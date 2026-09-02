@@ -1,0 +1,2257 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pension Calculator, Pensionbuddy</title>
+<meta name="description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
+<meta property="og:title" content="Pension Calculator, Pensionbuddy">
+<meta property="og:description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pensionbuddy">
+<meta property="og:locale" content="en_IE">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
+   ============================================================ */
+:root{
+  --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
+  --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
+  --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
+  --teal-50:#E8F6F3; --teal-100:#CBEBE4;
+  --amber:#F4B740; --amber-soft:#FCEFCF;
+  --line:#E7EBE9; --line-2:#D8DFDC;
+  --ring:rgba(11,122,110,.28);
+  --sh-sm:none;
+  --sh-md:0 1px 2px rgba(11,31,28,.04);
+  --sh-lg:0 1px 2px rgba(11,31,28,.04);
+  --sh-teal:none;
+  --font:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
+  --maxw:1140px;
+  --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --font-display:'Sora',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--teal-100);color:var(--teal-900)}
+h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
+.eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
+.btn svg{width:17px;height:17px;transition:transform .2s ease}
+.btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
+.btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
+.btn-primary:hover svg{transform:translateX(3px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+.announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
+.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
+nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:22px;height:22px}
+.nav-r{display:flex;align-items:center;gap:28px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
+
+/* ---- page head ---- */
+.phead{padding:52px 0 12px}
+.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
+.phead h1 .hl{color:var(--teal-700)}
+.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
+
+/* ---- calculator layout ---- */
+.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
+.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:22px}
+.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
+.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
+.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+
+/* custom sliders */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
+input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
+
+/* segmented tax toggle */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
+.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
+.seg button.on{color:var(--teal-700)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ---- results ---- */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.res-hero>div{position:relative;min-width:0}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
+
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
+.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend span{display:inline-flex;align-items:center;gap:8px}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
+
+.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
+.relief-card .rt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
+.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.relief-card .rbig b{font-weight:700;color:#3F2D04}
+.relief-viz{margin-top:18px;transition:opacity .4s}
+.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
+.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
+.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
+.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
+
+.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
+.boost-ico svg{width:22px;height:22px}
+.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt b{font-weight:700}
+
+/* ---- CTA ---- */
+.cta-band{padding:64px 0 8px}
+.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
+.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
+.buddy-mini svg{width:42px;height:42px;fill:#fff}
+.cta-card .ctext{position:relative;min-width:0}
+.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
+.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
+.cta-card .btn{position:relative}
+
+/* ---- assumptions ---- */
+.assume{padding:72px 0 24px}
+.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
+.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
+
+/* ---- footer ---- */
+footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
+.foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
+.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
+.disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
+.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
+
+@media(max-width:920px){
+  .calc-wrap{grid-template-columns:1fr;gap:20px}
+  .panel{position:static;top:auto}
+  .res-hero{grid-template-columns:1fr;padding:26px}
+  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .assume ul{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr 1fr;gap:30px}
+  .nav-r{gap:14px}
+}
+@media(max-width:560px){
+  .wrap{padding:0 18px}
+  .nav-r .back span,.nav-r .back{font-size:0}
+  .nav-r .back svg{width:20px;height:20px}
+}
+@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
+
+/* ============================================================
+   EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
+   Additive only, nothing above is modified.
+   ============================================================ */
+
+/* per-page accent: default teal; override on <body data-accent> */
+:root{--ac:var(--teal);--ac-700:var(--teal-700);--ac-50:var(--teal-50);--ac-100:var(--teal-100);--ac-soft:var(--teal-50)}
+body.acc-purple{--ac:#0B7A6E;--ac-700:#085E54;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--ac-soft:#EDF4F2}
+body.acc-teal{--ac:var(--teal);--ac-700:var(--teal-700);--ac-50:var(--teal-50);--ac-100:var(--teal-100);--ac-soft:var(--teal-50)}
+body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--ac-soft:#EDF4F2}
+.eyebrow.acc{color:var(--ac-700);background:var(--ac-50)}
+.eyebrow.acc .pip{background:var(--ac)}
+.btn-acc{background:var(--ac);color:#fff;box-shadow:0 14px 30px -12px color-mix(in srgb,var(--ac) 55%,transparent)}
+.btn-acc:hover{filter:brightness(.96);transform:translateY(-2px)}
+.btn-acc:hover svg{transform:translateX(3px)}
+
+/* audience hero (reuses .hero/.hero-grid spacing from base) */
+.aud-hero h1{font-size:clamp(38px,5.2vw,64px);font-weight:800;letter-spacing:-0.035em;margin:18px 0 0}
+.aud-hero h1 .hl{color:var(--ac-700)}
+.aud-hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
+.aud-figure{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:30px;overflow:hidden;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center}
+.aud-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--ac-50),transparent 60%);pointer-events:none}
+.aud-figure .ring{width:108px;height:108px;border-radius:50%;background:var(--ac-50);display:flex;align-items:center;justify-content:center;color:var(--ac-700);position:relative}
+.aud-figure .ring svg{width:50px;height:50px}
+.aud-figure .fcap{position:relative;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.aud-figure .fbadge{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--ac-700);z-index:2}
+
+/* "sound familiar" pain cards */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-sm)}
+.pain .pl{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ac-700);background:var(--ac-50);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:14px}
+.pain h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.pain p{font-size:15px;color:var(--ink-2)}
+
+/* callout band */
+.callout{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.callout::before{content:"";position:absolute;inset:0;pointer-events:none}
+.callout .eyebrow{background:none;color:rgba(255,255,255,.92);position:relative}
+.callout .eyebrow .pip{background:var(--ac)}
+.callout h2{color:#fff;font-size:clamp(28px,3.8vw,44px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
+.callout p{color:#CFEFE9;font-size:18px;max-width:540px;margin:0 auto 28px;position:relative}
+
+/* benefit grid (used on director page) */
+.benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.benefit{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-sm);display:flex;gap:16px;align-items:flex-start}
+.benefit .bi{width:46px;height:46px;border-radius:13px;background:var(--ac-50);color:var(--ac-700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.benefit .bi svg{width:23px;height:23px}
+.benefit h3{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
+.benefit p{font-size:14.5px;color:var(--ink-2)}
+
+/* info vs advice banner (CPC 2025) */
+.infoadvice{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 22px}
+.infoadvice .ii{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-sm)}
+.infoadvice .ii svg{width:18px;height:18px}
+.infoadvice p{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.infoadvice b{color:var(--ink);font-weight:700}
+
+/* lead-magnet capture block */
+.magnet{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:40px 44px;box-shadow:var(--sh-md);position:relative;overflow:hidden}
+.magnet::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 120% at 0 100%,var(--ac-50),transparent 55%);pointer-events:none}
+.magnet .mtext{position:relative}
+.magnet h2{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 10px}
+.magnet p{font-size:16px;color:var(--ink-2);max-width:420px}
+.magnet-form{position:relative;display:flex;flex-direction:column;gap:12px}
+.magnet-form .row{display:flex;gap:10px;flex-wrap:wrap}
+.magnet-form input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;padding:15px 20px;transition:border-color .2s,box-shadow .2s,background .2s}
+.magnet-form input:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ring)}
+.magnet-form .note{font-size:12px;color:var(--ink-3);line-height:1.5}
+.magnet-form .note a{color:var(--ac-700);font-weight:600}
+.magnet .ok{display:none;position:relative;background:var(--ac-50);border-radius:var(--r-lg);padding:24px;text-align:center}
+.magnet .ok.show{display:block}
+.magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
+.magnet .ok h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.magnet .ok p{font-size:14px;color:var(--ink-2);margin:0 auto}
+
+/* email-results capture (calculator) */
+.email-cap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-sm)}
+.email-cap .ec-top{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.email-cap .eci{width:42px;height:42px;border-radius:12px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.email-cap .eci svg{width:21px;height:21px}
+.email-cap .ect b{font-weight:700;font-size:15.5px;display:block}
+.email-cap .ect span{font-size:13px;color:var(--ink-3)}
+.email-cap .ec-row{display:flex;gap:10px;flex-wrap:wrap}
+.email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
+.email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
+.email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
+.email-cap .ec-note a{color:var(--teal-700);font-weight:600}
+.email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
+.email-cap .ec-ok.show{display:flex}
+.email-cap .ec-ok svg{width:18px;height:18px}
+
+/* credibility strip (about) */
+.creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.cred{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 20px;box-shadow:var(--sh-sm)}
+.cred .cn{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-0.03em;color:var(--teal-700);line-height:1}
+.cred .cl{font-size:13px;color:var(--ink-2);margin-top:6px}
+
+/* legal + glossary pages */
+.legal{padding:48px 0 72px;max-width:820px}
+.legal .updated{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.legal h1{font-size:clamp(32px,4.4vw,48px);font-weight:800;letter-spacing:-0.03em;margin:10px 0 14px}
+.legal .intro{font-size:18px;color:var(--ink-2);margin-bottom:8px}
+.legal h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:36px 0 12px}
+.legal h3{font-size:17px;font-weight:700;margin:22px 0 8px}
+.legal p{font-size:15.5px;color:var(--ink-2);margin-bottom:14px;line-height:1.7}
+.legal ul{list-style:none;margin:0 0 16px;padding:0}
+.legal li{font-size:15.5px;color:var(--ink-2);padding-left:24px;position:relative;line-height:1.7;margin-bottom:8px}
+.legal li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:2px;background:var(--teal);transform:rotate(45deg)}
+.legal a{color:var(--teal-700);font-weight:600}
+.legal .callbox{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;margin:20px 0}
+.legal .callbox p{margin-bottom:0}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:24px}
+.gterm{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px;box-shadow:var(--sh-sm)}
+.gterm h3{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;color:var(--ink)}
+.gterm .abbr{font-size:13px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:3px 9px;border-radius:var(--r-pill);margin-left:8px;vertical-align:middle}
+.gterm p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+
+/* page-head (shared by legal/glossary/persona intros without hero) */
+.page-head{padding:52px 0 8px}
+.page-head .eyebrow{margin-bottom:0}
+
+@media(max-width:920px){
+  .pains,.benefits,.creds,.gloss{grid-template-columns:1fr}
+  .magnet{grid-template-columns:1fr;gap:24px;padding:32px 26px}
+  .callout{padding:44px 26px}
+  .aud-figure{order:-1;max-width:460px;margin:0 auto}
+}
+@media(max-width:560px){
+  .magnet-form .row{flex-direction:column}
+  .magnet-form .row .btn{width:100%}
+}
+@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){.nav-in .logo span:not(.logo-mark),.nav-in .logo{font-size:0}.nav-in .logo-mark{font-size:16px}}
+
+/* ============================================================
+   UX POLISH  (scroll + click feel), additive
+   ============================================================ */
+/* anchor jumps clear the sticky nav */
+html{scroll-padding-top:90px}
+/* smoother nav shrink + subtle elevation on scroll */
+nav{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+nav.scrolled{box-shadow:0 1px 0 rgba(11,31,28,.04),0 8px 30px -18px rgba(11,31,28,.18)}
+.nav-in{transition:height .3s cubic-bezier(.4,0,.2,1)}
+nav.scrolled .nav-in{height:62px}
+.logo-mark{transition:width .3s cubic-bezier(.4,0,.2,1),height .3s cubic-bezier(.4,0,.2,1)}
+nav.scrolled .logo-mark{width:34px;height:34px}
+/* active-section underline for header links */
+.nav-links a.lnk{position:relative}
+.nav-links a.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.4,0,.2,1);opacity:.9}
+.nav-links a.lnk:hover::after,.nav-links a.lnk.active::after{transform:scaleX(1)}
+/* refined reveal: shorter travel, snappier curve, gentle */
+.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
+.js-reveal .reveal.in{opacity:1;transform:none}
+/* card press + hover lift feedback */
+.aud-card,.pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
+.aud-card:active,.benefit:active{transform:translateY(-2px) scale(.995)}
+/* links get a soft press */
+.aud-link,.back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
+.aud-card:active .aud-link{transform:translateX(2px)}
+/* smooth FAQ expand/collapse */
+details{overflow:hidden}
+details summary{transition:padding .2s ease}
+details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
+details[open] .faq-inner{grid-template-rows:1fr}
+details .faq-inner>div{overflow:hidden;min-height:0}
+summary .pm{transition:transform .3s cubic-bezier(.4,0,.2,1),background .25s ease,color .25s ease}
+/* focus-visible polish on non-button interactives */
+.aud-card:focus-visible,a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
+summary:focus-visible{border-radius:8px}
+/* gentle entrance for the page itself, avoids first-paint flash */
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+body{animation:pageIn .4s ease both}
+/* honor reduced motion for everything added here */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;scroll-padding-top:90px}
+  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
+  nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
+  nav.scrolled .nav-in{height:72px}
+}
+
+
+/* ---- fintech slider polish: floating value bubble + richer thumb ---- */
+.field{position:relative}
+.slider-wrap{position:relative}
+.sbubble{position:absolute;top:-40px;transform:translateX(-50%) translateY(6px) scale(.9);background:var(--teal-900);color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);z-index:5;font-variant-numeric:tabular-nums;box-shadow:0 6px 18px -6px rgba(9,63,57,.5)}
+.sbubble::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--teal-900);border-radius:1px}
+.slider-wrap.dragging .sbubble{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s}
+.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(11,122,110,.14),0 4px 14px rgba(11,122,110,.5)}
+/* result panel gentle pulse when values change */
+@keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
+.res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
+@media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
+
+
+/* ============================================================
+   TONE-DOWN PASS , calmer teal, brand intact  (additive, overrides)
+   Reserves saturated teal for accents + key moments; routes
+   supporting dark panels to a neutral deep-ink surface.
+   ============================================================ */
+:root{--ink-900:#12211E;--ink-800:#1B2E2A}
+/* 1) Announcement bar: light + quiet instead of full dark-teal */
+.announce{background:var(--surface-2);color:var(--ink-2);border-bottom:1px solid var(--line)}
+.announce b{color:var(--ink)}
+.announce .sep{background:var(--teal)}
+/* 2) About portrait: neutral deep-ink, not brand teal */
+.about-port{background:linear-gradient(155deg,var(--ink-800),var(--ink-900))}
+.about-port::before{pointer-events:none}
+.about-port .pl{color:#9FB3AE}
+/* 3) Calculator showcase preview + booking promise: neutral deep-ink (supporting, not shouting) */
+.calc-prev{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
+.calc-prev::before{pointer-events:none}
+.promise{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
+.promise::before{pointer-events:none}
+/* keep the FINAL CTA and calculator RESULT panels in true teal, these are the earned moments */
+/* soften callout bands slightly: deep-ink base with a teal glow rather than full teal-900 */
+.callout{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
+/* trim solid-teal chrome that adds visual noise: logo mark stays teal (brand), but reduce shadow intensity */
+.logo-mark{box-shadow:none}
+
+
+/* ============================================================
+   A11Y + UX PASS , verified contrast fixes & interaction polish
+   All values WCAG-checked. Additive overrides.
+   ============================================================ */
+/* 1) small/tertiary text: #7C8A86 (3.4:1, fail) -> #5D6C67 (~5:1) */
+:root{--ink-3:#5D6C67}
+/* 2) filled action buttons: white on #0B7A6E was 2.57:1 -> teal-700 = 5.08:1 */
+:root{--sh-teal:0 1px 2px rgba(11,31,28,.10)}
+.btn-primary{background:var(--teal-700);box-shadow:var(--sh-teal)}
+.btn-primary:hover{background:#096B60;box-shadow:var(--sh-md)}
+.btn-acc{background:var(--ac-700,var(--teal-700));box-shadow:var(--sh-sm)}
+.btn-acc:hover{filter:brightness(.92)}
+/* 3) per-audience link/icon colours on white cards -> deep variants (5.4–8:1) */
+.a1{--ac-deep:var(--teal)}.a2{--ac-deep:var(--teal-700)}.a3{--ac-deep:#0A332E}
+.aud-link{color:var(--ac-deep,var(--teal-700))}
+.aud-ico{color:var(--ac-deep,var(--teal-700))}
+/* 4) slider: fill to teal-600 (3:1 vs track), thumb border teal-700 for definition */
+input[type=range]{background:linear-gradient(to right,var(--teal-600) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{border-color:var(--teal-700)}
+input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
+.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(9,107,96,.16),0 4px 14px rgba(8,94,84,.45)}
+/* 5) skip-to-content link for keyboard users */
+.skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink);color:#fff;font-weight:600;font-size:14px;padding:12px 18px;border-radius:0 0 12px 0}
+.skip:focus{left:0;outline:none;box-shadow:0 0 0 4px var(--ring)}
+/* 6) FAQ affordance: hover cue on the question row */
+details summary:hover .pm{background:var(--teal-100)}
+details:not([open]) summary:hover{color:var(--teal-700)}
+/* 7) quieter announcement on small screens: keep only the regulator line */
+@media(max-width:480px){.announce span:nth-child(n+2){display:none}}
+
+
+/* ---- click-to-type values (precision beyond slider steps) ---- */
+.field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
+.field .val:hover{border-bottom-color:var(--teal-700)}
+.field .val:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:6px}
+.val-edit{font:700 17px var(--font);letter-spacing:-0.02em;color:var(--teal-700);background:var(--surface-2);border:1.5px solid var(--teal);border-radius:8px;padding:2px 8px;width:150px;text-align:right;font-variant-numeric:tabular-nums}
+.val-edit:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.val-edit{-moz-appearance:textfield;appearance:textfield}
+
+
+/* ============================================================
+   PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
+   Additive overrides. Calculation engines untouched.
+   ============================================================ */
+/* 1) Reveal: 30px rise, 800ms, ease-out-expo, GPU-hinted */
+.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
+.js-reveal .reveal.in{opacity:1;transform:none}
+/* 2) Hover physics: compound lift + wide diffused teal shadow */
+.aud-card,.tmember{will-change:transform}
+.aud-card:hover,.tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
+.aud-card:active,.tmember:active{transform:translateY(-2px) scale(1.005) !important}
+.btn-primary:hover,.btn-acc:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.22) !important}
+.btn-light:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(0,0,0,.18) !important}
+/* 3) Slider mechanics: fully custom, 200ms thumb scale to 1.15 */
+input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:99px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal-700);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s ease}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15);box-shadow:0 0 0 8px rgba(9,107,96,.16),0 4px 14px rgba(8,94,84,.45)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal-700);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .2s cubic-bezier(.16,1,.3,1),box-shadow .2s ease}
+input[type=range]:hover::-moz-range-thumb{transform:scale(1.15)}
+input[type=range]:active::-moz-range-thumb{transform:scale(1.15)}
+/* 4) Smart sticky header: hides on scroll down, returns on scroll up */
+nav{will-change:transform;transition:transform .38s cubic-bezier(.16,1,.3,1),background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+nav.nav-hidden{transform:translateY(-100%)}
+/* 5) Floating labels for capture inputs */
+.ffield{position:relative;flex:1;min-width:0;display:block}
+.ffield input{width:100%;padding:21px 20px 9px !important}
+.ffield .flabel{position:absolute;left:21px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-3);font-size:15px;font-weight:500;line-height:1.15;transition:top .22s cubic-bezier(.16,1,.3,1),transform .22s cubic-bezier(.16,1,.3,1),font-size .22s cubic-bezier(.16,1,.3,1),color .22s ease,letter-spacing .22s ease;white-space:nowrap}
+.ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-700)}
+@media(prefers-reduced-motion:reduce){
+  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
+  nav{transition:none}
+  .ffield .flabel,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{transition:none}
+  .aud-card:hover,.tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
+}
+
+
+/* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
+@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
+
+/* ---- Ask Buddy widget ---- */
+.pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
+.pb-b-btn:hover{transform:translateY(-2px)}
+.pb-b-btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring),var(--sh-lg)}
+.pb-b-btn img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--ac,#0B7A6E)}
+.pb-b-panel{position:fixed;right:18px;bottom:84px;z-index:241;width:min(94vw,372px);max-height:min(72vh,560px);display:flex;flex-direction:column;background:var(--surface,#fff);border:1px solid var(--line);border-radius:var(--r-lg,18px);box-shadow:var(--sh-lg);overflow:hidden}
+.pb-b-panel[hidden]{display:none}
+.pb-b-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--ac-soft,var(--teal-50))}
+.pb-b-head img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--ac,#0B7A6E)}
+.pb-b-head .t{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;color:var(--ink)}
+.pb-b-head .s{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.pb-b-close{margin-left:auto;background:none;border:0;cursor:pointer;color:var(--ink-3);font-size:22px;line-height:1;padding:6px;border-radius:8px}
+.pb-b-close:hover{color:var(--ink)}
+.pb-b-close:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
+.pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
+.pb-b-q .pm{margin-left:auto;color:var(--ac,#0B7A6E);font-weight:700}
+.pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
+.pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.pb-b-a>div{padding:2px 8px 14px}
+.pb-b-a p{margin:8px 0}
+.pb-b-item.open .pb-b-a{max-height:400px}
+.pb-b-item.open .pm{transform:rotate(45deg);display:inline-block}
+.pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
+.pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
+.pb-b-foot .btn{width:100%;justify-content:center}
+@media (max-width:520px){.pb-b-panel{right:3vw;left:3vw;width:auto;bottom:80px}}
+@media (prefers-reduced-motion: reduce){.pb-b-btn{transition:none}.pb-b-a{transition:none}}
+/* ---- cookie consent (dormant until analytics URL is set) ---- */
+.pb-consent{position:fixed;left:0;right:0;bottom:0;z-index:239;background:var(--ink);color:#FBF7EF;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;box-shadow:0 -6px 24px rgba(11,31,28,.25)}
+.pb-consent p{margin:0;font-size:13.5px;flex:1 1 320px}
+.pb-consent p a{color:#FBF7EF;text-decoration:underline}
+.pb-consent .pb-c-yes,.pb-consent .pb-c-no{font:inherit;font-weight:700;font-size:14px;border-radius:999px;padding:9px 18px;cursor:pointer}
+.pb-consent .pb-c-yes{background:var(--ac,#0B7A6E);color:var(--ink);border:0}
+.pb-consent .pb-c-no{background:none;color:#FBF7EF;border:1px solid rgba(255,255,255,.4)}
+.pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+body.pb-banner-open .pb-b-btn{bottom:96px}
+body.pb-banner-open .pb-b-panel{bottom:162px}
+
+/* dashed underline = term explained in the jargon buster */
+.gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
+.gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
+@media(max-width:600px){footer{padding-bottom:92px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
+/*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
+/* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
+.gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
+/* trust strip -> editorial caps with hairline separators */
+.strip-item svg{display:none}
+.strip-in{gap:0}
+.strip-item{display:flex;align-items:center;text-transform:uppercase;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
+.strip-item:first-child{border-left:none}
+@media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
+/* persona cards: tinted top rules + matching icon depth instead of identical grid */
+.aud-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.aud-card:nth-child(1)::before{background:var(--teal)}
+.aud-card:nth-child(2)::before{background:#4E9C90}
+.aud-card:nth-child(3)::before{background:#0A332E}
+.aud-card:nth-child(1) svg{color:var(--teal)}
+.aud-card:nth-child(2) svg{color:#3E8B7F}
+.aud-card:nth-child(3) svg{color:#0A332E}
+/* director benefits: icon cards -> keyline list */
+.benefit>svg,.benefit .ico{display:none}
+.benefit{border:0;border-left:2px solid var(--teal);border-radius:0;background:none;padding:4px 0 4px 20px}
+/* dark panels: left-aligned, asymmetric */
+.callout,.final{text-align:left;padding:64px 56px}
+@media(max-width:640px){.callout,.final{padding:44px 26px}}
+/* testimonials: card template -> editorial entries */
+.tcard{background:none;border:0;border-radius:0;border-top:1px solid var(--line-2);padding:22px 2px 0}
+.tcard .av{display:none}
+.tcard .who b{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.tcard .who span{font-size:13px;color:var(--ink-3)}
+/* booking stepper: circle dots -> brand dash */
+.tl::before{width:14px;height:2px;border-radius:0;left:-30px;top:9px;box-shadow:none;background:var(--teal)}
+/* section rhythm follows density */
+section:has(details){padding-top:64px;padding-bottom:72px}
+section:has(.tcol){padding-top:72px}
+/* floating photo chips: sticker pills -> sharp chips */
+.hc-badge,.hc-pill,.about-port .badge,.aud-figure .fbadge{border-radius:8px}
+/* uppercase pain labels: chip -> bare label, matches eyebrow motif */
+.pain .pl{background:none;padding:0}
+
+/* ============================================================
+   PB-SONA, refinement layer
+   Two faces (Sora / IBM Plex Mono) · keylines instead of shadows
+   one radius family · accent as wash · ambient motion
+   ============================================================ */
+
+/* --- 1. Type: Sora carries the page, mono carries the structure --- */
+body{font-size:.935rem;line-height:1.65;letter-spacing:-.006em}
+h1,h2,h3,h4,.logo{font-family:var(--font-display);letter-spacing:-.03em}
+h1{line-height:1.05;font-weight:700}
+h2{line-height:1.12;font-weight:600}
+h3,h4{line-height:1.2;font-weight:600;letter-spacing:-.02em}
+
+.hero h1,.aud-hero h1,.lead h1,.page-head h1{
+  font-size:clamp(2.35rem,5.4vw,4.25rem);line-height:1.05;letter-spacing:-.035em;font-weight:700}
+.sec-head h2{font-size:clamp(1.7rem,3.5vw,2.75rem);line-height:1.14;letter-spacing:-.03em;font-weight:600}
+.calc-copy h2,.about h2,.final h2,.callout h2{
+  font-size:clamp(1.55rem,3.1vw,2.5rem);line-height:1.12;letter-spacing:-.03em;font-weight:600}
+.hero .lede,.aud-hero .lede,.lead .lede{font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.62}
+.sec-head p{font-size:1.02rem;line-height:1.62}
+.aud-card p,.step p,.tcard blockquote,details p{font-size:.935rem}
+p,li{letter-spacing:-.004em}
+
+/* mono does structural work only: eyebrows, labels, figures, legal caps */
+.eyebrow,.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
+.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
+  font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em;font-weight:500}
+.eyebrow{font-size:.715rem;font-weight:500;gap:12px}
+.eyebrow .pip{width:14px;height:1px;background:currentColor;opacity:.5;border-radius:0}
+.kicker{font-size:.685rem;color:var(--ink-2);font-weight:500}
+.foot-col h4{font-size:.66rem;letter-spacing:.14em;color:var(--ink-2);font-weight:500}
+.hc-flabel,.hc-role{font-size:.66rem;letter-spacing:.13em}
+.tcard .who b{font-size:.66rem;letter-spacing:.13em}
+.strip-item{font-size:.665rem;letter-spacing:.15em;font-weight:500}
+.ctag{font-size:.665rem;letter-spacing:.15em}
+
+/* figures only - mono must never swallow a sentence */
+.hc-fnum,.cbig,.val,.dashk,.ind,.cn,.rv-keys b,.res-hero .big,.results .big{
+  font-family:var(--font-num);font-variant-numeric:tabular-nums}
+.hc-fnum,.cbig,.res-hero .big,.results .big{font-weight:600;letter-spacing:-.035em}
+.cn{font-weight:600;letter-spacing:-.02em}
+/* these carry prose with figures inside, so they stay in Sora */
+.rbig,.bt,.tcard.big,.tcard blockquote,.hc-fsub,.ctext{font-family:var(--font)}
+.rbig b,.bt b,.ec-note b{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+
+/* --- 2. Keylines instead of shadows --- */
+.aud-card,.tcard,.step,.gterm,.benefit,.pain,.cred,.assure,.dline,details,
+.chart-card,.relief-card,.boost-card,.cta-card,.panel,.book-card,.magnet,
+.btn,.btn-primary,.btn-ghost,.btn-light,.btn-acc,.hero-card,.about-port,
+.hc-pill,.hc-badge,.aud-figure,.tmember,.calc-prev,.email-cap input{box-shadow:none}
+.btn-primary:hover,.btn-acc:hover{transform:translateY(-1px) !important;box-shadow:none !important}
+.btn-light:hover{transform:translateY(-1px) !important;box-shadow:none !important}
+.btn-ghost:hover{transform:translateY(-1px);box-shadow:none}
+.hero-card{border:1px solid var(--line-2)}
+.hero-card::before{display:none}
+.about-port{border:1px solid var(--line-2)}
+.hc-pill{border:1px solid var(--line-2);box-shadow:none}
+.hc-avatar{box-shadow:none;border:1px solid var(--line-2)}
+details[open]{box-shadow:none;border-color:var(--line-2)}
+nav.scrolled{box-shadow:none;border-color:var(--line)}
+nav{background:var(--bg)}
+nav.scrolled{background:var(--bg)}
+.nav-links.open{box-shadow:none;border-bottom:1px solid var(--line-2)}
+.pb-b-btn,.pb-b-panel{box-shadow:none;border:1px solid var(--line-2)}
+.pb-b-btn{border-color:rgba(255,255,255,.16)}
+.pb-consent{box-shadow:none;border-top:1px solid rgba(255,255,255,.14)}
+
+/* --- 3. One radius family --- */
+.btn,details,.hero-card,.calc-prev,.about-port,.tcard,.panel,.magnet,
+.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.callbox,
+.hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.aud-figure,
+.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.email-cap input,.field input,
+.ffield input,.nav-links.open{border-radius:8px}
+.pb-b-btn,.pb-b-panel{border-radius:10px}
+.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
+.hc-bars i,.cbars i,.rv-bar i{border-radius:3px 3px 0 0}
+/* true circles keep their geometry */
+.pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg{border-radius:50%}
+
+/* --- 4. Accent as a wash, not a highlight --- */
+.tag{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.66rem;
+  font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);
+  background:var(--teal-50);padding:5px 10px;border-radius:6px;white-space:nowrap}
+/* bare marks, not chips - the box only existed to hold a tint */
+.aud-ico{background:none;border:0;width:auto;height:auto;margin-bottom:20px;
+  align-self:flex-start;justify-content:flex-start;color:var(--ac,var(--teal-700))}
+.aud-ico svg{width:22px;height:22px}
+/* the numeral is real sequence information, so it gets the rule that shows it */
+.step .sx{background:none;border:0;width:auto;height:auto;display:block;
+  font-family:var(--font-mono);font-size:.7rem;font-weight:500;letter-spacing:.15em;
+  color:var(--ink-3);padding-bottom:12px;margin-bottom:18px;
+  border-bottom:1px solid var(--line-2)}
+summary .pm{background:transparent;border:1px solid var(--line-2);color:var(--ink-2)}
+details[open] summary .pm{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* --- 5. Full-bleed dark sections that break the container --- */
+/* one padding-inline does the work: the section spans the viewport, its
+   content still lands on the same 1140px measure as everything else */
+.final,.callout{width:100vw;margin-left:calc(50% - 50vw);border-radius:0;text-align:left;
+  padding:88px max(24px,calc((100vw - var(--maxw)) / 2))}
+.final>p,.callout>p{margin:0 0 30px;max-width:52ch}
+.final>h2,.callout>h2{max-width:22ch}
+.final .paw-bg,.callout .paw-bg{right:6vw;bottom:-40px;opacity:.06}
+.final-band{padding:0}
+.final .eyebrow{background:none;padding:0}
+
+/* --- 6. Persona row: three floating cards -> one divided block --- */
+.aud{gap:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
+.aud-card{border:0;border-left:1px solid var(--line);border-radius:0;
+  padding:32px 28px 28px;transition:background .25s ease}
+.aud-card:first-child{border-left:0}
+.aud-card::after{display:none}
+.aud-card:hover{transform:none;background:var(--teal-50);border-color:var(--line)}
+.aud-card:active{transform:none}
+
+/* --- 7. Ambient motion: the trust strip runs, it doesn't sit --- */
+.strip{position:relative;overflow:hidden}
+.strip::before,.strip::after{content:"";position:absolute;top:0;bottom:0;width:72px;
+  z-index:2;pointer-events:none}
+.strip::before{left:0;background:linear-gradient(to right,var(--surface),rgba(255,255,255,0))}
+.strip::after{right:0;background:linear-gradient(to left,var(--surface),rgba(255,255,255,0))}
+.strip-in{display:flex;flex-wrap:nowrap;justify-content:flex-start;width:max-content;
+  max-width:none;margin:0;gap:0;padding:20px 0;will-change:transform;
+  animation:pbMarquee 44s linear infinite}
+.strip:hover .strip-in,.strip:focus-within .strip-in{animation-play-state:paused}
+.strip-item{border-left:1px solid var(--line-2);padding:0 30px;white-space:nowrap;flex:0 0 auto}
+.strip-item:first-child{border-left:1px solid var(--line-2)}
+@keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* reveals no longer move in lockstep */
+.js-reveal .reveal:not(.settled){transform:translateY(14px);
+  transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
+.js-reveal .sec-head.reveal:not(.settled){transition-duration:.46s;transform:translateY(10px)}
+.js-reveal .aud-card.reveal:not(.settled){transition-duration:.74s;transform:translateY(20px)}
+.js-reveal .hero-card.reveal:not(.settled){transition-duration:.92s;transform:translateY(26px)}
+.js-reveal .tcard.reveal:not(.settled){transition-duration:.68s}
+details .faq-inner{transition:grid-template-rows .42s cubic-bezier(.16,1,.3,1)}
+
+/* --- 8. Sliders: real touch targets, scroll-safe on mobile --- */
+input[type=range]{height:26px;touch-action:pan-y;
+  background-size:100% 6px;background-repeat:no-repeat;background-position:0 center}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+input[type=range]::-moz-range-track{height:6px;background:transparent}
+
+@media(hover:none){
+  .aud-card:hover{background:var(--surface)}
+  .btn-primary:hover,.btn-acc:hover,.btn-light:hover,.btn-ghost:hover{transform:none !important}
+}
+
+@media(max-width:920px){
+  .aud{grid-template-columns:1fr}
+  .aud-card{border-left:0;border-top:1px solid var(--line)}
+  .aud-card:first-child{border-top:0}
+  .final,.callout{padding:56px 20px}
+  .final>p,.callout>p,.final>h2,.callout>h2{max-width:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .strip-in{animation:none;width:auto;max-width:var(--maxw);margin:0 auto;
+    padding:20px 24px;flex-wrap:wrap;justify-content:center}
+  .strip-item.is-clone{display:none}
+  .strip::before,.strip::after{display:none}
+  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
+  details .faq-inner{transition:none}
+}
+
+/* --- pass 4 additions --- */
+.trole{font-size:.63rem;color:var(--ink-2)}
+.cl{font-size:.6rem;letter-spacing:.12em;color:var(--ink-3)}
+.rt{font-size:.665rem;letter-spacing:.15em}
+.tcard.big blockquote{font-weight:500;letter-spacing:-.02em;line-height:1.42}
+
+/* ============================================================
+   PB-SONA pass 6 - orphaned holders, figure wash, divided rows
+   ============================================================ */
+
+/* the svg inside was hidden earlier; the holder was left behind */
+.benefit .bi{display:none}
+.benefit{padding:2px 0 2px 22px}
+
+/* audience hero figure: wash + keyline, not a blank panel */
+.aud-figure{background:var(--ac-soft,var(--teal-50));border:1px solid var(--line-2);
+  border-radius:8px;box-shadow:none}
+.aud-figure .ring{background:transparent;border:1px solid var(--ac,var(--teal));
+  color:var(--ac,var(--teal));box-shadow:none}
+.aud-figure .fcap{font-family:var(--font-mono);font-size:.66rem;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2)}
+.aud-figure .fbadge{border:1px solid var(--line-2);background:var(--surface);
+  color:var(--ink);font-family:var(--font-mono);font-size:.6rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase}
+
+/* pain row: three cards -> one divided block, same idea as the persona row */
+.pains{gap:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;
+  background:var(--surface)}
+.pain{border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;
+  padding:28px 26px 26px;background:none}
+.pain:first-child{border-left:0}
+.pain .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);background:none;padding:0}
+
+/* lead magnet: keyline + wash, no gradient panel */
+.magnet{background:var(--teal-50);border:1px solid var(--line-2);border-radius:8px;
+  box-shadow:none}
+.magnet::before,.magnet::after{display:none}
+
+@media(max-width:920px){
+  .pains{grid-template-columns:1fr}
+  .pain{border-left:0;border-top:1px solid var(--line)}
+  .pain:first-child{border-top:0}
+}
+
+/* ============================================================
+   PB-SONA pass 7 - contrast fixes
+   ============================================================ */
+
+/* wrapper link rules (.legal a, .disclosure a, .ec-note a ...) are (0,1,1)
+   and were overriding button colour. Pin buttons at (0,2,1). */
+a.btn.btn-primary,a.btn.btn-acc{color:#fff}
+a.btn.btn-light{color:var(--teal-900)}
+a.btn.btn-ghost{color:var(--ink)}
+a.btn.btn-ghost:hover{color:var(--teal-700)}
+a.btn{font-weight:600}
+
+/* amber relief label: 4.1:1 -> 4.84:1 on #FCEFCF */
+.rt{color:#8C6010}
+
+/* ============================================================
+   PB-SONA pass 8 - final contrast fixes
+   ============================================================ */
+
+/* Base rule `h1,h2,h3,h4{color:var(--ink)}` beats inherited white, so headings
+   sitting on the dark photo overlay rendered ink-on-ink (1:1, invisible). */
+.cap h1,.cap h2,.cap h3,.cap h4,.cap p,
+.calc-prev h1,.calc-prev h2,.calc-prev h3,
+.final h1,.final h2,.final h3,.callout h1,.callout h2,.callout h3{color:#fff}
+
+/* `.relief-card .rt` is (0,2,0) and outranked the pass-7 fix at (0,1,0) */
+.relief-card .rt,.boost-card .rt,.panel .rt,.rt{color:#8C6010}
+
+/* `.max-card .mt` mirrors `.relief-card .rt` on the director calculator - same
+   amber label, same 4.1:1 shortfall. */
+.max-card .mt,.mt{color:#8C6010}
+
+/* ============================================================
+   PB-SONA pass 9 - radius discipline + one tier of elevation
+   Calibrated against CopyCat / Hatch / Backstory / GetAccept
+   ============================================================ */
+
+/* --- radius: 4 / 6 / 8, nothing else (true circles excepted) --- */
+:root{--r-sm:4px; --r-md:6px; --r-lg:8px; --r-xl:8px}
+
+.btn,details,.tcard,.panel,.magnet,.aud,.pains,.aud-figure,.callbox,
+.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,
+.email-cap input,.field input,.ffield input,.nav-links.open,
+.hero-card,.calc-prev,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
+
+.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr,
+.hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.tag,
+.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
+
+.hc-bars i,.cbars i,.rv-bar i,.rv-bar,.eyebrow .pip,
+input[type=range]{border-radius:4px}
+.hc-bars i,.cbars i{border-radius:4px 4px 0 0}
+
+/* true circles keep their geometry */
+.pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg,
+.aud-figure .ring,.rv-d,.dotk,input[type=range]::-webkit-slider-thumb,
+input[type=range]::-moz-range-thumb{border-radius:50%}
+
+/* --- one elevation tier, reserved for the artifact each page is selling --- */
+.hero-card,.calc-prev,.results,.res-hero{
+  box-shadow:0 1px 2px rgba(11,31,28,.04),0 18px 40px -28px rgba(11,31,28,.34)}
+.hero-card{border-color:var(--line)}
+
+@media(prefers-reduced-motion:no-preference){
+  .hero-card{transition:box-shadow .4s cubic-bezier(.16,1,.3,1)}
+}
+
+/* ============================================================
+   PB-SONA pass 10 - the last radius strays, found by rendering
+   Every value below was measured on a live page, not guessed:
+   .hc-avatar 16 · .bi 13 · .pain .pl 999 · .ii/.ind/.seg button 10
+   .eci 12 · .buddy-mini 22 · .dotk 2 · .rv-d 3
+   ============================================================ */
+.hc-avatar,.ii,.ind,.eci,.seg button,.seg .on,.bi{border-radius:6px}
+.buddy-mini{border-radius:8px}
+.pain .pl,.pains .pl{border-radius:0}
+.rv-keys .rv-d,.rv-d,i.dotk,.chart-legend .dotk{border-radius:50%}
+
+/* the audience pages sell the figure panel, so it earns the same single
+   elevation tier as the hero card and the calculator results */
+.aud-figure{box-shadow:0 1px 2px rgba(11,31,28,.04),0 18px 40px -28px rgba(11,31,28,.34)}
+
+/* pass 10b - these four lose to descendant selectors (.infoadvice .ii etc),
+   so the closing normalization is forced. Radius scale is now 4/6/8 only. */
+span.ii,span.ind,span.eci,span.bi{border-radius:6px !important}
+
+/* booking.html strays: .ai assurance icons and the Calendly fallback icon */
+span.ai,.assure .ai{border-radius:6px !important}
+.cal-fallback-icon{border-radius:8px !important}
+
+/* ============================================================
+   PB-SALES - reasons to act, all of them arithmetic or Revenue's
+   calendar. No invented scarcity anywhere in this block.
+   ============================================================ */
+
+.painband{padding:74px 0 10px;background:var(--bg)}
+.painband .sec-head{margin-bottom:34px}
+
+.proofs{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
+.proof{border-left:1px solid var(--line);padding:28px 26px 26px}
+.proof:first-child{border-left:0}
+.proof .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.proof h3{font-size:1.05rem;margin:0 0 8px}
+.proof p{font-size:.9rem;color:var(--ink-2);margin:0;line-height:1.6}
+
+/* cost of waiting: the one place on the site that names a price for delay */
+.waitcard{border:1px solid var(--line-2);border-left:3px solid var(--teal);
+  border-radius:8px;background:var(--surface);padding:20px 22px;margin-bottom:16px}
+.waitcard .wt{font-family:var(--font-mono);font-size:.63rem;font-weight:500;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.waitcard .wtext{font-size:.935rem;line-height:1.6;color:var(--ink)}
+.waitcard .wtext b{font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  color:var(--teal-700);font-weight:600}
+.waitcard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+.waitcard .wlink:hover{text-decoration:underline}
+.waitcard .wlink .ico{width:15px;height:15px}
+
+/* Revenue's own deadline, stated plainly */
+.deadline{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;
+  border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);
+  padding:14px 16px;margin-bottom:18px}
+.dl-tag{flex:0 0 auto;font-family:var(--font-mono);font-size:.6rem;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  background:var(--teal-50);border:1px solid var(--line-2);border-radius:6px;padding:5px 9px}
+.dl-text{flex:1 1 260px;font-size:.85rem;line-height:1.55;color:var(--ink-2)}
+.dl-text b{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:var(--ink)}
+
+@media(max-width:920px){
+  .proofs{grid-template-columns:1fr}
+  .proof{border-left:0;border-top:1px solid var(--line)}
+  .proof:first-child{border-top:0}
+  .painband{padding:52px 0 4px}
+}
+
+/* .pains only had its grid defined on the audience pages; the homepage copy
+   of the block needs it too. */
+.pains{display:grid;grid-template-columns:repeat(3,1fr)}
+/* .phead wraps the calculator h1 and lede - it is a header block, not a label.
+   Restore normal case. */
+.phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
+.phead h1{font-family:var(--font-display);letter-spacing:-.035em}
+.phead .eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em}
+
+/* the deadline band is a grid child of .calc-wrap; without a span it took a
+   column and pushed the results panel out of place */
+.calc-wrap .deadline{grid-column:1 / -1;margin-bottom:4px}
+
+/* ============================================================
+   PB-TICK - Pay & File countdown
+   A real deadline, set by Revenue, stated as theirs. Figures in
+   mono like every other number on the site.
+   ============================================================ */
+.tickband{padding:0}
+.tick{position:relative;background:var(--teal-900);color:#fff;border-radius:0;
+  width:100vw;margin-left:calc(50% - 50vw);
+  padding:64px max(24px,calc((100vw - var(--maxw)) / 2));
+  display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.tick h2{color:#fff;font-size:clamp(1.45rem,2.8vw,2.15rem);line-height:1.15;
+  letter-spacing:-.03em;margin:0 0 14px;max-width:24ch}
+.tick p{color:rgba(255,255,255,.78);font-size:.9rem;line-height:1.6;margin:0 0 12px;max-width:56ch}
+.tick .tk-who{color:rgba(255,255,255,.55);font-size:.8rem;margin-bottom:22px}
+.tick .eyebrow{color:#A7DED4}
+.tick .btn-light{background:#fff;color:var(--teal-900);border:0}
+
+.tk-clock{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.tk-unit{flex:0 0 auto;min-width:82px;text-align:center;padding:16px 10px 12px;
+  border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.04)}
+.tk-n{display:block;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  font-size:2.1rem;font-weight:600;letter-spacing:-.03em;color:#fff;line-height:1}
+.tk-l{display:block;margin-top:8px;font-family:var(--font-mono);font-size:.58rem;
+  font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+
+/* the digits change every second, so the clock is hidden from assistive tech
+   and this sentence carries the same information instead */
+.tk-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media(max-width:920px){
+  .tick{grid-template-columns:1fr;gap:28px;padding:48px 20px}
+  .tk-clock{justify-content:flex-start}
+  .tk-unit{min-width:0;flex:1 1 68px;padding:12px 6px 10px}
+  .tk-n{font-size:1.55rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .tk-sec{display:none}
+}
+
+/* ============================================================
+   PB-NAVTICK - deadline chip in the sticky header
+   Minutes, not seconds: a per-second repaint in a fixed header
+   reads as pressure and distracts while reading.
+   ============================================================ */
+.nav-tick{display:inline-flex;align-items:center;gap:8px;margin-left:18px;
+  padding:6px 11px;border:1px solid var(--line-2);border-radius:6px;
+  background:var(--surface);text-decoration:none;white-space:nowrap;
+  transition:border-color .2s ease,background .2s ease}
+.nav-tick:hover{border-color:var(--teal);background:var(--teal-50)}
+.nav-tick:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.nt-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:0 0 auto}
+.nt-n{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:.72rem;
+  font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.nt-l{font-family:var(--font-mono);font-size:.58rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
+
+/* the logo and the chip travel together, the links stay right */
+.nav-in{gap:0}
+.nav-in > .logo{flex:0 0 auto}
+
+/* the site already sets html{scroll-padding-top:90px}; adding scroll-margin
+   here stacked on top of it and overshot the target by ~90px */
+
+@media(prefers-reduced-motion:no-preference){
+  .nt-dot{animation:ntPulse 2.6s ease-in-out infinite}
+}
+@keyframes ntPulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+@media(max-width:1080px){
+  .nt-l{display:none}
+  .nav-tick{margin-left:12px;padding:6px 9px}
+}
+@media(max-width:560px){
+  .nav-tick{display:none}
+}
+
+/* ------------------------------------------------------------
+   body overflow: `hidden` makes the body a scroll container;
+   `clip` does the same clipping for the 100vw full-bleed sections
+   without one, which is the safer choice for any sticky
+   descendant. `hidden` stays first as the fallback.
+   (Note: the nav is not broken - it uses a deliberate
+   hide-on-scroll-down / show-on-scroll-up pattern via .nav-hidden.)
+   ------------------------------------------------------------ */
+body{overflow-x:hidden;overflow-x:clip}
+
+/* ============================================================
+   PB-EVIDENCE - sourced figures, attribution on every one
+   ============================================================ */
+.gapband{padding:70px 0 10px}
+.gapband .sec-head{margin-bottom:32px}
+.gapstats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
+.gs{border-left:1px solid var(--line);padding:30px 26px 26px}
+.gs:first-child{border-left:0}
+.gs-n{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:600;
+  font-size:clamp(1.9rem,3.2vw,2.5rem);letter-spacing:-.04em;color:var(--teal-700);line-height:1}
+.gs-l{margin-top:14px;font-size:.92rem;line-height:1.5;color:var(--ink)}
+.gs-s{margin-top:12px;font-family:var(--font-mono);font-size:.6rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);line-height:1.5}
+.gap-note{margin:18px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:76ch}
+
+.coverband{padding:8px 0 62px}
+.cover{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;
+  border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:34px 32px}
+.cover h3{font-size:clamp(1.2rem,2.2vw,1.6rem);line-height:1.2;margin:0 0 12px;max-width:22ch}
+.cover p{font-size:.92rem;line-height:1.6;color:var(--ink-2);margin:0 0 20px;max-width:52ch}
+.cv-figs{border-left:1px solid var(--line);padding-left:30px}
+.cv-f{margin-bottom:18px}
+.cv-n{display:block;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+  font-weight:600;font-size:1.85rem;letter-spacing:-.035em;color:var(--teal-700);line-height:1}
+.cv-l{display:block;margin-top:6px;font-size:.82rem;line-height:1.45;color:var(--ink-2)}
+.cv-s{font-family:var(--font-mono);font-size:.58rem;font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);line-height:1.5}
+
+@media(max-width:920px){
+  .gapstats{grid-template-columns:1fr}
+  .gs{border-left:0;border-top:1px solid var(--line)}
+  .gs:first-child{border-top:0}
+  .cover{grid-template-columns:1fr;gap:26px;padding:28px 22px}
+  .cv-figs{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:22px}
+  .gapband{padding:52px 0 6px}
+}
+
+/* ============================================================
+   PB-LEGIBILITY
+   Base size up, minimum label size enforced, every control at
+   least 44px in its smaller dimension. Nothing here changes
+   layout structure - only reach and readability.
+   ============================================================ */
+
+/* --- 1. Base size: 14.96px -> 16.5px, the floor for comfortable reading --- */
+html{font-size:103%}
+body{font-size:1rem;line-height:1.68}
+.hero .lede,.aud-hero .lede,.lead .lede,.phead p{font-size:clamp(1.06rem,1.5vw,1.22rem);line-height:1.6}
+.sec-head p{font-size:1.06rem}
+.aud-card p,.step p,.pain p,.proof p,.gs-l,.benefit p{font-size:.98rem;line-height:1.62}
+
+/* --- 2. Small-label floor: nothing under 12px anywhere --- */
+.eyebrow{font-size:.78rem;letter-spacing:.13em}
+.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
+.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.cv-s,.gs-s,
+.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.75rem !important;letter-spacing:.11em}
+.nt-l{font-size:.7rem !important;letter-spacing:.1em}
+.nt-n{font-size:.86rem}
+.hc-fsub,.ec-note,.gap-note,.cv-l,.note,.hint,.disclosure,.infoadvice,
+.tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
+.hc-flabel,.dl-text,.wtext{font-size:.9rem}
+
+/* --- 3. Tap targets: 44px minimum on everything interactive --- */
+.nav-links a.lnk{padding:12px 14px;margin:0 -2px}
+.nav-tick{padding:11px 13px}
+.logo{padding:6px 0}
+.foot-col a,.foot-links a{display:inline-block;padding:9px 0;line-height:1.35}
+.aud-link,.wlink,.gterm a,.back{display:inline-flex;align-items:center;padding:11px 0}
+.btn{min-height:48px;padding:13px 22px}
+.seg button{min-height:48px}
+summary{min-height:56px;padding-top:16px;padding-bottom:16px}
+
+/* the sliders are the main control on the site - 26px was too small to hit */
+input[type=range]{height:48px;background-position:0 center}
+input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
+input[type=range]::-moz-range-thumb{width:28px;height:28px}
+.field input,.ffield input,.email-cap input{min-height:52px;font-size:1rem}
+
+/* inline links inside prose need to be obviously links, not just coloured */
+.lede a,.tick p a,.ec-note a,.gap-note a,p a:not(.btn):not(.aud-link){
+  text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+
+/* --- 4. Focus visible on everything, for keyboard and switch users --- */
+a:focus-visible,button:focus-visible,summary:focus-visible,
+input:focus-visible,select:focus-visible{
+  outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+
+@media(max-width:920px){
+  html{font-size:104%}
+  .nav-links a.lnk{padding:14px 16px}
+}
+
+/* --- inline prose links and footer links: 44px reach --- */
+p a:not(.btn):not(.aud-link),.lede a,.tick p a,.note a,.ec-note a,.gap-note a,
+.disclosure a,.infoadvice a,.foot-links a,.hint a{
+  display:inline-block;padding:11px 0;line-height:1.2;vertical-align:baseline}
+/* an inline-block inside running text must not break the line rhythm */
+p a:not(.btn):not(.aud-link),.lede a,.tick p a,.note a,.ec-note a,.gap-note a,
+.disclosure a,.infoadvice a,.hint a{margin:-11px 0}
+
+/* the last two labels still under 12px */
+.nt-l{font-size:.72rem !important}
+.hc-fsub,.calc-prev .sub,.chart-note{font-size:.82rem}
+.aud-figure .fbadge,.aud-figure .fcap{font-size:.75rem !important}
+
+/* --- final reach pass: every link at 44px, floor at 12px --- */
+.foot-col a,.foot-links a{padding:12px 0}
+p a:not(.btn):not(.aud-link),.lede a,.tick p a,.note a,.ec-note a,.gap-note a,
+.disclosure a,.infoadvice a,.hint a,.legal a,.gterm a,td a,li a{
+  padding:13px 0;margin:-13px 0}
+/* glossary tooltip links sit inside tight prose - underline instead of pad */
+abbr[title],.abbr,.tip{text-decoration:underline dotted;text-underline-offset:3px}
+.nt-l{font-size:.75rem !important}
+.chart-note,.calc-prev .sub,.illus,.hc-note,.ec-note,.note{font-size:.82rem}
+
+/* --- last reach items, all measured on live pages --- */
+.ec-note,.ec-note a{font-size:.82rem}
+.ec-note a{display:inline-block;padding:13px 0;margin:-13px 0}
+.tip,.gterm .tip,span.tip,.dashk{display:inline-block;padding:12px 0;margin:-12px 0}
+#navToggle{min-width:48px;min-height:48px}
+.cal-note,.book-note{font-size:.82rem}
+
+/* .gref glossary refs sit inside dense assumption lists, and .ec-note carries
+   an inline style="font-size:11px" the cascade cannot reach - both handled. */
+a.gref{display:inline-block;padding:13px 0;margin:-13px 0}
+p.ec-note,p.ec-note *{font-size:.82rem !important}
+.book-meta,.cal-meta{font-size:.82rem}
+
+/* the Calendly card's brand strip label */
+.book-card .cal-brand span,.cal-brand span{font-size:.82rem}
+
+.letterhead span,.letterhead{font-size:.82rem}
+
+/* ============================================================
+   PB-NAV - one navigation, every page
+   ============================================================ */
+.nav-in{display:flex;align-items:center;gap:0}
+.nav-in > .logo{flex:0 0 auto;margin-right:auto}
+.nav-links{display:flex;align-items:center;gap:2px;margin-left:18px}
+.nav-links a.lnk{padding:12px 13px;font-size:.92rem;font-weight:500;color:var(--ink-2);
+  text-decoration:none;border-radius:6px;white-space:nowrap;transition:color .18s ease}
+.nav-links a.lnk:hover{color:var(--ink)}
+.nav-links a.lnk.active{color:var(--ink);font-weight:600}
+.nav-links a.lnk.active::after{content:"";display:block;height:2px;border-radius:2px;
+  background:var(--teal);margin-top:5px}
+.nav-links .btn{margin-left:10px}
+
+.nav-toggle{display:none;align-items:center;justify-content:center;min-width:48px;min-height:48px;
+  margin-left:8px;background:none;border:1px solid var(--line-2);border-radius:6px;cursor:pointer;
+  color:var(--ink)}
+.nav-toggle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round}
+
+@media(max-width:1120px){
+  .nav-links a.lnk{padding:12px 9px;font-size:.88rem}
+  .nav-tick{margin-left:10px}
+}
+@media(max-width:960px){
+  .nav-toggle{display:inline-flex}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:0;margin:0;padding:10px 20px 18px;
+    background:var(--bg);border-bottom:1px solid var(--line-2)}
+  .nav-links.open{display:flex}
+  .nav-links a.lnk{padding:16px 4px;font-size:1rem;border-bottom:1px solid var(--line)}
+  .nav-links a.lnk.active::after{display:none}
+  .nav-links .btn{margin:14px 0 0;width:100%;justify-content:center}
+  nav{position:sticky}
+}
+@media(max-width:560px){
+  .nav-tick .nt-l{display:none}
+}
+
+/* The five-item menu plus the chip and the CTA overran 1140px at desktop.
+   Tighten the items and hand the menu to the mobile drawer sooner, rather
+   than letting the bar push the page wider than the viewport. */
+.nav-links a.lnk{padding:12px 10px;font-size:.9rem}
+.nav-links{margin-left:12px}
+.nav-links .btn{margin-left:8px;padding:13px 16px}
+.nav-tick{margin-left:12px;padding:10px 10px}
+@media(max-width:1320px){
+  .nav-tick .nt-l{display:none}
+}
+@media(max-width:1180px){
+  .nav-toggle{display:inline-flex}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;align-items:stretch;gap:0;margin:0;padding:10px 20px 18px;
+    background:var(--bg);border-bottom:1px solid var(--line-2);z-index:60}
+  .nav-links.open{display:flex}
+  .nav-links a.lnk{padding:16px 4px;font-size:1rem;border-bottom:1px solid var(--line)}
+  .nav-links a.lnk.active::after{display:none}
+  .nav-links .btn{margin:14px 0 0;width:100%;justify-content:center}
+}
+
+/* ============================================================
+   PB-BRIGHT - a brighter, more teal accent
+   Split by job so nothing drops below AA:
+     text + fills   #0C8175  (4.76:1 on white)
+     graphics only  #0D9488  (3.59:1 - needs 3:1)
+     on dark        #7FE3D3  (9.06:1 on teal-900)
+   ============================================================ */
+:root{
+  --teal-bright:#0D9488;   /* non-text graphics only */
+  --teal-mint:#7FE3D3;     /* accents on dark panels */
+}
+
+/* graphics: bars, fills, rules, dots, marks - no text sits on these */
+.hc-bars i:last-child,.cbars i:last-child{background:var(--teal-bright)}
+input[type=range]{background-image:linear-gradient(var(--teal-bright),var(--teal-bright))}
+input[type=range]::-webkit-slider-thumb{background:var(--teal-bright);border-color:#fff}
+input[type=range]::-moz-range-thumb{background:var(--teal-bright);border-color:#fff}
+.nt-dot{background:var(--teal-bright)}
+.aud-ico,.boost-ico{color:var(--teal-bright)}
+.waitcard{border-left-color:var(--teal-bright)}
+.aud-card:nth-child(1)::before,.aud-card:nth-child(2)::before,
+.aud-card:nth-child(3)::before{background:var(--teal-bright)}
+.eyebrow .pip{background:var(--teal-bright);opacity:1;height:2px;width:16px}
+.stars svg{fill:var(--teal-bright)}
+.chart-line,.chart svg path[stroke]{stroke:var(--teal-bright)}
+
+/* on the dark panels a real mint reads far brighter than the old pale wash */
+/* mint is for accents ON the dark panels only. .hc-flabel sits inside the
+   hero card, which is white - it was pulled in here by mistake and dropped to
+   1.52:1. It stays on the AA-safe ink tone. */
+.final .eyebrow,.callout .eyebrow,.tick .eyebrow,
+.calc-prev .eyebrow,.calc-prev .ctag,.res-hero .eyebrow{color:var(--teal-mint)}
+.hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
+.tick .tk-n{color:#fff}
+.calc-prev .cbars i:last-child,.res-hero .rbar i:last-child{background:var(--teal-mint)}
+.final .paw-bg,.callout .paw-bg{opacity:.09}
+
+/* text and filled buttons stay on the AA-safe bright teal */
+.hl,.aud-link,.wlink,a.gref,.gs-n,.cv-n{color:var(--teal)}
+.btn-primary{background:var(--teal-700)}
+.btn-primary:hover{background:var(--teal-600)}
+
+/* the pale wash gets a touch more colour too */
+.tag,.dl-tag{background:var(--teal-50)}
+
+/* ============================================================
+   PB-FRIENDLY - vivid teal, dark ink on top
+   Contrast improves as the colour gets brighter, because the
+   text on it is dark rather than white.
+   ============================================================ */
+:root{
+  --aqua:#16C9B0;        /* the brand colour people actually see */
+  --aqua-600:#12B49E;    /* hover */
+  --aqua-ink:#04302A;    /* text that sits ON aqua - 7.4:1 */
+  --teal-50:#E6FBF7;     /* pale wash, brighter */
+  --teal-100:#C4F5EB;
+  --mint:#5EEAD4;        /* accents on the dark panels - 10:1 */
+}
+
+/* --- primary action: bright fill, dark text. This is the whole move. --- */
+.btn-primary,.btn-acc{background:var(--aqua);color:var(--aqua-ink);border:0;font-weight:600}
+a.btn.btn-primary,a.btn.btn-acc,button.btn-primary{color:var(--aqua-ink)}
+.btn-primary:hover,.btn-acc:hover{background:var(--aqua-600);color:var(--aqua-ink)}
+.btn-primary .ico,.btn-acc .ico{stroke:var(--aqua-ink)}
+.btn-primary:hover .ico,.btn-acc:hover .ico{stroke:var(--aqua-ink)}
+
+/* on the dark bands the light button keeps white, but its arrow warms up */
+.final .btn-light,.callout .btn-light,.tick .btn-light{background:#fff;color:var(--teal-900)}
+
+/* --- graphics: let the colour actually sing --- */
+.hc-bars i:last-child,.cbars i:last-child{background:var(--aqua)}
+.hc-bars i,.cbars i{background:var(--teal-100)}
+input[type=range]{background-image:linear-gradient(var(--aqua),var(--aqua))}
+input[type=range]::-webkit-slider-thumb{background:var(--aqua);border:3px solid #fff;
+  box-shadow:0 0 0 1px var(--line-2)}
+input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff}
+.nt-dot{background:var(--aqua)}
+.eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
+.aud-ico,.boost-ico{color:var(--aqua-600)}
+.waitcard{border-left-color:var(--aqua)}
+.aud-card:nth-child(1)::before,.aud-card:nth-child(2)::before,
+.aud-card:nth-child(3)::before{background:var(--aqua)}
+.stars svg{fill:var(--aqua)}
+.rv-you,.rv-bar i:first-child{background:var(--aqua)}
+
+/* --- the pale wash does more work now, so sections feel lighter --- */
+.tag,.dl-tag,.aud-figure,.magnet{background:var(--teal-50)}
+.aud-card:hover{background:var(--teal-50)}
+.deadline{background:var(--teal-50);border-color:var(--teal-100)}
+
+/* --- accents on the dark panels: proper bright mint --- */
+.final .eyebrow,.callout .eyebrow,.tick .eyebrow,
+.calc-prev .eyebrow,.calc-prev .ctag,.res-hero .eyebrow{color:var(--mint)}
+.calc-prev .cbars i:last-child,.res-hero .rbar i:last-child{background:var(--mint)}
+.calc-prev .cbars i,.res-hero .rbar i{background:rgba(255,255,255,.10)}
+.hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
+
+/* --- softer shapes: square corners read formal --- */
+.btn,.hero-card,.calc-prev,.about-port,.tcard,.panel,.magnet,.aud,.pains,.proofs,
+.gapstats,.cover,.aud-figure,.chart-card,.relief-card,.boost-card,.cta-card,
+.book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,
+.ffield input,.nav-links.open{border-radius:12px}
+.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.tag,.dl-tag,
+.hc-pill,.hc-badge,.aud-figure .fbadge,.nav-links a.lnk,.nav-tick,
+.seg button,.ec-row{border-radius:8px}
+.hc-bars i,.cbars i,.rv-bar i{border-radius:5px 5px 0 0}
+
+/* the check mark in the hero card picks up the brand colour */
+.hc-pill{border-color:var(--teal-100);background:var(--teal-50);color:var(--teal-900)}
+.hc-pill .ico{stroke:var(--aqua-600)}
+
+/* The hero highlight is the largest patch of colour on the page, and it was
+   still the old pine. At 58-69px it is large text, so AA needs 3:1 rather
+   than 4.5:1 - which lets it move to the brighter teal (3.59:1).
+   The 16px .hl on the homepage is body-size, so it is excluded and keeps the
+   AA-safe tone. */
+h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
+.logo-mark{background:var(--aqua)}
+.logo-mark svg ellipse,.logo-mark svg path{fill:var(--aqua-ink) !important}
+.pb-b-btn .logo-mark{background:var(--aqua)}
+
+/* section eyebrows on light backgrounds pick up the brand colour too */
+.sec-head .eyebrow,.painband .eyebrow,.gapband .eyebrow,.coverband .eyebrow{color:var(--teal)}
+
+/* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
+.adv{border-top:1px solid var(--line);margin-top:20px}
+.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
+.adv > summary::-webkit-details-marker{display:none}
+.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
+.adv > summary:hover{color:var(--ink)}
+.adv .adv-in{padding-top:4px;padding-bottom:6px}
+
+/* ============================================================
+   PB-AUDIT - changes driven by measured findings
+   ============================================================ */
+
+/* --- 1. von Restorff: two identical filled aqua CTAs sat above the fold
+   (nav at y=53, hero at y=755, both rgb(22,201,176)). Identical treatment
+   means neither is the exception, so neither reads as the anchor. The nav
+   CTA becomes an outline button: still obviously clickable, no longer
+   competing. One filled aqua moment per viewport. --- */
+#nav .btn-primary{background:transparent;color:var(--teal-900);
+  border:1.5px solid var(--aqua);font-weight:600}
+#nav .btn-primary:hover{background:var(--teal-50);border-color:var(--aqua-600)}
+#nav .btn-primary .ico{stroke:var(--teal-900)}
+
+/* the hero CTA absorbs the difference: 230x48 -> 268x56, and isolation
+   below it so nothing crowds the anchor */
+.hero-cta .btn-primary,.aud-hero .btn-primary{min-height:56px;padding:16px 26px;font-size:1.02rem}
+.hero-cta{gap:14px;margin-bottom:26px}
+
+/* --- 5. readability: .lede measured 45 characters per line, under the
+   50-75 band. Widening the measure, not the font. --- */
+.hero .lede,.aud-hero .lede,.lead .lede{max-width:32em}
+.aud-card p{max-width:none}
+
+/* terms/privacy/complaints body measured 13px at 114 cpl - failed both the
+   16px floor and the 75-character ceiling. */
+.legal p,.legal li,.legal td,.legal{font-size:1rem;line-height:1.62}
+.legal .wrap,.legal-body,.legal section{max-width:70ch}
+.legal h2{margin-top:2em}
+
+/* --- 7. motion: .logo-mark transitions width+height on hover, and .wrap
+   transitions height. Neither communicates a state change or a spatial
+   relationship - they are decoration, and height transitions on a layout
+   wrapper can cause reflow jitter. Removed.
+   Kept: reveals (spatial entry), .btn transform (affordance),
+   marquee (continuous ambient), ntPulse (liveness of a live counter). --- */
+.logo-mark{transition:none}
+.wrap{transition:none}
+
+/* --- 2. Hick's Law: the calculator presented 7 simultaneous controls
+   (6 sliders + a 2-option segment). The four that drive the headline number
+   stay visible; the three that refine it move behind a disclosure. --- */
+.adv{border-top:1px solid var(--line);margin-top:22px;padding-top:4px}
+.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:14px 0}
+.adv > summary::-webkit-details-marker{display:none}
+.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.adv[open] > summary::after{transform:rotate(-135deg)}
+.adv .adv-in{padding-top:6px}
+
+/* --- 4. Baymard trust: at 375px the audience pages showed regulation and
+   the adviser's name, but not the qualification. A single credential line
+   under the hero CTA carries it without a new component. --- */
+.credline{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:18px;
+  font-size:.86rem;color:var(--ink-2)}
+.credline b{color:var(--ink);font-weight:600}
+.credline .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
+
+/* the site's own .field display rule outranks the UA's
+   details:not([open]) > *{display:none}, so the collapse must be explicit */
+.adv:not([open]) .adv-in{display:none}
+
+/* --- 5. legal pages measured 13px at 114 characters per line (the .updated
+   date line and the body copy), failing both the 16px floor and the 75-char
+   ceiling. .legal was already capped at 820px, which is still ~114 chars at
+   13px - so both the size and the measure needed correcting. --- */
+.legal{max-width:68ch}
+.legal p,.legal li,.legal td{font-size:1rem;line-height:1.62}
+.legal .updated{font-size:.86rem}
+.legal .intro{font-size:1.12rem;line-height:1.6}
+.legal h2{font-size:1.3rem;margin-top:2.2em}
+.legal h3{font-size:1.06rem}
+
+/* --- 4. Baymard: the credential line sat 16px below the 812px fold on
+   director.html because its headline runs to four lines at 375px. --- */
+@media(max-width:420px){
+  .aud-hero h1,.hero h1{font-size:clamp(2rem,8.5vw,2.6rem);line-height:1.08}
+  .aud-hero .lede,.hero .lede{font-size:1rem;line-height:1.55;margin-bottom:20px}
+  .hero-cta{margin-bottom:16px;gap:10px}
+  .credline{margin-top:14px;font-size:.82rem;gap:6px 10px}
+}
+</style>
+
+<script>
+/* ------------------------------------------------------------------
+   LEAD CAPTURE CONFIG
+
+   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
+   a CRM webhook, anything that accepts a JSON POST). Once it starts with
+   http, results are posted there and the visitor only sees a confirmation
+   when the send actually succeeds.
+
+   Until then the form opens the visitor's mail client with their figures
+   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
+   lost and nobody is told an email is coming that isn't.
+   ------------------------------------------------------------------ */
+var LEAD_ENDPOINT = '';
+var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
+</script>
+</head>
+<body>
+<div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
+<nav id="nav"><div class="wrap nav-in">
+  <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
+  <div class="nav-links" id="navLinks">
+    <a class="lnk" href="tracker.html">Find a pension</a>
+    <a class="lnk" href="starter.html">Start a pension</a>
+    <a class="lnk" href="director.html">Directors</a>
+    <a class="lnk active" href="pension-calculator.html" aria-current="page">Calculator</a>
+    <a class="lnk" href="glossary.html">Jargon buster</a>
+    <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
+</div></nav>
+
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">What will your pension <span class="hl">actually</span> pay you?</h1>
+  <p class="reveal" style="transition-delay:.12s">Move the sliders and watch your projection build, including how much Revenue adds back. Rough numbers are fine.</p>
+</div></div>
+
+<div class="wrap"><div class="calc-wrap">
+  <div class="deadline" id="deadlineBand">
+      <span class="dl-tag">Tax deadline</span>
+      <span class="dl-text" id="deadlineText"></span>
+    </div>
+    <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40"></div>
+    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
+    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
+    <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
+    <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
+    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label>Your income tax rate</label></div>
+      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
+      <p class="subnote">Used to show the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="res-hero reveal" style="transition-delay:.08s">
+      <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
+      <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
+      <div class="divline"></div>
+      <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
+    </div>
+    <div class="waitcard reveal" style="transition-delay:.11s">
+      <div class="wt">The cost of waiting</div>
+      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
+      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <div class="chart-card reveal" style="transition-delay:.14s">
+      <h3>How your pot could grow</h3>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span></div>
+      <div id="chart"></div>
+    </div>
+    <div class="relief-card reveal" style="transition-delay:.2s">
+      <div class="rt">What Revenue adds</div>
+      <div class="rbig" id="reliefOut">Move the sliders to see your tax relief.</div>
+      <div class="relief-viz" id="reliefViz">
+        <div class="rv-bar"><div class="rv-you" id="rvYou" style="width:60%"></div><div class="rv-tax" id="rvTax" style="width:40%"></div></div>
+        <div class="rv-keys"><span><i class="rv-d you"></i>You really pay <b id="rvYouV">€0/mo</b></span><span><i class="rv-d tax"></i>Revenue adds <b id="rvTaxV">€0/mo</b></span></div>
+      </div>
+    </div>
+    <div class="boost-card reveal" style="transition-delay:.26s">
+      <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+      <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
+    </div>
+    <div class="email-cap reveal" style="transition-delay:.3s">
+      <div class="ec-top">
+        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+        <div class="ect"><b>Want these figures emailed to you?</b><span>And what they'd look like for your actual situation.</span></div>
+      </div>
+      <div id="ecForm">
+        <div class="ec-row">
+          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
+          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+        <p class="ec-note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
+      </div>
+      <div class="ec-ok" id="ecOk" role="status"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
+    </div>
+  </div>
+</div></div>
+
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><img src="data:image/jpeg;base64,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" alt="Buddy, the Pensionbuddy dog"></div>
+  <div class="ctext"><h2>These are just illustrations.</h2><p>Want real numbers built around your actual situation? Damian will walk you through it in a free 20-minute chat. Plain English, no obligation.</p></div>
+  <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
+    <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
+    <li>Tax relief is shown at the rate you select, on your own contributions only. Relief is subject to Revenue's age-related limits (a percentage of earnings, capped at €115,000).</li>
+    <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
+    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, roughly €15,000 a year for a full entitlement. Check gov.ie for the current rate.</li>
+    <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="foot-top">
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
+    <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
+    <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="glossary.html">Pension jargon buster</a></div>
+    <div class="foot-col"><h4>Company</h4><a href="index.html#about">About Damian</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
+  </div>
+  <div class="disclosure">
+    <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
+    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
+  <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
+    <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
+    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+  </div>
+</div></footer>
+
+<script>
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let taxRate=40;
+const $=id=>document.getElementById(id);
+const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
+
+function setTax(r){taxRate=r;$('t20').classList.toggle('on',r===20);$('t40').classList.toggle('on',r===40);$('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
+
+function project(months,startPot,monthly,mRate){
+  const grownPot=startPot*Math.pow(1+mRate,months);
+  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
+  return grownPot+grownContrib;
+}
+
+/* ---- smooth display engine ---- */
+const anims={};let rafId=null;
+function tween(id,target,fmt){
+  const a=anims[id];
+  if(!a){anims[id]={cur:target,target,fmt};$(id).textContent=fmt(target);startLoop();return;}
+  a.target=target;a.fmt=fmt;startLoop();
+}
+function startLoop(){if(!rafId)rafId=requestAnimationFrame(step);}
+function step(){
+  let active=false;const f=REDUCE?1:0.16;
+  for(const id in anims){const a=anims[id];const d=a.target-a.cur;
+    if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*f;active=true;}else{a.cur=a.target;}
+    $(id).textContent=a.fmt(a.cur);}
+  if(chart.lerp(f))active=true;
+  rafId=active?requestAnimationFrame(step):null;
+}
+
+/* ---- persistent morphing chart ---- */
+const chart={
+  N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
+  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
+  init(){
+    const NS='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);svg.setAttribute('width','100%');svg.style.display='block';
+    for(let g=1;g<=3;g++){const yy=this.padT+(g/4)*(this.H-this.padT-this.padB);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',this.padL);l.setAttribute('y1',yy);l.setAttribute('x2',this.W-this.padR);l.setAttribute('y2',yy);
+      l.setAttribute('stroke','rgba(11,31,28,0.07)');svg.appendChild(l);}
+    const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
+    this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
+    this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
+    this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
+    this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    $('chart').appendChild(svg);this.inited=true;
+  },
+  setTarget(b,u,ageS,ageE){
+    if(!this.inited)this.init();
+    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
+    this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
+    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
+    startLoop();
+  },
+  lerp(f){
+    if(!this.inited)return false;
+    let active=false;
+    const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
+      if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
+    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
+    const dm=this.tgt.max-this.cur.max;
+    if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
+    this.render();return active;
+  },
+  render(){
+    const n=this.cur.b.length;if(!n)return;
+    const max=this.cur.max;
+    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
+    const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
+    let dB='M '+X(0)+' '+Y(this.cur.b[0]).toFixed(1);
+    for(let i=1;i<n;i++)dB+=' L '+X(i).toFixed(1)+' '+Y(this.cur.b[i]).toFixed(1);
+    let dU='M '+X(0)+' '+Y(this.cur.u[0]).toFixed(1);
+    for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
+    this.els.base.setAttribute('d',dB);
+    this.els.boost.setAttribute('d',dU);
+    this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
+    this.els.mx.textContent=euro(max);
+  }
+};
+
+/* ---- slider fill paint ---- */
+function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');}
+
+/* ---- the maths (unchanged) ---- */
+function calc(){
+  let age=+$('age').value, ret=+$('ret').value;
+  const pot=+$('pot').value, mine=+$('mine').value, emp=+$('emp').value, g=+$('growth').value;
+  $('ret').min=age+1;
+  if(ret<=age){ret=age+1;$('ret').value=ret;}
+  paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
+  $('ageV').textContent=age;
+  $('retV').textContent=ret;
+  $('potV').textContent=euro(pot);
+  $('mineV').textContent=euro(mine);
+  $('empV').textContent=euro(emp);
+  $('growthV').textContent=g+'%';
+
+  const months=(ret-age)*12;
+  const mRate=Math.pow(1+g/100,1/12)-1;
+  const monthly=mine+emp;
+  const base=project(months,pot,monthly,mRate);
+  const boost=project(months,pot,monthly+100,mRate);
+
+  tween('potOut',base,euro);
+  tween('incOut',base*0.04/12,euro);
+
+
+  /* cost of waiting: existing pot keeps growing, twelve months of
+     contributions never happen. Same engine, one shifted start date. */
+  if(months>12){
+    const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
+    const gap=Math.max(0,base-later);
+    $('waitOut').innerHTML='Put this off for twelve months and you retire with roughly <b>'+euro(gap)+'</b> less. That gap is the contributions you never made, plus the growth they never earned.';
+  }else{
+    $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
+  }
+  const reliefMonthly=mine*(taxRate/100);
+  const costMonthly=mine-reliefMonthly;
+  if(mine>0){
+    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+(mine*12>46000?' <span style="display:block;margin-top:6px;font-size:13px">At this level, Revenue\'s age and earnings caps will limit how much of it qualifies for relief.</span>':'');
+  }else{
+    $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
+  }
+  /* relief visualizer: presentation only, driven by the same costMonthly/reliefMonthly values */
+  if(mine>0){
+    $('rvYou').style.width=(costMonthly/mine*100)+'%';
+    $('rvTax').style.width=(reliefMonthly/mine*100)+'%';
+    $('rvYouV').textContent=euro(costMonthly)+'/mo';
+    $('rvTaxV').textContent=euro(reliefMonthly)+'/mo';
+    $('reliefViz').style.opacity='1';
+  }else{
+    $('rvYou').style.width='100%';
+    $('rvTax').style.width='0%';
+    $('rvYouV').textContent='€0/mo';
+    $('rvTaxV').textContent='€0/mo';
+    $('reliefViz').style.opacity='.45';
+  }
+
+  const diffPot=boost-base;
+  const diffInc=diffPot*0.04/12;
+  $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
+
+  const b=[],u=[];
+  for(let i=0;i<chart.N;i++){
+    const m=months*i/(chart.N-1);
+    b.push(project(m,pot,monthly,mRate));
+    u.push(project(m,pot,monthly+100,mRate));
+  }
+  chart.setTarget(b,u,age,ret);
+  ['age','ret','pot','mine','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
+}
+
+['age','ret','pot','mine','emp','growth'].forEach(id=>{
+  const el=$(id);
+  el.addEventListener('input',()=>{paintSlider(el);calc();});
+  paintSlider(el);
+});
+calc();
+
+/* nav + reveal */
+const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  if(!els.length){return;}
+  if(!('IntersectionObserver' in window)){return;}
+  document.documentElement.classList.add('js-reveal');
+  function reveal(el){el.classList.add('in');}
+  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
+  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
+  els.forEach(function(el){io.observe(el);});
+  revealVisible();
+  window.addEventListener('load',revealVisible);
+  window.addEventListener('scroll',revealVisible,{passive:true});
+  window.addEventListener('resize',revealVisible);
+  // hard safety net: never leave anything hidden
+  setTimeout(function(){els.forEach(reveal);},900);
+})();
+
+/* email-results capture (front-end only) */
+function sendResults(){
+  var input=document.getElementById('ecEmail');
+  var e=input.value.trim();
+  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  var err=document.getElementById('ecErr');
+  if(!ok){ err.textContent='Please enter a valid email address.';
+           err.style.display='block'; input.focus(); return; }
+  err.style.display='none';
+
+  /* the figures the visitor is actually looking at */
+  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
+  var payload={
+    email:e,
+    source:document.title,
+    pot:fig('potOut'), income:fig('incOut'), taxSaved:fig('taxOut'),
+    costOfWaiting:fig('waitOut'),
+    inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
+             .map(function(s){return s.id+'='+s.value;}).join(', '),
+    page:location.href
+  };
+
+  var done=function(msg){
+    var t=document.getElementById('ecOkText');
+    if(t&&msg)t.textContent=msg;
+    document.getElementById('ecForm').style.display='none';
+    document.getElementById('ecOk').classList.add('show');
+  };
+  var failed=function(){
+    err.innerHTML='That did not send. You can '+
+      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
+    err.style.display='block';
+  };
+
+  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
+    /* configured: post it and only confirm on a real success */
+    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)})
+      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
+      .catch(failed);
+  }else{
+    /* not configured: hand the visitor a prefilled email rather than a fake
+       confirmation. The lead still reaches Damian, today, with no backend. */
+    var body='Please send me my pension figures.%0D%0A%0D%0A'+
+      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
+      'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
+      'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
+      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
+      'From: '+encodeURIComponent(payload.page);
+    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
+      '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
+    done('Your email app should be opening with your figures ready to send. If nothing happens, you can book a free call instead.');
+  }
+}
+</script>
+
+<script>
+/* --- UX polish: active nav section highlighting --- */
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nav-links a.lnk[href^="#"]'));
+  if(!links.length||!('IntersectionObserver' in window))return;
+  var map={};
+  links.forEach(function(l){var id=l.getAttribute('href').slice(1);var s=document.getElementById(id);if(s)map[id]=l;});
+  var secObs=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){l.classList.remove('active');});
+        var l=map[e.target.id]; if(l)l.classList.add('active');
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+  Object.keys(map).forEach(function(id){var s=document.getElementById(id);if(s)secObs.observe(s);});
+})();
+/* --- UX polish: FAQ smooth expand (wrap answer for grid animation) --- */
+(function(){
+  var ds=[].slice.call(document.querySelectorAll('details'));
+  ds.forEach(function(d){
+    var sum=d.querySelector('summary');
+    if(!sum)return;
+    // collect everything after summary into an inner wrapper
+    var inner=document.createElement('div'); inner.className='faq-inner';
+    var box=document.createElement('div');
+    var node=sum.nextSibling;
+    while(node){var next=node.nextSibling; box.appendChild(node); node=next;}
+    inner.appendChild(box); d.appendChild(inner);
+  });
+})();
+</script>
+
+
+<script>
+/* fintech slider polish: wrap each range in a positioned container + live value bubble */
+(function(){
+  var ranges=[].slice.call(document.querySelectorAll('input[type=range]'));
+  ranges.forEach(function(r){
+    if(r.parentElement.classList.contains('slider-wrap'))return;
+    var wrap=document.createElement('div'); wrap.className='slider-wrap';
+    r.parentNode.insertBefore(wrap,r); wrap.appendChild(r);
+    var bub=document.createElement('div'); bub.className='sbubble'; wrap.appendChild(bub);
+    // find the matching .val label in the same field to mirror its formatted text
+    var field=wrap.closest('.field');
+    var valEl=field?field.querySelector('.val'):null;
+    function pos(){
+      var min=+r.min,max=+r.max,v=+r.value;
+      var pct=(max>min)?((v-min)/(max-min)):0;
+      var w=r.offsetWidth, thumb=22;
+      var x=pct*(w-thumb)+thumb/2;
+      bub.style.left=x+'px';
+      bub.textContent=valEl?valEl.textContent:v;
+    }
+    function start(){wrap.classList.add('dragging');pos();}
+    function end(){wrap.classList.remove('dragging');}
+    r.addEventListener('input',pos);
+    r.addEventListener('pointerdown',start);
+    r.addEventListener('pointerup',end);
+    r.addEventListener('pointercancel',end);
+    r.addEventListener('mouseenter',function(){pos();wrap.classList.add('dragging');});
+    r.addEventListener('mouseleave',function(){if(!r.matches(':active'))end();});
+    r.addEventListener('focus',start);
+    r.addEventListener('blur',end);
+    window.addEventListener('resize',pos);
+    pos();
+  });
+})();
+/* pulse the result hero when the headline figure changes */
+(function(){
+  var hero=document.querySelector('.res-hero');
+  var watch=document.getElementById('potOut');
+  if(!hero||!watch)return;
+  var last=watch.textContent, t=null;
+  new MutationObserver(function(){
+    if(watch.textContent!==last){
+      last=watch.textContent;
+      clearTimeout(t);
+      hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse');
+      t=setTimeout(function(){hero.classList.remove('pulse');},600);
+    }
+  }).observe(watch,{childList:true,characterData:true,subtree:true});
+})();
+</script>
+
+
+<script>
+/* A11Y+UX runtime: skip link, decorative-svg aria, single-open FAQ */
+(function(){
+  if(document.querySelector('.skip'))return;
+  var n=document.getElementById('nav');
+  var m=n&&n.nextElementSibling; if(m&&!m.id)m.id='main';
+  var a=document.createElement('a');a.href='#main';a.className='skip';a.textContent='Skip to content';
+  document.body.insertBefore(a,document.body.firstChild);
+  document.querySelectorAll('svg').forEach(function(s){s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');});
+  document.querySelectorAll('.faq-list').forEach(function(list){
+    list.addEventListener('toggle',function(e){
+      if(e.target.tagName==='DETAILS'&&e.target.open){
+        list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
+      }
+    },true);
+  });
+})();
+</script>
+
+
+<script>
+/* CLICK-TO-EDIT v2: tap any value to type. Money fields accept ANY amount
+   (no upper cap); if you type beyond the slider's scale, the slider expands
+   to hold it and returns to its sane range once you're back below it.
+   Age, retirement age and growth stay clamped to their slider ranges. */
+(function(){
+  var HARD_CEIL=1e9; /* technical ceiling to keep formatting/charts sane */
+  document.querySelectorAll('.field').forEach(function(field){
+    var range=field.querySelector('input[type=range]');
+    var val=field.querySelector('.val');
+    if(!range||!val||val.dataset.editable)return;
+    val.dataset.editable='1';
+    var money=(val.textContent.trim().charAt(0)==='\u20AC');
+    if(!range.dataset.defmax)range.dataset.defmax=range.max;
+    if(!range.dataset.defstep)range.dataset.defstep=range.step||'1';
+    val.setAttribute('tabindex','0');
+    val.setAttribute('role','button');
+    val.setAttribute('title',money?'Click to type any amount':'Click to type an exact value');
+    val.setAttribute('aria-label',money?'Edit value. Press Enter to type any amount.':'Edit value. Press Enter to type an exact figure.');
+    function commitValue(v){
+      var min=+range.min, defmax=+range.dataset.defmax, step=+range.step||1;
+      if(money){
+        v=Math.round(Math.max(min,Math.min(HARD_CEIL,v)));
+        var defstep=+range.dataset.defstep||1;
+        range.step=(((v-min)%defstep)===0)?defstep:1;
+        if(v>defmax){ range.max=v; }
+        else if(+range.max>defmax){ range.max=defmax; }
+        range.value=v;
+      }else{
+        var max=+range.max;
+        v=Math.min(max,Math.max(min,v));
+        v=Math.round((v-min)/step)*step+min;
+        range.value=Math.round(v*100)/100;
+      }
+      range.dispatchEvent(new Event('input'));
+    }
+    function openEditor(){
+      if(field.querySelector('.val-edit'))return;
+      var inp=document.createElement('input');
+      inp.type='number'; inp.className='val-edit';
+      inp.min=range.min;
+      inp.max=money?HARD_CEIL:range.max;
+      inp.step=money?'any':(range.step||1);
+      inp.value=range.value;
+      inp.setAttribute('inputmode',(+range.step<1&&!money)?'decimal':'numeric');
+      inp.setAttribute('aria-label',money
+        ?('Type any amount, minimum '+range.min)
+        :('Type a value between '+range.min+' and '+range.max));
+      val.style.display='none';
+      val.parentNode.insertBefore(inp,val);
+      inp.focus(); inp.select();
+      var done=false;
+      function commit(){
+        if(done)return; done=true;
+        var v=parseFloat(inp.value);
+        if(!isNaN(v))commitValue(v);
+        inp.remove(); val.style.display=''; val.focus();
+      }
+      function cancel(){ if(done)return; done=true; inp.remove(); val.style.display=''; val.focus(); }
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();commit();}
+        else if(e.key==='Escape'){e.preventDefault();cancel();}
+      });
+      inp.addEventListener('blur',commit);
+    }
+    val.addEventListener('click',openEditor);
+    val.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openEditor();}
+    });
+    /* self-heal the scale: when a drag ends back inside the sane range, restore it */
+    if(money){
+      range.addEventListener('change',function(){
+        var defmax=+range.dataset.defmax, defstep=+range.dataset.defstep||1, min=+range.min;
+        var changed=false;
+        if(((+range.value-min)%defstep)===0 && +range.step!==defstep){ range.step=defstep; changed=true; }
+        if(+range.max>defmax && +range.value<=defmax){ range.max=defmax; changed=true; }
+        if(changed)range.dispatchEvent(new Event('input'));
+      });
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* Smart sticky header: passive scroll-direction listener, 15px up-threshold */
+(function(){
+  var nav=document.getElementById('nav');
+  if(!nav)return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var lastY=window.scrollY, downAcc=0, upAcc=0;
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY, d=y-lastY; lastY=y;
+    if(y<110){nav.classList.remove('nav-hidden');downAcc=0;upAcc=0;return;}
+    var menuOpen=document.querySelector('.nav-links.open');
+    if(menuOpen||nav.contains(document.activeElement)){nav.classList.remove('nav-hidden');return;}
+    if(d>0){ upAcc=0; downAcc+=d; if(downAcc>60)nav.classList.add('nav-hidden'); }
+    else if(d<0){ downAcc=0; upAcc+=(-d); if(upAcc>15)nav.classList.remove('nav-hidden'); }
+  },{passive:true});
+})();
+</script>
+
+
+<script>
+/* Reveal handoff: after the 800ms entrance completes, mark elements settled so
+   component-level hover transitions (cards, buttons) regain control and the
+   entrance's will-change GPU hint is released. */
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  if(!els.length)return;
+  function settle(el){ if(!el.classList.contains('settled')) setTimeout(function(){el.classList.add('settled');},900); }
+  var mo=('MutationObserver' in window)?new MutationObserver(function(ms){
+    ms.forEach(function(m){ if(m.target.classList.contains('in')) settle(m.target); });
+  }):null;
+  els.forEach(function(el){
+    if(el.classList.contains('in')) settle(el);
+    if(mo) mo.observe(el,{attributes:true,attributeFilter:['class']});
+  });
+  if(!mo){ setTimeout(function(){ els.forEach(function(el){el.classList.add('settled');}); },1800); }
+})();
+</script>
+
+<script>
+/* ---- Ask Buddy: quick answers, never advice. Content comes from this page's
+   existing FAQ blocks (or the site-wide set below, copied verbatim from the
+   homepage FAQ). Vanilla JS, no external calls. ---- */
+(function(){
+  if(document.getElementById('pbBuddyBtn'))return;
+  var SHARED=[{"q": "Is the first chat really free?", "a": "<p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so.</p>"}, {"q": "What does it cost if I become a client?", "a": "<p>That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business.</p>"}, {"q": "Do I need to know anything before we talk?", "a": "<p>Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job.</p>"}, {"q": "Is my information kept private?", "a": "<p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p>"}];
+  var AV='data:image/jpeg;base64,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';
+  var qs=[];
+  document.querySelectorAll('.faq-list details').forEach(function(d){
+    var s=d.querySelector('summary'); if(!s)return;
+    var q=s.textContent.replace(/\+\s*$/,'').trim();
+    var c=d.cloneNode(true); var cs=c.querySelector('summary'); if(cs)cs.parentNode.removeChild(cs);
+    qs.push({q:q,a:c.innerHTML});
+  });
+  if(!qs.length)qs=SHARED.slice();
+  qs=qs.slice(0,5);
+  qs.push({q:'Can Buddy tell me what I should do?',
+    a:'<p>That would be advice, and Buddy sticks to general information. What\u2019s right depends on your own situation \u2014 which is exactly what the free 20\u2011minute call with Damian is for.</p>'});
+
+  var btn=document.createElement('button');
+  btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
+  btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-expanded','false');
+  btn.innerHTML='<img src="'+AV+'" alt="">Ask Buddy';
+  var panel=document.createElement('div');
+  panel.className='pb-b-panel';panel.id='pbBuddyPanel';panel.hidden=true;
+  panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Ask Buddy: common questions');
+  var listHtml='';
+  qs.forEach(function(x,i){
+    listHtml+='<div class="pb-b-item"><button type="button" class="pb-b-q" aria-expanded="false" data-i="'+i+'">'+x.q+'<span class="pm" aria-hidden="true">+</span></button><div class="pb-b-a" id="pbA'+i+'"><div>'+x.a+'</div></div></div>';
+  });
+  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
+    +'<div class="pb-b-list">'+listHtml+'</div>'
+    +'<div class="pb-b-foot"><p class="d">Buddy shares general information. For advice about your own situation, that\u2019s a job for Damian.</p><a class="btn btn-primary" href="booking.html">Book a free call</a></div>';
+  document.body.appendChild(btn);document.body.appendChild(panel);
+
+  function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
+  function close(){panel.hidden=true;btn.setAttribute('aria-expanded','false');btn.focus();}
+  btn.addEventListener('click',function(){panel.hidden?open():close();});
+  panel.querySelector('.pb-b-close').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!panel.hidden)close();});
+  panel.querySelectorAll('.pb-b-q').forEach(function(b){
+    b.addEventListener('click',function(){
+      var item=b.parentNode,was=item.classList.contains('open');
+      panel.querySelectorAll('.pb-b-item.open').forEach(function(o){o.classList.remove('open');o.querySelector('.pb-b-q').setAttribute('aria-expanded','false');});
+      if(!was){item.classList.add('open');b.setAttribute('aria-expanded','true');}
+    });
+  });
+})();
+
+/* ---- Analytics consent scaffold ----
+   DEVELOPER: set ANALYTICS_SRC to your real script URL (e.g. Plausible or GA4).
+   While it is still the [ANALYTICS_SCRIPT_URL] placeholder, NO banner is shown
+   and NO cookies or analytics run: the site stays cookie-free, exactly as the
+   Privacy Notice promises. Set a real URL and the consent banner activates
+   automatically on the next visit. ---- */
+(function(){
+  var ANALYTICS_SRC='[ANALYTICS_SCRIPT_URL]';
+  if(ANALYTICS_SRC.charAt(0)==='[')return;
+  var choice=null;try{choice=localStorage.getItem('pb-consent');}catch(e){}
+  function load(){var s=document.createElement('script');s.defer=true;s.src=ANALYTICS_SRC;s.setAttribute('data-domain','pensionbuddy.ie');document.head.appendChild(s);}
+  if(choice==='accepted'){load();return;}
+  if(choice==='rejected')return;
+  var bar=document.createElement('div');bar.className='pb-consent';bar.setAttribute('role','region');bar.setAttribute('aria-label','Cookie choice');
+  bar.innerHTML='<p>We\u2019d like to use a little analytics to see how the site is used \u2014 nothing for ads, never sold. You choose. See our <a href="privacy.html">Privacy Notice</a>.</p><button type="button" class="pb-c-yes">That\u2019s fine</button><button type="button" class="pb-c-no">No thanks</button>';
+  document.body.appendChild(bar);document.body.classList.add('pb-banner-open');
+  function done(v){try{localStorage.setItem('pb-consent',v);}catch(e){}bar.parentNode.removeChild(bar);document.body.classList.remove('pb-banner-open');}
+  bar.querySelector('.pb-c-yes').addEventListener('click',function(){done('accepted');load();});
+  bar.querySelector('.pb-c-no').addEventListener('click',function(){done('rejected');});
+})();
+</script>
+
+<script>
+/* Pay & File: a contribution made before the deadline can be set against the
+   previous tax year. 31 October for paper filers, extended into mid-November on
+   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
+(function(){
+  var el=document.getElementById('deadlineText'); if(!el) return;
+  var now=new Date(), y=now.getFullYear();
+  var due=new Date(y,9,31);
+  if(now>due){ y+=1; due=new Date(y,9,31); }
+  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
+  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
+    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
+    taxYear+"'s allowance is gone for good.";
+})();
+</script>
+
+<script>
+/* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
+   Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
+   conservative end of the window since ROS filers get into mid-November.
+   Rolls to the next year on its own, so the date never needs editing. */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var pad = function(n){ return n < 10 ? '0' + n : '' + n; };
+
+  function target(){
+    var now = new Date(), y = now.getFullYear();
+    var t = new Date(y, 9, 31, 23, 59, 59);
+    if (now > t) { y += 1; t = new Date(y, 9, 31, 23, 59, 59); }
+    return t;
+  }
+
+  var chip = document.getElementById('navTick'),
+      chipVal = document.getElementById('ntVal'),
+      bD = document.getElementById('tkD'), bH = document.getElementById('tkH'),
+      bM = document.getElementById('tkM'), bS = document.getElementById('tkS'),
+      sr = document.getElementById('tkSr'), head = document.querySelector('.tick h2');
+
+  function tick(){
+    var t = target(), diff = Math.max(0, t - new Date());
+    var days = Math.floor(diff / 86400000),
+        hrs  = Math.floor(diff % 86400000 / 3600000),
+        min  = Math.floor(diff % 3600000 / 60000),
+        sec  = Math.floor(diff % 60000 / 1000),
+        taxYear = t.getFullYear() - 1;
+
+    if (chipVal) chipVal.textContent = days + 'd ' + pad(hrs) + 'h ' + pad(min) + 'm';
+    if (chip) chip.setAttribute('aria-label',
+      'About ' + days + ' days left until the 31 October Pay and File deadline for the ' +
+      taxYear + ' tax year. Opens the full explanation.');
+
+    if (bD){ bD.textContent = pad(days); bH.textContent = pad(hrs);
+             bM.textContent = pad(min);  bS.textContent = pad(sec); }
+    if (head) head.textContent = 'Contributions for the ' + taxYear +
+      ' tax year close on 31 October.';
+    if (sr) sr.textContent = 'About ' + days +
+      ' days left until the 31 October Pay and File deadline for the ' + taxYear + ' tax year.';
+  }
+
+  tick();
+  /* the band ticks per second; the chip alone only needs a minute */
+  setInterval(tick, (bD && !reduce) ? 1000 : 60000);
+})();
+</script>
+
+<script>
+/* Mobile menu. This handler previously existed on index.html only, so the
+   menu could not be opened from any other page. */
+(function(){
+  var t=document.getElementById('navToggle'), l=document.getElementById('navLinks');
+  if(!t||!l) return;
+  t.addEventListener('click',function(){
+    var open=l.classList.toggle('open');
+    t.setAttribute('aria-expanded',open?'true':'false');
+    t.setAttribute('aria-label',open?'Close menu':'Open menu');
+  });
+  /* tapping a link closes it, and Escape closes it for keyboard users */
+  l.addEventListener('click',function(e){
+    if(e.target.closest('a')){l.classList.remove('open');
+      t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');}
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&l.classList.contains('open')){
+      l.classList.remove('open');t.setAttribute('aria-expanded','false');t.focus();}
+  });
+})();
+</script>
+
+<script>
+/* Progressive disclosure (Hick's Law).
+   The four controls that drive the headline figure stay visible. The rest
+   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   every id, listener and slider-fill binding is preserved - which is why this
+   runs after the calculator's own script rather than replacing markup. */
+(function(){
+  var KEEP = ['age','ret','pot','mine','salary','contrib'];   /* primary controls */
+  var panel = document.querySelector('.panel');
+  if(!panel) return;
+
+  var fields = [].slice.call(panel.querySelectorAll('.field'));
+  var extra = fields.filter(function(f){
+    var c = f.querySelector('input[type=range]');
+    return c ? KEEP.indexOf(c.id) === -1 : false;
+  });
+  /* the tax-rate segment is a refinement too */
+  var seg = panel.querySelector('.seg');
+  var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
+  if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
+  if(!extra.length) return;
+
+  var d = document.createElement('details');
+  d.className = 'adv';
+  var sum = document.createElement('summary');
+  sum.textContent = 'More options (' + extra.length + ')';
+  var inner = document.createElement('div');
+  inner.className = 'adv-in';
+  d.appendChild(sum); d.appendChild(inner);
+
+  extra[0].parentNode.insertBefore(d, extra[0]);
+  extra.forEach(function(f){ inner.appendChild(f); });   /* moved, not cloned */
+
+  /* a hint that sat under the tax segment travels with it */
+  var hint = panel.querySelector('.hint');
+  if(hint && /tax relief/i.test(hint.textContent)) inner.appendChild(hint);
+
+  /* sliders inside a closed <details> have zero width, so their fill must be
+     repainted the first time the panel opens */
+  d.addEventListener('toggle', function(){
+    if(!d.open) return;
+    inner.querySelectorAll('input[type=range]').forEach(function(s){
+      s.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
+})();
+</script>
+</body>
+</html>
