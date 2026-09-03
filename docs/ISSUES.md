@@ -1,107 +1,135 @@
-# PensionBuddy — Consolidated Issue Backlog
+# PensionBuddy — Issue Backlog, Run 2
 
-Merged from two audit reports on 2026-09-03. Original issue codes are preserved
-so progress stays traceable. Report 1 is the full bug audit (A–E). Report 2's
-structural/strategic gaps were provided in summary form only and are logged
-here as F-codes.
+Supersedes the run-1 backlog (preserved in git history at `95c08cb` and in
+`docs/STATUS.md`). Original issue codes are kept so progress stays traceable.
 
-Fix order (as both reports proposed): **A → B → C → D → E → F**. One git commit
-per category. No issue is marked fixed without a passing run of
-`tools/verify.py` and, for visual fixes, a fresh screenshot at 375px and 1440px.
+**This run:** A–E and F1 are **verify only** — re-run the suite, confirm no
+regression from run 1, change nothing unless a check newly fails. F2–F6 are
+**build**, in the order F2 → F3 → F4 → F5 → F6.
 
-Status is tracked in `docs/STATUS.md`, not here.
-
----
-
-## A. Legal / content blockers (publish blockers)
-
-Files owned by this pass: `terms.html`, `privacy.html`, `complaints.html`, `404.html`.
-
-| Code | File:line | Issue | Fix |
-|---|---|---|---|
-| **A1** | `terms.html:1547` | `€[LIABILITY_CAP_EUR]` renders literally in the liability clause (§5). | **NEEDS DAMIAN INPUT** — the figure is a business decision. Replace with a clearly-marked placeholder that does not read as a broken token, flag in STATUS.md. |
-| **A2** | `terms.html:1495`, `terms.html:1530`, `privacy.html:1495`, `complaints.html:1494` | Four internal template notes render publicly: "Template document…", "Draft for legal review… including the liability cap figure in section 5", "Template notice…", "Template process…". | Remove all four blocks. |
-| **A3** | `privacy.html:1490`+`1492`, `terms.html:1490`+`1492` | Two contradictory "Last updated" dates on each page ("June 2026" and "9 July 2026"). Terms §8 explicitly refers to "the date at the top of this page". | Keep a single line with the later date. |
-| **A4** | `complaints.html:1513`, `terms.html:1523` | Unfinished contact block with live `<!-- DEVELOPER: replace the two placeholders -->` comment. "Phone:" renders as "book a call"; email is `hello@pensionbuddy.ie` (unconfirmed). Terms §10 points readers at contact details that don't exist. | **NEEDS DAMIAN INPUT** for phone + email confirmation. Remove the developer comment; restructure the block so it reads correctly with or without a phone line; flag in STATUS.md. |
-| **A5** | `404.html:1509` | 404 page carries the complaints page's disclosure paragraph. | Replace with the generic site disclosure used on index. |
-| **A6** | `privacy.html:1523`, `privacy.html:1529` | Privacy Notice publishes no email or postal address; data-subject rights route to the Calendly page. Terms and complaints both publish the registered address. | Add the registered office address (already public on every footer) and the contact email placeholder shared with A4. |
-
-## B. Functionality
-
-Files owned by this pass: `pension-calculator.html`, `director-calculator.html`, `booking.html`, `starter.html`, `tracker.html`, `director.html` (lead endpoint only).
-
-| Code | File:line | Issue | Fix |
-|---|---|---|---|
-| **B1** | `director-calculator.html:2355` | `KEEP=['age','ret','pot','mine','salary','contrib']` — the salary slider's id is `sal` and `mine` belongs to the other calculator. The salary control gets collapsed into "More options" at 0px height while the page headlines the figure it drives. | Correct the array to `['age','ret','pot','sal','contrib']`. |
-| **B2** | `booking.html:1418` | No failure path when Calendly's `widget.js` fails to load (ad blocker, CSP, outage): blank 680px box, fallback link stays hidden. | Add `onerror` + a load timeout that reveals the fallback panel and its link. |
-| **B3** | `booking.html:1399` | No 4-column footer at all — booking is the only page with zero links to `director-calculator.html`. The `.foot-top` CSS is also absent from this file. | Port the shared footer markup **and** its CSS from a sibling page. |
-| **B4** | `pension-calculator.html:1702` | Tax relief is a flat 20/40% on the whole contribution. The page copy (line 1558) promises Revenue's age-related limits and the €115,000 earnings cap, but there is no earnings input so neither can be applied. | Add an earnings input, apply the age bands (15/20/25/30/35/40%) and the €115k cap to the relievable amount, and show the capped figure. |
-| **B5** | `pension-calculator.html:1705` | Over-cap warning fires only above €46,000/yr — the age-60+ maximum. Under-60s never see it. | Superseded by B4: warn when the contribution exceeds the user's actual band. |
-| **B6** | `director-calculator.html:1860`, `:1866` | Corporation tax saving is presented as exclusive to the pension route. Salary is equally deductible, so against "taken as salary instead" the incremental CT saving is nil; the hero tile claims €90,000 saved. | Reframe: keep the CT-deductibility fact, drop the "saved vs salary" framing, remove the misleading hero tile or relabel it honestly. |
-| **B7** | `director-calculator.html:1900`, `pension-calculator.html:1780` | Cross-wired lead payloads read ids that only exist on the other page (`incOut` / `taxOut`); emailed results include a dangling "Estimated monthly income:" line. | Each page reads only its own result ids. |
-| **F1a** | all pages, e.g. `index.html:1871` | `ANALYTICS_SRC='[ANALYTICS_SCRIPT_URL]'` — analytics self-disables. | **NEEDS DAMIAN INPUT** (which provider). Leave the guard in place; document in STATUS.md. |
-| **F1b** | `pension-calculator.html:1446`, `director-calculator.html:1610`, `starter.html:1489`, `tracker.html`, `director.html` | `LEAD_ENDPOINT=''` — every capture point falls back to a `mailto:` link, which silently loses the lead on devices with no mail client. | **NEEDS DAMIAN INPUT** for the endpoint URL. Harden the fallback so the visitor is never left with a dead button: show the figures on screen and offer the booking CTA when no endpoint is set. |
-
-## C. Layout / visual
-
-Files owned by this pass: `index.html`, `starter.html`, `tracker.html`, `director.html`, `glossary.html` (CSS only).
-
-| Code | File:line | Issue | Fix |
-|---|---|---|---|
-| **C1** | `index.html:879`, `starter.html:987`, `tracker.html:983`, `director.html:987` | A later unconditional `.pains{grid-template-columns:repeat(3,1fr)}` overrides the ≤920px `1fr` rule. Measured at 375px: three ~150px columns, ~99px usable text, and **the third card clipped off entirely** by `overflow:hidden`. | Move the 3-column rule inside a `min-width` query or re-declare the single-column rule after it. |
-| **C2** | `index.html:260`, subpages `:261` | Open mobile drawer is pinned `top:72px`; the header shrinks to 62px on scroll. Measured 9px gap. | Anchor the drawer at `top:100%` of the nav. |
-| **C3** | `starter.html:413`, `tracker.html:413`, `director.html:413`, `glossary.html:412` | `font-size:0` hides the "Pensionbuddy" wordmark at ≤380px on these four pages only. | Remove the rule so the header matches index. |
-| **C4** | `glossary.html:595` + `:418` | `scroll-margin-top:96px` stacks with `scroll-padding-top:90px`; deep links land ~162px below the header. | Drop the per-term `scroll-margin-top`; rely on `scroll-padding-top`. |
-| **C5** | `index.html:1658` vs `1661–1664` | First FAQ row uses an SVG plus icon; the other four use a text `+`. | Make all five identical. |
-| **C6** | `index.html:1153` and subpage equivalents | Between ~1321–1405px the nav needs ~1226px inside a 1092px box; the CTA clips. | Hide the chip label up to ~1420px (or let the chip wrap). **Decision taken:** with the label the nav needs ~1258px and can never fit the 1140px column at any width, so the label is hidden at every width — consistent with what every viewer under 1320px already saw. The countdown chip keeps its full `aria-label`. |
-| **C8** | all 12 pages, e.g. `director.html:1209` | Found by the Category C screenshots: `a.gref{display:inline-block;padding:13px 0;margin:-13px 0}` (tap-target hack on inline glossary links) makes the link's underline render across the *following* line of prose at 375px ("corporation tax" on director, "tax relief" on starter). | `display:inline` with the same vertical padding — inline boxes accept vertical padding as hit area without affecting line layout — and drop the negative margin. |
-| **C9** | all 12 pages | Found by the post-C screenshots: the fixed "Ask Buddy" button (bottom-right, ~52px tall + 18px offset) sits over the footer's last line of legal links on mobile once the page is scrolled to the end — "Complaints" is partly covered at 375px. | Reserve space: extra bottom padding on the footer at ≤600px so the last line clears the button. |
-| **C7** | all pages with `.foot-top`, e.g. `404.html:1141` | Found by the verification screenshots: a later tap-target rule `.foot-col a,.foot-links a{display:inline-block;padding:9px 0}` overrides the earlier `.foot-col a{display:block}`, so footer column links flow inline and collide — "About DamianBook a call", "Terms of BusinessComplaints" — at every width. | Make the tap-target rule `display:block` (keeps the 44px target). |
-
-## D. Accessibility
-
-Files owned by this pass: all 12 HTML files (CSS token + landmark markup only).
-
-| Code | Scope | Issue | Fix |
-|---|---|---|---|
-| **D1** | `--ring` token, all pages | Focus ring `rgba(11,122,110,.28)` composites to 1.49:1 on white — fails SC 1.4.11 (3:1). | Raise alpha to ≥0.7 (measured pass) or use solid teal (4.76:1). |
-| **D2** | all pages | Skip link and decorative-SVG `aria-hidden` are injected by JavaScript; with JS off there is no skip link. | Put the skip link in the source HTML. |
-| **D3** | all pages | Skip target is a runtime-assigned `<div id="main">` with no `tabindex="-1"`; focus does not move, and no page exposes a `main` landmark. | Wrap page content in a real `<main id="main" tabindex="-1">`. |
-| **D4** | both calculators | Results update with no `aria-live`; sliders have no `aria-valuetext`, so "€50,000" is announced as "50000". | Add `aria-live="polite"` to the results block; set `aria-valuetext` on each slider from the formatted value. |
-
-## E. Polish
-
-| Code | File:line | Issue | Fix |
-|---|---|---|---|
-| **E1** | `index.html:1554` | Countdown heading is rewritten each tick but the line beneath hardcodes "2025 tax year" — contradicts itself from 1 Nov 2026. | Derive the year in the same script. |
-| **E2** | both calculators, `glossary.html` | Standard Fund Threshold is disclaimed in prose but never applied; director page can project €437m with no flag. Glossary lacks an SFT entry. | Show an SFT notice when the projected pot exceeds the threshold; add a glossary entry. |
-| **E3** | `index.html:1699` | Index's mobile menu can't be closed with Escape; `aria-label` stays "Open menu" while open. Subpages ship the better handler. | Port the subpage handler. |
-| **E4** | `404.html:1491` | "Last updated: June 2026" on a 404 page. | Remove. |
-| **E5** | `booking.html:1321–1328`, `:1392`, `:1407–1434` | Stale "Replace CALENDLY_URL" comments, dead `PLACEHOLDER` sentinel, hidden copy saying "once the Calendly link is connected". | Clean up alongside B2. |
-| **E6** | all pages | `ANALYTICS_SRC` / `LEAD_ENDPOINT` placeholders. | Tracked as F1a / F1b. |
-| **E7** | index + subpages | Dead media rules overridden by later unconditional rules (`.hero h1`, `.callout,.final`, `.strip-item`, `.nav-tick`, `.nav-links a.lnk`); `.aud-figure{order:-1}` is a no-op (not a grid child); `.strip*` CSS ships on pages with no strip markup. | Remove the dead rules; fix `.aud-figure` targeting. |
-
-## F. Structural / strategic gaps (from report 2)
-
-| Code | Scope | Gap | Plan |
-|---|---|---|---|
-| **F1** | see F1a / F1b above | Capture wiring: analytics + lead endpoint. | Config-dependent — placeholders hardened, flagged. |
-| **F2** | all pages | Typography mismatch: `.pb-b-head .t{font-family:Fraunces,…}` — Fraunces is never loaded, so the Ask Buddy title falls back to Georgia serif against a Sora site. | Delete the dead rule (use Sora). |
-| **F3** | `index.html` (476KB), both calculators | Six base64 JPEGs inline in index.html; two more in each calculator. Whole page must download before first paint. | Extract to `assets/img/*.webp` (with `.jpg` fallback via `<picture>`), reference by path, keep `loading="lazy"`. Inventory: index carries 5 unique JPEGs (17–97KB, ~263KB raw / ~350KB as base64); the 17KB Buddy avatar is duplicated in both calculators; a 3.7KB avatar lives in the `AV` JS variable on every page (leave — it is tiny and used before first paint by the widget). No WebP encoder ships with macOS (`sips` silently fails); Pillow 11 with libwebp is installed user-level — measured q80: 720×897 photo 97→78KB, 620×775 portrait 53→29KB, 320×320 avatar 17→9KB. |
-| **F4** | funnel | No qualifying form before the booking step — every visitor lands straight on Calendly with no context captured. | Structural addition; scoped separately from the bug backlog. Deferred unless time permits. |
-| **F5** | site | No About page — `index.html#about` is the only "about" content. | Structural addition. Deferred unless time permits. |
-| **F6** | funnel | No thank-you page after booking or lead capture — inline "Thanks" states only; no conversion event to measure. | Depends on Calendly redirect config (business setting) and F1. Deferred; flagged. |
+Verification is `python3 tools/verify.py` (headless Chrome, audits at
+375/1360/1440px, full-page screenshots at 375 and 1440). Nothing is marked
+done without a passing run, and for anything visual, a screenshot I have
+actually looked at.
 
 ---
 
-## Verified correct — must stay correct after every pass
+## Three claims in the incoming reports that the repo contradicts
 
-Re-run `tools/verify.py` after each category. These were confirmed working at audit time:
+Recorded here rather than silently accepted. All three were left as
+NEEDS DAMIAN INPUT at the end of run 1 and are **still open**:
 
-- All internal links and `#anchors` resolve (0 broken).
-- Zero console errors on all 12 pages.
-- Zero horizontal overflow at 375px.
-- Calculator maths (future-value projection, cost-of-waiting, +€100 boost, 12.5% CT, two-thirds salary cap) — independently recomputed.
-- Calendly embed takes the ready branch, injects script + CSS, hides the fallback.
-- Text contrast passes on every rendered pair measured.
-- All images decode and carry correct alt text.
+| Claim | Repo state |
+|---|---|
+| Report 1, A1: "now uses Damian's wording … low nominal figure flagged for solicitor" | `terms.html` §5 still renders the run-1 placeholder `€[amount to be confirmed]` (`data-issue="A1"`). No figure and no revised wording has reached the file. The described wording is a business/legal decision — it will not be invented here. **Still NEEDS DAMIAN INPUT.** |
+| Report 2, F1: "lead endpoint + analytics wiring — already resolved" | `LEAD_ENDPOINT` is still `''` on all five capture pages; `ANALYTICS_SRC` is still `'[ANALYTICS_SCRIPT_URL]'`. Both fail safely (mailto fallback with honest on-screen copy; analytics self-disables) but no lead reaches a backend and nothing is measured. **Still NEEDS DAMIAN INPUT.** |
+| Report 2, F3: "index.html is 476KB from three base64-inlined photos" | Already fixed in run 1 (`e028438`): index.html is **125,862 bytes**, photos live in `assets/img/` as JPEG + WebP inside `<picture>`. Description is stale — demoted to verify-only. |
+
+Also open from run 1: **A4** — phone number placeholder in `terms.html` and
+`complaints.html`, and confirmation that `hello@pensionbuddy.ie` is a real
+monitored mailbox.
+
+---
+
+## Verify only — A–E, F1
+
+No edits expected. Re-run the full suite on all 12 existing pages and confirm
+these run-1 outcomes still hold. Fix only what newly fails, and say so.
+
+| Group | What must still be true |
+|---|---|
+| **A** legal/content | No template/draft notes rendering; one "Last updated" per legal page; 404 carries the site disclosure, not the complaints text; privacy publishes a postal address + email. A1/A4 placeholders remain marked and flagged. |
+| **B** functionality | Salary slider outside the collapsed `<details>`; Calendly `onerror` + timeout reveals the fallback; booking has the 4-column footer and links to the director calculator; tax relief applies the age bands and €115,000 cap; CT framing honest; lead payloads reference only ids on their own page. |
+| **C** layout | `.pains` single column ≤920px with nothing clipped; drawer flush to the nav when scrolled; wordmark visible at 375px; glossary deep links land ~17px below the header; one FAQ icon style; nav inside the column at 1360; footer links stacked; `a.gref` underline on its own line; footer clears the Ask Buddy button. |
+| **D** accessibility | Focus ring ≥3:1 (currently 3.99:1 on white); skip link in source HTML; `<main id="main" tabindex="-1">` on every page; calculators announce results via `#srSummary` and every slider has `aria-valuetext`. |
+| **E** polish | Countdown year derived, not hardcoded; SFT notice appears only above the threshold constant; Escape closes the mobile menu on index; no orphaned marquee CSS. |
+| **F1** capture wiring | Guards still in place and still failing safely. **Expected to remain NEEDS DAMIAN INPUT** — see the table above. |
+| Regression floor | 0 broken links/anchors · 0 console errors · 0 horizontal overflow at 375px · 0 contrast failures · 0 image decode failures · calculator projection exact (101,685) · Calendly ready-branch verified. |
+
+---
+
+## Build — F2 to F6
+
+### F2 · Typography: load Fraunces, take headlines editorial
+**Owner:** typography/perf pass. **Files:** all 14 pages (12 + the 2 new ones once built).
+
+Run 1 deleted the orphaned `font-family:Fraunces,Georgia,serif` rule on the
+Ask Buddy header, which was silently rendering Georgia. **That decision is
+reversed by this run's brief:** the brief specifies Fraunces, warm editorial.
+
+- Add Fraunces to the existing Google Fonts `<link>` (keep the single
+  request; keep `display=swap` and the existing `preconnect`s). Sora stays
+  for body/UI, IBM Plex Mono stays for the mono eyebrow/label style.
+- Route display type to Fraunces via a token (e.g. `--font-display`) applied
+  to `h1`/`h2`/hero headlines/section headings and the Ask Buddy header —
+  not to body copy, buttons, form controls, nav links or numeric readouts,
+  which stay Sora.
+- Fraunces has different metrics to Sora (wider, taller x-height, optical
+  sizing). Re-check the tight spots at 375px: the hero headlines, the
+  countdown band, the calculator result figures (`potOut`/`incOut` must not
+  reflow or clip), and the director page's long hero line.
+- Must not regress: text contrast, horizontal overflow, or LCP. Watch the
+  added font weight — request only the weights actually used.
+
+### F3 · Base64 image extraction — **verify only**
+Completed in run 1. Confirm `assets/img/` still resolves, `images.failed` is
+empty, and the photos render identically. No work expected.
+
+### F4 · Qualifying / routing form before the calendar
+**Owner:** booking-flow pass. **Files:** `booking.html`.
+
+`booking.html` currently drops the visitor straight onto the calendar.
+
+- Short form ahead of the embed: **name, email, persona** (Tracker /
+  Starter / Director). Three fields, nothing more.
+- The Calendly embed stays hidden until the form is completed, then reveals.
+- Prefill name and email into the Calendly URL, and tag the persona so
+  Director enquiries can be prioritised later — Calendly reads `name` and
+  `email` query params for prefill, plus `utm_*` params which surface on the
+  booking record. Use a UTM param for the persona tag.
+- **Compliance line:** routing-level information only. No income, pension
+  value, age or circumstances — nothing that edges toward a personal
+  recommendation. Report 1's "information, not advice" position must hold.
+- Accessibility to the same standard as the rest of the site: real
+  `<label>`s, `aria-live` error messaging, keyboard operable, 44px targets,
+  focus ring from the shared token.
+- The existing fallback link (open Calendly in a new tab) must survive for
+  the case where the embed script fails — that is B2 and must not regress.
+
+### F5 · About / Our Story page
+**Owner:** story pass. **Files:** creates `about.html`; edits the homepage
+section and the nav on all existing pages.
+
+- Build `about.html` reusing existing components and CSS — no new design
+  language, no new patterns.
+- Content: Damian's story, 30 years in financial services, the QFA
+  credential, why Pensionbuddy exists, and the Gresham Wealth Management
+  relationship stated plainly.
+- **Source discipline:** use only facts already published on this site
+  (homepage About section, footers, terms). Anything not already on the site
+  — new biography detail, dates, firm names, client numbers, awards — is a
+  placeholder with a `data-issue` flag, never a guess.
+- Add "About" to the main nav on every page, and to the footer "Company"
+  column where the existing `index.html#about` link sits.
+- Shorten the homepage section to a teaser plus a "Read our story" link to
+  `about.html`. Keep `id="about"` working — footers across the site link to
+  `index.html#about`.
+
+### F6 · Post-booking thank-you page
+**Owner:** booking-flow pass. **Files:** creates `thank-you.html`.
+
+- Content: confirmation the call is booked, what to expect on the call, what
+  to have ready, reassurance ("no obligation, no jargon, no sales pressure"),
+  and links back to the calculators and jargon buster.
+- **Known dependency:** for an inline Calendly embed, "redirect after
+  booking" is a setting on the **event type inside the Calendly account** —
+  it cannot be forced from the page's markup. The page will be built and
+  ready, but the redirect cannot be confirmed end-to-end from here.
+  **Log as NEEDS DAMIAN INPUT in `docs/STATUS.md`** with the exact setting to
+  change (Calendly → Event type → *pensionbuddy-1-1* → Confirmation page →
+  Redirect to an external site → the deployed `/thank-you.html` URL).
+
+### Tooling
+Extend `tools/verify.py` so `about.html` and `thank-you.html` are audited
+like every other page, and add checks that they exist, are reachable from the
+nav / booking flow, and meet the same regression floor.

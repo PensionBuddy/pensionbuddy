@@ -140,8 +140,30 @@ AUDIT_JS = r"""
   const imgs=$$('img');R.images={total:imgs.length,missingAlt:imgs.filter(i=>!i.hasAttribute('alt')).length,failed:[]};
   await Promise.all(imgs.map(i=>new Promise(res=>{const t=new Image();t.onload=()=>res();t.onerror=()=>{R.images.failed.push((i.getAttribute('alt')||i.src.slice(0,40)));res()};t.src=i.src;setTimeout(res,3000)})));
 
-  // fonts (F2)
-  try{await document.fonts.ready;R.fonts={sora:document.fonts.check('700 20px Sora'),fraunces:$$('*').some(e=>/Fraunces/i.test(getComputedStyle(e).fontFamily))}}catch(e){R.fonts={error:String(e)}}
+  // fonts (F2): Fraunces must be REQUESTED, LOADED and actually applied to display type,
+  // while body copy / controls / numeric readouts stay on Sora.
+  try{
+    await document.fonts.ready;
+    const famOf=el=>el?getComputedStyle(el).fontFamily:'';
+    const isFr=s=>/Fraunces/i.test(s);
+    R.fonts={
+      sora:document.fonts.check('700 20px Sora'),
+      /* fonts.check() reports true for families that fall back, so ask the FontFace set directly */
+      frauncesLoaded:[...document.fonts].some(f=>/Fraunces/i.test(f.family)&&f.status==='loaded'),
+      frauncesFaces:[...document.fonts].filter(f=>/Fraunces/i.test(f.family)).length,
+      linkRequestsFraunces:$$('link[rel=stylesheet]').some(l=>/Fraunces/i.test(l.href)),
+      h1:famOf(document.querySelector('h1')).split(',')[0].trim(),
+      h2:famOf(document.querySelector('h2')).split(',')[0].trim(),
+      body:famOf(document.body).split(',')[0].trim(),
+      bodyCopyOnFraunces:$$('p').filter(p=>p.textContent.trim().length>60&&isFr(famOf(p))).length,
+      controlsOnFraunces:$$('button,input,select,.btn,.lnk').filter(e=>isFr(famOf(e))).length,
+      readoutsOnFraunces:$$('#potOut,#incOut,#taxOut,#maxOut,.big,.tk-n').filter(e=>isFr(famOf(e))).length
+    };
+  }catch(e){R.fonts={error:String(e)}}
+
+  // nav + footer link inventory (F5: "About" must reach about.html from every page)
+  R.navHrefs=$$('.nav-links a').map(a=>a.getAttribute('href'));
+  R.footHrefs=$$('.foot-col a').map(a=>a.getAttribute('href'));
 
   // clipped grid children (C1): any grid with >=2 columns whose children run past the grid's own box
   R.clippedGrids=[];
@@ -172,6 +194,40 @@ AUDIT_JS = r"""
   if(cw){R.calendly={dataUrl:cw.getAttribute('data-url'),widgetHeight:Math.round(cw.getBoundingClientRect().height),scriptInjected:!!document.querySelector('script[src*="calendly"]'),cssInjected:!!document.querySelector('link[href*="calendly"]'),fallbackDisplay:getComputedStyle(document.getElementById('calFallback')||cw).display,footTop:!!document.querySelector('.foot-top')}}
 
   // ---- interaction checks last (they mutate the page) ----
+  // F4: the qualifying form must gate the Calendly embed, and reveal it once completed
+  if(/booking/.test(location.pathname)){
+    const form=document.getElementById('qualForm');
+    const embedWrap=document.getElementById('calStage')||document.getElementById('calEmbed');
+    const vis=el=>{if(!el)return false;const cs=getComputedStyle(el);return cs.display!=='none'&&cs.visibility!=='hidden'&&el.getBoundingClientRect().height>0};
+    const g={formExists:!!form,embedVisibleBeforeSubmit:vis(embedWrap)};
+    if(form){
+      const fields=$$('#qualForm input,#qualForm select,#qualForm textarea').filter(i=>i.type!=='hidden');
+      g.fields=fields.map(i=>i.id||i.name||i.type);
+      g.unlabelled=fields.filter(i=>!(i.labels&&i.labels.length)&&!i.getAttribute('aria-label')&&!i.getAttribute('aria-labelledby')).map(i=>i.id||i.type);
+      g.smallTargets=fields.filter(i=>i.getBoundingClientRect().height<44).map(i=>i.id||i.type);
+      g.hasLiveError=!!form.querySelector('[aria-live]')||!!document.querySelector('#qualErr[aria-live]');
+      // submit empty -> must NOT reveal
+      form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      await new Promise(r=>setTimeout(r,250));
+      g.revealsWhenEmpty=vis(embedWrap);
+      // fill and submit properly
+      const set=(el,v)=>{if(!el)return;const p=Object.getPrototypeOf(el);const d=Object.getOwnPropertyDescriptor(p,'value');d&&d.set?d.set.call(el,v):el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));};
+      fields.forEach(f=>{
+        if(f.tagName==='SELECT'){const opt=[...f.options].find(o=>o.value&&o.value!=='');if(opt)set(f,opt.value);}
+        else if(f.type==='radio'){if(/director/i.test(f.value||f.id||''))f.click();}
+        else if(f.type==='email')set(f,'test@example.com');
+        else set(f,'Test Person');
+      });
+      if(!$$('#qualForm input[type=radio]:checked').length){const r0=document.querySelector('#qualForm input[type=radio]');r0&&r0.click();}
+      form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      await new Promise(r=>setTimeout(r,900));
+      g.revealsWhenComplete=vis(embedWrap);
+      const w=document.getElementById('calWidget');
+      g.urlAfterSubmit=w?(w.getAttribute('data-url')||'').slice(0,190):null;
+      g.fallbackLinkPresent=!!document.getElementById('calOpenBtn');
+    }
+    R.bookingGate=g;
+  }
   // deep-link offset (C4): glossary terms + any page's first in-page anchor target
   const term=document.getElementById('tax-relief')||document.getElementById('deadline')||document.getElementById('about');
   const nav=document.querySelector('nav');
@@ -350,6 +406,32 @@ def evaluate(page, st, audits):
     # width-invariant checks: evaluate once, on the first successful audit
     a = next((x for x in audits.values() if 'auditError' not in x), {})
     if a.get('needsInput'): W.append(('NEEDS-INPUT', ', '.join(a['needsInput'])))
+    # F2 — Fraunces requested, loaded, applied to display type only
+    fo = a.get('fonts') or {}
+    if fo and not fo.get('error'):
+        if not fo.get('linkRequestsFraunces'): W.append(('F2', 'stylesheet does not request Fraunces'))
+        elif not fo.get('frauncesLoaded'): F.append(('F2', 'Fraunces requested but did not load'))
+        elif not any('Fraunces' in str(fo.get(k, '')) for k in ('h1', 'h2')): W.append(('F2', 'Fraunces loaded but headings still %s/%s' % (fo.get('h1'), fo.get('h2'))))
+        for k, label in (('bodyCopyOnFraunces', 'body paragraphs'), ('controlsOnFraunces', 'controls'), ('readoutsOnFraunces', 'numeric readouts')):
+            if fo.get(k): W.append(('F2', '%d %s render in Fraunces (display type only)' % (fo[k], label)))
+    # F5 — About must be reachable from the nav of every page
+    nav = a.get('navHrefs')
+    if nav is not None and not any('about.html' in (h or '') for h in nav + (a.get('footHrefs') or [])):
+        W.append(('F5', 'no link to about.html in nav or footer'))
+    # F4 — the qualifying form must gate the embed
+    g = a.get('bookingGate')
+    if g is not None:
+        if not g.get('formExists'): W.append(('F4', 'no qualifying form ahead of the calendar'))
+        else:
+            if g.get('embedVisibleBeforeSubmit'): F.append(('F4', 'calendar is visible before the form is completed'))
+            if g.get('revealsWhenEmpty'): F.append(('F4', 'empty form submit reveals the calendar'))
+            if not g.get('revealsWhenComplete'): F.append(('F4', 'completed form does not reveal the calendar'))
+            if not g.get('fallbackLinkPresent'): F.append(('F4', 'B2 regression: Calendly fallback link gone'))
+            if g.get('unlabelled'): F.append(('F4', 'unlabelled field(s): %s' % g['unlabelled']))
+            if g.get('smallTargets'): W.append(('F4', 'field(s) under 44px: %s' % g['smallTargets']))
+            if not g.get('hasLiveError'): W.append(('F4', 'no aria-live error region on the form'))
+            u = g.get('urlAfterSubmit') or ''
+            if u and not ('email=' in u and ('utm_' in u or 'a1=' in u)): W.append(('F4', 'Calendly URL carries no prefill/persona tag: %s' % u[:90]))
     if a.get('calendly') and not a['calendly'].get('footTop'): W.append(('B3', 'no .foot-top footer on booking'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
     if a.get('countdownYears') and len(a['countdownYears']) > 1: W.append(('E1', 'countdown band mixes years %s' % a['countdownYears']))
@@ -380,6 +462,26 @@ def evaluate(page, st, audits):
 
 # ----------------------------------------------------------------------------
 
+def site_checks():
+    """Site-level expectations that are not about one page in isolation."""
+    out = []
+    for page, why in (('about.html', 'F5 story page'), ('thank-you.html', 'F6 post-booking page')):
+        if not os.path.isfile(os.path.join(ROOT, page)):
+            out.append(('MISSING-PAGE', '%s does not exist (%s)' % (page, why)))
+    bk = os.path.join(ROOT, 'booking.html')
+    if os.path.isfile(bk) and os.path.isfile(os.path.join(ROOT, 'thank-you.html')):
+        t = open(bk, encoding='utf-8', errors='replace').read()
+        if 'thank-you' not in t:
+            out.append(('F6', 'booking.html never references thank-you.html — redirect not wired in the page'))
+    sm = os.path.join(ROOT, 'sitemap.xml')
+    if os.path.isfile(sm):
+        s = open(sm, encoding='utf-8', errors='replace').read()
+        for page in ('about.html', 'thank-you.html'):
+            if os.path.isfile(os.path.join(ROOT, page)) and page not in s and page != 'thank-you.html':
+                out.append(('sitemap', '%s exists but is not in sitemap.xml' % page))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--pages', nargs='*'); ap.add_argument('--no-shots', action='store_true'); ap.add_argument('--widths', default=','.join(map(str, AUDIT_WIDTHS)))
@@ -408,13 +510,18 @@ def main():
         report['pages'][page] = {'static': st_all[page], 'audits': audits, 'shots': shots, 'FAIL': F, 'WARN': W}
         print('→ %d FAIL, %d WARN' % (len(F), len(W)))
     srv.shutdown()
+    site = site_checks()
+    report['site'] = site
     json.dump(report, open(os.path.join(OUT, 'report.json'), 'w'), indent=1)
     lines = ['# Verification report', '', 'Generated %s · %d pages · %.0fs' % (report['generated'], len(pages), time.time() - t0), '', '| Page | FAIL | WARN | Notes |', '|---|---|---|---|']
     for p, r in report['pages'].items():
         notes = '; '.join('**%s** %s' % x for x in r['FAIL']) + ('; ' if r['FAIL'] and r['WARN'] else '') + '; '.join('%s %s' % x for x in r['WARN'])
         lines.append('| %s | %d | %d | %s |' % (p, len(r['FAIL']), len(r['WARN']), notes.replace('|', '\\|')[:600]))
-    lines += ['', 'Screenshots: `verify-out/shots/<page>-<width>.png`', '', 'FAIL = must be zero before launch. WARN = open backlog item, tracked by code in docs/ISSUES.md.']
+    lines += ['', '## Site-level', '']
+    lines += (['- **%s** %s' % s for s in site] or ['- all site-level checks pass'])
+    lines += ['', 'Screenshots: `verify-out/shots/<page>-<width>.png`', '', 'FAIL = must be zero before launch. WARN = open backlog item, tracked by code in docs/ISSUES.md. Site-level rows do not affect the exit code — judge them at the final gate.']
     open(os.path.join(OUT, 'report.md'), 'w').write('\n'.join(lines) + '\n')
+    for s in site: print('  site: %-14s %s' % s)
     print('\n%s\nTOTAL FAIL: %d  → %s' % ('-' * 60, total_f, os.path.join(OUT, 'report.md')))
     sys.exit(1 if total_f else 0)
 
