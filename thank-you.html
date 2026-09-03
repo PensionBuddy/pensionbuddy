@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book a free call, Pensionbuddy</title>
-<meta name="description" content="Book a free, no-obligation 20-minute pension chat with Damian Condon (QFA). Pick a time that suits you. Phone or video, plain English, no pressure.">
+<title>Your call is booked, Pensionbuddy</title>
+<meta name="description" content="Your free pension chat with Damian is booked. What happens next, what to have ready, and where to look while you wait.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
-<meta property="og:title" content="Book a free call, Pensionbuddy">
-<meta property="og:description" content="Book a free, no-obligation 20-minute pension chat with Damian Condon (QFA). Pick a time that suits you. Phone or video, plain English, no pressure.">
+<meta property="og:title" content="Your call is booked, Pensionbuddy">
+<meta property="og:description" content="Your free pension chat with Damian is booked. What happens next, what to have ready, and where to look while you wait.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
 <meta name="twitter:card" content="summary">
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1410,18 +1411,16 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<!-- DEVELOPER NOTE: Booking is handled by Calendly.
-     A short routing form (#qualForm: name, email, persona) gates the calendar.
-     Only on a valid submit is #calStage revealed, #calWidget created with a
-     prefilled + UTM-tagged data-url, and Calendly's embed script injected. If
-     that script fails to load, a fallback panel links to the same URL in a new
-     tab. Availability is set inside Calendly. No booking data is stored on this
-     site; Calendly handles it under its own terms (Privacy Notice in the footer).
-
-     After a booking completes the visitor should land on thank-you.html. See
-     THANK_YOU_URL in the booking script at the foot of this page: for an inline
-     embed the redirect is a setting on the Calendly event type, not something
-     this page can force. -->
+<!-- DEVELOPER NOTE: post-booking confirmation page.
+     Visitors reach this page after completing a booking in the Calendly
+     embed on booking.html. For an inline embed that redirect is a setting on
+     the event type inside the Calendly account, not something the embedding
+     page can force:
+       Calendly -> Event Types -> "pensionbuddy-1-1" -> Confirmation page ->
+       "Redirect to an external site" -> https://pensionbuddy.ie/thank-you.html
+     booking.html also listens for Calendly's event_scheduled message as a
+     second route here (see THANK_YOU_URL in its booking script).
+     noindex: this is a post-conversion page, it should not be in search. -->
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
@@ -1441,14 +1440,14 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 <div class="wrap"><div class="layout">
 
   <div class="lead">
-    <span class="eyebrow reveal"><span class="pip"></span>Your free consultation</span>
-    <h1 class="reveal" style="transition-delay:.06s">A <span class="hl">real</span> conversation, free of charge.</h1>
-    <p class="sub reveal" style="transition-delay:.12s">Twenty minutes with Damian, by phone or video, at a time you choose. Free, with no obligation.</p>
+    <span class="eyebrow reveal"><span class="pip"></span>Your call is booked</span>
+    <h1 class="reveal" style="transition-delay:.06s">That is you <span class="hl">booked in</span>.</h1>
+    <p class="sub reveal" style="transition-delay:.12s">Twenty minutes with Damian, by phone or video, at the time you chose. Free, with no obligation.</p>
 
     <div class="timeline reveal" style="transition-delay:.18s">
-      <div class="tl"><div class="tn">First</div><div class="tt">Pick a time that suits</div><div class="td">Choose a slot from Damian's calendar on the right. It takes under a minute.</div></div>
-      <div class="tl"><div class="tn">Then</div><div class="tt">You get a confirmation</div><div class="td">Calendly emails you the details and a reminder before the call.</div></div>
-      <div class="tl"><div class="tn">After</div><div class="tt">Talk it through</div><div class="td">Plain English, your questions answered, and a clear sense of your next step.</div></div>
+      <div class="tl"><div class="tn">Now</div><div class="tt">Check your inbox</div><div class="td">Calendly emails you the details and a reminder before the call. If nothing arrives in a few minutes, check your spam folder.</div></div>
+      <div class="tl"><div class="tn">On the day</div><div class="tt">Damian gets in touch</div><div class="td">Phone or video, whichever you picked when you booked.</div></div>
+      <div class="tl"><div class="tn">During</div><div class="tt">Talk it through</div><div class="td">Plain English, your questions answered, and a clear sense of your next step.</div></div>
     </div>
 
     <div class="promise reveal" style="transition-delay:.24s">
@@ -1459,11 +1458,11 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <div class="assurances reveal" style="transition-delay:.3s">
       <div class="assure">
         <span class="ai"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-        <div><div class="at">20 minutes, that's it</div><div class="ad">A short, no-strings chat about your pension.</div></div>
+        <div><div class="at">20 minutes, that&rsquo;s it</div><div class="ad">A short, no-strings chat about your pension.</div></div>
       </div>
       <div class="assure">
         <span class="ai"><svg class="ico" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
-        <div><div class="at">Phone or video</div><div class="ad">Pick whichever you prefer when you book.</div></div>
+        <div><div class="at">Phone or video</div><div class="ad">Whichever you picked when you booked.</div></div>
       </div>
     </div>
   </div>
@@ -1471,61 +1470,56 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   <div class="book-card reveal" style="transition-delay:.15s">
     <div class="letterhead">
       <span class="paw"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>
-      <span>Pensionbuddy · Appointments</span>
+      <span>Pensionbuddy &middot; Appointments</span>
     </div>
 
     <div class="book-head">
-      <h2>Book your call</h2>
-      <p>Three quick details, then pick a time that suits. You will get a confirmation by email straight away.</p>
+      <h2>What to have ready</h2>
+      <p>Nothing formal, and nothing to dig out if you would rather not.</p>
     </div>
 
-    <div class="qual">
-      <form id="qualForm" novalidate>
-        <p class="qual-lead">Just so Damian knows who he is talking to, and so the calendar arrives with your name already on it.</p>
-
-        <div class="qgrid">
-          <div class="qfield">
-            <label for="qName">Your name</label>
-            <input id="qName" name="name" type="text" autocomplete="name" placeholder="First and last name" aria-describedby="qualErr" required>
-          </div>
-          <div class="qfield">
-            <label for="qEmail">Your email</label>
-            <input id="qEmail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" aria-describedby="qualErr" required>
-          </div>
+    <div class="card-body ruled">
+      <div class="assurances">
+        <div class="assure">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+          <div><div class="at">Roughly where you have worked</div><div class="ad">Rough employer names and rough dates are plenty. We do not need the old statements.</div></div>
         </div>
-
-        <fieldset class="qpersona">
-          <legend>Which sounds most like you?</legend>
-          <div class="pgrid">
-            <label class="popt"><input type="radio" name="persona" id="pTracker" value="tracker"><span class="pl"><b>Tracker</b><span>I have old pensions to track down.</span></span></label>
-            <label class="popt"><input type="radio" name="persona" id="pStarter" value="starter"><span class="pl"><b>Starter</b><span>I am starting my first pension.</span></span></label>
-            <label class="popt"><input type="radio" name="persona" id="pDirector" value="director"><span class="pl"><b>Director</b><span>I run a company and pay myself.</span></span></label>
-          </div>
-        </fieldset>
-
-        <p class="qerr" id="qualErr" role="alert" aria-live="polite"></p>
-
-        <button class="btn btn-primary qsubmit" type="submit" id="qualSubmit">Show me the calendar <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-
-        <p class="qnote">That is the lot. We do not ask what you earn, what your pension is worth, how old you are or who you work for: none of it is needed to book a chat, and this site gives information, not advice. Your name and email go to Calendly with the booking and are handled in line with our <a href="privacy.html">Privacy Notice</a>.</p>
-      </form>
-
-      <div class="qdone" id="qualDone">
-        <svg class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        <p id="qualDoneMsg"></p>
-        <button type="button" class="qedit" id="qualEdit">Change details</button>
+        <div class="assure">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12" y2="17"/></svg></span>
+          <div><div class="at">Whatever you have been wondering</div><div class="ad">No question is too basic. That is what the twenty minutes are for.</div></div>
+        </div>
+        <div class="assure">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <div><div class="at">And if you have none of it, come anyway</div><div class="ad">Bring what you remember, Damian will help track down the rest.</div></div>
+        </div>
       </div>
     </div>
 
-    <div id="calStage" hidden>
-    <div class="cal-embed" id="calEmbed"></div>
-
-    <div class="cal-fallback" id="calFallback" style="display:none">
-      <div class="cal-fallback-icon" style="width:64px;height:64px;border-radius:18px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg class="ico" viewBox="0 0 24 24" style="width:30px;height:30px"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-      <h3>Booking calendar</h3>
-      <p>The live calendar could not load here. You can open it in a new tab instead.</p>
-      <a class="btn btn-primary" id="calOpenBtn" href="https://calendly.com/damian-greshamwealth/pensionbuddy-1-1" target="_blank" rel="noopener">Open the booking calendar <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <div class="book-head">
+      <h2>While you are waiting</h2>
+      <p>No homework. But if you fancy a poke around, these are free and need no sign-up.</p>
     </div>
+
+    <div class="card-body">
+      <div class="assurances">
+        <a class="assure" href="pension-calculator.html">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><line x1="6" y1="20" x2="6" y2="14"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="10"/></svg></span>
+          <div><div class="at">Pension calculator</div><div class="ad">See what your pension could pay you, including what Revenue adds back through tax relief. Illustration only.</div></div>
+          <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;margin-left:auto;color:var(--teal-700)"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a class="assure" href="director-calculator.html">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span>
+          <div><div class="at">Director calculator</div><div class="ad">If you run a company: what it could contribute, and the corporation tax that could save. Illustration only.</div></div>
+          <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;margin-left:auto;color:var(--teal-700)"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a class="assure" href="glossary.html">
+          <span class="ai"><svg class="ico" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <div><div class="at">Pension jargon buster</div><div class="ad">Plain-English explanations of the terms that come up: tax relief, AVC, ARF, PRSA and the rest.</div></div>
+          <svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px;margin-left:auto;color:var(--teal-700)"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <p class="qnote">Need to change or cancel the time? The links are in your Calendly confirmation email. If anything else comes up before the call, reply to that email and it will reach us.</p>
     </div>
   </div>
 
@@ -1548,169 +1542,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 </div></footer>
 
 <script>
-/* ---- F4 · routing form gate + deferred Calendly embed ----------------------
-   The calendar is hidden until #qualForm is completed. Only three routing
-   fields are asked for (name, email, persona) and nothing about the visitor's
-   finances: this site gives information, not advice, so a form that collected
-   income, pot size, age or employer would edge toward a personal recommendation.
-
-   On a valid submit we reveal #calStage, create #calWidget with a prefilled,
-   UTM-tagged data-url, and only then inject Calendly's widget script. Deferring
-   the third-party script until it is actually wanted keeps it off the critical
-   path for everyone who never books.
-
-   B2 is preserved: the injected script still carries an onerror handler and an
-   8s deadline. Either one hides the blank embed and shows #calFallback, whose
-   #calOpenBtn points at the same prefilled and tagged URL, so a visitor who
-   falls back is no worse off.
-
-   THANK_YOU_URL — where a completed booking should land. For an INLINE embed
-   the redirect is a setting on the event type inside the Calendly account and
-   cannot be forced from this page:
-     Calendly -> Event Types -> "pensionbuddy-1-1" -> Confirmation page ->
-     "Redirect to an external site" -> https://pensionbuddy.ie/thank-you.html
-   The postMessage listener at the foot of this block is a belt-and-braces
-   second route to the same page. It has not been confirmed end to end from
-   here, so treat the Calendly setting above as the one that matters.
-   -------------------------------------------------------------------------- */
-(function(){
-  var CAL_EVENT_URL='https://calendly.com/damian-greshamwealth/pensionbuddy-1-1';
-  var THANK_YOU_URL='thank-you.html';
-  var LOAD_TIMEOUT_MS=8000;
-
-  var form=document.getElementById('qualForm');
-  var stage=document.getElementById('calStage');
-  var embed=document.getElementById('calEmbed');
-  var fallback=document.getElementById('calFallback');
-  var openBtn=document.getElementById('calOpenBtn');
-  var errBox=document.getElementById('qualErr');
-  var done=document.getElementById('qualDone');
-  var doneMsg=document.getElementById('qualDoneMsg');
-  var editBtn=document.getElementById('qualEdit');
-  var nameEl=document.getElementById('qName');
-  var mailEl=document.getElementById('qEmail');
-  if(!form||!stage||!embed||!nameEl||!mailEl)return;
-
-  var radios=[].slice.call(form.querySelectorAll('input[name="persona"]'));
-  var widget=null, timer=null, scriptAdded=false, scriptLoaded=false, fellBack=false;
-
-  function persona(){ for(var i=0;i<radios.length;i++){ if(radios[i].checked) return radios[i].value; } return ''; }
-
-  function bookingUrl(){
-    return CAL_EVENT_URL
-      +'?name='+encodeURIComponent(nameEl.value.trim())
-      +'&email='+encodeURIComponent(mailEl.value.trim())
-      +'&utm_source=pensionbuddy&utm_medium=booking-form'
-      +'&utm_campaign='+encodeURIComponent(persona());
-  }
-
-  function showFallback(){
-    if(fellBack)return; fellBack=true;
-    clearTimeout(timer);
-    if(embed)embed.style.display='none';
-    if(fallback)fallback.style.display='';   /* the stylesheet's display:flex takes over */
-    if(openBtn)openBtn.style.display='';
-  }
-
-  /* build the widget element first, then load the script: widget.js initialises
-     any .calendly-inline-widget it finds when it loads. On a second pass (the
-     visitor edited their details) the script is already there, so re-initialise. */
-  function mount(url){
-    clearTimeout(timer);
-    fellBack=false;
-    embed.style.display='';
-    if(fallback)fallback.style.display='none';
-    if(openBtn)openBtn.href=url;
-    embed.innerHTML='';
-    widget=document.createElement('div');
-    widget.className='calendly-inline-widget';
-    widget.id='calWidget';
-    widget.setAttribute('data-url',url);
-    embed.appendChild(widget);
-
-    if(scriptLoaded&&window.Calendly&&typeof window.Calendly.initInlineWidget==='function'){
-      window.Calendly.initInlineWidget({url:url,parentElement:widget});
-    }else if(!scriptAdded){
-      scriptAdded=true;
-      var s=document.createElement('script');
-      s.src='https://assets.calendly.com/assets/external/widget.js';
-      s.async=true;
-      s.onload=function(){ scriptLoaded=true; };
-      s.onerror=showFallback;
-      document.head.appendChild(s);
-      var l=document.createElement('link');
-      l.rel='stylesheet';
-      l.href='https://assets.calendly.com/assets/external/widget.css';
-      document.head.appendChild(l);
-    }
-
-    /* slow, blocked or silently broken: if nothing has rendered by the
-       deadline, fall back rather than leave a blank box */
-    timer=setTimeout(function(){
-      if(widget&&widget.querySelector('iframe'))return;
-      showFallback();
-    },LOAD_TIMEOUT_MS);
-  }
-
-  function clearErrors(){
-    errBox.textContent='';
-    nameEl.removeAttribute('aria-invalid');
-    mailEl.removeAttribute('aria-invalid');
-    radios.forEach(function(r){ r.removeAttribute('aria-invalid'); });
-  }
-
-  function looksLikeEmail(v){ return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(v); }
-
-  function sentence(list){
-    if(list.length===1)return list[0];
-    return list.slice(0,-1).join(', ')+' and '+list[list.length-1];
-  }
-
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    clearErrors();
-
-    var missing=[], notes=[], first=null;
-    if(!nameEl.value.trim()){ missing.push('your name'); nameEl.setAttribute('aria-invalid','true'); first=first||nameEl; }
-    var mail=mailEl.value.trim();
-    if(!mail){ missing.push('an email address we can send the confirmation to'); mailEl.setAttribute('aria-invalid','true'); first=first||mailEl; }
-    else if(!looksLikeEmail(mail)){ notes.push('That email address does not look quite right, could you check it?'); mailEl.setAttribute('aria-invalid','true'); first=first||mailEl; }
-    if(!persona()){ missing.push('your pick from the three options'); radios.forEach(function(r){ r.setAttribute('aria-invalid','true'); }); first=first||radios[0]; }
-
-    if(missing.length||notes.length){
-      if(missing.length)notes.unshift('We still need '+sentence(missing)+'.');
-      errBox.textContent=notes.join(' ')+' Then the calendar will open.';
-      if(first&&first.focus)first.focus();
-      return;
-    }
-
-    var url=bookingUrl();
-    stage.hidden=false;
-    mount(url);
-    form.hidden=true;
-    var given=nameEl.value.trim().split(/\s+/)[0];
-    doneMsg.textContent='Thanks, '+given+'. Pick a time below, the calendar already has your details.';
-    done.classList.add('show');
-  });
-
-  if(editBtn)editBtn.addEventListener('click',function(){
-    done.classList.remove('show');
-    form.hidden=false;
-    stage.hidden=true;
-    clearErrors();
-    nameEl.focus();
-  });
-
-  /* Calendly's embed posts a message when a booking completes. Origin-checked,
-     and harmless if it never arrives. The account-level redirect above is the
-     setting that actually guarantees the visitor reaches thank-you.html. */
-  window.addEventListener('message',function(ev){
-    if(ev.origin!=='https://calendly.com')return;
-    var d=ev.data;
-    if(d&&typeof d==='object'&&d.event==='calendly.event_scheduled'){ location.assign(THANK_YOU_URL); }
-  });
-})();
-
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 (function(){
   var els=[].slice.call(document.querySelectorAll('.reveal'));

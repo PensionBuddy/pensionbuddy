@@ -189,7 +189,12 @@ AUDIT_JS = r"""
   // calculator maths sanity (must stay correct)
   if(typeof project==='function'){const mR=Math.pow(1.03,1/12)-1,n=420;const exp=10000*Math.pow(1+mR,n)+100*((Math.pow(1+mR,n)-1)/mR);const got=project(n,10000,100,mR);R.calcMaths={expected:Math.round(exp),got:Math.round(got),ok:Math.abs(exp-got)<1}}
 
-  // booking calendly (must stay correct)
+  // B3: every page carries the shared 4-column footer. Reported independently of the
+  // Calendly block — F4 defers widget creation until submit, so keying this off
+  // #calWidget silently retired the check.
+  R.footTop=!!document.querySelector('.foot-top');
+
+  // booking calendly (must stay correct). Absent at load once F4 gates the embed.
   const cw=document.getElementById('calWidget');
   if(cw){R.calendly={dataUrl:cw.getAttribute('data-url'),widgetHeight:Math.round(cw.getBoundingClientRect().height),scriptInjected:!!document.querySelector('script[src*="calendly"]'),cssInjected:!!document.querySelector('link[href*="calendly"]'),fallbackDisplay:getComputedStyle(document.getElementById('calFallback')||cw).display,footTop:!!document.querySelector('.foot-top')}}
 
@@ -225,6 +230,12 @@ AUDIT_JS = r"""
       const w=document.getElementById('calWidget');
       g.urlAfterSubmit=w?(w.getAttribute('data-url')||'').slice(0,190):null;
       g.fallbackLinkPresent=!!document.getElementById('calOpenBtn');
+      // the B2/Calendly assertions the load-time block used to make, now made post-reveal
+      g.widgetCreated=!!w;
+      g.scriptInjectedAfter=!!document.querySelector('script[src*="calendly"]');
+      g.cssInjectedAfter=!!document.querySelector('link[href*="calendly"]');
+      g.widgetHeightAfter=w?Math.round(w.getBoundingClientRect().height):0;
+      g.openBtnHref=(document.getElementById('calOpenBtn')||{}).href||null;
     }
     R.bookingGate=g;
   }
@@ -430,12 +441,18 @@ def evaluate(page, st, audits):
             if g.get('revealsWhenEmpty'): F.append(('F4', 'empty form submit reveals the calendar'))
             if not g.get('revealsWhenComplete'): F.append(('F4', 'completed form does not reveal the calendar'))
             if not g.get('fallbackLinkPresent'): F.append(('F4', 'B2 regression: Calendly fallback link gone'))
+            if g.get('revealsWhenComplete'):
+                if not g.get('widgetCreated'): F.append(('F4', 'reveal happened but no Calendly widget was created'))
+                if not (g.get('scriptInjectedAfter') and g.get('cssInjectedAfter')): F.append(('F4', 'Calendly script/CSS not injected after reveal'))
+                if (g.get('widgetHeightAfter') or 0) < 300: W.append(('F4', 'revealed widget is only %spx tall' % g.get('widgetHeightAfter')))
+                oh = g.get('openBtnHref') or ''
+                if oh and not ('email=' in oh and 'utm_' in oh): W.append(('F4', 'fallback link is not prefilled/tagged like the embed'))
             if g.get('unlabelled'): F.append(('F4', 'unlabelled field(s): %s' % g['unlabelled']))
             if g.get('smallTargets'): W.append(('F4', 'field(s) under 44px: %s' % g['smallTargets']))
             if not g.get('hasLiveError'): W.append(('F4', 'no aria-live error region on the form'))
             u = g.get('urlAfterSubmit') or ''
             if u and not ('email=' in u and ('utm_' in u or 'a1=' in u)): W.append(('F4', 'Calendly URL carries no prefill/persona tag: %s' % u[:90]))
-    if a.get('calendly') and not a['calendly'].get('footTop'): W.append(('B3', 'no .foot-top footer on booking'))
+    if a.get('footTop') is False: F.append(('B3', 'page has no .foot-top footer'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
     if a.get('countdownYears') and len(a['countdownYears']) > 1: W.append(('E1', 'countdown band mixes years %s' % a['countdownYears']))
     if a.get('fonts', {}).get('fraunces'): W.append(('F2', 'an element resolves to Fraunces at runtime'))

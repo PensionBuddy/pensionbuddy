@@ -46,11 +46,45 @@ to verify-only and re-confirmed.
 
 | Code | Status |
 |---|---|
-| F2 typography | _in progress_ |
+| F2 typography | **Fixed** — commit `8a9db85` |
 | F3 image extraction | Verified — done in run 1, still holding |
-| F4 qualifying form | _pending_ |
+| F4 qualifying form | _in progress_ |
 | F5 about page | _pending_ |
-| F6 thank-you page | _pending_ |
+| F6 thank-you page | _in progress_ |
+| C10 (found in run 2) | **Fixed** — commit `8a9db85` |
+
+### F2 · typography — Fixed
+
+Fraunces is now loaded and carries the display type; run 1's deletion of the
+orphaned rule is reversed per the brief.
+
+- One Google Fonts request, now `Fraunces:opsz,wght@144,600..700` alongside
+  Sora and IBM Plex Mono. Pinning the optical size to 144 (the display cut)
+  and keeping a 600–700 weight range yields a single 33.6KB latin file
+  rather than two; the full variable axis would have been 67KB for no gain.
+- The existing `--font-display` token already fed exactly `h1`–`h4` and
+  `.phead h1`, so switching it moved display type and nothing else. Verified
+  zero leakage into body copy, buttons, form controls and numeric readouts
+  on all 12 pages.
+- Display type retuned for a serif: tracking `-.03/-.035em` → `-.012/-.015em`
+  (Fraunces letterforms genuinely collided at Sora's values), `h1` weight
+  700 → 600, leading opened slightly. `clamp()` sizes unchanged — the opsz
+  144 cut is narrower than the Sora it replaced, which actually relieved the
+  worst 375px headline (the director hero dropped from four lines to three).
+- `.logo` deliberately pinned back to Sora — the wordmark is a brand mark at
+  20px inside a 72px nav, where a serif reads as a different brand. **This is
+  a one-line reversible call** (`.logo{font-family:var(--font)}`) if you want
+  the wordmark editorial too.
+- `.pb-b-head .t` (Ask Buddy panel header) restored to the display token —
+  this was the rule that had been silently rendering Georgia.
+
+### C10 · homepage card titles — Fixed
+
+Surfaced by the F2 pass: `index.html` never carried the
+`.pain h3{font-size:19px;font-weight:700;margin-bottom:8px}` rule that
+director/starter/tracker all have, so the three "What usually happens" card
+titles rendered at the browser's default h3 size and, with the global margin
+reset, sat flush against their paragraphs. Pre-existing, not caused by F2.
 
 ---
 
