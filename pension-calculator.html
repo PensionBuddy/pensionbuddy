@@ -271,6 +271,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
+.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
 
 /* credibility strip (about) */
 .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
@@ -1442,6 +1443,8 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    Until then the form opens the visitor's mail client with their figures
    already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
    lost and nobody is told an email is coming that isn't.
+   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
+   set, the mailto fallback below is what actually runs.
    ------------------------------------------------------------------ */
 var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
@@ -1481,6 +1484,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
     <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
     <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
+    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
     <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
     <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
     <div class="field" style="margin-bottom:0">
@@ -1555,7 +1559,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <ul class="reveal">
     <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
     <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
-    <li>Tax relief is shown at the rate you select, on your own contributions only. Relief is subject to Revenue's age-related limits (a percentage of earnings, capped at €115,000).</li>
+    <li>Tax relief is shown at the rate you select, on your own contributions only, and is limited to Revenue's age-related percentage of your earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation.</li>
     <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, roughly €15,000 a year for a full entitlement. Check gov.ie for the current rate.</li>
     <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
@@ -1581,6 +1585,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let taxRate=40;
+/* Revenue's age-related limit on tax-relievable personal contributions:
+   a percentage of earnings, with earnings capped at EARN_CAP (B4/B5). */
+const EARN_CAP=115000;
+function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
 const $=id=>document.getElementById(id);
 const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
 
@@ -1669,7 +1677,7 @@ function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.st
 /* ---- the maths (unchanged) ---- */
 function calc(){
   let age=+$('age').value, ret=+$('ret').value;
-  const pot=+$('pot').value, mine=+$('mine').value, emp=+$('emp').value, g=+$('growth').value;
+  const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
   $('ret').min=age+1;
   if(ret<=age){ret=age+1;$('ret').value=ret;}
   paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
@@ -1677,6 +1685,7 @@ function calc(){
   $('retV').textContent=ret;
   $('potV').textContent=euro(pot);
   $('mineV').textContent=euro(mine);
+  $('earnV').textContent=euro(earn);
   $('empV').textContent=euro(emp);
   $('growthV').textContent=g+'%';
 
@@ -1699,10 +1708,22 @@ function calc(){
   }else{
     $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
   }
-  const reliefMonthly=mine*(taxRate/100);
+  /* tax relief (B4/B5): only the part of the personal contribution inside
+     Revenue's age-related limit gets relief.
+       reliefLimit      = band(age) x min(earnings, 115,000)
+       relievableAnnual = min(contribution x 12, reliefLimit)
+       reliefMonthly    = relievableAnnual / 12 x taxRate */
+  const annualMine=mine*12;
+  const band=reliefBand(age);
+  const reliefLimit=Math.round(band*Math.min(earn,EARN_CAP));
+  const relievableAnnual=Math.min(annualMine,reliefLimit);
+  const reliefMonthly=(relievableAnnual/12)*(taxRate/100);
   const costMonthly=mine-reliefMonthly;
   if(mine>0){
-    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+(mine*12>46000?' <span style="display:block;margin-top:6px;font-size:13px">At this level, Revenue\'s age and earnings caps will limit how much of it qualifies for relief.</span>':'');
+    const capNote=annualMine>relievableAnnual
+      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes into your pension, but without relief this year.</span>'
+      :'';
+    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+capNote;
   }else{
     $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
   }
@@ -1732,10 +1753,10 @@ function calc(){
     u.push(project(m,pot,monthly+100,mRate));
   }
   chart.setTarget(b,u,age,ret);
-  ['age','ret','pot','mine','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
+  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
 }
 
-['age','ret','pot','mine','emp','growth'].forEach(id=>{
+['age','ret','pot','mine','earn','emp','growth'].forEach(id=>{
   const el=$(id);
   el.addEventListener('input',()=>{paintSlider(el);calc();});
   paintSlider(el);
@@ -1777,16 +1798,16 @@ function sendResults(){
   var payload={
     email:e,
     source:document.title,
-    pot:fig('potOut'), income:fig('incOut'), taxSaved:fig('taxOut'),
+    pot:fig('potOut'), income:fig('incOut'), relief:fig('reliefOut'),
     costOfWaiting:fig('waitOut'),
     inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
              .map(function(s){return s.id+'='+s.value;}).join(', '),
     page:location.href
   };
 
-  var done=function(msg){
+  var done=function(msg,isHtml){
     var t=document.getElementById('ecOkText');
-    if(t&&msg)t.textContent=msg;
+    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
     document.getElementById('ecForm').style.display='none';
     document.getElementById('ecOk').classList.add('show');
   };
@@ -1809,11 +1830,13 @@ function sendResults(){
       'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
       'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
       'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
+      'Tax relief: '+encodeURIComponent(payload.relief)+'%0D%0A'+
       'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
       'From: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    done('Your email app should be opening with your figures ready to send. If nothing happens, you can book a free call instead.');
+    /* nothing has been sent by this page, so say so: no "on its way" claim */
+    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
   }
 }
 </script>
@@ -2213,7 +2236,7 @@ function sendResults(){
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','mine','salary','contrib'];   /* primary controls */
+  var KEEP = ['age','ret','pot','mine','earn'];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 

@@ -350,6 +350,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
 .magnet .ok h3{font-size:18px;font-weight:700;margin-bottom:6px}
 .magnet .ok p{font-size:14px;color:var(--ink-2);margin:0 auto}
+.magnet .ok a{color:var(--ac-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 
 /* email-results capture (calculator) */
 .email-cap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-sm)}
@@ -1485,6 +1486,8 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    webhook) that accepts a JSON POST. Until it starts with http, the form
    opens the visitor's mail client instead, so no lead is lost and nobody
    is told an email is coming that isn't.
+   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
+   set, the mailto fallback below is what actually runs.
    ------------------------------------------------------------------ */
 var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
@@ -1658,9 +1661,11 @@ function sendMagnet(){
 
   var payload={email:e, request:'guide', source:document.title, page:location.href};
 
-  var done=function(msg){
+  var done=function(msg,isHtml,heading){
     var t=document.getElementById('mOkText');
-    if(t&&msg)t.textContent=msg;
+    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
+    var h=document.querySelector('#mOk h3');
+    if(h&&heading)h.textContent=heading;
     document.getElementById('mForm').style.display='none';
     document.getElementById('mOk').classList.add('show');
   };
@@ -1680,8 +1685,9 @@ function sendMagnet(){
       encodeURIComponent(payload.email)+'%0D%0AFrom: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Guide request')+'&body='+body;
-    done('Your email app should be opening with your request ready to send. '+
-         'If nothing happens, you can book a free call instead.');
+    /* nothing has been sent by this page, so the panel must not say "on its way" */
+    done('Your email app should have opened with the request ready to send. '+
+         'If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through it.', true, 'One more step.');
   }
 }
 </script>

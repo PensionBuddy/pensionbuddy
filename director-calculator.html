@@ -365,6 +365,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
+.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
 
 /* credibility strip (about) */
 .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
@@ -429,12 +430,14 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
 .res-hero>div{position:relative;min-width:0}
 .res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .rsub{font-size:12.5px;color:#9FDDD2;margin-top:8px;line-height:1.5}
 .res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
 .res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
 .res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
 .vs-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
+.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
 .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
 .vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
 .vs-salary{background:var(--surface-2)}
@@ -1606,6 +1609,8 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    Until then the form opens the visitor's mail client with their figures
    already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
    lost and nobody is told an email is coming that isn't.
+   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
+   set, the mailto fallback below is what actually runs.
    ------------------------------------------------------------------ */
 var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
@@ -1629,7 +1634,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="phead"><div class="wrap">
   <span class="eyebrow reveal"><span class="pip"></span>The director calculator · two minutes</span>
   <h1 class="reveal" style="transition-delay:.06s">How much could your <span class="hl">company</span> put into your pension?</h1>
-  <p class="reveal" style="transition-delay:.12s">As a director you can fund your pension straight from the company, often far beyond personal limits, with your company cutting its corporation-tax bill as it goes.</p>
+  <p class="reveal" style="transition-delay:.12s">As a director you can fund your pension straight from the company, often far beyond personal limits, and every contribution is an allowable expense for the company.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap">
@@ -1651,9 +1656,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="results">
     <div class="res-hero reveal" style="transition-delay:.08s">
       <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
-      <div><div class="rl">Corporation tax saved by then</div><div class="big" id="taxOut">€0</div></div>
+      <div><div class="rl">Corporation tax relief on contributions</div><div class="big" id="taxOut">€0</div><div class="rsub">Worth 12.5% of each contribution, added up to retirement</div></div>
       <div class="divline"></div>
-      <div class="foot">By routing money through the company pension instead of drawing it as salary, you keep far more of it working, and the company's tax bill falls each year you contribute.</div>
+      <div class="foot">Pension contributions are deductible for the company, as salary would be. The difference is what reaches you: routed through the pension, far more of the money stays working for your retirement.</div>
     </div>
 
     <div class="vs-card reveal" style="transition-delay:.14s">
@@ -1669,9 +1674,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="vs-col vs-pension">
           <div class="vt">Into your pension</div>
           <div class="amt" id="pensionFull">€0</div>
-          <div class="lab" id="pensionLab">goes to work for your retirement, plus the company saves corporation tax</div>
+          <div class="lab" id="pensionLab">goes to work for your retirement, in full</div>
         </div>
       </div>
+      <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
     </div>
 
     <div class="waitcard reveal" style="transition-delay:.11s">
@@ -1863,7 +1869,6 @@ function calc(){
   const salaryNet=contrib*0.48;
   tween('salaryNet',salaryNet,euro);
   tween('pensionFull',contrib,euro);
-  $('pensionLab').innerHTML='goes to work for your retirement, plus the company saves about '+euro(contrib*0.125)+' in corporation tax this year';
   $('vsSub').textContent='Your €'+contrib.toLocaleString('en-IE')+' company contribution, taken as salary instead.';
 
   const maxPension=sal*(2/3);
@@ -1897,16 +1902,16 @@ function sendResults(){
   var payload={
     email:e,
     source:document.title,
-    pot:fig('potOut'), income:fig('incOut'), taxSaved:fig('taxOut'),
+    pot:fig('potOut'), ctRelief:fig('taxOut'), fundingTarget:fig('maxOut'),
     costOfWaiting:fig('waitOut'),
     inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
              .map(function(s){return s.id+'='+s.value;}).join(', '),
     page:location.href
   };
 
-  var done=function(msg){
+  var done=function(msg,isHtml){
     var t=document.getElementById('ecOkText');
-    if(t&&msg)t.textContent=msg;
+    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
     document.getElementById('ecForm').style.display='none';
     document.getElementById('ecOk').classList.add('show');
   };
@@ -1928,12 +1933,14 @@ function sendResults(){
     var body='Please send me my pension figures.%0D%0A%0D%0A'+
       'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
       'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
-      'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
+      'Corporation tax relief on contributions: '+encodeURIComponent(payload.ctRelief)+'%0D%0A'+
+      'Funding target: '+encodeURIComponent(payload.fundingTarget)+'%0D%0A'+
       'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
       'From: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    done('Your email app should be opening with your figures ready to send. If nothing happens, you can book a free call instead.');
+    /* nothing has been sent by this page, so say so: no "on its way" claim */
+    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
   }
 }
 
@@ -2352,7 +2359,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','mine','salary','contrib'];   /* primary controls */
+  var KEEP = ['age','ret','pot','sal','contrib'];   /* primary controls: ids on THIS page (salary slider is #sal) */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 

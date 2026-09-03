@@ -147,6 +147,9 @@ AUDIT_JS = r"""
   R.clippedGrids=[];
   $$('*').forEach(el=>{const cs=getComputedStyle(el);if(cs.display!=='grid')return;const cols=cs.gridTemplateColumns.split(' ').filter(x=>x&&x!=='none').length;if(cols<2)return;const pr=el.getBoundingClientRect();const kids=[...el.children];const clipped=kids.filter(k=>k.getBoundingClientRect().right>pr.right+2);if(clipped.length)R.clippedGrids.push({sel:el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/)[0]:''),cols,gridWidth:Math.round(pr.width),clippedChildren:clipped.length,scrollWidth:el.scrollWidth})});
 
+  // footer column links sharing a line (C7): consecutive anchors in a .foot-col must stack
+  R.footerInlineLinks=$$('.foot-col').reduce((n,col)=>{const as=[...col.querySelectorAll('a')];for(let i=1;i<as.length;i++){if(Math.abs(as[i].getBoundingClientRect().top-as[i-1].getBoundingClientRect().top)<4)n++}return n},0);
+
   // header wordmark visible (C3)
   const logo=document.querySelector('.logo');
   R.logoWordmark=logo?{fontSize:getComputedStyle(logo).fontSize,textWidth:Math.round([...logo.childNodes].filter(n=>n.nodeType===3||(n.tagName&&n.tagName!=='SVG'&&!n.classList.contains('logo-mark'))).reduce((w,n)=>{const r=(n.nodeType===3?(()=>{const rg=document.createRange();rg.selectNode(n);return rg.getBoundingClientRect()})():n.getBoundingClientRect());return w+r.width},0))}:null;
@@ -336,6 +339,7 @@ def evaluate(page, st, audits):
         if a.get('images', {}).get('failed'): F.append(('images', '@%d failed decode: %s' % (w, a['images']['failed'])))
         if a.get('images', {}).get('missingAlt'): F.append(('a11y-alt', '@%d %d img without alt' % (w, a['images']['missingAlt'])))
         if a.get('clippedGrids'): F.append(('C1', '@%d clipped grid children: %s' % (w, a['clippedGrids'][:2])))
+        if a.get('footerInlineLinks'): F.append(('C7', '@%d %d footer links share a line with their neighbour' % (w, a['footerInlineLinks'])))
         if a.get('calcMaths') and not a['calcMaths']['ok']: F.append(('calc', '@%d maths drift: %s' % (w, a['calcMaths'])))
         if a.get('calendly'):
             c = a['calendly']
