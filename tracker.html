@@ -136,11 +136,6 @@ nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
 .hc-pill svg{width:15px;height:15px}
 
-/* ---- logo / trust strip ---- */
-.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
-.strip-in{display:flex;align-items:center;justify-content:center;gap:14px 40px;flex-wrap:wrap;padding:22px 0}
-.strip-item{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--ink-2)}
-.strip-item svg{width:18px;height:18px;color:var(--teal)}
 
 /* ---- section base ---- */
 section{padding:88px 0}
@@ -268,7 +263,6 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
 }
 @media(max-width:560px){
   .wrap{padding:0 18px}
-  .hero h1{font-size:clamp(34px,9vw,44px)}
   .foot-top{grid-template-columns:1fr 1fr}
   .hero-cta .btn{flex:1}
 }
@@ -404,7 +398,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .pains,.benefits,.creds,.gloss{grid-template-columns:1fr}
   .magnet{grid-template-columns:1fr;gap:24px;padding:32px 26px}
   .callout{padding:44px 26px}
-  .aud-figure{order:-1;max-width:460px;margin:0 auto}
 }
 @media(max-width:560px){
   .magnet-form .row{flex-direction:column}
@@ -564,7 +557,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-panel[hidden]{display:none}
 .pb-b-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--ac-soft,var(--teal-50))}
 .pb-b-head img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--ac,#0B7A6E)}
-.pb-b-head .t{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19px;color:var(--ink)}
+.pb-b-head .t{font-weight:600;font-size:19px;color:var(--ink)}
 .pb-b-head .s{font-size:12.5px;color:var(--ink-3);margin-top:1px}
 .pb-b-close{margin-left:auto;background:none;border:0;cursor:pointer;color:var(--ink-3);font-size:22px;line-height:1;padding:6px;border-radius:8px}
 .pb-b-close:hover{color:var(--ink)}
@@ -597,12 +590,6 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
 .gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
-/* trust strip -> editorial caps with hairline separators */
-.strip-item svg{display:none}
-.strip-in{gap:0}
-.strip-item{display:flex;align-items:center;text-transform:uppercase;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
-.strip-item:first-child{border-left:none}
-@media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
 /* persona cards: tinted top rules + matching icon depth instead of identical grid */
 .aud-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
 .aud-card:nth-child(1)::before{background:var(--teal)}
@@ -616,7 +603,6 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 .benefit{border:0;border-left:2px solid var(--teal);border-radius:0;background:none;padding:4px 0 4px 20px}
 /* dark panels: left-aligned, asymmetric */
 .callout,.final{text-align:left;padding:64px 56px}
-@media(max-width:640px){.callout,.final{padding:44px 26px}}
 /* testimonials: card template -> editorial entries */
 .tcard{background:none;border:0;border-radius:0;border-top:1px solid var(--line-2);padding:22px 2px 0}
 .tcard .av{display:none}
@@ -656,7 +642,7 @@ h3,h4{line-height:1.2;font-weight:600;letter-spacing:-.02em}
 p,li{letter-spacing:-.004em}
 
 /* mono does structural work only: eyebrows, labels, figures, legal caps */
-.eyebrow,.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
+.eyebrow,.kicker,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
 .tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
   font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em;font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
@@ -665,7 +651,6 @@ p,li{letter-spacing:-.004em}
 .foot-col h4{font-size:.66rem;letter-spacing:.14em;color:var(--ink-2);font-weight:500}
 .hc-flabel,.hc-role{font-size:.66rem;letter-spacing:.13em}
 .tcard .who b{font-size:.66rem;letter-spacing:.13em}
-.strip-item{font-size:.665rem;letter-spacing:.15em;font-weight:500}
 .ctag{font-size:.665rem;letter-spacing:.15em}
 
 /* figures only - mono must never swallow a sentence */
@@ -747,20 +732,6 @@ details[open] summary .pm{background:var(--ink);border-color:var(--ink);color:#f
 .aud-card:hover{transform:none;background:var(--teal-50);border-color:var(--line)}
 .aud-card:active{transform:none}
 
-/* --- 7. Ambient motion: the trust strip runs, it doesn't sit --- */
-.strip{position:relative;overflow:hidden}
-.strip::before,.strip::after{content:"";position:absolute;top:0;bottom:0;width:72px;
-  z-index:2;pointer-events:none}
-.strip::before{left:0;background:linear-gradient(to right,var(--surface),rgba(255,255,255,0))}
-.strip::after{right:0;background:linear-gradient(to left,var(--surface),rgba(255,255,255,0))}
-.strip-in{display:flex;flex-wrap:nowrap;justify-content:flex-start;width:max-content;
-  max-width:none;margin:0;gap:0;padding:20px 0;will-change:transform;
-  animation:pbMarquee 44s linear infinite}
-.strip:hover .strip-in,.strip:focus-within .strip-in{animation-play-state:paused}
-.strip-item{border-left:1px solid var(--line-2);padding:0 30px;white-space:nowrap;flex:0 0 auto}
-.strip-item:first-child{border-left:1px solid var(--line-2)}
-@keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
 /* reveals no longer move in lockstep */
 .js-reveal .reveal:not(.settled){transform:translateY(14px);
   transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
@@ -790,10 +761,6 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .strip-in{animation:none;width:auto;max-width:var(--maxw);margin:0 auto;
-    padding:20px 24px;flex-wrap:wrap;justify-content:center}
-  .strip-item.is-clone{display:none}
-  .strip::before,.strip::after{display:none}
   .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
   details .faq-inner{transition:none}
 }
@@ -1063,7 +1030,6 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 @media(max-width:1080px){
   .nt-l{display:none}
-  .nav-tick{margin-left:12px;padding:6px 9px}
 }
 @media(max-width:560px){
   .nav-tick{display:none}
@@ -1133,7 +1099,7 @@ body{font-size:1rem;line-height:1.68}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
 .eyebrow{font-size:.78rem;letter-spacing:.13em}
-.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
+.kicker,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
 .pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.cv-s,.gs-s,
 .foot-col h4,.cl,.tl .tt,.assure .at{font-size:.75rem !important;letter-spacing:.11em}
 .nt-l{font-size:.7rem !important;letter-spacing:.1em}
@@ -1169,7 +1135,6 @@ input:focus-visible,select:focus-visible{
 
 @media(max-width:920px){
   html{font-size:104%}
-  .nav-links a.lnk{padding:14px 16px}
 }
 
 /* --- inline prose links and footer links: 44px reach --- */
@@ -1906,7 +1871,8 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'&&l.classList.contains('open')){
-      l.classList.remove('open');t.setAttribute('aria-expanded','false');t.focus();}
+      l.classList.remove('open');t.setAttribute('aria-expanded','false');
+      t.setAttribute('aria-label','Open menu');t.focus();}
   });
 })();
 </script>

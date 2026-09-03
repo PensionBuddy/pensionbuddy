@@ -296,7 +296,7 @@ def static_checks(pages):
                 if v[1:] and v[1:] not in ids[f] and v[1:] != 'main': broken.append(v + ' (missing id on page)')
                 continue
             path, _, frag = v.partition('#')
-            if path not in existing: broken.append(v + ' (file not found)')
+            if not os.path.isfile(os.path.join(ROOT, path)): broken.append(v + ' (file not found)')
             elif frag and path.endswith('.html') and frag not in ids.get(path, set()): broken.append(v + ' (missing #id in target)')
         dup = [i for i in re.findall(r'\bid\s*=\s*"([^"]+)"', t) if t.count('id="%s"' % i) > 1]
         res[f] = {
