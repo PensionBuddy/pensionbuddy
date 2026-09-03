@@ -26,7 +26,7 @@
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
   --amber:#F4B740; --amber-soft:#FCEFCF;
   --line:#E7EBE9; --line-2:#D8DFDC;
-  --ring:rgba(11,122,110,.28);
+  --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
@@ -428,6 +428,8 @@ input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
 /* 5) skip-to-content link for keyboard users */
 .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink);color:#fff;font-weight:600;font-size:14px;padding:12px 18px;border-radius:0 0 12px 0}
 .skip:focus{left:0;outline:none;box-shadow:0 0 0 4px var(--ring)}
+main{display:block}
+#main:focus{outline:none}
 /* 6) FAQ affordance: hover cue on the question row */
 details summary:hover .pm{background:var(--teal-100)}
 details:not([open]) summary:hover{color:var(--teal-700)}
@@ -1449,6 +1451,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
@@ -1463,6 +1466,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
+<main id="main" tabindex="-1">
 
 <div class="phead"><div class="wrap">
   <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
@@ -1496,6 +1500,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="res-hero reveal" style="transition-delay:.08s">
       <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
       <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
+      <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
     </div>
@@ -1564,6 +1569,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </ul>
 </div></section>
 
+</main>
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
@@ -1670,7 +1676,10 @@ const chart={
 };
 
 /* ---- slider fill paint ---- */
-function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');}
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
+const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
+function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
+let srTimer=null;
 
 /* ---- the maths (unchanged) ---- */
 function calc(){
@@ -1752,6 +1761,9 @@ function calc(){
   }
   chart.setTarget(b,u,age,ret);
   ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
+  /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
+  clearTimeout(srTimer);
+  srTimer=setTimeout(function(){$('srSummary').textContent='Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.';},700);
 }
 
 ['age','ret','pot','mine','earn','emp','growth'].forEach(id=>{
@@ -1926,13 +1938,9 @@ function sendResults(){
 
 
 <script>
-/* A11Y+UX runtime: skip link, decorative-svg aria, single-open FAQ */
+/* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
+   (The skip link and the main landmark are static in the page markup.) */
 (function(){
-  if(document.querySelector('.skip'))return;
-  var n=document.getElementById('nav');
-  var m=n&&n.nextElementSibling; if(m&&!m.id)m.id='main';
-  var a=document.createElement('a');a.href='#main';a.className='skip';a.textContent='Skip to content';
-  document.body.insertBefore(a,document.body.firstChild);
   document.querySelectorAll('svg').forEach(function(s){s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');});
   document.querySelectorAll('.faq-list').forEach(function(list){
     list.addEventListener('toggle',function(e){

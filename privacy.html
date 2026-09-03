@@ -32,7 +32,7 @@
   --amber:#F4B740; --amber-soft:#FCEFCF;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
-  --ring:rgba(11,122,110,.28);
+  --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
@@ -506,6 +506,8 @@ input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
 /* 5) skip-to-content link for keyboard users */
 .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink);color:#fff;font-weight:600;font-size:14px;padding:12px 18px;border-radius:0 0 12px 0}
 .skip:focus{left:0;outline:none;box-shadow:0 0 0 4px var(--ring)}
+main{display:block}
+#main:focus{outline:none}
 /* 6) FAQ affordance: hover cue on the question row */
 details summary:hover .pm{background:var(--teal-100)}
 details:not([open]) summary:hover{color:var(--teal-700)}
@@ -1470,6 +1472,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
@@ -1484,6 +1487,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
+<main id="main" tabindex="-1">
 <div class="wrap"><div class="legal reveal">
   <h1>Privacy Notice</h1>
   <p class="updated">Last updated: 9 July 2026</p>
@@ -1526,6 +1530,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   <p>Email: <a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a><br>Post: Damian Condon T/A Gresham Wealth Management, Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3</p>
   <p>Prefer to talk it through? Book a time on the <a href="booking.html">booking page</a> and we will be glad to help.</p>
 </div></div>
+</main>
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
@@ -1596,13 +1601,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 
 <script>
-/* A11Y+UX runtime: skip link, decorative-svg aria, single-open FAQ */
+/* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
+   (The skip link and the main landmark are static in the page markup.) */
 (function(){
-  if(document.querySelector('.skip'))return;
-  var n=document.getElementById('nav');
-  var m=n&&n.nextElementSibling; if(m&&!m.id)m.id='main';
-  var a=document.createElement('a');a.href='#main';a.className='skip';a.textContent='Skip to content';
-  document.body.insertBefore(a,document.body.firstChild);
   document.querySelectorAll('svg').forEach(function(s){s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');});
   document.querySelectorAll('.faq-list').forEach(function(list){
     list.addEventListener('toggle',function(e){
