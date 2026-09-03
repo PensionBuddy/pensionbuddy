@@ -23,6 +23,35 @@ injected, fallback hidden, widget 984px, footer present).
 Every warning left at that point was an open run-2 build item — F2 ×12,
 F5 ×12, F4 ×1 — plus the two NEEDS-INPUT placeholders. So A–E all held.
 
+## Run 2 · FINAL GATE — PASSED
+
+`python3 tools/verify.py --widths 375,1200,1360,1440` across all **14** pages
+(`verify-out/run2-finalgate-report.json`), with full-page screenshots at 375
+and 1440:
+
+| Measure | Result |
+|---|---|
+| Pages | 14 — the original 12 plus `about.html` and `thank-you.html` |
+| **FAIL** | **0** on every page |
+| Broken links / anchors | 0 |
+| Console errors | 0 |
+| Contrast failures | 0 |
+| Horizontal overflow at 375px | 0 |
+| Image decode failures | 0 |
+| Duplicate ids | 0 |
+| Worst nav overrun (incl. 1200px) | −18px — the header fits at every width |
+| Calculator projection | exact on both (101,685 = 101,685) |
+| Booking gate | refuses an empty submit, reveals on a valid one, widget 984px with script + CSS injected, fallback link prefilled and tagged |
+| New pages | Fraunces headings, `<main>`, skip link to `MAIN`, focus ring 3.99:1 |
+| Site-level checks | all pass — both new pages exist, are linked, and are in the sitemap |
+
+Remaining warnings: **3, all NEEDS DAMIAN INPUT** (A1 liability figure, A4
+phone number, F5 register reference). Nothing else is outstanding.
+
+The 1200px width was added to the audit specifically because the F5 pass
+found the seventh nav item overran the viewport there — a width the previous
+sampling (375/1360/1440) would have missed.
+
 ## Run 2 · corrections to the incoming reports
 
 Two items the incoming reports described as resolved are **not** resolved in
@@ -49,7 +78,7 @@ to verify-only and re-confirmed.
 | F2 typography | **Fixed** — commit `8a9db85` |
 | F3 image extraction | Verified — done in run 1, still holding |
 | F4 qualifying form | **Built** — commit `678697b` |
-| F5 about page | **Built** — commit pending |
+| F5 about page | **Built** — commit `e2113c3` |
 | F6 thank-you page | **Built**, redirect **Needs-Damian-Input** — commit `678697b` |
 | C10 (found in run 2) | **Fixed** — commit `8a9db85` |
 
