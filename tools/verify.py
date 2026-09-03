@@ -65,7 +65,8 @@ window.addEventListener('unhandledrejection',function(e){__errs.push('unhandledr
 SHOT_CSS = r"""
 <style id="__shotcss">
 .js-reveal .reveal:not(.settled),.reveal{opacity:1!important;transform:none!important;transition:none!important}
-*,*::before,*::after{animation-play-state:paused!important;transition:none!important}
+/* jump every animation straight to its end state (keeps fill-mode:forwards results) instead of pausing at frame 0 */
+*,*::before,*::after{animation-duration:0.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition:none!important}
 </style>
 """
 
@@ -200,10 +201,11 @@ class Handler(SimpleHTTPRequestHandler):
         path = u.path.lstrip('/') or 'index.html'
         if u.path == '/__frame':
             page = q.get('page', ['index.html'])[0]; w = int(q.get('w', ['375'])[0]); h = int(q.get('h', ['900'])[0])
+            mode = q.get('mode', ['audit'])[0]
             body = ('<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#888}</style></head><body>'
-                    '<iframe id="f" src="/%s?audit=1" style="width:%dpx;height:%dpx;border:0;display:block"></iframe>'
+                    '<iframe id="f" src="/%s?%s=1" style="width:%dpx;height:%dpx;border:0;display:block;margin:0 auto"></iframe>'
                     '<script>(function(){var f=document.getElementById("f");var tries=0;function poll(){tries++;try{var d=f.contentDocument;var p=d&&d.getElementById("__audit");if(p){var o=document.createElement("pre");o.id="__audit";o.textContent=p.textContent;document.body.appendChild(o);return;}}catch(e){}if(tries<400)setTimeout(poll,25);else{var o=document.createElement("pre");o.id="__audit";o.textContent=btoa(JSON.stringify({auditError:"timeout waiting for iframe audit"}));document.body.appendChild(o);}}f.addEventListener("load",poll);setTimeout(poll,500);})();</script>'
-                    '</body></html>') % (page, w, h)
+                    '</body></html>') % (page, mode, w, h)
             return self._send(body.encode('utf-8'))
         fs = os.path.join(ROOT, path)
         if path.endswith('.html') and os.path.isfile(fs):
@@ -248,10 +250,22 @@ def run_audit(port, page, width, height=900):
     return {'auditError': 'no audit block returned'}
 
 def screenshot(port, page, width, doc_height):
+    """Full-page screenshot at an exact CSS width.
+
+    Headless Chrome enforces a ~500px minimum window width, so a direct
+    --screenshot at 375px is really a 500px layout cropped to 375. Instead the
+    page is rendered inside a fixed-width iframe (same wrapper the audits use)
+    in a window at least 500px wide, then cropped to the iframe with sips."""
     os.makedirs(SHOTS, exist_ok=True)
     h = max(812, min(int(doc_height or 900) + 40, 9000))
     out = os.path.join(SHOTS, '%s-%d.png' % (page.replace('.html', ''), width))
-    chrome(['--window-size=%d,%d' % (width, h), '--virtual-time-budget=4000', '--screenshot=%s' % out, 'http://127.0.0.1:%d/%s?shot=1' % (port, page)])
+    win_w = max(width, 500)
+    if (win_w - width) % 2: win_w += 1          # even side margins so the centre crop lands exactly on the iframe
+    chrome(['--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=4000', '--screenshot=%s' % out,
+            'http://127.0.0.1:%d/__frame?page=%s&w=%d&h=%d&mode=shot' % (port, page, width, h)])
+    if os.path.exists(out) and win_w != width:
+        # the iframe is centred in the wrapper, and sips -c crops about the centre
+        subprocess.run(['sips', '-c', str(h), str(width), out, '--out', out], capture_output=True)
     return out if os.path.exists(out) else None
 
 # ----------------------------------------------------------------------------
@@ -380,7 +394,8 @@ def main():
         shots = {}
         if not args.no_shots:
             for w in SHOT_WIDTHS:
-                shots[w] = screenshot(port, page, w, audits.get(w, {}).get('docHeight')); print('📷%d' % w, end=' ', flush=True)
+                dh = audits.get(w, {}).get('docHeight') or max([a.get('docHeight') or 0 for a in audits.values()] or [0])
+                shots[w] = screenshot(port, page, w, dh); print('📷%d' % w, end=' ', flush=True)
         F, W = evaluate(page, st_all[page], audits)
         total_f += len(F)
         report['pages'][page] = {'static': st_all[page], 'audits': audits, 'shots': shots, 'FAIL': F, 'WARN': W}

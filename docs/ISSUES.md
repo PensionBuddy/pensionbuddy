@@ -54,6 +54,7 @@ Files owned by this pass: `index.html`, `starter.html`, `tracker.html`, `directo
 | **C4** | `glossary.html:595` + `:418` | `scroll-margin-top:96px` stacks with `scroll-padding-top:90px`; deep links land ~162px below the header. | Drop the per-term `scroll-margin-top`; rely on `scroll-padding-top`. |
 | **C5** | `index.html:1658` vs `1661–1664` | First FAQ row uses an SVG plus icon; the other four use a text `+`. | Make all five identical. |
 | **C6** | `index.html:1153` and subpage equivalents | Between ~1321–1405px the nav needs ~1226px inside a 1092px box; the CTA clips. | Hide the chip label up to ~1420px (or let the chip wrap). |
+| **C7** | all pages with `.foot-top`, e.g. `404.html:1141` | Found by the verification screenshots: a later tap-target rule `.foot-col a,.foot-links a{display:inline-block;padding:9px 0}` overrides the earlier `.foot-col a{display:block}`, so footer column links flow inline and collide — "About DamianBook a call", "Terms of BusinessComplaints" — at every width. | Make the tap-target rule `display:block` (keeps the 44px target). |
 
 ## D. Accessibility
 
