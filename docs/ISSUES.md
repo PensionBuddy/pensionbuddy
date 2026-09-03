@@ -48,6 +48,14 @@ these run-1 outcomes still hold. Fix only what newly fails, and say so.
 
 ---
 
+## Found during run 2
+
+| Code | File | Issue | Fix |
+|---|---|---|---|
+| **C10** | `index.html` | Surfaced by the F2 pass: `.pain h3{font-size:19px;font-weight:700;margin-bottom:8px}` exists on director/starter/tracker but was never on index, so the three homepage "pain" card titles rendered at the browser's default h3 size and — with the global `*{margin:0}` — sat flush against their paragraph. Pre-existing, not caused by F2. | Add the rule index was missing, matching the other three pages; tracking is reset with the other classed headings in the F2 block. **Fixed.** |
+
+---
+
 ## Build — F2 to F6
 
 ### F2 · Typography: load Fraunces, take headlines editorial

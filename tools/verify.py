@@ -362,6 +362,7 @@ def static_checks(pages):
             'mainInSource': bool(re.search(r'<main\b', t)),
             'skipInSource': bool(re.search(r'<a[^>]+class="skip"', t)),
             'fraunces': 'Fraunces' in t,
+            'requestsFraunces': bool(re.search(r'fonts\.googleapis\.com[^"\']*Fraunces', t)),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'bytes': len(t.encode('utf-8')),
         }
@@ -379,7 +380,9 @@ def evaluate(page, st, audits):
     if st['sourcePlaceholders']: F.append(('A1/A2/A4/E5', 'placeholder/template tokens in source: %s' % st['sourcePlaceholders']))
     if not st['mainInSource']: W.append(('D3', 'no <main> in source'))
     if not st['skipInSource']: W.append(('D2', 'skip link not in source HTML (JS-injected)'))
-    if st['fraunces']: W.append(('F2', 'Fraunces referenced but never loaded'))
+    # F2: referencing Fraunces is now correct — it is only a defect if the source
+    # names the family but never asks the stylesheet for it (the run-1 orphan bug).
+    if st['fraunces'] and not st['requestsFraunces']: W.append(('F2', 'Fraunces referenced in CSS but not requested from the font service'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue

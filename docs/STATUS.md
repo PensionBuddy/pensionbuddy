@@ -2,7 +2,57 @@
 
 Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 (headless Chrome audit at 375 / 1360 / 1440px + full-page screenshots in
-`verify-out/shots/`). Baseline before any fix: **26 FAIL** across 12 pages.
+`verify-out/shots/`). Run-1 baseline before any fix: **26 FAIL** across 12 pages.
+
+---
+
+# Run 2 — 2026-09-03
+
+Scope: re-verify A–E and F1, then build F2–F6.
+
+## Run 2 · verify-only gate — PASSED
+
+Full suite re-run on all 12 existing pages before any run-2 edit
+(`verify-out/run2-verifyonly-report.json`): **0 FAIL on every page, and zero
+regression from run 1** — 0 broken links or anchors, 0 console errors, 0
+horizontal overflow at 375px, 0 contrast failures, 0 image decode failures,
+calculator projection still exact (101,685), focus ring 3.99:1, `<main>` on
+12/12, and booking's Calendly ready-branch still verified (script + CSS
+injected, fallback hidden, widget 984px, footer present).
+
+Every warning left at that point was an open run-2 build item — F2 ×12,
+F5 ×12, F4 ×1 — plus the two NEEDS-INPUT placeholders. So A–E all held.
+
+## Run 2 · corrections to the incoming reports
+
+Two items the incoming reports described as resolved are **not** resolved in
+the repo. They are unchanged, still flagged, and were not invented around:
+
+- **A1** — Report 1 described a revised liability clause using Damian's
+  wording with "a low nominal figure flagged for solicitor". `terms.html` §5
+  still renders the run-1 placeholder `€[amount to be confirmed]`. No such
+  wording or figure has reached the file. This is a legal decision and stays
+  NEEDS DAMIAN INPUT.
+- **F1** — Report 2 listed "lead endpoint + analytics wiring" as resolved.
+  `LEAD_ENDPOINT` is still `''` on all five capture pages and `ANALYTICS_SRC`
+  is still `'[ANALYTICS_SCRIPT_URL]'`. Both still fail safely, but no lead
+  reaches a backend and nothing is measured. Stays NEEDS DAMIAN INPUT.
+
+**F3** was already completed in run 1 (`e028438`) — Report 2's "476KB index"
+is stale; index.html is 125,862 bytes with photos in `assets/img/`. Demoted
+to verify-only and re-confirmed.
+
+## Run 2 · build status
+
+| Code | Status |
+|---|---|
+| F2 typography | _in progress_ |
+| F3 image extraction | Verified — done in run 1, still holding |
+| F4 qualifying form | _pending_ |
+| F5 about page | _pending_ |
+| F6 thank-you page | _pending_ |
+
+---
 
 ## NEEDS DAMIAN INPUT
 
