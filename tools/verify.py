@@ -133,6 +133,8 @@ AUDIT_JS = r"""
   const pats=[/\[LIABILITY_CAP_EUR\]/,/\[ANALYTICS_SCRIPT_URL\]/,/Template (document|notice|process)\./,/Draft for legal review/,/CALENDLY_URL/,/once the Calendly link is connected/,/\[[A-Z_]{6,}\]/];
   R.renderedPlaceholders=pats.map(p=>{const m=body.match(p);return m?m[0]:null}).filter(Boolean);
   R.lastUpdatedCount=(body.match(/Last updated:/g)||[]).length;
+  // deliberate, clearly-marked business-input placeholders (tracked, not a failure)
+  R.needsInput=$$('.needs-input').map(e=>(e.getAttribute('data-issue')||'?')+': '+e.textContent.trim().slice(0,40));
 
   // images decode
   const imgs=$$('img');R.images={total:imgs.length,missingAlt:imgs.filter(i=>!i.hasAttribute('alt')).length,failed:[]};
@@ -343,6 +345,7 @@ def evaluate(page, st, audits):
         if sk and not sk.get('targetExists'): F.append(('D3', '@%d skip link target missing' % w))
     # width-invariant checks: evaluate once, on the first successful audit
     a = next((x for x in audits.values() if 'auditError' not in x), {})
+    if a.get('needsInput'): W.append(('NEEDS-INPUT', ', '.join(a['needsInput'])))
     if a.get('calendly') and not a['calendly'].get('footTop'): W.append(('B3', 'no .foot-top footer on booking'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
     if a.get('countdownYears') and len(a['countdownYears']) > 1: W.append(('E1', 'countdown band mixes years %s' % a['countdownYears']))
