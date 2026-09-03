@@ -257,7 +257,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
   .aud,.steps{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
   .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
+  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
   .nav-links.open a.lnk{padding:10px 0;font-size:16px}
   .nav-links.open .btn{margin-top:6px}
   .nav-toggle{display:block}
@@ -409,7 +409,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .magnet-form .row .btn{width:100%}
 }
 
-@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){.nav-in .logo span:not(.logo-mark),.nav-in .logo{font-size:0}.nav-in .logo-mark{font-size:16px}}
 
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
@@ -591,10 +590,11 @@ nav.nav-hidden{transform:translateY(-100%)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
 
-/* anchored glossary terms: offset for fixed nav + gentle arrival tint */
-.gterm{scroll-margin-top:96px}
+/* anchored glossary terms: gentle arrival tint. The offset under the sticky nav
+   comes from html{scroll-padding-top:90px}; a per-term scroll-margin-top would
+   stack on top of it and overshoot. */
 .gterm:target{background:var(--ac-soft,var(--teal-50));border-color:var(--ac,#0B7A6E)}
-@media(max-width:600px){footer{padding-bottom:92px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
+@media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
 .gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
@@ -1144,7 +1144,7 @@ body{font-size:1rem;line-height:1.68}
 .nav-links a.lnk{padding:12px 14px;margin:0 -2px}
 .nav-tick{padding:11px 13px}
 .logo{padding:6px 0}
-.foot-col a,.foot-links a{display:inline-block;padding:9px 0;line-height:1.35}
+.foot-col a,.foot-links a{display:block;padding:9px 0;margin-bottom:0;line-height:1.35}
 .aud-link,.wlink,.gterm a,.back{display:inline-flex;align-items:center;padding:11px 0}
 .btn{min-height:48px;padding:13px 22px}
 .seg button{min-height:48px}
@@ -1202,7 +1202,7 @@ abbr[title],.abbr,.tip{text-decoration:underline dotted;text-underline-offset:3p
 
 /* .gref glossary refs sit inside dense assumption lists, and .ec-note carries
    an inline style="font-size:11px" the cascade cannot reach - both handled. */
-a.gref{display:inline-block;padding:13px 0;margin:-13px 0}
+p a.gref:not(.btn):not(.aud-link),.lede a.gref,.legal a.gref,.gterm a.gref,li a.gref,td a.gref,a.gref{display:inline;padding:0 0 1px;margin:0}
 p.ec-note,p.ec-note *{font-size:.82rem !important}
 .book-meta,.cal-meta{font-size:.82rem}
 
@@ -1257,9 +1257,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links{margin-left:12px}
 .nav-links .btn{margin-left:8px;padding:13px 16px}
 .nav-tick{margin-left:12px;padding:10px 10px}
-@media(max-width:1320px){
-  .nav-tick .nt-l{display:none}
-}
+.nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
 @media(max-width:1180px){
   .nav-toggle{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;

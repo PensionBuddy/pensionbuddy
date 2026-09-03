@@ -257,7 +257,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
   .aud,.steps{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
   .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:72px;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
+  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
   .nav-links.open a.lnk{padding:10px 0;font-size:16px}
   .nav-links.open .btn{margin-top:6px}
   .nav-toggle{display:block}
@@ -487,7 +487,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
-@media(max-width:600px){footer{padding-bottom:92px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
+@media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
 .gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
@@ -876,7 +876,10 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 /* .pains only had its grid defined on the audience pages; the homepage copy
    of the block needs it too. */
-.pains{display:grid;grid-template-columns:repeat(3,1fr)}
+.pains{display:grid}
+/* columns only above the 920px stack point, so the @media(max-width:920px)
+   single-column rule above keeps winning on phones */
+@media(min-width:921px){.pains{grid-template-columns:repeat(3,1fr)}}
 /* .phead wraps the calculator h1 and lede - it is a header block, not a label.
    Restore normal case. */
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
@@ -1037,7 +1040,7 @@ body{font-size:1rem;line-height:1.68}
 .nav-links a.lnk{padding:12px 14px;margin:0 -2px}
 .nav-tick{padding:11px 13px}
 .logo{padding:6px 0}
-.foot-col a,.foot-links a{display:inline-block;padding:9px 0;line-height:1.35}
+.foot-col a,.foot-links a{display:block;padding:9px 0;margin-bottom:0;line-height:1.35}
 .aud-link,.wlink,.gterm a,.back{display:inline-flex;align-items:center;padding:11px 0}
 .btn{min-height:48px;padding:13px 22px}
 .seg button{min-height:48px}
@@ -1095,7 +1098,7 @@ abbr[title],.abbr,.tip{text-decoration:underline dotted;text-underline-offset:3p
 
 /* .gref glossary refs sit inside dense assumption lists, and .ec-note carries
    an inline style="font-size:11px" the cascade cannot reach - both handled. */
-a.gref{display:inline-block;padding:13px 0;margin:-13px 0}
+p a.gref:not(.btn):not(.aud-link),.lede a.gref,.legal a.gref,.gterm a.gref,li a.gref,td a.gref,a.gref{display:inline;padding:0 0 1px;margin:0}
 p.ec-note,p.ec-note *{font-size:.82rem !important}
 .book-meta,.cal-meta{font-size:.82rem}
 
@@ -1150,9 +1153,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links{margin-left:12px}
 .nav-links .btn{margin-left:8px;padding:13px 16px}
 .nav-tick{margin-left:12px;padding:10px 10px}
-@media(max-width:1320px){
-  .nav-tick .nt-l{display:none}
-}
+.nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
 @media(max-width:1180px){
   .nav-toggle{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
@@ -1655,7 +1656,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   </div>
   <div class="faq-list reveal" style="transition-delay:.1s">
     <details class="reveal">
-      <summary>What will I actually walk away with?<span class="pm"><svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><line x1="12" y1="5" x2="12" y2="19"/></svg></span></summary>
+      <summary>What will I actually walk away with?<span class="pm">+</span></summary>
       <div class="faq-inner"><div><p>A clear picture of what you already have, what it is likely to be worth at 66, and the one or two things worth doing about it. Written down, so you are not relying on memory a week later.</p></div></div>
     </details>
     <details><summary>Is the first chat really free?<span class="pm">+</span></summary><p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so.</p></details>
