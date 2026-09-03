@@ -48,9 +48,9 @@ to verify-only and re-confirmed.
 |---|---|
 | F2 typography | **Fixed** — commit `8a9db85` |
 | F3 image extraction | Verified — done in run 1, still holding |
-| F4 qualifying form | _in progress_ |
-| F5 about page | _pending_ |
-| F6 thank-you page | _in progress_ |
+| F4 qualifying form | **Built** — commit `678697b` |
+| F5 about page | **Built** — commit pending |
+| F6 thank-you page | **Built**, redirect **Needs-Damian-Input** — commit `678697b` |
 | C10 (found in run 2) | **Fixed** — commit `8a9db85` |
 
 ### F2 · typography — Fixed
@@ -78,6 +78,88 @@ orphaned rule is reversed per the brief.
 - `.pb-b-head .t` (Ask Buddy panel header) restored to the display token —
   this was the rule that had been silently rendering Georgia.
 
+### F4 · qualifying / routing form — Built
+
+`booking.html` no longer drops visitors straight onto a calendar. A
+three-field form (name, email, persona) stands in front of it.
+
+- The calendar stage is genuinely hidden until a valid submit, and the
+  Calendly script is only injected at that point — so the third-party
+  script no longer loads at all for visitors who never book.
+- The persona rides the booking record as
+  `utm_campaign=tracker|starter|director`, so Director enquiries are
+  identifiable and can be prioritised. Name and email prefill the event.
+- **B2 (the Calendly failure path) is preserved and slightly stronger:**
+  the `onerror` handler and 8s deadline now arm at injection time and check
+  for a real `<iframe>` rather than trusting `script.onload`, so a script
+  that loads but never renders now also falls back. The fallback link
+  carries the same prefilled, tagged URL.
+- Validation refuses an empty or malformed submit without revealing the
+  calendar, reports through an `aria-live` region, moves focus to the first
+  invalid field, and every field clears 44px.
+- **Compliance:** deliberately routing-level. It does not ask income,
+  pension value, age or employer, and says so in copy — the site's position
+  is information, not advice, and a form collecting circumstances would
+  edge toward a personal recommendation.
+
+### F6 · post-booking thank-you page — Built (redirect needs Damian)
+
+`thank-you.html` is generated from `booking.html`'s own skeleton, so chrome,
+nav, footer and accessibility scaffolding are identical. It confirms the
+booking, sets expectations for the call, says what to have ready, repeats
+the "no obligation, no jargon, no pressure" promise, and links back to both
+calculators and the jargon buster. `noindex`, as a post-conversion page.
+Every factual line is lifted from copy already published on the site.
+
+**The redirect cannot be wired from the page.** For an inline Calendly
+embed, "redirect after booking" is a setting on the event type inside the
+Calendly account. `THANK_YOU_URL` is defined in `booking.html` and used by
+an origin-checked `calendly.event_scheduled` listener, but that listener
+could not be confirmed end-to-end without a real completed booking — treat
+the account setting as the one that matters. See NEEDS DAMIAN INPUT.
+
+### F5 · About / Our Story page — Built
+
+`about.html` is assembled entirely from existing components — the hero,
+`.about-grid`/`.about-port`/`.pullquote`/`.bio`, `.timeline`, `.steps`,
+the `.team` blocks, `.proofs`, `.infoadvice` and the closing `.final` band.
+Only 13 lines of new CSS, both blocks copied verbatim from sibling pages
+(`.timeline` from booking, `.infoadvice` from director), so no new design
+language was introduced.
+
+Sections: hero → Damian's story → a five-stop career timeline → why
+Pensionbuddy exists → Buddy → **who you are actually dealing with** (the
+Gresham Wealth Management trading-name relationship in plain English, with
+the Central Bank register) → the "no testimonials yet" honesty position →
+book-a-call close.
+
+**Source discipline held.** Every fact traces to copy already published on
+this site — the homepage About/team/proof sections, the footer disclosure,
+and director.html's information-not-advice notice. No dates, firm names,
+qualifications, client numbers or fee claims were invented; the career
+timeline uses era labels ("Where it started", "Then", "Sydney", "2012",
+"Now") precisely so no dates had to be. One tracked placeholder:
+`data-issue="F5"` on the Central Bank **register reference number** — the
+site tells readers to check the register but never gives the number to look
+up. See NEEDS DAMIAN INPUT.
+
+**The nav needed a real fix, not just an extra link.** C6 had left zero
+slack: a seventh item pushed the row 59px past the 1140px column, and at a
+1200px viewport it overran the viewport itself — a width the verifier's
+375/1360/1440 sampling would not have caught. Rather than drop an item, the
+spacing was retuned inside the same C6 block (nav gap, link and CTA padding,
+chip margin), measured against a three-digit countdown (`364d 06h 41m`,
+the normal state for ~9 months of the year). Result: nav content 1076px
+inside a 1092px box — 16px of headroom in the worst case — and
+`navOverrun.overrun` back to −134 at 1360 on all 14 pages, identical to the
+pre-change baseline.
+
+Homepage section shortened to a teaser (portrait, pullquote, the career
+paragraph, the three credential tiles) plus a "Read our story →" link.
+`id="about"` is retained so old bookmarks still land, and the footer
+"About Damian" link now points at `about.html` on all 14 pages — no
+`index.html#about` links remain. `about.html` added to `sitemap.xml`.
+
 ### C10 · homepage card titles — Fixed
 
 Surfaced by the F2 pass: `index.html` never carried the
@@ -96,6 +178,8 @@ reset, sat flush against their paragraphs. Pre-existing, not caused by F2.
 | **A4** | `terms.html` and `complaints.html` Contact sections | (1) A phone number — currently a marked placeholder "[phone number to be confirmed]", search for `data-issue="A4"`. (2) Confirmation that `hello@pensionbuddy.ie` is a real, monitored mailbox — it is used on terms, complaints and privacy. |
 | **F1a** | every page, `ANALYTICS_SRC` | Which analytics provider (Plausible / GA4 / none). The guard self-disables until set; nothing loads. |
 | **F1b** | both calculators, starter, tracker, director — `LEAD_ENDPOINT` | A form endpoint (Formspree, Netlify Forms, CRM webhook). Until set, capture points open a pre-filled email and show an honest on-screen fallback. |
+| **F5 register no.** | `about.html`, transparency section | The Central Bank **register reference number**. The site tells readers to check the register at registers.centralbank.ie but never gives the number to look up. Renders as a marked placeholder — search `data-issue="F5"`. |
+| **F6 redirect** | the Calendly account, not the code | The thank-you page is built, but the redirect is an event-type setting: **Calendly → Event Types → `pensionbuddy-1-1` → Confirmation page → Redirect to an external site → `https://pensionbuddy.ie/thank-you.html`**. Until that is set, a completed booking still lands on Calendly's own confirmation screen. The page's JS listener is a belt-and-braces fallback that could not be confirmed end-to-end from here. |
 
 ## Category A — legal / content blockers · commit `7b8799b`
 

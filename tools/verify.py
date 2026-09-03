@@ -242,7 +242,18 @@ AUDIT_JS = r"""
   // deep-link offset (C4): glossary terms + any page's first in-page anchor target
   const term=document.getElementById('tax-relief')||document.getElementById('deadline')||document.getElementById('about');
   const nav=document.querySelector('nav');
-  if(term&&nav){de.style.scrollBehavior='auto';term.scrollIntoView({behavior:'instant',block:'start'});await new Promise(r=>setTimeout(r,120));const gap=Math.round(term.getBoundingClientRect().top-nav.getBoundingClientRect().bottom);R.deepLinkGap={id:term.id,gapBelowHeaderPx:gap,scrollY:Math.round(scrollY)};scrollTo(0,0);de.style.scrollBehavior=''}
+  /* C4: what matters is where the target lands relative to the VIEWPORT — scroll-padding-top
+     should park it just clear of the header. Measuring against nav.getBoundingClientRect()
+     is unreliable: the sticky header shrinks on scroll and then auto-hides, so "gap below
+     header" drifts with the header's own behaviour rather than the anchor offset. */
+  if(term&&nav){
+    de.style.scrollBehavior='auto';
+    term.scrollIntoView({behavior:'instant',block:'start'});
+    await new Promise(r=>setTimeout(r,350));
+    const headerH=Math.round(nav.getBoundingClientRect().height);
+    R.deepLinkGap={id:term.id,termTopFromViewport:Math.round(term.getBoundingClientRect().top),headerHeightPx:headerH,gapBelowHeaderPx:Math.round(term.getBoundingClientRect().top-nav.getBoundingClientRect().bottom),scrollY:Math.round(scrollY)};
+    scrollTo(0,0);de.style.scrollBehavior='';
+  }
   // mobile drawer (C2, E3)
   const toggle=document.getElementById('navToggle'),links=document.querySelector('.nav-links');
   if(toggle&&links&&innerWidth<=920&&getComputedStyle(toggle).display!=='none'){
@@ -475,7 +486,11 @@ def evaluate(page, st, audits):
         if hs and min(hs) < 44: W.append(('a11y-target', '@375 drawer links %spx (<44)' % hs))
     elif d: W.append(('tool', '@375 drawer did not open during audit'))
     g = a375.get('deepLinkGap') or a1440.get('deepLinkGap')
-    if g and g['gapBelowHeaderPx'] > 60: W.append(('C4', 'deep link #%s lands %dpx below header' % (g['id'], g['gapBelowHeaderPx'])))
+    if g:
+        top = g.get('termTopFromViewport')
+        if top is not None:
+            if top < g.get('headerHeightPx', 0): W.append(('C4', 'deep link #%s lands %dpx from the top, under the %dpx header' % (g['id'], top, g['headerHeightPx'])))
+            elif top > g.get('headerHeightPx', 0) + 90: W.append(('C4', 'deep link #%s lands %dpx from the top, far below the %dpx header' % (g['id'], top, g['headerHeightPx'])))
     n = a1360.get('navOverrun')
     if n and n['overrun'] > 0: W.append(('C6', '@1360 nav overruns viewport by %dpx' % n['overrun']))
     return F, W

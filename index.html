@@ -1161,6 +1161,15 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links{margin-left:12px}
 .nav-links .btn{margin-left:8px;padding:13px 16px}
 .nav-tick{margin-left:12px;padding:10px 10px}
+
+/* F5: a sixth informational item ("About") joins the row, and the C6 tightening
+   above had left no slack. The item is paid for here rather than by letting the
+   bar overrun the column again: one step less padding per link, the inter-item
+   gap closed, and a slightly tighter chip and CTA. */
+.nav-links{margin-left:6px;gap:0}
+.nav-links a.lnk{padding:12px 6px}
+.nav-links .btn{margin-left:6px;padding:13px 13px}
+.nav-tick{margin-left:8px;padding:10px 7px}
 .nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
 @media(max-width:1180px){
   .nav-toggle{display:inline-flex}
@@ -1410,6 +1419,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <a class="lnk" href="director.html">Directors</a>
     <a class="lnk" href="pension-calculator.html">Calculator</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
+    <a class="lnk" href="about.html">About</a>
     <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -1604,13 +1614,12 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <h2>Damian Condon</h2>
     <p class="pullquote">I've spent thirty years explaining money to real people, and the jargon was never the point. Clarity is.</p>
     <p class="bio">Bank of Ireland. Ulster Bank. Two years with St. George Private Bank in Sydney. Founder of Gresham Wealth Management since 2012, and the human behind Pensionbuddy.</p>
-    <p class="bio">The goal here is simple: make your pension make sense, then help you make the most of it.</p>
-    <span class="sig">Damian</span>
     <div class="creds">
       <div class="cred"><div class="cn">30+</div><div class="cl">years in financial services</div></div>
       <div class="cred"><div class="cn">QFA</div><div class="cl">Qualified Financial Adviser</div></div>
       <div class="cred"><div class="cn">2012</div><div class="cl">founded Gresham Wealth</div></div>
     </div>
+    <a class="aud-link" href="about.html" style="margin-top:20px">Read our story <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
 </div></section>
 
@@ -1710,7 +1719,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     </div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
     <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h4>Company</h4><a href="#about">About Damian</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
+    <div class="foot-col"><h4>Company</h4><a href="about.html">About Damian</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
