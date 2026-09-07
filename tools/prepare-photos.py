@@ -69,6 +69,11 @@ HEADSHOT = {
     'quality': 82,
 }
 
+# The same photo again at portrait size for Adam's own profile section, matching
+# damian-condon-portrait.jpg. The small card crop is a narrow 132px column, so
+# the headshot only reads properly at this size.
+PORTRAIT = dict(HEADSHOT, slug='adam-condon-portrait', size=(620, 775), quality=84)
+
 
 def photo_band(im):
     """Rows of the screenshot that hold the photo rather than black bars or UI.
@@ -144,18 +149,19 @@ def main():
     print('\n%d photos  |  jpg total %.0f KB  |  webp total %.0f KB (what browsers fetch)'
           % (len(PHOTOS), total_j / 1024, total_w / 1024))
 
-    h = HEADSHOT
-    if h.get('raw'):
-        head = Image.open(os.path.join(SRC, h['source'])).convert('RGB')
-    else:
-        head = load_cropped(h['source'])
-    if h.get('box'):
-        head = head.crop(h['box'])
-    head = head.resize(h['size'], Image.LANCZOS)
-    jpg, webp, jb, wb = save_pair(head, h['slug'], out_dir, h['quality'])
-    print('headshot %-21s %9d %9s  (from %s, %s)'
-          % (h['slug'], jb, wb if wb else 'skipped', h['source'],
-             'cropped' if h.get('box') else 'already 4:5, resized only'))
+    for h in (HEADSHOT, PORTRAIT):
+        if h.get('raw'):
+            head = Image.open(os.path.join(SRC, h['source'])).convert('RGB')
+        else:
+            head = load_cropped(h['source'])
+        if h.get('box'):
+            head = head.crop(h['box'])
+        head = head.resize(h['size'], Image.LANCZOS)
+        jpg, webp, jb, wb = save_pair(head, h['slug'], out_dir, h['quality'])
+        print('headshot %-24s %9d %9s  (from %s, %dx%d, %s)'
+              % (h['slug'], jb, wb if wb else 'skipped', h['source'],
+                 h['size'][0], h['size'][1],
+                 'cropped' if h.get('box') else 'already 4:5, resized only'))
 
 
 if __name__ == '__main__':
