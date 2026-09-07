@@ -387,6 +387,7 @@ def static_checks(pages):
             'fraunces': 'Fraunces' in t,
             'requestsFraunces': bool(re.search(r'fonts\.googleapis\.com[^"\']*Fraunces', t)),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
+            'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
             'bytes': len(t.encode('utf-8')),
         }
     return res
@@ -397,6 +398,13 @@ def static_checks(pages):
 
 def evaluate(page, st, audits):
     F, W = [], []
+    # The local copy editor (tools/edit-server.py) injects its markers and its UI
+    # into the copy of a page it serves, never into the file. If any of it shows
+    # up in a file on disk, something has written the editor into the real site
+    # and it would ship. That is a launch blocker, not a warning.
+    if st.get('editorLeak'):
+        F.append(('EDITOR-LEAK', 'local copy-editor markup is in the source file: %s'
+                  % ', '.join(st['editorLeak'][:6])))
     a375 = audits.get(375, {}); a1440 = audits.get(1440, {}); a1360 = audits.get(1360, {})
     if st['brokenLinks']: F.append(('links', '%d broken: %s' % (len(st['brokenLinks']), st['brokenLinks'][:4])))
     if st['duplicateIdsStatic']: F.append(('ids', 'duplicate ids in source: %s' % st['duplicateIdsStatic'][:5]))

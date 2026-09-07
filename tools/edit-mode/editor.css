@@ -1,0 +1,99 @@
+/* Local copy editor chrome. Served only by tools/edit-server.py, never part of
+   a page on disk. Everything here is outline / shadow / overlay so it cannot
+   move the layout it sits on top of. */
+
+:root{
+  --pbe-a:#7c3aed;        /* editable  */
+  --pbe-b:#c2410c;        /* changed   */
+  --pbe-c:#94a3b8;        /* locked    */
+}
+
+/* --- editable copy ------------------------------------------------------- */
+[data-pbe-live]{ cursor:text; border-radius:3px; }
+html[data-pbe-hl] [data-pbe-live]{
+  outline:1px dashed rgba(124,58,237,.42); outline-offset:3px;
+  transition:outline-color .12s, background-color .12s;
+}
+html[data-pbe-hl] [data-pbe-live]:hover{
+  outline-color:rgba(124,58,237,.95);
+  background-color:rgba(124,58,237,.07);
+}
+[data-pbe-live]:focus{
+  outline:2px solid var(--pbe-a) !important; outline-offset:3px;
+  background-color:rgba(124,58,237,.09);
+}
+[data-pbe-live][data-pbe-changed]{
+  background-color:rgba(194,65,12,.10);
+  outline:1px solid rgba(194,65,12,.55); outline-offset:3px;
+}
+html[data-pbe-hl] [data-pbe-live][data-pbe-changed]:hover{ outline-color:var(--pbe-b); }
+/* icons and images inside a run of copy stay put, they are not text */
+[data-pbe-live] svg,[data-pbe-live] img,[data-pbe-live] picture{ user-select:none; }
+
+/* --- locked, shown only on request --------------------------------------- */
+html[data-pbe-locked] [data-pbe-lock]{
+  outline:1px dotted rgba(148,163,184,.85); outline-offset:3px;
+  position:relative; cursor:not-allowed;
+}
+
+/* --- images, alt text ----------------------------------------------------- */
+html[data-pbe-hl] [data-pbe-alt]{ outline:1px dashed rgba(124,58,237,.45); outline-offset:2px; }
+.pbe-altbtn{
+  position:absolute; z-index:2147483000; font:600 11px/1 ui-sans-serif,system-ui,sans-serif;
+  background:var(--pbe-a); color:#fff; border:0; border-radius:5px; padding:5px 8px;
+  cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.28);
+}
+.pbe-altbtn[data-changed]{ background:var(--pbe-b); }
+
+/* --- the bar -------------------------------------------------------------- */
+#pbe-bar,#pbe-pop{
+  font:500 13px/1.35 ui-sans-serif,-apple-system,system-ui,"Segoe UI",sans-serif;
+  color:#e8eaf1; box-sizing:border-box;
+}
+#pbe-bar *,#pbe-pop *{ box-sizing:border-box; }
+#pbe-bar{
+  position:fixed; left:16px; bottom:16px; z-index:2147483600;
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap; max-width:min(640px,calc(100vw - 32px));
+  background:#14161f; border:1px solid #2b2f3d; border-radius:12px;
+  padding:9px 11px; box-shadow:0 10px 34px rgba(0,0,0,.42);
+}
+#pbe-bar .pbe-dot{ width:8px; height:8px; border-radius:50%; background:var(--pbe-a); flex:none; }
+#pbe-bar .pbe-name{ font-weight:700; letter-spacing:-.01em; }
+#pbe-bar .pbe-count{ color:#9aa3b8; font-variant-numeric:tabular-nums; }
+#pbe-bar button{
+  font:inherit; font-weight:600; color:#e8eaf1; background:#232735;
+  border:1px solid #343a4c; border-radius:8px; padding:6px 10px; cursor:pointer;
+}
+#pbe-bar button:hover{ background:#2c3142; }
+#pbe-bar button[aria-pressed="true"]{ background:#3b2f66; border-color:#5b46a8; color:#fff; }
+#pbe-bar button.pbe-save{ background:var(--pbe-a); border-color:var(--pbe-a); color:#fff; }
+#pbe-bar button.pbe-save:hover{ background:#6d31d9; }
+#pbe-bar button.pbe-save[disabled]{ opacity:.45; cursor:default; }
+#pbe-bar .pbe-msg{ color:#8fe3b0; flex-basis:100%; }
+#pbe-bar .pbe-msg[data-bad]{ color:#ffb4a2; }
+#pbe-bar .pbe-help{ flex-basis:100%; color:#9aa3b8; font-weight:400; }
+#pbe-bar .pbe-help[hidden]{ display:none; }
+#pbe-bar .pbe-q{ width:24px; padding:6px 0; text-align:center; }
+@media(max-width:620px){ #pbe-bar{ left:8px; right:8px; bottom:8px; max-width:none; } }
+@media print{ #pbe-bar,#pbe-pop,.pbe-altbtn{ display:none !important; } }
+
+/* --- alt text popover ------------------------------------------------------ */
+#pbe-back{ position:fixed; inset:0; z-index:2147483500; background:rgba(9,10,14,.45); }
+#pbe-pop{
+  position:fixed; z-index:2147483600; width:min(420px,calc(100vw - 24px));
+  left:50%; top:50%; transform:translate(-50%,-50%);
+  background:#14161f; border:1px solid #2b2f3d; border-radius:12px; padding:12px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5);
+}
+#pbe-pop label{ display:block; font-weight:700; margin-bottom:6px; }
+#pbe-pop .pbe-sub{ color:#9aa3b8; font-weight:400; margin-bottom:8px; }
+#pbe-pop textarea{
+  width:100%; min-height:76px; font:inherit; color:#e8eaf1; background:#0e1017;
+  border:1px solid #343a4c; border-radius:8px; padding:8px; resize:vertical;
+}
+#pbe-pop .pbe-row{ display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
+#pbe-pop button{
+  font:inherit; font-weight:600; color:#e8eaf1; background:#232735;
+  border:1px solid #343a4c; border-radius:8px; padding:6px 12px; cursor:pointer;
+}
+#pbe-pop button.pbe-ok{ background:var(--pbe-a); border-color:var(--pbe-a); color:#fff; }
