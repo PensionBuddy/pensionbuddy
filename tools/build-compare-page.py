@@ -54,6 +54,18 @@ VS_CSS = """
 .bd .capnote{font-size:12px;color:var(--ink-3)}
 .verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
 .srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
+/* ---- headline face ----
+   The page headline is Bricolage Grotesque; body copy stays Hanken Grotesk and
+   the remaining headings stay on --font-display for now. Kept behind its own
+   token so widening or reverting the scope is a one-line change.
+
+   Retuned for the face rather than inheriting Fraunces' values: Fraunces at
+   opsz 144 sat at 600 weight and -.015em. Bricolage is a grotesque with a
+   large x-height and a squarer, lighter-reading 600, so it takes 700 and
+   noticeably tighter tracking to carry the same weight at headline size, with
+   a little leading taken back out. */
+:root{--font-headline:'Bricolage Grotesque','Hanken Grotesk',-apple-system,system-ui,sans-serif}
+.phead h1{font-family:var(--font-headline);font-weight:700;letter-spacing:-.028em;line-height:1.04}
 /* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
    and each results panel keeps the results column's own vertical rhythm */
 .calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
@@ -88,6 +100,12 @@ def main():
                   lambda m: m.group(1) + DESC + m.group(2), head, count=1)
     assert head.count('</style>') >= 1
     head = head.replace('</style>', VS_CSS + '</style>', 1)
+
+    # add the headline face to the existing single Google Fonts request
+    m = re.search(r'(<link href="https://fonts\.googleapis\.com/css2\?)([^"]*)(")', head)
+    assert m, 'could not find the Google Fonts request'
+    if 'Bricolage' not in m.group(2):
+        head = head[:m.start(2)] + 'family=Bricolage+Grotesque:opsz,wght@12..96,600..800&' + head[m.start(2):]
 
     # mark this page as the active nav item instead of the pension calculator
     head = head.replace('<a class="lnk active" aria-current="page" href="pension-calculator.html">',

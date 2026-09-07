@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -1489,6 +1489,18 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .bd .capnote{font-size:12px;color:var(--ink-3)}
 .verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
 .srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
+/* ---- headline face ----
+   The page headline is Bricolage Grotesque; body copy stays Hanken Grotesk and
+   the remaining headings stay on --font-display for now. Kept behind its own
+   token so widening or reverting the scope is a one-line change.
+
+   Retuned for the face rather than inheriting Fraunces' values: Fraunces at
+   opsz 144 sat at 600 weight and -.015em. Bricolage is a grotesque with a
+   large x-height and a squarer, lighter-reading 600, so it takes 700 and
+   noticeably tighter tracking to carry the same weight at headline size, with
+   a little leading taken back out. */
+:root{--font-headline:'Bricolage Grotesque','Hanken Grotesk',-apple-system,system-ui,sans-serif}
+.phead h1{font-family:var(--font-headline);font-weight:700;letter-spacing:-.028em;line-height:1.04}
 /* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
    and each results panel keeps the results column's own vertical rhythm */
 .calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
