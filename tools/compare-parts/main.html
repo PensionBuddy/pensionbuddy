@@ -1,0 +1,177 @@
+<main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment, or a pension <span class="hl">through a broker</span>?</h1>
+  <p class="reveal" style="transition-delay:.12s">Two ways to build a pension, side by side, for your own salary and age. Or, if you want to save more than the minimum, both together. This shows the numbers for the figures you enter. It does not tell you which one to pick.</p>
+</div></div>
+
+<div class="wrap"><div class="calc-wrap">
+  <div class="deadline" id="deadlineBand">
+      <span class="dl-tag">Tax deadline</span>
+      <span class="dl-text" id="deadlineText"></span>
+    </div>
+
+    <div class="modebar reveal">
+      <div class="row"><span class="modelab">Two different questions</span></div>
+      <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
+        <span class="ind" id="modeInd"></span>
+        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Mode 1: Equivalent layer</button>
+        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">Mode 2: Combined</button>
+      </div>
+      <p class="subnote" id="modeNote">For the same money out of your pocket: what goes into your pension under auto-enrolment, against a personal pension instead.</p>
+    </div>
+
+    <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment employer and State contributions are worked out on salary up to €80,000. Your own contribution is not capped.</p></div>
+    <div class="field"><div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Contribution rates rise in three-year steps.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts matched to what auto-enrolment costs you, so the two sides begin like for like. Move it to whatever you would actually pay.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="match">Employer match on a personal pension</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">A percentage of salary. A personal pension only carries an employer contribution if your employer separately agrees to one. Leave this at zero if they have not.</p></div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">On top of the auto-enrolment minimum, from your own pocket. My Future Fund does not currently take contributions above its set rate, so this goes through a personal pension.</p></div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="tmatch">Employer match on your top-up</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A percentage of the top-up itself, not of salary. Only applies if your employer agrees to match what you add on. Leave this at zero if they have not.</p></div>
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label>Your income tax rate</label></div>
+      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)" type="button">20% rate</button><button id="t40" class="on" onclick="setTax(40)" type="button">40% rate</button></div>
+      <p class="subnote">Sets the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.</p>
+    </div>
+  </div>
+
+  <div class="results">
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+
+    <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
+    <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
+        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
+        <div class="divline"></div>
+        <div class="foot">Both figures are for one year, at the salary and age you entered. An illustration only.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">For the figures you entered</div>
+        <div class="wtext verdict" id="verdictOut"></div>
+        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="vs-card reveal" style="transition-delay:.14s">
+        <h3>What it actually costs you</h3>
+        <div class="sub">The money out of your own pocket for a year, on each path.</div>
+        <div class="vs">
+          <div class="vs-col vs-salary">
+            <div class="vt">Auto-enrolment</div>
+            <div class="amt" id="aeNet">€0</div>
+            <div class="lab">Taken from your take-home pay. No income tax relief on this path.</div>
+          </div>
+          <div class="vsmark">vs</div>
+          <div class="vs-col vs-pension">
+            <div class="vt">Personal pension</div>
+            <div class="amt" id="ppNet">€0</div>
+            <div class="lab" id="ppNetLab">Your contribution after tax relief.</div>
+          </div>
+        </div>
+        <p class="vs-note subnote" id="vsNote"></p>
+      </div>
+
+      <div class="chart-card reveal" style="transition-delay:.22s">
+        <h3>Personal pension, broken down</h3>
+        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
+        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
+        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
+        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2">€0</span></div>
+        <p class="subnote" id="ppReliefNote"></p>
+      </div>
+    </div>
+
+    <!-- ============ MODE 2: COMBINED ============ -->
+    <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
+        <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
+        <div class="divline"></div>
+        <div class="foot">Auto-enrolment at its set rate, plus your top-up through a personal pension. One year, at the salary and age you entered. An illustration only.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">For the figures you entered</div>
+        <div class="wtext verdict" id="cVerdict"></div>
+        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="vs-card reveal" style="transition-delay:.14s">
+        <h3>What it actually costs you</h3>
+        <div class="sub">The money out of your own pocket for a year, layer by layer.</div>
+        <div class="vs">
+          <div class="vs-col vs-salary">
+            <div class="vt">Auto-enrolment minimum</div>
+            <div class="amt" id="cAeNet">€0</div>
+            <div class="lab">Taken from your take-home pay. No income tax relief on this layer.</div>
+          </div>
+          <div class="vsmark">+</div>
+          <div class="vs-col vs-pension">
+            <div class="vt">Your top-up</div>
+            <div class="amt" id="cExtraNet">€0</div>
+            <div class="lab" id="cExtraLab">What you pay in each year, before relief.</div>
+          </div>
+        </div>
+        <p class="vs-note subnote" id="cNote"></p>
+      </div>
+
+      <div class="chart-card reveal" style="transition-delay:.22s">
+        <h3>Your top-up, broken down</h3>
+        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
+        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
+        <div class="bd"><span class="bl">Goes into your pension</span><span class="bv" id="cGross">€0</span></div>
+        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="cMatchCap"></span></span><span class="bv" id="cMatch">€0</span></div>
+        <div class="bd tot"><span class="bl">Total from the top-up</span><span class="bv" id="cTopUp2">€0</span></div>
+        <p class="subnote" id="cReliefNote"></p>
+      </div>
+    </div>
+
+    <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
+    <div class="chart-card reveal" style="transition-delay:.18s">
+      <h3>Auto-enrolment, broken down</h3>
+      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
+      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
+      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState">€0</span></div>
+      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2">€0</span></div>
+      <p class="subnote" id="aeRatesNote"></p>
+    </div>
+
+    <div class="chart-card reveal" style="transition-delay:.26s">
+      <h3>Before you rely on these rates</h3>
+      <p class="srcwarn">The My Future Fund contribution rates and phase years used here are taken from third-party summaries of the scheme, not from the primary NAERSA or gov.ie text. So is the position that the scheme does not currently accept contributions above its set rate. Confirm both against gov.ie or NAERSA before relying on this page. Rates and rules can change.</p>
+    </div>
+  </div>
+</div></div>
+
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="ctext"><h2>These are just illustrations.</h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
+  <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation, and it does not say which path is right for you. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
+    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State.</li>
+    <li>Employer and State auto-enrolment contributions are calculated on salary capped at €80,000. Your own contribution is not capped.</li>
+    <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
+    <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
+    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at the rate you select, limited to Revenue's age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
+    <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
+    <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+  </ul>
+</div></section>
+</main>

@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our story, Pensionbuddy</title>
-<meta name="description" content="Thirty years in financial services, a Trinity business graduate, one boxer dog, and the plain-English idea behind Pensionbuddy. Damian Condon, QFA, trading as Gresham Wealth Management and regulated by the Central Bank of Ireland.">
+<title>Auto-enrolment or a broker pension, Pensionbuddy</title>
+<meta name="description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
-<meta property="og:title" content="About Damian Condon, Pensionbuddy">
-<meta property="og:description" content="Thirty years in financial services, a Trinity business graduate, one boxer dog, and the plain-English idea behind Pensionbuddy. Damian Condon, QFA, trading as Gresham Wealth Management and regulated by the Central Bank of Ireland.">
+<meta property="og:title" content="Auto-enrolment or a broker pension, Pensionbuddy">
+<meta property="og:description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -18,28 +18,20 @@
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Fraunces + Hanken Grotesk + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
-  /* canvas + surfaces */
   --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
-  /* ink */
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
-  /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
   --amber:#F4B740; --amber-soft:#FCEFCF;
-  /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
-  /* type */
   --font:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
@@ -50,245 +42,283 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-picture{display:contents} /* F3: the extracted photos sit in <picture>; keep the img the direct layout child of its frame */
 ::selection{background:var(--teal-100);color:var(--teal-900)}
-h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink)}
+h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
-
-/* ---- eyebrow / labels ---- */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-
-/* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
 .btn svg{width:17px;height:17px;transition:transform .2s ease}
 .btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
 .btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
 .btn-primary:hover svg{transform:translateX(3px)}
-.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2);box-shadow:var(--sh-sm)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal-700);transform:translateY(-2px)}
-.btn-light{background:#fff;color:var(--teal-900)}
-.btn-light:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-
-/* ---- reveal on scroll ---- */
 .reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
-
-/* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
-.announce b{color:#fff;font-weight:600}
-.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-
-/* ---- nav ---- */
+.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
 nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
 .logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:22px;height:22px}
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a.lnk{font-weight:500;font-size:15px;color:var(--ink-2);transition:color .2s;position:relative}
-.nav-links a.lnk:hover{color:var(--teal-700)}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
+.nav-r{display:flex;align-items:center;gap:28px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 
-/* ---- hero ---- */
-.hero{padding:72px 0 36px;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-0.035em;margin:20px 0 0}
-.hero h1 .hl{color:var(--teal-700)}
-.hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.trust{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
-.stars{display:flex;gap:2px;color:var(--amber)}
-.stars svg{width:16px;height:16px;fill:currentColor}
-.trust span{font-size:14px;color:var(--ink-2)}
-.trust b{color:var(--ink);font-weight:600}
+/* ---- page head ---- */
+.phead{padding:52px 0 12px}
+.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
+.phead h1 .hl{color:var(--teal-700)}
+.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
 
-/* hero visual: clean app-style card, no rotation/frame */
-.hero-card{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:26px;overflow:hidden}
-.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--teal-50),transparent 60%);pointer-events:none}
-.hc-top{display:flex;align-items:center;justify-content:space-between;position:relative}
-.hc-buddy{display:flex;align-items:center;gap:12px}
-.hc-avatar{width:54px;height:54px;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm)}.hc-avatar img{width:100%;height:100%;object-fit:cover;display:block}
-.hc-avatar svg{width:30px;height:30px;fill:#fff}
-.hc-name{font-weight:700;font-size:16px}
-.hc-role{font-size:12.5px;color:var(--ink-3)}
-.hc-badge{font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:6px 12px;border-radius:var(--r-pill)}
-.hc-figure{position:relative;margin:24px 0 6px}
-.hc-flabel{font-size:13px;color:var(--ink-3);font-weight:500}
-.hc-fnum{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
-.hc-fsub{font-size:13.5px;color:var(--ink-2);margin-top:8px}
-.hc-bars{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:22px}
-.hc-bars i{flex:1;background:var(--teal-100);border-radius:7px 7px 4px 4px;display:block;animation:grow .9s cubic-bezier(.2,.7,.3,1) backwards}
-.hc-bars i.on{background:var(--teal)}
-.hc-bars i:nth-child(1){animation-delay:.05s}.hc-bars i:nth-child(2){animation-delay:.12s}.hc-bars i:nth-child(3){animation-delay:.19s}.hc-bars i:nth-child(4){animation-delay:.26s}.hc-bars i:nth-child(5){animation-delay:.33s}.hc-bars i:nth-child(6){animation-delay:.4s}
-@keyframes grow{from{height:0;opacity:.2}}
-@media(prefers-reduced-motion:reduce){.hc-bars i{animation:none}}
-.hc-note{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:13px;margin-top:16px}
-.hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
-.hc-pill svg{width:15px;height:15px}
+/* ---- calculator layout ---- */
+.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
+.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:22px}
+.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
+.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
+.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
+.sft-note[hidden]{display:none}
 
-/* ---- logo / trust strip ---- */
-.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
-.strip-in{display:flex;align-items:center;justify-content:center;gap:14px 40px;flex-wrap:wrap;padding:22px 0}
-.strip-item{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--ink-2)}
-.strip-item svg{width:18px;height:18px;color:var(--teal)}
+/* custom sliders */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
+input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
-/* ---- section base ---- */
-section{padding:88px 0}
-.sec-head{max-width:660px;margin-bottom:48px}
-.sec-head.ctr{margin-left:auto;margin-right:auto;text-align:center}
-.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
-.sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
+/* segmented tax toggle */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
+.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
+.seg button.on{color:var(--teal-700)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-/* ---- audience cards (static grid, no layout jump) ---- */
-.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.aud-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px 26px;box-shadow:var(--sh-sm);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;display:flex;flex-direction:column;overflow:hidden}
-.aud-card::after{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--ac,var(--teal));opacity:0;transition:opacity .25s ease}
-.aud-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
-.aud-card:hover::after{opacity:1}
-.aud-ico{width:50px;height:50px;border-radius:14px;background:var(--ac-soft,var(--teal-50));color:var(--ac,var(--teal-700));display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.aud-ico svg{width:25px;height:25px}
-.aud-card h3{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:9px}
-.aud-card p{font-size:15px;color:var(--ink-2);margin-bottom:22px}
-.aud-link{margin-top:auto;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;color:var(--ac,var(--teal-700))}
-.aud-link svg{width:16px;height:16px;transition:transform .2s ease}
-.aud-card:hover .aud-link svg{transform:translateX(4px)}
-.a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
-.a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
-.a3{--ac:#0A332E;--ac-soft:#EDF4F2}
+/* ---- results ---- */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.res-hero>div{position:relative;min-width:0}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 
-/* ---- "what to expect" steps ---- */
-.expect{background:var(--surface)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
-.step{position:relative;padding-top:8px}
-.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.step p{color:var(--ink-2);font-size:15px}
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
+.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend span{display:inline-flex;align-items:center;gap:8px}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
-/* ---- calculator showcase ---- */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-.calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
-.calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
-.calc-prev{background:var(--teal-900);border-radius:var(--r-xl);padding:34px;color:#fff;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
-.calc-prev::before{content:"";position:absolute;inset:0;pointer-events:none}
-.calc-prev .ctag{font-size:12.5px;letter-spacing:.04em;font-weight:600;color:#7FD8CC;position:relative}
-.calc-prev .cbig{font-size:clamp(38px,5vw,52px);font-weight:800;letter-spacing:-0.04em;line-height:1;margin:8px 0 4px;position:relative;font-variant-numeric:tabular-nums}
-.calc-prev .csub{font-size:14px;color:#A7DED4;position:relative}
-.cbars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:26px 0 6px;position:relative}
-.cbars i{flex:1;background:rgba(255,255,255,.14);border-radius:6px 6px 3px 3px;display:block}
-.cbars i.hl{background:var(--teal)}
-.cnote{font-size:12px;color:#7FD8CC;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;margin-top:8px;position:relative}
+.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
+.relief-card .rt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
+.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.relief-card .rbig b{font-weight:700;color:#3F2D04}
+.relief-viz{margin-top:18px;transition:opacity .4s}
+.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
+.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
+.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
+.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-/* ---- about Damian ---- */
-.about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
-.about-port{aspect-ratio:4/5;border-radius:var(--r-xl);position:relative;box-shadow:var(--sh-lg);overflow:hidden}.about-port img{width:100%;height:100%;object-fit:cover;display:block}
-.about-port::before{content:"";position:absolute;inset:0;pointer-events:none}
-.about-port .pl{position:relative;color:#BBE7DF;font-size:14px;font-weight:500}
-.about-port .badge{position:absolute;top:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:7px 13px;border-radius:var(--r-pill);box-shadow:var(--sh-sm)}
-.about h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 20px}
-.pullquote{font-size:clamp(20px,2.4vw,26px);line-height:1.34;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px;color:var(--ink)}
-.pullquote .q{color:var(--teal)}
+.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
+.boost-ico svg{width:22px;height:22px}
+.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt b{font-weight:700}
 
-/* ---- career timeline (base rules as on booking.html / thank-you.html) ---- */
-.timeline{position:relative;margin:0 0 32px;padding-left:30px}
-.timeline::before{content:"";position:absolute;left:8px;top:12px;bottom:12px;width:2px;background:var(--line-2);border-radius:2px}
-.tl{position:relative;padding-bottom:26px}
-.tl:last-child{padding-bottom:0}
-.tl::before{content:"";position:absolute;left:-26px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--bg)}
-.tl .tn{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-700);margin-bottom:4px}
-.tl .tt{font-weight:700;font-size:18px;letter-spacing:-0.02em;margin-bottom:4px}
-.tl .td{font-size:14.5px;color:var(--ink-2);max-width:380px}
+/* ---- CTA ---- */
+.cta-band{padding:64px 0 8px}
+.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
+.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
+picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
+.buddy-mini svg{width:42px;height:42px;fill:#fff}
+.cta-card .ctext{position:relative;min-width:0}
+.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
+.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
+.cta-card .btn{position:relative}
 
-/* ---- information-not-advice notice (base rules as on director.html) ---- */
+/* ---- assumptions ---- */
+.assume{padding:72px 0 24px}
+.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
+.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
+
+/* ---- footer ---- */
+footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
+.foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
+.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
+.disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
+.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
+
+@media(max-width:920px){
+  .calc-wrap{grid-template-columns:1fr;gap:20px}
+  .panel{position:static;top:auto}
+  .res-hero{grid-template-columns:1fr;padding:26px}
+  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .assume ul{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr 1fr;gap:30px}
+  .nav-r{gap:14px}
+}
+@media(max-width:560px){
+  .wrap{padding:0 18px}
+  .nav-r .back span,.nav-r .back{font-size:0}
+  .nav-r .back svg{width:20px;height:20px}
+}
+@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
+
+/* ============================================================
+   EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
+   Additive only, nothing above is modified.
+   ============================================================ */
+
+/* per-page accent: default teal; override on <body data-accent> */
+:root{--ac:var(--teal);--ac-700:var(--teal-700);--ac-50:var(--teal-50);--ac-100:var(--teal-100);--ac-soft:var(--teal-50)}
+body.acc-purple{--ac:#0B7A6E;--ac-700:#085E54;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--ac-soft:#EDF4F2}
+body.acc-teal{--ac:var(--teal);--ac-700:var(--teal-700);--ac-50:var(--teal-50);--ac-100:var(--teal-100);--ac-soft:var(--teal-50)}
+body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--ac-soft:#EDF4F2}
+.eyebrow.acc{color:var(--ac-700);background:var(--ac-50)}
+.eyebrow.acc .pip{background:var(--ac)}
+.btn-acc{background:var(--ac);color:#fff;box-shadow:0 14px 30px -12px color-mix(in srgb,var(--ac) 55%,transparent)}
+.btn-acc:hover{filter:brightness(.96);transform:translateY(-2px)}
+.btn-acc:hover svg{transform:translateX(3px)}
+
+/* audience hero (reuses .hero/.hero-grid spacing from base) */
+.aud-hero h1{font-size:clamp(38px,5.2vw,64px);font-weight:800;letter-spacing:-0.035em;margin:18px 0 0}
+.aud-hero h1 .hl{color:var(--ac-700)}
+.aud-hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
+.aud-figure{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:30px;overflow:hidden;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center}
+.aud-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--ac-50),transparent 60%);pointer-events:none}
+.aud-figure .ring{width:108px;height:108px;border-radius:50%;background:var(--ac-50);display:flex;align-items:center;justify-content:center;color:var(--ac-700);position:relative}
+.aud-figure .ring svg{width:50px;height:50px}
+.aud-figure .fcap{position:relative;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.aud-figure .fbadge{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--ac-700);z-index:2}
+
+/* "sound familiar" pain cards */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-sm)}
+.pain .pl{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ac-700);background:var(--ac-50);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:14px}
+.pain h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.pain p{font-size:15px;color:var(--ink-2)}
+
+/* callout band */
+.callout{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.callout::before{content:"";position:absolute;inset:0;pointer-events:none}
+.callout .eyebrow{background:none;color:rgba(255,255,255,.92);position:relative}
+.callout .eyebrow .pip{background:var(--ac)}
+.callout h2{color:#fff;font-size:clamp(28px,3.8vw,44px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
+.callout p{color:#CFEFE9;font-size:18px;max-width:540px;margin:0 auto 28px;position:relative}
+
+/* benefit grid (used on director page) */
+.benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.benefit{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-sm);display:flex;gap:16px;align-items:flex-start}
+.benefit .bi{width:46px;height:46px;border-radius:13px;background:var(--ac-50);color:var(--ac-700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.benefit .bi svg{width:23px;height:23px}
+.benefit h3{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px}
+.benefit p{font-size:14.5px;color:var(--ink-2)}
+
+/* info vs advice banner (CPC 2025) */
 .infoadvice{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 22px}
 .infoadvice .ii{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-sm)}
 .infoadvice .ii svg{width:18px;height:18px}
 .infoadvice p{font-size:13.5px;color:var(--ink-2);line-height:1.6}
 .infoadvice b{color:var(--ink);font-weight:700}
-.about p.bio{color:var(--ink-2);font-size:16px;margin-bottom:14px}
-.about .sig{font-style:italic;font-weight:600;font-size:18px;color:var(--teal-700)}
 
-/* ---- testimonials ---- */
-.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
-.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--sh-sm)}
-.tcard.big{justify-content:center}
-.tcard .qstars{display:flex;gap:2px;color:var(--amber);margin-bottom:16px}
-.tcard .qstars svg{width:16px;height:16px;fill:currentColor}
-.tcard blockquote{font-size:18px;line-height:1.5;font-weight:500;letter-spacing:-0.01em;margin:0 0 20px;color:var(--ink)}
-.tcard.big blockquote{font-size:23px;font-weight:600;letter-spacing:-0.02em}
-.tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto}
-.tcard .av{width:42px;height:42px;border-radius:50%;background:var(--teal-50);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-700)}
-.tcard .who b{font-weight:600;font-size:15px;display:block}
-.tcard .who span{font-size:13px;color:var(--ink-3)}
-.tcol{display:flex;flex-direction:column;gap:22px}
+/* lead-magnet capture block */
+.magnet{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:40px 44px;box-shadow:var(--sh-md);position:relative;overflow:hidden}
+.magnet::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 120% at 0 100%,var(--ac-50),transparent 55%);pointer-events:none}
+.magnet .mtext{position:relative}
+.magnet h2{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 10px}
+.magnet p{font-size:16px;color:var(--ink-2);max-width:420px}
+.magnet-form{position:relative;display:flex;flex-direction:column;gap:12px}
+.magnet-form .row{display:flex;gap:10px;flex-wrap:wrap}
+.magnet-form input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;padding:15px 20px;transition:border-color .2s,box-shadow .2s,background .2s}
+.magnet-form input:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ring)}
+.magnet-form .note{font-size:12px;color:var(--ink-3);line-height:1.5}
+.magnet-form .note a{color:var(--ac-700);font-weight:600}
+.magnet .ok{display:none;position:relative;background:var(--ac-50);border-radius:var(--r-lg);padding:24px;text-align:center}
+.magnet .ok.show{display:block}
+.magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
+.magnet .ok h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.magnet .ok p{font-size:14px;color:var(--ink-2);margin:0 auto}
 
-/* ---- faq ---- */
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
-details[open]{box-shadow:var(--sh-md);border-color:transparent}
-summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary .pm{width:26px;height:26px;border-radius:8px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;line-height:1;flex-shrink:0;transition:transform .25s,background .25s}
-details[open] summary .pm{transform:rotate(45deg);background:var(--teal);color:#fff}
-details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
+/* email-results capture (calculator) */
+.email-cap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-sm)}
+.email-cap .ec-top{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.email-cap .eci{width:42px;height:42px;border-radius:12px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.email-cap .eci svg{width:21px;height:21px}
+.email-cap .ect b{font-weight:700;font-size:15.5px;display:block}
+.email-cap .ect span{font-size:13px;color:var(--ink-3)}
+.email-cap .ec-row{display:flex;gap:10px;flex-wrap:wrap}
+.email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
+.email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
+.email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
+.email-cap .ec-note a{color:var(--teal-700);font-weight:600}
+.email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
+.email-cap .ec-ok.show{display:flex}
+.email-cap .ec-ok svg{width:18px;height:18px}
+.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
 
-/* ---- final CTA ---- */
-.final-band{padding:36px 0 88px}
-.final{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
-.final::before{content:"";position:absolute;inset:0;pointer-events:none}
-.final .paw-bg{position:absolute;right:-30px;bottom:-44px;width:260px;height:260px;opacity:.08;pointer-events:none}
-.final .paw-bg svg{width:100%;height:100%;fill:#fff}
-.final .eyebrow{background:rgba(255,255,255,.12);color:#CFEFE9;position:relative}
-.final .eyebrow .pip{background:var(--teal)}
-.final h2{color:#fff;font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
-.final p{color:#A7DED4;font-size:18px;max-width:440px;margin:0 auto 30px;position:relative}
+/* credibility strip (about) */
+.creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.cred{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 20px;box-shadow:var(--sh-sm)}
+.cred .cn{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-0.03em;color:var(--teal-700);line-height:1}
+.cred .cl{font-size:13px;color:var(--ink-2);margin-top:6px}
 
-/* ---- footer ---- */
-footer{padding:64px 0 40px;border-top:1px solid var(--line)}
-.foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
-.foot-brand .logo{margin-bottom:15px}
-.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
-.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
-.foot-col a:hover{color:var(--teal-700)}
-.disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
-.disclosure p{margin-bottom:10px;max-width:940px}
-.disclosure a{color:var(--teal-700);font-weight:600}
+/* legal + glossary pages */
+.legal{padding:48px 0 72px;max-width:820px}
+.legal .updated{font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.legal h1{font-size:clamp(32px,4.4vw,48px);font-weight:800;letter-spacing:-0.03em;margin:10px 0 14px}
+.legal .intro{font-size:18px;color:var(--ink-2);margin-bottom:8px}
+.legal h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:36px 0 12px}
+.legal h3{font-size:17px;font-weight:700;margin:22px 0 8px}
+.legal p{font-size:15.5px;color:var(--ink-2);margin-bottom:14px;line-height:1.7}
+.legal ul{list-style:none;margin:0 0 16px;padding:0}
+.legal li{font-size:15.5px;color:var(--ink-2);padding-left:24px;position:relative;line-height:1.7;margin-bottom:8px}
+.legal li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:2px;background:var(--teal);transform:rotate(45deg)}
+.legal a{color:var(--teal-700);font-weight:600}
+.legal .callbox{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;margin:20px 0}
+.legal .callbox p{margin-bottom:0}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:24px}
+.gterm{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px;box-shadow:var(--sh-sm)}
+.gterm h3{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;color:var(--ink)}
+.gterm .abbr{font-size:13px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:3px 9px;border-radius:var(--r-pill);margin-left:8px;vertical-align:middle}
+.gterm p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+
+/* page-head (shared by legal/glossary/persona intros without hero) */
+.page-head{padding:52px 0 8px}
+.page-head .eyebrow{margin-bottom:0}
+
 @media(max-width:920px){
-  .hero{padding:48px 0 24px}
-  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
-  .hero-card{order:-1;max-width:460px;margin:0 auto}
-  .aud,.steps{grid-template-columns:1fr}
-  .foot-top{grid-template-columns:1fr 1fr;gap:30px}
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
-  .nav-links.open a.lnk{padding:10px 0;font-size:16px}
-  .nav-links.open .btn{margin-top:6px}
-  .nav-toggle{display:block}
-  section{padding:60px 0}
-  .final{padding:54px 26px}
-  .final-band{padding:24px 0 60px}
+  .pains,.benefits,.creds,.gloss{grid-template-columns:1fr}
+  .magnet{grid-template-columns:1fr;gap:24px;padding:32px 26px}
+  .callout{padding:44px 26px}
+  .aud-figure{order:-1;max-width:460px;margin:0 auto}
 }
 @media(max-width:560px){
-  .wrap{padding:0 18px}
-  .foot-top{grid-template-columns:1fr 1fr}
-  .hero-cta .btn{flex:1}
+  .magnet-form .row{flex-direction:column}
+  .magnet-form .row .btn{width:100%}
 }
-@media(max-width:380px){
-  .foot-top{grid-template-columns:1fr}
-}
+@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){/* C3: wordmark stays visible at every width, matching index */}
 
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
@@ -335,6 +365,20 @@ body{animation:pageIn .4s ease both}
   nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
   nav.scrolled .nav-in{height:72px}
 }
+
+
+/* ---- fintech slider polish: floating value bubble + richer thumb ---- */
+.field{position:relative}
+.slider-wrap{position:relative}
+.sbubble{position:absolute;top:-40px;transform:translateX(-50%) translateY(6px) scale(.9);background:var(--teal-900);color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);z-index:5;font-variant-numeric:tabular-nums;box-shadow:0 6px 18px -6px rgba(9,63,57,.5)}
+.sbubble::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--teal-900);border-radius:1px}
+.slider-wrap.dragging .sbubble{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s}
+.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(11,122,110,.14),0 4px 14px rgba(11,122,110,.5)}
+/* result panel gentle pulse when values change */
+@keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
+.res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
+@media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
 
 
 /* ============================================================
@@ -395,38 +439,15 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
-.creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}.cred{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 20px;box-shadow:var(--sh-sm)}.cred .cn{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-0.03em;color:var(--teal-700);line-height:1}.cred .cl{font-size:13px;color:var(--ink-2);margin-top:6px}@media(max-width:560px){.creds{grid-template-columns:1fr}}
 
-/* ---- Meet the team band ---- */
-.team{padding:8px 0 8px}
-.team-head{text-align:center;max-width:560px;margin:0 auto 40px}
-.team-head .kicker{justify-content:center}
-.team-head h2{font-size:clamp(28px,3.6vw,40px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 12px}
-.team-head p{color:var(--ink-2);font-size:17px}
-.team-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:stretch}
-.team-feature{position:relative;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-lg);min-height:460px}
-.team-feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.team-feature .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 26px 22px;background:linear-gradient(to top,rgba(9,31,28,.92),rgba(9,31,28,.62) 52%,transparent);color:#fff;text-shadow:0 1px 8px rgba(9,31,28,.5)}
-.team-feature .cap h3{font-size:20px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.team-feature .cap p{font-size:14px;color:#CFEFE9;max-width:340px}
-.team-cards{display:grid;grid-template-rows:repeat(3,auto);gap:24px}
-.tmember{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-sm);overflow:hidden;display:flex;align-items:stretch;transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease}
-.tmember:hover{transform:translateY(-3px);box-shadow:var(--sh-md)}
-.tmember .tphoto{width:132px;flex-shrink:0;position:relative;overflow:hidden;background:var(--surface-2)}
-.tmember .tphoto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.tmember .tbody{padding:22px 22px;display:flex;flex-direction:column;justify-content:center}
-.tmember .trole{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-700);margin-bottom:6px}
-.tmember .tname{font-size:20px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
-.tmember .tdesc{font-size:14px;color:var(--ink-2);margin-top:8px;line-height:1.55}
-@media(max-width:860px){
-  .team-grid{grid-template-columns:1fr;gap:20px}
-  .team-feature{min-height:340px}
-  .team-cards{grid-template-rows:auto auto}
-}
-@media(max-width:460px){
-  .tmember{flex-direction:column}
-  .tmember .tphoto{width:100%;height:200px}
-}
+/* ---- click-to-type values (precision beyond slider steps) ---- */
+.field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
+.field .val:hover{border-bottom-color:var(--teal-700)}
+.field .val:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:6px}
+.val-edit{font:700 17px var(--font);letter-spacing:-0.02em;color:var(--teal-700);background:var(--surface-2);border:1.5px solid var(--teal);border-radius:8px;padding:2px 8px;width:150px;text-align:right;font-variant-numeric:tabular-nums}
+.val-edit:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.val-edit{-moz-appearance:textfield;appearance:textfield}
 
 
 /* ============================================================
@@ -466,6 +487,9 @@ nav.nav-hidden{transform:translateY(-100%)}
 }
 
 
+/* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
+@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
+
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
 .pb-b-btn:hover{transform:translateY(-2px)}
@@ -504,6 +528,10 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
+
+/* dashed underline = term explained in the jargon buster */
+.gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
+.gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
@@ -513,6 +541,7 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 .strip-in{gap:0}
 .strip-item{display:flex;align-items:center;text-transform:uppercase;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
 .strip-item:first-child{border-left:none}
+@media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
 /* persona cards: tinted top rules + matching icon depth instead of identical grid */
 .aud-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
 .aud-card:nth-child(1)::before{background:var(--teal)}
@@ -526,6 +555,7 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 .benefit{border:0;border-left:2px solid var(--teal);border-radius:0;background:none;padding:4px 0 4px 20px}
 /* dark panels: left-aligned, asymmetric */
 .callout,.final{text-align:left;padding:64px 56px}
+@media(max-width:640px){.callout,.final{padding:44px 26px}}
 /* testimonials: card template -> editorial entries */
 .tcard{background:none;border:0;border-radius:0;border-top:1px solid var(--line-2);padding:22px 2px 0}
 .tcard .av{display:none}
@@ -745,11 +775,6 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 .pain:first-child{border-left:0}
 .pain .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;
   letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);background:none;padding:0}
-/* C10: the audience pages all carry this rule; index never did, so with the
-   global margin reset the card titles sat flush on their paragraph at the
-   browser's default h3 size. Tracking is reset with the other classed
-   headings in the F2 block below. */
-.pain h3{font-size:19px;font-weight:700;margin-bottom:8px}
 
 /* lead magnet: keyline + wash, no gradient panel */
 .magnet{background:var(--teal-50);border:1px solid var(--line-2);border-radius:8px;
@@ -901,15 +926,16 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 /* .pains only had its grid defined on the audience pages; the homepage copy
    of the block needs it too. */
-.pains{display:grid}
-/* columns only above the 920px stack point, so the @media(max-width:920px)
-   single-column rule above keeps winning on phones */
-@media(min-width:921px){.pains{grid-template-columns:repeat(3,1fr)}}
+.pains{display:grid;grid-template-columns:repeat(3,1fr)}
 /* .phead wraps the calculator h1 and lede - it is a header block, not a label.
    Restore normal case. */
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
 .phead h1{font-family:var(--font-display);letter-spacing:-.015em}
 .phead .eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em}
+
+/* the deadline band is a grid child of .calc-wrap; without a span it took a
+   column and pushed the results panel out of place */
+.calc-wrap .deadline{grid-column:1 / -1;margin-bottom:4px}
 
 /* ============================================================
    PB-TICK - Pay & File countdown
@@ -982,6 +1008,7 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 @media(max-width:1080px){
   .nt-l{display:none}
+  .nav-tick{margin-left:12px;padding:6px 9px}
 }
 @media(max-width:560px){
   .nav-tick{display:none}
@@ -1087,6 +1114,7 @@ input:focus-visible,select:focus-visible{
 
 @media(max-width:920px){
   html{font-size:104%}
+  .nav-links a.lnk{padding:14px 16px}
 }
 
 /* --- inline prose links and footer links: 44px reach --- */
@@ -1321,6 +1349,19 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* section eyebrows on light backgrounds pick up the brand colour too */
 .sec-head .eyebrow,.painband .eyebrow,.gapband .eyebrow,.coverband .eyebrow{color:var(--teal)}
 
+/* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
+.adv{border-top:1px solid var(--line);margin-top:20px}
+.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
+.adv > summary::-webkit-details-marker{display:none}
+.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
+.adv > summary:hover{color:var(--ink)}
+.adv .adv-in{padding-top:4px;padding-bottom:6px}
+
 /* ============================================================
    PB-AUDIT - changes driven by measured findings
    ============================================================ */
@@ -1382,6 +1423,10 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .credline b{color:var(--ink);font-weight:600}
 .credline .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
 
+/* the site's own .field display rule outranks the UA's
+   details:not([open]) > *{display:none}, so the collapse must be explicit */
+.adv:not([open]) .adv-in{display:none}
+
 /* --- 5. legal pages measured 13px at 114 characters per line (the .updated
    date line and the body copy), failing both the 16px floor and the 75-char
    ceiling. .legal was already capped at 820px, which is still ~114 chars at
@@ -1419,30 +1464,64 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
 
-/* ---- off-duty photo strip ----
-   Reuses the trust-badge marquee wholesale: .strip gives the clipping and the
-   edge fades, .strip-in gives the pbMarquee track, the hover/focus pause and
-   the prefers-reduced-motion fallback. Only the photo treatment is new. */
-.snaps{padding:6px 0 0}
-.snaps .sec-head{margin-bottom:24px}
-.pstrip-in{animation-duration:70s;padding:26px 0}
-.psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
-  border:1px solid var(--line-2);border-radius:5px;box-shadow:var(--sh-md);
-  transform:rotate(var(--rot,0deg));transition:transform .3s cubic-bezier(.22,.61,.36,1)}
-.psnap img{display:block;height:var(--ph,190px);width:auto;border-radius:2px}
-.psnap:hover{transform:rotate(0deg) scale(1.04)}
-@media(max-width:600px){.psnap{margin:0 9px;padding:6px}.psnap img{height:calc(var(--ph,190px) * .74)}}
-@media(prefers-reduced-motion:reduce){
-  .psnap.is-clone{display:none}
-  .psnap,.psnap:hover{transform:none}
-}
+/* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
+.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
+.vs-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
+.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
+.vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
+.vs-salary{background:var(--surface-2)}
+.vs-pension{background:var(--teal-50)}
+.vs-col .vt{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.vs-pension .vt{color:var(--teal-700)}
+.vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+.vs-pension .amt{color:var(--teal-700)}
+.vs-col .lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.5}
+.vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+@media(max-width:560px){.vs{grid-template-columns:1fr;gap:12px}.vsmark{margin:0 auto}}
+/* itemised breakdown rows, built from the existing card + divline language */
+.bd{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14.5px}
+.bd .bl{color:var(--ink-2)}
+.bd .bv{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.bd.tot{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-weight:700}
+.bd.tot .bl{color:var(--ink)}
+.bd .capnote{font-size:12px;color:var(--ink-3)}
+.verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
+.srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
+/* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
+   and each results panel keeps the results column's own vertical rhythm */
+.calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
+.modebar .modelab{font-family:var(--font-mono);font-size:.66rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.modebar .modeseg{max-width:560px;margin-top:10px}
+.modebar .subnote{max-width:640px}
+.modepanel{display:flex;flex-direction:column;gap:18px}
+.modepanel[hidden]{display:none}
+@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:13px;padding:11px 4px}}
 </style>
+
+<script>
+/* ------------------------------------------------------------------
+   LEAD CAPTURE CONFIG
+
+   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
+   a CRM webhook, anything that accepts a JSON POST). Once it starts with
+   http, results are posted there and the visitor only sees a confirmation
+   when the send actually succeeds.
+
+   Until then the form opens the visitor's mail client with their figures
+   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
+   lost and nobody is told an email is coming that isn't.
+   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
+   set, the mailto fallback below is what actually runs.
+   ------------------------------------------------------------------ */
+var LEAD_ENDPOINT = '';
+var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
-
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
   <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
@@ -1450,293 +1529,460 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
     <a class="lnk" href="director.html">Directors</a>
-    <a class="lnk" href="pension-calculator.html">Calculator</a>
+    <a class="lnk active" href="pension-calculator.html" aria-current="page">Calculator</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
-    <a class="lnk active" href="about.html" aria-current="page">About</a>
+    <a class="lnk" href="about.html">About</a>
     <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment, or a pension <span class="hl">through a broker</span>?</h1>
+  <p class="reveal" style="transition-delay:.12s">Two ways to build a pension, side by side, for your own salary and age. Or, if you want to save more than the minimum, both together. This shows the numbers for the figures you enter. It does not tell you which one to pick.</p>
+</div></div>
 
-<header class="hero"><div class="wrap">
-  <div class="hero-copy" style="max-width:760px">
-    <span class="eyebrow reveal"><span class="pip"></span>Our story</span>
-    <h1 class="reveal" style="transition-delay:.06s">Thirty years of<br>making money <span class="hl">make sense</span>.</h1>
-    <p class="lede reveal" style="transition-delay:.12s">Pensionbuddy is a father and son, one boxer dog, and one idea: your pension should be something you understand, not something you avoid.</p>
-    <div class="hero-cta reveal" style="transition-delay:.18s">
-      <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
+<div class="wrap"><div class="calc-wrap">
+  <div class="deadline" id="deadlineBand">
+      <span class="dl-tag">Tax deadline</span>
+      <span class="dl-text" id="deadlineText"></span>
     </div>
-    <div class="credline reveal" style="transition-delay:.24s"><b>Damian Condon, QFA</b><span class="sep"></span>Regulated by the Central Bank of Ireland<span class="sep"></span>30 years in financial services</div>
-  </div>
-</div></header>
 
-<section id="damian" style="padding-top:56px"><div class="wrap about-grid">
-  <div class="about-port reveal">
-    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp"><img src="assets/img/damian-condon-portrait.jpg" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management"></picture>
-    <span class="badge">B.A., Q.F.A.</span>
-  </div>
-  <div class="about reveal" style="transition-delay:.1s">
-    <span class="kicker">Meet your buddy</span>
-    <h2>Damian Condon</h2>
-    <p class="pullquote">I've spent thirty years explaining money to real people, and the jargon was never the point. Clarity is.</p>
-    <p class="bio">Bank of Ireland. Ulster Bank. Two years with St. George Private Bank in Sydney. Founder of Gresham Wealth Management since 2012, and the human behind Pensionbuddy.</p>
-    <p class="bio">Thirty years of that work leaves you with one firm opinion: hardly anyone is bad with money. They have just never had it explained to them in words they felt allowed to ask questions about.</p>
-    <p class="bio">The goal here is simple: make your pension make sense, then help you make the most of it.</p>
-    <span class="sig">Damian</span>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap faq-grid">
-  <div class="sec-head reveal" style="margin-bottom:0">
-    <span class="kicker">The thirty years</span>
-    <h2>Where the time went.</h2>
-    <p>One job throughout: sitting across from someone and making their money make sense to them. Here is where it was done.</p>
-  </div>
-  <div class="timeline reveal" style="transition-delay:.1s">
-    <div class="tl">
-      <div class="tn">Where it started</div>
-      <div class="tt">Bank of Ireland</div>
-      <div class="td">Irish retail banking, and the first of thirty years spent explaining money to people who were never taught it.</div>
-    </div>
-    <div class="tl">
-      <div class="tn">Then</div>
-      <div class="tt">Ulster Bank</div>
-      <div class="td">Still banking, still Ireland, still the same job: turning the complicated bit into something you can act on.</div>
-    </div>
-    <div class="tl">
-      <div class="tn">Sydney</div>
-      <div class="tt">St. George Private Bank</div>
-      <div class="td">Two years in private banking on the other side of the world, then home.</div>
-    </div>
-    <div class="tl">
-      <div class="tn">2012</div>
-      <div class="tt">Gresham Wealth Management</div>
-      <div class="td">Damian founded his own advice firm in Dublin, regulated by the Central Bank of Ireland, and has run it ever since.</div>
-    </div>
-    <div class="tl">
-      <div class="tn">Now</div>
-      <div class="tt">Pensionbuddy</div>
-      <div class="td">Same adviser, same regulation, plainer English. Calculators, a jargon buster, and a free twenty-minute chat.</div>
-    </div>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head reveal">
-    <span class="kicker">Our story</span>
-    <h2>A pension you can actually follow.</h2>
-    <p>Pensionbuddy started as a father-son conversation. Damian has spent 30 years advising people on pensions, and kept seeing the same thing: people either ignored their pension completely, or only thought about it the day auto-enrolment landed in their payslip.</p>
-    <p>Adam, fresh out of Trinity with a business and economics degree, saw the same gap from the other side. Nobody was explaining any of it in a way that actually made sense. So they built Pensionbuddy together.</p>
-    <p>Adam handles the plain-English education and the site. Damian, authorised by the Central Bank of Ireland as a QFA, handles the real advice once you are ready to talk. The goal is simple: get you from &ldquo;I&rsquo;ve no idea what&rsquo;s happening with my pension&rdquo; to an actual conversation with someone qualified to help, no jargon needed in between.</p>
-  </div>
-  <div class="steps">
-    <div class="step reveal">
-      <div class="sx">1</div>
-      <h3>The problem</h3>
-      <p>Most people in Ireland have a pension they&rsquo;ve never really looked at. Not because they don&rsquo;t care, but because every explanation they were handed came wrapped in acronyms.</p>
-    </div>
-    <div class="step reveal" style="transition-delay:.1s">
-      <div class="sx">2</div>
-      <h3>The idea</h3>
-      <p>Make your pension make sense, then help you make the most of it. In that order. Plain English throughout, a picture wherever a picture beats a number, and a jargon buster for the words nobody can avoid.</p>
-    </div>
-    <div class="step reveal" style="transition-delay:.2s">
-      <div class="sx">3</div>
-      <h3>The promise</h3>
-      <p>A chat, not a sales pitch. Twenty relaxed minutes, free, with no obligation afterwards. If we&rsquo;re not the right fit, we&rsquo;ll say so.</p>
-    </div>
-  </div>
-</div></section>
-
-<section class="team"><div class="wrap">
-  <div class="team-head reveal">
-    <span class="kicker">Meet the team</span>
-    <h2>Two Condons and a boxer.</h2>
-    <p>A financial adviser who has spent a career making money make sense, his son who puts it in plain English, and a boxer who mostly supervises. All based in Dublin.</p>
-  </div>
-  <div class="team-grid">
-    <div class="team-feature reveal">
-      <picture><source type="image/webp" srcset="assets/img/damian-and-buddy-dublin-hills.webp"><img src="assets/img/damian-and-buddy-dublin-hills.jpg" width="720" height="897" alt="Damian and Buddy out walking in the Dublin hills" loading="lazy"></picture>
-      <div class="cap">
-        <h3>Out of office</h3>
-        <p>When they are not talking pensions, you will usually find the pair of them up a hill somewhere.</p>
+    <div class="modebar reveal">
+      <div class="row"><span class="modelab">Two different questions</span></div>
+      <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
+        <span class="ind" id="modeInd"></span>
+        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Mode 1: Equivalent layer</button>
+        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">Mode 2: Combined</button>
       </div>
+      <p class="subnote" id="modeNote">For the same money out of your pocket: what goes into your pension under auto-enrolment, against a personal pension instead.</p>
     </div>
-    <div class="team-cards">
-      <div class="tmember reveal" style="transition-delay:.06s">
-        <div class="tphoto"><picture><source type="image/webp" srcset="assets/img/damian-condon.webp"><img src="assets/img/damian-condon.jpg" width="300" height="375" alt="Damian Condon" loading="lazy" style="object-position:center 20%"></picture></div>
-        <div class="tbody">
-          <div class="trole">Founder and CEO</div>
-          <div class="tname">Damian Condon</div>
-          <div class="tdesc">Thirty years in financial services. The one who does the actual advising.</div>
+
+    <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment employer and State contributions are worked out on salary up to €80,000. Your own contribution is not capped.</p></div>
+    <div class="field"><div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Contribution rates rise in three-year steps.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts matched to what auto-enrolment costs you, so the two sides begin like for like. Move it to whatever you would actually pay.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="match">Employer match on a personal pension</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">A percentage of salary. A personal pension only carries an employer contribution if your employer separately agrees to one. Leave this at zero if they have not.</p></div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">On top of the auto-enrolment minimum, from your own pocket. My Future Fund does not currently take contributions above its set rate, so this goes through a personal pension.</p></div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="tmatch">Employer match on your top-up</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A percentage of the top-up itself, not of salary. Only applies if your employer agrees to match what you add on. Leave this at zero if they have not.</p></div>
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label>Your income tax rate</label></div>
+      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)" type="button">20% rate</button><button id="t40" class="on" onclick="setTax(40)" type="button">40% rate</button></div>
+      <p class="subnote">Sets the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.</p>
+    </div>
+  </div>
+
+  <div class="results">
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+
+    <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
+    <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
+        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
+        <div class="divline"></div>
+        <div class="foot">Both figures are for one year, at the salary and age you entered. An illustration only.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">For the figures you entered</div>
+        <div class="wtext verdict" id="verdictOut"></div>
+        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="vs-card reveal" style="transition-delay:.14s">
+        <h3>What it actually costs you</h3>
+        <div class="sub">The money out of your own pocket for a year, on each path.</div>
+        <div class="vs">
+          <div class="vs-col vs-salary">
+            <div class="vt">Auto-enrolment</div>
+            <div class="amt" id="aeNet">€0</div>
+            <div class="lab">Taken from your take-home pay. No income tax relief on this path.</div>
+          </div>
+          <div class="vsmark">vs</div>
+          <div class="vs-col vs-pension">
+            <div class="vt">Personal pension</div>
+            <div class="amt" id="ppNet">€0</div>
+            <div class="lab" id="ppNetLab">Your contribution after tax relief.</div>
+          </div>
         </div>
+        <p class="vs-note subnote" id="vsNote"></p>
       </div>
-      <div class="tmember reveal" style="transition-delay:.12s">
-        <div class="tphoto"><picture><source type="image/webp" srcset="assets/img/adam-condon.webp"><img src="assets/img/adam-condon.jpg" width="600" height="750" alt="Adam Condon" loading="lazy" style="object-position:center 20%"></picture></div>
-        <div class="tbody">
-          <div class="trole">Co-Founder and CMO</div>
-          <div class="tname">Adam Condon</div>
-          <div class="tdesc">Adam graduated from Trinity College Dublin this year with an honours degree in Business, Economics and Social Sciences. He&rsquo;s bringing a fresh perspective to how pensions get talked about, turning three decades of his dad&rsquo;s experience into something people can actually follow, from auto-enrolment to retirement planning. Adam runs the education side of Pensionbuddy: the site, the plain-English explanations, and helping people figure out where they actually stand before they ever need to talk numbers.</div>
+
+      <div class="chart-card reveal" style="transition-delay:.22s">
+        <h3>Personal pension, broken down</h3>
+        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
+        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
+        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
+        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2">€0</span></div>
+        <p class="subnote" id="ppReliefNote"></p>
+      </div>
+    </div>
+
+    <!-- ============ MODE 2: COMBINED ============ -->
+    <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
+        <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
+        <div class="divline"></div>
+        <div class="foot">Auto-enrolment at its set rate, plus your top-up through a personal pension. One year, at the salary and age you entered. An illustration only.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">For the figures you entered</div>
+        <div class="wtext verdict" id="cVerdict"></div>
+        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="vs-card reveal" style="transition-delay:.14s">
+        <h3>What it actually costs you</h3>
+        <div class="sub">The money out of your own pocket for a year, layer by layer.</div>
+        <div class="vs">
+          <div class="vs-col vs-salary">
+            <div class="vt">Auto-enrolment minimum</div>
+            <div class="amt" id="cAeNet">€0</div>
+            <div class="lab">Taken from your take-home pay. No income tax relief on this layer.</div>
+          </div>
+          <div class="vsmark">+</div>
+          <div class="vs-col vs-pension">
+            <div class="vt">Your top-up</div>
+            <div class="amt" id="cExtraNet">€0</div>
+            <div class="lab" id="cExtraLab">What you pay in each year, before relief.</div>
+          </div>
         </div>
+        <p class="vs-note subnote" id="cNote"></p>
       </div>
-      <div class="tmember reveal" style="transition-delay:.18s">
-        <div class="tphoto"><img src="assets/img/buddy-beach.jpg" width="440" height="550" alt="Buddy the boxer dog on the beach" loading="lazy" style="object-position:center 78%"></div>
-        <div class="tbody">
-          <div class="trole">Chief Napping Officer (CNO)</div>
-          <div class="tname">Buddy</div>
-          <div class="tdesc">Buddy handles quality control on all naps taken during business hours. Attends most video calls uninvited.</div>
-        </div>
+
+      <div class="chart-card reveal" style="transition-delay:.22s">
+        <h3>Your top-up, broken down</h3>
+        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
+        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
+        <div class="bd"><span class="bl">Goes into your pension</span><span class="bv" id="cGross">€0</span></div>
+        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="cMatchCap"></span></span><span class="bv" id="cMatch">€0</span></div>
+        <div class="bd tot"><span class="bl">Total from the top-up</span><span class="bv" id="cTopUp2">€0</span></div>
+        <p class="subnote" id="cReliefNote"></p>
       </div>
     </div>
-  </div>
-</div></section>
 
-<section><div class="wrap">
-  <div class="sec-head reveal">
-    <span class="kicker">No small print</span>
-    <h2>Who you are actually dealing with.</h2>
-    <p>Pensionbuddy is a name, not a separate company. The business behind it is Damian Condon T/A Gresham Wealth Management, and that is the business the Central Bank of Ireland regulates. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3.</p>
-    <p>You can check that for yourself, and you should. The Central Bank publishes its register at registers.centralbank.ie. Our reference number is <span class="needs-input" data-issue="F5">[to be confirmed]</span>.</p>
-  </div>
-  <div class="proofs">
-    <div class="proof reveal">
-      <div class="pl">Regulated</div>
-      <h3>Central Bank of Ireland</h3>
-      <p>Damian Condon T/A Gresham Wealth Management is authorised by the Central Bank. You can check the register yourself at registers.centralbank.ie.</p>
+    <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
+    <div class="chart-card reveal" style="transition-delay:.18s">
+      <h3>Auto-enrolment, broken down</h3>
+      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
+      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
+      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState">€0</span></div>
+      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2">€0</span></div>
+      <p class="subnote" id="aeRatesNote"></p>
     </div>
-    <div class="proof reveal" style="transition-delay:.06s">
-      <div class="pl">Qualified</div>
-      <h3>QFA</h3>
-      <p>Qualified Financial Adviser, the professional standard required to advise on pensions in Ireland.</p>
-    </div>
-    <div class="proof reveal" style="transition-delay:.12s">
-      <div class="pl">Experienced</div>
-      <h3>Thirty years</h3>
-      <p>Bank of Ireland, Ulster Bank, and two years with St George Private Bank in Sydney, before founding Gresham Wealth Management in 2012.</p>
-    </div>
-  </div>
-</div></section>
 
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head reveal" style="margin-bottom:26px">
-    <span class="kicker">What we can prove</span>
-    <h2>No testimonials yet.</h2>
-    <p>Reviews will go here once real clients have left them. We would rather show you nothing than something we wrote ourselves.</p>
-  </div>
-  <div class="infoadvice reveal">
-    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Pension and tax rules depend on your circumstances and can change. Regulated financial advice is given in a personal consultation with Damian.</p>
-  </div>
-</div></section>
-
-<section class="snaps"><div class="wrap">
-  <div class="sec-head reveal">
-    <span class="kicker">Off duty</span>
-    <h2>A few silly ones.</h2>
-    <p>We are not always this serious. Here is what Pensionbuddy actually looks like most days.</p>
-  </div>
-</div>
-  <div class="strip pstrip" role="group" aria-label="Photographs of the Pensionbuddy team off duty">
-    <div class="strip-in pstrip-in">
-    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:1.6deg;--ph:206px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="Adam sitting with Buddy in the park on a sunny afternoon" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-3.4deg;--ph:184px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="Buddy wearing a cycling helmet in front of an armchair" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-1.4deg;--ph:176px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="Buddy tilting his head at the camera indoors" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-2.8deg;--ph:188px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="Buddy stretched out on the sofa refusing to move" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:1.6deg;--ph:206px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-3.4deg;--ph:184px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-1.4deg;--ph:176px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-2.8deg;--ph:188px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
+    <div class="chart-card reveal" style="transition-delay:.26s">
+      <h3>Before you rely on these rates</h3>
+      <p class="srcwarn">The My Future Fund contribution rates and phase years used here are taken from third-party summaries of the scheme, not from the primary NAERSA or gov.ie text. So is the position that the scheme does not currently accept contributions above its set rate. Confirm both against gov.ie or NAERSA before relying on this page. Rates and rules can change.</p>
     </div>
   </div>
-</section>
-<div class="final-band"><div class="wrap"><div class="final reveal">
-  <div class="paw-bg"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="2" ry="2.9"/><ellipse cx="16" cy="7.5" rx="2" ry="2.9"/><ellipse cx="4.3" cy="11.8" rx="1.8" ry="2.4"/><ellipse cx="19.7" cy="11.8" rx="1.8" ry="2.4"/><path d="M12 12.6c-3.2 0-5.5 2.2-5.5 5 0 2.4 2.4 3 5.5 3s5.5-.6 5.5-3c0-2.8-2.3-5-5.5-5z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>Ready when you are</span>
-  <h2>Let&rsquo;s talk about<br>your pension.</h2>
-  <p>Twenty minutes with Damian. Phone or video. Free, with no pressure.</p>
-  <a class="btn btn-light" href="booking.html">Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div>
+
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="ctext"><h2>These are just illustrations.</h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
+  <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation, and it does not say which path is right for you. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
+    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State.</li>
+    <li>Employer and State auto-enrolment contributions are calculated on salary capped at €80,000. Your own contribution is not capped.</li>
+    <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
+    <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
+    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at the rate you select, limited to Revenue's age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
+    <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
+    <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+  </ul>
+</div></section>
+</main>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
-    <div class="foot-brand">
-      <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
-      <p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p>
-    </div>
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
     <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h4>Company</h4><a href="about.html">About Damian</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
-    <p>The information on this website is provided for general guidance only and does not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations only.</p>
+    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
-    <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+    <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
+    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
 </div></footer>
 
+<script src="assets/js/pension-tax-relief.js?v=4ec93ed5"></script>
+<script src="assets/js/autoenrolment.js?v=a36318f1"></script>
 <script>
-/* sticky nav shadow */
-const nav=document.getElementById('nav');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-/* mobile menu (same handler as starter/tracker/director: Escape closes it,
-   the toggle's label reads "Close menu" while open, null-guarded) */
-(function(){
-  var t=document.getElementById('navToggle'), l=document.getElementById('navLinks');
-  if(!t||!l) return;
-  t.addEventListener('click',function(){
-    var open=l.classList.toggle('open');
-    t.setAttribute('aria-expanded',open?'true':'false');
-    t.setAttribute('aria-label',open?'Close menu':'Open menu');
+/* broker-vs-autoenrolment.html
+   Maths lives in assets/js/autoenrolment.js and assets/js/pension-tax-relief.js,
+   which are the single source of truth and are covered by
+   tests/compare-calc.test.js. This file only reads the controls and paints
+   the result panels, so the page cannot hold a second copy of the rules.
+
+   Two modes, two different questions, one shared input panel:
+     Mode 1, Equivalent layer: for the same money out of pocket, auto-enrolment
+                               against a personal pension instead.
+     Mode 2, Combined:         auto-enrolment at its set rate PLUS a personal
+                               top-up for anything extra, because My Future
+                               Fund does not currently take contributions
+                               above that rate (see the source warning in
+                               autoenrolment.js).
+   Both are computed on every change so switching is instant and they can
+   never disagree about the shared auto-enrolment layer.
+
+   HONESTY RULE: this page reports the numbers for the inputs entered and
+   nothing more. When auto-enrolment produces the larger total in Mode 1 it
+   says so in exactly the same words and prominence as the opposite result.
+   Mode 2 is stated matter of fact, as a consequence of what the scheme
+   currently allows, never as a pitch. */
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let taxRate = 40;
+let mode = 1;
+
+const $ = id => document.getElementById(id);
+const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
+const pct = v => (Math.round(v * 1000) / 10).toLocaleString('en-IE') + '%';
+
+/* the user has moved the Mode 1 contribution slider themselves, so stop re-matching it */
+let grossTouched = false;
+
+/* Screen readers otherwise announce a bare number, so each slider carries a
+   formatted aria-valuetext, matching the other two calculators (issue D4). */
+const VALTEXT = {
+  age: v => v + ' years',
+  salary: v => euro(v),
+  phase: v => 'Year ' + v + (v >= 10 ? ' or later' : ''),
+  gross: v => euro(v) + ' a year',
+  match: v => v + '% of salary',
+  extra: v => euro(v) + ' a month',
+  tmatch: v => v + '% of your top-up'
+};
+
+function paintSlider(el) {
+  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
+  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
+  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
+}
+
+function setTax(r) {
+  taxRate = r;
+  $('t20').classList.toggle('on', r === 20);
+  $('t40').classList.toggle('on', r === 40);
+  $('segInd').style.transform = r === 20 ? 'translateX(0)' : 'translateX(100%)';
+  calc();
+}
+
+/* ---- mode tabs ---- */
+const MODE_NOTE = {
+  1: 'For the same money out of your pocket: what goes into your pension under auto-enrolment, against a personal pension instead.',
+  2: 'Saving more than the minimum: auto-enrolment as it stands, plus a personal top-up for the extra, because My Future Fund does not currently take contributions above its set rate.'
+};
+
+function setMode(m, focusTab) {
+  mode = m;
+  [1, 2].forEach(n => {
+    const tab = $('m' + n), on = n === m;
+    tab.classList.toggle('on', on);
+    tab.setAttribute('aria-selected', on ? 'true' : 'false');
+    tab.tabIndex = on ? 0 : -1;
+    $('mode' + n + 'Results').hidden = !on;
   });
-  /* tapping a link closes it, and Escape closes it for keyboard users */
-  l.addEventListener('click',function(e){
-    if(e.target.closest('a')){l.classList.remove('open');
-      t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');}
+  $('modeInd').style.transform = m === 1 ? 'translateX(0)' : 'translateX(100%)';
+  $('modeNote').textContent = MODE_NOTE[m];
+  /* mode-specific controls live in the shared panel and simply show or hide */
+  document.querySelectorAll('[data-mode]').forEach(el => { el.hidden = el.getAttribute('data-mode') !== String(m); });
+  if (focusTab) $('m' + m).focus();
+  try { history.replaceState(null, '', m === 2 ? '#combined' : location.pathname + location.search); } catch (e) {}
+  calc();
+}
+
+/* arrow keys move between the two tabs, as a tablist should */
+document.querySelector('.modeseg').addEventListener('keydown', e => {
+  if (!/^(ArrowLeft|ArrowRight|Home|End)$/.test(e.key)) return;
+  e.preventDefault();
+  setMode(e.key === 'Home' ? 1 : e.key === 'End' ? 2 : (mode === 1 ? 2 : 1), true);
+});
+
+let srTimer = null;
+function announce(text) {
+  clearTimeout(srTimer);
+  srTimer = setTimeout(() => { $('srSummary').textContent = text; }, 700);
+}
+
+function calc() {
+  const age = +$('age').value;
+  const salary = +$('salary').value;
+  const year = +$('phase').value;
+  const match = +$('match').value;
+  const extraMonthly = +$('extra').value;
+  const tmatch = +$('tmatch').value;
+
+  const ae = PBCompare.autoEnrolment(salary, year);
+
+  /* ---------- Mode 1: equivalent layer ---------- */
+  /* Until the user touches it, the personal contribution tracks the net cost of
+     auto-enrolment so the comparison opens genuinely like for like. */
+  if (!grossTouched) {
+    const matched = Math.round(PBCompare.matchedGross(salary, year, age, taxRate) / 250) * 250;
+    $('gross').value = Math.min(matched, +$('gross').max);
+  }
+  const gross = +$('gross').value;
+  const pp = PBCompare.personalPension(gross, age, salary, taxRate, match);
+
+  /* ---------- Mode 2: combined ---------- */
+  const c = PBCompare.combined({ salary, year, age, taxRate, extraMonthly, topUpMatchPct: tmatch });
+
+  /* control labels */
+  $('ageV').textContent = age;
+  $('salaryV').textContent = euro(salary);
+  $('phaseV').textContent = 'Year ' + year + (year >= 10 ? '+' : '');
+  $('grossV').textContent = euro(gross);
+  $('matchV').textContent = match + '%';
+  $('extraV').textContent = euro(extraMonthly);
+  $('tmatchV').textContent = tmatch + '%';
+  $('phaseNote').textContent = 'Phase ' + ae.phase + ' of the phase-in (' + ae.years + '): you '
+    + pct(ae.rates.employee) + ', employer ' + pct(ae.rates.employer)
+    + ', State ' + pct(ae.rates.state) + '. Rates rise in three-year steps.';
+
+  /* ---------- shared: the auto-enrolment layer ---------- */
+  $('aeEmployee').textContent = euro(ae.employee);
+  $('aeEmployer').textContent = euro(ae.employer);
+  $('aeState').textContent = euro(ae.state);
+  $('aeTotal2').textContent = euro(ae.totalIn);
+  const capNote = ae.salaryCapApplies ? '(on the first ' + euro(PBCompare.AE_SALARY_CAP) + ')' : '';
+  $('aeEmployerCap').textContent = capNote;
+  $('aeStateCap').textContent = capNote;
+  $('aeRatesNote').textContent = 'You pay ' + pct(ae.rates.employee) + ' of your full salary. '
+    + (ae.salaryCapApplies
+        ? 'Your employer and the State pay on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' only, which is why their share stops rising.'
+        : 'Your employer and the State pay on the same salary, up to a ' + euro(PBCompare.AE_SALARY_CAP) + ' cap.')
+    + ' These contributions come out of your take-home pay, so there is no income tax relief on them.';
+
+  /* ---------- Mode 1 panel ---------- */
+  $('aeTotal').textContent = euro(ae.totalIn);
+  $('ppTotal').textContent = euro(pp.totalIn);
+  $('ppTotal2').textContent = euro(pp.totalIn);
+  $('aeNet').textContent = euro(ae.netCost);
+  $('ppNet').textContent = euro(pp.netCost);
+  $('ppNetLab').textContent = pp.relief > 0
+    ? 'Your ' + euro(pp.gross) + ' contribution, less ' + euro(pp.relief) + ' of tax relief.'
+    : 'Your contribution. No relief applies at this level.';
+
+  const netGap = Math.round(pp.netCost - ae.netCost);
+  $('vsNote').textContent = Math.abs(netGap) < 1
+    ? 'Both paths cost you the same this year, so the totals above are a like-for-like comparison.'
+    : (netGap > 0
+        ? 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' more out of pocket this year.'
+        : 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' less out of pocket this year.');
+
+  $('ppGross').textContent = euro(pp.gross);
+  $('ppRelief').textContent = euro(pp.relief);
+  $('ppEmployer').textContent = euro(pp.employer);
+  $('ppReliefCap').textContent = 'at ' + taxRate + '%';
+  $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none set)';
+  $('ppReliefNote').textContent = reliefSentence(pp, age);
+
+  /* the Mode 1 verdict, stated the same way whichever path is larger */
+  const cmp = PBCompare.compare({ salary, year, age, taxRate, gross, employerMatchPct: match });
+  let verdict;
+  if (cmp.larger === 'equal') {
+    verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';
+  } else if (cmp.larger === 'autoEnrolment') {
+    verdict = 'Auto-enrolment puts ' + euro(cmp.difference) + ' more into your pension this year, '
+      + euro(ae.totalIn) + ' against ' + euro(pp.totalIn) + '.';
+  } else {
+    verdict = 'The personal pension puts ' + euro(cmp.difference) + ' more into your pension this year, '
+      + euro(pp.totalIn) + ' against ' + euro(ae.totalIn) + '.';
+  }
+  verdict += Math.abs(netGap) < 1
+    ? ' Both cost you the same out of pocket.'
+    : ' Bear in mind the two do not cost you the same out of pocket.';
+  $('verdictOut').textContent = verdict;
+
+  /* ---------- Mode 2 panel ---------- */
+  const x = c.extra;
+  $('cTotal').textContent = euro(c.totalIn);
+  $('cTopUp').textContent = euro(x.totalIn);
+  $('cTopUp2').textContent = euro(x.totalIn);
+  $('cAeNet').textContent = euro(ae.netCost);
+  $('cExtraNet').textContent = euro(c.extraNet);
+  $('cExtraLab').textContent = extraMonthly > 0
+    ? 'Your ' + euro(extraMonthly) + ' a month, before relief.'
+    : 'Nothing set yet. Move the slider to add an amount.';
+  $('cNote').textContent = extraMonthly > 0
+    ? 'Together, ' + euro(c.netCost) + ' out of your pocket this year puts ' + euro(c.totalIn) + ' into your pension.'
+    : 'With no top-up, this is just auto-enrolment: ' + euro(ae.netCost) + ' out of your pocket puts ' + euro(ae.totalIn) + ' in.';
+
+  $('cPaid').textContent = euro(c.extraNet);
+  $('cRelief').textContent = euro(x.relief);
+  $('cGross').textContent = euro(x.gross);
+  $('cMatch').textContent = euro(x.employer);
+  $('cReliefCap').textContent = 'at ' + taxRate + '%';
+  $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none set)';
+  $('cReliefNote').textContent = extraMonthly > 0 ? reliefSentence(x, age) : '';
+
+  /* the Mode 2 statement: matter of fact, a consequence of what the scheme allows */
+  let cv = 'Auto-enrolment puts ' + euro(ae.totalIn) + ' into your pension this year at its set rate.';
+  if (extraMonthly > 0) {
+    cv += ' My Future Fund does not currently take contributions above that rate, so your extra goes through a personal pension. '
+      + euro(extraMonthly) + ' a month from you becomes ' + euro(x.gross) + ' with tax relief'
+      + (x.employer > 0 ? ', and your employer adds ' + euro(x.employer) + ' on top' : '')
+      + '. Combined, ' + euro(c.totalIn) + ' goes into your pension for ' + euro(c.netCost) + ' out of your pocket.';
+  } else {
+    cv += ' My Future Fund does not currently take contributions above that rate. Add an amount above to see what routing it through a personal pension alongside auto-enrolment would put in.';
+  }
+  $('cVerdict').textContent = cv;
+
+  /* one live region, announcing whichever mode is showing */
+  announce(mode === 1
+    ? verdict + ' Auto-enrolment costs you ' + euro(ae.netCost) + ', the personal pension costs you ' + euro(pp.netCost) + '.'
+    : cv);
+
+  ['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => paintSlider($(id)));
+}
+
+/* the relief sentence is the same for Mode 1's personal path and Mode 2's top-up */
+function reliefSentence(layer, age) {
+  return 'Revenue allows relief on up to ' + euro(layer.reliefLimit)
+    + ' a year at your age, which is ' + pct(PBRelief.reliefBand(age)) + ' of earnings, counting earnings up to '
+    + euro(PBRelief.EARN_CAP) + '.'
+    + (layer.aboveReliefLimit > 0
+        ? ' ' + euro(layer.aboveReliefLimit) + ' of your contribution is above that limit. It still goes into your pension, it just gets no relief.'
+        : '');
+}
+
+['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => {
+  const el = $(id);
+  el.addEventListener('input', () => {
+    if (id === 'gross') grossTouched = true;
+    paintSlider(el);
+    calc();
   });
-  document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'&&l.classList.contains('open')){
-      l.classList.remove('open');t.setAttribute('aria-expanded','false');
-      t.setAttribute('aria-label','Open menu');t.focus();}
-  });
-})();
-/* scroll reveal */
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
-})();
+  paintSlider(el);
+});
+
+/* a shared link can open straight onto Mode 2 */
+setMode(location.hash === '#combined' ? 2 : 1);
 </script>
 
 <script>
@@ -1774,6 +2020,58 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 
 
 <script>
+/* fintech slider polish: wrap each range in a positioned container + live value bubble */
+(function(){
+  var ranges=[].slice.call(document.querySelectorAll('input[type=range]'));
+  ranges.forEach(function(r){
+    if(r.parentElement.classList.contains('slider-wrap'))return;
+    var wrap=document.createElement('div'); wrap.className='slider-wrap';
+    r.parentNode.insertBefore(wrap,r); wrap.appendChild(r);
+    var bub=document.createElement('div'); bub.className='sbubble'; wrap.appendChild(bub);
+    // find the matching .val label in the same field to mirror its formatted text
+    var field=wrap.closest('.field');
+    var valEl=field?field.querySelector('.val'):null;
+    function pos(){
+      var min=+r.min,max=+r.max,v=+r.value;
+      var pct=(max>min)?((v-min)/(max-min)):0;
+      var w=r.offsetWidth, thumb=22;
+      var x=pct*(w-thumb)+thumb/2;
+      bub.style.left=x+'px';
+      bub.textContent=valEl?valEl.textContent:v;
+    }
+    function start(){wrap.classList.add('dragging');pos();}
+    function end(){wrap.classList.remove('dragging');}
+    r.addEventListener('input',pos);
+    r.addEventListener('pointerdown',start);
+    r.addEventListener('pointerup',end);
+    r.addEventListener('pointercancel',end);
+    r.addEventListener('mouseenter',function(){pos();wrap.classList.add('dragging');});
+    r.addEventListener('mouseleave',function(){if(!r.matches(':active'))end();});
+    r.addEventListener('focus',start);
+    r.addEventListener('blur',end);
+    window.addEventListener('resize',pos);
+    pos();
+  });
+})();
+/* pulse the result hero when the headline figure changes */
+(function(){
+  var hero=document.querySelector('.res-hero');
+  var watch=document.getElementById('potOut');
+  if(!hero||!watch)return;
+  var last=watch.textContent, t=null;
+  new MutationObserver(function(){
+    if(watch.textContent!==last){
+      last=watch.textContent;
+      clearTimeout(t);
+      hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse');
+      t=setTimeout(function(){hero.classList.remove('pulse');},600);
+    }
+  }).observe(watch,{childList:true,characterData:true,subtree:true});
+})();
+</script>
+
+
+<script>
 /* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
    (The skip link and the main landmark are static in the page markup.) */
 (function(){
@@ -1784,6 +2082,90 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
         list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
       }
     },true);
+  });
+})();
+</script>
+
+
+<script>
+/* CLICK-TO-EDIT v2: tap any value to type. Money fields accept ANY amount
+   (no upper cap); if you type beyond the slider's scale, the slider expands
+   to hold it and returns to its sane range once you're back below it.
+   Age, retirement age and growth stay clamped to their slider ranges. */
+(function(){
+  var HARD_CEIL=1e9; /* technical ceiling to keep formatting/charts sane */
+  document.querySelectorAll('.field').forEach(function(field){
+    var range=field.querySelector('input[type=range]');
+    var val=field.querySelector('.val');
+    if(!range||!val||val.dataset.editable)return;
+    val.dataset.editable='1';
+    var money=(val.textContent.trim().charAt(0)==='\u20AC');
+    if(!range.dataset.defmax)range.dataset.defmax=range.max;
+    if(!range.dataset.defstep)range.dataset.defstep=range.step||'1';
+    val.setAttribute('tabindex','0');
+    val.setAttribute('role','button');
+    val.setAttribute('title',money?'Click to type any amount':'Click to type an exact value');
+    val.setAttribute('aria-label',money?'Edit value. Press Enter to type any amount.':'Edit value. Press Enter to type an exact figure.');
+    function commitValue(v){
+      var min=+range.min, defmax=+range.dataset.defmax, step=+range.step||1;
+      if(money){
+        v=Math.round(Math.max(min,Math.min(HARD_CEIL,v)));
+        var defstep=+range.dataset.defstep||1;
+        range.step=(((v-min)%defstep)===0)?defstep:1;
+        if(v>defmax){ range.max=v; }
+        else if(+range.max>defmax){ range.max=defmax; }
+        range.value=v;
+      }else{
+        var max=+range.max;
+        v=Math.min(max,Math.max(min,v));
+        v=Math.round((v-min)/step)*step+min;
+        range.value=Math.round(v*100)/100;
+      }
+      range.dispatchEvent(new Event('input'));
+    }
+    function openEditor(){
+      if(field.querySelector('.val-edit'))return;
+      var inp=document.createElement('input');
+      inp.type='number'; inp.className='val-edit';
+      inp.min=range.min;
+      inp.max=money?HARD_CEIL:range.max;
+      inp.step=money?'any':(range.step||1);
+      inp.value=range.value;
+      inp.setAttribute('inputmode',(+range.step<1&&!money)?'decimal':'numeric');
+      inp.setAttribute('aria-label',money
+        ?('Type any amount, minimum '+range.min)
+        :('Type a value between '+range.min+' and '+range.max));
+      val.style.display='none';
+      val.parentNode.insertBefore(inp,val);
+      inp.focus(); inp.select();
+      var done=false;
+      function commit(){
+        if(done)return; done=true;
+        var v=parseFloat(inp.value);
+        if(!isNaN(v))commitValue(v);
+        inp.remove(); val.style.display=''; val.focus();
+      }
+      function cancel(){ if(done)return; done=true; inp.remove(); val.style.display=''; val.focus(); }
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();commit();}
+        else if(e.key==='Escape'){e.preventDefault();cancel();}
+      });
+      inp.addEventListener('blur',commit);
+    }
+    val.addEventListener('click',openEditor);
+    val.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openEditor();}
+    });
+    /* self-heal the scale: when a drag ends back inside the sane range, restore it */
+    if(money){
+      range.addEventListener('change',function(){
+        var defmax=+range.dataset.defmax, defstep=+range.dataset.defstep||1, min=+range.min;
+        var changed=false;
+        if(((+range.value-min)%defstep)===0 && +range.step!==defstep){ range.step=defstep; changed=true; }
+        if(+range.max>defmax && +range.value<=defmax){ range.max=defmax; changed=true; }
+        if(changed)range.dispatchEvent(new Event('input'));
+      });
+    }
   });
 })();
 </script>
@@ -1899,6 +2281,21 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 </script>
 
+<script>
+/* Pay & File: a contribution made before the deadline can be set against the
+   previous tax year. 31 October for paper filers, extended into mid-November on
+   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
+(function(){
+  var el=document.getElementById('deadlineText'); if(!el) return;
+  var now=new Date(), y=now.getFullYear();
+  var due=new Date(y,9,31);
+  if(now>due){ y+=1; due=new Date(y,9,31); }
+  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
+  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
+    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
+    taxYear+"'s allowance is gone for good.";
+})();
+</script>
 
 <script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
@@ -1920,8 +2317,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
       chipVal = document.getElementById('ntVal'),
       bD = document.getElementById('tkD'), bH = document.getElementById('tkH'),
       bM = document.getElementById('tkM'), bS = document.getElementById('tkS'),
-      sr = document.getElementById('tkSr'), head = document.querySelector('.tick h2'),
-      who = document.getElementById('tkYear');
+      sr = document.getElementById('tkSr'), head = document.querySelector('.tick h2');
 
   function tick(){
     var t = target(), diff = Math.max(0, t - new Date());
@@ -1940,7 +2336,6 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
              bM.textContent = pad(min);  bS.textContent = pad(sec); }
     if (head) head.textContent = 'Contributions for the ' + taxYear +
       ' tax year close on 31 October.';
-    if (who) who.textContent = taxYear;
     if (sr) sr.textContent = 'About ' + days +
       ' days left until the 31 October Pay and File deadline for the ' + taxYear + ' tax year.';
   }
@@ -1948,6 +2343,77 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   tick();
   /* the band ticks per second; the chip alone only needs a minute */
   setInterval(tick, (bD && !reduce) ? 1000 : 60000);
+})();
+</script>
+
+<script>
+/* Mobile menu. This handler previously existed on index.html only, so the
+   menu could not be opened from any other page. */
+(function(){
+  var t=document.getElementById('navToggle'), l=document.getElementById('navLinks');
+  if(!t||!l) return;
+  t.addEventListener('click',function(){
+    var open=l.classList.toggle('open');
+    t.setAttribute('aria-expanded',open?'true':'false');
+    t.setAttribute('aria-label',open?'Close menu':'Open menu');
+  });
+  /* tapping a link closes it, and Escape closes it for keyboard users */
+  l.addEventListener('click',function(e){
+    if(e.target.closest('a')){l.classList.remove('open');
+      t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');}
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&l.classList.contains('open')){
+      l.classList.remove('open');t.setAttribute('aria-expanded','false');t.focus();}
+  });
+})();
+</script>
+
+<script>
+/* Progressive disclosure (Hick's Law).
+   The four controls that drive the headline figure stay visible. The rest
+   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   every id, listener and slider-fill binding is preserved - which is why this
+   runs after the calculator's own script rather than replacing markup. */
+(function(){
+  var KEEP = ['age','salary','phase','gross','match','extra','tmatch'];   /* primary controls: ids on THIS page */
+  var panel = document.querySelector('.panel');
+  if(!panel) return;
+
+  var fields = [].slice.call(panel.querySelectorAll('.field'));
+  var extra = fields.filter(function(f){
+    var c = f.querySelector('input[type=range]');
+    return c ? KEEP.indexOf(c.id) === -1 : false;
+  });
+  /* the tax-rate segment is a refinement too */
+  var seg = panel.querySelector('.seg');
+  var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
+  if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
+  if(!extra.length) return;
+
+  var d = document.createElement('details');
+  d.className = 'adv';
+  var sum = document.createElement('summary');
+  sum.textContent = 'More options (' + extra.length + ')';
+  var inner = document.createElement('div');
+  inner.className = 'adv-in';
+  d.appendChild(sum); d.appendChild(inner);
+
+  extra[0].parentNode.insertBefore(d, extra[0]);
+  extra.forEach(function(f){ inner.appendChild(f); });   /* moved, not cloned */
+
+  /* a hint that sat under the tax segment travels with it */
+  var hint = panel.querySelector('.hint');
+  if(hint && /tax relief/i.test(hint.textContent)) inner.appendChild(hint);
+
+  /* sliders inside a closed <details> have zero width, so their fill must be
+     repainted the first time the panel opens */
+  d.addEventListener('toggle', function(){
+    if(!d.open) return;
+    inner.querySelectorAll('input[type=range]').forEach(function(s){
+      s.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
 })();
 </script>
 </body>

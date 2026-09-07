@@ -6,6 +6,39 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 3 — 2026-09-07 · broker-vs-autoenrolment.html
+
+A new standalone comparison calculator. Contract in `docs/CALC-SPEC.md`,
+maths in `assets/js/autoenrolment.js` + `assets/js/pension-tax-relief.js`,
+tests in `tests/compare-calc.test.js` (run with `python3 tests/run-tests.py
+--drift`), page assembled by `tools/build-compare-page.py` from
+`pension-calculator.html`'s skeleton so chrome and a11y scaffolding are
+identical.
+
+| Item | Status | Note |
+|---|---|---|
+| Mode 1, Equivalent layer | **Built** | Same money out of pocket: auto-enrolment against a personal pension. Contribution defaults to the gross that matches auto-enrolment's net cost, so the comparison opens like for like. |
+| Mode 2, Combined | **Built** | Auto-enrolment at its set rate plus a personal top-up, because My Future Fund does not currently accept contributions above that rate. Top-up match is a percentage of the top-up, not of salary (Cases 9 and 12). |
+| Tax relief reuse | **Done, with a drift alarm** | Relief logic lifted verbatim into the shared module; `run-tests.py --drift` drives the real `pension-calculator.html` and fails on any disagreement. That page itself is untouched. |
+| Tests | **94 assertions, all passing** | Both supplied worked examples exact; Cases 7 to 9 exact; Case 5 asserts an auto-enrolment win on purpose; Case 12 asserts the match scales with the top-up. Every figure also read off the rendered page in a real browser. |
+| Verification | **0 FAIL, 0 WARN** at 375 / 1200 / 1360 / 1440 | No console errors, contrast failures, overflow or missing alt; `<main>`, skip link, focus ring, `aria-valuetext` on all seven sliders, one `aria-live` summary. |
+| Linked from | footer Tools column (all pages), starter.html CTA, sitemap | **Not the main nav**: the header had 16px of headroom after About; an eighth item would overflow (C6). |
+| Honesty rule | Enforced by test and by copy | The default state is an auto-enrolment win, stated in the same words and place as the opposite. Mode 2 is matter of fact. CTA reads "Talk through what this means for you". |
+
+**NEEDS DAMIAN INPUT (before this page goes live):** the My Future Fund rate
+table and phase years, and the "no AVCs above the set rate" position behind
+Mode 2, both come from third-party summaries, not gov.ie or NAERSA. Confirm
+the current phase year, the exact rates, and the AVC position before launch.
+Flagged in CALC-SPEC.md, as a comment above the rate table and above
+`combined()` in `autoenrolment.js`, and in a visible card on the page.
+
+Deployment note: the two module script tags carry a content-hash query
+(`?v=…`) written by the build script, because a cached old module under the
+same URL would silently break the maths (observed once in a persistent
+browser tab during testing; the verifier ignores `?query` when checking files).
+
+---
+
 # Run 2 — 2026-09-03
 
 Scope: re-verify A–E and F1, then build F2–F6.
