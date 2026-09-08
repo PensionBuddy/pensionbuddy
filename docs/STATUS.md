@@ -49,6 +49,21 @@ disclaimer and every "information, not advice" statement.
 **Verified:** 14 pages, 0 FAIL at 375 / 1360 / 1440. WARN only on the three
 NEEDS DAMIAN INPUT placeholders below.
 
+## Follow-up, same day
+
+| Change | Note |
+|---|---|
+| Damian's portrait swapped | New black and white headshot, `Damian-Headshot-BW.jpg` in the Photos folder, cropped to 4:5 by `tools/prepare-photos.py`. The previous colour portrait is in git at `5fbffb4`. |
+| "What usually happens" removed | The three-card pain band on the home page. Abstract commentary rather than a concrete situation, and the audience section below it does the same self-identification job better. |
+| The proofs grid removed | Its three cards restated the two paragraphs directly above them and Damian's bio. |
+
+Home page `<main>` went from 1484 words to 1283. "Central Bank / regulated"
+now appears 9 times rather than 11, QFA 7 rather than 9.
+
+The `.pains` sections on `tracker.html`, `starter.html` and `director.html`
+were left alone deliberately: they name concrete situations on targeted pages,
+which is what the home page one failed to do.
+
 ---
 
 # Run 3 — 2026-09-07 · broker-vs-autoenrolment.html

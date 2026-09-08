@@ -57,23 +57,18 @@ PHOTOS = [
 STRIP_H = 430
 STRIP_Q = 72
 
-# Adam's team-card headshot. The source is already 4:5, the same ratio as
-# damian-condon.jpg, so it only needs resizing. 'box' is None for a straight
-# resize; give it a crop box if a future source needs squaring up first.
-HEADSHOT = {
-    'source': 'Headshot.JPG',
-    'raw': True,                   # a real photo, not a phone screenshot to de-chrome
-    'box': None,
-    'slug': 'adam-condon',
-    'size': (600, 750),            # 2x of Damian's declared 300x375
-    'quality': 82,
-}
-
-# The same photo again at portrait size for Adam's own profile section, matching
-# damian-condon-portrait.jpg. The small card crop is a narrow 132px column, so
-# the headshot only reads properly at this size.
-PORTRAIT = dict(HEADSHOT, slug='adam-condon-portrait', size=(620, 775), quality=84)
-
+# The portraits behind the three profile sections on the home page. .about-port
+# is 4:5 and crops with object-fit: cover, so each one is delivered at 4:5 and
+# needs no cropping in the browser. 'box' squares a source that is not already
+# 4:5; None means the source is close enough to resize straight.
+PORTRAITS = [
+    {'source': 'Headshot.JPG', 'slug': 'adam-condon-portrait',
+     'box': None, 'size': (620, 775), 'quality': 84},
+    # 1246x1571 is 0.793, a shade taller than 4:5, so 14 rows come off the
+    # bottom of the shirt rather than out of the headroom.
+    {'source': 'Damian-Headshot-BW.jpg', 'slug': 'damian-condon-portrait',
+     'box': (0, 0, 1246, 1557), 'size': (620, 775), 'quality': 84},
+]
 
 # Images that arrived as a JPEG only, with no phone-screenshot chrome to strip
 # and no larger original to go back to. They just need the WebP the <picture>
@@ -174,20 +169,15 @@ def main():
             print('derive %-24s %9d  (webp from %s, %dx%d)'
                   % (os.path.basename(webp), wb, name, im.width, im.height))
 
-    for h in (HEADSHOT, PORTRAIT):
-        if h.get('raw'):
-            head = Image.open(os.path.join(SRC, h['source'])).convert('RGB')
-        else:
-            head = load_cropped(h['source'])
+    for h in PORTRAITS:
+        im = Image.open(os.path.join(SRC, h['source'])).convert('RGB')
         if h.get('box'):
-            head = head.crop(h['box'])
-        head = head.resize(h['size'], Image.LANCZOS)
-        jpg, webp, jb, wb = save_pair(head, h['slug'], out_dir, h['quality'])
-        print('headshot %-24s %9d %9s  (from %s, %dx%d, %s)'
+            im = im.crop(h['box'])
+        im = im.resize(h['size'], Image.LANCZOS)
+        jpg, webp, jb, wb = save_pair(im, h['slug'], out_dir, h['quality'])
+        print('portrait %-24s %9d %9s  (from %s, %dx%d)'
               % (h['slug'], jb, wb if wb else 'skipped', h['source'],
-                 h['size'][0], h['size'][1],
-                 'cropped' if h.get('box') else 'already 4:5, resized only'))
-
+                 h['size'][0], h['size'][1]))
 
 if __name__ == '__main__':
     main()
