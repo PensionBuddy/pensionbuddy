@@ -70,7 +70,7 @@ doing what it normally does. That is what stops you accidentally submitting the
 booking form when you meant to reword its button.
 
 So to move between pages, change the address in your browser: swap
-`about.html` for `terms.html` and so on, keeping the `?edit=1` on the end. To
+`index.html` for `terms.html` and so on, keeping the `?edit=1` on the end. To
 click through the site normally for a minute, press **Turn off**, or change
 `?edit=1` to `?edit=0`.
 

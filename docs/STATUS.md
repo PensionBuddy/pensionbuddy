@@ -109,7 +109,7 @@ and 1440:
 
 | Measure | Result |
 |---|---|
-| Pages | 14 — the original 12 plus `about.html` and `thank-you.html` |
+| Pages | 14 — the original 12, plus `thank-you.html` and `broker-vs-autoenrolment.html`. `about.html` was folded into the home page in run 4. |
 | **FAIL** | **0** on every page |
 | Broken links / anchors | 0 |
 | Console errors | 0 |
@@ -285,7 +285,7 @@ reset, sat flush against their paragraphs. Pre-existing, not caused by F2.
 | **A4** | `terms.html` and `complaints.html` Contact sections | (1) A phone number — currently a marked placeholder "[phone number to be confirmed]", search for `data-issue="A4"`. (2) Confirmation that `hello@pensionbuddy.ie` is a real, monitored mailbox — it is used on terms, complaints and privacy. |
 | **F1a** | every page, `ANALYTICS_SRC` | Which analytics provider (Plausible / GA4 / none). The guard self-disables until set; nothing loads. |
 | **F1b** | both calculators, starter, tracker, director — `LEAD_ENDPOINT` | A form endpoint (Formspree, Netlify Forms, CRM webhook). Until set, capture points open a pre-filled email and show an honest on-screen fallback. |
-| **F5 register no.** | `about.html`, transparency section | The Central Bank **register reference number**. The site tells readers to check the register at registers.centralbank.ie but never gives the number to look up. Renders as a marked placeholder — search `data-issue="F5"`. |
+| **F5 register no.** | `index.html`, "Who you are actually dealing with" | The Central Bank **register reference number**. The site tells readers to check the register at registers.centralbank.ie but never gives the number to look up. Renders as a marked placeholder — search `data-issue="F5"`. |
 | **F6 redirect** | the Calendly account, not the code | The thank-you page is built, but the redirect is an event-type setting: **Calendly → Event Types → `pensionbuddy-1-1` → Confirmation page → Redirect to an external site → `https://pensionbuddy.ie/thank-you.html`**. Until that is set, a completed booking still lands on Calendly's own confirmation screen. The page's JS listener is a belt-and-braces fallback that could not be confirmed end-to-end from here. |
 
 ## Category A — legal / content blockers · commit `7b8799b`
