@@ -75,6 +75,12 @@ HEADSHOT = {
 PORTRAIT = dict(HEADSHOT, slug='adam-condon-portrait', size=(620, 775), quality=84)
 
 
+# Images that arrived as a JPEG only, with no phone-screenshot chrome to strip
+# and no larger original to go back to. They just need the WebP the <picture>
+# pattern expects, derived from the JPEG that is already in assets/img.
+DERIVE_WEBP = [('buddy-beach.jpg', 80)]
+
+
 def photo_band(im):
     """Rows of the screenshot that hold the photo rather than black bars or UI.
 
@@ -148,6 +154,25 @@ def main():
                                              wb if wb else 'skipped'))
     print('\n%d photos  |  jpg total %.0f KB  |  webp total %.0f KB (what browsers fetch)'
           % (len(PHOTOS), total_j / 1024, total_w / 1024))
+
+    for name, q in DERIVE_WEBP:
+        src_jpg = os.path.join(OUT, name)
+        if not os.path.isfile(src_jpg):
+            print('derive %-24s source jpg missing, skipped' % name)
+            continue
+        im = Image.open(src_jpg).convert('RGB')
+        webp = os.path.join(out_dir, os.path.splitext(name)[0] + '.webp')
+        os.makedirs(out_dir, exist_ok=True)
+        im.save(webp, 'WEBP', quality=q, method=6)
+        wb, jb = os.path.getsize(webp), os.path.getsize(src_jpg)
+        if wb >= jb:
+            # Re-encoding an already-compressed JPEG usually costs quality without
+            # saving bytes. A WebP that loses is worse than no WebP at all.
+            os.remove(webp)
+            print('derive %-24s skipped, webp %d >= jpg %d' % (name, wb, jb))
+        else:
+            print('derive %-24s %9d  (webp from %s, %dx%d)'
+                  % (os.path.basename(webp), wb, name, im.width, im.height))
 
     for h in (HEADSHOT, PORTRAIT):
         if h.get('raw'):

@@ -161,7 +161,7 @@ AUDIT_JS = r"""
     };
   }catch(e){R.fonts={error:String(e)}}
 
-  // nav + footer link inventory (F5: "About" must reach about.html from every page)
+  // nav + footer link inventory (F5: "About" must reach the story section from every page)
   R.navHrefs=$$('.nav-links a').map(a=>a.getAttribute('href'));
   R.footHrefs=$$('.foot-col a').map(a=>a.getAttribute('href'));
 
@@ -450,8 +450,8 @@ def evaluate(page, st, audits):
             if fo.get(k): W.append(('F2', '%d %s render in Fraunces (display type only)' % (fo[k], label)))
     # F5 — About must be reachable from the nav of every page
     nav = a.get('navHrefs')
-    if nav is not None and not any('about.html' in (h or '') for h in nav + (a.get('footHrefs') or [])):
-        W.append(('F5', 'no link to about.html in nav or footer'))
+    if nav is not None and not any('#story' in (h or '') for h in nav + (a.get('footHrefs') or [])):
+        W.append(('F5', 'no link to the story section in nav or footer'))
     # F4 — the qualifying form must gate the embed
     g = a.get('bookingGate')
     if g is not None:
@@ -509,9 +509,21 @@ def evaluate(page, st, audits):
 def site_checks():
     """Site-level expectations that are not about one page in isolation."""
     out = []
-    for page, why in (('about.html', 'F5 story page'), ('thank-you.html', 'F6 post-booking page')):
+    for page, why in (('thank-you.html', 'F6 post-booking page'),):
         if not os.path.isfile(os.path.join(ROOT, page)):
             out.append(('MISSING-PAGE', '%s does not exist (%s)' % (page, why)))
+    # about.html was folded into the home page. The story, the three profiles and
+    # the regulatory detail it carried have to still be somewhere.
+    ix = os.path.join(ROOT, 'index.html')
+    if os.path.isfile(ix):
+        t = open(ix, encoding='utf-8', errors='replace').read()
+        for anchor, why in (('id="story"', 'the story section'), ('id="damian"', "Damian's profile"),
+                            ('id="adam"', "Adam's profile"), ('id="buddy"', "Buddy's profile"),
+                            ('registers.centralbank.ie', 'the Central Bank register reference')):
+            if anchor not in t:
+                out.append(('F5', 'index.html is missing %s (%s)' % (anchor, why)))
+    if os.path.isfile(os.path.join(ROOT, 'about.html')):
+        out.append(('F5', 'about.html is back, but every link now points at index.html#story'))
     bk = os.path.join(ROOT, 'booking.html')
     if os.path.isfile(bk) and os.path.isfile(os.path.join(ROOT, 'thank-you.html')):
         t = open(bk, encoding='utf-8', errors='replace').read()
@@ -520,7 +532,7 @@ def site_checks():
     sm = os.path.join(ROOT, 'sitemap.xml')
     if os.path.isfile(sm):
         s = open(sm, encoding='utf-8', errors='replace').read()
-        for page in ('about.html', 'thank-you.html'):
+        for page in ('thank-you.html',):
             if os.path.isfile(os.path.join(ROOT, page)) and page not in s and page != 'thank-you.html':
                 out.append(('sitemap', '%s exists but is not in sitemap.xml' % page))
     return out

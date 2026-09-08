@@ -6,6 +6,51 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 4 — 2026-09-08 · about.html folded into the home page, spartan copy pass
+
+`about.html` is gone. Everything it carried moved onto `index.html`, the
+duplication between the two pages was removed, and a copy pass across the site
+cut the trailing sentences that repeated what the reader already had.
+
+## Structure
+
+| Change | Note |
+|---|---|
+| `about.html` deleted | Every nav and footer "About" link now points at `index.html#story`. Removed from `sitemap.xml`. |
+| New `#story` section | The father-son story, under the heading "Father, son, dog." |
+| `#damian`, `#adam` moved over | Full profile sections, replacing the short `#about` panel the home page had. |
+| New `#buddy` section | The namesake and mascot, using `assets/img/buddy-beach.jpg`. |
+| `.snaps` photo strip moved over | Now "Out Of Office". Its CSS was the only component `index.html` did not already style. |
+| Regulatory section moved over | "Who you are actually dealing with", plus the information-not-advice box. |
+
+## Removed as said twice
+
+| Dropped | Why |
+|---|---|
+| The home page's short `#about` panel | The full `#damian` section replaces it. |
+| The career timeline, five entries | The edited Damian bio now lists the same jobs in one sentence. |
+| about's three story steps | Problem, idea and promise were each already covered by the pain band, Damian's bio and the "A chat, not a sales pitch" section. |
+| Both team-card grids | The three profile sections replace them. Roles kept, moved into each profile's kicker. |
+| One of two identical proofs blocks | Both pages carried the same three cards verbatim. |
+| The "No testimonials yet" section | Its explanatory copy was emptied in the saved edits. |
+
+## Copy pass
+
+29 sentences removed across 8 pages, following the pattern in the saved edits:
+keep the statement, drop the elaboration behind it. "If we're not the right
+fit, we'll say so" went from 21 uses to 10, and no marketing page now says it
+more than once. FAQ answers are mirrored into JSON-LD and the Ask Buddy widget,
+so every cut landed in all three copies.
+
+Untouched on purpose: the legal pages, every risk warning, the Standard Fund
+Threshold notes, the auto-enrolment source warning, the email-delivery
+disclaimer and every "information, not advice" statement.
+
+**Verified:** 14 pages, 0 FAIL at 375 / 1360 / 1440. WARN only on the three
+NEEDS DAMIAN INPUT placeholders below.
+
+---
+
 # Run 3 — 2026-09-07 · broker-vs-autoenrolment.html
 
 A new standalone comparison calculator. Contract in `docs/CALC-SPEC.md`,

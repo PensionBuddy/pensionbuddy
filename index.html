@@ -13,7 +13,7 @@
 <meta property="og:locale" content="en_IE">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FinancialService", "name": "Pensionbuddy", "legalName": "Damian Condon T/A Gresham Wealth Management", "url": "https://pensionbuddy.ie/", "description": "Pensions made friendly. Plain-English pension information and consultations. A brand of Gresham Wealth Management, regulated by the Central Bank of Ireland.", "address": {"@type": "PostalAddress", "streetAddress": "Bushfield House, Philipsburgh Avenue", "addressLocality": "Fairview", "addressRegion": "Dublin 3", "addressCountry": "IE"}, "areaServed": "IE", "founder": {"@type": "Person", "name": "Damian Condon", "honorificSuffix": "QFA"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type":"Question","name":"What will I actually walk away with?","acceptedAnswer":{"@type":"Answer","text":"A clear picture of what you already have, what it is likely to be worth at 66, and the one or two things worth doing about it. Written down, so you are not relying on memory a week later."}}, {"@type": "Question", "name": "Is the first chat really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type":"Question","name":"What will I actually walk away with?","acceptedAnswer":{"@type":"Answer","text":"A clear picture of what you already have, what it is likely to be worth at 66, and the one or two things worth doing about it. Written down, so you are not relying on memory a week later."}}, {"@type": "Question", "name": "Is the first chat really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
@@ -1403,12 +1403,29 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+/* ---- off-duty photo strip ----
+   Reuses the trust-badge marquee wholesale: .strip gives the clipping and the
+   edge fades, .strip-in gives the pbMarquee track, the hover/focus pause and
+   the prefers-reduced-motion fallback. Only the photo treatment is new. */
+.snaps{padding:6px 0 0}
+.snaps .sec-head{margin-bottom:24px}
+.pstrip-in{animation-duration:70s;padding:26px 0}
+.psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
+  border:1px solid var(--line-2);border-radius:5px;box-shadow:var(--sh-md);
+  transform:rotate(var(--rot,0deg));transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.psnap img{display:block;height:var(--ph,190px);width:auto;border-radius:2px}
+.psnap:hover{transform:rotate(0deg) scale(1.04)}
+@media(max-width:600px){.psnap{margin:0 9px;padding:6px}.psnap img{height:calc(var(--ph,190px) * .74)}}
+@media(prefers-reduced-motion:reduce){
+  .psnap.is-clone{display:none}
+  .psnap,.psnap:hover{transform:none}
+}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
+<div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
@@ -1419,7 +1436,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <a class="lnk" href="director.html">Directors</a>
     <a class="lnk" href="pension-calculator.html">Calculator</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
-    <a class="lnk" href="about.html">About</a>
+    <a class="lnk" href="#story">About</a>
     <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -1429,7 +1446,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 <header class="hero"><div class="wrap hero-grid">
   <div class="hero-copy">
     <span class="eyebrow reveal"><span class="pip"></span>Pensions, in plain English</span>
-    <h1 class="reveal" style="transition-delay:.06s">One call.<br>Then you&rsquo;ll know<br><span class="hl">where you stand</span>.</h1>
+    <h1 class="reveal" style="transition-delay:.06s">One call.<br>To know<br><span class="hl">where you stand</span>.</h1>
     <p class="lede reveal" style="transition-delay:.12s">Most people in Ireland have a pension they&rsquo;ve never really looked at. We&rsquo;ll tell you what it&rsquo;s worth, and what to do next.</p>
     <div class="hero-cta reveal" style="transition-delay:.18s">
       <a class="btn btn-primary" href="booking.html">Get my free review <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -1522,7 +1539,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     </div>
     <p class="gap-note reveal">These are survey averages, not a projection for you. What you&rsquo;ll actually
     need depends on your own circumstances, and the value of a pension can fall as well as rise.
-    Working out your own number is what the first conversation is for.</p>
+   </p>
   </div>
 </section>
 
@@ -1553,18 +1570,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   </div>
 </div></section>
 
-<section class="expect"><div class="wrap">
-  <div class="sec-head ctr reveal">
-    <span class="kicker">What to expect</span>
-    <h2>A chat, not a sales pitch.</h2>
-  </div>
-  <div class="steps">
-    <div class="step reveal"><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
-    <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
-    <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
-  </div>
-</div></section>
-
 <section id="calc"><div class="wrap calc-grid">
   <div class="calc-copy reveal">
     <span class="eyebrow"><span class="pip"></span>The free tool</span>
@@ -1588,7 +1593,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
         <div class="eyebrow"><i class="pip"></i>Revenue deadline</div>
         <h2>Contributions for the 2025 tax year close on 31 October.</h2>
         <p>Pay into a pension before the deadline and you can set it against last year&rsquo;s
-        tax bill. Miss it and that year is gone for good. You cannot go back and use it later. If you file your return online, you usually have until mid&#8209;November.</p>
+        tax bill. Miss it and that year is gone for good. If you file your return online, you usually have until mid&#8209;November.</p>
         <p class="tk-who">Applies to anyone claiming relief for the <span id="tkYear">2025</span> tax year, including
         AVCs, self-assessed income and company directors.</p>
         <a class="btn btn-light" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -1604,86 +1609,139 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   </div>
 </section>
 
-<section id="about" class="expect"><div class="wrap about-grid">
+<section id="story"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">Our story</span>
+    <h2>Father, son, dog.</h2>
+    <p>One idea: a pension should be something you understand, not something you avoid.</p>
+    <p>Pensionbuddy started as a father-son conversation. Damian has spent 30 years advising people on pensions, and kept seeing the same thing: people either ignored their pension completely, or only thought about it the day auto-enrolment came into effect.</p>
+    <p>Adam, freshly out of Trinity, saw the same gap from the other side. Nobody was explaining any of it in a fun and digestible way that actually made sense. So they built Pensionbuddy together.</p>
+    <p>Adam handles the social media and the site. Damian, authorised by the Central Bank of Ireland as a QFA, handles the real advice once you are ready to talk. The goal is simple: get you from &ldquo;I&rsquo;ve no idea what&rsquo;s happening with my pension&rdquo; to an actual conversation with someone qualified to help.</p>
+  </div>
+</div></section>
+
+<section id="damian" style="padding-top:56px"><div class="wrap about-grid">
   <div class="about-port reveal">
-    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp"><img src="assets/img/damian-condon-portrait.jpg" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management" loading="lazy"></picture>
+    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp"><img src="assets/img/damian-condon-portrait.jpg" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management"></picture>
     <span class="badge">B.A., Q.F.A.</span>
   </div>
   <div class="about reveal" style="transition-delay:.1s">
-    <span class="kicker">Meet your buddy</span>
+    <span class="kicker">Founder and CEO, QFA</span>
     <h2>Damian Condon</h2>
-    <p class="pullquote">I've spent thirty years explaining money to real people, and the jargon was never the point. Clarity is.</p>
-    <p class="bio">Bank of Ireland. Ulster Bank. Two years with St. George Private Bank in Sydney. Founder of Gresham Wealth Management since 2012, and the human behind Pensionbuddy.</p>
-    <div class="creds">
-      <div class="cred"><div class="cn">30+</div><div class="cl">years in financial services</div></div>
-      <div class="cred"><div class="cn">QFA</div><div class="cl">Qualified Financial Adviser</div></div>
-      <div class="cred"><div class="cn">2012</div><div class="cl">founded Gresham Wealth</div></div>
-    </div>
-    <a class="aud-link" href="about.html" style="margin-top:20px">Read our story <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can best serve real people. Clarity is.</p>
+    <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and have led it ever since, and I am the Qualified Financial Adviser behind Pensionbuddy.</p>
+    <p class="bio">Thirty years of that work leaves you with one firm opinion: hardly anyone is bad with money. They have just never had it explained to them in words they felt allowed to ask questions about.</p>
+    <p class="bio">&ldquo;The goal here is simple: make your pension make sense, then help you make the most of it.&rdquo;</p>
+    <span class="sig">Damian</span>
   </div>
 </div></section>
 
-<section class="team"><div class="wrap">
-  <div class="team-head reveal">
-    <span class="kicker">Meet the team</span>
-    <h2>The two behind Pensionbuddy.</h2>
-    <p>A financial adviser who has spent a career making money make sense, and a boxer who mostly supervises. Both based in Dublin.</p>
+<section id="adam" style="padding-top:8px"><div class="wrap about-grid">
+  <div class="about-port reveal">
+    <picture><source type="image/webp" srcset="assets/img/adam-condon-portrait.webp"><img src="assets/img/adam-condon-portrait.jpg" width="620" height="775" alt="Adam Condon, co-founder of Pensionbuddy" loading="lazy"></picture>
   </div>
-  <div class="team-grid">
-    <div class="team-feature reveal">
-      <picture><source type="image/webp" srcset="assets/img/damian-and-buddy-dublin-hills.webp"><img src="assets/img/damian-and-buddy-dublin-hills.jpg" width="720" height="897" alt="Damian and Buddy out walking in the Dublin hills" loading="lazy"></picture>
-      <div class="cap">
-        <h3>Out of office</h3>
-        <p>When they are not talking pensions, you will usually find the pair of them up a hill somewhere.</p>
-      </div>
+  <div class="about reveal" style="transition-delay:.1s">
+    <span class="kicker">Co-founder and CMO</span>
+    <h2>Adam Condon</h2>
+    <p class="pullquote">&ldquo;Nobody out there was explaining any of it in a way that actually made sense. That is the part I wanted to fix.&rdquo;</p>
+    <p class="bio">Adam graduated from Trinity College Dublin this year with an honours degree in Business, Economics and Social Sciences. He&rsquo;s bringing a fresh perspective to how pensions get talked about, transforming three decades of his dad&rsquo;s experience into something people can actually follow, from auto-enrolment to retirement planning.</p>
+    <p class="bio">Adam runs the social and education side of Pensionbuddy, the goal being to educate and remove the fear around pensions.</p>
+    <span class="sig">Adam</span>
+  </div>
+</div></section>
+
+<section id="buddy" style="padding-top:8px"><div class="wrap about-grid">
+  <div class="about-port reveal">
+    <img src="assets/img/buddy-beach.jpg" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
+  </div>
+  <div class="about reveal" style="transition-delay:.1s">
+    <span class="kicker">Chief Napping Officer</span>
+    <h2>Buddy</h2>
+    <p class="bio">Buddy is a boxer, and the reason this is called Pensionbuddy rather than something with the word wealth in it. He is the mascot, and the paw print in the logo is his.</p>
+    <p class="bio">He is also the point, in a way. A pension should feel like something with someone in your corner. Buddy supervises calls, sleeps through most of them, and is not regulated by the Central Bank of Ireland.</p>
+  </div>
+</div></section>
+
+<section class="snaps"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">Off duty</span>
+    <h2>Out Of Office</h2>
+    <p>From &lsquo;Champagne Supernova&rsquo; to &lsquo;All Roads Lead To Prague&rsquo;. We&rsquo;re ready for the next adventure.</p>
+  </div>
+</div>
+  <div class="strip pstrip" role="group" aria-label="Photographs of the Pensionbuddy team off duty">
+    <div class="strip-in pstrip-in">
+    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:1.6deg;--ph:206px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="Adam sitting with Buddy in the park on a sunny afternoon" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-3.4deg;--ph:184px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="Buddy wearing a cycling helmet in front of an armchair" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-1.4deg;--ph:176px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="Buddy tilting his head at the camera indoors" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-2.8deg;--ph:188px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="Buddy stretched out on the sofa refusing to move" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:1.6deg;--ph:206px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-3.4deg;--ph:184px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-1.4deg;--ph:176px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-2.8deg;--ph:188px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
     </div>
-    <div class="team-cards">
-      <div class="tmember reveal" style="transition-delay:.06s">
-        <div class="tphoto"><picture><source type="image/webp" srcset="assets/img/damian-condon.webp"><img src="assets/img/damian-condon.jpg" width="300" height="375" alt="Damian Condon" loading="lazy" style="object-position:center 20%"></picture></div>
-        <div class="tbody">
-          <div class="trole">Founder, QFA</div>
-          <div class="tname">Damian Condon</div>
-          <div class="tdesc">Thirty years in financial services. The one who does the actual advising.</div>
-        </div>
-      </div>
-      <div class="tmember reveal" style="transition-delay:.12s">
-        <div class="tphoto"><img src="assets/img/buddy-beach.jpg" width="440" height="550" alt="Buddy the boxer dog on the beach" loading="lazy" style="object-position:center 78%"></div>
-        <div class="tbody">
-          <div class="trole">Chief Pension Dog</div>
-          <div class="tname">Buddy</div>
-          <div class="tdesc">Head of morale and paw-based branding. Not regulated by the Central Bank.</div>
-        </div>
-      </div>
+  </div>
+</section>
+<section><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">No small print</span>
+    <h2>Who you are actually dealing with.</h2>
+    <p>Pensionbuddy is a name, not a separate company. The business behind it is Damian Condon T/A Gresham Wealth Management, and that is the business the Central Bank of Ireland regulates. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3.</p>
+    <p>You can check that for yourself, and you should. The Central Bank publishes its register at registers.centralbank.ie. Our reference number is <span class="needs-input" data-issue="F5">[to be confirmed]</span>.</p>
+  </div>
+  <div class="proofs">
+    <div class="proof reveal">
+      <div class="pl">Regulated</div>
+      <h3>Central Bank of Ireland</h3>
+      <p>Damian Condon T/A Gresham Wealth Management is authorised by the Central Bank. You can check the register yourself at registers.centralbank.ie.</p>
+    </div>
+    <div class="proof reveal" style="transition-delay:.06s">
+      <div class="pl">Qualified</div>
+      <h3>QFA</h3>
+      <p>Qualified Financial Adviser, the professional standard required to advise on pensions in Ireland.</p>
+    </div>
+    <div class="proof reveal" style="transition-delay:.12s">
+      <div class="pl">Experienced</div>
+      <h3>Thirty years</h3>
+      <p>Bank of Ireland, Ulster Bank, and two years with St George Private Bank in Sydney, before founding Gresham Wealth Management in 2012.</p>
     </div>
   </div>
 </div></section>
 
-<section>
-    <div class="wrap">
-      <div class="sec-head reveal">
-      <div class="eyebrow"><i class="pip"></i>What we can prove</div>
-      <h2>No testimonials yet.<br>Here is the paperwork instead.</h2>
-      <p>Reviews will go here once real clients have left them. We would rather show you nothing than something we wrote ourselves.</p>
-    </div>
-    <div class="proofs">
-      <div class="proof reveal">
-        <div class="pl">Regulated</div>
-        <h3>Central Bank of Ireland</h3>
-        <p>Damian Condon T/A Gresham Wealth Management is authorised by the Central Bank. You can check the register yourself at registers.centralbank.ie.</p>
-      </div>
-      <div class="proof reveal" style="transition-delay:.06s">
-        <div class="pl">Qualified</div>
-        <h3>QFA</h3>
-        <p>Qualified Financial Adviser, the professional standard required to advise on pensions in Ireland.</p>
-      </div>
-      <div class="proof reveal" style="transition-delay:.12s">
-        <div class="pl">Experienced</div>
-        <h3>Thirty years</h3>
-        <p>Bank of Ireland, Ulster Bank, and two years with St George Private Bank in Sydney, before founding Gresham Wealth Management in 2012.</p>
-      </div>
-    </div>
-    </div>
-  </section>
+<section style="padding-top:0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This page is information, not advice.</b> Pension and tax rules depend on your circumstances and can change. Regulated financial advice is given in a personal consultation with Damian.</p>
+  </div>
+</div></section>
+
+<section class="expect"><div class="wrap">
+  <div class="sec-head ctr reveal">
+    <span class="kicker">What to expect</span>
+    <h2>A chat, not a sales pitch.</h2>
+  </div>
+  <div class="steps">
+    <div class="step reveal"><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
+    <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
+    <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
+  </div>
+</div></section>
 
 <section class="expect"><div class="wrap faq-grid">
   <div class="sec-head reveal" style="margin-bottom:0">
@@ -1695,7 +1753,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
       <summary>What will I actually walk away with?<span class="pm">+</span></summary>
       <p>A clear picture of what you already have, what it is likely to be worth at 66, and the one or two things worth doing about it. Written down, so you are not relying on memory a week later.</p>
     </details>
-    <details><summary>Is the first chat really free?<span class="pm">+</span></summary><p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so.</p></details>
+    <details><summary>Is the first chat really free?<span class="pm">+</span></summary><p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions.</p></details>
     <details><summary>What does it cost if I become a client?<span class="pm">+</span></summary><p>That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business.</p></details>
     <details><summary>Do I need to know anything before we talk?<span class="pm">+</span></summary><p>Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job.</p></details>
     <details><summary>Is my information kept private?<span class="pm">+</span></summary><p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p></details>
@@ -1719,7 +1777,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     </div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
     <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h4>Company</h4><a href="about.html">About Damian</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
+    <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
@@ -1868,7 +1926,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
    homepage FAQ). Vanilla JS, no external calls. ---- */
 (function(){
   if(document.getElementById('pbBuddyBtn'))return;
-  var SHARED=[{"q": "Is the first chat really free?", "a": "<p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so.</p>"}, {"q": "What does it cost if I become a client?", "a": "<p>That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business.</p>"}, {"q": "Do I need to know anything before we talk?", "a": "<p>Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job.</p>"}, {"q": "Is my information kept private?", "a": "<p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p>"}];
+  var SHARED=[{"q": "Is the first chat really free?", "a": "<p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions.</p>"}, {"q": "What does it cost if I become a client?", "a": "<p>That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business.</p>"}, {"q": "Do I need to know anything before we talk?", "a": "<p>Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job.</p>"}, {"q": "Is my information kept private?", "a": "<p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p>"}];
   var AV='data:image/jpeg;base64,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';
   var qs=[];
   document.querySelectorAll('.faq-list details').forEach(function(d){
