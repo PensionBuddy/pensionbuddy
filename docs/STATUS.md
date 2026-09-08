@@ -49,6 +49,25 @@ disclaimer and every "information, not advice" statement.
 **Verified:** 14 pages, 0 FAIL at 375 / 1360 / 1440. WARN only on the three
 NEEDS DAMIAN INPUT placeholders below.
 
+## Second follow-up, same day
+
+Two real bugs, both mine, both from the about-page merge.
+
+| Bug | Cause |
+|---|---|
+| A page-filling "i" icon above the footer | `index.html` never received the five `.infoadvice` component rules, including `.infoadvice .ii svg{width:18px;height:18px}`. My pre-merge check counted the string `.infoadvice` appearing in unrelated font-size and link-padding groups and wrongly concluded the component was styled. Ported from `starter.html`. |
+| The new headshot appeared not to have landed | It had. Image URLs carry no cache key, so browsers kept serving the old colour file under the same name. `tools/stamp-images.py` now appends `?v=<content hash>` to every local image reference, the same trick the calculators use for their JS modules. |
+
+Also: the logo paw was being overridden to `--aqua-ink` by a later rule and
+rendered near black. Now white on all 14 pages. WCAG 1.4.11 exempts logotypes,
+so the drop from 6.9:1 to 2.1:1 against the aqua is allowed.
+
+Cut: the trust strip under the hero (all four claims appear elsewhere on the
+page), Damian's second mission quote, and the story paragraph naming who does
+what, which the two profiles directly below already say.
+
+Home page is 1184px shorter.
+
 ## Follow-up, same day
 
 | Change | Note |

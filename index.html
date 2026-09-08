@@ -1300,7 +1300,7 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
    AA-safe tone. */
 h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .logo-mark{background:var(--aqua)}
-.logo-mark svg ellipse,.logo-mark svg path{fill:var(--aqua-ink) !important}
+.logo-mark svg ellipse,.logo-mark svg path{fill:#fff !important}
 .pb-b-btn .logo-mark{background:var(--aqua)}
 
 /* section eyebrows on light backgrounds pick up the brand colour too */
@@ -1403,6 +1403,12 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+.infoadvice{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 22px}
+.infoadvice .ii{width:34px;height:34px;border-radius:10px;background:#fff;color:var(--teal-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-sm)}
+.infoadvice .ii svg{width:18px;height:18px}
+.infoadvice p{font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.infoadvice b{color:var(--ink);font-weight:700}
+
 /* ---- off-duty photo strip ----
    Reuses the trust-badge marquee wholesale: .strip gives the clipping and the
    edge fades, .strip-in gives the pbMarquee track, the hover/focus pause and
@@ -1462,7 +1468,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <div class="hc-pill"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Free first chat</div>
     <div class="hc-top">
       <div class="hc-buddy">
-        <span class="hc-avatar"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></span>
+        <span class="hc-avatar"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></span>
         <div><div class="hc-name">Buddy</div><div class="hc-role">Chief Pension Dog</div></div>
       </div>
     </div>
@@ -1475,17 +1481,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <div class="hc-note">Illustration only · the value of investments can fall as well as rise</div>
   </div>
 </div></header>
-
-<div class="strip" role="group" aria-label="Why people choose Pensionbuddy"><div class="wrap strip-in">
-  <div class="strip-item"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Central Bank regulated</div>
-  <div class="strip-item"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>QFA qualified adviser</div>
-  <div class="strip-item"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Free 20-minute first call</div>
-  <div class="strip-item"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 years in financial services</div>
-<div class="strip-item is-clone" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Central Bank regulated</div>
-  <div class="strip-item is-clone" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>QFA qualified adviser</div>
-  <div class="strip-item is-clone" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Free 20-minute first call</div>
-  <div class="strip-item is-clone" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>30 years in financial services</div>
-</div></div>
 
 <section class="gapband">
   <div class="wrap">
@@ -1501,7 +1496,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
       </div>
       <div class="gs reveal" style="transition-delay:.06s">
         <div class="gs-n">&euro;25,296</div>
-        <div class="gs-l">The shortfall that leaves once the maximum State Pension is counted</div>
+        <div class="gs-l">The projected annual shortfall vs the Maximum State Pension</div>
         <div class="gs-s">Same survey, against a State Pension of &euro;15,564</div>
       </div>
       <div class="gs reveal" style="transition-delay:.12s">
@@ -1589,29 +1584,28 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <p>One idea: a pension should be something you understand, not something you avoid.</p>
     <p>Pensionbuddy started as a father-son conversation. Damian has spent 30 years advising people on pensions, and kept seeing the same thing: people either ignored their pension completely, or only thought about it the day auto-enrolment came into effect.</p>
     <p>Adam, freshly out of Trinity, saw the same gap from the other side. Nobody was explaining any of it in a fun and digestible way that actually made sense. So they built Pensionbuddy together.</p>
-    <p>Adam handles the social media and the site. Damian, authorised by the Central Bank of Ireland as a QFA, handles the real advice once you are ready to talk. The goal is simple: get you from &ldquo;I&rsquo;ve no idea what&rsquo;s happening with my pension&rdquo; to an actual conversation with someone qualified to help.</p>
+    <p>The goal is simple: get you from &ldquo;I&rsquo;ve no idea what&rsquo;s happening with my pension&rdquo; to an actual conversation with someone qualified to help.</p>
   </div>
 </div></section>
 
 <section id="damian" style="padding-top:56px"><div class="wrap about-grid">
   <div class="about-port reveal">
-    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp"><img src="assets/img/damian-condon-portrait.jpg" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management"></picture>
+    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=cb50b8e2"><img src="assets/img/damian-condon-portrait.jpg?v=dbe5acaf" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management"></picture>
     <span class="badge">B.A., Q.F.A.</span>
   </div>
   <div class="about reveal" style="transition-delay:.1s">
     <span class="kicker">Founder and CEO, QFA</span>
     <h2>Damian Condon</h2>
-    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can best serve real people. Clarity is.</p>
+    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can best serve real people. Clarity is the whole point.</p>
     <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and have led it ever since, and I am the Qualified Financial Adviser behind Pensionbuddy.</p>
     <p class="bio">Thirty years of that work leaves you with one firm opinion: hardly anyone is bad with money. They have just never had it explained to them in words they felt allowed to ask questions about.</p>
-    <p class="bio">&ldquo;The goal here is simple: make your pension make sense, then help you make the most of it.&rdquo;</p>
-    <span class="sig">Damian</span>
+        <span class="sig">Damian</span>
   </div>
 </div></section>
 
 <section id="adam" style="padding-top:8px"><div class="wrap about-grid">
   <div class="about-port reveal">
-    <picture><source type="image/webp" srcset="assets/img/adam-condon-portrait.webp"><img src="assets/img/adam-condon-portrait.jpg" width="620" height="775" alt="Adam Condon, co-founder of Pensionbuddy" loading="lazy"></picture>
+    <picture><source type="image/webp" srcset="assets/img/adam-condon-portrait.webp?v=30ef47b6"><img src="assets/img/adam-condon-portrait.jpg?v=65e419e4" width="620" height="775" alt="Adam Condon, co-founder of Pensionbuddy" loading="lazy"></picture>
   </div>
   <div class="about reveal" style="transition-delay:.1s">
     <span class="kicker">Co-founder and CMO</span>
@@ -1625,49 +1619,49 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 
 <section id="buddy" style="padding-top:8px"><div class="wrap about-grid">
   <div class="about-port reveal">
-    <img src="assets/img/buddy-beach.jpg" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
+    <img src="assets/img/buddy-beach.jpg?v=4aed90ed" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
   </div>
   <div class="about reveal" style="transition-delay:.1s">
     <span class="kicker">Chief Napping Officer</span>
     <h2>Buddy</h2>
-    <p class="bio">Buddy is a boxer, and the reason this is called Pensionbuddy rather than something with the word wealth in it. He is the mascot, and the paw print in the logo is his.</p>
-    <p class="bio">He is also the point, in a way. A pension should feel like something with someone in your corner. Buddy supervises calls, sleeps through most of them, and is not regulated by the Central Bank of Ireland.</p>
+    <p class="bio">Buddy is a beloved boxer, and the namesake of Pensionbuddy. He is the mascot, and the paw print in the logo is his.</p>
+    <p class="bio">He is also the point, in a way. A pension should feel like something with someone in your corner, and Buddy is the loyal embodiment of that.</p>
   </div>
 </div></section>
 
 <section class="snaps"><div class="wrap">
   <div class="sec-head reveal">
     <span class="kicker">Off duty</span>
-    <h2>Out Of Office</h2>
-    <p>From &lsquo;Champagne Supernova&rsquo; to &lsquo;All Roads Lead To Prague&rsquo;. We&rsquo;re ready for the next adventure.</p>
+    <h2>Out of office.</h2>
+    <p>From &lsquo;Champagne Supernova&rsquo; to &lsquo;All Roads Lead To Prague&rsquo;. We&rsquo;re ready for this next adventure.</p>
   </div>
 </div>
   <div class="strip pstrip" role="group" aria-label="Photographs of the Pensionbuddy team off duty">
     <div class="strip-in pstrip-in">
-    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:1.6deg;--ph:206px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="Adam sitting with Buddy in the park on a sunny afternoon" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-3.4deg;--ph:184px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="Buddy wearing a cycling helmet in front of an armchair" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-1.4deg;--ph:176px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="Buddy tilting his head at the camera indoors" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-2.8deg;--ph:188px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="Buddy stretched out on the sofa refusing to move" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp"><img src="assets/img/strip-cycling-pink-kit.jpg" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp"><img src="assets/img/strip-cycling-blue-kit.jpg" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp"><img src="assets/img/strip-gig-bucket-hats.jpg" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp"><img src="assets/img/strip-train-platform.jpg" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp"><img src="assets/img/strip-adam-rocky-park.jpg" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:1.6deg;--ph:206px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp"><img src="assets/img/strip-adam-rocky-sitting.jpg" width="155" height="206" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-3.4deg;--ph:184px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp"><img src="assets/img/strip-rocky-helmet.jpg" width="104" height="184" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp"><img src="assets/img/strip-rocky-grinning.jpg" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-1.4deg;--ph:176px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp"><img src="assets/img/strip-rocky-head-tilt.jpg" width="150" height="176" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp"><img src="assets/img/strip-rocky-blanket.jpg" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-2.8deg;--ph:188px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp"><img src="assets/img/strip-rocky-sofa.jpg" width="163" height="188" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp"><img src="assets/img/strip-rocky-closeup.jpg" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:1.6deg;--ph:206px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp?v=791eea08"><img src="assets/img/strip-adam-rocky-sitting.jpg?v=55ae44d5" width="155" height="206" alt="Adam sitting with Buddy in the park on a sunny afternoon" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-3.4deg;--ph:184px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp?v=c28a833d"><img src="assets/img/strip-rocky-helmet.jpg?v=2e9cc252" width="104" height="184" alt="Buddy wearing a cycling helmet in front of an armchair" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-1.4deg;--ph:176px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp?v=6a28bd40"><img src="assets/img/strip-rocky-head-tilt.jpg?v=0ff02e14" width="150" height="176" alt="Buddy tilting his head at the camera indoors" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-2.8deg;--ph:188px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp?v=573208c0"><img src="assets/img/strip-rocky-sofa.jpg?v=b55dd56b" width="163" height="188" alt="Buddy stretched out on the sofa refusing to move" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:1.6deg;--ph:206px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-sitting.webp?v=791eea08"><img src="assets/img/strip-adam-rocky-sitting.jpg?v=55ae44d5" width="155" height="206" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-3.4deg;--ph:184px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-helmet.webp?v=c28a833d"><img src="assets/img/strip-rocky-helmet.jpg?v=2e9cc252" width="104" height="184" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-1.4deg;--ph:176px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-head-tilt.webp?v=6a28bd40"><img src="assets/img/strip-rocky-head-tilt.jpg?v=0ff02e14" width="150" height="176" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-2.8deg;--ph:188px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-sofa.webp?v=573208c0"><img src="assets/img/strip-rocky-sofa.jpg?v=b55dd56b" width="163" height="188" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
     </div>
   </div>
 </section>
