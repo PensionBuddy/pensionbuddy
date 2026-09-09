@@ -27,45 +27,69 @@ from the other.
 
 ---
 
-## S1. Sources, and what must be reconfirmed before launch
+## S1. Sources, verified 2026-09-09
 
-| Figure | Value used | Source to check against | Status |
+Checked against primary sources, not secondary summaries. gov.ie and
+citizensinformation.ie both return 403 to an automated fetch, so those two were
+read through search extracts of the primary pages; the Pensions Council PDF was
+downloaded and its text extracted directly.
+
+| Figure | Brief said | Verified | Result |
 |---|---|---|---|
-| State Pension (Contributory) maximum personal rate | **€299.30 a week** | gov.ie Budget 2026, or Citizens Information "State Pension (Contributory)" | **Confirm.** Supplied in the brief as a 2026 rate. Not independently verified. |
-| Contributions for the maximum rate | **2,080** (40 years x 52) | Citizens Information, Total Contributions Approach | **Confirm.** Internally consistent: 40 x 52 = 2,080. |
-| Minimum to qualify at all | **520** (10 years x 52) | Citizens Information | **Confirm.** Internally consistent: 10 x 52 = 520. |
-| Retirement Living Standards, single person | **€19,200 / €27,600 / €33,600** | Pensions Council, research by KPMG | **Confirm, and check for a newer edition.** Brief says the current published edition is 2024 data. |
-| Weeks used to annualise | **52** | n/a, a choice | **Decide.** See below. |
+| Maximum weekly personal rate, 2026 | €299.30 | €299.30 from 1 January 2026, up €10 from €289.30 | **Confirmed** |
+| Contributions for the maximum | 2,080 (40 years) | 2,080 | **Confirmed** |
+| Minimum to qualify | 520 (10 years) | 520 | **Confirmed, with a correction.** See "reckonable" below |
+| Rate below the maximum | proportional | "a pro rata rate depending on the number of contributions ... where those contributions are less than 2080" | **Confirmed** |
+| Retirement Living Standards, single | €19,200 / €27,600 / €33,600 | Same three figures, read out of the Pensions Council PDF itself | **Confirmed** |
+| Edition | 2024, check for a newer one | Irish Retirement Living Standards, Pensions Council, **September 2024**, published December 2024. No 2025 or 2026 edition exists | **Confirmed, still current** |
+| Annualising at 52 weeks | €15,563.60 | Independent sources cite the 2026 rate as "around €15,564 a year" | **Confirmed.** Uses 52, as instructed |
 
-### Annualising
+### Correction 1: contributions are "reckonable", not "paid"
 
-The State Pension is paid weekly. This spec multiplies the weekly rate by
-**52**, not 52.18, because:
+The brief says 2,080 **paid** contributions. The Total Contributions Approach
+counts **reckonable** contributions: paid contributions **plus** credited
+contributions **plus** HomeCaring Periods. Credits are themselves capped at 520.
 
-- `€299.30 x 52 = €15,563.60`, which rounds to **€15,564**
-- the home page already cites **€15,564** for the State Pension in its gap
-  statistics, so 52 keeps the two pages consistent
+This matters for who the tool speaks to. Someone with 10 years paid and 15
+years of HomeCaring Periods has 25 years reckonable, not 10. The input label
+must say "PRSI contributions, including credits and HomeCaring Periods", not
+"paid contributions", or the tool tells carers they have no entitlement when
+they may have a substantial one.
 
-If Damian prefers 52.18, both pages change together. Flagging rather than
-deciding quietly, because the two figures differ by about €54 a year and this
-page is built on subtraction.
+### Correction 2: the transition is a best-of, not a blend
 
-### What the tool does not model
+The brief describes "a blended Yearly Average and TCA method". The actual rule
+during the 2025 to 2034 transition is:
 
-The real Department of Social Protection calculation is more complicated than
-the proportional method below. During the current transition period the
-Department works out an entitlement under **both** the Yearly Average method
-and the Total Contributions Approach and pays whichever is better, and TCA
-itself can include **HomeCaring Periods** and **credited contributions** on
-top of paid ones.
+- **Method 1:** pure TCA. If it produces the full rate, that is the award and
+  nothing further is calculated.
+- **Method 2:** a combined rate, a proportion of TCA plus a proportion of
+  Yearly Average. In 2026 that proportion is **80% Yearly Average, 20% TCA**,
+  with the Yearly Average share falling 10 points a year until it reaches zero
+  in 2034.
+- **The higher of Method 1 and Method 2 is awarded.**
 
-This tool uses the **simplified proportional TCA approximation only**. That
-sentence must appear on the page in plain English, not only in a code comment.
-See S6.
+**What this means for this tool, and it matters:**
 
-Below 520 paid contributions there is no Contributory entitlement. A
-**Non-Contributory** State Pension is means tested and may apply instead. That
-is out of scope here and the page says so rather than guessing at a figure.
+This tool computes Method 1 only. Since the award is the higher of the two
+methods, the real payment is always **greater than or equal to** what this tool
+reports. So:
+
+- At the default 2,080 contributions, Method 1 gives the full rate, so the
+  headline figure is **exact**.
+- Below 2,080, the tool reports a **floor**. The real payment may be higher,
+  which means **the gap this tool shows may be larger than the real one**.
+
+That is the direction that flatters the page's own argument, so it has to be
+stated plainly on the page rather than left in a code comment. See S6.
+
+### Also found, not currently modelled
+
+- The personal rate rises to **€309.30 from age 80**. Out of scope for a tool
+  about age 66, but worth a line if Damian wants it.
+- Below 520 reckonable contributions there is no Contributory entitlement. A
+  **Non-Contributory** State Pension is means tested and may apply instead.
+  Out of scope, and the page says so rather than guessing a figure.
 
 ---
 
@@ -117,20 +141,39 @@ positive infinity.
 
 ## S3. Retirement Living Standards
 
-Single person, and these figures **assume the person owns their home
-outright**.
+Single person. **The brief's housing caveat is wrong and must not go on the
+page as written.**
 
-| Standard | Annual | Description used on the page |
+The brief says the figures "assume outright home ownership". The report says
+the opposite: housing costs are **included** in every one of these figures.
+Read out of the PDF verbatim, under "What the standards mean":
+
+| Standard | Annual, single | Housing, from the report |
 |---|---|---|
-| Modest | **€19,200** | The basics, no frills |
-| Moderate | **€27,600** | Some comfort, occasional treats |
-| Comfortable | **€33,600** | More freedom, travel, running a car |
+| Modest | **€19,200** | "typically a home-owner, but may be renting (most commonly from a local authority)". **38%** of a single person's monthly costs |
+| Moderate | **€27,600** | "almost always a home-owner, with some money spent on home decorating". **33%** |
+| Comfortable | **€33,600** | "almost always a home-owner, can afford to spend more on home decorating and the occasional use of a cleaner". **29%** |
 
-The home ownership assumption is not a footnote. Anyone renting or still
-paying a mortgage in retirement needs **more** than these figures, not less,
-so the gaps shown are the **best** case. This must be stated in the body copy
-next to the comparison, not buried in the disclaimer. It makes the page more
-honest, and it happens to make the point stronger.
+The only "mortgage and rent free" statement anywhere in the document is
+footnote [b] on a chart comparing Ireland to the **UK** PLSA standards, and it
+describes the UK methodology. Attributing it to the Irish figures on a
+regulated adviser's site would be misattribution.
+
+### The honest caveat, which still points the same way
+
+The figures include housing, but they describe a population that mostly owns
+its home, so the housing element reflects low or no mortgage costs and, at the
+modest end, local authority rent. Someone facing private rent or an unfinished
+mortgage in retirement should expect to need more.
+
+Wording for the page:
+
+> These figures include housing costs, but they describe people who mostly own
+> their home. At the modest standard, housing is 38% of a single person's
+> monthly spending. If you expect to be paying private rent or still paying a
+> mortgage, plan for more than these figures, not less.
+
+That belongs next to the comparison, not in the disclaimer.
 
 ### gapTo(annualPension, standard)
 
@@ -155,7 +198,7 @@ At the maximum rate, the arithmetic is:
 
 | Input | Control | Range | Default | What it drives |
 |---|---|---|---|---|
-| Total PRSI contributions expected by 66 | slider | 0 to 2,080, step 52 (one year) | **2,080** | The whole calculation. Defaults to the maximum so the headline case is the best case. |
+| Reckonable PRSI contributions expected by 66, including credits and HomeCaring Periods | slider | 0 to 2,080, step 52 (one year) | **2,080** | The whole calculation. Defaults to the maximum so the headline case is the best case. |
 | Age now | slider | 18 to 66 | 40 | **Nothing in the pension figure.** See below. |
 
 ### What age is for
@@ -223,14 +266,17 @@ the three standards, with the gap shaded. No new dependency.
 Not only in code comments:
 
 1. **The simplified method.** "The Department of Social Protection works your
-   pension out in a more detailed way than this, including a Yearly Average
-   calculation during the current transition period and credits for time spent
-   caring. This tool uses a simplified proportional method for illustration."
-2. **The home ownership assumption** on the living standards, next to the
-   comparison.
-3. **Sources, named and linked**: the Pensions Council for the living
+   pension out in a more detailed way than this. Until 2034 it calculates your
+   rate two ways, a Total Contributions Approach and a blend of that with the
+   older Yearly Average method, and pays whichever is higher. This tool uses
+   the Total Contributions Approach on its own."
+2. **That partial figures are a floor.** "Because the Department pays whichever
+   method gives more, anyone with less than a full 40 years may be paid more
+   than this tool shows, and the gap may be smaller."
+3. **The housing wording** from S3, next to the comparison.
+4. **Sources, named and linked**: the Pensions Council for the living
    standards, Citizens Information for the State Pension rules and rate.
-4. **The date the figures were checked**, so the page ages visibly rather than
+5. **The date the figures were checked**, so the page ages visibly rather than
    silently.
 
 ---
@@ -305,10 +351,13 @@ Every assertion is exact to the cent. No tolerances.
 
 ## S10. Open, and blocking
 
-1. **The investing explainer copy has not been supplied.** Step 4 of the brief
-   says "using the copy I've given", but no copy came with it. Section 4 of the
-   build cannot start without it. Everything else can.
-2. **Age**: keep it for the years-to-66 line, or drop it. See S4.
-3. **52 or 52.18 weeks.** See S1.
-4. **All five figures in S1 need confirming** against gov.ie, Citizens
-   Information and the Pensions Council before launch.
+1. **Still blocking: the investing explainer copy has not been supplied.** Step
+   4 of the brief says "using the copy I've given". Nothing came with the
+   original brief, and the follow-up said "Explainer copy is above" but again
+   carried none. Section 4 of the build cannot start until it arrives.
+   Everything else can.
+2. Settled: **age** is display only, one "You have X years until 66" line,
+   never feeding a projection.
+3. Settled: **52 weeks**, for consistency with the €15,564 on the home page.
+4. Settled: **all five S1 figures verified**, with the two corrections above.
+5. Optional: the **€309.30 rate from age 80**, currently not modelled.
