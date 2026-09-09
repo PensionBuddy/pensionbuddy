@@ -49,6 +49,27 @@ disclaimer and every "information, not advice" statement.
 **Verified:** 14 pages, 0 FAIL at 375 / 1360 / 1440. WARN only on the three
 NEEDS DAMIAN INPUT placeholders below.
 
+## Photo strip trimmed, illustration outstanding
+
+Removed from the off-duty strip on the home page, files and pipeline entries
+with them: `strip-adam-rocky-sitting`, `strip-rocky-helmet`, `strip-rocky-sofa`.
+Nine photos remain, real figures and marquee clones still in balance.
+
+**Outstanding:** a new illustration, "Buddy and Damian on the hill", to take the
+slot the park photo held. Not produced. Two reasons:
+
+1. No image generation is available in this session. The Adobe connector needs
+   authorising and the session is non-interactive.
+2. There is no illustration set to match. Every image asset in this repo, and
+   every one in its history, is a photograph. The only vector art is 24x24 flat
+   UI icons and a favicon letterform. The brief's palette maps onto real tokens
+   for deep pine (`--teal-900`), jewel teal (`--teal` / `--aqua`), ochre
+   (`--amber`) and warm near-black (`--ink`), but terracotta has no equivalent,
+   and no paper-grain texture exists anywhere in the codebase.
+
+If the brand illustrations live outside this repo, they need to come in before
+a new one can be matched to them.
+
 ## Second follow-up, same day
 
 Two real bugs, both mine, both from the about-page merge.
