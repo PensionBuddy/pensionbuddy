@@ -289,6 +289,13 @@ three-digit countdown, which is the normal state for about nine months of the
 year) after fitting a seventh item. An eighth would overflow the 1140px column
 and reintroduce issue C6. Instead:
 
+> **Corrected 2026-09-09.** That 16px measurement no longer reproduces. Measured
+> again with a three-digit countdown, the seven nav items use 676px of a 1140px
+> row, and an eighth fits at 1440, 1360 and 1200px with no overflow. See
+> `docs/CALC-SPEC-STATE-PENSION.md` §S8. The placements below are still correct
+> for this page, but the headroom argument behind them is not.
+
+
 - the footer **Tools** column, on all 15 pages, which is the site's de facto
   calculators index, alongside the pension and director calculators
 - an in-body CTA on `starter.html`, mirroring how `director.html` promotes
