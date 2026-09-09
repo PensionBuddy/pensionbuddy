@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Run tests/compare-calc.test.js. Node is not installed on this machine, so the
-same file is executed in the local headless Chrome instead, on a throwaway
-page that loads the two modules and the test.
+Run a JavaScript acceptance suite. Node is not installed on this machine, so
+the same file is executed in the local headless Chrome instead, on a throwaway
+page that loads the suite's modules and the test.
 
-    python3 tests/run-tests.py           # the acceptance tests
-    python3 tests/run-tests.py --drift   # also cross-check the shared relief
-                                         # module against the real
-                                         # pension-calculator.html page
+    python3 tests/run-tests.py                    # every suite
+    python3 tests/run-tests.py compare            # broker vs auto-enrolment
+    python3 tests/run-tests.py state-pension      # State Pension reality check
+    python3 tests/run-tests.py --drift            # also cross-check the shared
+                                                  # relief module against the
+                                                  # real pension-calculator page
 
 The drift check is the reason the shared module cannot silently diverge from
 pension-calculator.html, which the brief said not to modify.
@@ -17,22 +19,37 @@ import argparse, html, http.server, os, re, socket, subprocess, sys, threading, 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 
+# name -> (module scripts, test file, globals to report as loaded)
+SUITES = {
+    'compare': (['/assets/js/pension-tax-relief.js', '/assets/js/autoenrolment.js'],
+                '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare']),
+    'state-pension': (['/assets/js/state-pension.js'],
+                      '/tests/state-pension.test.js', ['PBStatePension']),
+}
+
 HARNESS = """<!doctype html><meta charset="utf-8"><title>tests</title><body>
 <script>window.__ERRS__=[];window.addEventListener('error',function(e){
   window.__ERRS__.push((e.message||e.type)+' @'+(e.filename||'').split('/').pop()+':'+e.lineno);},true);</script>
-<script src="/assets/js/pension-tax-relief.js"></script>
-<script src="/assets/js/autoenrolment.js"></script>
-<script src="/tests/compare-calc.test.js"></script>
+%(scripts)s
+<script src="%(test)s"></script>
 <script>
   var pre = document.createElement('pre');
   pre.id = '__out__';
-  var diag = '\\nloaded: PBRelief=' + (typeof window.PBRelief) +
-             ' PBCompare=' + (typeof window.PBCompare) +
+  var diag = '\\nloaded: ' + (%(diag)s) +
              '\\nerrors: ' + JSON.stringify(window.__ERRS__);
   pre.textContent = (window.__TEST_FAILED__ === 0 ? 'OK\\n' : 'FAILED\\n') +
                     (window.__TEST_REPORT__ || '(no report)') + diag;
   document.body.appendChild(pre);
 </script></body>"""
+
+
+def harness_for(name):
+    mods, test, globs = SUITES[name]
+    return HARNESS % {
+        'scripts': '\n'.join('<script src="%s"></script>' % m for m in mods),
+        'test': test,
+        'diag': " + ', ' + ".join("'%s=' + (typeof window.%s)" % (g, g) for g in globs),
+    }
 
 # Same relief inputs, asked of the real calculator page and of the module.
 DRIFT_CASES = [(35, 50000, 1000, 40), (29, 40000, 900, 20),
@@ -45,7 +62,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path.startswith('/__harness'):
-            b = HARNESS.encode()
+            name = self.path.split('/')[-1]
+            b = harness_for(name if name in SUITES else 'compare').encode()
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.send_header('Content-Length', str(len(b)))
@@ -70,8 +88,9 @@ def dump(url, budget=8000):
     return p.stdout.decode('utf-8', 'replace')
 
 
-def run_acceptance(port):
-    dom = dump('http://127.0.0.1:%d/__harness' % port)
+def run_acceptance(port, name):
+    print('\n%s  %s' % ('SUITE'.ljust(6), name))
+    dom = dump('http://127.0.0.1:%d/__harness/%s' % (port, name))
     m = re.search(r'<pre id="__out__">(.*?)</pre>', dom, re.S)
     if not m:
         print('could not read the test output from the page'); return 1
@@ -142,17 +161,22 @@ def run_drift(port):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('suite', nargs='?', choices=sorted(SUITES) + ['all'], default='all')
     ap.add_argument('--drift', action='store_true')
     args = ap.parse_args()
     if not os.path.exists(CHROME):
         sys.exit('Chrome not found at %s' % CHROME)
+    names = sorted(SUITES) if args.suite == 'all' else [args.suite]
     srv, port = serve()
+    rc = 0
     try:
-        rc = run_acceptance(port)
+        for n in names:
+            rc |= run_acceptance(port, n)
         if args.drift:
             rc |= run_drift(port)
     finally:
         srv.shutdown()
+    print('\n%s' % ('ALL SUITES PASS' if rc == 0 else 'FAILURES ABOVE'))
     sys.exit(rc)
 
 
