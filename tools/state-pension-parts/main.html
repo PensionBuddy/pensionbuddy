@@ -1,0 +1,119 @@
+<main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · one slider, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">If the State Pension is <span class="hl">all you have</span>.</h1>
+  <p class="reveal" style="transition-delay:.12s">The most the State Pension pays is €299.30 a week. This puts that next to what retirement in Ireland actually costs, using the Pensions Council's own research. It starts at the best case, a full forty years of contributions, and you can move it from there.</p>
+</div></div>
+
+<div class="wrap"><div class="calc-wrap">
+  <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+
+    <div class="field">
+      <div class="row"><label for="contribs">Reckonable PRSI contributions by 66</label><span class="val" id="contribsV">2,080</span></div>
+      <input type="range" id="contribs" min="0" max="2080" step="52" value="2080">
+      <p class="subnote"><b>Reckonable</b> means all three kinds added together: contributions you <b>paid</b>, contributions you were <b>credited</b> while unemployed or ill, and <b>HomeCaring Periods</b> for time spent looking after a child or someone who needed care. 2,080 is a full forty years. You can check your own record at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+    </div>
+
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
+      <input type="range" id="age" min="18" max="66" value="40">
+      <p class="subnote" id="ageNote">Used for one line only. It does not change the pension figure, and this page does not project investment growth.</p>
+    </div>
+  </div>
+
+  <div class="results">
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+
+    <div id="spHas">
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€299.30</div></div>
+        <div><div class="rl">State Pension, a year</div><div class="big" id="spAnnual">€15,564</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">One thing this does not show</div>
+        <div class="wtext" id="spFloor">This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.</div>
+      </div>
+    </div>
+
+    <div id="spNone" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spNoneFoot">Below 520 reckonable contributions, ten years, there is no State Pension (Contributory) at all.</div>
+      </div>
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">What may apply instead</div>
+        <div class="wtext">A State Pension (Non-Contributory) is means tested and may be payable instead. It works on a different basis and this tool does not calculate it. It is worth asking about.</div>
+        <a class="wlink" href="booking.html">Talk it through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+
+    <div class="vs-card reveal" style="transition-delay:.14s">
+      <h3>Against what retirement costs</h3>
+      <p class="sub">Three standards of living for a single person, from the Pensions Council's research. <span id="lsIntro">The bar shows how much of each one the State Pension covers.</span></p>
+
+      <div class="lstd" id="lsRows">
+        <div class="lsrow" data-std="modest">
+          <div class="lshead"><span class="lsname">Modest</span><span class="lstarget">€19,200 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
+        </div>
+        <div class="lsrow" data-std="moderate">
+          <div class="lshead"><span class="lsname">Moderate</span><span class="lstarget">€27,600 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
+        </div>
+        <div class="lsrow" data-std="comfortable">
+          <div class="lshead"><span class="lsname">Comfortable</span><span class="lstarget">€33,600 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
+        </div>
+      </div>
+
+      <p class="srcnote">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. Pension rate and rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a> and <a href="https://www.gov.ie/en/department-of-social-protection/services/state-pension-contributory/" rel="noopener">gov.ie</a>. Figures checked 9 September 2026.</p>
+    </div>
+  </div>
+</div></div>
+
+<section class="assume" style="padding-bottom:0"><div class="wrap">
+  <h3>How your State Pension is actually worked out</h3>
+  <div class="expl reveal">
+    <p>Since the switch to the Total Contributions Approach (TCA), your rate depends on how many reckonable contributions you have built up. Reckonable does not just mean paid. It includes contributions you were credited, for example while unemployed or ill, and HomeCaring Periods, time spent looking after a child or someone who needed care. If you have ever taken time out to care for someone, that time may still count toward your pension even though nothing came out of a payslip during it.</p>
+    <p>The shape of it: 2,080 reckonable contributions gets the full rate, €299.30 a week from January 2026. Below 520, there is no State Pension (Contributory) at all. Between the two, it is a pro rata share.</p>
+    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final.</p>
+  </div>
+</div></section>
+
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="ctext"><h2>What closes the difference is a second pension.</h2><p>The State Pension is a floor, not a plan. What sits on top of it, and how much of it you need, depends on when you start and what you want retirement to look like. Damian will work through your own numbers in a free 20-minute chat.</p></div>
+  <a class="btn btn-primary" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This page is information, not advice.</b> It compares two sets of published figures for illustration. It is not a personal recommendation, not a forecast of your own pension, and not a statement of what you will be paid. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own.</li>
+    <li>That means a figure below the maximum is a <b>floor</b>. Anyone without a full forty years may be paid more than this tool shows, and the difference against a living standard may be smaller. At a full 2,080 contributions the figure is exact.</li>
+    <li>Reckonable contributions are paid contributions, plus credited contributions, plus HomeCaring Periods. Credited contributions are themselves capped at 520. This tool takes the total you enter at face value and does not check how it is made up.</li>
+    <li>The maximum personal rate is €299.30 a week from January 2026. Rates change, usually at each Budget. The annual figure is 52 weekly payments.</li>
+    <li>Below 520 reckonable contributions there is no State Pension (Contributory). A means-tested State Pension (Non-Contributory) may apply instead, on a different basis, and this tool does not calculate it.</li>
+    <li>The rate shown is the personal rate at 66. It does not include an increase for a qualified adult or child, and it does not include the higher rate that applies from age 80.</li>
+    <li>The living standards are for a <b>single person</b>. Couple figures are higher in total and lower per person, and are not shown here.</li>
+    <li>The living standards describe annual spending in 2024 prices and have not been adjusted for inflation since. Both sides of this comparison move over time, and they do not move together.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+  </ul>
+</div></section>
+</main>

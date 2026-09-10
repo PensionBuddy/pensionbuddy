@@ -108,8 +108,12 @@ def main():
         head = head[:m.start(2)] + 'family=Bricolage+Grotesque:opsz,wght@12..96,600..800&' + head[m.start(2):]
 
     # mark this page as the active nav item instead of the pension calculator
-    head = head.replace('<a class="lnk active" aria-current="page" href="pension-calculator.html">',
-                        '<a class="lnk" href="pension-calculator.html">')
+    # The skeleton's active Calculator link carries aria-current AFTER href, so an
+    # exact-string replace never fired and the built page shipped with Calculator
+    # highlighted as the current page. Match on the attributes, not their order.
+    head, n = re.subn(r'<a class="lnk active"(?=[^>]*href="pension-calculator\.html")[^>]*>Calculator</a>',
+                      '<a class="lnk" href="pension-calculator.html">Calculator</a>', head, count=1)
+    assert n == 1, 'could not un-activate the Calculator nav item'
 
     # --- tail: swap the page-specific calc script for ours -----------------
     m = re.search(r'<script>\s*const REDUCE=', tail)
@@ -144,7 +148,7 @@ def main():
                          ('autoenrolment.js', 'shared AE module'),
                          ('vs-card', 'comparison component')]:
         print('  %-22s %s' % (label, 'ok' if check in out else 'MISSING'))
-    if '—' in out or '&mdash;' in out:
+    if '\u2014' in out or '&mdash;' in out:
         print('  WARNING: em dash present in output')
 
 

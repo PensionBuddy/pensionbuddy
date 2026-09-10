@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pension Calculator, Pensionbuddy</title>
-<meta name="description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<title>The State Pension reality check, Pensionbuddy</title>
+<meta name="description" content="What the State Pension actually pays, next to what retirement in Ireland costs according to the Pensions Council. An illustration, not advice.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
-<meta property="og:title" content="Pension Calculator, Pensionbuddy">
-<meta property="og:description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<meta property="og:title" content="The State Pension reality check, Pensionbuddy">
+<meta property="og:description" content="What the State Pension actually pays, next to what retirement in Ireland costs according to the Pensions Council. An illustration, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -1463,6 +1463,30 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+
+/* ---- living standards comparison, this page only ---- */
+.lstd{display:flex;flex-direction:column;gap:20px;margin-top:6px}
+.lsrow .lshead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:8px}
+.lsrow .lsname{font-weight:700;font-size:15px;letter-spacing:-0.01em}
+.lsrow .lstarget{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lsbar{height:13px;border-radius:99px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line)}
+.lsbar i{display:block;height:100%;background:var(--teal);border-radius:99px;
+  transition:width .45s cubic-bezier(.22,.61,.36,1)}
+.lsrow.is-covered .lsbar i{background:var(--aqua)}
+.lsrow .lsgap{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin-top:9px}
+.lsrow .lsgap b{color:var(--ink);font-variant-numeric:tabular-nums}
+.srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:22px;
+  padding-top:16px;border-top:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){.lsbar i{transition:none}}
+/* the two result states are wrappers inside the results column, so they carry
+   the column's own vertical rhythm or the cards inside them touch */
+#spHas,#spNone{display:flex;flex-direction:column;gap:18px}
+#spHas[hidden],#spNone[hidden]{display:none}
+/* the explainer reads as prose, not as an assumptions list */
+.assume .expl{max-width:70ch}
+.assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
+.assume .expl p:last-child{margin-bottom:0}
+.assume .expl b{color:var(--ink);font-weight:600}
 </style>
 
 <script>
@@ -1494,8 +1518,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
     <a class="lnk" href="director.html">Directors</a>
-    <a class="lnk active" href="pension-calculator.html" aria-current="page">Calculator</a>
-    <a class="lnk" href="state-pension-reality-check.html">State pension</a>
+    <a class="lnk" href="pension-calculator.html">Calculator</a>
+    <a class="lnk active" aria-current="page" href="state-pension-reality-check.html">State pension</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
     <a class="lnk" href="index.html#story">About</a>
     <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -1503,109 +1527,124 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">What will your pension <span class="hl">actually</span> pay you?</h1>
-  <p class="reveal" style="transition-delay:.12s">Move the sliders and watch your projection build, including how much Revenue adds back. Rough numbers are fine.</p>
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · one slider, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">If the State Pension is <span class="hl">all you have</span>.</h1>
+  <p class="reveal" style="transition-delay:.12s">The most the State Pension pays is €299.30 a week. This puts that next to what retirement in Ireland actually costs, using the Pensions Council's own research. It starts at the best case, a full forty years of contributions, and you can move it from there.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
-    </div>
-    <div class="panel reveal">
+  <div class="panel reveal">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
-    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
-    <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
-    <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
-    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
+
+    <div class="field">
+      <div class="row"><label for="contribs">Reckonable PRSI contributions by 66</label><span class="val" id="contribsV">2,080</span></div>
+      <input type="range" id="contribs" min="0" max="2080" step="52" value="2080">
+      <p class="subnote"><b>Reckonable</b> means all three kinds added together: contributions you <b>paid</b>, contributions you were <b>credited</b> while unemployed or ill, and <b>HomeCaring Periods</b> for time spent looking after a child or someone who needed care. 2,080 is a full forty years. You can check your own record at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+    </div>
+
     <div class="field" style="margin-bottom:0">
-      <div class="row"><label>Your income tax rate</label></div>
-      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
-      <p class="subnote">Used to show the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
+      <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
+      <input type="range" id="age" min="18" max="66" value="40">
+      <p class="subnote" id="ageNote">Used for one line only. It does not change the pension figure, and this page does not project investment growth.</p>
     </div>
   </div>
 
   <div class="results">
-    <div class="res-hero reveal" style="transition-delay:.08s">
-      <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
-      <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
-      <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-      <div class="divline"></div>
-      <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
-    </div>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
-    <div class="waitcard reveal" style="transition-delay:.11s">
-      <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
-      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <div class="chart-card reveal" style="transition-delay:.14s">
-      <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span></div>
-      <div id="chart"></div>
-    </div>
-    <div class="relief-card reveal" style="transition-delay:.2s">
-      <div class="rt">What Revenue adds</div>
-      <div class="rbig" id="reliefOut">Move the sliders to see your tax relief.</div>
-      <div class="relief-viz" id="reliefViz">
-        <div class="rv-bar"><div class="rv-you" id="rvYou" style="width:60%"></div><div class="rv-tax" id="rvTax" style="width:40%"></div></div>
-        <div class="rv-keys"><span><i class="rv-d you"></i>You really pay <b id="rvYouV">€0/mo</b></span><span><i class="rv-d tax"></i>Revenue adds <b id="rvTaxV">€0/mo</b></span></div>
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+
+    <div id="spHas">
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€299.30</div></div>
+        <div><div class="rl">State Pension, a year</div><div class="big" id="spAnnual">€15,564</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions.</div>
+      </div>
+
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">One thing this does not show</div>
+        <div class="wtext" id="spFloor">This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.</div>
       </div>
     </div>
-    <div class="boost-card reveal" style="transition-delay:.26s">
-      <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
-      <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
-    </div>
-    <div class="email-cap reveal" style="transition-delay:.3s">
-      <div class="ec-top">
-        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
-        <div class="ect"><b>Want these figures emailed to you?</b><span>And what they'd look like for your actual situation.</span></div>
+
+    <div id="spNone" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spNoneFoot">Below 520 reckonable contributions, ten years, there is no State Pension (Contributory) at all.</div>
       </div>
-      <div id="ecForm">
-        <div class="ec-row">
-          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
-          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">What may apply instead</div>
+        <div class="wtext">A State Pension (Non-Contributory) is means tested and may be payable instead. It works on a different basis and this tool does not calculate it. It is worth asking about.</div>
+        <a class="wlink" href="booking.html">Talk it through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+
+    <div class="vs-card reveal" style="transition-delay:.14s">
+      <h3>Against what retirement costs</h3>
+      <p class="sub">Three standards of living for a single person, from the Pensions Council's research. <span id="lsIntro">The bar shows how much of each one the State Pension covers.</span></p>
+
+      <div class="lstd" id="lsRows">
+        <div class="lsrow" data-std="modest">
+          <div class="lshead"><span class="lsname">Modest</span><span class="lstarget">€19,200 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
         </div>
-        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
-        <p class="ec-note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
+        <div class="lsrow" data-std="moderate">
+          <div class="lshead"><span class="lsname">Moderate</span><span class="lstarget">€27,600 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
+        </div>
+        <div class="lsrow" data-std="comfortable">
+          <div class="lshead"><span class="lsname">Comfortable</span><span class="lstarget">€33,600 a year</span></div>
+          <div class="lsbar"><i></i></div>
+          <div class="lsgap"></div>
+        </div>
       </div>
-      <div class="ec-ok" id="ecOk" role="status"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
+
+      <p class="srcnote">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. Pension rate and rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a> and <a href="https://www.gov.ie/en/department-of-social-protection/services/state-pension-contributory/" rel="noopener">gov.ie</a>. Figures checked 9 September 2026.</p>
     </div>
   </div>
 </div></div>
 
+<section class="assume" style="padding-bottom:0"><div class="wrap">
+  <h3>How your State Pension is actually worked out</h3>
+  <div class="expl reveal">
+    <p>Since the switch to the Total Contributions Approach (TCA), your rate depends on how many reckonable contributions you have built up. Reckonable does not just mean paid. It includes contributions you were credited, for example while unemployed or ill, and HomeCaring Periods, time spent looking after a child or someone who needed care. If you have ever taken time out to care for someone, that time may still count toward your pension even though nothing came out of a payslip during it.</p>
+    <p>The shape of it: 2,080 reckonable contributions gets the full rate, €299.30 a week from January 2026. Below 520, there is no State Pension (Contributory) at all. Between the two, it is a pro rata share.</p>
+    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final.</p>
+  </div>
+</div></section>
+
 <div class="cta-band"><div class="wrap"><div class="cta-card reveal">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>These are just illustrations.</h2><p>Want real numbers built around your actual situation? Damian will walk you through it in a free 20-minute chat.</p></div>
-  <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <div class="ctext"><h2>What closes the difference is a second pension.</h2><p>The State Pension is a floor, not a plan. What sits on top of it, and how much of it you need, depends on when you start and what you want retirement to look like. Damian will work through your own numbers in a free 20-minute chat.</p></div>
+  <a class="btn btn-primary" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice reveal">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+    <p><b>This page is information, not advice.</b> It compares two sets of published figures for illustration. It is not a personal recommendation, not a forecast of your own pension, and not a statement of what you will be paid. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
-    <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
-    <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
-    <li>Tax relief is shown at the rate you select, on your own contributions only, and is limited to Revenue's age-related percentage of your earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation.</li>
-    <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
-    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, roughly €15,000 a year for a full entitlement. Check gov.ie for the current rate.</li>
-    <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
+    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own.</li>
+    <li>That means a figure below the maximum is a <b>floor</b>. Anyone without a full forty years may be paid more than this tool shows, and the difference against a living standard may be smaller. At a full 2,080 contributions the figure is exact.</li>
+    <li>Reckonable contributions are paid contributions, plus credited contributions, plus HomeCaring Periods. Credited contributions are themselves capped at 520. This tool takes the total you enter at face value and does not check how it is made up.</li>
+    <li>The maximum personal rate is €299.30 a week from January 2026. Rates change, usually at each Budget. The annual figure is 52 weekly payments.</li>
+    <li>Below 520 reckonable contributions there is no State Pension (Contributory). A means-tested State Pension (Non-Contributory) may apply instead, on a different basis, and this tool does not calculate it.</li>
+    <li>The rate shown is the personal rate at 66. It does not include an increase for a qualified adult or child, and it does not include the higher rate that applies from age 80.</li>
+    <li>The living standards are for a <b>single person</b>. Couple figures are higher in total and lower per person, and are not shown here.</li>
+    <li>The living standards describe annual spending in 2024 prices and have not been adjusted for inflation since. Both sides of this comparison move over time, and they do not move together.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
   </ul>
 </div></section>
-
+</main>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -1623,273 +1662,130 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></footer>
 
+<script src="assets/js/state-pension.js?v=e30c4e34"></script>
 <script>
-const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let taxRate=40;
-/* Revenue's age-related limit on tax-relievable personal contributions:
-   a percentage of earnings, with earnings capped at EARN_CAP (B4/B5). */
-const EARN_CAP=115000;
-var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
-function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
-const $=id=>document.getElementById(id);
-const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
+/* state-pension-reality-check.html
 
-function setTax(r){taxRate=r;$('t20').classList.toggle('on',r===20);$('t40').classList.toggle('on',r===40);$('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
+   Maths lives in assets/js/state-pension.js, which is the single source of
+   truth and is covered by tests/state-pension.test.js. This file only reads
+   the two controls and paints the panels, so the page cannot hold a second
+   copy of the rules.
 
-function project(months,startPot,monthly,mRate){
-  const grownPot=startPot*Math.pow(1+mRate,months);
-  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
-  return grownPot+grownContrib;
-}
+   TONE: the Pensions Council's figures do the work. State the difference,
+   give it in euro and in words, and stop. No pressure language, no urgency,
+   nothing that dramatises a number that is already plain enough. */
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SP = window.PBStatePension;
 
-/* ---- smooth display engine ---- */
-const anims={};let rafId=null;
-function tween(id,target,fmt){
-  const a=anims[id];
-  if(!a){anims[id]={cur:target,target,fmt};$(id).textContent=fmt(target);startLoop();return;}
-  a.target=target;a.fmt=fmt;startLoop();
-}
-function startLoop(){if(!rafId)rafId=requestAnimationFrame(step);}
-function step(){
-  let active=false;const f=REDUCE?1:0.16;
-  for(const id in anims){const a=anims[id];const d=a.target-a.cur;
-    if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*f;active=true;}else{a.cur=a.target;}
-    $(id).textContent=a.fmt(a.cur);}
-  if(chart.lerp(f))active=true;
-  rafId=active?requestAnimationFrame(step):null;
-}
+const $ = id => document.getElementById(id);
+const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
+const euro2 = v => '€' + v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = v => v.toLocaleString('en-IE');
 
-/* ---- persistent morphing chart ---- */
-const chart={
-  N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
-  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
-  init(){
-    const NS='http://www.w3.org/2000/svg';
-    const svg=document.createElementNS(NS,'svg');
-    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);svg.setAttribute('width','100%');svg.style.display='block';
-    for(let g=1;g<=3;g++){const yy=this.padT+(g/4)*(this.H-this.padT-this.padB);
-      const l=document.createElementNS(NS,'line');
-      l.setAttribute('x1',this.padL);l.setAttribute('y1',yy);l.setAttribute('x2',this.W-this.padR);l.setAttribute('y2',yy);
-      l.setAttribute('stroke','rgba(11,31,28,0.07)');svg.appendChild(l);}
-    const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
-    this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
-    this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    $('chart').appendChild(svg);this.inited=true;
-  },
-  setTarget(b,u,ageS,ageE){
-    if(!this.inited)this.init();
-    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
-    this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
-    startLoop();
-  },
-  lerp(f){
-    if(!this.inited)return false;
-    let active=false;
-    const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
-      if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
-    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
-    const dm=this.tgt.max-this.cur.max;
-    if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
-    this.render();return active;
-  },
-  render(){
-    const n=this.cur.b.length;if(!n)return;
-    const max=this.cur.max;
-    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
-    const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
-    let dB='M '+X(0)+' '+Y(this.cur.b[0]).toFixed(1);
-    for(let i=1;i<n;i++)dB+=' L '+X(i).toFixed(1)+' '+Y(this.cur.b[i]).toFixed(1);
-    let dU='M '+X(0)+' '+Y(this.cur.u[0]).toFixed(1);
-    for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
-    this.els.base.setAttribute('d',dB);
-    this.els.boost.setAttribute('d',dU);
-    this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
-    this.els.mx.textContent=euro(max);
-  }
+/* Screen readers otherwise announce a bare number, so each slider carries a
+   formatted aria-valuetext, matching the other three calculators. */
+const VALTEXT = {
+  contribs: v => num(v) + ' reckonable contributions, ' + (v / 52) + ' years',
+  age: v => v + ' years old'
 };
 
-/* ---- slider fill paint ---- */
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
-function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
-let srTimer=null;
-
-/* ---- the maths (unchanged) ---- */
-function calc(){
-  let age=+$('age').value, ret=+$('ret').value;
-  const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
-  $('ret').min=age+1;
-  if(ret<=age){ret=age+1;$('ret').value=ret;}
-  paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
-  $('ageV').textContent=age;
-  $('retV').textContent=ret;
-  $('potV').textContent=euro(pot);
-  $('mineV').textContent=euro(mine);
-  $('earnV').textContent=euro(earn);
-  $('empV').textContent=euro(emp);
-  $('growthV').textContent=g+'%';
-
-  const months=(ret-age)*12;
-  const mRate=Math.pow(1+g/100,1/12)-1;
-  const monthly=mine+emp;
-  const base=project(months,pot,monthly,mRate);
-  const boost=project(months,pot,monthly+100,mRate);
-
-  tween('potOut',base,euro);
-  tween('incOut',base*0.04/12,euro);
-
-
-  /* cost of waiting: existing pot keeps growing, twelve months of
-     contributions never happen. Same engine, one shifted start date. */
-  if(months>12){
-    const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
-    const gap=Math.max(0,base-later);
-    $('waitOut').innerHTML='Put this off for twelve months and you retire with roughly <b>'+euro(gap)+'</b> less. That gap is the contributions you never made, plus the growth they never earned.';
-  }else{
-    $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
-  }
-  /* tax relief (B4/B5): only the part of the personal contribution inside
-     Revenue's age-related limit gets relief.
-       reliefLimit      = band(age) x min(earnings, 115,000)
-       relievableAnnual = min(contribution x 12, reliefLimit)
-       reliefMonthly    = relievableAnnual / 12 x taxRate */
-  const annualMine=mine*12;
-  const band=reliefBand(age);
-  const reliefLimit=Math.round(band*Math.min(earn,EARN_CAP));
-  const relievableAnnual=Math.min(annualMine,reliefLimit);
-  const reliefMonthly=(relievableAnnual/12)*(taxRate/100);
-  const costMonthly=mine-reliefMonthly;
-  if(mine>0){
-    const capNote=annualMine>relievableAnnual
-      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes into your pension, but without relief this year.</span>'
-      :'';
-    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+capNote;
-  }else{
-    $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
-  }
-  /* relief visualizer: presentation only, driven by the same costMonthly/reliefMonthly values */
-  if(mine>0){
-    $('rvYou').style.width=(costMonthly/mine*100)+'%';
-    $('rvTax').style.width=(reliefMonthly/mine*100)+'%';
-    $('rvYouV').textContent=euro(costMonthly)+'/mo';
-    $('rvTaxV').textContent=euro(reliefMonthly)+'/mo';
-    $('reliefViz').style.opacity='1';
-  }else{
-    $('rvYou').style.width='100%';
-    $('rvTax').style.width='0%';
-    $('rvYouV').textContent='€0/mo';
-    $('rvTaxV').textContent='€0/mo';
-    $('reliefViz').style.opacity='.45';
-  }
-
-  const diffPot=boost-base;
-  const diffInc=diffPot*0.04/12;
-  $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
-
-  const b=[],u=[];
-  for(let i=0;i<chart.N;i++){
-    const m=months*i/(chart.N-1);
-    b.push(project(m,pot,monthly,mRate));
-    u.push(project(m,pot,monthly+100,mRate));
-  }
-  chart.setTarget(b,u,age,ret);
-  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
-  /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
-  const overSFT=base>SFT, sftNote=$('sftNote');
-  if(sftNote) sftNote.hidden=!overSFT;
-  /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  clearTimeout(srTimer);
-  srTimer=setTimeout(function(){$('srSummary').textContent='Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':'');},700);
+function paintSlider(el) {
+  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
+  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
+  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
 }
 
-['age','ret','pot','mine','earn','emp','growth'].forEach(id=>{
-  const el=$(id);
-  el.addEventListener('input',()=>{paintSlider(el);calc();});
+/* Whole euro reads better in a sentence than euro and cents, but the cents
+   matter in the headline figures, so the two are formatted differently on
+   purpose. */
+function gapWords(g) {
+  if (g.covered) return 'The State Pension covers this in full.';
+  return 'You would need <b>' + euro(g.gapAnnual) + ' a year</b> on top, about <b>' +
+         euro(g.gapMonthly) + ' a month</b>.';
+}
+
+function render() {
+  const contribs = +$('contribs').value;
+  const age = +$('age').value;
+  const res = SP.statePension(contribs);
+  const years = contribs / 52;
+
+  $('contribsV').textContent = num(contribs);
+  $('ageV').textContent = age;
+
+  const toGo = SP.yearsUntilPensionAge(age);
+  $('ageNote').innerHTML = toGo > 0
+    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line only: it does not change the pension figure, and this page does not project investment growth.'
+    : 'You are at or past 66. This line does not change the pension figure, and this page does not project investment growth.';
+
+  $('spHas').hidden = !res.eligible;
+  $('spNone').hidden = res.eligible;
+
+  let annualCents;
+
+  if (res.eligible) {
+    annualCents = res.annualCents;
+    $('spWeekly').textContent = euro2(res.weekly);
+    $('spAnnual').textContent = euro(res.annual);
+
+    const pctOfMax = Math.round(res.fraction * 100);
+    $('spFoot').innerHTML = res.fraction === 1
+      ? 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.'
+      : num(contribs) + ' contributions is ' + years + (years === 1 ? ' year' : ' years') +
+        ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax +
+        '% of the maximum.';
+
+    /* The floor caveat only bites below a full record. At 2,080 the Total
+       Contributions Approach gives the full rate outright and nothing further
+       is calculated, so the figure is exact and saying otherwise would be
+       hedging for its own sake. */
+    $('spFloor').textContent = res.fraction === 1
+      ? 'At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.'
+      : 'This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.';
+  } else {
+    annualCents = 0;
+    $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
+      (years === 1 ? ' year' : ' years') + '. Below 520, ten years, there is no State Pension (Contributory) at all. You would need <b>' +
+      num(res.shortBy) + ' more</b> to qualify.';
+  }
+
+  /* Bars are drawn against each standard's own total, so the fill reads as
+     "how much of this standard the State Pension covers" rather than as a
+     comparison between the three standards. */
+  $('lsIntro').textContent = res.eligible
+    ? 'The bar shows how much of each one the State Pension covers.'
+    : 'With no Contributory entitlement, none of these is covered by it.';
+
+  SP.gaps(annualCents).forEach(g => {
+    const row = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
+    const covered = Math.max(0, Math.min(1, annualCents / g.targetCents));
+    const bar = row.querySelector('.lsbar i');
+    bar.style.width = (covered * 100) + '%';
+    row.querySelector('.lsbar').setAttribute('aria-hidden', 'true');
+    row.querySelector('.lsgap').innerHTML = res.eligible
+      ? 'The State Pension covers <b>' + Math.round(covered * 100) + '%</b>. ' + gapWords(g)
+      : 'You would need <b>' + euro(g.target) + ' a year</b> from somewhere else.';
+    row.classList.toggle('is-covered', g.covered && res.eligible);
+  });
+
+  /* One spoken summary rather than eight, so a screen reader gets the point
+     of the page and not a list of fragments. */
+  const g = SP.gaps(annualCents);
+  $('srSummary').textContent = res.eligible
+    ? 'State Pension ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) +
+      ' a year. Against a modest standard of living that is ' + euro(g[0].gapAnnual) +
+      ' a year short, moderate ' + euro(g[1].gapAnnual) + ' short, comfortable ' +
+      euro(g[2].gapAnnual) + ' short.'
+    : 'With ' + num(contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
+      num(res.shortBy) + ' more contributions would be needed to qualify.';
+}
+
+document.querySelectorAll('input[type=range]').forEach(el => {
   paintSlider(el);
+  el.addEventListener('input', () => { paintSlider(el); render(); });
 });
-calc();
 
-/* nav + reveal */
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
-})();
-
-/* email-results capture (front-end only) */
-function sendResults(){
-  var input=document.getElementById('ecEmail');
-  var e=input.value.trim();
-  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  var err=document.getElementById('ecErr');
-  if(!ok){ err.textContent='Please enter a valid email address.';
-           err.style.display='block'; input.focus(); return; }
-  err.style.display='none';
-
-  /* the figures the visitor is actually looking at */
-  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
-  var payload={
-    email:e,
-    source:document.title,
-    pot:fig('potOut'), income:fig('incOut'), relief:fig('reliefOut'),
-    costOfWaiting:fig('waitOut'),
-    inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
-             .map(function(s){return s.id+'='+s.value;}).join(', '),
-    page:location.href
-  };
-
-  var done=function(msg,isHtml){
-    var t=document.getElementById('ecOkText');
-    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
-    document.getElementById('ecForm').style.display='none';
-    document.getElementById('ecOk').classList.add('show');
-  };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
-    err.style.display='block';
-  };
-
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    /* configured: post it and only confirm on a real success */
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
-      .catch(failed);
-  }else{
-    /* not configured: hand the visitor a prefilled email rather than a fake
-       confirmation. The lead still reaches Damian, today, with no backend. */
-    var body='Please send me my pension figures.%0D%0A%0D%0A'+
-      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
-      'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
-      'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
-      'Tax relief: '+encodeURIComponent(payload.relief)+'%0D%0A'+
-      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
-      'From: '+encodeURIComponent(payload.page);
-    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
-      '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    /* nothing has been sent by this page, so say so: no "on its way" claim */
-    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
-  }
-}
+render();
 </script>
 
 <script>
@@ -2283,7 +2179,7 @@ function sendResults(){
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','mine','earn'];   /* primary controls: ids on THIS page */
+  var KEEP = ['contribs','age'];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 

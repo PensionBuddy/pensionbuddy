@@ -6,6 +6,29 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 5 — 2026-09-10 · state-pension-reality-check.html
+
+Contract-first, the same way as the comparison calculator: spec, then tests,
+then the page. Contract in `docs/CALC-SPEC-STATE-PENSION.md`, maths in
+`assets/js/state-pension.js`, tests in `tests/state-pension.test.js` (55
+assertions, exact to the cent), page assembled by
+`tools/build-state-pension-page.py` from `pension-calculator.html`'s skeleton.
+
+| Item | Status | Note |
+|---|---|---|
+| Figures verified | **Done** | All five against gov.ie, Citizens Information and the Pensions Council PDF itself. Two corrections to the brief, both applied: contributions are reckonable, and the transition is a best-of, so partial figures are a floor. |
+| Housing caveat | **Dropped** | The brief's "assumes outright home ownership" was UK PLSA methodology, not the Irish report. Removed entirely on Damian's call, no replacement. |
+| Page | **Built** | Leads with the maximum, €299.30 a week, €15,564 a year. Three living-standard bars, each scaled to its own target, gap in euro a year, a month, and words. Sub-520 shows a no-entitlement state, never a figure. |
+| Explainer | **Placed** | Damian's copy verbatim, as its own section before the CTA. |
+| Links | **Done** | Main nav ("State pension", fits with no overflow, see spec S8), footer Tools on all pages, a CTA on `starter.html`, `sitemap.xml`. |
+| Also fixed | **Done** | The comparison page had shipped with "Calculator" marked as the current nav item, because its build script's exact-string replace never matched the skeleton's attribute order. Both build scripts now match on attributes; the comparison page is rebuilt. |
+
+**Verified:** 15 pages, 0 FAIL at 375 / 1360 / 1440, no console errors. A page
+probe drives the built page and confirms it renders the module's figures at
+2,080, 1,560, 520 and 468 contributions.
+
+---
+
 # Run 4 — 2026-09-08 · about.html folded into the home page, spartan copy pass
 
 `about.html` is gone. Everything it carried moved onto `index.html`, the

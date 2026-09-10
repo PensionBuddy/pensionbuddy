@@ -159,21 +159,12 @@ footnote [b] on a chart comparing Ireland to the **UK** PLSA standards, and it
 describes the UK methodology. Attributing it to the Irish figures on a
 regulated adviser's site would be misattribution.
 
-### The honest caveat, which still points the same way
+### Decision: no housing caveat on the page at all
 
-The figures include housing, but they describe a population that mostly owns
-its home, so the housing element reflects low or no mortgage costs and, at the
-modest end, local authority rent. Someone facing private rent or an unfinished
-mortgage in retirement should expect to need more.
-
-Wording for the page:
-
-> These figures include housing costs, but they describe people who mostly own
-> their home. At the modest standard, housing is 38% of a single person's
-> monthly spending. If you expect to be paying private rent or still paying a
-> mortgage, plan for more than these figures, not less.
-
-That belongs next to the comparison, not in the disclaimer.
+Damian's call, 2026-09-10: drop the "assumes outright home ownership" line
+entirely and do not replace it with a corrected version. The page therefore
+says nothing about housing next to the comparison. The assumptions list notes
+only that the figures are 2024 prices for a single person.
 
 ### gapTo(annualPension, standard)
 
@@ -349,15 +340,18 @@ Every assertion is exact to the cent. No tolerances.
 
 ---
 
-## S10. Open, and blocking
+## S10. Resolved
 
-1. **Still blocking: the investing explainer copy has not been supplied.** Step
-   4 of the brief says "using the copy I've given". Nothing came with the
-   original brief, and the follow-up said "Explainer copy is above" but again
-   carried none. Section 4 of the build cannot start until it arrives.
-   Everything else can.
-2. Settled: **age** is display only, one "You have X years until 66" line,
-   never feeding a projection.
-3. Settled: **52 weeks**, for consistency with the €15,564 on the home page.
-4. Settled: **all five S1 figures verified**, with the two corrections above.
-5. Optional: the **€309.30 rate from age 80**, currently not modelled.
+1. **Explainer copy** received 2026-09-10 and placed verbatim as its own
+   section, "How your State Pension is actually worked out", between the
+   calculator and the CTA. It carries the MyWelfare.ie pointer.
+2. **Age** is display only, one "You have X years until 66" line.
+3. **52 weeks**, matching the €15,564 on the home page.
+4. **All five S1 figures verified** against primary sources, two corrections
+   applied: the slider is labelled as reckonable contributions with its three
+   components named beside it, and the best-of floor is stated beside the
+   result and again in the explainer.
+5. **Linked from** the main nav (label "State pension"), the footer Tools
+   column, `starter.html`, and `sitemap.xml`.
+6. Not modelled, by choice: the €309.30 rate from age 80, qualified adult and
+   child increases, and the Non-Contributory pension.
