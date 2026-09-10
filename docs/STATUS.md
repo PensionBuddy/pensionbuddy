@@ -6,6 +6,20 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 8 — 2026-09-10 · broker-vs-autoenrolment.html, funds and risk, sliders proved
+
+| Item | Status | Note |
+|---|---|---|
+| Funds and risk | **Built** | A shared card for the personal pension side, in both modes: My Future Fund offers a small set of standard funds with limited choice; a broker-arranged personal pension gives a wider range and lets the person choose a risk level. Three illustrations on the 1 to 7 Summary Risk Indicator, each showing return, bad-year fall and the can-fall-as-well-as-rise line together. No asset class named. Not a recommendation of any level; the CTA reads as talking the choice through. |
+| Risk figures | **NEEDS DAMIAN INPUT** | See the table below. Placeholders. |
+| Slider geometry | **Fixed, sitewide** | Measured, not eyeballed: the fill boundary sat 14px short of the thumb centre at 0%, 7px short at 25%, 7px past at 75% and 14px past at 100%, on every slider. A fill of x% of the full width ignores that a 28px thumb's centre only travels the width minus 28px. The two-tone strip is now drawn across (width - 28px) starting 14px in, with an aqua cap under the first 14px and a light base beneath. After the fix every position measures within a pixel. Thumb shadow confirmed by render beside a flat, shadowless copy. |
+| Default contribution | **Fixed** | The calculation was right at every salary (€39,000 gives €750). What stuck at 14,500 was the lock: once the slider had been moved it kept its value when salary changed. It now re-matches whenever salary, age or tax status changes, and the note under it says so. |
+
+Tests unchanged, all 196 pass, drift check clean. **Verified:** 15 pages, 0 FAIL
+at 375 / 1360 / 1440, no console errors.
+
+---
+
 # Run 7 — 2026-09-10 · broker-vs-autoenrolment.html, made plain
 
 Presentation only. No maths, tests or shared modules changed: `git diff` on
@@ -407,6 +421,8 @@ reset, sat flush against their paragraphs. Pre-existing, not caused by F2.
 | **A4** | `terms.html` and `complaints.html` Contact sections | (1) A phone number — currently a marked placeholder "[phone number to be confirmed]", search for `data-issue="A4"`. (2) Confirmation that `hello@pensionbuddy.ie` is a real, monitored mailbox — it is used on terms, complaints and privacy. |
 | **F1a** | every page, `ANALYTICS_SRC` | Which analytics provider (Plausible / GA4 / none). The guard self-disables until set; nothing loads. |
 | **F1b** | both calculators, starter, tracker, director — `LEAD_ENDPOINT` | A form endpoint (Formspree, Netlify Forms, CRM webhook). Until set, capture points open a pre-filled email and show an honest on-screen fallback. |
+| **R1 risk figures** | `broker-vs-autoenrolment.html`, "Choosing your funds, and how much risk"; constants in `tools/compare-parts/compare-page.js` (`RISK_LEVELS`) | The three illustrative levels use placeholder figures: lower risk, SRI 2 to 3, around 3% a year, could fall around 10%; medium, SRI 4, around 5%, could fall around 20%; higher, SRI 5 to 6, around 7%, could fall around 30% or more. **Confirm against the actual fund ranges Gresham can arrange**, and keep them consistent with the 1% to 8% growth slider (default 5%) on the two other calculators so no two pages imply different growth. |
+| **R2 fund access** | same page | **Exactly which fund ranges and structures Gresham can actually arrange**, and whether any wider asset access should be mentioned at all. Standard personal pensions and PRSAs have restricted fund menus; wider access generally needs a self-directed or self-administered arrangement, and Revenue rules apply. Until answered the page says only that a broker gives access to a wider choice of funds and risk levels than My Future Fund, and names no asset class. |
 | **F5 register no.** | `index.html`, "Who you are actually dealing with" | The Central Bank **register reference number**. The site tells readers to check the register at registers.centralbank.ie but never gives the number to look up. Renders as a marked placeholder — search `data-issue="F5"`. |
 | **F6 redirect** | the Calendly account, not the code | The thank-you page is built, but the redirect is an event-type setting: **Calendly → Event Types → `pensionbuddy-1-1` → Confirmation page → Redirect to an external site → `https://pensionbuddy.ie/thank-you.html`**. Until that is set, a completed booking still lands on Calendly's own confirmation screen. The page's JS listener is a belt-and-braces fallback that could not be confirmed end-to-end from here. |
 

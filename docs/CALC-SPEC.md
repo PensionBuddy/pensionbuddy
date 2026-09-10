@@ -354,6 +354,22 @@ scheme".
 
 ---
 
+## 5b. Funds and risk, added 2026-09-10
+
+Informational, no maths. A shared card for the personal pension side (Path B
+in Mode 1, the top-up layer in Mode 2): My Future Fund invests in a small set
+of standard funds with limited choice; a broker-arranged personal pension
+gives access to a wider range and a choice of risk level. Three illustrations
+on the 1 to 7 Summary Risk Indicator (PRIIPs), each showing an illustrative
+long-term return, an indication of a bad-year fall, and the statement that
+higher potential returns mean higher risk of loss and values can fall as well
+as rise. **A return figure is never shown without its downside.** Figures live
+in `RISK_LEVELS` in `compare-page.js` and are placeholders awaiting Damian's
+sign-off (STATUS R1, R2). No asset class is named. The page never says which
+level suits the person.
+
+---
+
 ## 6. Compliance
 
 Reuses the exact sitewide language, unchanged:

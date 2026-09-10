@@ -26,7 +26,7 @@
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
     <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment. Move it to what you would actually pay.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
     <div class="field" data-mode="1">
       <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
       <div class="togbody" data-for="matchOn" hidden>
@@ -147,6 +147,17 @@
       </div>
     </div>
 
+    <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
+    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s">
+      <h3>Choosing your funds, and how much risk</h3>
+      <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
+      <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
+      <div class="risktiles" id="riskTiles"></div>
+      <p class="riskrule"><b>Higher potential returns mean a higher risk of loss.</b> The value of a pension can fall as well as rise, and you may get back less than you put in. These figures are illustrations, not a recommendation of any level, and not a forecast. Which level suits you depends on things this page cannot see, and choosing one is a conversation with Damian.</p>
+      <p class="subnote">Under auto-enrolment on its own, your money goes into My Future Fund&rsquo;s standard funds and the choice is limited to those.</p>
+      <a class="wlink" href="booking.html">Talk the choice through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
     <div class="chart-card reveal" style="transition-delay:.18s">
       <h3>Auto-enrolment, broken down</h3>
@@ -190,6 +201,8 @@
     <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
     <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
     <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
+    <li>The three risk illustrations use the 1 to 7 Summary Risk Indicator that EU rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
+    <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
     <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
   </ul>
 </div></section>

@@ -91,6 +91,33 @@ VS_CSS = """
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .togbody[hidden]{display:none}
+/* funds and risk: three illustration tiles, each carrying its own downside */
+#riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
+#riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
+.risktiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
+.risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
+.risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
+.risktile .rk-sri b{color:var(--ink);font-variant-numeric:tabular-nums}
+.risktile .rk-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);padding-top:6px;border-top:1px dashed var(--line)}
+.risktile .rk-row b{color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.risktile .rk-note{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:4px}
+.risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
+#riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
+#riskCard .riskrule b{color:var(--ink)}
+@media(max-width:700px){.risktiles{grid-template-columns:1fr}}
+
+/* the risk card ends in the same link the verdict card uses; those rules are scoped to
+   .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
+   size and fills the card */
+#riskCard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+#riskCard .wlink:hover{text-decoration:underline}
+#riskCard .wlink .ico{width:15px;height:15px}
+#riskCard .wlink{display:inline-flex;align-items:center;padding:11px 0}
+#riskCard .wlink{color:var(--teal)}
+#riskCard .wlink{margin-top:14px}
+#riskCard .wlink .ico{width:16px;height:16px;flex:none}
 /* the one-sentence lead sits above the numbers in both modes */
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}

@@ -35,6 +35,35 @@ let statusIx = 0;
 const relief = () => ({ srcop: STATUS[statusIx].srcop });
 
 const $ = id => document.getElementById(id);
+
+/* Three illustrative risk levels for the personal pension side, on the 1 to 7
+   Summary Risk Indicator every fund's Key Information Document carries.
+
+   NEEDS DAMIAN INPUT. The return and bad-year figures below are placeholders.
+   They must be confirmed against the actual fund ranges Gresham can arrange,
+   and kept consistent with the 1% to 8% growth slider (default 5%) on
+   pension-calculator.html and director-calculator.html, so no two calculators
+   imply different growth. The bad-year figures are rough indications of a
+   fall, not floors. Nothing here names an asset class; which fund ranges and
+   structures can be offered, and whether any wider access should be
+   mentioned at all, is also for Damian to confirm. See docs/STATUS.md. */
+const RISK_LEVELS = [
+  { name: 'Lower risk',  sri: '2 to 3', ret: 3, fall: 10, note: 'Mostly bonds and cash-like assets. Smaller swings, slower growth.' },
+  { name: 'Medium risk', sri: '4',      ret: 5, fall: 20, note: 'A mix of shares and bonds. The level most default funds sit around.' },
+  { name: 'Higher risk', sri: '5 to 6', ret: 7, fall: 30, note: 'Mostly shares. Bigger swings, more room to grow, and to fall.' }
+];
+
+function renderRisk() {
+  $('riskTiles').innerHTML = RISK_LEVELS.map(l =>
+    '<div class="risktile">'
+    + '<div class="rk-name">' + l.name + '</div>'
+    + '<div class="rk-sri">Risk rating <b>' + l.sri + '</b> of 7</div>'
+    + '<div class="rk-row"><span>Illustrative return</span><b>around ' + l.ret + '% a year</b></div>'
+    + '<div class="rk-row"><span>In a bad year, could fall</span><b>around ' + l.fall + '%' + (l.fall >= 30 ? ' or more' : '') + '</b></div>'
+    + '<div class="rk-note">' + l.note + '</div>'
+    + '<div class="rk-warn">Can fall as well as rise. Not a recommendation.</div>'
+    + '</div>').join('');
+}
 const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
 const pct = v => (Math.round(v * 1000) / 10).toLocaleString('en-IE') + '%';
 
@@ -61,6 +90,7 @@ function paintSlider(el) {
 
 function setStatus(i) {
   statusIx = i;
+  grossTouched = false;                          // relief changed, so re-match
   for (let k = 0; k < STATUS.length; k++) {
     const b = $('st' + k), on = k === i;
     b.classList.toggle('on', on);
@@ -298,6 +328,10 @@ function reliefSentence(layer, age) {
   const el = $(id);
   el.addEventListener('input', () => {
     if (id === 'gross') grossTouched = true;
+    /* a new salary or age means a new auto-enrolment cost, so the contribution
+       goes back to matching it; a value dragged at one salary must not survive
+       into another */
+    if (id === 'salary' || id === 'age') grossTouched = false;
     paintSlider(el);
     calc();
   });
@@ -316,7 +350,7 @@ paintSlider($('phase'));
   });
 });
 syncToggles();
-
+renderRisk();
 setStatus(0);
 /* a shared link can open straight onto Mode 2 */
 setMode(location.hash === '#combined' ? 2 : 1);

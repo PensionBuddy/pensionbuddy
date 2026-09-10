@@ -1297,10 +1297,13 @@ a.btn.btn-primary,a.btn.btn-acc,button.btn-primary{color:var(--aqua-ink)}
 /* --- graphics: let the colour actually sing --- */
 .hc-bars i:last-child,.cbars i:last-child{background:var(--aqua)}
 .hc-bars i,.cbars i{background:var(--teal-100)}
-/* two-tone track: filled part in the brand aqua, the rest in a light line colour.
-   --fill is set per slider by the page script. An earlier pass had flattened this to
-   a single colour, which made the filled and empty parts identical. */
-input[type=range]{background-image:linear-gradient(to right,var(--aqua) var(--fill,50%),var(--line-2) var(--fill,50%))}
+/* two-tone track whose colour boundary lands on the thumb centre. The thumb is 28px
+   and its centre travels from 14px to (width - 14px), so a fill of x% of the FULL width
+   is off by up to 14px at the ends. The two-tone strip is therefore drawn across
+   (width - 28px) starting 14px in, with a fixed aqua cap under the first 14px and a
+   light base across the whole track. --fill is set per slider by the page script. */
+input[type=range]{background-image:linear-gradient(to right,var(--aqua) var(--fill,50%),var(--line-2) var(--fill,50%)),linear-gradient(var(--aqua),var(--aqua)),linear-gradient(var(--line-2),var(--line-2));
+  background-size:calc(100% - 28px) 6px,14px 6px,100% 6px;background-position:14px center,0 center,0 center;background-repeat:no-repeat}
 input[type=range]::-webkit-slider-thumb{background:var(--aqua);border:3px solid #fff;
   box-shadow:0 0 0 1px var(--line-2),0 2px 8px rgba(11,31,28,.18)}
 input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2),0 2px 8px rgba(11,31,28,.18)}
@@ -1529,6 +1532,33 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .togbody[hidden]{display:none}
+/* funds and risk: three illustration tiles, each carrying its own downside */
+#riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
+#riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
+.risktiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
+.risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
+.risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
+.risktile .rk-sri b{color:var(--ink);font-variant-numeric:tabular-nums}
+.risktile .rk-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);padding-top:6px;border-top:1px dashed var(--line)}
+.risktile .rk-row b{color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.risktile .rk-note{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:4px}
+.risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
+#riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
+#riskCard .riskrule b{color:var(--ink)}
+@media(max-width:700px){.risktiles{grid-template-columns:1fr}}
+
+/* the risk card ends in the same link the verdict card uses; those rules are scoped to
+   .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
+   size and fills the card */
+#riskCard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
+  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+#riskCard .wlink:hover{text-decoration:underline}
+#riskCard .wlink .ico{width:15px;height:15px}
+#riskCard .wlink{display:inline-flex;align-items:center;padding:11px 0}
+#riskCard .wlink{color:var(--teal)}
+#riskCard .wlink{margin-top:14px}
+#riskCard .wlink .ico{width:16px;height:16px;flex:none}
 /* the one-sentence lead sits above the numbers in both modes */
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}
@@ -1600,7 +1630,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
     <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment. Move it to what you would actually pay.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
     <div class="field" data-mode="1">
       <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
       <div class="togbody" data-for="matchOn" hidden>
@@ -1721,6 +1751,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
 
+    <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
+    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s">
+      <h3>Choosing your funds, and how much risk</h3>
+      <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
+      <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
+      <div class="risktiles" id="riskTiles"></div>
+      <p class="riskrule"><b>Higher potential returns mean a higher risk of loss.</b> The value of a pension can fall as well as rise, and you may get back less than you put in. These figures are illustrations, not a recommendation of any level, and not a forecast. Which level suits you depends on things this page cannot see, and choosing one is a conversation with Damian.</p>
+      <p class="subnote">Under auto-enrolment on its own, your money goes into My Future Fund&rsquo;s standard funds and the choice is limited to those.</p>
+      <a class="wlink" href="booking.html">Talk the choice through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
     <div class="chart-card reveal" style="transition-delay:.18s">
       <h3>Auto-enrolment, broken down</h3>
@@ -1764,6 +1805,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
     <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
     <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
+    <li>The three risk illustrations use the 1 to 7 Summary Risk Indicator that EU rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
+    <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
     <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
   </ul>
 </div></section>
@@ -1825,6 +1868,35 @@ let statusIx = 0;
 const relief = () => ({ srcop: STATUS[statusIx].srcop });
 
 const $ = id => document.getElementById(id);
+
+/* Three illustrative risk levels for the personal pension side, on the 1 to 7
+   Summary Risk Indicator every fund's Key Information Document carries.
+
+   NEEDS DAMIAN INPUT. The return and bad-year figures below are placeholders.
+   They must be confirmed against the actual fund ranges Gresham can arrange,
+   and kept consistent with the 1% to 8% growth slider (default 5%) on
+   pension-calculator.html and director-calculator.html, so no two calculators
+   imply different growth. The bad-year figures are rough indications of a
+   fall, not floors. Nothing here names an asset class; which fund ranges and
+   structures can be offered, and whether any wider access should be
+   mentioned at all, is also for Damian to confirm. See docs/STATUS.md. */
+const RISK_LEVELS = [
+  { name: 'Lower risk',  sri: '2 to 3', ret: 3, fall: 10, note: 'Mostly bonds and cash-like assets. Smaller swings, slower growth.' },
+  { name: 'Medium risk', sri: '4',      ret: 5, fall: 20, note: 'A mix of shares and bonds. The level most default funds sit around.' },
+  { name: 'Higher risk', sri: '5 to 6', ret: 7, fall: 30, note: 'Mostly shares. Bigger swings, more room to grow, and to fall.' }
+];
+
+function renderRisk() {
+  $('riskTiles').innerHTML = RISK_LEVELS.map(l =>
+    '<div class="risktile">'
+    + '<div class="rk-name">' + l.name + '</div>'
+    + '<div class="rk-sri">Risk rating <b>' + l.sri + '</b> of 7</div>'
+    + '<div class="rk-row"><span>Illustrative return</span><b>around ' + l.ret + '% a year</b></div>'
+    + '<div class="rk-row"><span>In a bad year, could fall</span><b>around ' + l.fall + '%' + (l.fall >= 30 ? ' or more' : '') + '</b></div>'
+    + '<div class="rk-note">' + l.note + '</div>'
+    + '<div class="rk-warn">Can fall as well as rise. Not a recommendation.</div>'
+    + '</div>').join('');
+}
 const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
 const pct = v => (Math.round(v * 1000) / 10).toLocaleString('en-IE') + '%';
 
@@ -1851,6 +1923,7 @@ function paintSlider(el) {
 
 function setStatus(i) {
   statusIx = i;
+  grossTouched = false;                          // relief changed, so re-match
   for (let k = 0; k < STATUS.length; k++) {
     const b = $('st' + k), on = k === i;
     b.classList.toggle('on', on);
@@ -2088,6 +2161,10 @@ function reliefSentence(layer, age) {
   const el = $(id);
   el.addEventListener('input', () => {
     if (id === 'gross') grossTouched = true;
+    /* a new salary or age means a new auto-enrolment cost, so the contribution
+       goes back to matching it; a value dragged at one salary must not survive
+       into another */
+    if (id === 'salary' || id === 'age') grossTouched = false;
     paintSlider(el);
     calc();
   });
@@ -2106,7 +2183,7 @@ paintSlider($('phase'));
   });
 });
 syncToggles();
-
+renderRisk();
 setStatus(0);
 /* a shared link can open straight onto Mode 2 */
 setMode(location.hash === '#combined' ? 2 : 1);
