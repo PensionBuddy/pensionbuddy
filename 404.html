@@ -1294,7 +1294,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 
 /* graphics: bars, fills, rules, dots, marks - no text sits on these */
 .hc-bars i:last-child,.cbars i:last-child{background:var(--teal-bright)}
-input[type=range]{background-image:linear-gradient(var(--teal-bright),var(--teal-bright))}
+input[type=range]{background-image:linear-gradient(to right,var(--teal-bright) var(--fill,50%),var(--line-2) var(--fill,50%))}
 input[type=range]::-webkit-slider-thumb{background:var(--teal-bright);border-color:#fff}
 input[type=range]::-moz-range-thumb{background:var(--teal-bright);border-color:#fff}
 .nt-dot{background:var(--teal-bright)}
@@ -1352,10 +1352,13 @@ a.btn.btn-primary,a.btn.btn-acc,button.btn-primary{color:var(--aqua-ink)}
 /* --- graphics: let the colour actually sing --- */
 .hc-bars i:last-child,.cbars i:last-child{background:var(--aqua)}
 .hc-bars i,.cbars i{background:var(--teal-100)}
-input[type=range]{background-image:linear-gradient(var(--aqua),var(--aqua))}
+/* two-tone track: filled part in the brand aqua, the rest in a light line colour.
+   --fill is set per slider by the page script. An earlier pass had flattened this to
+   a single colour, which made the filled and empty parts identical. */
+input[type=range]{background-image:linear-gradient(to right,var(--aqua) var(--fill,50%),var(--line-2) var(--fill,50%))}
 input[type=range]::-webkit-slider-thumb{background:var(--aqua);border:3px solid #fff;
-  box-shadow:0 0 0 1px var(--line-2)}
-input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff}
+  box-shadow:0 0 0 1px var(--line-2),0 2px 8px rgba(11,31,28,.18)}
+input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2),0 2px 8px rgba(11,31,28,.18)}
 .nt-dot{background:var(--aqua)}
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
 .aud-ico,.boost-ico{color:var(--aqua-600)}

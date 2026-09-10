@@ -68,9 +68,8 @@ function setStatus(i) {
   }
   $('segInd').style.transform = 'translateX(' + (i * 100) + '%)';
   const st = STATUS[i];
-  $('statusNote').innerHTML = 'Income tax is 40% on salary above <b>' + euro(st.srcop) + '</b> when you are ' + st.who
-    + (i === 2 ? ' (the maximum band, reached only where the lower earner has at least ' + euro(35000) + ' of their own income)' : '')
-    + ', so relief on a personal pension is 40% on that part of a contribution and 20% on the rest. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.';
+  $('statusNote').innerHTML = 'Tax is 40% above <b>' + euro(st.srcop) + '</b> for you, so relief on a personal pension is 40% on that part and 20% below.'
+    + (i === 2 ? ' The ' + euro(88000) + ' is a maximum; it needs the lower earner to have ' + euro(35000) + ' of their own.' : '');
   calc();
 }
 
@@ -85,9 +84,29 @@ function reliefAt(split) {
 
 /* ---- mode tabs ---- */
 const MODE_NOTE = {
-  1: 'For the same money out of your pocket: what goes into your pension under auto-enrolment, against a personal pension instead.',
-  2: 'Saving more than the minimum: auto-enrolment as it stands, plus a personal top-up for the extra, because My Future Fund does not currently take contributions above its set rate.'
+  1: 'Same money out of your pocket. Auto-enrolment, or a personal pension instead?',
+  2: 'Auto-enrolment as it is, plus extra saving through a personal pension.'
 };
+
+/* The auto-enrolment year is worked out from today's date. Year 1 is 2026.
+   Nobody has to think about it unless they are planning for a future year,
+   which is a toggle in More options, off by default. */
+const SCHEME_START = 2025;                       // year 1 is SCHEME_START + 1
+function thisYearsPhase() {
+  return Math.min(+$('phase').max, Math.max(1, new Date().getFullYear() - SCHEME_START));
+}
+function schemeYear() {
+  return $('futureOn').checked ? +$('phase').value : thisYearsPhase();
+}
+
+/* Yes/no toggles that reveal a secondary slider. Off means the slider is
+   hidden and counts as zero, whatever it was last set to. */
+function toggled(id) { return $(id).checked; }
+function syncToggles() {
+  document.querySelectorAll('.togbody[data-for]').forEach(b => {
+    b.hidden = !$(b.getAttribute('data-for')).checked;
+  });
+}
 
 function setMode(m, focusTab) {
   mode = m;
@@ -123,10 +142,10 @@ function announce(text) {
 function calc() {
   const age = +$('age').value;
   const salary = +$('salary').value;
-  const year = +$('phase').value;
-  const match = +$('match').value;
+  const year = schemeYear();
+  const match = toggled('matchOn') ? +$('match').value : 0;
   const extraMonthly = +$('extra').value;
-  const tmatch = +$('tmatch').value;
+  const tmatch = toggled('tmatchOn') ? +$('tmatch').value : 0;
 
   const ae = PBCompare.autoEnrolment(salary, year);
 
@@ -148,12 +167,17 @@ function calc() {
   $('salaryV').textContent = euro(salary);
   $('phaseV').textContent = 'Year ' + year + (year >= 10 ? '+' : '');
   $('grossV').textContent = euro(gross);
-  $('matchV').textContent = match + '%';
+  $('matchV').textContent = (+$('match').value) + '%';
   $('extraV').textContent = euro(extraMonthly);
-  $('tmatchV').textContent = tmatch + '%';
-  $('phaseNote').textContent = 'Phase ' + ae.phase + ' of the phase-in (' + ae.years + '): you '
-    + pct(ae.rates.employee) + ', employer ' + pct(ae.rates.employer)
-    + ', State ' + pct(ae.rates.state) + '. Rates rise in three-year steps.';
+  $('tmatchV').textContent = (+$('tmatch').value) + '%';
+  $('phaseNote').textContent = 'Phase ' + ae.phase + ' (' + ae.years + '): you '
+    + pct(ae.rates.employee) + ', employer ' + pct(ae.rates.employer) + ', State ' + pct(ae.rates.state) + '.';
+
+  /* the one line about the year, said plainly, up where the answer is */
+  const calYear = SCHEME_START + year;
+  $('phaseLine').textContent = ($('futureOn').checked ? 'Planning for ' + calYear : 'Since it is ' + calYear)
+    + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
+    + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
 
   /* ---------- shared: the auto-enrolment layer ---------- */
   $('aeEmployee').textContent = euro(ae.employee);
@@ -163,12 +187,10 @@ function calc() {
   const capNote = ae.salaryCapApplies ? '(on the first ' + euro(PBCompare.AE_SALARY_CAP) + ')' : '';
   $('aeEmployerCap').textContent = capNote;
   $('aeStateCap').textContent = capNote;
-  $('aeRatesNote').textContent = 'You pay ' + pct(ae.rates.employee) + ', your employer ' + pct(ae.rates.employer)
-    + ' and the State ' + pct(ae.rates.state)
-    + (ae.salaryCapApplies
-        ? ', all on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' of your salary only, which is why none of the three rises past that.'
-        : ', all on your whole salary, since it is under the ' + euro(PBCompare.AE_SALARY_CAP) + ' cap.')
-    + ' Your contribution comes out of your take-home pay, so there is no income tax relief on it.';
+  $('aeRatesNote').textContent = (ae.salaryCapApplies
+        ? 'All three are worked out on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' of your salary only.'
+        : 'All three are worked out on your whole salary.')
+    + ' Yours comes out of take-home pay, so there is no tax relief on it.';
 
   /* money above the cap: shown only when there is some */
   const ac = PBCompare.aboveCap(salary, year, age, relief());
@@ -179,9 +201,8 @@ function calc() {
     $('capStranded').textContent = euro(ac.strandedNet);
     $('capCouldBe').textContent = euro(ac.couldBe);
     $('capNote').textContent = 'Auto-enrolment takes nothing on salary above ' + euro(PBCompare.AE_SALARY_CAP)
-      + ', so the ' + euro(ac.strandedNet) + ' your own rate would have taken from that part stays in your take-home pay. '
-      + 'A personal pension could take that same ' + euro(ac.strandedNet) + ', relieved at your rate, and put '
-      + euro(ac.couldBe) + ' into your pension. That is where the money could go, not a suggestion to leave or reduce My Future Fund, which never sees it either way.';
+      + ', so this ' + euro(ac.strandedNet) + ' stays in your pay. A personal pension could take it and, with tax relief, put '
+      + euro(ac.couldBe) + ' in. Not a reason to leave My Future Fund, which never sees it either way.';
   }
 
   /* ---------- Mode 1 panel ---------- */
@@ -191,21 +212,21 @@ function calc() {
   $('aeNet').textContent = euro(ae.netCost);
   $('ppNet').textContent = euro(pp.netCost);
   $('ppNetLab').textContent = pp.relief > 0
-    ? 'Your ' + euro(pp.gross) + ' contribution, less ' + euro(pp.relief) + ' of tax relief.'
-    : 'Your contribution. No relief applies at this level.';
+    ? euro(pp.gross) + ' in, less ' + euro(pp.relief) + ' of tax relief.'
+    : 'Your contribution. No relief at this level.';
 
   const netGap = Math.round(pp.netCost - ae.netCost);
   $('vsNote').textContent = Math.abs(netGap) < 1
-    ? 'Both paths cost you the same this year, so the totals above are a like-for-like comparison.'
+    ? 'Both cost you the same, so the totals above are like for like.'
     : (netGap > 0
-        ? 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' more out of pocket this year.'
-        : 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' less out of pocket this year.');
+        ? 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' more out of pocket.'
+        : 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' less out of pocket.');
 
   $('ppGross').textContent = euro(pp.gross);
   $('ppRelief').textContent = euro(pp.relief);
   $('ppEmployer').textContent = euro(pp.employer);
   $('ppReliefCap').textContent = reliefAt(pp.reliefSplit);
-  $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none set)';
+  $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none)';
   $('ppReliefNote').textContent = reliefSentence(pp, age);
 
   /* the Mode 1 verdict, stated the same way whichever path is larger */
@@ -222,8 +243,7 @@ function calc() {
   }
   verdict += Math.abs(netGap) < 1
     ? ' Both cost you the same out of pocket.'
-    : ' Bear in mind the two do not cost you the same out of pocket.';
-  $('verdictOut').textContent = verdict;
+    : ' They do not cost you the same out of pocket, though.';
 
   /* ---------- Mode 2 panel ---------- */
   const x = c.extra;
@@ -233,31 +253,30 @@ function calc() {
   $('cAeNet').textContent = euro(ae.netCost);
   $('cExtraNet').textContent = euro(c.extraNet);
   $('cExtraLab').textContent = extraMonthly > 0
-    ? 'Your ' + euro(extraMonthly) + ' a month, before relief.'
-    : 'Nothing set yet. Move the slider to add an amount.';
+    ? euro(extraMonthly) + ' a month, before relief.'
+    : 'Nothing yet. Move the slider to add an amount.';
   $('cNote').textContent = extraMonthly > 0
-    ? 'Together, ' + euro(c.netCost) + ' out of your pocket this year puts ' + euro(c.totalIn) + ' into your pension.'
-    : 'With no top-up, this is just auto-enrolment: ' + euro(ae.netCost) + ' out of your pocket puts ' + euro(ae.totalIn) + ' in.';
+    ? euro(c.netCost) + ' out of your pocket puts ' + euro(c.totalIn) + ' in.'
+    : 'With no top-up this is just auto-enrolment: ' + euro(ae.netCost) + ' puts ' + euro(ae.totalIn) + ' in.';
 
   $('cPaid').textContent = euro(c.extraNet);
   $('cRelief').textContent = euro(x.relief);
   $('cGross').textContent = euro(x.gross);
   $('cMatch').textContent = euro(x.employer);
   $('cReliefCap').textContent = reliefAt(x.reliefSplit);
-  $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none set)';
+  $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none)';
   $('cReliefNote').textContent = extraMonthly > 0 ? reliefSentence(x, age) : '';
 
   /* the Mode 2 statement: matter of fact, a consequence of what the scheme allows */
-  let cv = 'Auto-enrolment puts ' + euro(ae.totalIn) + ' into your pension this year at its set rate.';
+  let cv = 'Auto-enrolment puts ' + euro(ae.totalIn) + ' into your pension this year.';
   if (extraMonthly > 0) {
-    cv += ' My Future Fund does not currently take contributions above that rate, so your extra goes through a personal pension. '
-      + euro(extraMonthly) + ' a month from you becomes ' + euro(x.gross) + ' with tax relief'
-      + (x.employer > 0 ? ', and your employer adds ' + euro(x.employer) + ' on top' : '')
-      + '. Combined, ' + euro(c.totalIn) + ' goes into your pension for ' + euro(c.netCost) + ' out of your pocket.';
+    cv += ' Your extra ' + euro(extraMonthly) + ' a month becomes ' + euro(x.gross) + ' with tax relief'
+      + (x.employer > 0 ? ', plus ' + euro(x.employer) + ' from your employer' : '')
+      + '. Together, ' + euro(c.totalIn) + ' goes in for ' + euro(c.netCost) + ' out of your pocket.';
   } else {
-    cv += ' My Future Fund does not currently take contributions above that rate. Add an amount above to see what routing it through a personal pension alongside auto-enrolment would put in.';
+    cv += ' Add an amount on the left to see what saving extra on top would put in.';
   }
-  $('cVerdict').textContent = cv;
+  $('leadOut').textContent = mode === 1 ? verdict : cv;
 
   /* one live region, announcing whichever mode is showing */
   announce(mode === 1
@@ -269,11 +288,9 @@ function calc() {
 
 /* the relief sentence is the same for Mode 1's personal path and Mode 2's top-up */
 function reliefSentence(layer, age) {
-  return 'Revenue allows relief on up to ' + euro(layer.reliefLimit)
-    + ' a year at your age, which is ' + pct(PBRelief.reliefBand(age)) + ' of earnings, counting earnings up to '
-    + euro(PBRelief.EARN_CAP) + '.'
+  return 'Revenue allows relief on up to ' + euro(layer.reliefLimit) + ' a year at your age.'
     + (layer.aboveReliefLimit > 0
-        ? ' ' + euro(layer.aboveReliefLimit) + ' of your contribution is above that limit. It still goes into your pension, it just gets no relief.'
+        ? ' ' + euro(layer.aboveReliefLimit) + ' of this is above that limit, so it goes in without relief.'
         : '');
 }
 
@@ -287,10 +304,18 @@ function reliefSentence(layer, age) {
   paintSlider(el);
 });
 
-/* the phase slider starts on the current year's phase (year 1 is 2026), so the
-   default stays where the scheme actually is without an annual edit */
-$('phase').value = Math.min(+$('phase').max, Math.max(1, new Date().getFullYear() - 2025));
+/* the phase slider, behind its toggle, starts on this year's phase */
+$('phase').value = thisYearsPhase();
 paintSlider($('phase'));
+['futureOn', 'matchOn', 'tmatchOn'].forEach(id => {
+  $(id).addEventListener('change', () => {
+    syncToggles();
+    /* a slider that was hidden has no width until now, so repaint it */
+    document.querySelectorAll('.togbody:not([hidden]) input[type=range]').forEach(paintSlider);
+    calc();
+  });
+});
+syncToggles();
 
 setStatus(0);
 /* a shared link can open straight onto Mode 2 */

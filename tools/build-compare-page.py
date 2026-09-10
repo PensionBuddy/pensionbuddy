@@ -84,6 +84,17 @@ VS_CSS = """
 @media(max-width:560px){.seg.seg-3 button{font-size:13px;padding:11px 4px}}
 /* the money-above-the-cap card only exists when there is money above the cap */
 #capCard[hidden]{display:none}
+/* yes/no toggles that reveal a secondary control. A plain checkbox row, so it
+   reads as a question rather than another slider. */
+.tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
+.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
+.tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.togbody[hidden]{display:none}
+/* the one-sentence lead sits above the numbers in both modes */
+.results .lead{margin-bottom:0}
+.results .lead .wtext{font-size:17px;line-height:1.5}
+.results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
 """
 
 
@@ -143,7 +154,7 @@ def main():
     # progressive disclosure keeps this page's primary controls visible
     # every range on this page is a primary control for one mode or the other;
     # only the tax-rate segment folds into "More options", as on the other calculators
-    tail = re.sub(r"KEEP = \[[^\]]*\]", "KEEP = ['age','salary','phase','gross','match','extra','tmatch']", tail, count=1)
+    tail = re.sub(r"KEEP = \[[^\]]*\]", "KEEP = ['age','salary','gross','match','extra','tmatch']", tail, count=1)
 
     body = read(os.path.join(PARTS, 'main.html'))
     out = head + body.strip() + '\n' + tail

@@ -317,14 +317,22 @@ and carrying the same information-not-advice framing as the rest of the page.
 |---|---|---|---|---|
 | Age | slider | 18 to 70 | 35 | Drives `reliefBand` only |
 | Salary | slider | €20,000 to €250,000, step €1,000 | €50,000 | Gross annual |
-| Auto-enrolment phase year | slider | 1 to 10+ | **the current calendar year minus 2025**, clamped to 1 to 12 | So the default stays where the scheme actually is without an annual edit |
+| Auto-enrolment phase year | derived from today's date, no visible control | 1 to 12 | the current calendar year minus 2025, clamped | 2026-09-10: no longer a primary input. Everyone is in the same year regardless of what they would pick, so the page works it out and says so in one line at the top of the results. A "plan for a future year" toggle in More options, off by default, reveals the slider for the few who need it. |
 | How you are assessed for tax | segmented control, three options, reusing the `.seg` pattern | single, married one income, married two incomes | single | Sets the standard rate cut-off point, and so the split of relief between 40% and 20% on Path B and on the Mode 2 top-up. Replaced the 20%/40% picker on 2026-09-10 |
 | Personal pension contribution | slider | €0 to €50,000 | net-cost-matched to Path A, see above | Gross annual |
-| Employer match on a personal pension | slider | 0% to 15% | **0%** | "Would your employer match a personal pension, and at what percent" |
+| Employer match on a personal pension | yes/no toggle, then a slider | 0% to 15% | **off**, so 0% | 2026-09-10: a secondary input most people leave at zero, so it sits behind "Would your employer pay into a personal pension too?" and the slider only appears on yes. Off counts as zero whatever the slider was last set to. Mode 2's top-up match is behind the same kind of toggle. |
 
 ---
 
 ## 5. Outputs
+
+**The results open with one plain sentence** stating the outcome for the
+figures entered, before any number or panel, whichever mode is showing (added
+2026-09-10; it was a card below the headline figures before). Directly under
+it, one line about the year: "Since it is 2026, you are in year 1 of the
+phase-in: you put in 1.5%, your employer matches 1.5%, and the State adds
+0.5%." The tabs read "Instead of auto-enrolment" and "On top of auto-enrolment";
+Mode 1 and Mode 2 remain the internal names.
 
 Per path: **total into the pension** and **your net cost**. Plus:
 

@@ -2,7 +2,7 @@
 <div class="phead"><div class="wrap">
   <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
   <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment, or a pension <span class="hl">through a broker</span>?</h1>
-  <p class="reveal" style="transition-delay:.12s">Two ways to build a pension, side by side, for your own salary and age. Or, if you want to save more than the minimum, both together. This shows the numbers for the figures you enter. It does not tell you which one to pick.</p>
+  <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap">
@@ -12,33 +12,54 @@
     </div>
 
     <div class="modebar reveal">
-      <div class="row"><span class="modelab">Two different questions</span></div>
+      <div class="row"><span class="modelab">Which question?</span></div>
       <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
         <span class="ind" id="modeInd"></span>
-        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Mode 1: Equivalent layer</button>
-        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">Mode 2: Combined</button>
+        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Instead of auto-enrolment</button>
+        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">On top of auto-enrolment</button>
       </div>
-      <p class="subnote" id="modeNote">For the same money out of your pocket: what goes into your pension under auto-enrolment, against a personal pension instead.</p>
+      <p class="subnote" id="modeNote">Same money out of your pocket. Auto-enrolment, or a personal pension instead?</p>
     </div>
 
     <div class="panel reveal">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are all worked out on salary up to €80,000. Above that the scheme takes nothing.</p></div>
-    <div class="field"><div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Contribution rates rise in three-year steps.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts matched to what auto-enrolment costs you, so the two sides begin like for like. Move it to whatever you would actually pay.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="match">Employer match on a personal pension</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">A percentage of salary. A personal pension only carries an employer contribution if your employer separately agrees to one. Leave this at zero if they have not.</p></div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">On top of the auto-enrolment minimum, from your own pocket. My Future Fund does not currently take contributions above its set rate, so this goes through a personal pension.</p></div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="tmatch">Employer match on your top-up</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A percentage of the top-up itself, not of salary. Only applies if your employer agrees to match what you add on. Leave this at zero if they have not.</p></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment. Move it to what you would actually pay.</p></div>
+    <div class="field" data-mode="1">
+      <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
+      <div class="togbody" data-for="matchOn" hidden>
+        <div class="row"><label for="match">How much, as a share of your salary</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">Only what your employer has actually agreed to.</p>
+      </div>
+    </div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">From your own pocket, on top of auto-enrolment. It goes through a personal pension, because My Future Fund only takes its set rate.</p></div>
+    <div class="field" data-mode="2" hidden>
+      <label class="tog"><input type="checkbox" id="tmatchOn"><span>Would your employer match what you add on?</span></label>
+      <div class="togbody" data-for="tmatchOn" hidden>
+        <div class="row"><label for="tmatch">How much of your top-up they would match</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A share of the top-up itself, not of your salary.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label class="tog"><input type="checkbox" id="futureOn"><span>Plan for a future year instead of this one</span></label>
+      <div class="togbody" data-for="futureOn" hidden>
+        <div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Rates rise in three-year steps.</p>
+      </div>
+    </div>
     <div class="field" style="margin-bottom:0">
       <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
       <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Two incomes</button></div>
-      <p class="subnote" id="statusNote">Sets where your income tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.</p>
+      <p class="subnote" id="statusNote">Sets where your tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension.</p>
     </div>
   </div>
 
   <div class="results">
+    <div class="waitcard lead reveal">
+      <div class="wt">In one sentence</div>
+      <div class="wtext verdict" id="leadOut"></div>
+      <p class="phaseline" id="phaseLine"></p>
+      <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
     <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
@@ -47,13 +68,7 @@
         <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
         <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
         <div class="divline"></div>
-        <div class="foot">Both figures are for one year, at the salary and age you entered. An illustration only.</div>
-      </div>
-
-      <div class="waitcard reveal" style="transition-delay:.11s">
-        <div class="wt">For the figures you entered</div>
-        <div class="wtext verdict" id="verdictOut"></div>
-        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="foot">One year, at your salary and age. An illustration only.</div>
       </div>
 
       <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
@@ -66,12 +81,12 @@
 
       <div class="vs-card reveal" style="transition-delay:.14s">
         <h3>What it actually costs you</h3>
-        <div class="sub">The money out of your own pocket for a year, on each path.</div>
+        <div class="sub">Out of your own pocket this year.</div>
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment</div>
             <div class="amt" id="aeNet">€0</div>
-            <div class="lab">Taken from your take-home pay. No income tax relief on this path.</div>
+            <div class="lab">From your take-home pay. No tax relief.</div>
           </div>
           <div class="vsmark">vs</div>
           <div class="vs-col vs-pension">
@@ -99,29 +114,23 @@
         <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
         <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
         <div class="divline"></div>
-        <div class="foot">Auto-enrolment at its set rate, plus your top-up through a personal pension. One year, at the salary and age you entered. An illustration only.</div>
-      </div>
-
-      <div class="waitcard reveal" style="transition-delay:.11s">
-        <div class="wt">For the figures you entered</div>
-        <div class="wtext verdict" id="cVerdict"></div>
-        <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
       </div>
 
       <div class="vs-card reveal" style="transition-delay:.14s">
         <h3>What it actually costs you</h3>
-        <div class="sub">The money out of your own pocket for a year, layer by layer.</div>
+        <div class="sub">Out of your own pocket this year, in two parts.</div>
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment minimum</div>
             <div class="amt" id="cAeNet">€0</div>
-            <div class="lab">Taken from your take-home pay. No income tax relief on this layer.</div>
+            <div class="lab">From your take-home pay. No tax relief.</div>
           </div>
           <div class="vsmark">+</div>
           <div class="vs-col vs-pension">
             <div class="vt">Your top-up</div>
             <div class="amt" id="cExtraNet">€0</div>
-            <div class="lab" id="cExtraLab">What you pay in each year, before relief.</div>
+            <div class="lab" id="cExtraLab">What you pay in, before relief.</div>
           </div>
         </div>
         <p class="vs-note subnote" id="cNote"></p>

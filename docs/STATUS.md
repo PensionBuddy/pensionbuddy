@@ -6,6 +6,26 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 7 — 2026-09-10 · broker-vs-autoenrolment.html, made plain
+
+Presentation only. No maths, tests or shared modules changed: `git diff` on
+`assets/js` and `tests` is empty, all 196 assertions pass unchanged, drift
+check clean.
+
+| Item | Status | Note |
+|---|---|---|
+| Sliders | **Fixed, sitewide** | The two-tone track was there at line 425 of the shared stylesheet and then flattened by a later brand-colour pass (lines 1241 and 1299) to a single-colour gradient with no `--fill` stops, so filled and empty read the same. The thumb's drop shadow had been replaced by a 1px ring at line 1300. Same class of bug as the logo paw and the giant info icon. Fixed in every page's copy of the stylesheet, since every calculator had it, and proved with captures at 10% and 90%. |
+| Auto-enrolment year | **Removed as an input** | Worked out from today's date and stated in one line at the top of the results: "Since it is 2026, you are in year 1 of the phase-in: you put in 1.5%, your employer matches 1.5%, and the State adds 0.5%." A "plan for a future year" toggle in More options, off by default, reveals the slider. |
+| Fewer things at once | **Done** | Visible by default: age, salary, and the amount slider for the mode. Employer match (both modes) sits behind a yes/no question and only shows its slider on yes; off counts as zero whatever the slider was set to. |
+| One sentence first | **Done** | The results open with the outcome in plain words, before any number, in both modes, with the year line under it. The two per-mode verdict cards became this one lead. |
+| Plainer words | **Done** | Tabs are "Instead of auto-enrolment" and "On top of auto-enrolment". Helper text cut to one glance each. |
+
+**Verified:** 15 pages, 0 FAIL at 375 / 1360 / 1440, no console errors. Page
+probe confirms the lead sentence, the year line, the toggles, and that the
+worked examples still render the same figures.
+
+---
+
 # Run 6 — 2026-09-10 · broker-vs-autoenrolment.html, corrected and extended
 
 Prompted by a sibling session's "Is My Future Fund enough?" build, supplied as
