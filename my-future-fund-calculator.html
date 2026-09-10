@@ -3,44 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Track down old pensions, Pensionbuddy</title>
-<meta name="description" content="Lost track of a pension from an old job in Ireland? We'll help you find it and work out what it's worth. Free plain-English consultation with a QFA.">
+<title>Is My Future Fund enough? Pensionbuddy</title>
+<meta name="description" content="See what My Future Fund puts into your pension at your salary, where income tax relief would be worth more, and how far the scheme gets you towards a two-thirds retirement income. Illustration only.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
-<meta property="og:title" content="Track down old pensions, Pensionbuddy">
-<meta property="og:description" content="Lost track of a pension from an old job in Ireland? We'll help you find it and work out what it's worth. Free plain-English consultation with a QFA.">
+<meta property="og:title" content="Is My Future Fund enough? Pensionbuddy">
+<meta property="og:description" content="See what My Future Fund puts into your pension at your salary, where income tax relief would be worth more, and how far the scheme gets you towards a two-thirds retirement income. Illustration only.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
 <meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "I don't have any of the paperwork, is that a problem?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension. You'd be surprised how little we need."}}, {"@type": "Question", "name": "Can I combine my old pensions into one?", "acceptedAnswer": {"@type": "Answer", "text": "Often, yes, and it makes them far easier to keep track of. But it isn't always right. Some older pensions carry valuable guarantees worth keeping, so we'll look at each one and tell you honestly."}}, {"@type": "Question", "name": "Is it really worth the hassle?", "acceptedAnswer": {"@type": "Answer", "text": "There usually is money there. Knowing what you've got, and making sure it's invested rather than sitting forgotten, can make a real difference. The first conversation is free, so there's little to lose by finding out."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Sora + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
-  /* canvas + surfaces */
   --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
-  /* ink */
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
-  /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
   --amber:#F4B740; --amber-soft:#FCEFCF;
-  /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
-  /* type */
   --font:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
@@ -51,224 +42,147 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
 ::selection{background:var(--teal-100);color:var(--teal-900)}
-h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink)}
+h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
-
-/* ---- eyebrow / labels ---- */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-
-/* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
 .btn svg{width:17px;height:17px;transition:transform .2s ease}
 .btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
 .btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
 .btn-primary:hover svg{transform:translateX(3px)}
-.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2);box-shadow:var(--sh-sm)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal-700);transform:translateY(-2px)}
-.btn-light{background:#fff;color:var(--teal-900)}
-.btn-light:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-
-/* ---- reveal on scroll ---- */
 .reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
 .reveal.in{opacity:1;transform:none}
-.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 @media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
-
-/* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
-.announce b{color:#fff;font-weight:600}
-.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-
-/* ---- nav ---- */
+.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
 nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
-.nav-r{display:flex;align-items:center;gap:28px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
 .logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:22px;height:22px}
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a.lnk{font-weight:500;font-size:15px;color:var(--ink-2);transition:color .2s;position:relative}
-.nav-links a.lnk:hover{color:var(--teal-700)}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
+.nav-r{display:flex;align-items:center;gap:28px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 
-/* ---- hero ---- */
-.hero{padding:72px 0 36px;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-0.035em;margin:20px 0 0}
-.hero h1 .hl{color:var(--teal-700)}
-.hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.trust{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
-.stars{display:flex;gap:2px;color:var(--amber)}
-.stars svg{width:16px;height:16px;fill:currentColor}
-.trust span{font-size:14px;color:var(--ink-2)}
-.trust b{color:var(--ink);font-weight:600}
+/* ---- page head ---- */
+.phead{padding:52px 0 12px}
+.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
+.phead h1 .hl{color:var(--teal-700)}
+.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
 
-/* hero visual: clean app-style card, no rotation/frame */
-.hero-card{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:26px;overflow:hidden}
-.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--teal-50),transparent 60%);pointer-events:none}
-.hc-top{display:flex;align-items:center;justify-content:space-between;position:relative}
-.hc-buddy{display:flex;align-items:center;gap:12px}
-.hc-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(150deg,var(--teal),var(--teal-700));display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-teal)}
-.hc-avatar svg{width:30px;height:30px;fill:#fff}
-.hc-name{font-weight:700;font-size:16px}
-.hc-role{font-size:12.5px;color:var(--ink-3)}
-.hc-badge{font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:6px 12px;border-radius:var(--r-pill)}
-.hc-figure{position:relative;margin:24px 0 6px}
-.hc-flabel{font-size:13px;color:var(--ink-3);font-weight:500}
-.hc-fnum{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
-.hc-fsub{font-size:13.5px;color:var(--ink-2);margin-top:8px}
-.hc-bars{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:22px}
-.hc-bars i{flex:1;background:var(--teal-100);border-radius:7px 7px 4px 4px;display:block;animation:grow .9s cubic-bezier(.2,.7,.3,1) backwards}
-.hc-bars i.on{background:var(--teal)}
-.hc-bars i:nth-child(1){animation-delay:.05s}.hc-bars i:nth-child(2){animation-delay:.12s}.hc-bars i:nth-child(3){animation-delay:.19s}.hc-bars i:nth-child(4){animation-delay:.26s}.hc-bars i:nth-child(5){animation-delay:.33s}.hc-bars i:nth-child(6){animation-delay:.4s}
-@keyframes grow{from{height:0;opacity:.2}}
-@media(prefers-reduced-motion:reduce){.hc-bars i{animation:none}}
-.hc-note{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:13px;margin-top:16px}
-.hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
-.hc-pill svg{width:15px;height:15px}
+/* ---- calculator layout ---- */
+.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
+.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:22px}
+.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
+.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
+.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
+.sft-note[hidden]{display:none}
 
+/* custom sliders */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
+input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
-/* ---- section base ---- */
-section{padding:88px 0}
-.sec-head{max-width:660px;margin-bottom:48px}
-.sec-head.ctr{margin-left:auto;margin-right:auto;text-align:center}
-.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
-.sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
+/* segmented tax toggle */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
+.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
+.seg button.on{color:var(--teal-700)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-/* ---- audience cards (static grid, no layout jump) ---- */
-.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.aud-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px 26px;box-shadow:var(--sh-sm);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;display:flex;flex-direction:column;overflow:hidden}
-.aud-card::after{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--ac,var(--teal));opacity:0;transition:opacity .25s ease}
-.aud-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
-.aud-card:hover::after{opacity:1}
-.aud-ico{width:50px;height:50px;border-radius:14px;background:var(--ac-soft,var(--teal-50));color:var(--ac,var(--teal-700));display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.aud-ico svg{width:25px;height:25px}
-.aud-card h3{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:9px}
-.aud-card p{font-size:15px;color:var(--ink-2);margin-bottom:22px}
-.aud-link{margin-top:auto;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;color:var(--ac,var(--teal-700))}
-.aud-link svg{width:16px;height:16px;transition:transform .2s ease}
-.aud-card:hover .aud-link svg{transform:translateX(4px)}
-.a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
-.a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
-.a3{--ac:#0A332E;--ac-soft:#EDF4F2}
+/* ---- results ---- */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.res-hero>div{position:relative;min-width:0}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 
-/* ---- "what to expect" steps ---- */
-.expect{background:var(--surface)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
-.step{position:relative;padding-top:8px}
-.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.step p{color:var(--ink-2);font-size:15px}
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
+.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend span{display:inline-flex;align-items:center;gap:8px}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
-/* ---- calculator showcase ---- */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-.calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
-.calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
-.calc-prev{background:var(--teal-900);border-radius:var(--r-xl);padding:34px;color:#fff;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
-.calc-prev::before{content:"";position:absolute;inset:0;pointer-events:none}
-.calc-prev .ctag{font-size:12.5px;letter-spacing:.04em;font-weight:600;color:#7FD8CC;position:relative}
-.calc-prev .cbig{font-size:clamp(38px,5vw,52px);font-weight:800;letter-spacing:-0.04em;line-height:1;margin:8px 0 4px;position:relative;font-variant-numeric:tabular-nums}
-.calc-prev .csub{font-size:14px;color:#A7DED4;position:relative}
-.cbars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:26px 0 6px;position:relative}
-.cbars i{flex:1;background:rgba(255,255,255,.14);border-radius:6px 6px 3px 3px;display:block}
-.cbars i.hl{background:var(--teal)}
-.cnote{font-size:12px;color:#7FD8CC;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;margin-top:8px;position:relative}
+.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
+.relief-card .rt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
+.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.relief-card .rbig b{font-weight:700;color:#3F2D04}
+.relief-viz{margin-top:18px;transition:opacity .4s}
+.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
+.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
+.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
+.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-/* ---- about Damian ---- */
-.about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
-.about-port{aspect-ratio:4/5;border-radius:var(--r-xl);background:linear-gradient(155deg,var(--teal-700),var(--teal-900));position:relative;box-shadow:var(--sh-lg);display:flex;align-items:flex-end;padding:26px;overflow:hidden}
-.about-port::before{content:"";position:absolute;inset:0;pointer-events:none}
-.about-port .pl{position:relative;color:#BBE7DF;font-size:14px;font-weight:500}
-.about-port .badge{position:absolute;top:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:7px 13px;border-radius:var(--r-pill);box-shadow:var(--sh-sm)}
-.about h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 20px}
-.pullquote{font-size:clamp(20px,2.4vw,26px);line-height:1.34;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px;color:var(--ink)}
-.pullquote .q{color:var(--teal)}
-.about p.bio{color:var(--ink-2);font-size:16px;margin-bottom:14px}
-.about .sig{font-style:italic;font-weight:600;font-size:18px;color:var(--teal-700)}
+.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
+.boost-ico svg{width:22px;height:22px}
+.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt b{font-weight:700}
 
-/* ---- testimonials ---- */
-.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
-.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--sh-sm)}
-.tcard.big{justify-content:center}
-.tcard .qstars{display:flex;gap:2px;color:var(--amber);margin-bottom:16px}
-.tcard .qstars svg{width:16px;height:16px;fill:currentColor}
-.tcard blockquote{font-size:18px;line-height:1.5;font-weight:500;letter-spacing:-0.01em;margin:0 0 20px;color:var(--ink)}
-.tcard.big blockquote{font-size:23px;font-weight:600;letter-spacing:-0.02em}
-.tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto}
-.tcard .av{width:42px;height:42px;border-radius:50%;background:var(--teal-50);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-700)}
-.tcard .who b{font-weight:600;font-size:15px;display:block}
-.tcard .who span{font-size:13px;color:var(--ink-3)}
-.tcol{display:flex;flex-direction:column;gap:22px}
+/* ---- CTA ---- */
+.cta-band{padding:64px 0 8px}
+.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
+.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
+picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
+.buddy-mini svg{width:42px;height:42px;fill:#fff}
+.cta-card .ctext{position:relative;min-width:0}
+.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
+.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
+.cta-card .btn{position:relative}
 
-/* ---- faq ---- */
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
-details[open]{box-shadow:var(--sh-md);border-color:transparent}
-summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary .pm{width:26px;height:26px;border-radius:8px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;line-height:1;flex-shrink:0;transition:transform .25s,background .25s}
-details[open] summary .pm{transform:rotate(45deg);background:var(--teal);color:#fff}
-details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
-
-/* ---- final CTA ---- */
-.final-band{padding:36px 0 88px}
-.final{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
-.final::before{content:"";position:absolute;inset:0;pointer-events:none}
-.final .paw-bg{position:absolute;right:-30px;bottom:-44px;width:260px;height:260px;opacity:.08;pointer-events:none}
-.final .paw-bg svg{width:100%;height:100%;fill:#fff}
-.final .eyebrow{background:rgba(255,255,255,.12);color:#CFEFE9;position:relative}
-.final .eyebrow .pip{background:var(--teal)}
-.final h2{color:#fff;font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
-.final p{color:#A7DED4;font-size:18px;max-width:440px;margin:0 auto 30px;position:relative}
+/* ---- assumptions ---- */
+.assume{padding:72px 0 24px}
+.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
+.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
 
 /* ---- footer ---- */
-footer{padding:64px 0 40px;border-top:1px solid var(--line)}
+footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
-.foot-brand .logo{margin-bottom:15px}
-.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
-.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
-.foot-col a:hover{color:var(--teal-700)}
+.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
-.disclosure p{margin-bottom:10px;max-width:940px}
-.disclosure a{color:var(--teal-700);font-weight:600}
+.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media(max-width:920px){
-  .hero{padding:48px 0 24px}
-  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
-  .hero-card{order:-1;max-width:460px;margin:0 auto}
-  .aud,.steps{grid-template-columns:1fr}
+  .calc-wrap{grid-template-columns:1fr;gap:20px}
+  .panel{position:static;top:auto}
+  .res-hero{grid-template-columns:1fr;padding:26px}
+  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .assume ul{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
-  .nav-links.open a.lnk{padding:10px 0;font-size:16px}
-  .nav-links.open .btn{margin-top:6px}
-  .nav-toggle{display:block}
-  section{padding:60px 0}
-  .final{padding:54px 26px}
-  .final-band{padding:24px 0 60px}
+  .nav-r{gap:14px}
 }
 @media(max-width:560px){
   .wrap{padding:0 18px}
-  .foot-top{grid-template-columns:1fr 1fr}
-  .hero-cta .btn{flex:1}
+  .nav-r .back span,.nav-r .back{font-size:0}
+  .nav-r .back svg{width:20px;height:20px}
 }
-@media(max-width:380px){
-  .foot-top{grid-template-columns:1fr}
-}
+@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
 
 /* ============================================================
    EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
@@ -344,7 +258,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
 .magnet .ok h3{font-size:18px;font-weight:700;margin-bottom:6px}
 .magnet .ok p{font-size:14px;color:var(--ink-2);margin:0 auto}
-.magnet .ok a{color:var(--ac-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 
 /* email-results capture (calculator) */
 .email-cap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-sm)}
@@ -361,6 +274,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
+.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
 
 /* credibility strip (about) */
 .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
@@ -398,12 +312,13 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .pains,.benefits,.creds,.gloss{grid-template-columns:1fr}
   .magnet{grid-template-columns:1fr;gap:24px;padding:32px 26px}
   .callout{padding:44px 26px}
+  .aud-figure{order:-1;max-width:460px;margin:0 auto}
 }
 @media(max-width:560px){
   .magnet-form .row{flex-direction:column}
   .magnet-form .row .btn{width:100%}
 }
-
+@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){/* C3: wordmark stays visible at every width, matching index */}
 
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
@@ -450,6 +365,20 @@ body{animation:pageIn .4s ease both}
   nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
   nav.scrolled .nav-in{height:72px}
 }
+
+
+/* ---- fintech slider polish: floating value bubble + richer thumb ---- */
+.field{position:relative}
+.slider-wrap{position:relative}
+.sbubble{position:absolute;top:-40px;transform:translateX(-50%) translateY(6px) scale(.9);background:var(--teal-900);color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);z-index:5;font-variant-numeric:tabular-nums;box-shadow:0 6px 18px -6px rgba(9,63,57,.5)}
+.sbubble::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--teal-900);border-radius:1px}
+.slider-wrap.dragging .sbubble{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s}
+.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(11,122,110,.14),0 4px 14px rgba(11,122,110,.5)}
+/* result panel gentle pulse when values change */
+@keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
+.res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
+@media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
 
 
 /* ============================================================
@@ -511,6 +440,16 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
 
+/* ---- click-to-type values (precision beyond slider steps) ---- */
+.field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
+.field .val:hover{border-bottom-color:var(--teal-700)}
+.field .val:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:6px}
+.val-edit{font:700 17px var(--font);letter-spacing:-0.02em;color:var(--teal-700);background:var(--surface-2);border:1.5px solid var(--teal);border-radius:8px;padding:2px 8px;width:150px;text-align:right;font-variant-numeric:tabular-nums}
+.val-edit:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.val-edit{-moz-appearance:textfield;appearance:textfield}
+
+
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
@@ -547,6 +486,9 @@ nav.nav-hidden{transform:translateY(-100%)}
   .aud-card:hover,.tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
 }
 
+
+/* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
+@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
 
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
@@ -586,10 +528,20 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
+
+/* dashed underline = term explained in the jargon buster */
+.gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
+.gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
 .gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
+/* trust strip -> editorial caps with hairline separators */
+.strip-item svg{display:none}
+.strip-in{gap:0}
+.strip-item{display:flex;align-items:center;text-transform:uppercase;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
+.strip-item:first-child{border-left:none}
+@media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
 /* persona cards: tinted top rules + matching icon depth instead of identical grid */
 .aud-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
 .aud-card:nth-child(1)::before{background:var(--teal)}
@@ -603,6 +555,7 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 .benefit{border:0;border-left:2px solid var(--teal);border-radius:0;background:none;padding:4px 0 4px 20px}
 /* dark panels: left-aligned, asymmetric */
 .callout,.final{text-align:left;padding:64px 56px}
+@media(max-width:640px){.callout,.final{padding:44px 26px}}
 /* testimonials: card template -> editorial entries */
 .tcard{background:none;border:0;border-radius:0;border-top:1px solid var(--line-2);padding:22px 2px 0}
 .tcard .av{display:none}
@@ -647,7 +600,7 @@ h3,h4{line-height:1.24;font-weight:600;letter-spacing:-.005em}
 p,li{letter-spacing:-.004em}
 
 /* mono does structural work only: eyebrows, labels, figures, legal caps */
-.eyebrow,.kicker,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
+.eyebrow,.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
 .tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
   font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em;font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
@@ -656,6 +609,7 @@ p,li{letter-spacing:-.004em}
 .foot-col h4{font-size:.66rem;letter-spacing:.14em;color:var(--ink-2);font-weight:500}
 .hc-flabel,.hc-role{font-size:.66rem;letter-spacing:.13em}
 .tcard .who b{font-size:.66rem;letter-spacing:.13em}
+.strip-item{font-size:.665rem;letter-spacing:.15em;font-weight:500}
 .ctag{font-size:.665rem;letter-spacing:.15em}
 
 /* figures only - mono must never swallow a sentence */
@@ -737,6 +691,20 @@ details[open] summary .pm{background:var(--ink);border-color:var(--ink);color:#f
 .aud-card:hover{transform:none;background:var(--teal-50);border-color:var(--line)}
 .aud-card:active{transform:none}
 
+/* --- 7. Ambient motion: the trust strip runs, it doesn't sit --- */
+.strip{position:relative;overflow:hidden}
+.strip::before,.strip::after{content:"";position:absolute;top:0;bottom:0;width:72px;
+  z-index:2;pointer-events:none}
+.strip::before{left:0;background:linear-gradient(to right,var(--surface),rgba(255,255,255,0))}
+.strip::after{right:0;background:linear-gradient(to left,var(--surface),rgba(255,255,255,0))}
+.strip-in{display:flex;flex-wrap:nowrap;justify-content:flex-start;width:max-content;
+  max-width:none;margin:0;gap:0;padding:20px 0;will-change:transform;
+  animation:pbMarquee 44s linear infinite}
+.strip:hover .strip-in,.strip:focus-within .strip-in{animation-play-state:paused}
+.strip-item{border-left:1px solid var(--line-2);padding:0 30px;white-space:nowrap;flex:0 0 auto}
+.strip-item:first-child{border-left:1px solid var(--line-2)}
+@keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
 /* reveals no longer move in lockstep */
 .js-reveal .reveal:not(.settled){transform:translateY(14px);
   transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
@@ -766,6 +734,10 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 }
 
 @media(prefers-reduced-motion:reduce){
+  .strip-in{animation:none;width:auto;max-width:var(--maxw);margin:0 auto;
+    padding:20px 24px;flex-wrap:wrap;justify-content:center}
+  .strip-item.is-clone{display:none}
+  .strip::before,.strip::after{display:none}
   .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
   details .faq-inner{transition:none}
 }
@@ -954,15 +926,16 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 /* .pains only had its grid defined on the audience pages; the homepage copy
    of the block needs it too. */
-.pains{display:grid}
-/* columns only above the 920px stack point, so the @media(max-width:920px)
-   single-column rule above keeps winning on phones */
-@media(min-width:921px){.pains{grid-template-columns:repeat(3,1fr)}}
+.pains{display:grid;grid-template-columns:repeat(3,1fr)}
 /* .phead wraps the calculator h1 and lede - it is a header block, not a label.
    Restore normal case. */
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
 .phead h1{font-family:var(--font-display);letter-spacing:-.015em}
 .phead .eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em}
+
+/* the deadline band is a grid child of .calc-wrap; without a span it took a
+   column and pushed the results panel out of place */
+.calc-wrap .deadline{grid-column:1 / -1;margin-bottom:4px}
 
 /* ============================================================
    PB-TICK - Pay & File countdown
@@ -1035,6 +1008,7 @@ span.ai,.assure .ai{border-radius:6px !important}
 
 @media(max-width:1080px){
   .nt-l{display:none}
+  .nav-tick{margin-left:12px;padding:6px 9px}
 }
 @media(max-width:560px){
   .nav-tick{display:none}
@@ -1104,7 +1078,7 @@ body{font-size:1rem;line-height:1.68}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
 .eyebrow{font-size:.78rem;letter-spacing:.13em}
-.kicker,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
+.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
 .pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.cv-s,.gs-s,
 .foot-col h4,.cl,.tl .tt,.assure .at{font-size:.75rem !important;letter-spacing:.11em}
 .nt-l{font-size:.7rem !important;letter-spacing:.1em}
@@ -1140,6 +1114,7 @@ input:focus-visible,select:focus-visible{
 
 @media(max-width:920px){
   html{font-size:104%}
+  .nav-links a.lnk{padding:14px 16px}
 }
 
 /* --- inline prose links and footer links: 44px reach --- */
@@ -1365,6 +1340,19 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* section eyebrows on light backgrounds pick up the brand colour too */
 .sec-head .eyebrow,.painband .eyebrow,.gapband .eyebrow,.coverband .eyebrow{color:var(--teal)}
 
+/* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
+.adv{border-top:1px solid var(--line);margin-top:20px}
+.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
+.adv > summary::-webkit-details-marker{display:none}
+.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
+.adv > summary:hover{color:var(--ink)}
+.adv .adv-in{padding-top:4px;padding-bottom:6px}
+
 /* ============================================================
    PB-AUDIT - changes driven by measured findings
    ============================================================ */
@@ -1426,6 +1414,10 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .credline b{color:var(--ink);font-weight:600}
 .credline .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
 
+/* the site's own .field display rule outranks the UA's
+   details:not([open]) > *{display:none}, so the collapse must be explicit */
+.adv:not([open]) .adv-in{display:none}
+
 /* --- 5. legal pages measured 13px at 114 characters per line (the .updated
    date line and the body copy), failing both the 16px floor and the 75-char
    ceiling. .legal was already capped at 820px, which is still ~114 chars at
@@ -1445,6 +1437,76 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   .hero-cta{margin-bottom:16px;gap:10px}
   .credline{margin-top:14px;font-size:.82rem;gap:6px 10px}
 }
+
+
+/* ============================================================
+   MY FUTURE FUND CROSSOVER - page-specific components.
+   Everything else on this page is the shared system above.
+   ============================================================ */
+/* the results cards below toggle with [hidden]; .boost-card/.relief-card set
+   their own display, which outranks the UA [hidden] rule */
+.results [hidden]{display:none!important}
+
+/* segmented control, 3- and 4-up variants of the existing .seg */
+.seg-3{grid-template-columns:1fr 1fr 1fr}
+.seg-4{grid-template-columns:repeat(4,1fr)}
+.seg-3 .ind{width:calc((100% - 8px)/3)}
+.seg-4 .ind{width:calc((100% - 8px)/4)}
+.seg-3 button{padding:11px 4px;font-size:13px}
+.seg-4 button{padding:11px 2px;font-size:12.5px}
+
+/* salary zone bar: one bar is the whole salary, split at the standard rate
+   cut-off point, with the My Future Fund earnings cap struck across the top */
+.zbar{position:relative;display:flex;height:34px;border-radius:8px;overflow:hidden;background:var(--surface-2);margin-top:8px}
+.z20{background:var(--teal-100);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.z40{background:var(--teal);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.zcap{position:absolute;top:0;bottom:0;right:0;border-left:2px solid #B5821C;
+  background:repeating-linear-gradient(135deg,rgba(181,130,28,.5) 0 6px,rgba(181,130,28,.18) 6px 12px);
+  transition:left .6s cubic-bezier(.45,0,.25,1)}
+.zkeys{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:13px;font-size:13px;color:var(--ink-2)}
+.zkeys b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;margin-left:6px}
+.zd{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.z20d{background:var(--teal-100);border:1px solid var(--line-2)}
+.z40d{background:var(--teal)}
+.zcapd{background:#B5821C}
+.zline{font-size:14px;color:var(--ink-2);line-height:1.62;margin-top:15px}
+.zline b{color:var(--ink);font-weight:700}
+
+/* two routes, one slice of take-home pay */
+.cmp-row{margin-top:16px}
+.cmp-l{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--ink-2);margin-bottom:7px}
+.cmp-l b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp-bar{height:13px;border-radius:99px;overflow:hidden;background:var(--surface-2)}
+.cmp-bar span{display:block;height:100%;border-radius:99px;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.cmp-mff{background:var(--teal)}
+.cmp-prsa{background:#B5821C}
+
+/* adequacy against the two-thirds target */
+.abar{position:relative;height:20px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:10px}
+.afill{height:100%;background:var(--teal);border-radius:99px;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.akeys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:var(--ink-2);flex-wrap:wrap}
+.akeys b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.sgl{display:block;margin-bottom:9px}
+.sgl:last-child{margin-bottom:0}
+/* The adequacy bar is the My Future Fund pot only. The State Pension is
+   payable on top of it, so the bar is marked as a reference rather than left
+   to overstate the gap by omission - and marked without a figure, because
+   putting one in the maths would invent precision the rest of the site does
+   not have. */
+.asp{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:13px;color:var(--ink-2)}
+.asp-plus{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:6px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:13px;line-height:1;flex-shrink:0}
+
+/* The shared layout-stability rule at min-width:921px pins every .chart-card
+   to 338px, which is the natural height of the pension calculator's single
+   chart card. This page has three, two of them much shorter, so only the one
+   that actually carries the growth chart keeps the floor. The verdict cards
+   swap in and out of each other's place, so they share one. */
+@media(min-width:921px){
+  .chart-card{min-height:0}
+  .chart-card.has-chart{min-height:338px}
+  #gapCard{min-height:114px}
+}
+@media(prefers-reduced-motion:reduce){.z20,.z40,.zcap,.cmp-bar span,.afill{transition:none}}
 
 /* ============================================================
    F2 - Fraunces display tracking
@@ -1466,11 +1528,16 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 
 <script>
 /* ------------------------------------------------------------------
-   LEAD CAPTURE CONFIG - same two values as the calculator pages.
-   Set LEAD_ENDPOINT to a form endpoint (Formspree, Netlify Forms, a CRM
-   webhook) that accepts a JSON POST. Until it starts with http, the form
-   opens the visitor's mail client instead, so no lead is lost and nobody
-   is told an email is coming that isn't.
+   LEAD CAPTURE CONFIG
+
+   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
+   a CRM webhook, anything that accepts a JSON POST). Once it starts with
+   http, results are posted there and the visitor only sees a confirmation
+   when the send actually succeeds.
+
+   Until then the form opens the visitor's mail client with their figures
+   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
+   lost and nobody is told an email is coming that isn't.
    NOTE (F1b): the endpoint value is pending Damian's input. Until it is
    set, the mailto fallback below is what actually runs.
    ------------------------------------------------------------------ */
@@ -1478,14 +1545,14 @@ var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 </head>
-<body class="acc-purple">
+<body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation, always</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
   <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
   <div class="nav-links" id="navLinks">
-    <a class="lnk active" href="tracker.html" aria-current="page">Find a pension</a>
+    <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
     <a class="lnk" href="director.html">Directors</a>
     <a class="lnk" href="pension-calculator.html">Calculator</a>
@@ -1495,100 +1562,157 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<header class="hero aud-hero"><div class="wrap hero-grid">
-  <div class="reveal">
-    <span class="eyebrow acc"><span class="pip"></span>For pension trackers</span>
-    <h1>Lost track of an old pension? Let's <span class="hl">find it</span>.</h1>
-    <p class="lede">Most people who've changed jobs have pension money sitting somewhere, often more than they'd guess. We'll help you track it down and work out what to do with it.</p>
-    <div class="hero-cta">
-      <a class="btn btn-acc" href="booking.html">Help me find my pensions <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
+
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>Auto-enrolment · two minutes, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">Is My Future Fund <span class="hl">enough</span>?</h1>
+  <p class="reveal" style="transition-delay:.12s">My Future Fund puts real money into your pension, and nothing here suggests leaving it. This shows the two places it stops covering your salary, and how far it gets you on its own.</p>
+</div></div>
+
+<div class="wrap"><div class="calc-wrap">
+  <div class="deadline" id="deadlineBand">
+      <span class="dl-tag">Tax deadline</span>
+      <span class="dl-text" id="deadlineText"></span>
     </div>
-      <div class="credline reveal" style="transition-delay:.28s"><b>Damian Condon, QFA</b><span class="sep"></span>Regulated by the Central Bank of Ireland<span class="sep"></span>30 years in financial services</div>
-  </div>
-  <div class="reveal" style="transition-delay:.15s">
-    <div class="aud-figure">
-      <div class="fbadge">Free trace</div>
-      <div class="ring"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-      <div class="fcap">The search</div>
+    <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+    <div class="field"><div class="row"><label for="sal">Your gross salary</label><span class="val" id="salV">€50,000</span></div><input type="range" id="sal" min="20000" max="300000" step="1000" value="50000"><p class="subnote">My Future Fund contributions are worked out on salary up to €80,000. Above that there is no employer match and no State top-up.</p></div>
+
+    <div class="field">
+      <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
+      <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="statusInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)">Two incomes</button></div>
+      <p class="subnote">Sets your standard rate cut-off point &mdash; the point where income tax goes from 20% to 40%, and so the rate <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> is given at. 2026 figures: €44,000, €53,000 and €88,000.</p>
+      <p class="subnote">Two incomes uses the €88,000 maximum combined band, only reached where the second income is high enough to use the full transferable amount — a single-earner couple’s band is €53,000.</p>
     </div>
-  </div>
-</div></header>
 
-<section><div class="wrap">
-  <div class="sec-head reveal"><span class="kicker">Sound familiar?</span><h2>If any of this rings true, you're in the right place.</h2></div>
-  <div class="pains">
-    <div class="pain reveal"><div class="pl">A few jobs in</div><h3>Pensions all over the place</h3><p>You've worked for two, three or more employers, and joined a scheme with some of them.</p></div>
-    <div class="pain reveal" style="transition-delay:.08s"><div class="pl">Long gone</div><h3>The paperwork vanished</h3><p>Statements binned years ago, and some of those providers have merged or changed names since.</p></div>
-    <div class="pain reveal" style="transition-delay:.16s"><div class="pl">A mystery</div><h3>No idea what it's worth</h3><p>You genuinely don't know how much is in any of them, or whether it's growing or just sitting there.</p></div>
-  </div>
-</div></section>
+    <div class="field">
+      <div class="row"><label id="phaseLabel">Contribution phase</label></div>
+      <div class="seg seg-4" role="group" aria-labelledby="phaseLabel"><span class="ind" id="phaseInd"></span><button id="ph0" aria-pressed="false" aria-label="Contribution rates for 2026 to 2028" onclick="setPhase(0)">2026–28</button><button id="ph1" aria-pressed="false" aria-label="Contribution rates for 2029 to 2031" onclick="setPhase(1)">2029–31</button><button id="ph2" aria-pressed="false" aria-label="Contribution rates for 2032 to 2034" onclick="setPhase(2)">2032–34</button><button id="ph3" aria-pressed="false" aria-label="Contribution rates for 2035 onwards" onclick="setPhase(3)">2035+</button></div>
+      <p class="subnote" id="phaseNote">Contributions phase up over ten years.</p>
+    </div>
 
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head ctr reveal"><span class="kicker">How we'll sort it</span><h2>Three steps. No paperwork to begin.</h2></div>
-  <div class="steps">
-    <div class="step reveal"><div class="sx">1</div><h3>Tell us where you worked</h3><p>Rough employer names and rough dates are plenty. We don't need the old statements.</p></div>
-    <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We trace and value them</h3><p>We help locate each pension you built up and find out what it's actually worth today.</p></div>
-    <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>We explain your options</h3><p>In plain English, including whether bringing them together into one plan makes sense for you.</p></div>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40"></div>
+    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
   </div>
-</div></section>
 
-<section style="padding-top:0"><div class="wrap">
-  <div class="callout reveal">
-    <span class="eyebrow"><span class="pip"></span>Worth knowing</span>
-    <h2>Forgotten pensions are more common than you'd think.</h2>
-    <p>Bringing scattered pensions together can make them easier to manage and, sometimes, work harder. We'll tell you honestly whether it's worth it for you.</p>
-    <p>If one of those pensions is My Future Fund, our <a href="my-future-fund-calculator.html">My Future Fund check</a> shows what the scheme covers at your salary and what it does not.</p>
-    <a class="btn btn-light" href="booking.html">Start finding mine <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  </div>
-</div></section>
+  <div class="results">
+    <div class="res-hero reveal" style="transition-delay:.08s">
+      <div><div class="rl">Into your pension through My Future Fund</div><div class="big" id="mffOut">€0</div></div>
+      <div><div class="rl">Into your pension through a broker-arranged PRSA</div><div class="big" id="prsaOut">€0</div></div>
+      <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+      <div class="divline"></div>
+      <div class="foot" id="basisNote">Per year, for the same amount of take-home pay given up either way.</div>
+      <div class="foot">Illustration only · the value of investments can fall as well as rise</div>
+    </div>
 
-<section><div class="wrap"><div class="magnet reveal">
-  <div class="mtext">
-    <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
-    <h2>How to find a lost pension.</h2>
-    <p>A short, plain-English guide to tracking down pensions from old jobs in Ireland, and what to do once you've found them. We'll email it to you.</p>
-  </div>
-  <div>
-    <div class="magnet-form" id="mForm">
-      <div class="row">
-        <span class="ffield"><input type="email" id="mEmail" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
-        <button class="btn btn-acc" onclick="sendMagnet()" type="button">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <div class="chart-card reveal" style="transition-delay:.11s">
+      <h3>Where your salary sits</h3>
+      <div class="zbar" id="zbar" role="img" aria-labelledby="zoneOut">
+        <div class="z20" id="z20"></div>
+        <div class="z40" id="z40"></div>
+        <div class="zcap" id="zcap" hidden></div>
       </div>
-      <p class="note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
-      <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+      <div class="zkeys">
+        <span><i class="zd z20d" aria-hidden="true"></i>Taxed at 20%<b id="z20V">€0</b></span>
+        <span><i class="zd z40d" aria-hidden="true"></i>Taxed at 40%<b id="z40V">€0</b></span>
+        <span id="zcapKey" hidden><i class="zd zcapd" aria-hidden="true"></i>Outside My Future Fund<b id="zcapV">€0</b></span>
+      </div>
+      <p class="zline" id="zoneOut">Move the sliders to see it.</p>
     </div>
-    <div class="ok" id="mOk" role="status">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-      <h3>Check your inbox.</h3>
-      <p><span id="mOkText">Thanks. The guide is on its way.</span></p>
+
+    <div class="chart-card reveal" style="transition-delay:.14s">
+      <h3>The same take-home pay, two routes</h3>
+      <p class="zline" style="margin-top:6px" id="cmpIntro">Move the sliders to see it.</p>
+      <div class="cmp-row">
+        <div class="cmp-l"><span>My Future Fund</span><b id="cmpMffV">€0</b></div>
+        <div class="cmp-bar"><span class="cmp-mff" id="cmpMff"></span></div>
+      </div>
+      <div class="cmp-row">
+        <div class="cmp-l"><span>Broker-arranged PRSA</span><b id="cmpPrsaV">€0</b></div>
+        <div class="cmp-bar"><span class="cmp-prsa" id="cmpPrsa"></span></div>
+      </div>
+      <p class="zline">My Future Fund adds your employer’s matching contribution, which a personal PRSA does not. A PRSA adds tax relief at your own rate, and has no €80,000 ceiling. Nothing here is a suggestion to opt out of My Future Fund or to stop contributing to it.</p>
+    </div>
+
+    <div class="relief-card reveal" id="gapCard" style="transition-delay:.17s" hidden>
+      <div class="rt">Money left on the table</div>
+      <div class="rbig" id="gapOut"></div>
+    </div>
+    <div class="boost-card reveal" id="aheadCard" style="transition-delay:.17s">
+      <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="bt" id="aheadOut">Move the sliders to see it.</div>
+    </div>
+
+    <div class="chart-card has-chart reveal" style="transition-delay:.2s">
+      <h3>How far it gets you on its own</h3>
+      <div class="abar"><div class="afill" id="afill" style="width:0"></div></div>
+      <p class="asp"><span class="asp-plus" aria-hidden="true">+</span>Your State Pension sits on top of this, and is not counted in the bar.</p>
+      <div class="akeys">
+        <span>My Future Fund only <b id="adqInc">€0</b> a month</span>
+        <span>Two-thirds target <b id="adqTgt">€0</b> a month</span>
+      </div>
+      <p class="zline" id="adqOut">Move the sliders to see it.</p>
+      <div class="chart-legend"><span><i class="dotk" aria-hidden="true"></i>My Future Fund only</span><span><i class="dashk" aria-hidden="true"></i>The pot the two-thirds target needs</span></div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="waitcard reveal" style="transition-delay:.24s">
+      <div class="wt">Where My Future Fund stops</div>
+      <div class="wtext" id="signalsOut">Move the sliders to see it.</div>
+      <a class="wlink" href="booking.html">Book a free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+
+    <div class="email-cap reveal" style="transition-delay:.3s">
+      <div class="ec-top">
+        <span class="eci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+        <div class="ect"><b>Want these figures emailed to you?</b><span>And what they’d look like for your actual situation.</span></div>
+      </div>
+      <div id="ecForm">
+        <div class="ec-row">
+          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
+          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+        <p class="ec-note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
+      </div>
+      <div class="ec-ok" id="ecOk" role="status"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
     </div>
   </div>
-</div></div></section>
+</div></div>
 
-<section style="padding-top:56px"><div class="wrap faq-grid">
-  <div class="sec-head reveal" style="margin-bottom:0"><span class="kicker">Good to know</span><h2>Questions, answered.</h2></div>
-  <div class="faq-list reveal" style="transition-delay:.1s">
-    <details><summary>I don't have any of the paperwork, is that a problem?<span class="pm">+</span></summary><p>Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension. You'd be surprised how little we need.</p></details>
-    <details><summary>Can I combine my old pensions into one?<span class="pm">+</span></summary><p>Often, yes, and it makes them far easier to keep track of. But it isn't always right. Some older pensions carry valuable guarantees worth keeping, so we'll look at each one and tell you honestly.</p></details>
-    <details><summary>Is it really worth the hassle?<span class="pm">+</span></summary><p>There usually is money there. Knowing what you've got, and making sure it's invested rather than sitting forgotten, can make a real difference. The first conversation is free, so there's little to lose by finding out.</p></details>
-  </div>
-</div></section>
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="ctext"><h2>These are just illustrations.</h2><p>Want to see what your own salary and scheme actually look like side by side? Damian will walk you through it in a free 20-minute call. Plain English, no obligation.</p></div>
+  <a class="btn btn-primary" href="booking.html">Book a free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></div>
 
-<section style="padding-top:0"><div class="wrap">
+<section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice reveal">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Whether to move or combine a pension depends on your circumstances. Regulated financial advice is given in a personal consultation with Damian.</p>
+    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
   </div>
 </div></section>
 
-<div class="final-band"><div class="wrap"><div class="final reveal">
-  <div class="paw-bg"><svg fill="#fff" viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="2" ry="2.9"/><ellipse cx="16" cy="7.5" rx="2" ry="2.9"/><ellipse cx="4.3" cy="11.8" rx="1.8" ry="2.4"/><ellipse cx="19.7" cy="11.8" rx="1.8" ry="2.4"/><path d="M12 12.6c-3.2 0-5.5 2.2-5.5 5 0 2.4 2.4 3 5.5 3s5.5-.6 5.5-3c0-2.8-2.3-5-5.5-5z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>Let's find what's yours</span>
-  <h2>A free chat. We'll do<br>the digging.</h2>
-  <p>Bring what you remember, Damian will help track down the rest. No pressure, no obligation.</p>
-  <a class="btn btn-light" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>My Future Fund contribution rates are the phased rates set out in the auto-enrolment legislation: employee, employer and State each rising in steps, on salary up to €80,000. The State top-up is a third of your own contribution at every phase, and replaces income tax relief rather than adding to it.</li>
+    <li>Your own My Future Fund contribution comes out of net pay, so it gets no income tax relief. Above €80,000 of salary there is no employer match and no State top-up at all.</li>
+    <li>The two routes are compared on the same amount of take-home pay given up: your own My Future Fund contribution rate applied to your whole salary. My Future Fund can only take that on the first €80,000 and matches it there. A PRSA can take all of it, relieved at your own rate, with no employer match.</li>
+    <li>Income tax relief is shown at 20% and 40% only, with the part of a contribution sitting above your standard rate cut-off point relieved at 40% and the rest at 20%. PRSI and USC are not modelled. Relief is still limited to Revenue’s age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000.</li>
+    <li>The standard rate cut-off points used are the 2026 figures: €44,000 single, €53,000 married or in a civil partnership with one income, and €88,000 with two incomes. The €88,000 is the maximum combined band and is only reached where the second income is high enough to use the full transferable amount; a single-earner couple’s band is €53,000. These bands change most years — check them at the start of each tax year.</li>
+    <li>Growth is assumed at the constant rate you choose, and your salary is assumed to stay where it is. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
+    <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
+    <li>The retirement target used is two-thirds of your salary. It is a common rule of thumb, not a rule, and what you actually need depends on your own circumstances.</li>
+    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) is not included in the projection and may be payable on top, roughly €15,000 a year for a full entitlement. Check gov.ie for the current rate.</li>
+    <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
+    <li>My Future Fund applies to employees who are not already in a qualifying workplace pension scheme, within the age and earnings limits the scheme sets. If you are already in a scheme at work, this page is not about you.</li>
+    <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
+  </ul>
+</div></section>
+
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -1599,54 +1723,322 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
-    <p>The information on this website is provided for general guidance only and does not constitute financial, investment or tax advice. The value of investments may fall as well as rise. Transferring or consolidating pensions will not be suitable for everyone. Tax treatment depends on individual circumstances and may change.</p>
+    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
-    <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+    <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
+    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
 </div></footer>
+
 <script>
-function sendMagnet(){
-  var input=document.getElementById('mEmail');
-  var e=input.value.trim();
-  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  var err=document.getElementById('mErr');
-  if(!ok){ err.textContent='Please enter a valid email address.';
-           err.style.display='block'; input.focus(); return; }
-  err.style.display='none';
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Revenue's age-related limit on tax-relievable personal contributions:
+   a percentage of earnings, with earnings capped at EARN_CAP. Reused
+   unchanged from the pension calculator. */
+const EARN_CAP=115000;
+function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
+const $=id=>document.getElementById(id);
+const euro=v=>'\u20AC'+Math.round(v).toLocaleString('en-IE');
+const rate=v=>(v*100).toFixed(1).replace(/\.0$/,'')+'%';
 
-  var payload={email:e, request:'guide', source:document.title, page:location.href};
+/* ============================================================
+   1. MY FUTURE FUND SCHEME RULES
+   Fixed by the auto-enrolment legislation rather than by the visitor's tax
+   position, so they are constants, not inputs. The State top-up is a third
+   of the employee's own contribution at every phase (0.5/1.5, 1/3, 1.5/4.5,
+   2/6) and replaces income tax relief rather than adding to it.
+   ============================================================ */
+var MFF_CAP=80000;   /* no employer match and no State top-up on salary above this */
+var MFF_PHASES=[
+  {label:'2026\u201328',from:2026,to:2028,ee:0.015,er:0.015,st:0.005},
+  {label:'2029\u201331',from:2029,to:2031,ee:0.03, er:0.03, st:0.01 },
+  {label:'2032\u201334',from:2032,to:2034,ee:0.045,er:0.045,st:0.015},
+  {label:'2035+',       from:2035,to:9999,ee:0.06, er:0.06, st:0.02 }
+];
+function phaseIndexFor(year){for(var i=0;i<MFF_PHASES.length;i++){if(year<=MFF_PHASES[i].to)return i;}return MFF_PHASES.length-1;}
+function phaseFor(year){return MFF_PHASES[phaseIndexFor(year)];}
 
-  var done=function(msg,isHtml,heading){
-    var t=document.getElementById('mOkText');
-    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
-    var h=document.querySelector('#mOk h3');
-    if(h&&heading)h.textContent=heading;
-    document.getElementById('mForm').style.display='none';
-    document.getElementById('mOk').classList.add('show');
-  };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead and we will talk it through.';
-    err.style.display='block';
-  };
+/* ============================================================
+   2. STANDARD RATE CUT-OFF POINT
+   NEEDS DAMIAN INPUT (G1). These are the 2026 figures and they move most
+   years - one constant, one date to check. The two-income figure is the
+   maximum combined band and assumes the second income is large enough to
+   use the full transferable increase.
+   ============================================================ */
+var SRCOP_YEAR=2026;
+var SRCOP=[44000,53000,88000];
 
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. The guide is on its way.') : failed(); })
-      .catch(failed);
-  }else{
-    var body='Please send me the guide.%0D%0A%0D%0AMy email: '+
-      encodeURIComponent(payload.email)+'%0D%0AFrom: '+encodeURIComponent(payload.page);
-    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
-      '?subject='+encodeURIComponent('Guide request')+'&body='+body;
-    /* nothing has been sent by this page, so the panel must not say "on its way" */
-    done('Your email app should have opened with the request ready to send. '+
-         'If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through it.', true, 'One more step.');
-  }
+/* ============================================================
+   3. INCOME TAX RELIEF
+   Same level of abstraction as the rest of the site: 20%/40% income tax
+   only, no PRSI and no USC. A pension contribution comes off the top of
+   taxable income, so the part of it sitting above the standard rate cut-off
+   point is relieved at 40% and the rest at 20%. Revenue's age-related limit
+   still decides how much of a contribution qualifies for relief at all.
+
+   (The pension calculator applies the same limit inline against a rate the
+   visitor picks by hand. There is no shared script file on this site and
+   that page is locked, so the logic is restated here rather than extracted
+   from underneath it - see the build note in docs/ISSUES.md.)
+   ============================================================ */
+function reliefTiers(salary,srcop,age){
+  var capQ=reliefBand(age)*Math.min(salary,EARN_CAP);
+  var t40=Math.min(Math.max(0,salary-srcop),capQ);
+  return {t40:t40,t20:Math.max(0,capQ-t40)};
 }
-</script>
-<script>
+/* the gross contribution whose cost, after relief, is exactly `net` */
+function grossForNetCost(net,salary,srcop,age){
+  var t=reliefTiers(salary,srcop,age),g=0,left=net,use;
+  use=Math.min(left/0.60,t.t40); g+=use; left-=use*0.60;
+  use=Math.min(left/0.80,t.t20); g+=use; left-=use*0.80;
+  return g+left;   /* past the age-related limit a contribution gets no relief */
+}
+
+/* ============================================================
+   4. THE TWO ROUTES, ON ONE BASIS
+   The visitor gives up the same slice of take-home pay either way: their own
+   My Future Fund contribution rate, applied to their whole salary. My Future
+   Fund can only take that on the first MFF_CAP of salary, and matches it
+   there. A PRSA can take all of it, relieved at the visitor's own rate, with
+   no employer match.
+   ============================================================ */
+function routes(salary,ph,srcop,age){
+  var net=ph.ee*salary;
+  return {
+    net:net,
+    mff:Math.min(salary,MFF_CAP)*(ph.ee+ph.er+ph.st),
+    prsa:grossForNetCost(net,salary,srcop,age),
+    stranded:ph.ee*Math.max(0,salary-MFF_CAP)
+  };
+}
+
+/* ============================================================
+   5. ADEQUACY
+   The My Future Fund contribution stream only, run through the same
+   compound growth and 4% drawdown the pension calculator uses, against a
+   two-thirds-of-salary target. Salary is held flat in nominal terms.
+   ============================================================ */
+var TARGET_FRACTION=2/3;
+var DRAWDOWN=0.04;
+function mffSeries(salary,age,ret,g){
+  var mRate=Math.pow(1+g/100,1/12)-1,pot=0,out=[0],y0=new Date().getFullYear();
+  var months=Math.max(0,ret-age)*12,base=Math.min(salary,MFF_CAP);
+  for(var m=0;m<months;m++){
+    var ph=phaseFor(y0+Math.floor(m/12));
+    pot=project(1,pot,base*(ph.ee+ph.er+ph.st)/12,mRate);
+    out.push(pot);
+  }
+  return out;
+}
+
+function project(months,startPot,monthly,mRate){
+  const grownPot=startPot*Math.pow(1+mRate,months);
+  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
+  return grownPot+grownContrib;
+}
+
+/* ---- smooth display engine ---- */
+const anims={};let rafId=null;
+function tween(id,target,fmt){
+  const a=anims[id];
+  if(!a){anims[id]={cur:target,target,fmt};$(id).textContent=fmt(target);startLoop();return;}
+  a.target=target;a.fmt=fmt;startLoop();
+}
+function startLoop(){if(!rafId)rafId=requestAnimationFrame(step);}
+function step(){
+  let active=false;const f=REDUCE?1:0.16;
+  for(const id in anims){const a=anims[id];const d=a.target-a.cur;
+    if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*f;active=true;}else{a.cur=a.target;}
+    $(id).textContent=a.fmt(a.cur);}
+  if(chart.lerp(f))active=true;
+  rafId=active?requestAnimationFrame(step):null;
+}
+
+/* ---- persistent morphing chart ---- */
+const chart={
+  N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
+  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
+  init(){
+    const NS='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(NS,'svg');
+    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);svg.setAttribute('width','100%');svg.style.display='block';
+    for(let g=1;g<=3;g++){const yy=this.padT+(g/4)*(this.H-this.padT-this.padB);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',this.padL);l.setAttribute('y1',yy);l.setAttribute('x2',this.W-this.padR);l.setAttribute('y2',yy);
+      l.setAttribute('stroke','rgba(11,31,28,0.07)');svg.appendChild(l);}
+    const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
+    this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
+    this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
+    this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
+    this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    $('chart').appendChild(svg);this.inited=true;
+  },
+  setTarget(b,u,ageS,ageE){
+    if(!this.inited)this.init();
+    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
+    this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
+    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
+    startLoop();
+  },
+  lerp(f){
+    if(!this.inited)return false;
+    let active=false;
+    const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
+      if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
+    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
+    const dm=this.tgt.max-this.cur.max;
+    if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
+    this.render();return active;
+  },
+  render(){
+    const n=this.cur.b.length;if(!n)return;
+    const max=this.cur.max;
+    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
+    const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
+    let dB='M '+X(0)+' '+Y(this.cur.b[0]).toFixed(1);
+    for(let i=1;i<n;i++)dB+=' L '+X(i).toFixed(1)+' '+Y(this.cur.b[i]).toFixed(1);
+    let dU='M '+X(0)+' '+Y(this.cur.u[0]).toFixed(1);
+    for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
+    this.els.base.setAttribute('d',dB);
+    this.els.boost.setAttribute('d',dU);
+    this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
+    this.els.mx.textContent=euro(max);
+  }
+};
+
+/* ---- slider fill paint ---- */
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
+const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
+function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
+let srTimer=null;
+
+/* ---- the controls ---- */
+var statusIx=0,phaseIx=0;
+function setStatus(i){
+  statusIx=i;
+  for(var k=0;k<3;k++){var b=$('st'+k);b.classList.toggle('on',k===i);b.setAttribute('aria-pressed',k===i?'true':'false');}
+  $('statusInd').style.transform='translateX('+(i*100)+'%)';
+  calc();
+}
+function setPhase(i){
+  phaseIx=i;
+  for(var k=0;k<MFF_PHASES.length;k++){var b=$('ph'+k);b.classList.toggle('on',k===i);b.setAttribute('aria-pressed',k===i?'true':'false');}
+  $('phaseInd').style.transform='translateX('+(i*100)+'%)';
+  calc();
+}
+
+/* ---- the maths ---- */
+function calc(){
+  var salary=+$('sal').value, age=+$('age').value, ret=+$('ret').value, g=+$('growth').value;
+  $('ret').min=age+1;
+  if(ret<=age){ret=age+1;$('ret').value=ret;}
+  paintSlider($('ret'));
+  $('salV').textContent=euro(salary);
+  $('ageV').textContent=age;
+  $('retV').textContent=ret;
+  $('growthV').textContent=g+'%';
+
+  var srcop=SRCOP[statusIx], ph=MFF_PHASES[phaseIx];
+  $('phaseNote').textContent='From '+ph.label+', on the first '+euro(MFF_CAP)+' of salary: you '+rate(ph.ee)+', your employer '+rate(ph.er)+', the State '+rate(ph.st)+'.';
+
+  /* headline: the same take-home pay, down each route */
+  var r=routes(salary,ph,srcop,age);
+  tween('mffOut',r.mff,euro);
+  tween('prsaOut',r.prsa,euro);
+  $('basisNote').textContent='Per year, at the '+ph.label+' rate, for the same '+euro(r.net)+' of take-home pay given up either way.';
+
+  /* ---- signal 1 and 2: the salary bar ---- */
+  var s20=Math.min(salary,srcop), s40=Math.max(0,salary-srcop), over=Math.max(0,salary-MFF_CAP);
+  $('z20').style.width=(s20/salary*100)+'%';
+  $('z40').style.width=(s40/salary*100)+'%';
+  $('z20V').textContent=euro(s20);
+  $('z40V').textContent=euro(s40);
+  $('zcap').hidden=!(over>0);
+  $('zcapKey').hidden=!(over>0);
+  if(over>0){$('zcap').style.left=(MFF_CAP/salary*100)+'%';$('zcapV').textContent=euro(over);}
+
+  var zl=[];
+  if(s40>0){
+    zl.push('<b>'+euro(s40)+'</b> of your salary is taxed at 40%. Tax relief on a pension contribution follows that rate, so on this part of your income relief is worth more than the flat top-up My Future Fund pays.');
+  }else{
+    zl.push('All of your salary is inside the 20% band. My Future Fund adds a third to your own contribution, which is worth more than relief at 20%. On tax alone, there is nothing here to catch up on.');
+  }
+  if(over>0){
+    zl.push('<b>'+euro(over)+'</b> of it is above the '+euro(MFF_CAP)+' My Future Fund works on. On that part there is no employer match and no State top-up at all.');
+  }else{
+    zl.push('All of it is inside the '+euro(MFF_CAP)+' My Future Fund works on, so the match and the top-up apply to the whole of it.');
+  }
+  $('zoneOut').innerHTML=zl.join(' ');
+
+  /* ---- the comparison ---- */
+  var mx=Math.max(r.mff,r.prsa,1);
+  $('cmpMff').style.width=(r.mff/mx*100)+'%';
+  $('cmpPrsa').style.width=(r.prsa/mx*100)+'%';
+  $('cmpMffV').textContent=euro(r.mff);
+  $('cmpPrsaV').textContent=euro(r.prsa);
+  $('cmpIntro').textContent='Say you give up '+euro(r.net)+' of take-home pay this year \u2014 your own '+rate(ph.ee)+' of salary. Here is where it lands each way.';
+
+  /* switch on the rounded figure, so the copy never reads "about \u20AC0 more" */
+  var diff=Math.round(r.prsa-r.mff);
+  $('gapCard').hidden=!(diff>0);
+  $('aheadCard').hidden=(diff>0);
+  if(diff>0){
+    $('gapOut').innerHTML='For the same '+euro(r.net)+' of take-home pay, a broker-arranged pension would put about <b>'+euro(diff)+' more</b> into your pension this year than My Future Fund can, because '+euro(r.stranded)+' of that money sits above the '+euro(MFF_CAP)+' the scheme works on.';
+  }else if(diff===0){
+    $('aheadOut').innerHTML='This is the crossover. At <b>'+euro(salary)+'</b> the '+euro(MFF_CAP)+' ceiling has cancelled out your employer\u2019s match exactly, so the same '+euro(r.net)+' of take-home pay lands in the same place either way. Above this salary the scheme stops keeping up.';
+  }else{
+    $('aheadOut').innerHTML='For the same '+euro(r.net)+' of take-home pay, My Future Fund puts about <b>'+euro(-diff)+' more</b> into your pension than a broker-arranged pension would, because your employer matches what you put in. On this part of your salary the scheme is the better of the two.';
+  }
+
+  /* ---- signal 3: adequacy against two-thirds of salary ---- */
+  var series=mffSeries(salary,age,ret,g);
+  var pot=series[series.length-1];
+  var targetAnnual=salary*TARGET_FRACTION, targetPot=targetAnnual/DRAWDOWN;
+  var incAnnual=pot*DRAWDOWN;
+  var share=targetPot>0?pot/targetPot:0;
+  $('afill').style.width=Math.min(100,share*100)+'%';
+  tween('adqInc',incAnnual/12,euro);
+  tween('adqTgt',targetAnnual/12,euro);
+  $('adqOut').innerHTML='On its own, My Future Fund is on track for roughly <b>'+euro(incAnnual/12)+' a month</b> at '+ret+', against a two-thirds-of-salary target of '+euro(targetAnnual/12)+'. That is about <b>'+Math.round(share*100)+'%</b> of the target, before any State Pension.';
+
+  /* ---- the three signals, in one place ---- */
+  var sig=[];
+  sig.push(s40>0
+    ? 'Part of your salary is taxed at 40%, where relief is worth more than the scheme\u2019s flat top-up.'
+    : 'Your whole salary is inside the 20% band, where the scheme\u2019s top-up is the better of the two.');
+  sig.push(over>0
+    ? euro(over)+' of your salary is above the '+euro(MFF_CAP)+' the scheme works on, and gets nothing from it.'
+    : 'Your salary is inside the '+euro(MFF_CAP)+' the scheme works on, so nothing is stranded above the cap.');
+  sig.push('On its own the scheme reaches about '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income.');
+  $('signalsOut').innerHTML=sig.map(function(s){return '<span class="sgl">'+s+'</span>';}).join('');
+
+  /* ---- the chart: the scheme's own path against the pot the target needs ---- */
+  var b=[],u=[];
+  for(var i=0;i<chart.N;i++){
+    b.push(series[Math.round((series.length-1)*i/(chart.N-1))]);
+    u.push(targetPot);
+  }
+  chart.setTarget(b,u,age,ret);
+
+  ['sal','age','ret','growth'].forEach(function(id){paintSlider($(id));});
+  clearTimeout(srTimer);
+  srTimer=setTimeout(function(){
+    $('srSummary').textContent='My Future Fund puts in '+euro(r.mff)+' a year. The same take-home pay in a broker-arranged pension puts in '+euro(r.prsa)+'. On its own the scheme reaches '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income.';
+  },700);
+}
+
+['sal','age','ret','growth'].forEach(id=>{
+  const el=$(id);
+  el.addEventListener('input',()=>{paintSlider(el);calc();});
+  paintSlider(el);
+});
+setStatus(0);
+setPhase(phaseIndexFor(Math.max(SRCOP_YEAR,new Date().getFullYear())));
+
+
+/* nav + reveal */
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 (function(){
   var els=[].slice.call(document.querySelectorAll('.reveal'));
@@ -1665,6 +2057,63 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   // hard safety net: never leave anything hidden
   setTimeout(function(){els.forEach(reveal);},900);
 })();
+
+/* email-results capture (front-end only) */
+function sendResults(){
+  var input=document.getElementById('ecEmail');
+  var e=input.value.trim();
+  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  var err=document.getElementById('ecErr');
+  if(!ok){ err.textContent='Please enter a valid email address.';
+           err.style.display='block'; input.focus(); return; }
+  err.style.display='none';
+
+  /* the figures the visitor is actually looking at */
+  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
+  var payload={
+    email:e,
+    source:document.title,
+    mff:fig('mffOut'), prsa:fig('prsaOut'),
+    adequacy:fig('adqOut'), signals:fig('signalsOut'),
+    inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
+             .map(function(s){return s.id+'='+s.value;}).join(', '),
+    page:location.href
+  };
+
+  var done=function(msg,isHtml){
+    var t=document.getElementById('ecOkText');
+    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
+    document.getElementById('ecForm').style.display='none';
+    document.getElementById('ecOk').classList.add('show');
+  };
+  var failed=function(){
+    err.innerHTML='That did not send. You can '+
+      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
+    err.style.display='block';
+  };
+
+  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
+    /* configured: post it and only confirm on a real success */
+    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)})
+      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
+      .catch(failed);
+  }else{
+    /* not configured: hand the visitor a prefilled email rather than a fake
+       confirmation. The lead still reaches Damian, today, with no backend. */
+    var body='Please send me my My Future Fund figures.%0D%0A%0D%0A'+
+      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
+      'Into a pension through My Future Fund: '+encodeURIComponent(payload.mff)+'%0D%0A'+
+      'Through a broker-arranged PRSA: '+encodeURIComponent(payload.prsa)+'%0D%0A'+
+      'Adequacy: '+encodeURIComponent(payload.adequacy)+'%0D%0A'+
+      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
+      'From: '+encodeURIComponent(payload.page);
+    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
+      '?subject='+encodeURIComponent('My Future Fund figures request')+'&body='+body;
+    /* nothing has been sent by this page, so say so: no "on its way" claim */
+    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
+  }
+}
 </script>
 
 <script>
@@ -1702,6 +2151,58 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 
 <script>
+/* fintech slider polish: wrap each range in a positioned container + live value bubble */
+(function(){
+  var ranges=[].slice.call(document.querySelectorAll('input[type=range]'));
+  ranges.forEach(function(r){
+    if(r.parentElement.classList.contains('slider-wrap'))return;
+    var wrap=document.createElement('div'); wrap.className='slider-wrap';
+    r.parentNode.insertBefore(wrap,r); wrap.appendChild(r);
+    var bub=document.createElement('div'); bub.className='sbubble'; wrap.appendChild(bub);
+    // find the matching .val label in the same field to mirror its formatted text
+    var field=wrap.closest('.field');
+    var valEl=field?field.querySelector('.val'):null;
+    function pos(){
+      var min=+r.min,max=+r.max,v=+r.value;
+      var pct=(max>min)?((v-min)/(max-min)):0;
+      var w=r.offsetWidth, thumb=22;
+      var x=pct*(w-thumb)+thumb/2;
+      bub.style.left=x+'px';
+      bub.textContent=valEl?valEl.textContent:v;
+    }
+    function start(){wrap.classList.add('dragging');pos();}
+    function end(){wrap.classList.remove('dragging');}
+    r.addEventListener('input',pos);
+    r.addEventListener('pointerdown',start);
+    r.addEventListener('pointerup',end);
+    r.addEventListener('pointercancel',end);
+    r.addEventListener('mouseenter',function(){pos();wrap.classList.add('dragging');});
+    r.addEventListener('mouseleave',function(){if(!r.matches(':active'))end();});
+    r.addEventListener('focus',start);
+    r.addEventListener('blur',end);
+    window.addEventListener('resize',pos);
+    pos();
+  });
+})();
+/* pulse the result hero when the headline figure changes */
+(function(){
+  var hero=document.querySelector('.res-hero');
+  var watch=document.getElementById('mffOut');
+  if(!hero||!watch)return;
+  var last=watch.textContent, t=null;
+  new MutationObserver(function(){
+    if(watch.textContent!==last){
+      last=watch.textContent;
+      clearTimeout(t);
+      hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse');
+      t=setTimeout(function(){hero.classList.remove('pulse');},600);
+    }
+  }).observe(watch,{childList:true,characterData:true,subtree:true});
+})();
+</script>
+
+
+<script>
 /* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
    (The skip link and the main landmark are static in the page markup.) */
 (function(){
@@ -1712,6 +2213,90 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
         list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
       }
     },true);
+  });
+})();
+</script>
+
+
+<script>
+/* CLICK-TO-EDIT v2: tap any value to type. Money fields accept ANY amount
+   (no upper cap); if you type beyond the slider's scale, the slider expands
+   to hold it and returns to its sane range once you're back below it.
+   Age, retirement age and growth stay clamped to their slider ranges. */
+(function(){
+  var HARD_CEIL=1e9; /* technical ceiling to keep formatting/charts sane */
+  document.querySelectorAll('.field').forEach(function(field){
+    var range=field.querySelector('input[type=range]');
+    var val=field.querySelector('.val');
+    if(!range||!val||val.dataset.editable)return;
+    val.dataset.editable='1';
+    var money=(val.textContent.trim().charAt(0)==='\u20AC');
+    if(!range.dataset.defmax)range.dataset.defmax=range.max;
+    if(!range.dataset.defstep)range.dataset.defstep=range.step||'1';
+    val.setAttribute('tabindex','0');
+    val.setAttribute('role','button');
+    val.setAttribute('title',money?'Click to type any amount':'Click to type an exact value');
+    val.setAttribute('aria-label',money?'Edit value. Press Enter to type any amount.':'Edit value. Press Enter to type an exact figure.');
+    function commitValue(v){
+      var min=+range.min, defmax=+range.dataset.defmax, step=+range.step||1;
+      if(money){
+        v=Math.round(Math.max(min,Math.min(HARD_CEIL,v)));
+        var defstep=+range.dataset.defstep||1;
+        range.step=(((v-min)%defstep)===0)?defstep:1;
+        if(v>defmax){ range.max=v; }
+        else if(+range.max>defmax){ range.max=defmax; }
+        range.value=v;
+      }else{
+        var max=+range.max;
+        v=Math.min(max,Math.max(min,v));
+        v=Math.round((v-min)/step)*step+min;
+        range.value=Math.round(v*100)/100;
+      }
+      range.dispatchEvent(new Event('input'));
+    }
+    function openEditor(){
+      if(field.querySelector('.val-edit'))return;
+      var inp=document.createElement('input');
+      inp.type='number'; inp.className='val-edit';
+      inp.min=range.min;
+      inp.max=money?HARD_CEIL:range.max;
+      inp.step=money?'any':(range.step||1);
+      inp.value=range.value;
+      inp.setAttribute('inputmode',(+range.step<1&&!money)?'decimal':'numeric');
+      inp.setAttribute('aria-label',money
+        ?('Type any amount, minimum '+range.min)
+        :('Type a value between '+range.min+' and '+range.max));
+      val.style.display='none';
+      val.parentNode.insertBefore(inp,val);
+      inp.focus(); inp.select();
+      var done=false;
+      function commit(){
+        if(done)return; done=true;
+        var v=parseFloat(inp.value);
+        if(!isNaN(v))commitValue(v);
+        inp.remove(); val.style.display=''; val.focus();
+      }
+      function cancel(){ if(done)return; done=true; inp.remove(); val.style.display=''; val.focus(); }
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();commit();}
+        else if(e.key==='Escape'){e.preventDefault();cancel();}
+      });
+      inp.addEventListener('blur',commit);
+    }
+    val.addEventListener('click',openEditor);
+    val.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openEditor();}
+    });
+    /* self-heal the scale: when a drag ends back inside the sane range, restore it */
+    if(money){
+      range.addEventListener('change',function(){
+        var defmax=+range.dataset.defmax, defstep=+range.dataset.defstep||1, min=+range.min;
+        var changed=false;
+        if(((+range.value-min)%defstep)===0 && +range.step!==defstep){ range.step=defstep; changed=true; }
+        if(+range.max>defmax && +range.value<=defmax){ range.max=defmax; changed=true; }
+        if(changed)range.dispatchEvent(new Event('input'));
+      });
+    }
   });
 })();
 </script>
@@ -1828,6 +2413,22 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 <script>
+/* Pay & File: a contribution made before the deadline can be set against the
+   previous tax year. 31 October for paper filers, extended into mid-November on
+   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
+(function(){
+  var el=document.getElementById('deadlineText'); if(!el) return;
+  var now=new Date(), y=now.getFullYear();
+  var due=new Date(y,9,31);
+  if(now>due){ y+=1; due=new Date(y,9,31); }
+  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
+  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
+    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
+    taxYear+"'s allowance is gone for good.";
+})();
+</script>
+
+<script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
    Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
    conservative end of the window since ROS filers get into mid-November.
@@ -1894,8 +2495,53 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'&&l.classList.contains('open')){
-      l.classList.remove('open');t.setAttribute('aria-expanded','false');
-      t.setAttribute('aria-label','Open menu');t.focus();}
+      l.classList.remove('open');t.setAttribute('aria-expanded','false');t.focus();}
+  });
+})();
+</script>
+
+<script>
+/* Progressive disclosure (Hick's Law).
+   The controls that drive the headline figure stay visible. The rest refine
+   it and open on request. The field nodes are MOVED, not rebuilt, so every
+   id, listener and slider-fill binding is preserved - which is why this runs
+   after the calculator's own script rather than replacing markup.
+
+   On this page salary, age and retirement age are primary, and BOTH
+   segmented controls are primary too: the assessment status sets the
+   standard rate cut-off point and the phase sets the contribution rates, so
+   neither is a refinement the way the pension calculator's tax-rate segment
+   is. That leaves the growth assumption as the only thing to fold away. */
+(function(){
+  var KEEP = ['sal','age','ret'];   /* primary controls: ids on THIS page */
+  var panel = document.querySelector('.panel');
+  if(!panel) return;
+
+  var fields = [].slice.call(panel.querySelectorAll('.field'));
+  var extra = fields.filter(function(f){
+    var c = f.querySelector('input[type=range]');
+    return c ? KEEP.indexOf(c.id) === -1 : false;
+  });
+  if(!extra.length) return;
+
+  var d = document.createElement('details');
+  d.className = 'adv';
+  var sum = document.createElement('summary');
+  sum.textContent = 'More options (' + extra.length + ')';
+  var inner = document.createElement('div');
+  inner.className = 'adv-in';
+  d.appendChild(sum); d.appendChild(inner);
+
+  extra[0].parentNode.insertBefore(d, extra[0]);
+  extra.forEach(function(f){ inner.appendChild(f); });   /* moved, not cloned */
+
+  /* sliders inside a closed <details> have zero width, so their fill must be
+     repainted the first time the panel opens */
+  d.addEventListener('toggle', function(){
+    if(!d.open) return;
+    inner.querySelectorAll('input[type=range]').forEach(function(s){
+      s.dispatchEvent(new Event('input', {bubbles:true}));
+    });
   });
 })();
 </script>

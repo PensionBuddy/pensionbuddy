@@ -141,3 +141,85 @@ section and the nav on all existing pages.
 Extend `tools/verify.py` so `about.html` and `thank-you.html` are audited
 like every other page, and add checks that they exist, are reachable from the
 nav / booking flow, and meet the same regression floor.
+
+---
+
+## G · "Is My Future Fund enough?" crossover calculator
+
+**Owner:** auto-enrolment pass. **Files:** creates
+`my-future-fund-calculator.html`; edits `starter.html`, `tracker.html`
+(entry points + footer "Tools" column) and `sitemap.xml`. The existing
+calculators and their locked constants were not touched.
+
+### G1 · Standard rate cut-off points — CONFIRMED 2026-09-10, refresh annually
+
+The page needs a standard rate cut-off point (SRCOP) to know which euro of
+salary relieves at 40% and which at 20%. Nothing on the site sourced Revenue
+rate bands before this page, so there was nowhere to reuse them from. They
+are **one dated constant** near the top of the page script:
+
+```js
+var SRCOP_YEAR=2026;
+var SRCOP=[44000,53000,88000];   /* single · married one income · married two incomes */
+```
+
+- **Damian confirmed these figures as correct for 2026 on 2026-09-10.** The
+  `needs-input` markers that flagged them as unverified have been removed
+  from the control and the assumptions list accordingly.
+- **They still change most years.** Update `SRCOP` and `SRCOP_YEAR` together
+  at the start of each tax year. The assumptions list says so on the page.
+- The €88,000 two-income figure is the **maximum combined band**, only
+  reached where the second income is high enough to use the full transferable
+  amount. A single-earner couple is capped at €53,000 regardless. That caveat
+  now appears in one line under the marital-status control and again in the
+  assumptions list.
+
+### G2 · Copy at the two crossover lines — NEEDS DAMIAN SIGN-OFF
+
+The wording shown when a visitor crosses the 40% threshold or the €80,000
+earnings cap is where "information" is closest to reading as "advice". It is
+written to be additive throughout — nothing on the page suggests opting out
+of My Future Fund or reducing contributions to it, and the page says so in
+as many words. Both strings live in `calc()` under the comments
+`signal 1 and 2: the salary bar` and `the comparison`. Read them as written
+and sign them off or rewrite them.
+
+### G3 · Build notes, for the record
+
+- **The brief's comparison metric is internally inconsistent.** If My Future
+  Fund returns €2.33 per €1 of take-home pay given up (employee + employer
+  match + State top-up) and a PRSA returns €1.67 at 40%, then MFF wins at
+  every salary and every tax rate, and there is no crossover to show. The
+  brief's signal 1 ("40% relief beats MFF's flat 33% top-up") only holds if
+  the employer match is excluded. The page instead compares **the same slice
+  of take-home pay given up either way** — the visitor's own MFF contribution
+  rate applied to their whole salary. MFF can only take that on the first
+  €80,000 and matches it there; a PRSA takes all of it at the marginal relief
+  rate with no match. That produces a real crossover at **€112,000**,
+  independent of contribution phase, and below it the page says plainly that
+  My Future Fund is ahead and there is nothing to fix.
+- **The relief function could not be extracted.** There is no shared script
+  file on this site and `pension-calculator.html` is locked, so the 20%/40%
+  logic is restated in the new page rather than lifted out from under it.
+  `reliefBand()` and `EARN_CAP` are copied byte-identical; `project()` is
+  copied byte-identical and is still covered by the `calcMaths` check in
+  `tools/verify.py`. If the existing calculators are ever unlocked, these
+  three belong in one shared file.
+- **No two-thirds target existed on the site** to reuse, despite the brief
+  saying so. It is a new constant (`TARGET_FRACTION=2/3`) and is described in
+  the assumptions as a rule of thumb rather than a rule.
+- **The State Pension is deliberately outside the maths.** Including it would
+  need a hardcoded euro figure; leaving it out overstates the adequacy gap,
+  which is the direction that flatters the CTA. **Settled 2026-09-10:** the
+  adequacy bar carries a labelled reference marker ("Your State Pension sits
+  on top of this, and is not counted in the bar") rather than a second
+  stacked segment, so the bar no longer overstates the gap by omission and no
+  weekly or annual figure is invented. The existing "roughly €15,000 a year"
+  line stays in the assumptions list only, byte-identical to the wording
+  already on `pension-calculator.html`.
+- **No sixth nav link was added.** The header has 134px of headroom at 1360px
+  with the five links it has, so a sixth would sit right on the C6 overrun
+  check, and adding one means editing the nav on all twelve pages including
+  the locked calculators. The page is reached from the starter and tracker
+  entry points and the footer "Tools" column instead. Say the word if you want
+  it in the nav and the header can be re-laid out to take it.
