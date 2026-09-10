@@ -25,16 +25,16 @@
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment employer and State contributions are worked out on salary up to €80,000. Your own contribution is not capped.</p></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are all worked out on salary up to €80,000. Above that the scheme takes nothing.</p></div>
     <div class="field"><div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Contribution rates rise in three-year steps.</p></div>
     <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts matched to what auto-enrolment costs you, so the two sides begin like for like. Move it to whatever you would actually pay.</p></div>
     <div class="field" data-mode="1"><div class="row"><label for="match">Employer match on a personal pension</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">A percentage of salary. A personal pension only carries an employer contribution if your employer separately agrees to one. Leave this at zero if they have not.</p></div>
     <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">On top of the auto-enrolment minimum, from your own pocket. My Future Fund does not currently take contributions above its set rate, so this goes through a personal pension.</p></div>
     <div class="field" data-mode="2" hidden><div class="row"><label for="tmatch">Employer match on your top-up</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A percentage of the top-up itself, not of salary. Only applies if your employer agrees to match what you add on. Leave this at zero if they have not.</p></div>
     <div class="field" style="margin-bottom:0">
-      <div class="row"><label>Your income tax rate</label></div>
-      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)" type="button">20% rate</button><button id="t40" class="on" onclick="setTax(40)" type="button">40% rate</button></div>
-      <p class="subnote">Sets the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.</p>
+      <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
+      <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Two incomes</button></div>
+      <p class="subnote" id="statusNote">Sets where your income tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.</p>
     </div>
   </div>
 
@@ -54,6 +54,14 @@
         <div class="wt">For the figures you entered</div>
         <div class="wtext verdict" id="verdictOut"></div>
         <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+
+      <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
+        <h3>Money above the cap</h3>
+        <div class="bd"><span class="bl">Salary above €80,000</span><span class="bv" id="capAbove">€0</span></div>
+        <div class="bd"><span class="bl">Your own rate on that part <span class="capnote" id="capRate"></span></span><span class="bv" id="capStranded">€0</span></div>
+        <div class="bd tot"><span class="bl">What a personal pension could turn it into</span><span class="bv" id="capCouldBe">€0</span></div>
+        <p class="subnote" id="capNote"></p>
       </div>
 
       <div class="vs-card reveal" style="transition-delay:.14s">
@@ -142,7 +150,7 @@
 
     <div class="chart-card reveal" style="transition-delay:.26s">
       <h3>Before you rely on these rates</h3>
-      <p class="srcwarn">The My Future Fund contribution rates and phase years used here are taken from third-party summaries of the scheme, not from the primary NAERSA or gov.ie text. So is the position that the scheme does not currently accept contributions above its set rate. Confirm both against gov.ie or NAERSA before relying on this page. Rates and rules can change.</p>
+      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at €80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years, and the position that the scheme does not currently accept contributions above its set rate. Confirm those against gov.ie or NAERSA before relying on them. Rates and rules can change.</p>
     </div>
   </div>
 </div></div>
@@ -164,11 +172,13 @@
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
     <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
-    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State.</li>
-    <li>Employer and State auto-enrolment contributions are calculated on salary capped at €80,000. Your own contribution is not capped.</li>
+    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.</li>
+    <li>All three auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are calculated on salary up to €80,000, which gov.ie confirms. Payroll stops the deduction after the pay period in which that threshold is crossed, so a little can be paid on earnings above it in that period; this annual illustration ignores that.</li>
     <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
     <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
-    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at the rate you select, limited to Revenue's age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
+    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% on the part of a contribution that sits above your standard rate cut-off point and at 20% on the rest, because a contribution comes off the top of your taxable income. It is limited to Revenue&rsquo;s age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. PRSI and USC are not modelled. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
+    <li>The standard rate cut-off points are the 2026 figures from Revenue: €44,000 single, €53,000 married or in a civil partnership with one income, and up to €88,000 with two incomes. The €88,000 is a maximum, reached only where the lower earner has at least €35,000 of income of their own; a couple with one income is €53,000 whatever they earn. These change most years.</li>
+    <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
     <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
     <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
     <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>

@@ -8,8 +8,10 @@
 
    Cases 1 and 2 are the worked examples supplied with the brief. Cases 3 and 4
    are the two additional ones required: a year 4 to 6 phase, and a salary above
-   the €80,000 cap combined with a 40% marginal rate and an employer match on
-   the personal pension side. */
+   the €80,000 cap combined with an employer match on the personal pension side.
+   Cases 2, 4 and 5 were corrected on 2026-09-10 when gov.ie confirmed the
+   employee's own contribution is capped at €80,000 too. Cases 13 to 22 cover
+   the tiered relief and the money-above-the-cap signal added the same day. */
 (function (root) {
   'use strict';
 
@@ -43,12 +45,18 @@
 
   // ---------------------------------------------------------------- case 2
   group('CASE 2  salary EUR 100,000, phase year 1  (worked example from brief)');
+  // Corrected 2026-09-10: gov.ie says contributions "will not be levied on any
+  // gross pay over EUR 80,000", the employee's own included. The brief had the
+  // employee uncapped (EUR 1,500 here); that was wrong.
   var c2 = Compare.autoEnrolment(100000, 1);
-  eq('employee, uncapped', c2.employee, 1500);
+  eq('employee, capped at 80k like the other two', c2.employee, 1200);
   eq('employer, capped at 80k', c2.employer, 1200);
   eq('State, capped at 80k', c2.state, 400);
-  eq('total in', c2.totalIn, 3100);
+  eq('total in', c2.totalIn, 2800);
   eq('salary cap applies', c2.salaryCapApplies ? 1 : 0, 1);
+  eq('salary above the cap', c2.salaryAboveCap, 20000);
+  var ac2 = Compare.aboveCap(100000, 1, 45, { srcop: Relief.SRCOP.single });
+  eq('money above the cap: 1.5% of the 20,000 the scheme never sees', ac2.strandedNet, 300);
 
   // ---------------------------------------------------------------- case 3
   group('CASE 3  salary EUR 60,000, phase year 5, age 35  (phase 2, 3/3/1)');
@@ -61,37 +69,51 @@
   eq('net cost', c3.netCost, 1800);
 
   // ---------------------------------------------------------------- case 4
-  group('CASE 4  salary EUR 120,000, phase year 10, age 45, 40% rate, 5% employer match');
+  group('CASE 4  salary EUR 120,000, phase year 10, age 45, single, 5% employer match');
+  // Corrected 2026-09-10 for the employee cap: A was 13,600 with a 7,200 net
+  // cost when the employee's 6% ran on the whole salary.
   var a4 = Compare.autoEnrolment(120000, 10);
   eq('A  phase number', a4.phase, 4);
-  eq('A  employee at 6%, uncapped', a4.employee, 7200);
+  eq('A  employee at 6%, capped at 80k', a4.employee, 4800);
   eq('A  employer at 6%, capped at 80k', a4.employer, 4800);
   eq('A  State at 2%, capped at 80k', a4.state, 1600);
-  eq('A  total in', a4.totalIn, 13600);
-  eq('A  net cost', a4.netCost, 7200);
+  eq('A  total in', a4.totalIn, 11200);
+  eq('A  net cost', a4.netCost, 4800);
 
   eq('B  relief limit, 25% of the 115k cap', Relief.reliefLimit(45, 120000), 28750);
-  var gross4 = Compare.matchedGross(120000, 10, 45, 40);
-  eq('B  gross matched to the same net cost', gross4, 12000);
-  var b4 = Compare.personalPension(gross4, 45, 120000, 40, 5);
-  eq('B  relief at 40%', b4.relief, 4800);
-  eq('B  net cost, same as path A', b4.netCost, 7200);
+  // single: salary less the 44,000 cut-off exceeds the limit, so every
+  // relievable euro sits in the 40% tier and tiered equals flat 40% here
+  var single = { srcop: Relief.SRCOP.single };
+  eq('B  every relievable euro is in the 40% tier', Relief.reliefTiers(45, 120000, Relief.SRCOP.single).t40, 28750);
+  var gross4 = Compare.matchedGross(120000, 10, 45, single);
+  eq('B  gross matched to the same net cost', gross4, 8000);
+  eq('B  the flat-rate path agrees for this person', Compare.matchedGross(120000, 10, 45, 40), 8000);
+  var b4 = Compare.personalPension(gross4, 45, 120000, single, 5);
+  eq('B  relief, all at 40%', b4.relief, 3200);
+  eq('B  relief split reports it all at 40%', b4.reliefSplit.at40, 3200);
+  eq('B  and none at 20%', b4.reliefSplit.at20, 0);
+  eq('B  net cost, same as path A', b4.netCost, 4800);
   eq('B  employer match, 5% of salary', b4.employer, 6000);
-  eq('B  total in', b4.totalIn, 18000);
+  eq('B  total in', b4.totalIn, 14000);
 
-  var cmp4 = Compare.compare({ salary: 120000, year: 10, age: 45, taxRate: 40, gross: gross4, employerMatchPct: 5 });
+  var cmp4 = Compare.compare({ salary: 120000, year: 10, age: 45, srcop: Relief.SRCOP.single, gross: gross4, employerMatchPct: 5 });
   eq('B  is larger for these inputs', cmp4.larger === 'personal' ? 1 : 0, 1);
-  eq('B  by this much', cmp4.difference, 4400);
+  eq('B  by this much', cmp4.difference, 2800);
+
+  var ac4 = Compare.aboveCap(120000, 10, 45, single);
+  eq('above the cap: 40,000 of salary', ac4.above, 40000);
+  eq('above the cap: 6% of it is money the scheme never sees', ac4.strandedNet, 2400);
+  eq('above the cap: a personal pension could turn that into', ac4.couldBe, 4000);
 
   // ------------------------------------------------- auto-enrolment winning
   // The honesty rule: this is a correct and expected outcome, so it is asserted
   // as deliberately as any other. Same inputs, no employer match on path B.
   group('CASE 5  the same person with NO employer match on the personal pension');
-  var b5 = Compare.personalPension(gross4, 45, 120000, 40, 0);
-  eq('B  total in, own contribution only', b5.totalIn, 12000);
-  var cmp5 = Compare.compare({ salary: 120000, year: 10, age: 45, taxRate: 40, gross: gross4, employerMatchPct: 0 });
+  var b5 = Compare.personalPension(gross4, 45, 120000, single, 0);
+  eq('B  total in, own contribution only', b5.totalIn, 8000);
+  var cmp5 = Compare.compare({ salary: 120000, year: 10, age: 45, srcop: Relief.SRCOP.single, gross: gross4, employerMatchPct: 0 });
   eq('auto-enrolment is larger here', cmp5.larger === 'autoEnrolment' ? 1 : 0, 1);
-  eq('by this much', cmp5.difference, 1600);
+  eq('by this much', cmp5.difference, 3200);
 
   // ------------------------------------------------------- relief limit edge
   group('CASE 6  contribution above the relief limit still reaches the pension');
@@ -173,6 +195,82 @@
   eq('relief only on the first 6,000', c11.extra.relief, 1200);
   eq('net cost is still exactly the 12,000 paid', c11.extra.netCost, 12000);
   eq('some of the extra sits above the limit', c11.extra.aboveReliefLimit > 0 ? 1 : 0, 1);
+
+  // ================================================== TIERED RELIEF
+  // Relief at the rate each euro actually attracts: 40% on the part of a
+  // contribution sitting above the standard rate cut-off point, 20% below,
+  // still within the age-related limit. Added 2026-09-10. The flat-rate
+  // functions above are untouched, and the drift test still guards them.
+
+  group('CASE 13  tiers: single, EUR 50,000, age 35');
+  var t13 = Relief.reliefTiers(35, 50000, Relief.SRCOP.single);
+  eq('age-related limit, 20% of 50,000', t13.limit, 10000);
+  eq('euros relieved at 40%: salary less the 44,000 cut-off', t13.t40, 6000);
+  eq('euros relieved at 20%: the rest of the limit', t13.t20, 4000);
+
+  group('CASE 14  same person, gross EUR 2,000 sits entirely in the 40% tier');
+  eq('relief', Relief.reliefOnTiered(2000, 35, 50000, Relief.SRCOP.single), 800);
+  eq('identical to flat 40% for this contribution', Relief.reliefOn(2000, 35, 50000, 40), 800);
+  eq('net cost', Relief.netCostOfTiered(2000, 35, 50000, Relief.SRCOP.single), 1200);
+
+  group('CASE 15  same person, gross EUR 8,000 spills into the 20% tier');
+  var s15 = Relief.reliefSplitTiered(8000, 35, 50000, Relief.SRCOP.single);
+  eq('6,000 at 40%', s15.at40, 2400);
+  eq('2,000 at 20%', s15.at20, 400);
+  eq('relief in total', s15.total, 2800);
+  eq('net cost', Relief.netCostOfTiered(8000, 35, 50000, Relief.SRCOP.single), 5200);
+  eq('flat 40% would have overstated relief by 400', Relief.reliefOn(8000, 35, 50000, 40) - s15.total, 400);
+
+  group('CASE 16  married, one income, EUR 50,000: nothing reaches the 40% band');
+  eq('no euros in the 40% tier', Relief.reliefTiers(35, 50000, Relief.SRCOP.marriedOneIncome).t40, 0);
+  eq('gross 2,000 relieved entirely at 20%', Relief.reliefOnTiered(2000, 35, 50000, Relief.SRCOP.marriedOneIncome), 400);
+
+  group('CASE 17  inverse: single, EUR 50,000, age 35, net EUR 4,000');
+  var g17 = Relief.grossForNetCostTiered(4000, 35, 50000, Relief.SRCOP.single);
+  eq('gross: 6,000 at 60c then 500 at 80c', g17, 6500);
+  eq('relief checks back', Relief.reliefOnTiered(g17, 35, 50000, Relief.SRCOP.single), 2500);
+  eq('net cost checks back exactly', Relief.netCostOfTiered(g17, 35, 50000, Relief.SRCOP.single), 4000);
+
+  group('CASE 18  inverse past the limit: net EUR 9,000');
+  var g18 = Relief.grossForNetCostTiered(9000, 35, 50000, Relief.SRCOP.single);
+  eq('gross: both tiers then 2,200 unrelieved', g18, 12200);
+  eq('relief stops at the limit', Relief.reliefOnTiered(g18, 35, 50000, Relief.SRCOP.single), 3200);
+  eq('net cost checks back exactly', Relief.netCostOfTiered(g18, 35, 50000, Relief.SRCOP.single), 9000);
+  eq('the module reports the excess above the limit', Compare.personalPension(g18, 35, 50000, single50(), 0).aboveReliefLimit, 2200);
+
+  group('CASE 19  tiers: two incomes, EUR 100,000, age 45');
+  var t19 = Relief.reliefTiers(45, 100000, Relief.SRCOP.marriedTwoIncomes);
+  eq('limit, 25% of 100,000', t19.limit, 25000);
+  eq('40% tier: salary less the 88,000 maximum band', t19.t40, 12000);
+  eq('20% tier: the rest of the limit', t19.t20, 13000);
+
+  group('CASE 20  Mode 2 on the tiered path reproduces case 8');
+  var c20 = Compare.combined({ salary: 50000, year: 1, age: 35, srcop: Relief.SRCOP.single, extraMonthly: 100, employerMatchPct: 0 });
+  eq('extra still grosses up to 2,000', c20.extra.gross, 2000);
+  eq('relief still 800', c20.extra.relief, 800);
+  eq('split reports it all at 40%', c20.extra.reliefSplit.at40, 800);
+  eq('combined total unchanged by the switch', c20.totalIn, 3750);
+
+  group('CASE 21  money above the cap: EUR 100,000, year 1, single, age 45');
+  var ac21 = Compare.aboveCap(100000, 1, 45, { srcop: Relief.SRCOP.single });
+  eq('salary above the cap', ac21.above, 20000);
+  eq('the rate that never gets applied to it', ac21.rate, 0.015);
+  eq('stranded: 1.5% of 20,000', ac21.strandedNet, 300);
+  eq('a personal pension could turn that 300 into', ac21.couldBe, 500);
+
+  group('CASE 22  money above the cap: at or below EUR 80,000 there is none');
+  var ac22 = Compare.aboveCap(80000, 1, 45, { srcop: Relief.SRCOP.single });
+  eq('nothing above the cap', ac22.above, 0);
+  eq('nothing stranded', ac22.strandedNet, 0);
+  eq('nothing to route elsewhere', ac22.couldBe, 0);
+
+  group('EXTRA C  cut-off point constants, revenue.ie 2026');
+  eq('year the constants were checked for', Relief.SRCOP_YEAR, 2026);
+  eq('single', Relief.SRCOP.single, 44000);
+  eq('married, one income', Relief.SRCOP.marriedOneIncome, 53000);
+  eq('married, two incomes, the maximum band', Relief.SRCOP.marriedTwoIncomes, 88000);
+
+  function single50() { return { srcop: Relief.SRCOP.single }; }
 
   // --------------------------------------------------------- phase boundaries
   group('EXTRA A  phase boundaries');

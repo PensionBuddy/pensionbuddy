@@ -21,8 +21,18 @@
    Mode 2 is stated matter of fact, as a consequence of what the scheme
    currently allows, never as a pitch. */
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let taxRate = 40;
 let mode = 1;
+
+/* Relief is worked out at the rate each euro actually attracts, split at the
+   standard rate cut-off point, so the page asks how the visitor is assessed
+   for tax rather than which rate to apply. Figures live in PBRelief. */
+const STATUS = [
+  { srcop: PBRelief.SRCOP.single,            who: 'single' },
+  { srcop: PBRelief.SRCOP.marriedOneIncome,  who: 'married or in a civil partnership with one income' },
+  { srcop: PBRelief.SRCOP.marriedTwoIncomes, who: 'married or in a civil partnership with two incomes' }
+];
+let statusIx = 0;
+const relief = () => ({ srcop: STATUS[statusIx].srcop });
 
 const $ = id => document.getElementById(id);
 const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
@@ -49,12 +59,28 @@ function paintSlider(el) {
   if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
 }
 
-function setTax(r) {
-  taxRate = r;
-  $('t20').classList.toggle('on', r === 20);
-  $('t40').classList.toggle('on', r === 40);
-  $('segInd').style.transform = r === 20 ? 'translateX(0)' : 'translateX(100%)';
+function setStatus(i) {
+  statusIx = i;
+  for (let k = 0; k < STATUS.length; k++) {
+    const b = $('st' + k), on = k === i;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  $('segInd').style.transform = 'translateX(' + (i * 100) + '%)';
+  const st = STATUS[i];
+  $('statusNote').innerHTML = 'Income tax is 40% on salary above <b>' + euro(st.srcop) + '</b> when you are ' + st.who
+    + (i === 2 ? ' (the maximum band, reached only where the lower earner has at least ' + euro(35000) + ' of their own income)' : '')
+    + ', so relief on a personal pension is 40% on that part of a contribution and 20% on the rest. Auto-enrolment contributions come out of your take-home pay and get no income tax relief.';
   calc();
+}
+
+/* "EUR 2,400 at 40%, EUR 400 at 20%", or just the one rate when only one applies */
+function reliefAt(split) {
+  if (!split) return '';
+  const parts = [];
+  if (split.at40 > 0) parts.push(euro(split.at40) + ' at 40%');
+  if (split.at20 > 0) parts.push(euro(split.at20) + ' at 20%');
+  return parts.length ? parts.join(', ') : '';
 }
 
 /* ---- mode tabs ---- */
@@ -108,14 +134,14 @@ function calc() {
   /* Until the user touches it, the personal contribution tracks the net cost of
      auto-enrolment so the comparison opens genuinely like for like. */
   if (!grossTouched) {
-    const matched = Math.round(PBCompare.matchedGross(salary, year, age, taxRate) / 250) * 250;
+    const matched = Math.round(PBCompare.matchedGross(salary, year, age, relief()) / 250) * 250;
     $('gross').value = Math.min(matched, +$('gross').max);
   }
   const gross = +$('gross').value;
-  const pp = PBCompare.personalPension(gross, age, salary, taxRate, match);
+  const pp = PBCompare.personalPension(gross, age, salary, relief(), match);
 
   /* ---------- Mode 2: combined ---------- */
-  const c = PBCompare.combined({ salary, year, age, taxRate, extraMonthly, topUpMatchPct: tmatch });
+  const c = PBCompare.combined({ salary, year, age, srcop: relief().srcop, extraMonthly, topUpMatchPct: tmatch });
 
   /* control labels */
   $('ageV').textContent = age;
@@ -137,11 +163,26 @@ function calc() {
   const capNote = ae.salaryCapApplies ? '(on the first ' + euro(PBCompare.AE_SALARY_CAP) + ')' : '';
   $('aeEmployerCap').textContent = capNote;
   $('aeStateCap').textContent = capNote;
-  $('aeRatesNote').textContent = 'You pay ' + pct(ae.rates.employee) + ' of your full salary. '
+  $('aeRatesNote').textContent = 'You pay ' + pct(ae.rates.employee) + ', your employer ' + pct(ae.rates.employer)
+    + ' and the State ' + pct(ae.rates.state)
     + (ae.salaryCapApplies
-        ? 'Your employer and the State pay on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' only, which is why their share stops rising.'
-        : 'Your employer and the State pay on the same salary, up to a ' + euro(PBCompare.AE_SALARY_CAP) + ' cap.')
-    + ' These contributions come out of your take-home pay, so there is no income tax relief on them.';
+        ? ', all on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' of your salary only, which is why none of the three rises past that.'
+        : ', all on your whole salary, since it is under the ' + euro(PBCompare.AE_SALARY_CAP) + ' cap.')
+    + ' Your contribution comes out of your take-home pay, so there is no income tax relief on it.';
+
+  /* money above the cap: shown only when there is some */
+  const ac = PBCompare.aboveCap(salary, year, age, relief());
+  $('capCard').hidden = !(ac.above > 0);
+  if (ac.above > 0) {
+    $('capAbove').textContent = euro(ac.above);
+    $('capRate').textContent = '(' + pct(ac.rate) + ')';
+    $('capStranded').textContent = euro(ac.strandedNet);
+    $('capCouldBe').textContent = euro(ac.couldBe);
+    $('capNote').textContent = 'Auto-enrolment takes nothing on salary above ' + euro(PBCompare.AE_SALARY_CAP)
+      + ', so the ' + euro(ac.strandedNet) + ' your own rate would have taken from that part stays in your take-home pay. '
+      + 'A personal pension could take that same ' + euro(ac.strandedNet) + ', relieved at your rate, and put '
+      + euro(ac.couldBe) + ' into your pension. That is where the money could go, not a suggestion to leave or reduce My Future Fund, which never sees it either way.';
+  }
 
   /* ---------- Mode 1 panel ---------- */
   $('aeTotal').textContent = euro(ae.totalIn);
@@ -163,12 +204,12 @@ function calc() {
   $('ppGross').textContent = euro(pp.gross);
   $('ppRelief').textContent = euro(pp.relief);
   $('ppEmployer').textContent = euro(pp.employer);
-  $('ppReliefCap').textContent = 'at ' + taxRate + '%';
+  $('ppReliefCap').textContent = reliefAt(pp.reliefSplit);
   $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none set)';
   $('ppReliefNote').textContent = reliefSentence(pp, age);
 
   /* the Mode 1 verdict, stated the same way whichever path is larger */
-  const cmp = PBCompare.compare({ salary, year, age, taxRate, gross, employerMatchPct: match });
+  const cmp = PBCompare.compare({ salary, year, age, srcop: relief().srcop, gross, employerMatchPct: match });
   let verdict;
   if (cmp.larger === 'equal') {
     verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';
@@ -202,7 +243,7 @@ function calc() {
   $('cRelief').textContent = euro(x.relief);
   $('cGross').textContent = euro(x.gross);
   $('cMatch').textContent = euro(x.employer);
-  $('cReliefCap').textContent = 'at ' + taxRate + '%';
+  $('cReliefCap').textContent = reliefAt(x.reliefSplit);
   $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none set)';
   $('cReliefNote').textContent = extraMonthly > 0 ? reliefSentence(x, age) : '';
 
@@ -246,5 +287,11 @@ function reliefSentence(layer, age) {
   paintSlider(el);
 });
 
+/* the phase slider starts on the current year's phase (year 1 is 2026), so the
+   default stays where the scheme actually is without an annual edit */
+$('phase').value = Math.min(+$('phase').max, Math.max(1, new Date().getFullYear() - 2025));
+paintSlider($('phase'));
+
+setStatus(0);
 /* a shared link can open straight onto Mode 2 */
 setMode(location.hash === '#combined' ? 2 : 1);

@@ -6,6 +6,30 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 6 — 2026-09-10 · broker-vs-autoenrolment.html, corrected and extended
+
+Prompted by a sibling session's "Is My Future Fund enough?" build, supplied as
+reference. Not ported. Used for ideas, and it surfaced one factual error.
+
+| Item | Status | Note |
+|---|---|---|
+| €80,000 cap | **Corrected** | The page said the employee's own contribution was not capped. gov.ie: contributions "will not be levied on any gross pay over €80,000", the employee's included. Module, spec, tests and every sentence on the page now agree. At €100,000 the auto-enrolment total is €2,800, not €3,100. |
+| Relief at the real rate | **Built** | Replaces the 20%/40% picker with "how you are assessed for tax". Relief is split at the standard rate cut-off point, 40% on the part of a contribution above it and 20% below, within the age-related limit. Cut-off points €44,000 / €53,000 / up to €88,000, confirmed at revenue.ie. Added to `pension-tax-relief.js` alongside the flat functions, which are untouched and still guarded by the drift test. |
+| Money above the cap | **Built** | A Mode 1 card, shown only above €80,000: the salary above the cap, the person's own rate on it that the scheme never takes, and what a personal pension could turn that same net amount into. Additive; the like-for-like basis is unchanged and no crossover is claimed. |
+| Phase default | **Built** | The phase slider starts on the current calendar year's phase rather than on year 1 forever. |
+| Nav | **Fixed** | The page had shipped with "Calculator" marked as the current nav item. |
+| Not taken | **By choice** | The reference's multi-year projection and adequacy bars would duplicate `pension-calculator.html` and the State Pension page. Its email capture waits on F1b. |
+
+Tests: `compare-calc.test.js` went from 94 to 141 assertions. Cases 2, 4 and
+5 changed with the cap; cases 13 to 22 cover the tiered relief and the cap
+card. Drift check against `pension-calculator.html` still clean. A page probe
+drives the built page and confirms the rendered figures at €50,000 single and
+married, €100,000, and the €120,000 worked example.
+
+**Verified:** 15 pages, 0 FAIL at 375 / 1360 / 1440, no console errors.
+
+---
+
 # Run 5 — 2026-09-10 · state-pension-reality-check.html
 
 Contract-first, the same way as the comparison calculator: spec, then tests,

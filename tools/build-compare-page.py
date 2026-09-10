@@ -75,6 +75,15 @@ VS_CSS = """
 .modepanel{display:flex;flex-direction:column;gap:18px}
 .modepanel[hidden]{display:none}
 @media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:13px;padding:11px 4px}}
+/* a three-way segmented control: the skeleton's .seg is two columns with a
+   half-width indicator, so a third option needs its own grid and a third-width
+   indicator. translateX(i * 100%) of the indicator's own width still lands it
+   on button i. */
+.seg.seg-3{grid-template-columns:repeat(3,1fr)}
+.seg.seg-3 .ind{width:calc(33.333% - 2.667px)}
+@media(max-width:560px){.seg.seg-3 button{font-size:13px;padding:11px 4px}}
+/* the money-above-the-cap card only exists when there is money above the cap */
+#capCard[hidden]{display:none}
 """
 
 
