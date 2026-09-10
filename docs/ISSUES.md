@@ -223,3 +223,54 @@ and sign them off or rewrite them.
   the locked calculators. The page is reached from the starter and tracker
   entry points and the footer "Tools" column instead. Say the word if you want
   it in the nav and the header can be re-laid out to take it.
+
+### G4 · Comfortable-living shortfall — built 2026-09-10
+
+A second adequacy reference on the same card, alongside the two-thirds-of-
+salary bar rather than replacing it. They answer different questions: one
+asks whether the scheme replaces this visitor's own income, the other
+whether it reaches a recognised national standard.
+
+**Constants, all three of which move and should be reviewed together:**
+
+```js
+var LIVING_YEAR=2024;
+var LIVING_COMFORTABLE={single:33600,couple:43200};  /* Pensions Council */
+var SP_RATE_YEAR=2026;
+var SP_WEEKLY=299.30;                                /* State Pension (Contributory), max personal rate */
+var ASSUMED_INFLATION=2;                             /* % a year, set 2026-09-10 */
+```
+
+The Pensions Council standards already include the State Pension, so the
+maximum personal rate is netted off to get what a pension actually has to
+find: €18,036 a year single, €12,073 a couple.
+
+**The inflation decision.** The standards are quoted in 2024 prices and the
+site's projections are nominal, so comparing them directly flatters the
+projection — understating the gap for people who fall short and overstating
+how comfortably the rest clear it. A caveat sentence was rejected as half a
+fix, because it only appeared on one of the two copy variants. The
+comfortable-retirement bar therefore runs on a **real rate**: the visitor's
+growth setting less `ASSUMED_INFLATION`, by simple subtraction. This applies
+to that bar and nothing else — not the slider, not the two-thirds bar, not
+the chart, and not any other calculator on the site. The rate is not floored
+at zero: a growth setting under 2% gives a negative real rate and a shrinking
+projection, which is the honest consequence of that setting.
+
+A short, symmetric residual caveat stays on **both** copy variants, because
+two mismatches survive the fix: the 2% is itself an assumption, and the
+standard is in 2024 rather than today's prices.
+
+**Effect of the real rate**, single €50,000 retiring at 66: the age at which
+My Future Fund alone clears the shortfall moves from 32 to 25. At €30,000 it
+stops clearing at any age. Both bars are labelled with their own figure
+(nominal vs today's money) so the two are not read as one number disagreeing
+with itself.
+
+**Runway figures, for the record.** The framing in the original brief
+(~40 years of runway to clear it, ~20 years nowhere near) was checked and did
+not hold at 5% nominal: on the €80,000 ceiling the single shortfall clears at
+about 26 years of runway, and 21 years reaches 64% of it. Confirmed as
+imprecise prose in the brief rather than a disagreement. Nothing on the page
+states a fixed crossover — it is computed live, because it moves twelve years
+across the growth slider's range.

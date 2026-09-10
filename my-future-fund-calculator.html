@@ -1494,7 +1494,15 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    putting one in the maths would invent precision the rest of the site does
    not have. */
 .asp{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:13px;color:var(--ink-2)}
-.asp-plus{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:6px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:13px;line-height:1;flex-shrink:0}
+.asp-chip{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:6px;font-weight:700;font-size:13px;line-height:1;flex-shrink:0}
+.asp-plus{background:var(--teal-50);color:var(--teal-700)}
+/* the living-standard figure already has the State Pension inside it, so its
+   marker has to say the opposite of the two-thirds bar's - same shape, amber,
+   so the two are not read as the same claim */
+.asp-minus{background:var(--amber-soft);color:#8C6010}
+/* the two adequacy bars answer different questions and are labelled apart */
+.asub{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:26px}
+.asub-first{margin-top:14px}
 
 /* The shared layout-stability rule at min-width:921px pins every .chart-card
    to 338px, which is the natural height of the pension calculator's single
@@ -1647,13 +1655,25 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div class="chart-card has-chart reveal" style="transition-delay:.2s">
       <h3>How far it gets you on its own</h3>
+
+      <p class="asub asub-first">Against two-thirds of your salary</p>
       <div class="abar"><div class="afill" id="afill" style="width:0"></div></div>
-      <p class="asp"><span class="asp-plus" aria-hidden="true">+</span>Your State Pension sits on top of this, and is not counted in the bar.</p>
+      <p class="asp"><span class="asp-chip asp-plus" aria-hidden="true">+</span>Your State Pension sits on top of this, and is not counted in the bar.</p>
       <div class="akeys">
         <span>My Future Fund only <b id="adqInc">€0</b> a month</span>
         <span>Two-thirds target <b id="adqTgt">€0</b> a month</span>
       </div>
       <p class="zline" id="adqOut">Move the sliders to see it.</p>
+
+      <p class="asub">Against a comfortable retirement</p>
+      <p class="zline" id="cmfIntro" style="margin-top:7px">Move the sliders to see it.</p>
+      <div class="abar"><div class="afill" id="cmffill" style="width:0"></div></div>
+      <p class="asp"><span class="asp-chip asp-minus" aria-hidden="true">&minus;</span>The State Pension is already inside this figure, so what is left is what a pension has to cover.</p>
+      <div class="akeys">
+        <span>My Future Fund, in today’s money <b id="cmfInc">€0</b> a month</span>
+        <span>Left for a pension to cover <b id="cmfTgt">€0</b> a month</span>
+      </div>
+      <p class="zline" id="cmfOut">Move the sliders to see it.</p>
       <div class="chart-legend"><span><i class="dotk" aria-hidden="true"></i>My Future Fund only</span><span><i class="dashk" aria-hidden="true"></i>The pot the two-thirds target needs</span></div>
       <div id="chart"></div>
     </div>
@@ -1706,6 +1726,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Growth is assumed at the constant rate you choose, and your salary is assumed to stay where it is. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
     <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
     <li>The retirement target used is two-thirds of your salary. It is a common rule of thumb, not a rule, and what you actually need depends on your own circumstances.</li>
+    <li>The comfortable-retirement figures are the Pensions Council’s living standards from its 2024 research: €33,600 a year for a single person and €43,200 for a couple, in 2024 cost-of-living terms. The Council updates these periodically, so check them against its latest publication.</li>
+    <li>Those standards already include the State Pension, so the maximum personal rate of the State Pension (Contributory) is taken off them to get what a pension has to find: €299.30 a week, €15,563.60 a year at the 2026 rate. The couple figure assumes both people qualify for the full rate. This rate changes in most Budgets.</li>
+    <li>Because that standard is quoted in 2024 prices, the comfortable-retirement bar — and only that bar — is projected in today’s money: the growth rate you choose, less an assumed 2% a year of inflation. A 5% setting becomes 3% for that bar. Everything else on this page, including the two-thirds-of-salary bar, runs on the rate you set, and no other calculator on the site is affected.</li>
+    <li>That 2% is an assumption, not a forecast, and the standard is in 2024 rather than today’s prices, so the comfortable-retirement bar is close rather than exact. If you set growth below 2% the real rate goes negative and the projection shrinks — that is the honest consequence of the rate you picked, not an error.</li>
+    <li>Which living standard is used follows the tax-assessment control: single uses the single standard, either married option uses the couple standard. The couple figure is the household’s, so a partner’s own pension counts towards it as well as yours.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) is not included in the projection and may be payable on top, roughly €15,000 a year for a full entitlement. Check gov.ie for the current rate.</li>
     <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
     <li>My Future Fund applies to employees who are not already in a qualifying workplace pension scheme, within the age and earnings limits the scheme sets. If you are already in a scheme at work, this page is not about you.</li>
@@ -1820,6 +1845,37 @@ function routes(salary,ph,srcop,age){
    ============================================================ */
 var TARGET_FRACTION=2/3;
 var DRAWDOWN=0.04;
+
+/* ============================================================
+   5b. A RECOGNISED LIVING STANDARD
+   The Pensions Council's "comfortable" retirement living standards, from
+   its KPMG-researched 2024 work and expressed in 2024 cost-of-living terms.
+   These standards ALREADY include the State Pension, so the maximum
+   personal rate is netted off to get what a pension actually has to cover:
+     single  33,600 - 15,563.60 = 18,036.40
+     couple  43,200 - 31,127.20 = 12,072.80   (both on the full rate)
+   Two dated constants, both of which move: the Council updates the
+   standards periodically and the State Pension rate changes each Budget.
+   ============================================================ */
+var LIVING_YEAR=2024;
+var LIVING_COMFORTABLE={single:33600,couple:43200};
+/* Nothing else on this site carries an inflation assumption - every other
+   mention is a disclaimer saying figures are NOT adjusted for it - so this is
+   a new one, and it is used for the comfortable-retirement bar and nowhere
+   else. The standard is quoted in LIVING_YEAR prices, so the projection it is
+   compared against has to be in today's money too, or the bar flatters the
+   projection for everyone: understating the gap for people who fall short and
+   overstating how comfortably the rest clear it. Netted off the visitor's
+   growth rate by simple subtraction. Assumption, not a forecast - review it
+   with the rest of these constants. */
+var ASSUMED_INFLATION=2;           /* % a year, set 2026-09-10 */
+var SP_RATE_YEAR=2026;
+var SP_WEEKLY=299.30;              /* State Pension (Contributory), maximum personal rate */
+var SP_ANNUAL=SP_WEEKLY*52;
+function comfortableGap(couple){
+  return couple ? LIVING_COMFORTABLE.couple-2*SP_ANNUAL
+                : LIVING_COMFORTABLE.single-SP_ANNUAL;
+}
 function mffSeries(salary,age,ret,g){
   var mRate=Math.pow(1+g/100,1/12)-1,pot=0,out=[0],y0=new Date().getFullYear();
   var months=Math.max(0,ret-age)*12,base=Math.min(salary,MFF_CAP);
@@ -2003,6 +2059,34 @@ function calc(){
   tween('adqTgt',targetAnnual/12,euro);
   $('adqOut').innerHTML='On its own, My Future Fund is on track for roughly <b>'+euro(incAnnual/12)+' a month</b> at '+ret+', against a two-thirds-of-salary target of '+euro(targetAnnual/12)+'. That is about <b>'+Math.round(share*100)+'%</b> of the target, before any State Pension.';
 
+  /* ---- the same pot against a recognised living standard ----
+     Different question from the two-thirds target: that one asks whether the
+     scheme replaces this visitor's own income, this one asks whether it
+     reaches a national standard of living. Both are shown. */
+  var couple=statusIx>0;
+  var cmfStd=couple?LIVING_COMFORTABLE.couple:LIVING_COMFORTABLE.single;
+  var cmfGap=comfortableGap(couple);
+  /* this bar, and only this bar, runs on a real rate: the standard is quoted
+     in LIVING_YEAR prices, so the projection has to be in today's money to be
+     compared with it. Not floored at zero - a growth rate under the inflation
+     assumption really does shrink the pot in real terms. */
+  var realG=g-ASSUMED_INFLATION;
+  var realSeries=mffSeries(salary,age,ret,realG);
+  var realIncAnnual=realSeries[realSeries.length-1]*DRAWDOWN;
+  var cmfShare=cmfGap>0?realIncAnnual/cmfGap:0;
+  $('cmffill').style.width=Math.min(100,Math.max(0,cmfShare*100))+'%';
+  tween('cmfInc',realIncAnnual/12,euro);
+  tween('cmfTgt',cmfGap/12,euro);
+  $('cmfIntro').innerHTML='The Pensions Council puts a comfortable retirement at <b>'+euro(cmfStd)+' a year</b> for '+(couple?'a couple':'a single person')+', in '+LIVING_YEAR+' prices. The State Pension covers '+euro(couple?2*SP_ANNUAL:SP_ANNUAL)+' of that at the maximum personal rate, which leaves <b>'+euro(cmfGap)+' a year</b> for a pension to find.';
+  var yrs=ret-age;
+  /* the same tail on both outcomes: the residual caveat applies whether the
+     visitor clears the standard or falls short of it */
+  $('cmfOut').innerHTML=(cmfShare>=1
+      ? 'On these figures My Future Fund covers all of that on its own, on the '+yrs+' years of contributions between now and '+ret+'.'
+      : 'My Future Fund covers about <b>'+Math.round(cmfShare*100)+'%</b> of it on its own, on the '+yrs+' years of contributions between now and '+ret+'.')
+    +(couple?' The couple figure is the household\u2019s, so a partner\u2019s own pension counts towards it too.':'')
+    +' This bar alone runs in today\u2019s money, at '+realG+'% real \u2014 the '+g+'% growth you set, less '+ASSUMED_INFLATION+'% inflation \u2014 so it lines up with a standard quoted in '+LIVING_YEAR+' prices. That inflation rate is an assumption in itself, so read the result as close rather than exact.';
+
   /* ---- the three signals, in one place ---- */
   var sig=[];
   sig.push(s40>0
@@ -2011,7 +2095,7 @@ function calc(){
   sig.push(over>0
     ? euro(over)+' of your salary is above the '+euro(MFF_CAP)+' the scheme works on, and gets nothing from it.'
     : 'Your salary is inside the '+euro(MFF_CAP)+' the scheme works on, so nothing is stranded above the cap.');
-  sig.push('On its own the scheme reaches about '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income.');
+  sig.push('On its own the scheme reaches about '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income, and, in today\u2019s money, about '+Math.round(cmfShare*100)+'% of what a comfortable retirement needs once the State Pension is counted.');
   $('signalsOut').innerHTML=sig.map(function(s){return '<span class="sgl">'+s+'</span>';}).join('');
 
   /* ---- the chart: the scheme's own path against the pot the target needs ---- */
@@ -2025,7 +2109,7 @@ function calc(){
   ['sal','age','ret','growth'].forEach(function(id){paintSlider($(id));});
   clearTimeout(srTimer);
   srTimer=setTimeout(function(){
-    $('srSummary').textContent='My Future Fund puts in '+euro(r.mff)+' a year. The same take-home pay in a broker-arranged pension puts in '+euro(r.prsa)+'. On its own the scheme reaches '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income.';
+    $('srSummary').textContent='My Future Fund puts in '+euro(r.mff)+' a year. The same take-home pay in a broker-arranged pension puts in '+euro(r.prsa)+'. On its own the scheme reaches '+Math.round(share*100)+'% of a two-thirds-of-salary retirement income, and, in today\u2019s money, '+Math.round(cmfShare*100)+'% of what a comfortable retirement needs after the State Pension.';
   },700);
 }
 
