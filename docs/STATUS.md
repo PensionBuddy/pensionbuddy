@@ -6,6 +6,32 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 11 — 2026-09-16 · the entitlement module's interface, narrowed
+
+Candidate 3 from the architecture review. `state-pension-entitlement.js` exposed
+almost its whole implementation — four functions and nine constants — and its
+result carried the same fact twice in three places. The interface is now two
+functions, and each duplicated pair is one field. Driven test-first; the page
+renders identically before and after, proven across its entire input space.
+
+| Item | Status | Note |
+|---|---|---|
+| Public interface | **2 functions, was 4 + 9 constants** | `entitlement(input)` and `band(average)`. Gone: `yearlyAverage()`, `bandRate()`, `drawdownYear()`, `PAID_MIN`, `CREDITS_CAP_TCA`, `HOMECARING_CAP_TCA`, `CREDITS_PLUS_HC_CAP`, `MAX_PER_YEAR`, `YA_MIN`, `PENSION_AGE`, `YA_BANDS`, `YA_SHARE`. Nothing outside needed a constant: the page reads `PENSION_AGE` from `state-pension.js`, where it lives, and works the drawdown year out itself, which it already had to do for its own slider bounds. |
+| `band(average)` added | **Done** | Returns `{ min, max, weeklyCents }`, or null below 10. `max` is null for the top band, which has no upper bound. The page printed "40 to 47" and "48 or over" by walking `YA_BANDS` itself to find where one band ended; it now reads the band's own two bounds. |
+| `method2`, one field not two | **Done** | Was `method2` plus `method2Unavailable`, a figure and a flag that could disagree. Now one field, never null, in one of two shapes with no key in common: `{ yaShare, tcaShare, weeklyCents, weekly }`, or `{ reason }`. `reason` is the whole test. |
+| `yearlyAverage`, one band not three fields | **Done** | `bandMin`, `weeklyCents` and `weekly` scattered beside each other became `band`, the object `band()` returns, null below 10. |
+| `tca`, the dead fields dropped | **Done** | Was the whole `statePension()` result copied wholesale plus five more. `contributions` was the same number as `reckonable`; `eligible` is always true past the 520 gate and `shortBy` never set with it. Now assembled field by field, so its shape is a decision rather than a side effect of the other module's. |
+| The unreachable panel, deleted | **Done** | `#spBefore`, the "before-transition" panel: markup, CSS and the branch that painted it. The birth slider starts at this year minus 66, so the earliest drawdown year the page can offer is this year, and 2025 is past. Proven, not assumed, before deleting: driven across the page's whole input space, the panel never appeared once. The module keeps the state; `entitlement()` is not the page. |
+| 520-contribution gate | **Untouched, still open** | Unchanged again, as in Run 10. Still Damian's wording decision. |
+| `state-pension.js` | **Untouched** | Confirmed by diff and by content hash: both built pages load byte-identical `state-pension.js`. |
+| Tests | **381 → 608 assertions** | Sections 5 to 8 and 18 now prove the rounding, the bands and the share table through `entitlement()` rather than through helpers that are no longer public; the constants block became boundary tests at the values where each constant decides something. New section 19 asserts the interface itself, whole. New section 21 walks every birth year and entry year the page offers and asserts the SET of states that come back, which is what makes the deletion a proof rather than an assumption. New section 22 covers a reckonable count past a full record, the one state in which the page prints "more than a full record of 2,080" instead of a percentage: no row reached it before, so `tca.capped` could have been wired to a constant unnoticed. |
+| Mutation-tested | **19 mutants, 19 caught** | Every hand-rebuilt `tca` field pointed at the wrong source; both band bounds moved by one; a share key deleted and a share value changed; each of the four caps and the 520 gate moved; the Method 2 reason string changed; the before-transition state removed. Every one of them fails the suite. Two of the assertions in the first draft of this pass did NOT fail under mutation and were rewritten: a HomeCaring cap asserted at exactly the cap, and a window sweep that counted a year as covered when its share was missing. |
+| New panel check | **In `tests/run-tests.py`, runs by default** | Reads the REAL built page's birth-year bounds in Chrome, drives 735 renders, and asserts the page has a panel for every state those bounds can reach and none it cannot. Deliberately broken to confirm it fires: lowering the birth floor by three years makes it fail on three counts, including the TypeError the unhandled state throws. |
+| Proof of no behaviour change | **29,733,102 states, identical** | Every setting of all five sliders, old page against new, both behind their own module version: every element written, every `aria-valuetext`, every panel's hidden flag. Zero differences. Plus 64,778 birth-slider moves through the page's own event handlers, for the entry-clamp note the direct sweep cannot reach, and 1,764 cases in real headless Chrome on the two built pages. The module itself was compared field by field over 256,200 inputs: every difference is one of the four intended shape changes and nothing else. |
+| verify.py | **0 FAIL** | 16 pages. |
+
+---
+
 # Run 10 — 2026-09-12 · one home for the transition window
 
 Candidate 2 from the architecture review. The rule deciding whether the reality

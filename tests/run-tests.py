@@ -18,6 +18,11 @@ browser, and it is the one to trust before a commit.
 
 The drift check is the reason the shared module cannot silently diverge from
 pension-calculator.html, which the brief said not to modify.
+
+The panel check runs with the entitlement suite and is the reason the deleted
+'before-transition' panel cannot silently become necessary again: it reads the
+REAL built page's birth-year bounds and asserts the page has a panel for every
+state those bounds can reach, and none it cannot.
 """
 import argparse, html, http.server, os, re, socket, subprocess, sys, threading, functools
 
@@ -166,6 +171,116 @@ def run_drift(port):
     return 0 if bad == 0 else 1
 
 
+PANEL_PROBE = """
+<script>
+// A throw inside an input listener never reaches dispatchEvent, so it has to be
+// caught here or a page that breaks on a state it does not handle looks clean.
+window.__renderErrs = [];
+window.addEventListener('error', function (e) {
+  window.__renderErrs.push((e.message || e.type) + ' @' + (e.lineno || '?'));
+}, true);
+window.addEventListener('load', function () {
+  var PANELS = ['spHas', 'spNone', 'spUnfit', 'spBefore'];
+  var present = PANELS.filter(function (id) { return !!document.getElementById(id); });
+  var b = document.getElementById('birth');
+  var lo = +b.min, hi = +b.max, YEAR = new Date().getFullYear();
+  var AGE = window.PBStatePension.PENSION_AGE;
+  var COUNTS = [[0,0,0], [468,260,0], [520,0,0], [1560,260,0], [2600,1040,1040]];
+  var states = {}, shown = {}, errors = [], renders = 0;
+  for (var birth = lo; birth <= hi; birth++) {
+    var emin = birth + 16, emax = Math.min(YEAR, birth + AGE - 1);
+    var entries = [emin, Math.floor((emin + emax) / 2), emax];
+    for (var e = 0; e < entries.length; e++) {
+      for (var c = 0; c < COUNTS.length; c++) {
+        document.getElementById('birth').value = birth;
+        var en = document.getElementById('entry');
+        en.min = emin; en.max = emax; en.value = entries[e];
+        document.getElementById('paid').value = COUNTS[c][0];
+        document.getElementById('credited').value = COUNTS[c][1];
+        document.getElementById('homecaring').value = COUNTS[c][2];
+        var before = window.__renderErrs.length;
+        try {
+          document.getElementById('paid').dispatchEvent(new Event('input', {bubbles: true}));
+        } catch (err) {
+          window.__renderErrs.push((err && err.message) || String(err));
+        }
+        if (window.__renderErrs.length > before) {
+          errors.push(birth + '/' + entries[e] + '/' + c + ': ' +
+                      window.__renderErrs[window.__renderErrs.length - 1]);
+        }
+        renders++;
+        states[window.PBEntitlement.entitlement({
+          paid: COUNTS[c][0], credited: COUNTS[c][1], homeCaring: COUNTS[c][2],
+          entryYear: entries[e], drawdownYear: birth + AGE
+        }).state] = 1;
+        shown[present.filter(function (id) {
+          return !document.getElementById(id).hidden;
+        }).join('+') || '(none)'] = 1;
+      }
+    }
+  }
+  var pre = document.createElement('pre');
+  pre.id = '__panels__';
+  pre.textContent = JSON.stringify({
+    birthMin: lo, birthMax: hi, renders: renders,
+    panelsInPage: present, statesReachable: Object.keys(states).sort(),
+    panelsShown: Object.keys(shown).sort(),
+    errorCount: errors.length, errors: errors.slice(0, 5)
+  });
+  document.body.appendChild(pre);
+});
+</script>"""
+
+
+def run_panel_check(port):
+    """The entitlement page's own controls, against the states its module can return.
+
+    The page has a result panel for each state its five controls can produce and
+    no panel for the one they cannot, 'before-transition'. That is a claim about
+    the REAL page's slider bounds, so it is checked against the real built page
+    rather than against a copy of those bounds kept in the test suite: an edit to
+    the birth-year floor that made the missing state reachable has to fail here.
+    """
+    print('\nPANEL CHECK  state-pension-entitlement.html: every state has a panel')
+    src = open(os.path.join(ROOT, 'state-pension-entitlement.html'),
+               encoding='utf-8', errors='replace').read()
+    tmp = os.path.join(ROOT, '__panel_probe.html')
+    open(tmp, 'w', encoding='utf-8').write(src.replace('</body>', PANEL_PROBE + '</body>'))
+    try:
+        dom = dump('http://127.0.0.1:%d/__panel_probe.html' % port, budget=60000)
+    finally:
+        os.remove(tmp)
+
+    m = re.search(r'<pre id="__panels__">(.*?)</pre>', dom, re.S)
+    if not m:
+        print('  could not read the panel report from the page')
+        return 1
+    import json
+    r = json.loads(html.unescape(m.group(1)))
+    panel_for = {'eligible': 'spHas', 'no-entitlement': 'spNone', 'inconsistent': 'spUnfit',
+                 'before-transition': 'spBefore'}
+    want = sorted(panel_for[s] for s in r['statesReachable'])
+    bad = 0
+    checks = [
+        ('birth years %d to %d, %d renders' % (r['birthMin'], r['birthMax'], r['renders']),
+         r['renders'] > 0),
+        ('no render error on any of them', not r.get('errorCount')),
+        ('states the page can reach: %s' % ', '.join(r['statesReachable']),
+         'before-transition' not in r['statesReachable']),
+        ('a panel for each, and no others: %s' % ', '.join(r['panelsInPage']),
+         sorted(r['panelsInPage']) == want),
+        ('exactly one panel showing every time: %s' % ', '.join(r['panelsShown']),
+         all(p in ('spHas', 'spNone', 'spUnfit') for p in r['panelsShown'])),
+    ]
+    for label, ok in checks:
+        print('  %s %s' % ('ok  ' if ok else 'FAIL', label))
+        bad += 0 if ok else 1
+    if r['errors']:
+        for e in r['errors']:
+            print('       %s' % e)
+    return 0 if bad == 0 else 1
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('suite', nargs='?', choices=sorted(SUITES) + ['all'], default='all')
@@ -179,6 +294,8 @@ def main():
     try:
         for n in names:
             rc |= run_acceptance(port, n)
+        if args.suite in ('all', 'state-pension-entitlement'):
+            rc |= run_panel_check(port)
         if args.drift:
             rc |= run_drift(port)
     finally:

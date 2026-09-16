@@ -174,18 +174,29 @@ for Method 1 and never re-implements. Every input is coerced with
 `Number(x) || 0` and floored, as the existing module does, so a missing value
 is a zero, never a NaN.
 
+The module's public interface is two functions, `entitlement(input)` and
+`band(average)`. The numbers and tables below are internal to it: they are
+facts it applies, not questions a caller asks, and each is proven from the
+outside at the boundary where it decides something (S8, row 19).
+
 ```
 PAID_MIN            = 520
 CREDITS_CAP_TCA     = 520
 HOMECARING_CAP_TCA  = 1040
 CREDITS_PLUS_HC_CAP = 1040
 MAX_PER_YEAR        = 52
-YA_MIN              = 10
-PENSION_AGE         = 66   (from state-pension.js, re-exported, not a copy)
+
+Pension age is NOT one of this module's numbers. It is not read here at all:
+entitlement() is handed a drawdown year and never works one out from a birth
+year. PENSION_AGE lives in state-pension.js and the page reads it there, for
+its own slider bounds and for the drawdown year it passes in.
 
 YA_BANDS (lower bound inclusive, weekly cents):
   48 → 29930    40 → 29350    30 → 26910
   20 → 25480    15 → 19500    10 → 11960
+  The lowest bound, 10, is also the floor of the whole method: below it an
+  average falls in no band and Method 2 does not apply. There is no separate
+  YA_MIN constant to drift from the table.
 
 YA_SHARE (percent of the Yearly Average rate, by drawdown year):
   2025 90   2026 80   2027 70   2028 60   2029 50
@@ -196,8 +207,12 @@ The window itself is not a constant of this module. Which side of it a
 drawdown year falls on is `PBStatePension.transition(year)`, answering
 `before` / `during` / `after`, and the window's two ends are
 `TRANSITION_FIRST` and `TRANSITION_LAST` there. YA_SHARE above says only what
-the mix IS inside the window, and the test suite asserts that its keys cover
-that window exactly.
+the mix IS inside the window. The test suite asserts that through the
+calculation rather than by reading the table: year by year across the window
+and past both its ends, a year inside it has to come back with a numeric share
+and a figure that is a real number, which is exactly what a missing key would
+break. A key OUTSIDE the window is not asserted against, because it cannot be
+read: `transition()` has already answered `before` or `after` by then.
 ```
 
 ### entitlement({ paid, credited, homeCaring, entryYear, drawdownYear })
@@ -222,17 +237,18 @@ tcaReckonable     = paid + extrasCounted
 method1 = PBStatePension.statePension(tcaReckonable)      # caps at 2,080 itself
 
 # Method 2
-if drawdownYear >= 2034:          unavailable, 'after-transition'
+if drawdownYear >= 2034:          method2 = { reason: 'after-transition' }
 else:
     average = yearlyAverage(paid + credited, years)      # years >= 10 here, see below
-    if average < YA_MIN:          unavailable, 'yearly-average-below-10'
+    yaBand  = band(average)                              # null below 10
+    if yaBand is null:            method2 = { reason: 'yearly-average-below-10' }
     else:
-        yaCents  = bandRate(average)
         yaShare  = YA_SHARE[drawdownYear]
-        method2Cents = roundHalfUp((yaCents * yaShare + method1.weeklyCents * (100 - yaShare)) / 100)
+        method2Cents = roundHalfUp((yaBand.weeklyCents * yaShare + method1.weeklyCents * (100 - yaShare)) / 100)
+        method2 = { yaShare, tcaShare, weeklyCents, weekly }
 
 # Best-of
-award = method2 available and method2Cents > method1.weeklyCents ? method2 : method1
+award = method2 has a figure and method2Cents > method1.weeklyCents ? method2 : method1
 return { state: 'eligible', ... }
 ```
 
@@ -241,25 +257,35 @@ contributions need at least ten years at 52 a year. So there is no
 "no complete year" case, and `years` is at least 10 wherever a yearly average
 is computed.
 
-### yearlyAverage(numerator, years)
+### band(average)
+
+The rate band the average falls in: the highest band whose lower bound the
+average reaches.
 
 ```
-years < 1 → null
-otherwise  min(52, roundHalfUp(numerator / years))
+{ min, max, weeklyCents }   max is null for the top band, which has no upper bound
+null                        below 10, where the method does not apply at all
 ```
 
-Half up, to a whole number, as the Department does: 9.5 becomes 10, 47.5
-becomes 48, 9.4 becomes 9. Capped at 52 as a guard; the consistency check
-means the full flow never needs it.
+The upper bound is one below the next band's lower bound and is worked out
+here, once, so a caller naming the band ("40 to 47", "48 or over") never walks
+the table to find where one band ends.
 
-### bandRate(average)
+### The yearly average itself
 
-The rate of the highest band whose lower bound the average reaches. Below 10,
-`null`.
+Internal. Paid plus credited over the years from entry to the year before
+drawdown, rounded half up to a whole number as the Department does: 9.5 becomes
+10, 47.5 becomes 48, 9.4 becomes 9. It is capped at 52 and refuses a division
+over no years, both guards only: the consistency gate returns `inconsistent`
+before either can fire, because 520 paid contributions need ten years at 52 a
+year. S8 row 8 asserts the gate, not the guard.
 
-### drawdownYear(birthYear)
+### Drawdown at 66
 
-`birthYear + 66`. Exact for drawdown at 66, which is all this page models.
+`entitlement()` takes the drawdown year; it does not work one out from a birth
+year. The page does that, as `birthYear + PENSION_AGE`, reading pension age
+from `state-pension.js` where it lives and which the page already loads for its
+own slider bounds.
 
 ### Return shape
 
@@ -270,20 +296,39 @@ no-entitlement:   { state, paid, paidShortBy }
 inconsistent:     { state, years, maxForYears, entered }
 before-transition:{ state, drawdownYear }
 eligible: {
-  state, paid, credited, homeCaring, entryYear, drawdownYear, years,
+  state, paid, credited, homeCaring, entryYear, drawdownYear,
+  years,                        # the years the Yearly Average divides by:
+                                # entryYear to drawdownYear - 1, both inclusive
   tca: { reckonable, creditsCounted, homeCaringCounted, extrasCounted, capBit,
-         weeklyCents, weekly, fraction, ... }       # the statePension() result plus these
-  yearlyAverage: null | { years, numerator, average, bandMin, weeklyCents, weekly }
-  method2: null | { yaShare, tcaShare, weeklyCents, weekly }
-  method2Unavailable: null | 'after-transition' | 'yearly-average-below-10'
+         counted, capped, fraction, years,      # NB: tca.years is counted / 52,
+         weeklyCents, weekly, annualCents, annual }   # the years of record the
+                                                      # TCA counts, which is not
+                                                      # the top-level `years`
+  yearlyAverage: null | { years, numerator, average,
+                          band: null | { min, max, weeklyCents } }
+  method2: { yaShare, tcaShare, weeklyCents, weekly }    # there is a figure
+          | { reason: 'after-transition' | 'yearly-average-below-10' }
   award: { basis: 'method1' | 'method2' | 'tie', weeklyCents, weekly, annualCents, annual, gainCents, gain }
 }
 ```
 
+`method2` is **one field with two shapes**, never null: the figure, or the
+reason there is no figure. The two shapes share no key, so `reason` is the
+whole test and there is nothing to find beside it. A figure plus a separate
+`method2Unavailable` flag was two fields for one fact, and two fields for one
+fact can disagree.
+
+`tca` is Method 1's result plus what the caps did to get there, named field by
+field rather than copied wholesale from `statePension()`. Two of that result's
+fields are deliberately absent: `eligible`, which past the 520 gate is always
+true, and `contributions`, which is the same number as `reckonable`. `capBit`
+is true when any of the three TCA caps reduced the count.
+
 `yearlyAverage` is populated whenever a yearly average was computed: for
 `yearly-average-below-10` it carries `years`, `numerator` and `average` with
-`bandMin`, `weeklyCents` and `weekly` null. For `after-transition` it is
-null. `capBit` is true when any of the three TCA caps reduced the count.
+`band` null. For `after-transition` it is null, because no average was worked
+out at all. The band is one object, not a lower bound and a rate scattered
+beside it.
 
 `gainCents` is `method2 − method1` when Method 2 is paid, otherwise 0. When
 the two figures are equal the basis is `'tie'` and the amount is the same
@@ -294,13 +339,16 @@ changes the amount.
 
 The three non-eligible states carry **no weekly or annual figure anywhere**.
 
-Also exported: `yearlyAverage`, `bandRate`, `drawdownYear(birthYear)`, and
-the constants.
+Nothing else is exported. `yearlyAverage()`, `bandRate()`, `bandMin()` and
+`drawdownYear()` were steps of `entitlement()` that a caller repeating them
+could only get out of step with it, and the constants and both tables were
+facts the module applies. A wide interface is a promise about internals; the
+promise here is `entitlement()` and `band()`.
 
-There is no `yaShare(year)`. It returned null both before 2025 and from 2034,
-two opposite facts under one value, and a caller could only tell them apart by
-already knowing the answer. `PBStatePension.transition(year)` names all three
-states instead, and `YA_SHARE` remains for the mix itself.
+There is no `yaShare(year)` either. It returned null both before 2025 and from
+2034, two opposite facts under one value, and a caller could only tell them
+apart by already knowing the answer. `PBStatePension.transition(year)` names
+all three states instead.
 
 ---
 
@@ -388,11 +436,18 @@ Method 1 row and a sentence saying why there is no second calculation:
   The Homemaker's Scheme, which this page leaves out, can shorten the years
   and bring the average back above 10."
 
-`before-transition` cannot be reached from the sliders either (birth year no
-earlier than current year − 66 gives drawdown no earlier than the current
-year) and has no page copy. If it ever appears the page shows the
-no-figure panel with "This page does not cover pensions that started before
-2025."
+`before-transition` cannot be reached from the sliders either, and the page
+has **no panel for it**. The birth-year slider starts at the current year minus
+66, because someone older has already passed pension age, so the earliest
+drawdown year the page can produce is the current year itself; 2025 is past, so
+that is inside the transition window or after it, never before. The panel that
+once stood ready for it was dead markup, dead CSS and a dead branch, and the
+page now has three result states because three is what its controls can
+produce. Section 21 of the test suite walks every birth year and entry year the
+page offers and asserts the set of states that come back: that the fourth
+never appears, and that the other three all do. The module keeps the state:
+`entitlement()` is not the page, and a drawdown year before 2025 is a real
+answer for it to give.
 
 The entry-year slider stays live in State C. It changes nothing there, and
 the after-transition sentence says why.
@@ -466,23 +521,25 @@ proven values (€261.89 at 1,820; €224.48 at 1,560; €74.83 at 520).
 | 1 | paid 2,080, credited 0, HC 0, entry 1986, drawdown 2026 | Method 1 €299.30. Years 40, average 52, band 48, Method 2 = 80% × 299.30 + 20% × 299.30 = **€299.30**. Basis **tie**, award **€299.30**, gain 0, annual **€15,563.60** |
 | 2 | **the 2026 default**: paid 1,560, credited 260, HC 0, entry 1985, drawdown 2028 | reckonable 1,820 → Method 1 **€261.89**. Years 43, 1,820 / 43 = 42.33 → **42**, band 40 → €293.50. Mix 60/40: (29350 × 60 + 26189 × 40) / 100 = 28085.6 → **€280.86**. Award **€280.86** on **method2**, gain **€18.97**, annual **€14,604.72** |
 | 3 | HomeCaring makes TCA win: paid 1,040, credited 0, HC 780, entry 1990, drawdown 2030 | reckonable 1,820 → Method 1 **€261.89**. Years 40, 1,040 / 40 = **26**, band 20 → €254.80. Mix 40/60: (25480 × 40 + 26189 × 60) / 100 = 25905.4 → **€259.05**. Award **€261.89** on **method1**, gain 0, `capBit` false |
-| 4 | yearly average below 10, module level: paid 520, credited 0, HC 0, entry 1970, drawdown 2026 | Method 1 **€74.83**. Years 56, 520 / 56 = 9.29 → **9**. `method2Unavailable` = `yearly-average-below-10`; `yearlyAverage` = { years 56, numerator 520, average 9, bandMin null, weeklyCents null }. Award **€74.83** on method1 |
-| 5 | half up at the top band: `yearlyAverage(1900, 40)` | 47.5 → **48**, `bandRate(48)` = 29930 |
-| 6 | one below: `yearlyAverage(1896, 40)` | 47.4 → **47**, `bandRate(47)` = 29350 |
-| 7 | half up at the floor: `yearlyAverage(570, 60)` = 9.5 → **10**, `bandRate(10)` = 11960; `yearlyAverage(564, 60)` = 9.4 → **9**, `bandRate(9)` = null | |
-| 8 | the guards: `yearlyAverage(2600, 40)` = **52**; `yearlyAverage(520, 0)` = **null**; `yearlyAverage(520, -1)` = **null** | |
+| 4 | yearly average below 10, module level: paid 520, credited 0, HC 0, entry 1970, drawdown 2026 | Method 1 **€74.83**. Years 56, 520 / 56 = 9.29 → **9**. `method2` = { reason: `yearly-average-below-10` } and carries no figure; `yearlyAverage` = { years 56, numerator 520, average 9, band null }. Award **€74.83** on method1 |
+| 5 | half up at the top band: paid 1,900, entry 1986, drawdown 2026 | 1,900 / 40 = 47.5 → **48**, `band(48)` = { min 48, max null, weeklyCents 29930 } |
+| 6 | one below: paid 1,896, same years | 1,896 / 40 = 47.4 → **47**, `band(47)` = { min 40, max 47, weeklyCents 29350 } |
+| 7 | half up at the floor: paid 570, entry 1966, drawdown 2026 | 9.5 → **10**, band { min 10, max 14, weeklyCents 11960 }, and a Method 2 figure. Paid 564 over the same years: 9.4 → **9**, band **null**, `method2.reason` = `yearly-average-below-10` |
+| 8 | the consistency gate at its boundary: 520 paid over exactly ten years | **eligible**, average **52**, the most a yearly average can be. One year's contributions more: **inconsistent**, `maxForYears` 520. 520 paid over nine years: **inconsistent**, `maxForYears` 468. So nothing past the gate divides by fewer than ten years, and the guards inside the average cannot fire |
 | 9 | credits uncapped under YA, capped under TCA: paid 1,040, credited 780, HC 0, entry 1990, drawdown 2030 | reckonable 1,040 + 520 = 1,560 → Method 1 **€224.48**, `creditsCounted` 520, `capBit` true. Years 40, 1,820 / 40 = 45.5 → **46**, band 40 → €293.50. Mix 40/60: (29350 × 40 + 22448 × 60) / 100 = 25208.8 → **€252.09**. Award **€252.09** on **method2**, gain **€27.61** |
 | 10 | combined credits + HomeCaring cap: paid 520, credited 520, HC 1,040, entry 1986, drawdown 2026 | `creditsCounted` 520, `homeCaringCounted` 1,040, `extrasCounted` 1,040, reckonable 1,560 → Method 1 **€224.48**, `capBit` true. Years 40, 1,040 / 40 = **26**, band 20 → €254.80. Mix 80/20: (25480 × 80 + 22448 × 20) / 100 = 24873.6 → **€248.74**. Award **€248.74** on **method2** |
-| 11 | after the transition: paid 1,560, credited 0, HC 0, entry 2004, drawdown 2052 | Years 48. Method 1 **€224.48**. `method2Unavailable` = `after-transition`, `yearlyAverage` null, `method2` null. Award **€224.48** on method1 |
+| 11 | after the transition: paid 1,560, credited 0, HC 0, entry 2004, drawdown 2052 | Years 48. Method 1 **€224.48**. `method2` = { reason: `after-transition` } and carries no figure; `yearlyAverage` null, no average worked out at all. Award **€224.48** on method1 |
 | 12 | before the transition: paid 1,560, credited 0, HC 0, entry 1990, drawdown 2024 | `state` = `before-transition`. No `award`, no `tca`, no weekly or annual figure anywhere in the result |
 | 13 | paid below 520 with reckonable above it: paid 468, credited 260, HC 0 | `state` = `no-entitlement`, `paidShortBy` **52**, no weekly or annual figure anywhere in the result |
 | 14 | the details do not fit: paid 520, credited 0, HC 0, entry 2026, drawdown 2026 | `state` = `inconsistent`, `years` 0, `maxForYears` **0**, `entered` 520, no figures. And paid 1,560, credited 0, entry 2000, drawdown 2026: years 26, `maxForYears` **1,352**, `entered` 1,560, `inconsistent` |
 | 15 | the last transition year: paid 1,560, credited 260, HC 0, entry 1985, drawdown 2033 | Method 1 **€261.89**. Years 48, 1,820 / 48 = 37.92 → **38**, band 30 → €269.10. Mix 10/90: (26910 × 10 + 26189 × 90) / 100 = 26261.1 → **€262.61**. Award **€262.61** on **method2**, gain **€0.72** |
 | 16 | Method 1 wins with no HomeCaring: paid 2,080, credited 0, HC 0, entry 1976, drawdown 2026 | Years 50, 2,080 / 50 = 41.6 → **42**, band 40 → €293.50. Method 1 **€299.30**. Mix 80/20: (29350 × 80 + 29930 × 20) / 100 = 29466 → **€294.66**. Award **€299.30** on **method1** |
-| 17 | every band boundary: `bandRate` at 48, 47, 40, 39, 30, 29, 20, 19, 15, 14, 10, 9 | 29930, 29350, 29350, 26910, 26910, 25480, 25480, 19500, 19500, 11960, 11960, null |
-| 18 | every transition year: `YA_SHARE` at 2024 … 2034, each cross-checked against `SP.transition(year)` | null, 90, 80, 70, 60, 50, 40, 30, 20, 10, null; a key exactly for the years `transition` calls `during` and none outside, and no `yaShare` export at all |
-| 19 | `drawdownYear(1962)` = 2028; `drawdownYear(1960)` = 2026; `drawdownYear(2008)` = 2074 | |
+| 17 | every band boundary, both sides: `band()` at 52, 48, 47, 40, 39, 30, 29, 20, 19, 15, 14, 10 | the six published bands with both bounds: 48/null, 40/47, 30/39, 20/29, 15/19, 10/14, at 29930, 29350, 26910, 25480, 19500, 11960. `band(9)` and `band(0)` null |
+| 18 | every transition year, through the calculation: one eligible record with the years held at 43, drawdown 2024 … 2034 | shares 90, 80, 70, 60, 50, 40, 30, 20, 10 for 2025 … 2033, each with a real figure and not a NaN; 2024 `before-transition`, 2034 `after-transition`. Swept over 2015 … 2045, the years with a share start at `TRANSITION_FIRST`, end at `TRANSITION_LAST` and miss none between |
+| 19 | the public interface, whole | `Object.keys` is exactly `band, entitlement`. `yearlyAverage`, `bandRate`, `bandMin`, `drawdownYear`, `yaShare`, `YA_BANDS`, `YA_SHARE` and every constant are undefined on it. The numbers those constants held are asserted at the boundaries where they decide something: 519 paid short by one and 520 eligible; credits capped at 520, HomeCaring at 1,040, the two together at 1,040; `maxForYears` 2,080 over 40 years; 10 in a band and 9 in none |
 | 20 | coercion: `entitlement({})` | `state` = `no-entitlement`, `paidShortBy` 520. And `entitlement({ paid: '1560', credited: undefined, homeCaring: null, entryYear: '1985', drawdownYear: 2028 })` gives the same award as example 2 with credited 0: reckonable 1,560, Method 1 €224.48, years 43, 1,560 / 43 = 36.28 → 36, band 30 → €269.10, mix 60/40: (26910 × 60 + 22448 × 40) / 100 = 25125.2 → **€251.25** on method2 |
+| 21 | the page's own input space: every birth year and entry year the five controls offer, against paid 0 … 2,600, credited 0 … 1,040 and HomeCaring 0 … 1,040 spanning both gates and all three caps | exactly three states come back, `eligible`, `inconsistent` and `no-entitlement`. `before-transition` never does, which is why the page has three result panels. No eligible result divides by fewer than ten years, none averages more than 52, and the lowest average reachable is 10 |
+| 22 | past a full record: paid 2,080, credited 0, HC 1,040, entry 1986, drawdown 2026 | reckonable **3,120**, over the 2,080 a full record is, so `counted` **2,080**, `capped` **true**, `fraction` **1**, Method 1 **€299.30**. `capBit` is **false**: the 2,080 cap is statePension()'s, not one of the three TCA caps on credits and HomeCaring Periods, and neither of those bit. The yearly average ignores the HomeCaring Periods: 2,080 / 40 = **52**, top band €299.30, so the two methods **tie** at €299.30. This is the only state in which the page prints "more than a full record of 2,080" instead of a percentage |
 
 Every eligible result is also checked for internal consistency:
 `award.weeklyCents` equals whichever of `tca.weeklyCents` and

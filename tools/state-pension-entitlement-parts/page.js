@@ -3,9 +3,11 @@
    Maths lives in assets/js/state-pension-entitlement.js, which is the single
    source of truth and is covered by tests/state-pension-entitlement.test.js.
    This file only reads the five controls and paints the panels, so the page
-   cannot hold a second copy of the rules. Every figure and every band comes
-   back from PBEntitlement.entitlement(); nothing here divides, rounds or
-   looks a rate up.
+   cannot hold a second copy of the rules. Every figure, and the band it falls
+   in, comes back from PBEntitlement.entitlement(): nothing here works out a
+   rate, a yearly average, a band, or where one band ends and the next begins.
+   The arithmetic that is left is formatting: cents to euros, a fraction to a
+   percentage, a count of contributions to years, and the slider bounds.
 
    TONE: the two figures do the work. State which calculation is paid, by how
    much it differs, and stop. No pressure language, no urgency. */
@@ -19,6 +21,10 @@ const SP = window.PBStatePension;
 const $ = id => document.getElementById(id);
 const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
 const euro2 = v => '€' + v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/* the module's money is integer cents. Every figure it hands over carries a
+   euro mirror beside it; a band's rate is the one that does not, so this is
+   the conversion for that, and it is display, not calculation. */
+const euro2c = c => euro2(c / 100);
 const num = v => v.toLocaleString('en-IE');
 /* a year is a label, not a quantity, so it never takes a thousands separator */
 const yr = v => String(v);
@@ -31,7 +37,17 @@ const pct = v => num(Math.round(v * 10000) / 100) + '%';
    reads the clock; the drawdown year is passed to it. Spec S2. */
 const CURRENT_YEAR = new Date().getFullYear();
 const PENSION_AGE = SP.PENSION_AGE;
-const BIRTH_MIN = CURRENT_YEAR - PENSION_AGE;      // reaches 66 this year: drawdown is never before the current year
+/* The pension starts at 66, so the birth year fixes the drawdown year. The
+   page needs pension age for its own slider bounds anyway, so it works this
+   out rather than asking the entitlement module for a second name for it. */
+const drawdownFor = birthYear => birthYear + PENSION_AGE;
+/* Reaching 66 this year is the earliest the page offers, so the earliest
+   drawdown year it can produce is the current one. That is why the page has
+   three result panels and not four: the module's fourth state,
+   'before-transition', needs a drawdown year before 2025 and no setting of
+   these controls can ask for one. Proven in section 21 of
+   tests/state-pension-entitlement.test.js, which walks this whole range. */
+const BIRTH_MIN = CURRENT_YEAR - PENSION_AGE;
 const BIRTH_MAX = CURRENT_YEAR - 18;
 const BIRTH_DEFAULT = CURRENT_YEAR - 64;           // the default reader is always 64. Revisit before 2032, spec S2
 const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contribution year of entry can be
@@ -43,7 +59,7 @@ const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. I
 /* Screen readers otherwise announce a bare number, so each slider carries a
    formatted aria-valuetext, matching the other calculators. */
 const VALTEXT = {
-  birth: v => 'born in ' + yr(v) + ', reaching 66 in ' + yr(ENT.drawdownYear(v)),
+  birth: v => 'born in ' + yr(v) + ', reaching 66 in ' + yr(drawdownFor(v)),
   entry: v => 'first paid PRSI in the ' + yr(v) + ' contribution year',
   paid: v => num(v) + ' paid contributions, ' + (v / 52) + ' years',
   credited: v => num(v) + ' credited contributions, ' + (v / 52) + ' years',
@@ -86,20 +102,13 @@ function syncEntryBounds() {
   paintSlider(entry);
 }
 
-/* The band's range in words, from the module's band table: the upper bound
-   of a band is one below the next band's lower bound, and the top band has
-   none. Nothing here decides which band an average falls in. */
-function bandLabel(bandMin) {
-  const bands = ENT.YA_BANDS;
-  for (let i = 0; i < bands.length; i++) {
-    if (bands[i].min !== bandMin) continue;
-    return i === 0 ? bandMin + ' or over' : bandMin + ' to ' + (bands[i - 1].min - 1);
-  }
-  return String(bandMin);
-}
+/* The band's range in words. The band comes back from the module carrying
+   both its bounds, the top one having no upper bound and saying so with null,
+   so this reads them out rather than working out where a band ends. */
+const bandLabel = b => b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max;
 
 function show(id) {
-  ['spHas', 'spNone', 'spUnfit', 'spBefore'].forEach(k => { $(k).hidden = k !== id; });
+  ['spHas', 'spNone', 'spUnfit'].forEach(k => { $(k).hidden = k !== id; });
 }
 
 function render() {
@@ -108,7 +117,7 @@ function render() {
   const paid = +$('paid').value;
   const credited = +$('credited').value;
   const homeCaring = +$('homecaring').value;
-  const drawdown = ENT.drawdownYear(birth);
+  const drawdown = drawdownFor(birth);
 
   $('birthV').textContent = yr(birth);
   $('entryV').textContent = yr(entryYear);
@@ -150,16 +159,6 @@ function render() {
       ' Check the contribution year you first paid PRSI.';
     sr = 'These details do not fit together. ' + fit + ' Check the contribution year you first paid PRSI.';
 
-  } else if (res.state === 'before-transition') {
-    // unreachable from the sliders, since the birth-year floor keeps drawdown
-    // at or after the current year, but the module has the state so the
-    // page has a panel for it rather than a blank column
-    show('spBefore');
-    const beforeCopy = 'This page does not cover pensions that started before ' +
-      yr(SP.TRANSITION_FIRST) + '.';
-    $('spBeforeFoot').textContent = beforeCopy;
-    sr = beforeCopy;
-
   } else {
     show('spHas');
     const tca = res.tca, ya = res.yearlyAverage, m2 = res.method2, award = res.award;
@@ -184,8 +183,9 @@ function render() {
         ' credits and HomeCaring Periods count; the rest are over the caps.';
     }
 
-    // Method 2 row, or the sentence saying why there is none
-    const hasM2 = m2 !== null;
+    // Method 2 row, or the sentence saying why there is none. One field
+    // answers that: the figure, or a reason.
+    const hasM2 = !m2.reason;
     $('m2Row').hidden = !hasM2;
     $('mClose').hidden = !hasM2;
     $('mWhy').hidden = hasM2;
@@ -193,11 +193,11 @@ function render() {
 
     if (hasM2) {
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
-      const band = bandLabel(ya.bandMin);
+      const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';
       $('m2Detail').innerHTML = 'A yearly average of <b>' + ya.average + '</b> over <b>' + ya.years + '</b> years, ' +
         yr(res.entryYear) + ' to ' + yr(res.drawdownYear - 1) + ', falls in the ' + band + ' band at ' +
-        euro2(ya.weekly) + ' a week. For a pension starting in ' + yr(res.drawdownYear) + ' the mix is <b>' +
+        euro2c(ya.band.weeklyCents) + ' a week. For a pension starting in ' + yr(res.drawdownYear) + ' the mix is <b>' +
         m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Total Contributions Approach rate.';
 
       if (basis === 'method2') {
@@ -221,7 +221,7 @@ function render() {
             : 'under the Total Contributions Approach. The Yearly Average blend gives ' + euro2(m2.weekly) + '.');
     } else {
       $('bothSub').textContent = 'Only one calculation applies to these details.';
-      $('mWhy').textContent = res.method2Unavailable === 'after-transition'
+      $('mWhy').textContent = m2.reason === 'after-transition'
         ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
         : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) +

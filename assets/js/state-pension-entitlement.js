@@ -104,22 +104,29 @@
   var CREDITS_PLUS_HC_CAP = 1040;  // credits and HomeCaring Periods together under
                                    // TCA. Operational Guidelines
   var MAX_PER_YEAR        = 52;    // contributions that count in any one year. gov.ie
-  var YA_MIN              = 10;    // below this there is no Yearly Average rate at all.
-                                   // S.I. 592/2024 Art. 62D(2)(a)
   var YA_MAX              = 52;    // a yearly average can never exceed a year's weeks.
                                    // A guard: the consistency check below means the
                                    // full flow never reaches it
 
-  /* Pension age and the transition window are NOT redeclared here. Which
-     calculations apply to a drawdown year is a fact both pages need and this
-     module is loaded on only one of them, so it lives in state-pension.js and
-     is read from there: SP.PENSION_AGE, SP.transition(). The mix DURING the
-     window is this module's own business and is the table below. */
+  /* The transition window is NOT redeclared here. Which calculations apply to
+     a drawdown year is a fact both pages need and this module is loaded on
+     only one of them, so it lives in state-pension.js and is read from there,
+     through SP.transition(). The mix DURING the window is this module's own
+     business and is the table below.
+
+     Pension age is not read here at all. This module is handed a drawdown year
+     and never works one out from a birth year: the page does that, from
+     SP.PENSION_AGE, which it already reads for its own slider bounds. */
 
   /* Yearly Average rate bands, personal rate at 66, weekly cents. Lower bound
      inclusive, highest first, so the lookup walks down and stops at the first
      bound the average reaches. Rates: DSP Rates of Payment 2026 (SW19) p.33.
-     Boundaries: S.I. 592/2024 Schedule 8C. */
+     Boundaries: S.I. 592/2024 Schedule 8C.
+
+     The lowest band's lower bound is also the floor of the whole method: an
+     average below it falls in no band and removes Method 2 outright, S.I.
+     592/2024 Art. 62D(2)(a). That is the table's own 10 and is not repeated
+     as a second constant, which could drift from it. */
   var YA_BANDS = [
     { min: 48, weeklyCents: 29930 },   // EUR 299.30, the maximum personal rate
     { min: 40, weeklyCents: 29350 },   // EUR 293.50
@@ -135,11 +142,14 @@
      makes 2034 on TCA only.
 
      This table is only ever read for a year SP.transition() has already
-     called 'during', so it must have a key for every year of the window and
-     none outside it. The test suite asserts exactly that against
-     SP.TRANSITION_FIRST and SP.TRANSITION_LAST, which is what keeps the table
-     and the window from drifting apart now that they live in different
-     files. */
+     called 'during', so it must have a key for every year of the window. A
+     missing one would be an undefined share blended silently into a rate,
+     which is what would let the table and the window drift apart now that they
+     live in different files. The test suite asserts it through the calculation
+     itself, year by year across the window and past both its ends, against
+     SP.TRANSITION_FIRST and SP.TRANSITION_LAST. A key OUTSIDE the window is
+     not asserted against, because it cannot be read: transition() has already
+     answered 'before' or 'after' by then. */
   var YA_SHARE = {
     2025: 90, 2026: 80, 2027: 70, 2028: 60, 2029: 50,
     2030: 40, 2031: 30, 2032: 20, 2033: 10
@@ -168,8 +178,14 @@
 
   /* The yearly average: paid plus credited over the years from entry to the
      year before drawdown, rounded half up to a whole number as the Department
-     does. Null over no years, since there is nothing to divide by. Capped at
-     52 as a guard only. */
+     does.
+
+     Internal. The two guards below are guards only and neither can fire
+     through entitlement(): 520 paid contributions need ten years at 52 a year,
+     so the consistency gate has already returned 'inconsistent' before a
+     division over no years or an average above 52 could arise. The gate is
+     what the tests assert, at its boundary on both sides, rather than the dead
+     ground behind it. Tests, sections 8 and 21. */
   function yearlyAverage(numerator, years) {
     var n = count(numerator);
     var y = year(years);
@@ -177,32 +193,34 @@
     return Math.min(YA_MAX, roundHalfUp(n / y));
   }
 
-  /* The rate of the highest band whose lower bound the average reaches. Below
-     10 there is no band and no Yearly Average rate, so null rather than zero:
-     a zero would blend, and the statute says the method simply does not
-     apply. */
-  function bandRate(average) {
+  /* The rate band an average falls in: the highest band whose lower bound the
+     average reaches, with both its bounds and its weekly rate.
+
+       min          the lower bound, inclusive
+       max          the upper bound, inclusive, or null for the top band,
+                    which has none
+       weeklyCents  the band's personal rate at 66
+
+     Below 10 there is no band and no Yearly Average rate, so null rather than
+     a band with a zero rate: a zero would blend, and the statute says the
+     method simply does not apply.
+
+     The upper bound is one below the next band's lower bound and is worked
+     out here, from the table, rather than by every caller that wants to name
+     the band. The page prints "40 to 47" and "48 or over" from these two
+     numbers and never walks the table itself. */
+  function band(average) {
     var a = Number(average) || 0;
     for (var i = 0; i < YA_BANDS.length; i++) {
-      if (a >= YA_BANDS[i].min) return YA_BANDS[i].weeklyCents;
+      if (a >= YA_BANDS[i].min) {
+        return {
+          min: YA_BANDS[i].min,
+          max: i === 0 ? null : YA_BANDS[i - 1].min - 1,
+          weeklyCents: YA_BANDS[i].weeklyCents
+        };
+      }
     }
     return null;
-  }
-
-  /* The lower bound of that band, for the page's "falls in the 40 to 47
-     band" line. Null below 10, as bandRate is. */
-  function bandMin(average) {
-    var a = Number(average) || 0;
-    for (var i = 0; i < YA_BANDS.length; i++) {
-      if (a >= YA_BANDS[i].min) return YA_BANDS[i].min;
-    }
-    return null;
-  }
-
-  /* Birth year to drawdown year. Exact for drawdown at 66, which is all this
-     page models. */
-  function drawdownYear(birthYear) {
-    return year(birthYear) + SP.PENSION_AGE;
   }
 
   /* The whole check. Returns one of four states. The three non-eligible
@@ -259,38 +277,68 @@
                  homeCaring > HOMECARING_CAP_TCA ||
                  creditsCounted + homeCaringCounted > CREDITS_PLUS_HC_CAP;
 
-    var sp = SP.statePension(reckonable);
-    var tca = {};
-    Object.keys(sp).forEach(function (k) { tca[k] = sp[k]; });
-    tca.reckonable        = reckonable;
-    tca.creditsCounted    = creditsCounted;
-    tca.homeCaringCounted = homeCaringCounted;
-    tca.extrasCounted     = extrasCounted;
-    tca.capBit            = capBit;
+    /* Method 1's result, plus what the caps did to get there. Named field by
+       field rather than copied wholesale, so this object's shape is a decision
+       and not a side effect of the other module's.
 
-    // Method 2, the Yearly Average blend. Paid plus credited, credits
-    // uncapped, HomeCaring Periods not counted: the Homemaker's Scheme is the
-    // Yearly Average's treatment of caring time and it is not modelled.
+       Two of statePension()'s fields are deliberately not carried over.
+       `eligible` is always true here: reckonable is paid plus extras and paid
+       has already cleared the 520 gate, so the ineligible shape cannot occur
+       and `shortBy` is never set with it. And the count it returns under
+       `contributions` is the reckonable count this module just worked out, so
+       it appears once, as `reckonable`, which is the word the page, the spec
+       and CONTEXT.md all use. */
+    var sp = SP.statePension(reckonable);
+    var tca = {
+      reckonable:        reckonable,
+      creditsCounted:    creditsCounted,
+      homeCaringCounted: homeCaringCounted,
+      extrasCounted:     extrasCounted,
+      capBit:            capBit,
+      counted:           sp.counted,       // what the 2,080 cap left
+      capped:            sp.capped,
+      fraction:          sp.fraction,      // the "x% of a full record" line
+      years:             sp.years,
+      weeklyCents:       sp.weeklyCents,
+      weekly:            sp.weekly,
+      annualCents:       sp.annualCents,
+      annual:            sp.annual
+    };
+
+    /* Method 2, the Yearly Average blend. Paid plus credited, credits
+       uncapped, HomeCaring Periods not counted: the Homemaker's Scheme is the
+       Yearly Average's treatment of caring time and it is not modelled.
+
+       ONE field answers "what is the Method 2 figure": either the figure, or
+       the reason there isn't one.
+
+         { yaShare, tcaShare, weeklyCents, weekly }   there is a figure
+         { reason: '...' }                            there is not, and why
+
+       Not a figure plus a separate flag. Two fields for one fact can
+       disagree, and a page reading only the first would print a blend that
+       does not apply. The two shapes have no key in common, so `reason` is
+       the whole test and there is nothing to find beside it. */
     var ya = null;
-    var method2 = null;
-    var method2Unavailable = null;
+    var method2;
 
     if (transitionState === 'after') {
-      method2Unavailable = 'after-transition';
+      method2 = { reason: 'after-transition' };
     } else {
       var numerator = paid + credited;
       var average = yearlyAverage(numerator, years);
-      var rate = bandRate(average);
+      // The band, whole: its two bounds and its rate in one object rather
+      // than three loose fields a caller has to put back together. Null below
+      // 10, where the method does not apply at all.
+      var yaBand = band(average);
       ya = {
         years: years,
         numerator: numerator,
         average: average,
-        bandMin: bandMin(average),
-        weeklyCents: rate,
-        weekly: rate === null ? null : rate / 100
+        band: yaBand
       };
-      if (rate === null) {
-        method2Unavailable = 'yearly-average-below-10';
+      if (yaBand === null) {
+        method2 = { reason: 'yearly-average-below-10' };
       } else {
         // 'during' by here, both other states having returned or branched
         // above, so the table has a key for this year.
@@ -298,7 +346,7 @@
         // The sum is an integer number of hundredths of a cent, so dividing
         // by 100 puts any half exactly on .5 before the half-up rounding. The
         // rounding itself is the assumption stated in the header.
-        var m2Cents = roundHalfUp((rate * share + tca.weeklyCents * (100 - share)) / 100);
+        var m2Cents = roundHalfUp((yaBand.weeklyCents * share + tca.weeklyCents * (100 - share)) / 100);
         method2 = {
           yaShare: share,
           tcaShare: 100 - share,
@@ -312,7 +360,7 @@
     // gives no tie rule; on a tie the amount is the same either way, so the
     // label is presentation and never moves the figure.
     var basis;
-    if (method2 === null || method2.weeklyCents < tca.weeklyCents) basis = 'method1';
+    if (method2.reason || method2.weeklyCents < tca.weeklyCents) basis = 'method1';
     else if (method2.weeklyCents > tca.weeklyCents) basis = 'method2';
     else basis = 'tie';
 
@@ -331,7 +379,6 @@
       tca: tca,
       yearlyAverage: ya,
       method2: method2,
-      method2Unavailable: method2Unavailable,
       award: {
         basis: basis,
         weeklyCents: awardCents,
@@ -344,19 +391,29 @@
     };
   }
 
+  /* The whole public interface.
+
+       entitlement(input)   the calculation, both methods and which is paid
+       band(average)        the rate band an average falls in, named
+
+     Everything else is internal. The constants, the band table and the share
+     table are facts entitlement() applies, not questions a caller has to ask;
+     yearlyAverage() and the old bandRate() and bandMin() were steps of it that
+     a caller repeating them could only get wrong or out of step.
+
+     band() stays public because naming a band is a real question with an
+     answer only this module holds, and because it is the shape entitlement()
+     puts in its own result: a caller holding an average, with no need of the
+     whole calculation, can ask it directly. The page does not have to, since
+     the band arrives inside the result, and that is the point. Before this,
+     the page walked the band table itself to work out where one band ended and
+     the next began.
+
+     PENSION_AGE is not re-exported. It lives in state-pension.js, which both
+     pages already load and read for exactly this; a second name for it here
+     was a second place to look. */
   return {
-    PAID_MIN: PAID_MIN,
-    CREDITS_CAP_TCA: CREDITS_CAP_TCA,
-    HOMECARING_CAP_TCA: HOMECARING_CAP_TCA,
-    CREDITS_PLUS_HC_CAP: CREDITS_PLUS_HC_CAP,
-    MAX_PER_YEAR: MAX_PER_YEAR,
-    YA_MIN: YA_MIN,
-    PENSION_AGE: SP.PENSION_AGE,   // re-exported from its one home, not a copy
-    YA_BANDS: YA_BANDS,
-    YA_SHARE: YA_SHARE,
     entitlement: entitlement,
-    yearlyAverage: yearlyAverage,
-    bandRate: bandRate,
-    drawdownYear: drawdownYear
+    band: band
   };
 }));
