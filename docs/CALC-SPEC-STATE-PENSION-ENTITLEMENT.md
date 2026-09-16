@@ -379,10 +379,14 @@ check, unchanged.
 ### State D: the details do not fit
 
 No weekly figure. "These details don't fit together. 1,820 paid and credited
-contributions is more than the 1,300 that fit between 2001 and the end of
+contributions is more than the 1,404 that fit between 2001 and the end of
 2027 at 52 a year. Check the contribution year you first paid PRSI." The
 numbers are the module's `entered`, `maxForYears`, `entryYear` and
 `drawdownYear − 1`.
+
+That is the page's own default record, 1,560 paid and 260 credited for someone
+born in 1962, with only the entry year moved to 2001: 2001 to the end of 2027
+is 27 years and 27 × 52 is 1,404.
 
 ### State B: eligible, Method 2 available
 
@@ -550,9 +554,11 @@ Every eligible result is also checked for internal consistency:
 
 ## S9. Changes to the reality check
 
-Confined to `tools/state-pension-parts/`. The 55 existing assertions in
+Confined to `tools/state-pension-parts/`. Every existing assertion in
 `tests/state-pension.test.js` must pass unchanged, and the page's figures do
-not move.
+not move. There are 80 of them as of Run 11, up from the 55 this section was
+written against; Run 10 added 25 when the transition window moved into
+`state-pension.js`.
 
 1. **The caveat card (`#spFloor`) becomes age-aware.** The reality check
    keeps its age slider, and age alone cannot fix the year of the 66th
