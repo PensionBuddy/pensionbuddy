@@ -1,10 +1,14 @@
 /* Acceptance tests for the broker vs auto-enrolment comparison.
    Written before the UI. Contract: docs/CALC-SPEC.md
 
-   Node is not installed on this machine, so this file is written to run
-   BOTH ways with no build step:
+   Written to run BOTH ways with no build step:
        node tests/compare-calc.test.js
        python3 tests/run-tests.py      (drives the same file in headless Chrome)
+
+   The Chrome run is the one that counts, because it loads the modules through
+   script tags the way a page does. Node was absent from this machine when
+   this file was written, which is where the two-way design came from; it is
+   installed now, and the design is worth keeping regardless.
 
    Cases 1 and 2 are the worked examples supplied with the brief. Cases 3 and 4
    are the two additional ones required: a year 4 to 6 phase, and a salary above

@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
-Run a JavaScript acceptance suite. Node is not installed on this machine, so
-the same file is executed in the local headless Chrome instead, on a throwaway
-page that loads the suite's modules and the test.
+Run a JavaScript acceptance suite in the local headless Chrome, on a throwaway
+page that loads the suite's modules and the test through script tags, so every
+module is exercised the way a page loads it rather than through require().
+
+Node is installed and every suite also runs directly under it, which is quicker
+for a red/green loop. This is the run that proves the modules work in a
+browser, and it is the one to trust before a commit.
 
     python3 tests/run-tests.py                    # every suite
     python3 tests/run-tests.py compare            # broker vs auto-enrolment
     python3 tests/run-tests.py state-pension      # State Pension reality check
+    python3 tests/run-tests.py state-pension-entitlement
     python3 tests/run-tests.py --drift            # also cross-check the shared
                                                   # relief module against the
                                                   # real pension-calculator page
@@ -25,6 +30,8 @@ SUITES = {
                 '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare']),
     'state-pension': (['/assets/js/state-pension.js'],
                       '/tests/state-pension.test.js', ['PBStatePension']),
+    'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],
+                                  '/tests/state-pension-entitlement.test.js', ['PBStatePension', 'PBEntitlement']),
 }
 
 HARNESS = """<!doctype html><meta charset="utf-8"><title>tests</title><body>

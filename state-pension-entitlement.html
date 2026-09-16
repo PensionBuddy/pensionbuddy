@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Director pension calculator, Pensionbuddy</title>
-<meta name="description" content="See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared. Illustration only.">
+<title>The State Pension entitlement check, Pensionbuddy</title>
+<meta name="description" content="What the State Pension (Contributory) would actually pay, worked out both ways the Department does until the end of 2033, and which one is paid. An illustration, not advice.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
-<meta property="og:title" content="Director pension calculator, Pensionbuddy">
-<meta property="og:description" content="See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared. Illustration only.">
+<meta property="og:title" content="The State Pension entitlement check, Pensionbuddy">
+<meta property="og:description" content="What the State Pension (Contributory) would actually pay, worked out both ways the Department does until the end of 2033, and which one is paid. An illustration, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -18,28 +18,20 @@
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Fraunces + Hanken Grotesk + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
-  /* canvas + surfaces */
   --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
-  /* ink */
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
-  /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
   --amber:#F4B740; --amber-soft:#FCEFCF;
-  /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
-  /* type */
   --font:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
@@ -50,231 +42,147 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
 ::selection{background:var(--teal-100);color:var(--teal-900)}
-h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink)}
+h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
-
-/* ---- eyebrow / labels ---- */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-
-/* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
 .btn svg{width:17px;height:17px;transition:transform .2s ease}
 .btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
 .btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
 .btn-primary:hover svg{transform:translateX(3px)}
-.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2);box-shadow:var(--sh-sm)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal-700);transform:translateY(-2px)}
-.btn-light{background:#fff;color:var(--teal-900)}
-.btn-light:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-
-/* ---- reveal on scroll ---- */
 .reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
 .reveal.in{opacity:1;transform:none}
-.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 @media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
-
-/* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
-.announce b{color:#fff;font-weight:600}
-.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-
-/* ---- nav ---- */
+.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
 nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
-.nav-r{display:flex;align-items:center;gap:28px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
 .logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:22px;height:22px}
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a.lnk{font-weight:500;font-size:15px;color:var(--ink-2);transition:color .2s;position:relative}
-.nav-links a.lnk:hover{color:var(--teal-700)}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
+.nav-r{display:flex;align-items:center;gap:28px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 
-/* ---- hero ---- */
-.hero{padding:72px 0 36px;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-0.035em;margin:20px 0 0}
-.hero h1 .hl{color:var(--teal-700)}
-.hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.trust{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
-.stars{display:flex;gap:2px;color:var(--amber)}
-.stars svg{width:16px;height:16px;fill:currentColor}
-.trust span{font-size:14px;color:var(--ink-2)}
-.trust b{color:var(--ink);font-weight:600}
+/* ---- page head ---- */
+.phead{padding:52px 0 12px}
+.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
+.phead h1 .hl{color:var(--teal-700)}
+.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
 
-/* hero visual: clean app-style card, no rotation/frame */
-.hero-card{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:26px;overflow:hidden}
-.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--teal-50),transparent 60%);pointer-events:none}
-.hc-top{display:flex;align-items:center;justify-content:space-between;position:relative}
-.hc-buddy{display:flex;align-items:center;gap:12px}
-.hc-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(150deg,var(--teal),var(--teal-700));display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-teal)}
-.hc-avatar svg{width:30px;height:30px;fill:#fff}
-.hc-name{font-weight:700;font-size:16px}
-.hc-role{font-size:12.5px;color:var(--ink-3)}
-.hc-badge{font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:6px 12px;border-radius:var(--r-pill)}
-.hc-figure{position:relative;margin:24px 0 6px}
-.hc-flabel{font-size:13px;color:var(--ink-3);font-weight:500}
-.hc-fnum{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
-.hc-fsub{font-size:13.5px;color:var(--ink-2);margin-top:8px}
-.hc-bars{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:22px}
-.hc-bars i{flex:1;background:var(--teal-100);border-radius:7px 7px 4px 4px;display:block;animation:grow .9s cubic-bezier(.2,.7,.3,1) backwards}
-.hc-bars i.on{background:var(--teal)}
-.hc-bars i:nth-child(1){animation-delay:.05s}.hc-bars i:nth-child(2){animation-delay:.12s}.hc-bars i:nth-child(3){animation-delay:.19s}.hc-bars i:nth-child(4){animation-delay:.26s}.hc-bars i:nth-child(5){animation-delay:.33s}.hc-bars i:nth-child(6){animation-delay:.4s}
-@keyframes grow{from{height:0;opacity:.2}}
-@media(prefers-reduced-motion:reduce){.hc-bars i{animation:none}}
-.hc-note{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:13px;margin-top:16px}
-.hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
-.hc-pill svg{width:15px;height:15px}
+/* ---- calculator layout ---- */
+.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
+.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:22px}
+.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
+.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
+.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
+.sft-note[hidden]{display:none}
 
-/* ---- logo / trust strip ---- */
-.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
-.strip-in{display:flex;align-items:center;justify-content:center;gap:14px 40px;flex-wrap:wrap;padding:22px 0}
-.strip-item{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--ink-2)}
-.strip-item svg{width:18px;height:18px;color:var(--teal)}
+/* custom sliders */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
+input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
-/* ---- section base ---- */
-section{padding:88px 0}
-.sec-head{max-width:660px;margin-bottom:48px}
-.sec-head.ctr{margin-left:auto;margin-right:auto;text-align:center}
-.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
-.sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
+/* segmented tax toggle */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
+.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
+.seg button.on{color:var(--teal-700)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-/* ---- audience cards (static grid, no layout jump) ---- */
-.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.aud-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px 26px;box-shadow:var(--sh-sm);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;display:flex;flex-direction:column;overflow:hidden}
-.aud-card::after{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--ac,var(--teal));opacity:0;transition:opacity .25s ease}
-.aud-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
-.aud-card:hover::after{opacity:1}
-.aud-ico{width:50px;height:50px;border-radius:14px;background:var(--ac-soft,var(--teal-50));color:var(--ac,var(--teal-700));display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.aud-ico svg{width:25px;height:25px}
-.aud-card h3{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:9px}
-.aud-card p{font-size:15px;color:var(--ink-2);margin-bottom:22px}
-.aud-link{margin-top:auto;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;color:var(--ac,var(--teal-700))}
-.aud-link svg{width:16px;height:16px;transition:transform .2s ease}
-.aud-card:hover .aud-link svg{transform:translateX(4px)}
-.a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
-.a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
-.a3{--ac:#0A332E;--ac-soft:#EDF4F2}
+/* ---- results ---- */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.res-hero>div{position:relative;min-width:0}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 
-/* ---- "what to expect" steps ---- */
-.expect{background:var(--surface)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
-.step{position:relative;padding-top:8px}
-.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.step p{color:var(--ink-2);font-size:15px}
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
+.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend span{display:inline-flex;align-items:center;gap:8px}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
-/* ---- calculator showcase ---- */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-.calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
-.calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
-.calc-prev{background:var(--teal-900);border-radius:var(--r-xl);padding:34px;color:#fff;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
-.calc-prev::before{content:"";position:absolute;inset:0;pointer-events:none}
-.calc-prev .ctag{font-size:12.5px;letter-spacing:.04em;font-weight:600;color:#7FD8CC;position:relative}
-.calc-prev .cbig{font-size:clamp(38px,5vw,52px);font-weight:800;letter-spacing:-0.04em;line-height:1;margin:8px 0 4px;position:relative;font-variant-numeric:tabular-nums}
-.calc-prev .csub{font-size:14px;color:#A7DED4;position:relative}
-.cbars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:26px 0 6px;position:relative}
-.cbars i{flex:1;background:rgba(255,255,255,.14);border-radius:6px 6px 3px 3px;display:block}
-.cbars i.hl{background:var(--teal)}
-.cnote{font-size:12px;color:#7FD8CC;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;margin-top:8px;position:relative}
+.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
+.relief-card .rt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
+.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.relief-card .rbig b{font-weight:700;color:#3F2D04}
+.relief-viz{margin-top:18px;transition:opacity .4s}
+.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
+.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
+.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
+.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-/* ---- about Damian ---- */
-.about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
-.about-port{aspect-ratio:4/5;border-radius:var(--r-xl);background:linear-gradient(155deg,var(--teal-700),var(--teal-900));position:relative;box-shadow:var(--sh-lg);display:flex;align-items:flex-end;padding:26px;overflow:hidden}
-.about-port::before{content:"";position:absolute;inset:0;pointer-events:none}
-.about-port .pl{position:relative;color:#BBE7DF;font-size:14px;font-weight:500}
-.about-port .badge{position:absolute;top:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:7px 13px;border-radius:var(--r-pill);box-shadow:var(--sh-sm)}
-.about h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 20px}
-.pullquote{font-size:clamp(20px,2.4vw,26px);line-height:1.34;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px;color:var(--ink)}
-.pullquote .q{color:var(--teal)}
-.about p.bio{color:var(--ink-2);font-size:16px;margin-bottom:14px}
-.about .sig{font-style:italic;font-weight:600;font-size:18px;color:var(--teal-700)}
+.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
+.boost-ico svg{width:22px;height:22px}
+.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt b{font-weight:700}
 
-/* ---- testimonials ---- */
-.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
-.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--sh-sm)}
-.tcard.big{justify-content:center}
-.tcard .qstars{display:flex;gap:2px;color:var(--amber);margin-bottom:16px}
-.tcard .qstars svg{width:16px;height:16px;fill:currentColor}
-.tcard blockquote{font-size:18px;line-height:1.5;font-weight:500;letter-spacing:-0.01em;margin:0 0 20px;color:var(--ink)}
-.tcard.big blockquote{font-size:23px;font-weight:600;letter-spacing:-0.02em}
-.tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto}
-.tcard .av{width:42px;height:42px;border-radius:50%;background:var(--teal-50);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-700)}
-.tcard .who b{font-weight:600;font-size:15px;display:block}
-.tcard .who span{font-size:13px;color:var(--ink-3)}
-.tcol{display:flex;flex-direction:column;gap:22px}
+/* ---- CTA ---- */
+.cta-band{padding:64px 0 8px}
+.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
+.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
+picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
+.buddy-mini svg{width:42px;height:42px;fill:#fff}
+.cta-card .ctext{position:relative;min-width:0}
+.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
+.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
+.cta-card .btn{position:relative}
 
-/* ---- faq ---- */
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
-details[open]{box-shadow:var(--sh-md);border-color:transparent}
-summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary .pm{width:26px;height:26px;border-radius:8px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;line-height:1;flex-shrink:0;transition:transform .25s,background .25s}
-details[open] summary .pm{transform:rotate(45deg);background:var(--teal);color:#fff}
-details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
-
-/* ---- final CTA ---- */
-.final-band{padding:36px 0 88px}
-.final{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
-.final::before{content:"";position:absolute;inset:0;pointer-events:none}
-.final .paw-bg{position:absolute;right:-30px;bottom:-44px;width:260px;height:260px;opacity:.08;pointer-events:none}
-.final .paw-bg svg{width:100%;height:100%;fill:#fff}
-.final .eyebrow{background:rgba(255,255,255,.12);color:#CFEFE9;position:relative}
-.final .eyebrow .pip{background:var(--teal)}
-.final h2{color:#fff;font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
-.final p{color:#A7DED4;font-size:18px;max-width:440px;margin:0 auto 30px;position:relative}
+/* ---- assumptions ---- */
+.assume{padding:72px 0 24px}
+.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
+.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
 
 /* ---- footer ---- */
-footer{padding:64px 0 40px;border-top:1px solid var(--line)}
+footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
-.foot-brand .logo{margin-bottom:15px}
-.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
-.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
-.foot-col a:hover{color:var(--teal-700)}
+.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
-.disclosure p{margin-bottom:10px;max-width:940px}
-.disclosure a{color:var(--teal-700);font-weight:600}
+.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media(max-width:920px){
-  .hero{padding:48px 0 24px}
-  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
-  .hero-card{order:-1;max-width:460px;margin:0 auto}
-  .aud,.steps{grid-template-columns:1fr}
+  .calc-wrap{grid-template-columns:1fr;gap:20px}
+  .panel{position:static;top:auto}
+  .res-hero{grid-template-columns:1fr;padding:26px}
+  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .assume ul{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
-  .nav-links.open a.lnk{padding:10px 0;font-size:16px}
-  .nav-links.open .btn{margin-top:6px}
-  .nav-toggle{display:block}
-  section{padding:60px 0}
-  .final{padding:54px 26px}
-  .final-band{padding:24px 0 60px}
+  .nav-r{gap:14px}
 }
 @media(max-width:560px){
   .wrap{padding:0 18px}
-  .hero h1{font-size:clamp(34px,9vw,44px)}
-  .foot-top{grid-template-columns:1fr 1fr}
-  .hero-cta .btn{flex:1}
+  .nav-r .back span,.nav-r .back{font-size:0}
+  .nav-r .back svg{width:20px;height:20px}
 }
-@media(max-width:380px){
-  .foot-top{grid-template-columns:1fr}
-}
+@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
 
 /* ============================================================
    EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
@@ -410,80 +318,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .magnet-form .row{flex-direction:column}
   .magnet-form .row .btn{width:100%}
 }
-
-
-/* director-calculator specific */
-.phead{padding:52px 0 12px}
-.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
-.phead h1 .hl{color:var(--teal-700)}
-.phead p{font-size:18px;color:var(--ink-2);max-width:600px}
-.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
-.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
-.field{margin-bottom:22px}
-.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
-.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
-.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
-.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
-.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
-.sft-note[hidden]{display:none}
-.results{display:flex;flex-direction:column;gap:18px;min-width:0}
-.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
-.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
-.res-hero>div{position:relative;min-width:0}
-.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
-.res-hero .rsub{font-size:12.5px;color:#9FDDD2;margin-top:8px;line-height:1.5}
-.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
-.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
-.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
-.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
-.vs-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
-.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
-.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
-.vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
-.vs-salary{background:var(--surface-2)}
-.vs-pension{background:var(--teal-50)}
-.vs-col .vt{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
-.vs-pension .vt{color:var(--teal-700)}
-.vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.vs-pension .amt{color:var(--teal-700)}
-.vs-col .lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.5}
-.vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
-.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.max-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
-.max-card .mt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
-.max-card .mbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.max-card .mbig b{font-weight:700;color:#3F2D04}
-.max-card .mnote{font-size:12.5px;color:#7A5A12;margin-top:12px;line-height:1.6}
-.cta-band{padding:64px 0 8px}
-.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
-.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
-.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
-.buddy-mini svg{width:42px;height:42px;fill:#fff}
-.cta-card .ctext{position:relative;min-width:0}
-.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
-.cta-card p{color:var(--ink-2);font-size:15px;max-width:520px}
-.cta-card .btn{position:relative}
-.assume{padding:72px 0 24px}
-.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
-.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
-.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
-.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
-footer{margin-top:56px}
-@media(max-width:920px){
-  .calc-wrap{grid-template-columns:1fr;gap:20px}
-  .panel{position:static;top:auto}
-  .res-hero{grid-template-columns:1fr;padding:26px}
-  .vs{grid-template-columns:1fr;gap:12px}
-  .vsmark{margin:0 auto}
-  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
-  .assume ul{grid-template-columns:1fr}
-}
-@media(max-width:560px){.nav-r .back span{display:none}}
-
 @media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){/* C3: wordmark stays visible at every width, matching index */}
 
 /* ============================================================
@@ -654,7 +488,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 
 
 /* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
-@media(min-width:921px){.res-hero{min-height:282px}.chart-card{min-height:287px}.vs-card{min-height:308px}.max-card{min-height:267px}.email-cap{min-height:187px}}
+@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
 
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
@@ -1635,6 +1469,35 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+
+/* ---- both calculations card, this page only ---- */
+.bothcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
+.bothcard h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.bothcard .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:6px;line-height:1.55}
+.mrow{padding:16px 0;border-top:1px solid var(--line)}
+.mrow[hidden]{display:none}
+.mrow .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px 16px;flex-wrap:wrap}
+.mrow .mname{font-weight:700;font-size:15px;letter-spacing:-0.01em}
+.mrow .mrate{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:600;font-size:15px;color:var(--teal-700);white-space:nowrap}
+.mrow .mdetail,.mrow .mnote{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-top:8px}
+.mrow .mnote{color:var(--ink-3)}
+.mrow .mdetail b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
+.mclose{font-size:14.5px;line-height:1.6;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
+.mclose[hidden]{display:none}
+.mclose b{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:var(--teal-700);font-weight:600}
+.mfloor{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:14px}
+.mfloor[hidden]{display:none}
+.srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:4px;
+  padding-top:16px;border-top:1px solid var(--line)}
+/* the four result states are wrappers inside the results column, so they carry
+   the column's own vertical rhythm or the cards inside them touch */
+#spHas,#spNone,#spUnfit,#spBefore{display:flex;flex-direction:column;gap:18px}
+#spHas[hidden],#spNone[hidden],#spUnfit[hidden],#spBefore[hidden]{display:none}
+/* the explainer reads as prose, not as an assumptions list */
+.assume .expl{max-width:70ch}
+.assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
+.assume .expl p:last-child{margin-bottom:0}
+.assume .expl b{color:var(--ink);font-weight:600}
 </style>
 
 <script>
@@ -1676,112 +1539,161 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The director calculator · two minutes</span>
-  <h1 class="reveal" style="transition-delay:.06s">How much could your <span class="hl">company</span> put into your pension?</h1>
-  <p class="reveal" style="transition-delay:.12s">As a director you can fund your pension straight from the company, often far beyond personal limits, and every contribution is an allowable expense for the company.</p>
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">What the State Pension would <span class="hl">actually pay</span> you.</h1>
+  <p class="reveal" style="transition-delay:.12s">Until the end of 2033 the Department of Social Protection works a State Pension (Contributory) rate out two ways and pays whichever is higher. This does both calculations from five details and shows which one would be paid, and by how much the two differ. It starts with a record that has gaps, so the two calculations disagree, and you can move it from there.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
-    </div>
-    <div class="panel reveal">
+  <div class="panel reveal">
     <h2>Your details</h2>
-    <p class="hint">Estimates are fine. Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="70" value="48"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
-    <div class="field"><div class="row"><label for="sal">Your annual salary</label><span class="val" id="salV">€100,000</span></div><input type="range" id="sal" min="30000" max="1000000" step="5000" value="100000"></div>
-    <div class="field"><div class="row"><label for="pot">Pension built up so far</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
-    <div class="field"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"><p class="subnote">What the company would pay into your pension annually.</p></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <p class="hint">Slide, or tap a value to type it.</p>
+
+    <div class="field">
+      <div class="row"><label for="birth">Year you were born</label><span class="val" id="birthV">1962</span></div>
+      <input type="range" id="birth" min="1960" max="2008" step="1" value="1962">
+      <p class="subnote" id="birthNote">You reach 66 in <b>2028</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.</p>
+    </div>
+
+    <div class="field">
+      <div class="row"><label for="entry">Contribution year you first paid PRSI</label><span class="val" id="entryV">1985</span></div>
+      <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
+      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.</p>
+    </div>
+
+    <div class="field">
+      <div class="row"><label for="paid">Paid contributions to the end of the year before you turn 66</label><span class="val" id="paidV">1,560</span></div>
+      <input type="range" id="paid" min="0" max="2600" step="52" value="1560">
+      <p class="subnote" id="paidNote">Full-rate contributions from your own earnings. Every 52 is a year. The pension needs at least 520 of these, ten years; credits and HomeCaring Periods do not count toward it. You can check your own record at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+    </div>
+
+    <div class="field">
+      <div class="row"><label for="credited">Credited contributions to the same date</label><span class="val" id="creditedV">260</span></div>
+      <input type="range" id="credited" min="0" max="1040" step="52" value="260">
+      <p class="subnote">Contributions awarded without earnings, for example while unemployed or ill. They count in full under the Yearly Average method and up to 520 under the Total Contributions Approach (TCA).</p>
+    </div>
+
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label for="homecaring">HomeCaring Periods</label><span class="val" id="homecaringV">0</span></div>
+      <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
+      <p class="subnote">Time spent caring for a child or for someone who needed care, added to your count although nothing was paid. HomeCaring Periods count under the Total Contributions Approach only, up to 1,040, and up to 1,040 combined with credited contributions.</p>
+    </div>
   </div>
 
   <div class="results">
-    <div class="res-hero reveal" style="transition-delay:.08s">
-      <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
-      <div><div class="rl">Corporation tax relief on contributions</div><div class="big" id="taxOut">€0</div><div class="rsub">Worth 12.5% of each contribution, added up to retirement</div></div>
-      <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-      <div class="divline"></div>
-      <div class="foot">Pension contributions are deductible for the company, as salary would be. The difference is what reaches you: routed through the pension, far more of the money stays working for your retirement.</div>
-    </div>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
-    <div class="vs-card reveal" style="transition-delay:.14s">
-      <h3>The same money, two ways</h3>
-      <p class="sub" id="vsSub">Your €40,000 company contribution, taken as salary instead.</p>
-      <div class="vs">
-        <div class="vs-col vs-salary">
-          <div class="vt">Taken as salary</div>
-          <div class="amt" id="salaryNet">€0</div>
-          <div class="lab">lands in your pocket after up to 52% income tax, USC and PRSI</div>
-        </div>
-        <div class="vsmark">vs</div>
-        <div class="vs-col vs-pension">
-          <div class="vt">Into your pension</div>
-          <div class="amt" id="pensionFull">€0</div>
-          <div class="lab" id="pensionLab">goes to work for your retirement, in full</div>
-        </div>
+    <div id="spHas">
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div><div class="rl">State Pension (Contributory), a week</div><div class="big" id="spWeekly">€280.86</div></div>
+        <div><div class="rl">State Pension (Contributory), a year</div><div class="big" id="spAnnual">€14,605</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spFoot">Worked out under the Yearly Average blend, for a pension starting in 2028.</div>
       </div>
-      <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
-    </div>
 
-    <div class="waitcard reveal" style="transition-delay:.11s">
-      <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
-      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <div class="chart-card reveal" style="transition-delay:.2s">
-      <h3>How your pot could grow</h3>
-      <div id="chart"></div>
-    </div>
+      <div class="bothcard reveal" style="transition-delay:.11s">
+        <h3>Both calculations</h3>
+        <p class="sub" id="bothSub">Until the end of 2033 the Department works the rate out both ways and pays the higher.</p>
 
-    <div class="max-card reveal" style="transition-delay:.26s">
-      <div class="mt">Roughly what you could aim for</div>
-      <div class="mbig" id="maxOut">Move the sliders to see your funding target.</div>
-      <div class="mnote">Revenue lets you fund towards a pension of up to two-thirds of salary (with sufficient service). The maximum your company can actually contribute each year is set by an actuarial funding calculation based on your age, salary, service and existing benefits. For older directors it can run well into six figures. A Standard Fund Threshold also caps the total fund that gets full tax relief. Damian will work out your exact figures.</div>
-    </div>
-
-    <div class="email-cap reveal" style="transition-delay:.3s">
-      <div class="ec-top">
-        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
-        <div class="ect"><b>Want these figures emailed to you?</b><span>And a proper funding calculation for your company.</span></div>
-      </div>
-      <div id="ecForm">
-        <div class="ec-row">
-          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
-          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        <div class="mrow" id="m1Row">
+          <div class="mhead"><span class="mname">Method 1, Total Contributions Approach</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
+          <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
+          <p class="mnote" id="m1Cap" hidden></p>
         </div>
-        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
-        <p class="ec-note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
+
+        <div class="mrow" id="m2Row">
+          <div class="mhead"><span class="mname">Method 2, the Yearly Average blend</span><span class="mrate" id="m2Rate">€280.86 a week</span></div>
+          <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
+        </div>
+
+        <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
+        <p class="mclose" id="mWhy" hidden></p>
+        <p class="mfloor" id="mFloor">On the details entered, the Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and the Alternative Yearly Average, both of which can only raise it. It does not cover mixed-rate, EU or pro-rata records, and it does not check that you first paid PRSI before 56.</p>
       </div>
-      <div class="ec-ok" id="ecOk" role="status"><svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
+
+      <div class="waitcard reveal" style="transition-delay:.14s">
+        <div class="wt">Taken at 66</div>
+        <div class="wtext">This assumes you take your pension at 66. To see what this pays for, put it next to what retirement costs.</div>
+        <a class="wlink" href="state-pension-reality-check.html">Put it next to what retirement costs <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
     </div>
+
+    <div id="spNone" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spNoneFoot">The State Pension (Contributory) needs 520 paid contributions, ten years. Credits and HomeCaring Periods do not count toward that minimum, however many there are.</div>
+      </div>
+      <div class="waitcard reveal" style="transition-delay:.11s">
+        <div class="wt">What may apply instead</div>
+        <div class="wtext">A State Pension (Non-Contributory) is means tested and may be payable instead. It works on a different basis and this tool does not calculate it. It is worth asking about.</div>
+        <a class="wlink" href="booking.html">Talk it through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div>
+
+    <div id="spUnfit" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">Check the details</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spUnfitFoot">These details don't fit together. Check the contribution year you first paid PRSI.</div>
+      </div>
+    </div>
+
+    <div id="spBefore" hidden>
+      <div class="res-hero reveal" style="transition-delay:.08s">
+        <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">Not covered</div></div>
+        <div class="divline"></div>
+        <div class="foot" id="spBeforeFoot">This page does not cover pensions that started before 2025.</div>
+      </div>
+    </div>
+
+    <p class="srcnote">Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. The Department's own web pages on the calculation methods still showed 2025 rates when this was checked, which is why the booklet is cited. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</p>
   </div>
 </div></div>
 
+<section class="assume" style="padding-bottom:0"><div class="wrap">
+  <h3>How the two calculations work</h3>
+  <div class="expl reveal">
+    <p><b>The Total Contributions Approach</b> counts everything you have, paid contributions, credited contributions and HomeCaring Periods, against a full record of 2,080, forty years. A full record gets the maximum personal rate, €299.30 a week from January 2026, and anything between the qualifying minimum and a full record gets a pro rata share. Credited contributions count up to 520, HomeCaring Periods up to 1,040, and the two together up to 1,040.</p>
+    <p><b>The Yearly Average method</b> is the older one. It adds your paid and credited contributions, with no cap on credited contributions, divides by the years from the contribution year you first paid PRSI to the year before you turn 66, rounds to a whole number, half up, and reads a weekly rate off one of six bands. HomeCaring Periods do not count under it. Caring time is handled there by the separate Homemaker's Scheme, which this page leaves out.</p>
+    <p><b>Until the end of 2033 the Department runs both.</b> Method 1 is the Total Contributions Approach on its own. Method 2 mixes a share of the Yearly Average rate with a share of the TCA rate, and the Yearly Average share falls ten points a year, from 90% for a pension starting in 2025 to 10% for one starting in 2033. Whichever of the two is higher is paid. From 2034 only the Total Contributions Approach applies.</p>
+    <p><b>The year your pension starts sets the mix</b>, once and for all. This page assumes you take the pension at 66, so the year you were born fixes it. Starting later, at 67 to 70, changes the mix and the rate, and is not modelled here. The qualifying minimum is the same under both methods: 520 paid contributions, and credits and HomeCaring Periods do not count toward it.</p>
+  </div>
+</div></section>
+
 <div class="cta-band"><div class="wrap"><div class="cta-card reveal">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>Director funding is where the big wins are.</h2><p>The numbers above are illustrations. Your exact funding limit and tax saving need a proper calculation, and Damian does this for directors all the time. Free 20-minute call, no pitch.</p></div>
-  <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <div class="ctext"><h2>Now you have the figure, the question is what sits on top of it.</h2><p>Whichever calculation the Department uses, the State Pension (Contributory) is the starting point, not the plan. What goes on top, and how much of it you need, depends on when you start and what you want retirement to look like. Damian will work through your own numbers in a free 20-minute chat.</p></div>
+  <a class="btn btn-primary" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice reveal">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It shows simplified illustrations from the figures you choose, not a personal recommendation. Maximum funding needs an actuarial calculation. Regulated financial advice is given in a personal consultation with Damian.</p>
+    <p><b>This page is information, not advice.</b> It applies two published calculations to the details you enter, for illustration. It is not a personal recommendation, not a forecast of your own pension, and not a statement of what you will be paid. The Department of Social Protection's own calculation on your actual record is the only one that counts, and you can request a statement of your contributions at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
-    <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is shown at the 12.5% trading rate, and assumes the contribution is wholly and exclusively for the business and within Revenue funding limits.</li>
-    <li>The salary comparison assumes a higher-rate taxpayer facing up to 52% on additional income (40% income tax, 8% USC, 4% PRSI). Your rate may differ.</li>
-    <li>Pension benefits are taxed when drawn, though up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
-    <li>Maximum funding (up to two-thirds of salary) requires sufficient service and an actuarial calculation. This tool does not perform that calculation.</li>
-    <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures here are not adjusted for inflation and ignore product charges.</li>
-    <li>This tool provides general information, not financial, tax or pension advice. For advice on your circumstances, speak to Damian.</li>
+    <li>Until the end of 2033 the Department of Social Protection works the rate out two ways, Method 1 the Total Contributions Approach on its own and Method 2 a mix of the Yearly Average rate and the TCA rate, and pays whichever is higher. From 2034 only the Total Contributions Approach applies. This page does the same on the details entered.</li>
+    <li>The year the pension starts sets the mix. Everything here assumes you take the pension at <b>66</b>, so the year you were born sets it. Starting later, at 67 to 70, is not modelled, and the Yearly Average band rates at those ages are not published for 2026.</li>
+    <li>The qualifying minimum is <b>520 paid contributions</b>, ten years. Credits and HomeCaring Periods do not count toward it, however many there are. Below it there is no State Pension (Contributory) under either method. A means-tested State Pension (Non-Contributory) may apply instead, on a different basis, and this page does not calculate it.</li>
+    <li>Under the Total Contributions Approach, credited contributions count up to 520, HomeCaring Periods up to 1,040, and the two together up to 1,040. Under the Yearly Average method credited contributions count in full and HomeCaring Periods do not count at all.</li>
+    <li>The yearly average is paid plus credited contributions divided by the years from the contribution year you first paid PRSI to the year before you turn 66, rounded half up to a whole number, as the Department does. Below 10 it falls into no band and the Yearly Average method gives nothing. No more than 52 contributions count in any year.</li>
+    <li>The Method 2 figure is a percentage of one rate plus a percentage of another and can land on a fraction of a cent. This page rounds it half up to the cent. No published rule governs that rounding, and the most it can move a figure is half a cent a week.</li>
+    <li>The <b>Homemaker's Scheme</b> is left out. It drops whole caring years from 1994 on, at most twenty and only years with no credited contributions, out of the years the yearly average divides by. Fewer years means a higher average, so leaving it out can only lower the Method 2 figure. On the details entered, that figure is a floor.</li>
+    <li>The <b>Alternative Yearly Average</b>, counted from 1979 and used only when it reaches 48, is left out. It can only raise the Method 2 figure.</li>
+    <li><b>Voluntary contributions</b> and <b>Long-Term Carer's Contributions</b> are left out. Both add to the count and can count toward the 520, so including them could only raise a figure or bring someone over the minimum.</li>
+    <li>Contributions in the year you turn 66 count under the Total Contributions Approach but sit outside the inputs, which run to the end of the year before. The TCA figure is a floor by that much, a few weeks' contributions at most.</li>
+    <li>Mixed-rate, EU and pro-rata records use different formulas and are not covered. They can give a lower figure, or no entitlement at all, so the floor statement does not extend to them.</li>
+    <li>The pension also requires that you first paid PRSI before 56. This page does not check that: an entry at 56 or later can mean no entitlement at all, and the page would still show a figure.</li>
+    <li>Before 2002 the contribution year ran from April to April, and the page takes the entry year as entered. If you give the calendar year of a first payment made between January and 5 April of a year up to 2001, the years divided by are one too few and the figure may be too high. The floor statement is on the details entered.</li>
+    <li>The maximum personal rate is €299.30 a week from January 2026, and the six Yearly Average band rates are the 2026 rates. Rates and rules change, usually at each Budget. The annual figure is 52 weekly payments.</li>
+    <li>The rate shown is the personal rate at 66. It does not include an increase for a qualified adult or child, and it does not include the higher rate that applies from age 80.</li>
+    <li>Pensions that started before 2025 were awarded under earlier rules and are not covered.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
   </ul>
 </div></section>
 </main>
@@ -1794,232 +1706,277 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
-    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment, tax or pension advice. The value of investments may fall as well as rise and you may get back less than you invested. Maximum pension funding is set by Revenue rules and requires an actuarial calculation. Corporation tax relief on contributions is at the discretion of the Revenue Commissioners. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
+    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
     <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
-    <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
 </div></footer>
+
+<script src="assets/js/state-pension.js?v=0aef6ee1"></script>
+<script src="assets/js/state-pension-entitlement.js?v=76c51e98"></script>
 <script>
-const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const $=id=>document.getElementById(id);
-const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
-const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE')+'k':euro(v);};
+/* state-pension-entitlement.html
 
-var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
+   Maths lives in assets/js/state-pension-entitlement.js, which is the single
+   source of truth and is covered by tests/state-pension-entitlement.test.js.
+   This file only reads the five controls and paints the panels, so the page
+   cannot hold a second copy of the rules. Every figure and every band comes
+   back from PBEntitlement.entitlement(); nothing here divides, rounds or
+   looks a rate up.
 
-function project(months,startPot,monthly,mRate){
-  const grownPot=startPot*Math.pow(1+mRate,months);
-  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
-  return grownPot+grownContrib;
-}
+   TONE: the two figures do the work. State which calculation is paid, by how
+   much it differs, and stop. No pressure language, no urgency. */
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ENT = window.PBEntitlement;
+/* Pension age and the transition window belong to the shared module, which is
+   loaded ahead of the entitlement one on this page. Read from there so this
+   page, the reality check and both modules turn on the same two numbers. */
+const SP = window.PBStatePension;
 
-/* smooth display engine */
-const anims={};let rafId=null;
-function tween(id,target,fmt){
-  const a=anims[id];
-  if(!a){anims[id]={cur:target,target,fmt};$(id).textContent=fmt(target);startLoop();return;}
-  a.target=target;a.fmt=fmt;startLoop();
-}
-function startLoop(){if(!rafId)rafId=requestAnimationFrame(step);}
-function step(){
-  let active=false;const f=REDUCE?1:0.16;
-  for(const id in anims){const a=anims[id];const d=a.target-a.cur;
-    if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*f;active=true;}else{a.cur=a.target;}
-    $(id).textContent=a.fmt(a.cur);}
-  if(chart.lerp(f))active=true;
-  rafId=active?requestAnimationFrame(step):null;
-}
+const $ = id => document.getElementById(id);
+const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
+const euro2 = v => '€' + v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = v => v.toLocaleString('en-IE');
+/* a year is a label, not a quantity, so it never takes a thousands separator */
+const yr = v => String(v);
+/* the TCA percentage is a multiple of 2.5 whenever the count is a multiple of
+   52, which every slider guarantees, so two decimals is exact */
+const pct = v => num(Math.round(v * 10000) / 100) + '%';
 
-/* persistent morphing chart (single series) */
-const chart={
-  N:48,inited:false,W:620,H:250,padL:6,padR:6,padT:14,padB:30,
-  cur:{v:[],max:1},tgt:{v:[],max:1},els:{},
-  init(){
-    const NS='http://www.w3.org/2000/svg';
-    const svg=document.createElementNS(NS,'svg');
-    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);svg.setAttribute('width','100%');svg.style.display='block';
-    for(let g=1;g<=3;g++){const yy=this.padT+(g/4)*(this.H-this.padT-this.padB);
-      const l=document.createElementNS(NS,'line');
-      l.setAttribute('x1',this.padL);l.setAttribute('y1',yy);l.setAttribute('x2',this.W-this.padR);l.setAttribute('y2',yy);
-      l.setAttribute('stroke','rgba(11,31,28,0.07)');svg.appendChild(l);}
-    const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
-    this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
-    this.els.line=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    $('chart').appendChild(svg);this.inited=true;
-  },
-  setTarget(v,ageS,ageE){
-    if(!this.inited)this.init();
-    this.tgt.v=v;this.tgt.max=Math.max(...v,1)*1.08;
-    this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),max:this.tgt.max};this.render();}
-    startLoop();
-  },
-  lerp(f){
-    if(!this.inited)return false;
-    let active=false;
-    for(let i=0;i<this.tgt.v.length;i++){const d=this.tgt.v[i]-this.cur.v[i];
-      if(Math.abs(d)>Math.max(0.5,Math.abs(this.tgt.v[i])*0.0004)){this.cur.v[i]+=d*f;active=true;}else this.cur.v[i]=this.tgt.v[i];}
-    const dm=this.tgt.max-this.cur.max;
-    if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
-    this.render();return active;
-  },
-  render(){
-    const n=this.cur.v.length;if(!n)return;
-    const max=this.cur.max;
-    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
-    const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
-    let d='M '+X(0)+' '+Y(this.cur.v[0]).toFixed(1);
-    for(let i=1;i<n;i++)d+=' L '+X(i).toFixed(1)+' '+Y(this.cur.v[i]).toFixed(1);
-    this.els.line.setAttribute('d',d);
-    this.els.area.setAttribute('d',d+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0).toFixed(1)+' '+(this.H-this.padB)+' Z');
-    this.els.mx.textContent=euroK(max);
-  }
+/* The current year comes from the clock once, so the birth-year bounds and
+   the entry-year ceiling move on 1 January without an edit. The module never
+   reads the clock; the drawdown year is passed to it. Spec S2. */
+const CURRENT_YEAR = new Date().getFullYear();
+const PENSION_AGE = SP.PENSION_AGE;
+const BIRTH_MIN = CURRENT_YEAR - PENSION_AGE;      // reaches 66 this year: drawdown is never before the current year
+const BIRTH_MAX = CURRENT_YEAR - 18;
+const BIRTH_DEFAULT = CURRENT_YEAR - 64;           // the default reader is always 64. Revisit before 2032, spec S2
+const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contribution year of entry can be
+const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
+const ENTRY_DEFAULT_AFTER_BIRTH = 23;
+
+const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.';
+
+/* Screen readers otherwise announce a bare number, so each slider carries a
+   formatted aria-valuetext, matching the other calculators. */
+const VALTEXT = {
+  birth: v => 'born in ' + yr(v) + ', reaching 66 in ' + yr(ENT.drawdownYear(v)),
+  entry: v => 'first paid PRSI in the ' + yr(v) + ' contribution year',
+  paid: v => num(v) + ' paid contributions, ' + (v / 52) + ' years',
+  credited: v => num(v) + ' credited contributions, ' + (v / 52) + ' years',
+  homecaring: v => num(v) + ' HomeCaring Periods, ' + (v / 52) + ' years'
 };
 
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
-function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
-let srTimer=null;
-
-/* the maths (unchanged) */
-function calc(){
-  let age=+$('age').value, ret=+$('ret').value;
-  const sal=+$('sal').value, pot=+$('pot').value, contrib=+$('contrib').value, g=+$('growth').value;
-  $('ret').min=age+1;
-  if(ret<=age){ret=age+1;$('ret').value=ret;}
-  paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
-  $('ageV').textContent=age;
-  $('retV').textContent=ret;
-  $('salV').textContent=euro(sal);
-  $('potV').textContent=euro(pot);
-  $('contribV').textContent=euro(contrib);
-  $('growthV').textContent=g+'%';
-
-  const yearsToRet=ret-age;
-  const months=yearsToRet*12;
-  const mRate=Math.pow(1+g/100,1/12)-1;
-  const monthly=contrib/12;
-  const p018=project(months,pot,monthly,mRate);
-  tween('potOut',p018,euro);
-
-
-  /* cost of waiting: one year of company contributions not made */
-  if(months>12){
-    const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
-    const gap=Math.max(0,p018-later);
-    $('waitOut').innerHTML='Leave it another twelve months and the fund lands roughly <b>'+euro(gap)+'</b> lower. That is one year of company contributions, and the growth they would have earned.';
-  }else{
-    $('waitOut').innerHTML='With less than a year to go, the questions worth asking are about drawdown rather than funding.';
-  }
-  const taxSaved=contrib*0.125*yearsToRet;
-  tween('taxOut',taxSaved,euro);
-
-  const salaryNet=contrib*0.48;
-  tween('salaryNet',salaryNet,euro);
-  tween('pensionFull',contrib,euro);
-  $('vsSub').textContent='Your €'+contrib.toLocaleString('en-IE')+' company contribution, taken as salary instead.';
-
-  const maxPension=sal*(2/3);
-  $('maxOut').innerHTML='A pension of up to about <b>'+euro(maxPension)+' a year</b>, two-thirds of your salary.';
-
-  const v=[];
-  for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);v.push(project(m,pot,monthly,mRate));}
-  chart.setTarget(v,age,ret);
-  ['age','ret','sal','pot','contrib','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
-  /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
-  const overSFT=p018>SFT, sftNote=$('sftNote');
-  if(sftNote) sftNote.hidden=!overSFT;
-  /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  clearTimeout(srTimer);
-  srTimer=setTimeout(function(){$('srSummary').textContent='Projected pot at retirement '+euro(p018)+'. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':'');},700);
+function paintSlider(el) {
+  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
+  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
+  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
 }
 
-['age','ret','sal','pot','contrib','growth'].forEach(id=>{
-  const el=$(id);
-  el.addEventListener('input',()=>{paintSlider(el);calc();});
-  paintSlider(el);
-});
-calc();
+/* The entry-year bounds move with the birth year. When a change of birth year
+   pushes the entry year outside them it is clamped to the nearest bound and
+   the subnote says so until the entry slider is next touched, so nothing
+   changes silently. Spec S2, coupled bounds. */
+let entryMoved = null;
 
-/* email-results capture (front-end only) */
-function sendResults(){
-  var input=document.getElementById('ecEmail');
-  var e=input.value.trim();
-  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  var err=document.getElementById('ecErr');
-  if(!ok){ err.textContent='Please enter a valid email address.';
-           err.style.display='block'; input.focus(); return; }
-  err.style.display='none';
-
-  /* the figures the visitor is actually looking at */
-  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
-  var payload={
-    email:e,
-    source:document.title,
-    pot:fig('potOut'), ctRelief:fig('taxOut'), fundingTarget:fig('maxOut'),
-    costOfWaiting:fig('waitOut'),
-    inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
-             .map(function(s){return s.id+'='+s.value;}).join(', '),
-    page:location.href
+function entryBounds(birthYear) {
+  return {
+    min: birthYear + ENTRY_AFTER_BIRTH_MIN,
+    max: Math.min(CURRENT_YEAR, birthYear + ENTRY_AFTER_BIRTH_MAX)
   };
-
-  var done=function(msg,isHtml){
-    var t=document.getElementById('ecOkText');
-    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
-    document.getElementById('ecForm').style.display='none';
-    document.getElementById('ecOk').classList.add('show');
-  };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
-    err.style.display='block';
-  };
-
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    /* configured: post it and only confirm on a real success */
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
-      .catch(failed);
-  }else{
-    /* not configured: hand the visitor a prefilled email rather than a fake
-       confirmation. The lead still reaches Damian, today, with no backend. */
-    var body='Please send me my pension figures.%0D%0A%0D%0A'+
-      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
-      'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
-      'Corporation tax relief on contributions: '+encodeURIComponent(payload.ctRelief)+'%0D%0A'+
-      'Funding target: '+encodeURIComponent(payload.fundingTarget)+'%0D%0A'+
-      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
-      'From: '+encodeURIComponent(payload.page);
-    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
-      '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    /* nothing has been sent by this page, so say so: no "on its way" claim */
-    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
-  }
 }
 
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
+function syncEntryBounds() {
+  const entry = $('entry');
+  const b = entryBounds(+$('birth').value);
+  // read the value before the bounds move: the browser re-clamps a range
+  // input's value the moment min or max changes, and the note needs to know
+  // whether that happened
+  const was = +entry.value;
+  // the note describes this change only; an earlier clamp is old news once
+  // the birth year has moved again
+  entryMoved = null;
+  entry.min = b.min;
+  entry.max = b.max;
+  if (was < b.min) { entry.value = b.min; entryMoved = { year: b.min, which: 'earliest' }; }
+  else if (was > b.max) { entry.value = b.max; entryMoved = { year: b.max, which: 'latest' }; }
+  paintSlider(entry);
+}
+
+/* The band's range in words, from the module's band table: the upper bound
+   of a band is one below the next band's lower bound, and the top band has
+   none. Nothing here decides which band an average falls in. */
+function bandLabel(bandMin) {
+  const bands = ENT.YA_BANDS;
+  for (let i = 0; i < bands.length; i++) {
+    if (bands[i].min !== bandMin) continue;
+    return i === 0 ? bandMin + ' or over' : bandMin + ' to ' + (bands[i - 1].min - 1);
+  }
+  return String(bandMin);
+}
+
+function show(id) {
+  ['spHas', 'spNone', 'spUnfit', 'spBefore'].forEach(k => { $(k).hidden = k !== id; });
+}
+
+function render() {
+  const birth = +$('birth').value;
+  const entryYear = +$('entry').value;
+  const paid = +$('paid').value;
+  const credited = +$('credited').value;
+  const homeCaring = +$('homecaring').value;
+  const drawdown = ENT.drawdownYear(birth);
+
+  $('birthV').textContent = yr(birth);
+  $('entryV').textContent = yr(entryYear);
+  $('paidV').textContent = num(paid);
+  $('creditedV').textContent = num(credited);
+  $('homecaringV').textContent = num(homeCaring);
+
+  // Which side of the transition window the drawdown year falls on. Asked of
+  // the shared module by name, so 'after' cannot be confused with 'before':
+  // the two want opposite wording and the reader only ever sees one of them.
+  $('birthNote').innerHTML = SP.transition(drawdown) === 'after'
+    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
+    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
+
+  $('entryNote').innerHTML = (entryMoved
+    ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '
+    : '') + APRIL_RULE;
+
+  const res = ENT.entitlement({
+    paid: paid, credited: credited, homeCaring: homeCaring,
+    entryYear: entryYear, drawdownYear: drawdown
+  });
+
+  let sr;
+
+  if (res.state === 'no-entitlement') {
+    show('spNone');
+    $('spNoneFoot').innerHTML = 'The State Pension (Contributory) needs 520 paid contributions, ten years. ' +
+      'Credits and HomeCaring Periods do not count toward that minimum, however many there are. With ' +
+      num(res.paid) + ' paid you would need <b>' + num(res.paidShortBy) + ' more</b> to qualify.';
+    sr = 'With ' + num(res.paid) + ' paid contributions there is no State Pension (Contributory) entitlement. ' +
+      num(res.paidShortBy) + ' more paid contributions would be needed to qualify. Credits and HomeCaring Periods do not count toward the minimum.';
+
+  } else if (res.state === 'inconsistent') {
+    show('spUnfit');
+    const fit = num(res.entered) + ' paid and credited contributions is more than the ' + num(res.maxForYears) +
+      ' that fit between ' + yr(entryYear) + ' and the end of ' + yr(drawdown - 1) + ' at 52 a year.';
+    $('spUnfitFoot').innerHTML = 'These details don\'t fit together. ' + fit +
+      ' Check the contribution year you first paid PRSI.';
+    sr = 'These details do not fit together. ' + fit + ' Check the contribution year you first paid PRSI.';
+
+  } else if (res.state === 'before-transition') {
+    // unreachable from the sliders, since the birth-year floor keeps drawdown
+    // at or after the current year, but the module has the state so the
+    // page has a panel for it rather than a blank column
+    show('spBefore');
+    const beforeCopy = 'This page does not cover pensions that started before ' +
+      yr(SP.TRANSITION_FIRST) + '.';
+    $('spBeforeFoot').textContent = beforeCopy;
+    sr = beforeCopy;
+
+  } else {
+    show('spHas');
+    const tca = res.tca, ya = res.yearlyAverage, m2 = res.method2, award = res.award;
+    const basis = award.basis;
+    const starting = 'for a pension starting in ' + yr(res.drawdownYear);
+
+    $('spWeekly').textContent = euro2(award.weekly);
+    $('spAnnual').textContent = euro(award.annual);
+    $('spFoot').textContent = basis === 'tie'
+      ? 'Both calculations give this figure, ' + starting + '.'
+      : 'Worked out under the ' + (basis === 'method2' ? 'Yearly Average blend' : 'Total Contributions Approach') +
+        ', ' + starting + '.';
+
+    // Method 1 row
+    $('m1Rate').textContent = euro2(tca.weekly) + ' a week';
+    $('m1Detail').innerHTML = tca.capped
+      ? '<b>' + num(tca.reckonable) + '</b> reckonable contributions, more than a full record of 2,080, so the maximum rate.'
+      : '<b>' + num(tca.reckonable) + '</b> reckonable contributions, <b>' + pct(tca.fraction) + '</b> of a full record of 2,080.';
+    $('m1Cap').hidden = !tca.capBit;
+    if (tca.capBit) {
+      $('m1Cap').textContent = num(tca.extrasCounted) + ' of your ' + num(res.credited + res.homeCaring) +
+        ' credits and HomeCaring Periods count; the rest are over the caps.';
+    }
+
+    // Method 2 row, or the sentence saying why there is none
+    const hasM2 = m2 !== null;
+    $('m2Row').hidden = !hasM2;
+    $('mClose').hidden = !hasM2;
+    $('mWhy').hidden = hasM2;
+    $('mFloor').hidden = !hasM2;
+
+    if (hasM2) {
+      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
+      const band = bandLabel(ya.bandMin);
+      $('m2Rate').textContent = euro2(m2.weekly) + ' a week';
+      $('m2Detail').innerHTML = 'A yearly average of <b>' + ya.average + '</b> over <b>' + ya.years + '</b> years, ' +
+        yr(res.entryYear) + ' to ' + yr(res.drawdownYear - 1) + ', falls in the ' + band + ' band at ' +
+        euro2(ya.weekly) + ' a week. For a pension starting in ' + yr(res.drawdownYear) + ' the mix is <b>' +
+        m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Total Contributions Approach rate.';
+
+      if (basis === 'method2') {
+        $('mClose').innerHTML = 'The Department pays the higher. That is <b>' + euro2(award.weekly) + '</b>, <b>' +
+          euro2(award.gain) + ' a week</b> more than the Total Contributions Approach alone.';
+      } else if (basis === 'tie') {
+        $('mClose').innerHTML = 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.';
+      } else if (res.homeCaring > 0) {
+        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.';
+      } else {
+        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. A yearly average of ' +
+          ya.average + ' over ' + ya.years + ' years falls in the ' + band +
+          ' band, and the blend of that band\'s rate with the TCA rate comes to less.';
+      }
+
+      sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ' +
+        (basis === 'tie'
+          ? 'and both calculations give this figure.'
+          : basis === 'method2'
+            ? 'under the Yearly Average blend. The Total Contributions Approach alone gives ' + euro2(tca.weekly) + '.'
+            : 'under the Total Contributions Approach. The Yearly Average blend gives ' + euro2(m2.weekly) + '.');
+    } else {
+      $('bothSub').textContent = 'Only one calculation applies to these details.';
+      $('mWhy').textContent = res.method2Unavailable === 'after-transition'
+        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
+        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
+      sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) +
+        ' a year. Only the Total Contributions Approach applies.';
+    }
+  }
+
+  /* One spoken summary rather than a dozen fragments, so a screen reader gets
+     the point of the page. */
+  $('srSummary').textContent = sr;
+}
+
+/* Bounds and defaults first, from the clock, before any slider is painted or
+   the shared click-to-edit script records the ranges it clamps to. */
+(function init() {
+  const birth = $('birth');
+  birth.min = BIRTH_MIN;
+  birth.max = BIRTH_MAX;
+  birth.value = BIRTH_DEFAULT;
+  const entry = $('entry');
+  const b = entryBounds(BIRTH_DEFAULT);
+  entry.min = b.min;
+  entry.max = b.max;
+  entry.value = BIRTH_DEFAULT + ENTRY_DEFAULT_AFTER_BIRTH;
 })();
+
+document.querySelectorAll('input[type=range]').forEach(el => {
+  paintSlider(el);
+  el.addEventListener('input', () => {
+    if (el.id === 'birth') syncEntryBounds();
+    if (el.id === 'entry') entryMoved = null;
+    paintSlider(el);
+    render();
+  });
+});
+
+render();
 </script>
 
 <script>
@@ -2413,7 +2370,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','sal','contrib'];   /* primary controls: ids on THIS page (salary slider is #sal) */
+  var KEEP = ['birth','entry','paid','credited','homecaring'];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 

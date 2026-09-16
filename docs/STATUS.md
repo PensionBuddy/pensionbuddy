@@ -6,6 +6,80 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 10 — 2026-09-12 · one home for the transition window
+
+Candidate 2 from the architecture review. The rule deciding whether the reality
+check shows "a floor" or "your actual rate" was copied in two places no test
+loaded: a transition-window constant inside `state-pension-entitlement.js` that
+was never exported, and `LAST_TRANSITION_YEAR = 2033` inside the reality-check
+page script. Driven test-first; both pages render identically before and after.
+
+| Item | Status | Note |
+|---|---|---|
+| Moved into `state-pension.js` | **Done** | `PENSION_AGE`, `TRANSITION_FIRST`, `TRANSITION_LAST`, and three functions: `transition(drawdownYear)` → before / during / after, `earliestDrawdownYear(age, thisYear)`, `floorStatus(result, age, thisYear)` → exact / floor / rate. It goes here and not in the entitlement module because both pages turn on this window and only one of them loads that module. |
+| The null overload, deleted | **Done** | `yaShare(year)` returned null both before 2025 and from 2034, two opposite facts under one value, and the entitlement page read it as "after 2033". On a pre-2025 drawdown year it told the reader they reach 66 *after the transition ends in 2033*. Unreachable from the birth slider, whose floor is clock-derived — one edit from reachable. The function is gone; `transition()` names all three states and `YA_SHARE` keeps the mix. |
+| 520-contribution gate | **Untouched, still open** | The two modules gate it on different counts, reckonable in one and paid in the other. A wording decision, not a refactor; left exactly as found for Damian. |
+| Tests | **25 new assertions** | `tests/state-pension.test.js` sections 15 to 17: years 2024, 2025, 2033, 2034, and age 57 against age 58 in 2026, the one year of age that crosses the boundary. 55 → 80 assertions. Entitlement row 18 now asserts the share table's keys against the window itself, since the two live in different files. 365 → 381. |
+| Proof of no behaviour change | **2,254 states, byte-identical** | Headless Chrome drove both built pages across every slider combination that can move the decision — 41 contribution steps × 49 ages, and 49 birth years × 5 records — and dumped every element the decision paints, before and after. Identical. The unreachable before-2025 panel was driven separately and also matches. |
+| verify.py | **0 FAIL** | 16 pages. The three WARNs are the open NEEDS-INPUT placeholders on other pages. |
+
+---
+
+# Run 9 — 2026-09-11 · state-pension-entitlement.html, the best-of calculation
+
+Contract-first again, with one addition: the spec was put through an
+adversarial review before any code was written against it. Research in
+`docs/RESEARCH-YEARLY-AVERAGE.md` (primary sources, verbatim quotes, six
+UNCONFIRMED items listed), contract in
+`docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md` (revision 2), maths in
+`assets/js/state-pension-entitlement.js` (imports Method 1 from
+`state-pension.js`, never re-implements it), tests in
+`tests/state-pension-entitlement.test.js` (365 assertions, exact to the cent),
+page assembled by `tools/build-state-pension-entitlement-page.py` from
+`pension-calculator.html`'s skeleton. Glossary started: `CONTEXT.md`.
+
+| Item | Status | Note |
+|---|---|---|
+| Research | **Done** | All six Yearly Average bands confirmed against SW19 2026 p.33 and Citizens Information; transition schedule and which-year-governs confirmed in SWCA 2005 s.109(6D). Two findings changed the design: HomeCaring Periods count under TCA only, and the 520 minimum is on paid contributions. gov.ie's own rate pages still show 2025 bands, so the page cites the booklet and says why. |
+| Spec review | **16 findings applied** | Three lenses (arithmetic, statute, edge cases), two skeptics per finding. Two were wrong rules: age cannot fix the year of the 66th birthday, so the page asks for year of birth; and contribution years before 2002 ran April to April, so the entry-year input is defined as the contribution year with the rule beside it. Also: impossible inputs (more than 52 a year) are refused rather than awarded; the floor claim is confined to the state where a Method 2 figure exists; before-2025 drawdowns return no figure. |
+| Page | **Built** | Five sliders. Leads with the award, then a "Both calculations" card showing Method 1, Method 2, and which is paid and by how much. Four states: eligible, no entitlement (520 paid), the details do not fit, and a defensive before-2025 panel. Not in the main nav: measured, an eighth text item overflows at 1200px. Linked from the reality check, the footer Tools column on every page, and the sitemap. |
+| Page probe | **10 of 10** | Headless Chrome drove the built page at every slider-reachable worked example and compared the DOM to the module: all match, all match the spec's hand-worked figures. |
+| Reality check | **Three copy changes** | The caveat card is now age-aware: exact at a full record; a floor for anyone reaching 66 by 2033 (decided on the earlier candidate year, so the "not a floor" wording can never show to someone still in the transition); and for 2034 or later, "this is your rate rather than a floor". Two links to the entitlement check. The age subnote now says age drives that note too. Figures untouched; 55 assertions pass unchanged. |
+| After review | **Fixed** | The CTA card had been copied from the reality check and its heading made no sense here; rewritten. Both build scripts emitted `</main>` twice; fixed. Image URLs re-stamped after rebuilding. |
+| Not in main nav | **By measurement** | 1236px wide at a 1200px viewport with one more item. S8 of the reality check spec is now out of date on nav headroom. |
+
+## NEEDS DAMIAN INPUT
+
+1. **Reality check, the 520 wording.** The live page gates on 520 *reckonable*
+   contributions; the statute gates on 520 *paid*, and credits never count.
+   Anyone with under 520 paid but 520 or more reckonable is shown a pension
+   they would not get. Proposed one sentence for the subnote and the
+   assumptions list is in the entitlement spec, S11 item 1. **Not applied.**
+2. **Reality check, the caps wording.** The page names only the 520 cap on
+   credits. HomeCaring Periods are capped at 1,040, and credits plus
+   HomeCaring at 1,040 combined. Proposed wording in S11 item 2. **Not applied.**
+3. **The band table**, before launch. Confirmed against two primary sources;
+   this is the sign-off the source warning asks for.
+4. **The April-to-April rule** is a subnote beside the entry-year slider. A
+   small "before 6 April?" control would be more robust for pre-2002 entrants.
+   Say if wanted.
+
+## Observed, not changed
+
+- The skeleton's Ask Buddy widget and consent bar carry three em dashes as
+  `\u2014` escapes inside JavaScript strings, on every page. The build
+  scripts' em-dash check looks for the literal character and misses them.
+- `broker-vs-autoenrolment.html` has the same duplicate `</main>` the two
+  State Pension pages had; its build script is not touched in this run.
+- The Method 2 blend is rounded half up to the cent. No published rule
+  governs that rounding; the page says so.
+
+Tests: 561 assertions across three suites, all pass. **Verified:** 16 pages,
+0 FAIL at 375 / 1360 / 1440, no console errors; the 3 WARN are the standing
+A1 / A4 / F1 placeholders.
+
+---
+
 # Run 8 — 2026-09-10 · broker-vs-autoenrolment.html, funds and risk, sliders proved
 
 | Item | Status | Note |

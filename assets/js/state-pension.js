@@ -46,6 +46,25 @@
   var WEEKS_PER_YEAR = 52;        // see the spec: 52, not 52.18, to match the
                                   // EUR 15,564 already cited on the home page
 
+  /* Pension age and the transition window. These three numbers decide which
+     calculations apply to a person, which is a different question from what
+     any one calculation pays, so they live here rather than in either page or
+     in the entitlement module: both pages and both modules read them from
+     this one place and none of them keeps a copy.
+
+     PENSION_AGE           66. CONTEXT.md. Drawdown at 66 is the only case
+                           modelled anywhere on this site; deferral to 67-70 is
+                           out of scope.
+     TRANSITION_FIRST      2025, the first drawdown year the best-of applies to.
+     TRANSITION_LAST       2033, the last year with a Yearly Average share.
+                           SWCA 2005 s.109(6D), inserted by the Social Welfare
+                           (Miscellaneous Provisions) Act 2023 s.46(e):
+                           paragraphs (a) to (i) run 2025 to 2033 and (j) makes
+                           2034 on TCA only. */
+  var PENSION_AGE      = 66;
+  var TRANSITION_FIRST = 2025;
+  var TRANSITION_LAST  = 2033;
+
   // Irish Retirement Living Standards, single person, annual, in cents.
   // Housing costs are INCLUDED in these figures. The report describes a group
   // that mostly owns its home, so the housing element reflects low or no
@@ -128,7 +147,78 @@
   /* Display only. Never feeds a projection: this page has no growth
      assumption and does not model investment returns. */
   function yearsUntilPensionAge(age) {
-    return Math.max(0, 66 - (Number(age) || 0));
+    return Math.max(0, PENSION_AGE - (Number(age) || 0));
+  }
+
+  /* Which calculations apply to a pension starting in this drawdown year.
+
+       'before'   earlier than 2025. Awarded under earlier rules, which
+                  neither module describes.
+       'during'   2025 to 2033. The Department works the rate out both ways,
+                  Total Contributions Approach and the older Yearly Average,
+                  and pays whichever is higher.
+       'after'    2034 on. Only the Total Contributions Approach.
+
+     Three named states, not a share that comes back empty at both ends.
+     'before' and 'after' are opposite facts about the same year and want
+     opposite wording on the page, so a caller that cannot tell them apart
+     will eventually print one of them as the other. This returns which side
+     you are on; what the mix IS during the window is a separate question,
+     answered by the band table in state-pension-entitlement.js. */
+  function transition(drawdownYear) {
+    var y = Math.floor(Number(drawdownYear) || 0);
+    if (y < TRANSITION_FIRST) return 'before';
+    if (y > TRANSITION_LAST) return 'after';
+    return 'during';
+  }
+
+  /* The earliest calendar year in which someone of this age could reach
+     pension age.
+
+     An age alone cannot fix the year of a 66th birthday. At age a in year t
+     the birthday lands in t + 66 - a - 1 if it has already happened this year
+     and t + 66 - a if it has not, and nothing the reader has entered says
+     which. This returns the EARLIER of the two, which is the cautious one:
+     used against the transition window it can tell someone the window is
+     still open when it has in fact just closed for them, and never the
+     reverse. Being told a figure is a floor when it is exact costs a reader
+     nothing; being told it is exact when the Department may pay more costs
+     them the difference. */
+  function earliestDrawdownYear(age, thisYear) {
+    return (Math.floor(Number(thisYear) || 0) + PENSION_AGE - 1) -
+           Math.floor(Number(age) || 0);
+  }
+
+  /* What the reality check's figure is: an exact rate, a floor under the real
+     one, or simply the rate.
+
+       'exact'  a full record. The Total Contributions Approach gives the
+                maximum personal rate outright, which is also the top Yearly
+                Average band, so no second calculation can beat it and hedging
+                would be hedging for its own sake.
+       'floor'  a partial record, reaching pension age while the Department
+                still runs both calculations and pays the higher. The real
+                rate may be above this one.
+       'rate'   a partial record, reaching pension age after the window. Only
+                the TCA applies, so on the contributions entered this is the
+                rate and not a floor.
+
+     'before' the window answers 'floor' as 'during' does: pensions awarded
+     before 2025 also came from the better of two calculations, so a figure
+     from this module is a floor there too.
+
+     Throws on a result with no entitlement in it. There is no fourth answer:
+     such a result carries no weekly or annual figure anywhere, so there is
+     nothing for a caption to qualify, and returning 'floor' would let a page
+     caption a pension that does not exist. Loud beats quietly wrong, as in
+     gapTo() above. */
+  function floorStatus(result, age, thisYear) {
+    if (!result || !result.eligible) {
+      throw new Error('floorStatus needs an eligible statePension() result');
+    }
+    if (result.fraction === 1) return 'exact';
+    return transition(earliestDrawdownYear(age, thisYear)) === 'after'
+      ? 'rate' : 'floor';
   }
 
   return {
@@ -136,11 +226,17 @@
     FULL_CONTRIBUTIONS: FULL_CONTRIBUTIONS,
     MIN_CONTRIBUTIONS: MIN_CONTRIBUTIONS,
     WEEKS_PER_YEAR: WEEKS_PER_YEAR,
+    PENSION_AGE: PENSION_AGE,
+    TRANSITION_FIRST: TRANSITION_FIRST,
+    TRANSITION_LAST: TRANSITION_LAST,
     STANDARDS: STANDARDS,
     STANDARD_ORDER: STANDARD_ORDER,
     statePension: statePension,
     gapTo: gapTo,
     gaps: gaps,
-    yearsUntilPensionAge: yearsUntilPensionAge
+    yearsUntilPensionAge: yearsUntilPensionAge,
+    transition: transition,
+    earliestDrawdownYear: earliestDrawdownYear,
+    floorStatus: floorStatus
   };
 }));

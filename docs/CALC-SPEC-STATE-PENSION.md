@@ -44,6 +44,12 @@ downloaded and its text extracted directly.
 | Edition | 2024, check for a newer one | Irish Retirement Living Standards, Pensions Council, **September 2024**, published December 2024. No 2025 or 2026 edition exists | **Confirmed, still current** |
 | Annualising at 52 weeks | €15,563.60 | Independent sources cite the 2026 rate as "around €15,564 a year" | **Confirmed.** Uses 52, as instructed |
 
+> **Pending, 2026-09-11.** Later research for the entitlement check found
+> two wording corrections this page needs, both awaiting Damian: the 520
+> minimum is on *paid* contributions, and HomeCaring Periods are capped at
+> 1,040 (and at 1,040 combined with credits). See
+> `docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md` S11, items 1 and 2.
+
 ### Correction 1: contributions are "reckonable", not "paid"
 
 The brief says 2,080 **paid** contributions. The Total Contributions Approach
@@ -207,6 +213,45 @@ projection needs a growth assumption and this page deliberately has none.
 **Decision needed:** keep age as this single framing line, or drop it. It
 earns its place only if the years-to-66 line is wanted.
 
+### What age is also for: the caveat card
+
+Age has one other job, and it is not a figure either. Whether the pension
+shown is an exact rate, a floor under the real one, or simply the rate turns
+on the year the reader reaches 66, and age is the only clue the page has to
+that year.
+
+`transition(drawdownYear)` → `before` | `during` | `after`
+
+> Which calculations apply to a pension starting that year. `during` is 2025
+> to 2033, when the Department works the rate out both ways and pays the
+> higher; `after` is 2034 on, TCA only; `before` is earlier rules. Three named
+> states rather than a share that comes back empty at both ends: `before` and
+> `after` are opposite facts about the same year and want opposite wording.
+
+`earliestDrawdownYear(age, thisYear)` → year
+
+> At age *a* in year *t* a 66th birthday lands in *t* + 65 − *a* or one year
+> later, depending on the birthday, and nothing the reader has entered says
+> which. This returns the earlier. Used against the window it can tell someone
+> the window is open when it has just closed for them, never the reverse:
+> being told a figure is a floor when it is exact costs a reader nothing,
+> being told it is exact when the Department may pay more costs them the
+> difference.
+
+`floorStatus(result, age, thisYear)` → `exact` | `floor` | `rate`
+
+> `exact` at a full record, where the TCA gives the maximum personal rate
+> outright and no second calculation can beat it. `floor` for a partial record
+> reaching 66 during the window, or before it. `rate` for a partial record
+> reaching 66 after it. Throws on a result with no entitlement: there is
+> nothing there for a caption to qualify.
+
+These live in `state-pension.js` and not in the page script, and not in
+`state-pension-entitlement.js`, because both State Pension pages turn on the
+same window and only one of them loads the entitlement module. `PENSION_AGE`,
+`TRANSITION_FIRST` and `TRANSITION_LAST` have their one home there too; the
+entitlement module re-exports `PENSION_AGE` rather than declaring its own.
+
 ### Step size
 
 The contributions slider steps in **52**, one year of contributions, because
@@ -335,6 +380,10 @@ both.
 | 11 | 1,560 contributions | gap to Comfortable | annual pension €11,672.96, gap **€21,927.04** |
 | 12 | an annual pension above a standard | gap | `covered: true`, gap not rendered as a shortfall |
 | 13 | every standard | target figures | €19,200, €27,600, €33,600 exactly, guarding against a typo in the constants |
+| 14 | age 40 / 66 / 70 | `yearsUntilPensionAge` | 26, 0, 0, never negative. And `statePension` ignores an age argument entirely |
+| 15 | drawdown years 2024, 2025, 2033, 2034 | `transition` | `before`, `during`, `during`, `after`. Every year between is `during`; 2074 is still `after` |
+| 16 | age 58 and age 57, both in 2026 | `earliestDrawdownYear` | **2033** and **2034**: one year of age crosses the boundary. Born 1967 or 1968 at 58, reaching 66 in 2033 or 2034, and the earlier decides |
+| 17 | a full and a partial record, at 58 and 57 in 2026 | `floorStatus` | full record `exact` on both sides of the boundary; partial record `floor` at 58 and `rate` at 57. Reaching 66 before 2025 is `floor`, not `rate`. An ineligible result throws |
 
 Every assertion is exact to the cent. No tolerances.
 

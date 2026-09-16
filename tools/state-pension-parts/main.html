@@ -19,7 +19,7 @@
     <div class="field" style="margin-bottom:0">
       <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
       <input type="range" id="age" min="18" max="66" value="40">
-      <p class="subnote" id="ageNote">Used for one line only. It does not change the pension figure, and this page does not project investment growth.</p>
+      <p class="subnote" id="ageNote">Used for this line and the note under the result. It does not change the pension figure, and this page does not project investment growth.</p>
     </div>
   </div>
 
@@ -36,7 +36,8 @@
 
       <div class="waitcard reveal" style="transition-delay:.11s">
         <div class="wt">One thing this does not show</div>
-        <div class="wtext" id="spFloor">This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.</div>
+        <p class="wtext" id="spFloor">At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.</p>
+        <a class="wlink" id="spFloorLink" href="state-pension-entitlement.html" style="display:none">Work out both calculations <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
     </div>
 
@@ -85,7 +86,7 @@
   <div class="expl reveal">
     <p>Since the switch to the Total Contributions Approach (TCA), your rate depends on how many reckonable contributions you have built up. Reckonable does not just mean paid. It includes contributions you were credited, for example while unemployed or ill, and HomeCaring Periods, time spent looking after a child or someone who needed care. If you have ever taken time out to care for someone, that time may still count toward your pension even though nothing came out of a payslip during it.</p>
     <p>The shape of it: 2,080 reckonable contributions gets the full rate, €299.30 a week from January 2026. Below 520, there is no State Pension (Contributory) at all. Between the two, it is a pro rata share.</p>
-    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final.</p>
+    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> works the rate out both ways and shows which one the Department would pay.</p>
   </div>
 </div></section>
 
@@ -105,7 +106,7 @@
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
-    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own.</li>
+    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> works the rate out both ways and shows which one the Department would pay.</li>
     <li>That means a figure below the maximum is a <b>floor</b>. Anyone without a full forty years may be paid more than this tool shows, and the difference against a living standard may be smaller. At a full 2,080 contributions the figure is exact.</li>
     <li>Reckonable contributions are paid contributions, plus credited contributions, plus HomeCaring Periods. Credited contributions are themselves capped at 520. This tool takes the total you enter at face value and does not check how it is made up.</li>
     <li>The maximum personal rate is €299.30 a week from January 2026. Rates change, usually at each Budget. The annual figure is 52 weekly payments.</li>

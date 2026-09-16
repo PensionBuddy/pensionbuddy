@@ -1553,7 +1553,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field" style="margin-bottom:0">
       <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
       <input type="range" id="age" min="18" max="66" value="40">
-      <p class="subnote" id="ageNote">Used for one line only. It does not change the pension figure, and this page does not project investment growth.</p>
+      <p class="subnote" id="ageNote">Used for this line and the note under the result. It does not change the pension figure, and this page does not project investment growth.</p>
     </div>
   </div>
 
@@ -1570,7 +1570,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
       <div class="waitcard reveal" style="transition-delay:.11s">
         <div class="wt">One thing this does not show</div>
-        <div class="wtext" id="spFloor">This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.</div>
+        <p class="wtext" id="spFloor">At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.</p>
+        <a class="wlink" id="spFloorLink" href="state-pension-entitlement.html" style="display:none">Work out both calculations <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
     </div>
 
@@ -1619,7 +1620,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="expl reveal">
     <p>Since the switch to the Total Contributions Approach (TCA), your rate depends on how many reckonable contributions you have built up. Reckonable does not just mean paid. It includes contributions you were credited, for example while unemployed or ill, and HomeCaring Periods, time spent looking after a child or someone who needed care. If you have ever taken time out to care for someone, that time may still count toward your pension even though nothing came out of a payslip during it.</p>
     <p>The shape of it: 2,080 reckonable contributions gets the full rate, €299.30 a week from January 2026. Below 520, there is no State Pension (Contributory) at all. Between the two, it is a pro rata share.</p>
-    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final.</p>
+    <p>One honest caveat. Until the transition finishes, the Department calculates this two ways, once on TCA alone and once blending TCA with the older Yearly Average method, and pays whichever comes out higher. This tool shows the TCA-only figure. If your record has gaps, that means what you see here is a floor rather than your exact number, and your real entitlement could be a little higher once the blended calculation is checked. Worth confirming your own figure at <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a> rather than treating this as final. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> works the rate out both ways and shows which one the Department would pay.</p>
   </div>
 </div></section>
 
@@ -1639,7 +1640,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
-    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own.</li>
+    <li>The Department of Social Protection works your pension out in a more detailed way than this. Until 2034 it calculates a rate two ways, once under the Total Contributions Approach and once blending that with the older Yearly Average method, and pays whichever is higher. This tool uses the Total Contributions Approach on its own. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> works the rate out both ways and shows which one the Department would pay.</li>
     <li>That means a figure below the maximum is a <b>floor</b>. Anyone without a full forty years may be paid more than this tool shows, and the difference against a living standard may be smaller. At a full 2,080 contributions the figure is exact.</li>
     <li>Reckonable contributions are paid contributions, plus credited contributions, plus HomeCaring Periods. Credited contributions are themselves capped at 520. This tool takes the total you enter at face value and does not check how it is made up.</li>
     <li>The maximum personal rate is €299.30 a week from January 2026. Rates change, usually at each Budget. The annual figure is 52 weekly payments.</li>
@@ -1651,12 +1652,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </ul>
 </div></section>
 </main>
-</main>
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
-    <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="glossary.html">Pension jargon buster</a></div>
+    <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
@@ -1668,7 +1668,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></footer>
 
-<script src="assets/js/state-pension.js?v=e30c4e34"></script>
+<script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 <script>
 /* state-pension-reality-check.html
 
@@ -1682,6 +1682,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
    nothing that dramatises a number that is already plain enough. */
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SP = window.PBStatePension;
+
+/* The caveat card decides between floor and not-a-floor on the year the
+   reader reaches 66, which needs today's year. Read from the clock once, at
+   load, so the page does not go stale on 1 January and every render agrees
+   with every other. Nothing in the pension figure depends on it. */
+const THIS_YEAR = new Date().getFullYear();
+
+/* The last drawdown year in which the Department still runs the Yearly
+   Average calculation alongside the Total Contributions Approach and pays
+   the higher comes from the module, SP.TRANSITION_LAST, and the card's copy
+   is built from it, so the wording and the decision cannot drift apart and
+   neither can drift from the entitlement page, which reads the same
+   constant. docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md S3 and S9. */
 
 const $ = id => document.getElementById(id);
 const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
@@ -1721,7 +1734,7 @@ function render() {
 
   const toGo = SP.yearsUntilPensionAge(age);
   $('ageNote').innerHTML = toGo > 0
-    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line only: it does not change the pension figure, and this page does not project investment growth.'
+    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line and the note under the result: it does not change the pension figure, and this page does not project investment growth.'
     : 'You are at or past 66. This line does not change the pension figure, and this page does not project investment growth.';
 
   $('spHas').hidden = !res.eligible;
@@ -1741,13 +1754,36 @@ function render() {
         ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax +
         '% of the maximum.';
 
-    /* The floor caveat only bites below a full record. At 2,080 the Total
-       Contributions Approach gives the full rate outright and nothing further
-       is calculated, so the figure is exact and saying otherwise would be
-       hedging for its own sake. */
-    $('spFloor').textContent = res.fraction === 1
-      ? 'At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.'
-      : 'This shows the Total Contributions Approach calculation only. If part of your working life falls under the older Yearly Average method, the Department pays whichever calculation gives the higher amount, so your real entitlement could be higher than the figure here.';
+    /* The caveat card has three states, and which one applies is the
+       module's decision, not this file's: SP.floorStatus() takes the result,
+       the age and the year and answers exact, floor or rate. It is the one
+       decision on this page that changes what a reader is told a number
+       MEANS, the entitlement page turns on the same window, and a copy of
+       the rule here is how the two pages would come to disagree. Asserted in
+       tests/state-pension.test.js sections 15 to 17.
+
+       The card never names the year it decided on, because age alone cannot
+       fix the year of a 66th birthday; the module takes the earlier of the
+       two candidates, which is the reading that can never tell someone
+       inside the window that it has closed. */
+    const status = SP.floorStatus(res, age, THIS_YEAR);
+    let floorHtml, showLink = false;
+    if (status === 'exact') {
+      floorHtml = 'At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.';
+    } else if (status === 'floor') {
+      floorHtml = 'You reach 66 while the Department still runs the older Yearly Average calculation alongside this one, which it does until the end of ' +
+        SP.TRANSITION_LAST + ', and pays whichever is higher. So this is a floor: your real rate may be higher.';
+      showLink = true;
+    } else {
+      floorHtml = 'You reach 66 in ' + (SP.TRANSITION_LAST + 1) + ' or later, after the older Yearly Average method has gone. ' +
+        'Only the Total Contributions Approach applies, so on these contributions this is your rate rather than a floor. ' +
+        'This page takes the contributions entered at face value. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> ' +
+        'applies the qualifying minimum and the caps the way the Department does.';
+    }
+    $('spFloor').innerHTML = floorHtml;
+    /* The link row is inline-flex in the shared stylesheet, which beats the
+       hidden attribute, and this page's own CSS lives in the build script. */
+    $('spFloorLink').style.display = showLink ? '' : 'none';
   } else {
     annualCents = 0;
     $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
