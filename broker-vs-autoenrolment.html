@@ -1827,6 +1827,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></footer>
 
+<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/autoenrolment.js?v=3fd93c2f"></script>
 <script>
@@ -1852,7 +1853,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
    says so in exactly the same words and prominence as the opposite result.
    Mode 2 is stated matter of fact, as a consequence of what the scheme
    currently allows, never as a pitch. */
-const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let mode = 1;
 
 /* Relief is worked out at the rate each euro actually attracts, split at the
@@ -1866,7 +1866,9 @@ const STATUS = [
 let statusIx = 0;
 const relief = () => ({ srcop: STATUS[statusIx].srcop });
 
-const $ = id => document.getElementById(id);
+/* Formatting, the slider fill, the wiring and the debounced live region are
+   the same on all five calculators and live in assets/js/calc-page.js. */
+const { $, euro, pct, paintSlider, wireRanges, announce } = window.PBPage;
 
 /* Three illustrative risk levels for the personal pension side, on the 1 to 7
    Summary Risk Indicator every fund's Key Information Document carries.
@@ -1896,14 +1898,12 @@ function renderRisk() {
     + '<div class="rk-warn">Can fall as well as rise. Not a recommendation.</div>'
     + '</div>').join('');
 }
-const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
-const pct = v => (Math.round(v * 1000) / 10).toLocaleString('en-IE') + '%';
 
 /* the user has moved the Mode 1 contribution slider themselves, so stop re-matching it */
 let grossTouched = false;
 
 /* Screen readers otherwise announce a bare number, so each slider carries a
-   formatted aria-valuetext, matching the other two calculators (issue D4). */
+   formatted aria-valuetext (issue D4). */
 const VALTEXT = {
   age: v => v + ' years',
   salary: v => euro(v),
@@ -1914,11 +1914,10 @@ const VALTEXT = {
   tmatch: v => v + '% of your top-up'
 };
 
-function paintSlider(el) {
-  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
-  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
-  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
-}
+/* paintSlider takes the wording map as an argument, so bind it once here. A
+   bare `paintSlider` handed to forEach would receive the array index as that
+   argument and quietly fall back to euro formatting on every slider. */
+const paint = el => paintSlider(el, VALTEXT);
 
 function setStatus(i) {
   statusIx = i;
@@ -1994,12 +1993,6 @@ document.querySelector('.modeseg').addEventListener('keydown', e => {
   e.preventDefault();
   setMode(e.key === 'Home' ? 1 : e.key === 'End' ? 2 : (mode === 1 ? 2 : 1), true);
 });
-
-let srTimer = null;
-function announce(text) {
-  clearTimeout(srTimer);
-  srTimer = setTimeout(() => { $('srSummary').textContent = text; }, 700);
-}
 
 function calc() {
   const age = +$('age').value;
@@ -2145,7 +2138,7 @@ function calc() {
     ? verdict + ' Auto-enrolment costs you ' + euro(ae.netCost) + ', the personal pension costs you ' + euro(pp.netCost) + '.'
     : cv);
 
-  ['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => paintSlider($(id)));
+  ['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => paint($(id)));
 }
 
 /* the relief sentence is the same for Mode 1's personal path and Mode 2's top-up */
@@ -2156,28 +2149,23 @@ function reliefSentence(layer, age) {
         : '');
 }
 
-['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => {
-  const el = $(id);
-  el.addEventListener('input', () => {
-    if (id === 'gross') grossTouched = true;
-    /* a new salary or age means a new auto-enrolment cost, so the contribution
-       goes back to matching it; a value dragged at one salary must not survive
-       into another */
-    if (id === 'salary' || id === 'age') grossTouched = false;
-    paintSlider(el);
-    calc();
-  });
-  paintSlider(el);
+wireRanges(VALTEXT, el => {
+  if (el.id === 'gross') grossTouched = true;
+  /* a new salary or age means a new auto-enrolment cost, so the contribution
+     goes back to matching it; a value dragged at one salary must not survive
+     into another */
+  if (el.id === 'salary' || el.id === 'age') grossTouched = false;
+  calc();
 });
 
 /* the phase slider, behind its toggle, starts on this year's phase */
 $('phase').value = thisYearsPhase();
-paintSlider($('phase'));
+paint($('phase'));
 ['futureOn', 'matchOn', 'tmatchOn'].forEach(id => {
   $(id).addEventListener('change', () => {
     syncToggles();
     /* a slider that was hidden has no width until now, so repaint it */
-    document.querySelectorAll('.togbody:not([hidden]) input[type=range]').forEach(paintSlider);
+    document.querySelectorAll('.togbody:not([hidden]) input[type=range]').forEach(paint);
     calc();
   });
 });

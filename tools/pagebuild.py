@@ -29,9 +29,12 @@ broker-vs-autoenrolment.html shipped with two of them. Cutting symmetrically
 removes the mismatch rather than compensating for it, and check() asserts the
 count so the mistake cannot return silently.
 
-IMAGE STAMPS are applied here, as the last step of assembly, so a built page
-is complete when it is written and needs no follow-up pass.
-tools/stamp-images.py imports the same functions for the hand-written pages.
+CONTENT STAMPS are applied here, as the last step of assembly, so a built page
+is complete when it is written and needs no follow-up pass. Images and local
+script tags both get one: assets/js/calc-page.js is the shared UI runtime every
+calculator loads, and the skeleton carries its tag with no ?v= at all so that
+the hash is never typed by hand anywhere. tools/stamp-images.py imports the
+same functions for the hand-written pages, the skeleton among them.
 """
 import hashlib
 import os
@@ -46,6 +49,17 @@ CLOSE_MAIN = '</main>'
 
 # assets/img/name.ext, optionally already stamped
 IMG_PAT = re.compile(r'(assets/img/[A-Za-z0-9_.-]+\.(?:jpg|jpeg|png|webp|svg))(\?v=[0-9a-f]+)?')
+
+# <script src="assets/js/name.js">, optionally already stamped. Anchored to the
+# tag, unlike IMG_PAT, because every page script also names its modules in
+# prose: "Maths lives in assets/js/autoenrolment.js" is a sentence, not a URL,
+# and an unanchored pattern would stamp it.
+JS_PAT = re.compile(r'(<script src=")(assets/js/[A-Za-z0-9_.-]+\.js)(\?v=[0-9a-f]+)?(")')
+
+# The shared UI runtime. It is in no page's `modules`: the skeleton carries the
+# one tag and assembly inherits it, so every page gets it without a record
+# having to remember to ask. check() asserts that below.
+SHARED_RUNTIME = 'assets/js/calc-page.js'
 
 _img_hash = {}
 
@@ -63,13 +77,17 @@ def content_hash(rel):
 
 
 def stamp_html(text, missing=None):
-    """Rewrite every local image URL as path?v=<content hash>.
+    """Rewrite every local image and script URL as path?v=<content hash>.
 
-    A replaced photo keeps its filename, so without this a browser that
-    already holds the old bytes carries on showing them. Files that are not on
-    disk are left alone and collected in `missing` when one is passed.
+    A replaced photo keeps its filename, so without this a browser that already
+    holds the old bytes carries on showing them. The same is true of a script,
+    which is why the calculation modules have carried a hash from the start.
+    This is how the shared runtime gets one too: the tag in the skeleton is
+    written with no query at all and stamped from here, so there is no hand
+    typed hash anywhere to go stale. Files that are not on disk are left alone
+    and collected in `missing` when one is passed.
     """
-    def repl(m):
+    def image(m):
         rel = m.group(1)
         h = content_hash(rel)
         if h is None:
@@ -77,13 +95,27 @@ def stamp_html(text, missing=None):
                 missing.add(rel)
             return m.group(0)
         return '%s?v=%s' % (rel, h)
-    return IMG_PAT.sub(repl, text)
+
+    def script(m):
+        rel = m.group(2)
+        h = content_hash(rel)
+        if h is None:
+            if missing is not None:
+                missing.add(rel)
+            return m.group(0)
+        return '%s%s?v=%s%s' % (m.group(1), rel, h, m.group(4))
+
+    return JS_PAT.sub(script, IMG_PAT.sub(image, text))
 
 
 def versioned(rel):
     """A module URL carrying its own content hash, so a changed module can
     never be served from a stale cache under the old URL."""
-    return '%s?v=%s' % (rel, content_hash(rel))
+    h = content_hash(rel)
+    # without this a missing file becomes the literal URL 'x.js?v=None', which
+    # 404s in the browser and passes every check that only counts tags
+    assert h is not None, 'module not on disk: %s' % rel
+    return '%s?v=%s' % (rel, h)
 
 
 class Page(object):
@@ -241,6 +273,15 @@ def check(html, page):
         where.append(html.find(marker))
     want(all(w >= 0 for w in where) and all(a < b for a, b in zip(where, where[1:])),
          'module order')
+
+    # The shared runtime is inherited from the skeleton, so no record lists it
+    # and the module checks above cannot see it. It has to be there once, and
+    # ahead of everything else: each page script reads window.PBPage as it
+    # loads, and a runtime that arrived later would leave that undefined.
+    shared = '<script src="%s?v=' % SHARED_RUNTIME
+    want(html.count(shared) == 1, 'shared runtime once')
+    at = html.find(shared)
+    want(at >= 0 and all(at < w for w in where if w >= 0), 'shared runtime first')
     if where and min(where) >= 0:
         after_last = html.index('</script>', max(where)) + len('</script>')
         want(html[after_last:after_last + 10] == '\n<script>\n', 'page script after modules')
@@ -259,6 +300,7 @@ def check(html, page):
         want(bad not in html, label)
 
     want(not [m for m in IMG_PAT.finditer(html) if not m.group(2)], 'images stamped')
+    want(not [m for m in JS_PAT.finditer(html) if not m.group(3)], 'scripts stamped')
 
     for needle, label in page.checks:
         want(needle in html, label)
