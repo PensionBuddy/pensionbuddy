@@ -6,6 +6,52 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 12 — 2026-09-17 · the jargon buster games: Buddy's Run and Jargon Battle
+
+Two mini-games on glossary.html, on branch `feature/jargon-buster-games`. The
+brief's prototype never arrived and Damian said to build without it, so both
+games are built to the brief's own description of the mechanics. Zero build
+tooling: three self-contained files in `games/`, the site's two fonts, nothing
+else. Buddy gives facts, never advice, and every game ends on the free call.
+
+| Item | Status | Note |
+|---|---|---|
+| Sprite sheet | **Built** | `games/buddy-sprites.js`: hand-authored string-matrix pixel art, one character per pixel, editable in a text editor. Buddy at 36x26 in sixteen frames (idle 2, run 6, jump 3, hurt 1, attack 2, happy 2), the Jargon Blob at 38x38 in six (idle 2, hurt 1, attack 2, faint 1), three props (paw, heart, paper). `draw()` paints a frame; `bake()` caches it on an offscreen canvas so a game draws one image per frame. Rendered on a contact sheet at 8x and at 3x on deep pine and looked at, three rounds; then an independent critique, whose four must-fixes (the faint frame's face, the sticky note eating the coffee ring, the paw not reading as the logo, the paper reading as a coin) were applied and re-rendered. |
+| Buddy's Run | **Built** | `games/buddys-run.html`. Auto-run along Dollymount Strand (Howth behind, the Poolbeg chimneys on the horizon, sea, sand, dune grass, three parallax layers). Good labels are run into for +10, bad labels are jumped; a hit costs a life with 1.2s of invulnerability; three lives; endless; speed rises with score from 235 to a cap of 400 world px/s; best score in localStorage. Space, Up, W, tap anywhere, or the Jump button; P or Escape pauses; blur pauses. Fixed 1/120s simulation steps. Fairness is measured, not hoped for: a bad pill's collision core is the central 55% of its width (70 to 120px), so clipping the tail of "Pensions are boring" reads as a near miss, and a probe proved a well-timed jump clears every bad label at both the slowest and the capped speed. |
+| Jargon Battle Quiz | **Built** | `games/jargon-battle.html`. RPG battle screen: Buddy left, the Jargon Blob (a grumpy stack of forms with a sticky note and a coffee ring) right. Eight questions a battle, drawn three easy, three medium, two hard; the Blob has eight HP segments, Buddy three hearts. A correct pick is a lunge and a BARK; a wrong one is a paper ball and a lost heart, and the dialogue box gives the right answer either way with a fact from Buddy. The brief's "eight correct before three wrong" cannot be met once a single answer is missed, so the win condition shipped is surviving all eight with a heart left; the heading is the brief's in both cases and the score reads hits out of eight. Answer menu is four real buttons (mouse, touch, keys 1 to 4, arrows), with a live region for the outcome. |
+| Question bank | **26 questions, fact-checked** | Written three ways (72 drafts over 28 terms) by writers with different comic angles; every draft checked by two independent skeptics, one for legal and factual accuracy under Irish rules, one for harm and tone, with any revision re-checked from scratch; the best surviving variant per term judged; an editor pass for one voice and one format (27 edits, mostly recurring jokes: parish, biscuits, motoring, the good front room); then two whole-bank accuracy gates. Two terms dropped: pension age duplicated the State Pension question, and investment risk gave its own answer away. One gate edit (the QFA option called it "the" Irish qualification) was lost between the two gates and applied by hand. No figure, date, rate or threshold beyond what the site already publishes. |
+| Run content | **14 + 14 labels, 9 facts** | Reviewed by a skeptic: "One tidy plan" (consolidation as an unqualified prize) and "The mortgage first" (an ordering of someone's money) removed as advice; "Can't afford it" replaced as a joke at the reader's expense; "Future you, sorted" replaced as a promised outcome; one statistic not on the site dropped. Each fact names the page it comes from. The CTA lead was corrected from "the first twenty minutes are free" to the site's own offer, a free first call of twenty minutes. |
+| Picker | **glossary.html** | A section after the page head: eyebrow, "Two ways to learn the lingo.", two cards drawn from the same sprite sheet. Each card is a plain link to its game, so it works with no JS and on a phone opens the game full-window. At 720px and up the click is borrowed and the game plays in a 16:9 iframe stage under the cards, with Full screen and Close; the active card carries aria-current. |
+| Game pages | **Chromeless inside the frame** | Each page carries a minimal header (paw mark, wordmark, back link), the game, and the site's regulated-by line; inside an iframe the header and footer hide. Every link is `target="_top"`; the CTA is "Book a free 20-minute call" to booking.html. Both pages added to the sitemap. |
+| verify.py | **Extended** | `games/*.html` audited like every other page; a relative href resolves from the page's own folder; screenshot names flatten the slash. Expectations about the shared chrome (skip link, four-column footer, nav wordmark, story link) are scoped to root pages, with a comment saying why, and nothing else was relaxed. |
+| Tests | **`tests/games.test.py`, 151 assertions** | Headless Chrome loads a probe copy of each real page and drives the API it exposes (`window.BuddysRun`, `window.JargonBattle`) with a deterministic rng: label and fact copy, the speed curve, collisions, scoring, lives, invulnerability, game over, the persisted best, no double jump, that a jump clears a bad label at both extremes of speed, pause; the bank's shape and wording, shuffle as a pure permutation, eight distinct questions a battle, the whole hit/heart/win/lose machine, and a click-through of the page's own buttons to the end panel. One real bug found and fixed: `pickQuestions(0)` returned the default eight instead of clamping to one as documented. Static checks on the files as they ship: no em dash, every link `_top`, the CTA href, no placeholders, and the glossary's hooks. |
+| Existing suites | **Unchanged, all pass** | `build.test.py` 35, `run-tests.py` 608 plus the panel check. |
+| verify.py | **0 FAIL** | 18 pages at 375 / 1360 / 1440. The three WARN are the standing A1 / A4 / F1 placeholders. The battle intro's overlay went from 90% to 96% pine so the contrast audit reads it as the background it is. |
+
+## NEEDS DAMIAN INPUT
+
+1. **Content sign-off.** The 26 questions, the 28 run labels and the 9 facts
+   are plain data at the top of each game's script. Fact-checked, but it is
+   your name on the site.
+2. **"Revenue chips in".** Kept as a run label because the glossary already
+   describes relief as money coming back. If nothing should imply the State
+   adds cash to the pot, "Tax back" is a straight swap.
+
+## Observed, not changed
+
+- The Ask Buddy widget can sit over the corner of the Jump button when the
+  stage's bottom-right corner meets the viewport's. Space, Up and tapping
+  anywhere on the sand still jump.
+- verify.py's 375px screenshots go through an iframe wrapper, so for the two
+  game pages they show embed mode in a tall portrait frame rather than the
+  standalone phone layout. That layout was checked at headless Chrome's 500px
+  floor and with an overflow probe at 375, and the picker sends phones to it.
+- On a wrong answer the live region announces the lost heart about 600ms
+  before the visible heart fades, when the paper ball lands.
+- The site limit killed two workflow phases mid-run; the finished agents'
+  results were recovered from the workflow journal and the rest continued
+  from them, so nothing was rebuilt twice.
+
 # Run 11 — 2026-09-16 · the entitlement module's interface, narrowed
 
 Candidate 3 from the architecture review. `state-pension-entitlement.js` exposed
