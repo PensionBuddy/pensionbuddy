@@ -39,14 +39,40 @@ satisfied either way), and lock `#story`.
 
 ## Proof
 
-- `tools/verify.py` — **0 FAIL** on 18 pages at 375/1360/1440. Three WARN, the
-  standing A1/A4/F1 placeholders, unchanged from baseline.
+- `tools/verify.py` — **0 FAIL** on 18 pages at 375/1360/1440. **One WARN**,
+  down from three: the two placeholders Damian chose to delete rather than fill
+  are gone (see below), leaving only `terms.html`'s A1 liability amount.
 - `tests/run-tests.py` — **ALL SUITES PASS**, six suites, 0 failed.
 - `tests/render-diff` against HEAD — every page loads to the same render, write
   for write; **159,135 states swept, 0 differing, 0 reordered, 0 errors**
   (compare 150,576 axes+corners, state-pension 2,009 exhaustive,
   pension-calculator 6,550 axes+corners). The calculator maths is untouched.
 - `tools/pagebuild.py` ×3 rebuild clean; `tools/sync-chrome.py --check` 0 behind.
+
+## Placeholders deleted, not filled — Damian's call
+
+F5 and A4 had been open since run 1. Rather than invent a Central Bank
+reference number or a phone number, Damian had them removed along with the
+markup that existed only to hold them.
+
+| Was | Now |
+|---|---|
+| `index.html` — "…publishes its register at registers.centralbank.ie. Our reference number is *[to be confirmed]*." | The clause is gone. The register sentence stays, because `site_checks()` in `tools/verify.py` fails index.html if `registers.centralbank.ie` leaves it. |
+| `terms.html`, `complaints.html` — "Email: … `<br>`Phone: *[phone number to be confirmed]*`<br>`Post: …" | The `Phone:` label and its `<br>` are gone. No empty label, no doubled `<br>`, no dangling punctuation. |
+
+**No check had to be weakened.** `needsInput` only *reports* `.needs-input`
+elements, it does not require them; `SRC_PLACEHOLDERS` never matched either
+string; and the one hard dependency, `registers.centralbank.ie` in
+`site_checks()`, is the sentence that was kept.
+
+The A4 comment on `terms.html` and `complaints.html` covered the phone number
+**and** an open question about whether `hello@pensionbuddy.ie` is a monitored
+mailbox. Deleting it whole would have erased the second half, so it was
+narrowed to the email-only wording `privacy.html` already carried, and that
+question stays flagged on all three legal pages.
+
+verify.py after: **0 FAIL, 1 WARN** across 18 pages, down from 3 WARN. The one
+left is `terms.html`'s A1 liability amount, which is still Damian's to set.
 
 ## Observed, not changed
 
