@@ -1629,16 +1629,20 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></footer>
 
+<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Formatting, the slider fill, the wiring and the debounced live region are
+   the same on all five calculators and live in assets/js/calc-page.js. REDUCE
+   stays here: it is read by the tween engine below, and tools/pagebuild.py
+   cuts this script out of the skeleton by matching it. */
+const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
 let taxRate=40;
 /* Revenue's age-related limit on tax-relievable personal contributions:
    a percentage of earnings, with earnings capped at EARN_CAP (B4/B5). */
 const EARN_CAP=115000;
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
-const $=id=>document.getElementById(id);
-const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
 
 function setTax(r){taxRate=r;$('t20').classList.toggle('on',r===20);$('t40').classList.toggle('on',r===40);$('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
 
@@ -1720,10 +1724,10 @@ const chart={
 };
 
 /* ---- slider fill paint ---- */
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
+   The four money sliders have no wording of their own and take paintSlider's euro fallback. */
 const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
-function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
-let srTimer=null;
+const paint=el=>paintSlider(el,VALTEXT);
 
 /* ---- the maths (unchanged) ---- */
 function calc(){
@@ -1731,7 +1735,7 @@ function calc(){
   const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
   $('ret').min=age+1;
   if(ret<=age){ret=age+1;$('ret').value=ret;}
-  paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
+  paint($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
   $('ageV').textContent=age;
   $('retV').textContent=ret;
   $('potV').textContent=euro(pot);
@@ -1804,20 +1808,15 @@ function calc(){
     u.push(project(m,pot,monthly+100,mRate));
   }
   chart.setTarget(b,u,age,ret);
-  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
+  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=base>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  clearTimeout(srTimer);
-  srTimer=setTimeout(function(){$('srSummary').textContent='Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':'');},700);
+  announce('Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
-['age','ret','pot','mine','earn','emp','growth'].forEach(id=>{
-  const el=$(id);
-  el.addEventListener('input',()=>{paintSlider(el);calc();});
-  paintSlider(el);
-});
+wireRanges(VALTEXT,calc);
 calc();
 
 /* nav + reveal */

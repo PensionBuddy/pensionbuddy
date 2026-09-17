@@ -29,9 +29,20 @@ broker-vs-autoenrolment.html shipped with two of them. Cutting symmetrically
 removes the mismatch rather than compensating for it, and check() asserts the
 count so the mistake cannot return silently.
 
-IMAGE STAMPS are applied here, as the last step of assembly, so a built page
-is complete when it is written and needs no follow-up pass.
-tools/stamp-images.py imports the same functions for the hand-written pages.
+CONTENT STAMPS are applied here, as the last step of assembly, so a built page
+is complete when it is written and needs no follow-up pass. Images and local
+script tags both get one: assets/js/calc-page.js is the shared UI runtime every
+calculator loads, and the skeleton carries its tag with no ?v= at all so that
+the hash is never typed by hand anywhere. tools/stamp-images.py imports the
+same functions for the hand-written pages, the skeleton among them.
+
+THE SHARED CHROME. The skeleton is also the one source of the nav and the
+footer's link columns for every page: assemble() carries them into the three
+built pages, tools/sync-chrome.py copies them into the twelve hand-written
+ones, and chrome_drift(), at the end of this file, is the guard that
+tools/verify.py and tests/build.test.py run over all sixteen. Edit the nav in
+pension-calculator.html, then run both tools; either order reaches the same
+tree.
 """
 import hashlib
 import os
@@ -46,6 +57,17 @@ CLOSE_MAIN = '</main>'
 
 # assets/img/name.ext, optionally already stamped
 IMG_PAT = re.compile(r'(assets/img/[A-Za-z0-9_.-]+\.(?:jpg|jpeg|png|webp|svg))(\?v=[0-9a-f]+)?')
+
+# <script src="assets/js/name.js">, optionally already stamped. Anchored to the
+# tag, unlike IMG_PAT, because every page script also names its modules in
+# prose: "Maths lives in assets/js/autoenrolment.js" is a sentence, not a URL,
+# and an unanchored pattern would stamp it.
+JS_PAT = re.compile(r'(<script src=")(assets/js/[A-Za-z0-9_.-]+\.js)(\?v=[0-9a-f]+)?(")')
+
+# The shared UI runtime. It is in no page's `modules`: the skeleton carries the
+# one tag and assembly inherits it, so every page gets it without a record
+# having to remember to ask. check() asserts that below.
+SHARED_RUNTIME = 'assets/js/calc-page.js'
 
 _img_hash = {}
 
@@ -63,13 +85,17 @@ def content_hash(rel):
 
 
 def stamp_html(text, missing=None):
-    """Rewrite every local image URL as path?v=<content hash>.
+    """Rewrite every local image and script URL as path?v=<content hash>.
 
-    A replaced photo keeps its filename, so without this a browser that
-    already holds the old bytes carries on showing them. Files that are not on
-    disk are left alone and collected in `missing` when one is passed.
+    A replaced photo keeps its filename, so without this a browser that already
+    holds the old bytes carries on showing them. The same is true of a script,
+    which is why the calculation modules have carried a hash from the start.
+    This is how the shared runtime gets one too: the tag in the skeleton is
+    written with no query at all and stamped from here, so there is no hand
+    typed hash anywhere to go stale. Files that are not on disk are left alone
+    and collected in `missing` when one is passed.
     """
-    def repl(m):
+    def image(m):
         rel = m.group(1)
         h = content_hash(rel)
         if h is None:
@@ -77,13 +103,27 @@ def stamp_html(text, missing=None):
                 missing.add(rel)
             return m.group(0)
         return '%s?v=%s' % (rel, h)
-    return IMG_PAT.sub(repl, text)
+
+    def script(m):
+        rel = m.group(2)
+        h = content_hash(rel)
+        if h is None:
+            if missing is not None:
+                missing.add(rel)
+            return m.group(0)
+        return '%s%s?v=%s%s' % (m.group(1), rel, h, m.group(4))
+
+    return JS_PAT.sub(script, IMG_PAT.sub(image, text))
 
 
 def versioned(rel):
     """A module URL carrying its own content hash, so a changed module can
     never be served from a stale cache under the old URL."""
-    return '%s?v=%s' % (rel, content_hash(rel))
+    h = content_hash(rel)
+    # without this a missing file becomes the literal URL 'x.js?v=None', which
+    # 404s in the browser and passes every check that only counts tags
+    assert h is not None, 'module not on disk: %s' % rel
+    return '%s?v=%s' % (rel, h)
 
 
 class Page(object):
@@ -241,6 +281,15 @@ def check(html, page):
         where.append(html.find(marker))
     want(all(w >= 0 for w in where) and all(a < b for a, b in zip(where, where[1:])),
          'module order')
+
+    # The shared runtime is inherited from the skeleton, so no record lists it
+    # and the module checks above cannot see it. It has to be there once, and
+    # ahead of everything else: each page script reads window.PBPage as it
+    # loads, and a runtime that arrived later would leave that undefined.
+    shared = '<script src="%s?v=' % SHARED_RUNTIME
+    want(html.count(shared) == 1, 'shared runtime once')
+    at = html.find(shared)
+    want(at >= 0 and all(at < w for w in where if w >= 0), 'shared runtime first')
     if where and min(where) >= 0:
         after_last = html.index('</script>', max(where)) + len('</script>')
         want(html[after_last:after_last + 10] == '\n<script>\n', 'page script after modules')
@@ -259,6 +308,7 @@ def check(html, page):
         want(bad not in html, label)
 
     want(not [m for m in IMG_PAT.finditer(html) if not m.group(2)], 'images stamped')
+    want(not [m for m in JS_PAT.finditer(html) if not m.group(3)], 'scripts stamped')
 
     for needle, label in page.checks:
         want(needle in html, label)
@@ -274,6 +324,278 @@ def build(page):
     for label, good in results:
         print('  %-28s %s' % (label, 'ok' if good else 'FAIL'))
     return all(good for _, good in results)
+
+
+# ============================================================================
+# THE SHARED CHROME. The nav and the footer's link columns are the same on
+# every page and have one owner, the skeleton. tools/sync-chrome.py copies
+# them to the hand-written pages and assemble() to the built ones, and
+# chrome_drift() is the guard both tools/verify.py and tests/build.test.py
+# run over every page: a page whose chrome differs from the skeleton's beyond
+# the two rules below is a FAIL.
+#
+# The two rules. The nav item for the page itself carries class="lnk active"
+# and aria-current="page"; only pages that are plain nav targets mark
+# themselves, so index.html, which the nav reaches by fragment, marks none.
+# And on index.html the nav's own-page fragments are same-page anchors, so
+# the countdown chip and About scroll instead of reloading whichever URL the
+# home page was served as. The footer keeps the absolute index.html#story on
+# every page, index included: that is today's behaviour, and changing it would
+# turn a reload into a scroll.
+#
+# Not owned: the disclosure paragraphs under the link columns, which carry
+# different legal wording on the legal pages on purpose, and the stylesheet,
+# which is three different families across the sixteen pages with no shared
+# subset a tool could pick (the ten marketing and legal pages share three
+# lines of the skeleton's 1,455). Two things in those regions ARE identical
+# on every page, and are guarded here but never synced: the paragraph naming
+# the Central Bank regulation, and the :root design tokens.
+# ============================================================================
+NAV_OPEN, NAV_CLOSE = '<nav id="nav">', '</nav>'
+FOOT_OPEN, DISCLOSURE = '<div class="foot-top">', '<div class="disclosure">'
+ANNOUNCE_OPEN = '<div class="announce">'
+SKIP_LINK = '<a class="skip" href="#main">'
+HOME = 'index.html'
+PLAIN = '<a class="lnk" href="%s">'
+ACTIVE = '<a class="lnk active" href="%s" aria-current="page">'
+LNK_PAT = re.compile(r'<a class="lnk[^"]*"[^>]*>')
+ACTIVE_PAT = re.compile(r'<a class="lnk active"(?=[^>]*href="([^"]+)")[^>]*>')
+CURRENT_PAT = re.compile(r'<a class="lnk"(?=[^>]*aria-current="page")(?=[^>]*href="([^"]+)")[^>]*>')
+HREF_PAT = re.compile(r'href="([^"]+)"')
+
+
+def _once(text, marker):
+    """Offset of the one occurrence of marker, or None unless it occurs exactly once."""
+    i = text.find(marker)
+    if i < 0 or text.find(marker, i + len(marker)) >= 0:
+        return None
+    return i
+
+
+def nav_span(text):
+    """(start, end) of the nav element, or None unless there is exactly one.
+    Found by index, never by a regex: the logo line inside is 200 characters
+    of SVG and a lazy `.*?` across it is a hazard that index arithmetic does
+    not have."""
+    i, j = _once(text, NAV_OPEN), _once(text, NAV_CLOSE)
+    if i is None or j is None or j < i:
+        return None
+    return i, j + len(NAV_CLOSE)
+
+
+def foot_top_span(text):
+    """(start, end) of the footer's link columns: from the start of the line
+    holding <div class="foot-top"> to the start of the line holding the
+    disclosure. None unless both occur exactly once, in that order."""
+    i, j = _once(text, FOOT_OPEN), _once(text, DISCLOSURE)
+    if i is None or j is None or j < i:
+        return None
+    return text.rfind('\n', 0, i) + 1, text.rfind('\n', 0, j) + 1
+
+
+def nav_items(nav):
+    """(href, tag) for every nav link, in order."""
+    out = []
+    for m in LNK_PAT.finditer(nav):
+        h = HREF_PAT.search(m.group(0))
+        out.append((h.group(1) if h else '', m.group(0)))
+    return out
+
+
+def nav_targets(nav):
+    """The pages that mark themselves current: every nav link to a page,
+    fragments excluded. Derived from the nav, so a new item makes its page
+    mark itself with no list to remember. tests/build.test.py pins the derived
+    set to the six names it is today, so a rule that quietly stopped matching
+    an item fails there rather than silently un-marking a page."""
+    return {h for h, tag in nav_items(nav) if '#' not in h}
+
+
+def active_hrefs(nav):
+    """The hrefs of the items carrying either half of the current marker."""
+    return [h for h, tag in nav_items(nav) if 'lnk active' in tag or 'aria-current="page"' in tag]
+
+
+def marker_whole(nav):
+    """True when every item carrying one half of the marker carries both."""
+    return all(('lnk active' in tag) == ('aria-current="page"' in tag) for h, tag in nav_items(nav))
+
+
+def neutral_nav(nav, page):
+    """The nav with the current marker removed from whichever item carries it,
+    whichever order its attributes are in, and, on the home page, the same-
+    page anchors written the way every other page writes them. Two navs that
+    differ only by the two rules compare equal after this."""
+    nav = ACTIVE_PAT.sub(lambda m: PLAIN % m.group(1), nav)
+    nav = CURRENT_PAT.sub(lambda m: PLAIN % m.group(1), nav)
+    if page == HOME:
+        nav = nav.replace('href="#', 'href="%s#' % HOME)
+    return nav
+
+
+def set_active(nav, href):
+    """The skeleton's nav with exactly one item marked current, or none. The
+    marker is moved, not the tag rebuilt, and every nav anchor is assumed to
+    carry exactly class and href; a skeleton whose marker cannot be found or
+    whose target is missing raises, because the skeleton is broken, not the
+    page."""
+    nav, n = ACTIVE_PAT.subn(lambda m: PLAIN % m.group(1), nav)
+    if n != 1:
+        raise ValueError('the skeleton nav marks %d items current, not one' % n)
+    if href:
+        if nav.count(PLAIN % href) != 1:
+            raise ValueError('no nav item for %s' % href)
+        nav = nav.replace(PLAIN % href, ACTIVE % href, 1)
+    return nav
+
+
+def localise(nav, page):
+    """On the home page the nav's own-page fragments are same-page anchors."""
+    return nav.replace('href="%s#' % HOME, 'href="#') if page == HOME else nav
+
+
+def chrome_for(skeleton, page):
+    """(nav, foot-top) the page should carry, from the skeleton's."""
+    i, j = nav_span(skeleton)
+    fi, fj = foot_top_span(skeleton)
+    nav = skeleton[i:j]
+    return localise(set_active(nav, page if page in nav_targets(nav) else None), page), skeleton[fi:fj]
+
+
+def _squash(s):
+    """Markup with the whitespace between tags removed, which is what the
+    renderer sees inside a grid: index.html's foot-brand is written over
+    four lines where every other page has one, and that is not a difference."""
+    return re.sub(r'>\s+<', '><', s)
+
+
+def _line_holding(text, marker):
+    i = text.find(marker)
+    if i < 0:
+        return None
+    return text[text.rfind('\n', 0, i) + 1:text.find('\n', i)].strip()
+
+
+def regulatory_line(text):
+    """The disclosure's first paragraph, whitespace collapsed: the sentence
+    naming the Central Bank regulation, identical on every page."""
+    i = text.find(DISCLOSURE)
+    m = re.search(r'<p>(.*?)</p>', text[i:], re.S) if i >= 0 else None
+    return re.sub(r'\s+', ' ', m.group(1)).strip() if m else None
+
+
+def root_tokens(text):
+    """The :root declarations, comments stripped, sorted: the design tokens."""
+    m = re.search(r':root\{(.*?)\}', text, re.S)
+    if not m:
+        return None
+    body = re.sub(r'/\*.*?\*/', '', m.group(1), flags=re.S)
+    return tuple(sorted(d.strip() for d in body.split(';') if d.strip()))
+
+
+def _describe(got, want):
+    """Why two blocks differ, readable: hrefs, then labels, then the first line."""
+    gh, wh = HREF_PAT.findall(got), HREF_PAT.findall(want)
+    if gh != wh:
+        return 'hrefs %s, expected %s' % ([h for h in gh if h not in wh] or gh[:4], [h for h in wh if h not in gh] or wh[:4])
+    gl, wl = re.findall(r'>([^<>]+)</a>', got), re.findall(r'>([^<>]+)</a>', want)
+    if gl != wl:
+        return 'labels %s, expected %s' % ([l for l in gl if l not in wl], [l for l in wl if l not in gl])
+    for a, b in zip(got.split('\n'), want.split('\n')):
+        if a != b:
+            return 'differs in markup only, first at: %s' % a.strip()[:80]
+    return 'differs in markup only'
+
+
+def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
+    """{page: [(kind, detail), ...]} for every page whose shared chrome differs
+    from the skeleton's. `sources` is {filename: text}: nothing is read or
+    written, so tests/build.test.py hands it a mutant as a dict with one
+    string changed. Never raises. A page whose blocks cannot be found is a
+    'structure' finding, because tools/verify.py writes its report after this
+    runs and a traceback here would leave the previous report standing.
+
+    Kinds: structure, nav (the block, marker neutralised), active (which item
+    is current), active-markup (both halves of the marker), foot-top, banner
+    (the announce bar and the skip link), regulatory, tokens."""
+    out = {}
+
+    def add(page, kind, detail):
+        out.setdefault(page, []).append((kind, detail))
+
+    skel = sources.get(skeleton)
+    if skel is None or nav_span(skel) is None or foot_top_span(skel) is None:
+        add(skeleton, 'structure', 'the skeleton is missing or has no single nav and foot-top block')
+        return out
+    sn, sf = nav_span(skel), foot_top_span(skel)
+    skel_nav = skel[sn[0]:sn[1]]
+    targets = nav_targets(skel_nav)
+    want = {
+        'banner: announce': _line_holding(skel, ANNOUNCE_OPEN),
+        'banner: skip link': _line_holding(skel, SKIP_LINK),
+        'regulatory': regulatory_line(skel),
+        'tokens': root_tokens(skel),
+    }
+    for page in sorted(sources):
+        text = sources[page]
+        n, f = nav_span(text), foot_top_span(text)
+        if n is None:
+            add(page, 'structure', 'no single <nav id="nav"> block')
+            continue
+        if f is None:
+            add(page, 'structure', 'no single foot-top block ahead of the disclosure')
+            continue
+        nav = text[n[0]:n[1]]
+        if neutral_nav(nav, page) != neutral_nav(skel_nav, skeleton):
+            add(page, 'nav', _describe(neutral_nav(nav, page), neutral_nav(skel_nav, skeleton)))
+        want_active = [page] if page in targets else []
+        if active_hrefs(nav) != want_active:
+            add(page, 'active', 'marked current: %s, expected %s' % (active_hrefs(nav) or 'none', want_active or 'none'))
+        if not marker_whole(nav):
+            add(page, 'active-markup', 'a current item carries both class="lnk active" and aria-current="page"')
+        if page == HOME and ('href="%s#' % HOME in nav or 'href="#story"' not in nav):
+            add(page, 'nav', 'the home page nav links its own sections as same-page anchors, #deadline and #story')
+        if _squash(text[f[0]:f[1]]) != _squash(skel[sf[0]:sf[1]]):
+            add(page, 'foot-top', _describe(text[f[0]:f[1]], skel[sf[0]:sf[1]]))
+        got = {
+            'banner: announce': _line_holding(text, ANNOUNCE_OPEN),
+            'banner: skip link': _line_holding(text, SKIP_LINK),
+            'regulatory': regulatory_line(text),
+            'tokens': root_tokens(text),
+        }
+        for key in want:
+            if got[key] != want[key]:
+                add(page, key.split(':')[0], '%s differs from the skeleton' % key)
+    return out
+
+
+def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
+    """{page: new text} for every hand-written page whose nav or foot-top has
+    to change to match the skeleton's. The skeleton and the pages assemble()
+    writes are never in the result: pagebuild owns those. The foot-top is
+    rewritten only when it differs beyond the whitespace between tags, so a
+    page that renders the same is left byte for byte as it is. Raises, before
+    anything is written, on a page whose blocks cannot be found."""
+    skel = sources[skeleton]
+    built = {p.out for p in PAGES.values()}
+    out = {}
+    for page in sorted(sources):
+        if page == skeleton or page in built:
+            continue
+        text = sources[page]
+        n, f = nav_span(text), foot_top_span(text)
+        if n is None or f is None:
+            raise ValueError('%s has no single nav and foot-top block' % page)
+        nav, foot = chrome_for(skel, page)
+        new = text
+        if text[n[0]:n[1]] != nav:
+            new = new[:n[0]] + nav + new[n[1]:]
+        f = foot_top_span(new)
+        if _squash(new[f[0]:f[1]]) != _squash(foot):
+            new = new[:f[0]] + foot + new[f[1]:]
+        if new != text:
+            out[page] = new
+    return out
 
 
 def main():

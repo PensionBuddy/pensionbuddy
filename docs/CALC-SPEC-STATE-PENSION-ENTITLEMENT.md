@@ -550,6 +550,22 @@ Every eligible result is also checked for internal consistency:
 `method2.weeklyCents` is named by `basis` (either, on a tie), and
 `annualCents` equals `weeklyCents × 52`.
 
+The built page is driven at these rows too, by `tests/page-probe.js` in the
+same run, under a clock pinned to 2026 so the drawdown years above stay on
+the birth slider: the five sliders are set through real input events, birth
+first because the entry-year bounds follow it, and every cell the page writes
+is read back against the figures above and against the module. Rows 1, 2, 3,
+8, 9, 10, 11, 13, 14 (second case), 15, 16 and 22 are driven, and so is the
+birth-to-entry clamp of S2. Six cases the sliders cannot reach stay
+module-only, and the probe prints the live bound or step that blocks each:
+row 4 and row 7 (an entry year below the slider's floor of birth + 16), rows
+5, 6 and 7 (a paid count that is not on the step of 52), row 12 (a 2024
+drawdown needs a 1958 birth, below the floor), and the first case of row 14
+(an entry year equal to the drawdown year, above the slider's ceiling). Rows
+17 to 21 have no page state. Row 2 is the page's shipped default, so its
+figures are in the static markup and prove the least; rows 1 and 9 are the
+ones that show the page writing a figure.
+
 ---
 
 ## S9. Changes to the reality check

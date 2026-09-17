@@ -19,24 +19,12 @@
   'use strict';
 
   var isNode = (typeof module === 'object' && module.exports);
+  var H = isNode ? require('./harness.js') : root.PBTest;
+  var t = H.suite('state-pension-entitlement');
+  var eq = t.eq, money = t.money;
+
   var SP = isNode ? require('../assets/js/state-pension.js') : root.PBStatePension;
   var E  = isNode ? require('../assets/js/state-pension-entitlement.js') : root.PBEntitlement;
-
-  var pass = 0, fail = 0, lines = [];
-
-  function eq(label, actual, expected) {
-    var ok = actual === expected;
-    if (ok) { pass++; } else { fail++; }
-    lines.push((ok ? '  ok   ' : '  FAIL ') + label +
-      (ok ? '' : '\n         expected ' + JSON.stringify(expected) +
-                  '\n         actual   ' + JSON.stringify(actual)));
-  }
-
-  function money(label, actualCents, expectedEuro) {
-    // compare in cents so nothing depends on float formatting
-    eq(label + ' = EUR ' + expectedEuro.toFixed(2),
-       actualCents, Math.round(expectedEuro * 100));
-  }
 
   /* The three non-eligible states must carry no weekly or annual figure
      anywhere, not just at the top level: a page that finds one nested under
@@ -707,30 +695,8 @@
     consistent('22.', r22);
   }
 
-  /* An uncaught throw would leave the runner with no report at all. Recording
-     it as a failure, with the last assertion that completed, keeps the report
-     flowing whether the module is missing or breaks partway through. */
-  try {
-    run();
-  } catch (err) {
-    var last = lines.length ? lines[lines.length - 1].split('\n')[0].replace(/^\s*(ok|FAIL)\s+/, '') : '(none)';
-    fail++;
-    lines.push('  FAIL  uncaught: ' + (err && err.message ? err.message : String(err)) +
-               '\n         after: ' + last);
-  }
-
-  // ------------------------------------------------------------------ report
-  // Same reporting contract as tests/state-pension.test.js, so one runner
-  // handles every file.
-  var summary = '\n' + (fail === 0 ? 'ALL PASS' : 'FAILURES') +
-                '  ' + pass + ' passed, ' + fail + ' failed';
-  var report = lines.join('\n') + summary;
-
-  if (isNode) {
-    console.log(report);
-    process.exit(fail === 0 ? 0 : 1);
-  } else {
-    root.__TEST_REPORT__ = report;
-    root.__TEST_FAILED__ = fail;
-  }
+  /* An uncaught throw is recorded by the harness as a failure after the last
+     assertion that completed, so the report keeps flowing whether a module is
+     missing or the calculation breaks partway through. */
+  run();
 }(typeof self !== 'undefined' ? self : this));

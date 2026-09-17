@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Run 12 — 2026-09-17 · the jargon buster games: Buddy's Run and Jargon Battle
+# Run 14 — 2026-09-17 · the jargon buster games: Buddy's Run and Jargon Battle
 
 Two mini-games on glossary.html, on branch `feature/jargon-buster-games`. The
 brief's prototype never arrived and Damian said to build without it, so both
@@ -49,6 +49,55 @@ nothing implies the State adds cash to the pot.
 - The site limit killed two workflow phases mid-run; the finished agents'
   results were recovered from the workflow journal and the rest continued
   from them, so nothing was rebuilt twice.
+# Run 13 — 2026-09-17 · one owner for the nav and the footer links
+
+Candidate 6 from the architecture review, flagged Speculative there and taken
+in two halves. The **stylesheet half was refused**: the "SHARED DESIGN SYSTEM
+(identical on every page)" banner is false on 12 of 16 pages. Against the
+skeleton's 1,455-line stylesheet the ten marketing and legal pages share 3
+lines, booking and thank-you share 33, and only the three built calculators
+share it all; the ten set h1 to h4 line-height 1.08 where the skeleton sets
+1.1. Syncing it would delete those pages' layout CSS and move every heading
+on ten pages. There is no marker separating shared from page CSS, so
+reconciling it is design work with your sign-off, not a refactor. The nav and
+footer halves were taken, guard first, then the sync.
+
+| Item | Status | Note |
+|---|---|---|
+| What had drifted | **Nothing, in the nav and the link columns** | Byte-identical on all 16 pages apart from which item is marked current and index.html's same-page anchors (`#story`, `#deadline`, deliberate: they work whether the home page is loaded as `/` or `/index.html`). The fan-out cost was authoring effort: the last three commits that touched them touched 16, 16 and 18 pages. |
+| The guard | **`pagebuild.chrome_drift()`, a FAIL in `tools/verify.py`, check 8 in `tests/build.test.py`** | Eight kinds of finding: `structure`, `nav` (the block, marker neutralised), `active` (the current item is the page's own, derived from the nav and pinned to the six pages it is today), `active-markup` (both halves of the marker), `foot-top` (whitespace between tags ignored, which is why index.html is not edited), `banner` (announce bar, skip link), and two things that are identical on all 16 and are guarded but never synced: `regulatory`, the disclosure's Central Bank sentence, and `tokens`, the 31 `:root` declarations. Never raises: a broken page is a finding, so verify's report is still written. |
+| Mutation-tested | **12 mutants, 12 caught**, permanent in `build.test.py` | An extra nav item, a relabelled one, the marker on the wrong item, aria-current dropped, the class dropped, index reverting to absolute anchors, two footer links swapped, a column heading changed, the Central Bank sentence changed, a token changed, the announce bar changed, a second nav. Plus the tree as it ships as the negative control. |
+| The sync | **`tools/sync-chrome.py`, same shape as `stamp-images.py`** | Edit the nav or the foot-top in `pension-calculator.html`, run it: the twelve hand-written pages follow; the three built pages follow on `pagebuild.py`, and `--check` names any that are behind. Pages come from `git ls-files`, every page is checked before any is written, `--check` exits 1 when stale. **Its first run changed zero bytes on every page**, which is the whole proof of no behaviour change. Tested end to end on a copy: `--check` clean, then 1 on a page that gained an item, then a plain run repairs it byte for byte. |
+| The cost | **One home for 28 editable strings per page** | Nav labels, the CTA, the footer headings and links are all editable in edit mode; an edit applied to a single page now shows as a FAIL in verify rather than staying put. `docs/EDIT-MODE.md` says so. A per-page nav variation is no longer expressible without a new rule in `pagebuild.py`. |
+| Not changed | **The disclosure paragraphs; the stylesheet; index's footer About link** | The disclosure carries different legal wording on the legal pages on purpose. The footer keeps the absolute `index.html#story` on index where the nav uses `#story`: today's behaviour, and collapsing it would turn a reload into a scroll. |
+| Tests | `build.test.py` 35 → **69 assertions** | verify.py **0 FAIL**, 16 pages. |
+
+---
+
+# Run 12 — 2026-09-17 · one test harness, one Chrome launch, and a test surface for the built pages
+
+Candidate 5 from the architecture review. Three suites carried their own `eq`,
+`money` and report block in two formats, each paid its own Chrome launch, and
+the only check that ever confirmed a built page shows the module's figures was
+ad hoc and gone. Driven test-first.
+
+| Item | Status | Note |
+|---|---|---|
+| Chrome launches | **4 → 1**, 5 → 1 with `--drift` | One parent page, one same-origin iframe per job, results copied up into one `<pre>`. Proved from outside: `tests/runner.test.py` points `CHROME` at a shim that counts launches. Per-suite frames rather than one document, so a suite runs with only its own modules and a module that fails to load is charged to the suite that needed it; measured, the frames cost nothing over one document. |
+| Runtime | **12.1 to 12.8 s → about 4 s** for everything, including the two new page probes | About 2.2 s of that is starting Chrome. The review's "roughly a quarter" was reached with the panel check's 735 real renders untouched: the loop itself costs under half a second; the old entitlement command was simply two launches. |
+| Report formats | **2 → 1** | `  ok   label` / `  FAIL label` with expected and actual on continuation lines, `  skip label  (reason)`, ALL PASS or FAILURES with the counts: the format the cent suites and `build.test.py` already used. compare-calc's `  PASS  employee  = 750` echo goes. `tests/harness.py` is the Python twin, used by both Python suites. |
+| Throw guard | **1 suite of 3 → every suite** | `tests/harness.js`: node's uncaughtException listener and the browser's capture-phase error listener both record the error as a FAIL after the last label that completed. A suite that dies reports how far it got. |
+| Assertions | **829, unchanged** (141 / 80 / 608), every label byte-identical in order | Each suite's node report was reduced to its labels before any edit and after the migration: empty diff for all three. Each suite is now also gated on its exact count, so a suite that ran nothing fails. |
+| Temp files in the repo root | **2 → 0** | The panel and drift probes were written into the root as throwaway pages; every probe is served from memory now, and `runner.test.py` asserts the two files are absent and the untracked set unchanged after a full run. |
+| Page probe, new | **`tests/page-probe.js`: 300 assertions on the reality check, 444 on the entitlement check**, 2 and 6 rows skipped with the live bound or step that blocks each | Drives the real built page's sliders through input events at the spec's worked examples (S9, S8) and reads back every cell. Three tiers: the spec's figures typed in by hand at rows that are not the shipped default; the module's figures through the page's own formatters on every sentence; structure, panels and the exact aria-valuetext of every slider. Every spec row is driven, skipped with a reason, or named module-only, and the probe asserts the three sets add up. The birth-to-entry clamp, which the panel check bypassed, is driven for the first time. |
+| Clock | **Pinned for the page probe** to the instant `render-diff/runpage.js` uses; real for the panel check | The birth slider's floor is this year minus 66, so which spec rows are reachable changes every 1 January. The pin is asserted through that floor, and a pin to 2027 is a passing run with the 2026 rows reported as skips. |
+| Mutation-tested | **11 faults, 11 caught**, permanent in `runner.test.py`; plus 12 in `harness.test.js` and `runner.test.py` for the harness itself | state-pension.js dropped from the entitlement frame; the modules loaded in the wrong order; a suite script that 404s; a parent page that never reports; a suite value changed; a pin that did not take; a page that stops writing the annual figure; the module and the page agreeing on a wrong maximum, which only the spec tier can see; a slider announcing different words; a finer slider step making skipped rows drivable; every one of them applied to the SERVED bytes and the repository untouched. Found by the tests, not by reasoning: a report longer than a 64 KB pipe written from node's exit handler is cut off; the harness writes from beforeExit instead. |
+| Spec rows the pages cannot reach | reality check: S9 rows 3, 6, 12; entitlement: S8 rows 4, 5, 6, 7, 12, 14 first case | Noted in both spec files with the bound or step that blocks each. |
+| CLI | unchanged, plus `harness` | All four suite forms, `--drift`, `node tests/<file>.test.js`. `PB_MUTATE`, `PB_BREAK`, `PB_CLOCK` are the test-only hooks. |
+| Untouched | the four calculation modules, `calc-page.js`, both page scripts, every page | Confirmed by diff. verify.py **0 FAIL**, 16 pages. |
+| Next | `--drift` still recomputes the relief band in Python, a third copy of that rule | Raised, not fixed here. |
+
+---
 
 # Run 11 — 2026-09-16 · the entitlement module's interface, narrowed
 

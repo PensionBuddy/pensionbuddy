@@ -11,26 +11,21 @@
 
    TONE: the two figures do the work. State which calculation is paid, by how
    much it differs, and stop. No pressure language, no urgency. */
-const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ENT = window.PBEntitlement;
 /* Pension age and the transition window belong to the shared module, which is
    loaded ahead of the entitlement one on this page. Read from there so this
    page, the reality check and both modules turn on the same two numbers. */
 const SP = window.PBStatePension;
 
-const $ = id => document.getElementById(id);
-const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
-const euro2 = v => '€' + v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/* Formatting, the slider fill and the wiring are the same on all five
+   calculators and live in assets/js/calc-page.js. pct is two decimals there,
+   which is exact for this page: the TCA percentage is a multiple of 2.5
+   whenever the count is a multiple of 52, and every slider guarantees that. */
+const { $, euro, euro2, num, yr, pct, paintSlider, wireRanges } = window.PBPage;
 /* the module's money is integer cents. Every figure it hands over carries a
    euro mirror beside it; a band's rate is the one that does not, so this is
    the conversion for that, and it is display, not calculation. */
 const euro2c = c => euro2(c / 100);
-const num = v => v.toLocaleString('en-IE');
-/* a year is a label, not a quantity, so it never takes a thousands separator */
-const yr = v => String(v);
-/* the TCA percentage is a multiple of 2.5 whenever the count is a multiple of
-   52, which every slider guarantees, so two decimals is exact */
-const pct = v => num(Math.round(v * 10000) / 100) + '%';
 
 /* The current year comes from the clock once, so the birth-year bounds and
    the entry-year ceiling move on 1 January without an edit. The module never
@@ -57,7 +52,7 @@ const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.';
 
 /* Screen readers otherwise announce a bare number, so each slider carries a
-   formatted aria-valuetext, matching the other calculators. */
+   formatted aria-valuetext. */
 const VALTEXT = {
   birth: v => 'born in ' + yr(v) + ', reaching 66 in ' + yr(drawdownFor(v)),
   entry: v => 'first paid PRSI in the ' + yr(v) + ' contribution year',
@@ -66,11 +61,7 @@ const VALTEXT = {
   homecaring: v => num(v) + ' HomeCaring Periods, ' + (v / 52) + ' years'
 };
 
-function paintSlider(el) {
-  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
-  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
-  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
-}
+const paint = el => paintSlider(el, VALTEXT);
 
 /* The entry-year bounds move with the birth year. When a change of birth year
    pushes the entry year outside them it is clamped to the nearest bound and
@@ -99,7 +90,7 @@ function syncEntryBounds() {
   entry.max = b.max;
   if (was < b.min) { entry.value = b.min; entryMoved = { year: b.min, which: 'earliest' }; }
   else if (was > b.max) { entry.value = b.max; entryMoved = { year: b.max, which: 'latest' }; }
-  paintSlider(entry);
+  paint(entry);
 }
 
 /* The band's range in words. The band comes back from the module carrying
@@ -248,14 +239,10 @@ function render() {
   entry.value = BIRTH_DEFAULT + ENTRY_DEFAULT_AFTER_BIRTH;
 })();
 
-document.querySelectorAll('input[type=range]').forEach(el => {
-  paintSlider(el);
-  el.addEventListener('input', () => {
-    if (el.id === 'birth') syncEntryBounds();
-    if (el.id === 'entry') entryMoved = null;
-    paintSlider(el);
-    render();
-  });
+wireRanges(VALTEXT, el => {
+  if (el.id === 'birth') syncEntryBounds();
+  if (el.id === 'entry') entryMoved = null;
+  render();
 });
 
 render();

@@ -387,6 +387,15 @@ both.
 
 Every assertion is exact to the cent. No tolerances.
 
+The built page is driven at these rows too, by `tests/page-probe.js` in the
+same run: the sliders are set through real input events and every cell the
+page writes is read back, against the figures above and against the module.
+Three rows the page cannot reach stay module-only, and the probe says so on
+every run: row 3 (519 is not on the slider's step of 52), row 6 (2,500 is
+above the slider's maximum of 2,080), and row 12 (the maximum annual figure
+is below the lowest standard, so no standard is ever covered; the probe
+asserts that the other way round, on every driven state).
+
 ---
 
 ## S10. Resolved

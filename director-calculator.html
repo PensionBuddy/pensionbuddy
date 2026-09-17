@@ -1800,10 +1800,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
 </div></footer>
+<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const $=id=>document.getElementById(id);
-const euro=v=>'€'+Math.round(v).toLocaleString('en-IE');
+/* Formatting, the slider fill, the wiring and the debounced live region are
+   the same on all five calculators and live in assets/js/calc-page.js. REDUCE
+   stays here: it is read by the tween engine below. */
+const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
+/* this page's own: the chart's top-of-axis label, which has a narrow gutter to
+   fit in, so a seven-figure fund is shown in thousands */
 const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE')+'k':euro(v);};
 
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
@@ -1880,10 +1885,10 @@ const chart={
   }
 };
 
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number */
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
+   Salary, pot and contribution have no wording of their own and take paintSlider's euro fallback. */
 const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
-function paintSlider(el){const min=+el.min||0,max=+el.max||100,v=+el.value;el.style.setProperty('--fill',((v-min)/(max-min))*100+'%');el.setAttribute('aria-valuetext',(VALTEXT[el.id]||euro)(v));}
-let srTimer=null;
+const paint=el=>paintSlider(el,VALTEXT);
 
 /* the maths (unchanged) */
 function calc(){
@@ -1891,7 +1896,7 @@ function calc(){
   const sal=+$('sal').value, pot=+$('pot').value, contrib=+$('contrib').value, g=+$('growth').value;
   $('ret').min=age+1;
   if(ret<=age){ret=age+1;$('ret').value=ret;}
-  paintSlider($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
+  paint($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
   $('ageV').textContent=age;
   $('retV').textContent=ret;
   $('salV').textContent=euro(sal);
@@ -1929,20 +1934,15 @@ function calc(){
   const v=[];
   for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);v.push(project(m,pot,monthly,mRate));}
   chart.setTarget(v,age,ret);
-  ['age','ret','sal','pot','contrib','growth'].forEach(function(id){paintSlider($(id));});  /* keep all fills in sync */
+  ['age','ret','sal','pot','contrib','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=p018>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  clearTimeout(srTimer);
-  srTimer=setTimeout(function(){$('srSummary').textContent='Projected pot at retirement '+euro(p018)+'. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':'');},700);
+  announce('Projected pot at retirement '+euro(p018)+'. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
-['age','ret','sal','pot','contrib','growth'].forEach(id=>{
-  const el=$(id);
-  el.addEventListener('input',()=>{paintSlider(el);calc();});
-  paintSlider(el);
-});
+wireRanges(VALTEXT,calc);
 calc();
 
 /* email-results capture (front-end only) */

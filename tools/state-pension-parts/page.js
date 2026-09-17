@@ -8,7 +8,6 @@
    TONE: the Pensions Council's figures do the work. State the difference,
    give it in euro and in words, and stop. No pressure language, no urgency,
    nothing that dramatises a number that is already plain enough. */
-const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SP = window.PBStatePension;
 
 /* The caveat card decides between floor and not-a-floor on the year the
@@ -24,23 +23,17 @@ const THIS_YEAR = new Date().getFullYear();
    neither can drift from the entitlement page, which reads the same
    constant. docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md S3 and S9. */
 
-const $ = id => document.getElementById(id);
-const euro = v => '€' + Math.round(v).toLocaleString('en-IE');
-const euro2 = v => '€' + v.toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const num = v => v.toLocaleString('en-IE');
+/* Formatting, the slider fill and the wiring are the same on all five
+   calculators and live in assets/js/calc-page.js. What is this page's own is
+   below: the wording of its two sliders, and render(). */
+const { $, euro, euro2, num, wireRanges } = window.PBPage;
 
 /* Screen readers otherwise announce a bare number, so each slider carries a
-   formatted aria-valuetext, matching the other three calculators. */
+   formatted aria-valuetext. */
 const VALTEXT = {
   contribs: v => num(v) + ' reckonable contributions, ' + (v / 52) + ' years',
   age: v => v + ' years old'
 };
-
-function paintSlider(el) {
-  const min = +el.min || 0, max = +el.max || 100, v = +el.value;
-  el.style.setProperty('--fill', ((v - min) / (max - min)) * 100 + '%');
-  if (VALTEXT[el.id]) el.setAttribute('aria-valuetext', VALTEXT[el.id](v));
-}
 
 /* Whole euro reads better in a sentence than euro and cents, but the cents
    matter in the headline figures, so the two are formatted differently on
@@ -150,9 +143,5 @@ function render() {
       num(res.shortBy) + ' more contributions would be needed to qualify.';
 }
 
-document.querySelectorAll('input[type=range]').forEach(el => {
-  paintSlider(el);
-  el.addEventListener('input', () => { paintSlider(el); render(); });
-});
-
+wireRanges(VALTEXT, render);
 render();
