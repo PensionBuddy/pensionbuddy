@@ -1512,6 +1512,40 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+
+/* ============================================================
+   ARCADE, the two jargon games. Additive: nothing above changes.
+   Cards are plain links first. On a wide screen the inline JS
+   borrows the click and plays the game in the stage below instead.
+   ============================================================ */
+.arcade{padding:48px 0 4px}
+.arc-head{max-width:660px;margin-bottom:26px}
+.arc-head h2{font-size:clamp(1.7rem,3.5vw,2.75rem);line-height:1.16;letter-spacing:-.012em;font-weight:600;margin:14px 0 0}
+.arc-head p{font-size:1.02rem;line-height:1.62;color:var(--ink-2);margin-top:12px}
+.arc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.arc-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line-2);border-radius:8px;overflow:hidden;transition:border-color .25s ease,background .25s ease}
+.arc-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.arc-card:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.arc-card[aria-current="true"]{border-color:var(--teal);background:var(--teal-50)}
+.arc-tile{display:flex;align-items:flex-end;justify-content:center;background:var(--teal-900);border-bottom:1px solid var(--line-2)}
+.arc-cv{display:block;width:256px;height:128px;max-width:100%;image-rendering:pixelated}
+.arc-body{display:flex;flex-direction:column;padding:22px 24px 18px}
+.arc-card h3{font-size:1.18rem;font-weight:600;letter-spacing:-.005em;margin-bottom:8px}
+.arc-d{font-size:.9rem;color:var(--ink-2);line-height:1.6}
+.arc-play{margin-top:auto;display:inline-flex;align-items:center;gap:7px;min-height:44px;font-weight:600;font-size:.92rem;color:var(--teal-700)}
+.arc-play svg{width:16px;height:16px;transition:transform .2s ease}
+.arc-card:hover .arc-play svg{transform:translateX(4px)}
+
+.arc-stage{margin-top:20px;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
+.arc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:9px 12px 9px 16px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.arc-now{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.14em;font-size:.68rem;font-weight:500;color:var(--ink-2)}
+.arc-acts{display:flex;align-items:center;gap:8px}
+.arc-act{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:8px;font-family:var(--font);font-size:.9rem;font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--line-2);cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.arc-act:hover{border-color:var(--teal);color:var(--teal-700)}
+.arc-act:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.arc-frame{display:block;width:100%;aspect-ratio:16/9;border:0;background:var(--teal-900)}
+@media(max-width:920px){.arc-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.arc-card,.arc-play svg,.arc-act{transition:none}}
 </style>
 </head>
 <body>
@@ -1538,6 +1572,42 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   <h1 class="legal" style="padding:0;margin:14px 0 12px;max-width:none">The pension jargon buster.</h1>
   <p class="reveal" style="font-size:18px;color:var(--ink-2);max-width:620px">Pensions come with a lot of acronyms. Here&rsquo;s what the common ones actually mean, in normal words.</p>
 </div></div>
+
+<section class="arcade" id="games"><div class="wrap">
+  <div class="arc-head">
+    <span class="eyebrow reveal"><span class="pip"></span>Learn it the fun way</span>
+    <h2 class="reveal">Two ways to learn the lingo.</h2>
+    <p class="reveal">Pick a game. Buddy gives you the facts; the free call is where the advice happens.</p>
+  </div>
+  <div class="arc-grid">
+    <a class="arc-card reveal" href="games/buddys-run.html" data-game="Buddy&rsquo;s Run">
+      <span class="arc-tile"><canvas class="arc-cv" id="arcCvRun" width="256" height="128" aria-hidden="true"></canvas></span>
+      <span class="arc-body">
+        <h3>Buddy&rsquo;s Run</h3>
+        <span class="arc-d">Collect the benefits, jump the excuses. Endless, three lives, best score kept.</span>
+        <span class="arc-play">Play <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </span>
+    </a>
+    <a class="arc-card reveal" href="games/jargon-battle.html" data-game="Jargon Battle">
+      <span class="arc-tile"><canvas class="arc-cv" id="arcCvBattle" width="256" height="128" aria-hidden="true"></canvas></span>
+      <span class="arc-body">
+        <h3>Jargon Battle</h3>
+        <span class="arc-d">A wild pension term appears. Pick the right meaning to bust the Jargon Blob.</span>
+        <span class="arc-play">Play <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </span>
+    </a>
+  </div>
+  <div class="arc-stage" id="arcStage" hidden>
+    <div class="arc-bar">
+      <span class="arc-now" id="arcNow">Buddy&rsquo;s Run</span>
+      <span class="arc-acts">
+        <a class="arc-act" id="arcFull" href="games/buddys-run.html">Full screen</a>
+        <button type="button" class="arc-act" id="arcClose">Close</button>
+      </span>
+    </div>
+    <iframe class="arc-frame" id="arcFrame" title="Pensionbuddy game" allow="fullscreen"></iframe>
+  </div>
+</div></section>
 
 <section style="padding-top:36px"><div class="wrap">
   <div class="gloss">
@@ -1587,6 +1657,72 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
 </div></footer>
+<script src="games/buddy-sprites.js"></script>
+<script>
+/* Arcade card art. The same sprite sheet the games themselves use, so the
+   picker shows the real Buddy rather than a separate illustration. */
+(function(){
+  var S=window.PBSprites;
+  if(!S||!S.draw){return;}
+  function ctxOf(id){
+    var cv=document.getElementById(id);
+    if(!cv||!cv.getContext){return null;}
+    var ctx=cv.getContext('2d');
+    if(!ctx){return null;}
+    ctx.imageSmoothingEnabled=false;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    return ctx;
+  }
+  var W=256,H=128,PAD=8;
+  var run=ctxOf('arcCvRun');
+  if(run){S.draw(run,S.buddy.idle[0],(W-S.buddy.w*4)/2,H-S.buddy.h*4-PAD,4,false);}
+  var bat=ctxOf('arcCvBattle');
+  if(bat){
+    S.draw(bat,S.buddy.idle[0],12,H-S.buddy.h*3-PAD,3,false);
+    S.draw(bat,S.blob.idle[0],136,H-S.blob.h*3-PAD,3,false);
+  }
+})();
+
+/* Play in place. Progressive enhancement: with no JS, or on a phone, each card
+   is a plain link and the game opens full window. On a wide screen the game
+   runs in the stage below the cards, which is why every link inside the games
+   carries target="_top". */
+(function(){
+  var stage=document.getElementById('arcStage'),
+      frame=document.getElementById('arcFrame'),
+      full=document.getElementById('arcFull'),
+      now=document.getElementById('arcNow'),
+      shut=document.getElementById('arcClose'),
+      cards=[].slice.call(document.querySelectorAll('.arc-card'));
+  if(!stage||!frame||!full||!now||!shut||!cards.length){return;}
+  var opener=null;
+  function calm(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);}
+  cards.forEach(function(card){
+    card.addEventListener('click',function(e){
+      if(window.innerWidth<720){return;}                       // phone: let the link do its job
+      if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button>0){return;}
+      e.preventDefault();
+      var href=card.getAttribute('href'), name=card.getAttribute('data-game');
+      cards.forEach(function(c){c.removeAttribute('aria-current');});
+      card.setAttribute('aria-current','true');
+      opener=card;
+      now.textContent=name;
+      frame.setAttribute('title',name);
+      full.setAttribute('href',href);
+      if(frame.getAttribute('src')!==href){frame.setAttribute('src',href);}
+      stage.hidden=false;
+      stage.scrollIntoView({behavior:calm()?'auto':'smooth',block:'start'});
+      frame.focus();
+    });
+  });
+  shut.addEventListener('click',function(){
+    frame.removeAttribute('src');
+    stage.hidden=true;
+    cards.forEach(function(c){c.removeAttribute('aria-current');});
+    if(opener){opener.focus();}
+  });
+})();
+</script>
 <script>
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 (function(){

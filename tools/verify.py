@@ -341,7 +341,8 @@ def screenshot(port, page, width, doc_height):
     in a window at least 500px wide, then cropped to the iframe with sips."""
     os.makedirs(SHOTS, exist_ok=True)
     h = max(812, min(int(doc_height or 900) + 40, 9000))
-    out = os.path.join(SHOTS, '%s-%d.png' % (page.replace('.html', ''), width))
+    # a page in a subfolder ("games/buddys-run.html") flattens to one filename
+    out = os.path.join(SHOTS, '%s-%d.png' % (page.replace('.html', '').replace('/', '-'), width))
     win_w = max(width, 500)
     if (win_w - width) % 2: win_w += 1          # even side margins so the centre crop lands exactly on the iframe
     chrome(['--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=4000', '--screenshot=%s' % out,
@@ -357,8 +358,29 @@ def screenshot(port, page, width, doc_height):
 
 SRC_PLACEHOLDERS = [r'\[LIABILITY_CAP_EUR\]', r'Template (document|notice|process)\.', r'Draft for legal review', r'<!--\s*DEVELOPER: replace', r'PLACEHOLDER=\'CALENDLY_URL\'']
 
+# Every page the site ships, as ROOT-relative paths: the root pages, plus the
+# arcade pages in games/ (Buddy's Run and Jargon Battle), which are real pages
+# a visitor can land on and so get audited exactly like the rest.
+PAGE_GLOBS = ('*.html', 'games/*.html')
+
+
+def all_pages():
+    return sorted(os.path.relpath(p, ROOT).replace(os.sep, '/')
+                  for pat in PAGE_GLOBS
+                  for p in glob.glob(os.path.join(ROOT, pat)))
+
+
+def is_root_page(page):
+    """False for a page that lives in a subfolder (games/*.html).
+
+    The game pages are deliberately chromeless: they are also shown inside the
+    iframe on glossary.html, so they carry no skip link, no site nav drawer, no
+    announcement bar and no four-column footer. Expectations about that chrome
+    are scoped to root pages rather than relaxed for everyone."""
+    return '/' not in page
+
+
 def static_checks(pages):
-    existing = set(os.listdir(ROOT))
     ids = {}
     src = {}
     for f in pages:
@@ -367,6 +389,9 @@ def static_checks(pages):
     res = {}
     for f in pages:
         t = src[f]; broken = []
+        # a relative href resolves against the page's own folder, so "../booking.html"
+        # from games/buddys-run.html is the site's booking.html
+        base = os.path.dirname(f)
         for attr, val in re.findall(r'\b(href|src)\s*=\s*"([^"]*)"', t, flags=re.I):
             v = val.strip()
             if not v or v.startswith(('http://', 'https://', '//', 'mailto:', 'tel:', 'data:', 'javascript:')) or "'+" in v or '${' in v: continue
@@ -375,8 +400,12 @@ def static_checks(pages):
                 continue
             path, _, frag = v.partition('#')
             path = path.split('?')[0]          # cache-busting query strings are not part of the file name
-            if not os.path.isfile(os.path.join(ROOT, path)): broken.append(v + ' (file not found)')
-            elif frag and path.endswith('.html') and frag not in ids.get(path, set()): broken.append(v + ' (missing #id in target)')
+            if not path:
+                continue
+            target = os.path.normpath(os.path.join(base, path.lstrip('/'))).replace(os.sep, '/')
+            if target.startswith('..'): broken.append(v + ' (resolves outside the site root)')
+            elif not os.path.isfile(os.path.join(ROOT, target)): broken.append(v + ' (file not found)')
+            elif frag and target.endswith('.html') and frag not in ids.get(target, set()): broken.append(v + ' (missing #id in target)')
         dup = [i for i in re.findall(r'\bid\s*=\s*"([^"]+)"', t) if t.count('id="%s"' % i) > 1]
         res[f] = {
             'brokenLinks': broken,
@@ -409,8 +438,10 @@ def evaluate(page, st, audits):
     if st['brokenLinks']: F.append(('links', '%d broken: %s' % (len(st['brokenLinks']), st['brokenLinks'][:4])))
     if st['duplicateIdsStatic']: F.append(('ids', 'duplicate ids in source: %s' % st['duplicateIdsStatic'][:5]))
     if st['sourcePlaceholders']: F.append(('A1/A2/A4/E5', 'placeholder/template tokens in source: %s' % st['sourcePlaceholders']))
+    root_page = is_root_page(page)
     if not st['mainInSource']: W.append(('D3', 'no <main> in source'))
-    if not st['skipInSource']: W.append(('D2', 'skip link not in source HTML (JS-injected)'))
+    # chrome-only expectation: the game pages ship deliberately chromeless
+    if root_page and not st['skipInSource']: W.append(('D2', 'skip link not in source HTML (JS-injected)'))
     # F2: referencing Fraunces is now correct — it is only a defect if the source
     # names the family but never asks the stylesheet for it (the run-1 orphan bug).
     if st['fraunces'] and not st['requestsFraunces']: W.append(('F2', 'Fraunces referenced in CSS but not requested from the font service'))
@@ -436,7 +467,8 @@ def evaluate(page, st, audits):
             if not (c['scriptInjected'] and c['cssInjected'] and c['fallbackDisplay'] == 'none' and c['widgetHeight'] > 300): F.append(('calendly', '@%d %s' % (w, c)))
         if page == 'director-calculator.html' and 'sal' in (a.get('rangesInClosedDetails') or []): F.append(('B1', '@%d salary slider hidden inside closed <details>' % w))
         sk = a.get('skipLink') or {}
-        if sk and not sk.get('targetExists'): F.append(('D3', '@%d skip link target missing' % w))
+        # chrome-only: only a root page is expected to carry a skip link at all
+        if root_page and sk and not sk.get('targetExists'): F.append(('D3', '@%d skip link target missing' % w))
     # width-invariant checks: evaluate once, on the first successful audit
     a = next((x for x in audits.values() if 'auditError' not in x), {})
     if a.get('needsInput'): W.append(('NEEDS-INPUT', ', '.join(a['needsInput'])))
@@ -449,7 +481,7 @@ def evaluate(page, st, audits):
         for k, label in (('bodyCopyOnFraunces', 'body paragraphs'), ('controlsOnFraunces', 'controls'), ('readoutsOnFraunces', 'numeric readouts')):
             if fo.get(k): W.append(('F2', '%d %s render in Fraunces (display type only)' % (fo[k], label)))
     # F5 — About must be reachable from the nav of every page
-    nav = a.get('navHrefs')
+    nav = a.get('navHrefs') if root_page else None       # chrome-only: the games have no site nav or footer
     if nav is not None and not any('#story' in (h or '') for h in nav + (a.get('footHrefs') or [])):
         W.append(('F5', 'no link to the story section in nav or footer'))
     # F4 — the qualifying form must gate the embed
@@ -472,7 +504,8 @@ def evaluate(page, st, audits):
             if not g.get('hasLiveError'): W.append(('F4', 'no aria-live error region on the form'))
             u = g.get('urlAfterSubmit') or ''
             if u and not ('email=' in u and ('utm_' in u or 'a1=' in u)): W.append(('F4', 'Calendly URL carries no prefill/persona tag: %s' % u[:90]))
-    if a.get('footTop') is False: F.append(('B3', 'page has no .foot-top footer'))
+    # chrome-only: the shared four-column footer belongs to the root pages
+    if root_page and a.get('footTop') is False: F.append(('B3', 'page has no .foot-top footer'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
     if a.get('countdownYears') and len(a['countdownYears']) > 1: W.append(('E1', 'countdown band mixes years %s' % a['countdownYears']))
     if a.get('fonts', {}).get('fraunces'): W.append(('F2', 'an element resolves to Fraunces at runtime'))
@@ -484,7 +517,8 @@ def evaluate(page, st, audits):
     if a.get('slidersMissingValuetext'): W.append(('D4', 'sliders without aria-valuetext %s' % a['slidersMissingValuetext']))
     if page in ('pension-calculator.html', 'director-calculator.html') and not a.get('ariaLiveRegions'): W.append(('D4', 'no aria-live region for results'))
     # width-specific
-    lw = a375.get('logoWordmark')
+    # chrome-only: the sticky site header, and with it the wordmark, exists on root pages
+    lw = a375.get('logoWordmark') if root_page else None
     if lw and (lw['fontSize'] == '0px' or lw['textWidth'] < 20): W.append(('C3', '@375 header wordmark hidden (font-size %s, width %s)' % (lw['fontSize'], lw['textWidth'])))
     d = a375.get('drawer')
     if d and d.get('opened'):
@@ -543,12 +577,12 @@ def main():
     ap.add_argument('--pages', nargs='*'); ap.add_argument('--no-shots', action='store_true'); ap.add_argument('--widths', default=','.join(map(str, AUDIT_WIDTHS)))
     args = ap.parse_args()
     if not os.path.exists(CHROME): sys.exit('Chrome not found at %s (set CHROME=...)' % CHROME)
-    pages = args.pages or sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*.html')))
+    pages = args.pages or all_pages()
     widths = [int(x) for x in args.widths.split(',')]
     os.makedirs(OUT, exist_ok=True)
     srv, port = start_server()
     t0 = time.time()
-    st_all = static_checks(sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*.html'))))
+    st_all = static_checks(all_pages())
     report = {'generated': time.strftime('%Y-%m-%d %H:%M:%S'), 'pages': {}}
     total_f = 0
     for page in pages:
