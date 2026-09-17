@@ -33,6 +33,10 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# tools/ is a scripts directory, so it goes after the stdlib imports above;
+# stamp-images.py imports pagebuild the same way
+sys.path.insert(0, os.path.join(ROOT, 'tools'))
+import pagebuild  # noqa: E402
 OUT = os.path.join(ROOT, 'verify-out')
 SHOTS = os.path.join(OUT, 'shots')
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
@@ -364,6 +368,9 @@ def static_checks(pages):
     for f in pages:
         t = open(os.path.join(ROOT, f), encoding='utf-8', errors='replace').read(); src[f] = t
         ids[f] = set(re.findall(r'\bid\s*=\s*"([^"]+)"', t))
+    # the shared chrome, nav and footer link columns, against the skeleton on
+    # every page at once: src holds all sixteen whatever --pages asked for
+    drift = pagebuild.chrome_drift(src)
     res = {}
     for f in pages:
         t = src[f]; broken = []
@@ -388,6 +395,7 @@ def static_checks(pages):
             'requestsFraunces': bool(re.search(r'fonts\.googleapis\.com[^"\']*Fraunces', t)),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
+            'chromeDrift': ['%s: %s' % d for d in drift.get(f, [])],
             'bytes': len(t.encode('utf-8')),
         }
     return res
@@ -405,6 +413,14 @@ def evaluate(page, st, audits):
     if st.get('editorLeak'):
         F.append(('EDITOR-LEAK', 'local copy-editor markup is in the source file: %s'
                   % ', '.join(st['editorLeak'][:6])))
+    # The nav and the footer's link columns are owned by pension-calculator.html
+    # and copied to every page (tools/sync-chrome.py, tools/pagebuild.py). A
+    # page whose copy differs, beyond its own current-item marker, is a page
+    # that missed an edit, and that is exactly the omission the guard exists
+    # to catch: a FAIL, not a warning.
+    if st.get('chromeDrift'):
+        F.append(('chrome', 'shared chrome differs from pension-calculator.html: %s'
+                  % '; '.join(st['chromeDrift'][:3])))
     a375 = audits.get(375, {}); a1440 = audits.get(1440, {}); a1360 = audits.get(1360, {})
     if st['brokenLinks']: F.append(('links', '%d broken: %s' % (len(st['brokenLinks']), st['brokenLinks'][:4])))
     if st['duplicateIdsStatic']: F.append(('ids', 'duplicate ids in source: %s' % st['duplicateIdsStatic'][:5]))

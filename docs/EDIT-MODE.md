@@ -100,6 +100,20 @@ locked, tell Claude and it can be changed in the HTML directly.
 Titles, meta descriptions and the text search engines see are not editable here
 either, since none of it appears on the page. Ask Claude for those.
 
+## The top menu and the footer's link columns
+
+The menu at the top and the four columns of links at the bottom are the same
+on every page, so they have one home: `pension-calculator.html`. You can still
+click and retype a menu label or a footer link on whichever page you are on.
+Claude applies that change to the one home and runs a command that copies it
+to the other twelve hand-written pages, then rebuilds the three calculator
+pages, instead of making the same edit sixteen times. If one of those labels
+were ever changed on a single page by hand, the verification tool would report
+that page as out of step rather than let it stay different.
+
+The small print under the link columns is not shared. Each page's legal wording
+is its own, deliberately, and no tool touches it.
+
 ## Why it cannot end up on the live site
 
 The tool never writes to your HTML files. It reads them, adds its markers to the
