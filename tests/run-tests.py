@@ -30,6 +30,12 @@ disk and served with its probe injected in memory, the way tools/verify.py
 serves its audits. The old runner wrote two throwaway copies into the root
 and removed them afterwards; tests/runner.test.py asserts they are gone.
 
+THE PAGE PROBE runs with each State Pension suite and is the test surface the
+two page scripts never had: it drives the REAL built page's sliders through
+input events at the spec's worked examples and reads back what the page
+wrote, against the spec's figures and the module's own. What it asserts is in
+tests/page-probe.js; the report is printed here like a suite's.
+
 The panel check runs with the entitlement suite and is the reason the deleted
 'before-transition' panel cannot silently become necessary again: it reads the
 REAL built page's birth-year bounds and asserts the page has a panel for every
@@ -47,8 +53,9 @@ prove the run is able to fail. Neither touches a file on disk.
 
     PB_MUTATE="<repo path>|<find>|<replace>"  one change to that file's SERVED
                                               bytes, module, suite or page
-    PB_BREAK=drop-module | swap-order | suite-404 | collector
+    PB_BREAK=drop-module | swap-order | suite-404 | collector | no-clock
                                               one deliberate fault in the run itself
+    PB_CLOCK=<iso instant>                    the instant the page probe pins
 """
 import argparse, base64, html, http.server, json, os, re, socket, subprocess, sys, threading, functools
 from urllib.parse import urlparse, parse_qs
@@ -70,11 +77,26 @@ SUITES = {
     'harness': ([], '/tests/harness.test.js', ['PBTest'], 59),
 }
 
-# The jobs that drive a REAL built page: job -> (page, the suite it runs with,
-# polls allowed before the parent gives up on it). 'drift' only runs on --drift.
+# The jobs that drive a REAL built page, each with the suite it runs with, the
+# probe tests/page-probe.js runs for it, whether the page's clock is pinned,
+# and the polls allowed before the parent gives up on it. 'drift' only runs on
+# --drift.
+#
+# THE CLOCK. Both State Pension pages read the year at load: the entitlement
+# page's birth slider starts at this year minus 66, so which of the spec's
+# worked examples its sliders can reach changes every 1 January. The page
+# probe therefore runs under a pinned clock, the same instant
+# tests/render-diff/runpage.js uses, and asserts the pin took. The panel check
+# keeps the real clock: its claim is about the bounds a reader gets today.
+CLOCK = os.environ.get('PB_CLOCK', '2026-09-16T12:00:00Z')
 PAGE_JOBS = {
-    'panel': ('state-pension-entitlement.html', 'state-pension-entitlement', 2400),
-    'drift': ('pension-calculator.html', None, 800),
+    'page-reality': dict(page='state-pension-reality-check.html', suite='state-pension',
+                         probe='page', clock=True, polls=800),
+    'page-entitlement': dict(page='state-pension-entitlement.html', suite='state-pension-entitlement',
+                             probe='page', clock=True, polls=800),
+    'panel': dict(page='state-pension-entitlement.html', suite='state-pension-entitlement',
+                  probe='panel', clock=False, polls=2400),
+    'drift': dict(page='pension-calculator.html', suite=None, probe='drift', clock=False, polls=800),
 }
 SUITE_POLLS = 800          # 25ms of virtual time each: 20s of idle for a suite
 BUDGET = 200000            # virtual ms for the whole launch; idle time is free
@@ -83,8 +105,8 @@ BUDGET = 200000            # virtual ms for the whole launch; idle time is free
 def jobs_for(suite, drift):
     names = sorted(SUITES) if suite == 'all' else [suite]
     jobs = list(names)
-    for job, (page, owner, polls) in PAGE_JOBS.items():
-        if job != 'drift' and (suite == 'all' or owner == suite):
+    for job, spec in PAGE_JOBS.items():
+        if job != 'drift' and (suite == 'all' or spec['suite'] == suite):
             jobs.append(job)
     if drift:
         jobs.append('drift')
@@ -154,100 +176,44 @@ window.addEventListener('error', function (e) {
 </script>
 """
 
-# Every probe ends the same way: one element the parent page can find.
-PUBLISH = """
-  var pre = document.createElement('pre');
-  pre.id = '__result__';
-  pre.textContent = btoa(unescape(encodeURIComponent(JSON.stringify(out))));
-  document.body.appendChild(pre);
+# A Date that answers a fixed instant to new Date() and Date.now() and is the
+# real Date for everything else: the countdown builds new Date(y, 9, 31, ...)
+# with six arguments and needs Date.parse and Date.UTC untouched. A subclass,
+# never a replacement, so instanceof and every prototype method hold. Copied
+# from tests/render-diff/runpage.js, which pins the same instant in node.
+CLOCK_JS = """<script>
+(function () {
+  var fixed = new Date(%s).getTime();
+  window.Date = class FixedDate extends Date {
+    constructor(...a) { if (a.length === 0) super(fixed); else super(...a); }
+    static now() { return fixed; }
+  };
+})();
+</script>
 """
-
-PANEL_PROBE = """
-<script>
-window.addEventListener('load', function () {
-  var PANELS = ['spHas', 'spNone', 'spUnfit', 'spBefore'];
-  var present = PANELS.filter(function (id) { return !!document.getElementById(id); });
-  var b = document.getElementById('birth');
-  var lo = +b.min, hi = +b.max, YEAR = new Date().getFullYear();
-  var AGE = window.PBStatePension.PENSION_AGE;
-  var COUNTS = [[0,0,0], [468,260,0], [520,0,0], [1560,260,0], [2600,1040,1040]];
-  var states = {}, shown = {}, errors = [], renders = 0;
-  for (var birth = lo; birth <= hi; birth++) {
-    var emin = birth + 16, emax = Math.min(YEAR, birth + AGE - 1);
-    var entries = [emin, Math.floor((emin + emax) / 2), emax];
-    for (var e = 0; e < entries.length; e++) {
-      for (var c = 0; c < COUNTS.length; c++) {
-        document.getElementById('birth').value = birth;
-        var en = document.getElementById('entry');
-        en.min = emin; en.max = emax; en.value = entries[e];
-        document.getElementById('paid').value = COUNTS[c][0];
-        document.getElementById('credited').value = COUNTS[c][1];
-        document.getElementById('homecaring').value = COUNTS[c][2];
-        var before = window.__errs.length;
-        try {
-          document.getElementById('paid').dispatchEvent(new Event('input', {bubbles: true}));
-        } catch (err) {
-          window.__errs.push((err && err.message) || String(err));
-        }
-        if (window.__errs.length > before) {
-          errors.push(birth + '/' + entries[e] + '/' + c + ': ' + window.__errs[window.__errs.length - 1]);
-        }
-        renders++;
-        states[window.PBEntitlement.entitlement({
-          paid: COUNTS[c][0], credited: COUNTS[c][1], homeCaring: COUNTS[c][2],
-          entryYear: entries[e], drawdownYear: birth + AGE
-        }).state] = 1;
-        shown[present.filter(function (id) {
-          return !document.getElementById(id).hidden;
-        }).join('+') || '(none)'] = 1;
-      }
-    }
-  }
-  var out = { kind: 'panel', data: {
-    birthMin: lo, birthMax: hi, renders: renders,
-    panelsInPage: present, statesReachable: Object.keys(states).sort(),
-    panelsShown: Object.keys(shown).sort(),
-    errorCount: errors.length, errors: errors.slice(0, 5)
-  } };
-%(publish)s
-});
-</script>""" % {'publish': PUBLISH}
 
 # Same relief inputs, asked of the real calculator page and of the module.
 DRIFT_CASES = [(35, 50000, 1000, 40), (29, 40000, 900, 20),
                (45, 120000, 3000, 40), (62, 200000, 5000, 40)]
 
-DRIFT_PROBE = """
-<script>
-window.addEventListener('load', function () {
-  function setR(id, v) { var el = document.getElementById(id); if (!el) return; el.value = v;
-    el.dispatchEvent(new Event('input', {bubbles: true})); }
-  function flush() { if (typeof anims === 'object') { for (var k in anims) { anims[k].cur = anims[k].target; } } }
-  var rows = [];
-  function r(age, earn, monthly, rate) {
-    setR('age', age); setR('earn', earn); setR('mine', monthly);
-    var btn = document.getElementById(rate === 40 ? 't40' : 't20'); if (btn) btn.click();
-    flush();
-    var txt = document.getElementById('reliefOut').textContent;
-    var m = txt.match(/covers the other €([\\d,]+)/);
-    rows.push({age: age, earn: earn, monthly: monthly, rate: rate,
-               pageRelief: m ? Number(m[1].replace(/,/g, '')) : null});
-  }
-  %(calls)s;
-  var out = { kind: 'drift', rows: rows, errors: window.__errs };
-%(publish)s
-});
-</script>""" % {'calls': ';'.join('r(%d,%d,%d,%d)' % c for c in DRIFT_CASES), 'publish': PUBLISH}
-
-PROBES = {'panel': PANEL_PROBE, 'drift': DRIFT_PROBE}
+PROBE_TAG = '<script src="/tests/page-probe.js"></script>\n'
+HARNESS_TAG = '<script src="/tests/harness.js"></script>\n'
 
 
-def page_document(page, probe):
-    """A real page from disk with a probe injected, in memory only."""
+def page_document(page, probe, clock):
+    """A real page from disk with its probe injected, in memory only: the
+    error capture and, when asked, the clock pin at the top of <head>, ahead
+    of every script the page loads; the harness for the page probe; and
+    tests/page-probe.js at the end of <body>."""
     src = open(os.path.join(ROOT, page), encoding='utf-8', errors='replace').read()
     src = mutated(page, src)
-    src = re.sub(r'(<head[^>]*>)', lambda m: m.group(1) + HEAD_JS, src, count=1, flags=re.I)
-    return src.replace('</body>', PROBES[probe] + '</body>', 1)
+    head = HEAD_JS
+    if clock and BREAK != 'no-clock':
+        head = CLOCK_JS % json.dumps(clock) + head
+    if probe == 'page':
+        head += HARNESS_TAG
+    src = re.sub(r'(<head[^>]*>)', lambda m: m.group(1) + head, src, count=1, flags=re.I)
+    return src.replace('</body>', PROBE_TAG + '</body>', 1)
 
 
 # The parent page. Frames are opened one at a time: they share the renderer
@@ -315,8 +281,13 @@ def run_page(jobs):
         if name in SUITES:
             specs.append({'name': name, 'url': '/__suite/' + name, 'polls': SUITE_POLLS})
         else:
-            page, _, polls = PAGE_JOBS[name]
-            specs.append({'name': name, 'url': '/%s?probe=%s' % (page, name), 'polls': polls})
+            spec = PAGE_JOBS[name]
+            url = '/%s?probe=%s' % (spec['page'], spec['probe'])
+            if spec['clock']:
+                url += '&clock=' + CLOCK
+            if spec['probe'] == 'drift':
+                url += '&cases=' + json.dumps(DRIFT_CASES, separators=(',', ':'))
+            specs.append({'name': name, 'url': url, 'polls': spec['polls']})
     return RUN_PAGE % {'jobs': json.dumps(specs),
                        'collector_broken': 'true' if BREAK == 'collector' else 'false'}
 
@@ -364,8 +335,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return self.send(suite_frame(name))
         rel = u.path.lstrip('/')
         if 'probe' in q and rel.endswith('.html') and os.path.isfile(os.path.join(ROOT, rel)):
-            return self.send(page_document(rel, q['probe'][0]))
-        if MUTATE and os.path.isfile(os.path.join(ROOT, rel)):
+            return self.send(page_document(rel, q['probe'][0], q.get('clock', [None])[0]))
+        if MUTATE and MUTATE.split('|', 1)[0].strip('/') == rel and os.path.isfile(os.path.join(ROOT, rel)):
+            # only the mutated file is served from here; everything else, images
+            # included, goes through the static handler as bytes
             text = open(os.path.join(ROOT, rel), encoding='utf-8', errors='replace').read()
             return self.send(mutated(rel, text), TYPES.get(os.path.splitext(rel)[1], 'text/plain'))
         return super().do_GET()
@@ -477,6 +450,19 @@ def report_drift(r):
     return 0 if bad == 0 else 1
 
 
+def report_page(name, r):
+    """The page probe's own report, made inside the real page by the harness."""
+    page = PAGE_JOBS[name]['page']
+    print('\nPAGE PROBE  %s%s' % (page, '  (clock pinned to %s)' % CLOCK if PAGE_JOBS[name]['clock'] else ''))
+    if r is None or r.get('error'):
+        print('  FAIL %s' % (r or {}).get('error', 'no result from the frame'))
+        return 1
+    rep = r['report']
+    print(rep['text'])
+    print('errors: ' + json.dumps(r.get('errors', [])))
+    return 0 if (rep['failed'] == 0 and rep['passed'] > 0) else 1
+
+
 REPORTERS = {'panel': report_panel, 'drift': report_drift}
 
 
@@ -501,6 +487,8 @@ def main():
         r = results.get(name)
         if name in SUITES:
             rc |= report_suite(name, r)
+        elif PAGE_JOBS[name]['probe'] == 'page':
+            rc |= report_page(name, r)
         else:
             rc |= REPORTERS[name](r)
     print('\n%s' % ('ALL SUITES PASS' if rc == 0 else 'FAILURES ABOVE'))

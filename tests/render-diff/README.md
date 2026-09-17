@@ -16,7 +16,10 @@ node sweep.js compare --axes --corners    # against HEAD, i.e. "does my working 
 
 This is **not** part of `python3 tests/run-tests.py`. It needs a baseline to
 compare against, and a full entitlement sweep is over an hour of CPU. Reach for
-it when a change claims to be a refactor.
+it when a change claims to be a refactor. The runner has its own probe of the
+two State Pension pages, `tests/page-probe.js`, which asserts the page against
+the spec's worked examples and the module rather than against a baseline; it
+pins the same instant `runpage.js` does, and it borrows the traps below.
 
 | file | what it does |
 |---|---|

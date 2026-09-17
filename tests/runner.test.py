@@ -201,6 +201,58 @@ def chrome():
     eq('7. with the one failure', 'FAILURES  140 passed, 1 failed' in out, True)
     eq('7. and the repository is untouched by it', untracked(), before)
 
+    # ------------------------------------------------------------------ 8
+    # The page probe runs with its suite, under a pinned clock, and can fail
+    # in each of the ways it is meant to. Every mutation is to the SERVED
+    # bytes of the built page or its module; the repository is not touched.
+    launches, rc, out = chrome_runs(tmp, ['state-pension'])
+    eq('8. the reality-check probe runs with its suite, in the one launch', launches, 1)
+    eq('8. and passes', rc, 0)
+    eq('8. under the pinned clock', 'PAGE PROBE  state-pension-reality-check.html  (clock pinned to 2026-09-16T12:00:00Z)' in out, True)
+    eq('8. skipping the rows the sliders cannot reach, with the bound that blocks each',
+       'skip S9 row 6  (2500 is not on the contribs step of 52; 2500 is outside contribs 0 to 2080)' in out, True)
+    eq('8. the entitlement probe did not run with it', 'PAGE PROBE  state-pension-entitlement.html' in out, False)
+
+    launches, rc, out = chrome_runs(tmp, ['state-pension-entitlement'], {'PB_CLOCK': '2027-06-01T12:00:00Z'})
+    eq('8. a later clock passes: the rows it puts out of reach are skipped, not failed', rc, 0)
+    eq('8. the birth floor moved with the clock', 'ok   clock: the birth floor follows the pinned year' in out, True)
+    eq('8. and a 2026 drawdown row is now reported unreachable',
+       'skip S8 row 1  (birth 1960 is outside the slider 1961 to 2009 (drawdown 2026))' in out, True)
+    eq('8. while the 2028 drawdown row is still driven', 'ok   S8 row 2: weekly, the spec figure' in out, True)
+
+    launches, rc, out = chrome_runs(tmp, ['state-pension-entitlement'],
+                                    {'PB_CLOCK': '2029-06-01T12:00:00Z', 'PB_BREAK': 'no-clock'})
+    eq('8. a pin that did not take fails the probe', rc, 1)
+    eq('8. on the bound the page derives from the year', 'FAIL clock: the birth floor follows the pinned year' in out, True)
+
+    # omission: the page stops writing the annual figure
+    launches, rc, out = chrome_runs(tmp, ['state-pension-entitlement'],
+                                    {'PB_MUTATE': "state-pension-entitlement.html|$('spAnnual').textContent = euro(award.annual);|"})
+    eq('8. a page that stops writing a headline cell fails', rc, 1)
+    eq('8. at a row that is not the shipped default', 'FAIL S8 row 1: annual, the spec figure' in out, True)
+
+    # module and page agreeing on a wrong number: only the spec tier can see it
+    launches, rc, out = chrome_runs(tmp, ['state-pension'],
+                                    {'PB_MUTATE': 'assets/js/state-pension.js|MAX_WEEKLY_CENTS = 29930|MAX_WEEKLY_CENTS = 29940'})
+    eq('8. the module and the page agreeing on a wrong maximum fails', rc, 1)
+    eq('8. on the spec figure', 'FAIL S9 row 1, 7, 8, 9, 10: weekly, the spec figure' in out, True)
+    eq('8. while the module tier, which can only agree with itself, still passes',
+       'ok   S9 row 1, 7, 8, 9, 10: weekly is the module figure' in out, True)
+
+    # a slider announcing the wrong words
+    launches, rc, out = chrome_runs(tmp, ['state-pension'],
+                                    {'PB_MUTATE': "state-pension-reality-check.html|' years old'|' years of age'"})
+    eq('8. a slider that announces different words fails', rc, 1)
+    eq('8. on its aria-valuetext', 'FAIL S9 row 1, 7, 8, 9, 10: age aria-valuetext' in out, True)
+
+    # a skip reason that stops being true: the step changes, the rows get driven
+    launches, rc, out = chrome_runs(tmp, ['state-pension-entitlement'],
+                                    {'PB_MUTATE': 'state-pension-entitlement.html|id="paid" min="0" max="2600" step="52"|id="paid" min="0" max="2600" step="1"'})
+    eq('8. a finer paid step makes the off-step rows reachable, and they are driven', 'ok   S8 row 5: the yearly average the spec works out' in out, True)
+    eq('8. not skipped', 'skip S8 row 5' in out, False)
+    eq('8. and they pass against the module', rc, 0)
+    eq('8. the repository is untouched by any of it', untracked(), before)
+
 
 if __name__ == '__main__':
     run()
