@@ -37,11 +37,13 @@ SUITES = {
                       '/tests/state-pension.test.js', ['PBStatePension']),
     'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],
                                   '/tests/state-pension-entitlement.test.js', ['PBStatePension', 'PBEntitlement']),
+    'harness': ([], '/tests/harness.test.js', ['PBTest']),
 }
 
 HARNESS = """<!doctype html><meta charset="utf-8"><title>tests</title><body>
 <script>window.__ERRS__=[];window.addEventListener('error',function(e){
   window.__ERRS__.push((e.message||e.type)+' @'+(e.filename||'').split('/').pop()+':'+e.lineno);},true);</script>
+<script src="/tests/harness.js"></script>
 %(scripts)s
 <script src="%(test)s"></script>
 <script>
@@ -49,8 +51,9 @@ HARNESS = """<!doctype html><meta charset="utf-8"><title>tests</title><body>
   pre.id = '__out__';
   var diag = '\\nloaded: ' + (%(diag)s) +
              '\\nerrors: ' + JSON.stringify(window.__ERRS__);
-  pre.textContent = (window.__TEST_FAILED__ === 0 ? 'OK\\n' : 'FAILED\\n') +
-                    (window.__TEST_REPORT__ || '(no report)') + diag;
+  var r = window.PBTest ? window.PBTest.report() : null;
+  pre.textContent = (r && r.failed === 0 && r.passed > 0 ? 'OK\\n' : 'FAILED\\n') +
+                    (r ? r.text : '(no report)') + diag;
   document.body.appendChild(pre);
 </script></body>"""
 

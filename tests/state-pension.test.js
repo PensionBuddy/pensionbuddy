@@ -12,28 +12,17 @@
 
    Every assertion is exact to the cent. No tolerances anywhere: the two worked
    examples in the brief are exact figures and the gap arithmetic is plain
-   subtraction, so an approximate match would be hiding something. */
+   subtraction, so an approximate match would be hiding something. eq is the
+   harness's strict comparison and money compares whole cents. */
 (function (root) {
   'use strict';
 
-  var SP = (typeof module === 'object' && module.exports)
-    ? require('../assets/js/state-pension.js') : root.PBStatePension;
+  var isNode = (typeof module === 'object' && module.exports);
+  var H = isNode ? require('./harness.js') : root.PBTest;
+  var t = H.suite('state-pension');
+  var eq = t.eq, money = t.money;
 
-  var pass = 0, fail = 0, lines = [];
-
-  function eq(label, actual, expected) {
-    var ok = actual === expected;
-    if (ok) { pass++; } else { fail++; }
-    lines.push((ok ? '  ok   ' : '  FAIL ') + label +
-      (ok ? '' : '\n         expected ' + JSON.stringify(expected) +
-                  '\n         actual   ' + JSON.stringify(actual)));
-  }
-
-  function money(label, actualCents, expectedEuro) {
-    // compare in cents so nothing depends on float formatting
-    eq(label + ' = EUR ' + expectedEuro.toFixed(2),
-       actualCents, Math.round(expectedEuro * 100));
-  }
+  var SP = isNode ? require('../assets/js/state-pension.js') : root.PBStatePension;
 
   // ---------------------------------------------------------------- 1, 2, 5
   // The two worked examples supplied with the brief, plus the 520 boundary,
@@ -264,19 +253,4 @@
   var threw = false;
   try { SP.floorStatus(SP.statePension(0), 40, 2026); } catch (e) { threw = true; }
   eq('17. an ineligible result throws rather than being captioned', threw, true);
-
-  // ------------------------------------------------------------------ report
-  // Same reporting contract as tests/compare-calc.test.js, so one runner
-  // handles both files.
-  var summary = '\n' + (fail === 0 ? 'ALL PASS' : 'FAILURES') +
-                '  ' + pass + ' passed, ' + fail + ' failed';
-  var report = lines.join('\n') + summary;
-
-  if (typeof module === 'object' && module.exports) {
-    console.log(report);
-    process.exit(fail === 0 ? 0 : 1);
-  } else {
-    root.__TEST_REPORT__ = report;
-    root.__TEST_FAILED__ = fail;
-  }
 }(typeof self !== 'undefined' ? self : this));

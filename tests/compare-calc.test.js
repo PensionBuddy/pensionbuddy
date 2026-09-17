@@ -19,23 +19,16 @@
 (function (root) {
   'use strict';
 
-  var Compare = (typeof module === 'object' && module.exports)
-    ? require('../assets/js/autoenrolment.js') : root.PBCompare;
-  var Relief = (typeof module === 'object' && module.exports)
-    ? require('../assets/js/pension-tax-relief.js') : root.PBRelief;
+  var isNode = (typeof module === 'object' && module.exports);
+  var H = isNode ? require('./harness.js') : root.PBTest;
+  // the modules return euro floats, compared to the cent: a drift of even
+  // 1c fails. The tolerance is declared once, here, and applies to numbers
+  // only; the harness's own test asserts it is applied.
+  var t = H.suite('compare', { tolerance: 0.005 });
+  var eq = t.eq, group = t.group;
 
-  var pass = 0, fail = 0, lines = [];
-
-  function eq(label, actual, expected) {
-    // money compared to the cent, so a drift of even 1c fails
-    var ok = Math.abs(actual - expected) < 0.005;
-    (ok ? pass++ : fail++);
-    lines.push((ok ? '  PASS  ' : '  FAIL  ') + label +
-      (ok ? '  = ' + expected : '  expected ' + expected + ', got ' + actual));
-    return ok;
-  }
-
-  function group(name) { lines.push(''); lines.push(name); }
+  var Compare = isNode ? require('../assets/js/autoenrolment.js') : root.PBCompare;
+  var Relief = isNode ? require('../assets/js/pension-tax-relief.js') : root.PBRelief;
 
   // ---------------------------------------------------------------- case 1
   group('CASE 1  salary EUR 50,000, phase year 1  (worked example from brief)');
@@ -301,15 +294,4 @@
   eq('55 to 59', Relief.reliefBand(55), 0.35);
   eq('60 and over', Relief.reliefBand(60), 0.40);
   eq('earnings cap', Relief.EARN_CAP, 115000);
-
-  var summary = '\n' + (fail === 0 ? 'ALL PASS' : 'FAILURES') + '  ' + pass + ' passed, ' + fail + ' failed';
-  var report = lines.join('\n') + summary;
-
-  if (typeof module === 'object' && module.exports) {
-    console.log(report);
-    process.exit(fail === 0 ? 0 : 1);
-  } else {
-    root.__TEST_REPORT__ = report;
-    root.__TEST_FAILED__ = fail;
-  }
 }(typeof self !== 'undefined' ? self : this));
