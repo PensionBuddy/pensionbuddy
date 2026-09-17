@@ -16,11 +16,11 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type":"Question","name":"What will I actually walk away with?","acceptedAnswer":{"@type":"Answer","text":"A clear picture of what you already have, what it is likely to be worth at 66, and the one or two things worth doing about it. Written down, so you are not relying on memory a week later."}}, {"@type": "Question", "name": "Is the first chat really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=IBM+Plex+Mono:wght@400;500;600&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Fraunces + Hanken Grotesk + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
+   Inter + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
   /* canvas + surfaces */
@@ -40,13 +40,13 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Hanken Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
   --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
-  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -528,27 +528,30 @@ section:has(.tcol){padding-top:72px}
 
 /* ============================================================
    PB-SONA, refinement layer
-   Three faces (Fraunces / Hanken Grotesk / IBM Plex Mono) · keylines instead of shadows
+   Two faces (Inter / IBM Plex Mono) · keylines instead of shadows
    one radius family · accent as wash · ambient motion
    ============================================================ */
 
-/* --- 1. Type: Hanken Grotesk carries the page, mono carries the structure --- */
+/* --- 1. Type: Inter carries the page, mono carries the structure --- */
 body{font-size:.935rem;line-height:1.65;letter-spacing:0}
-/* F2: display type is Fraunces (opsz 144, the display cut). A serif at
-   headline size needs far looser tracking than Sora did - the old -.03/-.035em
-   collided the letterforms - and a little more leading for its descenders. */
-h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:-.012em}
-/* the wordmark is a brand mark, not display copy: it stays on the body face */
-.logo{font-family:var(--font);letter-spacing:-.03em}
-h1{line-height:1.07;font-weight:600}
-h2{line-height:1.15;font-weight:600}
-h3,h4{line-height:1.24;font-weight:600;letter-spacing:-.005em}
-
-.hero h1,.aud-hero h1,.lead h1,.page-head h1{
-  font-size:clamp(2.35rem,5.4vw,4.25rem);line-height:1.07;letter-spacing:-.015em;font-weight:600}
-.sec-head h2{font-size:clamp(1.7rem,3.5vw,2.75rem);line-height:1.16;letter-spacing:-.012em;font-weight:600}
-.calc-copy h2,.about h2,.final h2,.callout h2{
-  font-size:clamp(1.55rem,3.1vw,2.5rem);line-height:1.16;letter-spacing:-.012em;font-weight:600}
+/* v3: ONE heading recipe, reused everywhere. Inter 800, tight tracking, three
+   fixed sizes on the site's own breakpoints (560 / 920, the two it already
+   leans on) - no fluid clamp and no per-section sizing. Every selector that
+   used to carry its own headline size is named here so it takes these and
+   nothing else. The wordmark is a brand mark, not display copy. */
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;letter-spacing:-.03em}
+.logo{font-family:var(--font);font-weight:800;letter-spacing:-.03em}
+h1,.hero h1,.aud-hero h1,.lead h1,.page-head h1,.phead h1{font-size:34px;line-height:1.06;letter-spacing:-.03em;font-weight:800}
+h2,.sec-head h2,.calc-copy h2,.about h2,.final h2,.callout h2,.team-head h2,.tick h2,.legal h2,.panel h2,.cta-card h2,.book-head h2,.arc-head h2,.magnet h2{font-size:28px;line-height:1.14;letter-spacing:-.025em;font-weight:800}
+h3,h4,.aud-card h3,.step h3,.pain h3,.proof h3,.cover h3,.chart-card h3,.assume h3,.team-feature .cap h3,.gterm h2,.magnet .ok h3,.cal-fallback h3,.benefit h3,.vs-card h3,.bothcard h3,.arc-card h3,.legal h3{font-size:20px;line-height:1.24;letter-spacing:-.02em;font-weight:800}
+@media(min-width:561px){
+  h1,.hero h1,.aud-hero h1,.lead h1,.page-head h1,.phead h1{font-size:46px}
+  h2,.sec-head h2,.calc-copy h2,.about h2,.final h2,.callout h2,.team-head h2,.tick h2,.legal h2,.panel h2,.cta-card h2,.book-head h2,.arc-head h2,.magnet h2{font-size:34px}
+}
+@media(min-width:921px){
+  h1,.hero h1,.aud-hero h1,.lead h1,.page-head h1,.phead h1{font-size:68px}
+  h2,.sec-head h2,.calc-copy h2,.about h2,.final h2,.callout h2,.team-head h2,.tick h2,.legal h2,.panel h2,.cta-card h2,.book-head h2,.arc-head h2,.magnet h2{font-size:46px}
+}
 .hero .lede,.aud-hero .lede,.lead .lede{font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.62}
 .sec-head p{font-size:1.02rem;line-height:1.62}
 .aud-card p,.step p,.tcard blockquote,details p{font-size:.935rem}
@@ -734,7 +737,7 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
    global margin reset the card titles sat flush on their paragraph at the
    browser's default h3 size. Tracking is reset with the other classed
    headings in the F2 block below. */
-.pain h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.pain h3{margin-bottom:8px}
 
 /* lead magnet: keyline + wash, no gradient panel */
 .magnet{background:var(--teal-50);border:1px solid var(--line-2);border-radius:8px;
@@ -851,7 +854,7 @@ span.ai,.assure .ai{border-radius:6px !important}
 .proof:first-child{border-left:0}
 .proof .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;letter-spacing:.15em;
   text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
-.proof h3{font-size:1.05rem;margin:0 0 8px}
+.proof h3{margin:0 0 8px}
 .proof p{font-size:.9rem;color:var(--ink-2);margin:0;line-height:1.6}
 
 /* cost of waiting: the one place on the site that names a price for delay */
@@ -906,7 +909,7 @@ span.ai,.assure .ai{border-radius:6px !important}
   width:100vw;margin-left:calc(50% - 50vw);
   padding:64px max(24px,calc((100vw - var(--maxw)) / 2));
   display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
-.tick h2{color:#fff;font-size:clamp(1.45rem,2.8vw,2.15rem);line-height:1.15;
+.tick h2{color:#fff;
   letter-spacing:-.03em;margin:0 0 14px;max-width:24ch}
 .tick p{color:rgba(255,255,255,.78);font-size:.9rem;line-height:1.6;margin:0 0 12px;max-width:56ch}
 .tick .tk-who{color:rgba(255,255,255,.55);font-size:.8rem;margin-bottom:22px}
@@ -1001,7 +1004,7 @@ body{overflow-x:hidden;overflow-x:clip}
 .coverband{padding:8px 0 62px}
 .cover{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;
   border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:34px 32px}
-.cover h3{font-size:clamp(1.2rem,2.2vw,1.6rem);line-height:1.2;margin:0 0 12px;max-width:22ch}
+.cover h3{margin:0 0 12px;max-width:22ch}
 .cover p{font-size:.92rem;line-height:1.6;color:var(--ink-2);margin:0 0 20px;max-width:52ch}
 .cv-figs{border-left:1px solid var(--line);padding-left:30px}
 .cv-f{margin-bottom:18px}
@@ -1381,32 +1384,25 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .legal p,.legal li,.legal td{font-size:1rem;line-height:1.62}
 .legal .updated{font-size:.86rem}
 .legal .intro{font-size:1.12rem;line-height:1.6}
-.legal h2{font-size:1.3rem;margin-top:2.2em}
-.legal h3{font-size:1.06rem}
+.legal h2{margin-top:2.2em}
 
 /* --- 4. Baymard: the credential line sat 16px below the 812px fold on
    director.html because its headline runs to four lines at 375px. --- */
 @media(max-width:420px){
-  .aud-hero h1,.hero h1{font-size:clamp(2rem,8.5vw,2.6rem);line-height:1.08}
   .aud-hero .lede,.hero .lede{font-size:1rem;line-height:1.55;margin-bottom:20px}
   .hero-cta{margin-bottom:16px;gap:10px}
   .credline{margin-top:14px;font-size:.82rem;gap:6px 10px}
 }
 
 /* ============================================================
-   F2 - Fraunces display tracking
-   Fraunces (opsz 144) is a serif. The -.02em/-.035em tracking these
-   classed headings inherited from Sora closes its letterforms up, so
-   reset them to serif-appropriate values, and hold the display scale
-   inside the 600-700 range the font request actually loads so nothing
-   falls back to a synthesised bold.
+   v3 - the per-section tracking and weight overrides that used to sit here
+   are gone. They were the last layer that re-sized and re-weighted headings
+   section by section, and the one heading recipe above now owns both. The
+   classed headings named here before (.legal, .magnet, .team-head, .tick,
+   .book-head, .cta-card, .gterm, .panel, .phead, .assume, .aud-card,
+   .benefit, .cal-fallback, .chart-card, .pain, .step, .vs-card) all take
+   the recipe's three sizes, Inter 800 and its tracking.
    ============================================================ */
-.legal h1,.magnet h2,.team-head h2,.tick h2,.book-head h2,.cta-card h2,
-.gterm h2,.legal h2,.panel h2{letter-spacing:-.012em}
-.assume h3,.aud-card h3,.benefit h3,.cal-fallback h3,.chart-card h3,
-.gterm h3,.legal h3,.pain h3,.step h3,.vs-card h3,
-.team-feature .cap h3,.magnet .ok h3{letter-spacing:-.005em}
-.legal h1,.phead h1,.magnet h2,.team-head h2{font-weight:600}
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
 .infoadvice{display:flex;gap:14px;align-items:flex-start;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:18px 22px}

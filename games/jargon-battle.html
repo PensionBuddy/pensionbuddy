@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script>
 /* Embed mode is decided before first paint so the header never flashes inside the iframe. */
 try { if (window.self !== window.top) { document.documentElement.className += ' embedded'; } } catch (e) { document.documentElement.className += ' embedded'; }
@@ -28,8 +28,8 @@ try { if (window.self !== window.top) { document.documentElement.className += ' 
   --amber:#F4B740; --amber-soft:#FCEFCF; --terracotta:#C1502E;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
-  --font:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
   --r:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -37,7 +37,7 @@ html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit}
-h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;line-height:1.1;letter-spacing:-.02em}
 .vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 :focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)!important;border-radius:4px}
 
@@ -997,7 +997,7 @@ main{max-width:1000px;margin:0 auto;padding:20px}
     ctx.fill();
     if (fontsReady) {
       ctx.fillStyle = '#0B1F1C';
-      ctx.font = '800 26px "Hanken Grotesk", system-ui, sans-serif';
+      ctx.font = '800 26px "Inter", system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('BARK!', cx, cy + 1);

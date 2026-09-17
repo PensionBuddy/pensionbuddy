@@ -144,24 +144,34 @@ AUDIT_JS = r"""
   const imgs=$$('img');R.images={total:imgs.length,missingAlt:imgs.filter(i=>!i.hasAttribute('alt')).length,failed:[]};
   await Promise.all(imgs.map(i=>new Promise(res=>{const t=new Image();t.onload=()=>res();t.onerror=()=>{R.images.failed.push((i.getAttribute('alt')||i.src.slice(0,40)));res()};t.src=i.src;setTimeout(res,3000)})));
 
-  // fonts (F2): Fraunces must be REQUESTED, LOADED and actually applied to display type,
-  // while body copy / controls / numeric readouts stay on Sora.
+  // fonts (F2): v3 is one text face. Inter must be REQUESTED, LOADED and carrying
+  // every heading at 800, no dropped family may be requested or resolve anywhere,
+  // and the one heading recipe means at most three distinct heading sizes at a
+  // given width. IBM Plex Mono keeps the numerals and is not counted here.
   try{
     await document.fonts.ready;
     const famOf=el=>el?getComputedStyle(el).fontFamily:'';
-    const isFr=s=>/Fraunces/i.test(s);
+    const first=s=>String(s).split(',')[0].replace(/['"]/g,'').trim();
+    const DROPPED=/Fraunces|Hanken|Bricolage|Sora/i;
+    const hs=$$('h1,h2,h3,h4');
     R.fonts={
-      sora:document.fonts.check('700 20px Sora'),
       /* fonts.check() reports true for families that fall back, so ask the FontFace set directly */
-      frauncesLoaded:[...document.fonts].some(f=>/Fraunces/i.test(f.family)&&f.status==='loaded'),
-      frauncesFaces:[...document.fonts].filter(f=>/Fraunces/i.test(f.family)).length,
-      linkRequestsFraunces:$$('link[rel=stylesheet]').some(l=>/Fraunces/i.test(l.href)),
-      h1:famOf(document.querySelector('h1')).split(',')[0].trim(),
-      h2:famOf(document.querySelector('h2')).split(',')[0].trim(),
-      body:famOf(document.body).split(',')[0].trim(),
-      bodyCopyOnFraunces:$$('p').filter(p=>p.textContent.trim().length>60&&isFr(famOf(p))).length,
-      controlsOnFraunces:$$('button,input,select,.btn,.lnk').filter(e=>isFr(famOf(e))).length,
-      readoutsOnFraunces:$$('#potOut,#incOut,#taxOut,#maxOut,.big,.tk-n').filter(e=>isFr(famOf(e))).length
+      interLoaded:[...document.fonts].some(f=>/Inter/i.test(f.family)&&f.status==='loaded'),
+      interFaces:[...document.fonts].filter(f=>/Inter/i.test(f.family)).length,
+      linkRequestsInter:$$('link[rel=stylesheet]').some(l=>/Inter/i.test(l.href)),
+      linkRequestsDropped:$$('link[rel=stylesheet]').filter(l=>DROPPED.test(l.href)).map(l=>l.href.slice(0,90)),
+      h1:first(famOf(document.querySelector('h1'))),
+      h2:first(famOf(document.querySelector('h2'))),
+      body:first(famOf(document.body)),
+      /* rule 2 keeps the existing mono/numeral treatment, and the footer column
+         labels are h4s deliberately set in the mono face. They are labels, not
+         display copy, so they are excluded from the one-recipe expectations
+         rather than the expectations being loosened for every heading. */
+      headingCount:hs.length,
+      headingsOffInter:hs.filter(h=>!/Inter|Mono/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
+      headingWeights:[...new Set(hs.filter(h=>!/Mono/i.test(famOf(h))).map(h=>getComputedStyle(h).fontWeight))].sort(),
+      headingSizes:[...new Set(hs.filter(h=>!/Mono/i.test(famOf(h))).map(h=>getComputedStyle(h).fontSize))].sort(),
+      droppedAtRuntime:[...new Set($$('body *').map(e=>first(famOf(e))).filter(f=>DROPPED.test(f)))].slice(0,4)
     };
   }catch(e){R.fonts={error:String(e)}}
 
@@ -424,8 +434,8 @@ def static_checks(pages):
             'sourcePlaceholders': [p for p in SRC_PLACEHOLDERS if re.search(p, t)],
             'mainInSource': bool(re.search(r'<main\b', t)),
             'skipInSource': bool(re.search(r'<a[^>]+class="skip"', t)),
-            'fraunces': 'Fraunces' in t,
-            'requestsFraunces': bool(re.search(r'fonts\.googleapis\.com[^"\']*Fraunces', t)),
+            'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora', t)}),
+            'requestsInter': bool(re.search(r'fonts\.googleapis\.com[^"\']*Inter', t)),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
             'chromeDrift': ['%s: %s' % d for d in drift.get(f, [])],
@@ -462,9 +472,11 @@ def evaluate(page, st, audits):
     if not st['mainInSource']: W.append(('D3', 'no <main> in source'))
     # chrome-only expectation: the game pages ship deliberately chromeless
     if root_page and not st['skipInSource']: W.append(('D2', 'skip link not in source HTML (JS-injected)'))
-    # F2: referencing Fraunces is now correct — it is only a defect if the source
-    # names the family but never asks the stylesheet for it (the run-1 orphan bug).
-    if st['fraunces'] and not st['requestsFraunces']: W.append(('F2', 'Fraunces referenced in CSS but not requested from the font service'))
+    # F2: v3 dropped Fraunces, Hanken Grotesk and Bricolage Grotesque for one face.
+    # Naming any of them in the source now is the defect, and so is a page that
+    # never asks the font service for Inter.
+    if st['droppedFamilies']: F.append(('F2', 'a dropped family is still named in source: %s' % ', '.join(st['droppedFamilies'])))
+    if not st['requestsInter']: F.append(('F2', 'source does not request Inter from the font service'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
@@ -492,14 +504,19 @@ def evaluate(page, st, audits):
     # width-invariant checks: evaluate once, on the first successful audit
     a = next((x for x in audits.values() if 'auditError' not in x), {})
     if a.get('needsInput'): W.append(('NEEDS-INPUT', ', '.join(a['needsInput'])))
-    # F2 — Fraunces requested, loaded, applied to display type only
+    # F2 — one face: Inter requested, loaded, carrying every heading at 800,
+    # in at most the three sizes the one heading recipe allows at a given width
     fo = a.get('fonts') or {}
     if fo and not fo.get('error'):
-        if not fo.get('linkRequestsFraunces'): W.append(('F2', 'stylesheet does not request Fraunces'))
-        elif not fo.get('frauncesLoaded'): F.append(('F2', 'Fraunces requested but did not load'))
-        elif not any('Fraunces' in str(fo.get(k, '')) for k in ('h1', 'h2')): W.append(('F2', 'Fraunces loaded but headings still %s/%s' % (fo.get('h1'), fo.get('h2'))))
-        for k, label in (('bodyCopyOnFraunces', 'body paragraphs'), ('controlsOnFraunces', 'controls'), ('readoutsOnFraunces', 'numeric readouts')):
-            if fo.get(k): W.append(('F2', '%d %s render in Fraunces (display type only)' % (fo[k], label)))
+        if not fo.get('linkRequestsInter'): F.append(('F2', 'stylesheet does not request Inter'))
+        elif not fo.get('interLoaded'): F.append(('F2', 'Inter requested but did not load'))
+        if fo.get('linkRequestsDropped'): F.append(('F2', 'a dropped family is still requested: %s' % fo['linkRequestsDropped'][0]))
+        if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Inter: %s' % fo['headingsOffInter']))
+        if fo.get('droppedAtRuntime'): F.append(('F2', 'a dropped family resolves at runtime: %s' % fo['droppedAtRuntime']))
+        bad_w = [w for w in (fo.get('headingWeights') or []) if str(w) != '800']
+        if bad_w: W.append(('F2', 'headings render at weights other than 800: %s' % bad_w))
+        sizes = fo.get('headingSizes') or []
+        if len(sizes) > 3: W.append(('F2', '%d distinct heading sizes, the one recipe allows 3: %s' % (len(sizes), sizes)))
     # F5 — About must be reachable from the nav of every page
     nav = a.get('navHrefs') if root_page else None       # chrome-only: the games have no site nav or footer
     if nav is not None and not any('#story' in (h or '') for h in nav + (a.get('footHrefs') or [])):
@@ -528,7 +545,6 @@ def evaluate(page, st, audits):
     if root_page and a.get('footTop') is False: F.append(('B3', 'page has no .foot-top footer'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
     if a.get('countdownYears') and len(a['countdownYears']) > 1: W.append(('E1', 'countdown band mixes years %s' % a['countdownYears']))
-    if a.get('fonts', {}).get('fraunces'): W.append(('F2', 'an element resolves to Fraunces at runtime'))
     if a.get('main') == 0: W.append(('D3', 'no <main> landmark at runtime'))
     sk = a.get('skipLink') or {}
     if sk.get('targetExists') and sk.get('targetTabindex') != '-1': W.append(('D3', 'skip target has no tabindex=-1'))

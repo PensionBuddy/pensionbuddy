@@ -158,8 +158,6 @@ PAGES = {
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
-        # the headline face this page alone uses, added to the one existing request
-        fonts='family=Bricolage+Grotesque:opsz,wght@12..96,600..800&',
         checks=(('vs-card', 'comparison component'),),
     ),
     'state-pension': Page(

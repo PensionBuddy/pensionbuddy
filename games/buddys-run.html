@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script>
 /* Embed mode is decided before first paint so the shell never flashes. */
 try { if (window.self !== window.top) { document.documentElement.className = 'embedded'; } } catch (e) { document.documentElement.className = 'embedded'; }
@@ -28,8 +28,8 @@ try { if (window.self !== window.top) { document.documentElement.className = 'em
   --amber:#F4B740; --amber-soft:#FCEFCF; --terracotta:#C1502E;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
-  --font:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --display:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -71,8 +71,8 @@ canvas.game{display:block;width:100%;height:100%;background:#E8F6F3}
 /* ---------- overlays ---------- */
 .overlay{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:.8em;background:rgba(10,51,46,.66);overflow:auto}
 .panel{background:var(--surface);border-radius:.9em;border:1px solid var(--line);padding:1.15em 1.25em;max-width:38em;width:100%;text-align:center;max-height:100%}
-.panel h1{font-family:var(--display);font-weight:700;font-size:2.5em;line-height:1.02;letter-spacing:-0.02em}
-.panel h2{font-family:var(--display);font-weight:700;font-size:1.85em;line-height:1.05;letter-spacing:-0.02em}
+.panel h1{font-family:var(--display);font-weight:800;font-size:2.5em;line-height:1.02;letter-spacing:-0.02em}
+.panel h2{font-family:var(--display);font-weight:800;font-size:1.85em;line-height:1.05;letter-spacing:-0.02em}
 .tagline{font-size:1.05em;font-weight:600;color:var(--teal-700);margin-top:.15em}
 .lede{font-size:1em;margin-top:.5em}
 .how{list-style:none;margin:.7em auto 0;display:grid;gap:.3em;text-align:left;max-width:34em;font-size:.94em;color:var(--ink-2)}
@@ -97,7 +97,7 @@ canvas.game{display:block;width:100%;height:100%;background:#E8F6F3}
 .fine{margin-top:.6em;font-size:.76em;color:var(--ink-2)}
 .panel .back{font-size:.85em;margin-top:.1em}
 .paused-card{background:var(--surface);border-radius:.9em;padding:1.2em 1.5em;text-align:center}
-.paused-card h2{font-family:var(--display);font-size:1.6em}
+.paused-card h2{font-family:var(--display);font-weight:800;font-size:1.6em}
 
 /* ---------- narrow screens: give the overlays room ---------- */
 /* a shallow box gets a tighter card, and a very shallow one drops the extras */
@@ -385,7 +385,7 @@ html.embedded .stage{height:100%;aspect-ratio:auto;border-radius:0}
     }
     return mctx;
   }
-  function pillFont(fs) { return '700 ' + fs + "px 'Hanken Grotesk', system-ui, sans-serif"; }
+  function pillFont(fs) { return '800 ' + fs + "px 'Inter', system-ui, sans-serif"; }
 
   function measureLabel(l) {
     var m = measurer();
@@ -953,7 +953,7 @@ html.embedded .stage{height:100%;aspect-ratio:auto;border-radius:0}
       ctx.drawImage(paw1, Math.round(d.x), Math.round(d.y));
     }
     ctx.globalAlpha = 1;
-    ctx.font = "800 18px 'Hanken Grotesk', system-ui, sans-serif";
+    ctx.font = "800 18px 'Inter', system-ui, sans-serif";
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     for (i = 0; i < S.pops.length; i++) {
