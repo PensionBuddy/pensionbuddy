@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jargon Battle Quiz, Pensionbuddy</title>
+<meta name="description" content="A retro battle quiz. Buddy the boxer dog takes on the Jargon Blob over eight Irish pension terms. Information, not advice.">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
+<meta property="og:title" content="Jargon Battle Quiz, Pensionbuddy">
+<meta property="og:description" content="A retro battle quiz. Buddy the boxer dog takes on the Jargon Blob over eight Irish pension terms. Information, not advice.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pensionbuddy">
+<meta property="og:locale" content="en_IE">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@144,600..700&family=Hanken+Grotesk:wght@300..800&display=swap" rel="stylesheet">
+<script>
+/* Embed mode is decided before first paint so the header never flashes inside the iframe. */
+try { if (window.self !== window.top) { document.documentElement.className += ' embedded'; } } catch (e) { document.documentElement.className += ' embedded'; }
+</script>
+<style>
+:root{
+  --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
+  --ink:#0B1F1C; --ink-2:#54635F;
+  --pine:#0A332E; --teal:#0C8175; --teal-600:#0A7166; --aqua:#16C9B0;
+  --teal-50:#E8F6F3; --teal-100:#CBEBE4;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --terracotta:#C1502E;
+  --line:#E7EBE9; --line-2:#D8DFDC;
+  --ring:rgb(14,143,128);
+  --font:'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --r:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.1;letter-spacing:-.02em}
+.vh{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)!important;border-radius:4px}
+
+/* ---------- page shell ---------- */
+.site-head{border-bottom:1px solid var(--line);background:var(--surface)}
+.site-head .in{max-width:1000px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.03em;min-height:44px}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.logo-mark svg{width:22px;height:22px}
+.backlink{font-size:14px;font-weight:600;color:var(--teal-600);border-bottom:1px solid var(--teal-100);display:inline-flex;align-items:center;min-height:44px}
+.site-foot{border-top:1px solid var(--line);margin-top:28px}
+.site-foot p{max-width:1000px;margin:0 auto;padding:18px 20px 28px;font-size:13px;color:var(--ink-2)}
+
+main{max-width:1000px;margin:0 auto;padding:20px}
+
+/* ---------- game frame ---------- */
+.game{position:relative;background:var(--surface);border:3px solid var(--ink);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:12px}
+
+.stage{background:var(--teal-50);border:2px solid var(--ink);border-radius:6px;overflow:hidden;line-height:0}
+#scene{display:block;width:100%;height:auto;aspect-ratio:640/220;image-rendering:pixelated}
+
+/* ---------- HUD ---------- */
+.hud{display:flex;gap:12px;flex-wrap:wrap}
+.panel{flex:1 1 200px;min-width:180px;background:var(--surface-2);border:2px solid var(--ink);border-radius:6px;padding:8px 10px}
+.panel .nm{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:6px}
+.bar{display:flex;gap:3px}
+.seg{flex:1 1 auto;height:14px;border:2px solid var(--ink);border-radius:2px;background:var(--line-2);transition:background-color .28s ease,transform .28s ease}
+.seg.on{background:var(--teal)}
+.bar.low .seg.on{background:var(--terracotta)}
+.seg.gone{transform:scaleY(.45)}
+.hearts{display:flex;gap:6px;align-items:center;min-height:24px}
+.hearts canvas{display:block;image-rendering:pixelated}
+@media (prefers-reduced-motion: reduce){ .seg{transition:none} }
+
+/* ---------- dialogue ---------- */
+.dlg{background:var(--surface);border:3px solid var(--ink);border-radius:4px;box-shadow:4px 4px 0 var(--line-2);padding:12px 14px;min-height:96px}
+.dlg .term{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-600);margin-bottom:4px}
+.dlg p{font-size:16px}
+.dlg .lead{display:block;font-weight:700}
+.dlg .caret{display:inline-block;width:10px;height:14px;background:var(--teal);margin-left:6px;vertical-align:-2px;animation:blink 1s steps(1,end) infinite}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media (prefers-reduced-motion: reduce){ .dlg .caret{animation:none;opacity:1} }
+.dlg[hidden]{display:none}
+
+/* ---------- answer menu ---------- */
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:10px;text-align:left;min-height:64px;padding:12px 14px;background:var(--surface);border:3px solid var(--ink);border-radius:4px;box-shadow:3px 3px 0 var(--line-2);cursor:pointer;font-size:15px;line-height:1.35;transition:transform .12s ease,background-color .15s ease}
+.opt:hover:not(:disabled){background:var(--teal-50)}
+.opt:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line-2)}
+.opt:disabled{cursor:default;opacity:1}
+.opt .key{flex:0 0 auto;width:24px;height:24px;border-radius:4px;background:var(--ink);color:#FBF7EF;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.opt.right{background:var(--teal-50);border-color:var(--teal)}
+.opt.right .key{background:var(--teal)}
+.opt.wrong{background:#FBEDE8;border-color:var(--terracotta)}
+.opt.wrong .key{background:var(--terracotta)}
+@media (prefers-reduced-motion: reduce){ .opt{transition:none} .opt:active:not(:disabled){transform:none} }
+
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:3px solid var(--ink);border-radius:4px;background:var(--amber);font-weight:700;font-size:15px;cursor:pointer;box-shadow:3px 3px 0 var(--line-2)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line-2)}
+.btn.cta{background:var(--teal);color:#fff;border-color:var(--pine)}
+.btn.ghost{background:var(--surface)}
+@media (prefers-reduced-motion: reduce){ .btn:active{transform:none} }
+
+/* ---------- end panel ---------- */
+.endPanel{border:3px solid var(--ink);border-radius:4px;background:var(--surface);box-shadow:4px 4px 0 var(--line-2);padding:16px}
+.endPanel h2{font-size:24px;margin-bottom:6px}
+.endPanel .sub{color:var(--ink-2);margin-bottom:12px}
+.scores{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.score{flex:1 1 140px;background:var(--teal-50);border:2px solid var(--teal-100);border-radius:6px;padding:10px 12px}
+.score .k{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--teal-600)}
+.score .v{font-family:var(--font-display);font-size:22px;font-weight:700}
+.lead{margin:14px 0 10px;font-size:15px}
+.note{margin-top:14px;font-size:12px;color:var(--ink-2)}
+
+/* ---------- intro overlay ---------- */
+.intro{position:absolute;inset:0;background:rgba(10,51,46,.96);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;z-index:5}
+.intro h1{font-size:34px;color:#FBF7EF}
+.intro p{max-width:46ch;color:var(--teal-100);font-size:15px}
+.intro .hint{font-size:13px;color:var(--teal-100);opacity:.9}
+
+[hidden]{display:none!important}
+
+/* ---------- narrow ---------- */
+@media (max-width:640px){
+  main{padding:12px}
+  .game{padding:10px;gap:10px}
+  .menu{grid-template-columns:1fr}
+  .opt{min-height:56px;font-size:14px}
+  .intro h1{font-size:26px}
+  .intro p{font-size:14px}
+  .hud{gap:8px}
+  /* the two panels share one row on a phone: it buys back a whole band of height */
+  .panel{flex:1 1 calc(50% - 4px);min-width:0;padding:6px 8px}
+  .panel .nm{font-size:11px;margin-bottom:5px}
+  /* A taller stage on a phone: the camera then crops the sides and the
+     fighters come up to a size the pixel art can actually carry. */
+  #scene{aspect-ratio:16/9}
+  .dlg{min-height:0}
+  .site-head .in{padding:10px 14px;gap:10px}
+  .logo{font-size:17px}
+  .backlink{font-size:13px}
+}
+
+/* ---------- embed mode ----------
+   The glossary picker shows this in a 16:9 iframe, so the card is capped at a
+   width whose scene height still leaves room for the question and all four
+   answers without a scroll. */
+.embedded .site-head,.embedded .site-foot{display:none}
+.embedded main{padding:6px;max-width:none}
+.embedded body{background:var(--surface)}
+.embedded main{height:100vh;display:flex;flex-direction:column}
+.embedded .game{border-radius:6px;padding:8px;gap:8px;flex:1 1 auto;min-height:0;overflow-y:auto}
+.embedded .stage{flex:1 1 auto;min-height:104px}
+/* in a flex column everything shrinks by default: only the scene may give ground */
+.embedded .hud,.embedded .dlg,.embedded .menu,.embedded .row,.embedded .endPanel{flex:0 0 auto}
+.embedded #scene{width:100%;height:100%;aspect-ratio:auto}
+.embedded .hud{gap:8px}
+.embedded .panel{padding:6px 10px}
+.embedded .dlg{min-height:78px;padding:10px 12px}
+.embedded .opt{min-height:56px;padding:10px 12px}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="in">
+    <a class="logo" href="../index.html" target="_top"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
+    <a class="backlink" href="../glossary.html" target="_top">Back to the jargon buster</a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="game" id="game">
+
+    <div class="stage">
+      <canvas id="scene" width="640" height="220" role="img" aria-label="Battle scene: Buddy the boxer dog faces the Jargon Blob."></canvas>
+    </div>
+
+    <div class="hud" id="hud" hidden>
+      <div class="panel">
+        <div class="nm">Jargon Blob</div>
+        <div class="bar" id="blobBar" role="img" aria-label="Jargon Blob health: 8 of 8"></div>
+      </div>
+      <div class="panel">
+        <div class="nm">Buddy</div>
+        <div class="hearts" id="hearts"></div>
+      </div>
+    </div>
+
+    <div class="dlg" id="dlg" hidden>
+      <div class="term" id="dlgTerm"></div>
+      <p id="dlgText">Buddy is warming up.<span class="caret" aria-hidden="true"></span></p>
+    </div>
+
+    <div class="menu" id="menu" hidden>
+      <button class="opt" type="button" data-i="0"><span class="key" aria-hidden="true">1</span><span class="txt"></span></button>
+      <button class="opt" type="button" data-i="1"><span class="key" aria-hidden="true">2</span><span class="txt"></span></button>
+      <button class="opt" type="button" data-i="2"><span class="key" aria-hidden="true">3</span><span class="txt"></span></button>
+      <button class="opt" type="button" data-i="3"><span class="key" aria-hidden="true">4</span><span class="txt"></span></button>
+    </div>
+
+    <div class="row" id="nextRow" hidden>
+      <button class="btn" type="button" id="nextBtn">Next</button>
+    </div>
+
+    <div class="endPanel" id="endPanel" hidden>
+      <h2 id="endTitle">The Jargon Blob is busted!</h2>
+      <p class="sub" id="endSub"></p>
+      <div class="scores">
+        <div class="score"><div class="k">Hits landed</div><div class="v" id="endHits">0 of 8</div></div>
+        <div class="score"><div class="k">Best ever</div><div class="v" id="endBest">0 of 8</div></div>
+      </div>
+      <div class="row">
+        <button class="btn" type="button" id="againBtn">Play again</button>
+        <a class="backlink" href="../glossary.html" target="_top">Back to the jargon buster</a>
+      </div>
+      <p class="lead">Still puzzled by a term? Damian explains them for a living, and the first call is free.</p>
+      <a class="btn cta" href="../booking.html" target="_top">Book a free 20-minute call</a>
+      <p class="note">A game, and general information. Nothing here is personal financial advice.</p>
+    </div>
+
+    <div class="intro" id="intro">
+      <h1>Jargon Battle Quiz</h1>
+      <p>Buddy takes on the Jargon Blob over eight Irish pension terms. Pick the right meaning and Buddy lands a hit. Pick a dud and Buddy loses a heart. Three hearts gone and the Blob wins.</p>
+      <button class="btn" type="button" id="startBtn">Start the battle</button>
+      <p class="hint">Mouse, touch, or keys 1 to 4.</p>
+    </div>
+
+  </div>
+
+  <p class="vh" id="live" role="status" aria-live="polite"></p>
+</main>
+
+<footer class="site-foot">
+  <p>Information, not advice. Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.</p>
+</footer>
+
+<script src="buddy-sprites.js"></script>
+<script>
+(function (global) {
+  'use strict';
+
+  /* ==========================================================
+     1. THE QUESTION BANK
+     ========================================================== */
+  var BANK = [
+ {
+  "term": "AVC (Additional Voluntary Contribution)",
+  "prompt": "What is an AVC?",
+  "correct": "Extra money you put into your work pension on top.",
+  "wrong": [
+   "Advanced Vocal Coaching, for anyone who sings at the karaoke.",
+   "Automatic Volume Control, the knob on the back of the telly.",
+   "The yearly service the boiler gets before the cold sets in."
+  ],
+  "buddySays": "AVCs usually go in through payroll, and they normally get the same tax relief as your regular pension contributions.",
+  "difficulty": 1
+ },
+ {
+  "term": "Annuity",
+  "prompt": "An annuity is...",
+  "correct": "A guaranteed income for life, bought with your pension pot.",
+  "wrong": [
+   "An annual tea dance the credit union puts on for members.",
+   "A garden plant that flowers once and is gone by autumn.",
+   "A festival for retired accountants, held every year in Athlone."
+  ],
+  "buddySays": "An insurer takes on the job of paying you for as long as you live. Once it is bought, it usually cannot be changed.",
+  "difficulty": 2
+ },
+ {
+  "term": "PRSA (Personal Retirement Savings Account)",
+  "prompt": "A PRSA is...",
+  "correct": "A flexible personal pension you own and take between jobs.",
+  "wrong": [
+   "Public Roads Safety Authority, the crowd behind the speed signs.",
+   "Personal Retirement Shopping Allowance, for the January sales.",
+   "A savings stamp book, filled in at the top of the kitchen press."
+  ],
+  "buddySays": "The A stands for account, and the account is yours, not the employer's. It travels with you when you move on.",
+  "difficulty": 2
+ },
+ {
+  "term": "Defined Contribution pension",
+  "prompt": "A Defined Contribution pension is...",
+  "correct": "A pot of contributions and growth, with no income promised.",
+  "wrong": [
+   "The speech someone gives when they finally retire.",
+   "The euro you drop in the collection tin at the shop door.",
+   "A firmly worded contribution to the letters page of the paper."
+  ],
+  "buddySays": "The pot is yours, though the final value is not guaranteed. Investments can fall as well as rise along the way.",
+  "difficulty": 2
+ },
+ {
+  "term": "Drawdown",
+  "prompt": "Drawdown means...",
+  "correct": "Taking money out of your pension pot once you retire.",
+  "wrong": [
+   "Pulling the blinds down in the front room of an afternoon.",
+   "The drop in the water level in the well after a dry spell.",
+   "The final raffle draw at the ploughing championships."
+  ],
+  "buddySays": "Drawdown is the taking out, after all the years of putting in. Whatever stays invested can still rise or fall.",
+  "difficulty": 1
+ },
+ {
+  "term": "Tracker fund",
+  "prompt": "What is a tracker fund?",
+  "correct": "A fund that follows an index instead of picking shares.",
+  "wrong": [
+   "A fund that tracks down the socks lost behind the radiator.",
+   "The number you type in to see where the parcel got to.",
+   "A fund that follows the same route as the 46A bus."
+  ],
+  "buddySays": "It follows the index up and it follows the index down, with no stock picking involved.",
+  "difficulty": 2
+ },
+ {
+  "term": "Vesting",
+  "prompt": "Vesting means...",
+  "correct": "When your employer's contributions become yours to keep.",
+  "wrong": [
+   "The thermal vest your mother insists on once it turns cold.",
+   "Pulling on a hi-vis vest before you go near the site.",
+   "The waistcoat half of a three piece suit, rarely worn now."
+  ],
+  "buddySays": "In Ireland that point generally comes after a qualifying period, often two years in the scheme. Your own contributions are always your own money.",
+  "difficulty": 3
+ },
+ {
+  "term": "Defined Benefit pension",
+  "prompt": "What is a Defined Benefit pension?",
+  "correct": "A pension promising a set income based on pay and service.",
+  "wrong": [
+   "Benefits worked out by a committee that meets twice a year.",
+   "A pension paid out in vouchers for the staff canteen.",
+   "A pension counting only the years you actually enjoyed the job."
+  ],
+  "buddySays": "With Defined Benefit the promise is about income, not about a pot with your name on it. Salary and years of service do the sums.",
+  "difficulty": 2
+ },
+ {
+  "term": "Tax relief",
+  "prompt": "What is pension tax relief?",
+  "correct": "Your contribution comes off the top of your taxable income.",
+  "wrong": [
+   "The great relief of getting the tax return finished at last.",
+   "A relief map of Ireland showing where all the tax offices are.",
+   "A carved stone relief of a taxman over an old bank door."
+  ],
+  "buddySays": "For a higher rate taxpayer, a hundred euro going in costs about sixty. PRSI and USC are not relieved, mind.",
+  "difficulty": 1
+ },
+ {
+  "term": "State Pension (Contributory)",
+  "prompt": "The State Pension (Contributory) is...",
+  "correct": "A State payment from age 66, based on your PRSI record.",
+  "wrong": [
+   "A pension paid to anyone in a contributory state of mind.",
+   "The pension the State of Texas posts over to Irish cousins.",
+   "A payment that arrives with a card from the President."
+  ],
+  "buddySays": "It is not means tested, so savings or a work pension do not cut it back. A full personal rate comes to roughly €15,000 a year.",
+  "difficulty": 1
+ },
+ {
+  "term": "Auto-enrolment (My Future Fund)",
+  "prompt": "Auto-enrolment means...",
+  "correct": "A State scheme enrolling eligible employees who have no pension.",
+  "wrong": [
+   "A motoring club that enrols anyone with an automatic gearbox.",
+   "The night class they put you into when the one you wanted fills up.",
+   "A subscription that renews itself whether you like it or not."
+  ],
+  "buddySays": "It goes by the name My Future Fund, and eligible employees are put in automatically. The employee, the employer and the State all pay into it.",
+  "difficulty": 2
+ },
+ {
+  "term": "ARF (Approved Retirement Fund)",
+  "prompt": "What is an ARF?",
+  "correct": "Your pot stays invested and you draw from it in retirement.",
+  "wrong": [
+   "What Buddy says at the postman, twice, from behind the gate.",
+   "Any Remaining Funds, the bit left over after the will is read.",
+   "A Really Fine hat, handed over on your last day at work."
+  ],
+  "buddySays": "An ARF can grow, it can fall, and it can run out, because the money stays invested. The A is for Approved, not for anything Buddy barks.",
+  "difficulty": 2
+ },
+ {
+  "term": "PRSI",
+  "prompt": "What does PRSI stand for?",
+  "correct": "Pay Related Social Insurance, which builds State Pension rights.",
+  "wrong": [
+   "Pretty Rough Sea Index, the number read out after the shipping forecast.",
+   "Public Records Service Ireland, the crowd who mind the old files.",
+   "Personal Ready Spending Income, whatever is left after the bills."
+  ],
+  "buddySays": "Paid, credited and HomeCaring contributions all count towards the State Pension, subject to caps. Only the paid ones count towards the 520 qualifying minimum.",
+  "difficulty": 1
+ },
+ {
+  "term": "Tax-free lump sum",
+  "prompt": "A tax-free lump sum is...",
+  "correct": "Part of your pot taken tax free at retirement, within limits.",
+  "wrong": [
+   "The lump in the porridge that nobody at the table owns up to.",
+   "The bump you get on your head off the low door in the attic.",
+   "A sum you never have to do at school, because the tax is free."
+  ],
+  "buddySays": "In many cases it is up to a quarter of the fund, and Revenue sets the limits.",
+  "difficulty": 1
+ },
+ {
+  "term": "Consolidation (of old pensions)",
+  "prompt": "Consolidation means...",
+  "correct": "Bringing old pensions from past jobs together into one plan.",
+  "wrong": [
+   "Consoling a pension that has had a rough enough week.",
+   "Building a console table to keep all the pension letters on.",
+   "A consolation prize for the pension that came second this year."
+  ],
+  "buddySays": "Some older pensions carry guarantees that would be left behind if the money moved, so they are not all the same inside.",
+  "difficulty": 2
+ },
+ {
+  "term": "Standard Fund Threshold",
+  "prompt": "The Standard Fund Threshold is...",
+  "correct": "Revenue's cap on the pension fund that gets full tax relief.",
+  "wrong": [
+   "A doorstep built to a standard height, the way builders like it.",
+   "A standard size of envelope that An Post prefers.",
+   "The level the racket has to reach before the neighbours ring."
+  ],
+  "buddySays": "Anything above the cap is taxed on drawdown. The cap is legislated to rise in steps from 2026 to 2029.",
+  "difficulty": 3
+ },
+ {
+  "term": "Employer contribution",
+  "prompt": "An employer contribution is...",
+  "correct": "Money your employer pays in, effectively part of your pay.",
+  "wrong": [
+   "The boss's turn to buy the fancy biscuits on a Friday.",
+   "The card the whole office signs when somebody is off having a baby.",
+   "The pen the company hands out with its own name on it."
+  ],
+  "buddySays": "It is effectively part of your pay, just pointed at your pension instead of your current account.",
+  "difficulty": 1
+ },
+ {
+  "term": "Compound growth",
+  "prompt": "Compound growth is...",
+  "correct": "Your growth earns growth of its own, so time matters.",
+  "wrong": [
+   "A locked compound where the council keeps the gritters.",
+   "Two words stuck together to make one, the way teapot works.",
+   "The way a damp patch on the ceiling keeps quietly spreading."
+  ],
+  "buddySays": "It is growth on the growth, quiet at first and louder later. No growth is ever guaranteed, mind.",
+  "difficulty": 1
+ },
+ {
+  "term": "QFA (Qualified Financial Adviser)",
+  "prompt": "QFA stands for...",
+  "correct": "Qualified Financial Adviser, an Irish financial advice qualification.",
+  "wrong": [
+   "Quick Fire Answers, the frantic last round of the table quiz.",
+   "Quality Farm Assured, the sticker on a packet of rashers.",
+   "Queueing For Ages, the national pastime at the deli counter on a Friday."
+  ],
+  "buddySays": "It is the professional qualification behind regulated financial advice in Ireland, not a round on the table quiz.",
+  "difficulty": 2
+ },
+ {
+  "term": "Occupational pension scheme",
+  "prompt": "An occupational pension scheme is...",
+  "correct": "A pension scheme set up by an employer for its staff.",
+  "wrong": [
+   "The physio you get for the shoulder you hurt at work.",
+   "A rota deciding who is occupying the hot desk this week.",
+   "Occupational therapy, run out of the local health centre."
+  ],
+  "buddySays": "Occupational simply means workplace. The employer sets it up and trustees run it.",
+  "difficulty": 1
+ },
+ {
+  "term": "Annual management charge (AMC)",
+  "prompt": "What is an AMC?",
+  "correct": "The yearly percentage charge taken from a fund for managing it.",
+  "wrong": [
+   "A Mighty Cuppa, the standard morning break in any Irish office.",
+   "Automatic Meter Check, the job the electricity fella does out the back.",
+   "A cinema chain famous for the enormous buckets of popcorn."
+  ],
+  "buddySays": "It comes out of the fund itself each year rather than landing as a bill in the post. A percentage, taken every year the money is invested.",
+  "difficulty": 2
+ },
+ {
+  "term": "Preserved benefit (a pension left behind when you change jobs)",
+  "prompt": "A preserved benefit is...",
+  "correct": "A vested pension left in an old scheme, still yours.",
+  "wrong": [
+   "A jar of jam your aunt makes and labels with the date.",
+   "A grant for keeping an old building exactly as it is.",
+   "The good china, kept for visitors who never come."
+  ],
+  "buddySays": "Once you are vested it stays put in the old scheme, or it can be transferred. Changing jobs does not make it vanish.",
+  "difficulty": 3
+ },
+ {
+  "term": "Transfer value",
+  "prompt": "A transfer value is...",
+  "correct": "The cash value a scheme puts on benefits if you move them.",
+  "wrong": [
+   "The price a club pays to sign a player in the winter window.",
+   "A transfer you iron onto the back of a T-shirt.",
+   "What the sofa is worth on the day you move house."
+  ],
+  "buddySays": "It is one figure for everything you built up in that scheme, and it is the figure that travels if the benefits move.",
+  "difficulty": 3
+ },
+ {
+  "term": "Trustee (of a pension scheme)",
+  "prompt": "A pension scheme trustee is...",
+  "correct": "Someone legally bound to run the scheme in the members' interests.",
+  "wrong": [
+   "A very trusting soul, the sort who lends out ladders and lawnmowers.",
+   "The tall tree in the car park that everyone parks under.",
+   "Whoever minds the keys of the community hall."
+  ],
+  "buddySays": "Trustees answer to the members, and the duty on them is a legal one. Quiet work, and important work.",
+  "difficulty": 3
+ },
+ {
+  "term": "Risk rating (the 1 to 7 scale on a fund)",
+  "prompt": "A fund's risk rating is...",
+  "correct": "A one to seven scale for how bumpy a fund may be.",
+  "wrong": [
+   "How hot the takeaway is, by the chillies on the menu.",
+   "How steep the climb is, according to the walking guide.",
+   "Seven gold stars for the bravest fund of the year."
+  ],
+  "buddySays": "It has a proper name, the Summary Risk Indicator, and it runs from 1 at the lowest to 7 at the highest.",
+  "difficulty": 2
+ },
+ {
+  "term": "Pay and File deadline (31 October)",
+  "prompt": "The Pay and File deadline is...",
+  "correct": "Contributions paid by 31 October can count against last year's tax.",
+  "wrong": [
+   "The day the shops are finally let put the Christmas tins on the shelves.",
+   "The deadline for filing your nails ahead of the Halloween party.",
+   "The evening the parish accounts are read out at Mass."
+  ],
+  "buddySays": "Online filers usually get until the middle of November. It is a Revenue date rather than a pension rule.",
+  "difficulty": 3
+ }
+];
+
+  /* ==========================================================
+     2. PURE LOGIC (no DOM anywhere in this block)
+     ========================================================== */
+  var QUESTIONS_PER_BATTLE = 8;
+  var START_HEARTS = 3;
+
+  var rng = Math.random;
+  function setRng(fn) { rng = (typeof fn === 'function') ? fn : Math.random; return rng; }
+
+  function shuffle(arr, r) {
+    var pick = (typeof r === 'function') ? r : rng;
+    var a = arr.slice(), i, j, t;
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(pick() * (i + 1));
+      if (j > i) { j = i; }
+      if (j < 0) { j = 0; }
+      t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* Draws n questions with no repeats, leaning on a 3 easy / 3 medium / 2 hard
+     spread when the bank can supply it, then falling back to whatever is left. */
+  function pickQuestions(n, r) {
+    var pick = (typeof r === 'function') ? r : rng;
+    var want = (n === undefined || n === null || isNaN(n)) ? QUESTIONS_PER_BATTLE : Math.floor(n);
+    if (want < 1) { want = 1; }
+    if (want > BANK.length) { want = BANK.length; }
+
+    var easy = Math.round(want * 3 / 8);
+    var medium = Math.round(want * 3 / 8);
+    var hard = want - easy - medium;
+    if (hard < 0) { medium += hard; hard = 0; }
+    if (medium < 0) { easy += medium; medium = 0; }
+    var quota = { 1: easy, 2: medium, 3: hard };
+
+    var buckets = { 1: [], 2: [], 3: [] };
+    var i, d;
+    for (i = 0; i < BANK.length; i++) {
+      d = BANK[i].difficulty;
+      if (!buckets[d]) { buckets[d] = []; }
+      buckets[d].push(BANK[i]);
+    }
+
+    var out = [], taken = [], k, pool;
+    for (k = 1; k <= 3; k++) {
+      pool = shuffle(buckets[k] || [], pick);
+      for (i = 0; i < pool.length && out.length < want && i < quota[k]; i++) {
+        out.push(pool[i]);
+        taken.push(pool[i]);
+      }
+    }
+
+    if (out.length < want) {
+      var rest = [];
+      for (i = 0; i < BANK.length; i++) {
+        if (taken.indexOf(BANK[i]) === -1) { rest.push(BANK[i]); }
+      }
+      rest = shuffle(rest, pick);
+      for (i = 0; i < rest.length && out.length < want; i++) { out.push(rest[i]); }
+    }
+
+    return shuffle(out, pick);
+  }
+
+  function buildQuestion(q, r) {
+    var options = shuffle([q.correct].concat(q.wrong), r);
+    return {
+      term: q.term,
+      shortTerm: q.term.split(' (')[0],
+      prompt: q.prompt,
+      options: options,
+      correctIndex: options.indexOf(q.correct),
+      correctText: q.correct,
+      buddySays: q.buddySays,
+      difficulty: q.difficulty
+    };
+  }
+
+  var battle = null;
+
+  function snapshotQuestion(q) {
+    if (!q) { return null; }
+    return {
+      term: q.term,
+      shortTerm: q.shortTerm,
+      prompt: q.prompt,
+      options: q.options.slice(),
+      correctIndex: q.correctIndex,
+      buddySays: q.buddySays
+    };
+  }
+
+  function state() {
+    if (!battle) {
+      return {
+        phase: 'idle', index: 0, blobHp: QUESTIONS_PER_BATTLE, hearts: START_HEARTS,
+        hits: 0, total: QUESTIONS_PER_BATTLE, current: null, last: null
+      };
+    }
+    return {
+      phase: battle.phase,
+      index: battle.index,
+      blobHp: battle.blobHp,
+      hearts: battle.hearts,
+      hits: battle.hits,
+      total: battle.questions.length,
+      current: snapshotQuestion(battle.questions[battle.index]),
+      last: battle.last ? {
+        correct: battle.last.correct, chosen: battle.last.chosen,
+        correctText: battle.last.correctText, buddySays: battle.last.buddySays,
+        term: battle.last.term
+      } : null
+    };
+  }
+
+  function newBattle(r) {
+    var pick = (typeof r === 'function') ? r : rng;
+    var raw = pickQuestions(QUESTIONS_PER_BATTLE, pick);
+    var qs = [], i;
+    for (i = 0; i < raw.length; i++) { qs.push(buildQuestion(raw[i], pick)); }
+    battle = {
+      phase: 'question', index: 0, blobHp: qs.length, hearts: START_HEARTS,
+      hits: 0, misses: 0, questions: qs, last: null
+    };
+    return state();
+  }
+
+  function answer(optionIndex) {
+    if (!battle || battle.phase !== 'question') {
+      var s = state();
+      return { correct: false, blobHp: s.blobHp, hearts: s.hearts, phase: s.phase };
+    }
+    var q = battle.questions[battle.index];
+    var ok = (optionIndex === q.correctIndex);
+    if (ok) {
+      battle.hits += 1;
+      battle.blobHp = Math.max(0, battle.blobHp - 1);
+    } else {
+      battle.misses += 1;
+      battle.hearts = Math.max(0, battle.hearts - 1);
+    }
+    battle.last = {
+      correct: ok, chosen: optionIndex, correctText: q.correctText,
+      buddySays: q.buddySays, term: q.term
+    };
+    battle.phase = 'result';
+    return { correct: ok, blobHp: battle.blobHp, hearts: battle.hearts, phase: battle.phase };
+  }
+
+  function next() {
+    if (!battle || battle.phase !== 'result') { return state(); }
+    if (battle.hearts <= 0) {
+      battle.phase = 'lost';
+    } else if (battle.index >= battle.questions.length - 1) {
+      battle.phase = 'won';
+    } else {
+      battle.index += 1;
+      battle.phase = 'question';
+    }
+    return state();
+  }
+
+  /* ==========================================================
+     3. VIEW STATE AND ANIMATION (simulation only, no drawing)
+     ========================================================== */
+  var W = 640, H = 220, SCALE = 4;
+  var BUDDY_X = 96, BUDDY_GROUND = 200;
+  var BLOB_X = 420, BLOB_GROUND = 192;
+
+  var fx = {
+    t: 0,
+    buddyAnim: 'idle', buddyT: 0, buddyLeft: 0,
+    blobAnim: 'idle', blobT: 0, blobLeft: 0,
+    lunge: 0,
+    paper: -1,      /* 0..1 while a paper ball is in flight, -1 when idle */
+    paperDelay: 0,
+    bark: -1,
+    shake: 0,
+    flash: 0,
+    ending: ''      /* '', 'won', 'lost' */
+  };
+
+  function setBuddy(anim, seconds) { fx.buddyAnim = anim; fx.buddyT = 0; fx.buddyLeft = seconds || 0; }
+  function setBlob(anim, seconds) { fx.blobAnim = anim; fx.blobT = 0; fx.blobLeft = seconds || 0; }
+
+  function playCorrect() {
+    setBuddy('attack', 0.5);
+    fx.lunge = 0.5;
+    setBlob('hurt', 0.6);
+    fx.bark = 0;
+    fx.shake = 0.45;
+  }
+
+  function playWrong() {
+    setBlob('attack', 0.55);
+    fx.paper = -1;
+    fx.paperDelay = 0.2;
+  }
+
+  function tick(dt) {
+    if (!(dt > 0)) { dt = 0; }
+    if (dt > 0.1) { dt = 0.1; }
+    fx.t += dt;
+    fx.buddyT += dt;
+    fx.blobT += dt;
+
+    if (fx.buddyLeft > 0) {
+      fx.buddyLeft -= dt;
+      if (fx.buddyLeft <= 0 && fx.ending === '') { setBuddy('idle', 0); }
+    }
+    if (fx.blobLeft > 0) {
+      fx.blobLeft -= dt;
+      if (fx.blobLeft <= 0 && fx.ending === '') { setBlob('idle', 0); }
+    }
+    if (fx.lunge > 0) { fx.lunge = Math.max(0, fx.lunge - dt); }
+    if (fx.shake > 0) { fx.shake = Math.max(0, fx.shake - dt); }
+    if (fx.flash > 0) { fx.flash = Math.max(0, fx.flash - dt); }
+    if (fx.bark >= 0) {
+      fx.bark += dt;
+      if (fx.bark > 0.8) { fx.bark = -1; }
+    }
+    if (fx.paperDelay > 0) {
+      fx.paperDelay -= dt;
+      if (fx.paperDelay <= 0) { fx.paper = 0; }
+    }
+    if (fx.paper >= 0) {
+      fx.paper += dt / 0.4;
+      if (fx.paper >= 1) {
+        fx.paper = -1;
+        setBuddy('hurt', 0.5);
+        fx.flash = 0.2;
+        if (ui.onPaperLanded) { ui.onPaperLanded(); }
+      }
+    }
+    return fx;
+  }
+
+  /* ==========================================================
+     4. PUBLIC API
+     ========================================================== */
+  var api = {
+    BANK: BANK,
+    pickQuestions: pickQuestions,
+    shuffle: shuffle,
+    newBattle: newBattle,
+    answer: answer,
+    next: next,
+    state: state,
+    setRng: setRng,
+    tick: tick,
+    fx: fx
+  };
+  global.JargonBattle = api;
+
+  /* ==========================================================
+     5. DOM AND RENDERING
+     ========================================================== */
+  var ui = {};
+  var doc = global.document;
+  if (!doc) { return; }
+
+  var cv = doc.getElementById('scene');
+  var ctx = null, dpr = 1, cssW = W, cssH = H;
+  var blobBar = doc.getElementById('blobBar');
+  var heartsBox = doc.getElementById('hearts');
+  var hud = doc.getElementById('hud');
+  var dlg = doc.getElementById('dlg');
+  var dlgTerm = doc.getElementById('dlgTerm');
+  var dlgText = doc.getElementById('dlgText');
+  var menu = doc.getElementById('menu');
+  var opts = menu ? menu.querySelectorAll('.opt') : [];
+  var nextRow = doc.getElementById('nextRow');
+  var nextBtn = doc.getElementById('nextBtn');
+  var endPanel = doc.getElementById('endPanel');
+  var endTitle = doc.getElementById('endTitle');
+  var endSub = doc.getElementById('endSub');
+  var endHits = doc.getElementById('endHits');
+  var endBest = doc.getElementById('endBest');
+  var againBtn = doc.getElementById('againBtn');
+  var intro = doc.getElementById('intro');
+  var startBtn = doc.getElementById('startBtn');
+  var live = doc.getElementById('live');
+
+  var reduce = false;
+  try {
+    if (global.matchMedia) {
+      var mq = global.matchMedia('(prefers-reduced-motion: reduce)');
+      reduce = !!mq.matches;
+      if (mq.addEventListener) { mq.addEventListener('change', function (e) { reduce = !!e.matches; }); }
+    }
+  } catch (e) { reduce = false; }
+
+  var fontsReady = false;
+  (function gateFonts() {
+    var done = function () { fontsReady = true; };
+    try {
+      if (doc.fonts && doc.fonts.ready && typeof doc.fonts.ready.then === 'function') {
+        doc.fonts.ready.then(done, done);
+      }
+    } catch (e) { /* a blocked font CDN must never blank the canvas */ }
+    global.setTimeout(done, 1500);
+  }());
+
+  var uiBeat = '';   /* '' | 'appear' */
+
+  /* ---------- storage ---------- */
+  var BEST_KEY = 'pb.jargonBattle.best';
+  function readBest() {
+    try {
+      var v = parseInt(global.localStorage.getItem(BEST_KEY), 10);
+      return (isFinite(v) && v >= 0) ? v : 0;
+    } catch (e) { return 0; }
+  }
+  function writeBest(v) {
+    try { global.localStorage.setItem(BEST_KEY, String(v)); } catch (e) { /* private mode is fine */ }
+  }
+
+  /* ---------- canvas sizing ---------- */
+  function sizeCanvas() {
+    if (!cv || !cv.getContext) { return; }
+    dpr = Math.min(3, Math.max(1, global.devicePixelRatio || 1));
+    cssW = (cv.clientWidth > 8) ? cv.clientWidth : W;
+    cssH = (cv.clientHeight > 8) ? cv.clientHeight : H;
+    cv.width = Math.round(cssW * dpr);
+    cv.height = Math.round(cssH * dpr);
+    ctx = cv.getContext('2d');
+    if (!ctx) { return; }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+  }
+
+  /* The world is 640x220, but the box it lands in is whatever the layout gives
+     us: a wide strip on desktop, a 16:9 panel in the glossary iframe, a taller
+     crop on a phone. MUST is the rectangle that has to survive every shape,
+     both fighters and the ground included. The camera fills the box, and only
+     crops as far as MUST allows, so nobody ever gets letterboxed or cut off. */
+  var MUST_W = 516, MUST_H = 180, MUST_CX = 334;
+
+  function camera() {
+    var cover = Math.max(cssW / W, cssH / H);
+    var mustFit = Math.min(cssW / MUST_W, cssH / MUST_H);
+    var s = Math.min(cover, mustFit);
+    if (!(s > 0)) { s = 1; }
+    return { s: s, tx: cssW / 2 - MUST_CX * s, ty: cssH - H * s };
+  }
+
+  function ell(cx, cy, rx, ry) {
+    ctx.beginPath();
+    if (ctx.ellipse) { ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); }
+    else { ctx.arc(cx, cy, rx, 0, Math.PI * 2); }
+    ctx.fill();
+  }
+
+  /* Sun and sparks live inside MUST, so no crop can slice them; the extra pair
+     above the Blob is only drawn when the whole world is on screen. */
+  function drawSky(fullWorld) {
+    ctx.fillStyle = '#FCEFCF';
+    ell(150, 66, 25, 25);
+    ctx.fillStyle = '#F4B740';
+    ell(150, 66, 14, 14);
+    var sparks = [[212, 50], [278, 80], [332, 46], [394, 76]];
+    if (fullWorld) { sparks = sparks.concat([[468, 18], [552, 26], [608, 60]]); }
+    ctx.fillStyle = '#F4B740';
+    for (var i = 0; i < sparks.length; i++) {
+      var x = sparks[i][0], y = sparks[i][1];
+      ctx.fillRect(x - 1, y - 4, 3, 11);
+      ctx.fillRect(x - 4, y - 1, 11, 3);
+    }
+  }
+
+  function drawScenery() {
+    ctx.fillStyle = '#CBEBE4';
+    ell(150, 200, 210, 56);
+    ell(470, 196, 200, 46);
+
+    /* bled well past the world so no container shape can leave a bare edge */
+    ctx.fillStyle = '#0A332E';
+    ctx.fillRect(-640, 184, W + 1280, H - 184 + 400);
+    ctx.fillStyle = '#0C8175';
+    ctx.fillRect(-640, 184, W + 1280, 5);
+  }
+
+  function platform(cx, cy, rx, ry) {
+    ctx.fillStyle = '#0A332E';
+    ell(cx, cy + 5, rx, ry);
+    ctx.fillStyle = '#0C8175';
+    ell(cx, cy, rx, ry);
+    ctx.fillStyle = '#16C9B0';
+    ell(cx, cy - 2, rx * 0.74, ry * 0.42);
+  }
+
+  function frameOf(set, name, t, fps) {
+    var anim = set[name] || set.idle;
+    var n = anim.length;
+    if (n < 2) { return anim[0]; }
+    return anim[Math.floor(t * (fps || 4)) % n];
+  }
+
+  function buddyFrame() {
+    var B = global.PBSprites.buddy;
+    if (fx.ending === 'lost') { return B.hurt[0]; }
+    if (fx.ending === 'won') { return frameOf(B, 'happy', fx.t, 4); }
+    if (fx.buddyAnim === 'hurt') { return B.hurt[0]; }
+    if (fx.buddyAnim === 'attack') { return fx.buddyT < 0.16 ? B.attack[0] : B.attack[1]; }
+    /* idle breathes on a 600ms loop */
+    return B.idle[Math.floor(fx.t / 0.3) % B.idle.length];
+  }
+
+  function blobFrame() {
+    var M = global.PBSprites.blob;
+    if (fx.ending === 'won') { return M.faint[0]; }
+    if (fx.blobAnim === 'hurt') { return M.hurt[0]; }
+    if (fx.blobAnim === 'attack') { return fx.blobT < 0.2 ? M.attack[0] : M.attack[1]; }
+    return M.idle[Math.floor(fx.t / 0.5) % M.idle.length];
+  }
+
+  function drawBark() {
+    if (fx.bark < 0) { return; }
+    var p = fx.bark / 0.8;
+    var cx = 396, cy = 96;
+    var pulse = reduce ? 1.1 : (0.78 + 0.42 * Math.sin(Math.min(1, p * 2.2) * Math.PI));
+    var r1 = 46 * pulse, r2 = 26 * pulse, i, ang;
+    ctx.save();
+    var fade = (p < 0.4) ? 1 : (1 - Math.pow((p - 0.4) / 0.6, 2));
+    ctx.globalAlpha = Math.max(0, fade);
+    ctx.fillStyle = '#F4B740';
+    ctx.beginPath();
+    for (i = 0; i < 20; i++) {
+      ang = (i / 20) * Math.PI * 2;
+      var r = (i % 2 === 0) ? r1 : r2;
+      var px = cx + Math.cos(ang) * r, py = cy + Math.sin(ang) * r * 0.82;
+      if (i === 0) { ctx.moveTo(px, py); } else { ctx.lineTo(px, py); }
+    }
+    ctx.closePath();
+    ctx.fill();
+    if (fontsReady) {
+      ctx.fillStyle = '#0B1F1C';
+      ctx.font = '800 26px "Hanken Grotesk", system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('BARK!', cx, cy + 1);
+    }
+    ctx.restore();
+  }
+
+  function drawPaper() {
+    if (fx.paper < 0) { return; }
+    var P = global.PBSprites.props.paper;
+    var p = Math.min(1, fx.paper);
+    var x0 = 408, y0 = 104, x1 = 214, y1 = 118;
+    var x = x0 + (x1 - x0) * p;
+    var y = y0 + (y1 - y0) * p - Math.sin(p * Math.PI) * 42;
+    ctx.save();
+    if (!reduce) {
+      ctx.translate(x + 16, y + 16);
+      ctx.rotate(-p * Math.PI * 2);
+      ctx.translate(-16, -16);
+      ctx.drawImage(global.PBSprites.bake(P[0], SCALE), 0, 0);
+    } else {
+      ctx.drawImage(global.PBSprites.bake(P[0], SCALE), x, y);
+    }
+    ctx.restore();
+  }
+
+  function render() {
+    if (!ctx || !global.PBSprites) { return; }
+    var S = global.PBSprites;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.save();
+
+    ctx.fillStyle = '#E8F6F3';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    if (!reduce && fx.shake > 0) {
+      ctx.translate(Math.round((Math.random() * 2 - 1) * fx.shake * 7), Math.round((Math.random() * 2 - 1) * fx.shake * 5));
+    }
+
+    var cam = camera();
+    ctx.translate(cam.tx, cam.ty);
+    ctx.scale(cam.s, cam.s);
+
+    drawSky(cam.tx >= -4 && cam.ty >= -4);
+    drawScenery();
+    platform(168, BUDDY_GROUND, 92, 14);
+    platform(496, BLOB_GROUND, 96, 15);
+
+    var bf = buddyFrame();
+    var lunge = fx.lunge > 0 ? Math.round(Math.sin((1 - fx.lunge / 0.5) * Math.PI) * 30) : 0;
+    ctx.drawImage(S.bake(bf, SCALE), BUDDY_X + lunge, BUDDY_GROUND - 25 * SCALE);
+
+    var mf = blobFrame();
+    var wob = (reduce || fx.ending) ? 0 : Math.round(Math.sin(fx.t * 2.2) * 3);
+    ctx.drawImage(S.bake(mf, SCALE), BLOB_X, BLOB_GROUND - 36 * SCALE + wob);
+
+    drawPaper();
+    drawBark();
+    ctx.restore();
+
+    if (!reduce && fx.flash > 0) {
+      ctx.fillStyle = 'rgba(193,80,46,' + (0.4 * (fx.flash / 0.2)).toFixed(3) + ')';
+      ctx.fillRect(0, 0, cssW, cssH);
+    }
+  }
+
+  /* The element's box is set by layout, not by the bitmap, so a stale bitmap
+     would be stretched to fit. Re-measure whenever the box moves: fonts landing,
+     a flex column settling, the glossary iframe being resized. */
+  function ensureSize() {
+    if (!cv) { return; }
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if (w > 8 && h > 8 && (w !== cssW || h !== cssH)) { sizeCanvas(); }
+  }
+
+  var lastTs = 0;
+  function loop(ts) {
+    var dt = lastTs ? (ts - lastTs) / 1000 : 0;
+    lastTs = ts;
+    ensureSize();
+    tick(dt);
+    render();
+    global.requestAnimationFrame(loop);
+  }
+
+  /* ---------- HUD ---------- */
+  function buildBar() {
+    if (!blobBar) { return; }
+    blobBar.innerHTML = '';
+    for (var i = 0; i < QUESTIONS_PER_BATTLE; i++) {
+      var d = doc.createElement('span');
+      d.className = 'seg on';
+      blobBar.appendChild(d);
+    }
+  }
+
+  function paintBar(hp) {
+    if (!blobBar) { return; }
+    var segs = blobBar.children, i;
+    for (i = 0; i < segs.length; i++) {
+      if (i < hp) { segs[i].className = 'seg on'; }
+      else { segs[i].className = 'seg gone'; }
+    }
+    blobBar.className = (hp <= 2) ? 'bar low' : 'bar';
+    blobBar.setAttribute('aria-label', 'Jargon Blob health: ' + hp + ' of ' + QUESTIONS_PER_BATTLE);
+  }
+
+  function buildHearts() {
+    if (!heartsBox || !global.PBSprites) { return; }
+    heartsBox.innerHTML = '';
+    var P = global.PBSprites.props.heart;
+    var s = (global.devicePixelRatio >= 2) ? 6 : 3;
+    for (var i = 0; i < START_HEARTS; i++) {
+      var c = doc.createElement('canvas');
+      c.width = P.w * s;
+      c.height = P.h * s;
+      c.style.width = (P.w * 3) + 'px';
+      c.style.height = (P.h * 3) + 'px';
+      c.setAttribute('role', 'img');
+      c.setAttribute('aria-label', 'Heart, full');
+      heartsBox.appendChild(c);
+    }
+    paintHearts(START_HEARTS);
+  }
+
+  function paintHearts(n) {
+    if (!heartsBox || !global.PBSprites) { return; }
+    var P = global.PBSprites.props.heart;
+    var kids = heartsBox.children, i, c, cx2;
+    for (i = 0; i < kids.length; i++) {
+      c = kids[i];
+      cx2 = c.getContext ? c.getContext('2d') : null;
+      if (!cx2) { continue; }
+      var s = Math.round(c.width / P.w);
+      cx2.clearRect(0, 0, c.width, c.height);
+      cx2.globalAlpha = (i < n) ? 1 : 0.18;
+      global.PBSprites.draw(cx2, P[0], 0, 0, s, false);
+      cx2.globalAlpha = 1;
+      c.setAttribute('aria-label', (i < n) ? 'Heart, full' : 'Heart, lost');
+    }
+  }
+
+  function describeScene(s) {
+    if (!cv) { return; }
+    var txt;
+    if (s.phase === 'won') {
+      txt = 'Battle scene: the Jargon Blob has flopped over and Buddy is bouncing with his tongue out.';
+    } else if (s.phase === 'lost') {
+      txt = 'Battle scene: Buddy is dazed and the Jargon Blob is still standing.';
+    } else {
+      txt = 'Battle scene: Buddy the boxer dog on the left faces the Jargon Blob on the right. Blob health '
+        + s.blobHp + ' of ' + QUESTIONS_PER_BATTLE + '. Buddy has ' + s.hearts + ' hearts.';
+    }
+    cv.setAttribute('aria-label', txt);
+  }
+
+  function say(msg) { if (live) { live.textContent = msg; } }
+
+  function setDialogue(term, line1, line2) {
+    if (!dlgTerm || !dlgText) { return; }
+    dlgTerm.textContent = term || '';
+    dlgText.textContent = '';
+    if (line2) {
+      var lead = doc.createElement('strong');
+      lead.className = 'lead';
+      lead.textContent = line1;
+      dlgText.appendChild(lead);
+      dlgText.appendChild(doc.createTextNode(line2));
+    } else {
+      dlgText.appendChild(doc.createTextNode(line1 || ''));
+    }
+    var caret = doc.createElement('span');
+    caret.className = 'caret';
+    caret.setAttribute('aria-hidden', 'true');
+    dlgText.appendChild(caret);
+  }
+
+  /* ---------- screens ---------- */
+  function showQuestion(s) {
+    var q = s.current;
+    if (!q) { return; }
+    setDialogue(q.term, 'A wild ' + q.shortTerm + ' appears!', q.prompt);
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].className = 'opt';
+      opts[i].disabled = false;
+      opts[i].querySelector('.txt').textContent = q.options[i];
+      opts[i].setAttribute('aria-label', 'Answer ' + (i + 1) + ': ' + q.options[i]);
+    }
+    if (menu) { menu.hidden = false; }
+    if (nextRow) { nextRow.hidden = true; }
+    if (endPanel) { endPanel.hidden = true; }
+    if (dlg) { dlg.hidden = false; }
+    paintBar(s.blobHp);
+    paintHearts(s.hearts);
+    describeScene(s);
+    say('Question ' + (s.index + 1) + ' of ' + s.total + '. ' + q.prompt + ' Four answers, use keys 1 to 4.');
+    if (started && opts.length) { opts[0].focus(); }
+  }
+
+  function showResult(s) {
+    var L = s.last;
+    if (!L) { return; }
+    var line = L.correct
+      ? 'Direct hit! Buddy says: ' + L.buddySays
+      : 'Ouch. The answer was: ' + L.correctText + ' Buddy says: ' + L.buddySays;
+    setDialogue(L.term, line);
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].disabled = true;
+      if (i === s.current.correctIndex) { opts[i].className = 'opt right'; }
+      else if (i === L.chosen) { opts[i].className = 'opt wrong'; }
+      else { opts[i].className = 'opt'; }
+    }
+    if (nextRow) { nextRow.hidden = false; }
+    paintBar(s.blobHp);
+    describeScene(s);
+    say((L.correct ? 'Correct. The Jargon Blob is down to ' + s.blobHp + ' of ' + QUESTIONS_PER_BATTLE + '. '
+                   : 'Wrong. The answer was: ' + L.correctText + ' Buddy has ' + s.hearts + ' hearts left. ')
+        + 'Buddy says: ' + L.buddySays);
+    if (nextBtn) { nextBtn.focus(); }
+  }
+
+  function showEnd(s) {
+    var won = (s.phase === 'won');
+    fx.ending = won ? 'won' : 'lost';
+    setBuddy(won ? 'happy' : 'hurt', 0);
+    setBlob(won ? 'faint' : 'idle', 0);
+
+    var best = readBest();
+    if (s.hits > best) { best = s.hits; writeBest(best); }
+
+    if (menu) { menu.hidden = true; }
+    if (nextRow) { nextRow.hidden = true; }
+    if (endPanel) { endPanel.hidden = false; }
+    if (endTitle) { endTitle.textContent = won ? 'The Jargon Blob is busted!' : 'Buddy needs a nap.'; }
+    if (endSub) {
+      endSub.textContent = won
+        ? (s.hits === s.total ? 'A clean sweep, and not a heart lost. Grand job.' : 'Buddy held his ground and the Blob gave up its paperwork.')
+        : 'The Blob lives to confuse another day.';
+    }
+    if (endHits) { endHits.textContent = s.hits + ' of ' + s.total; }
+    if (endBest) { endBest.textContent = best + ' of ' + s.total; }
+
+    setDialogue('', won ? 'Grand job. Buddy is off doing a lap of the garden.' : 'Sure look. Buddy will have a nap and go again.');
+    paintBar(s.blobHp);
+    paintHearts(s.hearts);
+    describeScene(s);
+    say((won ? 'Victory. The Jargon Blob is busted. ' : 'Defeat. Buddy needs a nap. ')
+        + 'Hits landed: ' + s.hits + ' of ' + s.total + '. Best ever: ' + best + ' of ' + s.total + '.');
+    if (againBtn) { againBtn.focus(); }
+  }
+
+  var started = false;
+
+  function sync() {
+    var s = state();
+    if (s.phase === 'question') { showQuestion(s); }
+    else if (s.phase === 'result') { showResult(s); }
+    else if (s.phase === 'won' || s.phase === 'lost') { showEnd(s); }
+  }
+
+  /* the heart only drops from the HUD once the paper ball actually lands */
+  ui.onPaperLanded = function () {
+    var s = state();
+    paintHearts(s.hearts);
+    describeScene(s);
+  };
+
+  function startBattle() {
+    started = true;
+    fx.ending = '';
+    setBuddy('idle', 0);
+    setBlob('idle', 0);
+    fx.paper = -1; fx.bark = -1; fx.shake = 0; fx.flash = 0; fx.paperDelay = 0;
+    newBattle();
+    var s = state();
+    paintBar(s.blobHp);
+    paintHearts(s.hearts);
+    if (intro) { intro.hidden = true; }
+    if (hud) { hud.hidden = false; }
+    if (endPanel) { endPanel.hidden = true; }
+    if (menu) { menu.hidden = true; }
+    if (dlg) { dlg.hidden = false; }
+    if (nextRow) { nextRow.hidden = false; }
+    uiBeat = 'appear';
+    setDialogue('', 'A wild Jargon Blob appears! Eight terms, and Buddy is ready.');
+    describeScene(s);
+    say('A wild Jargon Blob appears. Eight terms to get through.');
+    if (nextBtn) { nextBtn.focus(); }
+  }
+
+  function chooseAnswer(i) {
+    var s = state();
+    if (s.phase !== 'question' || uiBeat) { return; }
+    var res = answer(i);
+    if (res.correct) { playCorrect(); } else { playWrong(); }
+    /* hearts wait for the paper ball; blob HP drops with the hit */
+    showResult(state());
+    if (res.correct) { paintHearts(state().hearts); }
+  }
+
+  function advance() {
+    if (uiBeat === 'appear') {
+      uiBeat = '';
+      sync();
+      return;
+    }
+    var s = state();
+    if (s.phase !== 'result') { return; }
+    fx.paper = -1; fx.paperDelay = 0; fx.bark = -1;
+    next();
+    sync();
+  }
+
+  /* ---------- wiring ---------- */
+  if (startBtn) { startBtn.addEventListener('click', startBattle); }
+  if (againBtn) { againBtn.addEventListener('click', startBattle); }
+  if (nextBtn) { nextBtn.addEventListener('click', advance); }
+
+  for (var oi = 0; oi < opts.length; oi++) {
+    (function (btn) {
+      btn.addEventListener('click', function () { chooseAnswer(parseInt(btn.getAttribute('data-i'), 10)); });
+    }(opts[oi]));
+  }
+
+  if (menu) {
+    menu.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (k !== 'ArrowRight' && k !== 'ArrowLeft' && k !== 'ArrowDown' && k !== 'ArrowUp') { return; }
+      var here = -1, i;
+      for (i = 0; i < opts.length; i++) { if (opts[i] === doc.activeElement) { here = i; } }
+      if (here < 0) { return; }
+      e.preventDefault();
+      var step = (k === 'ArrowRight' || k === 'ArrowDown') ? 1 : -1;
+      var n = (here + step + opts.length) % opts.length;
+      opts[n].focus();
+    });
+  }
+
+  doc.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) { return; }
+    var s = state();
+    var tag = e.target && e.target.tagName ? e.target.tagName : '';
+    if (s.phase === 'question' && !uiBeat && e.key >= '1' && e.key <= '4') {
+      e.preventDefault();
+      chooseAnswer(parseInt(e.key, 10) - 1);
+      return;
+    }
+    if ((e.key === 'Enter' || e.key === ' ') && (uiBeat === 'appear' || s.phase === 'result')) {
+      /* a focused button handles its own Enter and Space, do not fire twice */
+      if (tag === 'BUTTON' || tag === 'A') { return; }
+      e.preventDefault();
+      advance();
+    }
+  });
+
+  global.addEventListener('resize', function () {
+    sizeCanvas();
+    render();
+  });
+
+  /* ---------- boot ---------- */
+  function boot() {
+    sizeCanvas();
+    buildBar();
+    buildHearts();
+    paintBar(QUESTIONS_PER_BATTLE);
+    setDialogue('', 'Buddy is stretching. Press start when you are ready.');
+    if (global.requestAnimationFrame) { global.requestAnimationFrame(loop); }
+    else { render(); }
+  }
+
+  if (doc.readyState === 'loading') { doc.addEventListener('DOMContentLoaded', boot); }
+  else { boot(); }
+
+}(this));
+</script>
+</body>
+</html>
