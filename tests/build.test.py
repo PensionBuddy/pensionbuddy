@@ -9,8 +9,8 @@ These tests assert the invariants that assembly must hold, against the pages
 as they actually ship, so a page that is broken in the repository fails here
 whether or not the build has been re-run.
 
-Same reporting contract as the JavaScript suites: one line per assertion,
-ALL PASS or FAILURES at the end, exit 0 or 1.
+Same report as the JavaScript suites, from tests/harness.py: one line per
+assertion, ALL PASS or FAILURES at the end, exit 0 or 1.
 """
 import os
 import re
@@ -18,21 +18,10 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
+sys.path.insert(0, os.path.join(ROOT, 'tests'))
 
 import pagebuild  # noqa: E402
-
-_pass, _fail, _lines = 0, 0, []
-
-
-def eq(label, actual, expected):
-    global _pass, _fail
-    ok = actual == expected
-    if ok:
-        _pass += 1
-    else:
-        _fail += 1
-    _lines.append(('  ok   ' if ok else '  FAIL ') + label +
-                  ('' if ok else '\n         expected %r\n         actual   %r' % (expected, actual)))
+from harness import eq, report  # noqa: E402
 
 
 def read(rel):
@@ -116,13 +105,6 @@ def run():
     for name, page in pages:
         bad = [label for label, ok in pagebuild.check(read(page.out), page) if not ok]
         eq('7. %s passes every build check' % page.out, bad, [])
-
-
-def report():
-    summary = '\n' + ('ALL PASS' if _fail == 0 else 'FAILURES') + \
-              '  %d passed, %d failed' % (_pass, _fail)
-    print('\n'.join(_lines) + summary)
-    sys.exit(0 if _fail == 0 else 1)
 
 
 if __name__ == '__main__':
