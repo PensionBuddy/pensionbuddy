@@ -28,14 +28,12 @@ else. Buddy gives facts, never advice, and every game ends on the free call.
 | Existing suites | **Unchanged, all pass** | `build.test.py` 35, `run-tests.py` 608 plus the panel check. |
 | verify.py | **0 FAIL** | 18 pages at 375 / 1360 / 1440. The three WARN are the standing A1 / A4 / F1 placeholders. The battle intro's overlay went from 90% to 96% pine so the contrast audit reads it as the background it is. |
 
-## NEEDS DAMIAN INPUT
+## Signed off, 2026-09-17
 
-1. **Content sign-off.** The 26 questions, the 28 run labels and the 9 facts
-   are plain data at the top of each game's script. Fact-checked, but it is
-   your name on the site.
-2. **"Revenue chips in".** Kept as a run label because the glossary already
-   describes relief as money coming back. If nothing should imply the State
-   adds cash to the pot, "Tax back" is a straight swap.
+Damian signed off the content as written: the 26 questions, the 28 run labels
+and the 9 facts, all plain data at the top of each game's script. One change
+asked for and made: the run label "Revenue chips in" is now "Tax back", so
+nothing implies the State adds cash to the pot.
 
 ## Observed, not changed
 
