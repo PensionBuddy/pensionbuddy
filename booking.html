@@ -295,7 +295,6 @@ details summary{transition:padding .2s ease}
 details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
-summary .pm{transition:transform .3s cubic-bezier(.4,0,.2,1),background .25s ease,color .25s ease}
 /* focus-visible polish on non-button interactives */
 .aud-card:focus-visible,a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
@@ -364,7 +363,6 @@ input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
 main{display:block}
 #main:focus{outline:none}
 /* 6) FAQ affordance: hover cue on the question row */
-details summary:hover .pm{background:var(--teal-100)}
 details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
@@ -423,13 +421,11 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-close:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 .pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
 .pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
-.pb-b-q .pm{margin-left:auto;color:var(--ac,#0B7A6E);font-weight:700}
 .pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
 .pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
 .pb-b-a>div{padding:2px 8px 14px}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
-.pb-b-item.open .pm{transform:rotate(45deg);display:inline-block}
 .pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
 .pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
 .pb-b-foot .btn{width:100%;justify-content:center}
@@ -566,7 +562,7 @@ nav.scrolled{background:var(--bg)}
 .pb-consent .pb-c-yes,.pb-consent .pb-c-no,.email-cap input,.field input,
 .ffield input,.nav-links.open{border-radius:8px}
 .pb-b-btn,.pb-b-panel{border-radius:10px}
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
 .hc-bars i,.cbars i,.rv-bar i{border-radius:3px 3px 0 0}
 /* true circles keep their geometry */
 .pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg{border-radius:50%}
@@ -584,8 +580,6 @@ nav.scrolled{background:var(--bg)}
   font-family:var(--font-mono);font-size:.7rem;font-weight:500;letter-spacing:.15em;
   color:var(--ink-3);padding-bottom:12px;margin-bottom:18px;
   border-bottom:1px solid var(--line-2)}
-summary .pm{background:transparent;border:1px solid var(--line-2);color:var(--ink-2)}
-details[open] summary .pm{background:var(--ink);border-color:var(--ink);color:#fff}
 
 /* --- 5. Full-bleed dark sections that break the container --- */
 /* one padding-inline does the work: the section spans the viewport, its
@@ -748,7 +742,7 @@ a.btn{font-weight:600}
 .email-cap input,.field input,.ffield input,.nav-links.open,
 .hero-card,.calc-prev,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
 
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr,
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr,
 .hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.tag,
 .pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
 
@@ -1245,7 +1239,7 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .gapstats,.cover,.aud-figure,.chart-card,.relief-card,.boost-card,.cta-card,
 .book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,
 .ffield input,.nav-links.open{border-radius:12px}
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.tag,.dl-tag,
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.tag,.dl-tag,
 .hc-pill,.hc-badge,.aud-figure .fbadge,.nav-links a.lnk,.nav-tick,
 .seg button,.ec-row{border-radius:8px}
 .hc-bars i,.cbars i,.rv-bar i{border-radius:5px 5px 0 0}
@@ -1314,10 +1308,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
   text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:14px 0}
 .adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg)}
+.adv > summary::after{content:"+";margin-left:auto}
 .adv .adv-in{padding-top:6px}
 
 /* --- 4. Baymard trust: at 375px the audience pages showed regulation and
@@ -1417,6 +1408,27 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   .pgrid{grid-template-columns:1fr}
   .popt{min-height:64px}
 }
+
+/* ============================================================
+   v3 - ONE icon set for every disclosure on the site: a plus that
+   turns into an x. It used to be three. The FAQ rows carried a
+   .pm plus restyled through six layers of the stylesheet, the Ask
+   Buddy panel carried its own unboxed plus, and "More options" on
+   the calculators carried a CSS chevron built out of two borders.
+   All three are this one mark now, and this block is its only
+   owner - nothing above restyles it and nothing below needs to.
+   ============================================================ */
+summary .pm,.pb-b-q .pm,.adv > summary::after{
+  width:26px;height:26px;border-radius:8px;box-sizing:border-box;
+  background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
+  flex-shrink:0;margin-left:auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
+             border-color .25s ease,color .25s ease}
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+  transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -1455,7 +1467,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 
   <div class="lead">
     <span class="eyebrow reveal"><span class="pip"></span>Your free consultation</span>
-    <h1 class="reveal" style="transition-delay:.06s">A <span class="hl">real</span> conversation, free of charge.</h1>
+    <h1 class="reveal">You've been meaning to sort the pension. Twenty minutes with Damian starts it.</h1>
     <p class="sub reveal" style="transition-delay:.12s">Twenty minutes with Damian, by phone or video, at a time you choose. Free, with no obligation.</p>
 
     <div class="timeline reveal" style="transition-delay:.18s">
@@ -1488,7 +1500,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
     </div>
 
     <div class="book-head">
-      <h2>Book your call</h2>
+      <h2>Three fields, none about money. Then Damian's calendar.</h2>
       <p>Three quick details, then pick a time that suits. You will get a confirmation by email straight away.</p>
     </div>
 

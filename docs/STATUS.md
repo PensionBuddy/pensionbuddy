@@ -6,6 +6,62 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 15 — 2026-09-17 · Ruthless Standard v3: one face, one heading recipe, one hero
+
+Damian's v3 standard, applied everywhere except `about.html` (which no longer
+exists) and the `#damian` / `#adam` / `#buddy` / `#story` sections on the home
+page. He added `#story` to that list when the audit pointed out it was the same
+folded-in About content. Calculator maths and disclaimer text were locked and
+are byte-identical.
+
+Audited before anything was touched: 18 pages, 804 findings, reported and
+approved by category before a single edit. Three decisions came back — replace
+the hero card with the phone, keep the near-black body (the AAA palette lock
+beats the standard's "muted grey", and `#0B1F1C` is not pure black so rule 2 is
+satisfied either way), and lock `#story`.
+
+| Item | Status | Note |
+|---|---|---|
+| Typography | **One face** | Inter at 400/500/700/800 replaces Fraunces, Hanken Grotesk and, on `broker-vs-autoenrolment` alone, Bricolage Grotesque. IBM Plex Mono is untouched on the numerals and the labels, as rule 2 says. Two `<link>` groups: the 15 pages that carry mono, and the two game pages that never did. Both hrefs checked against Google Fonts for a 200 and for exactly the four weights. |
+| The dead 800 | **Found by measuring** | Every page declared its headings at 800 and every page rendered them at 600. The same selectors were declared twice at identical specificity, ~400 lines apart, and the later block won. Confirmed in headless Chrome on all 18 pages before any edit, not inferred from specificity. The duplicate block is gone; 800 is what ships. |
+| One heading recipe | **Three fixed sizes** | 34/46/68 for h1 and 28/34/46 for h2 on the breakpoints the site already leans on (561, 921); h3 one size at 20. No fluid clamp. 88 bespoke per-section size, weight and leading declarations removed rather than left to fight the recipe. Every selector that used to carry its own headline size is named in it — a bare `h2` loses to any `.class h2`, which is what kept the first attempt leaking. Dense reference headings (glossary terms, legal subsections) take the recipe's smallest step rather than a number of their own. |
+| Canvas fonts | **Caught** | Three `ctx.font` strings in the games are JS, not CSS variables, so a variable-only swap would have left them asking for a face the page no longer loads. Swapped with the rest. |
+| FAQ | **One icon set** | Three treatments became one plus-that-turns-into-an-x: the FAQ `.pm`, the Ask Buddy panel's own unboxed plus, and the "More options" CSS chevron built from two borders. `.pm` had been restyled through six layers of one stylesheet; there is now a single owner and nothing above or below it restyles it. All three marks measured identical at runtime: 26×26, radius 8, same border, same colour, 20px Inter. |
+| Hero | **One column, four pages** | `index`, `director`, `starter`, `tracker` — the only pages with `.hero-grid` markup. The five calculator pages use `.phead`, which rule 3 does not name and which was already single-column, so the hero work never touched a generated page or a render-diff page. Order is the standard's: headline, one line of subcopy, CTA, trust line, phone. Each lede lost the sentence that repeated what the CTA button already promises. |
+| The phone | **Real Buddy chat** | A phone mockup did not exist anywhere on the site before this. Every word inside it is lifted verbatim from that page's own signed-off Ask Buddy answers, and the closing turn on all four is the one that says Buddy never advises and names the free call — so the mockup cannot claim anything the site does not already say. The home page's "Illustration only" line is kept verbatim beneath the phone, per Damian. The audience pages never carried one and none was invented for them. |
+| Photos | **All kept** | Every photo of Damian, Adam and Buddy is untouched. The Buddy avatar is reused in the phone's title bar. |
+| Writing | **22 contrast-pair headlines** | Applied only where the finding matched the file exactly, targeted a real headline rather than a mono label, and carried no instruction text. 30 proposals were skipped with the reason recorded. |
+| Writing — reverted | **5** | Two proposals leaked agent annotations into the markup (`" / <p>…</p>"` and `"(both facts on page: 1765, 1782)"`) and were caught by a scan of every new headline. Two more restated the paragraph directly beneath them, one of them hard-coding €299.30 and €19,200 into prose, which `CONTEXT.md` keeps in the specs and the modules. Three new tax and corporation-tax framings (`"Auto-enrolment gets no tax relief"`, `"Profit can go to Revenue"`, `"the State pay into auto-enrolment"`) were reverted to the shipped wording rather than shipped on Claude's own call — they are accurate to each page's premise but they are new regulated framing, and that is Damian's to sign. |
+| verify.py | **F2 inverted** | The check was keyed on the literal string `Fraunces` in eleven places. It now asserts the opposite: Inter requested and loaded, every display heading on it at 800, no dropped family named in source or resolving at runtime, and at most three heading sizes at a given width. That last clause caught four separate leaks during the run. Mono-faced `h4` footer labels are excluded by name rather than the expectation being loosened. |
+| pagebuild.py | **One line** | `PAGES['compare'].fonts` deleted. `fonts=None` is the default and `assemble()` already guarded with `if page.fonts:`, so nothing else moved. |
+| Existing suites | **Unchanged, all pass** | Nothing under `tests/` asserts anything about fonts, `.hero-grid` or FAQ icons; the coupling is to calculator behaviour and game logic. |
+
+## Proof
+
+- `tools/verify.py` — **0 FAIL** on 18 pages at 375/1360/1440. Three WARN, the
+  standing A1/A4/F1 placeholders, unchanged from baseline.
+- `tests/run-tests.py` — **ALL SUITES PASS**, six suites, 0 failed.
+- `tests/render-diff` against HEAD — every page loads to the same render, write
+  for write; **159,135 states swept, 0 differing, 0 reordered, 0 errors**
+  (compare 150,576 axes+corners, state-pension 2,009 exhaustive,
+  pension-calculator 6,550 axes+corners). The calculator maths is untouched.
+- `tools/pagebuild.py` ×3 rebuild clean; `tools/sync-chrome.py --check` 0 behind.
+
+## Observed, not changed
+
+- The phone reads as a chat card rather than a device at ≤560px, where it goes
+  full-width for readability. Deliberate.
+- The `.adv` "More options" mark is a `::after` on the summary rather than a
+  `.pm` element, because that disclosure has no span to hang one on. It is
+  styled by the same rule and measures identically.
+- `games/jargon-battle.html` had its `<h1>` rewritten to a contrast pair by the
+  writing pass and it was reverted: that heading is the game's name, and the
+  glossary picker links to it by that name.
+- The sitewide font swap necessarily reaches the excluded `#damian`, `#adam`,
+  `#buddy` and `#story` sections, because it is a token change. Their content
+  and layout were not touched. Pinning them to the old faces would mean keeping
+  Fraunces and Hanken Grotesk loaded, which is the opposite of rule 2.
+
 # Run 14 — 2026-09-17 · the jargon buster games: Buddy's Run and Jargon Battle
 
 Two mini-games on glossary.html, on branch `feature/jargon-buster-games`. The

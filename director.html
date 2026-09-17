@@ -216,8 +216,6 @@ details{background:var(--surface);border:1px solid var(--line);border-radius:var
 details[open]{box-shadow:var(--sh-md);border-color:transparent}
 summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
 summary::-webkit-details-marker{display:none}
-summary .pm{width:26px;height:26px;border-radius:8px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500;line-height:1;flex-shrink:0;transition:transform .25s,background .25s}
-details[open] summary .pm{transform:rotate(45deg);background:var(--teal);color:#fff}
 details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
 
 /* ---- final CTA ---- */
@@ -436,7 +434,6 @@ details summary{transition:padding .2s ease}
 details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
-summary .pm{transition:transform .3s cubic-bezier(.4,0,.2,1),background .25s ease,color .25s ease}
 /* focus-visible polish on non-button interactives */
 .aud-card:focus-visible,a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
@@ -505,7 +502,6 @@ input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
 main{display:block}
 #main:focus{outline:none}
 /* 6) FAQ affordance: hover cue on the question row */
-details summary:hover .pm{background:var(--teal-100)}
 details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
@@ -564,13 +560,11 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-close:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 .pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
 .pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
-.pb-b-q .pm{margin-left:auto;color:var(--ac,#0B7A6E);font-weight:700}
 .pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
 .pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
 .pb-b-a>div{padding:2px 8px 14px}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
-.pb-b-item.open .pm{transform:rotate(45deg);display:inline-block}
 .pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
 .pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
 .pb-b-foot .btn{width:100%;justify-content:center}
@@ -703,7 +697,7 @@ nav.scrolled{background:var(--bg)}
 .pb-consent .pb-c-yes,.pb-consent .pb-c-no,.email-cap input,.field input,
 .ffield input,.nav-links.open{border-radius:8px}
 .pb-b-btn,.pb-b-panel{border-radius:10px}
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
 .hc-bars i,.cbars i,.rv-bar i{border-radius:3px 3px 0 0}
 /* true circles keep their geometry */
 .pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg{border-radius:50%}
@@ -721,8 +715,6 @@ nav.scrolled{background:var(--bg)}
   font-family:var(--font-mono);font-size:.7rem;font-weight:500;letter-spacing:.15em;
   color:var(--ink-3);padding-bottom:12px;margin-bottom:18px;
   border-bottom:1px solid var(--line-2)}
-summary .pm{background:transparent;border:1px solid var(--line-2);color:var(--ink-2)}
-details[open] summary .pm{background:var(--ink);border-color:var(--ink);color:#fff}
 
 /* --- 5. Full-bleed dark sections that break the container --- */
 /* one padding-inline does the work: the section spans the viewport, its
@@ -867,7 +859,7 @@ a.btn{font-weight:600}
 .email-cap input,.field input,.ffield input,.nav-links.open,
 .hero-card,.calc-prev,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
 
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.gterm .abbr,
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr,
 .hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.tag,
 .pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
 
@@ -1365,7 +1357,7 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .gapstats,.cover,.aud-figure,.chart-card,.relief-card,.boost-card,.cta-card,
 .book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,
 .ffield input,.nav-links.open{border-radius:12px}
-.aud-ico,.step .sx,summary .pm,.logo-mark,.boost-ico,.tag,.dl-tag,
+.aud-ico,.step .sx,.logo-mark,.boost-ico,.tag,.dl-tag,
 .hc-pill,.hc-badge,.aud-figure .fbadge,.nav-links a.lnk,.nav-tick,
 .seg button,.ec-row{border-radius:8px}
 .hc-bars i,.cbars i,.rv-bar i{border-radius:5px 5px 0 0}
@@ -1434,10 +1426,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
   text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:14px 0}
 .adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg)}
+.adv > summary::after{content:"+";margin-left:auto}
 .adv .adv-in{padding-top:6px}
 
 /* --- 4. Baymard trust: at 375px the audience pages showed regulation and
@@ -1477,6 +1466,60 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    ============================================================ */
 /* the abbreviation pill is a UI chip inside the term, not display copy */
 .gterm .abbr{font-family:var(--font)}
+
+/* ============================================================
+   v3 - ONE icon set for every disclosure on the site: a plus that
+   turns into an x. It used to be three. The FAQ rows carried a
+   .pm plus restyled through six layers of the stylesheet, the Ask
+   Buddy panel carried its own unboxed plus, and "More options" on
+   the calculators carried a CSS chevron built out of two borders.
+   All three are this one mark now, and this block is its only
+   owner - nothing above restyles it and nothing below needs to.
+   ============================================================ */
+summary .pm,.pb-b-q .pm,.adv > summary::after{
+  width:26px;height:26px;border-radius:8px;box-sizing:border-box;
+  background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
+  flex-shrink:0;margin-left:auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
+             border-color .25s ease,color .25s ease}
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+  transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+
+/* ============================================================
+   v3 - the hero is ONE centre-stacked column: headline, one line of
+   subcopy, the call to action, the trust line, then a phone with a real
+   Buddy conversation in it. It was two columns, with a decorative
+   icon tile in the right-hand one (or, on the home page, a projected-pot
+   card). Every word inside the phone is lifted from this page's own
+   signed-off Ask Buddy answers, and the closing turn is the one that
+   says Buddy never advises - so the mockup cannot claim anything the
+   site does not already say.
+   ============================================================ */
+.hero-grid{display:block;max-width:760px;margin:0 auto;text-align:center}
+.hero-grid .eyebrow,.hero-grid .hero-cta,.hero-grid .trust,.hero-grid .credline{
+  justify-content:center;flex-wrap:wrap}
+.hero-grid .lede{margin-left:auto;margin-right:auto;max-width:54ch}
+.hero-grid .credline{margin-top:18px}
+
+.hero-phone{margin:44px auto 0;max-width:340px}
+.phone{border:1px solid var(--line-2);border-radius:28px;background:var(--surface);
+  padding:8px;box-shadow:var(--sh-md);text-align:left;overflow:hidden}
+.phone-bar{display:flex;align-items:center;gap:9px;padding:12px 12px 13px;
+  border-bottom:1px solid var(--line);font-weight:700;font-size:14px;color:var(--ink)}
+.phone-role{margin-left:auto;font-family:var(--font-mono);font-size:.58rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3,var(--ink-2))}
+.phone-av{width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;display:block}
+.phone-av img{width:100%;height:100%;object-fit:cover;display:block}
+.phone-chat{display:flex;flex-direction:column;gap:10px;padding:14px 12px 16px}
+.msg{font-size:13.5px;line-height:1.5;padding:10px 13px;border-radius:14px;max-width:88%;margin:0}
+.msg.them{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:5px}
+.msg.buddy{align-self:flex-start;background:var(--surface-2);color:var(--ink);
+  border:1px solid var(--line);border-bottom-left-radius:5px}
+.hero-phone .hc-note{margin-top:14px;text-align:center}
+@media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 </style>
 
 <script>
@@ -1515,7 +1558,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <header class="hero aud-hero"><div class="wrap hero-grid">
   <div class="reveal">
     <span class="eyebrow acc"><span class="pip"></span>For company directors</span>
-    <h1>Your company can build your pension, and <span class="hl">cut its tax bill</span> doing it.</h1>
+    <h1>Your profit is sitting in the company account. It could be building your pension and <span class="hl">cutting the tax bill</span>.</h1>
     <p class="lede">If you run your own company, you have funding options most people never get. Your business can contribute far beyond personal limits, and those contributions can reduce its <a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">corporation tax</a>.</p>
     <div class="hero-cta">
       <a class="btn btn-acc" href="booking.html">Book a free director chat <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -1523,13 +1566,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
       <div class="credline reveal" style="transition-delay:.28s"><b>Damian Condon, QFA</b><span class="sep"></span>Regulated by the Central Bank of Ireland<span class="sep"></span>30 years in financial services</div>
   </div>
-  <div class="reveal" style="transition-delay:.15s">
-    <div class="aud-figure">
-      <div class="fbadge">Company-funded</div>
-      <div class="ring"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg></div>
-      <div class="fcap">Director pension funding</div>
+  <div class="hero-phone reveal" style="transition-delay:.22s">
+    <div class="phone">
+      <div class="phone-bar"><span class="phone-av"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></span>Buddy<span class="phone-role">Chief Pension Dog</span></div>
+      <div class="phone-chat">
+        <p class="msg them">How much can my company actually contribute?</p>
+        <p class="msg buddy">Often a lot more than you&rsquo;d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions.</p>
+        <p class="msg them">Can Buddy tell me what I should do?</p>
+        <p class="msg buddy">That would be advice, and Buddy sticks to general information. What&rsquo;s right depends on your own situation &mdash; which is exactly what the free 20&#8209;minute call with Damian is for.</p>
+      </div>
     </div>
   </div>
+
 </div></header>
 
 <section><div class="wrap">
@@ -1586,7 +1634,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding-top:0"><div class="wrap">
   <div class="callout reveal">
     <span class="eyebrow"><span class="pip"></span>See your own numbers</span>
-    <h2>How much could your company put in?</h2>
+    <h2>You don't know the number. Two minutes with the calculator and you do.</h2>
     <p>The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up.</p>
     <a class="btn btn-light" href="director-calculator.html">Open the director calculator <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
@@ -1595,7 +1643,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section><div class="wrap"><div class="magnet reveal">
   <div class="mtext">
     <span class="eyebrow acc"><span class="pip"></span>Free director guide</span>
-    <h2>The director's pension guide.</h2>
+    <h2>Company pension funding is not obvious. This is the plain-English version.</h2>
     <p>A short, plain-English guide to how company directors can fund a pension through their business and cut their corporation tax. We'll email it to you.</p>
   </div>
   <div>
