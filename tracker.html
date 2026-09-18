@@ -1607,6 +1607,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We trace and value them</h3><p>We help locate each pension you built up and find out what it's actually worth today.</p></div>
     <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>We explain your options</h3><p>In plain English, including whether bringing them together into one plan makes sense for you.</p></div>
   </div>
+  <div class="pb-trace" id="pbTrace">
+    <h3>Tick these off as you go</h3>
+    <label class="pb-tick" for="pbTick1"><input type="checkbox" id="pbTick1"><span>Listed the employers I have had</span></label>
+    <label class="pb-tick" for="pbTick2"><input type="checkbox" id="pbTick2"><span>Found out what each pension is worth</span></label>
+    <label class="pb-tick" for="pbTick3"><input type="checkbox" id="pbTick3"><span>Talked the options through</span></label>
+    <div class="pb-badges" data-pb-badges="strip" data-pb-award="ticks"></div>
+  </div>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
@@ -1976,5 +1983,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=8ed5700e"></script>
 <script src="assets/js/pb-jargon-chips.js?v=d5128929"></script>
+<script src="assets/js/pb-badges.js?v=09b038c1"></script>
 </body>
 </html>
