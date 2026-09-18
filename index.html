@@ -1470,6 +1470,13 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .msg.buddy{align-self:flex-start;background:var(--surface-2);color:var(--ink);
   border:1px solid var(--line);border-bottom-left-radius:5px}
 .hero-phone .hc-note{margin-top:14px;text-align:center}
+.pb-phone-replies{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.pb-chip-hero{display:inline-flex;align-items:center;min-height:44px;max-width:88%;
+  padding:10px 14px;font-size:13.5px;line-height:1.5;border-radius:14px;
+  border-bottom-right-radius:5px;border:1px solid var(--teal-700);
+  background:var(--surface);color:var(--teal-700);text-decoration:none}
+.pb-chip-hero:hover,.pb-chip-hero:active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pb-chip-hero:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
 @media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 </style>
 </head>
@@ -1517,6 +1524,12 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
         <p class="msg buddy">Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions.</p>
         <p class="msg them">Can Buddy tell me what I should do?</p>
         <p class="msg buddy">That would be advice, and Buddy sticks to general information. What&rsquo;s right depends on your own situation &mdash; which is exactly what the free 20&#8209;minute call with Damian is for.</p>
+        <p class="msg buddy">Which of these sounds most like you?</p>
+        <div class="pb-phone-replies">
+          <a class="pb-chip-hero" href="starter.html" aria-label="Just starting out: starting a pension">Just starting out</a>
+          <a class="pb-chip-hero" href="tracker.html" aria-label="Changed jobs a few times: finding old pensions">Changed jobs a few times</a>
+          <a class="pb-chip-hero" href="director.html" aria-label="Run my own company: pensions for directors">Run my own company</a>
+        </div>
       </div>
     </div>
     <div class="hc-note">Illustration only &middot; the value of investments can fall as well as rise</div>
