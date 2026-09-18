@@ -810,21 +810,28 @@ def check_jargon_battle(data):
 
 def check_static():
     head('THE FILES AS THEY SHIP')
-    for rel in ('games/buddys-run.html', 'games/jargon-battle.html'):
+    # The question bank moved to assets/js/pb-jargon-bank.js, so the house-style
+    # guards below follow it there, and pb-jargon-chips.js is in the list too
+    # because it holds the chip microcopy. The link checks are about a page
+    # inside the arcade iframe and cannot mean anything in a .js file, so they
+    # stay on the two game pages.
+    for rel in ('games/buddys-run.html', 'games/jargon-battle.html',
+                'assets/js/pb-jargon-bank.js', 'assets/js/pb-jargon-chips.js'):
         src = read(rel)
         eq('18. %s has no em dash' % rel, src.count('\u2014'), 0)
         eq('18. %s has no em dash entity' % rel, src.count('&mdash;'), 0)
-        anchors = re.findall(r'<a\b[^>]*>', src)
-        ok('19. %s has links at all (%d)' % (rel, len(anchors)), len(anchors) > 0)
-        loose = [a for a in anchors if 'target="_top"' not in a]
-        eq('19. %s: every <a> carries target="_top"' % rel,
-           [a[:70] for a in loose], [])
-        ctas = [a for a in anchors if 'booking.html' in a]
-        eq('20. %s links to the booking page once' % rel, len(ctas), 1)
-        ok('20. %s: the call to action points at ../booking.html' % rel,
-           bool(ctas) and 'href="../booking.html"' in ctas[0])
-        ok('20. %s uses the agreed button words' % rel,
-           'Book a free 20-minute call' in src)
+        if rel.endswith('.html'):
+            anchors = re.findall(r'<a\b[^>]*>', src)
+            ok('19. %s has links at all (%d)' % (rel, len(anchors)), len(anchors) > 0)
+            loose = [a for a in anchors if 'target="_top"' not in a]
+            eq('19. %s: every <a> carries target="_top"' % rel,
+               [a[:70] for a in loose], [])
+            ctas = [a for a in anchors if 'booking.html' in a]
+            eq('20. %s links to the booking page once' % rel, len(ctas), 1)
+            ok('20. %s: the call to action points at ../booking.html' % rel,
+               bool(ctas) and 'href="../booking.html"' in ctas[0])
+            ok('20. %s uses the agreed button words' % rel,
+               'Book a free 20-minute call' in src)
         placeholders = [t for t in ('TODO', 'FIXME', 'lorem', 'XXX', '[to be confirmed]')
                         if t in src]
         eq('21. %s has no placeholder tokens' % rel, placeholders, [])

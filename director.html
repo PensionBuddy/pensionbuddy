@@ -1174,6 +1174,21 @@ abbr[title],.abbr,.tip{text-decoration:underline dotted;text-underline-offset:3p
 /* .gref glossary refs sit inside dense assumption lists, and .ec-note carries
    an inline style="font-size:11px" the cascade cannot reach - both handled. */
 p a.gref:not(.btn):not(.aud-link),.lede a.gref,.legal a.gref,.gterm a.gref,li a.gref,td a.gref,a.gref{display:inline;padding:0 0 1px;margin:0}
+/* pb-jargon-chips: a term in the prose that opens the jargon buster's own
+   one-line answer underneath the paragraph. Wired by assets/js/pb-jargon-chips.js;
+   with the script absent nothing here has anything to style. The chip is drawn
+   as the .gref link beside it is drawn, because it does the same job. */
+.pb-chip{display:inline;color:var(--teal);background:none;border:0;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding:0 0 1px;margin:0;font:inherit;line-height:inherit;text-align:left;cursor:pointer}
+a.pb-chip{text-decoration:none}
+.pb-chip:hover{border-bottom-color:var(--teal)}
+.pb-chip[aria-expanded="true"]{border-bottom:2px solid #16C9B0}
+.pb-chip:focus-visible{outline:2px solid var(--ac,#0B7A6E);outline-offset:2px;border-radius:2px}
+.pb-def{display:block;margin:10px 0 2px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);color:var(--ink-2);font-size:.92rem;line-height:1.55;opacity:1;transform:translateY(0);transition:opacity .14s ease,transform .14s ease}
+.pb-def[hidden]{display:none}
+.pb-def b{color:var(--ink)}
+.pb-def a{color:var(--teal-700)}
+.pb-def.pb-opening{opacity:0;transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.pb-def{transition:none}}
 p.ec-note,p.ec-note *{font-size:.82rem !important}
 .book-meta,.cal-meta{font-size:.82rem}
 
@@ -1997,5 +2012,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+<script src="assets/js/pb-jargon-bank.js?v=8ed5700e"></script>
+<script src="assets/js/pb-jargon-chips.js?v=d5128929"></script>
 </body>
 </html>
