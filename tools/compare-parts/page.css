@@ -81,6 +81,30 @@
 #riskCard .wlink{color:var(--teal)}
 #riskCard .wlink{margin-top:14px}
 #riskCard .wlink .ico{width:16px;height:16px;flex:none}
+/* ---- two lanes, one scale ----
+   A picture of the two figures in the .res-hero directly above, drawn from the
+   totals the page has already written. Its own surface rules rather than
+   .chart-card, because that class carries a 338px CLS lock from 921px up for
+   cards that hold a chart, and a label, a line of text and two thin lanes come
+   nowhere near it. No heading either: every classed h3 on this site takes the
+   20px/800 heading recipe, which beside the answer would read as a second
+   headline, so the card takes the small uppercase label the .vs-col .vt rows
+   use. Both tracks carry the same end rule, so it reads as the end of the
+   scale rather than as a verdict on either lane. */
+.pb-scale-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 22px;box-shadow:var(--sh-sm)}
+.pb-scale-title{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.pb-scale-sub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 16px}
+.pb-scale-lane{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center;margin-top:11px}
+.pb-scale-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.pb-scale-track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-scale-track::after{content:"";position:absolute;top:0;right:0;width:2px;height:100%;background:#16C9B0}
+.pb-scale-bar{width:0;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.45,0,.25,1)}
+#pbScaleAeBar{background:var(--teal-900)}
+#pbScalePpBar{background:var(--teal)}
+@media(max-width:560px){.pb-scale-lane{grid-template-columns:1fr;gap:5px}}
+/* the length each bar travels sets its own duration, written inline by the
+   page script, so both lanes move at one speed; this turns that off */
+@media(prefers-reduced-motion:reduce){.pb-scale-bar{transition:none}}
 /* the one-sentence lead sits above the numbers in both modes */
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}

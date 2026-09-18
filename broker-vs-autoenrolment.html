@@ -1561,6 +1561,30 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 #riskCard .wlink{color:var(--teal)}
 #riskCard .wlink{margin-top:14px}
 #riskCard .wlink .ico{width:16px;height:16px;flex:none}
+/* ---- two lanes, one scale ----
+   A picture of the two figures in the .res-hero directly above, drawn from the
+   totals the page has already written. Its own surface rules rather than
+   .chart-card, because that class carries a 338px CLS lock from 921px up for
+   cards that hold a chart, and a label, a line of text and two thin lanes come
+   nowhere near it. No heading either: every classed h3 on this site takes the
+   20px/800 heading recipe, which beside the answer would read as a second
+   headline, so the card takes the small uppercase label the .vs-col .vt rows
+   use. Both tracks carry the same end rule, so it reads as the end of the
+   scale rather than as a verdict on either lane. */
+.pb-scale-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 22px;box-shadow:var(--sh-sm)}
+.pb-scale-title{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.pb-scale-sub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 16px}
+.pb-scale-lane{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center;margin-top:11px}
+.pb-scale-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.pb-scale-track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-scale-track::after{content:"";position:absolute;top:0;right:0;width:2px;height:100%;background:#16C9B0}
+.pb-scale-bar{width:0;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.45,0,.25,1)}
+#pbScaleAeBar{background:var(--teal-900)}
+#pbScalePpBar{background:var(--teal)}
+@media(max-width:560px){.pb-scale-lane{grid-template-columns:1fr;gap:5px}}
+/* the length each bar travels sets its own duration, written inline by the
+   page script, so both lanes move at one speed; this turns that off */
+@media(prefers-reduced-motion:reduce){.pb-scale-bar{transition:none}}
 /* the one-sentence lead sits above the numbers in both modes */
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}
@@ -1675,6 +1699,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
         <div class="divline"></div>
         <div class="foot">One year, at your salary and age. An illustration only.</div>
+      </div>
+
+      <div class="pb-scale-card reveal" id="pbScaleCard" style="transition-delay:.1s" aria-hidden="true">
+        <div class="pb-scale-title">Side by side</div>
+        <p class="pb-scale-sub">One year of contributions each, on the same scale. The longer bar reaches the end of the scale.</p>
+        <div class="pb-scale-lane pb-scale-ae"><span class="pb-scale-lab">Auto-enrolment</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScaleAeBar"></div></div></div>
+        <div class="pb-scale-lane pb-scale-pp"><span class="pb-scale-lab">Personal pension</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScalePpBar"></div></div></div>
       </div>
 
       <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
@@ -2150,6 +2181,49 @@ function reliefSentence(layer, age) {
         ? ' ' + euro(layer.aboveReliefLimit) + ' of this is above that limit, so it goes in without relief.'
         : '');
 }
+
+/* ---- the two Mode 1 totals, drawn to one scale ----
+   The bars are read back from #aeTotal and #ppTotal, the two cells calc() has
+   just written, so the picture is scaled from exactly the figures on screen
+   and can never contradict them. No maths module is called here.
+
+   calc() itself is not edited: the `calc` binding is wrapped once, after the
+   function is defined, and every call site resolves `calc` by name at call
+   time, so the load render and every later one go through the wrapper.
+
+   Both lanes travel at one speed. Each bar's transition-duration is set in
+   proportion to the length it has to cover, so the longer bar is still moving
+   after the shorter one has stopped. There is no line to reach and no marker
+   on either lane: the end rule is identical on both tracks and is simply where
+   the scale ends. Under prefers-reduced-motion the CSS drops the transition
+   and the bars sit at their lengths. */
+function pbScaleValue(id) {
+  const el = $(id);
+  if (!el) return 0;
+  const n = +String(el.textContent).replace(/[^0-9]/g, '');
+  return isFinite(n) ? n : 0;
+}
+
+function renderScale() {
+  const ae = pbScaleValue('aeTotal');
+  const pp = pbScaleValue('ppTotal');
+  /* the bars read parsed text, so a parse failure would give both of them 0 */
+  const top = Math.max(ae, pp);
+  const lanes = [['pbScaleAeBar', ae], ['pbScalePpBar', pp]];
+  for (let i = 0; i < lanes.length; i++) {
+    const bar = $(lanes[i][0]);
+    if (!bar) continue;
+    const f = top > 0 ? lanes[i][1] / top : 0;
+    bar.style.setProperty('transition-duration', Math.max(0.2, 0.9 * f).toFixed(2) + 's');
+    bar.style.width = (f * 100) + '%';
+  }
+}
+
+var pbCalcFigures = calc;
+calc = function () {
+  pbCalcFigures();
+  renderScale();
+};
 
 wireRanges(VALTEXT, el => {
   if (el.id === 'gross') grossTouched = true;

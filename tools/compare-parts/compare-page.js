@@ -316,6 +316,49 @@ function reliefSentence(layer, age) {
         : '');
 }
 
+/* ---- the two Mode 1 totals, drawn to one scale ----
+   The bars are read back from #aeTotal and #ppTotal, the two cells calc() has
+   just written, so the picture is scaled from exactly the figures on screen
+   and can never contradict them. No maths module is called here.
+
+   calc() itself is not edited: the `calc` binding is wrapped once, after the
+   function is defined, and every call site resolves `calc` by name at call
+   time, so the load render and every later one go through the wrapper.
+
+   Both lanes travel at one speed. Each bar's transition-duration is set in
+   proportion to the length it has to cover, so the longer bar is still moving
+   after the shorter one has stopped. There is no line to reach and no marker
+   on either lane: the end rule is identical on both tracks and is simply where
+   the scale ends. Under prefers-reduced-motion the CSS drops the transition
+   and the bars sit at their lengths. */
+function pbScaleValue(id) {
+  const el = $(id);
+  if (!el) return 0;
+  const n = +String(el.textContent).replace(/[^0-9]/g, '');
+  return isFinite(n) ? n : 0;
+}
+
+function renderScale() {
+  const ae = pbScaleValue('aeTotal');
+  const pp = pbScaleValue('ppTotal');
+  /* the bars read parsed text, so a parse failure would give both of them 0 */
+  const top = Math.max(ae, pp);
+  const lanes = [['pbScaleAeBar', ae], ['pbScalePpBar', pp]];
+  for (let i = 0; i < lanes.length; i++) {
+    const bar = $(lanes[i][0]);
+    if (!bar) continue;
+    const f = top > 0 ? lanes[i][1] / top : 0;
+    bar.style.setProperty('transition-duration', Math.max(0.2, 0.9 * f).toFixed(2) + 's');
+    bar.style.width = (f * 100) + '%';
+  }
+}
+
+var pbCalcFigures = calc;
+calc = function () {
+  pbCalcFigures();
+  renderScale();
+};
+
 wireRanges(VALTEXT, el => {
   if (el.id === 'gross') grossTouched = true;
   /* a new salary or age means a new auto-enrolment cost, so the contribution
