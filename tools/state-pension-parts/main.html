@@ -24,6 +24,71 @@
   </div>
 
   <div class="results">
+    <!-- The contributions jar. It reads the #contribs slider in the panel and
+         is a second reading of the number that slider already shows. It lives
+         at the head of the results column, not under the slider itself: the
+         .panel is sticky from 921px up, and a jar inside it pushed the panel
+         to 765px against a 681px usable viewport at 1360x768, which put the
+         age slider below the fold while the panel was stuck. Laid out beside
+         its caption the dot card alone still measured 701px, so the card moved
+         here instead and the panel is back to its own 564px. Decorative:
+         #contribs already carries an aria-valuetext saying the same thing in
+         words, so the jar is aria-hidden and adds no second live region. It is
+         painted by initJar() at the foot of the page script and by nothing
+         else. -->
+    <div class="pb-jar" id="pbJar" aria-hidden="true">
+      <div class="pb-jar-stage">
+        <div class="pb-jar-spill"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="pb-jar-body">
+          <div class="pb-jar-dots">
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot pb-jar-first"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i>
+          </div>
+          <span class="pb-jar-band">The first 520</span>
+        </div>
+      </div>
+      <p class="pb-jar-cap" id="pbJarCap"></p>
+      <p class="pb-jar-lead">Each dot is a year of reckonable contributions.</p>
+    </div>
+
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
     <div id="spHas">

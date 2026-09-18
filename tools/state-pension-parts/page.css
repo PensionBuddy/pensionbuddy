@@ -12,6 +12,65 @@
 .srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:22px;
   padding-top:16px;border-top:1px solid var(--line)}
 @media(prefers-reduced-motion:reduce){.lsbar i{transition:none}}
+/* ---- the contributions jar, this page only ----
+   One dot per 52 reckonable contributions, forty of them, filling from the
+   bottom row up: .pb-jar-dots is flipped with scaleY(-1) so DOM order 0..39
+   reads as bottom to top. The bottom row is the first 520, marked by a rule
+   and a label rather than by a claim about entitlement.
+
+   Every text node in here is var(--ink-3), which is 5:1 on --surface-2.
+   --aqua and --amber carry no text: they are dot fills only, and tools/
+   verify.py samples colour on elements with a direct text child. The spill
+   lives inside .pb-jar-stage, which is overflow:hidden, so no keyframe can
+   push a dot past the panel edge and into a horizontal overflow FAIL. */
+.pb-jar{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);
+  grid-template-rows:auto auto 1fr;column-gap:16px}
+.pb-jar-stage{position:relative;width:200px;max-width:100%;padding-top:12px;overflow:hidden;
+  grid-row:1 / span 3}
+.pb-jar-body{position:relative;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:11px 12px 9px}
+.pb-jar-dots{display:grid;grid-template-columns:repeat(10,12px);gap:6px;transform:scaleY(-1)}
+.pb-jar-dot{display:block;width:12px;height:12px;border-radius:50%;background:var(--line-2);
+  transition:background-color .3s ease}
+.pb-jar-dot.pb-on{background:var(--aqua)}
+.pb-jar-dot.pb-jar-first.pb-on{background:var(--amber)}
+.pb-jar-band{display:block;margin-top:8px;padding-top:7px;border-top:1px solid var(--line-2);
+  font-size:11.5px;line-height:1.4;color:var(--ink-3)}
+.pb-jar-cap{font-size:12.5px;line-height:1.5;font-weight:600;color:var(--ink-3);margin-top:0;
+  font-variant-numeric:tabular-nums;grid-column:2;grid-row:1}
+.pb-jar-lead{font-size:12.5px;line-height:1.5;color:var(--ink-3);margin-top:4px;
+  grid-column:2;grid-row:2}
+/* one column again where two would squeeze the words into a ribbon */
+@media(max-width:600px){
+  .pb-jar{display:block}
+  .pb-jar-cap{margin-top:10px}
+}
+/* The spill: five dots resting ON the rim once the record is full. .pb-jar-body
+   is position:relative and comes after this in the DOM, so it paints over any
+   part of a dot that drops below the rim, and .pb-jar-stage is overflow:hidden,
+   which is what keeps a keyframe from ever pushing a dot past the panel edge
+   and into a horizontal overflow FAIL. */
+.pb-jar-spill{position:absolute;left:14px;right:14px;top:5px;height:16px;
+  display:flex;justify-content:space-between;pointer-events:none}
+.pb-jar-spill i{display:block;width:7px;height:7px;border-radius:50%;background:var(--aqua);
+  opacity:0;transform:translateY(3px)}
+.pb-jar.pb-full .pb-jar-spill i{opacity:1}
+/* and it only ANIMATES when the slider arrives at a full record during the
+   session; at load the dots are simply already resting there */
+.pb-jar.pb-full.pb-spill .pb-jar-spill i{animation:pb-jar-lift .8s cubic-bezier(.22,.61,.36,1) both}
+.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(2){animation-delay:.06s}
+.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(3){animation-delay:.12s}
+.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(4){animation-delay:.18s}
+.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(5){animation-delay:.24s}
+@keyframes pb-jar-lift{
+  0%{opacity:0;transform:translateY(16px) scale(.5)}
+  45%{opacity:1;transform:translateY(-4px) scale(1)}
+  100%{opacity:1;transform:translateY(3px) scale(1)}
+}
+@media(prefers-reduced-motion:reduce){
+  .pb-jar-dot{transition:none}
+  .pb-jar.pb-full.pb-spill .pb-jar-spill i{animation:none;opacity:1;transform:translateY(3px)}
+}
 /* the two result states are wrappers inside the results column, so they carry
    the column's own vertical rhythm or the cards inside them touch */
 #spHas,#spNone{display:flex;flex-direction:column;gap:18px}

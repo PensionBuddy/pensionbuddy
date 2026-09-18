@@ -145,3 +145,87 @@ function render() {
 
 wireRanges(VALTEXT, render);
 render();
+
+/* ---- the contributions jar -------------------------------------------
+
+   Forty dots under the contributions slider, one per 52 reckonable
+   contributions, filling bottom row up. It is a second reading of the number
+   the slider already carries, so it is decorative: aria-hidden in the markup,
+   no live region, and nothing here is part of the pension calculation.
+
+   THE WHOLE FEATURE HANGS OFF ONE STATEMENT, the last line of this file.
+   render() above is not touched by a single byte, and the jar gets its own
+   listener rather than a line inside render(), so the render-diff harness can
+   be asked the one question that matters:
+
+       cd tests/render-diff
+       MUTATE='state-pension|<that last line>|' BASELINE_REF=main \
+         node sweep.js state-pension --exhaustive
+
+   The find string is that call, semicolon included. This comment describes it
+   rather than quoting it on purpose: MUTATE replaces the FIRST occurrence in
+   the file (tests/render-diff/pages.js), so a copy of it up here would be the
+   text that got deleted and the call site would survive the mutation.
+
+   With that one call site deleted this script must be observably identical to
+   main across all 2,009 states. The unmutated runs DO differ, because the
+   harness counts a write to a node the baseline never touched as a
+   difference; the differing keys are the jar's own and are listed in the
+   commit message.
+
+   WRITES ARE GUARDED BY AN EXPLICIT READ. In tests/render-diff/minidom.js,
+   classList.toggle(name, force) records a write whether or not anything
+   changed, so toggle(n, want) on its own would add forty entries to the write
+   bag on every drag frame. Reading first keeps the bag honest, and in the
+   browser it stops the spill animation restarting while the slider moves. */
+function paintJar() {
+  var jar = $('pbJar');
+  var slider = $('contribs');
+  if (!jar || !slider) return;
+  var dots = document.querySelectorAll('.pb-jar-dot');
+  if (!dots.length) return;
+
+  /* one dot per 52, clamped to the dots that exist, so no typed value can ask
+     for a forty-first */
+  var max = dots.length * 52;
+  var v = +slider.value;
+  if (!(v > 0)) v = 0;
+  if (v > max) v = max;
+  var lit = Math.floor(v / 52);
+
+  var i, want;
+  for (i = 0; i < dots.length; i++) {
+    want = i < lit;
+    if (dots[i].classList.contains('pb-on') !== want) dots[i].classList.toggle('pb-on', want);
+  }
+
+  var full = lit >= dots.length;
+  if (jar.classList.contains('pb-full') !== full) jar.classList.toggle('pb-full', full);
+
+  /* The spill rests over the rim as soon as the record is full, including at
+     load. It only ANIMATES when the slider ARRIVES at a full record during
+     the session, which is why the previous value is kept: on the first paint
+     there is no previous value and nothing moves. */
+  var spill = jar.classList.contains('pb-spill');
+  if (!full) spill = false;
+  else if (paintJar.prev !== undefined && paintJar.prev < max) spill = true;
+  if (jar.classList.contains('pb-spill') !== spill) jar.classList.toggle('pb-spill', spill);
+  paintJar.prev = v;
+
+  var cap = $('pbJarCap');
+  if (cap) {
+    var text = full
+      ? dots.length + ' of ' + dots.length + ' years, a full record'
+      : lit + ' of ' + dots.length + ' years';
+    if (cap.textContent !== text) cap.textContent = text;
+  }
+}
+
+function initJar() {
+  var slider = $('contribs');
+  if (!slider || !$('pbJar')) return;
+  slider.addEventListener('input', paintJar);
+  paintJar();
+}
+
+initJar();
