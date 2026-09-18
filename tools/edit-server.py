@@ -488,6 +488,8 @@ def main():
     ap.add_argument('--no-open', action='store_true')
     ap.add_argument('--report', action='store_true',
                     help='print what is editable on each page and exit')
+    ap.add_argument('--view', action='store_true',
+                    help='open in view mode, editing off, instead of edit mode')
     args = ap.parse_args()
 
     pages = sorted(f for f in os.listdir(ROOT) if f.endswith('.html'))
@@ -508,7 +510,8 @@ def main():
     port = free_port(args.port)
     srv = http.server.ThreadingHTTPServer(
         ('127.0.0.1', port), functools.partial(Handler, directory=ROOT))
-    url = 'http://127.0.0.1:%d/%s?edit=1' % (port, args.page)
+    mode = '0' if args.view else '1'
+    url = 'http://127.0.0.1:%d/%s?edit=%s' % (port, args.page, mode)
     print('\n  Pensionbuddy copy editor')
     print('  ' + '-' * 44)
     if port != args.port:
