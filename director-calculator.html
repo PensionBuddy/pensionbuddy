@@ -1641,6 +1641,49 @@ summary .pm,.pb-b-q .pm,.adv > summary::after{
 details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
 summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+
+/* ============================================================
+   F4 - the corporation tax relief safe.
+
+   A drawn safe that sits under the two figures in .res-hero and
+   stands for the relief figure above it: the dial turns, the door
+   swings and the cavity fills as that figure rises. Decorative
+   only. It states nothing, it is aria-hidden in full, and the
+   figure and its .rsub carry the meaning for a screen reader.
+
+   Everything here reads one custom property, --pb-t, a 0 to 1
+   level written by the small script near the end of the page.
+   There is deliberately NO transition and NO keyframe animation
+   on any part of it: the property is rewritten on the display
+   tween's own frames, so the tween supplies the easing, and
+   prefers-reduced-motion is honoured by the same f=1 that makes
+   the figures snap. A transition re-aimed every frame would only
+   lag behind the figure it is meant to picture.
+
+   Tones are the dark panel's own: the mint it already uses for
+   accents, the amber token, and the two white washes behind
+   .res-hero .rbar i and .divline. No image, no SVG, no canvas.
+   ============================================================ */
+.pb-safe-row{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.pb-safe{position:relative;width:104px;height:104px;flex:0 0 auto;perspective:600px}
+.pb-safe-shell{position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16)}
+.pb-safe-cavity{position:absolute;inset:10px;border-radius:8px;background:rgba(11,31,28,.38);overflow:hidden}
+.pb-safe-fill{position:absolute;left:0;right:0;bottom:0;height:calc(var(--pb-t,0)*100%);background:var(--amber);opacity:.92}
+.pb-safe-door{position:absolute;inset:6px;border-radius:10px;border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(rgba(255,255,255,.13),rgba(255,255,255,.13)),var(--teal-900);
+  transform-origin:left center;transform:rotateY(calc(var(--pb-t,0)*74deg));
+  display:flex;align-items:center;justify-content:center;backface-visibility:hidden}
+.pb-safe-dial{width:34px;height:34px;border-radius:50%;border:2px solid var(--mint);position:relative;
+  transform:rotate(calc(var(--pb-t,0)*900deg))}
+.pb-safe-dial::before,.pb-safe-dial::after{content:"";position:absolute;left:50%;top:50%;width:2px;height:22px;
+  margin:-11px 0 0 -1px;background:var(--mint);border-radius:1px}
+.pb-safe-dial::after{transform:rotate(90deg)}
+.pb-safe-handle{position:absolute;right:7px;top:50%;width:4px;height:24px;margin-top:-12px;border-radius:2px;background:rgba(255,255,255,.34)}
+.pb-safe-cap{flex:1 1 180px;min-width:0;font-size:12.5px;color:#9FDDD2;line-height:1.5}
+.pb-safe-row[data-pb-state="locked"] .pb-safe-dial{border-color:rgba(255,255,255,.34)}
+.pb-safe-row[data-pb-state="locked"] .pb-safe-dial::before,
+.pb-safe-row[data-pb-state="locked"] .pb-safe-dial::after{background:rgba(255,255,255,.34)}
+.pb-safe-row[data-pb-state="open"] .pb-safe-door{box-shadow:0 12px 26px -14px rgba(0,0,0,.6)}
 </style>
 
 <script>
@@ -1707,6 +1750,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="res-hero reveal" style="transition-delay:.08s">
       <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
       <div><div class="rl">Corporation tax relief on contributions</div><div class="big" id="taxOut">€0</div><div class="rsub">Worth 12.5% of each contribution, added up to retirement</div></div>
+      <div class="pb-safe-row" id="pbSafe" data-pb-state="locked" aria-hidden="true">
+        <div class="pb-safe">
+          <div class="pb-safe-shell"><div class="pb-safe-cavity"><div class="pb-safe-fill"></div></div></div>
+          <div class="pb-safe-door"><div class="pb-safe-dial"></div><div class="pb-safe-handle"></div></div>
+        </div>
+        <span class="pb-safe-cap">A picture of the figure above. It fills as that figure rises.</span>
+      </div>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">Pension contributions are deductible for the company, as salary would be. The difference is what reaches you: routed through the pension, far more of the money stays working for your retirement.</div>
@@ -2110,6 +2160,57 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
       t=setTimeout(function(){hero.classList.remove('pulse');},600);
     }
   }).observe(watch,{childList:true,characterData:true,subtree:true});
+})();
+</script>
+
+
+<script>
+/* F4: the corporation tax relief safe, driven off the figure the calculator
+   has already written. This block computes nothing and writes to nothing the
+   calculator owns: it reads #taxOut's text, turns it into one 0 to 1 level,
+   and puts that level on #pbSafe as --pb-t plus a coarse data-pb-state. The
+   drawing is all CSS. It is a separate block from the calculator script, and
+   it deliberately does not begin with that script's first line, so the
+   render-diff harness keeps extracting the calculator block untouched.
+   Everything is looked up by document.getElementById and bails on null, in
+   the same shape as the hero pulse observer above. */
+(function(){
+  var el=document.getElementById('pbSafe');
+  var watch=document.getElementById('taxOut');
+  if(!el||!watch)return;
+  var last=null,queued=false;
+  /* a capped log scale, because the relief figure spans four orders of
+     magnitude across the sliders and a linear bar would sit at nothing for
+     almost all of it. Monotone, and clamped rather than allowed to overshoot
+     when a typed-in amount runs past the slider's own ceiling. */
+  function level(s){
+    var n=parseFloat(String(s).replace(/[^0-9.]/g,''));
+    if(!isFinite(n)||n<=0)return 0;
+    var t=(Math.log(n+1)/Math.LN10)/6.5;
+    return t>1?1:t;
+  }
+  function paint(){
+    queued=false;
+    var t=level(last);
+    el.style.setProperty('--pb-t',t.toFixed(4));
+    el.setAttribute('data-pb-state',t<=0?'locked':(t>=0.85?'open':'turning'));
+  }
+  /* the value guard matters: the tween reassigns textContent on every frame
+     while the chart is still easing, so without it this would write style on
+     frames where the figure has not moved at all. The queued flag keeps a
+     fast drag to one write per frame. */
+  function bump(){
+    var s=watch.textContent;
+    if(s===last)return;
+    last=s;
+    if(queued)return;
+    queued=true;
+    if(window.requestAnimationFrame)requestAnimationFrame(paint);else paint();
+  }
+  bump();
+  if(window.MutationObserver){
+    new MutationObserver(bump).observe(watch,{childList:true,characterData:true,subtree:true});
+  }
 })();
 </script>
 
