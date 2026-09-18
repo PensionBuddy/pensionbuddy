@@ -1684,7 +1684,71 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-safe-row[data-pb-state="locked"] .pb-safe-dial::before,
 .pb-safe-row[data-pb-state="locked"] .pb-safe-dial::after{background:rgba(255,255,255,.34)}
 .pb-safe-row[data-pb-state="open"] .pb-safe-door{box-shadow:0 12px 26px -14px rgba(0,0,0,.6)}
+
+/* ============================================================
+   F5 - "Take a guess first", and the veil it puts over the one
+   figure it is asking about.
+
+   The card is built at runtime by assets/js/pb-guess.js and
+   inserted as the first child of .results. These rules live in
+   the head rather than in a runtime <style> so the card arrives
+   styled instead of flashing, and so the three assembled pages
+   inherit them with the rest of the skeleton's stylesheet.
+
+   The veil is a filter, so it cannot move anything: a veiled
+   cell keeps its box, its colour and its contrast, and only its
+   legibility changes. .pb-veiled lands on its own, in one frame;
+   .pb-veil, the transition, is added only as the veil lifts, so
+   the blur eases out and never in. .pb-preveil on <html>, set by
+   the one-line script after this stylesheet, blurs the headline
+   cells before the first paint until pb-guess.js has its own veil
+   up. Under prefers-reduced-motion there is no transition and the
+   figures simply appear.
+
+   Cosmetic, and the script says so in full: the text is still in
+   the DOM and in the page source. aria-hidden while veiled, put
+   on and taken off with the class, is the closest honest
+   equivalent for a screen reader.
+   ============================================================ */
+.pb-guess{background:var(--surface-2);border:1px solid var(--line);border-top:3px solid #16C9B0;
+  border-radius:var(--r-lg);padding:20px 22px}
+.pb-guess-t{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.pb-guess-lead{font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:6px 0 16px}
+.pb-guess-row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+  gap:4px 12px;margin-bottom:10px}
+.pb-guess-lab{font-size:14.5px;font-weight:600;color:var(--ink)}
+/* The card's slider spans the card. Stated here rather than left to the page,
+   because the global input[type=range] rule carries width:100% in the skeleton
+   pension-calculator.html and not in director-calculator.html, where a range
+   with no width of its own collapses to the browser's default 129px under a
+   full-width button. This block is byte-identical in both files, so it names
+   them rather than saying "this file". */
+.pb-guess input[type=range]{width:100%}
+.pb-guess-val{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:16px;
+  font-weight:600;color:var(--ink)}
+.pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
+  border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
+.pb-guess-btn:hover{background:var(--teal-700)}
+.pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
+.pb-guess-out:empty{display:none}
+.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut{filter:blur(13px)}
+.pb-veil{transition:filter .45s ease}
+.pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
+@media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
 </style>
+<script>
+/* pb-guess: blur the headline cells before the first paint on the pages that
+   carry a guess card, so the answer is never seen sharp while
+   assets/js/pb-guess.js is still on its way. That file takes the class off in
+   the same task that puts its own veil up; if it never arrives, the class
+   comes off by itself after four seconds. With scripts off this never runs. */
+(function () {
+  var p = String(location.pathname || '').split('/').pop();
+  if (!/^(pension-calculator|director-calculator|state-pension-reality-check|state-pension-entitlement|broker-vs-autoenrolment)\.html$/.test(p)) { return; }
+  document.documentElement.classList.add('pb-preveil');
+  setTimeout(function () { document.documentElement.classList.remove('pb-preveil'); }, 4000);
+}());
+</script>
 
 <script>
 /* ------------------------------------------------------------------
@@ -2018,7 +2082,12 @@ function sendResults(){
     source:document.title,
     pot:fig('potOut'), ctRelief:fig('taxOut'), fundingTarget:fig('maxOut'),
     costOfWaiting:fig('waitOut'),
-    inputs:[].slice.call(document.querySelectorAll('input[type=range]'))
+    /* the panel's sliders only. #pbGuessRange is the guess card's own slider,
+       built at runtime by assets/js/pb-guess.js: it is the visitor playing a
+       game with themselves, not an input to any figure on this page, and a
+       lead that carried it would read as one. Excluded by id rather than by
+       scoping to .panel, because the More-options pass moves fields about. */
+    inputs:[].slice.call(document.querySelectorAll('input[type=range]:not(#pbGuessRange)'))
              .map(function(s){return s.id+'='+s.value;}).join(', '),
     page:location.href
   };
@@ -2560,5 +2629,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+<script src="assets/js/pb-guess.js?v=bb35d9a6"></script>
 </body>
 </html>
