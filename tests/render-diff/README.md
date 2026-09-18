@@ -30,7 +30,7 @@ pins the same instant `runpage.js` does, and it borrows the traps below.
 | `load.js` | the render each page performs **as it loads** |
 | `sweep.js` | the state sweep: exhaustive where the input space allows, stratified where it does not |
 | `sequences.js` | the **event path**: scripted sessions of real `input`/`change`/`click`/`keydown`, compared after every action |
-| `browser-diff.py` | the same pages in **real headless Chrome**, baseline checkout against working tree |
+| `browser-diff.py` | the same pages in **real headless Chrome**, baseline checkout against working tree; each run makes its own checkout in a fresh temp directory and names its probe page by process id, so runs can overlap |
 | `mutate-shared.js` | breaks `assets/js/calc-page.js` on purpose, one change at a time, and requires the sweep to notice |
 
 ## What "the same" means here

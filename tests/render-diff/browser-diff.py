@@ -40,8 +40,12 @@ import functools
 
 WORK = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(WORK))
-# a scratch checkout of the baseline, built here and removed again
-OLD = os.path.join(tempfile.gettempdir(), 'pb-render-diff-old')
+# The scratch checkout of the baseline is a fresh mkdtemp per run, made in
+# checkout_baseline() and removed in main()'s finally. It used to be one fixed
+# path under the temp directory, and two runs at once (two worktrees verifying
+# in parallel) each deleted the other's tree: one died with FileNotFoundError
+# on the probe page it had just written. Same for the probe page itself, which
+# carries the process id in its name below for the same reason.
 BASELINE_REF = os.environ.get('BASELINE_REF', 'HEAD')
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 
@@ -275,11 +279,14 @@ def dump(url, budget):
 def probe(root, page, cfg, budget=120000):
     src = open(os.path.join(root, page), encoding='utf-8', errors='replace').read()
     js = PROBE.replace('__CFG__', json.dumps(cfg))
-    tmp = os.path.join(root, '__bdiff.html')
+    # named per process: two runs serving the same working tree at once must
+    # not write, load and remove one file between them
+    name = '__bdiff-%d.html' % os.getpid()
+    tmp = os.path.join(root, name)
     open(tmp, 'w', encoding='utf-8').write(src.replace('</body>', js + '</body>'))
     srv, port = serve(root)
     try:
-        dom = dump('http://127.0.0.1:%d/__bdiff.html' % port, budget)
+        dom = dump('http://127.0.0.1:%d/%s' % (port, name), budget)
     finally:
         srv.shutdown()
         os.remove(tmp)
@@ -290,24 +297,34 @@ def probe(root, page, cfg, budget=120000):
 
 
 def checkout_baseline():
-    """A clean tree of BASELINE_REF, with its own assets/js. Serving the old page
-    from the repository root instead would silently load the NEW modules, and the
-    comparison would come out clean for the wrong reason."""
-    if os.path.isdir(OLD):
-        shutil.rmtree(OLD)
-    os.makedirs(OLD)
+    """A clean tree of BASELINE_REF, with its own assets/js, in a directory that
+    belongs to this run alone. Serving the old page from the repository root
+    instead would silently load the NEW modules, and the comparison would come
+    out clean for the wrong reason. The caller removes the directory."""
+    old = tempfile.mkdtemp(prefix='pb-render-diff-old-')
     archive = subprocess.run(['git', 'archive', BASELINE_REF], cwd=ROOT,
                              capture_output=True, check=True).stdout
-    subprocess.run(['tar', '-x', '-C', OLD], input=archive, check=True)
-    return OLD
+    subprocess.run(['tar', '-x', '-C', old], input=archive, check=True)
+    return old
 
 
 def main():
     print('real browser, working tree against %s' % BASELINE_REF)
-    checkout_baseline()
+    old = checkout_baseline()
+    try:
+        bad = run(old)
+    finally:
+        shutil.rmtree(old, ignore_errors=True)
+    print('\n%s' % ('every page renders identically in the browser, before and after'
+                    if not bad else 'FAILURES: %d' % bad))
+    sys.exit(1 if bad else 0)
+
+
+def run(old):
+    """Every page, old tree against working tree. The number that failed."""
     bad = 0
     for page, cfg in PAGES.items():
-        a = probe(OLD, page, cfg)
+        a = probe(old, page, cfg)
         b = probe(ROOT, page, cfg)
         if a is None or b is None:
             print('  FAIL %-38s could not read the probe output (%s)'
@@ -341,10 +358,7 @@ def main():
             print('          new %s' % json.dumps(y)[:150])
         for e in errs[:4]:
             print('        error: %s' % e)
-    shutil.rmtree(OLD, ignore_errors=True)
-    print('\n%s' % ('every page renders identically in the browser, before and after'
-                    if not bad else 'FAILURES: %d' % bad))
-    sys.exit(1 if bad else 0)
+    return bad
 
 
 if __name__ == '__main__':
