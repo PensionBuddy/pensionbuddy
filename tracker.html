@@ -1562,6 +1562,95 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .rbig b,.bt b,.ec-note b,.dl-text b,.wtext b,.nt-n,.mrow .mrate,.mclose b,
 .pb-guess-val,.dashk,.ind,.rv-keys b{font-family:var(--font);font-variant-numeric:tabular-nums}
 .cbig,.gs-n,.cv-n,.tk-n{font-weight:300;letter-spacing:-.02em}
+
+/* ============================================================
+   v4 - BANDS. What the reference sites (Stripe, Plaid, Ramp,
+   Revolut, Klarna, Lemonade) share and this site did not: a stat
+   row of big light figures on a soft wash with no card around any
+   of them (Plaid: weight 300, line-height 1; Stripe: the same on
+   dark); full-bleed colour breaks; a single figure stated as a
+   plain large sentence (Lemonade); real product UI rather than a
+   text card. Every one is a .pb-* class a page opts into.
+   ============================================================ */
+/* a band that runs edge to edge while its content keeps the page width */
+.pb-bleed{width:100vw;margin-left:calc(50% - 50vw);border-radius:0}
+.pb-wash{background:linear-gradient(180deg,var(--bg) 0%,var(--teal-50) 42%,#EEF8F5 100%)}
+.pb-dark{background:linear-gradient(160deg,var(--ink-800),var(--ink-900));color:#fff}
+.pb-dark h2,.pb-dark h3{color:#fff}
+.pb-dark p{color:rgba(255,255,255,.8)}
+.pb-dark .eyebrow{color:var(--mint)}
+/* on the wash the bright teal drops under 4.5:1; the eyebrow takes the darker step */
+.pb-wash .eyebrow,.pb-wash .kicker,.gapband .eyebrow{color:var(--teal-700)}
+/* the stat row: no borders, no cards, one horizontal row */
+.pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
+.pb-stat{border:0;padding:0;background:none;min-width:0}
+.pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+.pb-dark .pb-stat-n{color:#fff}
+.pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
+.pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
+/* the source line: small, sentence case, grey */
+.pb-src{margin:26px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-3);max-width:80ch}
+.pb-src a{color:inherit}
+.pb-dark .pb-src{color:rgba(255,255,255,.62)}
+/* a single figure as a plain sentence, no container */
+.pb-plain{font-size:clamp(1.4rem,2.6vw,2.05rem);line-height:1.3;font-weight:400;
+  letter-spacing:-.015em;color:var(--ink);max-width:26ch;margin:0}
+.pb-plain b{font-weight:700}
+.pb-dark .pb-plain{color:#fff}
+/* the old boxed stat grids, should any markup still reach them: borderless now */
+.gapstats,.cover,.proofs{border:0;background:none;border-radius:0;overflow:visible}
+.gs,.proof{border:0;padding:0}
+.gs-n,.cv-n{font-weight:300;letter-spacing:-.03em}
+.gs-s,.cv-s{font-size:.86rem !important;font-weight:400;color:var(--ink-3)}
+@media(max-width:920px){
+  .pb-statrow{gap:26px 28px}
+  .gs,.proof{border:0}
+}
+
+/* ============================================================
+   v4 - AUDIENCE BANDS. The three audience pages opt into the
+   band system above. The "Worth knowing" callout becomes a
+   full-bleed dark band with the real product, or the real
+   people, beside the copy; the coverage figures on director.html
+   sit in one borderless row on a wash; the free-guide box loses
+   its border and becomes a wash band; the final CTA runs edge to
+   edge. Identical on starter.html, tracker.html and director.html.
+   ============================================================ */
+/* band content lands on the .wrap measure: 1140px less its 24px padding */
+.callout.pb-bleed,.final.pb-bleed{padding:88px max(24px,calc((100vw - var(--maxw)) / 2 + 24px))}
+/* the product band: copy beside a real screenshot or photograph */
+.callout.pb-split{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;text-align:left}
+.pb-split-copy,.pb-split-media{position:relative;min-width:0}
+.pb-split-copy>h2{max-width:22ch}
+.pb-split-copy>p{margin:0 0 30px;max-width:52ch}
+.pb-split-media{margin:0}
+.pb-split-media img{display:block;width:100%;max-width:100%;height:auto;border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px rgba(0,0,0,.4)}
+.pb-split-media.pb-photo{max-width:420px;margin:0 auto}
+.pb-split-cap{margin:14px 0 0;font-size:.86rem;line-height:1.5;color:rgba(255,255,255,.62)}
+/* the coverage figures: one borderless row on a wash, the source line beneath */
+.coverband.pb-bleed{padding:80px 0}
+.coverband.pb-wash .eyebrow{color:var(--teal-700)}
+.cover.pb-coverrow{padding:0;gap:56px;grid-template-columns:.95fr 1.05fr;align-items:center}
+.pb-coverrow .pb-statrow{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 32px}
+.pb-coverrow .pb-src{margin-top:24px}
+/* the free guide: a wash band, no box */
+.pb-magnetband .magnet{background:none;border:0;border-radius:0;box-shadow:none;padding:0}
+.pb-magnetband .magnet-form input{background:#fff;border-color:var(--line-2)}
+.pb-magnetband .magnet-form input:focus{border-color:var(--ac)}
+.pb-magnetband .magnet .ok{background:#fff;border:1px solid var(--line-2)}
+@media(max-width:920px){
+  .callout.pb-bleed,.final.pb-bleed{padding:56px 24px}
+  .callout.pb-split{grid-template-columns:1fr;gap:36px}
+  .pb-split-copy>h2,.pb-split-copy>p{max-width:none}
+  .cover.pb-coverrow{grid-template-columns:1fr;gap:36px;padding:0}
+  .coverband.pb-bleed{padding:64px 0}
+  .pb-magnetband .magnet{padding:0}
+}
+@media(max-width:560px){
+  .callout.pb-bleed,.final.pb-bleed{padding:56px 18px}
+}
 </style>
 
 <script>
@@ -1648,15 +1737,21 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
-  <div class="callout reveal">
+  <div class="callout pb-bleed pb-dark pb-split reveal">
+    <div class="pb-split-copy">
     <span class="eyebrow"><span class="pip"></span>Worth knowing</span>
     <h2>Forgotten pensions are more common than you'd think.</h2>
     <p>Bringing scattered pensions together can make them easier to manage and, sometimes, work harder. We'll tell you honestly whether it's worth it for you.</p>
     <a class="btn btn-light" href="booking.html">Start finding mine <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+    <figure class="pb-split-media pb-photo">
+      <picture><source type="image/webp" srcset="assets/img/damian-and-buddy-dublin-hills.webp?v=dd7d6cfc"><img src="assets/img/damian-and-buddy-dublin-hills.jpg?v=81c0c784" width="720" height="897" alt="Damian and Buddy, the Pensionbuddy dog, on a rocky hilltop with green fields spread out below."></picture>
+      <figcaption class="pb-split-cap">Damian and Buddy in the Dublin hills.</figcaption>
+    </figure>
   </div>
 </div></section>
 
-<section><div class="wrap"><div class="magnet reveal">
+<section class="pb-bleed pb-wash pb-magnetband"><div class="wrap"><div class="magnet reveal">
   <div class="mtext">
     <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
     <h2>How to find a lost pension. Written for people with no paperwork left.</h2>
@@ -1695,7 +1790,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></section>
 
-<div class="final-band"><div class="wrap"><div class="final reveal">
+<div class="final-band"><div class="wrap"><div class="final pb-bleed reveal">
   <div class="paw-bg"><svg fill="#fff" viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="2" ry="2.9"/><ellipse cx="16" cy="7.5" rx="2" ry="2.9"/><ellipse cx="4.3" cy="11.8" rx="1.8" ry="2.4"/><ellipse cx="19.7" cy="11.8" rx="1.8" ry="2.4"/><path d="M12 12.6c-3.2 0-5.5 2.2-5.5 5 0 2.4 2.4 3 5.5 3s5.5-.6 5.5-3c0-2.8-2.3-5-5.5-5z"/></svg></div>
   <span class="eyebrow"><span class="pip"></span>Let's find what's yours</span>
   <h2>You bring what you remember. We'll do the digging.</h2>

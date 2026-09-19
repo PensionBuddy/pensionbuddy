@@ -1560,6 +1560,51 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-val,.dashk,.ind,.rv-keys b{font-family:var(--font);font-variant-numeric:tabular-nums}
 .cbig,.gs-n,.cv-n,.tk-n{font-weight:300;letter-spacing:-.02em}
 
+/* ============================================================
+   v4 - BANDS. What the reference sites (Stripe, Plaid, Ramp,
+   Revolut, Klarna, Lemonade) share and this site did not: a stat
+   row of big light figures on a soft wash with no card around any
+   of them (Plaid: weight 300, line-height 1; Stripe: the same on
+   dark); full-bleed colour breaks; a single figure stated as a
+   plain large sentence (Lemonade); real product UI rather than a
+   text card. Every one is a .pb-* class a page opts into.
+   ============================================================ */
+/* a band that runs edge to edge while its content keeps the page width */
+.pb-bleed{width:100vw;margin-left:calc(50% - 50vw);border-radius:0}
+.pb-wash{background:linear-gradient(180deg,var(--bg) 0%,var(--teal-50) 42%,#EEF8F5 100%)}
+.pb-dark{background:linear-gradient(160deg,var(--ink-800),var(--ink-900));color:#fff}
+.pb-dark h2,.pb-dark h3{color:#fff}
+.pb-dark p{color:rgba(255,255,255,.8)}
+.pb-dark .eyebrow{color:var(--mint)}
+/* on the wash the bright teal drops under 4.5:1; the eyebrow takes the darker step */
+.pb-wash .eyebrow,.pb-wash .kicker,.gapband .eyebrow{color:var(--teal-700)}
+/* the stat row: no borders, no cards, one horizontal row */
+.pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
+.pb-stat{border:0;padding:0;background:none;min-width:0}
+.pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+.pb-dark .pb-stat-n{color:#fff}
+.pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
+.pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
+/* the source line: small, sentence case, grey */
+.pb-src{margin:26px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-3);max-width:80ch}
+.pb-src a{color:inherit}
+.pb-dark .pb-src{color:rgba(255,255,255,.62)}
+/* a single figure as a plain sentence, no container */
+.pb-plain{font-size:clamp(1.4rem,2.6vw,2.05rem);line-height:1.3;font-weight:400;
+  letter-spacing:-.015em;color:var(--ink);max-width:26ch;margin:0}
+.pb-plain b{font-weight:700}
+.pb-dark .pb-plain{color:#fff}
+/* the old boxed stat grids, should any markup still reach them: borderless now */
+.gapstats,.cover,.proofs{border:0;background:none;border-radius:0;overflow:visible}
+.gs,.proof{border:0;padding:0}
+.gs-n,.cv-n{font-weight:300;letter-spacing:-.03em}
+.gs-s,.cv-s{font-size:.86rem !important;font-weight:400;color:var(--ink-3)}
+@media(max-width:920px){
+  .pb-statrow{gap:26px 28px}
+  .gs,.proof{border:0}
+}
+
 /* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
 .vs-card h3{letter-spacing:-0.02em;margin-bottom:4px}

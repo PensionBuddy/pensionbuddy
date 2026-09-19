@@ -1509,6 +1509,153 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .rbig b,.bt b,.ec-note b,.dl-text b,.wtext b,.nt-n,.mrow .mrate,.mclose b,
 .pb-guess-val,.dashk,.ind,.rv-keys b{font-family:var(--font);font-variant-numeric:tabular-nums}
 .cbig,.gs-n,.cv-n,.tk-n{font-weight:300;letter-spacing:-.02em}
+
+/* ============================================================
+   v4 - BANDS. What the reference sites (Stripe, Plaid, Ramp,
+   Revolut, Klarna, Lemonade) share and this site did not: a stat
+   row of big light figures on a soft wash with no card around any
+   of them (Plaid: weight 300, line-height 1; Stripe: the same on
+   dark); full-bleed colour breaks; a single figure stated as a
+   plain large sentence (Lemonade); real product UI rather than a
+   text card. Every one is a .pb-* class a page opts into.
+   ============================================================ */
+/* a band that runs edge to edge while its content keeps the page width */
+.pb-bleed{width:100vw;margin-left:calc(50% - 50vw);border-radius:0}
+.pb-wash{background:linear-gradient(180deg,var(--bg) 0%,var(--teal-50) 42%,#EEF8F5 100%)}
+.pb-dark{background:linear-gradient(160deg,var(--ink-800),var(--ink-900));color:#fff}
+.pb-dark h2,.pb-dark h3{color:#fff}
+.pb-dark p{color:rgba(255,255,255,.8)}
+.pb-dark .eyebrow{color:var(--mint)}
+/* on the wash the bright teal drops under 4.5:1; the eyebrow takes the darker step */
+.pb-wash .eyebrow,.pb-wash .kicker,.gapband .eyebrow{color:var(--teal-700)}
+/* the stat row: no borders, no cards, one horizontal row */
+.pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
+.pb-stat{border:0;padding:0;background:none;min-width:0}
+.pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+.pb-dark .pb-stat-n{color:#fff}
+.pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
+.pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
+/* the source line: small, sentence case, grey */
+.pb-src{margin:26px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-3);max-width:80ch}
+.pb-src a{color:inherit}
+.pb-dark .pb-src{color:rgba(255,255,255,.62)}
+/* a single figure as a plain sentence, no container */
+.pb-plain{font-size:clamp(1.4rem,2.6vw,2.05rem);line-height:1.3;font-weight:400;
+  letter-spacing:-.015em;color:var(--ink);max-width:26ch;margin:0}
+.pb-plain b{font-weight:700}
+.pb-dark .pb-plain{color:#fff}
+/* the old boxed stat grids, should any markup still reach them: borderless now */
+.gapstats,.cover,.proofs{border:0;background:none;border-radius:0;overflow:visible}
+.gs,.proof{border:0;padding:0}
+.gs-n,.cv-n{font-weight:300;letter-spacing:-.03em}
+.gs-s,.cv-s{font-size:.86rem !important;font-weight:400;color:var(--ink-3)}
+@media(max-width:920px){
+  .pb-statrow{gap:26px 28px}
+  .gs,.proof{border:0}
+}
+
+/* ============================================================
+   v4 - THE GAP. What people expect to need against what the
+   State Pension pays, as two bars on the soft wash, the shortfall
+   drawn as the space between them. The bars grow and the figures
+   count up once, when the band scrolls into view, with the
+   calculators' own display engine: each frame closes a fixed
+   fraction of the distance left. Reduced motion: final state at
+   once. The whole figure is one image to assistive tech, with the
+   three figures in its label, so the counting is never read out.
+   ============================================================ */
+.gapband{padding:88px 0 84px}
+.gapband .sec-head{margin-bottom:40px}
+.pb-gap-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px 72px;align-items:end}
+.pb-gap-aside .pb-plain{max-width:22ch}
+.pb-gap-aside .pb-src{margin-top:18px}
+@media(max-width:920px){
+  .pb-gap-grid{grid-template-columns:1fr;gap:44px}
+  .pb-gap-aside .pb-plain{max-width:26ch}
+}
+.pb-gap{--gh:320px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,5vw,56px);
+  max-width:760px;align-items:end}
+.pb-gap-col{min-width:0;transition:opacity .3s ease}
+.pb-gap:hover .pb-gap-col:not(:hover){opacity:.55}
+.pb-gap-stage{position:relative;height:var(--gh)}
+.pb-gap-bar,.pb-gap-short{position:absolute;left:0;right:0;height:0;overflow:hidden;
+  border-radius:14px 14px 0 0;transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
+.pb-gap-bar{bottom:0}
+.pb-gap-need .pb-gap-bar{background:var(--ink)}
+.pb-gap-state .pb-gap-bar{background:var(--aqua)}
+.pb-gap-short{bottom:38.1%;background:var(--amber-soft);transition-delay:.12s}
+.pb-gap.pb-go .pb-gap-bar,.pb-gap.pb-go .pb-gap-short{height:var(--h)}
+.pb-gap-n{position:absolute;left:20px;top:18px;font-family:var(--font);font-variant-numeric:tabular-nums;
+  font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.pb-gap-need .pb-gap-n{color:#fff}
+.pb-gap-state .pb-gap-bar .pb-gap-n{color:var(--aqua-ink)}
+.pb-gap-short .pb-gap-n{color:var(--ink)}
+.pb-gap-sl{position:absolute;left:20px;top:calc(18px + clamp(1.9rem,4.2vw,3.1rem) + 8px);
+  font-size:.92rem;color:var(--ink-2);white-space:nowrap}
+.pb-gap-l{display:block;margin-top:14px;font-size:.98rem;line-height:1.5;color:var(--ink-2);max-width:26ch}
+.pb-gap-col:hover .pb-gap-bar{filter:brightness(1.06)}
+@media(max-width:600px){
+  .pb-gap{--gh:250px;gap:14px}
+  .pb-gap-n{left:12px;top:12px}
+  .pb-gap-sl{left:12px;top:calc(12px + clamp(1.9rem,4.2vw,3.1rem) + 6px);font-size:.82rem}
+  .pb-gap-l{font-size:.9rem}
+  .gapband{padding:64px 0 60px}
+}
+@media(prefers-reduced-motion:reduce){
+  .pb-gap-bar,.pb-gap-short{transition:none}
+  .pb-gap.pb-go .pb-gap-bar,.pb-gap.pb-go .pb-gap-short{height:var(--h)}
+}
+
+/* ============================================================
+   v4 - THE PRODUCT. The calculator showcase was a card that
+   described the tool with made-up bars. It is now the tool itself,
+   photographed as it runs (tools/shoot-product.py), on a deep
+   full-bleed band the way Plaid drops to dark for its own product.
+   ============================================================ */
+.pb-product{padding:96px 0}
+.pb-product .calc-copy p{font-size:1.06rem;line-height:1.62;margin:0 0 26px;max-width:46ch}
+.pb-product-shot{display:block;position:relative;border-radius:16px;overflow:hidden;
+  box-shadow:0 32px 90px rgba(0,0,0,.45);background:var(--bg);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
+.pb-product-shot:hover{transform:translateY(-4px);box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.pb-product-shot:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
+.pb-product-shot img{display:block;width:100%;height:auto}
+.pb-product-cap{display:block;padding:12px 16px 13px;font-size:.82rem;line-height:1.5;
+  color:var(--ink-2);background:var(--bg);border-top:1px solid var(--line)}
+@media(max-width:920px){
+  .pb-product{padding:64px 0}
+  .pb-product .calc-grid{grid-template-columns:1fr;gap:34px}
+}
+
+/* ============================================================
+   v4 - THE OFFERING. Six places to begin, set huge, the way Klarna
+   lists what it does: no cards, no bullets, the name of each thing
+   at display size. Hovering or focusing one brings its line of
+   explanation in and lets the others fade; on phones the line sits
+   under each name and nothing is hidden behind a hover.
+   ============================================================ */
+.pb-offer{list-style:none;margin:0;padding:0}
+.pb-offer li{margin:0;padding:0}
+.pb-offer-item{display:block;padding:16px 0;color:var(--ink);text-decoration:none;transition:opacity .3s ease}
+.pb-offer-name{display:block;font-weight:800;font-size:clamp(2.1rem,6vw,4.7rem);line-height:1;
+  letter-spacing:-.035em;color:inherit;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.pb-offer-desc{display:block;margin-top:10px;max-width:46ch;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+@media(min-width:921px){
+  .pb-offer-item{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:end;padding:20px 0}
+  .pb-offer-desc{margin:0 0 10px;opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease}
+  .pb-offer-item:hover .pb-offer-desc,.pb-offer-item:focus-visible .pb-offer-desc{opacity:1;transform:none}
+  .pb-offer-item:hover .pb-offer-name,.pb-offer-item:focus-visible .pb-offer-name{transform:translateX(10px)}
+  .pb-offer:hover .pb-offer-item:not(:hover){opacity:.38}
+}
+.pb-offer-item:focus-visible{outline:3px solid var(--teal);outline-offset:4px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){
+  .pb-offer-name,.pb-offer-desc,.pb-offer-item,.pb-gap-col,.pb-product-shot{transition:none}
+}
+
+/* the closing band runs edge to edge, no rounded card */
+.final-band{padding:0}
+.final.pb-bleed{border-radius:0;padding:104px 24px}
 </style>
 </head>
 <body>
@@ -1568,28 +1715,35 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 
 </div></header>
 
-<section class="gapband">
+<section class="gapband pb-bleed pb-wash" id="gap">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="eyebrow"><i class="pip"></i>The gap</div>
       <h2>People know roughly what they&rsquo;ll need.<br>Far fewer know what they&rsquo;re on track for.</h2>
     </div>
-    <div class="gapstats">
-      <div class="gs reveal">
-        <div class="gs-n">&euro;40,860</div>
-        <div class="gs-l">What adults in Ireland expect to need each year in retirement</div>
-        <div class="gs-s">Royal London Ireland, survey of 900 non-retirees, 2026</div>
+    <div class="pb-gap-grid">
+    <div class="pb-gap-main">
+    <div class="pb-gap reveal" id="pbGap" role="img" aria-label="Two bars. What adults in Ireland expect to need each year in retirement, 40,860 euro, beside what the maximum State Pension pays a year, 15,564 euro. The gap between them is 25,296 euro a year.">
+      <div class="pb-gap-col pb-gap-need">
+        <div class="pb-gap-stage">
+          <div class="pb-gap-bar" style="--h:100%"><span class="pb-gap-n" data-pb-count="40860">&euro;0</span></div>
+        </div>
+        <span class="pb-gap-l">What adults in Ireland expect to need each year in retirement</span>
       </div>
-      <div class="gs reveal" style="transition-delay:.06s">
-        <div class="gs-n">&euro;25,296</div>
-        <div class="gs-l">The projected annual shortfall vs the Maximum State Pension</div>
-        <div class="gs-s">Same survey, against a State Pension of &euro;15,564</div>
+      <div class="pb-gap-col pb-gap-state">
+        <div class="pb-gap-stage">
+          <div class="pb-gap-short" style="--h:61.9%"><span class="pb-gap-n" data-pb-count="25296">&euro;0</span><span class="pb-gap-sl">a year short</span></div>
+          <div class="pb-gap-bar" style="--h:38.1%"><span class="pb-gap-n" data-pb-count="15564">&euro;0</span></div>
+        </div>
+        <span class="pb-gap-l">What the maximum State Pension pays a year</span>
       </div>
-      <div class="gs reveal" style="transition-delay:.12s">
-        <div class="gs-n">79%</div>
-        <div class="gs-l">Of employees say they feel financially unprepared for retirement</div>
-        <div class="gs-s">Am&aacute;rach Research for FPSB Ireland, IOB, LIA and the RPCI, May 2026</div>
-      </div>
+    </div>
+    <p class="pb-src reveal">Royal London Ireland, survey of 900 non-retirees, 2026. The State Pension figure is the one the survey measured against.</p>
+    </div>
+    <div class="pb-gap-aside reveal" style="transition-delay:.1s">
+      <p class="pb-plain">79% of employees say they feel financially unprepared for retirement.</p>
+      <p class="pb-src">Am&aacute;rach Research for FPSB Ireland, IOB, LIA and the RPCI, May 2026.</p>
+    </div>
     </div>
     <p class="gap-note reveal">These are survey averages, not a projection for you. What you&rsquo;ll actually
     need depends on your own circumstances, and the value of a pension can fall as well as rise.
@@ -1597,48 +1751,34 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
   </div>
 </section>
 
-<section id="audience"><div class="wrap">
-  <div class="sec-head reveal">
-    <span class="kicker">Start where you are</span>
-    <h2>Three different starting points. One of them is yours.</h2>
-  </div>
-  <div class="aud">
-    <a href="tracker.html" class="aud-card a1 reveal">
-      <span class="aud-ico"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-      <h3>Track down old pensions</h3>
-      <p>Changed jobs a few times and lost the thread? We'll find what you've built up and tell you what it's worth.</p>
-      <span class="aud-link">I've pensions to find <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-    </a>
-    <a href="starter.html" class="aud-card a2 reveal" style="transition-delay:.08s">
-      <span class="aud-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg></span>
-      <h3>Start a pension</h3>
-      <p>No pension yet, or one you've never looked at? We'll make starting simple, and it's never too late to begin.</p>
-      <span class="aud-link">I want to start <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-    </a>
-    <a href="director.html" class="aud-card a3 reveal" style="transition-delay:.16s">
-      <span class="aud-ico"><svg class="ico" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg></span>
-      <h3>I'm a company director</h3>
-      <p>Your company can fund your pension far beyond personal limits, and cut its tax bill doing it.</p>
-      <span class="aud-link">Show me the limits <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-    </a>
-  </div>
-</div></section>
-
-<section id="calc"><div class="wrap calc-grid">
+<section id="calc" class="pb-bleed pb-dark pb-product"><div class="wrap calc-grid">
   <div class="calc-copy reveal">
     <span class="eyebrow"><span class="pip"></span>The free tool</span>
     <h2>You know what goes in. This shows what comes out.</h2>
     <p>Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.</p>
     <a class="btn btn-primary" href="pension-calculator.html">Open the calculator <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
-  <div class="calc-prev reveal" style="transition-delay:.12s">
-    <div class="ctag">Projected pot at 66</div>
-    <div class="cbig">€487,200</div>
-    <div class="csub">about €1,624 a month in retirement</div>
-    <div class="cbars"><i style="height:24%"></i><i style="height:36%"></i><i style="height:50%"></i><i style="height:64%"></i><i style="height:80%"></i><i class="hl" style="height:100%"></i></div>
-    <div class="cnote">Illustration only · the value of investments can fall as well as rise</div>
-  </div>
+  <a class="pb-product-shot reveal" href="pension-calculator.html" style="transition-delay:.12s">
+    <picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=54040070"><img src="assets/img/product-pension-calculator.jpg?v=61eba801" width="2184" height="2164" loading="lazy" alt="The pension calculator as it runs: sliders for your age, retirement age, pension saved so far, monthly contribution and annual earnings on the left; on the right, the projected pot and monthly income, the cost of waiting a year, the growth chart and what Revenue adds through tax relief."></picture>
+    <span class="pb-product-cap">The calculator, as it runs. Illustration only &middot; the value of investments can fall as well as rise</span>
+  </a>
 </div></section>
+
+<section id="audience"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">Start where you are</span>
+    <h2>Six places to begin. One of them is yours.</h2>
+  </div>
+  <ul class="pb-offer reveal" id="pbOffer">
+    <li><a class="pb-offer-item" href="tracker.html"><span class="pb-offer-name">Track down old pensions</span><span class="pb-offer-desc">Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.</span></a></li>
+    <li><a class="pb-offer-item" href="starter.html"><span class="pb-offer-name">Start a pension</span><span class="pb-offer-desc">No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.</span></a></li>
+    <li><a class="pb-offer-item" href="director.html"><span class="pb-offer-name">Company directors</span><span class="pb-offer-desc">Your company can fund your pension far beyond personal limits, and cut its tax bill doing it.</span></a></li>
+    <li><a class="pb-offer-item" href="pension-calculator.html"><span class="pb-offer-name">Pension calculator</span><span class="pb-offer-desc">Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.</span></a></li>
+    <li><a class="pb-offer-item" href="state-pension-reality-check.html"><span class="pb-offer-name">State Pension reality check</span><span class="pb-offer-desc">What the State Pension actually leaves you to find, for a full record and for your own.</span></a></li>
+    <li><a class="pb-offer-item" href="broker-vs-autoenrolment.html"><span class="pb-offer-name">Auto-enrolment comparison</span><span class="pb-offer-desc">My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.</span></a></li>
+  </ul>
+</div></section>
+
 
 <section class="tickband" id="deadline">
   <div class="wrap">
@@ -1790,7 +1930,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
   </div>
 </div></section>
 
-<div class="final-band"><div class="wrap"><div class="final reveal">
+<div class="final-band"><div class="wrap"><div class="final pb-bleed reveal">
   <div class="paw-bg"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="2" ry="2.9"/><ellipse cx="16" cy="7.5" rx="2" ry="2.9"/><ellipse cx="4.3" cy="11.8" rx="1.8" ry="2.4"/><ellipse cx="19.7" cy="11.8" rx="1.8" ry="2.4"/><path d="M12 12.6c-3.2 0-5.5 2.2-5.5 5 0 2.4 2.4 3 5.5 3s5.5-.6 5.5-3c0-2.8-2.3-5-5.5-5z"/></svg></div>
   <span class="eyebrow"><span class="pip"></span>Ready when you are</span>
   <h2>Your pension has been sitting there quietly. Twenty minutes ends that.</h2>
@@ -1841,6 +1981,39 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
       l.classList.remove('open');t.setAttribute('aria-expanded','false');
       t.setAttribute('aria-label','Open menu');t.focus();}
   });
+})();
+/* the gap: bars grow and figures count up once, when the band scrolls into view */
+(function(){
+  var gap=document.getElementById('pbGap'); if(!gap) return;
+  var nums=[].slice.call(gap.querySelectorAll('[data-pb-count]'));
+  var REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  var done=false;
+  function run(){
+    if(done) return; done=true;
+    gap.classList.add('pb-go');
+    if(REDUCE||!('requestAnimationFrame' in window)){
+      nums.forEach(function(n){n.textContent=fmt(+n.getAttribute('data-pb-count'));});return;}
+    /* the calculators' display engine: each frame closes a fixed fraction of what is left */
+    var anims=nums.map(function(n){return {el:n,cur:0,target:+n.getAttribute('data-pb-count')};});
+    function step(){
+      var active=false;
+      anims.forEach(function(a){
+        var d=a.target-a.cur;
+        if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*0.16;active=true;}else{a.cur=a.target;}
+        a.el.textContent=fmt(a.cur);
+      });
+      if(active) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if(!('IntersectionObserver' in window)){run();return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){io.disconnect();run();}});
+  },{threshold:0.3});
+  io.observe(gap);
+  /* never leave the figures at zero: a band that is already past the fold when the observer attaches, or a browser that never fires it */
+  setTimeout(function(){var r=gap.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)run();},1200);
 })();
 /* scroll reveal */
 (function(){
