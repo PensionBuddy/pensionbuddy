@@ -11,11 +11,13 @@
     - only <p> and <li> inside <main>; headings are never scanned
     - never inside a, button, summary, .msg, .note, .hint, .disclosure,
       .infoadvice, .credline, .pb-b-panel, or an existing chip
-    - the bank's SHORT form only (the words before any parenthetical), plus a
-      simple plural; longest term first, case-insensitive, word boundaries
-    - one chip per paragraph, one paragraph per term, six per page
-    - no alias table. If the page does not use the bank's own wording, it gets
-      no chip, and that is the honest answer.
+    - the bank's SHORT form (the words before any parenthetical) plus a simple
+      plural, and the ALIASES below: every abbreviation and its expansion both
+      ways, and the everyday phrasings of a few terms; longest pattern first,
+      case-insensitive, word boundaries, the earliest match in a paragraph wins
+    - one chip per paragraph, one paragraph per term, eight per page
+    - a page that uses none of a term's phrasings gets no chip for it, and
+      that is the honest answer
 
   An existing <a class="gref"> whose glossary anchor is one of the two the bank
   also covers is upgraded in place instead of being left as a link: same words,
@@ -32,7 +34,7 @@
 (function () {
   'use strict';
 
-  var CAP = 6;
+  var CAP = 8;
   var SKIP = 'a,button,summary,.msg,.note,.hint,.disclosure,.infoadvice,.credline,.pb-b-panel,.pb-chip,.pb-def';
   var INNER = 'a,button,.pb-chip,.pb-def';
 
@@ -51,6 +53,43 @@
      promises only the page. */
   var LINK = 'See it in the jargon buster';
   var LINK_ALL = 'See the full jargon buster';
+
+  /* ---- the alias table ----
+     Phrasings the prose uses for a bank term instead of the bank's own short
+     form, keyed by that short form in lower case. Every abbreviation and its
+     expansion are here both ways, plus the everyday forms of a few terms.
+     Each alias gets the same plural and boundary rules as the short form,
+     and matching one of them makes the same chip: the button shows the words
+     on the page, the definition shows the bank term. A term absent here has
+     only its short form and plural. "Company contributions" is deliberately
+     not an alias of Employer contribution: on director.html the company is
+     funding the director's own pension, and the bank's line ("effectively
+     part of your pay") would read wrongly there. */
+  var ALIASES = {
+    'avc': ['additional voluntary contribution'],
+    'annuity': ['annuities'],
+    'prsa': ['personal retirement savings account'],
+    'defined contribution pension': ['defined contribution', 'dc pension', 'dc scheme'],
+    'drawdown': ['draw down', 'drawing down', 'drawn down'],
+    'tracker fund': ['index fund', 'index tracker'],
+    'vesting': ['vested'],
+    'defined benefit pension': ['defined benefit', 'db pension', 'db scheme', 'final salary pension', 'final salary scheme'],
+    'state pension': ['contributory state pension', 'contributory pension'],
+    'auto-enrolment': ['auto enrolment', 'autoenrolment', 'automatic enrolment', 'auto-enrolled', 'auto-enrol', 'my future fund'],
+    'arf': ['approved retirement fund'],
+    'prsi': ['pay related social insurance', 'pay-related social insurance', 'social insurance'],
+    'tax-free lump sum': ['tax free lump sum', 'lump sum'],
+    'consolidation': ['consolidate', 'consolidated', 'consolidating', 'bringing them together', 'bring them together', 'bringing your pensions together', 'combine your pensions', 'combining your pensions', 'combine my old pensions'],
+    'standard fund threshold': ['sft'],
+    'employer contribution': ['employer\'s contribution', 'employer match', 'employer matching'],
+    'compound growth': ['compounding', 'compound interest'],
+    'qfa': ['qualified financial adviser', 'qualified financial advisor'],
+    'occupational pension scheme': ['occupational pension', 'occupational scheme', 'workplace pension', 'workplace scheme', 'work pension', 'company pension scheme', 'employer\'s scheme', 'employer scheme'],
+    'annual management charge': ['amc', 'management charge', 'annual charge'],
+    'preserved benefit': ['preserved pension', 'deferred pension', 'deferred benefit', 'pension left behind', 'pensions left behind', 'pensions from old jobs', 'pension from an old job', 'older pension', 'old pension', 'old plan', 'old scheme'],
+    'risk rating': ['risk level', 'summary risk indicator'],
+    'pay and file deadline': ['pay and file', 'tax deadline', '31 october deadline']
+  };
   var TITLE = 'What this means';
 
   var seq = 0;
@@ -69,15 +108,31 @@
     return new RegExp('(^|[^A-Za-z0-9-])(' + esc(term) + 's?)(?![A-Za-z0-9-])', 'i');
   }
 
+  /* one entry per pattern: the short form, then each alias, all carrying the
+     same key so that one chip retires every phrasing of that term */
   function terms(bank) {
-    var list = [], i, s;
+    var list = [], i, j, s, key, al;
     for (i = 0; i < bank.length; i++) {
       s = shortForm(bank[i] && bank[i].term);
       if (!s || !bank[i].correct) { continue; }
-      list.push({ key: s.toLowerCase(), short: s, entry: bank[i], re: rx(s) });
+      key = s.toLowerCase();
+      list.push({ key: key, short: s, entry: bank[i], pat: s, re: rx(s) });
+      al = ALIASES.hasOwnProperty(key) ? ALIASES[key] : [];
+      for (j = 0; j < al.length; j++) {
+        list.push({ key: key, short: s, entry: bank[i], pat: al[j], re: rx(al[j]) });
+      }
     }
-    list.sort(function (a, b) { return b.short.length - a.short.length; });
+    list.sort(function (a, b) { return b.pat.length - a.pat.length; });
     return list;
+  }
+
+  /* every pattern of one term, gone once that term has its chip */
+  function retire(list, key) {
+    var out = [], i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i].key !== key) { out.push(list[i]); }
+    }
+    return out;
   }
 
   function skipped(el) {
@@ -189,7 +244,7 @@
 
     var main = document.getElementById('main');
     var bank = window.PBJargonBank;
-    var list, blocks, made, i, j, k, block, links, href, frag, item, nodes, hit, m;
+    var list, blocks, made, i, j, k, block, links, href, frag, nodes, hit, m, best, bm;
 
     if (!main || !bank || !bank.length || !main.querySelectorAll) { return; }
     list = terms(bank);
@@ -212,7 +267,7 @@
         for (k = 0; k < list.length; k++) {
           if (list[k].short === GREF[frag]) {
             upgrade(links[j], list[k], block);
-            list.splice(k, 1);
+            list = retire(list, list[k].key);
             made += 1;
             hit = links[j];
             break;
@@ -221,19 +276,21 @@
       }
       if (hit) { continue; }
 
-      /* 2. otherwise the first bank term written out in the prose */
+      /* 2. otherwise the earliest bank phrasing written out in the prose;
+            on a tie the longer pattern, which the sort order supplies */
       nodes = textNodes(block);
       for (j = 0; j < nodes.length && !hit; j++) {
+        best = null; bm = null;
         for (k = 0; k < list.length; k++) {
-          item = list[k];
-          m = item.re.exec(nodes[j].nodeValue);
+          m = list[k].re.exec(nodes[j].nodeValue);
           if (!m) { continue; }
-          if (!chip(nodes[j], m, item, block)) { break; }
-          list.splice(k, 1);
-          made += 1;
-          hit = nodes[j];
-          break;
+          if (!bm || m.index < bm.index) { best = list[k]; bm = m; }
         }
+        if (!best) { continue; }
+        if (!chip(nodes[j], bm, best, block)) { break; }
+        list = retire(list, best.key);
+        made += 1;
+        hit = nodes[j];
       }
     }
 
