@@ -67,16 +67,16 @@
   var LEAD = 'One for each thing you have tried.';
   var YES = 'Earned';
   var NO = 'Not yet';
-  var DONE = 'All four. Nice one.';
+  var DONE = '4/4 paws.';
   var BOOK = 'Book your free call';
 
   /* the fixed set, in the order the strip prints them */
   var ORDER = ['run', 'battle', 'calculator', 'trace'];
   var NAMES = {
-    run: 'Buddy’s Run',
-    battle: 'Jargon Battle',
-    calculator: 'A calculator',
-    trace: 'Pension trace check'
+    run: 'Runner Paw',
+    battle: 'Buster Paw',
+    calculator: 'Cruncher Paw',
+    trace: 'Tracker Paw'
   };
 
   /* the glossary paw, copied shape for shape from the .paw-bg decoration on
@@ -107,16 +107,18 @@
     + '.pb-badge .pb-paw{width:24px;height:24px;flex:0 0 auto;display:block}'
     + '.pb-badge .pb-paw svg{width:100%;height:100%;display:block;fill:none;'
     + 'stroke:var(--line-2,#D8DFDC);stroke-width:1.5}'
-    + '.pb-badge-on .pb-paw svg{fill:#16C9B0;stroke:none}'
+    + '.pb-badge-on .pb-paw svg{fill:var(--aqua);stroke:none}'
     + '.pb-badge .pb-name{font-size:14px;font-weight:600;min-width:0;'
     + 'overflow-wrap:break-word}'
     + '.pb-badge .pb-state{margin-left:auto;font-size:12px;font-weight:600;'
     + 'white-space:nowrap;color:var(--ink-2,#54635F)}'
     + '.pb-badge-on .pb-state{color:var(--teal-700,#08655A)}'
     + '.pb-badges .pb-done{margin-top:14px;font-size:14px;font-weight:600}'
-    + '.pb-badges .pb-book{display:inline-block;margin-top:6px;font-size:14px;'
-    + 'font-weight:600;color:var(--teal-700,#08655A);'
+    + '.pb-badges .pb-book{font-size:14px;'
+    + 'font-weight:600;color:var(--teal-700,#08655A);text-decoration:none;'
     + 'border-bottom:2px solid var(--teal,#0C8175);padding-bottom:1px}'
+    + '.pb-badges .pb-ico{width:14px;height:14px;vertical-align:-2px;margin-left:4px;'
+    + 'fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}'
     + '.pb-trace{margin-top:30px}'
     + '.pb-trace h3{margin-bottom:8px}'
     + '.pb-trace .pb-badges{margin-top:22px}'
@@ -243,15 +245,34 @@
     mount.appendChild(lead);
     mount.appendChild(list);
     if (all().length !== ORDER.length) { return; }
+    /* one line: "4/4 paws. Book your free call" with the site's arrow drawn
+       as an inline svg, the way every other link on the site carries it */
     done = document.createElement('p');
     done.className = 'pb-done';
-    done.textContent = DONE;
+    done.appendChild(document.createTextNode(DONE + ' '));
     link = document.createElement('a');
     link.className = 'pb-book';
     link.setAttribute('href', 'booking.html');
-    link.textContent = BOOK;
+    link.appendChild(document.createTextNode(BOOK));
+    link.appendChild(arrow());
+    done.appendChild(link);
     mount.appendChild(done);
-    mount.appendChild(link);
+  }
+
+  function arrow() {
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    var line = document.createElementNS(NS, 'line');
+    var head = document.createElementNS(NS, 'polyline');
+    svg.setAttribute('class', 'pb-ico');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    line.setAttribute('x1', '5'); line.setAttribute('y1', '12');
+    line.setAttribute('x2', '19'); line.setAttribute('y2', '12');
+    head.setAttribute('points', '12 5 19 12 12 19');
+    svg.appendChild(line);
+    svg.appendChild(head);
+    return svg;
   }
 
   /* The note. One line inside a game's end panel, already written into the
