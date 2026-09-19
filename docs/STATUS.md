@@ -6,6 +6,57 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 16 — 2026-09-19 · One case, one face, and the bands
+
+Damian's brief, against full-page captures of Stripe, Plaid, Ramp, Revolut,
+Mercury, Klarna and Lemonade: kill the caps-mono label system site-wide, add
+what those sites have and this one did not (stat rows with no cards, full-bleed
+colour breaks, the product itself on the page, a huge-type offering list, a
+figure as a plain sentence, sentence-case buttons), and turn the two boxed
+homepage figures into one visual of the gap. Calculator maths and the
+disclaimers were locked and are byte-identical. Branch
+`claude/remove-caps-mono-styling-8b6c42`.
+
+| Item | Status | Note |
+|---|---|---|
+| Caps-mono system | **Gone, site-wide** | One script over all 16 root pages, both games and the three `tools/*-parts/page.css`, so every page got the identical edit and the `:root` token guard still holds: the IBM Plex Mono request, the `--font-num` and `--font-mono` tokens, every `text-transform:uppercase` and every positive `letter-spacing` removed; `var(--font-mono\|--font-num)` rewritten to `var(--font)`. Footer column heads, form labels, stat citations, chips, callout heads, step numbers, the countdown labels, "More options" and the phone's role tag are all sentence case in the body face at 600. Figures are the body face with `font-variant-numeric:tabular-nums`; the big marketing figures at 300, the way Plaid and Stripe set theirs; calculator readouts stay 600 because they are the product's live output. Google Fonts now requests `Inter:wght@300;400;500;700;800` and nothing else. |
+| "Sora" | **Read as Inter, flagged** | The brief names Sora. Inter has been the one face since run 15 (`6b3ddeb`), and `tools/verify.py` fails any page that names or resolves Sora. The brief's own rule, "the SAME sans as body text", is satisfied by Inter. Switching the whole site to Sora is a one-line font change plus the guard, if that is what was meant; see NEEDS DAMIAN INPUT. |
+| verify.py guard | **CASE** | A page now FAILS if any element renders `text-transform:uppercase`, with positive letter-spacing, or on a monospace family, or if `text-transform:uppercase` appears in source; IBM Plex Mono joined the dropped-family list. Footer `h4` labels are excluded from the heading recipe by `.closest('.foot-col')` rather than by face. Mutation-tested on a throwaway copy: an uppercase rule, a tracked rule and a monospace rule were each caught. `--shot-widths` added so screenshots can be taken at the brief's 375/1200/1440. |
+| "One thing this does not show" | **Box and heading deleted; sentence kept** | The bordered `.waitcard` and its caps heading are gone from the reality check. The sentence inside it stays as plain text under the result (`.pb-floor`): `page.js` writes `#spFloor` and `#spFloorLink`, `tests/page-probe.js` asserts that text at every spec row, and CONTEXT.md's rule is that a floor says which rule it leaves out. Deleting the sentence too is Damian's call, not mine. The skeleton's own `.waitcard` ("The cost of waiting") is a nudge with a live figure, not a caveat, and keeps its card with a sentence-case head. |
+| Stat rows (2a) | **No cards anywhere** | `.pb-statrow` / `.pb-stat-n` (weight 300, line-height 1, tight tracking) / `.pb-stat-l` / `.pb-src` on every page; the old `.gapstats`, `.cover` and `.proofs` grids are borderless should any markup reach them again. director.html's boxed CSO figures are one row on a wash band with the source line beneath. |
+| Full-bleed breaks (2b) | **3 to 4 per page** | Home: the gap wash, the dark product band, the deadline band, the closing band. Audience trio: the dark product band, the wash guide band, the closing band, and on director the wash stat band too. `.pb-bleed` runs a band edge to edge while its content keeps the `.wrap` measure. |
+| The product on the page (2c) | **Real UI, photographed** | New `tools/shoot-product.py` renders the pension and director calculators in headless Chrome at 1200px at 2x, hides the chrome and the lead-capture, badge and boost rows, and crops the tool: `assets/img/product-pension-calculator` and `product-director-calculator` (.jpg + .webp). The homepage showcase card with made-up bars is gone; the calculator itself sits on the dark band and links to the tool. starter.html and director.html carry the same shots beside their existing copy; tracker.html, which has no calculator, carries the photo of Damian and Buddy. |
+| Offering list (2d) | **Home, six items** | The three audience cards became `.pb-offer`: six links set at display size (Klarna's pattern), descriptions revealed on hover and on keyboard focus at 921px and up, always visible beneath the name below that, siblings fading to 38% on hover. Item copy is lifted from the cards, the calculator section and starter.html; the heading and one description are new (see below). |
+| A figure as a sentence (2e) | **The 79%** | Beside the bars, as `.pb-plain`, with its source line: "79% of employees say they feel financially unprepared for retirement." |
+| Buttons (2f) | **Already sentence case** | None used caps; the guard now keeps it that way. |
+| The gap (Task 3) | **Two bars, counting** | `.pb-gap` on the wash: what adults expect to need (40,860, an ink bar at 100%) beside what the maximum State Pension pays (15,564, an aqua bar at 38.1%), the 25,296 shortfall drawn as an amber block from the top of the second bar to the height of the first, labelled "a year short". The bars grow and the figures count up once, when the band scrolls into view, with the calculators' display engine (each frame closes 16% of what is left); reduced motion gets the final state; the whole figure is one `role="img"` whose label carries the three figures and both captions, so the counting is never read out. Sources in small sentence-case grey underneath. Survey figures unchanged. Note: verify.py's screenshots catch the count mid-flight (a figure short of 40,860 in a capture is the tween, not the data). |
+| Calculators | **Untouched, proved** | Only CSS and markup outside the script blocks changed on the five calculator pages. render-diff against HEAD: every page loads to the same render write for write; sweeps state-pension exhaustive 2,009 / pension-calculator 6,550 / director-calculator 1,513 / compare 150,576 / entitlement 223 states, all 0 differing, 0 reordered; sequences 16,000 compared, 0 differing. |
+| Stray | **Noted, not changed** | The two hand-written calculators' chart axis labels name `Plus Jakarta Sans` inside the SVG text attributes, in the page script. Not mono, not loaded, falls back to sans; it sits inside the render-diff-protected script, so it is left for a calculator change. |
+
+## Proof
+
+- `python3 tools/verify.py --widths 375,1200,1440 --shot-widths 375,1200,1440`:
+  **18 pages, 0 FAIL, 1 WARN** (terms.html A1, unchanged), **0 contrast
+  pairs at any width**, no horizontal overflow. Identical to a baseline run on
+  a pristine `git archive HEAD` tree before any edit: 0 new WCAG AA fails.
+- `tests/build.test.py` 69 pass; `tests/run-tests.py` all suites pass;
+  `tools/stamp-images.py --check` 0 stale; `tools/sync-chrome.py --check` 0
+  behind; `tools/pagebuild.py` rebuild clean.
+- render-diff as above: 160,871 states and 16,000 event-path comparisons, 0
+  differing.
+- A five-lens adversarial review (brief compliance, accessibility, copy and
+  figures, calculator regression, robustness), each finding put to three
+  skeptics; outcome recorded in the commit.
+
+## NEEDS DAMIAN INPUT from this run
+
+| Code | Where | What is needed |
+|---|---|---|
+| **V4-1** | every page, the font link and `--font` | The brief says Sora; the site is on Inter and the guard drops Sora. Confirm Inter, or say Sora and the switch is the font request, the `--font` token and one line in verify.py. |
+| **V4-2** | `state-pension-reality-check.html`, under the result | The "One thing this does not show" box and heading are gone; the floor sentence stays as plain text because the page script writes it and the probe asserts it. Say if the sentence should go too. |
+| **V4-3** | `index.html` | New copy to sign: the offering heading "Six places to begin. One of them is yours."; the item names "Company directors" and "Auto-enrolment comparison"; the reality-check line "What the State Pension actually leaves you to find, for a full record and for your own."; the bar captions "What adults in Ireland expect to need each year in retirement" and "What the maximum State Pension pays a year"; "a year short"; the product caption "The calculator, as it runs." |
+| **V4-4** | `starter.html`, `director.html`, `tracker.html` | Captions "The pension calculator on this site, with example figures.", "The director calculator on this site, with example figures.", "Damian and Buddy in the Dublin hills." (the hill is named from the photo's filename; change the caption if it is elsewhere). |
+
 # Run 15 — 2026-09-17 · Ruthless Standard v3: one face, one heading recipe, one hero
 
 Damian's v3 standard, applied everywhere except `about.html` (which no longer
