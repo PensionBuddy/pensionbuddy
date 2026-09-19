@@ -15,8 +15,9 @@
 /* ---- the contributions jar, this page only ----
    One dot per 52 reckonable contributions, forty of them, filling from the
    bottom row up: .pb-jar-dots is flipped with scaleY(-1) so DOM order 0..39
-   reads as bottom to top. The bottom row is the first 520, marked by a rule
-   and a label rather than by a claim about entitlement.
+   reads as bottom to top. The bottom row, the first 520, is in amber and
+   carries no label: eligibility needs 520 PAID contributions, this slider
+   holds the reckonable total, and the mark makes no claim either way.
 
    Every text node in here is var(--ink-3), which is 5:1 on --surface-2.
    --aqua and --amber carry no text: they are dot fills only, and tools/
@@ -34,8 +35,6 @@
   transition:background-color .3s ease}
 .pb-jar-dot.pb-on{background:var(--aqua)}
 .pb-jar-dot.pb-jar-first.pb-on{background:var(--amber)}
-.pb-jar-band{display:block;margin-top:8px;padding-top:7px;border-top:1px solid var(--line-2);
-  font-size:11.5px;line-height:1.4;color:var(--ink-3)}
 .pb-jar-cap{font-size:12.5px;line-height:1.5;font-weight:600;color:var(--ink-3);margin-top:0;
   font-variant-numeric:tabular-nums;grid-column:2;grid-row:1}
 .pb-jar-lead{font-size:12.5px;line-height:1.5;color:var(--ink-3);margin-top:4px;
