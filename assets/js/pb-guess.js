@@ -30,15 +30,14 @@
   input or anything else focusable, and none of them has one, which is what
   makes aria-hidden while veiled honest rather than a trap.
 
-  THE REALITY CHECK IS ON THE LIST, with a caveat the page owns. It opens on a
-  full forty-year record, so #spWeekly holds the maximum rate at load, and the
-  page's own lede states that maximum in words above the results column ("The
-  most the State Pension pays is ..."). At the default the card is therefore
-  asking for a number the page has just printed; it only becomes a real guess
-  once the reader has moved the contributions slider to their own record,
-  which is what the page asks them to do. The brief asked for the card on
-  every calculator, so it is here; whether the lede should stop naming the
-  figure, or the page should open below a full record, is Damian's call.
+  THE REALITY CHECK IS ON THE LIST. It opens on a full forty-year record, so
+  #spWeekly holds the maximum rate at load. The page's lede used to state that
+  maximum in words above the results column and no longer does; the figure is
+  still printed lower down, in the explanation and the assumptions under the
+  tool, which a reader reaches only by scrolling past the card. At the default
+  the guess is therefore for the maximum rate, unseen; it becomes the reader's
+  own question once they move the contributions slider to their own record,
+  which is what the page asks them to do.
 
   THE VEIL LANDS BEFORE THE FIRST PAINT. This file arrives from a tag at the
   end of the body, after the page has painted its figures, so on its own the
