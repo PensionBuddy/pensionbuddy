@@ -14,11 +14,11 @@
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Inter + IBM Plex Mono · pine accent · keyline-first, near-zero shadow
+   Inter, one face · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
   /* canvas + surfaces */
@@ -42,8 +42,6 @@
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-num:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
-  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
   --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -58,9 +56,9 @@ h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(-
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
 
 /* ---- eyebrow / labels ---- */
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
-.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.kicker{font-size:13px;font-weight:700;color:var(--ink-3)}
 
 /* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
@@ -180,7 +178,7 @@ section{padding:88px 0}
 .calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
 .calc-prev{background:var(--teal-900);border-radius:var(--r-xl);padding:34px;color:#fff;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
 .calc-prev::before{content:"";position:absolute;inset:0;pointer-events:none}
-.calc-prev .ctag{font-size:12.5px;letter-spacing:.04em;font-weight:600;color:#7FD8CC;position:relative}
+.calc-prev .ctag{font-size:12.5px;font-weight:600;color:#7FD8CC;position:relative}
 .calc-prev .cbig{font-size:clamp(38px,5vw,52px);font-weight:800;letter-spacing:-0.04em;line-height:1;margin:8px 0 4px;position:relative;font-variant-numeric:tabular-nums}
 .calc-prev .csub{font-size:14px;color:#A7DED4;position:relative}
 .cbars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:26px 0 6px;position:relative}
@@ -298,13 +296,13 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .aud-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--ac-50),transparent 60%);pointer-events:none}
 .aud-figure .ring{width:108px;height:108px;border-radius:50%;background:var(--ac-50);display:flex;align-items:center;justify-content:center;color:var(--ac-700);position:relative}
 .aud-figure .ring svg{width:50px;height:50px}
-.aud-figure .fcap{position:relative;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)}
+.aud-figure .fcap{position:relative;font-size:13px;font-weight:600;color:var(--ink-3)}
 .aud-figure .fbadge{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--ac-700);z-index:2}
 
 /* "sound familiar" pain cards */
 .pains{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .pain{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;box-shadow:var(--sh-sm)}
-.pain .pl{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ac-700);background:var(--ac-50);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:14px}
+.pain .pl{display:inline-block;font-size:12px;font-weight:700;color:var(--ac-700);background:var(--ac-50);padding:5px 11px;border-radius:var(--r-pill);margin-bottom:14px}
 .pain h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .pain p{font-size:15px;color:var(--ink-2)}
 
@@ -422,7 +420,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .field{margin-bottom:22px}
 .field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
 .field label{font-weight:600;font-size:14.5px;color:var(--ink)}
-.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600}
 .subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
 .sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
 .sft-note[hidden]{display:none}
@@ -432,7 +430,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .res-hero>div{position:relative;min-width:0}
 .res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
 .res-hero .rsub{font-size:12.5px;color:#9FDDD2;margin-top:8px;line-height:1.5}
-.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font-num);font-weight:600;overflow-wrap:break-word}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
 .res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
 .res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -443,7 +441,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
 .vs-salary{background:var(--surface-2)}
 .vs-pension{background:var(--teal-50)}
-.vs-col .vt{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.vs-col .vt{font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:10px}
 .vs-pension .vt{color:var(--teal-700)}
 .vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
 .vs-pension .amt{color:var(--teal-700)}
@@ -452,7 +450,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .max-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
-.max-card .mt{font-size:13px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9A6B12;margin-bottom:9px}
+.max-card .mt{font-size:13px;font-weight:700;color:#9A6B12;margin-bottom:9px}
 .max-card .mbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
 .max-card .mbig b{font-weight:700;color:#3F2D04}
 .max-card .mnote{font-size:12.5px;color:#7A5A12;margin-top:12px;line-height:1.6}
@@ -640,7 +638,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .ffield{position:relative;flex:1;min-width:0;display:block}
 .ffield input{width:100%;padding:21px 20px 9px !important}
 .ffield .flabel{position:absolute;left:21px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-3);font-size:15px;font-weight:500;line-height:1.15;transition:top .22s cubic-bezier(.16,1,.3,1),transform .22s cubic-bezier(.16,1,.3,1),font-size .22s cubic-bezier(.16,1,.3,1),color .22s ease,letter-spacing .22s ease;white-space:nowrap}
-.ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-700)}
+.ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;color:var(--teal-700)}
 @media(prefers-reduced-motion:reduce){
   .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
   nav{transition:none}
@@ -692,14 +690,14 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 /* dashed underline = term explained in the jargon buster */
 .gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
 .gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
-@media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font-num);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
+@media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
 .gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
 /* trust strip -> editorial caps with hairline separators */
 .strip-item svg{display:none}
 .strip-in{gap:0}
-.strip-item{display:flex;align-items:center;text-transform:uppercase;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
+.strip-item{display:flex;align-items:center;font-size:12px;font-weight:600;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
 .strip-item:first-child{border-left:none}
 @media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
 /* persona cards: tinted top rules + matching icon depth instead of identical grid */
@@ -719,7 +717,7 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 /* testimonials: card template -> editorial entries */
 .tcard{background:none;border:0;border-radius:0;border-top:1px solid var(--line-2);padding:22px 2px 0}
 .tcard .av{display:none}
-.tcard .who b{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.tcard .who b{display:block;font-size:12px;font-weight:700;color:var(--ink)}
 .tcard .who span{font-size:13px;color:var(--ink-3)}
 /* booking stepper: circle dots -> brand dash */
 .tl::before{width:14px;height:2px;border-radius:0;left:-30px;top:9px;box-shadow:none;background:var(--teal)}
@@ -728,16 +726,16 @@ section:has(details){padding-top:64px;padding-bottom:72px}
 section:has(.tcol){padding-top:72px}
 /* floating photo chips: sticker pills -> sharp chips */
 .hc-badge,.hc-pill,.about-port .badge,.aud-figure .fbadge{border-radius:8px}
-/* uppercase pain labels: chip -> bare label, matches eyebrow motif */
+/* pain labels: chip -> bare label, matches eyebrow motif */
 .pain .pl{background:none;padding:0}
 
 /* ============================================================
    PB-SONA, refinement layer
-   Two faces (Inter / IBM Plex Mono) · keylines instead of shadows
+   One face (Inter) · keylines instead of shadows
    one radius family · accent as wash · ambient motion
    ============================================================ */
 
-/* --- 1. Type: Inter carries the page, mono carries the structure --- */
+/* --- 1. Type: Inter carries the page, labels and figures included --- */
 body{font-size:.935rem;line-height:1.65;letter-spacing:0}
 /* v3: ONE heading recipe, reused everywhere. Inter 800, tight tracking, three
    fixed sizes on the site's own breakpoints (560 / 920, the two it already
@@ -762,27 +760,28 @@ h3,h4,.aud-card h3,.step h3,.pain h3,.proof h3,.cover h3,.chart-card h3,.assume 
 .aud-card p,.step p,.tcard blockquote,details p{font-size:.935rem}
 p,li{letter-spacing:-.004em}
 
-/* mono does structural work only: eyebrows, labels, figures, legal caps */
+/* labels: the body face, sentence case, no tracking. v4 removed the caps-mono
+   label system; the selectors stay so the sizes below still reach them. */
 .eyebrow,.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
 .tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
-  font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em;font-weight:500}
+  font-family:var(--font);font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
 .eyebrow .pip{width:14px;height:1px;background:currentColor;opacity:.5;border-radius:0}
 .kicker{font-size:.685rem;color:var(--ink-2);font-weight:500}
-.foot-col h4{font-size:.66rem;letter-spacing:.14em;color:var(--ink-2);font-weight:500}
-.hc-flabel,.hc-role{font-size:.66rem;letter-spacing:.13em}
-.tcard .who b{font-size:.66rem;letter-spacing:.13em}
-.strip-item{font-size:.665rem;letter-spacing:.15em;font-weight:500}
-.ctag{font-size:.665rem;letter-spacing:.15em}
+.foot-col h4{font-size:.66rem;color:var(--ink-2);font-weight:500}
+.hc-flabel,.hc-role{font-size:.66rem;}
+.tcard .who b{font-size:.66rem;}
+.strip-item{font-size:.665rem;font-weight:500}
+.ctag{font-size:.665rem;}
 
-/* figures only - mono must never swallow a sentence */
+/* figures: the body face with tabular numerals */
 .hc-fnum,.cbig,.val,.dashk,.ind,.cn,.rv-keys b,.res-hero .big,.results .big{
-  font-family:var(--font-num);font-variant-numeric:tabular-nums}
+  font-family:var(--font);font-variant-numeric:tabular-nums}
 .hc-fnum,.cbig,.res-hero .big,.results .big{font-weight:600;letter-spacing:-.035em}
 .cn{font-weight:600;letter-spacing:-.02em}
 /* these carry prose with figures inside, so they stay in the body face */
 .rbig,.bt,.tcard.big,.tcard blockquote,.hc-fsub,.ctext{font-family:var(--font)}
-.rbig b,.bt b,.ec-note b{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+.rbig b,.bt b,.ec-note b{font-family:var(--font);font-variant-numeric:tabular-nums}
 
 /* --- 2. Keylines instead of shadows --- */
 .aud-card,.tcard,.step,.gterm,.benefit,.pain,.cred,.assure,.dline,details,
@@ -819,8 +818,8 @@ nav.scrolled{background:var(--bg)}
 .pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg{border-radius:50%}
 
 /* --- 4. Accent as a wash, not a highlight --- */
-.tag{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.66rem;
-  font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);
+.tag{display:inline-flex;align-items:center;font-family:var(--font);font-size:.66rem;
+  font-weight:500;color:var(--ink-2);
   background:var(--teal-50);padding:5px 10px;border-radius:6px;white-space:nowrap}
 /* bare marks, not chips - the box only existed to hold a tint */
 .aud-ico{background:none;border:0;width:auto;height:auto;margin-bottom:20px;
@@ -828,7 +827,7 @@ nav.scrolled{background:var(--bg)}
 .aud-ico svg{width:22px;height:22px}
 /* the numeral is real sequence information, so it gets the rule that shows it */
 .step .sx{background:none;border:0;width:auto;height:auto;display:block;
-  font-family:var(--font-mono);font-size:.7rem;font-weight:500;letter-spacing:.15em;
+  font-family:var(--font);font-size:.7rem;font-weight:500;
   color:var(--ink-3);padding-bottom:12px;margin-bottom:18px;
   border-bottom:1px solid var(--line-2)}
 
@@ -905,8 +904,8 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 
 /* --- pass 4 additions --- */
 .trole{font-size:.63rem;color:var(--ink-2)}
-.cl{font-size:.6rem;letter-spacing:.12em;color:var(--ink-3)}
-.rt{font-size:.665rem;letter-spacing:.15em}
+.cl{font-size:.6rem;color:var(--ink-3)}
+.rt{font-size:.665rem;}
 .tcard.big blockquote{font-weight:500;letter-spacing:-.02em;line-height:1.42}
 
 /* ============================================================
@@ -922,11 +921,11 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
   border-radius:8px;box-shadow:none}
 .aud-figure .ring{background:transparent;border:1px solid var(--ac,var(--teal));
   color:var(--ac,var(--teal));box-shadow:none}
-.aud-figure .fcap{font-family:var(--font-mono);font-size:.66rem;font-weight:500;
-  letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2)}
+.aud-figure .fcap{font-family:var(--font);font-size:.66rem;font-weight:500;
+  color:var(--ink-2)}
 .aud-figure .fbadge{border:1px solid var(--line-2);background:var(--surface);
-  color:var(--ink);font-family:var(--font-mono);font-size:.6rem;font-weight:500;
-  letter-spacing:.12em;text-transform:uppercase}
+  color:var(--ink);font-family:var(--font);font-size:.6rem;font-weight:500;
+  }
 
 /* pain row: three cards -> one divided block, same idea as the persona row */
 .pains{gap:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;
@@ -934,8 +933,8 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 .pain{border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;
   padding:28px 26px 26px;background:none}
 .pain:first-child{border-left:0}
-.pain .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;
-  letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);background:none;padding:0}
+.pain .pl{font-family:var(--font);font-size:.63rem;font-weight:500;
+  color:var(--ink-3);background:none;padding:0}
 
 /* lead magnet: keyline + wash, no gradient panel */
 .magnet{background:var(--teal-50);border:1px solid var(--line-2);border-radius:8px;
@@ -1050,18 +1049,18 @@ span.ai,.assure .ai{border-radius:6px !important}
   border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
 .proof{border-left:1px solid var(--line);padding:28px 26px 26px}
 .proof:first-child{border-left:0}
-.proof .pl{font-family:var(--font-mono);font-size:.63rem;font-weight:500;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+.proof .pl{font-family:var(--font);font-size:.63rem;font-weight:500;
+  color:var(--ink-3);margin-bottom:12px}
 .proof h3{margin:0 0 8px}
 .proof p{font-size:.9rem;color:var(--ink-2);margin:0;line-height:1.6}
 
 /* cost of waiting: the one place on the site that names a price for delay */
 .waitcard{border:1px solid var(--line-2);border-left:3px solid var(--teal);
   border-radius:8px;background:var(--surface);padding:20px 22px;margin-bottom:16px}
-.waitcard .wt{font-family:var(--font-mono);font-size:.63rem;font-weight:500;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.waitcard .wt{font-family:var(--font);font-size:.63rem;font-weight:500;
+  color:var(--ink-3);margin-bottom:10px}
 .waitcard .wtext{font-size:.935rem;line-height:1.6;color:var(--ink)}
-.waitcard .wtext b{font-family:var(--font-num);font-variant-numeric:tabular-nums;
+.waitcard .wtext b{font-family:var(--font);font-variant-numeric:tabular-nums;
   color:var(--teal-700);font-weight:600}
 .waitcard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
   font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
@@ -1072,11 +1071,11 @@ span.ai,.assure .ai{border-radius:6px !important}
 .deadline{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;
   border:1px solid var(--line-2);border-radius:8px;background:var(--surface-2);
   padding:14px 16px;margin-bottom:18px}
-.dl-tag{flex:0 0 auto;font-family:var(--font-mono);font-size:.6rem;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+.dl-tag{flex:0 0 auto;font-family:var(--font);font-size:.6rem;font-weight:500;
+  color:var(--ink);
   background:var(--teal-50);border:1px solid var(--line-2);border-radius:6px;padding:5px 9px}
 .dl-text{flex:1 1 260px;font-size:.85rem;line-height:1.55;color:var(--ink-2)}
-.dl-text b{font-family:var(--font-num);font-variant-numeric:tabular-nums;color:var(--ink)}
+.dl-text b{font-family:var(--font);font-variant-numeric:tabular-nums;color:var(--ink)}
 
 @media(max-width:920px){
   .proofs{grid-template-columns:1fr}
@@ -1092,7 +1091,7 @@ span.ai,.assure .ai{border-radius:6px !important}
    Restore normal case. */
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
 .phead h1{font-family:var(--font-display);letter-spacing:-.015em}
-.phead .eyebrow{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.15em}
+.phead .eyebrow{font-family:var(--font);}
 
 /* the deadline band is a grid child of .calc-wrap; without a span it took a
    column and pushed the results panel out of place */
@@ -1101,7 +1100,7 @@ span.ai,.assure .ai{border-radius:6px !important}
 /* ============================================================
    PB-TICK - Pay & File countdown
    A real deadline, set by Revenue, stated as theirs. Figures in
-   mono like every other number on the site.
+   the body face with tabular numerals, like every other number on the site.
    ============================================================ */
 .tickband{padding:0}
 .tick{position:relative;background:var(--teal-900);color:#fff;border-radius:0;
@@ -1118,10 +1117,10 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tk-clock{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .tk-unit{flex:0 0 auto;min-width:82px;text-align:center;padding:16px 10px 12px;
   border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.04)}
-.tk-n{display:block;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+.tk-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
   font-size:2.1rem;font-weight:600;letter-spacing:-.03em;color:#fff;line-height:1}
-.tk-l{display:block;margin-top:8px;font-family:var(--font-mono);font-size:.58rem;
-  font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.tk-l{display:block;margin-top:8px;font-family:var(--font);font-size:.58rem;
+  font-weight:500;color:rgba(255,255,255,.6)}
 
 /* the digits change every second, so the clock is hidden from assistive tech
    and this sentence carries the same information instead */
@@ -1150,10 +1149,10 @@ span.ai,.assure .ai{border-radius:6px !important}
 .nav-tick:hover{border-color:var(--teal);background:var(--teal-50)}
 .nav-tick:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .nt-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex:0 0 auto}
-.nt-n{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:.72rem;
+.nt-n{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:.72rem;
   font-weight:600;letter-spacing:-.01em;color:var(--ink)}
-.nt-l{font-family:var(--font-mono);font-size:.58rem;font-weight:500;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--ink-3)}
+.nt-l{font-family:var(--font);font-size:.58rem;font-weight:500;
+  color:var(--ink-3)}
 
 /* the logo and the chip travel together, the links stay right */
 .nav-in{gap:0}
@@ -1194,11 +1193,11 @@ body{overflow-x:hidden;overflow-x:clip}
   border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
 .gs{border-left:1px solid var(--line);padding:30px 26px 26px}
 .gs:first-child{border-left:0}
-.gs-n{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-weight:600;
+.gs-n{font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:600;
   font-size:clamp(1.9rem,3.2vw,2.5rem);letter-spacing:-.04em;color:var(--teal-700);line-height:1}
 .gs-l{margin-top:14px;font-size:.92rem;line-height:1.5;color:var(--ink)}
-.gs-s{margin-top:12px;font-family:var(--font-mono);font-size:.6rem;font-weight:500;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);line-height:1.5}
+.gs-s{margin-top:12px;font-family:var(--font);font-size:.6rem;font-weight:500;
+  color:var(--ink-3);line-height:1.5}
 .gap-note{margin:18px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:76ch}
 
 .coverband{padding:8px 0 62px}
@@ -1208,11 +1207,11 @@ body{overflow-x:hidden;overflow-x:clip}
 .cover p{font-size:.92rem;line-height:1.6;color:var(--ink-2);margin:0 0 20px;max-width:52ch}
 .cv-figs{border-left:1px solid var(--line);padding-left:30px}
 .cv-f{margin-bottom:18px}
-.cv-n{display:block;font-family:var(--font-num);font-variant-numeric:tabular-nums;
+.cv-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
   font-weight:600;font-size:1.85rem;letter-spacing:-.035em;color:var(--teal-700);line-height:1}
 .cv-l{display:block;margin-top:6px;font-size:.82rem;line-height:1.45;color:var(--ink-2)}
-.cv-s{font-family:var(--font-mono);font-size:.58rem;font-weight:500;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-3);line-height:1.5}
+.cv-s{font-family:var(--font);font-size:.58rem;font-weight:500;
+  color:var(--ink-3);line-height:1.5}
 
 @media(max-width:920px){
   .gapstats{grid-template-columns:1fr}
@@ -1238,11 +1237,11 @@ body{font-size:1rem;line-height:1.7}
 .aud-card p,.step p,.pain p,.proof p,.gs-l,.benefit p{font-size:.98rem;line-height:1.62}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
-.eyebrow{font-size:.78rem;letter-spacing:.13em}
+.eyebrow{font-size:.78rem;}
 .kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
 .pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.cv-s,.gs-s,
-.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.75rem !important;letter-spacing:.11em}
-.nt-l{font-size:.7rem !important;letter-spacing:.1em}
+.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
+.nt-l{font-size:.7rem !important;}
 .nt-n{font-size:.86rem}
 .hc-fsub,.ec-note,.gap-note,.cv-l,.note,.hint,.disclosure,.infoadvice,
 .tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
@@ -1519,8 +1518,8 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
 .adv{border-top:1px solid var(--line);margin-top:20px}
 .adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
-  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
+  font-family:var(--font);font-size:.75rem;font-weight:500;
+  color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
 .adv > summary::-webkit-details-marker{display:none}
 .adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
   border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
@@ -1573,8 +1572,8 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    stay visible; the three that refine it move behind a disclosure. --- */
 .adv{border-top:1px solid var(--line);margin-top:22px;padding-top:4px}
 .adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
-  font-family:var(--font-mono);font-size:.75rem;font-weight:500;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--ink-2);cursor:pointer;list-style:none;padding:14px 0}
+  font-family:var(--font);font-size:.75rem;font-weight:500;
+  color:var(--ink-2);cursor:pointer;list-style:none;padding:14px 0}
 .adv > summary::-webkit-details-marker{display:none}
 .adv > summary::after{content:"+";margin-left:auto}
 .adv .adv-in{padding-top:6px}
@@ -1724,7 +1723,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    full-width button. This block is byte-identical in both files, so it names
    them rather than saying "this file". */
 .pb-guess input[type=range]{width:100%}
-.pb-guess-val{font-family:var(--font-num);font-variant-numeric:tabular-nums;font-size:16px;
+.pb-guess-val{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:16px;
   font-weight:600;color:var(--ink)}
 .pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
   border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
@@ -1735,6 +1734,38 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-veil{transition:filter .45s ease}
 .pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
 @media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
+
+/* ============================================================
+   v4 - ONE CASE. The caps-mono label system is gone: no
+   text-transform, no tracked-out letter-spacing, no second face.
+   Every label the site sets small is sentence case in the body
+   face at a weight that reads, and every figure is the same face
+   with tabular numerals. The big marketing figures go light, the
+   way a stat band reads on Plaid or Stripe; calculator readouts
+   stay semibold because they are the product's live output.
+   ============================================================ */
+.eyebrow,.kicker,.ctag,.hc-flabel,.hc-role,.pain .pl,.proof .pl,.trole,.cl,
+.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
+.tk-l,.nt-l,.dl-tag,.tag,.cv-s,.gs-s,.aud-figure .fcap,.aud-figure .fbadge,
+.phone-role,.arc-now,.modebar .modelab,.qfield label,.qpersona legend,
+.promise .pt,.letterhead span,.relief-card .rt,.max-card .mt,.vs-col .vt,
+.pb-scale-title,.tmember .trole,.adv > summary,.strip-item,.calc-prev .ctag{
+  font-family:var(--font);text-transform:none;letter-spacing:0;font-weight:600}
+.eyebrow{font-size:.85rem;font-weight:600;gap:0}
+.eyebrow .pip{display:none}
+.kicker{font-size:.85rem}
+.foot-col h4{font-size:.8rem !important;font-weight:600;color:var(--ink);margin-bottom:12px}
+.tk-l{font-size:.8rem !important;font-weight:500;color:rgba(255,255,255,.72)}
+.nt-l{font-size:.8rem !important;font-weight:500}
+.ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{
+  font-family:var(--font);text-transform:none;letter-spacing:0;font-size:11.5px;font-weight:600}
+.qfield label,.qpersona legend{font-size:.9rem;font-weight:600;color:var(--ink)}
+.adv > summary{font-size:.9rem;font-weight:600}
+/* figures: one face, tabular numerals. Light for the big marketing numbers. */
+.hc-fnum,.cbig,.gs-n,.cv-n,.tk-n,.cn,.val,.big,.res-hero .big,.results .big,
+.rbig b,.bt b,.ec-note b,.dl-text b,.wtext b,.nt-n,.mrow .mrate,.mclose b,
+.pb-guess-val,.dashk,.ind,.rv-keys b{font-family:var(--font);font-variant-numeric:tabular-nums}
+.cbig,.gs-n,.cv-n,.tk-n{font-weight:300;letter-spacing:-.02em}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that

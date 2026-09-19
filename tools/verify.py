@@ -21,6 +21,7 @@ Usage:
   python3 tools/verify.py --pages index.html booking.html
   python3 tools/verify.py --no-shots      # skip screenshots (faster)
   python3 tools/verify.py --widths 375    # audit only these widths
+  python3 tools/verify.py --shot-widths 375,1200,1440   # screenshots at these widths
 
 Output:
   verify-out/report.json      machine-readable
@@ -147,12 +148,13 @@ AUDIT_JS = r"""
   // fonts (F2): v3 is one text face. Inter must be REQUESTED, LOADED and carrying
   // every heading at 800, no dropped family may be requested or resolve anywhere,
   // and the one heading recipe means at most three distinct heading sizes at a
-  // given width. IBM Plex Mono keeps the numerals and is not counted here.
+  // given width. v4 dropped IBM Plex Mono too: the numerals and the labels are
+  // Inter with tabular figures, so Plex joins the dropped list.
   try{
     await document.fonts.ready;
     const famOf=el=>el?getComputedStyle(el).fontFamily:'';
     const first=s=>String(s).split(',')[0].replace(/['"]/g,'').trim();
-    const DROPPED=/Fraunces|Hanken|Bricolage|Sora/i;
+    const DROPPED=/Fraunces|Hanken|Bricolage|Sora|Plex/i;
     const hs=$$('h1,h2,h3,h4');
     R.fonts={
       /* fonts.check() reports true for families that fall back, so ask the FontFace set directly */
@@ -163,17 +165,35 @@ AUDIT_JS = r"""
       h1:first(famOf(document.querySelector('h1'))),
       h2:first(famOf(document.querySelector('h2'))),
       body:first(famOf(document.body)),
-      /* rule 2 keeps the existing mono/numeral treatment, and the footer column
-         labels are h4s deliberately set in the mono face. They are labels, not
-         display copy, so they are excluded from the one-recipe expectations
+      /* the footer column labels are h4s by markup and labels by job: sentence
+         case, small, semibold. They are excluded from the one-recipe
+         expectations by where they sit, not by face (v4: there is one face),
          rather than the expectations being loosened for every heading. */
       headingCount:hs.length,
-      headingsOffInter:hs.filter(h=>!/Inter|Mono/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
-      headingWeights:[...new Set(hs.filter(h=>!/Mono/i.test(famOf(h))).map(h=>getComputedStyle(h).fontWeight))].sort(),
-      headingSizes:[...new Set(hs.filter(h=>!/Mono/i.test(famOf(h))).map(h=>getComputedStyle(h).fontSize))].sort(),
+      headingsOffInter:hs.filter(h=>!/Inter/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
+      headingWeights:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontWeight))].sort(),
+      headingSizes:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontSize))].sort(),
       droppedAtRuntime:[...new Set($$('body *').map(e=>first(famOf(e))).filter(f=>DROPPED.test(f)))].slice(0,4)
     };
   }catch(e){R.fonts={error:String(e)}}
+
+  // case (v4): the caps-mono label system is gone. No element may render with
+  // text-transform:uppercase, no text may be tracked out (positive
+  // letter-spacing), and no text may resolve to a monospace family. Measured
+  // on every element that carries its own text, so a rule that creeps back in
+  // through any of the stylesheet's layers is caught where it lands.
+  try{
+    const own=e=>[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+    const texty=$$('body *').filter(e=>own(e)&&getComputedStyle(e).display!=='none');
+    const first=s=>String(s).split(',')[0].replace(/['"]/g,'').trim();
+    const name=e=>e.tagName.toLowerCase()+(e.className&&typeof e.className==='string'?'.'+e.className.trim().split(/\s+/).slice(0,2).join('.'):'')+':'+e.textContent.trim().slice(0,18);
+    const caps=texty.filter(e=>getComputedStyle(e).textTransform==='uppercase');
+    const tracked=texty.filter(e=>parseFloat(getComputedStyle(e).letterSpacing)>0);
+    const mono=texty.filter(e=>/mono|plex|courier|menlo|consolas/i.test(first(getComputedStyle(e).fontFamily)));
+    const faces=[...new Set(texty.map(e=>first(getComputedStyle(e).fontFamily)))];
+    R.case={caps:caps.length,capsFirst:caps.slice(0,4).map(name),tracked:tracked.length,trackedFirst:tracked.slice(0,4).map(name),
+            mono:mono.length,monoFirst:mono.slice(0,4).map(name),faces:faces.slice(0,6)};
+  }catch(e){R.case={error:String(e)}}
 
   // nav + footer link inventory (F5: "About" must reach the story section from every page)
   R.navHrefs=$$('.nav-links a').map(a=>a.getAttribute('href'));
@@ -434,7 +454,8 @@ def static_checks(pages):
             'sourcePlaceholders': [p for p in SRC_PLACEHOLDERS if re.search(p, t)],
             'mainInSource': bool(re.search(r'<main\b', t)),
             'skipInSource': bool(re.search(r'<a[^>]+class="skip"', t)),
-            'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora', t)}),
+            'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono', t)}),
+            'uppercaseRules': len(re.findall(r'text-transform\s*:\s*uppercase', t)),
             'requestsInter': bool(re.search(r'fonts\.googleapis\.com[^"\']*Inter', t)),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
@@ -476,6 +497,9 @@ def evaluate(page, st, audits):
     # Naming any of them in the source now is the defect, and so is a page that
     # never asks the font service for Inter.
     if st['droppedFamilies']: F.append(('F2', 'a dropped family is still named in source: %s' % ', '.join(st['droppedFamilies'])))
+    # CASE (v4): sentence case everywhere, one face. The rule may not be in the
+    # source, and the runtime check below catches it arriving any other way.
+    if st.get('uppercaseRules'): F.append(('CASE', '%d text-transform:uppercase rule(s) in source' % st['uppercaseRules']))
     if not st['requestsInter']: F.append(('F2', 'source does not request Inter from the font service'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
@@ -517,6 +541,12 @@ def evaluate(page, st, audits):
         if bad_w: W.append(('F2', 'headings render at weights other than 800: %s' % bad_w))
         sizes = fo.get('headingSizes') or []
         if len(sizes) > 3: W.append(('F2', '%d distinct heading sizes, the one recipe allows 3: %s' % (len(sizes), sizes)))
+    # CASE (v4) at runtime: nothing in caps, nothing tracked out, nothing monospace
+    cs = a.get('case') or {}
+    if cs and not cs.get('error'):
+        if cs.get('caps'): F.append(('CASE', '%d element(s) render uppercase: %s' % (cs['caps'], cs['capsFirst'])))
+        if cs.get('tracked'): F.append(('CASE', '%d element(s) render with positive letter-spacing: %s' % (cs['tracked'], cs['trackedFirst'])))
+        if cs.get('mono'): F.append(('CASE', '%d element(s) render on a monospace face: %s' % (cs['mono'], cs['monoFirst'])))
     # F5 — About must be reachable from the nav of every page
     nav = a.get('navHrefs') if root_page else None       # chrome-only: the games have no site nav or footer
     if nav is not None and not any('#story' in (h or '') for h in nav + (a.get('footHrefs') or [])):
@@ -611,7 +641,9 @@ def site_checks():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--pages', nargs='*'); ap.add_argument('--no-shots', action='store_true'); ap.add_argument('--widths', default=','.join(map(str, AUDIT_WIDTHS)))
+    ap.add_argument('--shot-widths', default=','.join(map(str, SHOT_WIDTHS)), help='screenshot widths, e.g. 375,1200,1440')
     args = ap.parse_args()
+    shot_widths = [int(x) for x in args.shot_widths.split(',')]
     if not os.path.exists(CHROME): sys.exit('Chrome not found at %s (set CHROME=...)' % CHROME)
     pages = args.pages or all_pages()
     widths = [int(x) for x in args.widths.split(',')]
@@ -628,7 +660,7 @@ def main():
             audits[w] = run_audit(port, page, w); print('@%d' % w, end=' ', flush=True)
         shots = {}
         if not args.no_shots:
-            for w in SHOT_WIDTHS:
+            for w in shot_widths:
                 dh = audits.get(w, {}).get('docHeight') or max([a.get('docHeight') or 0 for a in audits.values()] or [0])
                 shots[w] = screenshot(port, page, w, dh); print('📷%d' % w, end=' ', flush=True)
         F, W = evaluate(page, st_all[page], audits)
