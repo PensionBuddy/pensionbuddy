@@ -108,8 +108,8 @@ function render() {
   } else {
     annualCents = 0;
     $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
-      (years === 1 ? ' year' : ' years') + '. Below 520, ten years, there is no State Pension (Contributory) at all. You would need <b>' +
-      num(res.shortBy) + ' more</b> to qualify.';
+      (years === 1 ? ' year' : ' years') + '. Below 520, ten years, this tool shows no State Pension (Contributory): <b>' +
+      num(res.shortBy) + ' more</b> would bring the total to 520. Qualifying itself needs 520 paid contributions.';
   }
 
   /* Bars are drawn against each standard's own total, so the fill reads as
@@ -140,7 +140,7 @@ function render() {
       ' a year short, moderate ' + euro(g[1].gapAnnual) + ' short, comfortable ' +
       euro(g[2].gapAnnual) + ' short.'
     : 'With ' + num(contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
-      num(res.shortBy) + ' more contributions would be needed to qualify.';
+      num(res.shortBy) + ' more contributions would bring the total to 520. Qualifying needs 520 paid contributions.';
 }
 
 wireRanges(VALTEXT, render);

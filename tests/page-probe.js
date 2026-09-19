@@ -222,8 +222,8 @@
               euro(gaps[1].gapAnnual) + ' short, comfortable ' + euro(gaps[2].gapAnnual) + ' short.');
       } else {
         t.has(label + ': spNoneFoot carries the count', text('spNoneFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
-        t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), 'You would need ' + num(res.shortBy) + ' more to qualify');
-        if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), 'need ' + row.shortBy + ' more');
+        t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), num(res.shortBy) + ' more would bring the total to 520');
+        if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), row.shortBy + ' more would bring');
         t.has(label + ': lsIntro says nothing is covered', text('lsIntro'), 'With no Contributory entitlement, none of these is covered by it.');
         SP.gaps(0).forEach(function (g) {
           var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
@@ -233,7 +233,7 @@
         });
         t.has(label + ': srSummary says there is no entitlement', text('srSummary'),
               'With ' + num(row.contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
-              num(res.shortBy) + ' more contributions would be needed to qualify.');
+              num(res.shortBy) + ' more contributions would bring the total to 520. Qualifying needs 520 paid contributions.');
       }
     });
 
