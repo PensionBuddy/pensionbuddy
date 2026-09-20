@@ -26,3 +26,12 @@
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
+/* v4: caveat text sits under the result as plain text, no card and no head.
+   The bordered card with a small grey label was the same style as the deleted
+   "One thing this does not show" box, and the brief cut that style. */
+.pb-floor{padding:2px 4px 0}
+.pb-floor .wtext{font-size:.95rem;line-height:1.6;color:var(--ink-2);margin:0}
+.pb-floor .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;
+  font-size:.9rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+.pb-floor .wlink:hover{text-decoration:underline}
+.pb-floor .wlink .ico{width:15px;height:15px}

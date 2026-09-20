@@ -15,7 +15,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -146,19 +146,7 @@ section{padding:88px 0}
 .sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
 .sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
 
-/* ---- audience cards (static grid, no layout jump) ---- */
-.aud{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.aud-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px 26px;box-shadow:var(--sh-sm);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;display:flex;flex-direction:column;overflow:hidden}
-.aud-card::after{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--ac,var(--teal));opacity:0;transition:opacity .25s ease}
-.aud-card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
-.aud-card:hover::after{opacity:1}
-.aud-ico{width:50px;height:50px;border-radius:14px;background:var(--ac-soft,var(--teal-50));color:var(--ac,var(--teal-700));display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.aud-ico svg{width:25px;height:25px}
-.aud-card h3{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:9px}
-.aud-card p{font-size:15px;color:var(--ink-2);margin-bottom:22px}
-.aud-link{margin-top:auto;display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;color:var(--ac,var(--teal-700))}
-.aud-link svg{width:16px;height:16px;transition:transform .2s ease}
-.aud-card:hover .aud-link svg{transform:translateX(4px)}
+/* ---- audience cards (static grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 .a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
 .a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
 .a3{--ac:#0A332E;--ac-soft:#EDF4F2}
@@ -175,15 +163,6 @@ section{padding:88px 0}
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
 .calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
 .calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
-.calc-prev{background:var(--teal-900);border-radius:var(--r-xl);padding:34px;color:#fff;box-shadow:var(--sh-lg);position:relative;overflow:hidden}
-.calc-prev::before{content:"";position:absolute;inset:0;pointer-events:none}
-.calc-prev .ctag{font-size:12.5px;font-weight:600;color:#7FD8CC;position:relative}
-.calc-prev .cbig{font-size:clamp(38px,5vw,52px);font-weight:800;letter-spacing:-0.04em;line-height:1;margin:8px 0 4px;position:relative;font-variant-numeric:tabular-nums}
-.calc-prev .csub{font-size:14px;color:#A7DED4;position:relative}
-.cbars{display:flex;align-items:flex-end;gap:10px;height:120px;margin:26px 0 6px;position:relative}
-.cbars i{flex:1;background:rgba(255,255,255,.14);border-radius:6px 6px 3px 3px;display:block}
-.cbars i.hl{background:var(--teal)}
-.cnote{font-size:12px;color:#7FD8CC;border-top:1px solid rgba(255,255,255,.16);padding-top:14px;margin-top:8px;position:relative}
 
 /* ---- about Damian ---- */
 .about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
@@ -250,7 +229,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
   .hero{padding:48px 0 24px}
   .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
   .hero-card{order:-1;max-width:460px;margin:0 auto}
-  .aud,.steps{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
   .nav-links{display:none}
   .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
@@ -291,12 +270,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .aud-hero h1{font-size:clamp(38px,5.2vw,64px);font-weight:800;letter-spacing:-0.035em;margin:18px 0 0}
 .aud-hero h1 .hl{color:var(--ac-700)}
 .aud-hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
-.aud-figure{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:30px;overflow:hidden;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center}
-.aud-figure::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--ac-50),transparent 60%);pointer-events:none}
-.aud-figure .ring{width:108px;height:108px;border-radius:50%;background:var(--ac-50);display:flex;align-items:center;justify-content:center;color:var(--ac-700);position:relative}
-.aud-figure .ring svg{width:50px;height:50px}
-.aud-figure .fcap{position:relative;font-size:13px;font-weight:600;color:var(--ink-3)}
-.aud-figure .fbadge{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--ac-700);z-index:2}
 
 /* "sound familiar" pain cards */
 .pains{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -398,7 +371,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .pains,.benefits,.creds,.gloss{grid-template-columns:1fr}
   .magnet{grid-template-columns:1fr;gap:24px;padding:32px 26px}
   .callout{padding:44px 26px}
-  .aud-figure{order:-1;max-width:460px;margin:0 auto}
 }
 @media(max-width:560px){
   .magnet-form .row{flex-direction:column}
@@ -425,20 +397,16 @@ nav.scrolled .logo-mark{width:34px;height:34px}
 /* refined reveal: shorter travel, snappier curve, gentle */
 .js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
 .js-reveal .reveal.in{opacity:1;transform:none}
-/* card press + hover lift feedback */
-.aud-card,.pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
-.aud-card:active,.benefit:active{transform:translateY(-2px) scale(.995)}
-/* links get a soft press */
-.aud-link,.back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
-.aud-card:active .aud-link{transform:translateX(2px)}
+.pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
+.benefit:active{transform:translateY(-2px) scale(.995)}
+.back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
 /* smooth FAQ expand/collapse */
 details{overflow:hidden}
 details summary{transition:padding .2s ease}
 details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
-/* focus-visible polish on non-button interactives */
-.aud-card:focus-visible,a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
+a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
 /* gentle entrance for the page itself, avoids first-paint flash */
 @keyframes pageIn{from{opacity:0}to{opacity:1}}
@@ -466,9 +434,7 @@ body{animation:pageIn .4s ease both}
 .about-port{background:linear-gradient(155deg,var(--ink-800),var(--ink-900))}
 .about-port::before{pointer-events:none}
 .about-port .pl{color:#9FB3AE}
-/* 3) Calculator showcase preview + booking promise: neutral deep-ink (supporting, not shouting) */
-.calc-prev{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
-.calc-prev::before{pointer-events:none}
+/* 3) Calculator showcase preview + booking promise: neutral deep-ink (supporting{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
 .promise{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
 .promise::before{pointer-events:none}
 /* keep the FINAL CTA and calculator RESULT panels in true teal, these are the earned moments */
@@ -492,8 +458,6 @@ body{animation:pageIn .4s ease both}
 .btn-acc:hover{filter:brightness(.92)}
 /* 3) per-audience link/icon colours on white cards -> deep variants (5.4–8:1) */
 .a1{--ac-deep:var(--teal)}.a2{--ac-deep:var(--teal-700)}.a3{--ac-deep:#0A332E}
-.aud-link{color:var(--ac-deep,var(--teal-700))}
-.aud-ico{color:var(--ac-deep,var(--teal-700))}
 /* 4) slider: fill to teal-600 (3:1 vs track), thumb border teal-700 for definition */
 input[type=range]{background:linear-gradient(to right,var(--teal-600) var(--fill,50%),var(--surface-2) var(--fill,50%))}
 input[type=range]::-webkit-slider-thumb{border-color:var(--teal-700)}
@@ -517,10 +481,9 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 /* 1) Reveal: 30px rise, 800ms, ease-out-expo, GPU-hinted */
 .js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
 .js-reveal .reveal.in{opacity:1;transform:none}
-/* 2) Hover physics: compound lift + wide diffused teal shadow */
-.aud-card,.tmember{will-change:transform}
-.aud-card:hover,.tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
-.aud-card:active,.tmember:active{transform:translateY(-2px) scale(1.005) !important}
+.tmember{will-change:transform}
+.tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
+.tmember:active{transform:translateY(-2px) scale(1.005) !important}
 .btn-primary:hover,.btn-acc:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.22) !important}
 .btn-light:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(0,0,0,.18) !important}
 /* 3) Slider mechanics: fully custom, 200ms thumb scale to 1.15 */
@@ -543,7 +506,7 @@ nav.nav-hidden{transform:translateY(-100%)}
   .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
   nav{transition:none}
   .ffield .flabel,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{transition:none}
-  .aud-card:hover,.tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
+  .tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
 }
 
 
@@ -586,21 +549,13 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
-.gterm,.benefit,.aud-card,.tcard,.pain{box-shadow:none}
+.gterm,.benefit,.tcard,.pain{box-shadow:none}
 /* trust strip -> editorial caps with hairline separators */
 .strip-item svg{display:none}
 .strip-in{gap:0}
 .strip-item{display:flex;align-items:center;font-size:12px;font-weight:600;color:var(--ink-2);padding:0 26px;border-left:1px solid var(--line-2)}
 .strip-item:first-child{border-left:none}
 @media(max-width:720px){.strip-item{border-left:none;padding:4px 14px}}
-/* persona cards: tinted top rules + matching icon depth instead of identical grid */
-.aud-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
-.aud-card:nth-child(1)::before{background:var(--teal)}
-.aud-card:nth-child(2)::before{background:#4E9C90}
-.aud-card:nth-child(3)::before{background:#0A332E}
-.aud-card:nth-child(1) svg{color:var(--teal)}
-.aud-card:nth-child(2) svg{color:#3E8B7F}
-.aud-card:nth-child(3) svg{color:#0A332E}
 /* director benefits: icon cards -> keyline list */
 .benefit>svg,.benefit .ico{display:none}
 .benefit{border:0;border-left:2px solid var(--teal);border-radius:0;background:none;padding:4px 0 4px 20px}
@@ -618,7 +573,7 @@ body.pb-banner-open .pb-b-panel{bottom:162px}
 section:has(details){padding-top:64px;padding-bottom:72px}
 section:has(.tcol){padding-top:72px}
 /* floating photo chips: sticker pills -> sharp chips */
-.hc-badge,.hc-pill,.about-port .badge,.aud-figure .fbadge{border-radius:8px}
+.hc-badge,.hc-pill,.about-port .badge{border-radius:8px}
 /* pain labels: chip -> bare label, matches eyebrow motif */
 .pain .pl{background:none;padding:0}
 
@@ -639,7 +594,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;letter-spacing:-.03e
 .logo{font-family:var(--font);font-weight:800;letter-spacing:-.03em}
 h1,.hero h1,.aud-hero h1,.lead h1,.page-head h1,.phead h1{font-size:34px;line-height:1.06;letter-spacing:-.03em;font-weight:800}
 h2,.sec-head h2,.calc-copy h2,.about h2,.final h2,.callout h2,.team-head h2,.tick h2,.legal h2,.panel h2,.cta-card h2,.book-head h2,.arc-head h2,.magnet h2{font-size:28px;line-height:1.14;letter-spacing:-.025em;font-weight:800}
-h3,h4,.aud-card h3,.step h3,.pain h3,.proof h3,.cover h3,.chart-card h3,.assume h3,.team-feature .cap h3,.gterm h2,.magnet .ok h3,.cal-fallback h3,.benefit h3,.vs-card h3,.bothcard h3,.arc-card h3,.legal h3{font-size:20px;line-height:1.24;letter-spacing:-.02em;font-weight:800}
+h3,h4,.step h3,.pain h3,.proof h3,.cover h3,.chart-card h3,.assume h3,.team-feature .cap h3,.gterm h2,.magnet .ok h3,.cal-fallback h3,.benefit h3,.vs-card h3,.bothcard h3,.arc-card h3,.legal h3{font-size:20px;line-height:1.24;letter-spacing:-.02em;font-weight:800}
 @media(min-width:561px){
   h1,.hero h1,.aud-hero h1,.lead h1,.page-head h1,.phead h1{font-size:46px}
   h2,.sec-head h2,.calc-copy h2,.about h2,.final h2,.callout h2,.team-head h2,.tick h2,.legal h2,.panel h2,.cta-card h2,.book-head h2,.arc-head h2,.magnet h2{font-size:34px}
@@ -650,13 +605,12 @@ h3,h4,.aud-card h3,.step h3,.pain h3,.proof h3,.cover h3,.chart-card h3,.assume 
 }
 .hero .lede,.aud-hero .lede,.lead .lede{font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.62}
 .sec-head p{font-size:1.02rem;line-height:1.62}
-.aud-card p,.step p,.tcard blockquote,details p{font-size:.935rem}
+.step p,.tcard blockquote,details p{font-size:.935rem}
 p,li{letter-spacing:-.004em}
 
-/* labels: the body face, sentence case, no tracking. v4 removed the caps-mono
+/* labels: the body face,sentence case,no tracking. v4 removed the caps-mono
    label system; the selectors stay so the sizes below still reach them. */
-.eyebrow,.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,
-.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
+.eyebrow,.kicker,.strip-item,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
   font-family:var(--font);font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
 .eyebrow .pip{width:14px;height:1px;background:currentColor;opacity:.5;border-radius:0}
@@ -665,22 +619,17 @@ p,li{letter-spacing:-.004em}
 .hc-flabel,.hc-role{font-size:.66rem;}
 .tcard .who b{font-size:.66rem;}
 .strip-item{font-size:.665rem;font-weight:500}
-.ctag{font-size:.665rem;}
 
 /* figures: the body face with tabular numerals */
-.hc-fnum,.cbig,.val,.dashk,.ind,.cn,.rv-keys b,.res-hero .big,.results .big{
+.hc-fnum,.val,.dashk,.ind,.cn,.rv-keys b,.res-hero .big,.results .big{
   font-family:var(--font);font-variant-numeric:tabular-nums}
-.hc-fnum,.cbig,.res-hero .big,.results .big{font-weight:600;letter-spacing:-.035em}
+.hc-fnum,.res-hero .big,.results .big{font-weight:600;letter-spacing:-.035em}
 .cn{font-weight:600;letter-spacing:-.02em}
 /* these carry prose with figures inside, so they stay in the body face */
 .rbig,.bt,.tcard.big,.tcard blockquote,.hc-fsub,.ctext{font-family:var(--font)}
 .rbig b,.bt b,.ec-note b{font-family:var(--font);font-variant-numeric:tabular-nums}
 
-/* --- 2. Keylines instead of shadows --- */
-.aud-card,.tcard,.step,.gterm,.benefit,.pain,.cred,.assure,.dline,details,
-.chart-card,.relief-card,.boost-card,.cta-card,.panel,.book-card,.magnet,
-.btn,.btn-primary,.btn-ghost,.btn-light,.btn-acc,.hero-card,.about-port,
-.hc-pill,.hc-badge,.aud-figure,.tmember,.calc-prev,.email-cap input{box-shadow:none}
+.tcard,.step,.gterm,.benefit,.pain,.cred,.assure,.dline,details,.chart-card,.relief-card,.boost-card,.cta-card,.panel,.book-card,.magnet,.btn,.btn-primary,.btn-ghost,.btn-light,.btn-acc,.hero-card,.about-port,.hc-pill,.hc-badge,.tmember,.email-cap input{box-shadow:none}
 .btn-primary:hover,.btn-acc:hover{transform:translateY(-1px) !important;box-shadow:none !important}
 .btn-light:hover{transform:translateY(-1px) !important;box-shadow:none !important}
 .btn-ghost:hover{transform:translateY(-1px);box-shadow:none}
@@ -699,14 +648,10 @@ nav.scrolled{background:var(--bg)}
 .pb-consent{box-shadow:none;border-top:1px solid rgba(255,255,255,.14)}
 
 /* --- 3. One radius family --- */
-.btn,details,.hero-card,.calc-prev,.about-port,.tcard,.panel,.magnet,
-.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.callbox,
-.hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.aud-figure,
-.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.email-cap input,.field input,
-.ffield input,.nav-links.open{border-radius:8px}
+.btn,details,.hero-card,.about-port,.tcard,.panel,.magnet,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.callbox,.hc-pill,.hc-badge,.about-port .badge,.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.email-cap input,.field input,.ffield input,.nav-links.open{border-radius:8px}
 .pb-b-btn,.pb-b-panel{border-radius:10px}
-.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
-.hc-bars i,.cbars i,.rv-bar i{border-radius:3px 3px 0 0}
+.step .sx,.logo-mark,.boost-ico,.gterm .abbr{border-radius:6px}
+.hc-bars i,.rv-bar i{border-radius:3px 3px 0 0}
 /* true circles keep their geometry */
 .pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg{border-radius:50%}
 
@@ -714,10 +659,8 @@ nav.scrolled{background:var(--bg)}
 .tag{display:inline-flex;align-items:center;font-family:var(--font);font-size:.66rem;
   font-weight:500;color:var(--ink-2);
   background:var(--teal-50);padding:5px 10px;border-radius:6px;white-space:nowrap}
-/* bare marks, not chips - the box only existed to hold a tint */
-.aud-ico{background:none;border:0;width:auto;height:auto;margin-bottom:20px;
+/* bare marks{background:none;border:0;width:auto;height:auto;margin-bottom:20px;
   align-self:flex-start;justify-content:flex-start;color:var(--ac,var(--teal-700))}
-.aud-ico svg{width:22px;height:22px}
 /* the numeral is real sequence information, so it gets the rule that shows it */
 .step .sx{background:none;border:0;width:auto;height:auto;display:block;
   font-family:var(--font);font-size:.7rem;font-weight:500;
@@ -734,15 +677,6 @@ nav.scrolled{background:var(--bg)}
 .final .paw-bg,.callout .paw-bg{right:6vw;bottom:-40px;opacity:.06}
 .final-band{padding:0}
 .final .eyebrow{background:none;padding:0}
-
-/* --- 6. Persona row: three floating cards -> one divided block --- */
-.aud{gap:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
-.aud-card{border:0;border-left:1px solid var(--line);border-radius:0;
-  padding:32px 28px 28px;transition:background .25s ease}
-.aud-card:first-child{border-left:0}
-.aud-card::after{display:none}
-.aud-card:hover{transform:none;background:var(--teal-50);border-color:var(--line)}
-.aud-card:active{transform:none}
 
 /* --- 7. Ambient motion: the trust strip runs, it doesn't sit --- */
 .strip{position:relative;overflow:hidden}
@@ -762,7 +696,6 @@ nav.scrolled{background:var(--bg)}
 .js-reveal .reveal:not(.settled){transform:translateY(14px);
   transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
 .js-reveal .sec-head.reveal:not(.settled){transition-duration:.46s;transform:translateY(10px)}
-.js-reveal .aud-card.reveal:not(.settled){transition-duration:.74s;transform:translateY(20px)}
 .js-reveal .hero-card.reveal:not(.settled){transition-duration:.92s;transform:translateY(26px)}
 .js-reveal .tcard.reveal:not(.settled){transition-duration:.68s}
 details .faq-inner{transition:grid-template-rows .42s cubic-bezier(.16,1,.3,1)}
@@ -774,14 +707,10 @@ input[type=range]::-webkit-slider-runnable-track{height:6px;background:transpare
 input[type=range]::-moz-range-track{height:6px;background:transparent}
 
 @media(hover:none){
-  .aud-card:hover{background:var(--surface)}
   .btn-primary:hover,.btn-acc:hover,.btn-light:hover,.btn-ghost:hover{transform:none !important}
 }
 
 @media(max-width:920px){
-  .aud{grid-template-columns:1fr}
-  .aud-card{border-left:0;border-top:1px solid var(--line)}
-  .aud-card:first-child{border-top:0}
   .final,.callout{padding:56px 20px}
   .final>p,.callout>p,.final>h2,.callout>h2{max-width:none}
 }
@@ -809,16 +738,8 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
 .benefit .bi{display:none}
 .benefit{padding:2px 0 2px 22px}
 
-/* audience hero figure: wash + keyline, not a blank panel */
-.aud-figure{background:var(--ac-soft,var(--teal-50));border:1px solid var(--line-2);
+/* audience hero figure: wash + keyline{background:var(--ac-soft,var(--teal-50));border:1px solid var(--line-2);
   border-radius:8px;box-shadow:none}
-.aud-figure .ring{background:transparent;border:1px solid var(--ac,var(--teal));
-  color:var(--ac,var(--teal));box-shadow:none}
-.aud-figure .fcap{font-family:var(--font);font-size:.66rem;font-weight:500;
-  color:var(--ink-2)}
-.aud-figure .fbadge{border:1px solid var(--line-2);background:var(--surface);
-  color:var(--ink);font-family:var(--font);font-size:.6rem;font-weight:500;
-  }
 
 /* pain row: three cards -> one divided block, same idea as the persona row */
 .pains{gap:0;border:1px solid var(--line-2);border-radius:8px;overflow:hidden;
@@ -859,11 +780,9 @@ a.btn{font-weight:600}
    PB-SONA pass 8 - final contrast fixes
    ============================================================ */
 
-/* Base rule `h1,h2,h3,h4{color:var(--ink)}` beats inherited white, so headings
-   sitting on the dark photo overlay rendered ink-on-ink (1:1, invisible). */
-.cap h1,.cap h2,.cap h3,.cap h4,.cap p,
-.calc-prev h1,.calc-prev h2,.calc-prev h3,
-.final h1,.final h2,.final h3,.callout h1,.callout h2,.callout h3{color:#fff}
+/* Base rule `h1,h2,h3,h4{color:var(--ink)}` beats inherited white,so headings
+   sitting on the dark photo overlay rendered ink-on-ink (1:1,invisible). */
+.cap h1,.cap h2,.cap h3,.cap h4,.cap p,.final h1,.final h2,.final h3,.callout h1,.callout h2,.callout h3{color:#fff}
 
 /* `.relief-card .rt` is (0,2,0) and outranked the pass-7 fix at (0,1,0) */
 .relief-card .rt,.boost-card .rt,.panel .rt,.rt{color:#8C6010}
@@ -880,26 +799,18 @@ a.btn{font-weight:600}
 /* --- radius: 4 / 6 / 8, nothing else (true circles excepted) --- */
 :root{--r-sm:4px; --r-md:6px; --r-lg:8px; --r-xl:8px}
 
-.btn,details,.tcard,.panel,.magnet,.aud,.pains,.aud-figure,.callbox,
-.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,
-.email-cap input,.field input,.ffield input,.nav-links.open,
-.hero-card,.calc-prev,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
+.btn,details,.tcard,.panel,.magnet,.pains,.callbox,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,.email-cap input,.field input,.ffield input,.nav-links.open,.hero-card,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
 
-.aud-ico,.step .sx,.logo-mark,.boost-ico,.gterm .abbr,
-.hc-pill,.hc-badge,.about-port .badge,.aud-figure .fbadge,.tag,
-.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
+.step .sx,.logo-mark,.boost-ico,.gterm .abbr,.hc-pill,.hc-badge,.about-port .badge,.tag,.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
 
-.hc-bars i,.cbars i,.rv-bar i,.rv-bar,.eyebrow .pip,
-input[type=range]{border-radius:4px}
-.hc-bars i,.cbars i{border-radius:4px 4px 0 0}
+.hc-bars i,.rv-bar i,.rv-bar,.eyebrow .pip,input[type=range]{border-radius:4px}
+.hc-bars i{border-radius:4px 4px 0 0}
 
 /* true circles keep their geometry */
-.pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg,
-.aud-figure .ring,.rv-d,.dotk,input[type=range]::-webkit-slider-thumb,
-input[type=range]::-moz-range-thumb{border-radius:50%}
+.pb-b-btn img,.pb-b-head img,.announce .sep,.tcard .av,.stars svg,.rv-d,.dotk,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{border-radius:50%}
 
-/* --- one elevation tier, reserved for the artifact each page is selling --- */
-.hero-card,.calc-prev,.results,.res-hero{
+/* --- one elevation tier,reserved for the artifact each page is selling --- */
+.hero-card,.results,.res-hero{
   box-shadow:0 1px 2px rgba(11,31,28,.04),0 18px 40px -28px rgba(11,31,28,.34)}
 .hero-card{border-color:var(--line)}
 
@@ -918,9 +829,7 @@ input[type=range]::-moz-range-thumb{border-radius:50%}
 .pain .pl,.pains .pl{border-radius:0}
 .rv-keys .rv-d,.rv-d,i.dotk,.chart-legend .dotk{border-radius:50%}
 
-/* the audience pages sell the figure panel, so it earns the same single
-   elevation tier as the hero card and the calculator results */
-.aud-figure{box-shadow:0 1px 2px rgba(11,31,28,.04),0 18px 40px -28px rgba(11,31,28,.34)}
+/* the audience pages sell the figure panel{box-shadow:0 1px 2px rgba(11,31,28,.04),0 18px 40px -28px rgba(11,31,28,.34)}
 
 /* pass 10b - these four lose to descendant selectors (.infoadvice .ii etc),
    so the closing normalization is forced. Radius scale is now 4/6/8 only. */
@@ -1078,15 +987,6 @@ body{overflow-x:hidden;overflow-x:clip}
    ============================================================ */
 .gapband{padding:70px 0 10px}
 .gapband .sec-head{margin-bottom:32px}
-.gapstats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-  border:1px solid var(--line-2);border-radius:8px;overflow:hidden;background:var(--surface)}
-.gs{border-left:1px solid var(--line);padding:30px 26px 26px}
-.gs:first-child{border-left:0}
-.gs-n{font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:600;
-  font-size:clamp(1.9rem,3.2vw,2.5rem);letter-spacing:-.04em;color:var(--teal-700);line-height:1}
-.gs-l{margin-top:14px;font-size:.92rem;line-height:1.5;color:var(--ink)}
-.gs-s{margin-top:12px;font-family:var(--font);font-size:.6rem;font-weight:500;
-  color:var(--ink-3);line-height:1.5}
 .gap-note{margin:18px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:76ch}
 
 .coverband{padding:8px 0 62px}
@@ -1094,20 +994,9 @@ body{overflow-x:hidden;overflow-x:clip}
   border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:34px 32px}
 .cover h3{margin:0 0 12px;max-width:22ch}
 .cover p{font-size:.92rem;line-height:1.6;color:var(--ink-2);margin:0 0 20px;max-width:52ch}
-.cv-figs{border-left:1px solid var(--line);padding-left:30px}
-.cv-f{margin-bottom:18px}
-.cv-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
-  font-weight:600;font-size:1.85rem;letter-spacing:-.035em;color:var(--teal-700);line-height:1}
-.cv-l{display:block;margin-top:6px;font-size:.82rem;line-height:1.45;color:var(--ink-2)}
-.cv-s{font-family:var(--font);font-size:.58rem;font-weight:500;
-  color:var(--ink-3);line-height:1.5}
 
 @media(max-width:920px){
-  .gapstats{grid-template-columns:1fr}
-  .gs{border-left:0;border-top:1px solid var(--line)}
-  .gs:first-child{border-top:0}
   .cover{grid-template-columns:1fr;gap:26px;padding:28px 22px}
-  .cv-figs{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:22px}
   .gapband{padding:52px 0 6px}
 }
 
@@ -1123,17 +1012,14 @@ html{font-size:103%}
 body{font-size:1rem;line-height:1.7}
 .hero .lede,.aud-hero .lede,.lead .lede,.phead p{font-size:clamp(1.06rem,1.5vw,1.22rem);line-height:1.6}
 .sec-head p{font-size:1.06rem}
-.aud-card p,.step p,.pain p,.proof p,.gs-l,.benefit p{font-size:.98rem;line-height:1.62}
+.step p,.pain p,.proof p,.benefit p{font-size:.98rem;line-height:1.62}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
 .eyebrow{font-size:.78rem;}
-.kicker,.strip-item,.ctag,.hc-flabel,.hc-role,.trole,.tcard .who b,
-.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.cv-s,.gs-s,
-.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
+.kicker,.strip-item,.hc-flabel,.hc-role,.trole,.tcard .who b,.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
 .nt-l{font-size:.7rem !important;}
 .nt-n{font-size:.86rem}
-.hc-fsub,.ec-note,.gap-note,.cv-l,.note,.hint,.disclosure,.infoadvice,
-.tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
+.hc-fsub,.ec-note,.gap-note,.note,.hint,.disclosure,.infoadvice,.tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
 .hc-flabel,.dl-text,.wtext{font-size:.9rem}
 
 /* --- 3. Tap targets: 44px minimum on everything interactive --- */
@@ -1141,7 +1027,7 @@ body{font-size:1rem;line-height:1.7}
 .nav-tick{padding:11px 13px}
 .logo{padding:6px 0}
 .foot-col a,.foot-links a{display:block;padding:9px 0;margin-bottom:0;line-height:1.35}
-.aud-link,.wlink,.gterm a,.back{display:inline-flex;align-items:center;padding:11px 0}
+.wlink,.gterm a,.back{display:inline-flex;align-items:center;padding:11px 0}
 .btn{min-height:48px;padding:13px 22px}
 .seg button{min-height:48px}
 summary{min-height:56px;padding-top:16px;padding-bottom:16px}
@@ -1176,8 +1062,7 @@ p a:not(.btn):not(.aud-link),.lede a,.tick p a,.note a,.ec-note a,.gap-note a,
 
 /* the last two labels still under 12px */
 .nt-l{font-size:.72rem !important}
-.hc-fsub,.calc-prev .sub,.chart-note{font-size:.82rem}
-.aud-figure .fbadge,.aud-figure .fcap{font-size:.75rem !important}
+.hc-fsub,.chart-note{font-size:.82rem}
 
 /* --- final reach pass: every link at 44px, floor at 12px --- */
 .foot-col a,.foot-links a{padding:12px 0}
@@ -1187,7 +1072,7 @@ p a:not(.btn):not(.aud-link),.lede a,.tick p a,.note a,.ec-note a,.gap-note a,
 /* glossary tooltip links sit inside tight prose - underline instead of pad */
 abbr[title],.abbr,.tip{text-decoration:underline dotted;text-underline-offset:3px}
 .nt-l{font-size:.75rem !important}
-.chart-note,.calc-prev .sub,.illus,.hc-note,.ec-note,.note{font-size:.82rem}
+.chart-note,.illus,.hc-note,.ec-note,.note{font-size:.82rem}
 
 /* --- last reach items, all measured on live pages --- */
 .ec-note,.ec-note a{font-size:.82rem}
@@ -1286,33 +1171,30 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
   --teal-mint:#7FE3D3;     /* accents on dark panels */
 }
 
-/* graphics: bars, fills, rules, dots, marks - no text sits on these */
-.hc-bars i:last-child,.cbars i:last-child{background:var(--teal-bright)}
+/* graphics: bars,fills,rules,dots,marks - no text sits on these */
+.hc-bars i:last-child{background:var(--teal-bright)}
 input[type=range]{background-image:linear-gradient(to right,var(--teal-bright) var(--fill,50%),var(--line-2) var(--fill,50%))}
 input[type=range]::-webkit-slider-thumb{background:var(--teal-bright);border-color:#fff}
 input[type=range]::-moz-range-thumb{background:var(--teal-bright);border-color:#fff}
 .nt-dot{background:var(--teal-bright)}
-.aud-ico,.boost-ico{color:var(--teal-bright)}
+.boost-ico{color:var(--teal-bright)}
 .waitcard{border-left-color:var(--teal-bright)}
-.aud-card:nth-child(1)::before,.aud-card:nth-child(2)::before,
-.aud-card:nth-child(3)::before{background:var(--teal-bright)}
 .eyebrow .pip{background:var(--teal-bright);opacity:1;height:2px;width:16px}
 .stars svg{fill:var(--teal-bright)}
 .chart-line,.chart svg path[stroke]{stroke:var(--teal-bright)}
 
 /* on the dark panels a real mint reads far brighter than the old pale wash */
 /* mint is for accents ON the dark panels only. .hc-flabel sits inside the
-   hero card, which is white - it was pulled in here by mistake and dropped to
+   hero card,which is white - it was pulled in here by mistake and dropped to
    1.52:1. It stays on the AA-safe ink tone. */
-.final .eyebrow,.callout .eyebrow,.tick .eyebrow,
-.calc-prev .eyebrow,.calc-prev .ctag,.res-hero .eyebrow{color:var(--teal-mint)}
+.final .eyebrow,.callout .eyebrow,.tick .eyebrow,.res-hero .eyebrow{color:var(--teal-mint)}
 .hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
 .tick .tk-n{color:#fff}
-.calc-prev .cbars i:last-child,.res-hero .rbar i:last-child{background:var(--teal-mint)}
+.res-hero .rbar i:last-child{background:var(--teal-mint)}
 .final .paw-bg,.callout .paw-bg{opacity:.09}
 
 /* text and filled buttons stay on the AA-safe bright teal */
-.hl,.aud-link,.wlink,a.gref,.gs-n,.cv-n{color:var(--teal)}
+.hl,.wlink,a.gref{color:var(--teal)}
 .btn-primary{background:var(--teal-700)}
 .btn-primary:hover{background:var(--teal-600)}
 
@@ -1344,8 +1226,8 @@ a.btn.btn-primary,a.btn.btn-acc,button.btn-primary{color:var(--aqua-ink)}
 .final .btn-light,.callout .btn-light,.tick .btn-light{background:#fff;color:var(--teal-900)}
 
 /* --- graphics: let the colour actually sing --- */
-.hc-bars i:last-child,.cbars i:last-child{background:var(--aqua)}
-.hc-bars i,.cbars i{background:var(--teal-100)}
+.hc-bars i:last-child{background:var(--aqua)}
+.hc-bars i{background:var(--teal-100)}
 /* two-tone track whose colour boundary lands on the thumb centre. The thumb is 28px
    and its centre travels from 14px to (width - 14px), so a fill of x% of the FULL width
    is off by up to 14px at the ends. The two-tone strip is therefore drawn across
@@ -1358,34 +1240,25 @@ input[type=range]::-webkit-slider-thumb{background:var(--aqua);border:3px solid 
 input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2),0 2px 8px rgba(11,31,28,.18)}
 .nt-dot{background:var(--aqua)}
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
-.aud-ico,.boost-ico{color:var(--aqua-600)}
+.boost-ico{color:var(--aqua-600)}
 .waitcard{border-left-color:var(--aqua)}
-.aud-card:nth-child(1)::before,.aud-card:nth-child(2)::before,
-.aud-card:nth-child(3)::before{background:var(--aqua)}
 .stars svg{fill:var(--aqua)}
 .rv-you,.rv-bar i:first-child{background:var(--aqua)}
 
-/* --- the pale wash does more work now, so sections feel lighter --- */
-.tag,.dl-tag,.aud-figure,.magnet{background:var(--teal-50)}
-.aud-card:hover{background:var(--teal-50)}
+/* --- the pale wash does more work now,so sections feel lighter --- */
+.tag,.dl-tag,.magnet{background:var(--teal-50)}
 .deadline{background:var(--teal-50);border-color:var(--teal-100)}
 
 /* --- accents on the dark panels: proper bright mint --- */
-.final .eyebrow,.callout .eyebrow,.tick .eyebrow,
-.calc-prev .eyebrow,.calc-prev .ctag,.res-hero .eyebrow{color:var(--mint)}
-.calc-prev .cbars i:last-child,.res-hero .rbar i:last-child{background:var(--mint)}
-.calc-prev .cbars i,.res-hero .rbar i{background:rgba(255,255,255,.10)}
+.final .eyebrow,.callout .eyebrow,.tick .eyebrow,.res-hero .eyebrow{color:var(--mint)}
+.res-hero .rbar i:last-child{background:var(--mint)}
+.res-hero .rbar i{background:rgba(255,255,255,.10)}
 .hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
 
 /* --- softer shapes: square corners read formal --- */
-.btn,.hero-card,.calc-prev,.about-port,.tcard,.panel,.magnet,.aud,.pains,.proofs,
-.gapstats,.cover,.aud-figure,.chart-card,.relief-card,.boost-card,.cta-card,
-.book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,
-.ffield input,.nav-links.open{border-radius:12px}
-.aud-ico,.step .sx,.logo-mark,.boost-ico,.tag,.dl-tag,
-.hc-pill,.hc-badge,.aud-figure .fbadge,.nav-links a.lnk,.nav-tick,
-.seg button,.ec-row{border-radius:8px}
-.hc-bars i,.cbars i,.rv-bar i{border-radius:5px 5px 0 0}
+.btn,.hero-card,.about-port,.tcard,.panel,.magnet,.pains,.proofs,.cover,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,.ffield input,.nav-links.open{border-radius:12px}
+.step .sx,.logo-mark,.boost-ico,.tag,.dl-tag,.hc-pill,.hc-badge,.nav-links a.lnk,.nav-tick,.seg button,.ec-row{border-radius:8px}
+.hc-bars i,.rv-bar i{border-radius:5px 5px 0 0}
 
 /* the check mark in the hero card picks up the brand colour */
 .hc-pill{border-color:var(--teal-100);background:var(--teal-50);color:var(--teal-900)}
@@ -1426,7 +1299,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* --- 5. readability: .lede measured 45 characters per line, under the
    50-75 band. Widening the measure, not the font. --- */
 .hero .lede,.aud-hero .lede,.lead .lede{max-width:32em}
-.aud-card p{max-width:none}
 
 /* terms/privacy/complaints body measured 13px at 114 cpl - failed both the
    16px floor and the 75-character ceiling. */
@@ -1483,13 +1355,11 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* ============================================================
    v3 - the per-section tracking and weight overrides that used to sit here
    are gone. They were the last layer that re-sized and re-weighted headings
-   section by section, and the one heading recipe above now owns both. The
-   classed headings named here before (.legal, .magnet, .team-head, .tick,
-   .book-head, .cta-card, .gterm, .panel, .phead, .assume, .aud-card,
-   .benefit, .cal-fallback, .chart-card, .pain, .step, .vs-card) all take
-   the recipe's three sizes, Inter 800 and its tracking.
+   section by section,and the one heading recipe above now owns both. The
+   classed headings named here before (.legal,.magnet,.team-head,.tick,.book-head,.cta-card,.gterm,.panel,.phead,.assume,.benefit,.cal-fallback,.chart-card,.pain,.step,.vs-card) all take
+   the recipe's three sizes,Inter 800 and its tracking.
    ============================================================ */
-/* the abbreviation pill is a UI chip inside the term, not display copy */
+/* the abbreviation pill is a UI chip inside the term,not display copy */
 .gterm .abbr{font-family:var(--font)}
 
 /* ============================================================
@@ -1522,12 +1392,12 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    way a stat band reads on Plaid or Stripe; calculator readouts
    stay semibold because they are the product's live output.
    ============================================================ */
-.eyebrow,.kicker,.ctag,.hc-flabel,.hc-role,.pain .pl,.proof .pl,.trole,.cl,
+.eyebrow,.kicker,.hc-flabel,.hc-role,.pain .pl,.proof .pl,.trole,.cl,
 .tcard .who b,.foot-col h4,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
-.tk-l,.nt-l,.dl-tag,.tag,.cv-s,.gs-s,.aud-figure .fcap,.aud-figure .fbadge,
+.tk-l,.nt-l,.dl-tag,.tag,
 .phone-role,.arc-now,.modebar .modelab,.qfield label,.qpersona legend,
 .promise .pt,.letterhead span,.relief-card .rt,.max-card .mt,.vs-col .vt,
-.pb-scale-title,.tmember .trole,.adv > summary,.strip-item,.calc-prev .ctag{
+.pb-scale-title,.tmember .trole,.adv > summary,.strip-item{
   font-family:var(--font);text-transform:none;letter-spacing:0;font-weight:600}
 .eyebrow{font-size:.85rem;font-weight:600;gap:0}
 .eyebrow .pip{display:none}
@@ -1540,10 +1410,12 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .qfield label,.qpersona legend{font-size:.9rem;font-weight:600;color:var(--ink)}
 .adv > summary{font-size:.9rem;font-weight:600}
 /* figures: one face, tabular numerals. Light for the big marketing numbers. */
-.hc-fnum,.cbig,.gs-n,.cv-n,.tk-n,.cn,.val,.big,.res-hero .big,.results .big,
+.hc-fnum,.tk-n,.cn,.val,.big,.res-hero .big,.results .big,
 .rbig b,.bt b,.ec-note b,.dl-text b,.wtext b,.nt-n,.mrow .mrate,.mclose b,
 .pb-guess-val,.dashk,.ind,.rv-keys b{font-family:var(--font);font-variant-numeric:tabular-nums}
-.cbig,.gs-n,.cv-n,.tk-n{font-weight:300;letter-spacing:-.02em}
+.tk-n{font-weight:300;letter-spacing:-.02em}
+/* the browser's default button face is not Inter; controls inherit the page's */
+button{font-family:inherit}
 
 /* ============================================================
    v4 - BANDS. What the reference sites (Stripe, Plaid, Ramp,
@@ -1580,14 +1452,10 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
   letter-spacing:-.015em;color:var(--ink);max-width:26ch;margin:0}
 .pb-plain b{font-weight:700}
 .pb-dark .pb-plain{color:#fff}
-/* the old boxed stat grids, should any markup still reach them: borderless now */
-.gapstats,.cover,.proofs{border:0;background:none;border-radius:0;overflow:visible}
-.gs,.proof{border:0;padding:0}
-.gs-n,.cv-n{font-weight:300;letter-spacing:-.03em}
-.gs-s,.cv-s{font-size:.86rem !important;font-weight:400;color:var(--ink-3)}
+/* director's coverage grid keeps its .cover wrapper and loses its box */
+.cover{border:0;background:none;border-radius:0;overflow:visible}
 @media(max-width:920px){
   .pb-statrow{gap:26px 28px}
-  .gs,.proof{border:0}
 }
 </style>
 </head>

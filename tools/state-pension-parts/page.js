@@ -10,7 +10,7 @@
    nothing that dramatises a number that is already plain enough. */
 const SP = window.PBStatePension;
 
-/* The caveat card decides between floor and not-a-floor on the year the
+/* The floor sentence decides between floor and not-a-floor on the year the
    reader reaches 66, which needs today's year. Read from the clock once, at
    load, so the page does not go stale on 1 January and every render agrees
    with every other. Nothing in the pension figure depends on it. */
@@ -18,7 +18,7 @@ const THIS_YEAR = new Date().getFullYear();
 
 /* The last drawdown year in which the Department still runs the Yearly
    Average calculation alongside the Total Contributions Approach and pays
-   the higher comes from the module, SP.TRANSITION_LAST, and the card's copy
+   the higher comes from the module, SP.TRANSITION_LAST, and the sentence's copy
    is built from it, so the wording and the decision cannot drift apart and
    neither can drift from the entitlement page, which reads the same
    constant. docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md S3 and S9. */
@@ -75,7 +75,7 @@ function render() {
         ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax +
         '% of the maximum.';
 
-    /* The caveat card has three states, and which one applies is the
+    /* The floor sentence has three states, and which one applies is the
        module's decision, not this file's: SP.floorStatus() takes the result,
        the age and the year and answers exact, floor or rate. It is the one
        decision on this page that changes what a reader is told a number
@@ -83,7 +83,7 @@ function render() {
        the rule here is how the two pages would come to disagree. Asserted in
        tests/state-pension.test.js sections 15 to 17.
 
-       The card never names the year it decided on, because age alone cannot
+       The sentence never names the year it decided on, because age alone cannot
        fix the year of a 66th birthday; the module takes the earlier of the
        two candidates, which is the reading that can never tell someone
        inside the window that it has closed. */

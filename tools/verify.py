@@ -151,7 +151,8 @@ AUDIT_JS = r"""
   // given width. v4 dropped IBM Plex Mono too: the numerals and the labels are
   // Inter with tabular figures, so Plex joins the dropped list.
   try{
-    await document.fonts.ready;
+    /* a stalled font fetch must not stall the audit: eight seconds, then read what has loaded */
+    await Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,8000)})]);
     const famOf=el=>el?getComputedStyle(el).fontFamily:'';
     const first=s=>String(s).split(',')[0].replace(/['"]/g,'').trim();
     const DROPPED=/Fraunces|Hanken|Bricolage|Sora|Plex/i;
@@ -181,7 +182,10 @@ AUDIT_JS = r"""
   // text-transform:uppercase, no text may be tracked out (positive
   // letter-spacing), and no text may resolve to a monospace family. Measured
   // on every element that carries its own text, so a rule that creeps back in
-  // through any of the stylesheet's layers is caught where it lands.
+  // through any of the stylesheet's layers is caught where it lands. A future
+  // <pre>, <code> or <kbd> would fail this on the browser's default face: that
+  // is the point, not a gap. Monospace is out of the project; a code sample
+  // would have to be set in the body face or this ban relaxed on purpose.
   try{
     const own=e=>[...e.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
     const texty=$$('body *').filter(e=>own(e)&&getComputedStyle(e).display!=='none');
@@ -350,9 +354,20 @@ def start_server():
 # ----------------------------------------------------------------------------
 
 def chrome(args, timeout=90):
+    """One headless Chrome run. A launch that stalls past the timeout is
+    killed and tried again, twice: an 18-page run of 54 audits and 54 shots
+    was lost twice to a single stalled load (once at an audit, once at a
+    screenshot, different pages each time), and a traceback loses the report
+    for the 17 pages that were fine. Three stalls in a row give up and hand
+    back nothing, which the audit reports as an error for that page."""
     base = [CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--no-first-run', '--disable-extensions', '--mute-audio']
-    p = subprocess.run(base + args, capture_output=True, timeout=timeout)
-    return p.stdout.decode('utf-8', 'replace')
+    for attempt in range(3):
+        try:
+            p = subprocess.run(base + args, capture_output=True, timeout=timeout)
+            return p.stdout.decode('utf-8', 'replace')
+        except subprocess.TimeoutExpired:
+            print('(chrome stalled, retry %d)' % (attempt + 1), end=' ', flush=True)
+    return ''
 
 def run_audit(port, page, width, height=900):
     url = 'http://127.0.0.1:%d/__frame?page=%s&w=%d&h=%d' % (port, page, width, height)
@@ -369,17 +384,26 @@ def run_audit(port, page, width, height=900):
 def screenshot(port, page, width, doc_height):
     """Full-page screenshot at an exact CSS width.
 
+    Taken with prefers-reduced-motion forced on, so anything that animates on
+    entry (the reveals, the home page's count-up and growing bars, the jar's
+    spill) is captured settled at its final state rather than mid-flight. A
+    capture is proof of what the page says, and a figure caught halfway through
+    a tween says the wrong number.
+
     Headless Chrome enforces a ~500px minimum window width, so a direct
     --screenshot at 375px is really a 500px layout cropped to 375. Instead the
     page is rendered inside a fixed-width iframe (same wrapper the audits use)
     in a window at least 500px wide, then cropped to the iframe with sips."""
     os.makedirs(SHOTS, exist_ok=True)
-    h = max(812, min(int(doc_height or 900) + 40, 9000))
+    # 16000 rather than 9000: the home page passed 11,000px once the offering
+    # list and the product band arrived, and a capped shot proves nothing about
+    # the closing band it cuts off
+    h = max(812, min(int(doc_height or 900) + 40, 16000))
     # a page in a subfolder ("games/buddys-run.html") flattens to one filename
     out = os.path.join(SHOTS, '%s-%d.png' % (page.replace('.html', '').replace('/', '-'), width))
     win_w = max(width, 500)
     if (win_w - width) % 2: win_w += 1          # even side margins so the centre crop lands exactly on the iframe
-    chrome(['--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=4000', '--screenshot=%s' % out,
+    chrome(['--force-prefers-reduced-motion', '--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=4000', '--screenshot=%s' % out,
             'http://127.0.0.1:%d/__frame?page=%s&w=%d&h=%d&mode=shot' % (port, page, width, h)])
     if os.path.exists(out) and win_w != width:
         # the iframe is centred in the wrapper, and sips -c crops about the centre
