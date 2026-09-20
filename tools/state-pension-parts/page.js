@@ -10,18 +10,11 @@
    nothing that dramatises a number that is already plain enough. */
 const SP = window.PBStatePension;
 
-/* The floor sentence decides between floor and not-a-floor on the year the
-   reader reaches 66, which needs today's year. Read from the clock once, at
-   load, so the page does not go stale on 1 January and every render agrees
-   with every other. Nothing in the pension figure depends on it. */
-const THIS_YEAR = new Date().getFullYear();
-
-/* The last drawdown year in which the Department still runs the Yearly
-   Average calculation alongside the Total Contributions Approach and pays
-   the higher comes from the module, SP.TRANSITION_LAST, and the sentence's copy
-   is built from it, so the wording and the decision cannot drift apart and
-   neither can drift from the entitlement page, which reads the same
-   constant. docs/CALC-SPEC-STATE-PENSION-ENTITLEMENT.md S3 and S9. */
+/* Whether the figure is exact, a floor under the real rate, or simply the
+   rate is the module's decision (SP.floorStatus, asserted in
+   tests/state-pension.test.js sections 15 to 17). This page no longer words
+   it: the sentence under the result was removed on 2026-09-20, Damian's
+   call, along with the other caveat cards. CONTEXT.md, "Floor". */
 
 /* Formatting, the slider fill and the wiring are the same on all five
    calculators and live in assets/js/calc-page.js. What is this page's own is
@@ -55,7 +48,7 @@ function render() {
 
   const toGo = SP.yearsUntilPensionAge(age);
   $('ageNote').innerHTML = toGo > 0
-    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line and the note under the result: it does not change the pension figure, and this page does not project investment growth.'
+    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line only: it does not change the pension figure, and this page does not project investment growth.'
     : 'You are at or past 66. This line does not change the pension figure, and this page does not project investment growth.';
 
   $('spHas').hidden = !res.eligible;
@@ -75,36 +68,6 @@ function render() {
         ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax +
         '% of the maximum.';
 
-    /* The floor sentence has three states, and which one applies is the
-       module's decision, not this file's: SP.floorStatus() takes the result,
-       the age and the year and answers exact, floor or rate. It is the one
-       decision on this page that changes what a reader is told a number
-       MEANS, the entitlement page turns on the same window, and a copy of
-       the rule here is how the two pages would come to disagree. Asserted in
-       tests/state-pension.test.js sections 15 to 17.
-
-       The sentence never names the year it decided on, because age alone cannot
-       fix the year of a 66th birthday; the module takes the earlier of the
-       two candidates, which is the reading that can never tell someone
-       inside the window that it has closed. */
-    const status = SP.floorStatus(res, age, THIS_YEAR);
-    let floorHtml, showLink = false;
-    if (status === 'exact') {
-      floorHtml = 'At a full record this figure is exact. The Total Contributions Approach gives the maximum rate outright, so no second calculation applies.';
-    } else if (status === 'floor') {
-      floorHtml = 'You reach 66 while the Department still runs the older Yearly Average calculation alongside this one, which it does until the end of ' +
-        SP.TRANSITION_LAST + ', and pays whichever is higher. So this is a floor: your real rate may be higher.';
-      showLink = true;
-    } else {
-      floorHtml = 'You reach 66 in ' + (SP.TRANSITION_LAST + 1) + ' or later, after the older Yearly Average method has gone. ' +
-        'Only the Total Contributions Approach applies, so on these contributions this is your rate rather than a floor. ' +
-        'This page takes the contributions entered at face value. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> ' +
-        'applies the qualifying minimum and the caps the way the Department does.';
-    }
-    $('spFloor').innerHTML = floorHtml;
-    /* The link row is inline-flex in the shared stylesheet, which beats the
-       hidden attribute, and this page's own CSS lives in the build script. */
-    $('spFloorLink').style.display = showLink ? '' : 'none';
   } else {
     annualCents = 0;
     $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +

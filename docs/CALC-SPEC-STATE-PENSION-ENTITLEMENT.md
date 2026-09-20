@@ -82,6 +82,8 @@ Full evidence in `docs/RESEARCH-YEARLY-AVERAGE.md`. Summary:
    caveat card becomes age-aware (S9) so it stops hedging where there is
    nothing to hedge. This one is applied, because it is copy in the card this
    build already rewrites and it makes the page more accurate, not less.
+   *2026-09-20: the card and its sentence are gone from the page (Damian's
+   decision, docs/STATUS.md run 16); the module's `floorStatus` stays.*
 
 ---
 
@@ -374,7 +376,7 @@ No weekly figure at all. The panel says the pension needs 520 paid
 contributions, ten years, that credits and HomeCaring Periods do not count
 toward that minimum however many there are, and how many more paid
 contributions are needed. Then the Non-Contributory note from the reality
-check, unchanged.
+check, unchanged. *2026-09-20: that note is gone from both pages' panels.*
 
 ### State D: the details do not fit
 
@@ -461,6 +463,10 @@ the after-transition sentence says why.
 - "This assumes you take your pension at 66."
 - One line linking to the reality check: "To see what this pays for, put it
   next to what retirement costs."
+
+*2026-09-20: both lines are gone, with the card that held them (Damian's
+decision, docs/STATUS.md run 16). The birth slider's own subnote still says
+the page assumes drawdown at 66.*
 
 ### Screen readers
 
@@ -576,7 +582,10 @@ not move. There are 80 of them as of Run 11, up from the 55 this section was
 written against; Run 10 added 25 when the transition window moved into
 `state-pension.js`.
 
-1. **The caveat card (`#spFloor`) becomes age-aware.** The reality check
+1. **The caveat card (`#spFloor`) becomes age-aware.** *2026-09-20: the card
+   and its sentence were removed from the page on Damian's decision; the
+   module's `floorStatus` stays and is still tested, and the probe still
+   checks it against the spec rows.* The reality check
    keeps its age slider, and age alone cannot fix the year of the 66th
    birthday: at age *a* it is either `currentYear + 65 − a` or one later. So
    the card never names the year, and it uses the **earlier** candidate to
@@ -596,7 +605,8 @@ written against; Run 10 added 25 when the transition window moved into
      quieter link to the entitlement check for the paid-contribution minimum
      and the caps.
    The age subnote stays true: age still does not change the pension figure
-   on that page.
+   on that page. *2026-09-20: with the note under the result gone, the
+   subnote reads "Used for this line only".*
 2. **The explainer's "one honest caveat" paragraph** gets one sentence at
    the end linking to the entitlement check.
 3. **The assumptions list** item about the two methods gets the same link.

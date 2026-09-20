@@ -178,20 +178,12 @@
           t.has(label + ': spFoot carries the count', text('spFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
           t.has(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so the rate is ' + pctOfMax + '% of the maximum');
         }
-        // the caveat card, the one decision on the page that changes what a
-        // number means; the module decides, the page only words it
+        // exact, floor or rate is still the module's decision and the spec rows
+        // still carry it; the page stopped wording it on 2026-09-20 (the
+        // caveat sentence under the result was removed, Damian's call), so
+        // nothing on the page is asserted for it any more
         var status = SP.floorStatus(res, row.age, YEAR);
         if (row.status) t.eq(label + ': the module status is the one the spec expects', status, row.status);
-        var wording = { exact: 'At a full record this figure is exact.',
-                        floor: 'So this is a floor: your real rate may be higher.',
-                        rate: 'this is your rate rather than a floor' }[status];
-        t.has(label + ': spFloor words the ' + status + ' status', text('spFloor'), wording);
-        t.eq(label + ': the link to the entitlement check shows only on a floor',
-             $('spFloorLink').style.display, status === 'floor' ? '' : 'none');
-        if (status !== 'exact') {
-          t.has(label + ': spFloor names the last transition year', text('spFloor'),
-                status === 'floor' ? 'until the end of ' + SP.TRANSITION_LAST : 'You reach 66 in ' + (SP.TRANSITION_LAST + 1) + ' or later');
-        }
 
         t.has(label + ': lsIntro', text('lsIntro'), 'The bar shows how much of each one the State Pension covers.');
         var gaps = SP.gaps(res.annualCents);

@@ -215,6 +215,11 @@ earns its place only if the years-to-66 line is wanted.
 
 ### What age is also for: the caveat card
 
+> **2026-09-20:** the card, and the sentence it held, are gone from the page
+> (Damian's decision, docs/STATUS.md run 16). The three module functions below
+> stay and are still asserted in tests/state-pension.test.js; the entitlement
+> page still turns on the same window. What follows describes the module.
+
 Age has one other job, and it is not a figure either. Whether the pension
 shown is an exact rate, a floor under the real one, or simply the rate turns
 on the year the reader reaches 66, and age is the only clue the page has to
@@ -279,7 +284,9 @@ When contributions are below 520:
 - **no weekly figure at all.** The panel states that there is no Contributory
   entitlement below 10 years of contributions, that a means-tested
   Non-Contributory payment may apply instead, and that this tool does not
-  calculate it.
+  calculate it. *2026-09-20: the Non-Contributory sentence is no longer in the
+  panel (Damian's decision, docs/STATUS.md run 16); the assumptions list below
+  the tool still says it.*
 
 When contributions are between 520 and 2,080:
 
@@ -408,7 +415,8 @@ asserts that the other way round, on every driven state).
 4. **All five S1 figures verified** against primary sources, two corrections
    applied: the slider is labelled as reckonable contributions with its three
    components named beside it, and the best-of floor is stated beside the
-   result and again in the explainer.
+   result and again in the explainer. *2026-09-20: no longer beside the
+   result; the explainer still states it.*
 5. **Linked from** the main nav (label "State pension"), the footer Tools
    column, `starter.html`, and `sitemap.xml`.
 6. Not modelled, by choice: the €309.30 rate from age 80, qualified adult and

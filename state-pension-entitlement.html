@@ -1522,15 +1522,6 @@ button{font-family:inherit}
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
-/* v4: caveat text sits under the result as plain text, no card and no head.
-   The bordered card with a small grey label was the same style as the deleted
-   "One thing this does not show" box, and the brief cut that style. */
-.pb-floor{padding:2px 4px 0}
-.pb-floor .wtext{font-size:.95rem;line-height:1.6;color:var(--ink-2);margin:0}
-.pb-floor .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;
-  font-size:.9rem;font-weight:600;color:var(--teal-700);text-decoration:none}
-.pb-floor .wlink:hover{text-decoration:underline}
-.pb-floor .wlink .ico{width:15px;height:15px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1657,10 +1648,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="mfloor" id="mFloor">On the details entered, the Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and the Alternative Yearly Average, both of which can only raise it. It does not cover mixed-rate, EU or pro-rata records, and it does not check that you first paid PRSI before 56.</p>
       </div>
 
-      <div class="pb-floor reveal" style="transition-delay:.14s">
-        <div class="wtext">This assumes you take your pension at 66. To see what this pays for, put it next to what retirement costs.</div>
-        <a class="wlink" href="state-pension-reality-check.html">Put it next to what retirement costs <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
     </div>
 
     <div id="spNone" hidden>
@@ -1668,10 +1655,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
         <div class="divline"></div>
         <div class="foot" id="spNoneFoot">The State Pension (Contributory) needs 520 paid contributions, ten years. Credits and HomeCaring Periods do not count toward that minimum, however many there are.</div>
-      </div>
-      <div class="pb-floor reveal" style="transition-delay:.11s">
-        <div class="wtext">A State Pension (Non-Contributory) is means tested and may be payable instead. It works on a different basis and this tool does not calculate it. It is worth asking about.</div>
-        <a class="wlink" href="booking.html">Talk it through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
     </div>
 
