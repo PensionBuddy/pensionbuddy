@@ -26,6 +26,8 @@ const { $, euro, euro2, num, yr, pct, paintSlider, wireRanges } = window.PBPage;
    euro mirror beside it; a band's rate is the one that does not, so this is
    the conversion for that, and it is display, not calculation. */
 const euro2c = c => euro2(c / 100);
+/* two rates to compare, or one: the same question the Method 2 row asks */
+const hasBoth = r => !r.method2.reason;
 
 /* The current year comes from the clock once, so the birth-year bounds and
    the entry-year ceiling move on 1 January without an edit. The module never
@@ -163,6 +165,40 @@ function render() {
       : 'Worked out under the ' + (basis === 'method2' ? 'Yearly Average blend' : 'Total Contributions Approach') +
         ', ' + starting + '.';
 
+    /* The two bars, on one scale: the maximum personal rate. Each fill is
+       that method's own rate, and the LOWER of the two carries an amber tail
+       up to the higher, which is the difference the closing sentence names.
+       Nothing is decided here: the module has already said which method wins
+       and by how much, and this only measures the two figures the rows show. */
+    const scale = c => (Math.max(0, Math.min(c, SP.MAX_WEEKLY_CENTS)) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
+    $('m1Fill').style.width = scale(tca.weeklyCents);
+    $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
+      euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
+    const lowCents = hasBoth(res) ? Math.min(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
+    const highCents = hasBoth(res) ? Math.max(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
+    const tailOn = highCents > lowCents ? (tca.weeklyCents < res.method2.weeklyCents ? 'm1' : 'm2') : null;
+    /* One label a row: the lower method is labelled with what it falls short
+       by, and whichever method the Department actually pays is labelled as
+       paid. At a tie both are paid, which is what the closing sentence says. */
+    const paidOn = { m1: res.award.basis !== 'method2', m2: hasBoth(res) && res.award.basis !== 'method1' };
+    ['m1', 'm2'].forEach(function (m) {
+      const gap = $(m + 'Gap'), lab = $(m + 'Lab');
+      gap.hidden = tailOn !== m;
+      if (tailOn === m) {
+        gap.style.left = scale(lowCents);
+        gap.style.width = ((highCents - lowCents) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
+        lab.hidden = false;
+        lab.style.left = scale(lowCents + (highCents - lowCents) / 2);
+        lab.textContent = euro2c(highCents - lowCents);
+      } else if (paidOn[m]) {
+        lab.hidden = false;
+        lab.style.left = scale(m === 'm1' ? tca.weeklyCents : res.method2.weeklyCents);
+        lab.textContent = 'Paid';
+      } else {
+        lab.hidden = true;
+      }
+    });
+
     // Method 1 row
     $('m1Rate').textContent = euro2(tca.weekly) + ' a week';
     $('m1Detail').innerHTML = tca.capped
@@ -182,6 +218,7 @@ function render() {
     $('mWhy').hidden = hasM2;
 
     if (hasM2) {
+      $('m2Fill').style.width = scale(m2.weeklyCents);
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
       const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';

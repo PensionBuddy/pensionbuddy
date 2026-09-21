@@ -1520,6 +1520,32 @@ button{font-family:inherit}
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
+
+/* ---- the two calculations, on one scale ----
+   The card names two weekly rates and says which one the Department pays.
+   The bars put them on one scale, the maximum personal rate, so a reader sees
+   both how far apart the two methods are and how close either comes to the
+   most the State pays. The lower one carries an amber tail up to the higher:
+   the site's colour grammar, where amber is what is missing. Both bars are
+   aria-hidden, because the rates, the difference and the verdict are already
+   sentences in this card. */
+.mbar{position:relative;margin:10px 0 2px;height:32px}
+.mbar-track{position:relative;height:10px;border-radius:99px;background:var(--surface-2);
+  border:1px solid var(--line);overflow:hidden}
+.mbar-fill,.mbar-gap{position:absolute;top:0;bottom:0;display:block}
+.mbar-fill{left:0;background:var(--aqua);
+  transition:width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-gap{background:var(--amber-soft);
+  transition:left .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-gap[hidden]{display:none}
+.mbar-lab{position:absolute;top:15px;font-size:12.5px;line-height:1.3;color:var(--ink);
+  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;
+  transform:translateX(-50%);transition:left .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-lab[hidden]{display:none}
+.mbar-scale{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+@media(prefers-reduced-motion:reduce){
+  .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
+}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1633,14 +1659,23 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="mrow" id="m1Row">
           <div class="mhead"><span class="mname">Method 1, Total Contributions Approach</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
           <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
+          <div class="mbar" aria-hidden="true">
+            <div class="mbar-track"><i class="mbar-fill" id="m1Fill" style="width:87.5008%"></i><i class="mbar-gap" id="m1Gap" style="left:87.5008%;width:6.3381%"></i></div>
+            <span class="mbar-lab" id="m1Lab" style="left:90.6699%">€18.97</span>
+          </div>
           <p class="mnote" id="m1Cap" hidden></p>
         </div>
 
         <div class="mrow" id="m2Row">
           <div class="mhead"><span class="mname">Method 2, the Yearly Average blend</span><span class="mrate" id="m2Rate">€280.86 a week</span></div>
           <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
+          <div class="mbar" aria-hidden="true">
+            <div class="mbar-track"><i class="mbar-fill" id="m2Fill" style="width:93.8390%"></i><i class="mbar-gap" id="m2Gap" hidden></i></div>
+            <span class="mbar-lab" id="m2Lab" style="left:93.8390%">Paid</span>
+          </div>
         </div>
 
+        <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
         <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
         <p class="mclose" id="mWhy" hidden></p>
       </div>
@@ -1762,6 +1797,8 @@ const { $, euro, euro2, num, yr, pct, paintSlider, wireRanges } = window.PBPage;
    euro mirror beside it; a band's rate is the one that does not, so this is
    the conversion for that, and it is display, not calculation. */
 const euro2c = c => euro2(c / 100);
+/* two rates to compare, or one: the same question the Method 2 row asks */
+const hasBoth = r => !r.method2.reason;
 
 /* The current year comes from the clock once, so the birth-year bounds and
    the entry-year ceiling move on 1 January without an edit. The module never
@@ -1899,6 +1936,40 @@ function render() {
       : 'Worked out under the ' + (basis === 'method2' ? 'Yearly Average blend' : 'Total Contributions Approach') +
         ', ' + starting + '.';
 
+    /* The two bars, on one scale: the maximum personal rate. Each fill is
+       that method's own rate, and the LOWER of the two carries an amber tail
+       up to the higher, which is the difference the closing sentence names.
+       Nothing is decided here: the module has already said which method wins
+       and by how much, and this only measures the two figures the rows show. */
+    const scale = c => (Math.max(0, Math.min(c, SP.MAX_WEEKLY_CENTS)) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
+    $('m1Fill').style.width = scale(tca.weeklyCents);
+    $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
+      euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
+    const lowCents = hasBoth(res) ? Math.min(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
+    const highCents = hasBoth(res) ? Math.max(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
+    const tailOn = highCents > lowCents ? (tca.weeklyCents < res.method2.weeklyCents ? 'm1' : 'm2') : null;
+    /* One label a row: the lower method is labelled with what it falls short
+       by, and whichever method the Department actually pays is labelled as
+       paid. At a tie both are paid, which is what the closing sentence says. */
+    const paidOn = { m1: res.award.basis !== 'method2', m2: hasBoth(res) && res.award.basis !== 'method1' };
+    ['m1', 'm2'].forEach(function (m) {
+      const gap = $(m + 'Gap'), lab = $(m + 'Lab');
+      gap.hidden = tailOn !== m;
+      if (tailOn === m) {
+        gap.style.left = scale(lowCents);
+        gap.style.width = ((highCents - lowCents) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
+        lab.hidden = false;
+        lab.style.left = scale(lowCents + (highCents - lowCents) / 2);
+        lab.textContent = euro2c(highCents - lowCents);
+      } else if (paidOn[m]) {
+        lab.hidden = false;
+        lab.style.left = scale(m === 'm1' ? tca.weeklyCents : res.method2.weeklyCents);
+        lab.textContent = 'Paid';
+      } else {
+        lab.hidden = true;
+      }
+    });
+
     // Method 1 row
     $('m1Rate').textContent = euro2(tca.weekly) + ' a week';
     $('m1Detail').innerHTML = tca.capped
@@ -1918,6 +1989,7 @@ function render() {
     $('mWhy').hidden = hasM2;
 
     if (hasM2) {
+      $('m2Fill').style.width = scale(m2.weeklyCents);
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
       const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';

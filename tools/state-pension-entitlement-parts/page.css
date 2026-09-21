@@ -24,3 +24,29 @@
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
+
+/* ---- the two calculations, on one scale ----
+   The card names two weekly rates and says which one the Department pays.
+   The bars put them on one scale, the maximum personal rate, so a reader sees
+   both how far apart the two methods are and how close either comes to the
+   most the State pays. The lower one carries an amber tail up to the higher:
+   the site's colour grammar, where amber is what is missing. Both bars are
+   aria-hidden, because the rates, the difference and the verdict are already
+   sentences in this card. */
+.mbar{position:relative;margin:10px 0 2px;height:32px}
+.mbar-track{position:relative;height:10px;border-radius:99px;background:var(--surface-2);
+  border:1px solid var(--line);overflow:hidden}
+.mbar-fill,.mbar-gap{position:absolute;top:0;bottom:0;display:block}
+.mbar-fill{left:0;background:var(--aqua);
+  transition:width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-gap{background:var(--amber-soft);
+  transition:left .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-gap[hidden]{display:none}
+.mbar-lab{position:absolute;top:15px;font-size:12.5px;line-height:1.3;color:var(--ink);
+  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;
+  transform:translateX(-50%);transition:left .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-lab[hidden]{display:none}
+.mbar-scale{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+@media(prefers-reduced-motion:reduce){
+  .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
+}

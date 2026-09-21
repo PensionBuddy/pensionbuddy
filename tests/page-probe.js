@@ -424,6 +424,48 @@
 
       var hasM2 = !m2.reason;
       t.eq(label + ': the Method 2 row shows iff there is a Method 2 figure', !$('m2Row').hidden, hasM2);
+
+      /* The two bars measure the two rates against the maximum personal rate.
+         style.width reads back at six significant digits, so these compare as
+         numbers, not as strings. The amber tail belongs to whichever method is
+         lower and to neither when only one applies or the two agree, which is
+         the same verdict the closing sentence states in words. */
+      var widthPct = function (id) { return parseFloat($(id).style.width); };
+      var onScale = function (cents) { return cents / SP.MAX_WEEKLY_CENTS * 100; };
+      t.eq(label + ': the Method 1 bar is its rate against the maximum',
+           Math.round(widthPct('m1Fill') * 1000) / 1000, Math.round(onScale(tca.weeklyCents) * 1000) / 1000);
+      if (hasM2) {
+        t.eq(label + ': the Method 2 bar is its rate against the maximum',
+             Math.round(widthPct('m2Fill') * 1000) / 1000, Math.round(onScale(m2.weeklyCents) * 1000) / 1000);
+      }
+      var lowC = hasM2 ? Math.min(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
+      var highC = hasM2 ? Math.max(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
+      var tail = highC > lowC ? (tca.weeklyCents < m2.weeklyCents ? 'm1' : 'm2') : null;
+      var paidRow = { m1: res.award.basis !== 'method2', m2: hasM2 && res.award.basis !== 'method1' };
+      ['m1', 'm2'].forEach(function (m) {
+        t.eq(label + ': the amber tail is on ' + m + ' only when ' + m + ' is the lower of the two',
+             !$(m + 'Gap').hidden, tail === m);
+        if (tail === m) {
+          t.eq(label + ': the tail starts at the lower rate',
+               Math.round(parseFloat($(m + 'Gap').style.left) * 1000) / 1000,
+               Math.round(onScale(lowC) * 1000) / 1000);
+          t.eq(label + ': the tail spans the difference between the two',
+               Math.round(widthPct(m + 'Gap') * 1000) / 1000,
+               Math.round(onScale(highC - lowC) * 1000) / 1000);
+          t.eq(label + ': the tail is labelled with that difference',
+               text(m + 'Lab'), euro2c(highC - lowC));
+        } else if (paidRow[m]) {
+          t.eq(label + ': ' + m + ' is labelled as the one the Department pays',
+               text(m + 'Lab'), 'Paid');
+          t.eq(label + ': the paid label sits at that method\'s own rate',
+               Math.round(parseFloat($(m + 'Lab').style.left) * 1000) / 1000,
+               Math.round(onScale(m === 'm1' ? tca.weeklyCents : m2.weeklyCents) * 1000) / 1000);
+        } else {
+          t.eq(label + ': ' + m + ' carries no label when it is neither paid nor short', $(m + 'Lab').hidden, true);
+        }
+      });
+      t.has(label + ': the scale is named as the maximum personal rate', text('mScale'),
+            'The maximum personal rate is ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
       t.eq(label + ': the closing sentence shows with it', !$('mClose').hidden, hasM2);
       t.eq(label + ': the reason shows instead when there is none', !$('mWhy').hidden, !hasM2);
       if (row.after) t.eq(label + ': the spec expects no Method 2, after the transition', m2.reason, 'after-transition');
