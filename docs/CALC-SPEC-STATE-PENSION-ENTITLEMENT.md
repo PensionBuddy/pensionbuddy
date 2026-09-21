@@ -423,7 +423,10 @@ Then a card, **"Both calculations"**, with the two methods as rows:
   Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and
   the Alternative Yearly Average, both of which can only raise it. It does
   not cover mixed-rate, EU or pro-rata records, and it does not check that
-  you first paid PRSI before 56."
+  you first paid PRSI before 56." *2026-09-20: deleted, with the toggle that
+  showed it and the probe line that asserted it (Damian's decision, V4-5,
+  docs/STATUS.md run 16). The assumptions below the tool still list what the
+  page leaves out.*
 
 ### State C: eligible, Method 2 unavailable
 

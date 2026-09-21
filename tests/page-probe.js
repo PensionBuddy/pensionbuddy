@@ -425,7 +425,6 @@
       var hasM2 = !m2.reason;
       t.eq(label + ': the Method 2 row shows iff there is a Method 2 figure', !$('m2Row').hidden, hasM2);
       t.eq(label + ': the closing sentence shows with it', !$('mClose').hidden, hasM2);
-      t.eq(label + ': the floor note shows with it', !$('mFloor').hidden, hasM2);
       t.eq(label + ': the reason shows instead when there is none', !$('mWhy').hidden, !hasM2);
       if (row.after) t.eq(label + ': the spec expects no Method 2, after the transition', m2.reason, 'after-transition');
       if (row.below10) t.eq(label + ': the spec expects no Method 2, average below 10', m2.reason, 'yearly-average-below-10');

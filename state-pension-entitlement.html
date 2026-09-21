@@ -1509,8 +1509,6 @@ button{font-family:inherit}
 .mclose{font-size:14.5px;line-height:1.6;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
 .mclose[hidden]{display:none}
 .mclose b{font-family:var(--font);font-variant-numeric:tabular-nums;color:var(--teal-700);font-weight:600}
-.mfloor{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:14px}
-.mfloor[hidden]{display:none}
 .srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:4px;
   padding-top:16px;border-top:1px solid var(--line)}
 /* the three result states are wrappers inside the results column, so they carry
@@ -1645,7 +1643,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
         <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
         <p class="mclose" id="mWhy" hidden></p>
-        <p class="mfloor" id="mFloor">On the details entered, the Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and the Alternative Yearly Average, both of which can only raise it. It does not cover mixed-rate, EU or pro-rata records, and it does not check that you first paid PRSI before 56.</p>
       </div>
 
     </div>
@@ -1919,7 +1916,6 @@ function render() {
     $('m2Row').hidden = !hasM2;
     $('mClose').hidden = !hasM2;
     $('mWhy').hidden = hasM2;
-    $('mFloor').hidden = !hasM2;
 
     if (hasM2) {
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';

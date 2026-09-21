@@ -180,7 +180,6 @@ function render() {
     $('m2Row').hidden = !hasM2;
     $('mClose').hidden = !hasM2;
     $('mWhy').hidden = hasM2;
-    $('mFloor').hidden = !hasM2;
 
     if (hasM2) {
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';

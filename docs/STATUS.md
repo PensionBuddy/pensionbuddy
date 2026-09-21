@@ -82,13 +82,36 @@ one, so the baseline side throws (`TypeError: Cannot set properties of null`)
 while the other three calculators still load identically. That is what a
 deliberate behaviour change looks like to a refactor harness.
 
+### 2026-09-20, later
+
+- **V4-5 closed: deleted entirely.** The Method 2 floor paragraph on the
+  entitlement check (`#mFloor`), the page-script line that showed it and the
+  probe assertion that covered it are gone; CONTEXT.md's Floor entry and the
+  entitlement spec's State B bullet carry the dated note. The probe makes 434
+  assertions for that page now, down from 444. Neither State Pension page
+  names a rule beside a result any more; both still list what they leave out
+  in the assumptions below the tool.
+- **The offering list.** Damian saw "Company directors" clipped at the bottom
+  edge and the side description sitting off its item. The second reproduced
+  in headless Chrome: with the description bottom-aligned, at 1024px it
+  started above a one-line name and beside only the second line of a two-line
+  one. The first did not reproduce in Chrome at 375, 768, 1024, 1280, 1440 or
+  1920 (every name's glyph box measured inside its list item, the section's
+  height equal to its scroll height), so it is treated as an engine
+  difference and fixed for any engine: the names carry `line-height:1.06`
+  with padding for the descenders, every ancestor down to the link declares
+  `overflow:visible`, and the description centres on its item.
+- The interactive audit (Damian's step 4) is a read-only workflow; its first
+  run was killed by the account's session limit before any auditor finished
+  and was relaunched. The list is delivered in the conversation, not built.
+
 ## NEEDS DAMIAN INPUT from this run
 
 | Code | Where | What is needed |
 |---|---|---|
 | **V4-1** | **Closed 2026-09-20: Inter, no action.** | The brief says Sora; the site is on Inter and the guard drops Sora. Confirm Inter, or say Sora and the switch is the font request, the `--font` token and one line in verify.py. |
 | **V4-2** | **Closed 2026-09-20: deleted entirely.** The four caveat sentences this run named are gone: the floor sentence and its link, from the page script that wrote them, the Non-Contributory note on both no-entitlement panels, and "Taken at 66" on the entitlement check. The reality check's age note, which pointed at "the note under the result", now reads "Used for this line only". One floor sentence remains, V4-5. `tests/page-probe.js` no longer asserts the wording (the module's `floorStatus` is still checked against the spec rows). CONTEXT.md's Floor entry and both CALC-SPEC files carry a dated note. Was: | The "One thing this does not show" box and heading are gone; the floor sentence stays as plain text because the page script writes it and the probe asserts it. Say if the sentence should go too. |
-| **V4-5** | `state-pension-entitlement.html`, beside the Method 2 figure | Not a card and never named in V4-2, so it was not deleted: the paragraph `#mFloor`, shown by the page script whenever Method 2 applies and asserted by the probe, reads "On the details entered, the Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and the Alternative Yearly Average, both of which can only raise it. It does not cover mixed-rate, EU or pro-rata records, and it does not check that you first paid PRSI before 56." Say if it should go too. |
+| **V4-5** | **Closed 2026-09-20: deleted entirely.** The paragraph, the page-script toggle that showed it and the probe assertion are gone; CONTEXT.md and the entitlement spec carry the dated note. Was: the paragraph `#mFloor`, shown by the page script whenever Method 2 applies and asserted by the probe, reads "On the details entered, the Method 2 figure is a floor. This page leaves out the Homemaker's Scheme and the Alternative Yearly Average, both of which can only raise it. It does not cover mixed-rate, EU or pro-rata records, and it does not check that you first paid PRSI before 56." Say if it should go too. |
 | **V4-3** | **Closed 2026-09-20: Damian's copy applied.** Heading "Six places to begin."; description "What the State Pension leaves you to find."; captions "What people expect to need" / "What the State Pension pays"; "a year short"; source "Royal London Ireland, 2026."; "79% feel unprepared."; link "Open the calculator"; caption "Illustration only. Investments can fall as well as rise."; the bars' label and the product alt shortened to his wording. Item names unchanged. Was: | New copy to sign: the offering heading "Six places to begin. One of them is yours."; the item names "Company directors" and "Auto-enrolment comparison"; the reality-check line "What the State Pension actually leaves you to find, for a full record and for your own."; the bar captions "What adults in Ireland expect to need each year in retirement" and "What the maximum State Pension pays a year"; "a year short"; the product caption "The calculator, as it runs." |
 | **V4-4** | **Closed 2026-09-20: Damian's copy applied.** Captions "Example figures." (starter, director) and "Damian and Buddy." (tracker); the three alts shortened to his wording. Was: | Captions "The pension calculator on this site, with example figures.", "The director calculator on this site, with example figures.", "Damian and Buddy in the Dublin hills." (the hill is named from the photo's filename; change the caption if it is elsewhere). |
 

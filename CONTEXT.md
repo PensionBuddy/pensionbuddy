@@ -151,9 +151,11 @@ this site shows that leaves out a rule which can only raise the figure is a
 floor, and the page says which rule. Dropped for the State Pension reality
 check on 2026-09-20 (Damian's decision, docs/STATUS.md run 16): nothing beside
 its result names the rule any more, though the explainer and the assumptions
-below the tool still do. The entitlement check still names what it leaves out
-beside its Method 2 figure. The figures are still floors; the module still
-decides which (SP.floorStatus).
+below the tool still do. The entitlement check's own floor statement beside its
+Method 2 figure went the same day (V4-5), so neither page names the rule beside
+a result; each still lists what it leaves out in the assumptions below the
+tool. The figures are still floors; the module still decides which
+(SP.floorStatus).
 _Avoid_: estimate, projection. A floor errs in a known direction; an estimate
 does not, and the difference is the whole reason the word exists here.
 

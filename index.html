@@ -1512,16 +1512,22 @@ button{font-family:inherit}
    explanation in and lets the others fade; on phones the line sits
    under each name and nothing is hidden behind a hover.
    ============================================================ */
+/* nothing in this chain may clip: at line-height 1 a display face's
+   descenders reach below the line box, and a clipping ancestor would cut
+   the p and y of "Company directors" at the bottom edge */
+#audience,#audience .wrap,.pb-offer,.pb-offer li,.pb-offer-item{overflow:visible}
 .pb-offer{list-style:none;margin:0;padding:0}
 .pb-offer li{margin:0;padding:0}
-.pb-offer-item{display:block;padding:16px 0;color:var(--ink);text-decoration:none;transition:opacity .3s ease}
-.pb-offer-name{display:block;font-weight:800;font-size:clamp(2.1rem,6vw,4.7rem);line-height:1;
+.pb-offer-item{display:block;padding:14px 0;color:var(--ink);text-decoration:none;transition:opacity .3s ease}
+.pb-offer-name{display:block;font-weight:800;font-size:clamp(2.1rem,6vw,4.7rem);line-height:1.06;padding:.02em 0 .06em;
   letter-spacing:-.035em;color:inherit;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
 .pb-offer-desc{display:block;margin-top:10px;max-width:46ch;font-size:1rem;line-height:1.55;color:var(--ink-2)}
 @media(min-width:921px){
-  .pb-offer-item{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:end;padding:20px 0}
-  .pb-offer-desc{margin:0 0 10px;opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease}
-  .pb-offer-item:hover .pb-offer-desc,.pb-offer-item:focus-visible .pb-offer-desc{opacity:1;transform:none}
+  /* the description sits beside its own item, centred on it whether the
+     name runs to one line or two */
+  .pb-offer-item{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:center;padding:18px 0}
+  .pb-offer-desc{margin:0;opacity:0;transition:opacity .3s ease}
+  .pb-offer-item:hover .pb-offer-desc,.pb-offer-item:focus-visible .pb-offer-desc{opacity:1}
   .pb-offer-item:hover .pb-offer-name,.pb-offer-item:focus-visible .pb-offer-name{transform:translateX(10px)}
   .pb-offer:hover .pb-offer-item:not(:hover):not(:focus-visible){opacity:.38}
 }
