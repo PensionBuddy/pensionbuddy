@@ -1524,6 +1524,54 @@ button{font-family:inherit}
 @media(max-width:560px){
   .callout.pb-bleed,.final.pb-bleed{padding:56px 18px}
 }
+
+/* ============================================================
+   v4 - THE FLOOR, IN BARS. The three figures this section used to
+   state in one sentence, on one scale instead: what the State
+   Pension pays a year, and the two living standards it gets
+   measured against. The teal base is the same height in all three
+   columns, because the State Pension does not change; what grows
+   across the row is the amber, the part a reader has to find.
+   Same colour grammar as the home page's gap band: teal is what
+   the State gives you, amber is the shortfall, and the total, in
+   ink above each bar, is what you need. Heights and figures are
+   in the markup, so the chart is finished before any script runs;
+   assets/js/pb-bars.js arms it and counts it up once, on scroll.
+   ============================================================ */
+.pb-lsb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(12px,3.5vw,36px);max-width:720px;margin-bottom:26px}
+.pb-lsb-col{min-width:0;display:flex;flex-direction:column}
+.pb-lsb-fig{position:absolute;left:0;bottom:var(--h);margin-bottom:9px;
+  font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
+  font-size:clamp(1.3rem,3.4vw,2.2rem);letter-spacing:-.03em;line-height:1;
+  color:var(--ink);white-space:nowrap;
+  transition:bottom 1.15s cubic-bezier(.2,.7,.2,1)}
+/* the stage keeps room above the tallest bar for the figure that rides it */
+.pb-lsb-stage{position:relative;height:clamp(170px,25vw,280px);
+  margin-top:calc(clamp(1.3rem,3.4vw,2.2rem) + 12px)}
+.pb-lsb-seg{position:absolute;left:0;right:0;border-radius:0;
+  transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
+.pb-lsb-top{border-radius:10px 10px 0 0}
+.pb-lsb-teal{bottom:0;height:var(--h);background:var(--aqua)}
+.pb-lsb-amber{bottom:var(--from);height:calc(var(--h) - var(--from));
+  background:var(--amber-soft);transition-delay:.12s}
+/* arming is instant, growing is animated: the script adds .pb-armed after the
+   markup has already painted at full height, so an animated collapse would
+   show the reader the finished chart and then take it away */
+.pb-lsb.pb-armed:not(.pb-go) .pb-lsb-seg{height:0;transition:none}
+.pb-lsb.pb-armed:not(.pb-go) .pb-lsb-fig{bottom:0;transition:none}
+.pb-lsb-name{margin-top:14px;font-size:.98rem;line-height:1.4;font-weight:600;color:var(--ink)}
+.pb-lsb-short{margin-top:6px;font-size:.9rem;line-height:1.45;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.pb-lsb-short b{color:var(--ink);font-weight:600}
+@media(max-width:560px){
+  .pb-lsb{gap:10px}
+  .pb-lsb-name{font-size:.88rem}
+  .pb-lsb-short{font-size:.82rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .pb-lsb-seg,.pb-lsb-fig{transition:none}
+}
 </style>
 
 <script>
@@ -1629,8 +1677,37 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="sec-head reveal">
     <span class="kicker">The floor under all of this</span>
     <h2>What the State Pension actually leaves you to find.</h2>
-    <p>The most it pays is €299.30 a week. The Pensions Council puts a modest retirement for a single person at €19,200 a year, and a comfortable one at €33,600. The reality check shows the difference, for a full record and for your own.</p>
+    <p>The reality check shows the difference, for a full record and for your own.</p>
   </div>
+  <div class="pb-lsb reveal" data-pb-bars role="img" aria-label="Three bars on one scale. The State Pension pays 15,564 euro a year. A modest retirement costs 19,200 euro, which is 3,636 euro more. A comfortable retirement costs 33,600 euro, which is 18,036 euro more.">
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="15564" style="--h:46.32%">&euro;15,564</span>
+        <div class="pb-lsb-seg pb-lsb-teal pb-lsb-top" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">The State Pension, a year</span>
+      <span class="pb-lsb-short">&euro;299.30 a week, at the maximum rate</span>
+    </div>
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="19200" style="--h:57.14%">&euro;19,200</span>
+        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:57.14%;--from:46.32%"></div>
+        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">A modest retirement</span>
+      <span class="pb-lsb-short"><b data-pb-count="3636">&euro;3,636</b> a year to find</span>
+    </div>
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="33600" style="--h:100%">&euro;33,600</span>
+        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:100%;--from:46.32%"></div>
+        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">A comfortable retirement</span>
+      <span class="pb-lsb-short"><b data-pb-count="18036">&euro;18,036</b> a year to find</span>
+    </div>
+  </div>
+  <p class="pb-src reveal">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. The maximum personal rate is &euro;299.30 a week from January 2026.</p>
   <a class="btn btn-primary" href="state-pension-reality-check.html">See the State Pension reality check <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
 
@@ -1990,6 +2067,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+<script src="assets/js/pb-bars.js?v=ec5d7e34"></script>
 <script src="assets/js/pb-jargon-bank.js?v=8ed5700e"></script>
 <script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
 </body>
