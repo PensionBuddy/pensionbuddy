@@ -1572,6 +1572,43 @@ button{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   .pb-lsb-seg,.pb-lsb-fig{transition:none}
 }
+
+/* ============================================================
+   v4 - WHAT TIME DOES. The same monthly amount, started at three
+   ages, on one scale. Teal is what the reader would have at 66;
+   amber is what starting later costs, which is the site's colour
+   grammar wherever a figure falls short of another. The bars'
+   proportions do not move as the slider does, and that is the
+   second half of the lesson: with nothing saved to start with,
+   the projection is linear in the monthly amount, so waiting
+   costs the same share of the pot whatever a reader pays in.
+   The markup carries the finished chart at the slider's default,
+   so the section is complete and correct with no script at all.
+   ============================================================ */
+.pb-sa{max-width:760px}
+.pb-sa-ctl{margin-bottom:26px;max-width:420px}
+.pb-sa-row0{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-sa-ctl label{font-size:.98rem;font-weight:600;color:var(--ink)}
+.pb-sa-val{font-size:1.05rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-sa-rows{display:flex;flex-direction:column;gap:16px}
+.pb-sa-row{display:grid;grid-template-columns:8.4em minmax(0,1fr) 6.4em 7.2em;gap:14px;align-items:center}
+.pb-sa-name{font-size:.95rem;font-weight:600;color:var(--ink)}
+.pb-sa-track{position:relative;display:block;height:14px;border-radius:99px;
+  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-sa-fill,.pb-sa-gap{position:absolute;top:0;bottom:0;display:block}
+.pb-sa-fill{left:0;background:var(--aqua)}
+.pb-sa-gap{background:var(--amber-soft)}
+.pb-sa-fig{font-size:1.05rem;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;text-align:right}
+.pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
+.pb-sa-note{margin:22px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:70ch}
+@media(max-width:700px){
+  .pb-sa-row{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
+  .pb-sa-name{grid-column:1;grid-row:1}
+  .pb-sa-fig{grid-column:2;grid-row:1}
+  .pb-sa-track{grid-column:1 / -1;grid-row:2}
+  .pb-sa-less{grid-column:1 / -1;grid-row:3}
+}
 </style>
 
 <script>
@@ -1647,6 +1684,40 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="step reveal"><div class="sx">1</div><h3>Tell us where you're at</h3><p>A quick, relaxed chat about your situation. There's nothing you need to prepare or know in advance.</p></div>
     <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We explain your options</h3><p>What a pension is, how the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> works in your favour, and what makes sense to start with, all in plain English.</p></div>
     <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>You start with confidence</h3><p>If you decide to go ahead, we'll help you set it up properly and make sure it's working from day one.</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">What time does</span>
+    <h2>The same monthly amount, started at 30, 40 and 50.</h2>
+  </div>
+  <div class="pb-sa reveal">
+    <div class="pb-sa-ctl">
+      <div class="pb-sa-row0"><label for="saMonthly">Your monthly contribution</label><span class="pb-sa-val" id="saMonthlyV">€300</span></div>
+      <input type="range" id="saMonthly" min="50" max="1000" step="25" value="300" aria-valuetext="€300 a month">
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row">
+        <span class="pb-sa-name">Started at 30</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
+        <span class="pb-sa-fig" id="sa30">€352,848</span>
+        <span class="pb-sa-less" id="sa30Less"></span>
+      </div>
+      <div class="pb-sa-row">
+        <span class="pb-sa-name">Started at 40</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:53.3341%"></i><i class="pb-sa-gap" style="left:53.3341%;width:46.6659%"></i></span>
+        <span class="pb-sa-fig" id="sa40">€188,188</span>
+        <span class="pb-sa-less" id="sa40Less">€164,659 less</span>
+      </div>
+      <div class="pb-sa-row">
+        <span class="pb-sa-name">Started at 50</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:24.6853%"></i><i class="pb-sa-gap" style="left:24.6853%;width:75.3147%"></i></span>
+        <span class="pb-sa-fig" id="sa50">€87,102</span>
+        <span class="pb-sa-less" id="sa50Less">€265,746 less</span>
+      </div>
+    </div>
+    <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. Assumes 5% growth a year, contributions from that age to 66, and no pension to start with. Figures ignore charges and inflation.</p>
   </div>
 </div></section>
 
@@ -2067,7 +2138,64 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-bars.js?v=ec5d7e34"></script>
+<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pb-bars.js?v=29f2cb96"></script>
+<script>
+/* WHAT TIME DOES. One slider, one variable: the same monthly amount started
+   at three ages, projected to 66. The compound growth is the pension
+   calculator's own project(), copied here rather than shared because it is
+   the only page outside the calculators that needs it and the calculators'
+   copy is held byte-identical by tests/render-diff. Growth is the
+   calculator's default assumption, 5% a year, converted to a monthly rate
+   the same way: Math.pow(1 + g/100, 1/12) - 1. Nothing here is a projection
+   for any particular reader, which is what the note under it says. */
+(function () {
+  var slider = document.getElementById('saMonthly');
+  if (!slider || !window.PBPage || !window.PBBars) return;
+  var euro = window.PBPage.euro, AGES = [30, 40, 50], RETIRE = 66, GROWTH = 5;
+  var mRate = Math.pow(1 + GROWTH / 100, 1 / 12) - 1;
+
+  function project(months, startPot, monthly, rate) {
+    var grownPot = startPot * Math.pow(1 + rate, months);
+    var grownContrib = rate > 0 ? monthly * ((Math.pow(1 + rate, months) - 1) / rate) : monthly * months;
+    return grownPot + grownContrib;
+  }
+
+  function pots(monthly) {
+    return AGES.map(function (age) { return project((RETIRE - age) * 12, 0, monthly, mRate); });
+  }
+
+  var seen = false;
+  function paint(animate) {
+    var monthly = +slider.value;
+    document.getElementById('saMonthlyV').textContent = euro(monthly);
+    var p = pots(monthly), top = p[0];
+    AGES.forEach(function (age, i) {
+      var fig = document.getElementById('sa' + age);
+      var less = document.getElementById('sa' + age + 'Less');
+      var lessFmt = function (v) { return euro(v) + ' less'; };
+      if (animate) {
+        window.PBBars.countTo(fig, p[i], euro, 0);
+        if (i) window.PBBars.countTo(less, top - p[i], lessFmt, 0);
+      } else {
+        window.PBBars.countTo(fig, p[i], euro);
+        if (i) window.PBBars.countTo(less, top - p[i], lessFmt);
+      }
+      if (!i) less.textContent = '';
+    });
+  }
+
+  window.PBPage.wireRanges({ saMonthly: function (v) { return euro(v) + ' a month'; } },
+                           function () { paint(false); });
+  /* the figures count up once, when the section is first seen, and follow the
+     slider after that; with no script at all the markup already reads right */
+  window.PBBars.whenSeen(document.querySelector('.pb-sa'), function () {
+    if (seen) return;
+    seen = true;
+    paint(true);
+  });
+})();
+</script>
 <script src="assets/js/pb-jargon-bank.js?v=8ed5700e"></script>
 <script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
 </body>
