@@ -184,11 +184,74 @@ function paintJar() {
   }
 }
 
+/* THE JAR IS ALSO THE CONTROL. Pointing at a dot fills the jar to it, and
+   dragging keeps filling, so the picture and the control are one object
+   rather than a picture of what a control did.
+
+   The slider stays, and stays the accessible control: the jar is
+   aria-hidden, it cannot take focus and it has no keyboard behaviour, so
+   removing the slider would leave a keyboard or screen-reader user with no
+   way to set the figure at all. This is a second, pointer-only way to reach
+   the same value, which is why it sets the slider and lets the slider's own
+   input event do everything else. Nothing here works anything out: the value
+   it sets is a dot count times 52, the same unit the dots already stand for.
+
+   Everything is behind feature checks, because this file also runs in
+   tests/render-diff behind a DOM that has no layout, no computed styles and
+   no pointer events. There, setup does nothing and the sweep sees the page
+   exactly as it was. */
+function initJarPointer() {
+  var bodies = document.querySelectorAll('.pb-jar-body');
+  var grids = document.querySelectorAll('.pb-jar-dots');
+  var dots = document.querySelectorAll('.pb-jar-dot');
+  var slider = $('contribs');
+  if (!bodies.length || !grids.length || !dots.length || !slider) return;
+  var body = bodies[0], grid = grids[0];
+  if (!body.addEventListener || typeof window.PointerEvent === 'undefined' ||
+      typeof getComputedStyle !== 'function' || typeof grid.getBoundingClientRect !== 'function') return;
+
+  function valueAt(e) {
+    var cols = getComputedStyle(grid).gridTemplateColumns.split(/\s+/).filter(Boolean).length;
+    if (!(cols > 0)) return null;
+    var rows = Math.ceil(dots.length / cols);
+    var r = grid.getBoundingClientRect();
+    if (!(r.width > 0) || !(r.height > 0)) return null;
+    var col = Math.floor((e.clientX - r.left) / (r.width / cols));
+    var fromTop = Math.floor((e.clientY - r.top) / (r.height / rows));
+    if (col < 0) col = 0; else if (col > cols - 1) col = cols - 1;
+    if (fromTop < 0) fromTop = 0; else if (fromTop > rows - 1) fromTop = rows - 1;
+    /* the grid is flipped in CSS so it fills from the bottom: the top visual
+       row is the LAST row in document order */
+    var idx = (rows - 1 - fromTop) * cols + col;
+    if (idx > dots.length - 1) idx = dots.length - 1;
+    return (idx + 1) * 52;
+  }
+
+  function apply(e) {
+    var v = valueAt(e);
+    if (v === null || +slider.value === v) return;
+    slider.value = v;
+    slider.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  body.addEventListener('pointerdown', function (e) {
+    if (e.button && e.button !== 0) return;
+    try { body.setPointerCapture(e.pointerId); } catch (err) {}
+    apply(e);
+    e.preventDefault();
+  });
+  body.addEventListener('pointermove', function (e) {
+    if (!body.hasPointerCapture || !body.hasPointerCapture(e.pointerId)) return;
+    apply(e);
+  });
+}
+
 function initJar() {
   var slider = $('contribs');
   if (!slider || !$('pbJar')) return;
   slider.addEventListener('input', paintJar);
   paintJar();
+  initJarPointer();
 }
 
 initJar();
