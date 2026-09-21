@@ -254,6 +254,43 @@
 
     var bandLabel = function (b) { return b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max; };
 
+    /* THE RATE LADDER is static markup, so nothing on the page rewrites it and
+       nothing would notice if it drifted from the Department's table. This is
+       what notices: every rung is read back and compared with the module,
+       walked from the public band() rather than a list typed here twice. The
+       geometry is the teaching, so it is asserted too: each rung's teal runs
+       to the rate of the band below it and its amber is the step up, and the
+       bottom rung steps up from nothing. */
+    var LADDER = (function () {
+      var out = [], prev = null;
+      for (var a = 52; a >= 10; a--) {
+        var b = ENT.band(a);
+        if (!prev || b.min !== prev.min) { out.push(b); prev = b; }
+      }
+      return out;
+    })();
+    var rungs = [].slice.call(document.querySelectorAll('.yal-row'));
+    t.eq('ladder: a rung for every band the module has', rungs.length, LADDER.length);
+    var onScaleP = function (cents) { return Math.round(cents / SP.MAX_WEEKLY_CENTS * 100 * 1000) / 1000; };
+    LADDER.forEach(function (b, i) {
+      var rung = rungs[i], below = i + 1 < LADDER.length ? LADDER[i + 1].weeklyCents : 0;
+      var pick = function (cls) { return rung.querySelector(cls); };
+      t.eq('ladder ' + i + ': the band range is the module\'s',
+           pick('.yal-range').firstChild.textContent.trim(), bandLabel(b));
+      t.eq('ladder ' + i + ': the rate is the module\'s', pick('.yal-rate').textContent.trim(), euro2c(b.weeklyCents));
+      t.eq('ladder ' + i + ': the step up is the rate less the band below',
+           pick('.yal-gain').textContent.trim(), euro2c(b.weeklyCents - below) + ' more');
+      t.eq('ladder ' + i + ': the teal runs to the band below',
+           Math.round(parseFloat(pick('.yal-fill').style.width) * 1000) / 1000, onScaleP(below));
+      t.eq('ladder ' + i + ': the amber is exactly the step up',
+           Math.round(parseFloat(pick('.yal-step').style.width) * 1000) / 1000, onScaleP(b.weeklyCents - below));
+      t.eq('ladder ' + i + ': the amber starts where the teal ends',
+           Math.round(parseFloat(pick('.yal-step').style.left) * 1000) / 1000, onScaleP(below));
+    });
+    t.eq('ladder: the steps are uneven, which is the whole point of drawing it',
+         LADDER.map(function (b, i) { return b.weeklyCents - (i + 1 < LADDER.length ? LADDER[i + 1].weeklyCents : 0); })
+               .filter(function (v, _, all) { return v === all[0]; }).length < LADDER.length, true);
+
     /* S8 rows. drawdown = birth + 66, as the page works it out. The figures
        are the spec's, typed in; `basis` and the sentences are asserted
        against the module. */
@@ -441,6 +478,18 @@
       var lowC = hasM2 ? Math.min(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
       var highC = hasM2 ? Math.max(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
       var tail = highC > lowC ? (tca.weeklyCents < m2.weeklyCents ? 'm1' : 'm2') : null;
+      /* the ladder tag marks the reader's own band, and only when Method 2 is
+         a calculation that applies to them */
+      var hereMin = hasM2 && ya.band ? ya.band.min : null;
+      LADDER.forEach(function (b, i) {
+        var you = $('yal' + i + 'You');
+        t.eq(label + ': the ladder tag is on the ' + bandLabel(b) + ' rung only when that is the reader\'s band',
+             !you.hidden, b.min === hereMin);
+        if (b.min === hereMin) {
+          t.eq(label + ': the tag names the reader\'s own average', text('yal' + i + 'You'), 'Your average, ' + ya.average);
+        }
+      });
+
       var paidRow = { m1: res.award.basis !== 'method2', m2: hasM2 && res.award.basis !== 'method1' };
       ['m1', 'm2'].forEach(function (m) {
         t.eq(label + ': the amber tail is on ' + m + ' only when ' + m + ' is the lower of the two',

@@ -50,3 +50,39 @@
 @media(prefers-reduced-motion:reduce){
   .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
 }
+
+/* ---- the Yearly Average band ladder ----
+   Six bands, each drawn against the same scale as the bars above, the
+   maximum personal rate. Each rung's teal runs to the rate of the band
+   BELOW it and its amber is the step up, so the thing prose cannot show is
+   the thing the reader sees first: the steps are wildly uneven. Reaching an
+   average of 48 from 47 is worth EUR 5.80 a week; reaching 20 from 19 is
+   worth EUR 59.80. The whole ladder is static markup, because it is the
+   Department's table and does not depend on the reader; only the tag
+   marking their own band is written by the page, and only when Method 2
+   applies to them. The track is aria-hidden: the range, the rate and the
+   step are already read out as text. */
+.yal{margin:4px 0 0}
+.yal-cap{font-size:15px;line-height:1.7;color:var(--ink-2);margin:0 0 12px}
+.yal-row{display:grid;grid-template-columns:7.4em minmax(0,1fr) 5em 6.6em;
+  gap:12px;align-items:center;padding:5px 0}
+.yal-range{font-size:13.5px;color:var(--ink);font-weight:600}
+.yal-track{position:relative;display:block;height:10px;border-radius:99px;
+  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.yal-fill,.yal-step{position:absolute;top:0;bottom:0;display:block}
+.yal-fill{left:0;background:var(--aqua)}
+.yal-step{background:var(--amber-soft)}
+.yal-rate{font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.yal-gain{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
+.yal-you{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:99px;
+  background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);
+  font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.yal-you[hidden]{display:none}
+.yal-note{font-size:13px;line-height:1.6;color:var(--ink-3);margin:12px 0 0}
+@media(max-width:620px){
+  .yal-row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px;padding:8px 0}
+  .yal-range{grid-column:1;grid-row:1}
+  .yal-rate{grid-column:2;grid-row:1}
+  .yal-track{grid-column:1 / -1;grid-row:2}
+  .yal-gain{grid-column:1 / -1;grid-row:3}
+}

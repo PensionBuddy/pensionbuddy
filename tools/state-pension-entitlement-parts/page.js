@@ -100,11 +100,31 @@ function syncEntryBounds() {
    so this reads them out rather than working out where a band ends. */
 const bandLabel = b => b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max;
 
+/* The rate ladder in the explainer is static markup: it is the Department's
+   own table and does not depend on the reader. The one live part is the tag
+   marking the reader's own band, and this is the order of the rungs, read out
+   of the module by walking every average a reader can have, highest first, so
+   the tag can never point at the wrong rung if the table changes. A yearly
+   average is never more than 52, and below 10 falls in no band at all. */
+const LADDER_MINS = (function () {
+  const out = [];
+  let prev = null;
+  for (let a = 52; a >= 10; a--) {
+    const b = ENT.band(a);
+    if (!prev || b.min !== prev.min) { out.push(b.min); prev = b; }
+  }
+  return out;
+})();
+
 function show(id) {
   ['spHas', 'spNone', 'spUnfit'].forEach(k => { $(k).hidden = k !== id; });
 }
 
 function render() {
+  /* which rung of the rate ladder is the reader's, or -1: only a band that
+     would actually be used is marked, so nobody is shown standing on a rate
+     that does not apply to them */
+  let hereIdx = -1;
   const birth = +$('birth').value;
   const entryYear = +$('entry').value;
   const paid = +$('paid').value;
@@ -174,6 +194,8 @@ function render() {
     $('m1Fill').style.width = scale(tca.weeklyCents);
     $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
       euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
+    if (hasBoth(res) && ya.band) hereIdx = LADDER_MINS.indexOf(ya.band.min);
+
     const lowCents = hasBoth(res) ? Math.min(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const highCents = hasBoth(res) ? Math.max(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const tailOn = highCents > lowCents ? (tca.weeklyCents < res.method2.weeklyCents ? 'm1' : 'm2') : null;
@@ -255,6 +277,12 @@ function render() {
         ' a year. Only the Total Contributions Approach applies.';
     }
   }
+
+  LADDER_MINS.forEach(function (min, i) {
+    const you = $('yal' + i + 'You');
+    you.hidden = i !== hereIdx;
+    if (i === hereIdx) you.textContent = 'Your average, ' + res.yearlyAverage.average;
+  });
 
   /* One spoken summary rather than a dozen fragments, so a screen reader gets
      the point of the page. */

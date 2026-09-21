@@ -1546,6 +1546,42 @@ button{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
 }
+
+/* ---- the Yearly Average band ladder ----
+   Six bands, each drawn against the same scale as the bars above, the
+   maximum personal rate. Each rung's teal runs to the rate of the band
+   BELOW it and its amber is the step up, so the thing prose cannot show is
+   the thing the reader sees first: the steps are wildly uneven. Reaching an
+   average of 48 from 47 is worth EUR 5.80 a week; reaching 20 from 19 is
+   worth EUR 59.80. The whole ladder is static markup, because it is the
+   Department's table and does not depend on the reader; only the tag
+   marking their own band is written by the page, and only when Method 2
+   applies to them. The track is aria-hidden: the range, the rate and the
+   step are already read out as text. */
+.yal{margin:4px 0 0}
+.yal-cap{font-size:15px;line-height:1.7;color:var(--ink-2);margin:0 0 12px}
+.yal-row{display:grid;grid-template-columns:7.4em minmax(0,1fr) 5em 6.6em;
+  gap:12px;align-items:center;padding:5px 0}
+.yal-range{font-size:13.5px;color:var(--ink);font-weight:600}
+.yal-track{position:relative;display:block;height:10px;border-radius:99px;
+  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.yal-fill,.yal-step{position:absolute;top:0;bottom:0;display:block}
+.yal-fill{left:0;background:var(--aqua)}
+.yal-step{background:var(--amber-soft)}
+.yal-rate{font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.yal-gain{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
+.yal-you{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:99px;
+  background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);
+  font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.yal-you[hidden]{display:none}
+.yal-note{font-size:13px;line-height:1.6;color:var(--ink-3);margin:12px 0 0}
+@media(max-width:620px){
+  .yal-row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px;padding:8px 0}
+  .yal-range{grid-column:1;grid-row:1}
+  .yal-rate{grid-column:2;grid-row:1}
+  .yal-track{grid-column:1 / -1;grid-row:2}
+  .yal-gain{grid-column:1 / -1;grid-row:3}
+}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1708,6 +1744,46 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="expl reveal">
     <p><b>The Total Contributions Approach</b> counts everything you have, paid contributions, credited contributions and HomeCaring Periods, against a full record of 2,080, forty years. A full record gets the maximum personal rate, €299.30 a week from January 2026, and anything between the qualifying minimum and a full record gets a pro rata share. Credited contributions count up to 520, HomeCaring Periods up to 1,040, and the two together up to 1,040.</p>
     <p><b>The Yearly Average method</b> is the older one. It adds your paid and credited contributions, with no cap on credited contributions, divides by the years from the contribution year you first paid PRSI to the year before you turn 66, rounds to a whole number, half up, and reads a weekly rate off one of six bands. HomeCaring Periods do not count under it. Caring time is handled there by the separate Homemaker's Scheme, which this page leaves out.</p>
+    <p class="yal-cap">The six rate bands, and what each step up is worth.</p>
+    <div class="yal">
+      <div class="yal-row">
+        <span class="yal-range">48 or over<span class="yal-you" id="yal0You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:98.0621%"></i><i class="yal-step" style="left:98.0621%;width:1.9379%"></i></span>
+        <span class="yal-rate">€299.30</span>
+        <span class="yal-gain">€5.80 more</span>
+      </div>
+      <div class="yal-row">
+        <span class="yal-range">40 to 47<span class="yal-you" id="yal1You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:89.9098%"></i><i class="yal-step" style="left:89.9098%;width:8.1524%"></i></span>
+        <span class="yal-rate">€293.50</span>
+        <span class="yal-gain">€24.40 more</span>
+      </div>
+      <div class="yal-row">
+        <span class="yal-range">30 to 39<span class="yal-you" id="yal2You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:85.1320%"></i><i class="yal-step" style="left:85.1320%;width:4.7778%"></i></span>
+        <span class="yal-rate">€269.10</span>
+        <span class="yal-gain">€14.30 more</span>
+      </div>
+      <div class="yal-row">
+        <span class="yal-range">20 to 29<span class="yal-you" id="yal3You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:65.1520%"></i><i class="yal-step" style="left:65.1520%;width:19.9800%"></i></span>
+        <span class="yal-rate">€254.80</span>
+        <span class="yal-gain">€59.80 more</span>
+      </div>
+      <div class="yal-row">
+        <span class="yal-range">15 to 19<span class="yal-you" id="yal4You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:39.9599%"></i><i class="yal-step" style="left:39.9599%;width:25.1921%"></i></span>
+        <span class="yal-rate">€195.00</span>
+        <span class="yal-gain">€75.40 more</span>
+      </div>
+      <div class="yal-row">
+        <span class="yal-range">10 to 14<span class="yal-you" id="yal5You" hidden></span></span>
+        <span class="yal-track" aria-hidden="true"><i class="yal-fill" style="width:0.0000%"></i><i class="yal-step" style="left:0.0000%;width:39.9599%"></i></span>
+        <span class="yal-rate">€119.60</span>
+        <span class="yal-gain">€119.60 more</span>
+      </div>
+    </div>
+    <p class="yal-note">Below 10 the Yearly Average method gives nothing.</p>
     <p><b>Until the end of 2033 the Department runs both.</b> Method 1 is the Total Contributions Approach on its own. Method 2 mixes a share of the Yearly Average rate with a share of the TCA rate, and the Yearly Average share falls ten points a year, from 90% for a pension starting in 2025 to 10% for one starting in 2033. Whichever of the two is higher is paid. From 2034 only the Total Contributions Approach applies.</p>
     <p><b>The year your pension starts sets the mix</b>, once and for all. This page assumes you take the pension at 66, so the year you were born fixes it. Starting later, at 67 to 70, changes the mix and the rate, and is not modelled here. The qualifying minimum is the same under both methods: 520 paid contributions, and credits and HomeCaring Periods do not count toward it.</p>
   </div>
@@ -1871,11 +1947,31 @@ function syncEntryBounds() {
    so this reads them out rather than working out where a band ends. */
 const bandLabel = b => b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max;
 
+/* The rate ladder in the explainer is static markup: it is the Department's
+   own table and does not depend on the reader. The one live part is the tag
+   marking the reader's own band, and this is the order of the rungs, read out
+   of the module by walking every average a reader can have, highest first, so
+   the tag can never point at the wrong rung if the table changes. A yearly
+   average is never more than 52, and below 10 falls in no band at all. */
+const LADDER_MINS = (function () {
+  const out = [];
+  let prev = null;
+  for (let a = 52; a >= 10; a--) {
+    const b = ENT.band(a);
+    if (!prev || b.min !== prev.min) { out.push(b.min); prev = b; }
+  }
+  return out;
+})();
+
 function show(id) {
   ['spHas', 'spNone', 'spUnfit'].forEach(k => { $(k).hidden = k !== id; });
 }
 
 function render() {
+  /* which rung of the rate ladder is the reader's, or -1: only a band that
+     would actually be used is marked, so nobody is shown standing on a rate
+     that does not apply to them */
+  let hereIdx = -1;
   const birth = +$('birth').value;
   const entryYear = +$('entry').value;
   const paid = +$('paid').value;
@@ -1945,6 +2041,8 @@ function render() {
     $('m1Fill').style.width = scale(tca.weeklyCents);
     $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
       euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
+    if (hasBoth(res) && ya.band) hereIdx = LADDER_MINS.indexOf(ya.band.min);
+
     const lowCents = hasBoth(res) ? Math.min(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const highCents = hasBoth(res) ? Math.max(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const tailOn = highCents > lowCents ? (tca.weeklyCents < res.method2.weeklyCents ? 'm1' : 'm2') : null;
@@ -2026,6 +2124,12 @@ function render() {
         ' a year. Only the Total Contributions Approach applies.';
     }
   }
+
+  LADDER_MINS.forEach(function (min, i) {
+    const you = $('yal' + i + 'You');
+    you.hidden = i !== hereIdx;
+    if (i === hereIdx) you.textContent = 'Your average, ' + res.yearlyAverage.average;
+  });
 
   /* One spoken summary rather than a dozen fragments, so a screen reader gets
      the point of the page. */
