@@ -38,7 +38,10 @@ const PAGES = {
     html: 'director-calculator.html',
     parts: null,                                   // inline, hand-written page
     modules: [SHARED],
-    ranges: ['age', 'ret', 'sal', 'pot', 'contrib', 'growth'],
+    // 'split' is the share of the company contribution the reader puts into
+    // the pension rather than taking as salary; it drives the one line under
+    // the two columns and is swept like every other control on the page
+    ranges: ['age', 'ret', 'sal', 'pot', 'contrib', 'growth', 'split'],
     // no tax segment here: the relief is corporation tax, at a fixed rate
     settle: p => { p.drainRaf(); p.flushTimers(); p.drainRaf(); },
     apply(p, s) { for (const id of this.ranges) p.set(id, s[id]); },

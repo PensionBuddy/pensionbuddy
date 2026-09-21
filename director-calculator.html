@@ -1679,6 +1679,15 @@ button{font-family:inherit}
 @media(max-width:920px){
   .pb-statrow{gap:26px 28px}
 }
+
+/* the continuum between the two ends the card already names: a split the
+   reader drags, with no point on it marked as the right one */
+.vs-split{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.vs-split-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px}
+.vs-split-head label{font-size:14px;font-weight:600;color:var(--ink)}
+.vs-split-val{font-size:14px;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.vs-split-out{margin:10px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.vs-split-out b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1786,6 +1795,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <div class="amt" id="pensionFull">€0</div>
           <div class="lab" id="pensionLab">goes to work for your retirement, in full</div>
         </div>
+      </div>
+      <div class="vs-split">
+        <div class="vs-split-head"><label for="split">Or split it between the two</label><span class="vs-split-val" id="splitV">half and half</span></div>
+        <input type="range" id="split" min="0" max="100" step="5" value="50" aria-valuetext="half into the pension">
+        <p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€9,600</b> in your pocket. €20,000 into the pension is <b>€20,000</b> for your retirement.</p>
       </div>
       <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
     </div>
@@ -1952,7 +1966,8 @@ const chart={
 
 /* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
    Salary, pot and contribution have no wording of their own and take paintSlider's euro fallback. */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
+const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%',
+  split:v=>v===0?'all as salary':v===100?'all into the pension':v===50?'half into the pension':v+'% into the pension'};
 const paint=el=>paintSlider(el,VALTEXT);
 
 /* the maths (unchanged) */
@@ -1993,13 +2008,27 @@ function calc(){
   tween('pensionFull',contrib,euro);
   $('vsSub').textContent='Your €'+contrib.toLocaleString('en-IE')+' company contribution, taken as salary instead.';
 
+  /* The two columns above are the two ends: all of it as salary, all of it
+     into the pension. This is the line between them, at whatever split the
+     reader drags to. It is the same two rates the columns use, 48p in the
+     pocket for salary and the whole euro for the pension, applied to a part
+     rather than the whole, so nothing new is being worked out here. No split
+     is recommended and none is marked: the reader is shown what each one
+     does, which is what the rest of the card does too. */
+  const splitPct=+$('split').value;
+  const toPension=contrib*splitPct/100, asSalary=contrib-toPension;
+  $('splitV').textContent=VALTEXT.split(splitPct);
+  $('splitOut').innerHTML=euro(asSalary)+' as salary is <b>'+euro(asSalary*0.48)+
+    '</b> in your pocket. '+euro(toPension)+' into the pension is <b>'+euro(toPension)+
+    '</b> for your retirement.';
+
   const maxPension=sal*(2/3);
   $('maxOut').innerHTML='A pension of up to about <b>'+euro(maxPension)+' a year</b>, two-thirds of your salary.';
 
   const v=[];
   for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);v.push(project(m,pot,monthly,mRate));}
   chart.setTarget(v,age,ret);
-  ['age','ret','sal','pot','contrib','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
+  ['age','ret','sal','pot','contrib','growth','split'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=p018>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
