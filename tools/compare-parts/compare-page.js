@@ -339,6 +339,15 @@ function pbScaleValue(id) {
 }
 
 function renderScale() {
+  /* which year the lanes are drawn for: they already move with the
+     auto-enrolment year slider, and this says so, so a reader dragging it can
+     see what changed and why */
+  const sub = $('pbScaleSub');
+  if (sub) {
+    const y = +$('phase').value;
+    sub.textContent = 'One year of contributions each, at year ' + y + (y >= 10 ? '+' : '') +
+      ' of the phase-in, on the same scale. The longer bar reaches the end of the scale.';
+  }
   const ae = pbScaleValue('aeTotal');
   const pp = pbScaleValue('ppTotal');
   /* the bars read parsed text, so a parse failure would give both of them 0 */
