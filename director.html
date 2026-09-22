@@ -1395,9 +1395,9 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    Buddy conversation in it. It was two columns, with a decorative
    icon tile in the right-hand one (or, on the home page, a projected-pot
    card). Every word inside the phone is lifted from this page's own
-   signed-off Ask Buddy answers, and the closing turn is the one that
-   says Buddy never advises - so the mockup cannot claim anything the
-   site does not already say.
+   signed-off Ask Buddy answers, so the mockup cannot claim anything the
+   site does not already say. It closes on a plain link to the booking
+   page rather than on a turn about what Buddy will not do.
    ============================================================ */
 .hero-grid{display:block;max-width:760px;margin:0 auto;text-align:center}
 .hero-grid .eyebrow,.hero-grid .hero-cta,.hero-grid .trust,.hero-grid .credline{
@@ -1420,6 +1420,14 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .msg.buddy{align-self:flex-start;background:var(--surface-2);color:var(--ink);
   border:1px solid var(--line);border-bottom-left-radius:5px}
 .hero-phone .hc-note{margin-top:14px;text-align:center}
+/* The chat closes on a plain link rather than on a turn about what Buddy will
+   not do. Left-aligned like a Buddy bubble, but unboxed, so it reads as the
+   component's own footer and not as another thing Buddy said. */
+.pb-phone-link{align-self:flex-start;margin:2px 0 0;padding:0 2px;
+  font-size:13px;font-weight:600;line-height:1.5}
+.pb-phone-link a{color:var(--teal-700);text-decoration:underline;
+  text-underline-offset:3px;text-decoration-thickness:1px}
+.pb-phone-link a:hover{text-decoration-thickness:2px}
 @media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 
 /* ============================================================
@@ -1592,8 +1600,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="phone-chat">
         <p class="msg them">How much can my company actually contribute?</p>
         <p class="msg buddy">Often a lot more than you&rsquo;d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions.</p>
-        <p class="msg them">Can Buddy tell me what I should do?</p>
-        <p class="msg buddy">That would be advice, and Buddy sticks to general information. What&rsquo;s right depends on your own situation &mdash; which is exactly what the free 20&#8209;minute call with Damian is for.</p>
+        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian to learn more</a></p>
       </div>
     </div>
   </div>
@@ -1898,8 +1905,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   if(!qs.length)qs=SHARED.slice();
   qs=qs.slice(0,5);
-  qs.push({q:'Can Buddy tell me what I should do?',
-    a:'<p>That would be advice, and Buddy sticks to general information. What\u2019s right depends on your own situation \u2014 which is exactly what the free 20\u2011minute call with Damian is for.</p>'});
 
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';

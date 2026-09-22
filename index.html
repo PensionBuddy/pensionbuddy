@@ -1337,9 +1337,9 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    Buddy conversation in it. It was two columns, with a decorative
    icon tile in the right-hand one (or, on the home page, a projected-pot
    card). Every word inside the phone is lifted from this page's own
-   signed-off Ask Buddy answers, and the closing turn is the one that
-   says Buddy never advises - so the mockup cannot claim anything the
-   site does not already say.
+   signed-off Ask Buddy answers, so the mockup cannot claim anything the
+   site does not already say. It closes on a plain link to the booking
+   page rather than on a turn about what Buddy will not do.
    ============================================================ */
 .hero-grid{display:block;max-width:760px;margin:0 auto;text-align:center}
 .hero-grid .eyebrow,.hero-grid .hero-cta,.hero-grid .trust,.hero-grid .credline{
@@ -1362,6 +1362,14 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .msg.buddy{align-self:flex-start;background:var(--surface-2);color:var(--ink);
   border:1px solid var(--line);border-bottom-left-radius:5px}
 .hero-phone .hc-note{margin-top:14px;text-align:center}
+/* The chat closes on a plain link rather than on a turn about what Buddy will
+   not do. Left-aligned like a Buddy bubble, but unboxed, so it reads as the
+   component's own footer and not as another thing Buddy said. */
+.pb-phone-link{align-self:flex-start;margin:2px 0 0;padding:0 2px;
+  font-size:13px;font-weight:600;line-height:1.5}
+.pb-phone-link a{color:var(--teal-700);text-decoration:underline;
+  text-underline-offset:3px;text-decoration-thickness:1px}
+.pb-phone-link a:hover{text-decoration-thickness:2px}
 .pb-phone-replies{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
 .pb-chip-hero{display:inline-flex;align-items:center;min-height:44px;max-width:88%;
   padding:10px 14px;font-size:13.5px;line-height:1.5;border-radius:14px;
@@ -1600,14 +1608,13 @@ button{font-family:inherit}
       <div class="phone-chat">
         <p class="msg them">Is the first chat really free?</p>
         <p class="msg buddy">Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions.</p>
-        <p class="msg them">Can Buddy tell me what I should do?</p>
-        <p class="msg buddy">That would be advice, and Buddy sticks to general information. What&rsquo;s right depends on your own situation &mdash; which is exactly what the free 20&#8209;minute call with Damian is for.</p>
         <p class="msg buddy">Which of these sounds most like you?</p>
         <div class="pb-phone-replies">
           <a class="pb-chip-hero" href="starter.html" aria-label="Just starting out: starting a pension">Just starting out</a>
           <a class="pb-chip-hero" href="tracker.html" aria-label="Changed jobs a few times: finding old pensions">Changed jobs a few times</a>
           <a class="pb-chip-hero" href="director.html" aria-label="Run my own company: pensions for directors">Run my own company</a>
         </div>
+        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian to learn more</a></p>
       </div>
     </div>
     <div class="hc-note">Illustration only &middot; the value of investments can fall as well as rise</div>
@@ -2042,8 +2049,6 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   });
   if(!qs.length)qs=SHARED.slice();
   qs=qs.slice(0,5);
-  qs.push({q:'Can Buddy tell me what I should do?',
-    a:'<p>That would be advice, and Buddy sticks to general information. What\u2019s right depends on your own situation \u2014 which is exactly what the free 20\u2011minute call with Damian is for.</p>'});
 
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
