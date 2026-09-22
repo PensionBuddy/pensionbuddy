@@ -1639,6 +1639,33 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .nav-tick{display:none}
   .nav-links a.lnk{padding:12px 7px}
 }
+
+/* ============================================================
+   REGULATORY LOCKUP (.pb-reg). The trust line under the hero call to action
+   on the home page and the three audience pages: the regulator line and the
+   adviser's name set as one mark, with each page's own "30 years" wording
+   kept beside the name. Type only, no crest, harp or badge: a regulated firm
+   may not use the Central Bank's. The regulator line links to the register
+   the site already names in its text (registers.centralbank.ie).
+   Two lines from 561px up. At 560px and below the "30 years" words take a
+   third line of their own and the dot goes, so the line never breaks inside
+   them ("30 / years") and never starts with a dot.
+   It is a <div>, not a <p>, so the jargon chips never turn "QFA" into a
+   button here. Byte-identical on index, starter, director and tracker.
+   ============================================================ */
+.pb-reg{display:flex;flex-direction:column;align-items:center;margin-top:22px;
+  font-size:.875rem;line-height:1.4;color:var(--ink-2);text-align:center;
+  font-variant-numeric:tabular-nums}
+.pb-reg > a{display:inline-block;padding:3px 0;color:var(--ink);font-weight:600;
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+  text-decoration-color:var(--ink-3)}
+.pb-reg > a:hover{color:var(--teal-700);text-decoration-color:currentColor}
+.pb-reg b{color:var(--ink);font-weight:600}
+@media(max-width:560px){
+  .pb-reg-sep{display:none}
+  .pb-reg-yrs{display:block}
+}
+@media(max-width:420px){.pb-reg{margin-top:14px;font-size:.82rem}}
 </style>
 
 <script>
@@ -1683,7 +1710,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <a class="btn btn-acc" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <a class="btn btn-ghost" href="director-calculator.html">Try the director calculator</a>
     </div>
-      <div class="credline reveal" style="transition-delay:.28s"><b>Damian Condon, QFA</b><span class="sep"></span>Regulated by the Central Bank of Ireland<span class="sep"></span>30 years in financial services</div>
+      <div class="pb-reg reveal" style="transition-delay:.28s">
+        <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
+        <span class="pb-reg-who"><b>Damian Condon, QFA</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
+      </div>
   </div>
   <div class="hero-phone reveal" style="transition-delay:.22s">
     <div class="phone">

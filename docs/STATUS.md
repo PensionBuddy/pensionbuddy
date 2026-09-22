@@ -31,7 +31,7 @@ twice is reverted and logged here. The audit itself is
 
 | # | Item | Result | Commit |
 |---|---|---|---|
-| 3 | Regulatory lockup | not reached | |
+| 3 | Regulatory lockup | done: regulator line and name as one type-only mark under the hero call to action, four pages, linked to the register | |
 | 4 | Result sentence | not reached | |
 | 15 | Success motion | not reached | |
 | 5 | Mobile booking bar | not reached | |
@@ -70,6 +70,8 @@ says it is Damian's: "Damian has spent 30 years advising people on pensions"
 ## New copy needing Damian's sign-off
 
 Every new user-facing string this run adds is listed here by item.
+
+- #3: the register link's accessible name (read by screen readers, not shown): "Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie". Nothing else in the lockup is new wording: "Regulated by the Central Bank of Ireland", "Damian Condon, QFA" and each page's own "30 years looking after Irish savers" / "30 years in financial services" are the existing strings, rearranged. The link itself is new: the site only ever named registers.centralbank.ie as text, so there was no existing href to reuse; it goes to https://registers.centralbank.ie/ in the same tab with rel="noopener", like the site's other outside links.
 
 ---
 
