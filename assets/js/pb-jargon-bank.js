@@ -135,7 +135,7 @@
    "The pension the State of Texas posts over to Irish cousins.",
    "A payment that arrives with a card from the President."
   ],
-  "buddySays": "It is not means tested, so savings or a work pension do not cut it back. A full personal rate comes to roughly €15,000 a year.",
+  "buddySays": "It is not means tested, so savings or a work pension do not cut it back. A full personal rate comes to €15,564 a year.",
   "difficulty": 1
  },
  {
