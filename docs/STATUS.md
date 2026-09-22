@@ -6,6 +6,41 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 17 — 2026-09-22 · Four fixes: the slider thumb, a photo, the advice turn, the chat on scroll
+
+Damian's brief, four items. Branch `claude/pensionbuddy-4-fixes-cbb679`. The
+calculator disclaimers were locked and are byte-identical: the md5 over the
+whole set of "the value of investments can fall as well as rise" lines is the
+same before and after.
+
+| Item | Status | Note |
+|---|---|---|
+| Slider thumb, off-centre | **Fixed, sitewide** | Chrome lays `::-webkit-slider-thumb` against the TOP of `::-webkit-slider-runnable-track`, so the 28px thumb on the 6px track hung `(28-6)/2 = 11px` below the line. There was no `margin-top` anywhere: the hack was never there to be lost, which is why this is a different bug from Run 8 (fill boundary, horizontal) and Run 9 (two-tone track flattened by a later colour pass). Measured in both engines by repainting thumb and track in flat colours that touch no geometry property and reading the two centres out of the pixels: **Chrome +11.00px in 102 of 102 measurements** (6 calculator pages × every slider × 0/50/100%), no variance; **Firefox 0.00px in 81 of 81**. After: **0.00px in all 102 and all 81**. |
+| The value, written as its formula | **Done** | `margin-top:calc((6px - 28px) / 2)`, not `-11px`, so the two numbers it depends on sit beside it. The offset does not depend on the input's own height — which is not uniform: `.field input{min-height:52px}` beats the 48px rule for most sliders, the rest stay 48px, and both measure the same 11px. |
+| Firefox | **Correctly left alone** | `::-moz-range-thumb` is centred on the track by Firefox itself. A `margin-top` copied onto it would push it off by exactly the amount this removes. There was none to remove; checked across every thumb rule on every page. |
+| Where it had to go | **All 16 pages** | The block was byte-identical in all sixteen, which is the likeliest reason earlier slider work did not stick everywhere. **Recommendation, deliberately not done: this stylesheet is duplicated sixteen ways with no shared file.** Consolidating it is a refactor of its own and was not smuggled into a bug fix. |
+| Off-duty photo | **Removed** | `strip-rocky-head-tilt`, "Buddy tilting his head at the camera indoors": the figure, its aria-hidden marquee clone, both asset files and its entry in `tools/prepare-photos.py`. Eight photos remain, real and clone counts equal at 8 and 8, which is what `pbMarquee`'s `translateX(-50%)` over a `width:max-content` track needs. No reference survives anywhere. |
+| The advice turn | **Cut** | "Can Buddy tell me what I should do?" / "That would be advice, and Buddy sticks to general information…" gone from the hero chat on index, starter, director and tracker, and from the Ask Buddy question bank on all sixteen pages. The chat now closes on a plain line, "Book a call with Damian to learn more" → `booking.html`. Nothing is orphaned: the widget's footer already carried both halves of what the deleted answer said, and the bank is built from the page's own FAQ before that entry was appended. |
+| The comment that described it | **Rewritten** | The hero CSS comment on all four chat pages said the closing turn was the one that says Buddy never advises. It no longer exists, so the comment no longer claims it does. |
+| Close variants | **Flagged, not removed — needs Damian** | `games/buddys-run.html` "Buddy sticks to the facts. What any of it means for you is a conversation" (the lead-in to that game's booking button); `glossary.html` "Buddy gives you the facts; the free call is where the advice happens"; the Ask Buddy widget's own standing labels on all 16 pages ("Quick answers. General info only — never advice." and "Buddy shares general information. For advice about your own situation, that's a job for Damian."); and the two games' "A game, and general information. Nothing here is personal financial advice." Each is either a sentence that breaks when cut, or a page's only information-not-advice statement. |
+| Chat plays on scroll | **Built** | Each message arrives as the reader reaches it and un-arrives on the way back up. IntersectionObserver only. Its own class and observer, deliberately not `.reveal`: that one `unobserve`s on first sight and force-reveals everything at 900ms. The gate hangs off a class the script sets on `<html>`, so with no JS every bubble is simply visible; under reduced motion the class is never set, which is also what makes `verify.py`'s screenshot pass deterministic, since it forces `prefers-reduced-motion`. |
+| Two bugs the testing found | **Fixed** | The gate was first a `.pb-said` rule competing with the directional ones — `.msg.them` is four classes and `.pb-said` three, so a sent bubble stayed pinned at its offset forever; the gate is now on `:not(.pb-said)` and no specificity race is possible. And the first safety net revealed the chat whenever it was visible and unplayed, which is the normal state of a chat still below the line: it fired before the reader scrolled and was exactly the fire-once-on-load behaviour the brief rejects. The net now waits on the observer never having reported at all. |
+| How the animation was proved | **Real frames, not virtual time** | IntersectionObserver delivery is tied to the rendering lifecycle, and under `--virtual-time-budget` Chrome runs no frames, so the chat never plays and a run there proves nothing. Driven instead on real frames with a slow image holding the load event open. index.html down: `00000 → 11000 → 11100 → 11110 → 11111`; back up: `11110 → 11100 → 11000 → 00000`. In order, no gaps, symmetric. starter, director and tracker the same. |
+| Pre-existing red, NOT from this run | **Needs a decision** | `tests/runner.test.py` already fails at `d71c1b9`, before any of this: that commit raised the compare gate 141 → 151 in `tests/run-tests.py:72` and left `tests/runner.test.py` pinning the old number at lines 155, 159 and 201. Proved by running it against a clean `git archive HEAD` tree: 73 passed, 4 failed. Not touched here — the suite really does make 151 assertions, so the fix is to update the three pinned strings, not to lower the gate. |
+
+**Verified:** `tools/verify.py` 18 pages at 375 / 1360 / 1440 — **0 FAIL**, 1 WARN
+(terms.html A1, the pre-existing NEEDS-DAMIAN-INPUT placeholder, unchanged from
+baseline). `tests/run-tests.py` all suites pass. `tests/build.test.py` 69 pass.
+`tests/games.test.py` 157 pass. `tools/stamp-images.py --check` and
+`tools/sync-chrome.py --check` clean. The three `pagebuild.py` pages regenerate
+byte-identically from the skeleton.
+
+**No automated gate in this repo can see whether the slider thumb is centred** —
+the node render-diff has no layout, `browser-diff.py` reads inline style only,
+and nothing in `tests/` or `verify.py` asserts on computed slider style. The
+proof is the pixel measurement above and the captures; a future regression here
+will be silent again.
+
 # Run 16 — 2026-09-19 · One case, one face, and the bands
 
 Damian's brief, against full-page captures of Stripe, Plaid, Ramp, Revolut,
