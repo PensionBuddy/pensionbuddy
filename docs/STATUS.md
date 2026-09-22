@@ -6,6 +6,73 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 19 — 2026-09-22/23 · Overnight build of the interactive audit
+
+Damian's overnight brief. Branch `claude/interactive-audit-2-efbbbb`, pushed as
+`origin/claude/interactive-audit-2`. Not merged: Damian reviews first. Built
+one item at a time in the order the brief gives, each gated, render-diffed if
+protected, committed and pushed before the next. An item that fails its gate
+twice is reverted and logged here. The audit itself is
+`docs/INTERACTIVE-AUDIT-2.md`.
+
+**RESUME FROM:** the first row below marked "not reached". Every row marked
+"done" is committed and pushed.
+
+## Fixes
+
+| Fix | Result | Commit |
+|---|---|---|
+| "roughly €15,000" → €15,564 (pension calculator assumptions, jargon bank) | Done | `f939b6a` |
+| Buddy's Run "floor" → "qualifying minimum" | Done | `f939b6a` |
+| PRSI rate | **Report only. 4% is out of date.** Department of Social Protection, *PRSI Contribution Rates and User Guide 2026* (SW14, January 2026): Class A employee and Class S both "4.2% until 30 September 2026 (4.35% from 1 October 2026)"; for 2026 self-employed income the blended rate is 4.2375%. The director calculator's "up to 52% (40% income tax, 8% USC, 4% PRSI)" and its 48c-in-the-pocket split both rest on 4%. Calculator maths not changed. #21 therefore not built; #25 skipped for the same reason (see below). | — |
+| CSO coverage | **Report only. Newer release exists.** CSO *Pension Coverage 2025*, released 17 April 2026, Q3 2025: 68% of employees and 57% of the self-employed and/or assisting relatives have pension cover. director.html still cites Q3 2021 (67.4% / 54.6%). Check the definitions match before swapping. | — |
+
+## Build list
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 3 | Regulatory lockup | not reached | |
+| 4 | Result sentence | not reached | |
+| 15 | Success motion | not reached | |
+| 5 | Mobile booking bar | not reached | |
+| 1 | Results peek bar | not reached | |
+| 14 | 3 : 3 : 1 split | not reached | |
+| 8 | Transition glide | not reached | |
+| 7 | Relief limit ladder | not reached | |
+| 11 | State Pension on top of monthly income | not reached | |
+| 6 | Gap band drag | not reached | |
+| 2 | Relief widget | not reached | |
+| 10 | TCA capped part | not reached | |
+| 19 | Phase staircase | not reached | |
+| 16 | 20% → 40% marker | not reached | |
+| 22 | Glossary index + entitlement jump row | not reached | |
+| 23 | Drawdown mini calc | not reached | |
+| 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
+| 24 | Buddy's facts links | not reached | |
+| 13 | Product band tabs | not reached | |
+| 20 | Screenshot arrows | not reached | |
+| 27 | "Before 6 April?" control | not reached | |
+| 26 | Two-tone headlines | not reached | |
+| 28 | Footer wordmark | not reached | |
+| 18 | Mess to order | not reached | |
+| 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
+| 17 | Scrollytelling | not reached | |
+| — | Re-shoot product rasters after the calculator changes | not reached | |
+
+## Held, not built
+
+#12 (cross-page memory: privacy notice wording drafted only), #9 (costs
+card: wording drafted only, from the Terms of Business), every N item (N9
+and N11 dropped entirely). The home hero's "30 years" is untouched; the repo
+says it is Damian's: "Damian has spent 30 years advising people on pensions"
+(index.html `#story`) and "I've spent thirty years…" (`#damian`).
+
+## New copy needing Damian's sign-off
+
+Every new user-facing string this run adds is listed here by item.
+
+---
+
 # Run 18 — 2026-09-22 · The new logo pack, and the flagged advice lines cut
 
 Damian's second brief of the day, in two halves. Branch
