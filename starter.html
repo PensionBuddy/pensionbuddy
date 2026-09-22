@@ -1008,9 +1008,25 @@ body{font-size:1rem;line-height:1.7}
 .seg button{min-height:48px}
 summary{min-height:56px;padding-top:16px;padding-bottom:16px}
 
-/* the sliders are the main control on the site - 26px was too small to hit */
+/* the sliders are the main control on the site - 26px was too small to hit.
+
+   CENTRING, and why it kept coming back. Chrome lays ::-webkit-slider-thumb out
+   against the TOP of ::-webkit-slider-runnable-track, not its centre, so a thumb
+   taller than the track hangs below the line by (thumb - track) / 2 unless a
+   margin-top pulls it back. Measured, not eyeballed: the 28px thumb on the 6px
+   track sat exactly 11px low on every slider of every page, at 0%, 50% and 100%.
+   One value is right for all of them, for a stronger reason than "nothing here is
+   responsive": the thumb is placed against the track, so the error is (thumb -
+   track) / 2 and the input's own height does not enter into it. That matters,
+   because the heights are not uniform - .field input{min-height:52px} below wins
+   over the 48px here for every slider inside a .field, and the rest stay 48px.
+   Both measure the same 11px. It is written below as the formula rather than
+   as -11px so that whoever next changes the 28px can see the two numbers it has to
+   agree with: the runnable-track height set above, and this thumb's own height.
+   Firefox centres ::-moz-range-thumb on the track by itself and measures 0px off.
+   It must NOT be given a margin-top: that would push it off by exactly that much. */
 input[type=range]{height:48px;background-position:0 center}
-input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
+input[type=range]::-webkit-slider-thumb{width:28px;height:28px;margin-top:calc((6px - 28px) / 2)}
 input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .field input,.ffield input,.email-cap input{min-height:52px;font-size:1rem}
 
