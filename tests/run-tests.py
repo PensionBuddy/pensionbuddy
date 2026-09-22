@@ -69,7 +69,7 @@ BREAK = os.environ.get('PB_BREAK')
 #          the exact number of assertions the suite makes)
 SUITES = {
     'compare': (['/assets/js/pension-tax-relief.js', '/assets/js/autoenrolment.js'],
-                '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare'], 141),
+                '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare'], 151),
     'state-pension': (['/assets/js/state-pension.js'],
                       '/tests/state-pension.test.js', ['PBStatePension'], 80),
     'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],

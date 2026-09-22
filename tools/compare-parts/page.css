@@ -109,3 +109,29 @@
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}
 .results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
+
+/* ---- everything paid in, by 66 ----
+   The lanes above race one year; this races all of them. Same two colours,
+   so the reader reads it as the same comparison over a longer run, and the
+   figures are text rather than bars alone because nothing else on the page
+   carries them. */
+.pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
+.pb-my-card h3{margin:0 0 4px}
+.pb-my-sub{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0 0 16px}
+.pb-my-lane{display:grid;grid-template-columns:8.6em minmax(0,1fr) 6.4em;gap:12px;align-items:center;margin-bottom:10px}
+.pb-my-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pb-my-track{position:relative;display:block;height:12px;border-radius:99px;
+  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:99px;
+  transition:width .9s cubic-bezier(.45,0,.25,1)}
+#pbMyAeBar{background:var(--teal-900)}
+#pbMyPpBar{background:var(--teal)}
+.pb-my-fig{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-my-note{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+@media(max-width:560px){
+  .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
+  .pb-my-lab{grid-column:1;grid-row:1}
+  .pb-my-fig{grid-column:2;grid-row:1}
+  .pb-my-track{grid-column:1 / -1;grid-row:2}
+}
+@media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}

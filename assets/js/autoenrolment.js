@@ -202,6 +202,53 @@
     };
   }
 
+  /* EVERY YEAR TO PENSION AGE, ADDED UP. compare() answers one year; this
+     walks the years from the reader's age to pension age and adds them,
+     growing each year's contributions to pension age at a rate the CALLER
+     supplies, because this module has no opinion about growth and should not
+     acquire one. The page passes the same assumption the calculators use.
+
+     Both paths change as the years pass and both changes are the module's
+     own: auto-enrolment's rates phase up through AE_PHASES, and the personal
+     pension's relief limit rises with the age bands. Everything else is held
+     where the reader put it, which is the assumption the page has to name:
+     salary, the personal contribution and any employer match do not move.
+
+       age, retireAge   the reader's age now and the age the money is for
+       firstYear        the auto-enrolment scheme year the first of these is
+       growth           a yearly rate as a fraction, 0.05 for 5%
+
+     Contributions are grown from the end of the year they are paid, so the
+     last year's are not grown at all. Nothing is deducted for charges or
+     inflation, which the page also says. */
+  function cumulative(opts) {
+    var years = Math.max(0, Math.round(opts.retireAge - opts.age));
+    var growth = opts.growth || 0;
+    var ae = 0, personal = 0, i, one, grown;
+    for (i = 0; i < years; i++) {
+      one = compare({
+        salary: opts.salary,
+        year: opts.firstYear + i,
+        age: opts.age + i,
+        srcop: opts.srcop,
+        taxRate: opts.taxRate,
+        gross: opts.gross,
+        employerMatchPct: opts.employerMatchPct
+      });
+      grown = Math.pow(1 + growth, years - 1 - i);
+      ae += one.autoEnrolment.totalIn * grown;
+      personal += one.personal.totalIn * grown;
+    }
+    var diff = personal - ae;
+    return {
+      years: years,
+      autoEnrolment: ae,
+      personal: personal,
+      difference: Math.abs(diff),
+      larger: Math.abs(diff) < 0.005 ? 'equal' : (diff > 0 ? 'personal' : 'autoEnrolment')
+    };
+  }
+
   return {
     AE_SALARY_CAP: AE_SALARY_CAP,
     AE_PHASES: AE_PHASES,
@@ -211,6 +258,7 @@
     matchedGross: matchedGross,
     aboveCap: aboveCap,
     compare: compare,
+    cumulative: cumulative,
     combined: combined
   };
 }));

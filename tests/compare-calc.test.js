@@ -285,6 +285,61 @@
     return Math.abs(p.employee / p.state - 3) < 1e-9 && p.employee === p.employer;
   }) ? 1 : 0, 1);
 
+  // ------------------------------------------------- every year, added up
+  group('EXTRA C  cumulative(): compare() over the years to pension age');
+  var CUM = { salary: 50000, firstYear: 1, age: 35, retireAge: 66,
+              srcop: 44000, gross: 3000, employerMatchPct: 0 };
+  function withOpts(extra) {
+    var o = {}, k;
+    for (k in CUM) o[k] = CUM[k];
+    for (k in extra) o[k] = extra[k];
+    return o;
+  }
+  eq('one year for every year between the two ages',
+     Compare.cumulative(withOpts({ growth: 0.05 })).years, 31);
+  eq('nobody at pension age has a year left',
+     Compare.cumulative(withOpts({ age: 66, growth: 0.05 })).years, 0);
+  eq('and nothing is added up for them',
+     Compare.cumulative(withOpts({ age: 66, growth: 0.05 })).autoEnrolment, 0);
+  eq('past pension age is not a negative run',
+     Compare.cumulative(withOpts({ age: 70, growth: 0.05 })).years, 0);
+
+  /* With no growth it must be exactly compare(), year by year, added up:
+     that is what makes the growth a wrapper around the module's own maths
+     rather than a second opinion about it. */
+  var flatAe = 0, flatPp = 0;
+  for (var cy = 0; cy < 31; cy++) {
+    var one = Compare.compare({ salary: CUM.salary, year: CUM.firstYear + cy, age: CUM.age + cy,
+                                srcop: CUM.srcop, gross: CUM.gross, employerMatchPct: CUM.employerMatchPct });
+    flatAe += one.autoEnrolment.totalIn;
+    flatPp += one.personal.totalIn;
+  }
+  eq('no growth is the plain sum of every year, auto-enrolment',
+     Compare.cumulative(withOpts({ growth: 0 })).autoEnrolment, flatAe);
+  eq('no growth is the plain sum of every year, personal pension',
+     Compare.cumulative(withOpts({ growth: 0 })).personal, flatPp);
+
+  /* The last year's contributions are not grown: a one-year run is that one
+     year at face value, whatever the growth rate. */
+  var oneYear = Compare.compare({ salary: CUM.salary, year: CUM.firstYear, age: 65,
+                                  srcop: CUM.srcop, gross: CUM.gross, employerMatchPct: CUM.employerMatchPct });
+  eq('a single year is that year, ungrown',
+     Compare.cumulative(withOpts({ age: 65, growth: 0.05 })).autoEnrolment, oneYear.autoEnrolment.totalIn);
+
+  eq('growth only ever adds', Compare.cumulative(withOpts({ growth: 0.05 })).autoEnrolment >
+     Compare.cumulative(withOpts({ growth: 0 })).autoEnrolment ? 1 : 0, 1);
+  /* The same number of years starting at scheme year 10 is worth MORE than
+     starting at year 1, because the first nine years of the phase-in are
+     below the 6% the scheme settles at. The run that skips them is larger. */
+  eq('a run that starts after the phase-in beats one that lives through it',
+     Compare.cumulative(withOpts({ firstYear: 10, growth: 0 })).autoEnrolment >
+     Compare.cumulative(withOpts({ growth: 0 })).autoEnrolment ? 1 : 0, 1);
+  /* this suite compares under a tolerance, which is a numeric test, so the
+     verdict is asserted as the answer to a question rather than as a word */
+  var cum = Compare.cumulative(withOpts({ growth: 0.05 }));
+  eq('the verdict names whichever of the two is larger',
+     cum.larger === (cum.personal > cum.autoEnrolment ? 'personal' : 'autoEnrolment') ? 1 : 0, 1);
+
   // ------------------------------------------------------------ relief bands
   group('EXTRA B  age bands match pension-calculator.html');
   eq('under 30', Relief.reliefBand(29), 0.15);

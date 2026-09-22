@@ -33,6 +33,13 @@ const STATUS = [
 let statusIx = 0;
 const relief = () => ({ srcop: STATUS[statusIx].srcop });
 
+/* Pension age, and the growth the multi-year card assumes. 66 is what every
+   figure on this site assumes; 5% a year is the pension calculator's own
+   default, reused rather than a second rate invented for this page. Both are
+   said on the card in words. */
+const PENSION_AGE = 66;
+const GROWTH = 5;
+
 /* Formatting, the slider fill, the wiring and the debounced live region are
    the same on all five calculators and live in assets/js/calc-page.js. */
 const { $, euro, pct, paintSlider, wireRanges, announce } = window.PBPage;
@@ -253,6 +260,26 @@ function calc() {
 
   /* the Mode 1 verdict, stated the same way whichever path is larger */
   const cmp = PBCompare.compare({ salary, year, age, srcop: relief().srcop, gross, employerMatchPct: match });
+
+  /* EVERYTHING PAID IN, BY 66. The same comparison over every year that is
+     left rather than one of them. The growth assumption is the calculators'
+     own default, 5% a year, named on the card; the module is told it rather
+     than owning it. Pension age is 66, which is what every figure on this
+     site assumes. */
+  const my = PBCompare.cumulative({
+    salary, firstYear: year, age, retireAge: PENSION_AGE, srcop: relief().srcop,
+    gross: +$('gross').value, employerMatchPct: match, growth: GROWTH / 100
+  });
+  $('pbMySub').textContent = my.years > 0
+    ? 'Both paths, every year from ' + age + ' to ' + PENSION_AGE + ', grown at ' + GROWTH + '% a year.'
+    : 'You are at or past ' + PENSION_AGE + ', so there are no years left to add up.';
+  $('pbMyAe').textContent = euro(my.autoEnrolment);
+  $('pbMyPp').textContent = euro(my.personal);
+  const myTop = Math.max(my.autoEnrolment, my.personal);
+  [['pbMyAeBar', my.autoEnrolment], ['pbMyPpBar', my.personal]].forEach(function (lane) {
+    $(lane[0]).style.width = (myTop > 0 ? lane[1] / myTop * 100 : 0) + '%';
+  });
+
   let verdict;
   if (cmp.larger === 'equal') {
     verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';

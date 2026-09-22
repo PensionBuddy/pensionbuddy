@@ -1605,6 +1605,32 @@ button{font-family:inherit}
 .results .lead{margin-bottom:0}
 .results .lead .wtext{font-size:17px;line-height:1.5}
 .results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
+
+/* ---- everything paid in, by 66 ----
+   The lanes above race one year; this races all of them. Same two colours,
+   so the reader reads it as the same comparison over a longer run, and the
+   figures are text rather than bars alone because nothing else on the page
+   carries them. */
+.pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
+.pb-my-card h3{margin:0 0 4px}
+.pb-my-sub{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0 0 16px}
+.pb-my-lane{display:grid;grid-template-columns:8.6em minmax(0,1fr) 6.4em;gap:12px;align-items:center;margin-bottom:10px}
+.pb-my-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pb-my-track{position:relative;display:block;height:12px;border-radius:99px;
+  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:99px;
+  transition:width .9s cubic-bezier(.45,0,.25,1)}
+#pbMyAeBar{background:var(--teal-900)}
+#pbMyPpBar{background:var(--teal)}
+.pb-my-fig{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-my-note{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+@media(max-width:560px){
+  .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
+  .pb-my-lab{grid-column:1;grid-row:1}
+  .pb-my-fig{grid-column:2;grid-row:1}
+  .pb-my-track{grid-column:1 / -1;grid-row:2}
+}
+@media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1735,6 +1761,22 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="pb-scale-sub" id="pbScaleSub">One year of contributions each, at year 1 of the phase-in, on the same scale. The longer bar reaches the end of the scale.</p>
         <div class="pb-scale-lane pb-scale-ae"><span class="pb-scale-lab">Auto-enrolment</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScaleAeBar"></div></div></div>
         <div class="pb-scale-lane pb-scale-pp"><span class="pb-scale-lab">Personal pension</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScalePpBar"></div></div></div>
+      </div>
+
+      <div class="pb-my-card reveal" id="pbMyCard" data-mode="1" style="transition-delay:.11s">
+        <h3>Everything paid in, by 66</h3>
+        <p class="pb-my-sub" id="pbMySub">Both paths, every year from now to 66, grown at 5% a year.</p>
+        <div class="pb-my-lane">
+          <span class="pb-my-lab">Auto-enrolment</span>
+          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar"></i></span>
+          <span class="pb-my-fig" id="pbMyAe">€0</span>
+        </div>
+        <div class="pb-my-lane">
+          <span class="pb-my-lab">Personal pension</span>
+          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyPpBar"></i></span>
+          <span class="pb-my-fig" id="pbMyPp">€0</span>
+        </div>
+        <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
       </div>
 
       <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
@@ -1892,7 +1934,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/autoenrolment.js?v=3fd93c2f"></script>
+<script src="assets/js/autoenrolment.js?v=f94c659a"></script>
 <script>
 /* broker-vs-autoenrolment.html
    Maths lives in assets/js/autoenrolment.js and assets/js/pension-tax-relief.js,
@@ -1928,6 +1970,13 @@ const STATUS = [
 ];
 let statusIx = 0;
 const relief = () => ({ srcop: STATUS[statusIx].srcop });
+
+/* Pension age, and the growth the multi-year card assumes. 66 is what every
+   figure on this site assumes; 5% a year is the pension calculator's own
+   default, reused rather than a second rate invented for this page. Both are
+   said on the card in words. */
+const PENSION_AGE = 66;
+const GROWTH = 5;
 
 /* Formatting, the slider fill, the wiring and the debounced live region are
    the same on all five calculators and live in assets/js/calc-page.js. */
@@ -2149,6 +2198,26 @@ function calc() {
 
   /* the Mode 1 verdict, stated the same way whichever path is larger */
   const cmp = PBCompare.compare({ salary, year, age, srcop: relief().srcop, gross, employerMatchPct: match });
+
+  /* EVERYTHING PAID IN, BY 66. The same comparison over every year that is
+     left rather than one of them. The growth assumption is the calculators'
+     own default, 5% a year, named on the card; the module is told it rather
+     than owning it. Pension age is 66, which is what every figure on this
+     site assumes. */
+  const my = PBCompare.cumulative({
+    salary, firstYear: year, age, retireAge: PENSION_AGE, srcop: relief().srcop,
+    gross: +$('gross').value, employerMatchPct: match, growth: GROWTH / 100
+  });
+  $('pbMySub').textContent = my.years > 0
+    ? 'Both paths, every year from ' + age + ' to ' + PENSION_AGE + ', grown at ' + GROWTH + '% a year.'
+    : 'You are at or past ' + PENSION_AGE + ', so there are no years left to add up.';
+  $('pbMyAe').textContent = euro(my.autoEnrolment);
+  $('pbMyPp').textContent = euro(my.personal);
+  const myTop = Math.max(my.autoEnrolment, my.personal);
+  [['pbMyAeBar', my.autoEnrolment], ['pbMyPpBar', my.personal]].forEach(function (lane) {
+    $(lane[0]).style.width = (myTop > 0 ? lane[1] / myTop * 100 : 0) + '%';
+  });
+
   let verdict;
   if (cmp.larger === 'equal') {
     verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';
