@@ -531,7 +531,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
 .pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
-.pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
 .pb-b-foot .btn{width:100%;justify-content:center}
 @media (max-width:520px){.pb-b-panel{right:3vw;left:3vw;width:auto;bottom:80px}}
 @media (prefers-reduced-motion: reduce){.pb-b-btn{transition:none}.pb-b-a{transition:none}}
@@ -1719,7 +1718,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><p class="d">Buddy shares general information. For advice about your own situation, that\u2019s a job for Damian.</p><a class="btn btn-primary" href="booking.html">Book a free call</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
