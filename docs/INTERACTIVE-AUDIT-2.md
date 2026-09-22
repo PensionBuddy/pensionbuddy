@@ -236,7 +236,8 @@ does not carry.
 ### Reference sites
 
 The captures are in `~/Downloads`, not a `/refs/` folder: Stripe, Plaid, Ramp,
-Revolut, Klarna and Lemonade. **There is no Mercury capture.**
+Revolut, Klarna, Lemonade and, found on 2026-09-22 under the name "Online
+Business Banking For Startups, Small Businesses & Scaling Companies", Mercury.
 
 Each capture was sliced into 52 pieces and read, and each saved page's markup
 was searched for what a still frame cannot show. Where the evidence is markup
@@ -267,6 +268,26 @@ Seen and not recommended: a live running total in the hero (competes with the
 countdown and needs a defensible source); a rotating hero; scroll-scrubbed
 video (ruled out by the brief); a spinning gradient ring round the main button;
 offer cards that open into a pop-up (overlaps the offering list).
+
+
+### Mercury, added 2026-09-22
+
+Most of Mercury's page came out blank in the capture: every section starts
+invisible and fades in at 35% up the screen, which never happened during the
+capture (a warning for any reveal here: keep content visible without script).
+Evidence is the hero, the footer and the saved markup, CSS and JS. None of
+these needs a new figure.
+
+| Pattern | Evidence | Fit | Build list |
+|---|---|---|---|
+| "Show the workings": a collapsible breakdown under the headline result | Fee-calculator chunk shipped with the homepage (`CollapsibleTrigger`, 600ms) | Under each calculator's one-sentence result, from the calculator's own intermediate values | **#29** |
+| "Share results": inputs kept in the link, a copy button that reads "Copied" | Same chunk (`urlKeys`, clipboard helper, 2s reset) | All five calculators, inputs after the `#` so they never reach a server | **#30** |
+| Closing fork: a last line, the CTA, then situation cards, each one next step | `data-section="wayfinding-module-record"` | Home, before the final band: the hero chat's three personas as cards | **#31** |
+| Mega-menu with a one-line description per item and "Jump to" links | Capture (nav) and markup | A "Calculators" dropdown naming the five tools | **#32** |
+| The page's colour fades between bands as you scroll | `data-theme` on 11 sections, `.transition-theme{transition-duration:.5s}` | Home only, into and out of the dark product band | **#33** |
+| Grain over dark areas, off for reduced motion | `styles_grainSvg` (feTurbulence) | The dark bands, static (no jitter), ~1 KB inline SVG | **#34** |
+| Numbered footnotes on claims | Superscripts linked to a notes list | **Not queued.** Every figure here already carries its source directly beneath it, which a footnote would move further away | — |
+| Feathered blur behind text on a photo | `styles_featheredBlur` | **Not queued.** No text sits on a photo anywhere on the site | — |
 
 ---
 
@@ -306,6 +327,12 @@ page with render-diff proof; L = a multi-step motion section.
 | 26 | **Two-tone headlines** (Stripe, Ramp) | Sitewide headings, locked sections excepted | Scanning | S | No | No |
 | 27 | **"Before 6 April?"** control for pre-2002 entry years. Your open S11 item 4 | Entitlement entry year | Removes a known one-year error | S | Yes (a new input to the module, not new maths) | No |
 | 28 | **Footer wordmark** (Klarna) | All footers | Cosmetic | S | No | No |
+| 29 | **Show the workings** (Mercury): a collapsible breakdown under each result sentence, the calculator's own intermediate values | Pension, director, reality check | Teaches how the figure is made | S | Yes | No |
+| 30 | **Share results** (Mercury): copy a link to these figures, inputs after the `#` | All five calculators | Brings the scenario to the call | M | Yes | No |
+| 31 | **Closing fork** (Mercury): three situation cards before the final band | Home | One next step at the end | S | No | No |
+| 32 | **Calculators dropdown** (Mercury) in the nav, one line per tool | Sitewide nav | Wayfinding to the tools | M | Yes (nav is shared) | No |
+| 33 | **Colour fade between bands** (Mercury) | Home | Cosmetic | S | No | No |
+| 34 | **Static grain on dark bands** (Mercury) | Dark bands | Cosmetic | S | No | No |
 
 **Not recommended:** a sticky side rail on starter and director (both are
 single-path pages ending at a booking button; 6,909px and 5,866px at 1440, 9

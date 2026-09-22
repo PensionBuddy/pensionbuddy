@@ -55,6 +55,12 @@ twice is reverted and logged here. The audit itself is
 | 26 | Two-tone headlines | not reached | |
 | 28 | Footer wordmark | not reached | |
 | 18 | Mess to order | not reached | |
+| 29 | Show the workings (Mercury) | not reached | |
+| 30 | Share results (Mercury) | not reached | |
+| 31 | Closing fork (Mercury) | not reached | |
+| 32 | Calculators dropdown (Mercury) | not reached | |
+| 33 | Colour fade between bands (Mercury) | not reached | |
+| 34 | Static grain on dark bands (Mercury) | not reached | |
 | 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
 | 17 | Scrollytelling | not reached | |
 | — | Re-shoot product rasters after the calculator changes | not reached | |
