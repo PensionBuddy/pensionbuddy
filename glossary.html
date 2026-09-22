@@ -5,16 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pension jargon buster, Pensionbuddy</title>
 <meta name="description" content="Plain-English explanations of common Irish pension terms: tax relief, AVC, ARF, annuity, PRSA, drawdown and more. Information, not advice.">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
+<link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
 <meta property="og:title" content="Pension jargon buster, Pensionbuddy">
 <meta property="og:description" content="Plain-English explanations of common Irish pension terms: tax relief, AVC, ARF, annuity, PRSA, drawdown and more. Information, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
+<meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="The Pensionbuddy paw mark">
+<meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -532,7 +540,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
 .pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
-.pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
 .pb-b-foot .btn{width:100%;justify-content:center}
 @media (max-width:520px){.pb-b-panel{right:3vw;left:3vw;width:auto;bottom:80px}}
 @media (prefers-reduced-motion: reduce){.pb-b-btn{transition:none}.pb-b-a{transition:none}}
@@ -1037,9 +1044,25 @@ body{font-size:1rem;line-height:1.7}
 .seg button{min-height:48px}
 summary{min-height:56px;padding-top:16px;padding-bottom:16px}
 
-/* the sliders are the main control on the site - 26px was too small to hit */
+/* the sliders are the main control on the site - 26px was too small to hit.
+
+   CENTRING, and why it kept coming back. Chrome lays ::-webkit-slider-thumb out
+   against the TOP of ::-webkit-slider-runnable-track, not its centre, so a thumb
+   taller than the track hangs below the line by (thumb - track) / 2 unless a
+   margin-top pulls it back. Measured, not eyeballed: the 28px thumb on the 6px
+   track sat exactly 11px low on every slider of every page, at 0%, 50% and 100%.
+   One value is right for all of them, for a stronger reason than "nothing here is
+   responsive": the thumb is placed against the track, so the error is (thumb -
+   track) / 2 and the input's own height does not enter into it. That matters,
+   because the heights are not uniform - .field input{min-height:52px} below wins
+   over the 48px here for every slider inside a .field, and the rest stay 48px.
+   Both measure the same 11px. It is written below as the formula rather than
+   as -11px so that whoever next changes the 28px can see the two numbers it has to
+   agree with: the runnable-track height set above, and this thumb's own height.
+   Firefox centres ::-moz-range-thumb on the track by itself and measures 0px off.
+   It must NOT be given a margin-top: that would push it off by exactly that much. */
 input[type=range]{height:48px;background-position:0 center}
-input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
+input[type=range]::-webkit-slider-thumb{width:28px;height:28px;margin-top:calc((6px - 28px) / 2)}
 input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .field input,.ffield input,.email-cap input{min-height:52px;font-size:1rem}
 
@@ -1153,7 +1176,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links .btn{margin-left:6px;padding:13px 13px}
 .nav-tick{margin-left:8px;padding:10px 7px}
 .nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
-@media(max-width:1180px){
+@media(max-width:1200px){
   .nav-toggle{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:0;margin:0;padding:10px 20px 18px;
@@ -1496,13 +1519,69 @@ button{font-family:inherit}
 @media(max-width:920px){
   .pb-statrow{gap:26px 28px}
 }
+
+/* ---- the brand lockup (assets/brand/lockup.html) ----
+   The pack derives the whole lockup from one number, the lockup height H, and
+   so does this: set --pb-logo-h and the mark, its corner radius, the paw inside
+   it, the gap and the wordmark all follow. H is 34px, which is what the mark
+   already measured, so the nav does not move; it is also above the pack's 28px
+   minimum, below which the wordmark closes up and the mark should be used
+   alone.
+
+   This layers onto the existing .logo / .logo-mark hooks rather than renaming
+   the markup to .pb-lockup. The same two elements are already addressed by a
+   dozen other rules here - the scrolled-nav size, three border-radius passes,
+   the brand background, the footer spacing - and renaming would strand every
+   one of them across eighteen separate copies of this stylesheet. The recipe
+   is the pack's; only the selector names are this site's.
+
+   --pb-teal and --pb-ink are local to the lockup on purpose. The bright teal
+   is a mark colour, not a text colour, and --aqua, --teal-700 and --ink are
+   left exactly as they are: this rule paints the logo and nothing else. */
+.logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
+  gap:calc(var(--pb-logo-h) * 0.269);
+  font-family:'Schibsted Grotesk',var(--font);
+  font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
+  letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
+.logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
+  border-radius:calc(var(--pb-logo-h) * 0.267);background:var(--pb-teal)}
+.logo-mark svg{width:calc(var(--pb-logo-h) * 0.578);
+  height:calc(var(--pb-logo-h) * 0.578);display:block}
+nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
+
+/* ---- the nav, once the booking button says the whole sentence ----
+   "Book a call with Damian for free" is 283px against the 165px the old
+   "Book a free call" took. The nav had no 118px spare: it already carried the
+   logo, the deadline chip and seven links, and run 11 recorded that an eighth
+   text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
+   109px at 1200 and was still 29px over at 1360 - a width tools/verify.py
+   audits, so this would have failed the gate rather than shipped quietly.
+
+   Two changes, measured rather than guessed. The drawer breakpoint moves from
+   1180 to 1200, because at 1181 the full bar was still 4px too wide; and
+   between there and 1420 the deadline chip stands down, which is the 121px
+   that lets seven links keep readable spacing beside the longer button.
+
+   Tightening alone was tried first and rejected: getting the width back from
+   padding and type size alone needed 2px link padding, at which the seven
+   labels touch each other and read as one word.
+
+   THE TRADE-OFF IS THE CHIP, and it is worth saying out loud: between 1201px
+   and 1420px the Revenue deadline countdown is not shown. It is a secondary,
+   decorative piece of urgency; the primary navigation and the primary call to
+   action are not. Below 1200 the whole bar is a drawer and the chip was never
+   in it; above 1420 the chip is back. */
+@media(min-width:1201px) and (max-width:1420px){
+  .nav-tick{display:none}
+  .nav-links a.lnk{padding:12px 7px}
+}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
-  <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
+  <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
   <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
@@ -1512,7 +1591,7 @@ button{font-family:inherit}
     <a class="lnk" href="state-pension-reality-check.html">State pension</a>
     <a class="lnk active" href="glossary.html" aria-current="page">Jargon buster</a>
     <a class="lnk" href="index.html#story">About</a>
-    <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
@@ -1527,7 +1606,7 @@ button{font-family:inherit}
   <div class="arc-head">
     <span class="eyebrow reveal"><span class="pip"></span>Learn it the fun way</span>
     <h2 class="reveal">Two ways to learn the lingo.</h2>
-    <p class="reveal">Pick a game. Buddy gives you the facts; the free call is where the advice happens.</p>
+    <p class="reveal">Pick a game.</p>
   </div>
   <div class="arc-grid">
     <a class="arc-card reveal" href="games/buddys-run.html" data-game="Buddy&rsquo;s Run">
@@ -1587,7 +1666,7 @@ button{font-family:inherit}
 </div></section>
 
 <div class="final-band"><div class="wrap"><div class="final reveal">
-  <div class="paw-bg"><svg fill='#fff' viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" /><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" /><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" /><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" /><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" /></svg></div>
+  <div class="paw-bg"><svg fill='#fff' viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
   <span class="eyebrow"><span class="pip"></span>Still unsure about a term?</span>
   <h2>Ask a real person.</h2>
   <p>If something still doesn't make sense, that's exactly what the free chat is for. No question is too basic.</p>
@@ -1596,7 +1675,7 @@ button{font-family:inherit}
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
-    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
     <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
@@ -1800,8 +1879,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   if(!qs.length)qs=SHARED.slice();
   qs=qs.slice(0,5);
-  qs.push({q:'Can Buddy tell me what I should do?',
-    a:'<p>That would be advice, and Buddy sticks to general information. What\u2019s right depends on your own situation \u2014 which is exactly what the free 20\u2011minute call with Damian is for.</p>'});
 
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
@@ -1816,7 +1893,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><p class="d">Buddy shares general information. For advice about your own situation, that\u2019s a job for Damian.</p><a class="btn btn-primary" href="booking.html">Book a free call</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}

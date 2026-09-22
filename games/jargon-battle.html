@@ -5,16 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jargon Battle Quiz, Pensionbuddy</title>
 <meta name="description" content="A retro battle quiz. Buddy the boxer dog takes on the Jargon Blob over eight Irish pension terms. Information, not advice.">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
+<link rel="icon" type="image/svg+xml" href="../assets/brand/pensionbuddy-mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/brand/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/brand/apple-touch-icon-180.png">
 <meta property="og:title" content="Jargon Battle Quiz, Pensionbuddy">
 <meta property="og:description" content="A retro battle quiz. Buddy the boxer dog takes on the Jargon Blob over eight Irish pension terms. Information, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
+<meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="The Pensionbuddy paw mark">
+<meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Schibsted+Grotesk:wght@800&display=swap" rel="stylesheet">
 <script>
 /* Embed mode is decided before first paint so the header never flashes inside the iframe. */
 try { if (window.self !== window.top) { document.documentElement.className += ' embedded'; } } catch (e) { document.documentElement.className += ' embedded'; }
@@ -111,7 +119,6 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 .score .k{font-size:11px;font-weight:700;color:var(--teal-600)}
 .score .v{font-family:var(--font-display);font-size:22px;font-weight:700}
 .lead{margin:14px 0 10px;font-size:15px}
-.note{margin-top:14px;font-size:12px;color:var(--ink-2)}
 
 /* ---------- intro overlay ---------- */
 .intro{position:absolute;inset:0;background:rgba(10,51,46,.96);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;z-index:5}
@@ -138,7 +145,8 @@ main{max-width:1000px;margin:0 auto;padding:20px}
   #scene{aspect-ratio:16/9}
   .dlg{min-height:0}
   .site-head .in{padding:10px 14px;gap:10px}
-  .logo{font-size:17px}
+  /* shrink the lockup, not just its wordmark: 28px is the pack's floor */
+  .logo{--pb-logo-h:28px}
   .backlink{font-size:13px}
 }
 
@@ -159,13 +167,42 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 .embedded .panel{padding:6px 10px}
 .embedded .dlg{min-height:78px;padding:10px 12px}
 .embedded .opt{min-height:56px;padding:10px 12px}
+
+/* ---- the brand lockup (assets/brand/lockup.html) ----
+   The pack derives the whole lockup from one number, the lockup height H, and
+   so does this: set --pb-logo-h and the mark, its corner radius, the paw inside
+   it, the gap and the wordmark all follow. H is 34px, which is what the mark
+   already measured, so the nav does not move; it is also above the pack's 28px
+   minimum, below which the wordmark closes up and the mark should be used
+   alone.
+
+   This layers onto the existing .logo / .logo-mark hooks rather than renaming
+   the markup to .pb-lockup. The same two elements are already addressed by a
+   dozen other rules here - the scrolled-nav size, three border-radius passes,
+   the brand background, the footer spacing - and renaming would strand every
+   one of them across eighteen separate copies of this stylesheet. The recipe
+   is the pack's; only the selector names are this site's.
+
+   --pb-teal and --pb-ink are local to the lockup on purpose. The bright teal
+   is a mark colour, not a text colour, and --aqua, --teal-700 and --ink are
+   left exactly as they are: this rule paints the logo and nothing else. */
+.logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
+  gap:calc(var(--pb-logo-h) * 0.269);
+  font-family:'Schibsted Grotesk',var(--font);
+  font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
+  letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
+.logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
+  border-radius:calc(var(--pb-logo-h) * 0.267);background:var(--pb-teal)}
+.logo-mark svg{width:calc(var(--pb-logo-h) * 0.578);
+  height:calc(var(--pb-logo-h) * 0.578);display:block}
+nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 </style>
 </head>
 <body>
 
 <header class="site-head">
   <div class="in">
-    <a class="logo" href="../index.html" target="_top"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
+    <a class="logo" href="../index.html" target="_top"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
     <a class="backlink" href="../glossary.html" target="_top">Back to the jargon buster</a>
   </div>
 </header>
@@ -217,8 +254,7 @@ main{max-width:1000px;margin:0 auto;padding:20px}
         <a class="backlink" href="../glossary.html" target="_top">Back to the jargon buster</a>
       </div>
       <p class="lead">Still puzzled by a term? Damian explains them for a living, and the first call is free.</p>
-      <a class="btn cta" href="../booking.html" target="_top">Book a free 20-minute call</a>
-      <p class="note">A game, and general information. Nothing here is personal financial advice.</p>
+      <a class="btn cta" href="../booking.html" target="_top">Book a call with Damian for free</a>
     </div>
 
     <div class="intro" id="intro">

@@ -5,17 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Track down old pensions, Pensionbuddy</title>
 <meta name="description" content="Lost track of a pension from an old job in Ireland? We'll help you find it and work out what it's worth. Free plain-English consultation with a QFA.">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="%230B1F1C"/><text x="32" y="45" font-family="Georgia,serif" font-size="38" font-weight="700" text-anchor="middle" fill="%23FBF7EF">P</text></svg>'>
+<link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
 <meta property="og:title" content="Track down old pensions, Pensionbuddy">
 <meta property="og:description" content="Lost track of a pension from an old job in Ireland? We'll help you find it and work out what it's worth. Free plain-English consultation with a QFA.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
+<meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="The Pensionbuddy paw mark">
+<meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "I don't have any of the paperwork, is that a problem?", "acceptedAnswer": {"@type": "Answer", "text": "Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension."}}, {"@type": "Question", "name": "Can I combine my old pensions into one?", "acceptedAnswer": {"@type": "Answer", "text": "Often, yes, and it makes them far easier to keep track of. But it isn't always right. Some older pensions carry valuable guarantees worth keeping, so we'll look at each one and tell you honestly."}}, {"@type": "Question", "name": "Is it really worth the hassle?", "acceptedAnswer": {"@type": "Answer", "text": "There usually is money there. Knowing what you've got, and making sure it's invested rather than sitting forgotten, can make a real difference."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@800&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -528,7 +536,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
 .pb-b-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:var(--surface-2,#FBF7EF)}
-.pb-b-foot .d{font-size:12px;color:var(--ink-3);margin:0 0 10px}
 .pb-b-foot .btn{width:100%;justify-content:center}
 @media (max-width:520px){.pb-b-panel{right:3vw;left:3vw;width:auto;bottom:80px}}
 @media (prefers-reduced-motion: reduce){.pb-b-btn{transition:none}.pb-b-a{transition:none}}
@@ -1004,9 +1011,25 @@ body{font-size:1rem;line-height:1.7}
 .seg button{min-height:48px}
 summary{min-height:56px;padding-top:16px;padding-bottom:16px}
 
-/* the sliders are the main control on the site - 26px was too small to hit */
+/* the sliders are the main control on the site - 26px was too small to hit.
+
+   CENTRING, and why it kept coming back. Chrome lays ::-webkit-slider-thumb out
+   against the TOP of ::-webkit-slider-runnable-track, not its centre, so a thumb
+   taller than the track hangs below the line by (thumb - track) / 2 unless a
+   margin-top pulls it back. Measured, not eyeballed: the 28px thumb on the 6px
+   track sat exactly 11px low on every slider of every page, at 0%, 50% and 100%.
+   One value is right for all of them, for a stronger reason than "nothing here is
+   responsive": the thumb is placed against the track, so the error is (thumb -
+   track) / 2 and the input's own height does not enter into it. That matters,
+   because the heights are not uniform - .field input{min-height:52px} below wins
+   over the 48px here for every slider inside a .field, and the rest stay 48px.
+   Both measure the same 11px. It is written below as the formula rather than
+   as -11px so that whoever next changes the 28px can see the two numbers it has to
+   agree with: the runnable-track height set above, and this thumb's own height.
+   Firefox centres ::-moz-range-thumb on the track by itself and measures 0px off.
+   It must NOT be given a margin-top: that would push it off by exactly that much. */
 input[type=range]{height:48px;background-position:0 center}
-input[type=range]::-webkit-slider-thumb{width:28px;height:28px}
+input[type=range]::-webkit-slider-thumb{width:28px;height:28px;margin-top:calc((6px - 28px) / 2)}
 input[type=range]::-moz-range-thumb{width:28px;height:28px}
 .field input,.ffield input,.email-cap input{min-height:52px;font-size:1rem}
 
@@ -1134,7 +1157,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links .btn{margin-left:6px;padding:13px 13px}
 .nav-tick{margin-left:8px;padding:10px 7px}
 .nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
-@media(max-width:1180px){
+@media(max-width:1200px){
   .nav-toggle{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:0;margin:0;padding:10px 20px 18px;
@@ -1375,9 +1398,9 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    Buddy conversation in it. It was two columns, with a decorative
    icon tile in the right-hand one (or, on the home page, a projected-pot
    card). Every word inside the phone is lifted from this page's own
-   signed-off Ask Buddy answers, and the closing turn is the one that
-   says Buddy never advises - so the mockup cannot claim anything the
-   site does not already say.
+   signed-off Ask Buddy answers, so the mockup cannot claim anything the
+   site does not already say. It closes on a plain link to the booking
+   page rather than on a turn about what Buddy will not do.
    ============================================================ */
 .hero-grid{display:block;max-width:760px;margin:0 auto;text-align:center}
 .hero-grid .eyebrow,.hero-grid .hero-cta,.hero-grid .trust,.hero-grid .credline{
@@ -1400,6 +1423,14 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .msg.buddy{align-self:flex-start;background:var(--surface-2);color:var(--ink);
   border:1px solid var(--line);border-bottom-left-radius:5px}
 .hero-phone .hc-note{margin-top:14px;text-align:center}
+/* The chat closes on a plain link rather than on a turn about what Buddy will
+   not do. Left-aligned like a Buddy bubble, but unboxed, so it reads as the
+   component's own footer and not as another thing Buddy said. */
+.pb-phone-link{align-self:flex-start;margin:2px 0 0;padding:0 2px;
+  font-size:13px;font-weight:600;line-height:1.5}
+.pb-phone-link a{color:var(--teal-700);text-decoration:underline;
+  text-underline-offset:3px;text-decoration-thickness:1px}
+.pb-phone-link a:hover{text-decoration-thickness:2px}
 @media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 
 /* ============================================================
@@ -1520,6 +1551,90 @@ button{font-family:inherit}
 @media(max-width:560px){
   .callout.pb-bleed,.final.pb-bleed{padding:56px 18px}
 }
+
+/* ---- the hero chat plays out as it is scrolled past ----
+   Its own class and its own observer, deliberately not the .reveal system:
+   that one calls io.unobserve on first sight and force-reveals everything at
+   900ms, and both of those are the opposite of what this needs.
+   The gate hangs off .pb-chat-play, which the script sets on <html>, so before
+   the script runs - and forever, with no JS - every bubble is simply visible.
+   Under reduced motion the script never sets it, which is also what makes the
+   screenshot pass in tools/verify.py deterministic: that pass forces
+   prefers-reduced-motion, so it photographs a settled chat every time.
+   The offsets are small and the x-shift is only a few pixels, toward the side
+   each bubble is already anchored to, so a message reads as arriving from its
+   own end of the conversation. .phone has overflow:hidden, so none of it can
+   reach the document's scroll width.
+   Keyboard focus is handled in the script rather than with :focus-within here,
+   because a focus rule would have to win a specificity race against the two
+   four-class directional rules above and that is a race worth not starting. */
+.pb-chat-play .phone-chat > *{
+  transition:opacity .4s cubic-bezier(.16,1,.3,1),transform .4s cubic-bezier(.16,1,.3,1)}
+.pb-chat-play .phone-chat > *:not(.pb-said){opacity:0;transform:translateY(8px)}
+.pb-chat-play .phone-chat > .msg.them:not(.pb-said){transform:translateY(8px) translateX(5px)}
+.pb-chat-play .phone-chat > .msg.buddy:not(.pb-said){transform:translateY(8px) translateX(-5px)}
+@media(prefers-reduced-motion:reduce){
+  .pb-chat-play .phone-chat > *:not(.pb-said),
+  .pb-chat-play .phone-chat > .msg.them:not(.pb-said),
+  .pb-chat-play .phone-chat > .msg.buddy:not(.pb-said){
+    opacity:1;transform:none;transition:none}
+}
+
+/* ---- the brand lockup (assets/brand/lockup.html) ----
+   The pack derives the whole lockup from one number, the lockup height H, and
+   so does this: set --pb-logo-h and the mark, its corner radius, the paw inside
+   it, the gap and the wordmark all follow. H is 34px, which is what the mark
+   already measured, so the nav does not move; it is also above the pack's 28px
+   minimum, below which the wordmark closes up and the mark should be used
+   alone.
+
+   This layers onto the existing .logo / .logo-mark hooks rather than renaming
+   the markup to .pb-lockup. The same two elements are already addressed by a
+   dozen other rules here - the scrolled-nav size, three border-radius passes,
+   the brand background, the footer spacing - and renaming would strand every
+   one of them across eighteen separate copies of this stylesheet. The recipe
+   is the pack's; only the selector names are this site's.
+
+   --pb-teal and --pb-ink are local to the lockup on purpose. The bright teal
+   is a mark colour, not a text colour, and --aqua, --teal-700 and --ink are
+   left exactly as they are: this rule paints the logo and nothing else. */
+.logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
+  gap:calc(var(--pb-logo-h) * 0.269);
+  font-family:'Schibsted Grotesk',var(--font);
+  font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
+  letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
+.logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
+  border-radius:calc(var(--pb-logo-h) * 0.267);background:var(--pb-teal)}
+.logo-mark svg{width:calc(var(--pb-logo-h) * 0.578);
+  height:calc(var(--pb-logo-h) * 0.578);display:block}
+nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
+
+/* ---- the nav, once the booking button says the whole sentence ----
+   "Book a call with Damian for free" is 283px against the 165px the old
+   "Book a free call" took. The nav had no 118px spare: it already carried the
+   logo, the deadline chip and seven links, and run 11 recorded that an eighth
+   text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
+   109px at 1200 and was still 29px over at 1360 - a width tools/verify.py
+   audits, so this would have failed the gate rather than shipped quietly.
+
+   Two changes, measured rather than guessed. The drawer breakpoint moves from
+   1180 to 1200, because at 1181 the full bar was still 4px too wide; and
+   between there and 1420 the deadline chip stands down, which is the 121px
+   that lets seven links keep readable spacing beside the longer button.
+
+   Tightening alone was tried first and rejected: getting the width back from
+   padding and type size alone needed 2px link padding, at which the seven
+   labels touch each other and read as one word.
+
+   THE TRADE-OFF IS THE CHIP, and it is worth saying out loud: between 1201px
+   and 1420px the Revenue deadline countdown is not shown. It is a secondary,
+   decorative piece of urgency; the primary navigation and the primary call to
+   action are not. Below 1200 the whole bar is a drawer and the chip was never
+   in it; above 1420 the chip is back. */
+@media(min-width:1201px) and (max-width:1420px){
+  .nav-tick{display:none}
+  .nav-links a.lnk{padding:12px 7px}
+}
 </style>
 
 <script>
@@ -1540,7 +1655,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <a class="skip" href="#main">Skip to content</a>
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
-  <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a>
+  <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
   <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk active" href="tracker.html" aria-current="page">Find a pension</a>
@@ -1550,7 +1665,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="lnk" href="state-pension-reality-check.html">State pension</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
     <a class="lnk" href="index.html#story">About</a>
-    <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
@@ -1572,8 +1687,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="phone-chat">
         <p class="msg them">I don&rsquo;t have any of the paperwork, is that a problem?</p>
         <p class="msg buddy">Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension.</p>
-        <p class="msg them">Can Buddy tell me what I should do?</p>
-        <p class="msg buddy">That would be advice, and Buddy sticks to general information. What&rsquo;s right depends on your own situation &mdash; which is exactly what the free 20&#8209;minute call with Damian is for.</p>
+        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>
       </div>
     </div>
   </div>
@@ -1660,16 +1774,16 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <div class="final-band"><div class="wrap"><div class="final pb-bleed reveal">
-  <div class="paw-bg"><svg fill="#fff" viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="2" ry="2.9"/><ellipse cx="16" cy="7.5" rx="2" ry="2.9"/><ellipse cx="4.3" cy="11.8" rx="1.8" ry="2.4"/><ellipse cx="19.7" cy="11.8" rx="1.8" ry="2.4"/><path d="M12 12.6c-3.2 0-5.5 2.2-5.5 5 0 2.4 2.4 3 5.5 3s5.5-.6 5.5-3c0-2.8-2.3-5-5.5-5z"/></svg></div>
+  <div class="paw-bg"><svg fill="#fff" viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
   <span class="eyebrow"><span class="pip"></span>Let's find what's yours</span>
   <h2>You bring what you remember. We'll do the digging.</h2>
   <p>Bring what you remember, Damian will help track down the rest. No pressure, no obligation.</p>
-  <a class="btn btn-light" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <a class="btn btn-light" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
-    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 24 24"><ellipse cx="8" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="16" cy="7.5" rx="1.9" ry="2.7" fill="#fff"/><ellipse cx="4.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><ellipse cx="19.5" cy="11.5" rx="1.7" ry="2.3" fill="#fff"/><path d="M12 12.5c-3 0-5.2 2.1-5.2 4.7 0 2.2 2.3 2.8 5.2 2.8s5.2-.6 5.2-2.8c0-2.6-2.2-4.7-5.2-4.7z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
     <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
     <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
@@ -1849,8 +1963,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   if(!qs.length)qs=SHARED.slice();
   qs=qs.slice(0,5);
-  qs.push({q:'Can Buddy tell me what I should do?',
-    a:'<p>That would be advice, and Buddy sticks to general information. What\u2019s right depends on your own situation \u2014 which is exactly what the free 20\u2011minute call with Damian is for.</p>'});
 
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
@@ -1865,7 +1977,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><p class="d">Buddy shares general information. For advice about your own situation, that\u2019s a job for Damian.</p><a class="btn btn-primary" href="booking.html">Book a free call</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -1979,5 +2091,71 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-jargon-bank.js?v=8ed5700e"></script>
 <script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
+<script>
+/* ---- the hero chat, played out against scroll position ----
+   IntersectionObserver only, no library, no scroll handler. Each step of the
+   conversation is observed against a line drawn near the foot of the viewport,
+   so which messages have been sent is a function of where the reader is rather
+   than of one moment when the component first appeared. Scrolling back up drops
+   a message below the line again and it un-sends, which is what makes it
+   reversible.
+
+   The stagger is batch-relative on purpose. Crossing the line slowly delivers
+   one entry at a time and each message lands on its own; a fast flick delivers
+   several in one callback and they cascade 70ms apart. Either way they arrive
+   in order, because the observer is given them in document order.
+
+   One net, and it guards a broken observer rather than an unscrolled reader.
+   "Nothing has played yet" is the normal state of a chat that is still below
+   the line, so revealing on that would be the fire-once-on-load behaviour this
+   replaces. What is never normal is the observer not reporting at all, so the
+   net waits on a callback having happened, not on a message having been sent.
+   A chat below the line is also below the fold, so nobody is looking at an
+   empty phone while it waits. ---- */
+(function(){
+  var chat=document.querySelector('.phone-chat');
+  if(!chat||!('IntersectionObserver' in window))return;
+  var steps=[].slice.call(chat.children);
+  if(!steps.length)return;
+  var mq=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(mq&&mq.matches)return;
+
+  document.documentElement.classList.add('pb-chat-play');
+  var timers=[];
+  function say(el,wait){
+    timers.push(setTimeout(function(){el.classList.add('pb-said');},wait));
+  }
+  function sayAll(){
+    while(timers.length)clearTimeout(timers.pop());
+    steps.forEach(function(el,i){say(el,i*70);});
+  }
+
+  /* Tabbing into the reply chips must never land focus on a message that is
+     still transparent, so focus plays the rest of the conversation at once. */
+  chat.addEventListener('focusin',function(){if(steps.some(function(el){
+    return !el.classList.contains('pb-said');}))sayAll();});
+
+  var reported=false;
+  var io=new IntersectionObserver(function(entries){
+    reported=true;
+    var batch=0;
+    entries.forEach(function(e){
+      var el=e.target;
+      if(e.isIntersecting){
+        if(el.classList.contains('pb-said'))return;
+        say(el,batch*70); batch++;
+      }else{
+        /* Only un-send a message the reader has scrolled back ABOVE. Leaving
+           the band upward means it has passed out the top and was read. */
+        var bottom=(e.rootBounds&&e.rootBounds.bottom)||window.innerHeight;
+        if(e.boundingClientRect.top>=bottom)el.classList.remove('pb-said');
+      }
+    });
+  },{threshold:0,rootMargin:'0px 0px -18% 0px'});
+  steps.forEach(function(el){io.observe(el);});
+
+  setTimeout(function(){if(!reported)sayAll();},3000);
+})();
+</script>
 </body>
 </html>

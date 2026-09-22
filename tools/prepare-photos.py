@@ -38,8 +38,6 @@ PHOTOS = [
      'Adam crouched beside Buddy on the grass in St Anne’s Park'),
     ('IMG_1029.PNG', 'strip-rocky-grinning',
      'Buddy grinning on his lead out for a walk'),
-    ('IMG_1030.PNG', 'strip-rocky-head-tilt',
-     'Buddy tilting his head at the camera indoors'),
     ('IMG_1034.PNG', 'strip-rocky-blanket',
      'Buddy sitting to attention on a blanket at home'),
     ('IMG_1031.PNG', 'strip-rocky-closeup',
