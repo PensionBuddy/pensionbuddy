@@ -1170,7 +1170,7 @@ p.ec-note,p.ec-note *{font-size:.82rem !important}
 .nav-links .btn{margin-left:6px;padding:13px 13px}
 .nav-tick{margin-left:8px;padding:10px 7px}
 .nav-tick .nt-l{display:none} /* C6: the label never fits inside the 1140px column; hidden at every width for a consistent header */
-@media(max-width:1180px){
+@media(max-width:1200px){
   .nav-toggle{display:inline-flex}
   .nav-links{display:none;position:absolute;top:100%;left:0;right:0;
     flex-direction:column;align-items:stretch;gap:0;margin:0;padding:10px 20px 18px;
@@ -1508,6 +1508,33 @@ button{font-family:inherit}
 .logo-mark svg{width:calc(var(--pb-logo-h) * 0.578);
   height:calc(var(--pb-logo-h) * 0.578);display:block}
 nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
+
+/* ---- the nav, once the booking button says the whole sentence ----
+   "Book a call with Damian for free" is 283px against the 165px the old
+   "Book a free call" took. The nav had no 118px spare: it already carried the
+   logo, the deadline chip and seven links, and run 11 recorded that an eighth
+   text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
+   109px at 1200 and was still 29px over at 1360 - a width tools/verify.py
+   audits, so this would have failed the gate rather than shipped quietly.
+
+   Two changes, measured rather than guessed. The drawer breakpoint moves from
+   1180 to 1200, because at 1181 the full bar was still 4px too wide; and
+   between there and 1420 the deadline chip stands down, which is the 121px
+   that lets seven links keep readable spacing beside the longer button.
+
+   Tightening alone was tried first and rejected: getting the width back from
+   padding and type size alone needed 2px link padding, at which the seven
+   labels touch each other and read as one word.
+
+   THE TRADE-OFF IS THE CHIP, and it is worth saying out loud: between 1201px
+   and 1420px the Revenue deadline countdown is not shown. It is a secondary,
+   decorative piece of urgency; the primary navigation and the primary call to
+   action are not. Below 1200 the whole bar is a drawer and the chip was never
+   in it; above 1420 the chip is back. */
+@media(min-width:1201px) and (max-width:1420px){
+  .nav-tick{display:none}
+  .nav-links a.lnk{padding:12px 7px}
+}
 </style>
 </head>
 <body>
@@ -1524,7 +1551,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     <a class="lnk" href="state-pension-reality-check.html">State pension</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
     <a class="lnk" href="index.html#story">About</a>
-    <a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
