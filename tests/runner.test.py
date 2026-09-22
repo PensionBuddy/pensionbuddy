@@ -8,6 +8,7 @@ code, and the Chrome runner's claims (one launch, nothing written into the
 repository) are only visible from outside it. Fixture suites are written to a
 temporary directory, never to tests/.
 """
+import importlib.util
 import os
 import subprocess
 import sys
@@ -109,6 +110,28 @@ CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacO
 RUNNER = os.path.join(TESTS, 'run-tests.py')
 
 
+def _gates():
+    """The runner's own assertion gates, read from the file this suite runs.
+
+    These counts used to be written down twice: once in run-tests.py's SUITES,
+    once as literals in the expectations below. A number with two homes drifts,
+    and this one did. Commit d71c1b9 raised compare's gate from 141 to 151 when
+    it added assertions, and left this file asserting 141, which meant this
+    suite - the one that exists to prove the runner can fail - was itself red
+    and saying so about the wrong thing.
+
+    run-tests.py guards its main() behind __name__, so importing it runs
+    nothing. Its filename has a hyphen and cannot be imported by name.
+    """
+    spec = importlib.util.spec_from_file_location('pb_run_tests', RUNNER)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return {name: rec[3] for name, rec in mod.SUITES.items()}
+
+
+GATES = _gates()
+
+
 def chrome_runs(tmp, args, env=None):
     """Run tests/run-tests.py with CHROME pointed at a shim that counts every
     launch before handing over to the real browser. The launch count is the
@@ -151,12 +174,14 @@ def chrome():
     launches, rc, out = chrome_runs(tmp, [])
     eq('6. the whole run is one Chrome launch', launches, 1)
     eq('6. and it passes', rc, 0)
-    for needle in ('SUITE  compare', 'ALL PASS  141 passed, 0 failed',
-                   'SUITE  state-pension-entitlement', 'ALL PASS  608 passed, 0 failed',
+    for needle in ('SUITE  compare',
+                   'ALL PASS  %d passed, 0 failed' % GATES['compare'],
+                   'SUITE  state-pension-entitlement',
+                   'ALL PASS  %d passed, 0 failed' % GATES['state-pension-entitlement'],
                    'SUITE  harness', 'PANEL CHECK', 'ALL SUITES PASS'):
         eq('6. the output carries %r' % needle, needle in out, True)
     eq('6. each suite is gated on its exact assertion count',
-       'GATE   compare 141 assertions' in out, True)
+       'GATE   compare %d assertions' % GATES['compare'] in out, True)
 
     # nothing is written into the repository by a run: the probes are served
     # from memory, where the old runner wrote two throwaway pages into the root
@@ -198,7 +223,9 @@ def chrome():
 
     launches, rc, out = chrome_runs(tmp, ['compare'], {'PB_MUTATE': 'tests/compare-calc.test.js|c1.employee, 750|c1.employee, 751'})
     eq('7. a served-bytes mutation of a suite fails the run', rc, 1)
-    eq('7. with the one failure', 'FAILURES  140 passed, 1 failed' in out, True)
+    # the mutation flips exactly one assertion, so one short of the gate passes
+    eq('7. with the one failure',
+       'FAILURES  %d passed, 1 failed' % (GATES['compare'] - 1) in out, True)
     eq('7. and the repository is untouched by it', untracked(), before)
 
     # ------------------------------------------------------------------ 8

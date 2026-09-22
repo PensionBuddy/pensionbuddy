@@ -469,11 +469,20 @@
          the same verdict the closing sentence states in words. */
       var widthPct = function (id) { return parseFloat($(id).style.width); };
       var onScale = function (cents) { return cents / SP.MAX_WEEKLY_CENTS * 100; };
+      /* Within a thousandth, not on the nose, and for the same reason the
+         reality check's bar widths are compared that way above: the page
+         writes the raw proportion and the browser serialises it back to six
+         significant digits. Rounding both sides to three decimals instead put
+         the comparison exactly on that serialisation's own precision, where a
+         half-way value rounds the two apart - a bar that reads back 91.3465
+         became 91.347 against a recomputed 91.346, and the run failed on a
+         difference of one part in ninety thousand. */
+      var near = function (a, b) { return Math.abs(a - b) < 0.001; };
       t.eq(label + ': the Method 1 bar is its rate against the maximum',
-           Math.round(widthPct('m1Fill') * 1000) / 1000, Math.round(onScale(tca.weeklyCents) * 1000) / 1000);
+           near(widthPct('m1Fill'), onScale(tca.weeklyCents)), true);
       if (hasM2) {
         t.eq(label + ': the Method 2 bar is its rate against the maximum',
-             Math.round(widthPct('m2Fill') * 1000) / 1000, Math.round(onScale(m2.weeklyCents) * 1000) / 1000);
+             near(widthPct('m2Fill'), onScale(m2.weeklyCents)), true);
       }
       var lowC = hasM2 ? Math.min(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
       var highC = hasM2 ? Math.max(tca.weeklyCents, m2.weeklyCents) : tca.weeklyCents;
@@ -496,11 +505,9 @@
              !$(m + 'Gap').hidden, tail === m);
         if (tail === m) {
           t.eq(label + ': the tail starts at the lower rate',
-               Math.round(parseFloat($(m + 'Gap').style.left) * 1000) / 1000,
-               Math.round(onScale(lowC) * 1000) / 1000);
+               near(parseFloat($(m + 'Gap').style.left), onScale(lowC)), true);
           t.eq(label + ': the tail spans the difference between the two',
-               Math.round(widthPct(m + 'Gap') * 1000) / 1000,
-               Math.round(onScale(highC - lowC) * 1000) / 1000);
+               near(widthPct(m + 'Gap'), onScale(highC - lowC)), true);
           t.eq(label + ': the tail is labelled with that difference',
                text(m + 'Lab'), euro2c(highC - lowC));
         } else if (paidRow[m]) {
