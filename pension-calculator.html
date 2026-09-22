@@ -1508,6 +1508,35 @@ button{font-family:inherit}
 @media(max-width:920px){
   .pb-statrow{gap:26px 28px}
 }
+
+/* ---- the brand lockup (assets/brand/lockup.html) ----
+   The pack derives the whole lockup from one number, the lockup height H, and
+   so does this: set --pb-logo-h and the mark, its corner radius, the paw inside
+   it, the gap and the wordmark all follow. H is 34px, which is what the mark
+   already measured, so the nav does not move; it is also above the pack's 28px
+   minimum, below which the wordmark closes up and the mark should be used
+   alone.
+
+   This layers onto the existing .logo / .logo-mark hooks rather than renaming
+   the markup to .pb-lockup. The same two elements are already addressed by a
+   dozen other rules here - the scrolled-nav size, three border-radius passes,
+   the brand background, the footer spacing - and renaming would strand every
+   one of them across eighteen separate copies of this stylesheet. The recipe
+   is the pack's; only the selector names are this site's.
+
+   --pb-teal and --pb-ink are local to the lockup on purpose. The bright teal
+   is a mark colour, not a text colour, and --aqua, --teal-700 and --ink are
+   left exactly as they are: this rule paints the logo and nothing else. */
+.logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
+  gap:calc(var(--pb-logo-h) * 0.269);
+  font-family:'Schibsted Grotesk',var(--font);
+  font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
+  letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
+.logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
+  border-radius:calc(var(--pb-logo-h) * 0.267);background:var(--pb-teal)}
+.logo-mark svg{width:calc(var(--pb-logo-h) * 0.578);
+  height:calc(var(--pb-logo-h) * 0.578);display:block}
+nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
