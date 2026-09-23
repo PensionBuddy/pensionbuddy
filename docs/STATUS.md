@@ -41,7 +41,7 @@ twice is reverted and logged here. The audit itself is
 | 7 | Relief limit ladder | done: six-step ladder from PBRelief.reliefBand; live marker and limit in euro on the pension calculator and compare (pb-ladder.js, no page-script change); static on starter, director, glossary | |
 | 11 | State Pension on top of monthly income | **skipped** (fail-once rule): verify.py flagged the new line at 2.18:1 contrast (grey --ink-2 on the dark results panel); reverted. Render-diff had proved only the new #pbSpTop cell differs, and the veil covered it; a colour fix away | — |
 | 6 | Gap band drag | done: need slider under the gap chart; chart re-scales against €15,564, covered at or under it; tap-for-source part left out (simplest option) | |
-| 2 | Relief widget | not reached | |
+| 2 | Relief widget | **skipped** (fail-once rule): verify.py's link check read the static hand-off link `pension-calculator.html#monthly=100` as a missing anchor on three pages; reverted. Everything else had passed (contrast 6.31:1 and up, render-diff clean, the calculator taking #monthly=500 and ignoring an off-step value); the fix is a plain href with the fragment added by script | — |
 | 10 | TCA capped part | not reached | |
 | 19 | Phase staircase | not reached | |
 | 16 | 20% → 40% marker | not reached | |
