@@ -39,7 +39,7 @@ twice is reverted and logged here. The audit itself is
 | 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | |
 | 8 | Transition glide | **skipped** (fail-once rule): verify.py flagged the visually-hidden "Your year:" marker text at 1.1:1 contrast on its teal dot; reverted. A one-line colour fix away; render-diff had proved only the new #pbGlideY cells differ | — |
 | 7 | Relief limit ladder | done: six-step ladder from PBRelief.reliefBand; live marker and limit in euro on the pension calculator and compare (pb-ladder.js, no page-script change); static on starter, director, glossary | |
-| 11 | State Pension on top of monthly income | not reached | |
+| 11 | State Pension on top of monthly income | **skipped** (fail-once rule): verify.py flagged the new line at 2.18:1 contrast (grey --ink-2 on the dark results panel); reverted. Render-diff had proved only the new #pbSpTop cell differs, and the veil covered it; a colour fix away | — |
 | 6 | Gap band drag | not reached | |
 | 2 | Relief widget | not reached | |
 | 10 | TCA capped part | not reached | |
