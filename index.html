@@ -1817,6 +1817,22 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 #calc::before{top:0;background:linear-gradient(to bottom,#EEF8F5,rgba(238,248,245,0))}
 #calc::after{bottom:0;background:linear-gradient(to top,var(--bg),rgba(250,250,249,0))}
 @media(max-width:600px){#calc::before,#calc::after{height:44px}}
+/* ============================================================
+   RELIEF WIDGET (.pb-rw). One amount in, one sentence out: what a
+   contribution could cost after tax relief at the two rates. Built by
+   assets/js/pb-relief-widget.js; the markup carries the €100 example and
+   a plain link, and the slider stays hidden without script. Text inherits
+   the surrounding colour. Byte-identical wherever used.
+   ============================================================ */
+.pb-rw{max-width:440px;margin:18px 0 22px;color:inherit}
+.pb-rw-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-rw-row label{font-size:.98rem;font-weight:600;color:inherit}
+.pb-rw-v{font-size:1.05rem;font-weight:700;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw input[type=range]{display:block;width:100%}
+.pb-rw input[type=range][hidden]{display:none}
+.pb-rw-out{margin:12px 0 8px;font-size:1rem;line-height:1.55;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw-out b{font-weight:700;color:inherit}
+.pb-rw-link{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body>
@@ -1963,6 +1979,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
         tax bill. Miss it and that year is gone for good. If you file your return online, you usually have until mid&#8209;November.</p>
         <p class="tk-who">Applies to anyone claiming relief for the <span id="tkYear">2025</span> tax year, including
         AVCs, self-assessed income and company directors.</p>
+<div class="pb-rw">
+  <div class="pb-rw-row"><label for="rwAmt3">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
+  <input type="range" id="rwAmt3" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
+  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
+  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
+</div>
         <a class="btn btn-light" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
       <div class="tk-clock" aria-hidden="true">
@@ -2567,5 +2589,6 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
+<script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>

@@ -1681,6 +1681,22 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* ============================================================
+   RELIEF WIDGET (.pb-rw). One amount in, one sentence out: what a
+   contribution could cost after tax relief at the two rates. Built by
+   assets/js/pb-relief-widget.js; the markup carries the €100 example and
+   a plain link, and the slider stays hidden without script. Text inherits
+   the surrounding colour. Byte-identical wherever used.
+   ============================================================ */
+.pb-rw{max-width:440px;margin:18px 0 22px;color:inherit}
+.pb-rw-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-rw-row label{font-size:.98rem;font-weight:600;color:inherit}
+.pb-rw-v{font-size:1.05rem;font-weight:700;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw input[type=range]{display:block;width:100%}
+.pb-rw input[type=range][hidden]{display:none}
+.pb-rw-out{margin:12px 0 8px;font-size:1rem;line-height:1.55;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw-out b{font-weight:700;color:inherit}
+.pb-rw-link{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body>
@@ -1770,6 +1786,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <div class="gloss">
     <div class="gterm reveal" id="pension"><h2>Pension</h2><p>A long-term savings pot for your retirement. You pay in while you're working, it's invested so it can grow, and you draw on it once you stop working. The government encourages it with tax relief.</p></div>
     <div class="gterm reveal" id="tax-relief"><h2>Tax relief</h2><p>Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every €100 you put in, around €40 can come back to you as relief, so it really costs you about €60. Relief is subject to Revenue's age-related limits.</p>
+<div class="pb-rw">
+  <div class="pb-rw-row"><label for="rwAmt1">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
+  <input type="range" id="rwAmt1" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
+  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
+  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
+</div>
   <div class="pb-lad">
     <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
     <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
@@ -2198,5 +2220,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
+<script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>

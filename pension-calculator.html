@@ -2118,6 +2118,16 @@ function calc(){
   announce('Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
+/* #2: a monthly amount handed over in the link's fragment (#monthly=100) by
+   the relief widget on the other pages. Read once, before the first render,
+   and only if it is a value the slider can hold; the fragment never reaches
+   a server. With no fragment the page loads exactly as before. */
+(function(){
+  var m=/(?:^#|&)monthly=(\d+)(?:&|$)/.exec((window.location&&window.location.hash)||'');
+  if(!m)return;
+  var r=$('mine'),v=+m[1];
+  if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
+})();
 wireRanges(VALTEXT,calc);
 calc();
 

@@ -1905,6 +1905,22 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-story-step{padding:12vh 0 12vh 18px}
 }
 @media(prefers-reduced-motion:reduce){.pb-story-bar i{transition:none}}
+/* ============================================================
+   RELIEF WIDGET (.pb-rw). One amount in, one sentence out: what a
+   contribution could cost after tax relief at the two rates. Built by
+   assets/js/pb-relief-widget.js; the markup carries the €100 example and
+   a plain link, and the slider stays hidden without script. Text inherits
+   the surrounding colour. Byte-identical wherever used.
+   ============================================================ */
+.pb-rw{max-width:440px;margin:18px 0 22px;color:inherit}
+.pb-rw-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-rw-row label{font-size:.98rem;font-weight:600;color:inherit}
+.pb-rw-v{font-size:1.05rem;font-weight:700;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw input[type=range]{display:block;width:100%}
+.pb-rw input[type=range][hidden]{display:none}
+.pb-rw-out{margin:12px 0 8px;font-size:1rem;line-height:1.55;color:inherit;font-variant-numeric:tabular-nums}
+.pb-rw-out b{font-weight:700;color:inherit}
+.pb-rw-link{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 </style>
 
 <script>
@@ -2047,6 +2063,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <span class="eyebrow"><span class="pip"></span>Worth knowing</span>
     <h2>Revenue helps you save.</h2>
     <p>Pension contributions get tax relief, so some of what you'd have paid in tax goes into your future instead. Our calculator shows how much that could add up to.</p>
+<div class="pb-rw">
+  <div class="pb-rw-row"><label for="rwAmt2">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
+  <input type="range" id="rwAmt2" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
+  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
+  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
+</div>
     <a class="btn btn-light" href="pension-calculator.html">See what I could build <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
@@ -2678,5 +2700,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   steps.forEach(function(s){io.observe(s);});
 })();
 </script>
+<script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>
