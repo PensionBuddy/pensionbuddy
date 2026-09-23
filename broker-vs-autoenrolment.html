@@ -1821,6 +1821,19 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-stair-r{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .pb-stair-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;color:var(--ink-2)}
 .pb-stair-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* WHERE 20% BECOMES 40% (.pb-band). The reader's salary as one bar, split
+   at the standard rate cut-off point the page is using for their status
+   (PBRelief.SRCOP, through the page's relief()). Income tax, so neutral:
+   neither the State's teal nor the gap's amber. */
+.pb-band{margin:10px 0 0}
+.pb-band-track{display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-band-track i{display:block;height:100%}
+.pb-band-lo{background:var(--line-2)}
+.pb-band-hi{background:var(--ink-2)}
+.pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1925,6 +1938,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
       <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Two incomes</button></div>
       <p class="subnote" id="statusNote">Sets where your tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension.</p>
+      <div class="pb-band">
+        <div class="pb-band-track" aria-hidden="true"><i class="pb-band-lo" id="pbBandLo" style="width:88%"></i><i class="pb-band-hi" id="pbBandHi" style="width:12%"></i></div>
+        <p class="pb-band-key"><span><i class="pb-band-sw pb-band-lo"></i><b id="pbBandLoN">€44,000</b> of your salary taxed at 20%</span><span><i class="pb-band-sw pb-band-hi"></i><b id="pbBandHiN">€6,000</b> at 40%</span></p>
+      </div>
     </div>
   </div>
 
@@ -2357,6 +2374,13 @@ function calc() {
   $('phaseLine').textContent = ($('futureOn').checked ? 'Planning for ' + calYear : 'Since it is ' + calYear)
     + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
     + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
+
+  /* where 20% becomes 40%: the salary split at the cut-off this status uses */
+  const cut = relief().srcop, bandLo = Math.min(salary, cut), bandHi = Math.max(0, salary - cut);
+  $('pbBandLo').style.width = (bandLo / salary * 100).toFixed(4) + '%';
+  $('pbBandHi').style.width = (bandHi / salary * 100).toFixed(4) + '%';
+  $('pbBandLoN').textContent = euro(bandLo);
+  $('pbBandHiN').textContent = euro(bandHi);
 
   /* the phase staircase in the assumptions: tag the phase these figures use */
   for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;

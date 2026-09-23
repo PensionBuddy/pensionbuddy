@@ -208,6 +208,13 @@ function calc() {
     + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
     + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
 
+  /* where 20% becomes 40%: the salary split at the cut-off this status uses */
+  const cut = relief().srcop, bandLo = Math.min(salary, cut), bandHi = Math.max(0, salary - cut);
+  $('pbBandLo').style.width = (bandLo / salary * 100).toFixed(4) + '%';
+  $('pbBandHi').style.width = (bandHi / salary * 100).toFixed(4) + '%';
+  $('pbBandLoN').textContent = euro(bandLo);
+  $('pbBandHiN').textContent = euro(bandHi);
+
   /* the phase staircase in the assumptions: tag the phase these figures use */
   for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;
 

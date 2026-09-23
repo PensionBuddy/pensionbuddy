@@ -44,7 +44,7 @@ twice is reverted and logged here. The audit itself is
 | 2 | Relief widget | **skipped** (fail-once rule): verify.py's link check read the static hand-off link `pension-calculator.html#monthly=100` as a missing anchor on three pages; reverted. Everything else had passed (contrast 6.31:1 and up, render-diff clean, the calculator taking #monthly=500 and ignoring an off-step value); the fix is a plain href with the fragment added by script | — |
 | 10 | TCA capped part | done: the record as one bar to the larger of 2,080 and everything entered: paid, credits and HomeCaring Periods counted, the part over the caps greyed; full-record tick | |
 | 19 | Phase staircase | done: four phases from AE_PHASES as a staircase in the rates assumption, stacked you / employer / State, the phase in use tagged | |
-| 16 | 20% → 40% marker | not reached | |
+| 16 | 20% → 40% marker | done: the salary as one bar split at the cut-off the page uses for the chosen status, with both parts in euro | |
 | 22 | Glossary index + entitlement jump row | not reached | |
 | 23 | Drawdown mini calc | not reached | |
 | 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
@@ -91,6 +91,7 @@ Every new user-facing string this run adds is listed here by item.
 - #6: slider label "What you expect to need"; value "€[x] a year"; result line "€[gap] a year short." or "Covered by the State Pension."; once moved, the need bar's caption reads "What you expect to need" (was the signed "What people expect to need", which it keeps until the slider moves); the chart's spoken label "Two bars. You expect to need [x] euro a year. The State Pension pays 15,564. The gap is [y]." / "…That is covered."
 - #10: key "Paid [n]", "Credits and HomeCaring Periods counted [n]", "Over the caps [n]" (the page's own "credits and HomeCaring Periods" wording).
 - #19: tag "Your year"; key "You", "Your employer", "The State"; column labels are the module's years ("2026 to 2028" …) and rates.
+- #16: key "€[x] of your salary taxed at 20%" and "€[y] at 40%".
 
 ---
 
