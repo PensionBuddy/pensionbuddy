@@ -147,6 +147,13 @@ function render() {
     ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
     : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
 
+  // The transition glide: mark the column for the reader's drawdown year, or
+  // the last one ("2034 on") once the transition is over.
+  const glideYear = Math.min(Math.max(drawdown, SP.TRANSITION_FIRST), SP.TRANSITION_LAST + 1);
+  for (let y = SP.TRANSITION_FIRST; y <= SP.TRANSITION_LAST + 1; y++) {
+    $('pbGlideY' + y).hidden = y !== glideYear;
+  }
+
   $('entryNote').innerHTML = (entryMoved
     ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '
     : '') + APRIL_RULE;

@@ -1825,6 +1825,24 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .pb-april{margin-top:10px}
 .pb-april[hidden]{display:none}
+
+/* THE TRANSITION GLIDE (.pb-glide). Ten columns, 2025 to 2034: the Yearly
+   Average share of Method 2 for a pension starting that year, the figures
+   the paragraph above states. Both shares are the State's, so teal. The
+   page marks the reader's drawdown year with a dot ("Your year" for screen
+   readers, white on the dot so it reads against it); the markup carries
+   the default birth year's. */
+.pb-glide{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;max-width:620px}
+.pb-glide-col{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:14px}
+.pb-glide-bar{position:relative;display:block;width:100%;max-width:34px;height:72px;border-radius:6px;background:var(--teal-50);border:1px solid var(--teal-100);overflow:hidden}
+.pb-glide-bar i{position:absolute;left:0;right:0;bottom:0;display:block;background:var(--aqua)}
+.pb-glide-pct{font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-glide-yr{font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:center;line-height:1.25}
+.pb-glide-you{position:absolute;top:0;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--teal-700);color:#fff}
+.pb-glide-you[hidden]{display:none}
+.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-yr{color:var(--ink);font-weight:700}
+.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-bar{border-color:var(--teal-700)}
+.pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2035,6 +2053,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <p class="yal-note">Below 10 the Yearly Average method gives nothing.</p>
     <p><b>Until the end of 2033 the Department runs both.</b> Method 1 is the Total Contributions Approach on its own. Method 2 mixes a share of the Yearly Average rate with a share of the TCA rate, and the Yearly Average share falls ten points a year, from 90% for a pension starting in 2025 to 10% for one starting in 2033. Whichever of the two is higher is paid. From 2034 only the Total Contributions Approach applies.</p>
+    <p class="yal-cap">The Yearly Average share of Method 2, by the year the pension starts.</p>
+    <ol class="pb-glide">
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2025" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:90%"></i></span><span class="pb-glide-pct">90%</span><span class="pb-glide-yr">2025</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2026" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:80%"></i></span><span class="pb-glide-pct">80%</span><span class="pb-glide-yr">2026</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2027" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:70%"></i></span><span class="pb-glide-pct">70%</span><span class="pb-glide-yr">2027</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2028"><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:60%"></i></span><span class="pb-glide-pct">60%</span><span class="pb-glide-yr">2028</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2029" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:50%"></i></span><span class="pb-glide-pct">50%</span><span class="pb-glide-yr">2029</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2030" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:40%"></i></span><span class="pb-glide-pct">40%</span><span class="pb-glide-yr">2030</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2031" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:30%"></i></span><span class="pb-glide-pct">30%</span><span class="pb-glide-yr">2031</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2032" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:20%"></i></span><span class="pb-glide-pct">20%</span><span class="pb-glide-yr">2032</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2033" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:10%"></i></span><span class="pb-glide-pct">10%</span><span class="pb-glide-yr">2033</span></li>
+      <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2034" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:0%"></i></span><span class="pb-glide-pct">0%</span><span class="pb-glide-yr">2034 on</span></li>
+    </ol>
     <p><b>The year your pension starts sets the mix</b>, once and for all. This page assumes you take the pension at 66, so the year you were born fixes it. Starting later, at 67 to 70, changes the mix and the rate, and is not modelled here. The qualifying minimum is the same under both methods: 520 paid contributions, and credits and HomeCaring Periods do not count toward it.</p>
   </div>
 </div></section>
@@ -2244,6 +2275,13 @@ function render() {
   $('birthNote').innerHTML = SP.transition(drawdown) === 'after'
     ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
     : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
+
+  // The transition glide: mark the column for the reader's drawdown year, or
+  // the last one ("2034 on") once the transition is over.
+  const glideYear = Math.min(Math.max(drawdown, SP.TRANSITION_FIRST), SP.TRANSITION_LAST + 1);
+  for (let y = SP.TRANSITION_FIRST; y <= SP.TRANSITION_LAST + 1; y++) {
+    $('pbGlideY' + y).hidden = y !== glideYear;
+  }
 
   $('entryNote').innerHTML = (entryMoved
     ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '

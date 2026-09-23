@@ -115,3 +115,21 @@
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .pb-april{margin-top:10px}
 .pb-april[hidden]{display:none}
+
+/* THE TRANSITION GLIDE (.pb-glide). Ten columns, 2025 to 2034: the Yearly
+   Average share of Method 2 for a pension starting that year, the figures
+   the paragraph above states. Both shares are the State's, so teal. The
+   page marks the reader's drawdown year with a dot ("Your year" for screen
+   readers, white on the dot so it reads against it); the markup carries
+   the default birth year's. */
+.pb-glide{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;max-width:620px}
+.pb-glide-col{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:14px}
+.pb-glide-bar{position:relative;display:block;width:100%;max-width:34px;height:72px;border-radius:6px;background:var(--teal-50);border:1px solid var(--teal-100);overflow:hidden}
+.pb-glide-bar i{position:absolute;left:0;right:0;bottom:0;display:block;background:var(--aqua)}
+.pb-glide-pct{font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-glide-yr{font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:center;line-height:1.25}
+.pb-glide-you{position:absolute;top:0;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--teal-700);color:#fff}
+.pb-glide-you[hidden]{display:none}
+.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-yr{color:var(--ink);font-weight:700}
+.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-bar{border-color:var(--teal-700)}
+.pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
