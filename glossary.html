@@ -1634,6 +1634,20 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
+/* ============================================================
+   TERM INDEX (.pb-tix). Every term on the page as a row of links, held
+   under the sticky nav while the terms are on screen and scrolling
+   sideways on a phone. The term in view is marked (aria-current), the
+   way the site's own section links are. A plain list without script.
+   ============================================================ */
+.pb-tix{position:sticky;top:var(--pb-navh,72px);transition:top .3s cubic-bezier(.4,0,.2,1);z-index:40;background:var(--bg);margin:0 0 20px;padding:10px 0;border-bottom:1px solid var(--line)}
+.pb-tix ul{list-style:none;margin:0;padding:0 0 2px;display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:thin}
+.pb-tix li{flex:0 0 auto}
+.pb-tix a{display:inline-block;padding:6px 12px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap}
+.pb-tix a:hover{color:var(--ink);border-color:var(--ink-3)}
+.pb-tix a[aria-current="true"]{background:var(--teal-50);border-color:var(--teal-100);color:var(--teal-700);font-weight:600}
+.gterm{scroll-margin-top:calc(var(--pb-navh,72px) + 72px)}
+@media(prefers-reduced-motion:reduce){.pb-tix{transition:none}}
 </style>
 </head>
 <body>
@@ -1699,6 +1713,27 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 </div></section>
 
 <section style="padding-top:36px"><div class="wrap">
+  <div class="pb-tix" role="navigation" aria-label="Terms on this page">
+    <ul>
+      <li><a href="#pension">Pension</a></li>
+      <li><a href="#tax-relief">Tax relief</a></li>
+      <li><a href="#avc">AVC</a></li>
+      <li><a href="#arf">ARF</a></li>
+      <li><a href="#annuity">Annuity</a></li>
+      <li><a href="#drawdown">Drawdown</a></li>
+      <li><a href="#defined-contribution">Defined Contribution</a></li>
+      <li><a href="#defined-benefit">Defined Benefit</a></li>
+      <li><a href="#lump-sum">Lump sum</a></li>
+      <li><a href="#fund-investment-growth">Fund / investment growth</a></li>
+      <li><a href="#state-pension">State Pension</a></li>
+      <li><a href="#prsa">PRSA</a></li>
+      <li><a href="#consolidation">Consolidation</a></li>
+      <li><a href="#employer-contribution">Employer contribution</a></li>
+      <li><a href="#corporation-tax-relief">Corporation tax relief</a></li>
+      <li><a href="#standard-fund-threshold">Standard Fund Threshold</a></li>
+      <li><a href="#qfa">QFA</a></li>
+    </ul>
+  </div>
   <div class="gloss">
     <div class="gterm reveal" id="pension"><h2>Pension</h2><p>A long-term savings pot for your retirement. You pay in while you're working, it's invested so it can grow, and you draw on it once you stop working. The government encourages it with tax relief.</p></div>
     <div class="gterm reveal" id="tax-relief"><h2>Tax relief</h2><p>Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every €100 you put in, around €40 can come back to you as relief, so it really costs you about €60. Relief is subject to Revenue's age-related limits.</p>
@@ -2075,5 +2110,37 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
+<script>
+/* the term index: held under the nav (whose height changes as it scrolls),
+   and the term in view marked */
+(function(){
+  var tix=document.querySelector('.pb-tix'), nav=document.getElementById('nav');
+  if(!tix||!nav||!('IntersectionObserver' in window)) return;
+  var root=document.documentElement;
+  /* the nav slides away on the way down and back on the way up, so the index
+     follows its bottom edge, not its height */
+  var raf=0;
+  function navh(){raf=0;root.style.setProperty('--pb-navh',Math.max(0,Math.round(nav.getBoundingClientRect().bottom))+'px');}
+  function queue(){if(!raf)raf=requestAnimationFrame(navh);}
+  navh();
+  window.addEventListener('scroll',queue,{passive:true});
+  window.addEventListener('resize',queue);
+  nav.addEventListener('transitionend',queue);
+  if('ResizeObserver' in window) new ResizeObserver(queue).observe(nav);
+  var links={}, row=tix.querySelector('ul');
+  [].forEach.call(tix.querySelectorAll('a[href^="#"]'),function(a){links[a.getAttribute('href').slice(1)]=a;});
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var a=links[e.target.id]; if(!a) return;
+      Object.keys(links).forEach(function(k){links[k].removeAttribute('aria-current');});
+      a.setAttribute('aria-current','true');
+      var l=a.offsetLeft-row.offsetLeft, r=l+a.offsetWidth;
+      if(l<row.scrollLeft||r>row.scrollLeft+row.clientWidth) row.scrollLeft=Math.max(0,l-16);
+    });
+  },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+  Object.keys(links).forEach(function(k){var t=document.getElementById(k);if(t)io.observe(t);});
+})();
+</script>
 </body>
 </html>
