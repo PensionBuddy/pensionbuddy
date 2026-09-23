@@ -32,7 +32,7 @@ twice is reverted and logged here. The audit itself is
 | # | Item | Result | Commit |
 |---|---|---|---|
 | 3 | Regulatory lockup | done: regulator line and name as one type-only mark under the hero call to action, four pages, linked to the register | |
-| 4 | Result sentence | not reached | |
+| 4 | Result sentence | done: the headline figures as one plain sentence under them on the pension, director and reality check pages, written from the same final values and veiled with them | |
 | 15 | Success motion | not reached | |
 | 5 | Mobile booking bar | not reached | |
 | 1 | Results peek bar | not reached | |
@@ -78,6 +78,11 @@ says it is Damian's: "Damian has spent 30 years advising people on pensions"
 Every new user-facing string this run adds is listed here by item.
 
 - #3: the register link's accessible name (read by screen readers, not shown): "Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie". Nothing else in the lockup is new wording: "Regulated by the Central Bank of Ireland", "Damian Condon, QFA" and each page's own "30 years looking after Irish savers" / "30 years in financial services" are the existing strings, rearranged. The link itself is new: the site only ever named registers.centralbank.ie as text, so there was no existing href to reuse; it goes to https://registers.centralbank.ie/ in the same tab with rel="noopener", like the site's other outside links.
+- #4 (pension calculator, under the two headline figures): "At [age], with [own + employer contribution] a month going in and [pot so far] saved already, your pot could reach [projected pot] by [retirement age]: an income of about [income] a month." At the defaults: "At 40, with €450 a month going in and €50,000 saved already, your pot could reach €460,066 by 66: an income of about €1,534 a month." The brief's wording was "…by [retirement age]: about [income] a month"; "an income of" was added so the monthly figure cannot be read as the pot, and it echoes the cell's label "Estimated income, per month".
+- #4 (pension calculator, edge wording): with no monthly contribution the middle reads "with nothing going in each month and [pot] saved already"; with nothing saved, "with [contribution] a month going in and nothing saved yet"; with neither, the whole sentence is "At [age], with nothing saved yet and nothing going in each month, there is no pot to grow by [retirement age]."
+- #4 (director calculator, under the pot and the corporation tax figure): "With [company contribution] a year from the company, from [age] to [retirement age], your pot could reach [projected pot], and the company could save [corporation tax relief] in corporation tax." At the defaults: "With €40,000 a year from the company, from 48 to 66, your pot could reach €1,511,849, and the company could save €90,000 in corporation tax." The brief said "your pension could reach"; "pot" was kept to match the cell's label "Projected pot at retirement" and the pension calculator's sentence, so a lump sum is never read as a yearly pension.
+- #4 (director calculator, edge wording): with no company contribution, "With no company contribution, from [age] to [retirement age], your pot could reach [projected pot], and there is no corporation tax to save."; with no contribution and nothing built up, "With no company contribution and nothing built up so far, there is no pot to grow from [age] to [retirement age], and no corporation tax to save."
+- #4 (State Pension reality check, under the weekly and yearly figures): "On [N] reckonable contributions, [N/52] years, this shows €[weekly] a week, €[annual] a year, which covers [x]% of a modest standard of living." At the default: "On 2,080 reckonable contributions, 40 years, this shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard of living." The share is the Modest bar's own "The State Pension covers 81%". Below 520 the sentence is hidden with the eligible panel, so "No entitlement" speaks alone; there is no below-520 wording.
 
 ---
 

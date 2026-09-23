@@ -118,6 +118,9 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
 .res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
 .res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
+/* #4: the headline figures as one plain sentence, written from the same final
+   values as the figures above. White on --teal-900, inherited from .res-hero. */
+.res-hero .pb-say{grid-column:1/-1;position:relative;min-width:0;font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:break-word}
 
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
@@ -1437,7 +1440,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-btn:hover{background:var(--teal-700)}
 .pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
 .pb-guess-out:empty{display:none}
-.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut{filter:blur(13px)}
+.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay{filter:blur(13px)}
 .pb-veil{transition:filter .45s ease}
 .pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
 @media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
@@ -1658,6 +1661,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="res-hero reveal" style="transition-delay:.08s">
       <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
       <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
+      <p class="pb-say" id="pbSay">At 40, with €450 a month going in and €50,000 saved already, your pot could reach €460,066 by 66: an income of about €1,534 a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
@@ -1869,6 +1873,16 @@ function calc(){
 
   tween('potOut',base,euro);
   tween('incOut',base*0.04/12,euro);
+  /* #4: the two figures above as one sentence. Written from the same final
+     values the tweens are aimed at, never the in-between ones, so it cannot
+     disagree with them once they land. Nothing new is worked out here. The
+     markup carries this sentence at the page's defaults for readers without
+     script, and assets/js/pb-guess.js veils it with the figures it repeats. */
+  $('pbSay').textContent=(monthly>0||pot>0)
+    ?'At '+age+', with '+(monthly>0?euro(monthly)+' a month going in':'nothing going in each month')+
+     ' and '+(pot>0?euro(pot)+' saved already':'nothing saved yet')+
+     ', your pot could reach '+euro(base)+' by '+ret+': an income of about '+euro(base*0.04/12)+' a month.'
+    :'At '+age+', with nothing saved yet and nothing going in each month, there is no pot to grow by '+ret+'.';
 
 
   /* cost of waiting: existing pot keeps growing, twelve months of
@@ -2448,7 +2462,7 @@ function sendResults(){
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=13f70747"></script>
+<script src="assets/js/pb-guess.js?v=581f2dfd"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 </body>
 </html>

@@ -26,9 +26,12 @@
   the compare page repeats both totals in its breakdown cards, quotes them
   again in #leadOut and states the personal-pension total a third time in
   #ppNetLab's sentence, and the entitlement page repeats the weekly rate in
-  .bothcard. Every element on every list was checked by hand for a link, an
-  input or anything else focusable, and none of them has one, which is what
-  makes aria-hidden while veiled honest rather than a trap.
+  .bothcard. The pension, director and reality-check pages each state their
+  headline figures again in #pbSay, the one-sentence result under them, so
+  that sentence is on each of their lists, and in the head's pre-paint blur.
+  Every element on every list was checked by hand for a link, an input or
+  anything else focusable, and none of them has one, which is what makes
+  aria-hidden while veiled honest rather than a trap.
 
   THE REALITY CHECK IS ON THE LIST. It opens on a full forty-year record, so
   #spWeekly holds the maximum rate at load. The page's lede used to state that
@@ -134,7 +137,7 @@
         target: 'potOut',
         fmt: euro,
         min: 0, max: 3000000, step: 10000, value: 250000,
-        veil: function () { return [$('potOut'), $('incOut'), card('chart')]; }
+        veil: function () { return [$('potOut'), $('incOut'), card('chart'), $('pbSay')]; }
       }];
     }
     if (file === 'director-calculator.html') {
@@ -143,8 +146,10 @@
         target: 'potOut',
         fmt: euro,
         min: 0, max: 4000000, step: 20000, value: 500000,
-        /* #taxOut stays sharp on purpose: the safe on this page animates it */
-        veil: function () { return [$('potOut'), card('chart')]; }
+        /* #taxOut stays sharp on purpose: the safe on this page animates it.
+           #pbSay repeats #taxOut's figure too, but it states the pot as well,
+           so the whole sentence is veiled */
+        veil: function () { return [$('potOut'), card('chart'), $('pbSay')]; }
       }];
     }
     if (file === 'state-pension-reality-check.html') {
@@ -157,7 +162,7 @@
         /* #spFoot names the record level in words and #lsRows draws the
            annual figure against three printed targets; both give it away */
         veil: function () {
-          return [$('spWeekly'), $('spAnnual'), $('spFoot'), $('lsRows')];
+          return [$('spWeekly'), $('spAnnual'), $('spFoot'), $('lsRows'), $('pbSay')];
         }
       }];
     }

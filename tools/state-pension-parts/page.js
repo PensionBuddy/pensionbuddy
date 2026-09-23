@@ -82,9 +82,11 @@ function render() {
     ? 'The bar shows how much of each one the State Pension covers.'
     : 'With no Contributory entitlement, none of these is covered by it.';
 
+  let modestCover = null;   /* #4: the modest row's share, as its bar prints it */
   SP.gaps(annualCents).forEach(g => {
     const row = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
     const covered = Math.max(0, Math.min(1, annualCents / g.targetCents));
+    if (g.standard === 'modest') modestCover = Math.round(covered * 100);
     const bar = row.querySelector('.lsbar i');
     bar.style.width = (covered * 100) + '%';
     row.querySelector('.lsbar').setAttribute('aria-hidden', 'true');
@@ -93,6 +95,18 @@ function render() {
       : 'You would need <b>' + euro(g.target) + ' a year</b> from somewhere else.';
     row.classList.toggle('is-covered', g.covered && res.eligible);
   });
+
+  /* #4: the result as one plain sentence, from the figures already written
+     above: the same weekly and annual rate, and the modest row's share exactly
+     as its bar prints it, so nothing here is worked out a second time. It sits
+     inside #spHas, so below the qualifying minimum it is hidden with the rest
+     of that panel and #spNone speaks alone, the same way #spWeekly keeps its
+     last value while hidden. The markup carries it at the page's default. */
+  if (res.eligible) {
+    $('pbSay').textContent = 'On ' + num(contribs) + ' reckonable contributions, ' + years +
+      ' years, this shows ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) +
+      ' a year, which covers ' + modestCover + '% of a modest standard of living.';
+  }
 
   /* One spoken summary rather than eight, so a screen reader gets the point
      of the page and not a list of fragments. */

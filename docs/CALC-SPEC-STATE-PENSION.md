@@ -271,6 +271,13 @@ Headline, at the default 2,080:
 
 - **€299.30 a week**, **€15,563.60 a year**
 - "the maximum State Pension, and that needs a full 40 years of contributions"
+- *2026-09-23 (#4, run 19):* under the two figures, one sentence from the
+  reader's own count: "On 2,080 reckonable contributions, 40 years, this
+  shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard
+  of living." Every figure in it is one the page already prints: the two
+  headline figures and the Modest bar's own share. It sits in the eligible
+  panel, so below 520 it is hidden with that panel and never appears beside
+  "No entitlement". It is on the guess veil's list for this page.
 
 Then, for each of the three standards, a bar and a plain sentence:
 

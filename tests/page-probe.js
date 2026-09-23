@@ -207,6 +207,14 @@
             });
           }
         });
+        // #4: the one-sentence result repeats the two headline figures and the
+        // modest row's share, so it is held to the module like they are
+        var modest = gaps.filter(function (g) { return g.standard === 'modest'; })[0];
+        t.eq(label + ': pbSay is the result in one sentence', text('pbSay'),
+             'On ' + num(row.contribs) + ' reckonable contributions, ' + years + ' years, this shows ' +
+             euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year, which covers ' +
+             Math.round(Math.max(0, Math.min(1, res.annualCents / modest.targetCents)) * 100) +
+             '% of a modest standard of living.');
         var sr = text('srSummary');
         t.has(label + ': srSummary carries the weekly figure', sr, 'State Pension ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year.');
         t.has(label + ': srSummary carries the three gaps', sr,
@@ -217,6 +225,10 @@
         t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), num(res.shortBy) + ' more would bring the total to 520');
         if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), row.shortBy + ' more would bring');
         t.has(label + ': lsIntro says nothing is covered', text('lsIntro'), 'With no Contributory entitlement, none of these is covered by it.');
+        // #4: below the minimum the one-sentence result must not be seen
+        // beside "No entitlement"; it goes with the eligible panel it sits in
+        t.eq(label + ': pbSay is out of sight with the eligible panel',
+             $('spHas').contains($('pbSay')) && $('pbSay').getClientRects().length === 0, true);
         SP.gaps(0).forEach(function (g) {
           var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
           t.eq(label + ': ' + g.standard + ' bar is empty', rowEl.querySelector('.lsbar i').style.width, '0%');
