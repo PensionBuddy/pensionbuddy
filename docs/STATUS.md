@@ -15,8 +15,15 @@ protected, committed and pushed before the next. An item that fails its gate
 twice is reverted and logged here. The audit itself is
 `docs/INTERACTIVE-AUDIT-2.md`.
 
-**RESUME FROM:** the first row below marked "not reached". Every row marked
-"done" is committed and pushed.
+**RUN COMPLETE, 2026-09-23.** Every row below is done, skipped with its reason, or
+not built by the brief's own condition; every done row is committed and pushed.
+Final gate: run-tests all suites pass; build 69; runner 77; games 157; stamp,
+chrome and pagebuild clean; verify.py 18 pages at 375/1200/1440 with
+screenshots, 0 FAIL (WARNs: terms A1, existing; glossary C4, from #22).
+Render-diff against main (0a2461c), with the run's new cells and the
+deliberately reworded #entryNote set aside: load identical on all five
+calculators; 160,871 swept states and 9,000 event-path comparisons, 0
+differing.
 
 ## Fixes
 
