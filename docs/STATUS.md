@@ -37,7 +37,7 @@ twice is reverted and logged here. The audit itself is
 | 5 | Mobile booking bar | done: below 921px on home, starter, director, tracker and glossary, a closable "Book a call with Damian for free" bar shows once the hero is gone and tucks away at the closing band; Ask Buddy lifts above it; it stands aside while the cookie bar or the Ask Buddy panel is up; closed stays closed for the session, Back included | |
 | 1 | Results peek bar | done: peek bar on the five calculators below 921px, mirroring the headline cells; figure-free while the guess veil is up | |
 | 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | |
-| 8 | Transition glide | not reached | |
+| 8 | Transition glide | **skipped** (fail-once rule): verify.py flagged the visually-hidden "Your year:" marker text at 1.1:1 contrast on its teal dot; reverted. A one-line colour fix away; render-diff had proved only the new #pbGlideY cells differ | — |
 | 7 | Relief limit ladder | not reached | |
 | 11 | State Pension on top of monthly income | not reached | |
 | 6 | Gap band drag | not reached | |
