@@ -1690,6 +1690,22 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-share button:hover{border-color:var(--teal-700)}
 .pb-share button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 .pb-share-said{font-size:13.5px;color:var(--ink-2)}
+/* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
+   the nav's "Calculator" link, from 1201px only (the row, not the drawer);
+   the nav's own markup is untouched. Takes no width in the row. */
+.pb-navmenu{display:none}
+@media(min-width:1201px){
+  .nav-links{position:relative}
+  .pb-navmenu{position:absolute;z-index:60;display:block;width:340px;margin-top:4px;padding:8px;background:var(--surface);
+    border:1px solid var(--line-2);border-radius:var(--r-xl);box-shadow:0 18px 40px rgba(11,31,28,.14)}
+  .pb-navmenu[hidden]{display:none}
+  .pb-navmenu a{display:block;padding:10px 12px;border-radius:var(--r-md);color:var(--ink);text-decoration:none}
+  .pb-navmenu a:hover,.pb-navmenu a:focus-visible{background:var(--teal-50)}
+  .pb-navmenu a:focus-visible{outline:3px solid var(--ring);outline-offset:0}
+  .pb-navmenu a[aria-current="page"] b{color:var(--teal-700)}
+  .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
+  .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
+}
 
 /* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -3062,5 +3078,6 @@ setMode(location.hash === '#combined' ? 2 : 1);
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
 <script src="assets/js/pb-share.js?v=e795eb76"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
+<script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
 </body>
 </html>
