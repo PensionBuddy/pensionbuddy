@@ -48,6 +48,12 @@ SHOTS = {
     # keeps the sliders, the headline and the salary-versus-pension comparison
     'director-calculator': {'page': 'director-calculator.html', 'target': '.calc-wrap',
                             'hide': '.waitcard,.chart-card,.max-card{display:none!important}'},
+    # #13, the home page's product tabs: the other three calculators, each
+    # cropped to its sliders and the part of its result that says the most
+    'broker-vs-autoenrolment': {'page': 'broker-vs-autoenrolment.html', 'target': '.calc-wrap',
+                                'hide': '.chart-card,#pbMyCard,#riskCard,.cta-card,.waitcard.lead .phaseline{display:none!important}'},
+    'state-pension-reality-check': {'page': 'state-pension-reality-check.html', 'target': '.calc-wrap', 'hide': ''},
+    'state-pension-entitlement': {'page': 'state-pension-entitlement.html', 'target': '.calc-wrap', 'hide': ''},
 }
 
 HIDE = ('nav,footer,.announce,.skip,.phead,.deadline,#deadlineBand,.assume,section,'

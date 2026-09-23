@@ -49,7 +49,7 @@ twice is reverted and logged here. The audit itself is
 | 23 | Drawdown mini calc | done: pot slider in the Drawdown entry, a month out at the calculator's own 4% illustration | |
 | 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
 | 24 | Buddy's facts links | done: each game-over fact's "More on this in …" names its page as a link (target _top, glossary anchors where they exist) | |
-| 13 | Product band tabs | not reached | |
+| 13 | Product band tabs | done: five tabs on the home product band swapping shot, line and button; three new shots (compare, reality check, entitlement) via shoot-product.py | |
 | 20 | Screenshot arrows | not reached | |
 | 27 | "Before 6 April?" control | not reached | |
 | 26 | Two-tone headlines | not reached | |
@@ -95,6 +95,7 @@ Every new user-facing string this run adds is listed here by item.
 - #22: glossary index label (for screen readers) "Terms on this page"; entitlement "Jump to how the two calculations work or the assumptions."
 - #23: label "A pot of"; "Drawing 4% a year from it is about €[x] a month." (the entry's own "not a recommendation" sentence sits directly above).
 - #24: none: the line "More on this in [page]." is unchanged; the page name is now a link.
+- #13: tablist label (screen readers) "The free tools"; tab names are the footer's tool names; new button "Open the entitlement check"; new line for the entitlement tab "What the State Pension would actually pay you, worked out both ways the Department does."; three new alt texts: "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "The State Pension entitlement check: sliders for birth year, first PRSI year and contributions, with the weekly rate and both calculations side by side." Other lines and buttons reuse each tool's existing wording.
 
 ---
 
