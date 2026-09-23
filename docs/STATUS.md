@@ -46,7 +46,7 @@ twice is reverted and logged here. The audit itself is
 | 19 | Phase staircase | done: four phases from AE_PHASES as a staircase in the rates assumption, stacked you / employer / State, the phase in use tagged | |
 | 16 | 20% → 40% marker | done: the salary as one bar split at the cut-off the page uses for the chosen status, with both parts in euro | |
 | 22 | Glossary index + entitlement jump row | done: glossary term index held under the nav (follows it as it slides away) with the term in view marked; entitlement jump row under the result. New WARN: glossary deep links land below the index (C4) | |
-| 23 | Drawdown mini calc | not reached | |
+| 23 | Drawdown mini calc | done: pot slider in the Drawdown entry, a month out at the calculator's own 4% illustration | |
 | 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
 | 24 | Buddy's facts links | not reached | |
 | 13 | Product band tabs | not reached | |
@@ -93,6 +93,7 @@ Every new user-facing string this run adds is listed here by item.
 - #19: tag "Your year"; key "You", "Your employer", "The State"; column labels are the module's years ("2026 to 2028" …) and rates.
 - #16: key "€[x] of your salary taxed at 20%" and "€[y] at 40%".
 - #22: glossary index label (for screen readers) "Terms on this page"; entitlement "Jump to how the two calculations work or the assumptions."
+- #23: label "A pot of"; "Drawing 4% a year from it is about €[x] a month." (the entry's own "not a recommendation" sentence sits directly above).
 
 ---
 

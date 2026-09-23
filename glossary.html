@@ -1648,6 +1648,17 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-tix a[aria-current="true"]{background:var(--teal-50);border-color:var(--teal-100);color:var(--teal-700);font-weight:600}
 .gterm{scroll-margin-top:calc(var(--pb-navh,72px) + 72px)}
 @media(prefers-reduced-motion:reduce){.pb-tix{transition:none}}
+/* DRAWDOWN AT 4% (.pb-dd). A pot in, a month out, at the pension
+   calculator's own illustration rate (4% of the pot a year, over twelve)
+   and its pot slider's range. The markup carries its default pot; the
+   slider stays hidden without script, so there is no dead control. */
+.pb-dd{max-width:420px;margin:14px 0 4px}
+.pb-dd-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-dd-row label{font-size:.95rem;font-weight:600;color:var(--ink)}
+.pb-dd-v{font-size:1rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-dd input[type=range]{display:block;width:100%}
+.pb-dd input[type=range][hidden]{display:none}
+.pb-dd-out{margin:10px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -1751,7 +1762,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     <div class="gterm reveal" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments you can make into a workplace pension, on top of the standard contributions, to build your pot faster. They usually qualify for tax relief too.</p></div>
     <div class="gterm reveal" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It stays invested, so it can grow, but it can also fall, and it can run out if you draw too much.</p></div>
     <div class="gterm reveal" id="annuity"><h2>Annuity</h2><p>Another option at retirement. You use your pension pot to buy a guaranteed income for life from an insurer. It gives certainty, but once bought it usually can't be changed.</p></div>
-    <div class="gterm reveal" id="drawdown"><h2>Drawdown</h2><p>Taking money out of your pension once you've retired. The 4% figure you'll see in our calculator is a simple illustration of drawing 4% of your pot a year, not a recommendation.</p></div>
+    <div class="gterm reveal" id="drawdown"><h2>Drawdown</h2><p>Taking money out of your pension once you've retired. The 4% figure you'll see in our calculator is a simple illustration of drawing 4% of your pot a year, not a recommendation.</p>
+<div class="pb-dd" id="pbDd">
+  <div class="pb-dd-row"><label for="pbDdPot">A pot of</label><span class="pb-dd-v" id="pbDdPotV">€50,000</span></div>
+  <input type="range" id="pbDdPot" min="5000" max="1500000" step="5000" value="50000" aria-valuetext="€50,000" hidden>
+  <p class="pb-dd-out">Drawing 4% a year from it is about <b id="pbDdOut">€167</b> a month.</p>
+</div></div>
     <div class="gterm reveal" id="defined-contribution"><h2>Defined Contribution<span class="abbr">DC</span></h2><p>The most common type of pension today. What you end up with depends on how much was paid in and how the investments performed. The pot is yours, but the final value isn't guaranteed.</p></div>
     <div class="gterm reveal" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable, which is why it's worth checking before moving one.</p></div>
     <div class="gterm reveal" id="lump-sum"><h2>Lump sum</h2><p>At retirement you can usually take part of your pension as a tax-free lump sum, within limits set by Revenue. The rest provides your retirement income.</p></div>
@@ -2140,6 +2156,22 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     });
   },{rootMargin:'-45% 0px -50% 0px',threshold:0});
   Object.keys(links).forEach(function(k){var t=document.getElementById(k);if(t)io.observe(t);});
+})();
+</script>
+<script>
+/* drawdown at 4%: the pension calculator's own illustration, pot times
+   0.04 over twelve, rounded to the euro as it rounds it */
+(function(){
+  var r=document.getElementById('pbDdPot'); if(!r) return;
+  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  function paint(){
+    var v=+r.value;
+    r.style.setProperty('--fill',((v-r.min)/(r.max-r.min))*100+'%');
+    r.setAttribute('aria-valuetext',fmt(v));
+    document.getElementById('pbDdPotV').textContent=fmt(v);
+    document.getElementById('pbDdOut').textContent=fmt(v*0.04/12);
+  }
+  r.hidden=false; r.addEventListener('input',paint); paint();
 })();
 </script>
 </body>
