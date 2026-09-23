@@ -56,7 +56,7 @@ twice is reverted and logged here. The audit itself is
 | 28 | Footer wordmark | done: "Pensionbuddy" full width at the foot of every footer, in the logo's own face, ink at 7%, aria-hidden | |
 | 18 | Mess to order | done: five pieces of paperwork scatter and settle under one card as the tracker's steps come into view; words only | |
 | 29 | Show the workings (Mercury) | done: "How we got this" under the pension and director results: paid in, already saved, growth, the pot, and the income or corporation tax line; list veiled; the reality check's footnote already shows its sum | |
-| 30 | Share results (Mercury) | not reached | |
+| 30 | Share results (Mercury) | done: "Copy a link to these figures" on the five calculators; the inputs travel after the #, and opening the link replays them through each page's own handlers | |
 | 31 | Closing fork (Mercury) | not reached | |
 | 32 | Calculators dropdown (Mercury) | not reached | |
 | 33 | Colour fade between bands (Mercury) | not reached | |
@@ -102,6 +102,7 @@ Every new user-facing string this run adds is listed here by item.
 - #28: none (the wordmark is the name, decorative and hidden from screen readers).
 - #18: paper labels "Old statement", "P60", "Unopened envelope", "Which provider?", "Pension booklet"; card "One picture of what you have" (all decorative, aria-hidden).
 - #29: summary "How we got this"; lines "Paid in, €[x] a month to [age]" / "Paid in by the company, €[x] a year to [age]", "Saved already" / "Built up already", "Growth at [g]% a year", "Your pot at [age]", "4% of it a year, over twelve months", "Corporation tax, 12.5% of each year's contribution".
+- #30: button "Copy a link to these figures"; status "Link copied." or "Could not copy. The link is in the address bar."
 
 ---
 

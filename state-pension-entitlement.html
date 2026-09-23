@@ -1683,6 +1683,13 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
 .pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .pb-work li b{color:var(--ink);font-weight:600;white-space:nowrap}
+/* SHARE RESULTS (.pb-share). A link to the figures on screen, the inputs
+   after the #; built by assets/js/pb-share.js on the five calculators. */
+.pb-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0 0}
+.pb-share button{font:inherit;font-size:14px;font-weight:600;color:var(--teal-700);background:var(--surface);border:1px solid var(--line-2);border-radius:99px;padding:8px 14px;cursor:pointer}
+.pb-share button:hover{border-color:var(--teal-700)}
+.pb-share button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-share-said{font-size:13.5px;color:var(--ink-2)}
 
 /* ---- both calculations card, this page only ---- */
 .bothcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -1834,6 +1841,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
+<script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -2838,6 +2846,7 @@ render();
 </script>
 <script src="assets/js/pb-guess.js?v=419efb51"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
+<script src="assets/js/pb-share.js?v=e795eb76"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 </body>
 </html>
