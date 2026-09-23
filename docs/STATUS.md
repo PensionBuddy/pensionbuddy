@@ -34,7 +34,7 @@ twice is reverted and logged here. The audit itself is
 | 3 | Regulatory lockup | done: regulator line and name as one type-only mark under the hero call to action, four pages, linked to the register | |
 | 4 | Result sentence | done: the headline figures as one plain sentence under them on the pension, director and reality check pages, written from the same final values and veiled with them | |
 | 15 | Success motion | done: the success tick draws itself once (300ms, ease-out) on the guide, calculator email and booking confirmations and beside thank-you's heading; focus lands on each confirmation; drawn and still under reduced motion | |
-| 5 | Mobile booking bar | not reached | |
+| 5 | Mobile booking bar | done: below 921px on home, starter, director, tracker and glossary, a closable "Book a call with Damian for free" bar shows once the hero is gone and tucks away at the closing band; Ask Buddy lifts above it; it stands aside while the cookie bar or the Ask Buddy panel is up; closed stays closed for the session, Back included | |
 | 1 | Results peek bar | not reached | |
 | 14 | 3 : 3 : 1 split | not reached | |
 | 8 | Transition glide | not reached | |
@@ -84,6 +84,7 @@ Every new user-facing string this run adds is listed here by item.
 - #4 (director calculator, edge wording): with no company contribution, "With no company contribution, from [age] to [retirement age], your pot could reach [projected pot], and there is no corporation tax to save."; with no contribution and nothing built up, "With no company contribution and nothing built up so far, there is no pot to grow from [age] to [retirement age], and no corporation tax to save."
 - #4 (State Pension reality check, under the weekly and yearly figures): "On [N] reckonable contributions, [N/52] years, this shows €[weekly] a week, €[annual] a year, which covers [x]% of a modest standard of living." At the default: "On 2,080 reckonable contributions, 40 years, this shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard of living." The share is the Modest bar's own "The State Pension covers 81%". Below 520 the sentence is hidden with the eligible panel, so "No entitlement" speaks alone; there is no below-520 wording.
 - #15: no new wording. The ticks are decorative (aria-hidden) and each confirmation keeps its existing text; what changes is that focus now lands on it, and the booking one (#qualDone) is now a status region.
+- #5: "Close", the accessible name of the booking bar's close button (read by screen readers, not shown; the button shows a drawn ×). The Ask Buddy panel's close button already uses the same name; the bar stands aside while that panel is open, so the two are never on screen together. The bar's link text, "Book a call with Damian for free", is the nav's and Ask Buddy's existing wording, byte for byte; nothing else in the bar is text.
 
 ---
 

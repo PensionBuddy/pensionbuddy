@@ -1674,6 +1674,45 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-reg-yrs{display:block}
 }
 @media(max-width:420px){.pb-reg{margin-top:14px;font-size:.82rem}}
+/* ============================================================
+   MOBILE BOOKING BAR (.pb-bookbar). Built by assets/js/pb-bookbar.js on the
+   five content pages (index, starter, director, tracker, glossary), never on
+   a calculator. Phones and tablets only: from 921px up it is display:none.
+   Pinned to the bottom edge, it shows once the hero has scrolled away and
+   tucks away at the closing band and the footer. Tucked means moved off
+   screen, not hidden, so a keyboard reader can still reach it (the last two
+   tab stops) and focus inside it brings it up. The button is the site's
+   primary button; the close is a 44px target with the site's focus ring.
+   While it shows, html.pb-bookbar-on lifts the Ask Buddy button above it by
+   the bar's measured height, and keeps anything scrolled into view clear of
+   it. Slides up in 200ms; under reduced motion it simply appears. With the
+   cookie choice bar up, or the Ask Buddy panel open, it is display:none, so
+   the panel opens in its own place. Byte-identical on the five pages.
+   ============================================================ */
+.pb-bookbar{display:none}
+@media(max-width:920px){
+  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
+    align-items:center;justify-content:center;gap:8px;
+    padding:10px 10px calc(10px + env(safe-area-inset-bottom, 0px)) 16px;
+    background:var(--surface);border-top:1px solid var(--line-2);
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-bookbar.pb-bookbar-on{transform:none}
+  .pb-bookbar.pb-bookbar-held{display:none}
+  .pb-bookbar .btn{flex:1 1 auto;max-width:480px;min-height:48px;padding:12px 16px;
+    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
+  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
+    color:var(--ink-2);cursor:pointer}
+  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
+  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
+  html.pb-bookbar-on .pb-b-btn{bottom:calc(var(--pb-bookbar-h, 68px) + 12px)}
+}
+@media(max-width:920px) and (prefers-reduced-motion:no-preference){
+  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
+}
+@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
 </style>
 
 <script>
@@ -2133,6 +2172,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
+<script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 <script>
 /* ---- the hero chat, played out against scroll position ----
