@@ -36,7 +36,7 @@ twice is reverted and logged here. The audit itself is
 | 15 | Success motion | done: the success tick draws itself once (300ms, ease-out) on the guide, calculator email and booking confirmations and beside thank-you's heading; focus lands on each confirmation; drawn and still under reduced motion | |
 | 5 | Mobile booking bar | done: below 921px on home, starter, director, tracker and glossary, a closable "Book a call with Damian for free" bar shows once the hero is gone and tucks away at the closing band; Ask Buddy lifts above it; it stands aside while the cookie bar or the Ask Buddy panel is up; closed stays closed for the session, Back included | |
 | 1 | Results peek bar | done: peek bar on the five calculators below 921px, mirroring the headline cells; figure-free while the guess veil is up | |
-| 14 | 3 : 3 : 1 split | not reached | |
+| 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | |
 | 8 | Transition glide | not reached | |
 | 7 | Relief limit ladder | not reached | |
 | 11 | State Pension on top of monthly income | not reached | |
@@ -86,6 +86,7 @@ Every new user-facing string this run adds is listed here by item.
 - #15: no new wording. The ticks are decorative (aria-hidden) and each confirmation keeps its existing text; what changes is that focus now lands on it, and the booking one (#qualDone) is now a status region.
 - #5: "Close", the accessible name of the booking bar's close button (read by screen readers, not shown; the button shows a drawn ×). The Ask Buddy panel's close button already uses the same name; the bar stands aside while that panel is open, so the two are never on screen together. The bar's link text, "Book a call with Damian for free", is the nav's and Ask Buddy's existing wording, byte for byte; nothing else in the bar is text.
 - #1: "Jump to your results", the peek bar's accessible name; labels are the pages' own, one shortened: "Income, per month" (from "Estimated income, per month"). While the veil is up the bar shows pb-guess's own title, "Take a guess first".
+- #14: "Your gross salary", "You pay in", "Your employer adds", "The State adds" are the comparison page's own labels; new: "A year, at the [2026 to 2028] rates: [1.5% of salary each from you and your employer, and 0.5% from the State], on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1." (the bracketed parts come from the module).
 
 ---
 

@@ -1645,6 +1645,15 @@ button{font-family:inherit}
   font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-note{margin:22px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:70ch}
+/* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
+   one scale: what you pay in, what your employer adds, what the State adds,
+   in a year at this year's auto-enrolment rates (PBCompare.autoEnrolment,
+   capped at the scheme's salary limit). Teal is the State; you and your
+   employer are neutral. The bars never change shape, only the figures do,
+   because the ratio is fixed. The markup carries the default. */
+.pb-ae{margin:6px 0 26px}
+.pb-ae-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em}
+.pb-sa-fill.pb-ae-own{background:var(--ink-2)}
 @media(max-width:700px){
   .pb-sa-row{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
   .pb-sa-name{grid-column:1;grid-row:1}
@@ -1935,6 +1944,30 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <span class="kicker">Already being auto-enrolled?</span>
     <h2>Your employer and the State pay into auto-enrolment. A personal pension pays you the tax relief instead.</h2>
     <p>My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.</p>
+  </div>
+  <div class="pb-sa pb-ae reveal">
+    <div class="pb-sa-ctl">
+      <div class="pb-sa-row0"><label for="aeSalary">Your gross salary</label><span class="pb-sa-val" id="aeSalaryV">€50,000</span></div>
+      <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year">
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">You pay in</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="aeYou">€750</span>
+      </div>
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">Your employer adds</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="aeEmp">€750</span>
+      </div>
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">The State adds</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:33.3333%"></i></span>
+        <span class="pb-sa-fig" id="aeState">€250</span>
+      </div>
+    </div>
+    <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1.</p>
   </div>
   <a class="btn btn-primary" href="broker-vs-autoenrolment.html">Compare the two side by side <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
@@ -2388,6 +2421,47 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     seen = true;
     paint(true);
   });
+})();
+</script>
+<script src="assets/js/autoenrolment.js?v=f94c659a"></script>
+<script>
+/* THE 3 : 3 : 1 SPLIT. One slider, the reader's gross salary, and what goes
+   in a year under auto-enrolment at this year's rates, straight from
+   PBCompare.autoEnrolment (which applies the salary cap). This year's phase
+   is worked out the way the comparison page works out its default year:
+   year 1 is 2026. Nothing is computed here but the widths, which are the
+   module's own figures over the largest of them. */
+(function () {
+  var slider = document.getElementById('aeSalary');
+  if (!slider || !window.PBPage || !window.PBCompare) return;
+  var euro = window.PBPage.euro, SCHEME_START = 2025;
+  var year = Math.min(12, Math.max(1, new Date().getFullYear() - SCHEME_START));
+  var pct = function (r) { return (Math.round(r * 1000) / 10) + '%'; };
+
+  function paint() {
+    var salary = +slider.value, a = window.PBCompare.autoEnrolment(salary, year);
+    document.getElementById('aeSalaryV').textContent = euro(salary);
+    document.getElementById('aeYou').textContent = euro(a.employee);
+    document.getElementById('aeEmp').textContent = euro(a.employer);
+    document.getElementById('aeState').textContent = euro(a.state);
+    var top = Math.max(a.employee, a.employer, a.state) || 1;
+    var fills = document.querySelectorAll('.pb-ae .pb-sa-fill');
+    [a.employee, a.employer, a.state].forEach(function (v, i) {
+      if (fills[i]) fills[i].style.width = (v / top * 100).toFixed(4) + '%';
+    });
+    document.getElementById('aeYears').textContent = a.years;
+    document.getElementById('aeRates').textContent = (a.rates.employee === a.rates.employer
+      ? pct(a.rates.employee) + ' of salary each from you and your employer'
+      : pct(a.rates.employee) + ' from you and ' + pct(a.rates.employer) + ' from your employer') +
+      ', and ' + pct(a.rates.state) + ' from the State';
+  }
+
+  /* wired on its own: wireRanges() takes every slider on the page and would
+     repaint the start-age slider's "a month" wording with this one's */
+  var vt = { aeSalary: function (v) { return euro(v) + ' a year'; } };
+  slider.addEventListener('input', function () { window.PBPage.paintSlider(slider, vt); paint(); });
+  window.PBPage.paintSlider(slider, vt);
+  paint();
 })();
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
