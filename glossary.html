@@ -1614,6 +1614,26 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* ============================================================
+   RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
+   contributions that get tax relief, six steps from 15% under 30 to 40% at
+   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
+   calculator and the comparison page assets/js/pb-ladder.js marks the
+   reader's step and says their limit in euro. Relief is money the State
+   puts in, so the fills are teal. Byte-identical wherever it appears.
+   ============================================================ */
+.pb-lad{max-width:560px}
+.pb-lad[hidden]{display:none}
+.pb-lad-cap{font-size:15px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
+.pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
+.pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
+.pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you[hidden]{display:none}
+.pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
 </style>
 </head>
 <body>
@@ -1681,7 +1701,18 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 <section style="padding-top:36px"><div class="wrap">
   <div class="gloss">
     <div class="gterm reveal" id="pension"><h2>Pension</h2><p>A long-term savings pot for your retirement. You pay in while you're working, it's invested so it can grow, and you draw on it once you stop working. The government encourages it with tax relief.</p></div>
-    <div class="gterm reveal" id="tax-relief"><h2>Tax relief</h2><p>Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every €100 you put in, around €40 can come back to you as relief, so it really costs you about €60. Relief is subject to Revenue's age-related limits.</p></div>
+    <div class="gterm reveal" id="tax-relief"><h2>Tax relief</h2><p>Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every €100 you put in, around €40 can come back to you as relief, so it really costs you about €60. Relief is subject to Revenue's age-related limits.</p>
+  <div class="pb-lad">
+    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
+    <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
+    <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
+    <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
+    <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
+    <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
+    <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
+    <p class="pb-lad-note">Earnings count up to €115,000.</p>
+  </div>
+</div>
     <div class="gterm reveal" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments you can make into a workplace pension, on top of the standard contributions, to build your pot faster. They usually qualify for tax relief too.</p></div>
     <div class="gterm reveal" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It stays invested, so it can grow, but it can also fall, and it can run out if you draw too much.</p></div>
     <div class="gterm reveal" id="annuity"><h2>Annuity</h2><p>Another option at retirement. You use your pension pot to buy a guaranteed income for life from an insurer. It gives certainty, but once bought it usually can't be changed.</p></div>

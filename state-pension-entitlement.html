@@ -1642,6 +1642,26 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
 }
 @media(prefers-reduced-motion:reduce){.pb-peek{transition:none}}
+/* ============================================================
+   RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
+   contributions that get tax relief, six steps from 15% under 30 to 40% at
+   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
+   calculator and the comparison page assets/js/pb-ladder.js marks the
+   reader's step and says their limit in euro. Relief is money the State
+   puts in, so the fills are teal. Byte-identical wherever it appears.
+   ============================================================ */
+.pb-lad{max-width:560px}
+.pb-lad[hidden]{display:none}
+.pb-lad-cap{font-size:15px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
+.pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
+.pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
+.pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you[hidden]{display:none}
+.pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
 
 /* ---- both calculations card, this page only ---- */
 .bothcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}

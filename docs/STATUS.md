@@ -38,7 +38,7 @@ twice is reverted and logged here. The audit itself is
 | 1 | Results peek bar | done: peek bar on the five calculators below 921px, mirroring the headline cells; figure-free while the guess veil is up | |
 | 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | |
 | 8 | Transition glide | **skipped** (fail-once rule): verify.py flagged the visually-hidden "Your year:" marker text at 1.1:1 contrast on its teal dot; reverted. A one-line colour fix away; render-diff had proved only the new #pbGlideY cells differ | — |
-| 7 | Relief limit ladder | not reached | |
+| 7 | Relief limit ladder | done: six-step ladder from PBRelief.reliefBand; live marker and limit in euro on the pension calculator and compare (pb-ladder.js, no page-script change); static on starter, director, glossary | |
 | 11 | State Pension on top of monthly income | not reached | |
 | 6 | Gap band drag | not reached | |
 | 2 | Relief widget | not reached | |
@@ -87,6 +87,7 @@ Every new user-facing string this run adds is listed here by item.
 - #5: "Close", the accessible name of the booking bar's close button (read by screen readers, not shown; the button shows a drawn ×). The Ask Buddy panel's close button already uses the same name; the bar stands aside while that panel is open, so the two are never on screen together. The bar's link text, "Book a call with Damian for free", is the nav's and Ask Buddy's existing wording, byte for byte; nothing else in the bar is text.
 - #1: "Jump to your results", the peek bar's accessible name; labels are the pages' own, one shortened: "Income, per month" (from "Estimated income, per month"). While the veil is up the bar shows pb-guess's own title, "Take a guess first".
 - #14: "Your gross salary", "You pay in", "Your employer adds", "The State adds" are the comparison page's own labels; new: "A year, at the [2026 to 2028] rates: [1.5% of salary each from you and your employer, and 0.5% from the State], on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1." (the bracketed parts come from the module).
+- #7: card heading "Your relief limit"; caption "Revenue's limit on the contributions that get tax relief, as a share of earnings."; live line "At [age], relief applies to contributions up to €[limit] a year: [x]% of €[earnings]." (above the cap: "…of €115,000, the most Revenue counts."); note "Earnings count up to €115,000."; starter caption "Tax relief is there at any age. Revenue's limit on the contributions that get it rises with age, as a share of earnings."; director caption "The personal limit: the share of salary that gets tax relief, by age." (its note reuses the page's own "Company funding is not capped by the salary percentages that limit everyone else."); row labels "Under 30", "30 to 39" … "60 and over", tag "You".
 
 ---
 
