@@ -1662,6 +1662,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
+/* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
+   second is the supporting one and sits quieter (Stripe, Ramp). Opacity
+   rather than a colour, so it mutes against whatever band it is on, light
+   or dark, and stays well inside AA for large text either way. */
+.pb-soft{opacity:.68}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1811,7 +1816,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card reveal">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>These are just illustrations. Damian builds the real ones.</h2><p>A free 20-minute chat. No obligation afterwards.</p></div>
+  <div class="ctext"><h2>These are just illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2><p>A free 20-minute chat. No obligation afterwards.</p></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 

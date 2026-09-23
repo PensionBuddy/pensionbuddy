@@ -1737,6 +1737,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
+/* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
+   second is the supporting one and sits quieter (Stripe, Ramp). Opacity
+   rather than a colour, so it mutes against whatever band it is on, light
+   or dark, and stays well inside AA for large text either way. */
+.pb-soft{opacity:.68}
 </style>
 
 <script>
@@ -1867,7 +1872,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="callout pb-bleed pb-dark pb-split reveal">
     <div class="pb-split-copy">
     <span class="eyebrow"><span class="pip"></span>See your own numbers</span>
-    <h2>You don't know the number. Two minutes with the calculator and you do.</h2>
+    <h2>You don't know the number. <span class="pb-soft">Two minutes with the calculator and you do.</span></h2>
     <p>The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up.</p>
     <a class="btn btn-light" href="director-calculator.html">Open the director calculator <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
@@ -1881,7 +1886,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-bleed pb-wash pb-magnetband"><div class="wrap"><div class="magnet reveal">
   <div class="mtext">
     <span class="eyebrow acc"><span class="pip"></span>Free director guide</span>
-    <h2>Company pension funding is not obvious. This is the plain-English version.</h2>
+    <h2>Company pension funding is not obvious. <span class="pb-soft">This is the plain-English version.</span></h2>
     <p>A short, plain-English guide to how company directors can fund a pension through their business and cut their corporation tax. We'll email it to you.</p>
   </div>
   <div>
@@ -1921,7 +1926,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="final-band"><div class="wrap"><div class="final pb-bleed reveal">
   <div class="paw-bg"><svg fill="#fff" viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
   <span class="eyebrow"><span class="pip"></span>Make your profit work harder</span>
-  <h2>Profit can go to Revenue.<br>Or it can go to your pension.</h2>
+  <h2>Profit can go to Revenue.<br><span class="pb-soft">Or it can go to your pension.</span></h2>
   <p>Twenty minutes with Damian to see what your business could do for your retirement. Free, no obligation.</p>
   <a class="btn btn-light" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>

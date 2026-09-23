@@ -1845,6 +1845,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-ann-line{fill:none;stroke:#16C9B0;stroke-width:7;stroke-linecap:round}
 .pb-ann-l{position:absolute;padding:3px 9px;border-radius:99px;background:var(--aqua);color:var(--ink);font-size:12.5px;font-weight:700;line-height:1.3;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
 .pb-ann-wrap{position:relative;display:block}
+/* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
+   second is the supporting one and sits quieter (Stripe, Ramp). Opacity
+   rather than a colour, so it mutes against whatever band it is on, light
+   or dark, and stays well inside AA for large text either way. */
+.pb-soft{opacity:.68}
 </style>
 
 <script>
@@ -1917,7 +1922,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
-  <div class="sec-head ctr reveal"><span class="kicker">How we'll get you going</span><h2>Three steps. Plain English, no pressure.</h2></div>
+  <div class="sec-head ctr reveal"><span class="kicker">How we'll get you going</span><h2>Three steps. <span class="pb-soft">Plain English, no pressure.</span></h2></div>
   <div class="steps">
     <div class="step reveal"><div class="sx">1</div><h3>Tell us where you're at</h3><p>A quick, relaxed chat about your situation. There's nothing you need to prepare or know in advance.</p></div>
     <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We explain your options</h3><p>What a pension is, how the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> works in your favour, and what makes sense to start with, all in plain English.</p></div>
@@ -1988,7 +1993,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal">
     <span class="kicker">Already being auto-enrolled?</span>
-    <h2>Your employer and the State pay into auto-enrolment. A personal pension pays you the tax relief instead.</h2>
+    <h2>Your employer and the State pay into auto-enrolment. <span class="pb-soft">A personal pension pays you the tax relief instead.</span></h2>
     <p>My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.</p>
   </div>
   <div class="pb-sa pb-ae reveal">
@@ -2059,7 +2064,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-bleed pb-wash pb-magnetband"><div class="wrap"><div class="magnet reveal">
   <div class="mtext">
     <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
-    <h2>Pensions get explained badly. This guide is short.</h2>
+    <h2>Pensions get explained badly. <span class="pb-soft">This guide is short.</span></h2>
     <p>How a pension works, how tax relief helps, how to begin.</p>
   </div>
   <div>
