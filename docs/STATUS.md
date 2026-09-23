@@ -62,7 +62,7 @@ twice is reverted and logged here. The audit itself is
 | 33 | Colour fade between bands (Mercury) | done: the home page's dark product band fades in from the wash above and out to the page below, inside its own padding; static seams, not a scroll-driven theme | |
 | 34 | Static grain on dark bands (Mercury) | done: static white-noise grain at 7% over every dark band, one layer added to the shared .pb-dark rule on all sixteen pages; no motion | |
 | 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
-| 17 | Scrollytelling | not reached | |
+| 17 | Scrollytelling | done: "First payslip to 66" on starter, a pinned card beside five steps (52 a year, 520, 15% to 40%, 2,080, 66), before the start-age chart | |
 | — | Re-shoot product rasters after the calculator changes | not reached | |
 
 ## Held, not built
@@ -105,6 +105,7 @@ Every new user-facing string this run adds is listed here by item.
 - #30: button "Copy a link to these figures"; status "Link copied." or "Could not copy. The link is in the address bar."
 - #31: none: the heading is the hero chat's "Which of these sounds most like you?", the card titles its three chips, the lines the offering list's.
 - #32: none new beyond reuse: tool names from the footer; lines from the thank-you page (pension, director), the comparison page's lede, the offering list and the entitlement check's h1.
+- #17: kicker "First payslip to 66"; heading "What builds up, and when."; steps "Your first payslip" / "Ten years in" / "All along the way" / "Forty years in" / "Sixty-six", each with a sentence built from existing site wording; card captions "contributions a year", "paid contributions: the qualifying minimum", "of earnings can get tax relief, rising with age", "reckonable contributions: a full record", "pension age"; bar label "Toward a full record of 2,080 contributions".
 
 ---
 

@@ -1872,6 +1872,39 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* ============================================================
+   FIRST PAYSLIP TO 66 (#pbStory). The one pinned section: a card held
+   in view while five steps scroll past; as each reaches the middle of the
+   screen the card shows its figure and the bar fills toward a full record.
+   Every figure is already on the site (52 a year, 520, 15% to 40%, 2,080,
+   €299.30, 66, €15,564). The card is decorative (aria-hidden): the steps
+   carry the words. Without script, and under reduced motion, it is a plain
+   list beside the card's final state.
+   ============================================================ */
+.pb-story-sec{padding-top:0}
+.pb-story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
+.pb-story-stage{position:sticky;top:120px}
+.pb-story-card{display:flex;flex-direction:column;gap:8px;padding:28px 28px 24px;border:1px solid var(--line-2);border-radius:var(--r-xl);background:var(--surface)}
+.pb-story-n{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-story-c{font-size:1rem;color:var(--ink);font-weight:600}
+.pb-story-bar{position:relative;display:block;height:10px;margin-top:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-story-bar i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.pb-story-bl{font-size:13px;color:var(--ink-2)}
+.pb-story-steps{list-style:none;margin:0;padding:0}
+.pb-story-step{padding:18vh 0 18vh 22px;border-left:2px solid var(--line)}
+.pb-story-step:first-child{padding-top:0}
+.pb-story-step:last-child{padding-bottom:6vh}
+.pb-story-step h3{margin:0 0 8px}
+.pb-story-step p{margin:0;font-size:1.02rem;line-height:1.6;color:var(--ink-2);max-width:46ch}
+.pb-story-step.pb-on{border-left-color:var(--teal-700)}
+@media(max-width:820px){
+  .pb-story{grid-template-columns:1fr;gap:20px}
+  .pb-story-stage{top:78px;z-index:2}
+  .pb-story-card{padding:16px 18px;box-shadow:0 8px 24px rgba(11,31,28,.08)}
+  .pb-story-n{font-size:2.2rem}
+  .pb-story-step{padding:12vh 0 12vh 18px}
+}
+@media(prefers-reduced-motion:reduce){.pb-story-bar i{transition:none}}
 </style>
 
 <script>
@@ -1949,6 +1982,28 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="step reveal"><div class="sx">1</div><h3>Tell us where you're at</h3><p>A quick, relaxed chat about your situation. There's nothing you need to prepare or know in advance.</p></div>
     <div class="step reveal" style="transition-delay:.1s"><div class="sx">2</div><h3>We explain your options</h3><p>What a pension is, how the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> works in your favour, and what makes sense to start with, all in plain English.</p></div>
     <div class="step reveal" style="transition-delay:.2s"><div class="sx">3</div><h3>You start with confidence</h3><p>If you decide to go ahead, we'll help you set it up properly and make sure it's working from day one.</p></div>
+  </div>
+</div></section>
+
+<section class="pb-story-sec"><div class="wrap">
+  <div class="sec-head reveal">
+    <span class="kicker">First payslip to 66</span>
+    <h2>What builds up, and when.</h2>
+  </div>
+  <div class="pb-story" id="pbStory">
+    <div class="pb-story-stage" aria-hidden="true"><div class="pb-story-card">
+      <span class="pb-story-n" id="pbStoryN">66</span>
+      <span class="pb-story-c" id="pbStoryC">pension age</span>
+      <span class="pb-story-bar"><i id="pbStoryFill" style="width:100%"></i></span>
+      <span class="pb-story-bl">Toward a full record of 2,080 contributions</span>
+    </div></div>
+    <ol class="pb-story-steps">
+      <li class="pb-story-step" data-n="52" data-c="contributions a year" data-f="2.5"><h3>Your first payslip</h3><p>PRSI starts. Each year of full-rate PRSI adds 52 contributions toward your State Pension.</p></li>
+      <li class="pb-story-step" data-n="520" data-c="paid contributions: the qualifying minimum" data-f="25"><h3>Ten years in</h3><p>520 paid contributions, the qualifying minimum for any State Pension (Contributory). Credits and HomeCaring Periods do not count toward it.</p></li>
+      <li class="pb-story-step" data-n="15% to 40%" data-c="of earnings can get tax relief, rising with age" data-f="50"><h3>All along the way</h3><p>A pension contribution gets tax relief, up to a share of earnings that Revenue raises with age: 15% under 30, rising in steps to 40% at 60 and over.</p></li>
+      <li class="pb-story-step" data-n="2,080" data-c="reckonable contributions: a full record" data-f="100"><h3>Forty years in</h3><p>2,080 reckonable contributions is a full record, and the maximum personal rate: &euro;299.30 a week from January 2026.</p></li>
+      <li class="pb-story-step" data-n="66" data-c="pension age" data-f="100"><h3>Sixty-six</h3><p>Pension age. The State Pension pays &euro;15,564 a year at the maximum. What sits on top of it is up to you, and the chart below shows what time does.</p></li>
+    </ol>
   </div>
 </div></section>
 
@@ -2608,5 +2663,20 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
+<script>
+/* first payslip to 66: the step nearest the middle of the screen sets the
+   card. Without an observer the card keeps its final state. */
+(function(){
+  var st=document.getElementById('pbStory'); if(!st||!('IntersectionObserver' in window)) return;
+  var n=document.getElementById('pbStoryN'), c=document.getElementById('pbStoryC'), f=document.getElementById('pbStoryFill');
+  var steps=[].slice.call(st.querySelectorAll('.pb-story-step'));
+  function show(li){
+    steps.forEach(function(s){s.classList.toggle('pb-on',s===li);});
+    n.textContent=li.getAttribute('data-n'); c.textContent=li.getAttribute('data-c'); f.style.width=li.getAttribute('data-f')+'%';
+  }
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)show(e.target);});},{rootMargin:'-45% 0px -45% 0px',threshold:0});
+  steps.forEach(function(s){io.observe(s);});
+})();
+</script>
 </body>
 </html>
