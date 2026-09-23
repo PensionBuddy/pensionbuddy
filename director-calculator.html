@@ -1877,6 +1877,18 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* THE 52.2% IN THREE PARTS (.pb-cut): what comes off each euro taken as
+   salary, 40% income tax, 8% USC and PRSI at the dated rate (PRSI, above).
+   Written once at load; the rest of the bar is what reaches the pocket. */
+.pb-cut{margin:10px 0 0}
+.pb-cut-bar{display:flex;height:8px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-cut-bar i{display:block;height:100%}
+.pb-cut-it{background:var(--ink)}
+.pb-cut-usc{background:var(--ink-2)}
+.pb-cut-prsi{background:var(--ink-3);opacity:.7}
+.pb-cut-key{display:flex;flex-wrap:wrap;gap:2px 12px;margin:6px 0 0;font-size:12.5px;color:var(--ink-2)}
+.pb-cut-key b{font-weight:600;color:var(--ink-2)}
+.pb-cut-sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1980,6 +1992,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <div class="vt">Taken as salary</div>
           <div class="amt" id="salaryNet">€0</div>
           <div class="lab">lands in your pocket after up to 52.2% income tax, USC and PRSI (52.35% from 1 October 2026)</div>
+          <div class="pb-cut"><div class="pb-cut-bar" aria-hidden="true"><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.2%"></i></div>
+          <p class="pb-cut-key"><span><i class="pb-cut-sw pb-cut-it"></i>40% income tax</span><span><i class="pb-cut-sw pb-cut-usc"></i>8% USC</span><span><i class="pb-cut-sw pb-cut-prsi"></i><b id="pbCutPrsiN">4.2%</b> PRSI</span></p></div>
         </div>
         <div class="vsmark">vs</div>
         <div class="vs-col vs-pension">
@@ -2089,6 +2103,13 @@ const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE'
    reaches the pocket is what is left. */
 var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;
 var TAKE_HOME = 1 - (0.40 + 0.08 + PRSI);
+/* #21: the PRSI part of the three-part bar under "Taken as salary" */
+(function () {
+  var f = document.getElementById('pbCutPrsi'), n = document.getElementById('pbCutPrsiN');
+  var pc = (Math.round(PRSI * 1000) / 10) + '%';
+  if (f) f.style.width = pc;
+  if (n) n.textContent = pc;
+})();
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 
 function project(months,startPot,monthly,mRate){
