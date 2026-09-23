@@ -38,39 +38,39 @@ differing.
 
 | # | Item | Result | Commit |
 |---|---|---|---|
-| 3 | Regulatory lockup | done: regulator line and name as one type-only mark under the hero call to action, four pages, linked to the register | |
-| 4 | Result sentence | done: the headline figures as one plain sentence under them on the pension, director and reality check pages, written from the same final values and veiled with them | |
-| 15 | Success motion | done: the success tick draws itself once (300ms, ease-out) on the guide, calculator email and booking confirmations and beside thank-you's heading; focus lands on each confirmation; drawn and still under reduced motion | |
-| 5 | Mobile booking bar | done: below 921px on home, starter, director, tracker and glossary, a closable "Book a call with Damian for free" bar shows once the hero is gone and tucks away at the closing band; Ask Buddy lifts above it; it stands aside while the cookie bar or the Ask Buddy panel is up; closed stays closed for the session, Back included | |
-| 1 | Results peek bar | done: peek bar on the five calculators below 921px, mirroring the headline cells; figure-free while the guess veil is up | |
-| 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | |
+| 3 | Regulatory lockup | done: regulator line and name as one type-only mark under the hero call to action, four pages, linked to the register | `8d5b72b` |
+| 4 | Result sentence | done: the headline figures as one plain sentence under them on the pension, director and reality check pages, written from the same final values and veiled with them | `15494a7` |
+| 15 | Success motion | done: the success tick draws itself once (300ms, ease-out) on the guide, calculator email and booking confirmations and beside thank-you's heading; focus lands on each confirmation; drawn and still under reduced motion | `6d15c55` |
+| 5 | Mobile booking bar | done: below 921px on home, starter, director, tracker and glossary, a closable "Book a call with Damian for free" bar shows once the hero is gone and tucks away at the closing band; Ask Buddy lifts above it; it stands aside while the cookie bar or the Ask Buddy panel is up; closed stays closed for the session, Back included | `0ab51a7` |
+| 1 | Results peek bar | done: peek bar on the five calculators below 921px, mirroring the headline cells; figure-free while the guess veil is up | `6374107` |
+| 14 | 3 : 3 : 1 split | done: salary slider, three bars in a year at this year's rates from PBCompare.autoEnrolment; the ratio note | `32ecd62` |
 | 8 | Transition glide | **skipped** (fail-once rule): verify.py flagged the visually-hidden "Your year:" marker text at 1.1:1 contrast on its teal dot; reverted. A one-line colour fix away; render-diff had proved only the new #pbGlideY cells differ | — |
-| 7 | Relief limit ladder | done: six-step ladder from PBRelief.reliefBand; live marker and limit in euro on the pension calculator and compare (pb-ladder.js, no page-script change); static on starter, director, glossary | |
+| 7 | Relief limit ladder | done: six-step ladder from PBRelief.reliefBand; live marker and limit in euro on the pension calculator and compare (pb-ladder.js, no page-script change); static on starter, director, glossary | `d79ac7a` |
 | 11 | State Pension on top of monthly income | **skipped** (fail-once rule): verify.py flagged the new line at 2.18:1 contrast (grey --ink-2 on the dark results panel); reverted. Render-diff had proved only the new #pbSpTop cell differs, and the veil covered it; a colour fix away | — |
-| 6 | Gap band drag | done: need slider under the gap chart; chart re-scales against €15,564, covered at or under it; tap-for-source part left out (simplest option) | |
+| 6 | Gap band drag | done: need slider under the gap chart; chart re-scales against €15,564, covered at or under it; tap-for-source part left out (simplest option) | `5425e0b` |
 | 2 | Relief widget | **skipped** (fail-once rule): verify.py's link check read the static hand-off link `pension-calculator.html#monthly=100` as a missing anchor on three pages; reverted. Everything else had passed (contrast 6.31:1 and up, render-diff clean, the calculator taking #monthly=500 and ignoring an off-step value); the fix is a plain href with the fragment added by script | — |
-| 10 | TCA capped part | done: the record as one bar to the larger of 2,080 and everything entered: paid, credits and HomeCaring Periods counted, the part over the caps greyed; full-record tick | |
-| 19 | Phase staircase | done: four phases from AE_PHASES as a staircase in the rates assumption, stacked you / employer / State, the phase in use tagged | |
-| 16 | 20% → 40% marker | done: the salary as one bar split at the cut-off the page uses for the chosen status, with both parts in euro | |
-| 22 | Glossary index + entitlement jump row | done: glossary term index held under the nav (follows it as it slides away) with the term in view marked; entitlement jump row under the result. New WARN: glossary deep links land below the index (C4) | |
-| 23 | Drawdown mini calc | done: pot slider in the Drawdown entry, a month out at the calculator's own 4% illustration | |
+| 10 | TCA capped part | done: the record as one bar to the larger of 2,080 and everything entered: paid, credits and HomeCaring Periods counted, the part over the caps greyed; full-record tick | `ba29618` |
+| 19 | Phase staircase | done: four phases from AE_PHASES as a staircase in the rates assumption, stacked you / employer / State, the phase in use tagged | `a1ec57f` |
+| 16 | 20% → 40% marker | done: the salary as one bar split at the cut-off the page uses for the chosen status, with both parts in euro | `663735c` |
+| 22 | Glossary index + entitlement jump row | done: glossary term index held under the nav (follows it as it slides away) with the term in view marked; entitlement jump row under the result. New WARN: glossary deep links land below the index (C4) | `94f847c` |
+| 23 | Drawdown mini calc | done: pot slider in the Drawdown entry, a month out at the calculator's own 4% illustration | `d4def54` |
 | 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
-| 24 | Buddy's facts links | done: each game-over fact's "More on this in …" names its page as a link (target _top, glossary anchors where they exist) | |
-| 13 | Product band tabs | done: five tabs on the home product band swapping shot, line and button; three new shots (compare, reality check, entitlement) via shoot-product.py | |
-| 20 | Screenshot arrows | done: two labelled arrows over the pension calculator photo (home band, pension tab only; starter callout); 600px and up | |
-| 27 | "Before 6 April?" control | done: box under the entry year for years up to 2001; ticked, the module gets the year before; subnote and assumption reworded; spec S11 item 4 marked built | |
-| 26 | Two-tone headlines | done: the second sentence of 17 two-sentence headings set quieter (opacity .68), index's locked sections and every h1 excepted | |
-| 28 | Footer wordmark | done: "Pensionbuddy" full width at the foot of every footer, in the logo's own face, ink at 7%, aria-hidden | |
-| 18 | Mess to order | done: five pieces of paperwork scatter and settle under one card as the tracker's steps come into view; words only | |
-| 29 | Show the workings (Mercury) | done: "How we got this" under the pension and director results: paid in, already saved, growth, the pot, and the income or corporation tax line; list veiled; the reality check's footnote already shows its sum | |
-| 30 | Share results (Mercury) | done: "Copy a link to these figures" on the five calculators; the inputs travel after the #, and opening the link replays them through each page's own handlers | |
-| 31 | Closing fork (Mercury) | done: three situation cards before the home page's closing band, the hero chat's question and chips, each to its page | |
-| 32 | Calculators dropdown (Mercury) | done: a panel of the five tools, one line each, under the nav's Calculator link from 1201px; script-built, so the guarded nav markup is unchanged | |
-| 33 | Colour fade between bands (Mercury) | done: the home page's dark product band fades in from the wash above and out to the page below, inside its own padding; static seams, not a scroll-driven theme | |
-| 34 | Static grain on dark bands (Mercury) | done: static white-noise grain at 7% over every dark band, one layer added to the shared .pb-dark rule on all sixteen pages; no motion | |
+| 24 | Buddy's facts links | done: each game-over fact's "More on this in …" names its page as a link (target _top, glossary anchors where they exist) | `af86c03` |
+| 13 | Product band tabs | done: five tabs on the home product band swapping shot, line and button; three new shots (compare, reality check, entitlement) via shoot-product.py | `d622ea4` |
+| 20 | Screenshot arrows | done: two labelled arrows over the pension calculator photo (home band, pension tab only; starter callout); 600px and up | `ea6b40b` |
+| 27 | "Before 6 April?" control | done: box under the entry year for years up to 2001; ticked, the module gets the year before; subnote and assumption reworded; spec S11 item 4 marked built | `1008d81` |
+| 26 | Two-tone headlines | done: the second sentence of 17 two-sentence headings set quieter (opacity .68), index's locked sections and every h1 excepted | `820a843` |
+| 28 | Footer wordmark | done: "Pensionbuddy" full width at the foot of every footer, in the logo's own face, ink at 7%, aria-hidden | `aaece61` |
+| 18 | Mess to order | done: five pieces of paperwork scatter and settle under one card as the tracker's steps come into view; words only | `37441b7` |
+| 29 | Show the workings (Mercury) | done: "How we got this" under the pension and director results: paid in, already saved, growth, the pot, and the income or corporation tax line; list veiled; the reality check's footnote already shows its sum | `f772818` |
+| 30 | Share results (Mercury) | done: "Copy a link to these figures" on the five calculators; the inputs travel after the #, and opening the link replays them through each page's own handlers | `4a1ff49` |
+| 31 | Closing fork (Mercury) | done: three situation cards before the home page's closing band, the hero chat's question and chips, each to its page | `264e003` |
+| 32 | Calculators dropdown (Mercury) | done: a panel of the five tools, one line each, under the nav's Calculator link from 1201px; script-built, so the guarded nav markup is unchanged | `9fbd842` |
+| 33 | Colour fade between bands (Mercury) | done: the home page's dark product band fades in from the wash above and out to the page below, inside its own padding; static seams, not a scroll-driven theme | `7bb81ce` |
+| 34 | Static grain on dark bands (Mercury) | done: static white-noise grain at 7% over every dark band, one layer added to the shared .pb-dark rule on all sixteen pages; no motion | `ff9ad9b` |
 | 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
-| 17 | Scrollytelling | done: "First payslip to 66" on starter, a pinned card beside five steps (52 a year, 520, 15% to 40%, 2,080, 66), before the start-age chart | |
-| — | Re-shoot product rasters after the calculator changes | done: all five re-shot; the relief-limit card, the workings and the share link are left out of the shots like the boost card; width/height corrected on index, starter and director; home tab data re-embedded; the annotation label moved clear of the result sentence | |
+| 17 | Scrollytelling | done: "First payslip to 66" on starter, a pinned card beside five steps (52 a year, 520, 15% to 40%, 2,080, 66), before the start-age chart | `f2c6395` |
+| — | Re-shoot product rasters after the calculator changes | done: all five re-shot; the relief-limit card, the workings and the share link are left out of the shots like the boost card; width/height corrected on index, starter and director; home tab data re-embedded; the annotation label moved clear of the result sentence | `2a60920` |
 
 ## Held, not built
 
