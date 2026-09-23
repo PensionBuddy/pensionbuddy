@@ -1587,6 +1587,61 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .nav-tick{display:none}
   .nav-links a.lnk{padding:12px 7px}
 }
+/* ============================================================
+   RESULTS PEEK BAR (.pb-peek). Built by assets/js/pb-peek.js on the five
+   calculators, straight after the inputs panel. Phones and tablets only:
+   from 921px up it is display:none, where the results column already sits
+   beside the inputs. Pinned to the bottom edge, it carries the page's
+   headline figure(s), copied from the results cells, while a control of
+   the inputs panel is on screen and the headline is not; while the guess
+   card's veil is up it carries only that card's title. The whole bar is
+   one button, at least 56px tall, that jumps to the results. Tucked means
+   moved off screen, not hidden, so a keyboard reader still meets it after
+   the last control, and focus inside it brings it up; the ring is inset
+   because the bar is flush with the screen's edges. While it shows,
+   html.pb-peek-on lifts the Ask Buddy button above it by the bar's
+   measured height, and keeps anything scrolled into view clear of it.
+   With the cookie choice bar up, or the Ask Buddy panel open, it is
+   display:none. Slides up in 200ms; under reduced motion it simply
+   appears. The State Pension pages set data-pb-tone="state", and their
+   figures are teal. The focus rules at the end give the element a tap
+   lands on (the results hero, or the guess card while the veil is up) the
+   site's ring when it was reached from the keyboard. Byte-identical in
+   pension-calculator.html, which carries it into the three built pages,
+   and director-calculator.html.
+   ============================================================ */
+.pb-peek{display:none}
+@media(max-width:920px){
+  .pb-peek{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;align-items:center;gap:12px;
+    width:100%;min-height:56px;margin:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom, 0px));
+    border:0;border-top:1px solid var(--line-2);border-radius:0;background:var(--surface);color:var(--ink);
+    font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-peek.pb-peek-on{transform:none}
+  .pb-peek.pb-peek-held{display:none}
+  .pb-peek:focus{outline:none}
+  .pb-peek:focus-visible{box-shadow:inset 0 0 0 3px var(--ring)}
+  .pb-peek [hidden]{display:none}
+  .pb-peek-figs{flex:1 1 auto;min-width:0}
+  .pb-peek-set{display:flex;flex-wrap:wrap;gap:2px 20px}
+  .pb-peek-item{display:flex;flex-direction:column;min-width:0}
+  .pb-peek-lab{font-size:12.5px;font-weight:500;line-height:1.3;color:var(--ink-2)}
+  .pb-peek-fig{font-size:18px;font-weight:700;line-height:1.25;color:var(--ink);
+    font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  .pb-peek[data-pb-tone="state"] .pb-peek-fig{color:var(--teal-700)}
+  .pb-peek-guess{display:block;font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
+  .pb-peek-go{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:36px;height:36px;border-radius:50%;background:var(--teal-700);color:#fff}
+  .pb-peek-go svg{width:18px;height:18px}
+  html.pb-peek-on{scroll-padding-bottom:calc(var(--pb-peek-h, 56px) + 8px)}
+  html.pb-peek-on .pb-b-btn{bottom:calc(var(--pb-peek-h, 56px) + 12px)}
+  .res-hero[tabindex="-1"]:focus,.pb-guess[tabindex="-1"]:focus{outline:none}
+  .res-hero[tabindex="-1"]:focus-visible,.pb-guess[tabindex="-1"]:focus-visible{outline:3px solid var(--ring);outline-offset:3px}
+}
+@media(max-width:920px) and (prefers-reduced-motion:no-preference){
+  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
+}
+@media(prefers-reduced-motion:reduce){.pb-peek{transition:none}}
 
 /* ---- living standards comparison, this page only ---- */
 .lstd{display:flex;flex-direction:column;gap:20px;margin-top:6px}
@@ -2622,6 +2677,7 @@ initJar();
 })();
 </script>
 <script src="assets/js/pb-guess.js?v=581f2dfd"></script>
+<script src="assets/js/pb-peek.js?v=eb145ab4"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 </body>
 </html>
