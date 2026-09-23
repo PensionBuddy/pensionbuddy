@@ -1751,6 +1751,22 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .yal-track{grid-column:1 / -1;grid-row:2}
   .yal-gain{grid-column:1 / -1;grid-row:3}
 }
+
+/* THE RECORD, AS IT COUNTS UNDER THE TCA (.pb-rec). One bar to the larger
+   of a full record (2,080, the tick) and everything entered: paid, then
+   the credits and HomeCaring Periods that count, then, greyed, the part the
+   caps leave out. Every count is the module's (tca.creditsCounted and
+   the rest); the page only divides by the scale. All the State's: teal. */
+.pb-rec{margin:10px 0 0}
+.pb-rec-track{position:relative;display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-rec-track i{display:block;height:100%}
+.pb-rec-paid{background:var(--teal-700)}
+.pb-rec-extra{background:var(--aqua)}
+.pb-rec-over{background:repeating-linear-gradient(135deg,var(--line-2) 0 4px,var(--surface-2) 4px 8px)}
+.pb-rec-track .pb-rec-full{position:absolute;top:-1px;bottom:-1px;width:2px;margin-left:-1px;background:var(--ink)}
+.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pb-rec-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1869,6 +1885,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
             <span class="mbar-lab" id="m1Lab" style="left:90.6699%">€18.97</span>
           </div>
           <p class="mnote" id="m1Cap" hidden></p>
+          <div class="pb-rec">
+            <div class="pb-rec-track" aria-hidden="true"><i class="pb-rec-paid" id="pbRecPaid" style="width:75%"></i><i class="pb-rec-extra" id="pbRecExtra" style="width:12.5%"></i><i class="pb-rec-over" id="pbRecOver" style="width:0%"></i><i class="pb-rec-full" id="pbRecFull" style="left:100%"></i></div>
+            <p class="pb-rec-key"><span><i class="pb-rec-sw pb-rec-paid"></i>Paid <b id="pbRecPaidN">1,560</b></span><span><i class="pb-rec-sw pb-rec-extra"></i>Credits and HomeCaring Periods counted <b id="pbRecExtraN">260</b></span><span><i class="pb-rec-sw pb-rec-over"></i>Over the caps <b id="pbRecOverN">0</b></span></p>
+          </div>
         </div>
 
         <div class="mrow" id="m2Row">
@@ -2243,6 +2263,18 @@ function render() {
       ? '<b>' + num(tca.reckonable) + '</b> reckonable contributions, more than a full record of 2,080, so the maximum rate.'
       : '<b>' + num(tca.reckonable) + '</b> reckonable contributions, <b>' + pct(tca.fraction) + '</b> of a full record of 2,080.';
     $('m1Cap').hidden = !tca.capBit;
+    // The record as the TCA counts it: the module's counts over the larger of
+    // a full record and everything entered.
+    const over = res.credited + res.homeCaring - tca.extrasCounted;
+    const recTop = Math.max(SP.FULL_CONTRIBUTIONS, res.paid + res.credited + res.homeCaring);
+    const recW = n => (n / recTop * 100).toFixed(4) + '%';
+    $('pbRecPaid').style.width = recW(res.paid);
+    $('pbRecExtra').style.width = recW(tca.extrasCounted);
+    $('pbRecOver').style.width = recW(over);
+    $('pbRecFull').style.left = recW(SP.FULL_CONTRIBUTIONS);
+    $('pbRecPaidN').textContent = num(res.paid);
+    $('pbRecExtraN').textContent = num(tca.extrasCounted);
+    $('pbRecOverN').textContent = num(over);
     if (tca.capBit) {
       $('m1Cap').textContent = num(tca.extrasCounted) + ' of your ' + num(res.credited + res.homeCaring) +
         ' credits and HomeCaring Periods count; the rest are over the caps.';

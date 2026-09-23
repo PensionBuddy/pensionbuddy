@@ -42,7 +42,7 @@ twice is reverted and logged here. The audit itself is
 | 11 | State Pension on top of monthly income | **skipped** (fail-once rule): verify.py flagged the new line at 2.18:1 contrast (grey --ink-2 on the dark results panel); reverted. Render-diff had proved only the new #pbSpTop cell differs, and the veil covered it; a colour fix away | — |
 | 6 | Gap band drag | done: need slider under the gap chart; chart re-scales against €15,564, covered at or under it; tap-for-source part left out (simplest option) | |
 | 2 | Relief widget | **skipped** (fail-once rule): verify.py's link check read the static hand-off link `pension-calculator.html#monthly=100` as a missing anchor on three pages; reverted. Everything else had passed (contrast 6.31:1 and up, render-diff clean, the calculator taking #monthly=500 and ignoring an off-step value); the fix is a plain href with the fragment added by script | — |
-| 10 | TCA capped part | not reached | |
+| 10 | TCA capped part | done: the record as one bar to the larger of 2,080 and everything entered: paid, credits and HomeCaring Periods counted, the part over the caps greyed; full-record tick | |
 | 19 | Phase staircase | not reached | |
 | 16 | 20% → 40% marker | not reached | |
 | 22 | Glossary index + entitlement jump row | not reached | |
@@ -89,6 +89,7 @@ Every new user-facing string this run adds is listed here by item.
 - #14: "Your gross salary", "You pay in", "Your employer adds", "The State adds" are the comparison page's own labels; new: "A year, at the [2026 to 2028] rates: [1.5% of salary each from you and your employer, and 0.5% from the State], on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1." (the bracketed parts come from the module).
 - #7: card heading "Your relief limit"; caption "Revenue's limit on the contributions that get tax relief, as a share of earnings."; live line "At [age], relief applies to contributions up to €[limit] a year: [x]% of €[earnings]." (above the cap: "…of €115,000, the most Revenue counts."); note "Earnings count up to €115,000."; starter caption "Tax relief is there at any age. Revenue's limit on the contributions that get it rises with age, as a share of earnings."; director caption "The personal limit: the share of salary that gets tax relief, by age." (its note reuses the page's own "Company funding is not capped by the salary percentages that limit everyone else."); row labels "Under 30", "30 to 39" … "60 and over", tag "You".
 - #6: slider label "What you expect to need"; value "€[x] a year"; result line "€[gap] a year short." or "Covered by the State Pension."; once moved, the need bar's caption reads "What you expect to need" (was the signed "What people expect to need", which it keeps until the slider moves); the chart's spoken label "Two bars. You expect to need [x] euro a year. The State Pension pays 15,564. The gap is [y]." / "…That is covered."
+- #10: key "Paid [n]", "Credits and HomeCaring Periods counted [n]", "Over the caps [n]" (the page's own "credits and HomeCaring Periods" wording).
 
 ---
 

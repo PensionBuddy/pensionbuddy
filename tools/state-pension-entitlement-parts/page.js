@@ -227,6 +227,18 @@ function render() {
       ? '<b>' + num(tca.reckonable) + '</b> reckonable contributions, more than a full record of 2,080, so the maximum rate.'
       : '<b>' + num(tca.reckonable) + '</b> reckonable contributions, <b>' + pct(tca.fraction) + '</b> of a full record of 2,080.';
     $('m1Cap').hidden = !tca.capBit;
+    // The record as the TCA counts it: the module's counts over the larger of
+    // a full record and everything entered.
+    const over = res.credited + res.homeCaring - tca.extrasCounted;
+    const recTop = Math.max(SP.FULL_CONTRIBUTIONS, res.paid + res.credited + res.homeCaring);
+    const recW = n => (n / recTop * 100).toFixed(4) + '%';
+    $('pbRecPaid').style.width = recW(res.paid);
+    $('pbRecExtra').style.width = recW(tca.extrasCounted);
+    $('pbRecOver').style.width = recW(over);
+    $('pbRecFull').style.left = recW(SP.FULL_CONTRIBUTIONS);
+    $('pbRecPaidN').textContent = num(res.paid);
+    $('pbRecExtraN').textContent = num(tca.extrasCounted);
+    $('pbRecOverN').textContent = num(over);
     if (tca.capBit) {
       $('m1Cap').textContent = num(tca.extrasCounted) + ' of your ' + num(res.credited + res.homeCaring) +
         ' credits and HomeCaring Periods count; the rest are over the caps.';

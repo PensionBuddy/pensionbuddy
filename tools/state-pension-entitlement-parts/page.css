@@ -86,3 +86,19 @@
   .yal-track{grid-column:1 / -1;grid-row:2}
   .yal-gain{grid-column:1 / -1;grid-row:3}
 }
+
+/* THE RECORD, AS IT COUNTS UNDER THE TCA (.pb-rec). One bar to the larger
+   of a full record (2,080, the tick) and everything entered: paid, then
+   the credits and HomeCaring Periods that count, then, greyed, the part the
+   caps leave out. Every count is the module's (tca.creditsCounted and
+   the rest); the page only divides by the scale. All the State's: teal. */
+.pb-rec{margin:10px 0 0}
+.pb-rec-track{position:relative;display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-rec-track i{display:block;height:100%}
+.pb-rec-paid{background:var(--teal-700)}
+.pb-rec-extra{background:var(--aqua)}
+.pb-rec-over{background:repeating-linear-gradient(135deg,var(--line-2) 0 4px,var(--surface-2) 4px 8px)}
+.pb-rec-track .pb-rec-full{position:absolute;top:-1px;bottom:-1px;width:2px;margin-left:-1px;background:var(--ink)}
+.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pb-rec-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
