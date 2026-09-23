@@ -48,7 +48,7 @@ twice is reverted and logged here. The audit itself is
 | 22 | Glossary index + entitlement jump row | done: glossary term index held under the nav (follows it as it slides away) with the term in view marked; entitlement jump row under the result. New WARN: glossary deep links land below the index (C4) | |
 | 23 | Drawdown mini calc | done: pot slider in the Drawdown entry, a month out at the calculator's own 4% illustration | |
 | 25 | €1,000 profit toggle | **skipped**: it draws the director calculator's 52% / 48c, which rests on the 4% PRSI the check found out of date; building it would repeat a stale figure on a second page | — |
-| 24 | Buddy's facts links | not reached | |
+| 24 | Buddy's facts links | done: each game-over fact's "More on this in …" names its page as a link (target _top, glossary anchors where they exist) | |
 | 13 | Product band tabs | not reached | |
 | 20 | Screenshot arrows | not reached | |
 | 27 | "Before 6 April?" control | not reached | |
@@ -94,6 +94,7 @@ Every new user-facing string this run adds is listed here by item.
 - #16: key "€[x] of your salary taxed at 20%" and "€[y] at 40%".
 - #22: glossary index label (for screen readers) "Terms on this page"; entitlement "Jump to how the two calculations work or the assumptions."
 - #23: label "A pot of"; "Drawing 4% a year from it is about €[x] a month." (the entry's own "not a recommendation" sentence sits directly above).
+- #24: none: the line "More on this in [page]." is unchanged; the page name is now a link.
 
 ---
 

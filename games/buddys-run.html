@@ -101,6 +101,7 @@ canvas.game{display:block;width:100%;height:100%;background:#E8F6F3}
 .factlabel{display:block;font-size:.7em;font-weight:800;color:var(--teal-700)}
 .fact p{margin-top:.25em;font-size:.92em;line-height:1.45}
 .fact .src{font-size:.78em;color:var(--ink-2);margin-top:.3em}
+.fact .src a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .panel .back{font-size:.85em;margin-top:.1em}
 .paused-card{background:var(--surface);border-radius:.9em;padding:1.2em 1.5em;text-align:center}
 .paused-card h2{font-family:var(--display);font-weight:800;font-size:1.6em}
@@ -263,14 +264,14 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   };
 
   var FACTS = [
-    { text: 'A pension contribution comes off the top of your taxable income, so for a higher-rate taxpayer a hundred euro in the pot costs about sixty.', source: 'glossary.html, Tax relief' },
+    { text: 'A pension contribution comes off the top of your taxable income, so for a higher-rate taxpayer a hundred euro in the pot costs about sixty.', source: 'glossary.html, Tax relief', anchor: '#tax-relief' },
     { text: 'Relief has a ceiling: an age-related share of earnings, fifteen per cent under thirty, rising in steps to forty per cent at sixty and over.', source: 'pension-calculator.html, assumptions' },
-    { text: 'Money an employer pays into your pension is effectively part of your pay, only it lands in your future instead of your current account.', source: 'glossary.html, Employer contribution' },
+    { text: 'Money an employer pays into your pension is effectively part of your pay, only it lands in your future instead of your current account.', source: 'glossary.html, Employer contribution', anchor: '#employer-contribution' },
     { text: 'The State Pension (Contributory) is paid from 66 to people with enough PRSI contributions, and the headline figure is a personal rate, before any increase for a qualified adult or child.', source: 'glossary.html, State Pension; state-pension-reality-check.html' },
     { text: 'Ten years of paid PRSI, 520 contributions, is the qualifying minimum for any Contributory pension at all, and credits do not count towards that bit.', source: 'state-pension-entitlement.html' },
-    { text: 'At retirement, part of the pot can usually come out as a tax-free lump sum, within the limits Revenue sets.', source: 'glossary.html, Lump sum' },
-    { text: 'An ARF keeps the pot invested, so it can grow, fall or run out; an annuity swaps it for an income for life that usually cannot be changed once bought.', source: 'glossary.html, ARF and Annuity' },
-    { text: "A contribution can be set against last year's tax bill if it lands by 31 October, and people who file online usually have until mid-November.", source: 'index.html, tax deadline band' },
+    { text: 'At retirement, part of the pot can usually come out as a tax-free lump sum, within the limits Revenue sets.', source: 'glossary.html, Lump sum', anchor: '#lump-sum' },
+    { text: 'An ARF keeps the pot invested, so it can grow, fall or run out; an annuity swaps it for an income for life that usually cannot be changed once bought.', source: 'glossary.html, ARF and Annuity', anchor: '#arf' },
+    { text: "A contribution can be set against last year's tax bill if it lands by 31 October, and people who file online usually have until mid-November.", source: 'index.html, tax deadline band', anchor: '#deadline' },
     { text: 'Under auto-enrolment, My Future Fund, an employer and the State pay in alongside the employee.', source: 'starter.html' }
   ];
 
@@ -1057,10 +1058,20 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   function say(msg) { el.say.textContent = msg; }
 
-  function factSource(f) {
+  /* "More on this in" the page the fact comes from, named as a link to it,
+     out of the arcade frame (target _top, like every link in the game) */
+  function factLink(f, node) {
     var first = String(f.source).split(';')[0].split(',')[0].trim();
     var name = PAGE_NAMES[first];
-    return name ? ('More on this in ' + name + '.') : '';
+    node.textContent = '';
+    if (!name) return;
+    var a = document.createElement('a');
+    a.href = '../' + first + (f.anchor || '');
+    a.target = '_top';
+    a.textContent = name;
+    node.appendChild(document.createTextNode('More on this in '));
+    node.appendChild(a);
+    node.appendChild(document.createTextNode('.'));
   }
 
   function showOver() {
@@ -1070,7 +1081,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     el.ovBestMsg.hidden = !S.newBest;
     var f = FACTS[Math.floor(rng() * FACTS.length)];
     el.ovFact.textContent = f.text;
-    el.ovSrc.textContent = factSource(f);
+    factLink(f, el.ovSrc);
     el.ovOver.hidden = false;
     el.ovStart.hidden = true;
     el.ovPause.hidden = true;
