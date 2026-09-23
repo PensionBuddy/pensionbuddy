@@ -208,6 +208,9 @@ function calc() {
     + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
     + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
 
+  /* the phase staircase in the assumptions: tag the phase these figures use */
+  for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;
+
   /* ---------- shared: the auto-enrolment layer ---------- */
   $('aeEmployee').textContent = euro(ae.employee);
   $('aeEmployer').textContent = euro(ae.employer);

@@ -1800,6 +1800,27 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-my-track{grid-column:1 / -1;grid-row:2}
 }
 @media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}
+
+/* THE PHASE STAIRCASE (.pb-stair). Auto-enrolment's four phases from
+   PBCompare.AE_PHASES, each column as tall as its total rate and stacked
+   you, your employer, the State (always 3 : 3 : 1). The page tags the
+   phase its figures are using. Teal is the State; the rest is neutral. */
+.pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
+.pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.assume .pb-stair li{padding-left:0;line-height:1.4}
+.assume .pb-stair li::before{content:none;display:none}
+.pb-stair-you{display:inline-block;max-width:100%;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600;white-space:nowrap}
+.pb-stair-you[hidden]{display:block;visibility:hidden}
+.pb-stair-bar{position:relative;display:block;width:100%;height:84px}
+.pb-stair-stack{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;border-radius:6px 6px 0 0;overflow:hidden}
+.pb-stair-stack i{display:block;width:100%}
+.pb-stair-ee{background:var(--ink-2)}
+.pb-stair-er{background:var(--ink-3);opacity:.6}
+.pb-stair-st{background:var(--aqua)}
+.pb-stair-yr{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-stair-r{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-stair-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;color:var(--ink-2)}
+.pb-stair-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2084,7 +2105,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
     <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
-    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.</li>
+    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.
+    <ol class="pb-stair">
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair3" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:75.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2032 to 2034</span><span class="pb-stair-r">4.5%, 4.5%, 1.5%</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span></li>
+    </ol>
+    <p class="pb-stair-key"><span><i class="pb-stair-sw pb-stair-ee"></i>You</span><span><i class="pb-stair-sw pb-stair-er"></i>Your employer</span><span><i class="pb-stair-sw pb-stair-st"></i>The State</span></p></li>
     <li>All three auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are calculated on salary up to €80,000, which gov.ie confirms. Payroll stops the deduction after the pay period in which that threshold is crossed, so a little can be paid on earnings above it in that period; this annual illustration ignores that.</li>
     <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
     <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
@@ -2329,6 +2357,9 @@ function calc() {
   $('phaseLine').textContent = ($('futureOn').checked ? 'Planning for ' + calYear : 'Since it is ' + calYear)
     + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
     + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
+
+  /* the phase staircase in the assumptions: tag the phase these figures use */
+  for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;
 
   /* ---------- shared: the auto-enrolment layer ---------- */
   $('aeEmployee').textContent = euro(ae.employee);
