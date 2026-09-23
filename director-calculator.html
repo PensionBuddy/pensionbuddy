@@ -1689,7 +1689,8 @@ button{font-family:inherit}
 /* a band that runs edge to edge while its content keeps the page width */
 .pb-bleed{width:100vw;margin-left:calc(50% - 50vw);border-radius:0}
 .pb-wash{background:linear-gradient(180deg,var(--bg) 0%,var(--teal-50) 42%,#EEF8F5 100%)}
-.pb-dark{background:linear-gradient(160deg,var(--ink-800),var(--ink-900));color:#fff}
+/* static grain over the dark bands (Mercury), white noise at 7%, no motion */
+.pb-dark{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"),linear-gradient(160deg,var(--ink-800),var(--ink-900));color:#fff}
 .pb-dark h2,.pb-dark h3{color:#fff}
 .pb-dark p{color:rgba(255,255,255,.8)}
 .pb-dark .eyebrow{color:var(--mint)}

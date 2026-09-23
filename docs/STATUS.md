@@ -60,7 +60,7 @@ twice is reverted and logged here. The audit itself is
 | 31 | Closing fork (Mercury) | done: three situation cards before the home page's closing band, the hero chat's question and chips, each to its page | |
 | 32 | Calculators dropdown (Mercury) | done: a panel of the five tools, one line each, under the nav's Calculator link from 1201px; script-built, so the guarded nav markup is unchanged | |
 | 33 | Colour fade between bands (Mercury) | done: the home page's dark product band fades in from the wash above and out to the page below, inside its own padding; static seams, not a scroll-driven theme | |
-| 34 | Static grain on dark bands (Mercury) | not reached | |
+| 34 | Static grain on dark bands (Mercury) | done: static white-noise grain at 7% over every dark band, one layer added to the shared .pb-dark rule on all sixteen pages; no motion | |
 | 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
 | 17 | Scrollytelling | not reached | |
 | — | Re-shoot product rasters after the calculator changes | not reached | |
