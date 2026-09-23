@@ -322,6 +322,18 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .magnet .ok h3{font-size:18px;font-weight:700;margin-bottom:6px}
 .magnet .ok p{font-size:14px;color:var(--ink-2);margin:0 auto}
 .magnet .ok a{color:var(--ac-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+/* #15: the success tick draws itself once, about 300ms, ease-out, as its
+   message appears: going from display:none to shown starts the animation, so
+   the draw needs no script. Drawn is the default and the draw runs only where
+   motion is allowed, so with reduced motion the tick is simply there. The
+   check is 22.6 long in its 24 box and a 24 dash covers it. The draw slides
+   that dash in from -23, so the short arm comes first, the way a tick is
+   written, and nothing shows before it starts. On success focus moves to the
+   message itself; it is not a control, so it shows no ring, like #main. */
+.pb-ok-tick path,.pb-ok-tick polyline{stroke-dasharray:24 24;stroke-dashoffset:0}
+@media(prefers-reduced-motion:no-preference){.pb-ok-tick path,.pb-ok-tick polyline{animation:pb-ok-tick-draw .3s cubic-bezier(.22,.61,.36,1) backwards}}
+@keyframes pb-ok-tick-draw{from{stroke-dashoffset:-23}to{stroke-dashoffset:0}}
+[role="status"][tabindex="-1"]:focus{outline:none}
 
 /* email-results capture (calculator) */
 .email-cap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-sm)}
@@ -1811,8 +1823,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
       <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
     </div>
-    <div class="ok" id="mOk" role="status">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+    <div class="ok" id="mOk" role="status" tabindex="-1">
+      <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
       <h3>Check your inbox.</h3>
       <p><span id="mOkText">Thanks. The guide is on its way.</span></p>
     </div>
@@ -1877,6 +1889,7 @@ function sendMagnet(){
     if(h&&heading)h.textContent=heading;
     document.getElementById('mForm').style.display='none';
     document.getElementById('mOk').classList.add('show');
+    document.getElementById('mOk').focus(); /* #15: land on the confirmation, not the hidden form */
   };
   var failed=function(){
     err.innerHTML='That did not send. You can '+

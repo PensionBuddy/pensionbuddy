@@ -1311,6 +1311,18 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .qdone p{font-size:14px;color:var(--ink);flex:1;min-width:180px}
 .qedit{font-family:var(--font);font-size:13px;font-weight:600;color:var(--teal-700);background:none;border:0;border-radius:8px;cursor:pointer;padding:12px 6px;min-height:44px;text-decoration:underline;text-underline-offset:3px}
 .qedit:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+/* #15: the success tick draws itself once, about 300ms, ease-out, as its
+   message appears: going from display:none to shown starts the animation, so
+   the draw needs no script. Drawn is the default and the draw runs only where
+   motion is allowed, so with reduced motion the tick is simply there. The
+   check is 22.6 long in its 24 box and a 24 dash covers it. The draw slides
+   that dash in from -23, so the short arm comes first, the way a tick is
+   written, and nothing shows before it starts. On success focus moves to the
+   message itself; it is not a control, so it shows no ring, like #main. */
+.pb-ok-tick path,.pb-ok-tick polyline{stroke-dasharray:24 24;stroke-dashoffset:0}
+@media(prefers-reduced-motion:no-preference){.pb-ok-tick path,.pb-ok-tick polyline{animation:pb-ok-tick-draw .3s cubic-bezier(.22,.61,.36,1) backwards}}
+@keyframes pb-ok-tick-draw{from{stroke-dashoffset:-23}to{stroke-dashoffset:0}}
+[role="status"][tabindex="-1"]:focus{outline:none}
 
 /* the calendar stage stays out of the page until the form is completed */
 #calStage[hidden]{display:none}
@@ -1579,8 +1591,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
         <p class="qnote">That is the lot. We do not ask what you earn, what your pension is worth, how old you are or who you work for: none of it is needed to book a chat, and this site gives information, not advice. Your name and email go to Calendly with the booking and are handled in line with our <a href="privacy.html">Privacy Notice</a>.</p>
       </form>
 
-      <div class="qdone" id="qualDone">
-        <svg class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="qdone" id="qualDone" role="status" tabindex="-1">
+        <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         <p id="qualDoneMsg"></p>
         <button type="button" class="qedit" id="qualEdit">Change details</button>
       </div>
@@ -1760,6 +1772,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     var given=nameEl.value.trim().split(/\s+/)[0];
     doneMsg.textContent='Thanks, '+given+'. Pick a time below, the calendar already has your details.';
     done.classList.add('show');
+    done.focus(); /* #15: land on the confirmation, not the hidden form */
   });
 
   if(editBtn)editBtn.addEventListener('click',function(){
