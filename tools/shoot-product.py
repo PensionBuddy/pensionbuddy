@@ -58,7 +58,11 @@ SHOTS = {
 
 HIDE = ('nav,footer,.announce,.skip,.phead,.deadline,#deadlineBand,.assume,section,'
         '.pb-b-btn,.pb-b-panel,.pb-consent,.email-cap,.pb-guess,.pb-guess-card,.nav-tick,.sft-note,'
-        '.boost-card,.pb-badges'
+        '.boost-card,.pb-badges,'
+        # run 19's additions below the headline: the relief limit card, the
+        # workings and the share link, left out like the boost card to keep
+        # the pictures close to square
+        '.chart-card:has(.pb-lad),.pb-work,.pb-share,.pb-peek'
         '{display:none!important}')
 SETTLE = ('html{scroll-behavior:auto}'
           '.reveal,.js-reveal .reveal{opacity:1!important;transform:none!important}'

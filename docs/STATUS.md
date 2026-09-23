@@ -63,7 +63,7 @@ twice is reverted and logged here. The audit itself is
 | 34 | Static grain on dark bands (Mercury) | done: static white-noise grain at 7% over every dark band, one layer added to the shared .pb-dark rule on all sixteen pages; no motion | |
 | 21 | 52% as three segments | **not built**: the PRSI check did not confirm 4% | — |
 | 17 | Scrollytelling | done: "First payslip to 66" on starter, a pinned card beside five steps (52 a year, 520, 15% to 40%, 2,080, 66), before the start-age chart | |
-| — | Re-shoot product rasters after the calculator changes | not reached | |
+| — | Re-shoot product rasters after the calculator changes | done: all five re-shot; the relief-limit card, the workings and the share link are left out of the shots like the boost card; width/height corrected on index, starter and director; home tab data re-embedded; the annotation label moved clear of the result sentence | |
 
 ## Held, not built
 
