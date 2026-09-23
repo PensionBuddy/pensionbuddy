@@ -1979,7 +1979,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="vs-col vs-salary">
           <div class="vt">Taken as salary</div>
           <div class="amt" id="salaryNet">€0</div>
-          <div class="lab">lands in your pocket after up to 52% income tax, USC and PRSI</div>
+          <div class="lab">lands in your pocket after up to 52.2% income tax, USC and PRSI (52.35% from 1 October 2026)</div>
         </div>
         <div class="vsmark">vs</div>
         <div class="vs-col vs-pension">
@@ -1991,7 +1991,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="vs-split">
         <div class="vs-split-head"><label for="split">Or split it between the two</label><span class="vs-split-val" id="splitV">half and half</span></div>
         <input type="range" id="split" min="0" max="100" step="5" value="50" aria-valuetext="half into the pension">
-        <p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€9,600</b> in your pocket. €20,000 into the pension is <b>€20,000</b> for your retirement.</p>
+        <p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€9,560</b> in your pocket. €20,000 into the pension is <b>€20,000</b> for your retirement.</p>
       </div>
       <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
     </div>
@@ -2048,7 +2048,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h3>The assumptions behind these numbers</h3>
   <ul class="reveal">
     <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is shown at the 12.5% trading rate, and assumes the contribution is wholly and exclusively for the business and within Revenue funding limits.</li>
-    <li>The salary comparison assumes a higher-rate taxpayer facing up to 52% on additional income (40% income tax, 8% USC, 4% PRSI). Your rate may differ.</li>
+    <li>The salary comparison assumes a higher-rate taxpayer facing up to 52.2% on additional income (40% income tax, 8% USC, 4.2% PRSI), and 52.35% from 1 October 2026, when PRSI rises to 4.35%. Your rate may differ.</li>
     <li>Pension benefits are taxed when drawn, though up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
     <li>Maximum funding (up to two-thirds of salary) requires sufficient service and an actuarial calculation. This tool does not perform that calculation.</li>
     <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures here are not adjusted for inflation and ignore product charges.</li>
@@ -2083,6 +2083,12 @@ const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
    fit in, so a seven-figure fund is shown in thousands */
 const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE')+'k':euro(v);};
 
+/* PRSI on additional income: 4.2% to 30 September 2026, 4.35% from 1 October
+   2026 (Department of Social Protection, PRSI Contribution Rates and User
+   Guide 2026, SW14). With 40% income tax and 8% USC, the share of salary that
+   reaches the pocket is what is left. */
+var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;
+var TAKE_HOME = 1 - (0.40 + 0.08 + PRSI);
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 
 function project(months,startPot,monthly,mRate){
@@ -2216,7 +2222,7 @@ function calc(){
       :'With no company contribution and nothing built up so far, there is no pot to grow from '+age+
        ' to '+ret+', and no corporation tax to save.';
 
-  const salaryNet=contrib*0.48;
+  const salaryNet=contrib*TAKE_HOME;
   tween('salaryNet',salaryNet,euro);
   tween('pensionFull',contrib,euro);
   $('vsSub').textContent='Your €'+contrib.toLocaleString('en-IE')+' company contribution, taken as salary instead.';
@@ -2231,7 +2237,7 @@ function calc(){
   const splitPct=+$('split').value;
   const toPension=contrib*splitPct/100, asSalary=contrib-toPension;
   $('splitV').textContent=VALTEXT.split(splitPct);
-  $('splitOut').innerHTML=euro(asSalary)+' as salary is <b>'+euro(asSalary*0.48)+
+  $('splitOut').innerHTML=euro(asSalary)+' as salary is <b>'+euro(asSalary*TAKE_HOME)+
     '</b> in your pocket. '+euro(toPension)+' into the pension is <b>'+euro(toPension)+
     '</b> for your retirement.';
 
