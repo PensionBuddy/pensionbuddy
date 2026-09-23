@@ -137,7 +137,7 @@
         target: 'potOut',
         fmt: euro,
         min: 0, max: 3000000, step: 10000, value: 250000,
-        veil: function () { return [$('potOut'), $('incOut'), card('chart'), $('pbSay'), $('pbWork')]; }
+        veil: function () { return [$('potOut'), $('incOut'), card('chart'), $('pbSay'), $('pbWork'), $('pbSpTop')]; }
       }];
     }
     if (file === 'director-calculator.html') {

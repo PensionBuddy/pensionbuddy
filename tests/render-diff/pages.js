@@ -25,7 +25,7 @@ const PAGES = {
   'pension-calculator': {
     html: 'pension-calculator.html',
     parts: null,                                   // inline, and the build skeleton
-    modules: [SHARED],
+    modules: [SHARED, 'assets/js/state-pension.js'],  // #11: the maximum rate, on top
     ranges: ['age', 'ret', 'pot', 'mine', 'earn', 'emp', 'growth'],
     settle: p => { p.drainRaf(); p.flushTimers(); p.drainRaf(); },
     apply(p, s) {

@@ -120,6 +120,7 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 /* #4: the headline figures as one plain sentence, written from the same final
    values as the figures above. White on --teal-900, inherited from .res-hero. */
+.res-hero .pb-sp-top{margin-top:-6px;font-size:14px;color:inherit;opacity:.92}
 .res-hero .pb-say{grid-column:1/-1;position:relative;min-width:0;font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:break-word}
 
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
@@ -1452,7 +1453,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-btn:hover{background:var(--teal-700)}
 .pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
 .pb-guess-out:empty{display:none}
-.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay{filter:blur(13px)}
+.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
 .pb-veil{transition:filter .45s ease}
 .pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
 @media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
@@ -1795,6 +1796,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
       <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
       <p class="pb-say" id="pbSay">At 40, with €450 a month going in and €50,000 saved already, your pot could reach €460,066 by 66: an income of about €1,534 a month.</p>
+      <p class="pb-say pb-sp-top" id="pbSpTop">Add the State Pension (Contributory) at the maximum rate from 66, and it comes to about €2,831 a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
@@ -1883,6 +1885,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-ladder.js?v=a9ec3585"></script>
+<script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -2034,6 +2037,14 @@ function calc(){
      ' and '+(pot>0?euro(pot)+' saved already':'nothing saved yet')+
      ', your pot could reach '+euro(base)+' by '+ret+': an income of about '+euro(base*0.04/12)+' a month.'
     :'At '+age+', with nothing saved yet and nothing going in each month, there is no pot to grow by '+ret+'.';
+  /* #11: the same monthly income with the State Pension (Contributory) at its
+     maximum rate on top, from 66, the pension age. The rate is the reality
+     check's module's, a year over twelve; only the addition is done here. */
+  if(window.PBStatePension){
+    const SPm=PBStatePension.MAX_WEEKLY_CENTS*PBStatePension.WEEKS_PER_YEAR/100/12;
+    $('pbSpTop').textContent='Add the State Pension (Contributory) at the maximum rate from '+PBStatePension.PENSION_AGE+
+      ', and it comes to about '+euro(base*0.04/12+SPm)+' a month.';
+  }
 
 
   /* #29: the workings, from the same values: what went in, what was there
@@ -2623,7 +2634,7 @@ function sendResults(){
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=419efb51"></script>
+<script src="assets/js/pb-guess.js?v=3213e251"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
 <script src="assets/js/pb-share.js?v=e795eb76"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>

@@ -120,6 +120,7 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
 /* #4: the headline figures as one plain sentence, written from the same final
    values as the figures above. White on --teal-900, inherited from .res-hero. */
+.res-hero .pb-sp-top{margin-top:-6px;font-size:14px;color:inherit;opacity:.92}
 .res-hero .pb-say{grid-column:1/-1;position:relative;min-width:0;font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:break-word}
 
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
@@ -1452,7 +1453,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-btn:hover{background:var(--teal-700)}
 .pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
 .pb-guess-out:empty{display:none}
-.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay{filter:blur(13px)}
+.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
 .pb-veil{transition:filter .45s ease}
 .pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
 @media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
@@ -3075,7 +3076,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=419efb51"></script>
+<script src="assets/js/pb-guess.js?v=3213e251"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
 <script src="assets/js/pb-share.js?v=e795eb76"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
