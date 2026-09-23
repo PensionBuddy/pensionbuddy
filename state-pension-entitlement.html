@@ -1772,6 +1772,14 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    long scrolls down on a phone */
 .pb-jump{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
 .pb-jump a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* #27: the "between 1 January and 5 April" box under the entry year, the
+   comparison page's checkbox row */
+.tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
+.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
+.tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+.pb-april{margin-top:10px}
+.pb-april[hidden]{display:none}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1845,7 +1853,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field">
       <div class="row"><label for="entry">Contribution year you first paid PRSI</label><span class="val" id="entryV">1985</span></div>
       <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
-      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.</p>
+      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.</p>
+      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first payment was between 1 January and 5 April</span></label>
     </div>
 
     <div class="field">
@@ -2012,7 +2021,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Contributions in the year you turn 66 count under the Total Contributions Approach but sit outside the inputs, which run to the end of the year before. The TCA figure is a floor by that much, a few weeks' contributions at most.</li>
     <li>Mixed-rate, EU and pro-rata records use different formulas and are not covered. They can give a lower figure, or no entitlement at all, so the floor statement does not extend to them.</li>
     <li>The pension also requires that you first paid PRSI before 56. This page does not check that: an entry at 56 or later can mean no entitlement at all, and the page would still show a figure.</li>
-    <li>Before 2002 the contribution year ran from April to April, and the page takes the entry year as entered. If you give the calendar year of a first payment made between January and 5 April of a year up to 2001, the years divided by are one too few and the figure may be too high. The floor statement is on the details entered.</li>
+    <li>Before 2002 the contribution year ran from April to April. For a first payment between 1 January and 5 April of a year up to 2001, the box under the entry year counts from the year before, as the Department does; left unticked, the page takes the entry year as entered, and if that is the calendar year of such a payment the years divided by are one too few and the figure may be too high. The floor statement is on the details entered.</li>
     <li>The maximum personal rate is €299.30 a week from January 2026, and the six Yearly Average band rates are the 2026 rates. Rates and rules change, usually at each Budget. The annual figure is 52 weekly payments.</li>
     <li>The rate shown is the personal rate at 66. It does not include an increase for a qualified adult or child, and it does not include the higher rate that applies from age 80.</li>
     <li>Pensions that started before 2025 were awarded under earlier rules and are not covered.</li>
@@ -2093,7 +2102,9 @@ const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contributio
 const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
 const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 
-const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.';
+const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.';
+/* #27, Damian's S11 item 4: the last contribution year that ran April to April */
+const APRIL_LAST = 2001;
 
 /* Screen readers otherwise announce a bare number, so each slider carries a
    formatted aria-valuetext. */
@@ -2191,9 +2202,16 @@ function render() {
     ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '
     : '') + APRIL_RULE;
 
+  // A first payment between 1 January and 5 April of a year up to 2001 fell
+  // in the contribution year that began the April before: the module gets
+  // that year. Nothing else changes; the box shows only where it can apply.
+  const aprilApplies = entryYear <= APRIL_LAST;
+  $('pbAprilRow').hidden = !aprilApplies;
+  const effectiveEntry = aprilApplies && $('aprilOn').checked ? entryYear - 1 : entryYear;
+
   const res = ENT.entitlement({
     paid: paid, credited: credited, homeCaring: homeCaring,
-    entryYear: entryYear, drawdownYear: drawdown
+    entryYear: effectiveEntry, drawdownYear: drawdown
   });
 
   let sr;
@@ -2362,6 +2380,7 @@ wireRanges(VALTEXT, el => {
   if (el.id === 'entry') entryMoved = null;
   render();
 });
+$('aprilOn').addEventListener('change', render);
 
 render();
 </script>

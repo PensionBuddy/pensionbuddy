@@ -51,7 +51,9 @@ const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contributio
 const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
 const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 
-const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between January and 5 April of a year up to 2001, choose the year before.';
+const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.';
+/* #27, Damian's S11 item 4: the last contribution year that ran April to April */
+const APRIL_LAST = 2001;
 
 /* Screen readers otherwise announce a bare number, so each slider carries a
    formatted aria-valuetext. */
@@ -149,9 +151,16 @@ function render() {
     ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '
     : '') + APRIL_RULE;
 
+  // A first payment between 1 January and 5 April of a year up to 2001 fell
+  // in the contribution year that began the April before: the module gets
+  // that year. Nothing else changes; the box shows only where it can apply.
+  const aprilApplies = entryYear <= APRIL_LAST;
+  $('pbAprilRow').hidden = !aprilApplies;
+  const effectiveEntry = aprilApplies && $('aprilOn').checked ? entryYear - 1 : entryYear;
+
   const res = ENT.entitlement({
     paid: paid, credited: credited, homeCaring: homeCaring,
-    entryYear: entryYear, drawdownYear: drawdown
+    entryYear: effectiveEntry, drawdownYear: drawdown
   });
 
   let sr;
@@ -320,5 +329,6 @@ wireRanges(VALTEXT, el => {
   if (el.id === 'entry') entryMoved = null;
   render();
 });
+$('aprilOn').addEventListener('change', render);
 
 render();

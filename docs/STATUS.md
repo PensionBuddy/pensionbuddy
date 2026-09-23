@@ -51,7 +51,7 @@ twice is reverted and logged here. The audit itself is
 | 24 | Buddy's facts links | done: each game-over fact's "More on this in …" names its page as a link (target _top, glossary anchors where they exist) | |
 | 13 | Product band tabs | done: five tabs on the home product band swapping shot, line and button; three new shots (compare, reality check, entitlement) via shoot-product.py | |
 | 20 | Screenshot arrows | done: two labelled arrows over the pension calculator photo (home band, pension tab only; starter callout); 600px and up | |
-| 27 | "Before 6 April?" control | not reached | |
+| 27 | "Before 6 April?" control | done: box under the entry year for years up to 2001; ticked, the module gets the year before; subnote and assumption reworded; spec S11 item 4 marked built | |
 | 26 | Two-tone headlines | not reached | |
 | 28 | Footer wordmark | not reached | |
 | 18 | Mess to order | not reached | |
@@ -97,6 +97,7 @@ Every new user-facing string this run adds is listed here by item.
 - #24: none: the line "More on this in [page]." is unchanged; the page name is now a link.
 - #13: tablist label (screen readers) "The free tools"; tab names are the footer's tool names; new button "Open the entitlement check"; new line for the entitlement tab "What the State Pension would actually pay you, worked out both ways the Department does."; three new alt texts: "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "The State Pension entitlement check: sliders for birth year, first PRSI year and contributions, with the weekly rate and both calculations side by side." Other lines and buttons reuse each tool's existing wording.
 - #20: labels "Drag a slider" and "The figures follow" (decorative, aria-hidden).
+- #27: box "My first payment was between 1 January and 5 April"; entry subnote now "Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before."; assumption bullet rewritten to describe the box (see the entitlement page's assumptions list).
 
 ---
 

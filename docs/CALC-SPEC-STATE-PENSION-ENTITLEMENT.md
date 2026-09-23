@@ -680,7 +680,10 @@ Out of scope entirely:
    the source warning at the top asks for.
 4. **The April-to-April rule** is handled by a subnote. If you would rather
    the page asked "was that before 6 April?" for pre-2002 entries, that is a
-   small control and a follow-up.
+   small control and a follow-up. **Built 2026-09-23 (#27 on Damian's build
+   list):** a box under the entry year, shown for entry years up to 2001;
+   ticked, the module gets the entry year minus one. Unticked, nothing
+   changes.
 
 ### Stated on the page as assumptions, no action needed
 
