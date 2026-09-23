@@ -1535,6 +1535,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .nav-tick{display:none}
   .nav-links a.lnk{padding:12px 7px}
 }
+/* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
+   at the foot of the page, in the logo's own face. Decorative: aria-hidden,
+   and ink at 7% (translucent, so no reader is asked to read it). */
+.pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
+  line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 </style>
 </head>
 <body>
@@ -1596,6 +1601,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
     <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
+  <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 <script>
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));

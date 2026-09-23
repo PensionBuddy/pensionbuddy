@@ -53,7 +53,7 @@ twice is reverted and logged here. The audit itself is
 | 20 | Screenshot arrows | done: two labelled arrows over the pension calculator photo (home band, pension tab only; starter callout); 600px and up | |
 | 27 | "Before 6 April?" control | done: box under the entry year for years up to 2001; ticked, the module gets the year before; subnote and assumption reworded; spec S11 item 4 marked built | |
 | 26 | Two-tone headlines | done: the second sentence of 17 two-sentence headings set quieter (opacity .68), index's locked sections and every h1 excepted | |
-| 28 | Footer wordmark | not reached | |
+| 28 | Footer wordmark | done: "Pensionbuddy" full width at the foot of every footer, in the logo's own face, ink at 7%, aria-hidden | |
 | 18 | Mess to order | not reached | |
 | 29 | Show the workings (Mercury) | not reached | |
 | 30 | Share results (Mercury) | not reached | |
@@ -99,6 +99,7 @@ Every new user-facing string this run adds is listed here by item.
 - #20: labels "Drag a slider" and "The figures follow" (decorative, aria-hidden).
 - #27: box "My first payment was between 1 January and 5 April"; entry subnote now "Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before."; assumption bullet rewritten to describe the box (see the entitlement page's assumptions list).
 - #26: no new words; only the treatment of existing headings changes.
+- #28: none (the wordmark is the name, decorative and hidden from screen readers).
 
 ---
 

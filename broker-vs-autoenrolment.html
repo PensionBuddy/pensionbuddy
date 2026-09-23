@@ -1667,6 +1667,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    rather than a colour, so it mutes against whatever band it is on, light
    or dark, and stays well inside AA for large text either way. */
 .pb-soft{opacity:.68}
+/* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
+   at the foot of the page, in the logo's own face. Decorative: aria-hidden,
+   and ink at 7% (translucent, so no reader is asked to read it). */
+.pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
+  line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 
 /* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -2164,6 +2169,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
     <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
+  <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
