@@ -137,7 +137,7 @@
         target: 'potOut',
         fmt: euro,
         min: 0, max: 3000000, step: 10000, value: 250000,
-        veil: function () { return [$('potOut'), $('incOut'), card('chart'), $('pbSay')]; }
+        veil: function () { return [$('potOut'), $('incOut'), card('chart'), $('pbSay'), $('pbWork')]; }
       }];
     }
     if (file === 'director-calculator.html') {
@@ -149,7 +149,7 @@
         /* #taxOut stays sharp on purpose: the safe on this page animates it.
            #pbSay repeats #taxOut's figure too, but it states the pot as well,
            so the whole sentence is veiled */
-        veil: function () { return [$('potOut'), card('chart'), $('pbSay')]; }
+        veil: function () { return [$('potOut'), card('chart'), $('pbSay'), $('pbWork')]; }
       }];
     }
     if (file === 'state-pension-reality-check.html') {

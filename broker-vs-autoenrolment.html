@@ -1672,6 +1672,17 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* SHOW THE WORKINGS (.pb-work). Mercury's collapsible breakdown under the
+   headline: what went in, what was there already and what growth added,
+   from the page's own inputs and outputs (sums and differences of them,
+   nothing projected afresh). Closed by default; the list is on the guess
+   veil, the summary names nothing. Byte-identical on both calculators. */
+.pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
+.pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+.pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
+.pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
+.pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-work li b{color:var(--ink);font-weight:600;white-space:nowrap}
 
 /* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -3039,7 +3050,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=581f2dfd"></script>
+<script src="assets/js/pb-guess.js?v=419efb51"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 </body>
