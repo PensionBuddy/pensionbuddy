@@ -1805,6 +1805,17 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* COLOUR FADE INTO AND OUT OF THE DARK BAND (#calc). Mercury fades the
+   page between its bands; here the dark product band fades in from the pale
+   wash above it and back out to the page below, inside its own padding
+   (no text there), rather than cutting hard. A scroll-driven page theme
+   would need every section's text colour to swap as well, so the seams are
+   static: the fade is in the page, not in the timing. */
+#calc{position:relative}
+#calc::before,#calc::after{content:"";position:absolute;left:0;right:0;height:72px;pointer-events:none}
+#calc::before{top:0;background:linear-gradient(to bottom,#EEF8F5,rgba(238,248,245,0))}
+#calc::after{bottom:0;background:linear-gradient(to top,var(--bg),rgba(250,250,249,0))}
+@media(max-width:600px){#calc::before,#calc::after{height:44px}}
 </style>
 </head>
 <body>
