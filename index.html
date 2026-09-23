@@ -1514,6 +1514,20 @@ button{font-family:inherit}
 @media(prefers-reduced-motion:reduce){
   .pb-gap-bar,.pb-gap-short{transition:none;height:var(--h)}
 }
+/* THE GAP, YOUR OWN (#pbNeedCtl). A slider under the chart: the reader's own
+   figure for what they expect to need a year, against the same €15,564. The
+   chart re-scales to the larger of the two; at or under €15,564 the need is
+   covered and there is no amber block, never a negative gap. Hidden in the
+   markup and switched on by script, so a page without script shows the
+   survey chart and no dead control. Bars follow the thumb with no easing. */
+.pb-gapctl{max-width:420px;margin-top:22px}
+.pb-gapctl[hidden]{display:none}
+.pb-gapctl input[type=range]{display:block;width:100%}
+.pb-gapctl-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-gapctl label{font-size:.98rem;font-weight:600;color:var(--ink)}
+.pb-gapctl-v{font-size:1.05rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-gapctl-out{margin:10px 0 0;font-size:.98rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-gap.pb-gap-live .pb-gap-bar,.pb-gap.pb-gap-live .pb-gap-short{transition:none}
 
 /* ============================================================
    v4 - THE PRODUCT. The calculator showcase was a card that
@@ -1803,6 +1817,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       </div>
     </div>
     <p class="pb-src reveal">Royal London Ireland, 2026.</p>
+    <div class="pb-gapctl" id="pbNeedCtl" hidden>
+      <div class="pb-gapctl-row"><label for="pbNeed">What you expect to need</label><span class="pb-gapctl-v" id="pbNeedV">€40,860 a year</span></div>
+      <input type="range" id="pbNeed" min="15000" max="80000" step="20" value="40860" aria-valuetext="€40,860 a year">
+      <p class="pb-gapctl-out" id="pbNeedOut">€25,296 a year short.</p>
+    </div>
     </div>
     <div class="pb-gap-aside reveal" style="transition-delay:.1s">
       <p class="pb-plain">79% feel unprepared.</p>
@@ -2080,6 +2099,39 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   io.observe(gap);
   /* never leave the figures at zero: a band that is already past the fold when the observer attaches, or a browser that never fires it */
   setTimeout(function(){var r=gap.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)run();},1200);
+})();
+/* the gap, your own: the reader's figure for what they expect to need, against
+   the State Pension figure the chart already carries. Only the chart's own
+   proportions are worked out here; nothing is a projection. */
+(function(){
+  var gap=document.getElementById('pbGap'), ctl=document.getElementById('pbNeedCtl'), r=document.getElementById('pbNeed');
+  if(!gap||!ctl||!r) return;
+  var needN=gap.querySelector('.pb-gap-need .pb-gap-n'), needBar=gap.querySelector('.pb-gap-need .pb-gap-bar');
+  var needL=gap.querySelector('.pb-gap-need .pb-gap-l'), stBar=gap.querySelector('.pb-gap-state .pb-gap-bar');
+  var st=+stBar.querySelector('[data-pb-count]').getAttribute('data-pb-count');
+  var sh=gap.querySelector('.pb-gap-short'), shN=sh.querySelector('.pb-gap-n'), shL=sh.querySelector('.pb-gap-sl');
+  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  /* the slider's fill and spoken value, as the calculators' paintSlider() sets them */
+  function slide(){var v=+r.value;r.style.setProperty('--fill',((v-r.min)/(r.max-r.min))*100+'%');r.setAttribute('aria-valuetext',fmt(v)+' a year');}
+  function paint(){
+    var need=+r.value, top=Math.max(need,st), g=need-st, pc=function(v){return (v/top*100).toFixed(2)+'%';};
+    gap.classList.add('pb-gap-live');
+    needBar.style.setProperty('--h',pc(need));
+    stBar.style.setProperty('--h',pc(st));
+    sh.style.setProperty('--from',pc(st));
+    sh.style.setProperty('--h',g>0?pc(g):'0%');
+    needN.setAttribute('data-pb-count',need); needN.textContent=fmt(need);
+    shN.setAttribute('data-pb-count',Math.max(g,0)); shN.textContent=g>0?fmt(g):'';
+    shL.textContent=g>0?'a year short':'';
+    needL.textContent='What you expect to need';
+    document.getElementById('pbNeedV').textContent=fmt(need)+' a year';
+    document.getElementById('pbNeedOut').textContent=g>0?fmt(g)+' a year short.':'Covered by the State Pension.';
+    gap.setAttribute('aria-label','Two bars. You expect to need '+Math.round(need).toLocaleString('en-IE')+' euro a year. The State Pension pays '+
+      st.toLocaleString('en-IE')+'. '+(g>0?'The gap is '+Math.round(g).toLocaleString('en-IE')+'.':'That is covered.'));
+  }
+  ctl.hidden=false;
+  slide();
+  r.addEventListener('input',function(){slide();paint();});
 })();
 /* scroll reveal */
 (function(){
