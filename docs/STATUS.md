@@ -43,6 +43,8 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 21 | WhatsApp | not built: it needs your WhatsApp Business number, who answers it and when, and how chats would be kept on record, for compliance to confirm. Once there is a number, a "Message us on WhatsApp" link is one line in the skeleton and a sync | — |
+| 22 | Accessibility pass | report only, per the audit-then-approve workflow: see "Accessibility, #22" below. Nothing blocks a keyboard or screen reader user; the findings are heading levels, target sizes and small text | — |
 | 15 | Career breaks | done: "Time out." on starter.html under "If you wait.": the chart's monthly amount paid from 30 to 66, with and without a break ("The break starts at" 30 to 65, "Years out" 1 to 10); the two pots, the difference, and one sentence with the pot's share against the payments' share and the monthly top-up from the break's end that would make it up. At the default, three years from 32 leave the pot €52,672 smaller, 15% of it from 8% of the payments; ten years from 50 cost €62,058, not much more. A break that would run past 66 stops there and the card says so. The prescribed warnings are under the figures. Then the State Pension side, checked against Citizens Information (page edited 24 September 2026): full-time care of a child under 12, or of an older child or adult who needs an increased level of care, can add HomeCaring Periods, up to 1,040, counted under the Total Contributions Approach once the 520 paid contributions are there, and claimed with the pension; linked to the entitlement check. New `PBWaiting.withBreak()` (spec W4b), suite cost-of-waiting now 77 assertions, the figures worked out month by month a second time and three mutations shown to fail it. **Not built:** a gender pension gap figure, which needs a sourced Irish statistic; the card is written for anyone taking time out | — |
 | 14 | My Future Fund, what happens when | done: on starter.html under the 3 : 3 : 1 split, "Once you are enrolled: what happens when.", seven rows down a line: month 1 (the 2026 to 2028 rates on pay up to €80,000), the opt-out window in months 7 and 8 (your own contributions come back; the employer's and the State's stay invested until 66), pausing from month 7 for one to two years (still possible after month 8, when opting out is not), automatic re-enrolment two years after an opt-out (under 66 and in a job with no pension through payroll, which is not the first enrolment's test), and the rises of 2029, 2032 and 2035 with a window after each, when opting out refunds only the extra the rise added. From the Automatic Enrolment Retirement Savings System Act 2024 (ss.54, 55, 61, 62 and 63), gov.ie and Citizens Information; the 835,000 in it is the Department's figure of 14 September 2026. Plain markup, no script | — |
 | 12 | All your pensions in one view | done: new page `my-pensions.html` (parts `tools/pots-parts/`): up to ten pensions, each a name, a kind (six), what it is worth now and, if known, the annual charge; the total, each one's share as a bar, and the known annual charges in euro a year at today's values, saying how many charges are not known. Nothing is projected or judged. A value or a charge that is not a number is said beside its field ("Not counted: enter an amount in euro, like 40,000.") rather than dropped without a word, and a comma in a charge is a decimal point, so "0,75" is 0.75% and never 75%. Nothing is stored or sent; "Print or save this list" prints the title, the summary, then the list (found while checking it: the first print rule hid the summary, which is a section too). New module `assets/js/pots.js`, suite 33 assertions, both reading hazards shown to fail the suite when put back. Linked from the footer's Tools column on every page, under tracker.html's tick list, and the sitemap | — |
@@ -60,7 +62,47 @@ a figure or a legal sentence is Damian's to give, the page carries a
 | 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | — |
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
+## Accessibility, #22 (report only)
+
+Swept every page at 1200px in headless Chrome with a scripted check, on top of
+what `verify.py` already fails or warns on at 375 / 1200 / 1440 (contrast, the
+focus ring, the drawer's targets, the `<main>` landmark, sliders'
+`aria-valuetext`, overflow). Nothing was changed.
+
+**Clean on every page:** `lang="en-IE"`; one `<h1>`; one `<main>`; a skip link
+to it (not on the two games, which have no site chrome); every image has alt
+text; every field, button and link has an accessible name; no "click here"
+links; no duplicate ids; no positive `tabindex`; no autoplaying media; no link
+opens a new window without saying so; the viewport allows zoom
+(`width=device-width, initial-scale=1.0`, no maximum scale). Keyboard: the two
+games, every slider (arrow keys; a single click also works) and every form
+work without a mouse; the finder's drawn signature is optional, the typed name
+being the signature.
+
+**Findings, for you to approve or not:**
+
+1. **Heading levels skip** (WCAG 1.3.1, advisory): the shared footer's column
+   titles ("Who we help", "Tools", "Company") are `<h4>`, the only `<h4>`s on
+   the site, so they skip a level on the 17 pages whose last heading before
+   the footer is an `<h2>`, and 404.html goes `<h1>` to `<h4>`. Making them
+   `<h2>` (styled as now) is one edit to the skeleton and a sync.
+   pension-readiness-check.html goes `<h1>` to `<h3>` ("How the score works")
+   while the result, which holds the `<h2>`, is hidden.
+2. **Targets under 24px** (WCAG 2.2, 2.5.8): the "occasional emails" boxes are
+   18 x 18 on the calculators and persona pages; the checklist and tick-list
+   boxes are 20 x 20; the director rules page's answers 18 x 18. All sit inside
+   clickable labels with room around them, so they very likely pass by the
+   criterion's spacing exception, but 24px would remove the doubt.
+3. **Small text:** the share of visible text under 16px is about 48% on the home
+   page, 89% on the pension calculator, 91% on the finder and 13% on the terms;
+   under 13px it is 0 to 3%, the smallest being the 9.5px "Chief Pension Dog"
+   label. WCAG sets no minimum size; zoom works. A floor of 14px for notes and
+   16px for body copy would be a design change across the stylesheet families
+   (the stylesheet sync was refused before, so this is not proposed as one).
+
 ## NEEDS DAMIAN INPUT from this run
+
+- **#22, accessibility:** say which of the three findings above to fix (footer headings, 24px boxes, a text-size floor). **#21:** the WhatsApp number, if you want it.
 
 - **#18, #20 and #11, the three guide pages:** every rule on them is from Revenue, the Pensions Authority, gov.ie, GOV.UK and HMRC, read on 24 September 2026, but they are regulated content and yours to sign. Re-check after Budget 2027 on 6 October 2026, and the UK page after the UK Budget. The UK page states the overseas transfer allowance as "usually £1,073,100"; confirm that is how you want it put, since a person's own allowance can differ.
 
@@ -595,6 +637,44 @@ deliberate behaviour change looks like to a refactor harness.
 - The interactive audit (Damian's step 4) is a read-only workflow; its first
   run was killed by the account's session limit before any auditor finished
   and was relaunched. The list is delivered in the conversation, not built.
+
+## Accessibility, #22 (report only)
+
+Swept every page at 1200px in headless Chrome with a scripted check, on top of
+what `verify.py` already fails or warns on at 375 / 1200 / 1440 (contrast, the
+focus ring, the drawer's targets, the `<main>` landmark, sliders'
+`aria-valuetext`, overflow). Nothing was changed.
+
+**Clean on every page:** `lang="en-IE"`; one `<h1>`; one `<main>`; a skip link
+to it (not on the two games, which have no site chrome); every image has alt
+text; every field, button and link has an accessible name; no "click here"
+links; no duplicate ids; no positive `tabindex`; no autoplaying media; no link
+opens a new window without saying so; the viewport allows zoom
+(`width=device-width, initial-scale=1.0`, no maximum scale). Keyboard: the two
+games, every slider (arrow keys; a single click also works) and every form
+work without a mouse; the finder's drawn signature is optional, the typed name
+being the signature.
+
+**Findings, for you to approve or not:**
+
+1. **Heading levels skip** (WCAG 1.3.1, advisory): the shared footer's column
+   titles ("Who we help", "Tools", "Company") are `<h4>`, the only `<h4>`s on
+   the site, so they skip a level on the 17 pages whose last heading before
+   the footer is an `<h2>`, and 404.html goes `<h1>` to `<h4>`. Making them
+   `<h2>` (styled as now) is one edit to the skeleton and a sync.
+   pension-readiness-check.html goes `<h1>` to `<h3>` ("How the score works")
+   while the result, which holds the `<h2>`, is hidden.
+2. **Targets under 24px** (WCAG 2.2, 2.5.8): the "occasional emails" boxes are
+   18 x 18 on the calculators and persona pages; the checklist and tick-list
+   boxes are 20 x 20; the director rules page's answers 18 x 18. All sit inside
+   clickable labels with room around them, so they very likely pass by the
+   criterion's spacing exception, but 24px would remove the doubt.
+3. **Small text:** the share of visible text under 16px is about 48% on the home
+   page, 89% on the pension calculator, 91% on the finder and 13% on the terms;
+   under 13px it is 0 to 3%, the smallest being the 9.5px "Chief Pension Dog"
+   label. WCAG sets no minimum size; zoom works. A floor of 14px for notes and
+   16px for body copy would be a design change across the stylesheet families
+   (the stylesheet sync was refused before, so this is not proposed as one).
 
 ## NEEDS DAMIAN INPUT from this run
 
