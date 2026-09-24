@@ -133,7 +133,7 @@ NOINDEX = '<meta name="robots" content="noindex">'
 
 class Page(object):
     def __init__(self, out, parts, title, desc, modules, keep,
-                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False):
+                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False, floor16=False):
         self.out = out                # file written at the repository root
         self.parts = parts            # directory under tools/
         self.title = title            # <title>, og:title
@@ -145,6 +145,7 @@ class Page(object):
         self.fonts = fonts            # extra Google Fonts family parameter, or None
         self.checks = checks          # (needle, label) pairs particular to this page
         self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
+        self.floor16 = floor16        # a calculator: keeps the skeleton's 16px floor on the text in <main>
 
     @property
     def parts_dir(self):
@@ -164,6 +165,7 @@ PAGES = {
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
+        floor16=True,
         checks=(('vs-card', 'comparison component'),),
     ),
     'state-pension': Page(
@@ -175,6 +177,7 @@ PAGES = {
         modules=['assets/js/state-pension.js'],
         # both controls are primary, so nothing folds into "More options"
         keep=['contribs', 'age'],
+        floor16=True,
         nav='state-pension-reality-check.html',
         checks=(('id="contribs"', 'contributions slider'),
                 ('id="lsRows"', 'living standards bars'),
@@ -192,6 +195,7 @@ PAGES = {
         modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js'],
         # all five controls are primary, so nothing folds into "More options"
         keep=['birth', 'entry', 'paid', 'credited', 'homecaring'],
+        floor16=True,
         # not a nav page: reached from the reality check, the footer and the sitemap
         nav=None,
         checks=(('id="birth"', 'birth year slider'),
@@ -238,6 +242,7 @@ PAGES = {
               'pension pot by retirement, next to another plan\'s charges. An illustration, not advice.'),
         modules=['assets/js/pension-fees.js'],
         keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
+        floor16=True,
         nav=None,
         checks=(('id="feeChart"', 'the chart'),
                 ('class="pb-warn"', 'the prescribed warnings'),
@@ -273,6 +278,7 @@ PAGES = {
               'Rules as at September 2026. An illustration, not advice.'),
         modules=['assets/js/sft.js'],
         keep=['total', 'year', 'lump'],
+        floor16=True,
         nav=None,
         checks=(('id="sftStrip"', 'the year-by-year strip'),
                 ('Rules as at 24 September 2026', 'the date the rules were checked'),
@@ -336,6 +342,12 @@ def assemble(page):
                           lambda m: m.group(1) + NOINDEX + '\n', head, count=1)
         assert n == 1, 'no description meta to put the robots meta after'
 
+    # Run 21: the skeleton carries the calculators' 16px floor on the text in
+    # <main>. The calculator records keep it; the other pages built on the
+    # skeleton leave it out, so their text stays as designed.
+    if not page.floor16:
+        head, n = re.subn(r'/\* FLOOR16:BEGIN.*?FLOOR16:END \*/\n', '', head, count=1, flags=re.S)
+        assert n == 1, 'no 16px floor block in the skeleton to leave out'
     assert head.count('</style>') >= 1, 'no stylesheet to extend'
     css = read(os.path.join(page.parts_dir, 'page.css')).strip()
     head = head.replace('</style>', '\n' + css + '\n</style>', 1)
@@ -381,6 +393,8 @@ def check(html, page):
         out.append((label, bool(ok)))
 
     want(OPEN_MAIN in html, 'main landmark')
+    want(html.count('FLOOR16:BEGIN') == (1 if page.floor16 else 0),
+         'the 16px floor' if page.floor16 else 'no 16px floor')
     want(html.count(NOINDEX) == (1 if page.noindex else 0),
          'held back: noindex' if page.noindex else 'indexable')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')

@@ -182,7 +182,11 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
   .calc-wrap{grid-template-columns:1fr;gap:20px}
   .panel{position:static;top:auto}
   .res-hero{grid-template-columns:1fr;padding:26px}
-  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .cta-card{grid-template-columns:minmax(0,1fr);text-align:center;justify-items:center;padding:34px 24px}
+  /* a long call to action may wrap rather than push the card past the
+     screen (Run 21: at the 16px floor, "Talk through what this means for
+     you" no longer fits one line on a phone) */
+  .cta-card .btn{white-space:normal;line-height:1.3;text-align:center}
   .assume ul{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
   .nav-r{gap:14px}
@@ -271,6 +275,9 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ect b{font-weight:700;font-size:15.5px;display:block}
 .email-cap .ect span{font-size:13px;color:var(--ink-3)}
 .email-cap .ec-row{display:flex;gap:10px;flex-wrap:wrap}
+/* the field keeps room for its label: when field and button do not both fit
+   (a phone, at the 16px floor of Run 21) the button wraps under the field */
+.email-cap .ec-row .ffield{flex:1 1 200px}
 .email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
 .email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
@@ -1727,6 +1734,194 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* FLOOR16:BEGIN ================================================
+   16px FLOOR ON THE CALCULATORS (Run 21, Damian's decision on the
+   accessibility finding): no text in a calculator's own content under
+   16px. 1rem is 16.48px here (the root is 103%, 104% on phones).
+   Everything in the main element, the peek bar with it; the site's nav and footer
+   stay as on every other page. Raised, never lowered: each selector
+   below drew text under 16px on a calculator, and is re-declared one
+   element more specific, !important only where the rule it lifts was.
+   The list was generated from the pages themselves (the rules each
+   small text resolved to, at 375, 1200 and 1440, folded parts open),
+   plus the rules for states a first load never shows. tools/pagebuild.py
+   keeps this block on the calculator records only; director-calculator
+   carries a copy; tools/verify.py fails a calculator with text in its
+   main element under 16px. */
+main{font-size:1rem}
+:where(main) :where(button,input,select,textarea){font-size:max(1rem,1em)}
+main svg text{font-size:1rem}
+/* Chart labels. The growth charts (#chart, a 620-unit viewBox) and the
+   charges chart (#feeChart, 600) scale to their column, so a label's size
+   is in chart units and shows smaller or larger with the chart. These steps
+   keep it at 16px or more on screen at every width, the narrow end of each
+   range measured; the widest end of a range shows about 20px. The top label
+   hangs down from its line instead of standing above it, and the chart may
+   draw a label's descenders past its edge. */
+main #chart svg,main #feeChart svg{overflow:visible}
+main #chart svg text[y="12"],main #feeChart svg text[y="18"]{dominant-baseline:hanging}
+main #chart svg text,main #feeChart svg text{font-size:19px}
+@media(max-width:1139px){main #chart svg text,main #feeChart svg text{font-size:20px}}
+@media(max-width:1079px){main #chart svg text,main #feeChart svg text{font-size:22px}}
+@media(max-width:999px){main #chart svg text,main #feeChart svg text{font-size:24.5px}}
+@media(max-width:920px){main #chart svg text,main #feeChart svg text{font-size:15.5px}}
+@media(max-width:760px){main #chart svg text,main #feeChart svg text{font-size:17.5px}}
+@media(max-width:680px){main #chart svg text,main #feeChart svg text{font-size:20px}}
+@media(max-width:600px){main #chart svg text,main #feeChart svg text{font-size:22px}}
+@media(max-width:540px){main #chart svg text,main #feeChart svg text{font-size:25.5px}}
+@media(max-width:480px){main #chart svg text,main #feeChart svg text{font-size:31px}}
+@media(max-width:414px){main #chart svg text,main #feeChart svg text{font-size:35px}}
+@media(max-width:375px){main #chart svg text,main #feeChart svg text{font-size:40px}}
+@media(max-width:340px){main #chart svg text,main #feeChart svg text{font-size:44px}}
+main #riskCard .riskintro,
+main #riskCard .riskrule,
+main #riskCard .risksub,
+main #riskCard .wlink,
+main .adv > summary,
+main .assume .expl p,
+main .assume li,
+main .bd,
+main .bd .capnote,
+main .benefit p,
+main .boost-card .bt,
+main .bothcard .sub,
+main .btn,
+main .chart-legend,
+main .cover p,
+main .cta-card p,
+main .dl-text,
+main .ec-note,
+main .ec-note a,
+main .email-cap .ec-note,
+main .email-cap .ec-ok,
+main .email-cap .ect b,
+main .email-cap .ect span,
+main .email-cap input,
+main .eyebrow,
+main .fee-chart text,
+main .fee-key,
+main .fee-note,
+main .fee-side p,
+main .fee-t,
+main .fee-t thead th,
+main .ffield .flabel,
+main .ffield input:focus ~ .flabel,
+main .ffield input:not(:placeholder-shown) ~ .flabel,
+main .field label,
+main .hint,
+main .infoadvice,
+main .infoadvice p,
+main .lsrow .lsgap,
+main .lsrow .lsname,
+main .lsrow .lstarget,
+main .max-card .mnote,
+main .max-card .mt,
+main .mbar-lab,
+main .mbar-scale,
+main .mclose,
+main .modebar .modelab,
+main .modebar .seg button,
+main .mrow .mdetail,
+main .mrow .mname,
+main .mrow .mnote,
+main .mrow .mrate,
+main .note,
+main .panel .hint,
+main .pb-badge .pb-name,
+main .pb-badge .pb-state,
+main .pb-badges .pb-done,
+main .pb-badges .pb-lead,
+main .pb-band-key,
+main .pb-cut-key,
+main .pb-glide-pct,
+main .pb-glide-yr,
+main .pb-guess-btn,
+main .pb-guess-lab,
+main .pb-guess-lead,
+main .pb-jar-cap,
+main .pb-jar-lead,
+main .pb-jump,
+main .pb-lad-age,
+main .pb-lad-cap,
+main .pb-lad-note,
+main .pb-lad-out,
+main .pb-lad-pct,
+main .pb-lad-you,
+main .pb-my-fig,
+main .pb-my-lab,
+main .pb-my-note,
+main .pb-my-sub,
+main .pb-optin,
+main .pb-paw-note,
+main .pb-peek-guess,
+main .pb-peek-lab,
+main .pb-rec-key,
+main .pb-safe-cap,
+main .pb-scale-lab,
+main .pb-scale-sub,
+main .pb-scale-title,
+main .pb-share button,
+main .pb-stair-key,
+main .pb-stair-r,
+main .pb-stair-you,
+main .pb-stair-yr,
+main .pb-work li,
+main .pb-work summary,
+main .relief-card .rt,
+main .res-hero .foot,
+main .res-hero .pb-say,
+main .res-hero .pb-sp-top,
+main .res-hero .rl,
+main .res-hero .rsub,
+main .results .lead .phaseline,
+main .risktile .rk-name,
+main .risktile .rk-note,
+main .risktile .rk-row,
+main .risktile .rk-sri,
+main .risktile .rk-warn,
+main .rv-keys,
+main .sbubble,
+main .seg button,
+main .seg.seg-3 button,
+main .sft-card p,
+main .sft-card p.sft-small,
+main .sft-note,
+main .sft-small,
+main .sft-strip b,
+main .sft-strip-note,
+main .sft-t,
+main .small,
+main .srcnote,
+main .srcwarn,
+main .step p,
+main .subnote,
+main .tag,
+main .tog,
+main .vs-card .sub,
+main .vs-col .lab,
+main .vs-col .vt,
+main .vs-split-head label,
+main .vs-split-out,
+main .vs-split-val,
+main .vsmark,
+main .waitcard .wlink,
+main .waitcard .wt,
+main .waitcard .wtext,
+main .wtext,
+main .yal-cap,
+main .yal-gain,
+main .yal-note,
+main .yal-range,
+main .yal-rate,
+main .yal-you,
+main details p{font-size:1rem}
+main .dl-tag,
+main .mt,
+main .rt,
+main .wt,
+main p.ec-note,
+main p.ec-note *{font-size:1rem !important}
+/* FLOOR16:END */
 
 /* ============================================================
    WHAT CHARGES COST (pension-fees-calculator.html, Run 20 #3).

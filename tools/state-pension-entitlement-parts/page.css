@@ -132,4 +132,6 @@
 .pb-glide-you[hidden]{display:none}
 .pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-yr{color:var(--ink);font-weight:700}
 .pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-bar{border-color:var(--teal-700)}
+/* two rows of five on a phone (Run 21): ten 16px labels do not fit one row */
+@media(max-width:560px){.pb-glide{grid-template-columns:repeat(5,minmax(0,1fr));row-gap:14px}}
 .pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

@@ -57,7 +57,9 @@
 /* funds and risk: three illustration tiles, each carrying its own downside */
 #riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
 #riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
-.risktiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+/* one tile a row (Run 21): at the calculators' 16px floor, three across no
+   longer fit the results column, and each row reads label left, figure right */
+.risktiles{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
 .risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
 .risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
 .risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
@@ -68,7 +70,6 @@
 .risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
 #riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
 #riskCard .riskrule b{color:var(--ink)}
-@media(max-width:700px){.risktiles{grid-template-columns:1fr}}
 
 /* the risk card ends in the same link the verdict card uses; those rules are scoped to
    .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
@@ -141,6 +142,9 @@
    you, your employer, the State (always 3 : 3 : 1). The page tags the
    phase its figures are using. Teal is the State; the rest is neutral. */
 .pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
+/* two by two on a phone (Run 21): at 16px, four columns leave each year's
+   rates a word a line and the "Your year" chip wider than its column */
+@media(max-width:420px){.pb-stair{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:18px}}
 .pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
 .assume .pb-stair li{padding-left:0;line-height:1.4}
 .assume .pb-stair li::before{content:none;display:none}

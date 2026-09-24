@@ -119,6 +119,20 @@ AUDIT_JS = r"""
   });
   R.contrastFails=cf;
 
+  // text size (Run 21): the calculators keep a 16px floor on the text in
+  // <main>. Every text run on screen there, SVG labels included; visually
+  // hidden text (the screen-reader summaries) is not on screen.
+  (function(){const m=document.querySelector('main'),out=[],seen2={};
+    if(m){const tw=document.createTreeWalker(m,NodeFilter.SHOW_TEXT);let n;
+      while((n=tw.nextNode())){if(!n.nodeValue.trim())continue;const el=n.parentElement;
+        if(!el||/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(el.tagName))continue;
+        const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)<.15||cs.clipPath==='inset(50%)')continue;
+        const rc=el.getBoundingClientRect();if(rc.width<=1||rc.height<=1)continue;
+        const sz=parseFloat(cs.fontSize);if(sz>=15.95)continue;
+        const sel=el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(typeof el.className==='string'&&el.className.trim()?'.'+el.className.trim().split(/\s+/)[0]:'');
+        if(seen2[sel+sz])continue;seen2[sel+sz]=1;out.push({size:+sz.toFixed(2),sel,text:n.nodeValue.trim().slice(0,30)})}}
+    R.smallMainText=out;})();
+
   // focus ring token contrast (D1)
   const ring=getComputedStyle(de).getPropertyValue('--ring').trim();
   const rp=parse(ring);
@@ -415,6 +429,9 @@ def screenshot(port, page, width, doc_height):
 # Static checks
 # ----------------------------------------------------------------------------
 
+# Run 21: the calculators keep a 16px floor on the text in their <main>
+FLOOR_PAGES = ('pension-calculator.html', 'director-calculator.html') + tuple(
+    p.out for p in pagebuild.PAGES.values() if p.floor16)
 SRC_PLACEHOLDERS = [r'\[LIABILITY_CAP_EUR\]', r'Template (document|notice|process)\.', r'Draft for legal review', r'<!--\s*DEVELOPER: replace', r'PLACEHOLDER=\'CALENDLY_URL\'']
 
 # Every page the site ships, as ROOT-relative paths: the root pages, plus the
@@ -537,6 +554,8 @@ def evaluate(page, st, audits):
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
         if a.get('errors'): F.append(('console', '@%d %s' % (w, a['errors'][:3])))
+        if page in FLOOR_PAGES and a.get('smallMainText'):
+            F.append(('floor16', '@%d text in <main> under 16px: %s' % (w, ['%s %spx "%s"' % (x['sel'], x['size'], x['text']) for x in a['smallMainText'][:4]])))
         if a.get('overflowX', 0) > 0: F.append(('overflow', '@%d horizontal overflow %dpx' % (w, a['overflowX'])))
         if a.get('duplicateIds'): F.append(('ids', '@%d duplicate ids %s' % (w, a['duplicateIds'][:5])))
         if a.get('h1') != 1: F.append(('structure', '@%d h1 count = %s' % (w, a.get('h1'))))
