@@ -85,7 +85,7 @@
   eq('7. the 20-point steps first', mid.moves[0].points + ' ' + mid.moves[1].points, '20 20');
   eq('7. then the 10s', mid.moves[2].points + ' ' + mid.moves[3].points, '10 10');
   eq('7. every step names a page', mid.moves.every(function (m) { return !!m.href && !!m.link && !!m.text; }), true);
-  has('7. losing points on "where are they" leads to the finder', mid.moves.filter(function (m) { return m.key === 'whereAll'; })[0].href, 'find-my-pension.html');
+  has('7. losing points on "where are they" leads to the tracker page, while the finder is held back', mid.moves.filter(function (m) { return m.key === 'whereAll'; })[0].href, 'tracker.html');
   has('7. the State Pension step leads to the entitlement check', mid.moves.filter(function (m) { return m.key === 'statePension'; })[0].href, 'state-pension-entitlement.html');
   has('7. the figure to aim for leads to the way-of-life picker', mid.moves.filter(function (m) { return m.key === 'target'; })[0].href, 'index.html#gap');
 

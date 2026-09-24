@@ -451,9 +451,13 @@ def static_checks(pages):
     # runs inside the iframe on glossary.html, so they have no nav or foot-top
     # to drift and asking would report every one of them as a structure fault.
     drift = pagebuild.chrome_drift({f: t for f, t in src.items() if is_root_page(f)})
+    # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
+    # of reach until it is signed off, so no other page may link to it. Signing
+    # a page off means removing that meta, which lifts this check by itself.
+    held = {f for f, t in src.items() if pagebuild.NOINDEX in t}
     res = {}
     for f in pages:
-        t = src[f]; broken = []
+        t = src[f]; broken = []; held_links = []
         # a relative href resolves against the page's own folder, so "../booking.html"
         # from games/buddys-run.html is the site's booking.html
         base = os.path.dirname(f)
@@ -468,12 +472,14 @@ def static_checks(pages):
             if not path:
                 continue
             target = os.path.normpath(os.path.join(base, path.lstrip('/'))).replace(os.sep, '/')
+            if attr.lower() == 'href' and target in held and target != f: held_links.append(v)
             if target.startswith('..'): broken.append(v + ' (resolves outside the site root)')
             elif not os.path.isfile(os.path.join(ROOT, target)): broken.append(v + ' (file not found)')
             elif frag and target.endswith('.html') and frag not in ids.get(target, set()): broken.append(v + ' (missing #id in target)')
         dup = [i for i in re.findall(r'\bid\s*=\s*"([^"]+)"', t) if t.count('id="%s"' % i) > 1]
         res[f] = {
             'brokenLinks': broken,
+            'heldLinks': held_links,
             'duplicateIdsStatic': sorted(set(dup)),
             'sourcePlaceholders': [p for p in SRC_PLACEHOLDERS if re.search(p, t)],
             'mainInSource': bool(re.search(r'<main\b', t)),
@@ -511,6 +517,7 @@ def evaluate(page, st, audits):
                   % '; '.join(st['chromeDrift'][:3])))
     a375 = audits.get(375, {}); a1440 = audits.get(1440, {}); a1360 = audits.get(1360, {})
     if st['brokenLinks']: F.append(('links', '%d broken: %s' % (len(st['brokenLinks']), st['brokenLinks'][:4])))
+    if st.get('heldLinks'): F.append(('held', 'links to a page held back with noindex: %s' % st['heldLinks'][:4]))
     if st['duplicateIdsStatic']: F.append(('ids', 'duplicate ids in source: %s' % st['duplicateIdsStatic'][:5]))
     if st['sourcePlaceholders']: F.append(('A1/A2/A4/E5', 'placeholder/template tokens in source: %s' % st['sourcePlaceholders']))
     root_page = is_root_page(page)
@@ -659,6 +666,11 @@ def site_checks():
         for page in ('thank-you.html',):
             if os.path.isfile(os.path.join(ROOT, page)) and page not in s and page != 'thank-you.html':
                 out.append(('sitemap', '%s exists but is not in sitemap.xml' % page))
+        # a page held back with noindex has no place in the sitemap either
+        for page in all_pages():
+            t = open(os.path.join(ROOT, page), encoding='utf-8', errors='replace').read()
+            if pagebuild.NOINDEX in t and '/%s<' % page in s:
+                out.append(('held', '%s is held back with noindex but listed in sitemap.xml' % page))
     return out
 
 

@@ -126,9 +126,14 @@ def versioned(rel):
     return '%s?v=%s' % (rel, h)
 
 
+# The robots meta a held-back page carries, the form 404.html and thank-you.html
+# already use. verify.py fails any page that links to a page carrying it.
+NOINDEX = '<meta name="robots" content="noindex">'
+
+
 class Page(object):
     def __init__(self, out, parts, title, desc, modules, keep,
-                 page_js='page.js', nav=None, fonts=None, checks=()):
+                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False):
         self.out = out                # file written at the repository root
         self.parts = parts            # directory under tools/
         self.title = title            # <title>, og:title
@@ -139,6 +144,7 @@ class Page(object):
         self.nav = nav                # href of the nav item to mark current, or None
         self.fonts = fonts            # extra Google Fonts family parameter, or None
         self.checks = checks          # (needle, label) pairs particular to this page
+        self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
 
     @property
     def parts_dir(self):
@@ -212,6 +218,9 @@ PAGES = {
         modules=['assets/js/pension-finder.js'],
         keep=[],
         nav=None,
+        # Run 21: held back until compliance signs off the letter; to re-link,
+        # drop this and put back the links listed in docs/STATUS.md, Run 21
+        noindex=True,
         checks=(('id="pfForm"', 'the finder form'),
                 ('data-issue="R20-1a"', 'the draft letter flagged for compliance'),
                 ('id="pfPhoneOk"', 'phone consent is its own box'),
@@ -247,6 +256,9 @@ PAGES = {
         modules=['assets/js/readiness.js'],
         keep=[],
         nav=None,
+        # Run 21: held back until compliance has the brief on the score; to
+        # re-link, drop this and put back the links listed in STATUS, Run 21
+        noindex=True,
         checks=(('id="rdForm"', 'the check'),
                 ('not a suitability assessment', 'information only, said on the page')),
     ),
@@ -319,6 +331,10 @@ def assemble(page):
                       lambda m: m.group(1) + page.desc + m.group(2), head, count=1)
     head = re.sub(r'(<meta property="og:title" content=")[^"]*(")',
                   lambda m: m.group(1) + page.title + m.group(2), head, count=1)
+    if page.noindex:
+        head, n = re.subn(r'(<meta name="description" content="[^"]*">\n)',
+                          lambda m: m.group(1) + NOINDEX + '\n', head, count=1)
+        assert n == 1, 'no description meta to put the robots meta after'
 
     assert head.count('</style>') >= 1, 'no stylesheet to extend'
     css = read(os.path.join(page.parts_dir, 'page.css')).strip()
@@ -365,6 +381,8 @@ def check(html, page):
         out.append((label, bool(ok)))
 
     want(OPEN_MAIN in html, 'main landmark')
+    want(html.count(NOINDEX) == (1 if page.noindex else 0),
+         'held back: noindex' if page.noindex else 'indexable')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')
     want(html.count(CLOSE_MAIN) == 1, 'one </main>')
     want('class="skip"' in html, 'skip link')

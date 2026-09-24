@@ -6,6 +6,54 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 21 — 2026-09-24 · Damian's decisions on Run 20
+
+Damian's instructions after reading Run 20: push `claude/next-step-features`
+(done, at `c615a3d`); hold three pages back until compliance signs them off;
+apply his decisions on the accessibility findings, the starter page's closing
+line, the four-paws link and WhatsApp; write a compliance pack; then gate,
+commit, push, merge to `main` and push `main`. Same worktree and branch, one
+commit per item, the same gates as Run 20.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Held back until signed off: How we work, the old pension finder, the readiness check | done: all three stay live at their addresses but carry `<meta name="robots" content="noindex">` (how-we-work.html in its head; the two built pages through a new `noindex` field on their `tools/pagebuild.py` records, which the build checks) and nothing links to them: out of the footer's Tools and Company columns on every page (skeleton, sync-chrome, pagebuild) and out of sitemap.xml. tracker.html's "Help me find my pensions" and "Start finding mine" point at booking.html again, as before the finder. Cross-links reworded so each sentence still reads whole: the charges calculator's call to action, the pensions list, the UK guide and the old pension checklist now point at tracker.html ("we can help you find it", "we can help you find them", "We can do the asking for you: see how we help you find old pensions"); the self-employed guide no longer mentions the readiness check; terms.html has its original "A full summary of fees and any commission arrangements is available on request." again. The readiness check's two steps that led to the finder lead to tracker.html (suite still 41). New guard in `tools/verify.py`: a page that links to any page carrying the noindex meta FAILs, and a noindex page in the sitemap is a site-level row; shown to fire on both, in memory, and to leave 404.html and thank-you.html, already noindex and unlinked, alone | — |
+
+## To re-link after compliance sign-off
+
+Per page, once it is signed off. The wording each place had is in `c615a3d`,
+the commit before this run.
+
+- **How we work** (how-we-work.html): delete its robots meta; put `<a
+  href="how-we-work.html">How we are paid</a>` back in the skeleton's footer
+  Company column after "Terms of Business", then run `tools/sync-chrome.py`
+  and `tools/pagebuild.py`; put its sitemap entry back (priority 0.4); in
+  terms.html, replace "A full summary of fees and any commission arrangements
+  is available on request." with "Our summary of the commission we receive
+  from product providers, and our fees, are published on our How we work
+  page." linking `how-we-work.html#paid`.
+- **Old pension finder** (find-my-pension.html): delete `noindex=True` from
+  its record in `tools/pagebuild.py`; put `<a href="find-my-pension.html">Old
+  pension finder</a>` back in the footer Tools column after "State Pension
+  entitlement check"; sitemap entry back (0.7); tracker.html's two buttons
+  back to find-my-pension.html; the four sentences back to the finder
+  (`tools/fees-parts/main.html`, `tools/pots-parts/main.html`,
+  uk-pensions-in-ireland.html, old-pension-checklist.html); and the readiness
+  check's two steps (`assets/js/readiness.js` and its test), if the readiness
+  check is live by then. Then rebuild.
+- **Readiness check** (pension-readiness-check.html): delete `noindex=True`
+  from its record; put `<a href="pension-readiness-check.html">Pension
+  readiness check</a>` back in the footer Tools column after "All your
+  pensions in one view"; sitemap entry back (0.6); the self-employed guide's
+  "and the readiness check takes a minute". Then rebuild.
+- `tools/verify.py` fails any link to a page that still carries the meta, so
+  a link put back before the meta comes off is caught, and the check lifts
+  by itself once it does.
+
+---
+
 # Run 20 — 2026-09-24 · The next-step features (ranked build list)
 
 Damian's brief: "Pensionbuddy.ie: Missing Features & Content — Ranked Build

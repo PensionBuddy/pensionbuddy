@@ -37,10 +37,10 @@
   var Q = {
     whereAll: { text: 'Do you know where all of your pensions are?', options: [
       ['Yes, every one', 20], ['Some of them', 10], ['No, or I am not sure', 0]],
-      step: { text: 'Track down the pensions you have lost sight of.', href: 'find-my-pension.html', link: 'Start a search' } },
+      step: { text: 'Track down the pensions you have lost sight of.', href: 'tracker.html', link: 'How we help you find them' } },
     worth: { text: 'Do you know roughly what they are worth now?', options: [
       ['Yes, from a recent statement', 20], ['Roughly', 10], ['No idea', 0]],
-      step: { text: 'Ask each provider for a current value. A signed letter lets us ask for you.', href: 'find-my-pension.html', link: 'Start a search' } },
+      step: { text: 'Ask each provider for a current value, or have us ask for you.', href: 'tracker.html', link: 'How we help' } },
     charges: { text: 'Do you know what your pensions charge you each year?', options: [
       ['Yes', 20], ['Roughly', 10], ['No', 0]],
       step: { text: 'Find out what the charges take out of your pot by retirement.', href: 'pension-fees-calculator.html', link: 'Open the charges calculator' } },
