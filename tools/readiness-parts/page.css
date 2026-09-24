@@ -13,7 +13,7 @@
 .rd-q legend{font-size:1.02rem;font-weight:700;color:var(--ink);margin:0 0 10px;padding:0}
 .rd-opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;margin:0 0 8px;border:1.5px solid var(--line-2);
   border-radius:var(--r-md);background:var(--surface);cursor:pointer;font-size:.98rem;line-height:1.45;color:var(--ink)}
-.rd-opt input{flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal-700)}
+.rd-opt input{flex:0 0 auto;width:24px;height:24px;margin:-1px 0 0;accent-color:var(--teal-700)}
 .rd-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
 .rd-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
 .rd-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}

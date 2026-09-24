@@ -111,7 +111,7 @@
 /* #27: the "between 1 January and 5 April" box under the entry year, the
    comparison page's checkbox row */
 .tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
-.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
+.tog input{appearance:auto;-webkit-appearance:checkbox;width:24px;height:24px;min-height:0;margin:-1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .pb-april{margin-top:10px}
 .pb-april[hidden]{display:none}

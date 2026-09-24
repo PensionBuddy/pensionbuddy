@@ -50,7 +50,7 @@
 /* yes/no toggles that reveal a secondary control. A plain checkbox row, so it
    reads as a question rather than another slider. */
 .tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
-.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
+.tog input{appearance:auto;-webkit-appearance:checkbox;width:24px;height:24px;min-height:0;margin:-1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .togbody[hidden]{display:none}

@@ -17,7 +17,7 @@
 .dr-q legend{font-size:1rem;font-weight:700;color:var(--ink);margin:0 0 8px;padding:0}
 .dr-opt{display:inline-flex;gap:8px;align-items:center;margin:0 8px 8px 0;padding:9px 14px;border:1.5px solid var(--line-2);
   border-radius:99px;background:var(--surface);cursor:pointer;font-size:.95rem;color:var(--ink);min-height:44px}
-.dr-opt input{width:18px;height:18px;margin:0;accent-color:var(--teal-700)}
+.dr-opt input{width:24px;height:24px;margin:0;accent-color:var(--teal-700)}
 .dr-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
 .dr-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
 .dr-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
