@@ -43,6 +43,7 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
 
@@ -58,6 +59,16 @@ a figure or a legal sentence is Damian's to give, the page carries a
   request, and for nothing else unless you tick the box." (the rest of each
   note is unchanged). Fallback email line "Occasional emails: yes, please" or
   "Occasional emails: no".
+- #8: heading "If you wait."; lead "The same monthly amount, from your own
+  age: started now, or a few years from now."; labels "Your age now", "If you
+  start in"; rows "Now, at [age]" and "In [n] years, at [age]", "€[x] less";
+  "To end up with the same pot, starting at [age] would take about €[x] a
+  month instead of €[m]: €[y] more each month." and, from 66 on, "By [age]
+  there are no years left to pay in before pension age, 66, so there is no
+  catch-up figure to show."; note "Illustration only · the value of
+  investments can fall as well as rise. The monthly amount is the one set
+  above. Assumes 5% growth a year, contributions to 66, and no pension to
+  start with. Figures ignore charges, tax relief and inflation."
 
 ---
 

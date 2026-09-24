@@ -75,6 +75,8 @@ SUITES = {
     'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],
                                   '/tests/state-pension-entitlement.test.js', ['PBStatePension', 'PBEntitlement'], 608),
     'harness': ([], '/tests/harness.test.js', ['PBTest'], 59),
+    'cost-of-waiting': (['/assets/js/cost-of-waiting.js'],
+                        '/tests/cost-of-waiting.test.js', ['PBWaiting'], 51),
 }
 
 # The jobs that drive a REAL built page, each with the suite it runs with, the
