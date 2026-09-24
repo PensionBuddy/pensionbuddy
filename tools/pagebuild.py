@@ -197,6 +197,26 @@ PAGES = {
                 ('citizensinformation.ie', 'Citizens Information cited'),
                 ('mywelfare.ie', 'MyWelfare cited')),
     ),
+    # Run 20 #1. Not a calculator: a four-step form built on the same
+    # skeleton so it wears the same chrome. It has no sliders, so nothing
+    # folds into "More options", and it uses none of the class names the
+    # calculators' shared scripts look for (.results, .seg), so the guess
+    # card, the peek bar and the share link all stand aside.
+    'finder': Page(
+        out='find-my-pension.html',
+        parts='finder-parts',
+        title='Find an old pension, Pensionbuddy',
+        desc=('Lost track of a pension from an old job? Tell us where you worked, sign a letter '
+              'that lets us ask the providers, and we do the chasing. Nothing is moved, and '
+              'there is no obligation.'),
+        modules=['assets/js/pension-finder.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="pfForm"', 'the finder form'),
+                ('data-issue="R20-1a"', 'the draft letter flagged for compliance'),
+                ('id="pfPhoneOk"', 'phone consent is its own box'),
+                ('id="pfOptin"', 'email consent is its own box')),
+    ),
 }
 
 

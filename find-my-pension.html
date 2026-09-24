@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pension Calculator, Pensionbuddy</title>
-<meta name="description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<title>Find an old pension, Pensionbuddy</title>
+<meta name="description" content="Lost track of a pension from an old job? Tell us where you worked, sign a letter that lets us ask the providers, and we do the chasing. Nothing is moved, and there is no obligation.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
-<meta property="og:title" content="Pension Calculator, Pensionbuddy">
-<meta property="og:description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
+<meta property="og:title" content="Find an old pension, Pensionbuddy">
+<meta property="og:description" content="Lost track of a pension from an old job? Tell us where you worked, sign a letter that lets us ask the providers, and we do the chasing. Nothing is moved, and there is no obligation.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -1718,6 +1718,118 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+
+/* ============================================================
+   THE OLD PENSION FINDER (find-my-pension.html, Run 20 #1).
+   Four steps in one form: where you worked, about you, the signed
+   letter, and what happens next. One step shows at a time; the rest
+   are hidden sections, so without script the first step is all a
+   reader sees and nothing half-works. The panels are the
+   calculators' .panel, made static: a form this long cannot be
+   sticky. Every control is a native input with a real label, the
+   drawn signature is optional (the typed name is the signature), and
+   every box starts unticked.
+   ============================================================ */
+.pf-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:40px;align-items:start;padding:8px 0 24px}
+.pf-main{min-width:0}
+.pf-panel{position:static;top:auto}
+.pf-panel[hidden]{display:none}
+/* each step's heading takes focus when the step opens, so a screen reader
+   starts there; it is not a control, so it draws no ring */
+.pf-panel h2:focus{outline:none}
+
+.pf-steps{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px;counter-reset:none}
+.pf-steps li{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.pf-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--line-2);font-size:.82rem;font-variant-numeric:tabular-nums;color:var(--ink-2);background:var(--surface)}
+.pf-steps li.pf-on{color:var(--ink)}
+.pf-steps li.pf-on .pf-n{background:var(--ink);border-color:var(--ink);color:#fff}
+.pf-steps li.pf-past .pf-n{background:var(--teal-50);border-color:var(--teal-700);color:var(--teal-700)}
+
+.pf-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.pf-err:not(:empty){margin:0 0 14px;padding:12px 16px;border:1px solid #E7B7B0;border-radius:var(--r-md);background:#FDF3F1}
+
+.pf-emp{border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 4px;margin:0 0 14px;min-width:0}
+.pf-emp legend{font-size:.95rem;font-weight:700;color:var(--ink);padding:0 6px}
+.pf-emp-x{float:right;font:inherit;font-size:.86rem;font-weight:600;color:var(--teal-700);background:none;border:0;
+  padding:6px 0 10px 12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:40px}
+.pf-field{margin:0 0 14px;min-width:0}
+.pf-field label{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.pf-opt{font-weight:400;color:var(--ink-2)}
+.pf-field input,.pf-field textarea{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:11px 14px;min-height:48px}
+.pf-field textarea{resize:vertical;line-height:1.5}
+.pf-field input:focus,.pf-field textarea:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pf-field [aria-invalid="true"]{border-color:#A4291D}
+.pf-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+
+.pf-add{font:inherit;font-size:.95rem;font-weight:600;color:var(--teal-700);background:var(--surface);
+  border:1.5px dashed var(--line-2);border-radius:var(--r-md);padding:11px 16px;min-height:46px;cursor:pointer;width:100%}
+.pf-add:focus-visible,.pf-back:focus-visible,.pf-clear:focus-visible,.pf-emp-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pf-add[hidden]{display:none}
+
+.pf-nav{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:22px}
+.pf-nav .btn{width:auto}
+.pf-back{font:inherit;font-size:.95rem;font-weight:600;color:var(--ink);background:none;border:0;padding:10px 4px;min-height:44px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px}
+
+.pf-check{display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;font-size:.95rem;line-height:1.5;color:var(--ink);cursor:pointer}
+.pf-check input{flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal-700)}
+.pf-check input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pf-check [aria-invalid="true"]{outline:2px solid #A4291D;outline-offset:2px}
+.pf-note{margin:10px 0 0;font-size:.88rem;line-height:1.6;color:var(--ink-2)}
+
+.pf-draft{margin:0 0 12px;font-size:.9rem;color:var(--ink-2)}
+.pf-letter{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface-2);padding:18px 20px;margin:0 0 18px;
+  font-size:.95rem;line-height:1.65;color:var(--ink)}
+.pf-letter h3,.pf-print h3{margin:0 0 6px}
+.pf-letter p,.pf-print p{margin:0 0 10px}
+.pf-letter ul,.pf-print ul{margin:0 0 12px;padding-left:20px}
+.pf-letter li,.pf-print li{margin:0 0 4px}
+.pf-letter .pf-to,.pf-print .pf-to{font-weight:600}
+
+.pf-sig{margin:0 0 14px}
+.pf-sig-l{margin:0 0 6px;font-size:.95rem;font-weight:600;color:var(--ink)}
+#pfPad{display:block;width:100%;height:140px;border:1.5px dashed var(--line-2);border-radius:var(--r-md);background:var(--surface);
+  touch-action:none;cursor:crosshair}
+.pf-clear{font:inherit;font-size:.88rem;font-weight:600;color:var(--teal-700);background:none;border:0;padding:8px 0;min-height:40px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px}
+
+.pf-done{font-size:1rem;line-height:1.6;color:var(--ink)}
+.pf-track{list-style:none;margin:16px 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.pf-track li{border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 14px}
+.pf-track b{display:block;font-size:.98rem;color:var(--ink);margin-bottom:8px}
+.pf-stages{display:flex;flex-wrap:wrap;gap:6px}
+.pf-stage{font-size:.82rem;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid var(--line-2);color:var(--ink-2);background:var(--surface)}
+.pf-stage.pf-done-s{background:var(--teal-700);border-color:var(--teal-700);color:#fff}
+.pf-stage.pf-next-s{border-color:var(--teal-700);color:var(--teal-700)}
+
+.pf-side{border:1px solid var(--line);border-radius:var(--r-xl);padding:22px 22px 10px;background:var(--surface);position:sticky;top:96px}
+.pf-side-h{margin:0 0 12px}
+.pf-side ul{list-style:none;margin:0;padding:0}
+.pf-side li{font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 12px}
+.pf-side li b{color:var(--ink);font-weight:700}
+
+.pf-print{display:none}
+
+@media(max-width:920px){
+  .pf-wrap{grid-template-columns:1fr;gap:24px}
+  .pf-side{position:static}
+}
+@media(max-width:480px){
+  .pf-two{grid-template-columns:1fr}
+  .pf-nav{flex-direction:column-reverse;align-items:stretch}
+  .pf-nav .btn{width:100%}
+}
+
+/* Printing, or saving as PDF: the letter alone, on white. */
+@media print{
+  body > :not(main){display:none!important}
+  main > :not(.pf-print){display:none!important}
+  body{background:#fff!important}
+  .pf-print{display:block!important;color:#000;font-size:12pt;line-height:1.5;padding:0}
+  .pf-print img{max-width:260px;height:auto;display:block;margin:6px 0}
+}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1763,7 +1875,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
     <a class="lnk" href="director.html">Directors</a>
-    <a class="lnk active" href="pension-calculator.html" aria-current="page">Calculator</a>
+    <a class="lnk" href="pension-calculator.html">Calculator</a>
     <a class="lnk" href="state-pension-reality-check.html">State pension</a>
     <a class="lnk" href="glossary.html">Jargon buster</a>
     <a class="lnk" href="index.html#story">About</a>
@@ -1772,131 +1884,112 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">A pension pot is just a number. This shows what it <span class="hl">pays</span> you a month.</h1>
-  <p class="reveal" style="transition-delay:.12s">Move the sliders and watch your projection build, including how much Revenue adds back. Rough numbers are fine.</p>
+  <span class="eyebrow reveal"><span class="pip"></span>Old pension finder · about five minutes, no obligation</span>
+  <h1 class="reveal" style="transition-delay:.06s">Lost track of an old pension? <span class="hl">Start the search here.</span></h1>
+  <p class="reveal" style="transition-delay:.12s">Tell us where you worked, sign a letter that lets us ask the providers, and we do the chasing. Nothing is moved or changed, and you are under no obligation to do anything with what we find.</p>
 </div></div>
 
-<div class="wrap"><div class="calc-wrap">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
-    </div>
-    <div class="panel reveal">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
-    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
-    <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
-    <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
-    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label>Your income tax rate</label></div>
-      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
-      <p class="subnote">Used to show the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
-    </div>
-  </div>
+<div class="wrap"><div class="pf-wrap">
+  <div class="pf-main">
+    <ol class="pf-steps" id="pfSteps">
+      <li class="pf-on" aria-current="step"><span class="pf-n">1</span> Where you worked</li>
+      <li><span class="pf-n">2</span> About you</li>
+      <li><span class="pf-n">3</span> Sign the letter</li>
+      <li><span class="pf-n">4</span> What happens next</li>
+    </ol>
 
-  <div class="results">
-    <div class="res-hero reveal" style="transition-delay:.08s">
-      <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut">€0</div></div>
-      <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut">€0</div></div>
-      <p class="pb-say" id="pbSay">At 40, with €450 a month going in and €50,000 saved already, your pot could reach €460,066 by 66: an income of about €1,534 a month.</p>
-      <p class="pb-say pb-sp-top" id="pbSpTop">Add the State Pension (Contributory) at the maximum rate from 66, and it comes to about €2,831 a month.</p>
-      <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-      <div class="divline"></div>
-      <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
-    </div>
-    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
-    <div class="waitcard reveal" style="transition-delay:.11s">
-      <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
-      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <div class="chart-card reveal" style="transition-delay:.14s">
-      <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span></div>
-      <div id="chart"></div>
-    </div>
-    <div class="relief-card reveal" style="transition-delay:.2s">
-      <div class="rt">What Revenue adds</div>
-      <div class="rbig" id="reliefOut">Move the sliders to see your tax relief.</div>
-      <div class="relief-viz" id="reliefViz">
-        <div class="rv-bar"><div class="rv-you" id="rvYou" style="width:60%"></div><div class="rv-tax" id="rvTax" style="width:40%"></div></div>
-        <div class="rv-keys"><span><i class="rv-d you"></i>You really pay <b id="rvYouV">€0/mo</b></span><span><i class="rv-d tax"></i>Revenue adds <b id="rvTaxV">€0/mo</b></span></div>
-      </div>
-    </div>
-    <div class="chart-card reveal">
-      <h3>Your relief limit</h3>
-    <div class="pb-lad" data-pb-age="age" data-pb-earn="earn">
-    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
-      <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-      <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
-      <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
-      <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
-      <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
-      <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-out">At 40, relief applies to contributions up to €12,500 a year: 25% of €50,000.</p>
-    <p class="pb-lad-note">Earnings count up to €115,000.</p>
-  </div>
-    </div>
-    <div class="boost-card reveal" style="transition-delay:.26s">
-      <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
-      <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
-    </div>
-    <div class="email-cap reveal" style="transition-delay:.3s">
-      <div class="ec-top">
-        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
-        <div class="ect"><b>Want these figures emailed to you?</b><span>And what they'd look like for your actual situation.</span></div>
-      </div>
-      <div id="ecForm">
-        <div class="ec-row">
-          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
-          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <form id="pfForm" novalidate>
+      <p class="pf-err" id="pfErr" role="alert"></p>
+
+      <section class="panel pf-panel" id="pfStep1" aria-labelledby="pfH1">
+        <h2 id="pfH1" tabindex="-1">Where you worked</h2>
+        <p class="hint">Rough names and rough years are plenty. Add every employer where you might have been in a pension, even for a year or two.</p>
+        <div id="pfEmps">
+          <fieldset class="pf-emp" data-i="0">
+            <legend>Employer 1</legend>
+            <div class="pf-field"><label for="pfEmp0Name">Employer&rsquo;s name</label><input id="pfEmp0Name" type="text" autocomplete="organization"></div>
+            <div class="pf-two">
+              <div class="pf-field"><label for="pfEmp0From">From, the year</label><input id="pfEmp0From" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 1998"></div>
+              <div class="pf-field"><label for="pfEmp0To">To, the year</label><input id="pfEmp0To" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 2004"></div>
+            </div>
+            <div class="pf-field"><label for="pfEmp0Provider">Pension provider or scheme, if you know it <span class="pf-opt">(optional)</span></label><input id="pfEmp0Provider" type="text"></div>
+            <div class="pf-field"><label for="pfEmp0Ref">Policy or member number, if you have one <span class="pf-opt">(optional)</span></label><input id="pfEmp0Ref" type="text"></div>
+          </fieldset>
         </div>
-        <label class="pb-optin"><input type="checkbox" id="ecOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
-        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
-        <p class="ec-note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
-      </div>
-      <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
-    </div>
-    <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
+        <button type="button" class="pf-add" id="pfEmpAdd">Add another employer</button>
+        <div class="pf-nav"><button type="button" class="btn btn-primary" id="pfNext1">Continue <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep2" aria-labelledby="pfH2" hidden>
+        <h2 id="pfH2" tabindex="-1">About you</h2>
+        <p class="hint">Providers match their records on your name, date of birth and address. We do not ask for your PPS number here.</p>
+        <div class="pf-field"><label for="pfName">Your full name</label><input id="pfName" type="text" autocomplete="name"></div>
+        <div class="pf-field"><label for="pfOther">Any other name you used at those jobs, such as a name before marriage <span class="pf-opt">(optional)</span></label><input id="pfOther" type="text"></div>
+        <div class="pf-field"><label for="pfDob">Date of birth</label><input id="pfDob" type="date" autocomplete="bday" min="1916-01-01"></div>
+        <div class="pf-field"><label for="pfAddress">Your address now</label><textarea id="pfAddress" rows="3" autocomplete="street-address"></textarea></div>
+        <div class="pf-field"><label for="pfEmail">Your email</label><input id="pfEmail" type="email" autocomplete="email" inputmode="email"></div>
+        <div class="pf-field"><label for="pfPhone">Your phone number <span class="pf-opt">(optional)</span></label><input id="pfPhone" type="tel" autocomplete="tel"></div>
+        <label class="pf-check"><input type="checkbox" id="pfPhoneOk"><span>You can phone me about this search.</span></label>
+        <label class="pf-check"><input type="checkbox" id="pfOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
+        <p class="pf-note">We use these details to search for your pensions and to reply to you, and for nothing else unless you tick a box above. See our <a href="privacy.html">Privacy Notice</a>.</p>
+        <div class="pf-nav"><button type="button" class="pf-back" id="pfBack2">Back</button><button type="button" class="btn btn-primary" id="pfNext2">Continue <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep3" aria-labelledby="pfH3" hidden>
+        <h2 id="pfH3" tabindex="-1">Sign the letter</h2>
+        <p class="hint">This letter lets us ask each provider what you have with them. It cannot move, change or cash in anything.</p>
+        <p class="pf-draft"><span class="needs-input" data-issue="R20-1a">[Letter wording: a draft, to be confirmed by Gresham Wealth&rsquo;s compliance officer before this page goes live]</span></p>
+        <div class="pf-letter" id="pfLetter"></div>
+        <div class="pf-field"><label for="pfSigned">Type your full name to sign</label><input id="pfSigned" type="text" autocomplete="off"></div>
+        <div class="pf-sig">
+          <p class="pf-sig-l" id="pfSigL">You can also sign with a finger or a mouse <span class="pf-opt">(optional)</span></p>
+          <canvas id="pfPad" role="img" aria-label="Signature box. Your typed name is your signature; drawing here is optional."></canvas>
+          <button type="button" class="pf-clear" id="pfPadClear">Clear the drawn signature</button>
+        </div>
+        <label class="pf-check"><input type="checkbox" id="pfConfirm"><span>I have read this letter and I am signing it.</span></label>
+        <div class="pf-nav"><button type="button" class="pf-back" id="pfBack3">Back</button><button type="submit" class="btn btn-primary" id="pfSend">Sign and send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep4" aria-labelledby="pfH4" hidden>
+        <h2 id="pfH4" tabindex="-1">What happens next</h2>
+        <p class="pf-done" id="pfDone"></p>
+        <ul class="pf-track" id="pfTrack"></ul>
+        <p class="pf-note">Each provider replies in its own time. As the replies come in, Damian will tell you what was found and what it is worth. What you do with it, if anything, is up to you.</p>
+        <div class="pf-nav"><button type="button" class="btn btn-ghost" id="pfPrint">Save or print your letter</button><a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+      </section>
+    </form>
   </div>
+
+  <aside class="pf-side">
+    <h3 class="pf-side-h">What this is, and what it is not</h3>
+    <ul>
+      <li><b>Free to start, with no obligation.</b> Finding a pension is not the same as moving it.</li>
+      <li><b>We ask, the providers answer.</b> We cannot promise every pension will be found: schemes close, merge and change hands, and old records are not always complete.</li>
+      <li><b>Nothing is moved or changed.</b> The letter allows questions, not transactions.</li>
+      <li><b>Your details are used for the search.</b> Nothing else, unless you ask for more.</li>
+    </ul>
+  </aside>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>These are just illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2><p>A free 20-minute chat. No obligation afterwards.</p></div>
-  <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
+<div class="pf-print" id="pfPrintLetter" aria-hidden="true"></div>
+
+<section class="assume"><div class="wrap">
+  <h3>Good to know</h3>
+  <ul class="reveal">
+    <li>Moving a pension is a separate decision, for later and with advice. A transfer can mean giving up terms you cannot get back, such as the pension a defined benefit scheme promised, which is swapped for a transfer value. So it is never assumed.</li>
+    <li>This finder is for pensions from work and personal pensions. Your State Pension record is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>, and the <a href="state-pension-entitlement.html">State Pension entitlement check</a> works through it.</li>
+    <li>Worked in the UK? The UK government&rsquo;s <a href="https://www.gov.uk/find-pension-contact-details" rel="noopener">Pension Tracing Service</a> finds contact details for UK schemes, free.</li>
+    <li>You can withdraw the letter at any time, in writing, and we stop asking.</li>
+  </ul>
+</div></section>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice reveal">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+    <p><b>This is a search, not advice.</b> We gather what your old providers hold and tell you what it is. Any advice about what to do with a pension is given in a personal consultation with Damian, if you want one.</p>
   </div>
 </div></section>
-
-<section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
-  <ul class="reveal">
-    <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
-    <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
-    <li>Tax relief is shown at the rate you select, on your own contributions only, and is limited to Revenue's age-related percentage of your earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation.</li>
-    <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
-    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, €15,564 a year for a full entitlement. Check gov.ie for the current rate.</li>
-    <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
-  </ul>
-</div></section>
-
-<script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/pb-ladder.js?v=a9ec3585"></script>
-<script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -1916,318 +2009,258 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pension-finder.js?v=e25757ae"></script>
 <script>
-const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-/* Formatting, the slider fill, the wiring and the debounced live region are
-   the same on all five calculators and live in assets/js/calc-page.js. REDUCE
-   stays here: it is read by the tween engine below, and tools/pagebuild.py
-   cuts this script out of the skeleton by matching it. */
-const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
-let taxRate=40;
-/* Revenue's age-related limit on tax-relievable personal contributions:
-   a percentage of earnings, with earnings capped at EARN_CAP (B4/B5). */
-const EARN_CAP=115000;
-var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
-function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
+/* find-my-pension.html, the old pension finder (Run 20 #1).
 
-function setTax(r){taxRate=r;$('t20').classList.toggle('on',r===20);$('t40').classList.toggle('on',r===40);$('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
+   What a trace needs, the Letter of Authority and what is sent all live in
+   assets/js/pension-finder.js, covered by tests/pension-finder.test.js. This
+   file only moves between the four steps, reads the form into the shape the
+   module expects, and paints what the module returns.
 
-function project(months,startPot,monthly,mRate){
-  const grownPot=startPot*Math.pow(1+mRate,months);
-  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
-  return grownPot+grownContrib;
-}
+   SENDING. With LEAD_ENDPOINT set (it is empty today, as on every page),
+   the whole trace is posted as JSON and the page only says "sent" on a real
+   success. Without it, the reader's email app opens with the details and a
+   one-line authority ready to go to Damian, and the page says exactly that:
+   nothing has been sent by the page itself. A signature drawn on screen
+   cannot travel in an email link, so the last step offers the letter to
+   save as a PDF and attach.
 
-/* ---- smooth display engine ---- */
-const anims={};let rafId=null;
-function tween(id,target,fmt){
-  const a=anims[id];
-  if(!a){anims[id]={cur:target,target,fmt};$(id).textContent=fmt(target);startLoop();return;}
-  a.target=target;a.fmt=fmt;startLoop();
-}
-function startLoop(){if(!rafId)rafId=requestAnimationFrame(step);}
-function step(){
-  let active=false;const f=REDUCE?1:0.16;
-  for(const id in anims){const a=anims[id];const d=a.target-a.cur;
-    if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*f;active=true;}else{a.cur=a.target;}
-    $(id).textContent=a.fmt(a.cur);}
-  if(chart.lerp(f))active=true;
-  rafId=active?requestAnimationFrame(step):null;
-}
+   TONE: no urgency, no promise of a find. The module's messages say what is
+   missing and nothing else. */
+(function () {
+  'use strict';
+  var F = window.PBFinder, P = window.PBPage;
+  var form = document.getElementById('pfForm');
+  if (!F || !P || !form) return;
+  var $ = P.$;
+  var MAX = F.MAX_EMPLOYERS;
+  var steps = [$('pfStep1'), $('pfStep2'), $('pfStep3'), $('pfStep4')];
+  var dots = [].slice.call(document.querySelectorAll('#pfSteps li'));
+  var err = $('pfErr'), emps = $('pfEmps'), add = $('pfEmpAdd');
+  var drawn = null;          // the drawn signature, as a PNG data URL, or null
+  var today = new Date();
 
-/* ---- persistent morphing chart ---- */
-const chart={
-  N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
-  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
-  init(){
-    const NS='http://www.w3.org/2000/svg';
-    const svg=document.createElementNS(NS,'svg');
-    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);svg.setAttribute('width','100%');svg.style.display='block';
-    for(let g=1;g<=3;g++){const yy=this.padT+(g/4)*(this.H-this.padT-this.padB);
-      const l=document.createElementNS(NS,'line');
-      l.setAttribute('x1',this.padL);l.setAttribute('y1',yy);l.setAttribute('x2',this.W-this.padR);l.setAttribute('y2',yy);
-      l.setAttribute('stroke','rgba(11,31,28,0.07)');svg.appendChild(l);}
-    const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
-    this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
-    this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    $('chart').appendChild(svg);this.inited=true;
-  },
-  setTarget(b,u,ageS,ageE){
-    if(!this.inited)this.init();
-    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
-    this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
-    startLoop();
-  },
-  lerp(f){
-    if(!this.inited)return false;
-    let active=false;
-    const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
-      if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
-    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
-    const dm=this.tgt.max-this.cur.max;
-    if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
-    this.render();return active;
-  },
-  render(){
-    const n=this.cur.b.length;if(!n)return;
-    const max=this.cur.max;
-    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
-    const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
-    let dB='M '+X(0)+' '+Y(this.cur.b[0]).toFixed(1);
-    for(let i=1;i<n;i++)dB+=' L '+X(i).toFixed(1)+' '+Y(this.cur.b[i]).toFixed(1);
-    let dU='M '+X(0)+' '+Y(this.cur.u[0]).toFixed(1);
-    for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
-    this.els.base.setAttribute('d',dB);
-    this.els.boost.setAttribute('d',dU);
-    this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
-    this.els.mx.textContent=euro(max);
-  }
-};
+  /* ---------------------------------------------------------- employers */
+  var FIELDS = [
+    ['Name', 'Employer’s name', 'organization', ''],
+    ['From', 'From, the year', '', 'e.g. 1998'],
+    ['To', 'To, the year', '', 'e.g. 2004'],
+    ['Provider', 'Pension provider or scheme, if you know it', '', ''],
+    ['Ref', 'Policy or member number, if you have one', '', '']
+  ];
+  function rows() { return [].slice.call(emps.querySelectorAll('.pf-emp')); }
 
-/* ---- slider fill paint ---- */
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
-   The four money sliders have no wording of their own and take paintSlider's euro fallback. */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
-const paint=el=>paintSlider(el,VALTEXT);
-
-/* ---- the maths (unchanged) ---- */
-function calc(){
-  let age=+$('age').value, ret=+$('ret').value;
-  const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
-  $('ret').min=age+1;
-  if(ret<=age){ret=age+1;$('ret').value=ret;}
-  paint($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
-  $('ageV').textContent=age;
-  $('retV').textContent=ret;
-  $('potV').textContent=euro(pot);
-  $('mineV').textContent=euro(mine);
-  $('earnV').textContent=euro(earn);
-  $('empV').textContent=euro(emp);
-  $('growthV').textContent=g+'%';
-
-  const months=(ret-age)*12;
-  const mRate=Math.pow(1+g/100,1/12)-1;
-  const monthly=mine+emp;
-  const base=project(months,pot,monthly,mRate);
-  const boost=project(months,pot,monthly+100,mRate);
-
-  tween('potOut',base,euro);
-  tween('incOut',base*0.04/12,euro);
-  /* #4: the two figures above as one sentence. Written from the same final
-     values the tweens are aimed at, never the in-between ones, so it cannot
-     disagree with them once they land. Nothing new is worked out here. The
-     markup carries this sentence at the page's defaults for readers without
-     script, and assets/js/pb-guess.js veils it with the figures it repeats. */
-  $('pbSay').textContent=(monthly>0||pot>0)
-    ?'At '+age+', with '+(monthly>0?euro(monthly)+' a month going in':'nothing going in each month')+
-     ' and '+(pot>0?euro(pot)+' saved already':'nothing saved yet')+
-     ', your pot could reach '+euro(base)+' by '+ret+': an income of about '+euro(base*0.04/12)+' a month.'
-    :'At '+age+', with nothing saved yet and nothing going in each month, there is no pot to grow by '+ret+'.';
-  /* #11: the same monthly income with the State Pension (Contributory) at its
-     maximum rate on top, from 66, the pension age. The rate is the reality
-     check's module's, a year over twelve; only the addition is done here. */
-  if(window.PBStatePension){
-    const SPm=PBStatePension.MAX_WEEKLY_CENTS*PBStatePension.WEEKS_PER_YEAR/100/12;
-    $('pbSpTop').textContent='Add the State Pension (Contributory) at the maximum rate from '+PBStatePension.PENSION_AGE+
-      ', and it comes to about '+euro(base*0.04/12+SPm)+' a month.';
+  function field(i, f) {
+    var id = 'pfEmp' + i + f[0];
+    var wrap = document.createElement('div'); wrap.className = 'pf-field';
+    var lab = document.createElement('label'); lab.htmlFor = id; lab.textContent = f[1];
+    if (f[0] === 'Provider' || f[0] === 'Ref') {
+      var o = document.createElement('span'); o.className = 'pf-opt'; o.textContent = ' (optional)'; lab.appendChild(o);
+    }
+    var inp = document.createElement('input'); inp.id = id; inp.type = 'text';
+    if (f[2]) inp.autocomplete = f[2];
+    if (f[3]) inp.placeholder = f[3];
+    if (f[0] === 'From' || f[0] === 'To') { inp.inputMode = 'numeric'; inp.maxLength = 4; }
+    wrap.appendChild(lab); wrap.appendChild(inp);
+    return wrap;
   }
 
-
-  /* #29: the workings, from the same values: what went in, what was there
-     already, and what growth added (the rest of the pot) */
-  const paidIn=monthly*months, grown=base-pot-paidIn;
-  $('pbWork').innerHTML='<li>Paid in, '+euro(monthly)+' a month to '+ret+' <b>'+euro(paidIn)+'</b></li>'+
-    '<li>Saved already <b>'+euro(pot)+'</b></li>'+
-    '<li>Growth at '+g+'% a year <b>'+euro(grown)+'</b></li>'+
-    '<li>Your pot at '+ret+' <b>'+euro(base)+'</b></li>'+
-    '<li>4% of it a year, over twelve months <b>'+euro(base*0.04/12)+'</b></li>';
-
-  /* cost of waiting: existing pot keeps growing, twelve months of
-     contributions never happen. Same engine, one shifted start date. */
-  if(months>12){
-    const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
-    const gap=Math.max(0,base-later);
-    $('waitOut').innerHTML='Put this off for twelve months and you retire with roughly <b>'+euro(gap)+'</b> less. That gap is the contributions you never made, plus the growth they never earned.';
-  }else{
-    $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
-  }
-  /* tax relief (B4/B5): only the part of the personal contribution inside
-     Revenue's age-related limit gets relief.
-       reliefLimit      = band(age) x min(earnings, 115,000)
-       relievableAnnual = min(contribution x 12, reliefLimit)
-       reliefMonthly    = relievableAnnual / 12 x taxRate */
-  const annualMine=mine*12;
-  const band=reliefBand(age);
-  const reliefLimit=Math.round(band*Math.min(earn,EARN_CAP));
-  const relievableAnnual=Math.min(annualMine,reliefLimit);
-  const reliefMonthly=(relievableAnnual/12)*(taxRate/100);
-  const costMonthly=mine-reliefMonthly;
-  if(mine>0){
-    const capNote=annualMine>relievableAnnual
-      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes into your pension, but without relief this year.</span>'
-      :'';
-    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+capNote;
-  }else{
-    $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
-  }
-  /* relief visualizer: presentation only, driven by the same costMonthly/reliefMonthly values */
-  if(mine>0){
-    $('rvYou').style.width=(costMonthly/mine*100)+'%';
-    $('rvTax').style.width=(reliefMonthly/mine*100)+'%';
-    $('rvYouV').textContent=euro(costMonthly)+'/mo';
-    $('rvTaxV').textContent=euro(reliefMonthly)+'/mo';
-    $('reliefViz').style.opacity='1';
-  }else{
-    $('rvYou').style.width='100%';
-    $('rvTax').style.width='0%';
-    $('rvYouV').textContent='€0/mo';
-    $('rvTaxV').textContent='€0/mo';
-    $('reliefViz').style.opacity='.45';
+  /* renumber every row so ids, legends and the module's field names agree */
+  function renumber() {
+    rows().forEach(function (r, i) {
+      r.setAttribute('data-i', i);
+      r.querySelector('legend').textContent = 'Employer ' + (i + 1);
+      FIELDS.forEach(function (f) {
+        var inp = r.querySelector('[id^="pfEmp"][id$="' + f[0] + '"]');
+        var lab = inp && r.querySelector('label[for="' + inp.id + '"]');
+        if (!inp) return;
+        inp.id = 'pfEmp' + i + f[0];
+        if (lab) lab.htmlFor = inp.id;
+      });
+      var x = r.querySelector('.pf-emp-x');
+      if (x) x.setAttribute('aria-label', 'Remove employer ' + (i + 1));
+    });
+    add.hidden = rows().length >= MAX;
   }
 
-  const diffPot=boost-base;
-  const diffInc=diffPot*0.04/12;
-  $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
-
-  const b=[],u=[];
-  for(let i=0;i<chart.N;i++){
-    const m=months*i/(chart.N-1);
-    b.push(project(m,pot,monthly,mRate));
-    u.push(project(m,pot,monthly+100,mRate));
+  function addRow() {
+    if (rows().length >= MAX) return;
+    var i = rows().length;
+    var fs = document.createElement('fieldset'); fs.className = 'pf-emp';
+    var lg = document.createElement('legend'); fs.appendChild(lg);
+    var x = document.createElement('button'); x.type = 'button'; x.className = 'pf-emp-x'; x.textContent = 'Remove';
+    fs.appendChild(x);
+    fs.appendChild(field(i, FIELDS[0]));
+    var two = document.createElement('div'); two.className = 'pf-two';
+    two.appendChild(field(i, FIELDS[1])); two.appendChild(field(i, FIELDS[2]));
+    fs.appendChild(two);
+    fs.appendChild(field(i, FIELDS[3])); fs.appendChild(field(i, FIELDS[4]));
+    emps.appendChild(fs);
+    renumber();
+    fs.querySelector('input').focus();
   }
-  chart.setTarget(b,u,age,ret);
-  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
-  /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
-  const overSFT=base>SFT, sftNote=$('sftNote');
-  if(sftNote) sftNote.hidden=!overSFT;
-  /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  announce('Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':''));
-}
+  add.addEventListener('click', addRow);
+  emps.addEventListener('click', function (e) {
+    var x = e.target.closest('.pf-emp-x');
+    if (!x) return;
+    var r = x.closest('.pf-emp'), i = rows().indexOf(r);
+    r.parentNode.removeChild(r);
+    renumber();
+    var left = rows(), next = left[Math.min(i, left.length - 1)];
+    (next ? next.querySelector('input') : add).focus();
+  });
 
-/* #2: a monthly amount handed over in the link's fragment (#monthly=100) by
-   the relief widget on the other pages. Read once, before the first render,
-   and only if it is a value the slider can hold; the fragment never reaches
-   a server. With no fragment the page loads exactly as before. */
-(function(){
-  var m=/(?:^#|&)monthly=(\d+)(?:&|$)/.exec((window.location&&window.location.hash)||'');
-  if(!m)return;
-  var r=$('mine'),v=+m[1];
-  if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
+  /* ---------------------------------------------------------- the form, read */
+  function val(id) { var el = $(id); return el ? el.value : ''; }
+  function data() {
+    return {
+      employers: rows().map(function (r, i) {
+        return { name: val('pfEmp' + i + 'Name'), from: val('pfEmp' + i + 'From'), to: val('pfEmp' + i + 'To'),
+                 provider: val('pfEmp' + i + 'Provider'), ref: val('pfEmp' + i + 'Ref') };
+      }),
+      fullName: val('pfName'), otherNames: val('pfOther'), dob: val('pfDob'), address: val('pfAddress'),
+      email: val('pfEmail'), phone: val('pfPhone'),
+      consents: { phone: $('pfPhoneOk').checked === true, marketing: $('pfOptin').checked === true },
+      signature: { typed: val('pfSigned'), confirmed: $('pfConfirm').checked === true, drawn: drawn }
+    };
+  }
+
+  /* ---------------------------------------------------------- problems */
+  function clear() {
+    err.textContent = '';
+    [].forEach.call(form.querySelectorAll('[aria-invalid]'), function (el) { el.removeAttribute('aria-invalid'); });
+  }
+  function show(list) {
+    clear();
+    if (!list.length) return true;
+    err.textContent = list.map(function (p) { return p.message; }).join(' ');
+    list.forEach(function (p) { var el = $(p.field); if (el) el.setAttribute('aria-invalid', 'true'); });
+    var first = $(list[0].field);
+    if (first && first.focus) first.focus();
+    return false;
+  }
+
+  /* ---------------------------------------------------------- steps */
+  function go(n) {
+    steps.forEach(function (s, i) { s.hidden = i !== n; });
+    dots.forEach(function (d, i) {
+      d.classList.toggle('pf-on', i === n);
+      d.classList.toggle('pf-past', i < n);
+      if (i === n) d.setAttribute('aria-current', 'step'); else d.removeAttribute('aria-current');
+    });
+    var h = steps[n].querySelector('h2');
+    if (n === 2) { paintLetter($('pfLetter'), false); sizePad(); }
+    if (h) h.focus();
+  }
+  $('pfNext1').addEventListener('click', function () { if (show(F.problems('where', data(), today))) go(1); });
+  $('pfNext2').addEventListener('click', function () { if (show(F.problems('who', data(), today))) go(2); });
+  $('pfBack2').addEventListener('click', function () { clear(); go(0); });
+  $('pfBack3').addEventListener('click', function () { clear(); go(1); });
+
+  /* ---------------------------------------------------------- the letter */
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
+  function paintLetter(box, signed) {
+    var L = F.letter(data(), today);
+    box.textContent = '';
+    box.appendChild(el('h3', L.title));
+    box.appendChild(el('p', L.to, 'pf-to'));
+    L.paragraphs.forEach(function (p) { box.appendChild(el('p', p)); });
+    box.appendChild(el('p', 'Where I worked:'));
+    var ul = el('ul');
+    L.employers.forEach(function (e) {
+      ul.appendChild(el('li', e.name + ', ' + e.years + (e.provider ? ', ' + e.provider : '') + (e.ref ? ', reference ' + e.ref : '')));
+    });
+    box.appendChild(ul);
+    if (signed) {
+      if (drawn) { var img = document.createElement('img'); img.src = drawn; img.alt = 'Signature, drawn by ' + L.signedBy; box.appendChild(img); }
+      box.appendChild(el('p', 'Signed: ' + L.signature));
+    }
+    box.appendChild(el('p', 'Name: ' + (L.signedBy || '')));
+    box.appendChild(el('p', 'Date: ' + L.signedOn));
+  }
+
+  /* ---------------------------------------------------------- signature pad
+     Optional. Pointer events cover mouse, pen and touch; touch-action:none
+     in the stylesheet stops the page scrolling under a finger. The typed
+     name is the signature; this adds a drawn one to the saved letter. */
+  var pad = $('pfPad'), ctx = pad && pad.getContext ? pad.getContext('2d') : null, drawing = false, marks = false;
+  function sizePad() {
+    if (!ctx) return;
+    var r = pad.getBoundingClientRect(), k = window.devicePixelRatio || 1;
+    if (!r.width) return;
+    var keep = marks ? pad.toDataURL('image/png') : null;
+    pad.width = Math.round(r.width * k); pad.height = Math.round(r.height * k);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#0B1F1C';
+    if (keep) { var im = new Image(); im.onload = function () { ctx.drawImage(im, 0, 0, r.width, r.height); }; im.src = keep; }
+  }
+  function at(e) { var r = pad.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+  if (ctx) {
+    pad.addEventListener('pointerdown', function (e) {
+      drawing = true; pad.setPointerCapture && pad.setPointerCapture(e.pointerId);
+      var p = at(e); ctx.beginPath(); ctx.moveTo(p[0], p[1]);
+    });
+    pad.addEventListener('pointermove', function (e) {
+      if (!drawing) return;
+      var p = at(e); ctx.lineTo(p[0], p[1]); ctx.stroke(); marks = true;
+    });
+    function end() { if (!drawing) return; drawing = false; if (marks) drawn = pad.toDataURL('image/png'); }
+    pad.addEventListener('pointerup', end);
+    pad.addEventListener('pointercancel', end);
+    pad.addEventListener('pointerleave', end);
+    window.addEventListener('resize', function () { if (!steps[2].hidden) sizePad(); });
+  }
+  $('pfPadClear').addEventListener('click', function () {
+    if (ctx) ctx.clearRect(0, 0, pad.width, pad.height);
+    marks = false; drawn = null;
+  });
+
+  /* ---------------------------------------------------------- sending */
+  function finish(message) {
+    $('pfDone').textContent = message;
+    var list = F.tracker(F.employers(data().employers, today.getFullYear()));
+    var track = $('pfTrack'); track.textContent = '';
+    list.forEach(function (t) {
+      var li = el('li'); li.appendChild(el('b', t.name));
+      var st = el('div', null, 'pf-stages');
+      t.stages.forEach(function (s) {
+        var tag = el('span', s.label, 'pf-stage' + (s.state === 'done' ? ' pf-done-s' : s.state === 'next' ? ' pf-next-s' : ''));
+        tag.setAttribute('title', s.state === 'done' ? 'Done' : s.state === 'next' ? 'Next' : 'Later');
+        st.appendChild(tag);
+      });
+      /* the pills are drawn for the eye; a screen reader hears one sentence
+         saying where each stage stands, rather than the three words twice */
+      st.setAttribute('aria-hidden', 'true');
+      var sr = el('span', ' (' + t.stages.map(function (s) { return s.label + ': ' + (s.state === 'done' ? 'done' : 'not yet'); }).join(', ') + ')');
+      sr.className = 'tk-sr';
+      li.appendChild(st); li.appendChild(sr);
+      track.appendChild(li);
+    });
+    paintLetter($('pfPrintLetter'), true);
+    go(3);
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var d = data();
+    if (!show(F.problems('sign', d, today))) return;
+    if (typeof LEAD_ENDPOINT === 'string' && LEAD_ENDPOINT.indexOf('http') === 0) {
+      fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(F.payload(d, today, location.href)) })
+        .then(function (r) {
+          if (r.ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
+          else show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]);
+        })
+        .catch(function () { show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]); });
+    } else {
+      window.location.href = F.mailto(d, today, LEAD_FALLBACK_ADDRESS);
+      finish('Your email app should have opened with your details ready to send to Damian. Nothing has been sent until you press send there. Please attach your signed letter: choose "Save or print your letter" below, then save it as a PDF.');
+    }
+  });
+  $('pfPrint').addEventListener('click', function () { window.print(); });
+
+  renumber();
 })();
-wireRanges(VALTEXT,calc);
-calc();
-
-/* nav + reveal */
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
-})();
-
-/* email-results capture (front-end only) */
-function sendResults(){
-  var input=document.getElementById('ecEmail');
-  var e=input.value.trim();
-  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  var err=document.getElementById('ecErr');
-  if(!ok){ err.textContent='Please enter a valid email address.';
-           err.style.display='block'; input.focus(); return; }
-  err.style.display='none';
-
-  /* the figures the visitor is actually looking at */
-  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
-  var payload={
-    email:e,
-    source:document.title,
-    pot:fig('potOut'), income:fig('incOut'), relief:fig('reliefOut'),
-    costOfWaiting:fig('waitOut'),
-    /* the panel's sliders only. #pbGuessRange is the guess card's own slider,
-       built at runtime by assets/js/pb-guess.js: it is the visitor playing a
-       game with themselves, not an input to any figure on this page, and a
-       lead that carried it would read as one. Excluded by id rather than by
-       scoping to .panel, because the More-options pass moves fields about. */
-    inputs:[].slice.call(document.querySelectorAll('input[type=range]:not(#pbGuessRange)'))
-             .map(function(s){return s.id+'='+s.value;}).join(', '),
-    /* the separate, unticked box under the form: asking for these figures
-       is not consent to anything else, so the two are recorded apart */
-    marketingConsent:!!(document.getElementById('ecOptin')||{}).checked,
-    page:location.href
-  };
-
-  var done=function(msg,isHtml){
-    var t=document.getElementById('ecOkText');
-    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
-    document.getElementById('ecForm').style.display='none';
-    document.getElementById('ecOk').classList.add('show');
-    document.getElementById('ecOk').focus(); /* #15: land on the confirmation, not the hidden form */
-  };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
-    err.style.display='block';
-  };
-
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    /* configured: post it and only confirm on a real success */
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
-      .catch(failed);
-  }else{
-    /* not configured: hand the visitor a prefilled email rather than a fake
-       confirmation. The lead still reaches Damian, today, with no backend. */
-    var body='Please send me my pension figures.%0D%0A%0D%0A'+
-      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
-      'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
-      'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
-      'Tax relief: '+encodeURIComponent(payload.relief)+'%0D%0A'+
-      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
-      'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
-      'From: '+encodeURIComponent(payload.page);
-    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
-      '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    /* nothing has been sent by this page, so say so: no "on its way" claim */
-    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
-  }
-}
 </script>
 
 <script>
@@ -2619,7 +2652,7 @@ function sendResults(){
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','mine','earn'];   /* primary controls: ids on THIS page */
+  var KEEP = [];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 

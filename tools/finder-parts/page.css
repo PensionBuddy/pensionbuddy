@@ -1,0 +1,111 @@
+/* ============================================================
+   THE OLD PENSION FINDER (find-my-pension.html, Run 20 #1).
+   Four steps in one form: where you worked, about you, the signed
+   letter, and what happens next. One step shows at a time; the rest
+   are hidden sections, so without script the first step is all a
+   reader sees and nothing half-works. The panels are the
+   calculators' .panel, made static: a form this long cannot be
+   sticky. Every control is a native input with a real label, the
+   drawn signature is optional (the typed name is the signature), and
+   every box starts unticked.
+   ============================================================ */
+.pf-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:40px;align-items:start;padding:8px 0 24px}
+.pf-main{min-width:0}
+.pf-panel{position:static;top:auto}
+.pf-panel[hidden]{display:none}
+/* each step's heading takes focus when the step opens, so a screen reader
+   starts there; it is not a control, so it draws no ring */
+.pf-panel h2:focus{outline:none}
+
+.pf-steps{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px;counter-reset:none}
+.pf-steps li{display:flex;align-items:center;gap:8px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.pf-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--line-2);font-size:.82rem;font-variant-numeric:tabular-nums;color:var(--ink-2);background:var(--surface)}
+.pf-steps li.pf-on{color:var(--ink)}
+.pf-steps li.pf-on .pf-n{background:var(--ink);border-color:var(--ink);color:#fff}
+.pf-steps li.pf-past .pf-n{background:var(--teal-50);border-color:var(--teal-700);color:var(--teal-700)}
+
+.pf-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.pf-err:not(:empty){margin:0 0 14px;padding:12px 16px;border:1px solid #E7B7B0;border-radius:var(--r-md);background:#FDF3F1}
+
+.pf-emp{border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 4px;margin:0 0 14px;min-width:0}
+.pf-emp legend{font-size:.95rem;font-weight:700;color:var(--ink);padding:0 6px}
+.pf-emp-x{float:right;font:inherit;font-size:.86rem;font-weight:600;color:var(--teal-700);background:none;border:0;
+  padding:6px 0 10px 12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;min-height:40px}
+.pf-field{margin:0 0 14px;min-width:0}
+.pf-field label{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.pf-opt{font-weight:400;color:var(--ink-2)}
+.pf-field input,.pf-field textarea{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:11px 14px;min-height:48px}
+.pf-field textarea{resize:vertical;line-height:1.5}
+.pf-field input:focus,.pf-field textarea:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pf-field [aria-invalid="true"]{border-color:#A4291D}
+.pf-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+
+.pf-add{font:inherit;font-size:.95rem;font-weight:600;color:var(--teal-700);background:var(--surface);
+  border:1.5px dashed var(--line-2);border-radius:var(--r-md);padding:11px 16px;min-height:46px;cursor:pointer;width:100%}
+.pf-add:focus-visible,.pf-back:focus-visible,.pf-clear:focus-visible,.pf-emp-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pf-add[hidden]{display:none}
+
+.pf-nav{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:22px}
+.pf-nav .btn{width:auto}
+.pf-back{font:inherit;font-size:.95rem;font-weight:600;color:var(--ink);background:none;border:0;padding:10px 4px;min-height:44px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px}
+
+.pf-check{display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;font-size:.95rem;line-height:1.5;color:var(--ink);cursor:pointer}
+.pf-check input{flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal-700)}
+.pf-check input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pf-check [aria-invalid="true"]{outline:2px solid #A4291D;outline-offset:2px}
+.pf-note{margin:10px 0 0;font-size:.88rem;line-height:1.6;color:var(--ink-2)}
+
+.pf-draft{margin:0 0 12px;font-size:.9rem;color:var(--ink-2)}
+.pf-letter{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface-2);padding:18px 20px;margin:0 0 18px;
+  font-size:.95rem;line-height:1.65;color:var(--ink)}
+.pf-letter h3,.pf-print h3{margin:0 0 6px}
+.pf-letter p,.pf-print p{margin:0 0 10px}
+.pf-letter ul,.pf-print ul{margin:0 0 12px;padding-left:20px}
+.pf-letter li,.pf-print li{margin:0 0 4px}
+.pf-letter .pf-to,.pf-print .pf-to{font-weight:600}
+
+.pf-sig{margin:0 0 14px}
+.pf-sig-l{margin:0 0 6px;font-size:.95rem;font-weight:600;color:var(--ink)}
+#pfPad{display:block;width:100%;height:140px;border:1.5px dashed var(--line-2);border-radius:var(--r-md);background:var(--surface);
+  touch-action:none;cursor:crosshair}
+.pf-clear{font:inherit;font-size:.88rem;font-weight:600;color:var(--teal-700);background:none;border:0;padding:8px 0;min-height:40px;cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px}
+
+.pf-done{font-size:1rem;line-height:1.6;color:var(--ink)}
+.pf-track{list-style:none;margin:16px 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.pf-track li{border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 14px}
+.pf-track b{display:block;font-size:.98rem;color:var(--ink);margin-bottom:8px}
+.pf-stages{display:flex;flex-wrap:wrap;gap:6px}
+.pf-stage{font-size:.82rem;font-weight:600;border-radius:999px;padding:4px 10px;border:1px solid var(--line-2);color:var(--ink-2);background:var(--surface)}
+.pf-stage.pf-done-s{background:var(--teal-700);border-color:var(--teal-700);color:#fff}
+.pf-stage.pf-next-s{border-color:var(--teal-700);color:var(--teal-700)}
+
+.pf-side{border:1px solid var(--line);border-radius:var(--r-xl);padding:22px 22px 10px;background:var(--surface);position:sticky;top:96px}
+.pf-side-h{margin:0 0 12px}
+.pf-side ul{list-style:none;margin:0;padding:0}
+.pf-side li{font-size:.92rem;line-height:1.55;color:var(--ink-2);margin:0 0 12px}
+.pf-side li b{color:var(--ink);font-weight:700}
+
+.pf-print{display:none}
+
+@media(max-width:920px){
+  .pf-wrap{grid-template-columns:1fr;gap:24px}
+  .pf-side{position:static}
+}
+@media(max-width:480px){
+  .pf-two{grid-template-columns:1fr}
+  .pf-nav{flex-direction:column-reverse;align-items:stretch}
+  .pf-nav .btn{width:100%}
+}
+
+/* Printing, or saving as PDF: the letter alone, on white. */
+@media print{
+  body > :not(main){display:none!important}
+  main > :not(.pf-print){display:none!important}
+  body{background:#fff!important}
+  .pf-print{display:block!important;color:#000;font-size:12pt;line-height:1.5;padding:0}
+  .pf-print img{max-width:260px;height:auto;display:block;margin:6px 0}
+}

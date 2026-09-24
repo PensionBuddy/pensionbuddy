@@ -43,11 +43,34 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 1 | Old pension finder with a signed Letter of Authority | done: new page `find-my-pension.html` (built by `tools/pagebuild.py` from new parts `tools/finder-parts/`), four steps: where you worked (up to ten employers, years optional), about you (name, other names, date of birth, address, email, optional phone; no PPS number), the Letter of Authority filled in and signed (typed name, an optional drawn signature, an unticked confirm box), and what happens next (a Requested / Found / Valued line per employer). Phone and email consent are separate unticked boxes. With `LEAD_ENDPOINT` set it posts JSON; today it opens a pre-filled email to Damian and offers the letter to save as a PDF and attach. New module `assets/js/pension-finder.js`, suite 65 assertions. tracker.html's "Help me find my pensions" and "Start finding mine" go to it; "Old pension finder" joined the footer's Tools column | — |
 | A1 + 9 | Reg 32 commission summary, and the trust page | done as a template: new page `how-we-work.html` ("How we work, and how we are paid"): who advises you (Damian Condon, QFA, 30 years' experience, the Central Bank register linked), the Reg 32 summary laid out per product type as Reg 32(3) asks (when you start, trail commission, clawback), other fees and non-monetary benefits, agencies held, whether commission is set against a fee (Reg 33), a fees section (Reg 68), the rules any review shown will follow (Reg 85), and the CCPC, MABS and Pensions Authority (the Central Bank's guidance 2.2.7). Every figure is a placeholder. terms.html's "available on request" now links to it, and "How we are paid" is in the footer's Company column on every page (skeleton + sync-chrome + pagebuild) | — |
 | 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | — |
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
+
+- **R20-1a, find-my-pension.html: the Letter of Authority's wording** is a
+  draft, for Gresham Wealth's compliance officer (the page flags it where the
+  letter shows). It authorises requests for information only and says it
+  cannot move, change, cash in or transfer anything. Also for them: whether
+  the providers you deal with accept an e-signed letter (the typed name is
+  the signature; a drawn one is optional), and whether tracing is a regulated
+  activity for the firm. If it is not, the Regulations treat it as an
+  unregulated activity: its own web page (Reg 72), no regulatory disclosure
+  statement on it (Reg 71(2)-(3)), and a set warning in written communications
+  about it (Reg 73(1)(c)). The Central Bank's guidance (3.5.10) suggests an
+  information form like this one is not a "digital platform", but that is
+  a judgement for compliance.
+- **R20-1b, privacy.html:** a sentence on what the finder collects and the
+  signed letter: why, who sees it (the providers and trustees named), and how
+  long it is kept. Reg 117(2) allows a record of someone who did not become
+  a client to be kept for 12 months, subject to their consent.
+- **The finder's promises for Damian to confirm he can keep:** "As the
+  replies come in, Damian will tell you what was found and what it is
+  worth"; "You can withdraw the letter at any time, in writing, and we stop
+  asking"; and that a PPS number is asked for later, on a call, if a
+  provider insists.
 
 - **R20-9a to R20-9e, how-we-work.html:** the Central Bank reference number;
   for each product type, the commission when a plan starts, the trail, and any
@@ -104,6 +127,19 @@ a figure or a legal sentence is Damian's to give, the page carries a
   across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
+
+- #1: the whole of find-my-pension.html, including the h1 "Lost track of an
+  old pension? Start the search here.", the step names, the side card "What
+  this is, and what it is not" ("We cannot promise every pension will be
+  found: schemes close, merge and change hands, and old records are not
+  always complete."), the consent boxes "You can phone me about this search."
+  and the site's occasional-emails box, the draft letter, and the two
+  confirmations: "Thanks. Your signed letter and your details are with
+  Damian, and the search has started." (only after a real success from the
+  endpoint) and "Your email app should have opened with your details ready to
+  send to Damian. Nothing has been sent until you press send there. Please
+  attach your signed letter: choose \"Save or print your letter\" below, then
+  save it as a PDF." Footer link "Old pension finder".
 
 - A1/#9: the whole of how-we-work.html (title "How we work, and how we are
   paid"), which reuses the Terms of Business' "fee you agree with us …

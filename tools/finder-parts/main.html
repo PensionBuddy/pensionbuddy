@@ -1,0 +1,108 @@
+<main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>Old pension finder · about five minutes, no obligation</span>
+  <h1 class="reveal" style="transition-delay:.06s">Lost track of an old pension? <span class="hl">Start the search here.</span></h1>
+  <p class="reveal" style="transition-delay:.12s">Tell us where you worked, sign a letter that lets us ask the providers, and we do the chasing. Nothing is moved or changed, and you are under no obligation to do anything with what we find.</p>
+</div></div>
+
+<div class="wrap"><div class="pf-wrap">
+  <div class="pf-main">
+    <ol class="pf-steps" id="pfSteps">
+      <li class="pf-on" aria-current="step"><span class="pf-n">1</span> Where you worked</li>
+      <li><span class="pf-n">2</span> About you</li>
+      <li><span class="pf-n">3</span> Sign the letter</li>
+      <li><span class="pf-n">4</span> What happens next</li>
+    </ol>
+
+    <form id="pfForm" novalidate>
+      <p class="pf-err" id="pfErr" role="alert"></p>
+
+      <section class="panel pf-panel" id="pfStep1" aria-labelledby="pfH1">
+        <h2 id="pfH1" tabindex="-1">Where you worked</h2>
+        <p class="hint">Rough names and rough years are plenty. Add every employer where you might have been in a pension, even for a year or two.</p>
+        <div id="pfEmps">
+          <fieldset class="pf-emp" data-i="0">
+            <legend>Employer 1</legend>
+            <div class="pf-field"><label for="pfEmp0Name">Employer&rsquo;s name</label><input id="pfEmp0Name" type="text" autocomplete="organization"></div>
+            <div class="pf-two">
+              <div class="pf-field"><label for="pfEmp0From">From, the year</label><input id="pfEmp0From" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 1998"></div>
+              <div class="pf-field"><label for="pfEmp0To">To, the year</label><input id="pfEmp0To" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 2004"></div>
+            </div>
+            <div class="pf-field"><label for="pfEmp0Provider">Pension provider or scheme, if you know it <span class="pf-opt">(optional)</span></label><input id="pfEmp0Provider" type="text"></div>
+            <div class="pf-field"><label for="pfEmp0Ref">Policy or member number, if you have one <span class="pf-opt">(optional)</span></label><input id="pfEmp0Ref" type="text"></div>
+          </fieldset>
+        </div>
+        <button type="button" class="pf-add" id="pfEmpAdd">Add another employer</button>
+        <div class="pf-nav"><button type="button" class="btn btn-primary" id="pfNext1">Continue <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep2" aria-labelledby="pfH2" hidden>
+        <h2 id="pfH2" tabindex="-1">About you</h2>
+        <p class="hint">Providers match their records on your name, date of birth and address. We do not ask for your PPS number here.</p>
+        <div class="pf-field"><label for="pfName">Your full name</label><input id="pfName" type="text" autocomplete="name"></div>
+        <div class="pf-field"><label for="pfOther">Any other name you used at those jobs, such as a name before marriage <span class="pf-opt">(optional)</span></label><input id="pfOther" type="text"></div>
+        <div class="pf-field"><label for="pfDob">Date of birth</label><input id="pfDob" type="date" autocomplete="bday" min="1916-01-01"></div>
+        <div class="pf-field"><label for="pfAddress">Your address now</label><textarea id="pfAddress" rows="3" autocomplete="street-address"></textarea></div>
+        <div class="pf-field"><label for="pfEmail">Your email</label><input id="pfEmail" type="email" autocomplete="email" inputmode="email"></div>
+        <div class="pf-field"><label for="pfPhone">Your phone number <span class="pf-opt">(optional)</span></label><input id="pfPhone" type="tel" autocomplete="tel"></div>
+        <label class="pf-check"><input type="checkbox" id="pfPhoneOk"><span>You can phone me about this search.</span></label>
+        <label class="pf-check"><input type="checkbox" id="pfOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
+        <p class="pf-note">We use these details to search for your pensions and to reply to you, and for nothing else unless you tick a box above. See our <a href="privacy.html">Privacy Notice</a>.</p>
+        <div class="pf-nav"><button type="button" class="pf-back" id="pfBack2">Back</button><button type="button" class="btn btn-primary" id="pfNext2">Continue <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep3" aria-labelledby="pfH3" hidden>
+        <h2 id="pfH3" tabindex="-1">Sign the letter</h2>
+        <p class="hint">This letter lets us ask each provider what you have with them. It cannot move, change or cash in anything.</p>
+        <p class="pf-draft"><span class="needs-input" data-issue="R20-1a">[Letter wording: a draft, to be confirmed by Gresham Wealth&rsquo;s compliance officer before this page goes live]</span></p>
+        <div class="pf-letter" id="pfLetter"></div>
+        <div class="pf-field"><label for="pfSigned">Type your full name to sign</label><input id="pfSigned" type="text" autocomplete="off"></div>
+        <div class="pf-sig">
+          <p class="pf-sig-l" id="pfSigL">You can also sign with a finger or a mouse <span class="pf-opt">(optional)</span></p>
+          <canvas id="pfPad" role="img" aria-label="Signature box. Your typed name is your signature; drawing here is optional."></canvas>
+          <button type="button" class="pf-clear" id="pfPadClear">Clear the drawn signature</button>
+        </div>
+        <label class="pf-check"><input type="checkbox" id="pfConfirm"><span>I have read this letter and I am signing it.</span></label>
+        <div class="pf-nav"><button type="button" class="pf-back" id="pfBack3">Back</button><button type="submit" class="btn btn-primary" id="pfSend">Sign and send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </section>
+
+      <section class="panel pf-panel" id="pfStep4" aria-labelledby="pfH4" hidden>
+        <h2 id="pfH4" tabindex="-1">What happens next</h2>
+        <p class="pf-done" id="pfDone"></p>
+        <ul class="pf-track" id="pfTrack"></ul>
+        <p class="pf-note">Each provider replies in its own time. As the replies come in, Damian will tell you what was found and what it is worth. What you do with it, if anything, is up to you.</p>
+        <div class="pf-nav"><button type="button" class="btn btn-ghost" id="pfPrint">Save or print your letter</button><a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+      </section>
+    </form>
+  </div>
+
+  <aside class="pf-side">
+    <h3 class="pf-side-h">What this is, and what it is not</h3>
+    <ul>
+      <li><b>Free to start, with no obligation.</b> Finding a pension is not the same as moving it.</li>
+      <li><b>We ask, the providers answer.</b> We cannot promise every pension will be found: schemes close, merge and change hands, and old records are not always complete.</li>
+      <li><b>Nothing is moved or changed.</b> The letter allows questions, not transactions.</li>
+      <li><b>Your details are used for the search.</b> Nothing else, unless you ask for more.</li>
+    </ul>
+  </aside>
+</div></div>
+
+<div class="pf-print" id="pfPrintLetter" aria-hidden="true"></div>
+
+<section class="assume"><div class="wrap">
+  <h3>Good to know</h3>
+  <ul class="reveal">
+    <li>Moving a pension is a separate decision, for later and with advice. A transfer can mean giving up terms you cannot get back, such as the pension a defined benefit scheme promised, which is swapped for a transfer value. So it is never assumed.</li>
+    <li>This finder is for pensions from work and personal pensions. Your State Pension record is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>, and the <a href="state-pension-entitlement.html">State Pension entitlement check</a> works through it.</li>
+    <li>Worked in the UK? The UK government&rsquo;s <a href="https://www.gov.uk/find-pension-contact-details" rel="noopener">Pension Tracing Service</a> finds contact details for UK schemes, free.</li>
+    <li>You can withdraw the letter at any time, in writing, and we stop asking.</li>
+  </ul>
+</div></section>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This is a search, not advice.</b> We gather what your old providers hold and tell you what it is. Any advice about what to do with a pension is given in a personal consultation with Damian, if you want one.</p>
+  </div>
+</div></section>
+</main>
