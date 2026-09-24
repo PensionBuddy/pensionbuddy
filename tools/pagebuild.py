@@ -282,6 +282,21 @@ PAGES = {
                 ('Rules as at 24 September 2026', 'the date the rules were checked'),
                 ('Topics to discuss, not advice', 'the list says what it is')),
     ),
+    # Run 20 #12. A list the reader fills in and a summary that follows it,
+    # like the finder: no sliders, none of the calculators' class names.
+    'pots': Page(
+        out='my-pensions.html',
+        parts='pots-parts',
+        title='All your pensions in one view, Pensionbuddy',
+        desc=('List the pensions you have and see the total, how it is split, and what the annual '
+              'charges come to in euro a year. Nothing you type leaves the page.'),
+        modules=['assets/js/pots.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="ptForm"', 'the list'),
+                ('id="ptPrint"', 'print or save'),
+                ('Nothing you type is sent or stored', 'said on the page')),
+    ),
 }
 
 

@@ -1,0 +1,70 @@
+/* ============================================================
+   ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
+   reader fills in and a summary that follows it as they type: the
+   total, each pot's share as a bar, and the annual charges in euro.
+   Nothing is stored; the print button keeps a copy.
+   ============================================================ */
+.pt-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start;padding:8px 0 24px}
+.pt-panel{position:static;top:auto}
+.pt-row{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 4px;margin:0 0 14px;min-width:0}
+.pt-row legend{font-size:.95rem;font-weight:700;color:var(--ink);padding:0 6px}
+/* on the row's top border, level with its legend, so it takes no width
+   from the fields (a float here narrows the whole grid beside it) */
+.pt-x{position:absolute;top:0;right:12px;transform:translateY(-50%);font:inherit;font-size:.86rem;font-weight:600;color:var(--teal-700);
+  background:var(--surface);border:0;padding:0 6px;min-height:40px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.pt-wide{grid-column:1 / -1}
+.pt-field{margin:0 0 14px;min-width:0}
+.pt-field label{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:6px}
+.pt-opt{font-weight:400;color:var(--ink-2)}
+.pt-field input,.pt-field select{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:11px 12px;min-height:48px}
+.pt-field input:focus,.pt-field select:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pt-field [aria-invalid="true"]{border-color:#A4291D}
+.pt-bad{margin:6px 0 0;font-size:.86rem;line-height:1.45;font-weight:600;color:#A4291D}
+.pt-add{font:inherit;font-size:.95rem;font-weight:600;color:var(--teal-700);background:var(--surface);border:1.5px dashed var(--line-2);
+  border-radius:var(--r-md);padding:11px 16px;min-height:46px;cursor:pointer;width:100%}
+.pt-add[hidden]{display:none}
+.pt-add:focus-visible,.pt-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pt-print{border-style:solid;width:auto}
+.pt-sum{position:sticky;top:96px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:24px}
+.pt-sum h2{font-size:21px;letter-spacing:-0.02em;margin:0 0 10px}
+.pt-total{margin:0 0 16px;color:var(--ink)}
+.pt-total-n{display:block;font-size:2.6rem;font-weight:300;line-height:1.1;font-variant-numeric:tabular-nums}
+.pt-total-l{font-size:.95rem;color:var(--ink-2)}
+.pt-bars{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px}
+.pt-bars li{font-size:.92rem;color:var(--ink)}
+.pt-bars .pt-bl{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
+.pt-bars .pt-bl b{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.pt-bars .pt-bl span{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pt-bars i{display:block;height:10px;border-radius:99px;background:var(--aqua);width:var(--w)}
+.pt-charges{margin:0 0 14px;font-size:.95rem;line-height:1.55;color:var(--ink)}
+.pt-actions{margin:0 0 12px}
+.pt-note{margin:0 0 12px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.pt-kinds{margin:16px 0 0}
+.pt-next{margin:0;padding-left:18px}
+.pt-next li{font-size:.92rem;line-height:1.55;color:var(--ink);margin:0 0 6px}
+.pt-next a{color:var(--teal-700);font-weight:600}
+@media(max-width:920px){
+  .pt-wrap{grid-template-columns:1fr}
+  .pt-sum{position:static}
+}
+@media(max-width:480px){
+  .pt-grid{grid-template-columns:1fr}
+  /* room for the longest kind, "A Personal Retirement Bond", in the select */
+  .pt-row{padding:12px 10px 2px}
+  .pt-field select{padding-left:10px}
+}
+/* The printout: the title, then the summary, then the list as entered.
+   Only main's direct sections go (the note under the page); the summary is
+   a section too, nested deeper, and must stay. */
+@media print{
+  body > :not(main){display:none!important}
+  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next{display:none!important}
+  main .phead{padding:0 0 16px!important;margin:0!important}
+  .pt-wrap{display:flex;flex-direction:column;gap:18px;padding:0}
+  .pt-sum{order:-1;position:static}
+  .pt-panel,.pt-sum{border:1px solid #bbb;box-shadow:none;break-inside:auto}
+  .pt-row{break-inside:avoid}
+  body{background:#fff!important}
+}

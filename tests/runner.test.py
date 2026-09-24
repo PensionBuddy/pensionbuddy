@@ -100,7 +100,7 @@ def run():
     # The shipped suites, under node, each exit 0 on their own.
     for name in ('harness', 'compare-calc', 'state-pension', 'state-pension-entitlement',
                  'cost-of-waiting', 'living-standards', 'pension-finder',
-                 'pension-fees', 'readiness', 'sft', 'director-topics'):
+                 'pension-fees', 'readiness', 'sft', 'director-topics', 'pots'):
         p = subprocess.run(['node', os.path.join(TESTS, name + '.test.js')],
                            capture_output=True, text=True, timeout=120)
         eq('5. node tests/%s.test.js exits 0' % name, p.returncode, 0)
