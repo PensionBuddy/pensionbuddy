@@ -43,12 +43,21 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 5 | Save or send your results | done: "Save or print these figures" (a one-page report: the headline figures under the page's own labels, the result sentence, the workings, what was entered, the page's assumptions, the link that reopens the figures, any warning box, and the footer's regulatory statement and disclaimer) and "Email them to yourself" (the reader's own email app, addressed to no one) beside "Copy a link to these figures" on all five calculators; new `assets/js/pb-report.js`, which reads only what the page shows, stands aside while the guess card's veil is up, and leaves out switched-off controls; pb-share.js exposes its link builder so there is one definition of a resume link; the two calculators' "Email my results" now carry that link too | — |
+| A4 | Warnings beside the figures | done, for compliance to confirm: the two warnings the Regulations prescribe word for word (Reg 372, "Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment."; Reg 392, "Warning: The value of your investment may go down as well as up."), boxed, bold and no smaller than the text around them (Reg 45), directly under the projected figures (Reg 82) on the pension and director calculators and under both of starter's growth charts; the printed report carries them. The State Pension pages and the comparison project no investment growth and carry none. Found while re-shooting: the director calculator's sliders drew at Chrome's default 129px inside a 423px column (its base slider rule never set a width); fixed. All five product photographs re-shot (the pension and entitlement shots were stale since `b3febf2` and `bbc0f9d`), the pension one without the State Pension line so the home page's arrow label stays clear, and every declared width and height corrected, the product tabs' data included | — |
 | 1 | Old pension finder with a signed Letter of Authority | done: new page `find-my-pension.html` (built by `tools/pagebuild.py` from new parts `tools/finder-parts/`), four steps: where you worked (up to ten employers, years optional), about you (name, other names, date of birth, address, email, optional phone; no PPS number), the Letter of Authority filled in and signed (typed name, an optional drawn signature, an unticked confirm box), and what happens next (a Requested / Found / Valued line per employer). Phone and email consent are separate unticked boxes. With `LEAD_ENDPOINT` set it posts JSON; today it opens a pre-filled email to Damian and offers the letter to save as a PDF and attach. New module `assets/js/pension-finder.js`, suite 65 assertions. tracker.html's "Help me find my pensions" and "Start finding mine" go to it; "Old pension finder" joined the footer's Tools column | — |
 | A1 + 9 | Reg 32 commission summary, and the trust page | done as a template: new page `how-we-work.html` ("How we work, and how we are paid"): who advises you (Damian Condon, QFA, 30 years' experience, the Central Bank register linked), the Reg 32 summary laid out per product type as Reg 32(3) asks (when you start, trail commission, clawback), other fees and non-monetary benefits, agencies held, whether commission is set against a fee (Reg 33), a fees section (Reg 68), the rules any review shown will follow (Reg 85), and the CCPC, MABS and Pensions Authority (the Central Bank's guidance 2.2.7). Every figure is a placeholder. terms.html's "available on request" now links to it, and "How we are paid" is in the footer's Company column on every page (skeleton + sync-chrome + pagebuild) | — |
 | 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | — |
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
+
+- **A4, the warnings:** whether a generic calculator's projection counts as an
+  illustration of an investment product under Reg 372 is a judgement the
+  research could not settle; the boxes were added as the cautious reading, and
+  compliance may take them off. Starter's chart note still says "the value of
+  investments can fall as well as rise" in small print, which the box now says
+  in the prescribed words; trim it if you like.
 
 - **R20-1a, find-my-pension.html: the Letter of Authority's wording** is a
   draft, for Gresham Wealth's compliance officer (the page flags it where the
@@ -127,6 +136,17 @@ a figure or a legal sentence is Damian's to give, the page carries a
   across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
+
+- #5: buttons "Save or print these figures" and "Email them to yourself";
+  status lines "Reveal the illustration first, then save it." and "Your email
+  app should have opened. Add your own address and send."; report headings
+  "Your figures", "How we got this", "What you entered", "The assumptions
+  behind these numbers", "Next steps"; lines "Pensionbuddy. Saved on
+  [date].", "Open these figures again: [link]", "Talk them through with
+  Damian in a free 20-minute call: [link]"; the self-email's first line
+  "[page], saved on [date]" and "What I entered:". In the two calculators'
+  emails to Damian, the new line "Open these figures again: [link]".
+- A4: none; the two warnings are the Regulations' own words.
 
 - #1: the whole of find-my-pension.html, including the h1 "Lost track of an
   old pension? Start the search here.", the step names, the side card "What

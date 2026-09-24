@@ -1660,6 +1660,16 @@ button{font-family:inherit}
   font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-note{margin:22px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:70ch}
+/* WARNINGS (.pb-warn, A4 in Run 20). The Consumer Protection Regulations
+   2025 (S.I. 81 of 2025) give these two sentences word for word, Reg 372 for
+   any illustration of an investment's figures and Reg 392 wherever its value
+   can fluctuate, and say how they appear (Reg 45): prominent, in a box, in
+   bold, no smaller than the text around them, and beside the figures they
+   are about (Reg 82), not in a footer. */
+.pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
+.pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
+.pb-warn p+p{margin-top:6px}
+.pb-sa .pb-warn{max-width:760px;margin:22px 0 0}
 /* IF YOU WAIT (.pb-wait, #8 in Run 20). The chart above, turned to the
    reader's own age: the same monthly amount started now or after a wait,
    and what the later start would need each month to catch up. The rows
@@ -2090,6 +2100,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="pb-sa-less" id="sa50Less">€265,746 less</span>
       </div>
     </div>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
     <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. Assumes 5% growth a year, contributions from that age to 66, and no pension to start with. Figures ignore charges and inflation.</p>
   </div>
   <div class="pb-sa pb-wait reveal" id="pbWait">
@@ -2120,6 +2131,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <p class="pb-wait-say" id="pbWaitSay">To end up with the same pot, starting at 35 would take about <b>€406 a month</b> instead of €300: €106 more each month.</p>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
     <p class="pb-wait-sr" id="pbWaitSr" aria-live="polite" aria-atomic="true"></p>
     <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. The monthly amount is the one set above. Assumes 5% growth a year, contributions to 66, and no pension to start with. Figures ignore charges, tax relief and inflation.</p>
   </div>
@@ -2140,7 +2152,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="btn btn-light" href="pension-calculator.html">See what I could build <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
-      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=98adbe52"><img src="assets/img/product-pension-calculator.jpg?v=6f4efaff" width="2184" height="2217" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 520 Q470 520 425 420" class="pb-ann-under"/><path d="M560 520 Q470 520 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-under"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:52.2%">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:41.5%">The figures follow</span></span></span>
+      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=0d59f58e"><img src="assets/img/product-pension-calculator.jpg?v=6ed190c6" width="2184" height="2534" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 520 Q470 520 425 420" class="pb-ann-under"/><path d="M560 520 Q470 520 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-under"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:52.2%">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:41.5%">The figures follow</span></span></span>
       <figcaption class="pb-split-cap">Example figures.</figcaption>
     </figure>
   </div>

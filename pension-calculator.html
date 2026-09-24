@@ -1702,6 +1702,15 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-share button:hover{border-color:var(--teal-700)}
 .pb-share button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 .pb-share-said{font-size:13.5px;color:var(--ink-2)}
+/* WARNINGS (.pb-warn, A4 in Run 20). The Consumer Protection Regulations
+   2025 (S.I. 81 of 2025) give these two sentences word for word, Reg 372 for
+   any illustration of an investment's figures and Reg 392 wherever its value
+   can fluctuate, and say how they appear (Reg 45): prominent, in a box, in
+   bold, no smaller than the text around them, and beside the figures they
+   are about (Reg 82), not in a footer. */
+.pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
+.pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
+.pb-warn p+p{margin-top:6px}
 /* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
    the nav's "Calculator" link, from 1201px only (the row, not the drawer);
    the nav's own markup is untouched. Takes no width in the row. */
@@ -1811,6 +1820,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="divline"></div>
       <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
     </div>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
     <div class="waitcard reveal" style="transition-delay:.11s">
@@ -2189,6 +2199,8 @@ function sendResults(){
     /* the separate, unticked box under the form: asking for these figures
        is not consent to anything else, so the two are recorded apart */
     marketingConsent:!!(document.getElementById('ecOptin')||{}).checked,
+    /* #5: the link that opens these same figures again, pb-share's own */
+    link:(window.PBShare&&window.PBShare.link)?window.PBShare.link():location.href,
     page:location.href
   };
 
@@ -2221,6 +2233,7 @@ function sendResults(){
       'Tax relief: '+encodeURIComponent(payload.relief)+'%0D%0A'+
       'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
       'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
+      'Open these figures again: '+encodeURIComponent(payload.link)+'%0D%0A'+
       'From: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
@@ -2661,7 +2674,8 @@ function sendResults(){
 </script>
 <script src="assets/js/pb-guess.js?v=3213e251"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
-<script src="assets/js/pb-share.js?v=e3302e5a"></script>
+<script src="assets/js/pb-share.js?v=db328391"></script>
+<script src="assets/js/pb-report.js?v=666938b3"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
 </body>
