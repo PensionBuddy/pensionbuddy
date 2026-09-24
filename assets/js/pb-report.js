@@ -36,7 +36,9 @@
                 'September', 'October', 'November', 'December'];
   var VEILED = 'Reveal the illustration first, then save it.';
 
-  function text(el) { return el ? String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim() : ''; }
+  /* innerText, whitespace collapsed; a visually hidden part of a label sits
+     out of the flow and comes back with a space before its comma */
+  function text(el) { return el ? String(el.innerText || el.textContent || '').replace(/\s+/g, ' ').replace(/ ([,.;:])/g, '$1').trim() : ''; }
   function shown(el) { return !!el && !el.closest('[hidden]') && el.getClientRects().length > 0; }
   function all(sel, root) { return [].slice.call((root || document).querySelectorAll(sel)); }
   function today() { var d = new Date(); return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }

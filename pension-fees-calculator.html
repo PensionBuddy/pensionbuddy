@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms of Business, Pensionbuddy</title>
-<meta name="description" content="Who we are, what we do, and how we are paid. Plain-English Terms of Business for Damian Condon T/A Gresham Wealth Management, regulated by the Central Bank of Ireland.">
+<title>What your pension charges cost, Pensionbuddy</title>
+<meta name="description" content="What an annual management charge and a charge on each payment take out of a pension pot by retirement, next to another plan's charges. An illustration, not advice.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
-<meta property="og:title" content="Terms of Business, Pensionbuddy">
-<meta property="og:description" content="Who we are, what we do, and how we are paid. Plain-English Terms of Business for Damian Condon T/A Gresham Wealth Management, regulated by the Central Bank of Ireland.">
+<meta property="og:title" content="What your pension charges cost, Pensionbuddy">
+<meta property="og:description" content="What an annual management charge and a charge on each payment take out of a pension pot by retirement, next to another plan's charges. An illustration, not advice.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -26,28 +26,20 @@
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
-   Inter, one face · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
-  /* canvas + surfaces */
   --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
-  /* ink */
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
-  /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
   --amber:#F4B740; --amber-soft:#FCEFCF;
-  /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
-  /* type */
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-  /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
@@ -56,206 +48,151 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
 ::selection{background:var(--teal-100);color:var(--teal-900)}
-h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink)}
+h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
-
-/* ---- eyebrow / labels ---- */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
-.kicker{font-size:13px;font-weight:700;color:var(--ink-3)}
-
-/* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
 .btn svg{width:17px;height:17px;transition:transform .2s ease}
 .btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
 .btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
 .btn-primary:hover svg{transform:translateX(3px)}
-.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2);box-shadow:var(--sh-sm)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal-700);transform:translateY(-2px)}
-.btn-light{background:#fff;color:var(--teal-900)}
-.btn-light:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-
-/* ---- reveal on scroll ---- */
 .reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
 .reveal.in{opacity:1;transform:none}
-.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 @media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
-
-/* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
-.announce b{color:#fff;font-weight:600}
-.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-
-/* ---- nav ---- */
+.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
 nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
 .logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:22px;height:22px}
-.nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a.lnk{font-weight:500;font-size:15px;color:var(--ink-2);transition:color .2s;position:relative}
-.nav-links a.lnk:hover{color:var(--teal-700)}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
+.nav-r{display:flex;align-items:center;gap:28px}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 
-/* ---- hero ---- */
-.hero{padding:72px 0 36px;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-0.035em;margin:20px 0 0}
-.hero h1 .hl{color:var(--teal-700)}
-.hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.trust{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
-.stars{display:flex;gap:2px;color:var(--amber)}
-.stars svg{width:16px;height:16px;fill:currentColor}
-.trust span{font-size:14px;color:var(--ink-2)}
-.trust b{color:var(--ink);font-weight:600}
+/* ---- page head ---- */
+.phead{padding:52px 0 12px}
+.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
+.phead h1 .hl{color:var(--teal-700)}
+.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
 
-/* hero visual: clean app-style card, no rotation/frame */
-.hero-card{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:26px;overflow:hidden}
-.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--teal-50),transparent 60%);pointer-events:none}
-.hc-top{display:flex;align-items:center;justify-content:space-between;position:relative}
-.hc-buddy{display:flex;align-items:center;gap:12px}
-.hc-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(150deg,var(--teal),var(--teal-700));display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-teal)}
-.hc-avatar svg{width:30px;height:30px;fill:#fff}
-.hc-name{font-weight:700;font-size:16px}
-.hc-role{font-size:12.5px;color:var(--ink-3)}
-.hc-badge{font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:6px 12px;border-radius:var(--r-pill)}
-.hc-figure{position:relative;margin:24px 0 6px}
-.hc-flabel{font-size:13px;color:var(--ink-3);font-weight:500}
-.hc-fnum{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
-.hc-fsub{font-size:13.5px;color:var(--ink-2);margin-top:8px}
-.hc-bars{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:22px}
-.hc-bars i{flex:1;background:var(--teal-100);border-radius:7px 7px 4px 4px;display:block;animation:grow .9s cubic-bezier(.2,.7,.3,1) backwards}
-.hc-bars i.on{background:var(--teal)}
-.hc-bars i:nth-child(1){animation-delay:.05s}.hc-bars i:nth-child(2){animation-delay:.12s}.hc-bars i:nth-child(3){animation-delay:.19s}.hc-bars i:nth-child(4){animation-delay:.26s}.hc-bars i:nth-child(5){animation-delay:.33s}.hc-bars i:nth-child(6){animation-delay:.4s}
-@keyframes grow{from{height:0;opacity:.2}}
-@media(prefers-reduced-motion:reduce){.hc-bars i{animation:none}}
-.hc-note{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:13px;margin-top:16px}
-.hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
-.hc-pill svg{width:15px;height:15px}
+/* ---- calculator layout ---- */
+.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
+.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:22px}
+.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
+.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
+.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600}
+.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
+.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
+.sft-note[hidden]{display:none}
 
-/* ---- logo / trust strip ---- */
-.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
-.strip-in{display:flex;align-items:center;justify-content:center;gap:14px 40px;flex-wrap:wrap;padding:22px 0}
-.strip-item{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--ink-2)}
-.strip-item svg{width:18px;height:18px;color:var(--teal)}
+/* custom sliders */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
+input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
-/* ---- section base ---- */
-section{padding:88px 0}
-.sec-head{max-width:660px;margin-bottom:48px}
-.sec-head.ctr{margin-left:auto;margin-right:auto;text-align:center}
-.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
-.sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
+/* segmented tax toggle */
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
+.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
+.seg button.on{color:var(--teal-700)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-/* ---- audience cards (static grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
-.a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
-.a3{--ac:#0A332E;--ac-soft:#EDF4F2}
+/* ---- results ---- */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+.res-hero>div{position:relative;min-width:0}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
+/* #4: the headline figures as one plain sentence, written from the same final
+   values as the figures above. White on --teal-900, inherited from .res-hero. */
+.res-hero .pb-sp-top{margin-top:-6px;font-size:14px;color:inherit;opacity:.92}
+.res-hero .pb-say{grid-column:1/-1;position:relative;min-width:0;font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:break-word}
 
-/* ---- "what to expect" steps ---- */
-.expect{background:var(--surface)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
-.step{position:relative;padding-top:8px}
-.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.step p{color:var(--ink-2);font-size:15px}
+.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
+.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend span{display:inline-flex;align-items:center;gap:8px}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
-/* ---- calculator showcase ---- */
-.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
-.calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
-.calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
+.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
+.relief-card .rt{font-size:13px;font-weight:700;color:#9A6B12;margin-bottom:9px}
+.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.relief-card .rbig b{font-weight:700;color:#3F2D04}
+.relief-viz{margin-top:18px;transition:opacity .4s}
+.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
+.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
+.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
+.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
+.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-/* ---- about Damian ---- */
-.about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
-.about-port{aspect-ratio:4/5;border-radius:var(--r-xl);background:linear-gradient(155deg,var(--teal-700),var(--teal-900));position:relative;box-shadow:var(--sh-lg);display:flex;align-items:flex-end;padding:26px;overflow:hidden}
-.about-port::before{content:"";position:absolute;inset:0;pointer-events:none}
-.about-port .pl{position:relative;color:#BBE7DF;font-size:14px;font-weight:500}
-.about-port .badge{position:absolute;top:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:7px 13px;border-radius:var(--r-pill);box-shadow:var(--sh-sm)}
-.about h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 20px}
-.pullquote{font-size:clamp(20px,2.4vw,26px);line-height:1.34;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px;color:var(--ink)}
-.pullquote .q{color:var(--teal)}
-.about p.bio{color:var(--ink-2);font-size:16px;margin-bottom:14px}
-.about .sig{font-style:italic;font-weight:600;font-size:18px;color:var(--teal-700)}
+.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
+.boost-ico svg{width:22px;height:22px}
+.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt b{font-weight:700}
 
-/* ---- testimonials ---- */
-.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
-.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--sh-sm)}
-.tcard.big{justify-content:center}
-.tcard .qstars{display:flex;gap:2px;color:var(--amber);margin-bottom:16px}
-.tcard .qstars svg{width:16px;height:16px;fill:currentColor}
-.tcard blockquote{font-size:18px;line-height:1.5;font-weight:500;letter-spacing:-0.01em;margin:0 0 20px;color:var(--ink)}
-.tcard.big blockquote{font-size:23px;font-weight:600;letter-spacing:-0.02em}
-.tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto}
-.tcard .av{width:42px;height:42px;border-radius:50%;background:var(--teal-50);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-700)}
-.tcard .who b{font-weight:600;font-size:15px;display:block}
-.tcard .who span{font-size:13px;color:var(--ink-3)}
-.tcol{display:flex;flex-direction:column;gap:22px}
+/* ---- CTA ---- */
+.cta-band{padding:64px 0 8px}
+.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
+.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
+picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
+.buddy-mini svg{width:42px;height:42px;fill:#fff}
+.cta-card .ctext{position:relative;min-width:0}
+.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
+.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
+.cta-card .btn{position:relative}
 
-/* ---- faq ---- */
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
-details[open]{box-shadow:var(--sh-md);border-color:transparent}
-summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
-summary::-webkit-details-marker{display:none}
-details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
-
-/* ---- final CTA ---- */
-.final-band{padding:36px 0 88px}
-.final{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
-.final::before{content:"";position:absolute;inset:0;pointer-events:none}
-.final .paw-bg{position:absolute;right:-30px;bottom:-44px;width:260px;height:260px;opacity:.08;pointer-events:none}
-.final .paw-bg svg{width:100%;height:100%;fill:#fff}
-.final .eyebrow{background:rgba(255,255,255,.12);color:#CFEFE9;position:relative}
-.final .eyebrow .pip{background:var(--teal)}
-.final h2{color:#fff;font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
-.final p{color:#A7DED4;font-size:18px;max-width:440px;margin:0 auto 30px;position:relative}
+/* ---- assumptions ---- */
+.assume{padding:72px 0 24px}
+.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
+.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
+.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
+.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
 
 /* ---- footer ---- */
-footer{padding:64px 0 40px;border-top:1px solid var(--line)}
+footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
-.foot-brand .logo{margin-bottom:15px}
-.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
-.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
-.foot-col a:hover{color:var(--teal-700)}
+.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
-.disclosure p{margin-bottom:10px;max-width:940px}
-.disclosure a{color:var(--teal-700);font-weight:600}
+.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media(max-width:920px){
-  .hero{padding:48px 0 24px}
-  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
-  .hero-card{order:-1;max-width:460px;margin:0 auto}
-  .steps{grid-template-columns:1fr}
+  .calc-wrap{grid-template-columns:1fr;gap:20px}
+  .panel{position:static;top:auto}
+  .res-hero{grid-template-columns:1fr;padding:26px}
+  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
+  .assume ul{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
-  .nav-links{display:none}
-  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
-  .nav-links.open a.lnk{padding:10px 0;font-size:16px}
-  .nav-links.open .btn{margin-top:6px}
-  .nav-toggle{display:block}
-  section{padding:60px 0}
-  .final{padding:54px 26px}
-  .final-band{padding:24px 0 60px}
+  .nav-r{gap:14px}
 }
 @media(max-width:560px){
   .wrap{padding:0 18px}
-  .hero h1{font-size:clamp(34px,9vw,44px)}
-  .foot-top{grid-template-columns:1fr 1fr}
-  .hero-cta .btn{flex:1}
+  .nav-r .back span,.nav-r .back{font-size:0}
+  .nav-r .back svg{width:20px;height:20px}
 }
-@media(max-width:380px){
-  .foot-top{grid-template-columns:1fr}
-}
+@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
 
 /* ============================================================
    EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
@@ -337,10 +274,33 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
 .email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
+/* MARKETING OPT-IN (.pb-optin). A request for figures or a guide is not
+   consent to anything else, so the optional emails are a separate box,
+   unticked, and recorded apart from the request (Run 20, A2). The form's
+   own input rule styles every input inside it as a pill-shaped text field,
+   so the checkbox is reset here rather than left to inherit that padding
+   and flex. */
+.pb-optin{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-2);cursor:pointer}
+.email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:18px;height:18px;min-width:18px;min-height:0;margin:1px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
+.email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.magnet-form .pb-optin{margin-top:0}
 .email-cap .ec-note a{color:var(--teal-700);font-weight:600}
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
+.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
+/* #15: the success tick draws itself once, about 300ms, ease-out, as its
+   message appears: going from display:none to shown starts the animation, so
+   the draw needs no script. Drawn is the default and the draw runs only where
+   motion is allowed, so with reduced motion the tick is simply there. The
+   check is 22.6 long in its 24 box and a 24 dash covers it. The draw slides
+   that dash in from -23, so the short arm comes first, the way a tick is
+   written, and nothing shows before it starts. On success focus moves to the
+   message itself; it is not a control, so it shows no ring, like #main. */
+.pb-ok-tick path,.pb-ok-tick polyline{stroke-dasharray:24 24;stroke-dashoffset:0}
+@media(prefers-reduced-motion:no-preference){.pb-ok-tick path,.pb-ok-tick polyline{animation:pb-ok-tick-draw .3s cubic-bezier(.22,.61,.36,1) backwards}}
+@keyframes pb-ok-tick-draw{from{stroke-dashoffset:-23}to{stroke-dashoffset:0}}
+[role="status"][tabindex="-1"]:focus{outline:none}
 
 /* credibility strip (about) */
 .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
@@ -383,7 +343,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .magnet-form .row{flex-direction:column}
   .magnet-form .row .btn{width:100%}
 }
-
+@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){/* C3: wordmark stays visible at every width, matching index */}
 
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
@@ -425,6 +385,20 @@ body{animation:pageIn .4s ease both}
   nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
   nav.scrolled .nav-in{height:72px}
 }
+
+
+/* ---- fintech slider polish: floating value bubble + richer thumb ---- */
+.field{position:relative}
+.slider-wrap{position:relative}
+.sbubble{position:absolute;top:-40px;transform:translateX(-50%) translateY(6px) scale(.9);background:var(--teal-900);color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);z-index:5;font-variant-numeric:tabular-nums;box-shadow:0 6px 18px -6px rgba(9,63,57,.5)}
+.sbubble::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--teal-900);border-radius:1px}
+.slider-wrap.dragging .sbubble{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s}
+.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(11,122,110,.14),0 4px 14px rgba(11,122,110,.5)}
+/* result panel gentle pulse when values change */
+@keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
+.res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
+@media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
 
 
 /* ============================================================
@@ -481,6 +455,16 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
 
+/* ---- click-to-type values (precision beyond slider steps) ---- */
+.field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
+.field .val:hover{border-bottom-color:var(--teal-700)}
+.field .val:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:6px}
+.val-edit{font:700 17px var(--font);letter-spacing:-0.02em;color:var(--teal-700);background:var(--surface-2);border:1.5px solid var(--teal);border-radius:8px;padding:2px 8px;width:150px;text-align:right;font-variant-numeric:tabular-nums}
+.val-edit:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.val-edit{-moz-appearance:textfield;appearance:textfield}
+
+
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
@@ -517,6 +501,9 @@ nav.nav-hidden{transform:translateY(-100%)}
 }
 
 
+/* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
+@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
+
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
 .pb-b-btn:hover{transform:translateY(-2px)}
@@ -552,6 +539,10 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
+
+/* dashed underline = term explained in the jargon buster */
+.gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
+.gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
@@ -900,6 +891,10 @@ span.ai,.assure .ai{border-radius:6px !important}
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
 .phead h1{font-family:var(--font-display);letter-spacing:-.015em}
 .phead .eyebrow{font-family:var(--font);}
+
+/* the deadline band is a grid child of .calc-wrap; without a span it took a
+   column and pushed the results panel out of place */
+.calc-wrap .deadline{grid-column:1 / -1;margin-bottom:4px}
 
 /* ============================================================
    PB-TICK - Pay & File countdown
@@ -1299,6 +1294,19 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* section eyebrows on light backgrounds pick up the brand colour too */
 .sec-head .eyebrow,.painband .eyebrow,.gapband .eyebrow,.coverband .eyebrow{color:var(--teal)}
 
+/* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
+.adv{border-top:1px solid var(--line);margin-top:20px}
+.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
+  font-family:var(--font);font-size:.75rem;font-weight:500;
+  color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
+.adv > summary::-webkit-details-marker{display:none}
+.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
+.adv > summary:hover{color:var(--ink)}
+.adv .adv-in{padding-top:4px;padding-bottom:6px}
+
 /* ============================================================
    PB-AUDIT - changes driven by measured findings
    ============================================================ */
@@ -1356,6 +1364,10 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .credline b{color:var(--ink);font-weight:600}
 .credline .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
 
+/* the site's own .field display rule outranks the UA's
+   details:not([open]) > *{display:none}, so the collapse must be explicit */
+.adv:not([open]) .adv-in{display:none}
+
 /* --- 5. legal pages measured 13px at 114 characters per line (the .updated
    date line and the body copy), failing both the 16px floor and the 75-char
    ceiling. .legal was already capped at 820px, which is still ~114 chars at
@@ -1404,6 +1416,57 @@ summary .pm,.pb-b-q .pm,.adv > summary::after{
 details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
 summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+
+/* ============================================================
+   F5 - "Take a guess first", and the veil it puts over the one
+   figure it is asking about.
+
+   The card is built at runtime by assets/js/pb-guess.js and
+   inserted as the first child of .results. These rules live in
+   the head rather than in a runtime <style> so the card arrives
+   styled instead of flashing, and so the three assembled pages
+   inherit them with the rest of the skeleton's stylesheet.
+
+   The veil is a filter, so it cannot move anything: a veiled
+   cell keeps its box, its colour and its contrast, and only its
+   legibility changes. .pb-veiled lands on its own, in one frame;
+   .pb-veil, the transition, is added only as the veil lifts, so
+   the blur eases out and never in. .pb-preveil on <html>, set by
+   the one-line script after this stylesheet, blurs the headline
+   cells before the first paint until pb-guess.js has its own veil
+   up. Under prefers-reduced-motion there is no transition and the
+   figures simply appear.
+
+   Cosmetic, and the script says so in full: the text is still in
+   the DOM and in the page source. aria-hidden while veiled, put
+   on and taken off with the class, is the closest honest
+   equivalent for a screen reader.
+   ============================================================ */
+.pb-guess{background:var(--surface-2);border:1px solid var(--line);border-top:3px solid var(--aqua);
+  border-radius:var(--r-lg);padding:20px 22px}
+.pb-guess-t{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.pb-guess-lead{font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:6px 0 16px}
+.pb-guess-row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+  gap:4px 12px;margin-bottom:10px}
+.pb-guess-lab{font-size:14.5px;font-weight:600;color:var(--ink)}
+/* The card's slider spans the card. Stated here rather than left to the page,
+   because the global input[type=range] rule carries width:100% in the skeleton
+   pension-calculator.html and not in director-calculator.html, where a range
+   with no width of its own collapses to the browser's default 129px under a
+   full-width button. This block is byte-identical in both files, so it names
+   them rather than saying "this file". */
+.pb-guess input[type=range]{width:100%}
+.pb-guess-val{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:16px;
+  font-weight:600;color:var(--ink)}
+.pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
+  border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
+.pb-guess-btn:hover{background:var(--teal-700)}
+.pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
+.pb-guess-out:empty{display:none}
+.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
+.pb-veil{transition:filter .45s ease}
+.pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
+@media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
 
 /* ============================================================
    v4 - ONE CASE. The caps-mono label system is gone: no
@@ -1536,11 +1599,118 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .nav-tick{display:none}
   .nav-links a.lnk{padding:12px 7px}
 }
+/* ============================================================
+   RESULTS PEEK BAR (.pb-peek). Built by assets/js/pb-peek.js on the five
+   calculators, straight after the inputs panel. Phones and tablets only:
+   from 921px up it is display:none, where the results column already sits
+   beside the inputs. Pinned to the bottom edge, it carries the page's
+   headline figure(s), copied from the results cells, while a control of
+   the inputs panel is on screen and the headline is not; while the guess
+   card's veil is up it carries only that card's title. The whole bar is
+   one button, at least 56px tall, that jumps to the results. Tucked means
+   moved off screen, not hidden, so a keyboard reader still meets it after
+   the last control, and focus inside it brings it up; the ring is inset
+   because the bar is flush with the screen's edges. While it shows,
+   html.pb-peek-on lifts the Ask Buddy button above it by the bar's
+   measured height, and keeps anything scrolled into view clear of it.
+   With the cookie choice bar up, or the Ask Buddy panel open, it is
+   display:none. Slides up in 200ms; under reduced motion it simply
+   appears. The State Pension pages set data-pb-tone="state", and their
+   figures are teal. The focus rules at the end give the element a tap
+   lands on (the results hero, or the guess card while the veil is up) the
+   site's ring when it was reached from the keyboard. Byte-identical in
+   pension-calculator.html, which carries it into the three built pages,
+   and director-calculator.html.
+   ============================================================ */
+.pb-peek{display:none}
+@media(max-width:920px){
+  .pb-peek{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;align-items:center;gap:12px;
+    width:100%;min-height:56px;margin:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom, 0px));
+    border:0;border-top:1px solid var(--line-2);border-radius:0;background:var(--surface);color:var(--ink);
+    font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-peek.pb-peek-on{transform:none}
+  .pb-peek.pb-peek-held{display:none}
+  .pb-peek:focus{outline:none}
+  .pb-peek:focus-visible{box-shadow:inset 0 0 0 3px var(--ring)}
+  .pb-peek [hidden]{display:none}
+  .pb-peek-figs{flex:1 1 auto;min-width:0}
+  .pb-peek-set{display:flex;flex-wrap:wrap;gap:2px 20px}
+  .pb-peek-item{display:flex;flex-direction:column;min-width:0}
+  .pb-peek-lab{font-size:12.5px;font-weight:500;line-height:1.3;color:var(--ink-2)}
+  .pb-peek-fig{font-size:18px;font-weight:700;line-height:1.25;color:var(--ink);
+    font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  .pb-peek[data-pb-tone="state"] .pb-peek-fig{color:var(--teal-700)}
+  .pb-peek-guess{display:block;font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
+  .pb-peek-go{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:36px;height:36px;border-radius:50%;background:var(--teal-700);color:#fff}
+  .pb-peek-go svg{width:18px;height:18px}
+  html.pb-peek-on{scroll-padding-bottom:calc(var(--pb-peek-h, 56px) + 8px)}
+  html.pb-peek-on .pb-b-btn{bottom:calc(var(--pb-peek-h, 56px) + 12px)}
+  .res-hero[tabindex="-1"]:focus,.pb-guess[tabindex="-1"]:focus{outline:none}
+  .res-hero[tabindex="-1"]:focus-visible,.pb-guess[tabindex="-1"]:focus-visible{outline:3px solid var(--ring);outline-offset:3px}
+}
+@media(max-width:920px) and (prefers-reduced-motion:no-preference){
+  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
+}
+@media(prefers-reduced-motion:reduce){.pb-peek{transition:none}}
+/* ============================================================
+   RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
+   contributions that get tax relief, six steps from 15% under 30 to 40% at
+   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
+   calculator and the comparison page assets/js/pb-ladder.js marks the
+   reader's step and says their limit in euro. Relief is money the State
+   puts in, so the fills are teal. Byte-identical wherever it appears.
+   ============================================================ */
+.pb-lad{max-width:560px}
+.pb-lad[hidden]{display:none}
+.pb-lad-cap{font-size:15px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
+.pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
+.pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
+.pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you[hidden]{display:none}
+.pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
+/* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
+   second is the supporting one and sits quieter (Stripe, Ramp). Opacity
+   rather than a colour, so it mutes against whatever band it is on, light
+   or dark, and stays well inside AA for large text either way. */
+.pb-soft{opacity:.68}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* SHOW THE WORKINGS (.pb-work). Mercury's collapsible breakdown under the
+   headline: what went in, what was there already and what growth added,
+   from the page's own inputs and outputs (sums and differences of them,
+   nothing projected afresh). Closed by default; the list is on the guess
+   veil, the summary names nothing. Byte-identical on both calculators. */
+.pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
+.pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+.pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
+.pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
+.pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-work li b{color:var(--ink);font-weight:600;white-space:nowrap}
+/* SHARE RESULTS (.pb-share). A link to the figures on screen, the inputs
+   after the #; built by assets/js/pb-share.js on the five calculators. */
+.pb-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0 0}
+.pb-share button{font:inherit;font-size:14px;font-weight:600;color:var(--teal-700);background:var(--surface);border:1px solid var(--line-2);border-radius:99px;padding:8px 14px;cursor:pointer}
+.pb-share button:hover{border-color:var(--teal-700)}
+.pb-share button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-share-said{font-size:13.5px;color:var(--ink-2)}
+/* WARNINGS (.pb-warn, A4 in Run 20). The Consumer Protection Regulations
+   2025 (S.I. 81 of 2025) give these two sentences word for word, Reg 372 for
+   any illustration of an investment's figures and Reg 392 wherever its value
+   can fluctuate, and say how they appear (Reg 45): prominent, in a box, in
+   bold, no smaller than the text around them, and beside the figures they
+   are about (Reg 82), not in a footer. */
+.pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
+.pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
+.pb-warn p+p{margin-top:6px}
 /* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
    the nav's "Calculator" link, from 1201px only (the row, not the drawer);
    the nav's own markup is untouched. Takes no width in the row. */
@@ -1557,7 +1727,79 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+
+/* ============================================================
+   WHAT CHARGES COST (pension-fees-calculator.html, Run 20 #3).
+   Two sets of charges on one pot, and no charges as the yardstick.
+   The chart is drawn by the page script as one inline SVG: the
+   no-charge line dashed and quiet, the other plan in the site's teal,
+   the reader's own plan in ink, so the reader's line is the one that
+   reads first. The table says where the money goes; the card under
+   it gives the other side, beside the figures rather than below the
+   tool.
+   ============================================================ */
+.fee-grp{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line);font-size:.98rem;font-weight:700;color:var(--ink)}
+.fee-chart{width:100%;margin:12px 0 8px}
+.fee-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.fee-chart .fee-l-none{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 5}
+.fee-chart .fee-l-b{fill:none;stroke:var(--aqua);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.fee-chart .fee-l-a{fill:none;stroke:var(--ink);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.fee-chart .fee-grid{stroke:var(--line);stroke-width:1}
+.fee-chart text{font-family:var(--font);font-size:13px;fill:var(--ink-2)}
+.fee-key{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.86rem;color:var(--ink-2)}
+.fee-key li{display:flex;align-items:center;gap:8px}
+.fee-key i{display:inline-block;width:20px;height:0;border-top:3px solid}
+.fee-key .fee-k-none{border-top:2px dashed var(--ink-3)}
+.fee-key .fee-k-b{border-color:var(--aqua)}
+.fee-key .fee-k-a{border-color:var(--ink)}
+.fee-card,.fee-side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;margin-top:16px}
+.fee-card h3,.fee-side h3{margin:0 0 10px}
+.fee-t{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+.fee-t th,.fee-t td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+.fee-t th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
+.fee-t thead th{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.fee-t tbody tr:last-child th,.fee-t tbody tr:last-child td{font-weight:700;color:var(--ink);border-bottom:0}
+.fee-note{margin:10px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.fee-side p{margin:0;font-size:.95rem;line-height:1.6;color:var(--ink)}
+@media(max-width:480px){
+  .fee-card,.fee-side{padding:18px 16px}
+  .fee-t{font-size:.86rem}
+  .fee-t th,.fee-t td{padding:8px 4px}
+}
 </style>
+<script>
+/* pb-guess: blur the headline cells before the first paint on the pages that
+   carry a guess card, so the answer is never seen sharp while
+   assets/js/pb-guess.js is still on its way. That file takes the class off in
+   the same task that puts its own veil up; if it never arrives, the class
+   comes off by itself after four seconds. With scripts off this never runs. */
+(function () {
+  var p = String(location.pathname || '').split('/').pop();
+  if (!/^(pension-calculator|director-calculator|state-pension-reality-check|state-pension-entitlement|broker-vs-autoenrolment)\.html$/.test(p)) { return; }
+  document.documentElement.classList.add('pb-preveil');
+  setTimeout(function () { document.documentElement.classList.remove('pb-preveil'); }, 4000);
+}());
+</script>
+
+<script>
+/* ------------------------------------------------------------------
+   LEAD CAPTURE CONFIG
+
+   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
+   a CRM webhook, anything that accepts a JSON POST). Once it starts with
+   http, results are posted there and the visitor only sees a confirmation
+   when the send actually succeeds.
+
+   Until then the form opens the visitor's mail client with their figures
+   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
+   lost and nobody is told an email is coming that isn't.
+   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
+   set, the mailto fallback below is what actually runs.
+   ------------------------------------------------------------------ */
+var LEAD_ENDPOINT = '';
+var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
+</script>
+<script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -1578,77 +1820,97 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<div class="wrap"><div class="legal reveal">
-  <h1>Terms of Business</h1>
-  <p class="updated">Last updated: 9 July 2026</p>
-  <p class="intro">This sets out who we are, what we do, and how we are paid, so you know exactly where you stand before you decide to work with us.</p>
-
-  <h2>Who we are</h2>
-  <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management. We are regulated by the Central Bank of Ireland. You can verify our authorisation on the Central Bank's register at registers.centralbank.ie. Our registered office is Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3.</p>
-
-  <h2>Our services</h2>
-  <p>We provide financial advice, with a particular focus on pensions and retirement planning, to individuals and company directors. The information, guides and calculators on this website are general information only. Personal financial advice is given to you directly, after we understand your circumstances through a fact-finding conversation.</p>
-
-  <h2>Information versus advice</h2>
-  <p>Nothing on this website is a personal recommendation. The calculators produce illustrations to help you think, not advice to act on. Regulated financial advice happens in a personal consultation, where we take the time to understand your situation first.</p>
-
-  <h2>How we are paid</h2>
-  <p>We will always be clear and upfront about how we are paid before you commit to anything. Depending on what you need, we may be paid by a fee agreed with you, by commission from a product provider, or by a combination of the two. The specific basis that applies to you will be set out clearly in writing before any work begins. Our summary of the commission we receive from product providers, and our fees, are published on our <a href="how-we-work.html#paid">How we work</a> page.</p>
-
-  <h2>Your first consultation</h2>
-  <p>The first consultation is free and carries no obligation. Its purpose is to understand your situation and answer your questions. If we are not the right fit for you, we will say so.</p>
-
-  <h2>Conflicts of interest</h2>
-  <p>We have arrangements in place to identify and manage any conflicts of interest so that they do not unfairly affect you. Further detail is available on request.</p>
-
-  <h2>Complaints</h2>
-  <p>If you are ever unhappy with our service, we want to hear about it and put it right. Our full complaints process is set out on our <a href="complaints.html">complaints page</a>, including your right to refer a complaint to the Financial Services and Pensions Ombudsman.</p>
-
-  <h2>Compensation</h2>
-  <p>We are covered by the relevant statutory compensation arrangements that apply to regulated firms in Ireland. Details are available on request.</p>
-
-  <h2>Contact</h2>
-  <p>You can reach us directly:</p>
-  <!-- A4: email address awaiting confirmation from Damian, see docs/STATUS.md -->
-  <p>Email: <a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a><br>Post: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3</p>
-  <p>Prefer to talk it through? Book a time on the <a href="booking.html">booking page</a>.</p>
-
-  <h2 id="terms-of-use">Website Terms of Use</h2>
-  <p class="intro">These terms cover your use of this website and its free tools. They sit alongside, and are separate from, the Terms of Business above, which govern the regulated advice relationship if you become a client.</p>
-
-  <h3>1. Who we are and what these terms cover</h3>
-  <p>This website is operated by Damian Condon T/A Gresham Wealth Management ("we", "us"), regulated by the Central Bank of Ireland, with our registered office at Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. By using this website you agree to these terms. If you do not agree with them, please do not use the site.</p>
-
-  <h3>2. Information, not advice</h3>
-  <p>Everything on this website &mdash; including the calculators, guides, glossary and any answers from Buddy &mdash; is general information only. It is not financial, investment, tax or legal advice, and it is not a personal recommendation. Using this website does not create an advisory or client relationship between us. Regulated financial advice is only provided in a personal consultation, under our Terms of Business, once we understand your circumstances.</p>
-
-  <h3>3. Calculators and tools</h3>
-  <p>The calculators produce illustrative estimates from the figures you enter, combined with general assumptions. The results are not a forecast, are not a guarantee of future performance, and may differ significantly from what actually happens. The value of investments may fall as well as rise. To the fullest extent permitted by law, we make no warranty, express or implied, that the calculators, their outputs or any other content on this site are accurate, complete, up to date or fit for any particular purpose. Please do not make financial decisions based on this website alone.</p>
-
-  <h3>4. Accuracy and availability</h3>
-  <p>We take reasonable care in preparing the content on this site, but we do not promise that it will always be accurate, complete or available, or that the site will be free from errors, interruptions or harmful components. We may change, suspend or remove any part of the site at any time without notice.</p>
-
-  <h3>5. Limitation of liability</h3>
-  <p>Nothing in these terms excludes or limits our liability for death or personal injury caused by our negligence, for fraud or fraudulent misrepresentation, or for any other liability that cannot be excluded or limited under Irish law, including your statutory rights as a consumer.</p>
-  <p>Subject to that, and to the fullest extent permitted by law, we accept no liability for any loss or damage arising from your use of, or reliance on, this website, its content, its calculators or its tools, including any indirect or consequential loss, loss of profit, loss of savings, loss of opportunity or loss of data, whether arising in contract, tort (including negligence), breach of statutory duty or otherwise.</p>
-  <p>Where liability in connection with this website cannot be excluded but can lawfully be limited, our total aggregate liability to you is capped at &euro;<span class="needs-input" data-issue="A1">[amount to be confirmed]</span>.</p>
-  <p>For clarity, this section applies only to your use of this free website. It does not apply to, or limit, any duties we owe you under a regulated advice engagement, which is governed by our Terms of Business and the rules of the Central Bank of Ireland.</p>
-
-  <h3>6. Third-party services and links</h3>
-  <p>Parts of this site rely on third-party services &mdash; for example, bookings are handled by Calendly under its own terms and privacy policy &mdash; and we may link to external websites. We do not control third-party services or sites, we are not responsible for them, and a link is not an endorsement. Email delivery also depends on providers outside our control, so we cannot accept responsibility for messages that are delayed, filtered or blocked in transit.</p>
-
-  <h3>7. Intellectual property</h3>
-  <p>The content, design and branding of this website &mdash; including the Pensionbuddy name, the "Buddy" character and all text, graphics and code &mdash; belong to Damian Condon T/A Gresham Wealth Management or our licensors. You may view and print pages for your own personal, non-commercial use. Any other reproduction or use requires our prior written permission.</p>
-
-  <h3>8. Changes to these terms</h3>
-  <p>We may update these terms from time to time. The "Last updated" date at the top of this page shows the current version, and your continued use of the site after a change means you accept the updated terms.</p>
-
-  <h3>9. Governing law</h3>
-  <p>These terms, and any dispute arising from your use of this website, are governed by the laws of Ireland, and the Irish courts have exclusive jurisdiction &mdash; although nothing in this clause takes away protections you are entitled to as a consumer under mandatory law.</p>
-
-  <h3>10. Contact</h3>
-  <p>Questions about these terms? Use the contact details in the Contact section above.</p>
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
+  <p class="reveal" style="transition-delay:.12s">Small percentages add up. Put in your pot and your plan&rsquo;s charges, and see what they take out of it by the time you retire, next to a plan with other charges. Your charges are on your annual statement.</p>
 </div></div>
+
+<div class="wrap"><div class="calc-wrap">
+  <div class="panel reveal">
+    <h2>Your details</h2>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
+    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
+    <div class="field"><div class="row"><label for="monthly">Paid in each month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
+    <div class="field"><div class="row"><label for="years">Years until you retire</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
+
+    <p class="fee-grp">Your plan&rsquo;s charges</p>
+    <div class="field"><div class="row"><label for="amcA">Annual management charge<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">A share of the fund taken every year. On an older plan it may be called a fund management charge.</p></div>
+    <div class="field"><div class="row"><label for="feeA">Charge on each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">Sometimes shown as an allocation rate: 95% allocated means a 5% charge.</p></div>
+
+    <p class="fee-grp">For comparison: another plan&rsquo;s charges</p>
+    <div class="field"><div class="row"><label for="amcB">Annual management charge<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
+    <div class="field"><div class="row"><label for="feeB">Charge on each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
+
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth, before charges</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
+  </div>
+
+  <div class="results">
+    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+    <div class="res-hero reveal" style="transition-delay:.08s">
+      <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
+      <div><div class="rl">The other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
+      <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
+      <div class="divline"></div>
+      <div class="foot">An illustration only. What charges take depends on your own plan&rsquo;s terms, and the growth assumed here may not happen.</div>
+    </div>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
+
+    <div class="chart-card reveal" style="transition-delay:.14s">
+      <h3>How your pot could grow, three ways</h3>
+      <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
+      <ul class="fee-key" aria-hidden="true">
+        <li><i class="fee-k-none"></i>With no charges at all</li>
+        <li><i class="fee-k-b"></i>With the other plan&rsquo;s charges</li>
+        <li><i class="fee-k-a"></i>With your plan&rsquo;s charges</li>
+      </ul>
+    </div>
+
+    <div class="fee-card reveal" style="transition-delay:.16s">
+      <h3>Where it goes</h3>
+      <table class="fee-t">
+        <caption class="tk-sr">What the charges take, for each plan</caption>
+        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">The other plan</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Annual charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
+          <tr><th scope="row">Charges on payments</th><td id="feePaidA">€3,000</td><td id="feePaidB">€0</td></tr>
+          <tr><th scope="row">What they cost you by retirement</th><td id="costA">€58,754</td><td id="costB">€28,327</td></tr>
+        </tbody>
+      </table>
+      <p class="fee-note">The last line is larger than the two above it because every euro a charge takes stops growing. It is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
+    </div>
+
+    <div class="fee-side reveal" style="transition-delay:.18s">
+      <h3>The other side</h3>
+      <p>A lower charge is not the only thing that matters. Some older plans carry terms worth more than any charge saved, such as a pension a defined benefit scheme promised, and moving a pension can mean giving them up. Charges, terms and the funds themselves are weighed together in a review.</p>
+    </div>
+  </div>
+</div></div>
+
+<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="ctext"><h2>Not sure what your old plans charge?</h2><p>Charges hide in allocation rates, policy fees and fund charges, and older plans rarely spell them out. Damian can find out what yours are and what they mean, in a free 20-minute call. If you have lost track of a plan, <a href="find-my-pension.html">start a search</a> first.</p></div>
+  <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This calculator is information, not advice.</b> It shows what the charges you enter would do to a pot, as an illustration. It names no provider and says nothing about whether any plan is right for you. Regulated financial advice is given in a personal consultation with Damian.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h3>The assumptions behind these numbers</h3>
+  <ul class="reveal">
+    <li>The pot grows each month at the yearly rate you choose, before charges. Then the annual management charge is taken from the fund, a twelfth of a year&rsquo;s worth at a time, so a year of it takes exactly the percentage shown. Then the month&rsquo;s payment goes in, less the charge on payments.</li>
+    <li>The defaults for your plan, 1% a year and 5% of each payment, are the most a Standard PRSA may charge under the Pensions Act. Other plans can charge more, or charge in other ways.</li>
+    <li>Plans can also carry policy fees, set-up charges, bid/offer spreads on older contracts, and exit or switching charges. None of these is included, so a plan that has them costs more than shown. The CCPC&rsquo;s guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a> explains each one.</li>
+    <li>Payments stay the same every month until you retire. Figures are not adjusted for inflation. Tax relief is left out: it changes what a payment costs you, not what the charges take.</li>
+    <li>Growth is steady and the same for both plans. Real returns vary, can be negative, and differ between funds.</li>
+    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+  </ul>
+</div></section>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -1659,30 +1921,122 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
-    <p>This summary of our Terms of Business is provided for general information. Full terms are provided to clients in writing before any service begins.</p>
+    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
-    <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+    <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
+    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
+
+<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pension-fees.js?v=8ac63932"></script>
 <script>
-const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
+/* pension-fees-calculator.html, what a pension's charges cost (Run 20 #3).
+
+   Maths lives in assets/js/pension-fees.js, covered by
+   tests/pension-fees.test.js. This file reads the sliders, hands the module
+   fractions (the sliders are in percent), and paints what comes back: the
+   two pots, the sentence, the table, the chart and one spoken summary.
+
+   TONE: the figures do the work. No provider is named, nobody's charges
+   are called too high, and the card beside the figures says what a lower
+   charge can cost in other ways. */
+(function () {
+  'use strict';
+  var Fees = window.PBFees, P = window.PBPage;
+  if (!Fees || !P) return;
+  var $ = P.$, euro = P.euro;
+
+  var pc = function (v) { return (Math.round(v * 100) / 100).toLocaleString('en-IE') + '%'; };
+  var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var VALTEXT = {
+    pot: function (v) { return euro(v); },
+    monthly: function (v) { return euro(v) + ' a month'; },
+    years: function (v) { return years(v); },
+    amcA: function (v) { return pc(v) + ' a year'; },
+    feeA: function (v) { return pc(v) + ' of each payment'; },
+    amcB: function (v) { return pc(v) + ' a year'; },
+    feeB: function (v) { return pc(v) + ' of each payment'; },
+    growth: function (v) { return pc(v) + ' a year'; }
+  };
+
+  function read() {
+    var n = function (id) { return +$(id).value; };
+    return {
+      pot: n('pot'), monthly: n('monthly'), years: n('years'), growth: n('growth') / 100,
+      a: { amc: n('amcA') / 100, contribution: n('feeA') / 100 },
+      b: { amc: n('amcB') / 100, contribution: n('feeB') / 100 }
+    };
+  }
+
+  /* One SVG: the no-charge line, the other plan, your plan, on one scale
+     from nothing to the no-charge pot at retirement, the highest point. */
+  var NS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs, text) {
+    var e = document.createElementNS(NS, tag);
+    Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function chart(c, n) {
+    var W = 600, H = 250, L = 4, R = 4, T = 26, B = 28;
+    var top = Math.max.apply(null, c.none.yearly.concat(c.a.yearly, c.b.yearly)) || 1;
+    var x = function (i) { return L + (W - L - R) * (n ? i / n : 0); };
+    var y = function (v) { return T + (H - T - B) * (1 - v / top); };
+    var line = function (arr) { return arr.map(function (v, i) { return x(i).toFixed(1) + ',' + y(v).toFixed(1); }).join(' '); };
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, 'aria-hidden': 'true', focusable: 'false' });
+    svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(0), y2: y(0), 'class': 'fee-grid' }));
+    svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(top), y2: y(top), 'class': 'fee-grid' }));
+    svg.appendChild(svgEl('text', { x: L, y: T - 8 }, euro(top)));
+    svg.appendChild(svgEl('polyline', { points: line(c.none.yearly), 'class': 'fee-l-none' }));
+    svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b' }));
+    svg.appendChild(svgEl('polyline', { points: line(c.a.yearly), 'class': 'fee-l-a' }));
+    svg.appendChild(svgEl('text', { x: L, y: H - 6 }, 'Now'));
+    svg.appendChild(svgEl('text', { x: W - R, y: H - 6, 'text-anchor': 'end' }, 'In ' + years(n)));
+    var box = $('feeChart');
+    box.textContent = '';
+    box.appendChild(svg);
+    box.setAttribute('aria-label', 'Your pot, year by year, over ' + years(n) + '. At retirement: ' +
+      euro(c.a.pot) + ' with your plan’s charges, ' + euro(c.b.pot) + ' with the other plan’s, and ' +
+      euro(c.none.pot) + ' with no charges at all.');
+  }
+
+  function sentence(c, n) {
+    var first = c.costA >= 0.5
+      ? 'Over ' + years(n) + ', your plan’s charges would take about ' + euro(c.costA) + ' out of your pot.'
+      : 'Over ' + years(n) + ', with no charges on your plan, nothing would be taken out of your pot.';
+    var second = c.difference >= 0.5
+      ? 'With the other plan’s charges, you would have about ' + euro(c.difference) + ' more at retirement.'
+      : c.difference <= -0.5
+        ? 'With the other plan’s charges, you would have about ' + euro(-c.difference) + ' less at retirement.'
+        : 'The other plan’s charges come out the same.';
+    return first + ' ' + second;
+  }
+
+  function render() {
+    var o = read(), c = Fees.compare(o), n = o.years;
+    $('potV').textContent = euro(o.pot);
+    $('monthlyV').textContent = euro(o.monthly);
+    $('yearsV').textContent = n;
+    ['amcA', 'feeA', 'amcB', 'feeB', 'growth'].forEach(function (id) { $(id + 'V').textContent = pc(+$(id).value); });
+    $('potA').textContent = euro(c.a.pot);
+    $('potB').textContent = euro(c.b.pot);
+    var say = sentence(c, n);
+    $('pbSay').textContent = say;
+    $('amcPaidA').textContent = euro(c.a.amcPaid);
+    $('amcPaidB').textContent = euro(c.b.amcPaid);
+    $('feePaidA').textContent = euro(c.a.contributionPaid);
+    $('feePaidB').textContent = euro(c.b.contributionPaid);
+    $('costA').textContent = euro(c.costA);
+    $('costB').textContent = euro(c.costB);
+    $('nonePot').textContent = euro(c.none.pot);
+    chart(c, n);
+    P.announce('Your plan at retirement ' + euro(c.a.pot) + '. The other plan ' + euro(c.b.pot) + '. ' + say);
+  }
+
+  P.wireRanges(VALTEXT, render);
+  render();
 })();
 </script>
 
@@ -1721,6 +2075,58 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 
 <script>
+/* fintech slider polish: wrap each range in a positioned container + live value bubble */
+(function(){
+  var ranges=[].slice.call(document.querySelectorAll('input[type=range]'));
+  ranges.forEach(function(r){
+    if(r.parentElement.classList.contains('slider-wrap'))return;
+    var wrap=document.createElement('div'); wrap.className='slider-wrap';
+    r.parentNode.insertBefore(wrap,r); wrap.appendChild(r);
+    var bub=document.createElement('div'); bub.className='sbubble'; wrap.appendChild(bub);
+    // find the matching .val label in the same field to mirror its formatted text
+    var field=wrap.closest('.field');
+    var valEl=field?field.querySelector('.val'):null;
+    function pos(){
+      var min=+r.min,max=+r.max,v=+r.value;
+      var pct=(max>min)?((v-min)/(max-min)):0;
+      var w=r.offsetWidth, thumb=22;
+      var x=pct*(w-thumb)+thumb/2;
+      bub.style.left=x+'px';
+      bub.textContent=valEl?valEl.textContent:v;
+    }
+    function start(){wrap.classList.add('dragging');pos();}
+    function end(){wrap.classList.remove('dragging');}
+    r.addEventListener('input',pos);
+    r.addEventListener('pointerdown',start);
+    r.addEventListener('pointerup',end);
+    r.addEventListener('pointercancel',end);
+    r.addEventListener('mouseenter',function(){pos();wrap.classList.add('dragging');});
+    r.addEventListener('mouseleave',function(){if(!r.matches(':active'))end();});
+    r.addEventListener('focus',start);
+    r.addEventListener('blur',end);
+    window.addEventListener('resize',pos);
+    pos();
+  });
+})();
+/* pulse the result hero when the headline figure changes */
+(function(){
+  var hero=document.querySelector('.res-hero');
+  var watch=document.getElementById('potOut');
+  if(!hero||!watch)return;
+  var last=watch.textContent, t=null;
+  new MutationObserver(function(){
+    if(watch.textContent!==last){
+      last=watch.textContent;
+      clearTimeout(t);
+      hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse');
+      t=setTimeout(function(){hero.classList.remove('pulse');},600);
+    }
+  }).observe(watch,{childList:true,characterData:true,subtree:true});
+})();
+</script>
+
+
+<script>
 /* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
    (The skip link and the main landmark are static in the page markup.) */
 (function(){
@@ -1731,6 +2137,90 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
         list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
       }
     },true);
+  });
+})();
+</script>
+
+
+<script>
+/* CLICK-TO-EDIT v2: tap any value to type. Money fields accept ANY amount
+   (no upper cap); if you type beyond the slider's scale, the slider expands
+   to hold it and returns to its sane range once you're back below it.
+   Age, retirement age and growth stay clamped to their slider ranges. */
+(function(){
+  var HARD_CEIL=1e9; /* technical ceiling to keep formatting/charts sane */
+  document.querySelectorAll('.field').forEach(function(field){
+    var range=field.querySelector('input[type=range]');
+    var val=field.querySelector('.val');
+    if(!range||!val||val.dataset.editable)return;
+    val.dataset.editable='1';
+    var money=(val.textContent.trim().charAt(0)==='\u20AC');
+    if(!range.dataset.defmax)range.dataset.defmax=range.max;
+    if(!range.dataset.defstep)range.dataset.defstep=range.step||'1';
+    val.setAttribute('tabindex','0');
+    val.setAttribute('role','button');
+    val.setAttribute('title',money?'Click to type any amount':'Click to type an exact value');
+    val.setAttribute('aria-label',money?'Edit value. Press Enter to type any amount.':'Edit value. Press Enter to type an exact figure.');
+    function commitValue(v){
+      var min=+range.min, defmax=+range.dataset.defmax, step=+range.step||1;
+      if(money){
+        v=Math.round(Math.max(min,Math.min(HARD_CEIL,v)));
+        var defstep=+range.dataset.defstep||1;
+        range.step=(((v-min)%defstep)===0)?defstep:1;
+        if(v>defmax){ range.max=v; }
+        else if(+range.max>defmax){ range.max=defmax; }
+        range.value=v;
+      }else{
+        var max=+range.max;
+        v=Math.min(max,Math.max(min,v));
+        v=Math.round((v-min)/step)*step+min;
+        range.value=Math.round(v*100)/100;
+      }
+      range.dispatchEvent(new Event('input'));
+    }
+    function openEditor(){
+      if(field.querySelector('.val-edit'))return;
+      var inp=document.createElement('input');
+      inp.type='number'; inp.className='val-edit';
+      inp.min=range.min;
+      inp.max=money?HARD_CEIL:range.max;
+      inp.step=money?'any':(range.step||1);
+      inp.value=range.value;
+      inp.setAttribute('inputmode',(+range.step<1&&!money)?'decimal':'numeric');
+      inp.setAttribute('aria-label',money
+        ?('Type any amount, minimum '+range.min)
+        :('Type a value between '+range.min+' and '+range.max));
+      val.style.display='none';
+      val.parentNode.insertBefore(inp,val);
+      inp.focus(); inp.select();
+      var done=false;
+      function commit(){
+        if(done)return; done=true;
+        var v=parseFloat(inp.value);
+        if(!isNaN(v))commitValue(v);
+        inp.remove(); val.style.display=''; val.focus();
+      }
+      function cancel(){ if(done)return; done=true; inp.remove(); val.style.display=''; val.focus(); }
+      inp.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();commit();}
+        else if(e.key==='Escape'){e.preventDefault();cancel();}
+      });
+      inp.addEventListener('blur',commit);
+    }
+    val.addEventListener('click',openEditor);
+    val.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();openEditor();}
+    });
+    /* self-heal the scale: when a drag ends back inside the sane range, restore it */
+    if(money){
+      range.addEventListener('change',function(){
+        var defmax=+range.dataset.defmax, defstep=+range.dataset.defstep||1, min=+range.min;
+        var changed=false;
+        if(((+range.value-min)%defstep)===0 && +range.step!==defstep){ range.step=defstep; changed=true; }
+        if(+range.max>defmax && +range.value<=defmax){ range.max=defmax; changed=true; }
+        if(changed)range.dispatchEvent(new Event('input'));
+      });
+    }
   });
 })();
 </script>
@@ -1845,6 +2335,22 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 <script>
+/* Pay & File: a contribution made before the deadline can be set against the
+   previous tax year. 31 October for paper filers, extended into mid-November on
+   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
+(function(){
+  var el=document.getElementById('deadlineText'); if(!el) return;
+  var now=new Date(), y=now.getFullYear();
+  var due=new Date(y,9,31);
+  if(now>due){ y+=1; due=new Date(y,9,31); }
+  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
+  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
+    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
+    taxYear+"'s allowance is gone for good.";
+})();
+</script>
+
+<script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
    Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
    conservative end of the window since ROS filers get into mid-November.
@@ -1915,6 +2421,59 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+
+<script>
+/* Progressive disclosure (Hick's Law).
+   The four controls that drive the headline figure stay visible. The rest
+   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   every id, listener and slider-fill binding is preserved - which is why this
+   runs after the calculator's own script rather than replacing markup. */
+(function(){
+  var KEEP = ['pot','monthly','years','amcA','feeA','amcB','feeB'];   /* primary controls: ids on THIS page */
+  var panel = document.querySelector('.panel');
+  if(!panel) return;
+
+  var fields = [].slice.call(panel.querySelectorAll('.field'));
+  var extra = fields.filter(function(f){
+    var c = f.querySelector('input[type=range]');
+    return c ? KEEP.indexOf(c.id) === -1 : false;
+  });
+  /* the tax-rate segment is a refinement too */
+  var seg = panel.querySelector('.seg');
+  var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
+  if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
+  if(!extra.length) return;
+
+  var d = document.createElement('details');
+  d.className = 'adv';
+  var sum = document.createElement('summary');
+  sum.textContent = 'More options (' + extra.length + ')';
+  var inner = document.createElement('div');
+  inner.className = 'adv-in';
+  d.appendChild(sum); d.appendChild(inner);
+
+  extra[0].parentNode.insertBefore(d, extra[0]);
+  extra.forEach(function(f){ inner.appendChild(f); });   /* moved, not cloned */
+
+  /* a hint that sat under the tax segment travels with it */
+  var hint = panel.querySelector('.hint');
+  if(hint && /tax relief/i.test(hint.textContent)) inner.appendChild(hint);
+
+  /* sliders inside a closed <details> have zero width, so their fill must be
+     repainted the first time the panel opens */
+  d.addEventListener('toggle', function(){
+    if(!d.open) return;
+    inner.querySelectorAll('input[type=range]').forEach(function(s){
+      s.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
+})();
+</script>
+<script src="assets/js/pb-guess.js?v=3213e251"></script>
+<script src="assets/js/pb-peek.js?v=eb145ab4"></script>
+<script src="assets/js/pb-share.js?v=0c417a51"></script>
+<script src="assets/js/pb-report.js?v=572ada0b"></script>
+<script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 <script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
 </body>
 </html>

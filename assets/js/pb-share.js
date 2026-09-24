@@ -63,6 +63,9 @@
   var work = document.getElementById('pbWork'), hero = results.querySelector('.res-hero');
   var after = work ? work.closest('details') : hero;
   if (!after) return;
+  /* the prescribed warnings (.pb-warn) stay directly under the figures they
+     are about; the row goes after them, never between */
+  if (after.nextElementSibling && after.nextElementSibling.classList.contains('pb-warn')) after = after.nextElementSibling;
   after.parentNode.insertBefore(row, after.nextSibling);
 
   function link() {

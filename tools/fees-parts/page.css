@@ -1,0 +1,38 @@
+/* ============================================================
+   WHAT CHARGES COST (pension-fees-calculator.html, Run 20 #3).
+   Two sets of charges on one pot, and no charges as the yardstick.
+   The chart is drawn by the page script as one inline SVG: the
+   no-charge line dashed and quiet, the other plan in the site's teal,
+   the reader's own plan in ink, so the reader's line is the one that
+   reads first. The table says where the money goes; the card under
+   it gives the other side, beside the figures rather than below the
+   tool.
+   ============================================================ */
+.fee-grp{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line);font-size:.98rem;font-weight:700;color:var(--ink)}
+.fee-chart{width:100%;margin:12px 0 8px}
+.fee-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.fee-chart .fee-l-none{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 5}
+.fee-chart .fee-l-b{fill:none;stroke:var(--aqua);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.fee-chart .fee-l-a{fill:none;stroke:var(--ink);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.fee-chart .fee-grid{stroke:var(--line);stroke-width:1}
+.fee-chart text{font-family:var(--font);font-size:13px;fill:var(--ink-2)}
+.fee-key{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.86rem;color:var(--ink-2)}
+.fee-key li{display:flex;align-items:center;gap:8px}
+.fee-key i{display:inline-block;width:20px;height:0;border-top:3px solid}
+.fee-key .fee-k-none{border-top:2px dashed var(--ink-3)}
+.fee-key .fee-k-b{border-color:var(--aqua)}
+.fee-key .fee-k-a{border-color:var(--ink)}
+.fee-card,.fee-side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;margin-top:16px}
+.fee-card h3,.fee-side h3{margin:0 0 10px}
+.fee-t{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+.fee-t th,.fee-t td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+.fee-t th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
+.fee-t thead th{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.fee-t tbody tr:last-child th,.fee-t tbody tr:last-child td{font-weight:700;color:var(--ink);border-bottom:0}
+.fee-note{margin:10px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.fee-side p{margin:0;font-size:.95rem;line-height:1.6;color:var(--ink)}
+@media(max-width:480px){
+  .fee-card,.fee-side{padding:18px 16px}
+  .fee-t{font-size:.86rem}
+  .fee-t th,.fee-t td{padding:8px 4px}
+}

@@ -217,6 +217,24 @@ PAGES = {
                 ('id="pfPhoneOk"', 'phone consent is its own box'),
                 ('id="pfOptin"', 'email consent is its own box')),
     ),
+    # Run 20 #3. A calculator like the other five: panel, results, the
+    # shared runtime, the share row and the saved report. Growth folds under
+    # More options; the pot, the payments, the years and both plans' charges
+    # stay out.
+    'fees': Page(
+        out='pension-fees-calculator.html',
+        parts='fees-parts',
+        title='What your pension charges cost, Pensionbuddy',
+        desc=('What an annual management charge and a charge on each payment take out of a '
+              'pension pot by retirement, next to another plan\'s charges. An illustration, not advice.'),
+        modules=['assets/js/pension-fees.js'],
+        keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
+        nav=None,
+        checks=(('id="feeChart"', 'the chart'),
+                ('class="pb-warn"', 'the prescribed warnings'),
+                ('ccpc.ie', 'the CCPC cited'),
+                ('under the Pensions Act', 'the Standard PRSA maximums sourced')),
+    ),
 }
 
 
