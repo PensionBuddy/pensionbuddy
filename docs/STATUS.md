@@ -43,6 +43,7 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | — |
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
@@ -50,6 +51,21 @@ a figure or a legal sentence is Damian's to give, the page carries a
 - **R20-A2, privacy.html:** a sentence for "How we use it" on the optional
   emails: who gets them (only people who tick the box), what they are, and how
   to stop them. Placeholder in the list.
+
+- **#2, the couple comparison:** a couple is set against two State Pensions
+  at the maximum rate, the report's own basis for its couple Modest figure. A
+  couple with one pension, or reduced rates, would have a smaller State bar
+  than the chart draws. Say if the bar should carry that caveat in words.
+- **Research findings on figures the site already quotes (nothing changed):**
+  the home page's "79% feel unprepared." matches the Amárach report's p. 5
+  (79% of *employees surveyed* feel financially unready); the phrase "nearly 8
+  in 10" in the build list is the Irish Examiner's, not the report's. The
+  €40,860 is Royal London Ireland's press release of 16 July 2026 (iReach, 896
+  adults not yet retired), a total that already counts the State Pension; a
+  more exact source line would be "Royal London Ireland / iReach, July 2026".
+  The build list's "only 42% felt financially prepared" is on the living
+  standards report's p. 8, but the Council's own raw survey file gives 38%
+  across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
 
@@ -59,6 +75,22 @@ a figure or a legal sentence is Damian's to give, the page carries a
   request, and for nothing else unless you tick the box." (the rest of each
   note is unchanged). Fallback email line "Occasional emails: yes, please" or
   "Occasional emails: no".
+- #2: "Not sure what you'll need? Start from a way of life."; toggle "Single" /
+  "Couple" (group name for screen readers "Who it is for"); card lines "The
+  basics, with a little left for extras.", "More room to manoeuvre, and more
+  security.", "More freedom, and room for a few luxuries." (paraphrasing the
+  report's p. 9 definitions); need bar "[Level], for one" or "[Level], for a
+  couple"; for a couple the State bar reads "Two State Pensions, both at the
+  maximum" and a covered need "Covered by two State Pensions."; month head
+  "[Level], for one person: €[x] a month" or "…, for a couple: …"; category
+  names the report's own, lightly shortened ("Housing, including utilities",
+  "Once-off costs"); note "Once-off costs are holidays, Christmas and gifts,
+  insurance, car and property tax, and bigger one-off buys, spread over the
+  year. These are national averages at 2024 prices, not a budget for you.";
+  source lines "Standards of living: Pensions Council, Irish Retirement Living
+  Standards, researched by KPMG, 2024 prices." and, under the chart while a
+  card is chosen, "Pensions Council, Irish Retirement Living Standards, 2024
+  prices."
 - #8: heading "If you wait."; lead "The same monthly amount, from your own
   age: started now, or a few years from now."; labels "Your age now", "If you
   start in"; rows "Now, at [age]" and "In [n] years, at [age]", "€[x] less";

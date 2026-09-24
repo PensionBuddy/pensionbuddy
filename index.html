@@ -1529,6 +1529,47 @@ button{font-family:inherit}
 .pb-gapctl-v{font-size:1.05rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
 .pb-gapctl-out{margin:10px 0 0;font-size:.98rem;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-gap.pb-gap-live .pb-gap-bar,.pb-gap.pb-gap-live .pb-gap-short{transition:none}
+/* A WAY OF LIFE (#pbLife, #2 in Run 20). The Pensions Council's three
+   standards of living, for one person or a couple, as a start point for the
+   need slider above: a card sets the slider to its annual figure, so the
+   chart and the sentence under it follow exactly as they do for a drag. A
+   couple is measured against two State Pensions at the maximum rate, the
+   report's own basis for its couple Modest figure, and the State bar says so.
+   The chosen card opens its month, category by category, from
+   assets/js/living-standards.js. Hidden in the markup and switched on by
+   script, like the slider. */
+.pb-life{margin-top:34px;max-width:640px}
+.pb-life[hidden],.pb-life-split[hidden]{display:none}
+.pb-life-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin-bottom:14px}
+.pb-life-q{margin:0;font-size:.98rem;font-weight:600;color:var(--ink);max-width:36ch}
+.pb-life-hh{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;background:var(--surface)}
+.pb-life-hh button{font:inherit;font-size:.9rem;font-weight:600;color:var(--ink-2);background:none;border:0;border-radius:999px;padding:8px 16px;min-height:40px;cursor:pointer}
+.pb-life-hh button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pb-life-hh button:focus-visible,.pb-life-card:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pb-life-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.pb-life-card{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 14px 16px;
+  background:var(--surface);color:var(--ink);border:1.5px solid var(--line-2);border-radius:var(--r-lg);cursor:pointer}
+.pb-life-card b{font-size:1rem;font-weight:700}
+.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-life-d{font-size:.84rem;line-height:1.45;color:var(--ink-2)}
+.pb-life-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.pb-life-split{margin-top:20px}
+.pb-life-st{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-life-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.pb-life-rows li{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 4.8em;gap:12px;align-items:center;font-size:.92rem;color:var(--ink)}
+.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--aqua);width:var(--w)}
+.pb-life-rows b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.pb-life-note{margin:14px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
+.pb-life .pb-src{margin-top:12px}
+@media(max-width:600px){
+  .pb-life-cards{grid-template-columns:1fr}
+  .pb-life-card{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:10px}
+  .pb-life-d{flex-basis:100%}
+  .pb-life-rows li{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
+  .pb-life-rows span{grid-column:1;grid-row:1}
+  .pb-life-rows b{grid-column:2;grid-row:1}
+  .pb-life-rows i{grid-column:1 / -1;grid-row:2}
+}
 
 /* ============================================================
    v4 - THE PRODUCT. The calculator showcase was a card that
@@ -1926,6 +1967,26 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       <p class="pb-src">Am&aacute;rach Research for FPSB Ireland, IOB, LIA and the RPCI, May 2026.</p>
     </div>
     </div>
+    <div class="pb-life" id="pbLife" hidden>
+      <div class="pb-life-head">
+        <p class="pb-life-q" id="pbLifeQ">Not sure what you&rsquo;ll need? Start from a way of life.</p>
+        <div class="pb-life-hh" role="group" aria-label="Who it is for">
+          <button type="button" id="pbLifeSingle" aria-pressed="true">Single</button>
+          <button type="button" id="pbLifeCouple" aria-pressed="false">Couple</button>
+        </div>
+      </div>
+      <div class="pb-life-cards" role="group" aria-labelledby="pbLifeQ">
+        <button type="button" class="pb-life-card" data-level="modest" aria-pressed="false"><b>Modest</b><span class="pb-life-n">€19,200</span><span class="pb-life-d">The basics, with a little left for extras.</span></button>
+        <button type="button" class="pb-life-card" data-level="moderate" aria-pressed="false"><b>Moderate</b><span class="pb-life-n">€27,600</span><span class="pb-life-d">More room to manoeuvre, and more security.</span></button>
+        <button type="button" class="pb-life-card" data-level="comfortable" aria-pressed="false"><b>Comfortable</b><span class="pb-life-n">€33,600</span><span class="pb-life-d">More freedom, and room for a few luxuries.</span></button>
+      </div>
+      <div class="pb-life-split" id="pbLifeSplit" hidden>
+        <p class="pb-life-st" id="pbLifeSt"></p>
+        <ul class="pb-life-rows" id="pbLifeRows"></ul>
+        <p class="pb-life-note">Once-off costs are holidays, Christmas and gifts, insurance, car and property tax, and bigger one-off buys, spread over the year. These are national averages at 2024 prices, not a budget for you.</p>
+      </div>
+      <p class="pb-src">Standards of living: Pensions Council, Irish Retirement Living Standards, researched by KPMG, 2024 prices.</p>
+    </div>
     <p class="gap-note reveal">These are survey averages, not a projection for you. What you&rsquo;ll actually
     need depends on your own circumstances, and the value of a pension can fall as well as rise.
    </p>
@@ -2160,6 +2221,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
+<script src="assets/js/state-pension.js?v=0aef6ee1"></script>
+<script src="assets/js/living-standards.js?v=97a698fc"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');
@@ -2222,36 +2285,105 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 /* the gap, your own: the reader's figure for what they expect to need, against
    the State Pension figure the chart already carries. Only the chart's own
-   proportions are worked out here; nothing is a projection. */
+   proportions are worked out here; nothing is a projection.
+
+   A WAY OF LIFE (#pbLife, Run 20 #2). The Pensions Council's three standards
+   of living, for one person or a couple, as a start point for the slider: a
+   card sets the slider to its annual figure and paints exactly what a drag
+   to that figure paints, then opens its month category by category
+   (assets/js/living-standards.js). Dragging again is the reader's own figure
+   and lets the card go. A couple is set against two State Pensions at the
+   maximum rate, which is how the report built its couple Modest figure; the
+   rate is state-pension.js's, a year of it is 52 weeks, and the chart says
+   "two State Pensions" whenever it is showing them. */
 (function(){
   var gap=document.getElementById('pbGap'), ctl=document.getElementById('pbNeedCtl'), r=document.getElementById('pbNeed');
   if(!gap||!ctl||!r) return;
   var needN=gap.querySelector('.pb-gap-need .pb-gap-n'), needBar=gap.querySelector('.pb-gap-need .pb-gap-bar');
   var needL=gap.querySelector('.pb-gap-need .pb-gap-l'), stBar=gap.querySelector('.pb-gap-state .pb-gap-bar');
-  var st=+stBar.querySelector('[data-pb-count]').getAttribute('data-pb-count');
+  var stN=stBar.querySelector('[data-pb-count]'), stL=gap.querySelector('.pb-gap-state .pb-gap-l');
+  var st1=+stN.getAttribute('data-pb-count'), st=st1, stLabel1=stL.textContent;
   var sh=gap.querySelector('.pb-gap-short'), shN=sh.querySelector('.pb-gap-n'), shL=sh.querySelector('.pb-gap-sl');
-  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  var src=gap.parentNode.querySelector('.pb-gap + .pb-src'), src1=src?src.textContent:'';
+  var fmt=function(v){return '€'+Math.round(v).toLocaleString('en-IE');};
+  var LS=window.PBLivingStandards, SP=window.PBStatePension;
+  var life=document.getElementById('pbLife');
+  var household='single', level=null;
+  /* two State Pensions at the maximum rate, from the rate itself rather than
+     double the rounded figure: 2 x 299.30 x 52 is 31,127.20 */
+  var st2=SP?Math.round(2*SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100):2*st1;
   /* the slider's fill and spoken value, as the calculators' paintSlider() sets them */
   function slide(){var v=+r.value;r.style.setProperty('--fill',((v-r.min)/(r.max-r.min))*100+'%');r.setAttribute('aria-valuetext',fmt(v)+' a year');}
   function paint(){
     var need=+r.value, top=Math.max(need,st), g=need-st, pc=function(v){return (v/top*100).toFixed(2)+'%';};
+    var two=household==='couple';
+    var std=level&&LS?LS.standard(level,household):null;
     gap.classList.add('pb-gap-live');
     needBar.style.setProperty('--h',pc(need));
     stBar.style.setProperty('--h',pc(st));
     sh.style.setProperty('--from',pc(st));
     sh.style.setProperty('--h',g>0?pc(g):'0%');
     needN.setAttribute('data-pb-count',need); needN.textContent=fmt(need);
+    stN.setAttribute('data-pb-count',st); stN.textContent=fmt(st);
     shN.setAttribute('data-pb-count',Math.max(g,0)); shN.textContent=g>0?fmt(g):'';
     shL.textContent=g>0?'a year short':'';
-    needL.textContent='What you expect to need';
+    needL.textContent=std?(std.label+', '+(two?'for a couple':'for one')):'What you expect to need';
+    stL.textContent=two?'Two State Pensions, both at the maximum':stLabel1;
+    if(src) src.textContent=std?'Pensions Council, Irish Retirement Living Standards, 2024 prices.':src1;
     document.getElementById('pbNeedV').textContent=fmt(need)+' a year';
-    document.getElementById('pbNeedOut').textContent=g>0?fmt(g)+' a year short.':'Covered by the State Pension.';
-    gap.setAttribute('aria-label','Two bars. You expect to need '+Math.round(need).toLocaleString('en-IE')+' euro a year. The State Pension pays '+
+    document.getElementById('pbNeedOut').textContent=g>0?fmt(g)+' a year short.':(two?'Covered by two State Pensions.':'Covered by the State Pension.');
+    gap.setAttribute('aria-label','Two bars. '+(std?'A '+std.label.toLowerCase()+' retirement '+(two?'for a couple':'for one')+' costs ':'You expect to need ')+
+      Math.round(need).toLocaleString('en-IE')+' euro a year. '+(two?'Two State Pensions at the maximum pay ':'The State Pension pays ')+
       st.toLocaleString('en-IE')+'. '+(g>0?'The gap is '+Math.round(g).toLocaleString('en-IE')+'.':'That is covered.'));
   }
   ctl.hidden=false;
   slide();
-  r.addEventListener('input',function(){slide();paint();});
+  r.addEventListener('input',function(){ if(level) choose(null); slide(); paint(); });
+  if(!life||!LS) return;
+
+  var cards=[].slice.call(life.querySelectorAll('.pb-life-card'));
+  var bSingle=document.getElementById('pbLifeSingle'), bCouple=document.getElementById('pbLifeCouple');
+  var split=document.getElementById('pbLifeSplit'), rows=document.getElementById('pbLifeRows'), head=document.getElementById('pbLifeSt');
+  function figures(){
+    cards.forEach(function(c){
+      c.querySelector('.pb-life-n').textContent=fmt(LS.standard(c.getAttribute('data-level'),household).annual);
+      c.setAttribute('aria-pressed',c.getAttribute('data-level')===level?'true':'false');
+    });
+    bSingle.setAttribute('aria-pressed',household==='single'?'true':'false');
+    bCouple.setAttribute('aria-pressed',household==='couple'?'true':'false');
+  }
+  function month(){
+    if(!level){ split.hidden=true; return; }
+    var s=LS.standard(level,household), top=0;
+    s.categories.forEach(function(c){ top=Math.max(top,c.monthly); });
+    head.textContent=s.label+(household==='couple'?', for a couple':', for one person')+': '+fmt(s.monthly)+' a month';
+    rows.innerHTML=s.categories.map(function(c){
+      return '<li><span>'+c.label+'</span><i style="--w:'+(c.monthly/top*100).toFixed(2)+'%" aria-hidden="true"></i><b>'+fmt(c.monthly)+'</b></li>';
+    }).join('');
+    split.hidden=false;
+  }
+  /* a level of null lets the card go: the slider is the reader's own again */
+  function choose(lv){ level=lv; figures(); month(); }
+  function setNeed(){
+    if(!level) return;
+    r.value=LS.standard(level,household).annual;
+    slide();
+  }
+  cards.forEach(function(c){
+    c.addEventListener('click',function(){
+      var lv=c.getAttribute('data-level');
+      choose(level===lv?null:lv);
+      setNeed(); paint();
+    });
+  });
+  function setHousehold(h){
+    household=h; st=h==='couple'?st2:st1;
+    figures(); setNeed(); month(); paint();
+  }
+  bSingle.addEventListener('click',function(){ setHousehold('single'); });
+  bCouple.addEventListener('click',function(){ setHousehold('couple'); });
+  figures();
+  life.hidden=false;
 })();
 /* scroll reveal */
 (function(){

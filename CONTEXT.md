@@ -163,10 +163,17 @@ does not, and the difference is the whole reason the word exists here.
 
 **Retirement Living Standards**:
 The three annual spending levels published by the Pensions Council: Modest,
-Moderate and Comfortable. Always the single-person figures here, at 2024
-prices, with housing costs included.
+Moderate and Comfortable. At 2024 prices, with housing costs included, and
+national averages rather than anyone's budget. The single-person figures
+unless a page says otherwise: since Run 20 the home page's way-of-life picker
+also offers the couple figures, and sets a couple against two State Pensions
+at the maximum rate, which is the report's own basis for its couple Modest
+figure. Each level is a monthly total of seven categories, and the report's
+"ability to save" sits outside that total.
 _Avoid_: attributing any "mortgage and rent free" assumption to them. That is
-the UK PLSA methodology, not this report.
+the UK PLSA methodology, not this report. Also avoid calling them an income
+target: they are spending levels, and the report does not say whether income
+tax would come on top.
 
 **Gap**:
 The difference between a living standard and an annual pension, stated as a
