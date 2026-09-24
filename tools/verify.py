@@ -166,7 +166,8 @@ AUDIT_JS = r"""
       h1:first(famOf(document.querySelector('h1'))),
       h2:first(famOf(document.querySelector('h2'))),
       body:first(famOf(document.body)),
-      /* the footer column labels are h4s by markup and labels by job: sentence
+      /* the footer column labels are h2s by markup (h4s until Run 21, which
+         skipped a level) and labels by job: sentence
          case, small, semibold. They are excluded from the one-recipe
          expectations by where they sit, not by face (v4: there is one face),
          rather than the expectations being loosened for every heading. */
