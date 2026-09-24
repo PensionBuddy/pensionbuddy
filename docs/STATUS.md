@@ -26,6 +26,34 @@ commit per item, the same gates as Run 20.
 | 2d | "The best time to start is now" cut | done: the eyebrow over starter.html's closing band is gone; the band now opens on "Let's get your pension started." (screenshot at 1200 beside tracker's band) | — |
 | 2e | No booking reward in the paw prints | done: at 4/4 the strip says "4/4 paws." and nothing more; the "Book your free call" link after it, its CSS and the arrow helper that only it used are out of `assets/js/pb-badges.js`, whose header now says that nothing in the file builds a link. The badges themselves are unchanged. Probed on tracker.html and the pension calculator with all four paws held: "4/4 paws.", no link, no errors. Script hashes restamped on every page that loads it | — |
 | 2f | WhatsApp | not building, as decided | — |
+| 3 | Compliance pack | done: `docs/COMPLIANCE-PACK.md`, plain text to email, one section each: the open questions (twelve, each saying what the site does now, the rule, and what is needed), the Letter of Authority word for word as the finder writes it and the email it prepares, the two Privacy Notice placeholders with proposed wording marked as proposed (the retention period and the way to stop the emails left as bracketed decisions), the readiness check brief (situations, all fifteen questions with points, zones, every step and link, and four questions under Guidance 3.5.7), the Reg 71, 56 and 88 findings with the current wording quoted, the other findings, every new line of copy by page, and the full text of every new page and new section as appendices. Everything quoted is read from the site's own files when the pack is built, so it says what the pages say | — |
+
+## Corrections to Run 20, found while writing the pack
+
+- Run 20's A4 row says the auto-enrolment comparison projects no investment
+  growth and so carries no warning box. It does project growth: its card
+  "Everything paid in, by 66" adds both paths' contributions "grown at 5% a
+  year" (added in `d71c1b9`, before this branch). It has no box. Not
+  changed; the pack puts it to compliance with the boxes' question.
+- Run 20's NEEDS DAMIAN INPUT says the pages new in this run spell out every
+  initialism they use (Reg 88). Several do not: the directors' rules page
+  (AVC, PRSA, ROS), the charges calculator (CCPC, PRSA), the threshold check
+  (CSO, PRSI, USC), the three guides (CCPC; PRSI, ROS; HMRC, PRSI, USC), the
+  year-end checklist (ROS) and the finder (PPS). The pack lists every page.
+  Not changed.
+
+## NEEDS DAMIAN INPUT from this run
+
+- **Send the compliance pack** to the compliance officer; the three held
+  pages come back per the list below as each is signed off.
+- **The 16px floor's reach:** it covers each calculator's own content. The
+  site's nav and footer, shared by every page, stay as they are everywhere,
+  so a calculator page still has small text in its footer. Say if the
+  footer and nav should get the floor too; that is a sitewide change.
+- **Two offers, not done:** a box with the two warnings under the
+  comparison's "Everything paid in, by 66" card, if compliance keeps the
+  boxes; and a pass spelling out every initialism on every page, if
+  compliance says the jargon buster is not enough.
 
 ## To re-link after compliance sign-off
 
