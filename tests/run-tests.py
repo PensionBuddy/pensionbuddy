@@ -83,6 +83,8 @@ SUITES = {
                        '/tests/pension-finder.test.js', ['PBFinder'], 65),
     'pension-fees': (['/assets/js/cost-of-waiting.js', '/assets/js/pension-fees.js'],
                      '/tests/pension-fees.test.js', ['PBWaiting', 'PBFees'], 35),
+    'readiness': (['/assets/js/readiness.js'],
+                  '/tests/readiness.test.js', ['PBReadiness'], 41),
 }
 
 # The jobs that drive a REAL built page, each with the suite it runs with, the

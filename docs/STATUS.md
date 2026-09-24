@@ -43,6 +43,7 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 4 | The 60-second readiness check | done, not for launch before the compliance brief the build list asks for: new page `pension-readiness-check.html` (parts `tools/readiness-parts/`): which of the three situations fits (the booking form's three), then five questions for that situation, 20 points each, a score out of 100 in three named zones (Early days, On the way, In good shape) shown as a number, in words and on a labelled scale, and a step for every point not scored, each linked to the page that helps (the finder, the charges calculator, the entitlement check, the way-of-life picker, the calculators). Only things the reader can do are scored; paying in alone scores the same as with an employer; nothing scores booking. Answers never leave the page; "Talk it through with Damian, free" goes to `booking.html#persona=…`, and booking.html now ticks that one choice and nothing else. New module `assets/js/readiness.js`, suite 41 assertions. Footer Tools column | — |
 | 3 | What your pension's charges cost | done: new calculator `pension-fees-calculator.html` (parts `tools/fees-parts/`): the pot, the monthly payment and the years; your plan's annual management charge and charge on each payment (defaults 1% and 5%, the Standard PRSA maximums, Pensions Act 1990 s.104(5) and (6)) against another plan's (defaults 0.5% and none), growth folded under More options. The two pots at retirement, one sentence, a table of what each plan's charges took and what they cost by retirement, a chart of both pots and the no-charge line, the prescribed warnings beside the figures, and "The other side" card (a lower charge is not the only thing that matters; moving can mean giving up terms worth more). Labels stay neutral ("the other plan") so a higher comparison reads right. New module `assets/js/pension-fees.js` (spec `docs/CALC-SPEC-FEES.md`), suite 35 assertions, the defaults worked out a second time in Python first; the no-charge line is the calculators' own projection to the cent. Linked from the footer's Tools column, the nav's Calculator menu and the finder; pb-share now keeps the warning box directly under the figures | — |
 | 5 | Save or send your results | done: "Save or print these figures" (a one-page report: the headline figures under the page's own labels, the result sentence, the workings, what was entered, the page's assumptions, the link that reopens the figures, any warning box, and the footer's regulatory statement and disclaimer) and "Email them to yourself" (the reader's own email app, addressed to no one) beside "Copy a link to these figures" on all five calculators; new `assets/js/pb-report.js`, which reads only what the page shows, stands aside while the guess card's veil is up, and leaves out switched-off controls; pb-share.js exposes its link builder so there is one definition of a resume link; the two calculators' "Email my results" now carry that link too | — |
 | A4 | Warnings beside the figures | done, for compliance to confirm: the two warnings the Regulations prescribe word for word (Reg 372, "Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment."; Reg 392, "Warning: The value of your investment may go down as well as up."), boxed, bold and no smaller than the text around them (Reg 45), directly under the projected figures (Reg 82) on the pension and director calculators and under both of starter's growth charts; the printed report carries them. The State Pension pages and the comparison project no investment growth and carry none. Found while re-shooting: the director calculator's sliders drew at Chrome's default 129px inside a 423px column (its base slider rule never set a width); fixed. All five product photographs re-shot (the pension and entitlement shots were stale since `b3febf2` and `bbc0f9d`), the pension one without the State Pension line so the home page's arrow label stays clear, and every declared width and height corrected, the product tabs' data included | — |
@@ -52,6 +53,12 @@ a figure or a legal sentence is Damian's to give, the page carries a
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
+
+- **#4, before the readiness check goes live:** the build list's own condition,
+  a brief to compliance on the check (a score is a gamified element, which the
+  Central Bank's General Guidance 3.5.7 names), and sign-off of its questions,
+  points and zone names. It is information only and says so; it scores
+  nothing out of the reader's hands and nothing for booking.
 
 - **A4, the warnings:** whether a generic calculator's projection counts as an
   illustration of an investment product under Reg 372 is a judgement the
@@ -137,6 +144,15 @@ a figure or a legal sentence is Damian's to give, the page carries a
   across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
+
+- #4: the whole of pension-readiness-check.html: the h1 "How ready is your
+  pension? Six questions to find out.", the three situations ("I have pensions
+  from old jobs to sort out." and so on), the fifteen questions and their
+  answers, the zones ("Early days. Plenty you can do, and the first steps are
+  simple ones." / "On the way. A few gaps are worth closing." / "In good
+  shape. Worth keeping under review as things change."), the ten steps and
+  their link names, and "How the score works". Footer link "Pension
+  readiness check".
 
 - #3: the whole of pension-fees-calculator.html: h1 "What your pension's
   charges cost you by retirement.", slider labels, the subnotes ("A share of

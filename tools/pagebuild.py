@@ -235,6 +235,21 @@ PAGES = {
                 ('ccpc.ie', 'the CCPC cited'),
                 ('under the Pensions Act', 'the Standard PRSA maximums sourced')),
     ),
+    # Run 20 #4. A short form and a result, like the finder: no sliders, and
+    # none of the class names the calculators' shared scripts look for.
+    'readiness': Page(
+        out='pension-readiness-check.html',
+        parts='readiness-parts',
+        title='How ready is your pension? A 60-second check, Pensionbuddy',
+        desc=('Six questions about what you know and what you have done, a score out of 100, '
+              'and a next step for every point you did not get. Information only; nothing you '
+              'answer leaves the page.'),
+        modules=['assets/js/readiness.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="rdForm"', 'the check'),
+                ('not a suitability assessment', 'information only, said on the page')),
+    ),
 }
 
 

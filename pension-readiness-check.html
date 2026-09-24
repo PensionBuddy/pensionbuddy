@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auto-enrolment or a broker pension, Pensionbuddy</title>
-<meta name="description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
+<title>How ready is your pension? A 60-second check, Pensionbuddy</title>
+<meta name="description" content="Six questions about what you know and what you have done, a score out of 100, and a next step for every point you did not get. Information only; nothing you answer leaves the page.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
-<meta property="og:title" content="Auto-enrolment or a broker pension, Pensionbuddy">
-<meta property="og:description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
+<meta property="og:title" content="How ready is your pension? A 60-second check, Pensionbuddy">
+<meta property="og:description" content="Six questions about what you know and what you have done, a score out of 100, and a next step for every point you did not get. Information only; nothing you answer leaves the page.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -1728,177 +1728,59 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
 
-/* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
-.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
-.vs-card h3{letter-spacing:-0.02em;margin-bottom:4px}
-.vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
-.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
-.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
-.vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
-.vs-salary{background:var(--surface-2)}
-.vs-pension{background:var(--teal-50)}
-.vs-col .vt{font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:10px}
-.vs-pension .vt{color:var(--teal-700)}
-.vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.vs-pension .amt{color:var(--teal-700)}
-.vs-col .lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.5}
-.vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-@media(max-width:560px){.vs{grid-template-columns:1fr;gap:12px}.vsmark{margin:0 auto}}
-/* itemised breakdown rows, built from the existing card + divline language */
-.bd{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14.5px}
-.bd .bl{color:var(--ink-2)}
-.bd .bv{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
-.bd.tot{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-weight:700}
-.bd.tot .bl{color:var(--ink)}
-.bd .capnote{font-size:12px;color:var(--ink-3)}
-.verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
-.srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
-/* ---- headline face ----
-   v3: this page used to load a fourth family for its headline alone, behind its
-   own --font-headline token, requested by PAGES['compare'].fonts. One font
-   sitewide now, so the token, the face and that extra Google Fonts request are
-   all gone; .phead h1 takes the shared heading recipe like every other
-   headline. See docs/STATUS.md for which face it was. */
-/* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
-   and each results panel keeps the results column's own vertical rhythm */
-.calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
-.modebar .modelab{font-family:var(--font);font-size:.66rem;font-weight:500;color:var(--ink-3)}
-.modebar .modeseg{max-width:560px;margin-top:10px}
-.modebar .subnote{max-width:640px}
-.modepanel{display:flex;flex-direction:column;gap:18px}
-.modepanel[hidden]{display:none}
-@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:13px;padding:11px 4px}}
-/* a three-way segmented control: the skeleton's .seg is two columns with a
-   half-width indicator, so a third option needs its own grid and a third-width
-   indicator. translateX(i * 100%) of the indicator's own width still lands it
-   on button i. */
-.seg.seg-3{grid-template-columns:repeat(3,1fr)}
-.seg.seg-3 .ind{width:calc(33.333% - 2.667px)}
-@media(max-width:560px){.seg.seg-3 button{font-size:13px;padding:11px 4px}}
-/* the money-above-the-cap card only exists when there is money above the cap */
-#capCard[hidden]{display:none}
-/* yes/no toggles that reveal a secondary control. A plain checkbox row, so it
-   reads as a question rather than another slider. */
-.tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
-.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
-.tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
-.togbody[hidden]{display:none}
-/* funds and risk: three illustration tiles, each carrying its own downside */
-#riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
-#riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
-.risktiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
-.risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
-.risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
-.risktile .rk-sri b{color:var(--ink);font-variant-numeric:tabular-nums}
-.risktile .rk-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);padding-top:6px;border-top:1px dashed var(--line)}
-.risktile .rk-row b{color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
-.risktile .rk-note{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:4px}
-.risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
-#riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
-#riskCard .riskrule b{color:var(--ink)}
-@media(max-width:700px){.risktiles{grid-template-columns:1fr}}
+/* ============================================================
+   THE READINESS CHECK (pension-readiness-check.html, Run 20 #4).
+   A short form and a result, one at a time. The panels are the
+   calculators' .panel, made static. The score is shown three ways
+   that do not depend on colour: the number, the zone's name in words,
+   and a marker on a scale whose three bands are labelled underneath.
+   ============================================================ */
+.rd-wrap{max-width:760px;padding:8px 0 24px}
+.rd-panel{position:static;top:auto}
+.rd-panel[hidden]{display:none}
+.rd-panel h2:focus{outline:none}
+.rd-q{border:0;margin:0 0 22px;padding:0;min-width:0}
+.rd-q legend{font-size:1.02rem;font-weight:700;color:var(--ink);margin:0 0 10px;padding:0}
+.rd-opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;margin:0 0 8px;border:1.5px solid var(--line-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font-size:.98rem;line-height:1.45;color:var(--ink)}
+.rd-opt input{flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal-700)}
+.rd-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
+.rd-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.rd-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.rd-err:not(:empty){margin:0 0 12px}
+.rd-nav{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:8px}
+.rd-nav .btn{width:auto}
+.rd-again{font:inherit;font-size:.95rem;font-weight:600;color:var(--ink);background:none;border:0;padding:10px 4px;min-height:44px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rd-again:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.rd-note{font-size:.9rem;color:var(--ink-2)}
 
-/* the risk card ends in the same link the verdict card uses; those rules are scoped to
-   .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
-   size and fills the card */
-#riskCard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
-  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
-#riskCard .wlink:hover{text-decoration:underline}
-#riskCard .wlink .ico{width:15px;height:15px}
-#riskCard .wlink{display:inline-flex;align-items:center;padding:11px 0}
-#riskCard .wlink{color:var(--teal)}
-#riskCard .wlink{margin-top:14px}
-#riskCard .wlink .ico{width:16px;height:16px;flex:none}
-/* ---- two lanes, one scale ----
-   A picture of the two figures in the .res-hero directly above, drawn from the
-   totals the page has already written. Its own surface rules rather than
-   .chart-card, because that class carries a 338px CLS lock from 921px up for
-   cards that hold a chart, and a label, a line of text and two thin lanes come
-   nowhere near it. No heading either: every classed h3 on this site takes the
-   20px/800 heading recipe, which beside the answer would read as a second
-   headline, so the card takes the small label the .vs-col .vt rows
-   use. Both tracks carry the same end rule, so it reads as the end of the
-   scale rather than as a verdict on either lane. */
-.pb-scale-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 22px;box-shadow:var(--sh-sm)}
-.pb-scale-title{font-size:12px;font-weight:700;color:var(--ink-3)}
-.pb-scale-sub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 16px}
-.pb-scale-lane{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center;margin-top:11px}
-.pb-scale-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.pb-scale-track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-scale-track::after{content:"";position:absolute;top:0;right:0;width:2px;height:100%;background:var(--aqua)}
-.pb-scale-bar{width:0;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.45,0,.25,1)}
-#pbScaleAeBar{background:var(--teal-900)}
-#pbScalePpBar{background:var(--teal)}
-@media(max-width:560px){.pb-scale-lane{grid-template-columns:1fr;gap:5px}}
-/* the length each bar travels sets its own duration, written inline by the
-   page script, so both lanes move at one speed; this turns that off */
-@media(prefers-reduced-motion:reduce){.pb-scale-bar{transition:none}}
-/* the one-sentence lead sits above the numbers in both modes */
-.results .lead{margin-bottom:0}
-.results .lead .wtext{font-size:17px;line-height:1.5}
-.results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
-
-/* ---- everything paid in, by 66 ----
-   The lanes above race one year; this races all of them. Same two colours,
-   so the reader reads it as the same comparison over a longer run, and the
-   figures are text rather than bars alone because nothing else on the page
-   carries them. */
-.pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
-.pb-my-card h3{margin:0 0 4px}
-.pb-my-sub{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0 0 16px}
-.pb-my-lane{display:grid;grid-template-columns:8.6em minmax(0,1fr) 6.4em;gap:12px;align-items:center;margin-bottom:10px}
-.pb-my-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
-.pb-my-track{position:relative;display:block;height:12px;border-radius:99px;
-  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:99px;
-  transition:width .9s cubic-bezier(.45,0,.25,1)}
-#pbMyAeBar{background:var(--teal-900)}
-#pbMyPpBar{background:var(--teal)}
-.pb-my-fig{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-my-note{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
-@media(max-width:560px){
-  .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
-  .pb-my-lab{grid-column:1;grid-row:1}
-  .pb-my-fig{grid-column:2;grid-row:1}
-  .pb-my-track{grid-column:1 / -1;grid-row:2}
+.rd-score{margin:6px 0 14px;color:var(--ink)}
+.rd-n{font-size:3.4rem;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.rd-of{font-size:1rem;color:var(--ink-2)}
+.rd-scale{margin:0 0 16px}
+.rd-bands{position:relative;display:flex;height:14px;border-radius:99px;overflow:visible}
+.rd-bands i{display:block;height:100%}
+.rd-b-early{width:40%;background:var(--amber-soft);border-radius:99px 0 0 99px}
+.rd-b-onway{width:35%;background:var(--teal-100)}
+.rd-b-good{width:25%;background:var(--aqua);border-radius:0 99px 99px 0}
+.rd-mark{position:absolute;top:-5px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--ink)}
+.rd-bl{display:flex;margin-top:8px;font-size:.84rem;color:var(--ink-2)}
+.rd-bl span:nth-child(1){width:40%}
+.rd-bl span:nth-child(2){width:35%}
+.rd-bl span:nth-child(3){width:25%;text-align:right}
+.rd-zone{font-size:1.02rem;line-height:1.55;color:var(--ink);margin:0 0 20px}
+.rd-result h3{margin:0 0 10px}
+.rd-moves{margin:0 0 18px;padding-left:22px}
+.rd-moves li{margin:0 0 12px;font-size:.98rem;line-height:1.55;color:var(--ink)}
+.rd-moves .rd-pts{font-weight:700;font-variant-numeric:tabular-nums}
+.rd-moves a{color:var(--teal-700);font-weight:600}
+.rd-none{font-size:.98rem;color:var(--ink)}
+@media(max-width:480px){
+  .rd-bl{font-size:.76rem}
+  .rd-nav{flex-direction:column-reverse;align-items:stretch}
+  .rd-nav .btn{width:100%}
 }
-@media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}
-
-/* THE PHASE STAIRCASE (.pb-stair). Auto-enrolment's four phases from
-   PBCompare.AE_PHASES, each column as tall as its total rate and stacked
-   you, your employer, the State (always 3 : 3 : 1). The page tags the
-   phase its figures are using. Teal is the State; the rest is neutral. */
-.pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
-.pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
-.assume .pb-stair li{padding-left:0;line-height:1.4}
-.assume .pb-stair li::before{content:none;display:none}
-.pb-stair-you{display:inline-block;max-width:100%;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600;white-space:nowrap}
-.pb-stair-you[hidden]{display:block;visibility:hidden}
-.pb-stair-bar{position:relative;display:block;width:100%;height:84px}
-.pb-stair-stack{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;border-radius:6px 6px 0 0;overflow:hidden}
-.pb-stair-stack i{display:block;width:100%}
-.pb-stair-ee{background:var(--ink-2)}
-.pb-stair-er{background:var(--ink-3);opacity:.6}
-.pb-stair-st{background:var(--aqua)}
-.pb-stair-yr{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
-.pb-stair-r{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-stair-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;color:var(--ink-2)}
-.pb-stair-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-
-/* WHERE 20% BECOMES 40% (.pb-band). The reader's salary as one bar, split
-   at the standard rate cut-off point the page is using for their status
-   (PBRelief.SRCOP, through the page's relief()). Income tax, so neutral:
-   neither the State's teal nor the gap's amber. */
-.pb-band{margin:10px 0 0}
-.pb-band-track{display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-band-track i{display:block;height:100%}
-.pb-band-lo{background:var(--line-2)}
-.pb-band-hi{background:var(--ink-2)}
-.pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
-.pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -1954,262 +1836,55 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
+  <span class="eyebrow reveal"><span class="pip"></span>A 60-second check · six questions, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">How ready is your pension? <span class="hl">Six questions to find out.</span></h1>
+  <p class="reveal" style="transition-delay:.12s">One question about your situation, then five about what you know and what you have done. You get a score out of 100, and a next step for every point you did not get. Nothing you answer leaves this page.</p>
 </div></div>
 
-<div class="wrap"><div class="calc-wrap">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
+<div class="wrap"><div class="rd-wrap">
+  <form class="panel rd-panel" id="rdForm" novalidate>
+    <fieldset class="rd-q" id="rdQ0">
+      <legend>1. Which sounds most like you?</legend>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="tracker"><span>I have pensions from old jobs to sort out.</span></label>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="starter"><span>I am starting out, or have not started a pension yet.</span></label>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="director"><span>I run a company and pay myself.</span></label>
+    </fieldset>
+    <div id="rdQs"></div>
+    <p class="rd-err" id="rdErr" role="alert"></p>
+    <div class="rd-nav"><button type="submit" class="btn btn-primary" id="rdGo">See my score <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    <noscript><p class="rd-note">This check needs JavaScript to add up your answers.</p></noscript>
+  </form>
+
+  <section class="panel rd-panel rd-result" id="rdResult" aria-labelledby="rdH" hidden>
+    <h2 id="rdH" tabindex="-1">Your score</h2>
+    <p class="rd-score"><span class="rd-n" id="rdN">0</span> <span class="rd-of">out of 100</span></p>
+    <div class="rd-scale" aria-hidden="true">
+      <div class="rd-bands"><i class="rd-b-early"></i><i class="rd-b-onway"></i><i class="rd-b-good"></i><b class="rd-mark" id="rdMark"></b></div>
+      <div class="rd-bl"><span>Early days</span><span>On the way</span><span>In good shape</span></div>
     </div>
-
-    <div class="modebar reveal">
-      <div class="row"><span class="modelab">Which question?</span></div>
-      <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
-        <span class="ind" id="modeInd"></span>
-        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Instead of auto-enrolment</button>
-        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">On top of auto-enrolment</button>
-      </div>
-      <p class="subnote" id="modeNote">Same money out of your pocket. Auto-enrolment, or a personal pension instead?</p>
-    </div>
-
-    <div class="panel reveal">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
-    <div class="field" data-mode="1">
-      <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
-      <div class="togbody" data-for="matchOn" hidden>
-        <div class="row"><label for="match">How much, as a share of your salary</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">Only what your employer has actually agreed to.</p>
-      </div>
-    </div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">From your own pocket, on top of auto-enrolment. It goes through a personal pension, because My Future Fund only takes its set rate.</p></div>
-    <div class="field" data-mode="2" hidden>
-      <label class="tog"><input type="checkbox" id="tmatchOn"><span>Would your employer match what you add on?</span></label>
-      <div class="togbody" data-for="tmatchOn" hidden>
-        <div class="row"><label for="tmatch">How much of your top-up they would match</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A share of the top-up itself, not of your salary.</p>
-      </div>
-    </div>
-    <div class="field">
-      <label class="tog"><input type="checkbox" id="futureOn"><span>Plan for a future year instead of this one</span></label>
-      <div class="togbody" data-for="futureOn" hidden>
-        <div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Rates rise in three-year steps.</p>
-      </div>
-    </div>
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
-      <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Two incomes</button></div>
-      <p class="subnote" id="statusNote">Sets where your tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension.</p>
-      <div class="pb-band">
-        <div class="pb-band-track" aria-hidden="true"><i class="pb-band-lo" id="pbBandLo" style="width:88%"></i><i class="pb-band-hi" id="pbBandHi" style="width:12%"></i></div>
-        <p class="pb-band-key"><span><i class="pb-band-sw pb-band-lo"></i><b id="pbBandLoN">€44,000</b> of your salary taxed at 20%</span><span><i class="pb-band-sw pb-band-hi"></i><b id="pbBandHiN">€6,000</b> at 40%</span></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="results">
-    <div class="waitcard lead reveal">
-      <div class="wt">In one sentence</div>
-      <div class="wtext verdict" id="leadOut"></div>
-      <p class="phaseline" id="phaseLine"></p>
-      <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-
-    <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
-    <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
-      <div class="res-hero reveal" style="transition-delay:.08s">
-        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
-        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
-        <div class="divline"></div>
-        <div class="foot">One year, at your salary and age. An illustration only.</div>
-      </div>
-
-      <div class="pb-scale-card reveal" id="pbScaleCard" style="transition-delay:.1s" aria-hidden="true">
-        <div class="pb-scale-title">Side by side</div>
-        <p class="pb-scale-sub" id="pbScaleSub">One year of contributions each, at year 1 of the phase-in, on the same scale. The longer bar reaches the end of the scale.</p>
-        <div class="pb-scale-lane pb-scale-ae"><span class="pb-scale-lab">Auto-enrolment</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScaleAeBar"></div></div></div>
-        <div class="pb-scale-lane pb-scale-pp"><span class="pb-scale-lab">Personal pension</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScalePpBar"></div></div></div>
-      </div>
-
-      <div class="pb-my-card reveal" id="pbMyCard" data-mode="1" style="transition-delay:.11s">
-        <h3>Everything paid in, by 66</h3>
-        <p class="pb-my-sub" id="pbMySub">Both paths, every year from now to 66, grown at 5% a year.</p>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Auto-enrolment</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar"></i></span>
-          <span class="pb-my-fig" id="pbMyAe">€0</span>
-        </div>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Personal pension</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyPpBar"></i></span>
-          <span class="pb-my-fig" id="pbMyPp">€0</span>
-        </div>
-        <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
-      </div>
-
-      <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
-        <h3>Money above the cap</h3>
-        <div class="bd"><span class="bl">Salary above €80,000</span><span class="bv" id="capAbove">€0</span></div>
-        <div class="bd"><span class="bl">Your own rate on that part <span class="capnote" id="capRate"></span></span><span class="bv" id="capStranded">€0</span></div>
-        <div class="bd tot"><span class="bl">What a personal pension could turn it into</span><span class="bv" id="capCouldBe">€0</span></div>
-        <p class="subnote" id="capNote"></p>
-      </div>
-
-      <div class="vs-card reveal" style="transition-delay:.14s">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year.</div>
-        <div class="vs">
-          <div class="vs-col vs-salary">
-            <div class="vt">Auto-enrolment</div>
-            <div class="amt" id="aeNet">€0</div>
-            <div class="lab">From your take-home pay. No tax relief.</div>
-          </div>
-          <div class="vsmark">vs</div>
-          <div class="vs-col vs-pension">
-            <div class="vt">Personal pension</div>
-            <div class="amt" id="ppNet">€0</div>
-            <div class="lab" id="ppNetLab">Your contribution after tax relief.</div>
-          </div>
-        </div>
-        <p class="vs-note subnote" id="vsNote"></p>
-      </div>
-
-      <div class="chart-card reveal" style="transition-delay:.22s">
-        <h3>Personal pension, broken down</h3>
-        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
-        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
-        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
-        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2">€0</span></div>
-        <p class="subnote" id="ppReliefNote"></p>
-      </div>
-      <div class="chart-card reveal">
-        <h3>Your relief limit</h3>
-      <div class="pb-lad" data-pb-age="age" data-pb-earn="salary">
-    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
-        <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-        <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
-        <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
-        <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
-        <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
-        <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-out">At 35, relief applies to contributions up to €10,000 a year: 20% of €50,000.</p>
-    <p class="pb-lad-note">Earnings count up to €115,000.</p>
-  </div>
-      </div>
-    </div>
-
-    <!-- ============ MODE 2: COMBINED ============ -->
-    <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
-      <div class="res-hero reveal" style="transition-delay:.08s">
-        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
-        <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
-        <div class="divline"></div>
-        <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
-      </div>
-
-      <div class="vs-card reveal" style="transition-delay:.14s">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year, in two parts.</div>
-        <div class="vs">
-          <div class="vs-col vs-salary">
-            <div class="vt">Auto-enrolment minimum</div>
-            <div class="amt" id="cAeNet">€0</div>
-            <div class="lab">From your take-home pay. No tax relief.</div>
-          </div>
-          <div class="vsmark">+</div>
-          <div class="vs-col vs-pension">
-            <div class="vt">Your top-up</div>
-            <div class="amt" id="cExtraNet">€0</div>
-            <div class="lab" id="cExtraLab">What you pay in, before relief.</div>
-          </div>
-        </div>
-        <p class="vs-note subnote" id="cNote"></p>
-      </div>
-
-      <div class="chart-card reveal" style="transition-delay:.22s">
-        <h3>Your top-up, broken down</h3>
-        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
-        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
-        <div class="bd"><span class="bl">Goes into your pension</span><span class="bv" id="cGross">€0</span></div>
-        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="cMatchCap"></span></span><span class="bv" id="cMatch">€0</span></div>
-        <div class="bd tot"><span class="bl">Total from the top-up</span><span class="bv" id="cTopUp2">€0</span></div>
-        <p class="subnote" id="cReliefNote"></p>
-      </div>
-    </div>
-
-    <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
-    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s">
-      <h3>Choosing your funds, and how much risk</h3>
-      <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
-      <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
-      <div class="risktiles" id="riskTiles"></div>
-      <p class="riskrule"><b>Higher potential returns mean a higher risk of loss.</b> The value of a pension can fall as well as rise, and you may get back less than you put in. These figures are illustrations, not a recommendation of any level, and not a forecast. Which level suits you depends on things this page cannot see, and choosing one is a conversation with Damian.</p>
-      <p class="subnote">Under auto-enrolment on its own, your money goes into My Future Fund&rsquo;s standard funds and the choice is limited to those.</p>
-      <a class="wlink" href="booking.html">Talk the choice through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-
-    <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
-    <div class="chart-card reveal" style="transition-delay:.18s">
-      <h3>Auto-enrolment, broken down</h3>
-      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
-      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
-      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState">€0</span></div>
-      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2">€0</span></div>
-      <p class="subnote" id="aeRatesNote"></p>
-    </div>
-
-    <div class="chart-card reveal" style="transition-delay:.26s">
-      <h3>Before you rely on these rates</h3>
-      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at €80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years, and the position that the scheme does not currently accept contributions above its set rate. Confirm those against gov.ie or NAERSA before relying on them. Rates and rules can change.</p>
-    </div>
-    <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
-  </div>
+    <p class="rd-zone" id="rdZone"></p>
+    <h3>What moves your score</h3>
+    <ol class="rd-moves" id="rdMoves"></ol>
+    <p class="rd-none" id="rdNone" hidden>Nothing to add: you gave the best answer to every question. Things change, so it is worth a look again next year.</p>
+    <div class="rd-nav"><button type="button" class="rd-again" id="rdAgain">Change my answers</button><a class="btn btn-primary" id="rdBook" href="booking.html">Talk it through with Damian, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+  </section>
 </div></div>
-
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
-  <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice reveal">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation, and it does not say which path is right for you. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+    <p><b>This check is information only.</b> It is not a suitability assessment and not advice: it adds up your answers and does not look at your finances. Nothing you answer is sent anywhere or stored. If you book a call, the booking page only knows which of the three situations you picked.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <h3>How the score works</h3>
   <ul class="reveal">
-    <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
-    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.
-    <ol class="pb-stair">
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair3" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:75.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2032 to 2034</span><span class="pb-stair-r">4.5%, 4.5%, 1.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span></li>
-    </ol>
-    <p class="pb-stair-key"><span><i class="pb-stair-sw pb-stair-ee"></i>You</span><span><i class="pb-stair-sw pb-stair-er"></i>Your employer</span><span><i class="pb-stair-sw pb-stair-st"></i>The State</span></p></li>
-    <li>All three auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are calculated on salary up to €80,000, which gov.ie confirms. Payroll stops the deduction after the pay period in which that threshold is crossed, so a little can be paid on earnings above it in that period; this annual illustration ignores that.</li>
-    <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
-    <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
-    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% on the part of a contribution that sits above your standard rate cut-off point and at 20% on the rest, because a contribution comes off the top of your taxable income. It is limited to Revenue&rsquo;s age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. PRSI and USC are not modelled. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
-    <li>The standard rate cut-off points are the 2026 figures from Revenue: €44,000 single, €53,000 married or in a civil partnership with one income, and up to €88,000 with two incomes. The €88,000 is a maximum, reached only where the lower earner has at least €35,000 of income of their own; a couple with one income is €53,000 whatever they earn. These change most years.</li>
-    <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
-    <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
-    <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
-    <li>The three risk illustrations use the 1 to 7 Summary Risk Indicator that EU rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
-    <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
-    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+    <li>Each of the five questions after the first is worth up to 20 points: 20 for the best answer, 10 for a partial one, and 0 otherwise. The first question only chooses which five you are asked.</li>
+    <li>Only things you can find out or do are scored. Paying in on your own scores the same as paying in with an employer, and being self-employed scores the same as knowing what an employer would add.</li>
+    <li>0 to 39 is early days, 40 to 74 is on the way, and 75 to 100 is in good shape. The score is a checklist added up, not a measure of how much you have saved.</li>
   </ul>
 </div></section>
-<script src="assets/js/pb-ladder.js?v=a9ec3585"></script>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -2229,441 +1904,97 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/autoenrolment.js?v=f94c659a"></script>
+<script src="assets/js/readiness.js?v=a2de2ee1"></script>
 <script>
-/* broker-vs-autoenrolment.html
-   Maths lives in assets/js/autoenrolment.js and assets/js/pension-tax-relief.js,
-   which are the single source of truth and are covered by
-   tests/compare-calc.test.js. This file only reads the controls and paints
-   the result panels, so the page cannot hold a second copy of the rules.
+/* pension-readiness-check.html, the 60-second readiness check (Run 20 #4).
 
-   Two modes, two different questions, one shared input panel:
-     Mode 1, Equivalent layer: for the same money out of pocket, auto-enrolment
-                               against a personal pension instead.
-     Mode 2, Combined:         auto-enrolment at its set rate PLUS a personal
-                               top-up for anything extra, because My Future
-                               Fund does not currently take contributions
-                               above that rate (see the source warning in
-                               autoenrolment.js).
-   Both are computed on every change so switching is instant and they can
-   never disagree about the shared auto-enrolment layer.
+   The questions, the points and the steps all live in assets/js/readiness.js,
+   covered by tests/readiness.test.js. This file builds the five questions for
+   the situation chosen, adds up the answers through the module, and paints
+   the result. Answers are kept in this page's memory only: nothing is sent,
+   stored or put in a link, except the situation itself, which the booking
+   form asks anyway, carried as booking.html#persona=... so it arrives
+   ticked. */
+(function () {
+  'use strict';
+  var R = window.PBReadiness, P = window.PBPage;
+  var form = document.getElementById('rdForm');
+  if (!R || !P || !form) return;
+  var $ = P.$;
+  var answers = {}, persona = null;
+  var qsBox = $('rdQs'), err = $('rdErr'), result = $('rdResult');
 
-   HONESTY RULE: this page reports the numbers for the inputs entered and
-   nothing more. When auto-enrolment produces the larger total in Mode 1 it
-   says so in exactly the same words and prominence as the opposite result.
-   Mode 2 is stated matter of fact, as a consequence of what the scheme
-   currently allows, never as a pitch. */
-let mode = 1;
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
 
-/* Relief is worked out at the rate each euro actually attracts, split at the
-   standard rate cut-off point, so the page asks how the visitor is assessed
-   for tax rather than which rate to apply. Figures live in PBRelief. */
-const STATUS = [
-  { srcop: PBRelief.SRCOP.single,            who: 'single' },
-  { srcop: PBRelief.SRCOP.marriedOneIncome,  who: 'married or in a civil partnership with one income' },
-  { srcop: PBRelief.SRCOP.marriedTwoIncomes, who: 'married or in a civil partnership with two incomes' }
-];
-let statusIx = 0;
-const relief = () => ({ srcop: STATUS[statusIx].srcop });
-
-/* Pension age, and the growth the multi-year card assumes. 66 is what every
-   figure on this site assumes; 5% a year is the pension calculator's own
-   default, reused rather than a second rate invented for this page. Both are
-   said on the card in words. */
-const PENSION_AGE = 66;
-const GROWTH = 5;
-
-/* Formatting, the slider fill, the wiring and the debounced live region are
-   the same on all five calculators and live in assets/js/calc-page.js. */
-const { $, euro, pct, paintSlider, wireRanges, announce } = window.PBPage;
-
-/* Three illustrative risk levels for the personal pension side, on the 1 to 7
-   Summary Risk Indicator every fund's Key Information Document carries.
-
-   NEEDS DAMIAN INPUT. The return and bad-year figures below are placeholders.
-   They must be confirmed against the actual fund ranges Gresham can arrange,
-   and kept consistent with the 1% to 8% growth slider (default 5%) on
-   pension-calculator.html and director-calculator.html, so no two calculators
-   imply different growth. The bad-year figures are rough indications of a
-   fall, not floors. Nothing here names an asset class; which fund ranges and
-   structures can be offered, and whether any wider access should be
-   mentioned at all, is also for Damian to confirm. See docs/STATUS.md. */
-const RISK_LEVELS = [
-  { name: 'Lower risk',  sri: '2 to 3', ret: 3, fall: 10, note: 'Mostly bonds and cash-like assets. Smaller swings, slower growth.' },
-  { name: 'Medium risk', sri: '4',      ret: 5, fall: 20, note: 'A mix of shares and bonds. The level most default funds sit around.' },
-  { name: 'Higher risk', sri: '5 to 6', ret: 7, fall: 30, note: 'Mostly shares. Bigger swings, more room to grow, and to fall.' }
-];
-
-function renderRisk() {
-  $('riskTiles').innerHTML = RISK_LEVELS.map(l =>
-    '<div class="risktile">'
-    + '<div class="rk-name">' + l.name + '</div>'
-    + '<div class="rk-sri">Risk rating <b>' + l.sri + '</b> of 7</div>'
-    + '<div class="rk-row"><span>Illustrative return</span><b>around ' + l.ret + '% a year</b></div>'
-    + '<div class="rk-row"><span>In a bad year, could fall</span><b>around ' + l.fall + '%' + (l.fall >= 30 ? ' or more' : '') + '</b></div>'
-    + '<div class="rk-note">' + l.note + '</div>'
-    + '<div class="rk-warn">Can fall as well as rise. Not a recommendation.</div>'
-    + '</div>').join('');
-}
-
-/* the user has moved the Mode 1 contribution slider themselves, so stop re-matching it */
-let grossTouched = false;
-
-/* Screen readers otherwise announce a bare number, so each slider carries a
-   formatted aria-valuetext (issue D4). */
-const VALTEXT = {
-  age: v => v + ' years',
-  salary: v => euro(v),
-  phase: v => 'Year ' + v + (v >= 10 ? ' or later' : ''),
-  gross: v => euro(v) + ' a year',
-  match: v => v + '% of salary',
-  extra: v => euro(v) + ' a month',
-  tmatch: v => v + '% of your top-up'
-};
-
-/* paintSlider takes the wording map as an argument, so bind it once here. A
-   bare `paintSlider` handed to forEach would receive the array index as that
-   argument and quietly fall back to euro formatting on every slider. */
-const paint = el => paintSlider(el, VALTEXT);
-
-function setStatus(i) {
-  statusIx = i;
-  grossTouched = false;                          // relief changed, so re-match
-  for (let k = 0; k < STATUS.length; k++) {
-    const b = $('st' + k), on = k === i;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-  }
-  $('segInd').style.transform = 'translateX(' + (i * 100) + '%)';
-  const st = STATUS[i];
-  $('statusNote').innerHTML = 'Tax is 40% above <b>' + euro(st.srcop) + '</b> for you, so relief on a personal pension is 40% on that part and 20% below.'
-    + (i === 2 ? ' The ' + euro(88000) + ' is a maximum; it needs the lower earner to have ' + euro(35000) + ' of their own.' : '');
-  calc();
-}
-
-/* "EUR 2,400 at 40%, EUR 400 at 20%", or just the one rate when only one applies */
-function reliefAt(split) {
-  if (!split) return '';
-  const parts = [];
-  if (split.at40 > 0) parts.push(euro(split.at40) + ' at 40%');
-  if (split.at20 > 0) parts.push(euro(split.at20) + ' at 20%');
-  return parts.length ? parts.join(', ') : '';
-}
-
-/* ---- mode tabs ---- */
-const MODE_NOTE = {
-  1: 'Same money out of your pocket. Auto-enrolment, or a personal pension instead?',
-  2: 'Auto-enrolment as it is, plus extra saving through a personal pension.'
-};
-
-/* The auto-enrolment year is worked out from today's date. Year 1 is 2026.
-   Nobody has to think about it unless they are planning for a future year,
-   which is a toggle in More options, off by default. */
-const SCHEME_START = 2025;                       // year 1 is SCHEME_START + 1
-function thisYearsPhase() {
-  return Math.min(+$('phase').max, Math.max(1, new Date().getFullYear() - SCHEME_START));
-}
-function schemeYear() {
-  return $('futureOn').checked ? +$('phase').value : thisYearsPhase();
-}
-
-/* Yes/no toggles that reveal a secondary slider. Off means the slider is
-   hidden and counts as zero, whatever it was last set to. */
-function toggled(id) { return $(id).checked; }
-function syncToggles() {
-  document.querySelectorAll('.togbody[data-for]').forEach(b => {
-    b.hidden = !$(b.getAttribute('data-for')).checked;
-  });
-}
-
-function setMode(m, focusTab) {
-  mode = m;
-  [1, 2].forEach(n => {
-    const tab = $('m' + n), on = n === m;
-    tab.classList.toggle('on', on);
-    tab.setAttribute('aria-selected', on ? 'true' : 'false');
-    tab.tabIndex = on ? 0 : -1;
-    $('mode' + n + 'Results').hidden = !on;
-  });
-  $('modeInd').style.transform = m === 1 ? 'translateX(0)' : 'translateX(100%)';
-  $('modeNote').textContent = MODE_NOTE[m];
-  /* mode-specific controls live in the shared panel and simply show or hide */
-  document.querySelectorAll('[data-mode]').forEach(el => { el.hidden = el.getAttribute('data-mode') !== String(m); });
-  if (focusTab) $('m' + m).focus();
-  try { history.replaceState(null, '', m === 2 ? '#combined' : location.pathname + location.search); } catch (e) {}
-  calc();
-}
-
-/* arrow keys move between the two tabs, as a tablist should */
-document.querySelector('.modeseg').addEventListener('keydown', e => {
-  if (!/^(ArrowLeft|ArrowRight|Home|End)$/.test(e.key)) return;
-  e.preventDefault();
-  setMode(e.key === 'Home' ? 1 : e.key === 'End' ? 2 : (mode === 1 ? 2 : 1), true);
-});
-
-function calc() {
-  const age = +$('age').value;
-  const salary = +$('salary').value;
-  const year = schemeYear();
-  const match = toggled('matchOn') ? +$('match').value : 0;
-  const extraMonthly = +$('extra').value;
-  const tmatch = toggled('tmatchOn') ? +$('tmatch').value : 0;
-
-  const ae = PBCompare.autoEnrolment(salary, year);
-
-  /* ---------- Mode 1: equivalent layer ---------- */
-  /* Until the user touches it, the personal contribution tracks the net cost of
-     auto-enrolment so the comparison opens genuinely like for like. */
-  if (!grossTouched) {
-    const matched = Math.round(PBCompare.matchedGross(salary, year, age, relief()) / 250) * 250;
-    $('gross').value = Math.min(matched, +$('gross').max);
-  }
-  const gross = +$('gross').value;
-  const pp = PBCompare.personalPension(gross, age, salary, relief(), match);
-
-  /* ---------- Mode 2: combined ---------- */
-  const c = PBCompare.combined({ salary, year, age, srcop: relief().srcop, extraMonthly, topUpMatchPct: tmatch });
-
-  /* control labels */
-  $('ageV').textContent = age;
-  $('salaryV').textContent = euro(salary);
-  $('phaseV').textContent = 'Year ' + year + (year >= 10 ? '+' : '');
-  $('grossV').textContent = euro(gross);
-  $('matchV').textContent = (+$('match').value) + '%';
-  $('extraV').textContent = euro(extraMonthly);
-  $('tmatchV').textContent = (+$('tmatch').value) + '%';
-  $('phaseNote').textContent = 'Phase ' + ae.phase + ' (' + ae.years + '): you '
-    + pct(ae.rates.employee) + ', employer ' + pct(ae.rates.employer) + ', State ' + pct(ae.rates.state) + '.';
-
-  /* the one line about the year, said plainly, up where the answer is */
-  const calYear = SCHEME_START + year;
-  $('phaseLine').textContent = ($('futureOn').checked ? 'Planning for ' + calYear : 'Since it is ' + calYear)
-    + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
-    + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
-
-  /* where 20% becomes 40%: the salary split at the cut-off this status uses */
-  const cut = relief().srcop, bandLo = Math.min(salary, cut), bandHi = Math.max(0, salary - cut);
-  $('pbBandLo').style.width = (bandLo / salary * 100).toFixed(4) + '%';
-  $('pbBandHi').style.width = (bandHi / salary * 100).toFixed(4) + '%';
-  $('pbBandLoN').textContent = euro(bandLo);
-  $('pbBandHiN').textContent = euro(bandHi);
-
-  /* the phase staircase in the assumptions: tag the phase these figures use */
-  for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;
-
-  /* ---------- shared: the auto-enrolment layer ---------- */
-  $('aeEmployee').textContent = euro(ae.employee);
-  $('aeEmployer').textContent = euro(ae.employer);
-  $('aeState').textContent = euro(ae.state);
-  $('aeTotal2').textContent = euro(ae.totalIn);
-  const capNote = ae.salaryCapApplies ? '(on the first ' + euro(PBCompare.AE_SALARY_CAP) + ')' : '';
-  $('aeEmployerCap').textContent = capNote;
-  $('aeStateCap').textContent = capNote;
-  $('aeRatesNote').textContent = (ae.salaryCapApplies
-        ? 'All three are worked out on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' of your salary only.'
-        : 'All three are worked out on your whole salary.')
-    + ' Yours comes out of take-home pay, so there is no tax relief on it.';
-
-  /* money above the cap: shown only when there is some */
-  const ac = PBCompare.aboveCap(salary, year, age, relief());
-  $('capCard').hidden = !(ac.above > 0);
-  if (ac.above > 0) {
-    $('capAbove').textContent = euro(ac.above);
-    $('capRate').textContent = '(' + pct(ac.rate) + ')';
-    $('capStranded').textContent = euro(ac.strandedNet);
-    $('capCouldBe').textContent = euro(ac.couldBe);
-    $('capNote').textContent = 'Auto-enrolment takes nothing on salary above ' + euro(PBCompare.AE_SALARY_CAP)
-      + ', so this ' + euro(ac.strandedNet) + ' stays in your pay. A personal pension could take it and, with tax relief, put '
-      + euro(ac.couldBe) + ' in. Not a reason to leave My Future Fund, which never sees it either way.';
+  function build() {
+    qsBox.textContent = '';
+    var qs = R.questions(persona);
+    if (!qs) return;
+    qs.forEach(function (q, n) {
+      var fs = el('fieldset', null, 'rd-q'); fs.id = 'rdQ' + (n + 1);
+      fs.appendChild(el('legend', (n + 2) + '. ' + q.text));
+      q.options.forEach(function (o) {
+        var lab = el('label', null, 'rd-opt');
+        var inp = document.createElement('input');
+        inp.type = 'radio'; inp.name = 'rd_' + q.key; inp.value = String(o.index);
+        if (answers[q.key] === o.index) inp.checked = true;
+        inp.addEventListener('change', function () { answers[q.key] = o.index; err.textContent = ''; });
+        lab.appendChild(inp); lab.appendChild(el('span', o.label));
+        fs.appendChild(lab);
+      });
+      qsBox.appendChild(fs);
+    });
   }
 
-  /* ---------- Mode 1 panel ---------- */
-  $('aeTotal').textContent = euro(ae.totalIn);
-  $('ppTotal').textContent = euro(pp.totalIn);
-  $('ppTotal2').textContent = euro(pp.totalIn);
-  $('aeNet').textContent = euro(ae.netCost);
-  $('ppNet').textContent = euro(pp.netCost);
-  $('ppNetLab').textContent = pp.relief > 0
-    ? euro(pp.gross) + ' in, less ' + euro(pp.relief) + ' of tax relief.'
-    : 'Your contribution. No relief at this level.';
-
-  const netGap = Math.round(pp.netCost - ae.netCost);
-  $('vsNote').textContent = Math.abs(netGap) < 1
-    ? 'Both cost you the same, so the totals above are like for like.'
-    : (netGap > 0
-        ? 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' more out of pocket.'
-        : 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' less out of pocket.');
-
-  $('ppGross').textContent = euro(pp.gross);
-  $('ppRelief').textContent = euro(pp.relief);
-  $('ppEmployer').textContent = euro(pp.employer);
-  $('ppReliefCap').textContent = reliefAt(pp.reliefSplit);
-  $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none)';
-  $('ppReliefNote').textContent = reliefSentence(pp, age);
-
-  /* the Mode 1 verdict, stated the same way whichever path is larger */
-  const cmp = PBCompare.compare({ salary, year, age, srcop: relief().srcop, gross, employerMatchPct: match });
-
-  /* EVERYTHING PAID IN, BY 66. The same comparison over every year that is
-     left rather than one of them. The growth assumption is the calculators'
-     own default, 5% a year, named on the card; the module is told it rather
-     than owning it. Pension age is 66, which is what every figure on this
-     site assumes. */
-  const my = PBCompare.cumulative({
-    salary, firstYear: year, age, retireAge: PENSION_AGE, srcop: relief().srcop,
-    gross: +$('gross').value, employerMatchPct: match, growth: GROWTH / 100
-  });
-  $('pbMySub').textContent = my.years > 0
-    ? 'Both paths, every year from ' + age + ' to ' + PENSION_AGE + ', grown at ' + GROWTH + '% a year.'
-    : 'You are at or past ' + PENSION_AGE + ', so there are no years left to add up.';
-  $('pbMyAe').textContent = euro(my.autoEnrolment);
-  $('pbMyPp').textContent = euro(my.personal);
-  const myTop = Math.max(my.autoEnrolment, my.personal);
-  [['pbMyAeBar', my.autoEnrolment], ['pbMyPpBar', my.personal]].forEach(function (lane) {
-    $(lane[0]).style.width = (myTop > 0 ? lane[1] / myTop * 100 : 0) + '%';
+  [].forEach.call(form.querySelectorAll('input[name="rdPersona"]'), function (r) {
+    r.addEventListener('change', function () { persona = r.value; err.textContent = ''; build(); });
   });
 
-  let verdict;
-  if (cmp.larger === 'equal') {
-    verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';
-  } else if (cmp.larger === 'autoEnrolment') {
-    verdict = 'Auto-enrolment puts ' + euro(cmp.difference) + ' more into your pension this year, '
-      + euro(ae.totalIn) + ' against ' + euro(pp.totalIn) + '.';
-  } else {
-    verdict = 'The personal pension puts ' + euro(cmp.difference) + ' more into your pension this year, '
-      + euro(pp.totalIn) + ' against ' + euro(ae.totalIn) + '.';
+  function show(s) {
+    $('rdN').textContent = s.score;
+    $('rdMark').style.left = s.score + '%';
+    $('rdZone').innerHTML = '';
+    var b = el('b', s.zone.label + '.'); $('rdZone').appendChild(b);
+    $('rdZone').appendChild(document.createTextNode(' ' + s.zone.line));
+    var list = $('rdMoves'); list.textContent = '';
+    s.moves.forEach(function (m) {
+      var li = el('li');
+      li.appendChild(el('span', '+' + m.points + ' ', 'rd-pts'));
+      li.appendChild(document.createTextNode(m.text + ' '));
+      var a = el('a', m.link); a.href = m.href;
+      if (/^https?:/.test(m.href)) a.rel = 'noopener';
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    list.hidden = !s.moves.length;
+    $('rdNone').hidden = !!s.moves.length;
+    $('rdBook').href = 'booking.html#persona=' + encodeURIComponent(s.persona);
+    form.hidden = true;
+    result.hidden = false;
+    $('rdH').focus();
   }
-  verdict += Math.abs(netGap) < 1
-    ? ' Both cost you the same out of pocket.'
-    : ' They do not cost you the same out of pocket, though.';
 
-  /* ---------- Mode 2 panel ---------- */
-  const x = c.extra;
-  $('cTotal').textContent = euro(c.totalIn);
-  $('cTopUp').textContent = euro(x.totalIn);
-  $('cTopUp2').textContent = euro(x.totalIn);
-  $('cAeNet').textContent = euro(ae.netCost);
-  $('cExtraNet').textContent = euro(c.extraNet);
-  $('cExtraLab').textContent = extraMonthly > 0
-    ? euro(extraMonthly) + ' a month, before relief.'
-    : 'Nothing yet. Move the slider to add an amount.';
-  $('cNote').textContent = extraMonthly > 0
-    ? euro(c.netCost) + ' out of your pocket puts ' + euro(c.totalIn) + ' in.'
-    : 'With no top-up this is just auto-enrolment: ' + euro(ae.netCost) + ' puts ' + euro(ae.totalIn) + ' in.';
-
-  $('cPaid').textContent = euro(c.extraNet);
-  $('cRelief').textContent = euro(x.relief);
-  $('cGross').textContent = euro(x.gross);
-  $('cMatch').textContent = euro(x.employer);
-  $('cReliefCap').textContent = reliefAt(x.reliefSplit);
-  $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none)';
-  $('cReliefNote').textContent = extraMonthly > 0 ? reliefSentence(x, age) : '';
-
-  /* the Mode 2 statement: matter of fact, a consequence of what the scheme allows */
-  let cv = 'Auto-enrolment puts ' + euro(ae.totalIn) + ' into your pension this year.';
-  if (extraMonthly > 0) {
-    cv += ' Your extra ' + euro(extraMonthly) + ' a month becomes ' + euro(x.gross) + ' with tax relief'
-      + (x.employer > 0 ? ', plus ' + euro(x.employer) + ' from your employer' : '')
-      + '. Together, ' + euro(c.totalIn) + ' goes in for ' + euro(c.netCost) + ' out of your pocket.';
-  } else {
-    cv += ' Add an amount on the left to see what saving extra on top would put in.';
-  }
-  $('leadOut').textContent = mode === 1 ? verdict : cv;
-
-  /* one live region, announcing whichever mode is showing */
-  announce(mode === 1
-    ? verdict + ' Auto-enrolment costs you ' + euro(ae.netCost) + ', the personal pension costs you ' + euro(pp.netCost) + '.'
-    : cv);
-
-  ['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => paint($(id)));
-}
-
-/* the relief sentence is the same for Mode 1's personal path and Mode 2's top-up */
-function reliefSentence(layer, age) {
-  return 'Revenue allows relief on up to ' + euro(layer.reliefLimit) + ' a year at your age.'
-    + (layer.aboveReliefLimit > 0
-        ? ' ' + euro(layer.aboveReliefLimit) + ' of this is above that limit, so it goes in without relief.'
-        : '');
-}
-
-/* ---- the two Mode 1 totals, drawn to one scale ----
-   The bars are read back from #aeTotal and #ppTotal, the two cells calc() has
-   just written, so the picture is scaled from exactly the figures on screen
-   and can never contradict them. No maths module is called here.
-
-   calc() itself is not edited: the `calc` binding is wrapped once, after the
-   function is defined, and every call site resolves `calc` by name at call
-   time, so the load render and every later one go through the wrapper.
-
-   Both lanes travel at one speed. Each bar's transition-duration is set in
-   proportion to the length it has to cover, so the longer bar is still moving
-   after the shorter one has stopped. There is no line to reach and no marker
-   on either lane: the end rule is identical on both tracks and is simply where
-   the scale ends. Under prefers-reduced-motion the CSS drops the transition
-   and the bars sit at their lengths. */
-function pbScaleValue(id) {
-  const el = $(id);
-  if (!el) return 0;
-  const n = +String(el.textContent).replace(/[^0-9]/g, '');
-  return isFinite(n) ? n : 0;
-}
-
-function renderScale() {
-  /* which year the lanes are drawn for: they already move with the
-     auto-enrolment year slider, and this says so, so a reader dragging it can
-     see what changed and why */
-  const sub = $('pbScaleSub');
-  if (sub) {
-    const y = +$('phase').value;
-    sub.textContent = 'One year of contributions each, at year ' + y + (y >= 10 ? '+' : '') +
-      ' of the phase-in, on the same scale. The longer bar reaches the end of the scale.';
-  }
-  const ae = pbScaleValue('aeTotal');
-  const pp = pbScaleValue('ppTotal');
-  /* the bars read parsed text, so a parse failure would give both of them 0 */
-  const top = Math.max(ae, pp);
-  const lanes = [['pbScaleAeBar', ae], ['pbScalePpBar', pp]];
-  for (let i = 0; i < lanes.length; i++) {
-    const bar = $(lanes[i][0]);
-    if (!bar) continue;
-    const f = top > 0 ? lanes[i][1] / top : 0;
-    bar.style.setProperty('transition-duration', Math.max(0.2, 0.9 * f).toFixed(2) + 's');
-    bar.style.width = (f * 100) + '%';
-  }
-}
-
-var pbCalcFigures = calc;
-calc = function () {
-  pbCalcFigures();
-  renderScale();
-};
-
-wireRanges(VALTEXT, el => {
-  if (el.id === 'gross') grossTouched = true;
-  /* a new salary or age means a new auto-enrolment cost, so the contribution
-     goes back to matching it; a value dragged at one salary must not survive
-     into another */
-  if (el.id === 'salary' || el.id === 'age') grossTouched = false;
-  calc();
-});
-
-/* the phase slider, behind its toggle, starts on this year's phase */
-$('phase').value = thisYearsPhase();
-paint($('phase'));
-['futureOn', 'matchOn', 'tmatchOn'].forEach(id => {
-  $(id).addEventListener('change', () => {
-    syncToggles();
-    /* a slider that was hidden has no width until now, so repaint it */
-    document.querySelectorAll('.togbody:not([hidden]) input[type=range]').forEach(paint);
-    calc();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!persona) { err.textContent = 'Pick the situation that sounds most like you first.'; form.querySelector('input[name="rdPersona"]').focus(); return; }
+    var s = R.score(persona, answers);
+    if (!s.complete) {
+      err.textContent = 'Answer every question to see your score. ' + s.missing.length + (s.missing.length === 1 ? ' is' : ' are') + ' still open.';
+      var first = R.questions(persona).map(function (q) { return q.key; }).indexOf(s.missing[0]);
+      var target = $('rdQ' + (first + 1));
+      if (target) target.querySelector('input').focus();
+      return;
+    }
+    show(s);
   });
-});
-syncToggles();
-renderRisk();
-setStatus(0);
-/* a shared link can open straight onto Mode 2 */
-setMode(location.hash === '#combined' ? 2 : 1);
+
+  $('rdAgain').addEventListener('click', function () {
+    result.hidden = true;
+    form.hidden = false;
+    var checked = form.querySelector('input[name="rdPersona"]:checked') || form.querySelector('input[name="rdPersona"]');
+    checked.focus();
+  });
+})();
 </script>
 
 <script>
@@ -3055,7 +2386,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','salary','gross','match','extra','tmatch'];   /* primary controls: ids on THIS page */
+  var KEEP = [];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 
