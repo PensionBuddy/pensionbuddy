@@ -250,6 +250,38 @@ PAGES = {
         checks=(('id="rdForm"', 'the check'),
                 ('not a suitability assessment', 'information only, said on the page')),
     ),
+    # Run 20 #7. The threshold for a year, the share of it used, and the
+    # lump sum's bands, from assets/js/sft.js, which carries the sources.
+    'sft': Page(
+        out='standard-fund-threshold.html',
+        parts='sft-parts',
+        title='The Standard Fund Threshold, and how much of it you would use, Pensionbuddy',
+        desc=('The Standard Fund Threshold from 2026 to 2029 and after, how much of it your pensions '
+              'would use in the year you take them, and how a retirement lump sum is taxed. '
+              'Rules as at September 2026. An illustration, not advice.'),
+        modules=['assets/js/sft.js'],
+        keep=['total', 'year', 'lump'],
+        nav=None,
+        checks=(('id="sftStrip"', 'the year-by-year strip'),
+                ('Rules as at 24 September 2026', 'the date the rules were checked'),
+                ('Finance Act 2024', 'the statute cited')),
+    ),
+    # Run 20 #6. A dated summary of the rules that changed for directors, and
+    # four questions that list topics to discuss, never a recommendation.
+    'director-rules': Page(
+        out='director-pension-rules.html',
+        parts='director-rules-parts',
+        title="Directors' pensions in 2026: what changed, Pensionbuddy",
+        desc=('What changed for company directors: executive pensions set up before April 2021, a '
+              "company's payments into a PRSA, the October window and the Standard Fund Threshold. "
+              'Rules as at September 2026. Information, not advice.'),
+        modules=['assets/js/director-topics.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="drForm"', 'the four questions'),
+                ('Rules as at 24 September 2026', 'the date the rules were checked'),
+                ('Topics to discuss, not advice', 'the list says what it is')),
+    ),
 }
 
 

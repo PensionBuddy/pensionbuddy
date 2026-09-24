@@ -43,6 +43,8 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| 6 | Directors' 2026 rules and "which structure" | done: new page `director-pension-rules.html` (parts `tools/director-rules-parts/`), dated "Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.", five short sections each with its sources: executive pensions set up before 22 April 2021 (the five years' grace ended 21 April 2026; since then a one-member scheme can carry on only under the full rules, and most have moved to a master trust, a PRSA before normal retirement age, or a buy-out bond; the Pensions Authority's 40,644 on 1 September 2026, from 141,500), a company paying into a PRSA (100% of pay from 1 January 2025, then a benefit-in-kind and not deductible), the October window (31 October 2026, 18 November 2026 on ROS; company contributions follow its year end), the threshold, and SSAPs. Four questions list topics to discuss, never a recommendation (new module `assets/js/director-topics.js`, suite 10). The build list's "every executive pension had to move to a Master Trust or PRSA by 22 April 2026" is not what the law says (it required compliance, not a move); the page says what it does. Linked from director.html | — |
+| 7 | The Standard Fund Threshold and lump sums | done: new calculator `standard-fund-threshold.html` (parts `tools/sft-parts/`), same date stamp: the total of your pensions, the year taken (2026 to "2030 or later") and a lump sum; the threshold for that year and the share used, the statute's steps as a strip with the year marked, the chargeable excess tax at 40% when over ("at most" from 2030, when the threshold is only known to be at least €2.8m), the €60,000 lump sum credit, the combined rate of up to 68.8%, or 71.2% with PRSI, from the Department of Finance's 2024 examination, and the lump sum's three bands (€200,000 tax-free, €300,000 at 20%, the rest as income; the €500,000 fixed since 1 January 2025). New module `assets/js/sft.js` carrying every source, suite 37. The build list's "up to 71% (100% - 40% x 52%)": that formula gives 79.2%; the right sum is 40% + 60% x 52% = 71.2%, and the page cites the government's report, not Davy. Linked from director.html and the rules page | — |
 | 4 | The 60-second readiness check | done, not for launch before the compliance brief the build list asks for: new page `pension-readiness-check.html` (parts `tools/readiness-parts/`): which of the three situations fits (the booking form's three), then five questions for that situation, 20 points each, a score out of 100 in three named zones (Early days, On the way, In good shape) shown as a number, in words and on a labelled scale, and a step for every point not scored, each linked to the page that helps (the finder, the charges calculator, the entitlement check, the way-of-life picker, the calculators). Only things the reader can do are scored; paying in alone scores the same as with an employer; nothing scores booking. Answers never leave the page; "Talk it through with Damian, free" goes to `booking.html#persona=…`, and booking.html now ticks that one choice and nothing else. New module `assets/js/readiness.js`, suite 41 assertions. Footer Tools column | — |
 | 3 | What your pension's charges cost | done: new calculator `pension-fees-calculator.html` (parts `tools/fees-parts/`): the pot, the monthly payment and the years; your plan's annual management charge and charge on each payment (defaults 1% and 5%, the Standard PRSA maximums, Pensions Act 1990 s.104(5) and (6)) against another plan's (defaults 0.5% and none), growth folded under More options. The two pots at retirement, one sentence, a table of what each plan's charges took and what they cost by retirement, a chart of both pots and the no-charge line, the prescribed warnings beside the figures, and "The other side" card (a lower charge is not the only thing that matters; moving can mean giving up terms worth more). Labels stay neutral ("the other plan") so a higher comparison reads right. New module `assets/js/pension-fees.js` (spec `docs/CALC-SPEC-FEES.md`), suite 35 assertions, the defaults worked out a second time in Python first; the no-charge line is the calculators' own projection to the cent. Linked from the footer's Tools column, the nav's Calculator menu and the finder; pb-share now keeps the warning box directly under the figures | — |
 | 5 | Save or send your results | done: "Save or print these figures" (a one-page report: the headline figures under the page's own labels, the result sentence, the workings, what was entered, the page's assumptions, the link that reopens the figures, any warning box, and the footer's regulatory statement and disclaimer) and "Email them to yourself" (the reader's own email app, addressed to no one) beside "Copy a link to these figures" on all five calculators; new `assets/js/pb-report.js`, which reads only what the page shows, stands aside while the guess card's veil is up, and leaves out switched-off controls; pb-share.js exposes its link builder so there is one definition of a resume link; the two calculators' "Email my results" now carry that link too | — |
@@ -53,6 +55,17 @@ a figure or a legal sentence is Damian's to give, the page carries a
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
+
+- **#6 and #7, every tax and regulatory statement:** both pages state rules
+  from primary sources (Finance Act 2024 ss.12 and 13, S.I. 128 of 2021, the
+  Pensions Act s.61B, Revenue's Pensions Manual chapters 4, 13, 19, 24, 25
+  and 27 and appendix III, Revenue eBrief 034/26, the Pensions Authority's
+  notices and conference figures), all read on 24 September 2026, but they
+  are regulated content and yours to sign. Re-check both after Budget 2027 on
+  6 October 2026. Two points the research could not settle: how a Personal
+  Fund Threshold below the rising SFT is treated (the page only says a PFT
+  may apply instead), and Revenue's defined benefit valuation factors (the
+  page says Damian can work that out, and gives no factor).
 
 - **#4, before the readiness check goes live:** the build list's own condition,
   a brief to compliance on the check (a score is a gamified element, which the
@@ -144,6 +157,14 @@ a figure or a legal sentence is Damian's to give, the page carries a
   across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
+
+- #6 and #7: both pages whole, including the four questions and five topics
+  on the rules page ("Topics to discuss, not advice.") and every sentence the
+  threshold check writes ("[total] taken in [year] uses [x]% of that year's
+  threshold, leaving [y] of headroom." / "... is [z] over ..."; "Chargeable
+  excess tax at 40% on the [z] over is [cet] ..."). On director.html, a new
+  section "The rules for 2026. What changed, and how close you are to the
+  cap." with two cards linking the pages.
 
 - #4: the whole of pension-readiness-check.html: the h1 "How ready is your
   pension? Six questions to find out.", the three situations ("I have pensions
