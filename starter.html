@@ -1709,6 +1709,24 @@ button{font-family:inherit}
   .pb-sa-track{grid-column:1 / -1;grid-row:2}
   .pb-sa-less{grid-column:1 / -1;grid-row:3}
 }
+/* MY FUTURE FUND, WHAT HAPPENS WHEN (.pb-mff, #14 in Run 20). Under the
+   3 : 3 : 1 split: the dates and windows the Automatic Enrolment Retirement
+   Savings System Act 2024 sets, as a list with a line down it. The rates are
+   s.61's, the opt-out windows s.54(2), the refund s.63, pausing s.62 and
+   re-enrolment s.55. Plain markup, no script. */
+.pb-mff{max-width:760px;margin:40px 0 30px;padding-top:32px;border-top:1px solid var(--line)}
+.pb-mff h3{margin-bottom:18px}
+.pb-mff-list{list-style:none;margin:0;padding:0}
+.pb-mff-list li{position:relative;display:grid;grid-template-columns:14em minmax(0,1fr);gap:4px 18px;padding:0 0 16px 26px}
+.pb-mff-list li::before{content:"";position:absolute;left:0;top:.42em;width:12px;height:12px;border-radius:50%;background:var(--teal);box-sizing:border-box}
+.pb-mff-list li::after{content:"";position:absolute;left:5px;top:calc(.42em + 16px);bottom:2px;width:2px;background:var(--line-2)}
+.pb-mff-list li:last-child{padding-bottom:0}
+.pb-mff-list li:last-child::after{display:none}
+.pb-mff-list b{font-size:.98rem;font-weight:700;color:var(--ink);line-height:1.55}
+.pb-mff-list span{font-size:.98rem;line-height:1.55;color:var(--ink-2)}
+@media(max-width:700px){
+  .pb-mff-list li{grid-template-columns:minmax(0,1fr)}
+}
 
 /* ---- the hero chat plays out as it is scrolled past ----
    Its own class and its own observer, deliberately not the .reveal system:
@@ -2198,6 +2216,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1.</p>
+  </div>
+  <div class="pb-mff reveal" id="pbMff">
+    <h3>Once you are enrolled: what happens when.</h3>
+    <ol class="pb-mff-list">
+      <li><b>Month 1</b><span>You are enrolled through payroll and contributions start. From 2026 to 2028 that is 1.5% of your gross pay from you, 1.5% from your employer and 0.5% from the State, on pay up to &euro;80,000 a year.</span></li>
+      <li><b>Months 7 and 8</b><span>You can opt out. What you paid in comes back to you. What your employer and the State paid stays in your pot, invested, until you can draw it at 66.</span></li>
+      <li><b>From month 7</b><span>You can pause contributions instead, for between one and two years. Once month 8 has passed you can no longer opt out, but you can still pause.</span></li>
+      <li><b>Two years after an opt-out</b><span>You are enrolled again automatically, if you are under 66 and still in a job without a pension through payroll.</span></li>
+      <li><b>2029</b><span>The rates double: 3% each from you and your employer, and 1% from the State. There is another window to opt out in months 7 and 8 after the rise, and opting out then refunds only the extra the rise added.</span></li>
+      <li><b>2032</b><span>4.5% each, and 1.5% from the State, with another window to opt out after it.</span></li>
+      <li><b>2035 on</b><span>6% each, and 2% from the State, with one more window to opt out after it.</span></li>
+    </ol>
+    <p class="pb-sa-note">My Future Fund started on 1 January 2026 for employees aged 23 to 59 earning &euro;20,000 or more a year who are not in a pension through payroll. The self-employed are not included. The Department of Social Protection reported more than 835,000 people in it on 14 September 2026. Sources: the Automatic Enrolment Retirement Savings System Act 2024, sections 54, 55, 61, 62 and 63; gov.ie; Citizens Information.</p>
   </div>
   <a class="btn btn-primary" href="broker-vs-autoenrolment.html">Compare the two side by side <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
