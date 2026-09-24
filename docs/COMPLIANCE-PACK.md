@@ -116,15 +116,15 @@ questions, points and zone names.
 What the site does now: the two warnings Reg 372 and Reg 392 prescribe, word
 for word, boxed, in bold, no smaller than the text around them (Reg 45),
 directly under the projected figures (Reg 82), on the pension, director and
-charges calculators and under both growth charts on the starter page. The
-printed report carries them. One page was missed: the auto-enrolment
-comparison's card "Everything paid in, by 66" adds up both paths'
-contributions "grown at 5% a year" and carries no box. Our earlier status
-note said that page projects no growth; that was wrong.
+charges calculators, on the auto-enrolment comparison's card "Everything
+paid in, by 66" (which adds up both paths' contributions "grown at 5% a
+year"; it was missed at first and has the box now), and under both growth
+charts on the starter page. The printed report carries them. In the site's
+copy editor the boxes are locked, so the prescribed words cannot be edited
+there.
 What we need: whether a general calculator's projection is an illustration
 of an investment product under Reg 372 at all. The boxes were added as the
-cautious reading and can come off if they are not required; if they stay,
-the comparison needs one too.
+cautious reading and can come off if they are not required.
 
 1.5 The regulatory disclosure statement (Reg 71)
 ------------------------------------------------
@@ -141,8 +141,9 @@ the words to use instead.
 1.7 Initialisms (Reg 88)
 ------------------------
 
-See section 5. What we need: whether each initialism must be spelled out on
-the page that uses it, or whether the site's jargon buster is enough.
+See section 5. Every initialism is now spelled out at its first use on each
+page. What we need: confirmation that this meets Reg 88, and your view on
+the few left as they are.
 
 1.8 Tax and regulatory statements on the dated pages
 ----------------------------------------------------
@@ -435,8 +436,9 @@ page that helps:
   "How we help" (tracker.html)
 - "Find out what the charges take out of your pot by retirement." Link:
   "Open the charges calculator" (pension-fees-calculator.html)
-- "Check your PRSI record on MyWelfare.ie, then see what it could pay."
-  Link: "Open the entitlement check" (state-pension-entitlement.html)
+- "Check your Pay-Related Social Insurance (PRSI) record on MyWelfare.ie,
+  then see what it could pay." Link: "Open the entitlement check"
+  (state-pension-entitlement.html)
 - "Pick a way of life to aim for, from the Pensions Council’s research."
   Link: "Start from a way of life" (index.html#gap)
 - "See what a monthly amount could grow to, and what tax relief adds." Link:
@@ -531,34 +533,22 @@ changed. The footer and menu call the page "Auto-enrolment comparison".
 5.3 Reg 88: initialisms
 -----------------------
 
-Reg 88 requires an advertisement to spell out any initialism it uses. A scan
-of every public page's visible text lists the initialisms each page uses
-without spelling them out anywhere on that page ("UK" and "EU" left aside as
-everyday):
+Reg 88 requires an advertisement to spell out any initialism it uses. Every
+initialism on the site is now spelled out at its first use on each page, in
+the form "Personal Retirement Savings Account (PRSA)", including the
+glossary's term index and the research bodies named on the home page. A scan
+of every page's text, as the browser renders it, checks this for 28
+initialisms (PRSA, PRSI, USC, ROS, AVC, ARF, PRB, SFT, TCA, QFA, CCPC, CSO,
+HMRC, QROPS, EEA, EU, NAERSA, PPS, MABS, IORP, HR and others) and finds none
+left unexplained at first use.
 
-- broker-vs-autoenrolment.html: NAERSA, PRSA, PRSI, USC
-- director-calculator.html: PRSI, USC
-- director-pension-rules.html: AVC, PRSA, ROS
-- director-year-end-checklist.html: ROS
-- director.html: CSO, PRSA, PRSI, QFA, USC
-- find-my-pension.html: PPS
-- glossary.html: PRSI
-- index.html: AVC
-- pension-fees-calculator.html: CCPC, PRSA
-- pensions-over-50.html: CCPC
-- self-employed-pensions.html: PRSI, ROS
-- standard-fund-threshold.html: CSO, PRSI, USC
-- starter.html: PRSI, QFA
-- state-pension-entitlement.html: PRSI
-- state-pension-reality-check.html: PRSI
-- tracker.html: QFA
-- uk-pensions-in-ireland.html: HMRC, PRSI, USC
+Left as they are, for you to confirm: "UK" (and the web address GOV.UK),
+"KPMG" (the firm's own name), "CEO" and "CMO" (job titles on the home page),
+"B.A." (a degree), and the jargon quiz on the glossary page, which asks what
+PRSI stands for, so spelling it out would give the answer away.
 
 A correction to our earlier status note: it said the pages new in September
-spell out every initialism they use. The scan shows several do not (among
-them the directors' rules page, the charges calculator, the threshold check
-and the three guides). Nothing was changed; the site's jargon buster
-explains most of these terms, but it is a separate page.
+already spelled out every initialism. Several did not; all now do.
 
 6. Other findings
 =================
@@ -571,8 +561,8 @@ estimates only. They are not a reliable guide to the future performance of
 your investment." (Reg 372) and "Warning: The value of your investment may
 go down as well as up." (Reg 392). The two State Pension checks and the
 Standard Fund Threshold check project no investment growth and carry
-neither. The auto-enrolment comparison does project growth, and carries
-neither: see question 1.4.
+neither. The auto-enrolment comparison projects growth and now carries both
+(question 1.4).
 
 6.2 Comparative claims
 ----------------------
@@ -723,6 +713,25 @@ Changed wording on existing pages
   ask for you." with "How we help".
 - The paw-print badges: at four of four, the line "4/4 paws." and nothing
   after it.
+- Initialisms spelled out at first use on every page, for example
+  "Pay-Related Social Insurance (PRSI)", "the Universal Social Charge
+  (USC)", "Personal Retirement Savings Account (PRSA)" and "the Revenue
+  Online Service (ROS)". Among the reworded lines: "Damian Condon, Qualified
+  Financial Adviser (QFA)" in the credentials line; "Amárach Research for
+  the Financial Planning Standards Board Ireland (FPSB Ireland), the
+  Institute of Banking (IOB), the Life Insurance Association (LIA) and the
+  Retirement Planning Council of Ireland (RPCI), May 2026."; on the director
+  calculator, "lands in your pocket after up to 52.2% in income tax, the
+  Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), or
+  52.35% from 1 October 2026"; on the charges calculator, "The Competition
+  and Consumer Protection Commission (CCPC) has a guide to pension fees and
+  charges"; the over-50 heading "What comes after: an Approved Retirement
+  Fund (ARF) or an annuity"; on the directors' rules page, "the European
+  Union (EU) directive on institutions for occupational retirement provision
+  (IORP II)"; the glossary's index entries such as "Additional Voluntary
+  Contribution (AVC)"; and the pensions list's hint, "The kinds include a
+  Personal Retirement Savings Account (PRSA) and additional voluntary
+  contributions (AVCs), paid on top of a pension from a job."
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -886,7 +895,7 @@ Policy or member number, if you have one (optional)
 About you
 ---------
 Providers match their records on your name, date of birth and address. We do
-not ask for your PPS number here.
+not ask for your Personal Public Service (PPS) number here.
 Your full name
 Any other name you used at those jobs, such as a name before marriage
 (optional)
@@ -1091,12 +1100,13 @@ The assumptions behind these numbers
   year’s worth at a time, so a year of it takes exactly the percentage
   shown. Then the month’s payment goes in, less the charge on payments.
 - The defaults for your plan, 1% a year and 5% of each payment, are the most
-  a Standard PRSA may charge under the Pensions Act. Other plans can charge
-  more, or charge in other ways.
+  a Standard Personal Retirement Savings Account (PRSA) may charge under the
+  Pensions Act. Other plans can charge more, or charge in other ways.
 - Plans can also carry policy fees, set-up charges, bid/offer spreads on
   older contracts, and exit or switching charges. None of these is included,
-  so a plan that has them costs more than shown. The CCPC’s guide to pension
-  fees and charges explains each one.
+  so a plan that has them costs more than shown. The Competition and
+  Consumer Protection Commission (CCPC) has a guide to pension fees and
+  charges explains each one.
 - Payments stay the same every month until you retire. Figures are not
   adjusted for inflation. Tax relief is left out: it changes what a payment
   costs you, not what the charges take.
@@ -1151,13 +1161,14 @@ The threshold, year by year
 - 2029: €2.8m
 - 2030 on: At least €2.8m
 Set by Finance Act 2024. From 2030 it rises each year with average earnings,
-as the CSO measures them, and cannot fall.
+as the Central Statistics Office (CSO) measures them, and cannot fall.
 
 Over the threshold
 ------------------
 What is left of the excess stays in the pension and is taxed again as income
 when it is drawn. The Department of Finance’s independent examination of the
-threshold (2024) put the combined rate at up to 68.8%, or 71.2% with PRSI.
+threshold (2024) put the combined rate at up to 68.8%, or 71.2% with
+Pay-Related Social Insurance (PRSI).
 
 Tax on the lump sum
 -------------------
@@ -1167,8 +1178,8 @@ How the lump sum is taxed, band by band
 | Tax at 20% | €40,000
 | Above €500,000, taxed as income | €0
 Anything above €500,000 is taxed as income at your marginal rate, usually
-40%, plus USC. The €500,000 has been fixed since 1 January 2025, so it no
-longer rises with the threshold.
+40%, plus the Universal Social Charge (USC). The €500,000 has been fixed
+since 1 January 2025, so it no longer rises with the threshold.
 
 Close to the threshold, or over it?
 -----------------------------------
@@ -1217,9 +1228,9 @@ Directors’ pensions in 2026: what changed, and what to talk about.
 ------------------------------------------------------------
 Three things changed in the last two years: what happens to company pensions
 set up for one person before April 2021, how much a company can pay into a
-PRSA for you tax-free, and how high the Standard Fund Threshold goes. Here
-they are in plain English, with four questions to see which of them apply to
-you.
+Personal Retirement Savings Account (PRSA) for you tax-free, and how high
+the Standard Fund Threshold goes. Here they are in plain English, with four
+questions to see which of them apply to you.
 Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could
 change them.
 
@@ -1227,7 +1238,8 @@ Executive pensions set up before 22 April 2021
 ----------------------------------------------
 A company pension set up for one person (an executive pension, which the
 rules call a one-member arrangement) had five years’ grace from the
-governance rules that came in with the EU’s IORP II directive, if it was set
+governance rules that came in with the European Union (EU) directive on
+institutions for occupational retirement provision (IORP II), if it was set
 up before 22 April 2021. That grace ended on 21 April 2026.
 Since 22 April 2026, a scheme like this can carry on only if it meets the
 same rules as any other occupational pension scheme. Those include at least
@@ -1262,9 +1274,10 @@ Sources: Finance Act 2024, section 12; Revenue Pensions Manual, chapter 24.
 The October window
 ------------------
 Pension contributions you pay yourself, into a PRSA, a personal pension or
-as AVCs, can be set against the previous year’s income if you pay by 31
-October and choose to. For 2025 income that is 31 October 2026, or 18
-November 2026 if you both pay and file your tax return through ROS.
+as additional voluntary contributions (AVCs), can be set against the
+previous year’s income if you pay by 31 October and choose to. For 2025
+income that is 31 October 2026, or 18 November 2026 if you both pay and file
+your tax return through the Revenue Online Service (ROS).
 Company contributions cannot be backdated like this. The company deducts
 them in the accounting period in which it pays them, so the date that
 matters for those is the company’s year end, not October.
@@ -1338,7 +1351,9 @@ or stored: print or save the list if you want to keep it.
 
 Your pensions
 -------------
-A rough value is fine. Leave the charge blank if you do not know it.
+A rough value is fine. Leave the charge blank if you do not know it. The
+kinds include a Personal Retirement Savings Account (PRSA) and additional
+voluntary contributions (AVCs), paid on top of a pension from a job.
 Pension 1
 Name or provider
 Kind
@@ -1347,8 +1362,6 @@ Retirement Bond / AVCs / Something else)
 Value now, in euro
 Annual charge, % (optional)
 [Add another pension]
-A PRSA is a Personal Retirement Savings Account. AVCs are additional
-voluntary contributions, paid on top of a pension from a job.
 
 In one view
 -----------
@@ -1397,8 +1410,9 @@ contributions) on top of a work scheme.
 Finding them
 ------------
 -
-[ ] Ask each old employer, through HR, payroll or the pension scheme’s
-trustees. Information about a scheme comes from its trustees.
+[ ] Ask each old employer, through human resources (HR), payroll or the
+pension scheme’s trustees. Information about a scheme comes from its
+trustees.
 -
 [ ] If an employer has closed, its scheme may still exist. Occupational
 pension schemes must register with the Pensions Authority, which regulates
@@ -1469,7 +1483,8 @@ What you pay in yourself
 [ ] Mind the October deadline. What you pay yourself, into a PRSA, a
 personal pension or as AVCs (additional voluntary contributions), can be set
 against 2025 income if you pay by 31 October 2026 and choose to, or by 18
-November 2026 if you both pay and file through ROS.
+November 2026 if you both pay and file through the Revenue Online Service
+(ROS).
 -
 [ ] Check your age-related limit. Tax relief on your own contributions is
 limited to a share of your earnings, from 15% under 30 to 40% at 60 and
@@ -1540,21 +1555,21 @@ went in has less time to grow, and an income bought from it costs more,
 because it is paid for more years. The tax-free amount you can take can be
 lower too. Early access is a trade, not a bonus.
 
-What comes after: an ARF or an annuity
---------------------------------------
+What comes after: an Approved Retirement Fund (ARF) or an annuity
+------------------------------------------------------------
 When you take a pension, after any lump sum, the rest usually goes one of
 two ways.
 - An annuity is an income for life, bought from a life company with your
   pension fund. How much it pays depends on annuity rates when you buy, and
   it can include a guaranteed period of up to 10 years, a pension for a
   spouse, and yearly increases. The income is taxed.
-- An ARF (Approved Retirement Fund) is your own fund, kept invested, that
-  you draw from as you choose. It is not guaranteed: its value can fall.
-  Growth inside it is not taxed, but what you take out is taxed as income.
-  From the year you turn 61 you are taxed on at least 4% of it a year,
-  whether you take it or not: 5% from the year you turn 71, and 6% of all of
-  it if your ARFs and vested PRSAs together come to more than €2 million. An
-  ARF can buy an annuity at any time.
+- An ARF is your own fund, kept invested, that you draw from as you choose.
+  It is not guaranteed: its value can fall. Growth inside it is not taxed,
+  but what you take out is taxed as income. From the year you turn 61 you
+  are taxed on at least 4% of it a year, whether you take it or not: 5% from
+  the year you turn 71, and 6% of all of it if your ARFs and vested PRSAs
+  together come to more than €2 million. An ARF can buy an annuity at any
+  time.
 Neither suits everyone: one gives certainty, the other flexibility and the
 risk that comes with it. The Approved Minimum Retirement Fund, which some
 people once had to buy, was abolished from 1 January 2022, and any that
@@ -1568,8 +1583,8 @@ Standard Fund Threshold your pensions would use.
 This page is general information, not advice. Sources: Revenue, “Tax relief
 limits on pension contributions”; Revenue Pensions Manual, chapters 9, 21,
 23, 24 and 28; the Pensions Authority, “Early retirement” and “What are my
-pension options?”; Citizens Information, “Personal pensions”; the CCPC,
-“Personal pensions”.
+pension options?”; Citizens Information, “Personal pensions”; the
+Competition and Consumer Protection Commission (CCPC), “Personal pensions”.
 
 A.11 Pensions when you are self-employed
 ----------------------------------------
@@ -1587,9 +1602,10 @@ that matters.
 Auto-enrolment does not cover you
 ---------------------------------
 My Future Fund, the State’s auto-enrolment scheme, enrols employees through
-payroll. Self-employed people are left out by their PRSI class, so a pension
-is something you set up yourself. The Department of Social Protection has
-said it will look at whether the scheme could be extended to others.
+payroll. Self-employed people are left out by their Pay-Related Social
+Insurance (PRSI) class, so a pension is something you set up yourself. The
+Department of Social Protection has said it will look at whether the scheme
+could be extended to others.
 
 What you can use
 ----------------
@@ -1613,9 +1629,9 @@ later years. You claim it on your tax return, Form 11.
 The October deadline
 --------------------
 A contribution paid by 31 October 2026 can be set against your 2025 income,
-if you choose to when you file. If you both pay and file through ROS, the
-date is 18 November 2026. The election cannot be made before the
-contribution is paid.
+if you choose to when you file. If you both pay and file through the Revenue
+Online Service (ROS), the date is 18 November 2026. The election cannot be
+made before the contribution is paid.
 
 See your own numbers
 --------------------
@@ -1645,9 +1661,9 @@ cost, and how Ireland taxes what you are paid.
 Moving a UK pension to Ireland
 ------------------------------
 A UK workplace or personal pension can only be moved to an Irish scheme that
-HMRC recognises as a qualifying recognised overseas pension scheme, a QROPS.
-Moving it anywhere else, the UK scheme may refuse, or the move is taxed at
-40% or more.
+HM Revenue and Customs (HMRC) recognises as a qualifying recognised overseas
+pension scheme, a QROPS. Moving it anywhere else, the UK scheme may refuse,
+or the move is taxed at 40% or more.
 Since 30 October 2024, a move to a QROPS in the European Economic Area is no
 longer free of the UK’s 25% Overseas Transfer Charge just because it is in
 the EEA. It stays free of it mainly when you live in the same country as the
@@ -1666,10 +1682,11 @@ Pension.
 How Ireland taxes it
 --------------------
 A UK pension paid to someone who lives in Ireland is generally taxed in
-Ireland, not the UK, under the two countries’ tax treaty: income tax and
-USC, but not PRSI, and a State pension is not liable to USC. A pension for
-UK government service is the exception: it is usually taxed only in the UK,
-unless you are an Irish citizen and not also a British one.
+Ireland, not the UK, under the two countries’ tax treaty: income tax and the
+Universal Social Charge (USC), but not Pay-Related Social Insurance (PRSI),
+and a State pension is not liable to USC. A pension for UK government
+service is the exception: it is usually taxed only in the UK, unless you are
+an Irish citizen and not also a British one.
 
 Finding a UK pension
 --------------------
@@ -1806,8 +1823,9 @@ What changed, and how close you are to the cap.
 Directors’ pensions in 2026
 ---------------------------
 Executive pensions set up before April 2021, a company’s payments into a
-PRSA, the October window and small self-administered schemes, dated and
-sourced, with four questions to see which of it applies to you.
+Personal Retirement Savings Account (PRSA), the October window and small
+self-administered schemes, dated and sourced, with four questions to see
+which of it applies to you.
 
 The Standard Fund Threshold check
 ---------------------------------

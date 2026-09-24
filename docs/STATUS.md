@@ -6,6 +6,28 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 22 — 2026-09-24 · The comparison's warning box, and every initialism spelled out
+
+Damian's instructions after Run 21: add the locked warning box to the
+auto-enrolment comparison's "Everything paid in, by 66" card, same as the
+other calculators; spell out every initialism on first use on each page;
+gate, commit, push, merge to `main`.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | The comparison's warning box, locked | done: the two prescribed warnings (Regs 372 and 392), the same box as on the other calculators, directly under the card's two figures and above its note. "Locked": `pb-warn` joins the copy editor's deny list (`tools/edit-server.py`), so no warning sentence on any page can be edited there; shown with the editor's own parser, 2 editable warning sentences per calculator and 6 on starter before, none after. render-diff against HEAD identical | — |
+| 2 | Every initialism spelled out at first use | done: a scan of each page's text as Chrome renders it (28 initialisms: PRSA, PRSI, USC, ROS, AVC, ARF, PRB, SFT, TCA, QFA, CCPC, CSO, HMRC, QROPS, EEA, EU, NAERSA, PPS, MABS, IORP, HR, DB, DC, PAO, FPSB, IOB, LIA, RPCI) found 54 first uses not spelled out on 20 pages; each now reads "Full name (INITIALISM)" where it first appears, and the scan finds none. Among them: the credentials line on four pages ("Damian Condon, Qualified Financial Adviser (QFA)"), the research source line on the home page (the four bodies named in full), the glossary's term index, two State Pension slider labels, the director calculator's take-home line, the readiness check's State Pension step (script-written), and the pensions list's hint, which now explains PRSA and AVCs above the kinds instead of below them. Left as they are: "UK" and GOV.UK, "KPMG" (a firm's name), "CEO"/"CMO" (job titles), "B.A.", and the jargon quiz, which asks what PRSI stands for. The compliance pack is updated to match (questions 1.4 and 1.7, finding 5.3, the copy list) | — |
+
+## NEEDS DAMIAN INPUT from this run
+
+- The exceptions above ("UK", "KPMG", "CEO", "CMO", "B.A.", the quiz): say
+  if any should be spelled out too.
+- New wording from the expansions is in the compliance pack's section 7.
+
+---
+
 # Run 21 — 2026-09-24 · Damian's decisions on Run 20
 
 Damian's instructions after reading Run 20: push `claude/next-step-features`
