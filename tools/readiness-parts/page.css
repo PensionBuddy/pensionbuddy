@@ -24,6 +24,10 @@
   cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .rd-again:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 .rd-note{font-size:.9rem;color:var(--ink-2)}
+/* "How the score works" is an h2, the level after the page's h1, since the
+   result above it (which holds the h2s) starts hidden (Run 21); it keeps the
+   look of the calculators' .assume h3 */
+.assume h2{font-size:20px;line-height:1.24;letter-spacing:-.02em;font-weight:800;margin:0 0 20px}
 
 .rd-score{margin:6px 0 14px;color:var(--ink)}
 .rd-n{font-size:3.4rem;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
