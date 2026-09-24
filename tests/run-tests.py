@@ -76,7 +76,7 @@ SUITES = {
                                   '/tests/state-pension-entitlement.test.js', ['PBStatePension', 'PBEntitlement'], 608),
     'harness': ([], '/tests/harness.test.js', ['PBTest'], 59),
     'cost-of-waiting': (['/assets/js/cost-of-waiting.js'],
-                        '/tests/cost-of-waiting.test.js', ['PBWaiting'], 51),
+                        '/tests/cost-of-waiting.test.js', ['PBWaiting'], 77),
     'living-standards': (['/assets/js/state-pension.js', '/assets/js/living-standards.js'],
                          '/tests/living-standards.test.js', ['PBStatePension', 'PBLivingStandards'], 66),
     'pension-finder': (['/assets/js/pension-finder.js'],

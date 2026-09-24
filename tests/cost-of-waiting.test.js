@@ -117,4 +117,57 @@
   eq('9. no growth: the catch-up spreads the same total over 24 years', g0.catchUpMonthly, 31200 / 288);
   var r70 = W.costOfWaiting({ age: 40, wait: 2, monthly: 100, retireAge: 70 });
   eq('9. a later retirement age is honoured', r70.now, W.potFrom(40, 70, 100, 5));
+
+  /* a pot paid in month by month, with payments left out for a stretch */
+  function gapped(fromAge, breakAge, years, retire, monthly, rate) {
+    var pot = 0;
+    for (var m = fromAge * 12; m < retire * 12; m++) {
+      var out = m >= breakAge * 12 && m < (breakAge + years) * 12;
+      pot = pot * (1 + rate) + (out ? 0 : monthly);
+    }
+    return pot;
+  }
+
+  group('10  a break: the card at its default, three years from 32, EUR 300 a month');
+  var b = W.withBreak({ breakAge: 32, years: 3, monthly: 300 });
+  eq('10. paying in from 30 by default', b.from, 30);
+  eq('10. without the break, EUR 352,847.61', b.full, 352847.61021774425);
+  eq('10. with it, EUR 300,175.54', b.withBreak, 300175.5378989147);
+  eq('10. and the month-by-month pot agrees', b.withBreak, gapped(30, 32, 3, 66, 300, r5));
+  eq('10. EUR 52,672.07 less', b.less, 52672.07231882954);
+  eq('10. 14.9% of the pot', b.share, 0.14927711225343232);
+  eq('10. EUR 60.65 a month more from 35 makes it up', b.extraMonthly, 60.65295283946664);
+  eq('10. and it does: the top-up grows into what was missed', stepped(372, 0, b.extraMonthly, r5), b.less);
+  eq('10. three years out', b.yearsOut, 3);
+  eq('10. ending at 35', b.breakEnd, 35);
+  yes('10. there are years left to make it up', b.tooLate === false);
+
+  group('11  an early break costs more a year than a late one');
+  var late = W.withBreak({ breakAge: 50, years: 10, monthly: 300 });
+  eq('11. ten years out from 50: EUR 62,058.42 less', late.less, 62058.41985995666);
+  eq('11. and the month-by-month pot agrees', late.withBreak, gapped(30, 50, 10, 66, 300, r5));
+  yes('11. three years at 32 cost more than a third of ten years at 50', b.less / 3 > late.less / 10);
+  var y1 = W.withBreak({ breakAge: 31, years: 1, monthly: 300 }).less;
+  var y1late = W.withBreak({ breakAge: 60, years: 1, monthly: 300 }).less;
+  yes('11. a year out at 31 costs more than a year out at 60', y1 > y1late);
+
+  group('12  a break that runs into pension age stops there');
+  var edge = W.withBreak({ breakAge: 64, years: 5, monthly: 300 });
+  eq('12. two years out, not five', edge.yearsOut, 2);
+  eq('12. the pot is the one paid in to 64 and grown on', edge.withBreak, gapped(30, 64, 2, 66, 300, r5));
+  eq('12. EUR 7,547.64 less', edge.less, 7547.635180702375);
+  yes('12. no months left, so no top-up figure', edge.extraMonthly === null && edge.tooLate === true);
+  var at65 = W.withBreak({ breakAge: 65, years: 1, monthly: 300 });
+  yes('12. one year from 65 also reaches 66', at65.tooLate === true && at65.yearsOut === 1);
+
+  group('13  what the caller may leave out, and what it may set');
+  var early = W.withBreak({ breakAge: 25, years: 3, monthly: 300 });
+  eq('13. a break before paying in starts is read from 30', early.breakStart, 30);
+  eq('13. so it is the same as one from 30', early.less, W.withBreak({ breakAge: 30, years: 3, monthly: 300 }).less);
+  var z = W.withBreak({ breakAge: 32, years: 3, monthly: 300, growth: 0 });
+  eq('13. no growth: the missed payments exactly', z.less, 10800);
+  eq('13. no growth: spread over the 31 years left', z.extraMonthly, 10800 / 372);
+  var own = W.withBreak({ breakAge: 45, years: 2, monthly: 200, growth: 4, retireAge: 68, from: 40 });
+  eq('13. its own start, growth and pension age are honoured', own.withBreak, gapped(40, 45, 2, 68, 200, W.monthlyRate(4)));
+  eq('13. none: nothing missed', W.withBreak({ breakAge: 40, years: 0, monthly: 300 }).less, 0);
 }(typeof self !== 'undefined' ? self : this));

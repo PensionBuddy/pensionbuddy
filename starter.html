@@ -1693,6 +1693,13 @@ button{font-family:inherit}
      outranks the chart's own media rule by specificity */
   .pb-wait .pb-sa-row{grid-template-columns:minmax(0,1fr) auto}
 }
+/* TIME OUT (.pb-break, #15 in Run 20). The If-you-wait card's layout for a
+   break in payments: the chart's monthly amount paid from 30 to 66, with and
+   without one to ten years out, from PBWaiting.withBreak(). Under it, the
+   State Pension side: HomeCaring Periods, which only caring earns. The
+   markup carries the default. */
+.pb-break-sp{margin:22px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
+.pb-break-sp a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 /* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
    one scale: what you pay in, what your employer adds, what the State adds,
    in a year at this year's auto-enrolment rates (PBCompare.autoEnrolment,
@@ -2152,6 +2159,39 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
     <p class="pb-wait-sr" id="pbWaitSr" aria-live="polite" aria-atomic="true"></p>
     <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. The monthly amount is the one set above. Assumes 5% growth a year, contributions to 66, and no pension to start with. Figures ignore charges, tax relief and inflation.</p>
+  </div>
+  <div class="pb-sa pb-wait pb-break reveal" id="pbBreak">
+    <h3>Time out.</h3>
+    <p class="pb-wait-lead">Time away from work, to care for someone, to study or to travel: what a break in payments does to the pot, and, for time spent caring, what can still count toward the State Pension.</p>
+    <div class="pb-wait-ctls">
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbBrAge">The break starts at</label><span class="pb-sa-val" id="pbBrAgeV">32</span></div>
+        <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old">
+      </div>
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbBrYrs">Years out</label><span class="pb-sa-val" id="pbBrYrsV">3 years</span></div>
+        <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years">
+      </div>
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row">
+        <span class="pb-sa-name">Paying in all along</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="pbBrFull">&euro;352,848</span>
+        <span class="pb-sa-less"></span>
+      </div>
+      <div class="pb-sa-row">
+        <span class="pb-sa-name" id="pbBrName">3 years out at 32</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbBrFill" style="width:85.0723%"></i><i class="pb-sa-gap" id="pbBrGap" style="left:85.0723%;width:14.9277%"></i></span>
+        <span class="pb-sa-fig" id="pbBrWith">&euro;300,176</span>
+        <span class="pb-sa-less" id="pbBrLess">&euro;52,672 less</span>
+      </div>
+    </div>
+    <p class="pb-wait-say" id="pbBrSay">A break of 3 years at 32 leaves the pot at 66 about <b>&euro;52,672 smaller</b>: 15% of it, from 8% of the payments, because early payments have the longest to grow. Paying about &euro;61 a month more from 35 would make it up.</p>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
+    <p class="pb-break-sp">For the State Pension, weeks spent caring full-time for a child under 12, or for an older child or an adult who needs an increased level of care, can be added to your record as HomeCaring Periods: up to 1,040 of them, twenty years&rsquo; worth. They count under the Total Contributions Approach once you have the 520 paid contributions the pension needs, and you claim them when you apply for it. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> counts them in.</p>
+    <p class="pb-wait-sr" id="pbBrSr" aria-live="polite" aria-atomic="true"></p>
+    <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. From 30 to 66, with the monthly amount set above. Assumes 5% growth a year and no pension to start with; the pot keeps growing through the break, with nothing paid in, and a break stops at 66. Figures ignore charges, tax relief and inflation. HomeCaring Periods: Citizens Information, &ldquo;HomeCaring Periods Scheme&rdquo;.</p>
   </div>
 </div></section>
 
@@ -2635,7 +2675,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-bars.js?v=29f2cb96"></script>
-<script src="assets/js/cost-of-waiting.js?v=f826b5bf"></script>
+<script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
 /* WHAT TIME DOES. One slider, one variable: the same monthly amount started
    at three ages, projected to 66. The compound growth is the pension
@@ -2742,6 +2782,63 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   }
 
   [age, yrs].forEach(function (el) {
+    el.addEventListener('input', function () { P.paintSlider(el, vt); paint(true); });
+    P.paintSlider(el, vt);
+  });
+  monthly.addEventListener('input', function () { paint(true); });
+  paint(false);
+})();
+
+/* TIME OUT (#15, Run 20). The chart's monthly amount paid from 30 to 66,
+   with and without a break of one to ten years. All of it is
+   PBWaiting.withBreak(); this only paints, as the card above does, and its
+   sliders are wired on their own for the same reason. A break that would run
+   past 66 stops there, so the second row names the years actually out. */
+(function () {
+  var W = window.PBWaiting, P = window.PBPage;
+  var at = document.getElementById('pbBrAge'), yrs = document.getElementById('pbBrYrs');
+  var monthly = document.getElementById('saMonthly');
+  if (!W || !W.withBreak || !P || !at || !yrs || !monthly) return;
+  var euro = P.euro;
+  var $ = function (id) { return document.getElementById(id); };
+  var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var srTimer = 0;
+  var vt = {
+    pbBrAge: function (v) { return v + ' years old'; },
+    pbBrYrs: function (v) { return years(v); }
+  };
+
+  function paint(spoken) {
+    var a = +at.value, n = +yrs.value, m = +monthly.value;
+    var b = W.withBreak({ breakAge: a, years: n, monthly: m });
+    $('pbBrAgeV').textContent = a;
+    $('pbBrYrsV').textContent = years(n);
+    $('pbBrName').textContent = years(b.yearsOut) + ' out at ' + b.breakStart;
+    $('pbBrFull').textContent = euro(b.full);
+    $('pbBrWith').textContent = euro(b.withBreak);
+    $('pbBrLess').textContent = euro(b.less) + ' less';
+    var f = b.full > 0 ? b.withBreak / b.full * 100 : 0;
+    $('pbBrFill').style.width = f.toFixed(4) + '%';
+    $('pbBrGap').style.left = f.toFixed(4) + '%';
+    $('pbBrGap').style.width = (100 - f).toFixed(4) + '%';
+    var potPct = Math.round(b.share * 100);
+    var payPct = Math.round(b.yearsOut / (W.PENSION_AGE - b.from) * 100);
+    var say = 'A break of ' + years(b.yearsOut) + ' at ' + b.breakStart + ' leaves the pot at ' + W.PENSION_AGE +
+      ' about <b>' + euro(b.less) + ' smaller</b>: ' + potPct + '% of it, from ' + payPct + '% of the payments' +
+      (potPct > payPct ? ', because early payments have the longest to grow.' : '.');
+    say += b.tooLate
+      ? ' The break runs to pension age, so there are no years after it to make that up.'
+      : ' Paying about ' + euro(b.extraMonthly) + ' a month more from ' + b.breakEnd + ' would make it up.';
+    $('pbBrSay').innerHTML = say;
+    if (!spoken) return;
+    clearTimeout(srTimer);
+    srTimer = setTimeout(function () {
+      $('pbBrSr').textContent = 'Paying in all along: ' + euro(b.full) + '. ' + years(b.yearsOut) + ' out at ' +
+        b.breakStart + ': ' + euro(b.withBreak) + ', ' + euro(b.less) + ' less. ' + say.replace(/<[^>]+>/g, '');
+    }, 700);
+  }
+
+  [at, yrs].forEach(function (el) {
     el.addEventListener('input', function () { P.paintSlider(el, vt); paint(true); });
     P.paintSlider(el, vt);
   });

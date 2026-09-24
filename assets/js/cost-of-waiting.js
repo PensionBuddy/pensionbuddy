@@ -8,6 +8,9 @@
    pages outside them share, starting with starter.html (the 30/40/50 chart
    and the "If you wait" card under it).
 
+   withBreak() is the "Time out." card under it (Run 20 #15): the same
+   monthly amount paid from 30 to 66 with and without a few years' break.
+
    Nothing here is a projection for a particular reader: no starting pot, no
    tax relief, no charges, no inflation. The page says so beside the figures.
 
@@ -66,13 +69,47 @@
     };
   }
 
+  var BREAK_FROM = 30;         // the break card pays in from 30, as the chart's first row does
+
+  /* A break in payments (Run 20 #15): paying in from `from` to pension age,
+     except for `years` years starting at `breakAge`. The pot keeps growing
+     through the break with nothing paid in, so what the break costs is the
+     missed payments grown to pension age. A break that would run past pension
+     age stops there. extraMonthly is what paying in more after the break,
+     every month to pension age, would take to make it up. */
+  function withBreak(o) {
+    var retire = o.retireAge == null ? PENSION_AGE : o.retireAge;
+    var growth = o.growth == null ? DEFAULT_GROWTH : o.growth;
+    var from = o.from == null ? BREAK_FROM : o.from;
+    var rate = monthlyRate(growth);
+    var start = Math.min(Math.max(o.breakAge, from), retire);
+    var end = Math.min(start + o.years, retire);
+    var full = potFrom(from, retire, o.monthly, growth);
+    var missed = project((end - start) * 12, 0, o.monthly, rate) * Math.pow(1 + rate, (retire - end) * 12);
+    var after = (retire - end) * 12;
+    return {
+      from: from,
+      breakStart: start,
+      breakEnd: end,
+      yearsOut: end - start,
+      full: full,
+      withBreak: full - missed,
+      less: missed,
+      share: full > 0 ? missed / full : 0,
+      extraMonthly: after > 0 ? monthlyFor(missed, after, rate) : null,
+      tooLate: after <= 0
+    };
+  }
+
   return {
     PENSION_AGE: PENSION_AGE,
     DEFAULT_GROWTH: DEFAULT_GROWTH,
+    BREAK_FROM: BREAK_FROM,
     monthlyRate: monthlyRate,
     project: project,
     potFrom: potFrom,
     monthlyFor: monthlyFor,
-    costOfWaiting: costOfWaiting
+    costOfWaiting: costOfWaiting,
+    withBreak: withBreak
   };
 }));

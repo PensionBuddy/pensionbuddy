@@ -65,6 +65,31 @@ Undefined (null) when `months <= 0`.
 `wait = 0` gives `less = 0`, `catchUpMonthly = monthly` and `extraMonthly = 0`
 exactly: the formula is its own inverse, and the tests assert it to the cent.
 
+## W4b. withBreak({ breakAge, years, monthly, growth, retireAge, from })
+
+Run 20 #15, the "Time out." card. Paying `monthly` from `from` (default 30,
+`BREAK_FROM`) to `retireAge` (default 66), except for `years` years from
+`breakAge`. `breakAge` below `from` is read as `from`; a break that would run
+past `retireAge` stops there.
+
+| field | value |
+|---|---|
+| `breakStart`, `breakEnd` | the break's first and last age, after the clamps |
+| `yearsOut` | `breakEnd - breakStart` |
+| `full` | `potFrom(from, retireAge, monthly, growth)` |
+| `less` | the missed payments grown to `retireAge`: `project(yearsOut * 12, 0, monthly, r) * (1 + r)^((retireAge - breakEnd) * 12)` |
+| `withBreak` | `full - less`; the same as the pot before the break grown on, plus the pot paid in after it |
+| `share` | `less / full` |
+| `extraMonthly` | `monthlyFor(less, (retireAge - breakEnd) * 12, r)`: paying this much more every month from the break's end makes the pot whole |
+| `tooLate` | `true` when the break reaches `retireAge`; then `extraMonthly` is null |
+
+At the card's default (€300 a month, 5%, three years from 32) the pot is
+€352,847.61 without the break and €300,175.54 with it: €52,672.07 less, 14.9%
+of the pot for 8% of the payments, and about €60.65 a month more from 35 makes
+it up. Ten years out from 50 costs €62,058.42, not much more: an early break
+costs more a year because the missed payments had longest to grow. Worked out
+a second time month by month; the tests assert both.
+
 ## W5. On the page
 
 - Inputs: "Your age now" 18 to 60, default 30; "If you start in" 0 to 10
@@ -77,6 +102,11 @@ exactly: the formula is its own inverse, and the tests assert it to the cent.
   investments can fall as well as rise; 5% growth a year; contributions to 66;
   no pension to start with; charges, tax relief and inflation ignored.
 - Tone: "less" and "to catch up". No urgency words, no "lose", no countdown.
+- "Time out." (withBreak): "The break starts at" 30 to 65, default 32, and
+  "Years out" 1 to 10, default 3, with the same monthly amount; the two pots,
+  the difference, one sentence, and the HomeCaring Periods paragraph for the
+  State Pension side. The prescribed warnings sit under the figures, as under
+  the chart.
 
 ## W6. Not built
 
