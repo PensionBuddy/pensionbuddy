@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auto-enrolment or a broker pension, Pensionbuddy</title>
-<meta name="description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
+<title>How we work, and how we are paid, Pensionbuddy</title>
+<meta name="description" content="Who gives the advice, how we are paid for it, our summary of commission from product providers, our fees, and where else to get free, independent help.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
-<meta property="og:title" content="Auto-enrolment or a broker pension, Pensionbuddy">
-<meta property="og:description" content="Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension arranged through a broker, for your own salary and age. An illustration, not advice.">
+<meta property="og:title" content="How we work, and how we are paid, Pensionbuddy">
+<meta property="og:description" content="Who gives the advice, how we are paid for it, our summary of commission from product providers, our fees, and where else to get free, independent help.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
@@ -26,20 +26,28 @@
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
+   Inter, one face · pine accent · keyline-first, near-zero shadow
    ============================================================ */
 :root{
+  /* canvas + surfaces */
   --bg:#FAFAF9; --surface:#FFFFFF; --surface-2:#F4F5F3;
+  /* ink */
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
+  /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
+  /* warm secondary, used sparingly for tax-relief visual */
   --amber:#F4B740; --amber-soft:#FCEFCF;
+  /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
   --sh-md:0 1px 2px rgba(11,31,28,.04);
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
+  /* type */
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
   --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
@@ -48,151 +56,206 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
 ::selection{background:var(--teal-100);color:var(--teal-900)}
-h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--ink)}
+h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 .ico{stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none;flex-shrink:0}
+
+/* ---- eyebrow / labels ---- */
 .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;color:var(--ac,var(--teal-700));background:none;padding:0;border-radius:0}
 .eyebrow .pip{width:16px;height:2px;border-radius:0;background:var(--ac,var(--teal))}
+.kicker{font-size:13px;font-weight:700;color:var(--ink-3)}
+
+/* ---- buttons ---- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--font);font-weight:600;font-size:15px;line-height:1;padding:15px 24px;border-radius:10px;cursor:pointer;border:1.5px solid transparent;transition:transform .2s ease,box-shadow .25s ease,background .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
 .btn svg{width:17px;height:17px;transition:transform .2s ease}
 .btn-primary{background:var(--teal);color:#fff;box-shadow:var(--sh-teal)}
 .btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:var(--sh-md)}
 .btn-primary:hover svg{transform:translateX(3px)}
+.btn-ghost{background:var(--surface);color:var(--ink);border-color:var(--line-2);box-shadow:var(--sh-sm)}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal-700);transform:translateY(-2px)}
+.btn-light{background:#fff;color:var(--teal-900)}
+.btn-light:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+
+/* ---- reveal on scroll ---- */
 .reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
 .reveal.in{opacity:1;transform:none}
+.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 @media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+
+/* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
-.announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
+.announce b{color:#fff;font-weight:600}
+.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
+
+/* ---- nav ---- */
 nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
 .logo-mark{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
 .logo-mark svg{width:22px;height:22px}
-.nav-r{display:flex;align-items:center;gap:28px}
-.back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a.lnk{font-weight:500;font-size:15px;color:var(--ink-2);transition:color .2s;position:relative}
+.nav-links a.lnk:hover{color:var(--teal-700)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:4px}
 
-/* ---- page head ---- */
-.phead{padding:52px 0 12px}
-.phead h1{font-size:clamp(34px,5vw,58px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 14px}
-.phead h1 .hl{color:var(--teal-700)}
-.phead p{font-size:18px;color:var(--ink-2);max-width:560px}
+/* ---- hero ---- */
+.hero{padding:72px 0 36px;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-0.035em;margin:20px 0 0}
+.hero h1 .hl{color:var(--teal-700)}
+.hero .lede{font-size:clamp(17px,2vw,20px);color:var(--ink-2);max-width:480px;margin:22px 0 30px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.trust{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap}
+.stars{display:flex;gap:2px;color:var(--amber)}
+.stars svg{width:16px;height:16px;fill:currentColor}
+.trust span{font-size:14px;color:var(--ink-2)}
+.trust b{color:var(--ink);font-weight:600}
 
-/* ---- calculator layout ---- */
-.calc-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;padding:40px 0 12px;align-items:start}
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 28px;box-shadow:var(--sh-sm);position:sticky;top:96px}
-.panel h2{font-size:21px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.panel .hint{color:var(--ink-2);font-size:14px;margin-bottom:24px}
-.field{margin-bottom:22px}
-.field .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:12px}
-.field label{font-weight:600;font-size:14.5px;color:var(--ink)}
-.field .val{font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--teal-700);font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600}
-.subnote{font-size:12.5px;color:var(--ink-3);margin-top:9px;line-height:1.5}
-.sft-note{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:-4px;padding-left:14px;border-left:2px solid var(--line-2)}
-.sft-note[hidden]{display:none}
+/* hero visual: clean app-style card, no rotation/frame */
+.hero-card{position:relative;background:var(--surface);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:26px;overflow:hidden}
+.hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0,var(--teal-50),transparent 60%);pointer-events:none}
+.hc-top{display:flex;align-items:center;justify-content:space-between;position:relative}
+.hc-buddy{display:flex;align-items:center;gap:12px}
+.hc-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(150deg,var(--teal),var(--teal-700));display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-teal)}
+.hc-avatar svg{width:30px;height:30px;fill:#fff}
+.hc-name{font-weight:700;font-size:16px}
+.hc-role{font-size:12.5px;color:var(--ink-3)}
+.hc-badge{font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:6px 12px;border-radius:var(--r-pill)}
+.hc-figure{position:relative;margin:24px 0 6px}
+.hc-flabel{font-size:13px;color:var(--ink-3);font-weight:500}
+.hc-fnum{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;margin-top:6px;font-variant-numeric:tabular-nums}
+.hc-fsub{font-size:13.5px;color:var(--ink-2);margin-top:8px}
+.hc-bars{display:flex;align-items:flex-end;gap:10px;height:96px;margin-top:22px}
+.hc-bars i{flex:1;background:var(--teal-100);border-radius:7px 7px 4px 4px;display:block;animation:grow .9s cubic-bezier(.2,.7,.3,1) backwards}
+.hc-bars i.on{background:var(--teal)}
+.hc-bars i:nth-child(1){animation-delay:.05s}.hc-bars i:nth-child(2){animation-delay:.12s}.hc-bars i:nth-child(3){animation-delay:.19s}.hc-bars i:nth-child(4){animation-delay:.26s}.hc-bars i:nth-child(5){animation-delay:.33s}.hc-bars i:nth-child(6){animation-delay:.4s}
+@keyframes grow{from{height:0;opacity:.2}}
+@media(prefers-reduced-motion:reduce){.hc-bars i{animation:none}}
+.hc-note{font-size:11.5px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:13px;margin-top:16px}
+.hc-pill{position:absolute;top:18px;right:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-md);border-radius:var(--r-pill);padding:8px 14px;font-size:13px;font-weight:600;color:var(--teal-700);display:flex;align-items:center;gap:7px;z-index:2}
+.hc-pill svg{width:15px;height:15px}
 
-/* custom sliders */
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--teal) var(--fill,50%),var(--surface-2) var(--fill,50%))}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s,box-shadow .18s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.12)}
-input[type=range]:active::-webkit-slider-thumb{transform:scale(1.2);box-shadow:0 4px 14px rgba(11,122,110,.5)}
-input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(11,31,28,.18);transition:transform .18s}
-input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
+/* ---- logo / trust strip ---- */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.strip-in{display:flex;align-items:center;justify-content:center;gap:14px 40px;flex-wrap:wrap;padding:22px 0}
+.strip-item{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.strip-item svg{width:18px;height:18px;color:var(--teal)}
 
-/* segmented tax toggle */
-.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
-.seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);background:#fff;border-radius:10px;transition:transform .32s cubic-bezier(.3,.8,.3,1);box-shadow:var(--sh-sm)}
-.seg button{position:relative;z-index:1;background:none;border:none;font:600 14px var(--font);padding:11px 8px;color:var(--ink-2);cursor:pointer;transition:color .25s;border-radius:10px}
-.seg button.on{color:var(--teal-700)}
-.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+/* ---- section base ---- */
+section{padding:88px 0}
+.sec-head{max-width:660px;margin-bottom:48px}
+.sec-head.ctr{margin-left:auto;margin-right:auto;text-align:center}
+.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 0}
+.sec-head p{font-size:18px;color:var(--ink-2);margin-top:14px}
 
-/* ---- results ---- */
-.results{display:flex;flex-direction:column;gap:18px;min-width:0}
-.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
-.res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
-.res-hero>div{position:relative;min-width:0}
-.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
-.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
-.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
-.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
-/* #4: the headline figures as one plain sentence, written from the same final
-   values as the figures above. White on --teal-900, inherited from .res-hero. */
-.res-hero .pb-sp-top{margin-top:-6px;font-size:14px;color:inherit;opacity:.92}
-.res-hero .pb-say{grid-column:1/-1;position:relative;min-width:0;font-size:15px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:break-word}
+/* ---- audience cards (static grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.a1{--ac:#0B7A6E;--ac-soft:#EAF4F1}
+.a2{--ac:var(--teal-700);--ac-soft:var(--teal-50)}
+.a3{--ac:#0A332E;--ac-soft:#EDF4F2}
 
-.chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
-.chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
-.chart-legend span{display:inline-flex;align-items:center;gap:8px}
-.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
-.dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
+/* ---- "what to expect" steps ---- */
+.expect{background:var(--surface)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:step}
+.step{position:relative;padding-top:8px}
+.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.step p{color:var(--ink-2);font-size:15px}
 
-.relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
-.relief-card .rt{font-size:13px;font-weight:700;color:#9A6B12;margin-bottom:9px}
-.relief-card .rbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.relief-card .rbig b{font-weight:700;color:#3F2D04}
-.relief-viz{margin-top:18px;transition:opacity .4s}
-.rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
-.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
-.rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
-.rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
-.rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
-.rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
-.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
-@media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
+/* ---- calculator showcase ---- */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.calc-copy h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;letter-spacing:-0.03em;margin:14px 0 16px}
+.calc-copy p{font-size:18px;color:var(--ink-2);margin-bottom:26px;max-width:440px}
 
-.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
-.boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
-.boost-ico svg{width:22px;height:22px}
-.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
-.boost-card .bt b{font-weight:700}
+/* ---- about Damian ---- */
+.about-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center}
+.about-port{aspect-ratio:4/5;border-radius:var(--r-xl);background:linear-gradient(155deg,var(--teal-700),var(--teal-900));position:relative;box-shadow:var(--sh-lg);display:flex;align-items:flex-end;padding:26px;overflow:hidden}
+.about-port::before{content:"";position:absolute;inset:0;pointer-events:none}
+.about-port .pl{position:relative;color:#BBE7DF;font-size:14px;font-weight:500}
+.about-port .badge{position:absolute;top:20px;left:20px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:7px 13px;border-radius:var(--r-pill);box-shadow:var(--sh-sm)}
+.about h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-0.03em;margin:12px 0 20px}
+.pullquote{font-size:clamp(20px,2.4vw,26px);line-height:1.34;font-weight:600;letter-spacing:-0.02em;margin:0 0 22px;color:var(--ink)}
+.pullquote .q{color:var(--teal)}
+.about p.bio{color:var(--ink-2);font-size:16px;margin-bottom:14px}
+.about .sig{font-style:italic;font-weight:600;font-size:18px;color:var(--teal-700)}
 
-/* ---- CTA ---- */
-.cta-band{padding:64px 0 8px}
-.cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
-.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
-.buddy-mini{width:80px;height:80px;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-sm);flex-shrink:0;position:relative}.buddy-mini img{width:100%;height:100%;object-fit:cover;display:block}
-picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep the img the direct flex child of its frame */
-.buddy-mini svg{width:42px;height:42px;fill:#fff}
-.cta-card .ctext{position:relative;min-width:0}
-.cta-card h2{font-size:24px;font-weight:700;letter-spacing:-0.025em;margin-bottom:6px}
-.cta-card p{color:var(--ink-2);font-size:15px;max-width:480px}
-.cta-card .btn{position:relative}
+/* ---- testimonials ---- */
+.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--sh-sm)}
+.tcard.big{justify-content:center}
+.tcard .qstars{display:flex;gap:2px;color:var(--amber);margin-bottom:16px}
+.tcard .qstars svg{width:16px;height:16px;fill:currentColor}
+.tcard blockquote{font-size:18px;line-height:1.5;font-weight:500;letter-spacing:-0.01em;margin:0 0 20px;color:var(--ink)}
+.tcard.big blockquote{font-size:23px;font-weight:600;letter-spacing:-0.02em}
+.tcard .who{display:flex;align-items:center;gap:12px;margin-top:auto}
+.tcard .av{width:42px;height:42px;border-radius:50%;background:var(--teal-50);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal-700)}
+.tcard .who b{font-weight:600;font-size:15px;display:block}
+.tcard .who span{font-size:13px;color:var(--ink-3)}
+.tcol{display:flex;flex-direction:column;gap:22px}
 
-/* ---- assumptions ---- */
-.assume{padding:72px 0 24px}
-.assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
-.assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
-.assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
-.assume li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:5px;background:var(--teal-50);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23085E54' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:11px}
+/* ---- faq ---- */
+.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
+.faq-list{display:flex;flex-direction:column;gap:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
+details[open]{box-shadow:var(--sh-md);border-color:transparent}
+summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
+summary::-webkit-details-marker{display:none}
+details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
+
+/* ---- final CTA ---- */
+.final-band{padding:36px 0 88px}
+.final{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
+.final::before{content:"";position:absolute;inset:0;pointer-events:none}
+.final .paw-bg{position:absolute;right:-30px;bottom:-44px;width:260px;height:260px;opacity:.08;pointer-events:none}
+.final .paw-bg svg{width:100%;height:100%;fill:#fff}
+.final .eyebrow{background:rgba(255,255,255,.12);color:#CFEFE9;position:relative}
+.final .eyebrow .pip{background:var(--teal)}
+.final h2{color:#fff;font-size:clamp(30px,4.2vw,50px);font-weight:800;letter-spacing:-0.03em;margin:16px 0 14px;position:relative}
+.final p{color:#A7DED4;font-size:18px;max-width:440px;margin:0 auto 30px;position:relative}
 
 /* ---- footer ---- */
-footer{padding:64px 0 40px;border-top:1px solid var(--line);margin-top:56px}
+footer{padding:64px 0 40px;border-top:1px solid var(--line)}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
-.foot-brand .logo{margin-bottom:15px}.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;margin-bottom:15px;color:var(--ink)}
-.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}.foot-col a:hover{color:var(--teal-700)}
+.foot-brand .logo{margin-bottom:15px}
+.foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
+.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
+.foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
+.foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
-.disclosure p{margin-bottom:10px;max-width:940px}.disclosure a{color:var(--teal-700);font-weight:600}
+.disclosure p{margin-bottom:10px;max-width:940px}
+.disclosure a{color:var(--teal-700);font-weight:600}
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media(max-width:920px){
-  .calc-wrap{grid-template-columns:1fr;gap:20px}
-  .panel{position:static;top:auto}
-  .res-hero{grid-template-columns:1fr;padding:26px}
-  .cta-card{grid-template-columns:1fr;text-align:center;justify-items:center;padding:34px 24px}
-  .assume ul{grid-template-columns:1fr}
+  .hero{padding:48px 0 24px}
+  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
+  .hero-card{order:-1;max-width:460px;margin:0 auto}
+  .steps{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
-  .nav-r{gap:14px}
+  .nav-links{display:none}
+  .nav-links.open{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border-bottom:1px solid var(--line);padding:16px 24px 22px;box-shadow:var(--sh-md)}
+  .nav-links.open a.lnk{padding:10px 0;font-size:16px}
+  .nav-links.open .btn{margin-top:6px}
+  .nav-toggle{display:block}
+  section{padding:60px 0}
+  .final{padding:54px 26px}
+  .final-band{padding:24px 0 60px}
 }
 @media(max-width:560px){
   .wrap{padding:0 18px}
-  .nav-r .back span,.nav-r .back{font-size:0}
-  .nav-r .back svg{width:20px;height:20px}
+  .hero h1{font-size:clamp(34px,9vw,44px)}
+  .foot-top{grid-template-columns:1fr 1fr}
+  .hero-cta .btn{flex:1}
 }
-@media(max-width:380px){.foot-top{grid-template-columns:1fr}}
+@media(max-width:380px){
+  .foot-top{grid-template-columns:1fr}
+}
 
 /* ============================================================
    EXTENDED COMPONENTS  (audience pages, legal, glossary, capture)
@@ -274,33 +337,10 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
 .email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
-/* MARKETING OPT-IN (.pb-optin). A request for figures or a guide is not
-   consent to anything else, so the optional emails are a separate box,
-   unticked, and recorded apart from the request (Run 20, A2). The form's
-   own input rule styles every input inside it as a pill-shaped text field,
-   so the checkbox is reset here rather than left to inherit that padding
-   and flex. */
-.pb-optin{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-2);cursor:pointer}
-.email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:18px;height:18px;min-width:18px;min-height:0;margin:1px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
-.email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
-.magnet-form .pb-optin{margin-top:0}
 .email-cap .ec-note a{color:var(--teal-700);font-weight:600}
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
-.email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
-/* #15: the success tick draws itself once, about 300ms, ease-out, as its
-   message appears: going from display:none to shown starts the animation, so
-   the draw needs no script. Drawn is the default and the draw runs only where
-   motion is allowed, so with reduced motion the tick is simply there. The
-   check is 22.6 long in its 24 box and a 24 dash covers it. The draw slides
-   that dash in from -23, so the short arm comes first, the way a tick is
-   written, and nothing shows before it starts. On success focus moves to the
-   message itself; it is not a control, so it shows no ring, like #main. */
-.pb-ok-tick path,.pb-ok-tick polyline{stroke-dasharray:24 24;stroke-dashoffset:0}
-@media(prefers-reduced-motion:no-preference){.pb-ok-tick path,.pb-ok-tick polyline{animation:pb-ok-tick-draw .3s cubic-bezier(.22,.61,.36,1) backwards}}
-@keyframes pb-ok-tick-draw{from{stroke-dashoffset:-23}to{stroke-dashoffset:0}}
-[role="status"][tabindex="-1"]:focus{outline:none}
 
 /* credibility strip (about) */
 .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
@@ -343,7 +383,7 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .magnet-form .row{flex-direction:column}
   .magnet-form .row .btn{width:100%}
 }
-@media(max-width:600px){.nav-in .nav-r .back{display:none}.nav-in .logo{font-size:17px;gap:8px}.nav-in .logo-mark{width:32px;height:32px;border-radius:9px}.nav-in .logo-mark svg{width:19px;height:19px}.nav-in .nav-r .btn{padding:11px 15px;font-size:13.5px;gap:6px}.nav-in .nav-r .btn svg{width:15px;height:15px}}@media(max-width:380px){/* C3: wordmark stays visible at every width, matching index */}
+
 
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
@@ -385,20 +425,6 @@ body{animation:pageIn .4s ease both}
   nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
   nav.scrolled .nav-in{height:72px}
 }
-
-
-/* ---- fintech slider polish: floating value bubble + richer thumb ---- */
-.field{position:relative}
-.slider-wrap{position:relative}
-.sbubble{position:absolute;top:-40px;transform:translateX(-50%) translateY(6px) scale(.9);background:var(--teal-900);color:#fff;font-weight:700;font-size:13px;letter-spacing:-.01em;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s ease,transform .18s cubic-bezier(.34,1.56,.64,1);z-index:5;font-variant-numeric:tabular-nums;box-shadow:0 6px 18px -6px rgba(9,63,57,.5)}
-.sbubble::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--teal-900);border-radius:1px}
-.slider-wrap.dragging .sbubble{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,border-color .18s}
-.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 0 0 8px rgba(11,122,110,.14),0 4px 14px rgba(11,122,110,.5)}
-/* result panel gentle pulse when values change */
-@keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
-.res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
-@media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
 
 
 /* ============================================================
@@ -455,16 +481,6 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
 
-/* ---- click-to-type values (precision beyond slider steps) ---- */
-.field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
-.field .val:hover{border-bottom-color:var(--teal-700)}
-.field .val:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:6px}
-.val-edit{font:700 17px var(--font);letter-spacing:-0.02em;color:var(--teal-700);background:var(--surface-2);border:1.5px solid var(--teal);border-radius:8px;padding:2px 8px;width:150px;text-align:right;font-variant-numeric:tabular-nums}
-.val-edit:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
-.val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.val-edit{-moz-appearance:textfield;appearance:textfield}
-
-
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
@@ -501,9 +517,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 }
 
 
-/* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
-@media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
-
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
 .pb-b-btn:hover{transform:translateY(-2px)}
@@ -539,10 +552,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 body.pb-banner-open .pb-b-btn{bottom:96px}
 body.pb-banner-open .pb-b-panel{bottom:162px}
-
-/* dashed underline = term explained in the jargon buster */
-.gref{color:inherit;text-decoration:none;border-bottom:1.5px dashed var(--ac,#0B7A6E);padding-bottom:1px}
-.gref:hover{border-bottom-style:solid;color:var(--ac-deep,var(--ink))}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
@@ -891,10 +900,6 @@ span.ai,.assure .ai{border-radius:6px !important}
 .phead,.phead h1,.phead p{font-family:var(--font);text-transform:none;letter-spacing:normal}
 .phead h1{font-family:var(--font-display);letter-spacing:-.015em}
 .phead .eyebrow{font-family:var(--font);}
-
-/* the deadline band is a grid child of .calc-wrap; without a span it took a
-   column and pushed the results panel out of place */
-.calc-wrap .deadline{grid-column:1 / -1;margin-bottom:4px}
 
 /* ============================================================
    PB-TICK - Pay & File countdown
@@ -1294,19 +1299,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 /* section eyebrows on light backgrounds pick up the brand colour too */
 .sec-head .eyebrow,.painband .eyebrow,.gapband .eyebrow,.coverband .eyebrow{color:var(--teal)}
 
-/* --- 2. Hick's Law: 7 simultaneous controls -> 4 primary + 3 on request --- */
-.adv{border-top:1px solid var(--line);margin-top:20px}
-.adv > summary{min-height:52px;display:flex;align-items:center;gap:10px;
-  font-family:var(--font);font-size:.75rem;font-weight:500;
-  color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
-.adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
-.adv > summary:hover{color:var(--ink)}
-.adv .adv-in{padding-top:4px;padding-bottom:6px}
-
 /* ============================================================
    PB-AUDIT - changes driven by measured findings
    ============================================================ */
@@ -1364,10 +1356,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .credline b{color:var(--ink);font-weight:600}
 .credline .sep{width:3px;height:3px;border-radius:50%;background:var(--ink-3);flex:0 0 auto}
 
-/* the site's own .field display rule outranks the UA's
-   details:not([open]) > *{display:none}, so the collapse must be explicit */
-.adv:not([open]) .adv-in{display:none}
-
 /* --- 5. legal pages measured 13px at 114 characters per line (the .updated
    date line and the body copy), failing both the 16px floor and the 75-char
    ceiling. .legal was already capped at 820px, which is still ~114 chars at
@@ -1416,57 +1404,6 @@ summary .pm,.pb-b-q .pm,.adv > summary::after{
 details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
 summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
-
-/* ============================================================
-   F5 - "Take a guess first", and the veil it puts over the one
-   figure it is asking about.
-
-   The card is built at runtime by assets/js/pb-guess.js and
-   inserted as the first child of .results. These rules live in
-   the head rather than in a runtime <style> so the card arrives
-   styled instead of flashing, and so the three assembled pages
-   inherit them with the rest of the skeleton's stylesheet.
-
-   The veil is a filter, so it cannot move anything: a veiled
-   cell keeps its box, its colour and its contrast, and only its
-   legibility changes. .pb-veiled lands on its own, in one frame;
-   .pb-veil, the transition, is added only as the veil lifts, so
-   the blur eases out and never in. .pb-preveil on <html>, set by
-   the one-line script after this stylesheet, blurs the headline
-   cells before the first paint until pb-guess.js has its own veil
-   up. Under prefers-reduced-motion there is no transition and the
-   figures simply appear.
-
-   Cosmetic, and the script says so in full: the text is still in
-   the DOM and in the page source. aria-hidden while veiled, put
-   on and taken off with the class, is the closest honest
-   equivalent for a screen reader.
-   ============================================================ */
-.pb-guess{background:var(--surface-2);border:1px solid var(--line);border-top:3px solid var(--aqua);
-  border-radius:var(--r-lg);padding:20px 22px}
-.pb-guess-t{font-size:17px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
-.pb-guess-lead{font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:6px 0 16px}
-.pb-guess-row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
-  gap:4px 12px;margin-bottom:10px}
-.pb-guess-lab{font-size:14.5px;font-weight:600;color:var(--ink)}
-/* The card's slider spans the card. Stated here rather than left to the page,
-   because the global input[type=range] rule carries width:100% in the skeleton
-   pension-calculator.html and not in director-calculator.html, where a range
-   with no width of its own collapses to the browser's default 129px under a
-   full-width button. This block is byte-identical in both files, so it names
-   them rather than saying "this file". */
-.pb-guess input[type=range]{width:100%}
-.pb-guess-val{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:16px;
-  font-weight:600;color:var(--ink)}
-.pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
-  border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
-.pb-guess-btn:hover{background:var(--teal-700)}
-.pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
-.pb-guess-out:empty{display:none}
-.pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
-.pb-veil{transition:filter .45s ease}
-.pb-veiled{filter:blur(13px);user-select:none;-webkit-user-select:none}
-@media(prefers-reduced-motion:reduce){.pb-veil{transition:none}}
 
 /* ============================================================
    v4 - ONE CASE. The caps-mono label system is gone: no
@@ -1599,109 +1536,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .nav-tick{display:none}
   .nav-links a.lnk{padding:12px 7px}
 }
-/* ============================================================
-   RESULTS PEEK BAR (.pb-peek). Built by assets/js/pb-peek.js on the five
-   calculators, straight after the inputs panel. Phones and tablets only:
-   from 921px up it is display:none, where the results column already sits
-   beside the inputs. Pinned to the bottom edge, it carries the page's
-   headline figure(s), copied from the results cells, while a control of
-   the inputs panel is on screen and the headline is not; while the guess
-   card's veil is up it carries only that card's title. The whole bar is
-   one button, at least 56px tall, that jumps to the results. Tucked means
-   moved off screen, not hidden, so a keyboard reader still meets it after
-   the last control, and focus inside it brings it up; the ring is inset
-   because the bar is flush with the screen's edges. While it shows,
-   html.pb-peek-on lifts the Ask Buddy button above it by the bar's
-   measured height, and keeps anything scrolled into view clear of it.
-   With the cookie choice bar up, or the Ask Buddy panel open, it is
-   display:none. Slides up in 200ms; under reduced motion it simply
-   appears. The State Pension pages set data-pb-tone="state", and their
-   figures are teal. The focus rules at the end give the element a tap
-   lands on (the results hero, or the guess card while the veil is up) the
-   site's ring when it was reached from the keyboard. Byte-identical in
-   pension-calculator.html, which carries it into the three built pages,
-   and director-calculator.html.
-   ============================================================ */
-.pb-peek{display:none}
-@media(max-width:920px){
-  .pb-peek{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;align-items:center;gap:12px;
-    width:100%;min-height:56px;margin:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom, 0px));
-    border:0;border-top:1px solid var(--line-2);border-radius:0;background:var(--surface);color:var(--ink);
-    font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;
-    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
-  .pb-peek.pb-peek-on{transform:none}
-  .pb-peek.pb-peek-held{display:none}
-  .pb-peek:focus{outline:none}
-  .pb-peek:focus-visible{box-shadow:inset 0 0 0 3px var(--ring)}
-  .pb-peek [hidden]{display:none}
-  .pb-peek-figs{flex:1 1 auto;min-width:0}
-  .pb-peek-set{display:flex;flex-wrap:wrap;gap:2px 20px}
-  .pb-peek-item{display:flex;flex-direction:column;min-width:0}
-  .pb-peek-lab{font-size:12.5px;font-weight:500;line-height:1.3;color:var(--ink-2)}
-  .pb-peek-fig{font-size:18px;font-weight:700;line-height:1.25;color:var(--ink);
-    font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-  .pb-peek[data-pb-tone="state"] .pb-peek-fig{color:var(--teal-700)}
-  .pb-peek-guess{display:block;font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
-  .pb-peek-go{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
-    width:36px;height:36px;border-radius:50%;background:var(--teal-700);color:#fff}
-  .pb-peek-go svg{width:18px;height:18px}
-  html.pb-peek-on{scroll-padding-bottom:calc(var(--pb-peek-h, 56px) + 8px)}
-  html.pb-peek-on .pb-b-btn{bottom:calc(var(--pb-peek-h, 56px) + 12px)}
-  .res-hero[tabindex="-1"]:focus,.pb-guess[tabindex="-1"]:focus{outline:none}
-  .res-hero[tabindex="-1"]:focus-visible,.pb-guess[tabindex="-1"]:focus-visible{outline:3px solid var(--ring);outline-offset:3px}
-}
-@media(max-width:920px) and (prefers-reduced-motion:no-preference){
-  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
-}
-@media(prefers-reduced-motion:reduce){.pb-peek{transition:none}}
-/* ============================================================
-   RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
-   contributions that get tax relief, six steps from 15% under 30 to 40% at
-   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
-   calculator and the comparison page assets/js/pb-ladder.js marks the
-   reader's step and says their limit in euro. Relief is money the State
-   puts in, so the fills are teal. Byte-identical wherever it appears.
-   ============================================================ */
-.pb-lad{max-width:560px}
-.pb-lad[hidden]{display:none}
-.pb-lad-cap{font-size:15px;line-height:1.6;color:var(--ink-2);margin:0 0 10px}
-.pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
-.pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
-.pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
-.pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
-.pb-lad-you[hidden]{display:none}
-.pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
-.pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
-/* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
-   second is the supporting one and sits quieter (Stripe, Ramp). Opacity
-   rather than a colour, so it mutes against whatever band it is on, light
-   or dark, and stays well inside AA for large text either way. */
-.pb-soft{opacity:.68}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
-/* SHOW THE WORKINGS (.pb-work). Mercury's collapsible breakdown under the
-   headline: what went in, what was there already and what growth added,
-   from the page's own inputs and outputs (sums and differences of them,
-   nothing projected afresh). Closed by default; the list is on the guess
-   veil, the summary names nothing. Byte-identical on both calculators. */
-.pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
-.pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
-.pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
-.pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
-.pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-work li b{color:var(--ink);font-weight:600;white-space:nowrap}
-/* SHARE RESULTS (.pb-share). A link to the figures on screen, the inputs
-   after the #; built by assets/js/pb-share.js on the five calculators. */
-.pb-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0 0}
-.pb-share button{font:inherit;font-size:14px;font-weight:600;color:var(--teal-700);background:var(--surface);border:1px solid var(--line-2);border-radius:99px;padding:8px 14px;cursor:pointer}
-.pb-share button:hover{border-color:var(--teal-700)}
-.pb-share button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
-.pb-share-said{font-size:13.5px;color:var(--ink-2)}
 /* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
    the nav's "Calculator" link, from 1201px only (the row, not the drawer);
    the nav's own markup is untouched. Takes no width in the row. */
@@ -1718,212 +1557,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
-
-/* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
-.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
-.vs-card h3{letter-spacing:-0.02em;margin-bottom:4px}
-.vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
-.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
-.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
-.vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
-.vs-salary{background:var(--surface-2)}
-.vs-pension{background:var(--teal-50)}
-.vs-col .vt{font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:10px}
-.vs-pension .vt{color:var(--teal-700)}
-.vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.vs-pension .amt{color:var(--teal-700)}
-.vs-col .lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.5}
-.vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-@media(max-width:560px){.vs{grid-template-columns:1fr;gap:12px}.vsmark{margin:0 auto}}
-/* itemised breakdown rows, built from the existing card + divline language */
-.bd{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14.5px}
-.bd .bl{color:var(--ink-2)}
-.bd .bv{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
-.bd.tot{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-weight:700}
-.bd.tot .bl{color:var(--ink)}
-.bd .capnote{font-size:12px;color:var(--ink-3)}
-.verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
-.srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
-/* ---- headline face ----
-   v3: this page used to load a fourth family for its headline alone, behind its
-   own --font-headline token, requested by PAGES['compare'].fonts. One font
-   sitewide now, so the token, the face and that extra Google Fonts request are
-   all gone; .phead h1 takes the shared heading recipe like every other
-   headline. See docs/STATUS.md for which face it was. */
-/* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
-   and each results panel keeps the results column's own vertical rhythm */
-.calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
-.modebar .modelab{font-family:var(--font);font-size:.66rem;font-weight:500;color:var(--ink-3)}
-.modebar .modeseg{max-width:560px;margin-top:10px}
-.modebar .subnote{max-width:640px}
-.modepanel{display:flex;flex-direction:column;gap:18px}
-.modepanel[hidden]{display:none}
-@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:13px;padding:11px 4px}}
-/* a three-way segmented control: the skeleton's .seg is two columns with a
-   half-width indicator, so a third option needs its own grid and a third-width
-   indicator. translateX(i * 100%) of the indicator's own width still lands it
-   on button i. */
-.seg.seg-3{grid-template-columns:repeat(3,1fr)}
-.seg.seg-3 .ind{width:calc(33.333% - 2.667px)}
-@media(max-width:560px){.seg.seg-3 button{font-size:13px;padding:11px 4px}}
-/* the money-above-the-cap card only exists when there is money above the cap */
-#capCard[hidden]{display:none}
-/* yes/no toggles that reveal a secondary control. A plain checkbox row, so it
-   reads as a question rather than another slider. */
-.tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
-.tog input{appearance:auto;-webkit-appearance:checkbox;width:20px;height:20px;margin:1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
-.tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
-.togbody[hidden]{display:none}
-/* funds and risk: three illustration tiles, each carrying its own downside */
-#riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
-#riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
-.risktiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
-.risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
-.risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
-.risktile .rk-sri b{color:var(--ink);font-variant-numeric:tabular-nums}
-.risktile .rk-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);padding-top:6px;border-top:1px dashed var(--line)}
-.risktile .rk-row b{color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
-.risktile .rk-note{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:4px}
-.risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
-#riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
-#riskCard .riskrule b{color:var(--ink)}
-@media(max-width:700px){.risktiles{grid-template-columns:1fr}}
-
-/* the risk card ends in the same link the verdict card uses; those rules are scoped to
-   .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
-   size and fills the card */
-#riskCard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
-  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
-#riskCard .wlink:hover{text-decoration:underline}
-#riskCard .wlink .ico{width:15px;height:15px}
-#riskCard .wlink{display:inline-flex;align-items:center;padding:11px 0}
-#riskCard .wlink{color:var(--teal)}
-#riskCard .wlink{margin-top:14px}
-#riskCard .wlink .ico{width:16px;height:16px;flex:none}
-/* ---- two lanes, one scale ----
-   A picture of the two figures in the .res-hero directly above, drawn from the
-   totals the page has already written. Its own surface rules rather than
-   .chart-card, because that class carries a 338px CLS lock from 921px up for
-   cards that hold a chart, and a label, a line of text and two thin lanes come
-   nowhere near it. No heading either: every classed h3 on this site takes the
-   20px/800 heading recipe, which beside the answer would read as a second
-   headline, so the card takes the small label the .vs-col .vt rows
-   use. Both tracks carry the same end rule, so it reads as the end of the
-   scale rather than as a verdict on either lane. */
-.pb-scale-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 22px;box-shadow:var(--sh-sm)}
-.pb-scale-title{font-size:12px;font-weight:700;color:var(--ink-3)}
-.pb-scale-sub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 16px}
-.pb-scale-lane{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center;margin-top:11px}
-.pb-scale-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.pb-scale-track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-scale-track::after{content:"";position:absolute;top:0;right:0;width:2px;height:100%;background:var(--aqua)}
-.pb-scale-bar{width:0;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.45,0,.25,1)}
-#pbScaleAeBar{background:var(--teal-900)}
-#pbScalePpBar{background:var(--teal)}
-@media(max-width:560px){.pb-scale-lane{grid-template-columns:1fr;gap:5px}}
-/* the length each bar travels sets its own duration, written inline by the
-   page script, so both lanes move at one speed; this turns that off */
-@media(prefers-reduced-motion:reduce){.pb-scale-bar{transition:none}}
-/* the one-sentence lead sits above the numbers in both modes */
-.results .lead{margin-bottom:0}
-.results .lead .wtext{font-size:17px;line-height:1.5}
-.results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
-
-/* ---- everything paid in, by 66 ----
-   The lanes above race one year; this races all of them. Same two colours,
-   so the reader reads it as the same comparison over a longer run, and the
-   figures are text rather than bars alone because nothing else on the page
-   carries them. */
-.pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
-.pb-my-card h3{margin:0 0 4px}
-.pb-my-sub{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0 0 16px}
-.pb-my-lane{display:grid;grid-template-columns:8.6em minmax(0,1fr) 6.4em;gap:12px;align-items:center;margin-bottom:10px}
-.pb-my-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
-.pb-my-track{position:relative;display:block;height:12px;border-radius:99px;
-  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:99px;
-  transition:width .9s cubic-bezier(.45,0,.25,1)}
-#pbMyAeBar{background:var(--teal-900)}
-#pbMyPpBar{background:var(--teal)}
-.pb-my-fig{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-my-note{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
-@media(max-width:560px){
-  .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
-  .pb-my-lab{grid-column:1;grid-row:1}
-  .pb-my-fig{grid-column:2;grid-row:1}
-  .pb-my-track{grid-column:1 / -1;grid-row:2}
+/* HOW WE WORK (how-we-work.html, Run 20 A1 and #9). The Reg 32 summary of
+   what product providers pay us, one block per type of product: a heading
+   and three pairs, which fall to one column on a phone rather than asking a
+   table to squeeze. */
+.pay-list{margin:18px 0 22px;border-top:1px solid var(--line)}
+.pay-row{padding:16px 0 12px;border-bottom:1px solid var(--line)}
+.legal .pay-row h3{margin:0 0 10px}
+.pay-row dl{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:6px 18px;margin:0}
+.pay-row dt{font-size:.95rem;font-weight:600;color:var(--ink)}
+.pay-row dd{margin:0;font-size:.95rem;color:var(--ink-2)}
+@media(max-width:600px){
+  .pay-row dl{grid-template-columns:1fr;gap:2px}
+  .pay-row dd{margin-bottom:8px}
 }
-@media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}
-
-/* THE PHASE STAIRCASE (.pb-stair). Auto-enrolment's four phases from
-   PBCompare.AE_PHASES, each column as tall as its total rate and stacked
-   you, your employer, the State (always 3 : 3 : 1). The page tags the
-   phase its figures are using. Teal is the State; the rest is neutral. */
-.pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
-.pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
-.assume .pb-stair li{padding-left:0;line-height:1.4}
-.assume .pb-stair li::before{content:none;display:none}
-.pb-stair-you{display:inline-block;max-width:100%;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600;white-space:nowrap}
-.pb-stair-you[hidden]{display:block;visibility:hidden}
-.pb-stair-bar{position:relative;display:block;width:100%;height:84px}
-.pb-stair-stack{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;border-radius:6px 6px 0 0;overflow:hidden}
-.pb-stair-stack i{display:block;width:100%}
-.pb-stair-ee{background:var(--ink-2)}
-.pb-stair-er{background:var(--ink-3);opacity:.6}
-.pb-stair-st{background:var(--aqua)}
-.pb-stair-yr{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
-.pb-stair-r{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-stair-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;color:var(--ink-2)}
-.pb-stair-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-
-/* WHERE 20% BECOMES 40% (.pb-band). The reader's salary as one bar, split
-   at the standard rate cut-off point the page is using for their status
-   (PBRelief.SRCOP, through the page's relief()). Income tax, so neutral:
-   neither the State's teal nor the gap's amber. */
-.pb-band{margin:10px 0 0}
-.pb-band-track{display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-band-track i{display:block;height:100%}
-.pb-band-lo{background:var(--line-2)}
-.pb-band-hi{background:var(--ink-2)}
-.pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
-.pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 </style>
-<script>
-/* pb-guess: blur the headline cells before the first paint on the pages that
-   carry a guess card, so the answer is never seen sharp while
-   assets/js/pb-guess.js is still on its way. That file takes the class off in
-   the same task that puts its own veil up; if it never arrives, the class
-   comes off by itself after four seconds. With scripts off this never runs. */
-(function () {
-  var p = String(location.pathname || '').split('/').pop();
-  if (!/^(pension-calculator|director-calculator|state-pension-reality-check|state-pension-entitlement|broker-vs-autoenrolment)\.html$/.test(p)) { return; }
-  document.documentElement.classList.add('pb-preveil');
-  setTimeout(function () { document.documentElement.classList.remove('pb-preveil'); }, 4000);
-}());
-</script>
-
-<script>
-/* ------------------------------------------------------------------
-   LEAD CAPTURE CONFIG
-
-   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
-   a CRM webhook, anything that accepts a JSON POST). Once it starts with
-   http, results are posted there and the visitor only sees a confirmation
-   when the send actually succeeds.
-
-   Until then the form opens the visitor's mail client with their figures
-   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
-   lost and nobody is told an email is coming that isn't.
-   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
-   set, the mailto fallback below is what actually runs.
-   ------------------------------------------------------------------ */
-var LEAD_ENDPOINT = '';
-var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
-</script>
-<script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -1944,263 +1592,93 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
-</div></div>
+<div class="wrap"><div class="legal reveal">
+  <h1>How we work, and how we are paid</h1>
+  <p class="updated">Last updated: 24 September 2026</p>
+  <p class="intro">Who gives the advice, how we are paid for it, and what you can check for yourself before you talk to us.</p>
 
-<div class="wrap"><div class="calc-wrap">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
-    </div>
+  <h2 id="adviser">Who advises you</h2>
+  <p>Advice is given by Damian Condon, QFA (Qualified Financial Adviser), who has 30 years&rsquo; experience. Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management.</p>
+  <p>You can check our authorisation yourself on the <a href="https://registers.centralbank.ie/" rel="noopener">Central Bank of Ireland&rsquo;s register</a>. Our reference number is <span class="needs-input" data-issue="R20-9a">[Central Bank reference number to be confirmed]</span>.</p>
 
-    <div class="modebar reveal">
-      <div class="row"><span class="modelab">Which question?</span></div>
-      <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
-        <span class="ind" id="modeInd"></span>
-        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Instead of auto-enrolment</button>
-        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">On top of auto-enrolment</button>
-      </div>
-      <p class="subnote" id="modeNote">Same money out of your pocket. Auto-enrolment, or a personal pension instead?</p>
-    </div>
+  <h2 id="paid">How we are paid</h2>
+  <p>We are paid by a fee you agree with us, by commission from the company whose product you take out, or by a mix of the two. Which applies to you, and how much, is set out in writing before any work begins.</p>
+  <p>This is our summary of the commission and other payments we receive from product providers, by type of product. Where an amount depends on your circumstances, we give the range and say what decides where in it you fall.</p>
 
-    <div class="panel reveal">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
-    <div class="field" data-mode="1">
-      <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
-      <div class="togbody" data-for="matchOn" hidden>
-        <div class="row"><label for="match">How much, as a share of your salary</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">Only what your employer has actually agreed to.</p>
-      </div>
+  <div class="pay-list">
+    <div class="pay-row">
+      <h3>PRSA (Personal Retirement Savings Account)</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
     </div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">From your own pocket, on top of auto-enrolment. It goes through a personal pension, because My Future Fund only takes its set rate.</p></div>
-    <div class="field" data-mode="2" hidden>
-      <label class="tog"><input type="checkbox" id="tmatchOn"><span>Would your employer match what you add on?</span></label>
-      <div class="togbody" data-for="tmatchOn" hidden>
-        <div class="row"><label for="tmatch">How much of your top-up they would match</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A share of the top-up itself, not of your salary.</p>
-      </div>
+    <div class="pay-row">
+      <h3>Personal pension, or Personal Retirement Bond (a buy-out bond)</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
     </div>
-    <div class="field">
-      <label class="tog"><input type="checkbox" id="futureOn"><span>Plan for a future year instead of this one</span></label>
-      <div class="togbody" data-for="futureOn" hidden>
-        <div class="row"><label for="phase">Auto-enrolment year</label><span class="val" id="phaseV">Year 1</span></div><input type="range" id="phase" min="1" max="12" value="1"><p class="subnote" id="phaseNote">Rates rise in three-year steps.</p>
-      </div>
+    <div class="pay-row">
+      <h3>Company pension for directors (an executive pension or a Master Trust)</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
     </div>
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label id="statusLabel">How you are assessed for tax</label></div>
-      <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">One income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Two incomes</button></div>
-      <p class="subnote" id="statusNote">Sets where your tax moves from 20% to 40%, and so the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on a personal pension.</p>
-      <div class="pb-band">
-        <div class="pb-band-track" aria-hidden="true"><i class="pb-band-lo" id="pbBandLo" style="width:88%"></i><i class="pb-band-hi" id="pbBandHi" style="width:12%"></i></div>
-        <p class="pb-band-key"><span><i class="pb-band-sw pb-band-lo"></i><b id="pbBandLoN">€44,000</b> of your salary taxed at 20%</span><span><i class="pb-band-sw pb-band-hi"></i><b id="pbBandHiN">€6,000</b> at 40%</span></p>
-      </div>
+    <div class="pay-row">
+      <h3>AVCs (additional voluntary contributions)</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
+    </div>
+    <div class="pay-row">
+      <h3>ARF (Approved Retirement Fund)</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
+    </div>
+    <div class="pay-row">
+      <h3>Annuity</h3>
+      <dl>
+        <dt>When you start</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>Each year after (trail commission)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+        <dt>If the plan is cancelled early (clawback)</dt><dd><span class="needs-input" data-issue="R20-9b">[to be confirmed]</span></dd>
+      </dl>
     </div>
   </div>
+  <p>Any other types of product we are paid for: <span class="needs-input" data-issue="R20-9c">[to be confirmed, or none]</span></p>
+  <p>Other fees, administration costs or non-monetary benefits we receive from product providers: <span class="needs-input" data-issue="R20-9c">[to be confirmed, or none]</span></p>
+  <p>The product providers we hold agencies with: <span class="needs-input" data-issue="R20-9c">[to be confirmed]</span></p>
+  <p>If you pay us a fee and we also receive commission: <span class="needs-input" data-issue="R20-9c">[whether the commission is set against the fee, to be confirmed]</span></p>
 
-  <div class="results">
-    <div class="waitcard lead reveal">
-      <div class="wt">In one sentence</div>
-      <div class="wtext verdict" id="leadOut"></div>
-      <p class="phaseline" id="phaseLine"></p>
-      <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
+  <h2 id="fees">Our fees</h2>
+  <p>The first consultation is free and carries no obligation.</p>
+  <p>After that: <span class="needs-input" data-issue="R20-9d">[schedule of fees and charges to be confirmed]</span></p>
 
-    <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
-    <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
-      <div class="res-hero reveal" style="transition-delay:.08s">
-        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
-        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
-        <div class="divline"></div>
-        <div class="foot">One year, at your salary and age. An illustration only.</div>
-      </div>
+  <h2 id="reviews">Reviews</h2>
+  <p>We show a review here only if it is genuine and unedited, with the reviewer&rsquo;s name, the date and their permission, and only if it is about our service rather than investment returns. If a reviewer works for us, is connected to us, or was paid anything, we say so beside the review.</p>
+  <p><span class="needs-input" data-issue="R20-9e">[Reviews to be added]</span></p>
 
-      <div class="pb-scale-card reveal" id="pbScaleCard" style="transition-delay:.1s" aria-hidden="true">
-        <div class="pb-scale-title">Side by side</div>
-        <p class="pb-scale-sub" id="pbScaleSub">One year of contributions each, at year 1 of the phase-in, on the same scale. The longer bar reaches the end of the scale.</p>
-        <div class="pb-scale-lane pb-scale-ae"><span class="pb-scale-lab">Auto-enrolment</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScaleAeBar"></div></div></div>
-        <div class="pb-scale-lane pb-scale-pp"><span class="pb-scale-lab">Personal pension</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScalePpBar"></div></div></div>
-      </div>
-
-      <div class="pb-my-card reveal" id="pbMyCard" data-mode="1" style="transition-delay:.11s">
-        <h3>Everything paid in, by 66</h3>
-        <p class="pb-my-sub" id="pbMySub">Both paths, every year from now to 66, grown at 5% a year.</p>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Auto-enrolment</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar"></i></span>
-          <span class="pb-my-fig" id="pbMyAe">€0</span>
-        </div>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Personal pension</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyPpBar"></i></span>
-          <span class="pb-my-fig" id="pbMyPp">€0</span>
-        </div>
-        <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
-      </div>
-
-      <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
-        <h3>Money above the cap</h3>
-        <div class="bd"><span class="bl">Salary above €80,000</span><span class="bv" id="capAbove">€0</span></div>
-        <div class="bd"><span class="bl">Your own rate on that part <span class="capnote" id="capRate"></span></span><span class="bv" id="capStranded">€0</span></div>
-        <div class="bd tot"><span class="bl">What a personal pension could turn it into</span><span class="bv" id="capCouldBe">€0</span></div>
-        <p class="subnote" id="capNote"></p>
-      </div>
-
-      <div class="vs-card reveal" style="transition-delay:.14s">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year.</div>
-        <div class="vs">
-          <div class="vs-col vs-salary">
-            <div class="vt">Auto-enrolment</div>
-            <div class="amt" id="aeNet">€0</div>
-            <div class="lab">From your take-home pay. No tax relief.</div>
-          </div>
-          <div class="vsmark">vs</div>
-          <div class="vs-col vs-pension">
-            <div class="vt">Personal pension</div>
-            <div class="amt" id="ppNet">€0</div>
-            <div class="lab" id="ppNetLab">Your contribution after tax relief.</div>
-          </div>
-        </div>
-        <p class="vs-note subnote" id="vsNote"></p>
-      </div>
-
-      <div class="chart-card reveal" style="transition-delay:.22s">
-        <h3>Personal pension, broken down</h3>
-        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
-        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
-        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
-        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2">€0</span></div>
-        <p class="subnote" id="ppReliefNote"></p>
-      </div>
-      <div class="chart-card reveal">
-        <h3>Your relief limit</h3>
-      <div class="pb-lad" data-pb-age="age" data-pb-earn="salary">
-    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
-        <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-        <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
-        <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
-        <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
-        <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
-        <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-out">At 35, relief applies to contributions up to €10,000 a year: 20% of €50,000.</p>
-    <p class="pb-lad-note">Earnings count up to €115,000.</p>
-  </div>
-      </div>
-    </div>
-
-    <!-- ============ MODE 2: COMBINED ============ -->
-    <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
-      <div class="res-hero reveal" style="transition-delay:.08s">
-        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
-        <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
-        <div class="divline"></div>
-        <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
-      </div>
-
-      <div class="vs-card reveal" style="transition-delay:.14s">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year, in two parts.</div>
-        <div class="vs">
-          <div class="vs-col vs-salary">
-            <div class="vt">Auto-enrolment minimum</div>
-            <div class="amt" id="cAeNet">€0</div>
-            <div class="lab">From your take-home pay. No tax relief.</div>
-          </div>
-          <div class="vsmark">+</div>
-          <div class="vs-col vs-pension">
-            <div class="vt">Your top-up</div>
-            <div class="amt" id="cExtraNet">€0</div>
-            <div class="lab" id="cExtraLab">What you pay in, before relief.</div>
-          </div>
-        </div>
-        <p class="vs-note subnote" id="cNote"></p>
-      </div>
-
-      <div class="chart-card reveal" style="transition-delay:.22s">
-        <h3>Your top-up, broken down</h3>
-        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
-        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
-        <div class="bd"><span class="bl">Goes into your pension</span><span class="bv" id="cGross">€0</span></div>
-        <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="cMatchCap"></span></span><span class="bv" id="cMatch">€0</span></div>
-        <div class="bd tot"><span class="bl">Total from the top-up</span><span class="bv" id="cTopUp2">€0</span></div>
-        <p class="subnote" id="cReliefNote"></p>
-      </div>
-    </div>
-
-    <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
-    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s">
-      <h3>Choosing your funds, and how much risk</h3>
-      <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
-      <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
-      <div class="risktiles" id="riskTiles"></div>
-      <p class="riskrule"><b>Higher potential returns mean a higher risk of loss.</b> The value of a pension can fall as well as rise, and you may get back less than you put in. These figures are illustrations, not a recommendation of any level, and not a forecast. Which level suits you depends on things this page cannot see, and choosing one is a conversation with Damian.</p>
-      <p class="subnote">Under auto-enrolment on its own, your money goes into My Future Fund&rsquo;s standard funds and the choice is limited to those.</p>
-      <a class="wlink" href="booking.html">Talk the choice through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-
-    <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
-    <div class="chart-card reveal" style="transition-delay:.18s">
-      <h3>Auto-enrolment, broken down</h3>
-      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
-      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
-      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState">€0</span></div>
-      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2">€0</span></div>
-      <p class="subnote" id="aeRatesNote"></p>
-    </div>
-
-    <div class="chart-card reveal" style="transition-delay:.26s">
-      <h3>Before you rely on these rates</h3>
-      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at €80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years, and the position that the scheme does not currently accept contributions above its set rate. Confirm those against gov.ie or NAERSA before relying on them. Rates and rules can change.</p>
-    </div>
-    <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
-  </div>
-</div></div>
-
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
-  <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
-  <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
-
-<section style="padding:40px 0 0"><div class="wrap">
-  <div class="infoadvice reveal">
-    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation, and it does not say which path is right for you. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
-  </div>
-</div></section>
-
-<section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
-  <ul class="reveal">
-    <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
-    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.
-    <ol class="pb-stair">
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair3" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:75.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2032 to 2034</span><span class="pb-stair-r">4.5%, 4.5%, 1.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span></li>
-    </ol>
-    <p class="pb-stair-key"><span><i class="pb-stair-sw pb-stair-ee"></i>You</span><span><i class="pb-stair-sw pb-stair-er"></i>Your employer</span><span><i class="pb-stair-sw pb-stair-st"></i>The State</span></p></li>
-    <li>All three auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are calculated on salary up to €80,000, which gov.ie confirms. Payroll stops the deduction after the pay period in which that threshold is crossed, so a little can be paid on earnings above it in that period; this annual illustration ignores that.</li>
-    <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
-    <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
-    <li>A personal pension or PRSA gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% on the part of a contribution that sits above your standard rate cut-off point and at 20% on the rest, because a contribution comes off the top of your taxable income. It is limited to Revenue&rsquo;s age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. PRSI and USC are not modelled. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
-    <li>The standard rate cut-off points are the 2026 figures from Revenue: €44,000 single, €53,000 married or in a civil partnership with one income, and up to €88,000 with two incomes. The €88,000 is a maximum, reached only where the lower earner has at least €35,000 of income of their own; a couple with one income is €53,000 whatever they earn. These change most years.</li>
-    <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
-    <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
-    <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
-    <li>The three risk illustrations use the 1 to 7 Summary Risk Indicator that EU rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
-    <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
-    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+  <h2 id="elsewhere">Help from elsewhere</h2>
+  <p>Free, independent information you may find useful before or after you talk to us:</p>
+  <ul>
+    <li>The Competition and Consumer Protection Commission&rsquo;s <a href="https://www.ccpc.ie/consumers/money-tools/" rel="noopener">money tools</a>, and its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
+    <li>The Money Advice and Budgeting Service, <a href="https://www.mabs.ie/en/" rel="noopener">MABS</a>, for free and confidential help with budgeting and debt.</li>
+    <li>The <a href="https://www.pensionsauthority.ie/" rel="noopener">Pensions Authority</a>, the regulator of pension schemes and PRSAs.</li>
   </ul>
-</div></section>
-<script src="assets/js/pb-ladder.js?v=a9ec3585"></script>
+
+  <h2 id="more">More detail</h2>
+  <p>Our <a href="terms.html">Terms of Business</a> cover the rest of the relationship, including conflicts of interest and compensation. If something goes wrong, our <a href="complaints.html">complaints process</a> sets out what we do and where you can go if we cannot put it right.</p>
+</div></div>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -2211,450 +1689,31 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
-    <p>The information and calculations on this page are provided for general guidance only and do not constitute financial, investment or tax advice. The value of investments may fall as well as rise and you may get back less than you invested. Past performance is not a reliable guide to future performance. Tax treatment depends on individual circumstances and may change. Calculator results are illustrations and are not a guarantee of future outcomes.</p>
+    <p>This summary of our Terms of Business is provided for general information. Full terms are provided to clients in writing before any service begins.</p>
   <p>Use of this website is subject to our <a href="terms.html#terms-of-use">Website Terms of Use</a>.</p>
-    <p>These figures are generated from the information you enter, using general assumptions. They are not personalised financial advice and are not a promise of what you will actually get. Before making any financial decision based on them, talk it through in a full consultation, where advice can be tailored to you.</p>
-    <p>© 2026 Gresham Wealth Management. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
+    <p>© 2026 Gresham Wealth Management. All rights reserved. · <a href="privacy.html">Privacy Notice</a> · <a href="terms.html">Terms of Business</a> · <a href="complaints.html">Complaints</a></p>
   </div>
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
-
-<script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/autoenrolment.js?v=f94c659a"></script>
 <script>
-/* broker-vs-autoenrolment.html
-   Maths lives in assets/js/autoenrolment.js and assets/js/pension-tax-relief.js,
-   which are the single source of truth and are covered by
-   tests/compare-calc.test.js. This file only reads the controls and paints
-   the result panels, so the page cannot hold a second copy of the rules.
-
-   Two modes, two different questions, one shared input panel:
-     Mode 1, Equivalent layer: for the same money out of pocket, auto-enrolment
-                               against a personal pension instead.
-     Mode 2, Combined:         auto-enrolment at its set rate PLUS a personal
-                               top-up for anything extra, because My Future
-                               Fund does not currently take contributions
-                               above that rate (see the source warning in
-                               autoenrolment.js).
-   Both are computed on every change so switching is instant and they can
-   never disagree about the shared auto-enrolment layer.
-
-   HONESTY RULE: this page reports the numbers for the inputs entered and
-   nothing more. When auto-enrolment produces the larger total in Mode 1 it
-   says so in exactly the same words and prominence as the opposite result.
-   Mode 2 is stated matter of fact, as a consequence of what the scheme
-   currently allows, never as a pitch. */
-let mode = 1;
-
-/* Relief is worked out at the rate each euro actually attracts, split at the
-   standard rate cut-off point, so the page asks how the visitor is assessed
-   for tax rather than which rate to apply. Figures live in PBRelief. */
-const STATUS = [
-  { srcop: PBRelief.SRCOP.single,            who: 'single' },
-  { srcop: PBRelief.SRCOP.marriedOneIncome,  who: 'married or in a civil partnership with one income' },
-  { srcop: PBRelief.SRCOP.marriedTwoIncomes, who: 'married or in a civil partnership with two incomes' }
-];
-let statusIx = 0;
-const relief = () => ({ srcop: STATUS[statusIx].srcop });
-
-/* Pension age, and the growth the multi-year card assumes. 66 is what every
-   figure on this site assumes; 5% a year is the pension calculator's own
-   default, reused rather than a second rate invented for this page. Both are
-   said on the card in words. */
-const PENSION_AGE = 66;
-const GROWTH = 5;
-
-/* Formatting, the slider fill, the wiring and the debounced live region are
-   the same on all five calculators and live in assets/js/calc-page.js. */
-const { $, euro, pct, paintSlider, wireRanges, announce } = window.PBPage;
-
-/* Three illustrative risk levels for the personal pension side, on the 1 to 7
-   Summary Risk Indicator every fund's Key Information Document carries.
-
-   NEEDS DAMIAN INPUT. The return and bad-year figures below are placeholders.
-   They must be confirmed against the actual fund ranges Gresham can arrange,
-   and kept consistent with the 1% to 8% growth slider (default 5%) on
-   pension-calculator.html and director-calculator.html, so no two calculators
-   imply different growth. The bad-year figures are rough indications of a
-   fall, not floors. Nothing here names an asset class; which fund ranges and
-   structures can be offered, and whether any wider access should be
-   mentioned at all, is also for Damian to confirm. See docs/STATUS.md. */
-const RISK_LEVELS = [
-  { name: 'Lower risk',  sri: '2 to 3', ret: 3, fall: 10, note: 'Mostly bonds and cash-like assets. Smaller swings, slower growth.' },
-  { name: 'Medium risk', sri: '4',      ret: 5, fall: 20, note: 'A mix of shares and bonds. The level most default funds sit around.' },
-  { name: 'Higher risk', sri: '5 to 6', ret: 7, fall: 30, note: 'Mostly shares. Bigger swings, more room to grow, and to fall.' }
-];
-
-function renderRisk() {
-  $('riskTiles').innerHTML = RISK_LEVELS.map(l =>
-    '<div class="risktile">'
-    + '<div class="rk-name">' + l.name + '</div>'
-    + '<div class="rk-sri">Risk rating <b>' + l.sri + '</b> of 7</div>'
-    + '<div class="rk-row"><span>Illustrative return</span><b>around ' + l.ret + '% a year</b></div>'
-    + '<div class="rk-row"><span>In a bad year, could fall</span><b>around ' + l.fall + '%' + (l.fall >= 30 ? ' or more' : '') + '</b></div>'
-    + '<div class="rk-note">' + l.note + '</div>'
-    + '<div class="rk-warn">Can fall as well as rise. Not a recommendation.</div>'
-    + '</div>').join('');
-}
-
-/* the user has moved the Mode 1 contribution slider themselves, so stop re-matching it */
-let grossTouched = false;
-
-/* Screen readers otherwise announce a bare number, so each slider carries a
-   formatted aria-valuetext (issue D4). */
-const VALTEXT = {
-  age: v => v + ' years',
-  salary: v => euro(v),
-  phase: v => 'Year ' + v + (v >= 10 ? ' or later' : ''),
-  gross: v => euro(v) + ' a year',
-  match: v => v + '% of salary',
-  extra: v => euro(v) + ' a month',
-  tmatch: v => v + '% of your top-up'
-};
-
-/* paintSlider takes the wording map as an argument, so bind it once here. A
-   bare `paintSlider` handed to forEach would receive the array index as that
-   argument and quietly fall back to euro formatting on every slider. */
-const paint = el => paintSlider(el, VALTEXT);
-
-function setStatus(i) {
-  statusIx = i;
-  grossTouched = false;                          // relief changed, so re-match
-  for (let k = 0; k < STATUS.length; k++) {
-    const b = $('st' + k), on = k === i;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-  }
-  $('segInd').style.transform = 'translateX(' + (i * 100) + '%)';
-  const st = STATUS[i];
-  $('statusNote').innerHTML = 'Tax is 40% above <b>' + euro(st.srcop) + '</b> for you, so relief on a personal pension is 40% on that part and 20% below.'
-    + (i === 2 ? ' The ' + euro(88000) + ' is a maximum; it needs the lower earner to have ' + euro(35000) + ' of their own.' : '');
-  calc();
-}
-
-/* "EUR 2,400 at 40%, EUR 400 at 20%", or just the one rate when only one applies */
-function reliefAt(split) {
-  if (!split) return '';
-  const parts = [];
-  if (split.at40 > 0) parts.push(euro(split.at40) + ' at 40%');
-  if (split.at20 > 0) parts.push(euro(split.at20) + ' at 20%');
-  return parts.length ? parts.join(', ') : '';
-}
-
-/* ---- mode tabs ---- */
-const MODE_NOTE = {
-  1: 'Same money out of your pocket. Auto-enrolment, or a personal pension instead?',
-  2: 'Auto-enrolment as it is, plus extra saving through a personal pension.'
-};
-
-/* The auto-enrolment year is worked out from today's date. Year 1 is 2026.
-   Nobody has to think about it unless they are planning for a future year,
-   which is a toggle in More options, off by default. */
-const SCHEME_START = 2025;                       // year 1 is SCHEME_START + 1
-function thisYearsPhase() {
-  return Math.min(+$('phase').max, Math.max(1, new Date().getFullYear() - SCHEME_START));
-}
-function schemeYear() {
-  return $('futureOn').checked ? +$('phase').value : thisYearsPhase();
-}
-
-/* Yes/no toggles that reveal a secondary slider. Off means the slider is
-   hidden and counts as zero, whatever it was last set to. */
-function toggled(id) { return $(id).checked; }
-function syncToggles() {
-  document.querySelectorAll('.togbody[data-for]').forEach(b => {
-    b.hidden = !$(b.getAttribute('data-for')).checked;
-  });
-}
-
-function setMode(m, focusTab) {
-  mode = m;
-  [1, 2].forEach(n => {
-    const tab = $('m' + n), on = n === m;
-    tab.classList.toggle('on', on);
-    tab.setAttribute('aria-selected', on ? 'true' : 'false');
-    tab.tabIndex = on ? 0 : -1;
-    $('mode' + n + 'Results').hidden = !on;
-  });
-  $('modeInd').style.transform = m === 1 ? 'translateX(0)' : 'translateX(100%)';
-  $('modeNote').textContent = MODE_NOTE[m];
-  /* mode-specific controls live in the shared panel and simply show or hide */
-  document.querySelectorAll('[data-mode]').forEach(el => { el.hidden = el.getAttribute('data-mode') !== String(m); });
-  if (focusTab) $('m' + m).focus();
-  try { history.replaceState(null, '', m === 2 ? '#combined' : location.pathname + location.search); } catch (e) {}
-  calc();
-}
-
-/* arrow keys move between the two tabs, as a tablist should */
-document.querySelector('.modeseg').addEventListener('keydown', e => {
-  if (!/^(ArrowLeft|ArrowRight|Home|End)$/.test(e.key)) return;
-  e.preventDefault();
-  setMode(e.key === 'Home' ? 1 : e.key === 'End' ? 2 : (mode === 1 ? 2 : 1), true);
-});
-
-function calc() {
-  const age = +$('age').value;
-  const salary = +$('salary').value;
-  const year = schemeYear();
-  const match = toggled('matchOn') ? +$('match').value : 0;
-  const extraMonthly = +$('extra').value;
-  const tmatch = toggled('tmatchOn') ? +$('tmatch').value : 0;
-
-  const ae = PBCompare.autoEnrolment(salary, year);
-
-  /* ---------- Mode 1: equivalent layer ---------- */
-  /* Until the user touches it, the personal contribution tracks the net cost of
-     auto-enrolment so the comparison opens genuinely like for like. */
-  if (!grossTouched) {
-    const matched = Math.round(PBCompare.matchedGross(salary, year, age, relief()) / 250) * 250;
-    $('gross').value = Math.min(matched, +$('gross').max);
-  }
-  const gross = +$('gross').value;
-  const pp = PBCompare.personalPension(gross, age, salary, relief(), match);
-
-  /* ---------- Mode 2: combined ---------- */
-  const c = PBCompare.combined({ salary, year, age, srcop: relief().srcop, extraMonthly, topUpMatchPct: tmatch });
-
-  /* control labels */
-  $('ageV').textContent = age;
-  $('salaryV').textContent = euro(salary);
-  $('phaseV').textContent = 'Year ' + year + (year >= 10 ? '+' : '');
-  $('grossV').textContent = euro(gross);
-  $('matchV').textContent = (+$('match').value) + '%';
-  $('extraV').textContent = euro(extraMonthly);
-  $('tmatchV').textContent = (+$('tmatch').value) + '%';
-  $('phaseNote').textContent = 'Phase ' + ae.phase + ' (' + ae.years + '): you '
-    + pct(ae.rates.employee) + ', employer ' + pct(ae.rates.employer) + ', State ' + pct(ae.rates.state) + '.';
-
-  /* the one line about the year, said plainly, up where the answer is */
-  const calYear = SCHEME_START + year;
-  $('phaseLine').textContent = ($('futureOn').checked ? 'Planning for ' + calYear : 'Since it is ' + calYear)
-    + ', you are in year ' + year + ' of the phase-in: you put in ' + pct(ae.rates.employee)
-    + ', your employer matches ' + pct(ae.rates.employer) + ', and the State adds ' + pct(ae.rates.state) + '.';
-
-  /* where 20% becomes 40%: the salary split at the cut-off this status uses */
-  const cut = relief().srcop, bandLo = Math.min(salary, cut), bandHi = Math.max(0, salary - cut);
-  $('pbBandLo').style.width = (bandLo / salary * 100).toFixed(4) + '%';
-  $('pbBandHi').style.width = (bandHi / salary * 100).toFixed(4) + '%';
-  $('pbBandLoN').textContent = euro(bandLo);
-  $('pbBandHiN').textContent = euro(bandHi);
-
-  /* the phase staircase in the assumptions: tag the phase these figures use */
-  for (let i = 1; i <= 4; i++) $('pbStair' + i).hidden = ae.phase !== i;
-
-  /* ---------- shared: the auto-enrolment layer ---------- */
-  $('aeEmployee').textContent = euro(ae.employee);
-  $('aeEmployer').textContent = euro(ae.employer);
-  $('aeState').textContent = euro(ae.state);
-  $('aeTotal2').textContent = euro(ae.totalIn);
-  const capNote = ae.salaryCapApplies ? '(on the first ' + euro(PBCompare.AE_SALARY_CAP) + ')' : '';
-  $('aeEmployerCap').textContent = capNote;
-  $('aeStateCap').textContent = capNote;
-  $('aeRatesNote').textContent = (ae.salaryCapApplies
-        ? 'All three are worked out on the first ' + euro(PBCompare.AE_SALARY_CAP) + ' of your salary only.'
-        : 'All three are worked out on your whole salary.')
-    + ' Yours comes out of take-home pay, so there is no tax relief on it.';
-
-  /* money above the cap: shown only when there is some */
-  const ac = PBCompare.aboveCap(salary, year, age, relief());
-  $('capCard').hidden = !(ac.above > 0);
-  if (ac.above > 0) {
-    $('capAbove').textContent = euro(ac.above);
-    $('capRate').textContent = '(' + pct(ac.rate) + ')';
-    $('capStranded').textContent = euro(ac.strandedNet);
-    $('capCouldBe').textContent = euro(ac.couldBe);
-    $('capNote').textContent = 'Auto-enrolment takes nothing on salary above ' + euro(PBCompare.AE_SALARY_CAP)
-      + ', so this ' + euro(ac.strandedNet) + ' stays in your pay. A personal pension could take it and, with tax relief, put '
-      + euro(ac.couldBe) + ' in. Not a reason to leave My Future Fund, which never sees it either way.';
-  }
-
-  /* ---------- Mode 1 panel ---------- */
-  $('aeTotal').textContent = euro(ae.totalIn);
-  $('ppTotal').textContent = euro(pp.totalIn);
-  $('ppTotal2').textContent = euro(pp.totalIn);
-  $('aeNet').textContent = euro(ae.netCost);
-  $('ppNet').textContent = euro(pp.netCost);
-  $('ppNetLab').textContent = pp.relief > 0
-    ? euro(pp.gross) + ' in, less ' + euro(pp.relief) + ' of tax relief.'
-    : 'Your contribution. No relief at this level.';
-
-  const netGap = Math.round(pp.netCost - ae.netCost);
-  $('vsNote').textContent = Math.abs(netGap) < 1
-    ? 'Both cost you the same, so the totals above are like for like.'
-    : (netGap > 0
-        ? 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' more out of pocket.'
-        : 'The personal pension costs you ' + euro(Math.abs(netGap)) + ' less out of pocket.');
-
-  $('ppGross').textContent = euro(pp.gross);
-  $('ppRelief').textContent = euro(pp.relief);
-  $('ppEmployer').textContent = euro(pp.employer);
-  $('ppReliefCap').textContent = reliefAt(pp.reliefSplit);
-  $('ppEmployerCap').textContent = match > 0 ? '(' + match + '% of salary)' : '(none)';
-  $('ppReliefNote').textContent = reliefSentence(pp, age);
-
-  /* the Mode 1 verdict, stated the same way whichever path is larger */
-  const cmp = PBCompare.compare({ salary, year, age, srcop: relief().srcop, gross, employerMatchPct: match });
-
-  /* EVERYTHING PAID IN, BY 66. The same comparison over every year that is
-     left rather than one of them. The growth assumption is the calculators'
-     own default, 5% a year, named on the card; the module is told it rather
-     than owning it. Pension age is 66, which is what every figure on this
-     site assumes. */
-  const my = PBCompare.cumulative({
-    salary, firstYear: year, age, retireAge: PENSION_AGE, srcop: relief().srcop,
-    gross: +$('gross').value, employerMatchPct: match, growth: GROWTH / 100
-  });
-  $('pbMySub').textContent = my.years > 0
-    ? 'Both paths, every year from ' + age + ' to ' + PENSION_AGE + ', grown at ' + GROWTH + '% a year.'
-    : 'You are at or past ' + PENSION_AGE + ', so there are no years left to add up.';
-  $('pbMyAe').textContent = euro(my.autoEnrolment);
-  $('pbMyPp').textContent = euro(my.personal);
-  const myTop = Math.max(my.autoEnrolment, my.personal);
-  [['pbMyAeBar', my.autoEnrolment], ['pbMyPpBar', my.personal]].forEach(function (lane) {
-    $(lane[0]).style.width = (myTop > 0 ? lane[1] / myTop * 100 : 0) + '%';
-  });
-
-  let verdict;
-  if (cmp.larger === 'equal') {
-    verdict = 'Both paths put the same amount into your pension this year, ' + euro(ae.totalIn) + '.';
-  } else if (cmp.larger === 'autoEnrolment') {
-    verdict = 'Auto-enrolment puts ' + euro(cmp.difference) + ' more into your pension this year, '
-      + euro(ae.totalIn) + ' against ' + euro(pp.totalIn) + '.';
-  } else {
-    verdict = 'The personal pension puts ' + euro(cmp.difference) + ' more into your pension this year, '
-      + euro(pp.totalIn) + ' against ' + euro(ae.totalIn) + '.';
-  }
-  verdict += Math.abs(netGap) < 1
-    ? ' Both cost you the same out of pocket.'
-    : ' They do not cost you the same out of pocket, though.';
-
-  /* ---------- Mode 2 panel ---------- */
-  const x = c.extra;
-  $('cTotal').textContent = euro(c.totalIn);
-  $('cTopUp').textContent = euro(x.totalIn);
-  $('cTopUp2').textContent = euro(x.totalIn);
-  $('cAeNet').textContent = euro(ae.netCost);
-  $('cExtraNet').textContent = euro(c.extraNet);
-  $('cExtraLab').textContent = extraMonthly > 0
-    ? euro(extraMonthly) + ' a month, before relief.'
-    : 'Nothing yet. Move the slider to add an amount.';
-  $('cNote').textContent = extraMonthly > 0
-    ? euro(c.netCost) + ' out of your pocket puts ' + euro(c.totalIn) + ' in.'
-    : 'With no top-up this is just auto-enrolment: ' + euro(ae.netCost) + ' puts ' + euro(ae.totalIn) + ' in.';
-
-  $('cPaid').textContent = euro(c.extraNet);
-  $('cRelief').textContent = euro(x.relief);
-  $('cGross').textContent = euro(x.gross);
-  $('cMatch').textContent = euro(x.employer);
-  $('cReliefCap').textContent = reliefAt(x.reliefSplit);
-  $('cMatchCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none)';
-  $('cReliefNote').textContent = extraMonthly > 0 ? reliefSentence(x, age) : '';
-
-  /* the Mode 2 statement: matter of fact, a consequence of what the scheme allows */
-  let cv = 'Auto-enrolment puts ' + euro(ae.totalIn) + ' into your pension this year.';
-  if (extraMonthly > 0) {
-    cv += ' Your extra ' + euro(extraMonthly) + ' a month becomes ' + euro(x.gross) + ' with tax relief'
-      + (x.employer > 0 ? ', plus ' + euro(x.employer) + ' from your employer' : '')
-      + '. Together, ' + euro(c.totalIn) + ' goes in for ' + euro(c.netCost) + ' out of your pocket.';
-  } else {
-    cv += ' Add an amount on the left to see what saving extra on top would put in.';
-  }
-  $('leadOut').textContent = mode === 1 ? verdict : cv;
-
-  /* one live region, announcing whichever mode is showing */
-  announce(mode === 1
-    ? verdict + ' Auto-enrolment costs you ' + euro(ae.netCost) + ', the personal pension costs you ' + euro(pp.netCost) + '.'
-    : cv);
-
-  ['age', 'salary', 'phase', 'gross', 'match', 'extra', 'tmatch'].forEach(id => paint($(id)));
-}
-
-/* the relief sentence is the same for Mode 1's personal path and Mode 2's top-up */
-function reliefSentence(layer, age) {
-  return 'Revenue allows relief on up to ' + euro(layer.reliefLimit) + ' a year at your age.'
-    + (layer.aboveReliefLimit > 0
-        ? ' ' + euro(layer.aboveReliefLimit) + ' of this is above that limit, so it goes in without relief.'
-        : '');
-}
-
-/* ---- the two Mode 1 totals, drawn to one scale ----
-   The bars are read back from #aeTotal and #ppTotal, the two cells calc() has
-   just written, so the picture is scaled from exactly the figures on screen
-   and can never contradict them. No maths module is called here.
-
-   calc() itself is not edited: the `calc` binding is wrapped once, after the
-   function is defined, and every call site resolves `calc` by name at call
-   time, so the load render and every later one go through the wrapper.
-
-   Both lanes travel at one speed. Each bar's transition-duration is set in
-   proportion to the length it has to cover, so the longer bar is still moving
-   after the shorter one has stopped. There is no line to reach and no marker
-   on either lane: the end rule is identical on both tracks and is simply where
-   the scale ends. Under prefers-reduced-motion the CSS drops the transition
-   and the bars sit at their lengths. */
-function pbScaleValue(id) {
-  const el = $(id);
-  if (!el) return 0;
-  const n = +String(el.textContent).replace(/[^0-9]/g, '');
-  return isFinite(n) ? n : 0;
-}
-
-function renderScale() {
-  /* which year the lanes are drawn for: they already move with the
-     auto-enrolment year slider, and this says so, so a reader dragging it can
-     see what changed and why */
-  const sub = $('pbScaleSub');
-  if (sub) {
-    const y = +$('phase').value;
-    sub.textContent = 'One year of contributions each, at year ' + y + (y >= 10 ? '+' : '') +
-      ' of the phase-in, on the same scale. The longer bar reaches the end of the scale.';
-  }
-  const ae = pbScaleValue('aeTotal');
-  const pp = pbScaleValue('ppTotal');
-  /* the bars read parsed text, so a parse failure would give both of them 0 */
-  const top = Math.max(ae, pp);
-  const lanes = [['pbScaleAeBar', ae], ['pbScalePpBar', pp]];
-  for (let i = 0; i < lanes.length; i++) {
-    const bar = $(lanes[i][0]);
-    if (!bar) continue;
-    const f = top > 0 ? lanes[i][1] / top : 0;
-    bar.style.setProperty('transition-duration', Math.max(0.2, 0.9 * f).toFixed(2) + 's');
-    bar.style.width = (f * 100) + '%';
-  }
-}
-
-var pbCalcFigures = calc;
-calc = function () {
-  pbCalcFigures();
-  renderScale();
-};
-
-wireRanges(VALTEXT, el => {
-  if (el.id === 'gross') grossTouched = true;
-  /* a new salary or age means a new auto-enrolment cost, so the contribution
-     goes back to matching it; a value dragged at one salary must not survive
-     into another */
-  if (el.id === 'salary' || el.id === 'age') grossTouched = false;
-  calc();
-});
-
-/* the phase slider, behind its toggle, starts on this year's phase */
-$('phase').value = thisYearsPhase();
-paint($('phase'));
-['futureOn', 'matchOn', 'tmatchOn'].forEach(id => {
-  $(id).addEventListener('change', () => {
-    syncToggles();
-    /* a slider that was hidden has no width until now, so repaint it */
-    document.querySelectorAll('.togbody:not([hidden]) input[type=range]').forEach(paint);
-    calc();
-  });
-});
-syncToggles();
-renderRisk();
-setStatus(0);
-/* a shared link can open straight onto Mode 2 */
-setMode(location.hash === '#combined' ? 2 : 1);
+const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  if(!els.length){return;}
+  if(!('IntersectionObserver' in window)){return;}
+  document.documentElement.classList.add('js-reveal');
+  function reveal(el){el.classList.add('in');}
+  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
+  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
+  els.forEach(function(el){io.observe(el);});
+  revealVisible();
+  window.addEventListener('load',revealVisible);
+  window.addEventListener('scroll',revealVisible,{passive:true});
+  window.addEventListener('resize',revealVisible);
+  // hard safety net: never leave anything hidden
+  setTimeout(function(){els.forEach(reveal);},900);
+})();
 </script>
 
 <script>
@@ -2692,58 +1751,6 @@ setMode(location.hash === '#combined' ? 2 : 1);
 
 
 <script>
-/* fintech slider polish: wrap each range in a positioned container + live value bubble */
-(function(){
-  var ranges=[].slice.call(document.querySelectorAll('input[type=range]'));
-  ranges.forEach(function(r){
-    if(r.parentElement.classList.contains('slider-wrap'))return;
-    var wrap=document.createElement('div'); wrap.className='slider-wrap';
-    r.parentNode.insertBefore(wrap,r); wrap.appendChild(r);
-    var bub=document.createElement('div'); bub.className='sbubble'; wrap.appendChild(bub);
-    // find the matching .val label in the same field to mirror its formatted text
-    var field=wrap.closest('.field');
-    var valEl=field?field.querySelector('.val'):null;
-    function pos(){
-      var min=+r.min,max=+r.max,v=+r.value;
-      var pct=(max>min)?((v-min)/(max-min)):0;
-      var w=r.offsetWidth, thumb=22;
-      var x=pct*(w-thumb)+thumb/2;
-      bub.style.left=x+'px';
-      bub.textContent=valEl?valEl.textContent:v;
-    }
-    function start(){wrap.classList.add('dragging');pos();}
-    function end(){wrap.classList.remove('dragging');}
-    r.addEventListener('input',pos);
-    r.addEventListener('pointerdown',start);
-    r.addEventListener('pointerup',end);
-    r.addEventListener('pointercancel',end);
-    r.addEventListener('mouseenter',function(){pos();wrap.classList.add('dragging');});
-    r.addEventListener('mouseleave',function(){if(!r.matches(':active'))end();});
-    r.addEventListener('focus',start);
-    r.addEventListener('blur',end);
-    window.addEventListener('resize',pos);
-    pos();
-  });
-})();
-/* pulse the result hero when the headline figure changes */
-(function(){
-  var hero=document.querySelector('.res-hero');
-  var watch=document.getElementById('potOut');
-  if(!hero||!watch)return;
-  var last=watch.textContent, t=null;
-  new MutationObserver(function(){
-    if(watch.textContent!==last){
-      last=watch.textContent;
-      clearTimeout(t);
-      hero.classList.remove('pulse'); void hero.offsetWidth; hero.classList.add('pulse');
-      t=setTimeout(function(){hero.classList.remove('pulse');},600);
-    }
-  }).observe(watch,{childList:true,characterData:true,subtree:true});
-})();
-</script>
-
-
-<script>
 /* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
    (The skip link and the main landmark are static in the page markup.) */
 (function(){
@@ -2754,90 +1761,6 @@ setMode(location.hash === '#combined' ? 2 : 1);
         list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
       }
     },true);
-  });
-})();
-</script>
-
-
-<script>
-/* CLICK-TO-EDIT v2: tap any value to type. Money fields accept ANY amount
-   (no upper cap); if you type beyond the slider's scale, the slider expands
-   to hold it and returns to its sane range once you're back below it.
-   Age, retirement age and growth stay clamped to their slider ranges. */
-(function(){
-  var HARD_CEIL=1e9; /* technical ceiling to keep formatting/charts sane */
-  document.querySelectorAll('.field').forEach(function(field){
-    var range=field.querySelector('input[type=range]');
-    var val=field.querySelector('.val');
-    if(!range||!val||val.dataset.editable)return;
-    val.dataset.editable='1';
-    var money=(val.textContent.trim().charAt(0)==='\u20AC');
-    if(!range.dataset.defmax)range.dataset.defmax=range.max;
-    if(!range.dataset.defstep)range.dataset.defstep=range.step||'1';
-    val.setAttribute('tabindex','0');
-    val.setAttribute('role','button');
-    val.setAttribute('title',money?'Click to type any amount':'Click to type an exact value');
-    val.setAttribute('aria-label',money?'Edit value. Press Enter to type any amount.':'Edit value. Press Enter to type an exact figure.');
-    function commitValue(v){
-      var min=+range.min, defmax=+range.dataset.defmax, step=+range.step||1;
-      if(money){
-        v=Math.round(Math.max(min,Math.min(HARD_CEIL,v)));
-        var defstep=+range.dataset.defstep||1;
-        range.step=(((v-min)%defstep)===0)?defstep:1;
-        if(v>defmax){ range.max=v; }
-        else if(+range.max>defmax){ range.max=defmax; }
-        range.value=v;
-      }else{
-        var max=+range.max;
-        v=Math.min(max,Math.max(min,v));
-        v=Math.round((v-min)/step)*step+min;
-        range.value=Math.round(v*100)/100;
-      }
-      range.dispatchEvent(new Event('input'));
-    }
-    function openEditor(){
-      if(field.querySelector('.val-edit'))return;
-      var inp=document.createElement('input');
-      inp.type='number'; inp.className='val-edit';
-      inp.min=range.min;
-      inp.max=money?HARD_CEIL:range.max;
-      inp.step=money?'any':(range.step||1);
-      inp.value=range.value;
-      inp.setAttribute('inputmode',(+range.step<1&&!money)?'decimal':'numeric');
-      inp.setAttribute('aria-label',money
-        ?('Type any amount, minimum '+range.min)
-        :('Type a value between '+range.min+' and '+range.max));
-      val.style.display='none';
-      val.parentNode.insertBefore(inp,val);
-      inp.focus(); inp.select();
-      var done=false;
-      function commit(){
-        if(done)return; done=true;
-        var v=parseFloat(inp.value);
-        if(!isNaN(v))commitValue(v);
-        inp.remove(); val.style.display=''; val.focus();
-      }
-      function cancel(){ if(done)return; done=true; inp.remove(); val.style.display=''; val.focus(); }
-      inp.addEventListener('keydown',function(e){
-        if(e.key==='Enter'){e.preventDefault();commit();}
-        else if(e.key==='Escape'){e.preventDefault();cancel();}
-      });
-      inp.addEventListener('blur',commit);
-    }
-    val.addEventListener('click',openEditor);
-    val.addEventListener('keydown',function(e){
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();openEditor();}
-    });
-    /* self-heal the scale: when a drag ends back inside the sane range, restore it */
-    if(money){
-      range.addEventListener('change',function(){
-        var defmax=+range.dataset.defmax, defstep=+range.dataset.defstep||1, min=+range.min;
-        var changed=false;
-        if(((+range.value-min)%defstep)===0 && +range.step!==defstep){ range.step=defstep; changed=true; }
-        if(+range.max>defmax && +range.value<=defmax){ range.max=defmax; changed=true; }
-        if(changed)range.dispatchEvent(new Event('input'));
-      });
-    }
   });
 })();
 </script>
@@ -2952,22 +1875,6 @@ setMode(location.hash === '#combined' ? 2 : 1);
 </script>
 
 <script>
-/* Pay & File: a contribution made before the deadline can be set against the
-   previous tax year. 31 October for paper filers, extended into mid-November on
-   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
-(function(){
-  var el=document.getElementById('deadlineText'); if(!el) return;
-  var now=new Date(), y=now.getFullYear();
-  var due=new Date(y,9,31);
-  if(now>due){ y+=1; due=new Date(y,9,31); }
-  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
-  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
-    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
-    taxYear+"'s allowance is gone for good.";
-})();
-</script>
-
-<script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
    Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
    conservative end of the window since ROS filers get into mid-November.
@@ -3038,58 +1945,6 @@ setMode(location.hash === '#combined' ? 2 : 1);
   });
 })();
 </script>
-
-<script>
-/* Progressive disclosure (Hick's Law).
-   The four controls that drive the headline figure stay visible. The rest
-   refine it and open on request. The field nodes are MOVED, not rebuilt, so
-   every id, listener and slider-fill binding is preserved - which is why this
-   runs after the calculator's own script rather than replacing markup. */
-(function(){
-  var KEEP = ['age','salary','gross','match','extra','tmatch'];   /* primary controls: ids on THIS page */
-  var panel = document.querySelector('.panel');
-  if(!panel) return;
-
-  var fields = [].slice.call(panel.querySelectorAll('.field'));
-  var extra = fields.filter(function(f){
-    var c = f.querySelector('input[type=range]');
-    return c ? KEEP.indexOf(c.id) === -1 : false;
-  });
-  /* the tax-rate segment is a refinement too */
-  var seg = panel.querySelector('.seg');
-  var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
-  if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
-  if(!extra.length) return;
-
-  var d = document.createElement('details');
-  d.className = 'adv';
-  var sum = document.createElement('summary');
-  sum.textContent = 'More options (' + extra.length + ')';
-  var inner = document.createElement('div');
-  inner.className = 'adv-in';
-  d.appendChild(sum); d.appendChild(inner);
-
-  extra[0].parentNode.insertBefore(d, extra[0]);
-  extra.forEach(function(f){ inner.appendChild(f); });   /* moved, not cloned */
-
-  /* a hint that sat under the tax segment travels with it */
-  var hint = panel.querySelector('.hint');
-  if(hint && /tax relief/i.test(hint.textContent)) inner.appendChild(hint);
-
-  /* sliders inside a closed <details> have zero width, so their fill must be
-     repainted the first time the panel opens */
-  d.addEventListener('toggle', function(){
-    if(!d.open) return;
-    inner.querySelectorAll('input[type=range]').forEach(function(s){
-      s.dispatchEvent(new Event('input', {bubbles:true}));
-    });
-  });
-})();
-</script>
-<script src="assets/js/pb-guess.js?v=3213e251"></script>
-<script src="assets/js/pb-peek.js?v=eb145ab4"></script>
-<script src="assets/js/pb-share.js?v=e3302e5a"></script>
-<script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
 </body>
 </html>

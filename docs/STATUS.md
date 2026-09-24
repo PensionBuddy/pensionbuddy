@@ -43,10 +43,46 @@ a figure or a legal sentence is Damian's to give, the page carries a
 |---|---|---|---|
 | A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
 | A3 | Gamification check | report only: see the table above | — |
+| A1 + 9 | Reg 32 commission summary, and the trust page | done as a template: new page `how-we-work.html` ("How we work, and how we are paid"): who advises you (Damian Condon, QFA, 30 years' experience, the Central Bank register linked), the Reg 32 summary laid out per product type as Reg 32(3) asks (when you start, trail commission, clawback), other fees and non-monetary benefits, agencies held, whether commission is set against a fee (Reg 33), a fees section (Reg 68), the rules any review shown will follow (Reg 85), and the CCPC, MABS and Pensions Authority (the Central Bank's guidance 2.2.7). Every figure is a placeholder. terms.html's "available on request" now links to it, and "How we are paid" is in the footer's Company column on every page (skeleton + sync-chrome + pagebuild) | — |
 | 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | — |
 | 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | — |
 
 ## NEEDS DAMIAN INPUT from this run
+
+- **R20-9a to R20-9e, how-we-work.html:** the Central Bank reference number;
+  for each product type, the commission when a plan starts, the trail, and any
+  clawback (a single figure where possible; where it is a range, what decides
+  the point in it, per the Central Bank's guidance 3.4.4); other fees,
+  administration costs and non-monetary benefits, or "none"; the providers you
+  hold agencies with; whether commission is set against a fee; the schedule of
+  fees after the free first consultation; and any reviews. Correct the product
+  list if it is not the list you are paid for.
+- **Compliance findings from reading the 2025 Regulations (S.I. 81 of 2025)
+  and the Central Bank's General Guidance, for your compliance officer. Nothing
+  below was changed:**
+  - Reg 71(4) prescribes the regulatory disclosure statement's exact form,
+    "[Full legal name], [trading as …] is regulated by the Central Bank of
+    Ireland", with no other text. The footer's sentence ("Pensionbuddy is a
+    trading name of … which is regulated by …" followed by the registered
+    office and the register) is a different form. Reg 71(2)-(3) also limit
+    the statement to pages solely about regulated activities.
+  - Reg 56: an intermediary may say "broker" only if its principal regulated
+    activities are on a fair analysis of the market. The comparison page's
+    name and copy use "broker" ("a personal pension arranged through a
+    broker").
+  - Reg 68: a schedule of fees and charges must be displayed on the website.
+    how-we-work.html has the section; it needs the schedule.
+  - Regs 45, 82, 372 and 392: where a page illustrates investment growth, the
+    prescribed warnings ("Warning: These figures are estimates only. They are
+    not a reliable guide to the future performance of your investment.";
+    "Warning: The value of your investment may go down as well as up.") go
+    in a box, in bold, no smaller than the main text, at the same time as the
+    benefit. The calculators and the charts carry plain small-print
+    illustration notes instead. Whether a generic calculator is caught is a
+    judgement call the research could not settle; see A4.
+  - Reg 88: an advertisement must spell out every initialism it uses (PRSA,
+    AVC, ARF, PRB, SFT). New pages in this run do; older pages rely on the
+    jargon buster.
 
 - **R20-A2, privacy.html:** a sentence for "How we use it" on the optional
   emails: who gets them (only people who tick the box), what they are, and how
@@ -68,6 +104,18 @@ a figure or a legal sentence is Damian's to give, the page carries a
   across all 500, so cite it as the report's figure, never "42% of 500".
 
 ## New copy needing Damian's sign-off
+
+- A1/#9: the whole of how-we-work.html (title "How we work, and how we are
+  paid"), which reuses the Terms of Business' "fee you agree with us …
+  commission from the company whose product you take out … set out in
+  writing before any work begins", and says of reviews: "We show a review
+  here only if it is genuine and unedited, with the reviewer's name, the date
+  and their permission, and only if it is about our service rather than
+  investment returns. If a reviewer works for us, is connected to us, or was
+  paid anything, we say so beside the review." terms.html: "A full summary of
+  fees and any commission arrangements is available on request." became "Our
+  summary of the commission we receive from product providers, and our fees,
+  are published on our How we work page." Footer link label "How we are paid".
 
 - A2: box label "Also send me occasional emails about pension deadlines and
   rule changes. Optional, and you can unsubscribe at any time." Note, replacing
