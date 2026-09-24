@@ -79,6 +79,9 @@ DENY_CLASS = {
     'seg', 'nav-toggle', 'nav-tick', 'nt-n', 'nt-l', 'nt-dot', 'ind',
     'pb-consent', 'pb-buddy', 'pb-b-head', 'pb-b-item', 'pb-b-q', 'pb-b-a',
     'pb-b-close', 'pb-c-yes', 'pb-c-no', 'logo-mark', 'skip',
+    # the prescribed warnings (Regs 372 and 392) are the Regulations' words,
+    # not copy: locked, with everything inside them
+    'pb-warn',
 }
 # Roles that belong to the tab system.
 DENY_ROLE = {'tab', 'tablist'}
