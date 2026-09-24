@@ -1660,6 +1660,16 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-dd input[type=range]{display:block;width:100%}
 .pb-dd input[type=range][hidden]{display:none}
 .pb-dd-out{margin:10px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
+/* INFLATION (.pb-infl, Run 20 #13) uses the drawdown widget's rows and output;
+   RISK RATING (.pb-risk, #16) is the 1 to 7 scale drawn as seven steps. */
+.pb-infl{max-width:420px;margin:14px 0 4px}
+.pb-infl input[type=range]{display:block;width:100%;margin-bottom:14px}
+.pb-infl input[type=range][hidden]{display:none}
+.pb-risk{list-style:none;display:flex;gap:4px;margin:12px 0 14px;padding:0;max-width:420px}
+.pb-risk li{flex:1 1 0;text-align:center;padding:6px 0;border-radius:4px;font-size:.9rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--teal-50)}
+.pb-risk li:nth-child(n+3){background:var(--teal-100)}
+.pb-risk li:nth-child(n+5){background:var(--amber-soft)}
+.pb-risk li::before{display:none}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
@@ -1774,9 +1784,13 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       <li><a href="#defined-benefit">Defined Benefit</a></li>
       <li><a href="#lump-sum">Lump sum</a></li>
       <li><a href="#fund-investment-growth">Fund / investment growth</a></li>
+      <li><a href="#inflation">Inflation</a></li>
+      <li><a href="#risk-rating">Risk rating</a></li>
       <li><a href="#state-pension">State Pension</a></li>
       <li><a href="#prsa">PRSA</a></li>
       <li><a href="#consolidation">Consolidation</a></li>
+      <li><a href="#personal-retirement-bond">Personal Retirement Bond</a></li>
+      <li><a href="#pension-adjustment-order">Pension adjustment order</a></li>
       <li><a href="#employer-contribution">Employer contribution</a></li>
       <li><a href="#corporation-tax-relief">Corporation tax relief</a></li>
       <li><a href="#standard-fund-threshold">Standard Fund Threshold</a></li>
@@ -1816,12 +1830,25 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     <div class="gterm reveal" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable, which is why it's worth checking before moving one.</p></div>
     <div class="gterm reveal" id="lump-sum"><h2>Lump sum</h2><p>At retirement you can usually take part of your pension as a tax-free lump sum, within limits set by Revenue. The rest provides your retirement income.</p></div>
     <div class="gterm reveal" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed, and returns can be negative in some years, which is why long-term thinking matters.</p></div>
+    <div class="gterm reveal" id="inflation"><h2>Inflation</h2><p>The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today&rsquo;s. The European Central Bank aims for inflation of 2% a year over the medium term.</p>
+<div class="pb-infl" id="pbInfl">
+  <div class="pb-dd-row"><label for="pbInflYrs">Years from now</label><span class="pb-dd-v" id="pbInflYrsV">30 years</span></div>
+  <input type="range" id="pbInflYrs" min="1" max="45" step="1" value="30" aria-valuetext="30 years" hidden>
+  <div class="pb-dd-row"><label for="pbInflRate">Inflation a year</label><span class="pb-dd-v" id="pbInflRateV">2%</span></div>
+  <input type="range" id="pbInflRate" min="1" max="5" step="0.5" value="2" aria-valuetext="2% a year" hidden>
+  <p class="pb-dd-out" id="pbInflOut">At 2% a year, what &euro;1,000 buys today would cost about <b>&euro;1,811</b> in 30 years. The other way round, &euro;1,000 then buys what <b>&euro;552</b> buys today.</p>
+</div></div>
+    <div class="gterm reveal" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest, printed on a fund&rsquo;s key information document. It measures how much the fund&rsquo;s value has swung up and down and, on the newer documents, the chance that the company behind it cannot pay. A higher number means bigger swings, both ways. It does not mean a better or a worse fund.</p>
+<ol class="pb-risk" aria-hidden="true"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li></ol>
+<p>Two funds with the same number are not always alike. The older scale for investment funds and the newer one use different bands, so a 4 on one is not a 4 on the other; the newer one also depends on how long the fund is meant to be held; ratings are worked out again as markets move; and some pension products are outside the newer rules altogether, so a provider&rsquo;s own scale may work differently again. Compare like with like, and ask what a number is based on.</p></div>
     <div class="gterm reveal" id="state-pension"><h2>State Pension</h2><p>The pension paid by the government to people who've enough PRSI contributions. It may be payable on top of your own pension, but for most people it isn't enough on its own to fund the retirement they'd like.</p></div>
     <div class="gterm reveal" id="prsa"><h2>PRSA<span class="abbr">Personal Retirement Savings Account</span></h2><p>A flexible, portable personal pension you own yourself. Useful if you don't have a workplace scheme, or want a pension that moves with you between jobs.</p></div>
     <div class="gterm reveal" id="consolidation"><h2>Consolidation</h2><p>Bringing several old pensions together into one plan so they're easier to manage. It often makes sense, but not always, since some older pensions carry guarantees worth keeping. Worth checking each one.</p></div>
+    <div class="gterm reveal" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your own name that holds the value of a pension from a job you have left, bought by that scheme&rsquo;s trustees. When and how you can take it follows the rules of the scheme it came from. It cannot be moved into a PRSA, and a PRSA cannot be moved into it. Before moving any old pension, it is worth knowing what the move would give up: a defined benefit scheme&rsquo;s promised pension, for one, becomes a transfer value.</p></div>
+    <div class="gterm reveal" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>An order a court can make on a judicial separation, a divorce, or the end of a civil partnership or of a relationship between qualified cohabitants, giving part of one person&rsquo;s pension to the other, or for a dependent child. Only a court can share a pension out: a separation agreement cannot. The court can instead leave the pensions as they are and take their value into account in other orders. A share given this way can be moved into a pension in the other person&rsquo;s own name, on request. It needs a solicitor, and specialist advice on what the pension is worth.</p></div>
     <div class="gterm reveal" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension on your behalf. It's effectively part of your pay, so not joining a scheme that offers it usually means leaving money on the table.</p></div>
     <div class="gterm reveal" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>For company directors, pension contributions made by the company can usually be offset against its profits, reducing its corporation tax bill, while building your retirement fund. One of the reasons director pensions are powerful.</p></div>
-    <div class="gterm reveal" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029, and the current figure is best confirmed in conversation.</p></div>
+    <div class="gterm reveal" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029: the <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows each year&rsquo;s figure and how much of it your pensions would use.</p></div>
     <div class="gterm reveal" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>A professional qualification for financial advisers in Ireland. It means the adviser has met the standard required to give regulated financial advice.</p></div>
   </div>
   <div class="infoadvice reveal" style="margin-top:8px">
@@ -2217,6 +2244,25 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     document.getElementById('pbDdOut').textContent=fmt(v*0.04/12);
   }
   r.hidden=false; r.addEventListener('input',paint); paint();
+})();
+/* inflation (#13 in Run 20): what EUR 1,000 today would cost after the years
+   chosen at the rate chosen, 2% by default (the ECB's medium-term aim), and
+   what EUR 1,000 then would buy in today's money. Nothing else is assumed. */
+(function(){
+  var y=document.getElementById('pbInflYrs'), r=document.getElementById('pbInflRate'); if(!y||!r) return;
+  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  var pc=function(v){return (Math.round(v*10)/10).toLocaleString('en-IE')+'%';};
+  function fill(el){el.style.setProperty('--fill',((el.value-el.min)/(el.max-el.min))*100+'%');}
+  function paint(){
+    var n=+y.value, rate=+r.value, f=Math.pow(1+rate/100,n), yrs=n+(n===1?' year':' years');
+    fill(y); fill(r);
+    y.setAttribute('aria-valuetext',yrs); r.setAttribute('aria-valuetext',pc(rate)+' a year');
+    document.getElementById('pbInflYrsV').textContent=yrs;
+    document.getElementById('pbInflRateV').textContent=pc(rate);
+    document.getElementById('pbInflOut').innerHTML='At '+pc(rate)+' a year, what \u20ac1,000 buys today would cost about <b>'+fmt(1000*f)+'</b> in '+yrs+'. The other way round, \u20ac1,000 then buys what <b>'+fmt(1000/f)+'</b> buys today.';
+  }
+  y.hidden=false; r.hidden=false;
+  y.addEventListener('input',paint); r.addEventListener('input',paint); paint();
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
