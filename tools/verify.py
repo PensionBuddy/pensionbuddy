@@ -119,6 +119,20 @@ AUDIT_JS = r"""
   });
   R.contrastFails=cf;
 
+  // text size (Run 21): the calculators keep a 16px floor on the text in
+  // <main>. Every text run on screen there, SVG labels included; visually
+  // hidden text (the screen-reader summaries) is not on screen.
+  (function(){const m=document.querySelector('main'),out=[],seen2={};
+    if(m){const tw=document.createTreeWalker(m,NodeFilter.SHOW_TEXT);let n;
+      while((n=tw.nextNode())){if(!n.nodeValue.trim())continue;const el=n.parentElement;
+        if(!el||/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(el.tagName))continue;
+        const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||parseFloat(cs.opacity)<.15||cs.clipPath==='inset(50%)')continue;
+        const rc=el.getBoundingClientRect();if(rc.width<=1||rc.height<=1)continue;
+        const sz=parseFloat(cs.fontSize);if(sz>=15.95)continue;
+        const sel=el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(typeof el.className==='string'&&el.className.trim()?'.'+el.className.trim().split(/\s+/)[0]:'');
+        if(seen2[sel+sz])continue;seen2[sel+sz]=1;out.push({size:+sz.toFixed(2),sel,text:n.nodeValue.trim().slice(0,30)})}}
+    R.smallMainText=out;})();
+
   // focus ring token contrast (D1)
   const ring=getComputedStyle(de).getPropertyValue('--ring').trim();
   const rp=parse(ring);
@@ -166,7 +180,8 @@ AUDIT_JS = r"""
       h1:first(famOf(document.querySelector('h1'))),
       h2:first(famOf(document.querySelector('h2'))),
       body:first(famOf(document.body)),
-      /* the footer column labels are h4s by markup and labels by job: sentence
+      /* the footer column labels are h2s by markup (h4s until Run 21, which
+         skipped a level) and labels by job: sentence
          case, small, semibold. They are excluded from the one-recipe
          expectations by where they sit, not by face (v4: there is one face),
          rather than the expectations being loosened for every heading. */
@@ -414,6 +429,9 @@ def screenshot(port, page, width, doc_height):
 # Static checks
 # ----------------------------------------------------------------------------
 
+# Run 21: the calculators keep a 16px floor on the text in their <main>
+FLOOR_PAGES = ('pension-calculator.html', 'director-calculator.html') + tuple(
+    p.out for p in pagebuild.PAGES.values() if p.floor16)
 SRC_PLACEHOLDERS = [r'\[LIABILITY_CAP_EUR\]', r'Template (document|notice|process)\.', r'Draft for legal review', r'<!--\s*DEVELOPER: replace', r'PLACEHOLDER=\'CALENDLY_URL\'']
 
 # Every page the site ships, as ROOT-relative paths: the root pages, plus the
@@ -451,9 +469,13 @@ def static_checks(pages):
     # runs inside the iframe on glossary.html, so they have no nav or foot-top
     # to drift and asking would report every one of them as a structure fault.
     drift = pagebuild.chrome_drift({f: t for f, t in src.items() if is_root_page(f)})
+    # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
+    # of reach until it is signed off, so no other page may link to it. Signing
+    # a page off means removing that meta, which lifts this check by itself.
+    held = {f for f, t in src.items() if pagebuild.NOINDEX in t}
     res = {}
     for f in pages:
-        t = src[f]; broken = []
+        t = src[f]; broken = []; held_links = []
         # a relative href resolves against the page's own folder, so "../booking.html"
         # from games/buddys-run.html is the site's booking.html
         base = os.path.dirname(f)
@@ -468,12 +490,14 @@ def static_checks(pages):
             if not path:
                 continue
             target = os.path.normpath(os.path.join(base, path.lstrip('/'))).replace(os.sep, '/')
+            if attr.lower() == 'href' and target in held and target != f: held_links.append(v)
             if target.startswith('..'): broken.append(v + ' (resolves outside the site root)')
             elif not os.path.isfile(os.path.join(ROOT, target)): broken.append(v + ' (file not found)')
             elif frag and target.endswith('.html') and frag not in ids.get(target, set()): broken.append(v + ' (missing #id in target)')
         dup = [i for i in re.findall(r'\bid\s*=\s*"([^"]+)"', t) if t.count('id="%s"' % i) > 1]
         res[f] = {
             'brokenLinks': broken,
+            'heldLinks': held_links,
             'duplicateIdsStatic': sorted(set(dup)),
             'sourcePlaceholders': [p for p in SRC_PLACEHOLDERS if re.search(p, t)],
             'mainInSource': bool(re.search(r'<main\b', t)),
@@ -511,6 +535,7 @@ def evaluate(page, st, audits):
                   % '; '.join(st['chromeDrift'][:3])))
     a375 = audits.get(375, {}); a1440 = audits.get(1440, {}); a1360 = audits.get(1360, {})
     if st['brokenLinks']: F.append(('links', '%d broken: %s' % (len(st['brokenLinks']), st['brokenLinks'][:4])))
+    if st.get('heldLinks'): F.append(('held', 'links to a page held back with noindex: %s' % st['heldLinks'][:4]))
     if st['duplicateIdsStatic']: F.append(('ids', 'duplicate ids in source: %s' % st['duplicateIdsStatic'][:5]))
     if st['sourcePlaceholders']: F.append(('A1/A2/A4/E5', 'placeholder/template tokens in source: %s' % st['sourcePlaceholders']))
     root_page = is_root_page(page)
@@ -529,6 +554,8 @@ def evaluate(page, st, audits):
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
         if a.get('errors'): F.append(('console', '@%d %s' % (w, a['errors'][:3])))
+        if page in FLOOR_PAGES and a.get('smallMainText'):
+            F.append(('floor16', '@%d text in <main> under 16px: %s' % (w, ['%s %spx "%s"' % (x['sel'], x['size'], x['text']) for x in a['smallMainText'][:4]])))
         if a.get('overflowX', 0) > 0: F.append(('overflow', '@%d horizontal overflow %dpx' % (w, a['overflowX'])))
         if a.get('duplicateIds'): F.append(('ids', '@%d duplicate ids %s' % (w, a['duplicateIds'][:5])))
         if a.get('h1') != 1: F.append(('structure', '@%d h1 count = %s' % (w, a.get('h1'))))
@@ -659,6 +686,11 @@ def site_checks():
         for page in ('thank-you.html',):
             if os.path.isfile(os.path.join(ROOT, page)) and page not in s and page != 'thank-you.html':
                 out.append(('sitemap', '%s exists but is not in sitemap.xml' % page))
+        # a page held back with noindex has no place in the sitemap either
+        for page in all_pages():
+            t = open(os.path.join(ROOT, page), encoding='utf-8', errors='replace').read()
+            if pagebuild.NOINDEX in t and '/%s<' % page in s:
+                out.append(('held', '%s is held back with noindex but listed in sitemap.xml' % page))
     return out
 
 

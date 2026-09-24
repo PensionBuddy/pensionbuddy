@@ -43,7 +43,11 @@ OUT_DIR = os.path.join(ROOT, 'assets', 'img')
 WIDTH, SCALE = 1200, 2
 
 SHOTS = {
-    'pension-calculator': {'page': 'pension-calculator.html', 'target': '.calc-wrap', 'hide': ''},
+    # the State Pension line under the headline (#pbSpTop, b3febf2) is left
+    # out, like the other secondary lines: the home page's annotation arrow
+    # label sits where it would be, and was placed before it existed
+    'pension-calculator': {'page': 'pension-calculator.html', 'target': '.calc-wrap',
+                           'hide': '#pbSpTop{display:none!important}'},
     # the director page stacks five cards under its headline figure; the shot
     # keeps the sliders, the headline and the salary-versus-pension comparison
     'director-calculator': {'page': 'director-calculator.html', 'target': '.calc-wrap',

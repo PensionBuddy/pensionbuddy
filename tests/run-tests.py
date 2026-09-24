@@ -75,6 +75,20 @@ SUITES = {
     'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],
                                   '/tests/state-pension-entitlement.test.js', ['PBStatePension', 'PBEntitlement'], 608),
     'harness': ([], '/tests/harness.test.js', ['PBTest'], 59),
+    'cost-of-waiting': (['/assets/js/cost-of-waiting.js'],
+                        '/tests/cost-of-waiting.test.js', ['PBWaiting'], 77),
+    'living-standards': (['/assets/js/state-pension.js', '/assets/js/living-standards.js'],
+                         '/tests/living-standards.test.js', ['PBStatePension', 'PBLivingStandards'], 66),
+    'pension-finder': (['/assets/js/pension-finder.js'],
+                       '/tests/pension-finder.test.js', ['PBFinder'], 65),
+    'pension-fees': (['/assets/js/cost-of-waiting.js', '/assets/js/pension-fees.js'],
+                     '/tests/pension-fees.test.js', ['PBWaiting', 'PBFees'], 35),
+    'readiness': (['/assets/js/readiness.js'],
+                  '/tests/readiness.test.js', ['PBReadiness'], 41),
+    'sft': (['/assets/js/sft.js'], '/tests/sft.test.js', ['PBSft'], 37),
+    'director-topics': (['/assets/js/director-topics.js'],
+                        '/tests/director-topics.test.js', ['PBDirectorTopics'], 10),
+    'pots': (['/assets/js/pots.js'], '/tests/pots.test.js', ['PBPots'], 33),
 }
 
 # The jobs that drive a REAL built page, each with the suite it runs with, the

@@ -1,0 +1,49 @@
+<main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>The free tool · nothing leaves this page</span>
+  <h1 class="reveal" style="transition-delay:.06s">All your pensions, <span class="hl">in one view.</span></h1>
+  <p class="reveal" style="transition-delay:.12s">List what you have, from statements or from memory. See the total, how it is split, and what the annual charges come to in euro. Nothing you type is sent or stored: print or save the list if you want to keep it.</p>
+</div></div>
+
+<div class="wrap"><div class="pt-wrap">
+  <form class="panel pt-panel" id="ptForm" novalidate>
+    <h2>Your pensions</h2>
+    <p class="hint">A rough value is fine. Leave the charge blank if you do not know it.</p>
+    <div id="ptRows">
+      <fieldset class="pt-row">
+        <legend>Pension 1</legend>
+        <div class="pt-grid">
+          <div class="pt-field pt-wide"><label for="ptName0">Name or provider</label><input id="ptName0" type="text"></div>
+          <div class="pt-field"><label for="ptKind0">Kind</label><select id="ptKind0"><option value="workplace">A pension from a job</option><option value="prsa">A PRSA</option><option value="personal">A personal pension</option><option value="prb">A Personal Retirement Bond</option><option value="avc">AVCs</option><option value="other">Something else</option></select></div>
+          <div class="pt-field"><label for="ptValue0">Value now, in euro</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
+          <div class="pt-field"><label for="ptAmc0">Annual charge, % <span class="pt-opt">(optional)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
+        </div>
+      </fieldset>
+    </div>
+    <button type="button" class="pt-add" id="ptAdd">Add another pension</button>
+    <p class="pt-note pt-kinds">A PRSA is a Personal Retirement Savings Account. AVCs are additional voluntary contributions, paid on top of a pension from a job.</p>
+  </form>
+
+  <section class="pt-sum" id="ptSum" aria-labelledby="ptSumH">
+    <h2 id="ptSumH">In one view</h2>
+    <p class="pt-total"><span class="pt-total-n" id="ptTotal">€0</span> <span class="pt-total-l" id="ptCount">No pensions listed yet.</span></p>
+    <ul class="pt-bars" id="ptBars"></ul>
+    <p class="pt-charges" id="ptCharges"></p>
+    <p class="pt-sr tk-sr" id="ptSr" aria-live="polite" aria-atomic="true"></p>
+    <p class="pt-actions"><button type="button" class="pt-add pt-print" id="ptPrint">Print or save this list</button></p>
+    <p class="pt-note">Values are what you entered, as they are today. Nothing here is a projection, and nothing here says whether any pension is right for you.</p>
+    <ul class="pt-next">
+      <li>Lost track of one? <a href="tracker.html">We can help you find it</a>.</li>
+      <li>What could the charges cost by retirement? <a href="pension-fees-calculator.html">The charges calculator</a>.</li>
+      <li>Near €2 million altogether? <a href="standard-fund-threshold.html">The Standard Fund Threshold check</a>.</li>
+    </ul>
+  </section>
+</div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This is a list, not advice.</b> It adds up what you enter and nothing else. Bringing pensions together is not always right: some carry terms worth more than the convenience. Advice on what to do with yours is given in a personal consultation with Damian.</p>
+  </div>
+</div></section>
+</main>

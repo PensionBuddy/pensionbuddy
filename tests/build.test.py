@@ -182,7 +182,7 @@ def run():
          foot_only('booking.html', '<a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a>',
                    '<a href="starter.html">Start a pension</a><a href="tracker.html">Track old pensions</a>')),
         ('a footer column heading changed', '404.html', 'foot-top',
-         foot_only('404.html', '<h4>Tools</h4>', '<h4>Calculators</h4>')),
+         foot_only('404.html', '<h2>Tools</h2>', '<h2>Calculators</h2>')),
         ('the Central Bank sentence changed', 'complaints.html', 'regulatory',
          after('complaints.html', '<div class="disclosure">', 'regulated by the Central Bank of Ireland', 'regulated in Ireland')),
         ('a design token changed', 'glossary.html', 'tokens',

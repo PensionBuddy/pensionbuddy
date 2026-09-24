@@ -6,6 +6,448 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 21 — 2026-09-24 · Damian's decisions on Run 20
+
+Damian's instructions after reading Run 20: push `claude/next-step-features`
+(done, at `c615a3d`); hold three pages back until compliance signs them off;
+apply his decisions on the accessibility findings, the starter page's closing
+line, the four-paws link and WhatsApp; write a compliance pack; then gate,
+commit, push, merge to `main` and push `main`. Same worktree and branch, one
+commit per item, the same gates as Run 20.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Held back until signed off: How we work, the old pension finder, the readiness check | done: all three stay live at their addresses but carry `<meta name="robots" content="noindex">` (how-we-work.html in its head; the two built pages through a new `noindex` field on their `tools/pagebuild.py` records, which the build checks) and nothing links to them: out of the footer's Tools and Company columns on every page (skeleton, sync-chrome, pagebuild) and out of sitemap.xml. tracker.html's "Help me find my pensions" and "Start finding mine" point at booking.html again, as before the finder. Cross-links reworded so each sentence still reads whole: the charges calculator's call to action, the pensions list, the UK guide and the old pension checklist now point at tracker.html ("we can help you find it", "we can help you find them", "We can do the asking for you: see how we help you find old pensions"); the self-employed guide no longer mentions the readiness check; terms.html has its original "A full summary of fees and any commission arrangements is available on request." again. The readiness check's two steps that led to the finder lead to tracker.html (suite still 41). New guard in `tools/verify.py`: a page that links to any page carrying the noindex meta FAILs, and a noindex page in the sitemap is a site-level row; shown to fire on both, in memory, and to leave 404.html and thank-you.html, already noindex and unlinked, alone | `948f1ef` |
+| 2a | Footer headings: one level, not a skip | done: the footer's three column titles ("Who we help", "Tools", "Company") are `<h2>`, the level after the page's own, instead of `<h4>`, the only `<h4>`s on the site. Markup in the skeleton, carried by sync-chrome and pagebuild; the six layered `.foot-col h4` rules on each of the 28 pages retargeted to `h2`, plus `line-height:1.24`, which the `<h4>`s had taken from the shared `h3,h4` rule. Proved styled as before: every title's computed font, size, weight, line height, spacing, colour and margins, its box and the footer's height, on all 28 pages at 375 and 1200, identical before and after (0 differences). The build test's chrome-drift mutant now uses `<h2>` | `24276fc` |
+| 2b | Checkboxes and radios at 24px | done: every checkbox and radio on the site is at least 24 x 24 (WCAG 2.2, 2.5.8), measured on every page at 375 and 1200 with folded and hidden ones shown: the "occasional emails" boxes (18px; the skeleton, director-calculator, director, starter, tracker), the auto-enrolment comparison's three toggles and the entitlement check's April box (20px wide), the two checklists (20px), the tick lists (20px, in the CSS `assets/js/pb-badges.js` injects), the director rules page's radios (18px), and the finder's and readiness check's boxes (20px). Each box's top margin came down by half its growth so it stays level with the first line of its label (screenshots at 375). The booking page's persona radios are already whole cards. render-diff against HEAD identical | `fe30942` |
+| 2c | 16px minimum text on the calculators | done, on the seven calculators (pension, director, auto-enrolment comparison, State Pension reality check and entitlement check, charges, Standard Fund Threshold): no text in their `<main>` under 16px, at 375, 1200 and 1440, with folded parts open. How: one "16px floor" block at the end of the skeleton's stylesheet (pagebuild keeps it on the five calculator records, new `floor16` field, and leaves it out of the other four pages built on the skeleton) and a copy in director-calculator.html. It re-declares, one element more specific, each of the 148 rules that drew calculator text under 16px (`main <selector>{font-size:1rem}`, 1rem being 16.48px here; `!important` only where the rule it lifts was), plus `main{font-size:1rem}` for text that inherits and a zero-specificity rule for buttons at the browser's 13.3px. The list was generated from the pages: for every small text run, the rule it resolved to in the browser, at three widths, plus rules only reached in other states (focused field, copied link, earned paw). Proved: every element on the seven pages at 375, 1200 and 1440, before and after: 63 to 314 raised per page, **none smaller** (the one rule that would have lowered text, `.sft-asat`, is left out), none under 16px. Chart labels are drawn in scaled SVG, so 16 chart units showed as 7.6px on a phone: they now step with the viewport and measure 16.0 to 21.1px on screen at 33 widths from 320 to 1440. Layouts the larger text broke, found by audit and screenshots and fixed: the email row (the button now wraps under the field on a phone), the comparison's risk tiles (one a row) and rate staircase (two by two on a phone), its closing card's button (may wrap on a phone), and the entitlement check's ten-year glide (two rows of five on a phone). The site's nav and footer are not calculator content and stay as on every other page. `tools/verify.py` now fails a calculator with any text in its `<main>` under 16px (shown to fire with the floor taken out). render-diff against HEAD identical (load, and 80,000 events) | `4a7f0d6` |
+| 2d | "The best time to start is now" cut | done: the eyebrow over starter.html's closing band is gone; the band now opens on "Let's get your pension started." (screenshot at 1200 beside tracker's band) | `7b43716` |
+| 2e | No booking reward in the paw prints | done: at 4/4 the strip says "4/4 paws." and nothing more; the "Book your free call" link after it, its CSS and the arrow helper that only it used are out of `assets/js/pb-badges.js`, whose header now says that nothing in the file builds a link. The badges themselves are unchanged. Probed on tracker.html and the pension calculator with all four paws held: "4/4 paws.", no link, no errors. Script hashes restamped on every page that loads it | `9997902` |
+| 2f | WhatsApp | not building, as decided | `9997902` |
+| 3 | Compliance pack | done: `docs/COMPLIANCE-PACK.md`, plain text to email, one section each: the open questions (twelve, each saying what the site does now, the rule, and what is needed), the Letter of Authority word for word as the finder writes it and the email it prepares, the two Privacy Notice placeholders with proposed wording marked as proposed (the retention period and the way to stop the emails left as bracketed decisions), the readiness check brief (situations, all fifteen questions with points, zones, every step and link, and four questions under Guidance 3.5.7), the Reg 71, 56 and 88 findings with the current wording quoted, the other findings, every new line of copy by page, and the full text of every new page and new section as appendices. Everything quoted is read from the site's own files when the pack is built, so it says what the pages say | `5bcfbe3` |
+| 2a, cont. | The last skipped heading level | done: the readiness check's "How the score works" is an `<h2>`, styled as the `<h3>` it was (computed style, box and spacing identical at 375 and 1200), so the page no longer goes `<h1>` to `<h3>` while its result is hidden. The site now has no skipped heading level on any page (the sweep's 30 pages) | `f5fdaa7` |
+
+## Proof, at the end of the run
+
+- `tests/run-tests.py`: every suite at its exact assertion gate, ALL SUITES
+  PASS; `tests/build.test.py` 135, `tests/runner.test.py` 93,
+  `tests/games.test.py` 157, all pass. `stamp-images.py --check`,
+  `sync-chrome.py --check` and `pagebuild.py --check`: clean.
+- render-diff against `c615a3d` (Run 20's end) and against `ebe1cbe` (this
+  branch's base): the five calculator pages load to the same render, write
+  for write, and 80,000 scripted events each way compare identical. No
+  calculator script changed in this run; the floor, the boxes and the
+  footer's headings are CSS and markup.
+- `verify.py`, every page at 375 / 1200 / 1440 with screenshots: 0 FAIL,
+  with the new checks live (no link to a held page; no text under 16px in
+  a calculator's main). The five WARNs are the ones Run 20 ended with: the
+  open placeholders and glossary.html's C4 deep link. The readiness check
+  was changed after that run and re-audited on its own: 0 FAIL.
+- The accessibility sweep over every page: no skipped heading level and no
+  checkbox or radio under 24px anywhere.
+
+## Corrections to Run 20, found while writing the pack
+
+- Run 20's A4 row says the auto-enrolment comparison projects no investment
+  growth and so carries no warning box. It does project growth: its card
+  "Everything paid in, by 66" adds both paths' contributions "grown at 5% a
+  year" (added in `d71c1b9`, before this branch). It has no box. Not
+  changed; the pack puts it to compliance with the boxes' question.
+- Run 20's NEEDS DAMIAN INPUT says the pages new in this run spell out every
+  initialism they use (Reg 88). Several do not: the directors' rules page
+  (AVC, PRSA, ROS), the charges calculator (CCPC, PRSA), the threshold check
+  (CSO, PRSI, USC), the three guides (CCPC; PRSI, ROS; HMRC, PRSI, USC), the
+  year-end checklist (ROS) and the finder (PPS). The pack lists every page.
+  Not changed.
+
+## NEEDS DAMIAN INPUT from this run
+
+- **Send the compliance pack** to the compliance officer; the three held
+  pages come back per the list below as each is signed off.
+- **The 16px floor's reach:** it covers each calculator's own content. The
+  site's nav and footer, shared by every page, stay as they are everywhere,
+  so a calculator page still has small text in its footer. Say if the
+  footer and nav should get the floor too; that is a sitewide change.
+- **Two offers, not done:** a box with the two warnings under the
+  comparison's "Everything paid in, by 66" card, if compliance keeps the
+  boxes; and a pass spelling out every initialism on every page, if
+  compliance says the jargon buster is not enough.
+
+## To re-link after compliance sign-off
+
+Per page, once it is signed off. The wording each place had is in `c615a3d`,
+the commit before this run.
+
+- **How we work** (how-we-work.html): delete its robots meta; put `<a
+  href="how-we-work.html">How we are paid</a>` back in the skeleton's footer
+  Company column after "Terms of Business", then run `tools/sync-chrome.py`
+  and `tools/pagebuild.py`; put its sitemap entry back (priority 0.4); in
+  terms.html, replace "A full summary of fees and any commission arrangements
+  is available on request." with "Our summary of the commission we receive
+  from product providers, and our fees, are published on our How we work
+  page." linking `how-we-work.html#paid`.
+- **Old pension finder** (find-my-pension.html): delete `noindex=True` from
+  its record in `tools/pagebuild.py`; put `<a href="find-my-pension.html">Old
+  pension finder</a>` back in the footer Tools column after "State Pension
+  entitlement check"; sitemap entry back (0.7); tracker.html's two buttons
+  back to find-my-pension.html; the four sentences back to the finder
+  (`tools/fees-parts/main.html`, `tools/pots-parts/main.html`,
+  uk-pensions-in-ireland.html, old-pension-checklist.html); and the readiness
+  check's two steps (`assets/js/readiness.js` and its test), if the readiness
+  check is live by then. Then rebuild.
+- **Readiness check** (pension-readiness-check.html): delete `noindex=True`
+  from its record; put `<a href="pension-readiness-check.html">Pension
+  readiness check</a>` back in the footer Tools column after "All your
+  pensions in one view"; sitemap entry back (0.6); the self-employed guide's
+  "and the readiness check takes a minute". Then rebuild.
+- `tools/verify.py` fails any link to a page that still carries the meta, so
+  a link put back before the meta comes off is caught, and the check lifts
+  by itself once it does.
+
+---
+
+# Run 20 — 2026-09-24 · The next-step features (ranked build list)
+
+Damian's brief: "Pensionbuddy.ie: Missing Features & Content — Ranked Build
+List (Sept 2026)". Its thesis is that the site needs a way to take action and
+follow up rather than another calculator. Built in its own worktree,
+`.claude/worktrees/next-step-features`, on branch `claude/next-step-features`,
+from `ebe1cbe`: the newest commit of any worktree (the two most recently used
+worktrees both hold it) and `main` = `origin/main`. **Not pushed, not merged.**
+
+Every item is gated before its commit: `tests/run-tests.py`, the build, runner
+and games suites, `stamp-images.py --check`, `sync-chrome.py --check`, a
+rebuild with no diff, render-diff against HEAD (load, axes and corners, event
+path) whenever a calculator page's script is touched, and `verify.py` at
+375 / 1200 / 1440 with screenshots on every page the item changes. Facts that
+go on a page were checked against primary sources first (Revenue, the Pensions
+Authority, the Central Bank, gov.ie, the Pensions Council's own report); where
+a figure or a legal sentence is Damian's to give, the page carries a
+`needs-input` placeholder and it is listed under NEEDS DAMIAN INPUT below.
+
+## What the brief assumed, and what was actually here
+
+| Assumed | Actually |
+|---|---|
+| "Email or save your results" is missing | Email capture exists on the two hand-written calculators and as a guide request on tracker, starter and director, but `LEAD_ENDPOINT` is empty on every page, so each one hands the visitor a pre-filled email to hello@pensionbuddy.ie (A4 still asks whether that address is real). Save-and-resume half exists: run 19's share link (#30) carries the inputs after the #. |
+| Marketing consent is separate from calculator data | It was not. All five email forms said "No spam, unsubscribe any time" over a single email field, so asking for figures read as joining a list. Fixed first (A2). |
+| The paw badges and games might reward booking or contributing | Neither does. Badges are earned by using a tool; the games award nothing for booking. One thing for compliance: collecting all four paws shows "4/4 paws. Book your free call", a booking link at the completion moment, which is already on Damian's open list from the gamification branch. |
+| Reg 32 commission disclosure "if it isn't live yet" | Not live. terms.html says "A full summary of fees and any commission arrangements is available on request." |
+| #8 "cost of waiting" is new | The pension and director calculators already carry a "The cost of waiting" card (`#waitOut`). #8 is built as the start-age comparison the card does not do. |
+| #2 fills "the need bar on your existing gap chart" | That is the home page's gap chart (`#pbGap`) and run 19's need slider (`#pbNeed`). |
+| Run 19's table is current | It is not quite: #8, #11, #2, #21 and #25, skipped or not built there, were built afterwards on `claude/fixes-after-audit-2` (`bbc0f9d`, `b3febf2`, `bf35e0d`, `4624c72`), with the PRSI and CSO fixes (`a1aabeb`, `09a6a13`). All of that is in this run's base. |
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | `57d2446` |
+| A3 | Gamification check | report only: see the table above | `57d2446` (this table) |
+| 21 | WhatsApp | not built: it needs your WhatsApp Business number, who answers it and when, and how chats would be kept on record, for compliance to confirm. Once there is a number, a "Message us on WhatsApp" link is one line in the skeleton and a sync | `6a168e8` |
+| 22 | Accessibility pass | report only, per the audit-then-approve workflow: see "Accessibility, #22" below. Nothing blocks a keyboard or screen reader user; the findings are heading levels, target sizes and small text | `6a168e8` |
+| 15 | Career breaks | done: "Time out." on starter.html under "If you wait.": the chart's monthly amount paid from 30 to 66, with and without a break ("The break starts at" 30 to 65, "Years out" 1 to 10); the two pots, the difference, and one sentence with the pot's share against the payments' share and the monthly top-up from the break's end that would make it up. At the default, three years from 32 leave the pot €52,672 smaller, 15% of it from 8% of the payments; ten years from 50 cost €62,058, not much more. A break that would run past 66 stops there and the card says so. The prescribed warnings are under the figures. Then the State Pension side, checked against Citizens Information (page edited 24 September 2026): full-time care of a child under 12, or of an older child or adult who needs an increased level of care, can add HomeCaring Periods, up to 1,040, counted under the Total Contributions Approach once the 520 paid contributions are there, and claimed with the pension; linked to the entitlement check. New `PBWaiting.withBreak()` (spec W4b), suite cost-of-waiting now 77 assertions, the figures worked out month by month a second time and three mutations shown to fail it. **Not built:** a gender pension gap figure, which needs a sourced Irish statistic; the card is written for anyone taking time out | `8df5234` |
+| 14 | My Future Fund, what happens when | done: on starter.html under the 3 : 3 : 1 split, "Once you are enrolled: what happens when.", seven rows down a line: month 1 (the 2026 to 2028 rates on pay up to €80,000), the opt-out window in months 7 and 8 (your own contributions come back; the employer's and the State's stay invested until 66), pausing from month 7 for one to two years (still possible after month 8, when opting out is not), automatic re-enrolment two years after an opt-out (under 66 and in a job with no pension through payroll, which is not the first enrolment's test), and the rises of 2029, 2032 and 2035 with a window after each, when opting out refunds only the extra the rise added. From the Automatic Enrolment Retirement Savings System Act 2024 (ss.54, 55, 61, 62 and 63), gov.ie and Citizens Information; the 835,000 in it is the Department's figure of 14 September 2026. Plain markup, no script | `61f95d2` |
+| 12 | All your pensions in one view | done: new page `my-pensions.html` (parts `tools/pots-parts/`): up to ten pensions, each a name, a kind (six), what it is worth now and, if known, the annual charge; the total, each one's share as a bar, and the known annual charges in euro a year at today's values, saying how many charges are not known. Nothing is projected or judged. A value or a charge that is not a number is said beside its field ("Not counted: enter an amount in euro, like 40,000.") rather than dropped without a word, and a comma in a charge is a decimal point, so "0,75" is 0.75% and never 75%. Nothing is stored or sent; "Print or save this list" prints the title, the summary, then the list (found while checking it: the first print rule hid the summary, which is a section too). New module `assets/js/pots.js`, suite 33 assertions, both reading hazards shown to fail the suite when put back. Linked from the footer's Tools column on every page, under tracker.html's tick list, and the sitemap | `bbc2c6e` |
+| 18, 20, 11 | Over 50, self-employed, and a UK pension in Ireland | done: three guide pages in the legal pages' family, each dated "Rules as at 24 September 2026" and closing on its sources. `pensions-over-50.html` (#18): catching up (the age-related limits from 50, AVCs within them), taking benefits early (a job you have left from 50 with the scheme's and employer's agreement, a 20% director cutting links first; a PRSA from 60, or 50 on retiring from an employment; a personal pension from 60; a Personal Retirement Bond following its old scheme), why early is smaller, and an ARF against an annuity (the imputed 4% from 61, 5% from 71, 6% over €2 million; AMRFs abolished from 2022). `self-employed-pensions.html` (#20): auto-enrolment enrols employees only, a PRSA or a personal pension (no new personal pension products approved since 1 January 2024), relief on net relevant earnings at the age-related shares up to €115,000, carry-forward, Form 11, and 31 October 2026 or 18 November 2026 on ROS. `uk-pensions-in-ireland.html` (#11): a move only to a QROPS, the 25% Overseas Transfer Charge since 30 October 2024 and when it still does not apply, the UK State Pension paid into Ireland and uprated in the EEA, Irish tax on UK pensions under the treaty (UK government service pensions the exception), and the Pension Tracing Service. None gives a recommendation; each ends on a free call. Linked from a new "Over 50", "Self-employed" and "Worked in the UK" in the footer's Who we help column on every page, and the sitemap | `fb41ce7` |
+| 13, 16, 17, 19 | Glossary: inflation, risk rating, pension adjustment order, Personal Retirement Bond | done: four new entries in the jargon buster and its term index. Inflation (#13) carries the build list's "shrink-ray": years and a rate (2% by default, the ECB's medium-term aim, said in the entry) give what €1,000 today would cost then and what €1,000 then buys today. Risk rating (#16) draws the 1 to 7 scale and says why two funds with the same number are not always alike (the older and newer scales' different bands, the holding period, recalculation, pension products outside the newer rules). Pension adjustment order (#17): only a court can share a pension out, the court may adjust other assets instead, the share can move into the other person's own pension, and it needs a solicitor. Personal Retirement Bond (#19): what one is, that its access follows the old scheme's rules, that it cannot move to or from a PRSA, and what a transfer can give up. The Standard Fund Threshold entry now points at the new check instead of "best confirmed in conversation" | `53f1eee` |
+| 10 | Checklists, videos and a monthly email | partly done: the two lead magnets the build list names, as printable pages with tick boxes and a "Print or save this checklist" button (the browser's own dialog, so a PDF too): `old-pension-checklist.html` (ten steps: employers, names, papers, your own plans, asking trustees, closed employers, the UK tracing service, MyWelfare, what to ask a provider, and not moving anything yet) and `director-year-end-checklist.html` (nine: the company's year end, its funding limit, the PRSA 100% test, an executive pension set up before April 2021, the October deadline, the age-related limit, the threshold, salary against pension, Budget 2027), both built from the legal pages' family like how-we-work.html. Today the guide requests on tracker and director reach Damian as an email asking for "the guide"; these are a guide he can send. Linked from the finder, the director rules page, director.html and the sitemap. **Not built:** the videos (they need Damian on camera; the Central Bank's guidance 2.2.11 does suggest video or an infographic can help) and the monthly "Pension Pulse" email (it needs an email service and his content, and each email is an advertisement needing the regulatory disclosure statement, Reg 71(1)(c)) | `c6d2653` |
+| 6 | Directors' 2026 rules and "which structure" | done: new page `director-pension-rules.html` (parts `tools/director-rules-parts/`), dated "Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.", five short sections each with its sources: executive pensions set up before 22 April 2021 (the five years' grace ended 21 April 2026; since then a one-member scheme can carry on only under the full rules, and most have moved to a master trust, a PRSA before normal retirement age, or a buy-out bond; the Pensions Authority's 40,644 on 1 September 2026, from 141,500), a company paying into a PRSA (100% of pay from 1 January 2025, then a benefit-in-kind and not deductible), the October window (31 October 2026, 18 November 2026 on ROS; company contributions follow its year end), the threshold, and SSAPs. Four questions list topics to discuss, never a recommendation (new module `assets/js/director-topics.js`, suite 10). The build list's "every executive pension had to move to a Master Trust or PRSA by 22 April 2026" is not what the law says (it required compliance, not a move); the page says what it does. Linked from director.html | `47a4582` |
+| 7 | The Standard Fund Threshold and lump sums | done: new calculator `standard-fund-threshold.html` (parts `tools/sft-parts/`), same date stamp: the total of your pensions, the year taken (2026 to "2030 or later") and a lump sum; the threshold for that year and the share used, the statute's steps as a strip with the year marked, the chargeable excess tax at 40% when over ("at most" from 2030, when the threshold is only known to be at least €2.8m), the €60,000 lump sum credit, the combined rate of up to 68.8%, or 71.2% with PRSI, from the Department of Finance's 2024 examination, and the lump sum's three bands (€200,000 tax-free, €300,000 at 20%, the rest as income; the €500,000 fixed since 1 January 2025). New module `assets/js/sft.js` carrying every source, suite 37. The build list's "up to 71% (100% - 40% x 52%)": that formula gives 79.2%; the right sum is 40% + 60% x 52% = 71.2%, and the page cites the government's report, not Davy. Linked from director.html and the rules page | `47a4582` |
+| 4 | The 60-second readiness check | done, not for launch before the compliance brief the build list asks for: new page `pension-readiness-check.html` (parts `tools/readiness-parts/`): which of the three situations fits (the booking form's three), then five questions for that situation, 20 points each, a score out of 100 in three named zones (Early days, On the way, In good shape) shown as a number, in words and on a labelled scale, and a step for every point not scored, each linked to the page that helps (the finder, the charges calculator, the entitlement check, the way-of-life picker, the calculators). Only things the reader can do are scored; paying in alone scores the same as with an employer; nothing scores booking. Answers never leave the page; "Talk it through with Damian, free" goes to `booking.html#persona=…`, and booking.html now ticks that one choice and nothing else. New module `assets/js/readiness.js`, suite 41 assertions. Footer Tools column | `bb0d0b1` |
+| 3 | What your pension's charges cost | done: new calculator `pension-fees-calculator.html` (parts `tools/fees-parts/`): the pot, the monthly payment and the years; your plan's annual management charge and charge on each payment (defaults 1% and 5%, the Standard PRSA maximums, Pensions Act 1990 s.104(5) and (6)) against another plan's (defaults 0.5% and none), growth folded under More options. The two pots at retirement, one sentence, a table of what each plan's charges took and what they cost by retirement, a chart of both pots and the no-charge line, the prescribed warnings beside the figures, and "The other side" card (a lower charge is not the only thing that matters; moving can mean giving up terms worth more). Labels stay neutral ("the other plan") so a higher comparison reads right. New module `assets/js/pension-fees.js` (spec `docs/CALC-SPEC-FEES.md`), suite 35 assertions, the defaults worked out a second time in Python first; the no-charge line is the calculators' own projection to the cent. Linked from the footer's Tools column, the nav's Calculator menu and the finder; pb-share now keeps the warning box directly under the figures | `b24bf2c` |
+| 5 | Save or send your results | done: "Save or print these figures" (a one-page report: the headline figures under the page's own labels, the result sentence, the workings, what was entered, the page's assumptions, the link that reopens the figures, any warning box, and the footer's regulatory statement and disclaimer) and "Email them to yourself" (the reader's own email app, addressed to no one) beside "Copy a link to these figures" on all five calculators; new `assets/js/pb-report.js`, which reads only what the page shows, stands aside while the guess card's veil is up, and leaves out switched-off controls; pb-share.js exposes its link builder so there is one definition of a resume link; the two calculators' "Email my results" now carry that link too | `0fe1b65` |
+| A4 | Warnings beside the figures | done, for compliance to confirm: the two warnings the Regulations prescribe word for word (Reg 372, "Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment."; Reg 392, "Warning: The value of your investment may go down as well as up."), boxed, bold and no smaller than the text around them (Reg 45), directly under the projected figures (Reg 82) on the pension and director calculators and under both of starter's growth charts; the printed report carries them. The State Pension pages and the comparison project no investment growth and carry none. Found while re-shooting: the director calculator's sliders drew at Chrome's default 129px inside a 423px column (its base slider rule never set a width); fixed. All five product photographs re-shot (the pension and entitlement shots were stale since `b3febf2` and `bbc0f9d`), the pension one without the State Pension line so the home page's arrow label stays clear, and every declared width and height corrected, the product tabs' data included | `0fe1b65` |
+| 1 | Old pension finder with a signed Letter of Authority | done: new page `find-my-pension.html` (built by `tools/pagebuild.py` from new parts `tools/finder-parts/`), four steps: where you worked (up to ten employers, years optional), about you (name, other names, date of birth, address, email, optional phone; no PPS number), the Letter of Authority filled in and signed (typed name, an optional drawn signature, an unticked confirm box), and what happens next (a Requested / Found / Valued line per employer). Phone and email consent are separate unticked boxes. With `LEAD_ENDPOINT` set it posts JSON; today it opens a pre-filled email to Damian and offers the letter to save as a PDF and attach. New module `assets/js/pension-finder.js`, suite 65 assertions. tracker.html's "Help me find my pensions" and "Start finding mine" go to it; "Old pension finder" joined the footer's Tools column | `73ad89b` |
+| A1 + 9 | Reg 32 commission summary, and the trust page | done as a template: new page `how-we-work.html` ("How we work, and how we are paid"): who advises you (Damian Condon, QFA, 30 years' experience, the Central Bank register linked), the Reg 32 summary laid out per product type as Reg 32(3) asks (when you start, trail commission, clawback), other fees and non-monetary benefits, agencies held, whether commission is set against a fee (Reg 33), a fees section (Reg 68), the rules any review shown will follow (Reg 85), and the CCPC, MABS and Pensions Authority (the Central Bank's guidance 2.2.7). Every figure is a placeholder. terms.html's "available on request" now links to it, and "How we are paid" is in the footer's Company column on every page (skeleton + sync-chrome + pagebuild) | `399f861` |
+| 2 | Way-of-life picker (Irish Retirement Living Standards) | done: under the home page's gap chart, Modest / Moderate / Comfortable for one person or a couple; a card sets run 19's need slider to its annual figure, so the chart, the sentence and the spoken label follow; the chosen card opens its month in the report's seven categories; a couple is set against two State Pensions at the maximum rate (€31,127, from the weekly rate, not twice the rounded €15,564), which is how the report built its couple Modest figure; the chart's source line follows the figure it shows. New module `assets/js/living-standards.js` (all six columns of the report's p. 12 table, read from the PDF), suite 66 assertions, cross-checked against the single totals in `state-pension.js`; CONTEXT.md's entry updated | `9a2daaa` |
+| 8 | Cost of waiting | done: "If you wait." under starter's 30/40/50 chart: the reader's age and a wait of 1 to 10 years, the two pots, the difference, and the monthly amount the later start needs to catch up; the assumptions in the card itself; new module `assets/js/cost-of-waiting.js` (spec `docs/CALC-SPEC-COST-OF-WAITING.md`, suite 51 assertions), which the 30/40/50 chart now reads instead of its inline copy (proved identical at all 39 slider values). Also fixed: the chart's and the 3 : 3 : 1 split's sliders drew at Chrome's default 129px inside their 420px controls | `a48164b` |
+
+## Proof, at the end of the run
+
+- `tests/run-tests.py`: every suite at its exact assertion gate (the new ones:
+  cost-of-waiting 77, living-standards 66, pension-finder 65, pension-fees 35,
+  readiness 41, sft 37, director-topics 10, pots 33), ALL SUITES PASS, with
+  the State Pension pages' probe and panel check. `tests/build.test.py` 135,
+  `tests/runner.test.py` 93, `tests/games.test.py` 157, all pass.
+- `stamp-images.py --check`, `sync-chrome.py --check` and `pagebuild.py
+  --check`: clean, so every page carries the current nav, footer and hashes.
+- render-diff against `ebe1cbe`, the run's base: the five calculator pages load
+  to the same render, write for write, and 400 scripted sessions of 40 events
+  on each (80,000 events) compare identical. The run changed their markup and
+  the shared scripts around them, not what their own scripts write.
+- `verify.py`, every page at 375 / 1360 / 1440 with screenshots: 0 FAIL. Five WARNs, none new: the open placeholders on find-my-pension.html (R20-1a), how-we-work.html (R20-9a to R20-9e), privacy.html (R20-1b, R20-A2) and terms.html (A1), and glossary.html's deep link #tax-relief landing further below the header than the check likes, which the audit reported before this run began (C4).
+
+## Accessibility, #22 (report only)
+
+Swept every page at 1200px in headless Chrome with a scripted check, on top of
+what `verify.py` already fails or warns on at 375 / 1200 / 1440 (contrast, the
+focus ring, the drawer's targets, the `<main>` landmark, sliders'
+`aria-valuetext`, overflow). Nothing was changed.
+
+**Clean on every page:** `lang="en-IE"`; one `<h1>`; one `<main>`; a skip link
+to it (not on the two games, which have no site chrome); every image has alt
+text; every field, button and link has an accessible name; no "click here"
+links; no duplicate ids; no positive `tabindex`; no autoplaying media; no link
+opens a new window without saying so; the viewport allows zoom
+(`width=device-width, initial-scale=1.0`, no maximum scale). Keyboard: the two
+games, every slider (arrow keys; a single click also works) and every form
+work without a mouse; the finder's drawn signature is optional, the typed name
+being the signature.
+
+**Findings, for you to approve or not:**
+
+1. **Heading levels skip** (WCAG 1.3.1, advisory): the shared footer's column
+   titles ("Who we help", "Tools", "Company") are `<h4>`, the only `<h4>`s on
+   the site, so they skip a level on the 17 pages whose last heading before
+   the footer is an `<h2>`, and 404.html goes `<h1>` to `<h4>`. Making them
+   `<h2>` (styled as now) is one edit to the skeleton and a sync.
+   pension-readiness-check.html goes `<h1>` to `<h3>` ("How the score works")
+   while the result, which holds the `<h2>`, is hidden.
+2. **Targets under 24px** (WCAG 2.2, 2.5.8): the "occasional emails" boxes are
+   18 x 18 on the calculators and persona pages; the checklist and tick-list
+   boxes are 20 x 20; the director rules page's answers 18 x 18. All sit inside
+   clickable labels with room around them, so they very likely pass by the
+   criterion's spacing exception, but 24px would remove the doubt.
+3. **Small text:** the share of visible text under 16px is about 48% on the home
+   page, 89% on the pension calculator, 91% on the finder and 13% on the terms;
+   under 13px it is 0 to 3%, the smallest being the 9.5px "Chief Pension Dog"
+   label. WCAG sets no minimum size; zoom works. A floor of 14px for notes and
+   16px for body copy would be a design change across the stylesheet families
+   (the stylesheet sync was refused before, so this is not proposed as one).
+
+## NEEDS DAMIAN INPUT from this run
+
+- **#22, accessibility:** say which of the three findings above to fix (footer headings, 24px boxes, a text-size floor). **#21:** the WhatsApp number, if you want it.
+
+- **#18, #20 and #11, the three guide pages:** every rule on them is from Revenue, the Pensions Authority, gov.ie, GOV.UK and HMRC, read on 24 September 2026, but they are regulated content and yours to sign. Re-check after Budget 2027 on 6 October 2026, and the UK page after the UK Budget. The UK page states the overseas transfer allowance as "usually £1,073,100"; confirm that is how you want it put, since a person's own allowance can differ.
+
+- **#6 and #7, every tax and regulatory statement:** both pages state rules
+  from primary sources (Finance Act 2024 ss.12 and 13, S.I. 128 of 2021, the
+  Pensions Act s.61B, Revenue's Pensions Manual chapters 4, 13, 19, 24, 25
+  and 27 and appendix III, Revenue eBrief 034/26, the Pensions Authority's
+  notices and conference figures), all read on 24 September 2026, but they
+  are regulated content and yours to sign. Re-check both after Budget 2027 on
+  6 October 2026. Two points the research could not settle: how a Personal
+  Fund Threshold below the rising SFT is treated (the page only says a PFT
+  may apply instead), and Revenue's defined benefit valuation factors (the
+  page says Damian can work that out, and gives no factor).
+
+- **#4, before the readiness check goes live:** the build list's own condition,
+  a brief to compliance on the check (a score is a gamified element, which the
+  Central Bank's General Guidance 3.5.7 names), and sign-off of its questions,
+  points and zone names. It is information only and says so; it scores
+  nothing out of the reader's hands and nothing for booking.
+
+- **A4, the warnings:** whether a generic calculator's projection counts as an
+  illustration of an investment product under Reg 372 is a judgement the
+  research could not settle; the boxes were added as the cautious reading, and
+  compliance may take them off. Starter's chart note still says "the value of
+  investments can fall as well as rise" in small print, which the box now says
+  in the prescribed words; trim it if you like.
+
+- **R20-1a, find-my-pension.html: the Letter of Authority's wording** is a
+  draft, for Gresham Wealth's compliance officer (the page flags it where the
+  letter shows). It authorises requests for information only and says it
+  cannot move, change, cash in or transfer anything. Also for them: whether
+  the providers you deal with accept an e-signed letter (the typed name is
+  the signature; a drawn one is optional), and whether tracing is a regulated
+  activity for the firm. If it is not, the Regulations treat it as an
+  unregulated activity: its own web page (Reg 72), no regulatory disclosure
+  statement on it (Reg 71(2)-(3)), and a set warning in written communications
+  about it (Reg 73(1)(c)). The Central Bank's guidance (3.5.10) suggests an
+  information form like this one is not a "digital platform", but that is
+  a judgement for compliance.
+- **R20-1b, privacy.html:** a sentence on what the finder collects and the
+  signed letter: why, who sees it (the providers and trustees named), and how
+  long it is kept. Reg 117(2) allows a record of someone who did not become
+  a client to be kept for 12 months, subject to their consent.
+- **The finder's promises for Damian to confirm he can keep:** "As the
+  replies come in, Damian will tell you what was found and what it is
+  worth"; "You can withdraw the letter at any time, in writing, and we stop
+  asking"; and that a PPS number is asked for later, on a call, if a
+  provider insists.
+
+- **R20-9a to R20-9e, how-we-work.html:** the Central Bank reference number;
+  for each product type, the commission when a plan starts, the trail, and any
+  clawback (a single figure where possible; where it is a range, what decides
+  the point in it, per the Central Bank's guidance 3.4.4); other fees,
+  administration costs and non-monetary benefits, or "none"; the providers you
+  hold agencies with; whether commission is set against a fee; the schedule of
+  fees after the free first consultation; and any reviews. Correct the product
+  list if it is not the list you are paid for.
+- **Compliance findings from reading the 2025 Regulations (S.I. 81 of 2025)
+  and the Central Bank's General Guidance, for your compliance officer. Nothing
+  below was changed:**
+  - Reg 71(4) prescribes the regulatory disclosure statement's exact form,
+    "[Full legal name], [trading as …] is regulated by the Central Bank of
+    Ireland", with no other text. The footer's sentence ("Pensionbuddy is a
+    trading name of … which is regulated by …" followed by the registered
+    office and the register) is a different form. Reg 71(2)-(3) also limit
+    the statement to pages solely about regulated activities.
+  - Reg 56: an intermediary may say "broker" only if its principal regulated
+    activities are on a fair analysis of the market. The comparison page's
+    name and copy use "broker" ("a personal pension arranged through a
+    broker").
+  - Reg 68: a schedule of fees and charges must be displayed on the website.
+    how-we-work.html has the section; it needs the schedule.
+  - Regs 45, 82, 372 and 392: where a page illustrates investment growth, the
+    prescribed warnings ("Warning: These figures are estimates only. They are
+    not a reliable guide to the future performance of your investment.";
+    "Warning: The value of your investment may go down as well as up.") go
+    in a box, in bold, no smaller than the main text, at the same time as the
+    benefit. The calculators and the charts carry plain small-print
+    illustration notes instead. Whether a generic calculator is caught is a
+    judgement call the research could not settle; see A4.
+  - Reg 88: an advertisement must spell out every initialism it uses (PRSA,
+    AVC, ARF, PRB, SFT). New pages in this run do; older pages rely on the
+    jargon buster.
+  - Comparative claims: a scan of every page's copy for superlatives and
+    comparisons ("best", "cheapest", "lowest", "better than", "the only",
+    "guaranteed", "independent" and others) found none setting Pensionbuddy
+    or any product against another. Every hit is descriptive: the 1 to 7 risk
+    scale, "not guaranteed", the Ombudsman and the CCPC as independent, the
+    games' best scores. One line reads as a general claim: starter.html's
+    closing heading "The best time to start is now", which predates this run.
+
+- **R20-A2, privacy.html:** a sentence for "How we use it" on the optional
+  emails: who gets them (only people who tick the box), what they are, and how
+  to stop them. Placeholder in the list.
+
+- **#2, the couple comparison:** a couple is set against two State Pensions
+  at the maximum rate, the report's own basis for its couple Modest figure. A
+  couple with one pension, or reduced rates, would have a smaller State bar
+  than the chart draws. Say if the bar should carry that caveat in words.
+- **Research findings on figures the site already quotes (nothing changed):**
+  the home page's "79% feel unprepared." matches the Amárach report's p. 5
+  (79% of *employees surveyed* feel financially unready); the phrase "nearly 8
+  in 10" in the build list is the Irish Examiner's, not the report's. The
+  €40,860 is Royal London Ireland's press release of 16 July 2026 (iReach, 896
+  adults not yet retired), a total that already counts the State Pension; a
+  more exact source line would be "Royal London Ireland / iReach, July 2026".
+  The build list's "only 42% felt financially prepared" is on the living
+  standards report's p. 8, but the Council's own raw survey file gives 38%
+  across all 500, so cite it as the report's figure, never "42% of 500".
+
+## New copy needing Damian's sign-off
+
+- #15: on starter.html, "Time out."; the lead "Time away from work, to care for someone, to study or to travel: what a break in payments does to the pot, and, for time spent caring, what can still count toward the State Pension."; labels "The break starts at", "Years out"; rows "Paying in all along" and "[n] years out at [age]"; the sentence "A break of [n] years at [age] leaves the pot at 66 about €[x] smaller: [p]% of it, from [q]% of the payments[, because early payments have the longest to grow]. Paying about €[y] a month more from [age] would make it up." or "... The break runs to pension age, so there are no years after it to make that up."; the HomeCaring Periods paragraph; and the note, which adds "the pot keeps growing through the break, with nothing paid in, and a break stops at 66".
+
+- #14: on starter.html, the heading "Once you are enrolled: what happens when.", its seven rows ("Month 1", "Months 7 and 8", "From month 7", "Two years after an opt-out", "2029", "2032", "2035 on") and the source note, as on the page.
+
+- #12: the whole of my-pensions.html: h1 "All your pensions, in one view.", eyebrow "The free tool · nothing leaves this page", the lede, "Your pensions" and its hint, the field labels ("Name or provider", "Kind", "Value now, in euro", "Annual charge, % (optional)"), the six kinds ("A pension from a job", "A PRSA", "A personal pension", "A Personal Retirement Bond", "AVCs", "Something else"), "Add another pension", "Remove", "A PRSA is a Personal Retirement Savings Account. AVCs are additional voluntary contributions, paid on top of a pension from a job.", "In one view", "[total] across [n] pensions.", "The annual charges you know of come to about €[x] a year at today's values, with [n] charges not known.", "Add an annual charge to see what the charges come to in euro a year.", the two field messages, "Print or save this list", the note "Values are what you entered, as they are today. Nothing here is a projection, and nothing here says whether any pension is right for you.", the three next-step lines, and "This is a list, not advice. ... Bringing pensions together is not always right: some carry terms worth more than the convenience." On tracker.html, under the ticks: "Know roughly what some are worth already? List them in one view, with the total and what the charges come to." Footer link "All your pensions in one view".
+
+- #18, #20, #11: the three pages whole: "Pensions after 50: catching up, taking benefits early, and what comes after", "Pensions when you are self-employed" and "A UK pension, and living in Ireland", including "Early access is a trade, not a bonus.", "Neither suits everyone: one gives certainty, the other flexibility and the risk that comes with it." and "There is no general answer, and this page does not give one." Footer links "Over 50", "Self-employed", "Worked in the UK".
+
+- #13, #16, #17, #19: the four glossary entries whole, the inflation widget's
+  labels ("Years from now", "Inflation a year") and sentence ("At [r] a
+  year, what €1,000 buys today would cost about €[x] in [n] years. The other
+  way round, €1,000 then buys what €[y] buys today."), and the Standard Fund
+  Threshold entry's new last sentence.
+
+- #10: both checklists whole, the button "Print or save this checklist", and
+  on director.html a third card "The year-end checklist".
+
+- #6 and #7: both pages whole, including the four questions and five topics
+  on the rules page ("Topics to discuss, not advice.") and every sentence the
+  threshold check writes ("[total] taken in [year] uses [x]% of that year's
+  threshold, leaving [y] of headroom." / "... is [z] over ..."; "Chargeable
+  excess tax at 40% on the [z] over is [cet] ..."). On director.html, a new
+  section "The rules for 2026. What changed, and how close you are to the
+  cap." with two cards linking the pages.
+
+- #4: the whole of pension-readiness-check.html: the h1 "How ready is your
+  pension? Six questions to find out.", the three situations ("I have pensions
+  from old jobs to sort out." and so on), the fifteen questions and their
+  answers, the zones ("Early days. Plenty you can do, and the first steps are
+  simple ones." / "On the way. A few gaps are worth closing." / "In good
+  shape. Worth keeping under review as things change."), the ten steps and
+  their link names, and "How the score works". Footer link "Pension
+  readiness check".
+
+- #3: the whole of pension-fees-calculator.html: h1 "What your pension's
+  charges cost you by retirement.", slider labels, the subnotes ("A share of
+  the fund taken every year. On an older plan it may be called a fund
+  management charge."; "Sometimes shown as an allocation rate: 95% allocated
+  means a 5% charge."), "Over [n] years, your plan's charges would take about
+  €[x] out of your pot. With the other plan's charges, you would have about
+  €[y] more [or less] at retirement.", the table's rows, "The other side",
+  the call to action "Not sure what your old plans charge?" and every
+  assumption. Footer link and menu line "Pension charges calculator", "What
+  your plan's charges take out of your pot by retirement."
+
+- #5: buttons "Save or print these figures" and "Email them to yourself";
+  status lines "Reveal the illustration first, then save it." and "Your email
+  app should have opened. Add your own address and send."; report headings
+  "Your figures", "How we got this", "What you entered", "The assumptions
+  behind these numbers", "Next steps"; lines "Pensionbuddy. Saved on
+  [date].", "Open these figures again: [link]", "Talk them through with
+  Damian in a free 20-minute call: [link]"; the self-email's first line
+  "[page], saved on [date]" and "What I entered:". In the two calculators'
+  emails to Damian, the new line "Open these figures again: [link]".
+- A4: none; the two warnings are the Regulations' own words.
+
+- #1: the whole of find-my-pension.html, including the h1 "Lost track of an
+  old pension? Start the search here.", the step names, the side card "What
+  this is, and what it is not" ("We cannot promise every pension will be
+  found: schemes close, merge and change hands, and old records are not
+  always complete."), the consent boxes "You can phone me about this search."
+  and the site's occasional-emails box, the draft letter, and the two
+  confirmations: "Thanks. Your signed letter and your details are with
+  Damian, and the search has started." (only after a real success from the
+  endpoint) and "Your email app should have opened with your details ready to
+  send to Damian. Nothing has been sent until you press send there. Please
+  attach your signed letter: choose \"Save or print your letter\" below, then
+  save it as a PDF." Footer link "Old pension finder".
+
+- A1/#9: the whole of how-we-work.html (title "How we work, and how we are
+  paid"), which reuses the Terms of Business' "fee you agree with us …
+  commission from the company whose product you take out … set out in
+  writing before any work begins", and says of reviews: "We show a review
+  here only if it is genuine and unedited, with the reviewer's name, the date
+  and their permission, and only if it is about our service rather than
+  investment returns. If a reviewer works for us, is connected to us, or was
+  paid anything, we say so beside the review." terms.html: "A full summary of
+  fees and any commission arrangements is available on request." became "Our
+  summary of the commission we receive from product providers, and our fees,
+  are published on our How we work page." Footer link label "How we are paid".
+
+- A2: box label "Also send me occasional emails about pension deadlines and
+  rule changes. Optional, and you can unsubscribe at any time." Note, replacing
+  "No spam, unsubscribe any time.": "We use your email to reply to this
+  request, and for nothing else unless you tick the box." (the rest of each
+  note is unchanged). Fallback email line "Occasional emails: yes, please" or
+  "Occasional emails: no".
+- #2: "Not sure what you'll need? Start from a way of life."; toggle "Single" /
+  "Couple" (group name for screen readers "Who it is for"); card lines "The
+  basics, with a little left for extras.", "More room to manoeuvre, and more
+  security.", "More freedom, and room for a few luxuries." (paraphrasing the
+  report's p. 9 definitions); need bar "[Level], for one" or "[Level], for a
+  couple"; for a couple the State bar reads "Two State Pensions, both at the
+  maximum" and a covered need "Covered by two State Pensions."; month head
+  "[Level], for one person: €[x] a month" or "…, for a couple: …"; category
+  names the report's own, lightly shortened ("Housing, including utilities",
+  "Once-off costs"); note "Once-off costs are holidays, Christmas and gifts,
+  insurance, car and property tax, and bigger one-off buys, spread over the
+  year. These are national averages at 2024 prices, not a budget for you.";
+  source lines "Standards of living: Pensions Council, Irish Retirement Living
+  Standards, researched by KPMG, 2024 prices." and, under the chart while a
+  card is chosen, "Pensions Council, Irish Retirement Living Standards, 2024
+  prices."
+- #8: heading "If you wait."; lead "The same monthly amount, from your own
+  age: started now, or a few years from now."; labels "Your age now", "If you
+  start in"; rows "Now, at [age]" and "In [n] years, at [age]", "€[x] less";
+  "To end up with the same pot, starting at [age] would take about €[x] a
+  month instead of €[m]: €[y] more each month." and, from 66 on, "By [age]
+  there are no years left to pay in before pension age, 66, so there is no
+  catch-up figure to show."; note "Illustration only · the value of
+  investments can fall as well as rise. The monthly amount is the one set
+  above. Assumes 5% growth a year, contributions to 66, and no pension to
+  start with. Figures ignore charges, tax relief and inflation."
+
+---
+
 # Run 19 — 2026-09-22/23 · Overnight build of the interactive audit
 
 Damian's overnight brief. Branch `claude/interactive-audit-2-efbbbb`, pushed as

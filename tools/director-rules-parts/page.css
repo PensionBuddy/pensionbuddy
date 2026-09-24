@@ -1,0 +1,32 @@
+/* ============================================================
+   DIRECTORS' RULES, 2026 (director-pension-rules.html, Run 20 #6).
+   A dated summary in five short sections, each with its sources under
+   it, and four questions that list what is worth talking through.
+   The list is topics, never a recommendation, and says so.
+   ============================================================ */
+.dr-asat{margin-top:10px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.dr-wrap{max-width:780px;padding:12px 0 8px}
+.dr-sec{padding:28px 0;border-top:1px solid var(--line)}
+.dr-sec:first-child{border-top:0;padding-top:8px}
+.dr-sec h2{margin:0 0 12px}
+.dr-sec p{margin:0 0 12px;font-size:1rem;line-height:1.65;color:var(--ink)}
+.dr-sec a{color:var(--teal-700);font-weight:600}
+.dr-sec p.dr-src{font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.dr-tree form{margin-top:14px}
+.dr-q{border:0;margin:0 0 18px;padding:0;min-width:0}
+.dr-q legend{font-size:1rem;font-weight:700;color:var(--ink);margin:0 0 8px;padding:0}
+.dr-opt{display:inline-flex;gap:8px;align-items:center;margin:0 8px 8px 0;padding:9px 14px;border:1.5px solid var(--line-2);
+  border-radius:99px;background:var(--surface);cursor:pointer;font-size:.95rem;color:var(--ink);min-height:44px}
+.dr-opt input{width:24px;height:24px;margin:0;accent-color:var(--teal-700)}
+.dr-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
+.dr-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.dr-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.dr-err:not(:empty){margin:0 0 12px}
+.dr-tree .btn{width:auto}
+.dr-out{margin-top:22px;padding:20px 22px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+.dr-out[hidden]{display:none}
+.dr-out h3{margin:0 0 10px}
+.dr-out h3:focus{outline:none}
+.dr-out ul{margin:0 0 12px;padding-left:20px}
+.dr-out li{margin:0 0 10px;font-size:.98rem;line-height:1.55;color:var(--ink)}
+.dr-out li a{color:var(--teal-700);font-weight:600}

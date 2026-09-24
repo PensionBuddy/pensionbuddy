@@ -1,0 +1,31 @@
+/* ============================================================
+   THE STANDARD FUND THRESHOLD (standard-fund-threshold.html, Run 20 #7).
+   The threshold for the year chosen and the share of it used; the
+   statute's steps as a strip with that year marked; what happens over
+   it; and the lump sum's three bands. Every figure is from
+   assets/js/sft.js, which carries the sources.
+   ============================================================ */
+.sft-asat{margin-top:10px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.sft-strip{list-style:none;margin:14px 0 10px;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.sft-strip li{border:1px solid var(--line);border-radius:var(--r-md);padding:10px 8px;text-align:center;background:var(--surface);min-width:0}
+.sft-strip b{display:block;font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.sft-strip span{display:block;font-size:1rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sft-strip li.sft-on{border:2px solid var(--ink);background:var(--teal-50)}
+.sft-strip li.sft-on b{color:var(--ink)}
+/* not .sft-note: the skeleton already styles that class for the calculators' own threshold note */
+.sft-strip-note{margin:6px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.chart-card.sft-strip-card{min-height:0}
+.sft-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;margin-top:16px}
+.sft-card[hidden]{display:none}
+.sft-card h3{margin:0 0 10px}
+.sft-card p{margin:0 0 10px;font-size:.95rem;line-height:1.6;color:var(--ink)}
+.sft-small{margin:10px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
+.sft-card p.sft-small{font-size:.86rem;color:var(--ink-2);margin:0}
+.sft-t{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+.sft-t th,.sft-t td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+.sft-t th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
+.sft-t tr:last-child th,.sft-t tr:last-child td{border-bottom:0}
+@media(max-width:600px){
+  .sft-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sft-card{padding:18px 16px}
+}

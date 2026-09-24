@@ -126,9 +126,14 @@ def versioned(rel):
     return '%s?v=%s' % (rel, h)
 
 
+# The robots meta a held-back page carries, the form 404.html and thank-you.html
+# already use. verify.py fails any page that links to a page carrying it.
+NOINDEX = '<meta name="robots" content="noindex">'
+
+
 class Page(object):
     def __init__(self, out, parts, title, desc, modules, keep,
-                 page_js='page.js', nav=None, fonts=None, checks=()):
+                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False, floor16=False):
         self.out = out                # file written at the repository root
         self.parts = parts            # directory under tools/
         self.title = title            # <title>, og:title
@@ -139,6 +144,8 @@ class Page(object):
         self.nav = nav                # href of the nav item to mark current, or None
         self.fonts = fonts            # extra Google Fonts family parameter, or None
         self.checks = checks          # (needle, label) pairs particular to this page
+        self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
+        self.floor16 = floor16        # a calculator: keeps the skeleton's 16px floor on the text in <main>
 
     @property
     def parts_dir(self):
@@ -158,6 +165,7 @@ PAGES = {
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
+        floor16=True,
         checks=(('vs-card', 'comparison component'),),
     ),
     'state-pension': Page(
@@ -169,6 +177,7 @@ PAGES = {
         modules=['assets/js/state-pension.js'],
         # both controls are primary, so nothing folds into "More options"
         keep=['contribs', 'age'],
+        floor16=True,
         nav='state-pension-reality-check.html',
         checks=(('id="contribs"', 'contributions slider'),
                 ('id="lsRows"', 'living standards bars'),
@@ -186,6 +195,7 @@ PAGES = {
         modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js'],
         # all five controls are primary, so nothing folds into "More options"
         keep=['birth', 'entry', 'paid', 'credited', 'homecaring'],
+        floor16=True,
         # not a nav page: reached from the reality check, the footer and the sitemap
         nav=None,
         checks=(('id="birth"', 'birth year slider'),
@@ -196,6 +206,114 @@ PAGES = {
                 ('SW19', 'SW19 cited'),
                 ('citizensinformation.ie', 'Citizens Information cited'),
                 ('mywelfare.ie', 'MyWelfare cited')),
+    ),
+    # Run 20 #1. Not a calculator: a four-step form built on the same
+    # skeleton so it wears the same chrome. It has no sliders, so nothing
+    # folds into "More options", and it uses none of the class names the
+    # calculators' shared scripts look for (.results, .seg), so the guess
+    # card, the peek bar and the share link all stand aside.
+    'finder': Page(
+        out='find-my-pension.html',
+        parts='finder-parts',
+        title='Find an old pension, Pensionbuddy',
+        desc=('Lost track of a pension from an old job? Tell us where you worked, sign a letter '
+              'that lets us ask the providers, and we do the chasing. Nothing is moved, and '
+              'there is no obligation.'),
+        modules=['assets/js/pension-finder.js'],
+        keep=[],
+        nav=None,
+        # Run 21: held back until compliance signs off the letter; to re-link,
+        # drop this and put back the links listed in docs/STATUS.md, Run 21
+        noindex=True,
+        checks=(('id="pfForm"', 'the finder form'),
+                ('data-issue="R20-1a"', 'the draft letter flagged for compliance'),
+                ('id="pfPhoneOk"', 'phone consent is its own box'),
+                ('id="pfOptin"', 'email consent is its own box')),
+    ),
+    # Run 20 #3. A calculator like the other five: panel, results, the
+    # shared runtime, the share row and the saved report. Growth folds under
+    # More options; the pot, the payments, the years and both plans' charges
+    # stay out.
+    'fees': Page(
+        out='pension-fees-calculator.html',
+        parts='fees-parts',
+        title='What your pension charges cost, Pensionbuddy',
+        desc=('What an annual management charge and a charge on each payment take out of a '
+              'pension pot by retirement, next to another plan\'s charges. An illustration, not advice.'),
+        modules=['assets/js/pension-fees.js'],
+        keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
+        floor16=True,
+        nav=None,
+        checks=(('id="feeChart"', 'the chart'),
+                ('class="pb-warn"', 'the prescribed warnings'),
+                ('ccpc.ie', 'the CCPC cited'),
+                ('under the Pensions Act', 'the Standard PRSA maximums sourced')),
+    ),
+    # Run 20 #4. A short form and a result, like the finder: no sliders, and
+    # none of the class names the calculators' shared scripts look for.
+    'readiness': Page(
+        out='pension-readiness-check.html',
+        parts='readiness-parts',
+        title='How ready is your pension? A 60-second check, Pensionbuddy',
+        desc=('Six questions about what you know and what you have done, a score out of 100, '
+              'and a next step for every point you did not get. Information only; nothing you '
+              'answer leaves the page.'),
+        modules=['assets/js/readiness.js'],
+        keep=[],
+        nav=None,
+        # Run 21: held back until compliance has the brief on the score; to
+        # re-link, drop this and put back the links listed in STATUS, Run 21
+        noindex=True,
+        checks=(('id="rdForm"', 'the check'),
+                ('not a suitability assessment', 'information only, said on the page')),
+    ),
+    # Run 20 #7. The threshold for a year, the share of it used, and the
+    # lump sum's bands, from assets/js/sft.js, which carries the sources.
+    'sft': Page(
+        out='standard-fund-threshold.html',
+        parts='sft-parts',
+        title='The Standard Fund Threshold, and how much of it you would use, Pensionbuddy',
+        desc=('The Standard Fund Threshold from 2026 to 2029 and after, how much of it your pensions '
+              'would use in the year you take them, and how a retirement lump sum is taxed. '
+              'Rules as at September 2026. An illustration, not advice.'),
+        modules=['assets/js/sft.js'],
+        keep=['total', 'year', 'lump'],
+        floor16=True,
+        nav=None,
+        checks=(('id="sftStrip"', 'the year-by-year strip'),
+                ('Rules as at 24 September 2026', 'the date the rules were checked'),
+                ('Finance Act 2024', 'the statute cited')),
+    ),
+    # Run 20 #6. A dated summary of the rules that changed for directors, and
+    # four questions that list topics to discuss, never a recommendation.
+    'director-rules': Page(
+        out='director-pension-rules.html',
+        parts='director-rules-parts',
+        title="Directors' pensions in 2026: what changed, Pensionbuddy",
+        desc=('What changed for company directors: executive pensions set up before April 2021, a '
+              "company's payments into a PRSA, the October window and the Standard Fund Threshold. "
+              'Rules as at September 2026. Information, not advice.'),
+        modules=['assets/js/director-topics.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="drForm"', 'the four questions'),
+                ('Rules as at 24 September 2026', 'the date the rules were checked'),
+                ('Topics to discuss, not advice', 'the list says what it is')),
+    ),
+    # Run 20 #12. A list the reader fills in and a summary that follows it,
+    # like the finder: no sliders, none of the calculators' class names.
+    'pots': Page(
+        out='my-pensions.html',
+        parts='pots-parts',
+        title='All your pensions in one view, Pensionbuddy',
+        desc=('List the pensions you have and see the total, how it is split, and what the annual '
+              'charges come to in euro a year. Nothing you type leaves the page.'),
+        modules=['assets/js/pots.js'],
+        keep=[],
+        nav=None,
+        checks=(('id="ptForm"', 'the list'),
+                ('id="ptPrint"', 'print or save'),
+                ('Nothing you type is sent or stored', 'said on the page')),
     ),
 }
 
@@ -219,7 +337,17 @@ def assemble(page):
                       lambda m: m.group(1) + page.desc + m.group(2), head, count=1)
     head = re.sub(r'(<meta property="og:title" content=")[^"]*(")',
                   lambda m: m.group(1) + page.title + m.group(2), head, count=1)
+    if page.noindex:
+        head, n = re.subn(r'(<meta name="description" content="[^"]*">\n)',
+                          lambda m: m.group(1) + NOINDEX + '\n', head, count=1)
+        assert n == 1, 'no description meta to put the robots meta after'
 
+    # Run 21: the skeleton carries the calculators' 16px floor on the text in
+    # <main>. The calculator records keep it; the other pages built on the
+    # skeleton leave it out, so their text stays as designed.
+    if not page.floor16:
+        head, n = re.subn(r'/\* FLOOR16:BEGIN.*?FLOOR16:END \*/\n', '', head, count=1, flags=re.S)
+        assert n == 1, 'no 16px floor block in the skeleton to leave out'
     assert head.count('</style>') >= 1, 'no stylesheet to extend'
     css = read(os.path.join(page.parts_dir, 'page.css')).strip()
     head = head.replace('</style>', '\n' + css + '\n</style>', 1)
@@ -265,6 +393,10 @@ def check(html, page):
         out.append((label, bool(ok)))
 
     want(OPEN_MAIN in html, 'main landmark')
+    want(html.count('FLOOR16:BEGIN') == (1 if page.floor16 else 0),
+         'the 16px floor' if page.floor16 else 'no 16px floor')
+    want(html.count(NOINDEX) == (1 if page.noindex else 0),
+         'held back: noindex' if page.noindex else 'indexable')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')
     want(html.count(CLOSE_MAIN) == 1, 'one </main>')
     want('class="skip"' in html, 'skip link')

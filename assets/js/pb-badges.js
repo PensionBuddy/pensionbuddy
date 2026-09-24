@@ -35,13 +35,14 @@
   of the guess slider would earn it without the reader touching a control that
   drives a figure. Both are checked in the listener, not in a test.
 
-  THE GAMES GET NO STRIP AND NO LINK, AT ALL. Both games run inside
-  iframe#arcFrame on glossary.html, so an anchor with no target would navigate
-  the frame instead of the page. The 'note' view has no link path in it: the
-  code that builds an anchor is inside the strip branch and the note branch
-  returns before it. That is the enforcement. The static checks in
-  tests/games.test.py read the shipped file text and would not see a link this
-  file injected at runtime, so the rule cannot live there.
+  NO LINK, ANYWHERE (Run 21). The strip once ended, at 4/4, on a link to
+  book a call; the gamification check took it out, so collecting every paw
+  earns a line of text and nothing else. The games get no strip either: both
+  run inside iframe#arcFrame on glossary.html, where an anchor with no target
+  would navigate the frame instead of the page. Nothing in this file builds
+  an anchor now. The static checks in tests/games.test.py read the shipped
+  file text and would not see a link injected at runtime, so the rule cannot
+  live there.
 
   HOW THE TWO GAMES ARE HOOKED WITHOUT ENTERING THE GAME. Neither game
   publishes an "it ended" callback, and wrapping the exposed API would put
@@ -68,7 +69,6 @@
   var YES = 'Earned';
   var NO = 'Not yet';
   var DONE = '4/4 paws.';
-  var BOOK = 'Book your free call';
 
   /* the fixed set, in the order the strip prints them */
   var ORDER = ['run', 'battle', 'calculator', 'trace'];
@@ -114,19 +114,14 @@
     + 'white-space:nowrap;color:var(--ink-2,#54635F)}'
     + '.pb-badge-on .pb-state{color:var(--teal-700,#08655A)}'
     + '.pb-badges .pb-done{margin-top:14px;font-size:14px;font-weight:600}'
-    + '.pb-badges .pb-book{font-size:14px;'
-    + 'font-weight:600;color:var(--teal-700,#08655A);text-decoration:none;'
-    + 'border-bottom:2px solid var(--teal,#0C8175);padding-bottom:1px}'
-    + '.pb-badges .pb-ico{width:14px;height:14px;vertical-align:-2px;margin-left:4px;'
-    + 'fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}'
     + '.pb-trace{margin-top:30px}'
     + '.pb-trace h3{margin-bottom:8px}'
     + '.pb-trace .pb-badges{margin-top:22px}'
     + '.pb-trace .pb-tick{display:flex;align-items:flex-start;gap:12px;'
     + 'padding:12px 0;border-bottom:1px solid var(--line,#E7EBE9);'
     + 'font-size:15px;cursor:pointer}'
-    + '.pb-trace .pb-tick input{width:20px;height:20px;flex:0 0 auto;'
-    + 'margin-top:2px;accent-color:var(--teal,#0C8175)}'
+    + '.pb-trace .pb-tick input{width:24px;height:24px;flex:0 0 auto;'
+    + 'margin-top:0;accent-color:var(--teal,#0C8175)}'
     + '.pb-paw-note{margin-top:.6em;font-size:.82em;font-weight:600;'
     + 'color:var(--teal-700,#08655A)}'
     + '@media(max-width:480px){.pb-badge{flex-wrap:wrap}}'
@@ -234,7 +229,7 @@
      unreachable from a 'note' mount: render() returns above it. */
   function strip(mount) {
     var h = document.createElement('h3'), lead = document.createElement('p'),
-      list = document.createElement('ul'), done, link, i;
+      list = document.createElement('ul'), done, i;
     mount.textContent = '';
     h.textContent = HEAD;
     lead.className = 'pb-lead';
@@ -245,34 +240,13 @@
     mount.appendChild(lead);
     mount.appendChild(list);
     if (all().length !== ORDER.length) { return; }
-    /* one line: "4/4 paws. Book your free call" with the site's arrow drawn
-       as an inline svg, the way every other link on the site carries it */
+    /* all four: one line of text, and nothing else. Collecting every paw
+       is not rewarded with a call to book (Run 21: the booking link that
+       used to follow "4/4 paws." came out after the gamification check) */
     done = document.createElement('p');
     done.className = 'pb-done';
-    done.appendChild(document.createTextNode(DONE + ' '));
-    link = document.createElement('a');
-    link.className = 'pb-book';
-    link.setAttribute('href', 'booking.html');
-    link.appendChild(document.createTextNode(BOOK));
-    link.appendChild(arrow());
-    done.appendChild(link);
+    done.textContent = DONE;
     mount.appendChild(done);
-  }
-
-  function arrow() {
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    var line = document.createElementNS(NS, 'line');
-    var head = document.createElementNS(NS, 'polyline');
-    svg.setAttribute('class', 'pb-ico');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('aria-hidden', 'true');
-    line.setAttribute('x1', '5'); line.setAttribute('y1', '12');
-    line.setAttribute('x2', '19'); line.setAttribute('y2', '12');
-    head.setAttribute('points', '12 5 19 12 12 19');
-    svg.appendChild(line);
-    svg.appendChild(head);
-    return svg;
   }
 
   /* The note. One line inside a game's end panel, already written into the

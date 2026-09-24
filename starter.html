@@ -219,7 +219,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
 .foot-brand .logo{margin-bottom:15px}
 .foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
+.foot-col h2{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
 .foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
 .foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
@@ -316,6 +316,16 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .magnet-form input:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .magnet-form .note{font-size:12px;color:var(--ink-3);line-height:1.5}
 .magnet-form .note a{color:var(--ac-700);font-weight:600}
+/* MARKETING OPT-IN (.pb-optin). A request for figures or a guide is not
+   consent to anything else, so the optional emails are a separate box,
+   unticked, and recorded apart from the request (Run 20, A2). The form's
+   own input rule styles every input inside it as a pill-shaped text field,
+   so the checkbox is reset here rather than left to inherit that padding
+   and flex. */
+.pb-optin{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-2);cursor:pointer}
+.email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:24px;height:24px;min-width:24px;min-height:0;margin:-2px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
+.email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.magnet-form .pb-optin{margin-top:0}
 .magnet .ok{display:none;position:relative;background:var(--ac-50);border-radius:var(--r-lg);padding:24px;text-align:center}
 .magnet .ok.show{display:block}
 .magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
@@ -622,12 +632,12 @@ p,li{letter-spacing:-.004em}
 
 /* labels: the body face,sentence case,no tracking. v4 removed the caps-mono
    label system; the selectors stay so the sizes below still reach them. */
-.eyebrow,.kicker,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
+.eyebrow,.kicker,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,.tcard .who b,.foot-col h2,.step .sx,.tl .tt,.assure .at,.rt{
   font-family:var(--font);font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
 .eyebrow .pip{width:14px;height:1px;background:currentColor;opacity:.5;border-radius:0}
 .kicker{font-size:.685rem;color:var(--ink-2);font-weight:500}
-.foot-col h4{font-size:.66rem;color:var(--ink-2);font-weight:500}
+.foot-col h2{font-size:.66rem;color:var(--ink-2);font-weight:500}
 .hc-flabel,.hc-role{font-size:.66rem;}
 .tcard .who b{font-size:.66rem;}
 
@@ -1011,7 +1021,7 @@ body{font-size:1rem;line-height:1.7}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
 .eyebrow{font-size:.78rem;}
-.kicker,.hc-flabel,.hc-role,.trole,.tcard .who b,.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
+.kicker,.hc-flabel,.hc-role,.trole,.tcard .who b,.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.foot-col h2,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
 .nt-l{font-size:.7rem !important;}
 .nt-n{font-size:.86rem}
 .hc-fsub,.ec-note,.gap-note,.note,.hint,.disclosure,.infoadvice,.tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
@@ -1459,7 +1469,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    stay semibold because they are the product's live output.
    ============================================================ */
 .eyebrow,.kicker,.hc-flabel,.hc-role,.pain .pl,.proof .pl,.trole,.cl,
-.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
+.tcard .who b,.foot-col h2,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
 .tk-l,.nt-l,.dl-tag,.tag,
 .phone-role,.arc-now,.modebar .modelab,.qfield label,.qpersona legend,
 .promise .pt,.letterhead span,.relief-card .rt,.max-card .mt,.vs-col .vt,
@@ -1468,7 +1478,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .eyebrow{font-size:.85rem;font-weight:600;gap:0}
 .eyebrow .pip{display:none}
 .kicker{font-size:.85rem}
-.foot-col h4{font-size:.8rem !important;font-weight:600;color:var(--ink);margin-bottom:12px}
+.foot-col h2{font-size:.8rem !important;font-weight:600;line-height:1.24;color:var(--ink);margin-bottom:12px}
 .tk-l{font-size:.8rem !important;font-weight:500;color:rgba(255,255,255,.72)}
 .nt-l{font-size:.8rem !important;font-weight:500}
 .ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{
@@ -1633,6 +1643,10 @@ button{font-family:inherit}
 .pb-sa-ctl{margin-bottom:26px;max-width:420px}
 .pb-sa-row0{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .pb-sa-ctl label{font-size:.98rem;font-weight:600;color:var(--ink)}
+/* the slider fills its control, as every other widget's does (.pb-rw,
+   .pb-gapctl, .pb-dd). Without it the chart's and the 3 : 3 : 1 split's
+   sliders drew at Chrome's default 129px inside a 420px control (Run 20). */
+.pb-sa-ctl input[type=range]{display:block;width:100%}
 .pb-sa-val{font-size:1.05rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
 .pb-sa-rows{display:flex;flex-direction:column;gap:16px}
 .pb-sa-row{display:grid;grid-template-columns:8.4em minmax(0,1fr) 6.4em 7.2em;gap:14px;align-items:center}
@@ -1646,6 +1660,46 @@ button{font-family:inherit}
   font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-note{margin:22px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3);max-width:70ch}
+/* WARNINGS (.pb-warn, A4 in Run 20). The Consumer Protection Regulations
+   2025 (S.I. 81 of 2025) give these two sentences word for word, Reg 372 for
+   any illustration of an investment's figures and Reg 392 wherever its value
+   can fluctuate, and say how they appear (Reg 45): prominent, in a box, in
+   bold, no smaller than the text around them, and beside the figures they
+   are about (Reg 82), not in a footer. */
+.pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
+.pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
+.pb-warn p+p{margin-top:6px}
+.pb-sa .pb-warn{max-width:760px;margin:22px 0 0}
+/* IF YOU WAIT (.pb-wait, #8 in Run 20). The chart above, turned to the
+   reader's own age: the same monthly amount started now or after a wait,
+   and what the later start would need each month to catch up. The rows
+   and the note are the chart's own; the maths is assets/js/cost-of-waiting.js,
+   which the chart above now reads too. The name column is wider than the
+   chart's because "In 10 years, at 40" is. The markup carries the default. */
+.pb-wait{margin-top:56px;padding-top:40px;border-top:1px solid var(--line)}
+.pb-wait h3{margin-bottom:8px}
+.pb-wait-lead{margin:0 0 24px;color:var(--ink-2);max-width:60ch}
+.pb-wait-ctls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;max-width:760px}
+.pb-wait-ctls .pb-sa-ctl{max-width:none}
+.pb-wait .pb-sa-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em 7.2em}
+.pb-wait-say{margin:22px 0 0;font-size:1rem;line-height:1.6;color:var(--ink);max-width:60ch}
+.pb-wait-say b{font-weight:700;font-variant-numeric:tabular-nums}
+/* one spoken summary once the reader stops dragging, the calculators' 700ms
+   debounce: the sentence above changes on every frame of a drag */
+.pb-wait-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+@media(max-width:700px){
+  .pb-wait-ctls{grid-template-columns:1fr}
+  /* the chart's phone layout, restated: the wider name column above
+     outranks the chart's own media rule by specificity */
+  .pb-wait .pb-sa-row{grid-template-columns:minmax(0,1fr) auto}
+}
+/* TIME OUT (.pb-break, #15 in Run 20). The If-you-wait card's layout for a
+   break in payments: the chart's monthly amount paid from 30 to 66, with and
+   without one to ten years out, from PBWaiting.withBreak(). Under it, the
+   State Pension side: HomeCaring Periods, which only caring earns. The
+   markup carries the default. */
+.pb-break-sp{margin:22px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
+.pb-break-sp a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 /* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
    one scale: what you pay in, what your employer adds, what the State adds,
    in a year at this year's auto-enrolment rates (PBCompare.autoEnrolment,
@@ -1661,6 +1715,24 @@ button{font-family:inherit}
   .pb-sa-fig{grid-column:2;grid-row:1}
   .pb-sa-track{grid-column:1 / -1;grid-row:2}
   .pb-sa-less{grid-column:1 / -1;grid-row:3}
+}
+/* MY FUTURE FUND, WHAT HAPPENS WHEN (.pb-mff, #14 in Run 20). Under the
+   3 : 3 : 1 split: the dates and windows the Automatic Enrolment Retirement
+   Savings System Act 2024 sets, as a list with a line down it. The rates are
+   s.61's, the opt-out windows s.54(2), the refund s.63, pausing s.62 and
+   re-enrolment s.55. Plain markup, no script. */
+.pb-mff{max-width:760px;margin:40px 0 30px;padding-top:32px;border-top:1px solid var(--line)}
+.pb-mff h3{margin-bottom:18px}
+.pb-mff-list{list-style:none;margin:0;padding:0}
+.pb-mff-list li{position:relative;display:grid;grid-template-columns:14em minmax(0,1fr);gap:4px 18px;padding:0 0 16px 26px}
+.pb-mff-list li::before{content:"";position:absolute;left:0;top:.42em;width:12px;height:12px;border-radius:50%;background:var(--teal);box-sizing:border-box}
+.pb-mff-list li::after{content:"";position:absolute;left:5px;top:calc(.42em + 16px);bottom:2px;width:2px;background:var(--line-2)}
+.pb-mff-list li:last-child{padding-bottom:0}
+.pb-mff-list li:last-child::after{display:none}
+.pb-mff-list b{font-size:.98rem;font-weight:700;color:var(--ink);line-height:1.55}
+.pb-mff-list span{font-size:.98rem;line-height:1.55;color:var(--ink-2)}
+@media(max-width:700px){
+  .pb-mff-list li{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---- the hero chat plays out as it is scrolled past ----
@@ -2053,7 +2125,73 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="pb-sa-less" id="sa50Less">€265,746 less</span>
       </div>
     </div>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
     <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. Assumes 5% growth a year, contributions from that age to 66, and no pension to start with. Figures ignore charges and inflation.</p>
+  </div>
+  <div class="pb-sa pb-wait reveal" id="pbWait">
+    <h3>If you wait.</h3>
+    <p class="pb-wait-lead">The same monthly amount, from your own age: started now, or a few years from now.</p>
+    <div class="pb-wait-ctls">
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbWaitAge">Your age now</label><span class="pb-sa-val" id="pbWaitAgeV">30</span></div>
+        <input type="range" id="pbWaitAge" min="18" max="60" step="1" value="30" aria-valuetext="30 years old">
+      </div>
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbWaitYrs">If you start in</label><span class="pb-sa-val" id="pbWaitYrsV">5 years</span></div>
+        <input type="range" id="pbWaitYrs" min="1" max="10" step="1" value="5" aria-valuetext="5 years">
+      </div>
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row">
+        <span class="pb-sa-name" id="pbWaitNowName">Now, at 30</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
+        <span class="pb-sa-fig" id="pbWaitNow">€352,848</span>
+        <span class="pb-sa-less"></span>
+      </div>
+      <div class="pb-sa-row">
+        <span class="pb-sa-name" id="pbWaitLaterName">In 5 years, at 35</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbWaitFill" style="width:73.8350%"></i><i class="pb-sa-gap" id="pbWaitGap" style="left:73.8350%;width:26.1650%"></i></span>
+        <span class="pb-sa-fig" id="pbWaitLater">€260,525</span>
+        <span class="pb-sa-less" id="pbWaitLess">€92,322 less</span>
+      </div>
+    </div>
+    <p class="pb-wait-say" id="pbWaitSay">To end up with the same pot, starting at 35 would take about <b>€406 a month</b> instead of €300: €106 more each month.</p>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
+    <p class="pb-wait-sr" id="pbWaitSr" aria-live="polite" aria-atomic="true"></p>
+    <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. The monthly amount is the one set above. Assumes 5% growth a year, contributions to 66, and no pension to start with. Figures ignore charges, tax relief and inflation.</p>
+  </div>
+  <div class="pb-sa pb-wait pb-break reveal" id="pbBreak">
+    <h3>Time out.</h3>
+    <p class="pb-wait-lead">Time away from work, to care for someone, to study or to travel: what a break in payments does to the pot, and, for time spent caring, what can still count toward the State Pension.</p>
+    <div class="pb-wait-ctls">
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbBrAge">The break starts at</label><span class="pb-sa-val" id="pbBrAgeV">32</span></div>
+        <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old">
+      </div>
+      <div class="pb-sa-ctl">
+        <div class="pb-sa-row0"><label for="pbBrYrs">Years out</label><span class="pb-sa-val" id="pbBrYrsV">3 years</span></div>
+        <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years">
+      </div>
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row">
+        <span class="pb-sa-name">Paying in all along</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="pbBrFull">&euro;352,848</span>
+        <span class="pb-sa-less"></span>
+      </div>
+      <div class="pb-sa-row">
+        <span class="pb-sa-name" id="pbBrName">3 years out at 32</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbBrFill" style="width:85.0723%"></i><i class="pb-sa-gap" id="pbBrGap" style="left:85.0723%;width:14.9277%"></i></span>
+        <span class="pb-sa-fig" id="pbBrWith">&euro;300,176</span>
+        <span class="pb-sa-less" id="pbBrLess">&euro;52,672 less</span>
+      </div>
+    </div>
+    <p class="pb-wait-say" id="pbBrSay">A break of 3 years at 32 leaves the pot at 66 about <b>&euro;52,672 smaller</b>: 15% of it, from 8% of the payments, because early payments have the longest to grow. Paying about &euro;61 a month more from 35 would make it up.</p>
+    <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
+    <p class="pb-break-sp">For the State Pension, weeks spent caring full-time for a child under 12, or for an older child or an adult who needs an increased level of care, can be added to your record as HomeCaring Periods: up to 1,040 of them, twenty years&rsquo; worth. They count under the Total Contributions Approach once you have the 520 paid contributions the pension needs, and you claim them when you apply for it. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> counts them in.</p>
+    <p class="pb-wait-sr" id="pbBrSr" aria-live="polite" aria-atomic="true"></p>
+    <p class="pb-sa-note">Illustration only &middot; the value of investments can fall as well as rise. From 30 to 66, with the monthly amount set above. Assumes 5% growth a year and no pension to start with; the pot keeps growing through the break, with nothing paid in, and a break stops at 66. Figures ignore charges, tax relief and inflation. HomeCaring Periods: Citizens Information, &ldquo;HomeCaring Periods Scheme&rdquo;.</p>
   </div>
 </div></section>
 
@@ -2072,7 +2210,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="btn btn-light" href="pension-calculator.html">See what I could build <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
-      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=98adbe52"><img src="assets/img/product-pension-calculator.jpg?v=6f4efaff" width="2184" height="2217" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 520 Q470 520 425 420" class="pb-ann-under"/><path d="M560 520 Q470 520 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-under"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:52.2%">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:41.5%">The figures follow</span></span></span>
+      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=0d59f58e"><img src="assets/img/product-pension-calculator.jpg?v=6ed190c6" width="2184" height="2534" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 520 Q470 520 425 420" class="pb-ann-under"/><path d="M560 520 Q470 520 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-under"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:52.2%">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:41.5%">The figures follow</span></span></span>
       <figcaption class="pb-split-cap">Example figures.</figcaption>
     </figure>
   </div>
@@ -2118,6 +2256,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1.</p>
+  </div>
+  <div class="pb-mff reveal" id="pbMff">
+    <h3>Once you are enrolled: what happens when.</h3>
+    <ol class="pb-mff-list">
+      <li><b>Month 1</b><span>You are enrolled through payroll and contributions start. From 2026 to 2028 that is 1.5% of your gross pay from you, 1.5% from your employer and 0.5% from the State, on pay up to &euro;80,000 a year.</span></li>
+      <li><b>Months 7 and 8</b><span>You can opt out. What you paid in comes back to you. What your employer and the State paid stays in your pot, invested, until you can draw it at 66.</span></li>
+      <li><b>From month 7</b><span>You can pause contributions instead, for between one and two years. Once month 8 has passed you can no longer opt out, but you can still pause.</span></li>
+      <li><b>Two years after an opt-out</b><span>You are enrolled again automatically, if you are under 66 and still in a job without a pension through payroll.</span></li>
+      <li><b>2029</b><span>The rates double: 3% each from you and your employer, and 1% from the State. There is another window to opt out in months 7 and 8 after the rise, and opting out then refunds only the extra the rise added.</span></li>
+      <li><b>2032</b><span>4.5% each, and 1.5% from the State, with another window to opt out after it.</span></li>
+      <li><b>2035 on</b><span>6% each, and 2% from the State, with one more window to opt out after it.</span></li>
+    </ol>
+    <p class="pb-sa-note">My Future Fund started on 1 January 2026 for employees aged 23 to 59 earning &euro;20,000 or more a year who are not in a pension through payroll. The self-employed are not included. The Department of Social Protection reported more than 835,000 people in it on 14 September 2026. Sources: the Automatic Enrolment Retirement Savings System Act 2024, sections 54, 55, 61, 62 and 63; gov.ie; Citizens Information.</p>
   </div>
   <a class="btn btn-primary" href="broker-vs-autoenrolment.html">Compare the two side by side <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
@@ -2172,7 +2323,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="ffield"><input type="email" id="mEmail" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
         <button class="btn btn-acc" onclick="sendMagnet()" type="button">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       </div>
-      <p class="note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
+      <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
+      <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
       <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
     </div>
     <div class="ok" id="mOk" role="status" tabindex="-1">
@@ -2201,7 +2353,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="final-band"><div class="wrap"><div class="final pb-bleed reveal">
   <div class="paw-bg"><svg fill="#fff" viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>The best time to start is now</span>
   <h2>Let's get your<br>pension started.</h2>
   <p>Twenty relaxed minutes with Damian to take the first step. Free, no jargon, no pressure.</p>
   <a class="btn btn-light" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -2210,9 +2361,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
-    <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
-    <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
+    <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="my-pensions.html">All your pensions in one view</a><a href="glossary.html">Pension jargon buster</a></div>
+    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
@@ -2232,7 +2383,10 @@ function sendMagnet(){
            err.style.display='block'; input.focus(); return; }
   err.style.display='none';
 
-  var payload={email:e, request:'guide', source:document.title, page:location.href};
+  var payload={email:e, request:'guide', source:document.title, page:location.href,
+    /* the separate, unticked box under the form: asking for the guide is
+       not consent to anything else, so the two are recorded apart */
+    marketingConsent:!!(document.getElementById('mOptin')||{}).checked};
 
   var done=function(msg,isHtml,heading){
     var t=document.getElementById('mOkText');
@@ -2256,7 +2410,9 @@ function sendMagnet(){
       .catch(failed);
   }else{
     var body='Please send me the guide.%0D%0A%0D%0AMy email: '+
-      encodeURIComponent(payload.email)+'%0D%0AFrom: '+encodeURIComponent(payload.page);
+      encodeURIComponent(payload.email)+'%0D%0A'+
+      'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
+      'From: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Guide request')+'&body='+body;
     /* nothing has been sent by this page, so the panel must not say "on its way" */
@@ -2518,29 +2674,26 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-bars.js?v=29f2cb96"></script>
+<script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
 /* WHAT TIME DOES. One slider, one variable: the same monthly amount started
    at three ages, projected to 66. The compound growth is the pension
-   calculator's own project(), copied here rather than shared because it is
-   the only page outside the calculators that needs it and the calculators'
-   copy is held byte-identical by tests/render-diff. Growth is the
-   calculator's default assumption, 5% a year, converted to a monthly rate
-   the same way: Math.pow(1 + g/100, 1/12) - 1. Nothing here is a projection
-   for any particular reader, which is what the note under it says. */
+   calculator's own project() and its monthly rate, Math.pow(1 + g/100, 1/12)
+   - 1, at the calculator's default 5% a year. Both used to be copied inline
+   here; since Run 20 they come from assets/js/cost-of-waiting.js, which the
+   "If you wait" card below needs as well, so the page holds one copy. The
+   arithmetic is the same operations in the same order, and the figures were
+   compared for every value of the slider before and after. The calculators
+   keep their own copy, held byte-identical by tests/render-diff. Nothing
+   here is a projection for any particular reader, which is what the note
+   under it says. */
 (function () {
   var slider = document.getElementById('saMonthly');
-  if (!slider || !window.PBPage || !window.PBBars) return;
-  var euro = window.PBPage.euro, AGES = [30, 40, 50], RETIRE = 66, GROWTH = 5;
-  var mRate = Math.pow(1 + GROWTH / 100, 1 / 12) - 1;
-
-  function project(months, startPot, monthly, rate) {
-    var grownPot = startPot * Math.pow(1 + rate, months);
-    var grownContrib = rate > 0 ? monthly * ((Math.pow(1 + rate, months) - 1) / rate) : monthly * months;
-    return grownPot + grownContrib;
-  }
+  if (!slider || !window.PBPage || !window.PBBars || !window.PBWaiting) return;
+  var euro = window.PBPage.euro, W = window.PBWaiting, AGES = [30, 40, 50];
 
   function pots(monthly) {
-    return AGES.map(function (age) { return project((RETIRE - age) * 12, 0, monthly, mRate); });
+    return AGES.map(function (age) { return W.potFrom(age, W.PENSION_AGE, monthly, W.DEFAULT_GROWTH); });
   }
 
   var seen = false;
@@ -2572,6 +2725,124 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     seen = true;
     paint(true);
   });
+})();
+
+/* IF YOU WAIT (#8, Run 20). The chart above at the reader's own age: the
+   same monthly amount started now, or after a wait of one to ten years, and
+   what the later start would need each month to reach the same pot. All of
+   it is PBWaiting.costOfWaiting(); this only paints. The monthly amount is
+   the chart's slider, so one amount drives both. Once the later start is at
+   or past 66 there are no months left to pay in, and the card says so rather
+   than printing a figure. Its two sliders are wired on their own, like the
+   3 : 3 : 1 split's: wireRanges() above already took every slider on the
+   page with the chart's wording, and these listeners run after it, so each
+   slider ends with its own. */
+(function () {
+  var W = window.PBWaiting, P = window.PBPage;
+  var age = document.getElementById('pbWaitAge'), yrs = document.getElementById('pbWaitYrs');
+  var monthly = document.getElementById('saMonthly');
+  if (!W || !P || !age || !yrs || !monthly) return;
+  var euro = P.euro;
+  var $ = function (id) { return document.getElementById(id); };
+  var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var srTimer = 0;
+  var vt = {
+    pbWaitAge: function (v) { return v + ' years old'; },
+    pbWaitYrs: function (v) { return years(v); }
+  };
+
+  function paint(spoken) {
+    var a = +age.value, w = +yrs.value, m = +monthly.value;
+    var c = W.costOfWaiting({ age: a, wait: w, monthly: m });
+    $('pbWaitAgeV').textContent = a;
+    $('pbWaitYrsV').textContent = years(w);
+    $('pbWaitNowName').textContent = 'Now, at ' + a;
+    $('pbWaitLaterName').textContent = 'In ' + years(w) + ', at ' + c.startLater;
+    $('pbWaitNow').textContent = euro(c.now);
+    $('pbWaitLater').textContent = euro(c.later);
+    $('pbWaitLess').textContent = euro(c.less) + ' less';
+    var f = c.now > 0 ? c.later / c.now * 100 : 0;
+    $('pbWaitFill').style.width = f.toFixed(4) + '%';
+    $('pbWaitGap').style.left = f.toFixed(4) + '%';
+    $('pbWaitGap').style.width = (100 - f).toFixed(4) + '%';
+    var say = c.tooLate
+      ? 'By ' + c.startLater + ' there are no years left to pay in before pension age, ' +
+        W.PENSION_AGE + ', so there is no catch-up figure to show.'
+      : 'To end up with the same pot, starting at ' + c.startLater + ' would take about <b>' +
+        euro(c.catchUpMonthly) + ' a month</b> instead of ' + euro(m) + ': ' +
+        euro(c.extraMonthly) + ' more each month.';
+    $('pbWaitSay').innerHTML = say;
+    if (!spoken) return;
+    clearTimeout(srTimer);
+    srTimer = setTimeout(function () {
+      $('pbWaitSr').textContent = 'Now, at ' + a + ': ' + euro(c.now) + '. In ' + years(w) + ', at ' +
+        c.startLater + ': ' + euro(c.later) + ', ' + euro(c.less) + ' less. ' + say.replace(/<[^>]+>/g, '');
+    }, 700);
+  }
+
+  [age, yrs].forEach(function (el) {
+    el.addEventListener('input', function () { P.paintSlider(el, vt); paint(true); });
+    P.paintSlider(el, vt);
+  });
+  monthly.addEventListener('input', function () { paint(true); });
+  paint(false);
+})();
+
+/* TIME OUT (#15, Run 20). The chart's monthly amount paid from 30 to 66,
+   with and without a break of one to ten years. All of it is
+   PBWaiting.withBreak(); this only paints, as the card above does, and its
+   sliders are wired on their own for the same reason. A break that would run
+   past 66 stops there, so the second row names the years actually out. */
+(function () {
+  var W = window.PBWaiting, P = window.PBPage;
+  var at = document.getElementById('pbBrAge'), yrs = document.getElementById('pbBrYrs');
+  var monthly = document.getElementById('saMonthly');
+  if (!W || !W.withBreak || !P || !at || !yrs || !monthly) return;
+  var euro = P.euro;
+  var $ = function (id) { return document.getElementById(id); };
+  var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var srTimer = 0;
+  var vt = {
+    pbBrAge: function (v) { return v + ' years old'; },
+    pbBrYrs: function (v) { return years(v); }
+  };
+
+  function paint(spoken) {
+    var a = +at.value, n = +yrs.value, m = +monthly.value;
+    var b = W.withBreak({ breakAge: a, years: n, monthly: m });
+    $('pbBrAgeV').textContent = a;
+    $('pbBrYrsV').textContent = years(n);
+    $('pbBrName').textContent = years(b.yearsOut) + ' out at ' + b.breakStart;
+    $('pbBrFull').textContent = euro(b.full);
+    $('pbBrWith').textContent = euro(b.withBreak);
+    $('pbBrLess').textContent = euro(b.less) + ' less';
+    var f = b.full > 0 ? b.withBreak / b.full * 100 : 0;
+    $('pbBrFill').style.width = f.toFixed(4) + '%';
+    $('pbBrGap').style.left = f.toFixed(4) + '%';
+    $('pbBrGap').style.width = (100 - f).toFixed(4) + '%';
+    var potPct = Math.round(b.share * 100);
+    var payPct = Math.round(b.yearsOut / (W.PENSION_AGE - b.from) * 100);
+    var say = 'A break of ' + years(b.yearsOut) + ' at ' + b.breakStart + ' leaves the pot at ' + W.PENSION_AGE +
+      ' about <b>' + euro(b.less) + ' smaller</b>: ' + potPct + '% of it, from ' + payPct + '% of the payments' +
+      (potPct > payPct ? ', because early payments have the longest to grow.' : '.');
+    say += b.tooLate
+      ? ' The break runs to pension age, so there are no years after it to make that up.'
+      : ' Paying about ' + euro(b.extraMonthly) + ' a month more from ' + b.breakEnd + ' would make it up.';
+    $('pbBrSay').innerHTML = say;
+    if (!spoken) return;
+    clearTimeout(srTimer);
+    srTimer = setTimeout(function () {
+      $('pbBrSr').textContent = 'Paying in all along: ' + euro(b.full) + '. ' + years(b.yearsOut) + ' out at ' +
+        b.breakStart + ': ' + euro(b.withBreak) + ', ' + euro(b.less) + ' less. ' + say.replace(/<[^>]+>/g, '');
+    }, 700);
+  }
+
+  [at, yrs].forEach(function (el) {
+    el.addEventListener('input', function () { P.paintSlider(el, vt); paint(true); });
+    P.paintSlider(el, vt);
+  });
+  monthly.addEventListener('input', function () { paint(true); });
+  paint(false);
 })();
 </script>
 <script src="assets/js/autoenrolment.js?v=f94c659a"></script>
@@ -2684,7 +2955,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
-<script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
+<script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
 <script>
 /* first payslip to 66: the step nearest the middle of the screen sets the
    card. Without an observer the card keeps its final state. */

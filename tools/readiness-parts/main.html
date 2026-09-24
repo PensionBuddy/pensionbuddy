@@ -1,0 +1,52 @@
+<main id="main" tabindex="-1">
+<div class="phead"><div class="wrap">
+  <span class="eyebrow reveal"><span class="pip"></span>A 60-second check · six questions, no sign-up</span>
+  <h1 class="reveal" style="transition-delay:.06s">How ready is your pension? <span class="hl">Six questions to find out.</span></h1>
+  <p class="reveal" style="transition-delay:.12s">One question about your situation, then five about what you know and what you have done. You get a score out of 100, and a next step for every point you did not get. Nothing you answer leaves this page.</p>
+</div></div>
+
+<div class="wrap"><div class="rd-wrap">
+  <form class="panel rd-panel" id="rdForm" novalidate>
+    <fieldset class="rd-q" id="rdQ0">
+      <legend>1. Which sounds most like you?</legend>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="tracker"><span>I have pensions from old jobs to sort out.</span></label>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="starter"><span>I am starting out, or have not started a pension yet.</span></label>
+      <label class="rd-opt"><input type="radio" name="rdPersona" value="director"><span>I run a company and pay myself.</span></label>
+    </fieldset>
+    <div id="rdQs"></div>
+    <p class="rd-err" id="rdErr" role="alert"></p>
+    <div class="rd-nav"><button type="submit" class="btn btn-primary" id="rdGo">See my score <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    <noscript><p class="rd-note">This check needs JavaScript to add up your answers.</p></noscript>
+  </form>
+
+  <section class="panel rd-panel rd-result" id="rdResult" aria-labelledby="rdH" hidden>
+    <h2 id="rdH" tabindex="-1">Your score</h2>
+    <p class="rd-score"><span class="rd-n" id="rdN">0</span> <span class="rd-of">out of 100</span></p>
+    <div class="rd-scale" aria-hidden="true">
+      <div class="rd-bands"><i class="rd-b-early"></i><i class="rd-b-onway"></i><i class="rd-b-good"></i><b class="rd-mark" id="rdMark"></b></div>
+      <div class="rd-bl"><span>Early days</span><span>On the way</span><span>In good shape</span></div>
+    </div>
+    <p class="rd-zone" id="rdZone"></p>
+    <h3>What moves your score</h3>
+    <ol class="rd-moves" id="rdMoves"></ol>
+    <p class="rd-none" id="rdNone" hidden>Nothing to add: you gave the best answer to every question. Things change, so it is worth a look again next year.</p>
+    <div class="rd-nav"><button type="button" class="rd-again" id="rdAgain">Change my answers</button><a class="btn btn-primary" id="rdBook" href="booking.html">Talk it through with Damian, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+  </section>
+</div></div>
+
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice reveal">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This check is information only.</b> It is not a suitability assessment and not advice: it adds up your answers and does not look at your finances. Nothing you answer is sent anywhere or stored. If you book a call, the booking page only knows which of the three situations you picked.</p>
+  </div>
+</div></section>
+
+<section class="assume"><div class="wrap">
+  <h2>How the score works</h2>
+  <ul class="reveal">
+    <li>Each of the five questions after the first is worth up to 20 points: 20 for the best answer, 10 for a partial one, and 0 otherwise. The first question only chooses which five you are asked.</li>
+    <li>Only things you can find out or do are scored. Paying in on your own scores the same as paying in with an employer, and being self-employed scores the same as knowing what an employer would add.</li>
+    <li>0 to 39 is early days, 40 to 74 is on the way, and 75 to 100 is in good shape. The score is a checklist added up, not a measure of how much you have saved.</li>
+  </ul>
+</div></section>
+</main>

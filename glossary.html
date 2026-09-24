@@ -223,7 +223,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
 .foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;margin-bottom:44px}
 .foot-brand .logo{margin-bottom:15px}
 .foot-brand p{color:var(--ink-2);font-size:14.5px;max-width:280px}
-.foot-col h4{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
+.foot-col h2{font-weight:700;font-size:14px;letter-spacing:-0.01em;margin-bottom:15px;color:var(--ink)}
 .foot-col a{display:block;color:var(--ink-2);font-size:14.5px;margin-bottom:11px;transition:color .2s}
 .foot-col a:hover{color:var(--teal-700)}
 .disclosure{font-size:12.5px;color:var(--ink-3);line-height:1.7;border-top:1px solid var(--line);padding-top:26px}
@@ -622,12 +622,12 @@ p,li{letter-spacing:-.004em}
 
 /* labels: the body face,sentence case,no tracking. v4 removed the caps-mono
    label system; the selectors stay so the sizes below still reach them. */
-.eyebrow,.kicker,.strip-item,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.assure .at,.rt{
+.eyebrow,.kicker,.strip-item,.hc-flabel,.hc-role,.pain .pl,.trole,.cl,.tcard .who b,.foot-col h2,.step .sx,.tl .tt,.assure .at,.rt{
   font-family:var(--font);font-weight:500}
 .eyebrow{font-size:.715rem;font-weight:500;gap:12px}
 .eyebrow .pip{width:14px;height:1px;background:currentColor;opacity:.5;border-radius:0}
 .kicker{font-size:.685rem;color:var(--ink-2);font-weight:500}
-.foot-col h4{font-size:.66rem;color:var(--ink-2);font-weight:500}
+.foot-col h2{font-size:.66rem;color:var(--ink-2);font-weight:500}
 .hc-flabel,.hc-role{font-size:.66rem;}
 .tcard .who b{font-size:.66rem;}
 .strip-item{font-size:.665rem;font-weight:500}
@@ -1028,7 +1028,7 @@ body{font-size:1rem;line-height:1.7}
 
 /* --- 2. Small-label floor: nothing under 12px anywhere --- */
 .eyebrow{font-size:.78rem;}
-.kicker,.strip-item,.hc-flabel,.hc-role,.trole,.tcard .who b,.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.foot-col h4,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
+.kicker,.strip-item,.hc-flabel,.hc-role,.trole,.tcard .who b,.pain .pl,.proof .pl,.step .sx,.rt,.mt,.wt,.tk-l,.dl-tag,.foot-col h2,.cl,.tl .tt,.assure .at{font-size:.8rem !important}
 .nt-l{font-size:.7rem !important;}
 .nt-n{font-size:.86rem}
 .hc-fsub,.ec-note,.gap-note,.note,.hint,.disclosure,.infoadvice,.tick p,.tk-who,.legal p,.small{font-size:.86rem;line-height:1.62}
@@ -1455,7 +1455,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    stay semibold because they are the product's live output.
    ============================================================ */
 .eyebrow,.kicker,.hc-flabel,.hc-role,.pain .pl,.proof .pl,.trole,.cl,
-.tcard .who b,.foot-col h4,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
+.tcard .who b,.foot-col h2,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
 .tk-l,.nt-l,.dl-tag,.tag,
 .phone-role,.arc-now,.modebar .modelab,.qfield label,.qpersona legend,
 .promise .pt,.letterhead span,.relief-card .rt,.max-card .mt,.vs-col .vt,
@@ -1464,7 +1464,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .eyebrow{font-size:.85rem;font-weight:600;gap:0}
 .eyebrow .pip{display:none}
 .kicker{font-size:.85rem}
-.foot-col h4{font-size:.8rem !important;font-weight:600;color:var(--ink);margin-bottom:12px}
+.foot-col h2{font-size:.8rem !important;font-weight:600;line-height:1.24;color:var(--ink);margin-bottom:12px}
 .tk-l{font-size:.8rem !important;font-weight:500;color:rgba(255,255,255,.72)}
 .nt-l{font-size:.8rem !important;font-weight:500}
 .ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{
@@ -1660,6 +1660,16 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-dd input[type=range]{display:block;width:100%}
 .pb-dd input[type=range][hidden]{display:none}
 .pb-dd-out{margin:10px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
+/* INFLATION (.pb-infl, Run 20 #13) uses the drawdown widget's rows and output;
+   RISK RATING (.pb-risk, #16) is the 1 to 7 scale drawn as seven steps. */
+.pb-infl{max-width:420px;margin:14px 0 4px}
+.pb-infl input[type=range]{display:block;width:100%;margin-bottom:14px}
+.pb-infl input[type=range][hidden]{display:none}
+.pb-risk{list-style:none;display:flex;gap:4px;margin:12px 0 14px;padding:0;max-width:420px}
+.pb-risk li{flex:1 1 0;text-align:center;padding:6px 0;border-radius:4px;font-size:.9rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--teal-50)}
+.pb-risk li:nth-child(n+3){background:var(--teal-100)}
+.pb-risk li:nth-child(n+5){background:var(--amber-soft)}
+.pb-risk li::before{display:none}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
@@ -1774,9 +1784,13 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       <li><a href="#defined-benefit">Defined Benefit</a></li>
       <li><a href="#lump-sum">Lump sum</a></li>
       <li><a href="#fund-investment-growth">Fund / investment growth</a></li>
+      <li><a href="#inflation">Inflation</a></li>
+      <li><a href="#risk-rating">Risk rating</a></li>
       <li><a href="#state-pension">State Pension</a></li>
       <li><a href="#prsa">PRSA</a></li>
       <li><a href="#consolidation">Consolidation</a></li>
+      <li><a href="#personal-retirement-bond">Personal Retirement Bond</a></li>
+      <li><a href="#pension-adjustment-order">Pension adjustment order</a></li>
       <li><a href="#employer-contribution">Employer contribution</a></li>
       <li><a href="#corporation-tax-relief">Corporation tax relief</a></li>
       <li><a href="#standard-fund-threshold">Standard Fund Threshold</a></li>
@@ -1816,12 +1830,25 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     <div class="gterm reveal" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable, which is why it's worth checking before moving one.</p></div>
     <div class="gterm reveal" id="lump-sum"><h2>Lump sum</h2><p>At retirement you can usually take part of your pension as a tax-free lump sum, within limits set by Revenue. The rest provides your retirement income.</p></div>
     <div class="gterm reveal" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed, and returns can be negative in some years, which is why long-term thinking matters.</p></div>
+    <div class="gterm reveal" id="inflation"><h2>Inflation</h2><p>The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today&rsquo;s. The European Central Bank aims for inflation of 2% a year over the medium term.</p>
+<div class="pb-infl" id="pbInfl">
+  <div class="pb-dd-row"><label for="pbInflYrs">Years from now</label><span class="pb-dd-v" id="pbInflYrsV">30 years</span></div>
+  <input type="range" id="pbInflYrs" min="1" max="45" step="1" value="30" aria-valuetext="30 years" hidden>
+  <div class="pb-dd-row"><label for="pbInflRate">Inflation a year</label><span class="pb-dd-v" id="pbInflRateV">2%</span></div>
+  <input type="range" id="pbInflRate" min="1" max="5" step="0.5" value="2" aria-valuetext="2% a year" hidden>
+  <p class="pb-dd-out" id="pbInflOut">At 2% a year, what &euro;1,000 buys today would cost about <b>&euro;1,811</b> in 30 years. The other way round, &euro;1,000 then buys what <b>&euro;552</b> buys today.</p>
+</div></div>
+    <div class="gterm reveal" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest, printed on a fund&rsquo;s key information document. It measures how much the fund&rsquo;s value has swung up and down and, on the newer documents, the chance that the company behind it cannot pay. A higher number means bigger swings, both ways. It does not mean a better or a worse fund.</p>
+<ol class="pb-risk" aria-hidden="true"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li></ol>
+<p>Two funds with the same number are not always alike. The older scale for investment funds and the newer one use different bands, so a 4 on one is not a 4 on the other; the newer one also depends on how long the fund is meant to be held; ratings are worked out again as markets move; and some pension products are outside the newer rules altogether, so a provider&rsquo;s own scale may work differently again. Compare like with like, and ask what a number is based on.</p></div>
     <div class="gterm reveal" id="state-pension"><h2>State Pension</h2><p>The pension paid by the government to people who've enough PRSI contributions. It may be payable on top of your own pension, but for most people it isn't enough on its own to fund the retirement they'd like.</p></div>
     <div class="gterm reveal" id="prsa"><h2>PRSA<span class="abbr">Personal Retirement Savings Account</span></h2><p>A flexible, portable personal pension you own yourself. Useful if you don't have a workplace scheme, or want a pension that moves with you between jobs.</p></div>
     <div class="gterm reveal" id="consolidation"><h2>Consolidation</h2><p>Bringing several old pensions together into one plan so they're easier to manage. It often makes sense, but not always, since some older pensions carry guarantees worth keeping. Worth checking each one.</p></div>
+    <div class="gterm reveal" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your own name that holds the value of a pension from a job you have left, bought by that scheme&rsquo;s trustees. When and how you can take it follows the rules of the scheme it came from. It cannot be moved into a PRSA, and a PRSA cannot be moved into it. Before moving any old pension, it is worth knowing what the move would give up: a defined benefit scheme&rsquo;s promised pension, for one, becomes a transfer value.</p></div>
+    <div class="gterm reveal" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>An order a court can make on a judicial separation, a divorce, or the end of a civil partnership or of a relationship between qualified cohabitants, giving part of one person&rsquo;s pension to the other, or for a dependent child. Only a court can share a pension out: a separation agreement cannot. The court can instead leave the pensions as they are and take their value into account in other orders. A share given this way can be moved into a pension in the other person&rsquo;s own name, on request. It needs a solicitor, and specialist advice on what the pension is worth.</p></div>
     <div class="gterm reveal" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension on your behalf. It's effectively part of your pay, so not joining a scheme that offers it usually means leaving money on the table.</p></div>
     <div class="gterm reveal" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>For company directors, pension contributions made by the company can usually be offset against its profits, reducing its corporation tax bill, while building your retirement fund. One of the reasons director pensions are powerful.</p></div>
-    <div class="gterm reveal" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029, and the current figure is best confirmed in conversation.</p></div>
+    <div class="gterm reveal" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029: the <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows each year&rsquo;s figure and how much of it your pensions would use.</p></div>
     <div class="gterm reveal" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>A professional qualification for financial advisers in Ireland. It means the adviser has met the standard required to give regulated financial advice.</p></div>
   </div>
   <div class="infoadvice reveal" style="margin-top:8px">
@@ -1841,9 +1868,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
-    <div class="foot-col"><h4>Who we help</h4><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a></div>
-    <div class="foot-col"><h4>Tools</h4><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h4>Company</h4><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
+    <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="my-pensions.html">All your pensions in one view</a><a href="glossary.html">Pension jargon buster</a></div>
+    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
@@ -2170,7 +2197,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
-<script src="assets/js/pb-badges.js?v=323d0cc4"></script>
+<script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script>
 /* the term index: held under the nav (whose height changes as it scrolls),
    and the term in view marked */
@@ -2218,8 +2245,27 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   }
   r.hidden=false; r.addEventListener('input',paint); paint();
 })();
+/* inflation (#13 in Run 20): what EUR 1,000 today would cost after the years
+   chosen at the rate chosen, 2% by default (the ECB's medium-term aim), and
+   what EUR 1,000 then would buy in today's money. Nothing else is assumed. */
+(function(){
+  var y=document.getElementById('pbInflYrs'), r=document.getElementById('pbInflRate'); if(!y||!r) return;
+  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
+  var pc=function(v){return (Math.round(v*10)/10).toLocaleString('en-IE')+'%';};
+  function fill(el){el.style.setProperty('--fill',((el.value-el.min)/(el.max-el.min))*100+'%');}
+  function paint(){
+    var n=+y.value, rate=+r.value, f=Math.pow(1+rate/100,n), yrs=n+(n===1?' year':' years');
+    fill(y); fill(r);
+    y.setAttribute('aria-valuetext',yrs); r.setAttribute('aria-valuetext',pc(rate)+' a year');
+    document.getElementById('pbInflYrsV').textContent=yrs;
+    document.getElementById('pbInflRateV').textContent=pc(rate);
+    document.getElementById('pbInflOut').innerHTML='At '+pc(rate)+' a year, what \u20ac1,000 buys today would cost about <b>'+fmt(1000*f)+'</b> in '+yrs+'. The other way round, \u20ac1,000 then buys what <b>'+fmt(1000/f)+'</b> buys today.';
+  }
+  y.hidden=false; r.hidden=false;
+  y.addEventListener('input',paint); r.addEventListener('input',paint); paint();
+})();
 </script>
-<script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
+<script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>

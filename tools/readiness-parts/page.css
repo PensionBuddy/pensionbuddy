@@ -1,0 +1,57 @@
+/* ============================================================
+   THE READINESS CHECK (pension-readiness-check.html, Run 20 #4).
+   A short form and a result, one at a time. The panels are the
+   calculators' .panel, made static. The score is shown three ways
+   that do not depend on colour: the number, the zone's name in words,
+   and a marker on a scale whose three bands are labelled underneath.
+   ============================================================ */
+.rd-wrap{max-width:760px;padding:8px 0 24px}
+.rd-panel{position:static;top:auto}
+.rd-panel[hidden]{display:none}
+.rd-panel h2:focus{outline:none}
+.rd-q{border:0;margin:0 0 22px;padding:0;min-width:0}
+.rd-q legend{font-size:1.02rem;font-weight:700;color:var(--ink);margin:0 0 10px;padding:0}
+.rd-opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;margin:0 0 8px;border:1.5px solid var(--line-2);
+  border-radius:var(--r-md);background:var(--surface);cursor:pointer;font-size:.98rem;line-height:1.45;color:var(--ink)}
+.rd-opt input{flex:0 0 auto;width:24px;height:24px;margin:-1px 0 0;accent-color:var(--teal-700)}
+.rd-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
+.rd-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.rd-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.rd-err:not(:empty){margin:0 0 12px}
+.rd-nav{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:8px}
+.rd-nav .btn{width:auto}
+.rd-again{font:inherit;font-size:.95rem;font-weight:600;color:var(--ink);background:none;border:0;padding:10px 4px;min-height:44px;
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rd-again:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.rd-note{font-size:.9rem;color:var(--ink-2)}
+/* "How the score works" is an h2, the level after the page's h1, since the
+   result above it (which holds the h2s) starts hidden (Run 21); it keeps the
+   look of the calculators' .assume h3 */
+.assume h2{font-size:20px;line-height:1.24;letter-spacing:-.02em;font-weight:800;margin:0 0 20px}
+
+.rd-score{margin:6px 0 14px;color:var(--ink)}
+.rd-n{font-size:3.4rem;font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.rd-of{font-size:1rem;color:var(--ink-2)}
+.rd-scale{margin:0 0 16px}
+.rd-bands{position:relative;display:flex;height:14px;border-radius:99px;overflow:visible}
+.rd-bands i{display:block;height:100%}
+.rd-b-early{width:40%;background:var(--amber-soft);border-radius:99px 0 0 99px}
+.rd-b-onway{width:35%;background:var(--teal-100)}
+.rd-b-good{width:25%;background:var(--aqua);border-radius:0 99px 99px 0}
+.rd-mark{position:absolute;top:-5px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--ink)}
+.rd-bl{display:flex;margin-top:8px;font-size:.84rem;color:var(--ink-2)}
+.rd-bl span:nth-child(1){width:40%}
+.rd-bl span:nth-child(2){width:35%}
+.rd-bl span:nth-child(3){width:25%;text-align:right}
+.rd-zone{font-size:1.02rem;line-height:1.55;color:var(--ink);margin:0 0 20px}
+.rd-result h3{margin:0 0 10px}
+.rd-moves{margin:0 0 18px;padding-left:22px}
+.rd-moves li{margin:0 0 12px;font-size:.98rem;line-height:1.55;color:var(--ink)}
+.rd-moves .rd-pts{font-weight:700;font-variant-numeric:tabular-nums}
+.rd-moves a{color:var(--teal-700);font-weight:600}
+.rd-none{font-size:.98rem;color:var(--ink)}
+@media(max-width:480px){
+  .rd-bl{font-size:.76rem}
+  .rd-nav{flex-direction:column-reverse;align-items:stretch}
+  .rd-nav .btn{width:100%}
+}

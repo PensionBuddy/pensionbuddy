@@ -4,8 +4,8 @@
    tools/pagebuild.py guards and tools/sync-chrome.py copies: without script,
    "Calculator" is the plain link it always was. From 1201px, where the nav
    is a row rather than the phone drawer, hovering or focusing "Calculator"
-   opens a panel under it naming the five tools, each with one line in its
-   own page's words. It takes no width in the row. Escape closes it and
+   opens a panel under it naming the calculators, each with one line in its
+   own page's words (six since Run 20 added the charges calculator). It takes no width in the row. Escape closes it and
    returns focus to the link; leaving both closes it. */
 (function () {
   'use strict';
@@ -16,6 +16,7 @@
   var TOOLS = [
     ['pension-calculator.html', 'Pension calculator', 'See what your pension could pay you, including what Revenue adds back through tax relief.'],
     ['director-calculator.html', 'Director calculator', 'If you run a company: what it could contribute, and the corporation tax that could save.'],
+    ['pension-fees-calculator.html', 'Pension charges calculator', 'What your plan\u2019s charges take out of your pot by retirement.'],
     ['broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'Auto-enrolment against a personal pension, for your own salary and age.'],
     ['state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension leaves you to find.'],
     ['state-pension-entitlement.html', 'State Pension entitlement check', 'What the State Pension would actually pay you.']
