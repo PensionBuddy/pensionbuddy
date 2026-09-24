@@ -8,7 +8,10 @@
    a link sets those controls in page order and fires the same input and
    click events a reader would, so every figure is the page's own work
    through its own handlers; nothing here calculates anything. The guess
-   slider is never included. Without script there is no button. */
+   slider is never included, and neither is the email form's marketing
+   opt-in (.pb-optin): consent is the reader's own choice, made on their own
+   screen, and a link that ticked or unticked it for whoever opened it would
+   be making that choice for them. Without script there is no button. */
 (function () {
   'use strict';
   var wrap = document.querySelector('.calc-wrap'), results = document.querySelector('.results');
@@ -16,7 +19,7 @@
 
   function ranges() {
     return [].slice.call(wrap.querySelectorAll('input[type=range], input[type=checkbox]'))
-      .filter(function (el) { return el.id && el.id !== 'pbGuessRange' && !el.closest('.pb-guess'); });
+      .filter(function (el) { return el.id && el.id !== 'pbGuessRange' && !el.closest('.pb-guess') && !el.closest('.pb-optin'); });
   }
   function pressed() {
     return [].slice.call(wrap.querySelectorAll('button.on[id], button[aria-pressed="true"][id], [role="tab"][aria-selected="true"][id]'))

@@ -316,6 +316,16 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .magnet-form input:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .magnet-form .note{font-size:12px;color:var(--ink-3);line-height:1.5}
 .magnet-form .note a{color:var(--ac-700);font-weight:600}
+/* MARKETING OPT-IN (.pb-optin). A request for figures or a guide is not
+   consent to anything else, so the optional emails are a separate box,
+   unticked, and recorded apart from the request (Run 20, A2). The form's
+   own input rule styles every input inside it as a pill-shaped text field,
+   so the checkbox is reset here rather than left to inherit that padding
+   and flex. */
+.pb-optin{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-2);cursor:pointer}
+.email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:18px;height:18px;min-width:18px;min-height:0;margin:1px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
+.email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.magnet-form .pb-optin{margin-top:0}
 .magnet .ok{display:none;position:relative;background:var(--ac-50);border-radius:var(--r-lg);padding:24px;text-align:center}
 .magnet .ok.show{display:block}
 .magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
@@ -1900,7 +1910,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="ffield"><input type="email" id="mEmail" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
         <button class="btn btn-acc" onclick="sendMagnet()" type="button">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       </div>
-      <p class="note">No spam, unsubscribe any time. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
+      <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
+      <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
       <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
     </div>
     <div class="ok" id="mOk" role="status" tabindex="-1">
@@ -1960,7 +1971,10 @@ function sendMagnet(){
            err.style.display='block'; input.focus(); return; }
   err.style.display='none';
 
-  var payload={email:e, request:'guide', source:document.title, page:location.href};
+  var payload={email:e, request:'guide', source:document.title, page:location.href,
+    /* the separate, unticked box under the form: asking for the guide is
+       not consent to anything else, so the two are recorded apart */
+    marketingConsent:!!(document.getElementById('mOptin')||{}).checked};
 
   var done=function(msg,isHtml,heading){
     var t=document.getElementById('mOkText');
@@ -1984,7 +1998,9 @@ function sendMagnet(){
       .catch(failed);
   }else{
     var body='Please send me the guide.%0D%0A%0D%0AMy email: '+
-      encodeURIComponent(payload.email)+'%0D%0AFrom: '+encodeURIComponent(payload.page);
+      encodeURIComponent(payload.email)+'%0D%0A'+
+      'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
+      'From: '+encodeURIComponent(payload.page);
     window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
       '?subject='+encodeURIComponent('Guide request')+'&body='+body;
     /* nothing has been sent by this page, so the panel must not say "on its way" */

@@ -6,6 +6,61 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 20 — 2026-09-24 · The next-step features (ranked build list)
+
+Damian's brief: "Pensionbuddy.ie: Missing Features & Content — Ranked Build
+List (Sept 2026)". Its thesis is that the site needs a way to take action and
+follow up rather than another calculator. Built in its own worktree,
+`.claude/worktrees/next-step-features`, on branch `claude/next-step-features`,
+from `ebe1cbe`: the newest commit of any worktree (the two most recently used
+worktrees both hold it) and `main` = `origin/main`. **Not pushed, not merged.**
+
+Every item is gated before its commit: `tests/run-tests.py`, the build, runner
+and games suites, `stamp-images.py --check`, `sync-chrome.py --check`, a
+rebuild with no diff, render-diff against HEAD (load, axes and corners, event
+path) whenever a calculator page's script is touched, and `verify.py` at
+375 / 1200 / 1440 with screenshots on every page the item changes. Facts that
+go on a page were checked against primary sources first (Revenue, the Pensions
+Authority, the Central Bank, gov.ie, the Pensions Council's own report); where
+a figure or a legal sentence is Damian's to give, the page carries a
+`needs-input` placeholder and it is listed under NEEDS DAMIAN INPUT below.
+
+## What the brief assumed, and what was actually here
+
+| Assumed | Actually |
+|---|---|
+| "Email or save your results" is missing | Email capture exists on the two hand-written calculators and as a guide request on tracker, starter and director, but `LEAD_ENDPOINT` is empty on every page, so each one hands the visitor a pre-filled email to hello@pensionbuddy.ie (A4 still asks whether that address is real). Save-and-resume half exists: run 19's share link (#30) carries the inputs after the #. |
+| Marketing consent is separate from calculator data | It was not. All five email forms said "No spam, unsubscribe any time" over a single email field, so asking for figures read as joining a list. Fixed first (A2). |
+| The paw badges and games might reward booking or contributing | Neither does. Badges are earned by using a tool; the games award nothing for booking. One thing for compliance: collecting all four paws shows "4/4 paws. Book your free call", a booking link at the completion moment, which is already on Damian's open list from the gamification branch. |
+| Reg 32 commission disclosure "if it isn't live yet" | Not live. terms.html says "A full summary of fees and any commission arrangements is available on request." |
+| #8 "cost of waiting" is new | The pension and director calculators already carry a "The cost of waiting" card (`#waitOut`). #8 is built as the start-age comparison the card does not do. |
+| #2 fills "the need bar on your existing gap chart" | That is the home page's gap chart (`#pbGap`) and run 19's need slider (`#pbNeed`). |
+| Run 19's table is current | It is not quite: #8, #11, #2, #21 and #25, skipped or not built there, were built afterwards on `claude/fixes-after-audit-2` (`bbc0f9d`, `b3febf2`, `bf35e0d`, `4624c72`), with the PRSI and CSO fixes (`a1aabeb`, `09a6a13`). All of that is in this run's base. |
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| A2 | Marketing consent kept apart from the request | done: a separate, unticked "Also send me occasional emails…" box on all five email forms; the request and the choice travel apart (`marketingConsent` in the JSON, "Occasional emails: yes, please / no" in the fallback email); the notes no longer say "No spam, unsubscribe any time" over a request; the share link never carries the box; privacy notice placeholder R20-A2 | — |
+| A3 | Gamification check | report only: see the table above | — |
+
+## NEEDS DAMIAN INPUT from this run
+
+- **R20-A2, privacy.html:** a sentence for "How we use it" on the optional
+  emails: who gets them (only people who tick the box), what they are, and how
+  to stop them. Placeholder in the list.
+
+## New copy needing Damian's sign-off
+
+- A2: box label "Also send me occasional emails about pension deadlines and
+  rule changes. Optional, and you can unsubscribe at any time." Note, replacing
+  "No spam, unsubscribe any time.": "We use your email to reply to this
+  request, and for nothing else unless you tick the box." (the rest of each
+  note is unchanged). Fallback email line "Occasional emails: yes, please" or
+  "Occasional emails: no".
+
+---
+
 # Run 19 — 2026-09-22/23 · Overnight build of the interactive audit
 
 Damian's overnight brief. Branch `claude/interactive-audit-2-efbbbb`, pushed as

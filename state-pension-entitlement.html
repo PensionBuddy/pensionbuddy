@@ -274,6 +274,16 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap input{flex:1;min-width:0;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:13px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
 .email-cap input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
 .email-cap .ec-note{font-size:11.5px;color:var(--ink-3);margin-top:10px;line-height:1.5}
+/* MARKETING OPT-IN (.pb-optin). A request for figures or a guide is not
+   consent to anything else, so the optional emails are a separate box,
+   unticked, and recorded apart from the request (Run 20, A2). The form's
+   own input rule styles every input inside it as a pill-shaped text field,
+   so the checkbox is reset here rather than left to inherit that padding
+   and flex. */
+.pb-optin{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-2);cursor:pointer}
+.email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:18px;height:18px;min-width:18px;min-height:0;margin:1px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
+.email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.magnet-form .pb-optin{margin-top:0}
 .email-cap .ec-note a{color:var(--teal-700);font-weight:600}
 .email-cap .ec-ok{display:none;align-items:center;gap:9px;color:var(--teal-700);font-weight:600;font-size:14.5px;margin-top:4px}
 .email-cap .ec-ok.show{display:flex}
@@ -2902,7 +2912,7 @@ render();
 </script>
 <script src="assets/js/pb-guess.js?v=3213e251"></script>
 <script src="assets/js/pb-peek.js?v=eb145ab4"></script>
-<script src="assets/js/pb-share.js?v=e795eb76"></script>
+<script src="assets/js/pb-share.js?v=e3302e5a"></script>
 <script src="assets/js/pb-badges.js?v=323d0cc4"></script>
 <script src="assets/js/pb-navmenu.js?v=84a3b19a"></script>
 </body>
