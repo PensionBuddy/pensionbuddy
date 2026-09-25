@@ -267,7 +267,49 @@ def run():
     shutil.rmtree(tmp, ignore_errors=True)
 
     # ----------------------------------------------------------------- 12
-    # Run 25: the lead forms, as Netlify reads them at deploy. Netlify finds a
+    # Run 26. The review line and the reason to book are one string each in
+    # pagebuild, and their CSS is one block every page carries. The guard is
+    # clean on the tree as it ships, and each mutant below is one way a page
+    # could drift: every one must be named, and only on the page it touched.
+    eq('12. the trust components are clean on the tree as it ships', pagebuild.trust_drift(sources), {})
+    eq('12. the review line is on the ten pages the brief names',
+       sorted(pagebuild.reviewed_pages()),
+       sorted(['pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
+               'pension-fees-calculator.html', 'my-pensions.html', 'state-pension-reality-check.html',
+               'state-pension-entitlement.html', 'director-pension-rules.html', 'standard-fund-threshold.html',
+               'pia.html']))
+    eq('12. and on neither held page', [p for p in ('find-my-pension.html', 'pension-readiness-check.html')
+                                        if pagebuild.REVIEWED in sources[p]], [])
+    trust_mutants = [
+        ('a built page lost its review line', 'pia.html', pagebuild.REVIEWED, '', 'reviewed'),
+        ('a hand-written calculator changed the date', 'director-calculator.html',
+         'Last reviewed September 2026', 'Last reviewed October 2026', 'reviewed'),
+        ('a page that should not carry it gained it', 'terms.html', '<main', pagebuild.REVIEWED + '<main', 'reviewed'),
+        ('a reason line reworded', 'index.html', 'Free, 20 minutes, no obligation.', 'Free, 30 minutes, no obligation.', 'reason'),
+        ('the recipe edited on one page', 'glossary.html', 'body p.pb-why{margin:10px 0 0', 'body p.pb-why{margin:12px 0 0', 'trust-css'),
+        ('the recipe missing from one page', 'booking.html', pagebuild.TRUST_OPEN, '/* TRUST-GONE', 'trust-css'),
+    ]
+    for label, page, find, repl, kind in trust_mutants:
+        m = dict(sources)
+        assert find in m[page], label
+        m[page] = m[page].replace(find, repl, 1)
+        eq('12. %s: named, on that page only' % label, sorted(set(findings(pagebuild.trust_drift(m)))), [(page, kind)])
+
+    # ----------------------------------------------------------------- 13
+    # Run 26. The home page's gap chart: its markup is the finished chart, so
+    # a reader without JavaScript sees the real figures, and the script never
+    # writes a euro zero. tests/gap-band.py proves the rest on real frames.
+    home = sources['index.html']
+    chart = home[home.index('id="pbGap"'):home.index('class="pb-src', home.index('id="pbGap"'))]
+    eq('13. the gap chart carries its three figures in the markup',
+       re.findall(r'data-pb-count="(\d+)">&euro;([\d,]+)<', chart),
+       [('40860', '40,860'), ('25296', '25,296'), ('15564', '15,564')])
+    script = home[home.index('/* the gap: bars grow'):home.index('/* the gap, your own')]
+    eq('13. the count-up script never writes a zero figure', 'fmt(0)' in script, False)
+    eq('13. and arms the bars without a transition', "classList.add('pb-still','pb-armed')" in script, True)
+
+    # ----------------------------------------------------------------- 14
+    # Run 27: the lead forms, as Netlify reads them at deploy. Netlify finds a
     # form by name in the static HTML and stores only the fields that form
     # declares, so each must be in the source, not built by script, with a
     # hidden form-name and the honeypot, under a name no other page uses.
@@ -298,27 +340,28 @@ def run():
         for form in parser.forms:
             if form['attrs'].get('data-netlify') == 'true':
                 netlify.setdefault(form['attrs'].get('name'), []).append((name, form))
-    eq('12. the seven lead forms, each on its page', sorted((n, [p for p, _ in v]) for n, v in netlify.items()),
+    eq('14. the seven lead forms, each on its page', sorted((n, [p for p, _ in v]) for n, v in netlify.items()),
        sorted((n, [p]) for p, n in LEAD_FORMS.items()))
     for form_name, where in sorted(netlify.items()):
         page, form = where[0]
         names = [f[1] for f in form['fields']]
-        eq('12. %s: posts to Netlify with the honeypot' % form_name,
+        eq('14. %s: posts to Netlify with the honeypot' % form_name,
            (form['attrs'].get('method'), form['attrs'].get('netlify-honeypot')), ('POST', 'bot-field'))
-        eq('12. %s: a hidden form-name carrying its own name' % form_name,
+        eq('14. %s: a hidden form-name carrying its own name' % form_name,
            [f for f in form['fields'] if f[1] == 'form-name'], [('hidden', 'form-name', form_name)])
-        eq('12. %s: one honeypot field, not hidden by type' % form_name,
+        eq('14. %s: one honeypot field, not hidden by type' % form_name,
            [f[0] for f in form['fields'] if f[1] == 'bot-field'], ['input'])
-        eq('12. %s: an email field' % form_name, 'email' in names, True)
+        eq('14. %s: an email field' % form_name, 'email' in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
-        eq('12. %s: no field declared twice' % form_name, len(single), len(set(single)))
+        eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
     finder = read('assets/js/pension-finder.js')
     m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
-    eq('12. the finder declares exactly what PBFinder.fields() sends',
+    eq('14. the finder declares exactly what PBFinder.fields() sends',
        re.findall(r"'([a-z_]+)'", m.group(1)) if m else None, pagebuild.FINDER_FIELDS)
 
 
-# Run 25: every Netlify form on the site, by page. Adding a lead form means
+
+# Run 27: every Netlify form on the site, by page. Adding a lead form means
 # adding it here, and telling Damian its name for the notification settings.
 LEAD_FORMS = {
     'booking.html': 'booking',

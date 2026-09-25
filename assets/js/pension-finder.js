@@ -198,7 +198,7 @@
     };
   }
 
-  /* What Netlify Forms receives (Run 25): the trace as one flat text value
+  /* What Netlify Forms receives (Run 27): the trace as one flat text value
      per field. Netlify keeps only the fields the page's static form declares,
      so FIELDS is exactly the hidden fields of the form in
      tools/finder-parts/main.html, in that order; pagebuild checks the built

@@ -66,7 +66,10 @@ HIDE = ('nav,footer,.announce,.skip,.phead,.deadline,#deadlineBand,.assume,secti
         # run 19's additions below the headline: the relief limit card, the
         # workings and the share link, left out like the boost card to keep
         # the pictures close to square
-        '.chart-card:has(.pb-lad),.pb-work,.pb-share,.pb-peek'
+        '.chart-card:has(.pb-lad),.pb-work,.pb-share,.pb-peek,'
+        # run 25: the reason to book under a booking link, a line about the
+        # call rather than the tool
+        '.pb-why'
         '{display:none!important}')
 SETTLE = ('html{scroll-behavior:auto}'
           '.reveal,.js-reveal .reveal{opacity:1!important;transform:none!important}'

@@ -69,7 +69,7 @@ JS_PAT = re.compile(r'(<script src=")(assets/js/[A-Za-z0-9_.-]+\.js)(\?v=[0-9a-f
 # having to remember to ask. check() asserts that below.
 SHARED_RUNTIME = 'assets/js/calc-page.js'
 
-# Run 25: the fields assets/js/pension-finder.js FIELDS sends to Netlify Forms.
+# Run 27: the fields assets/js/pension-finder.js FIELDS sends to Netlify Forms.
 # Netlify stores only the fields a form declares in the HTML it reads at
 # deploy, so the built finder must declare every one; tests/build.test.py
 # reads FIELDS out of the module and holds the two lists together.
@@ -138,10 +138,24 @@ def versioned(rel):
 # already use. verify.py fails any page that links to a page carrying it.
 NOINDEX = '<meta name="robots" content="noindex">'
 
+# Run 26. Two shared components, each one string here, styled by the TRUST
+# block of CSS that every page carries byte for byte. REVIEWED sits at the
+# foot of the page header on every calculator, the State Pension pages, the
+# director rules, the SFT and the PIA page: assemble() puts it into each
+# record with reviewed=True, and the two hand-written calculators carry it by
+# hand. REASON sits next to a booking call to action whose own block gives no
+# reason to book; docs/STATUS.md, Run 26, lists every call to action and which
+# reason it has. trust_drift(), at the end of this file, is the guard.
+REVIEWED = ('<p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, '
+            'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
+REASON = '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
+REVIEWED_BY_HAND = ('pension-calculator.html', 'director-calculator.html')
+TRUST_OPEN, TRUST_CLOSE = '/* TRUST:BEGIN', '/* TRUST:END */\n'
+
 
 class Page(object):
     def __init__(self, out, parts, title, desc, modules, keep,
-                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False, floor16=False):
+                 page_js='page.js', nav=None, fonts=None, checks=(), noindex=False, floor16=False, reviewed=False):
         self.out = out                # file written at the repository root
         self.parts = parts            # directory under tools/
         self.title = title            # <title>, og:title
@@ -154,6 +168,7 @@ class Page(object):
         self.checks = checks          # (needle, label) pairs particular to this page
         self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
         self.floor16 = floor16        # a calculator: keeps the skeleton's 16px floor on the text in <main>
+        self.reviewed = reviewed      # carries REVIEWED at the foot of its page header
 
     @property
     def parts_dir(self):
@@ -174,6 +189,7 @@ PAGES = {
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
         floor16=True,
+        reviewed=True,
         checks=(('vs-card', 'comparison component'),),
     ),
     'state-pension': Page(
@@ -186,6 +202,7 @@ PAGES = {
         # both controls are primary, so nothing folds into "More options"
         keep=['contribs', 'age'],
         floor16=True,
+        reviewed=True,
         nav='state-pension-reality-check.html',
         checks=(('id="contribs"', 'contributions slider'),
                 ('id="lsRows"', 'living standards bars'),
@@ -204,6 +221,7 @@ PAGES = {
         # all five controls are primary, so nothing folds into "More options"
         keep=['birth', 'entry', 'paid', 'credited', 'homecaring'],
         floor16=True,
+        reviewed=True,
         # not a nav page: reached from the reality check, the footer and the sitemap
         nav=None,
         checks=(('id="birth"', 'birth year slider'),
@@ -256,6 +274,7 @@ PAGES = {
         modules=['assets/js/pension-fees.js'],
         keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
         floor16=True,
+        reviewed=True,
         nav=None,
         checks=(('id="feeChart"', 'the chart'),
                 ('class="pb-warn"', 'the prescribed warnings'),
@@ -292,6 +311,7 @@ PAGES = {
         modules=['assets/js/sft.js'],
         keep=['total', 'year', 'lump'],
         floor16=True,
+        reviewed=True,
         nav=None,
         checks=(('id="sftStrip"', 'the year-by-year strip'),
                 ('Rules as at 24 September 2026', 'the date the rules were checked'),
@@ -309,6 +329,7 @@ PAGES = {
         modules=['assets/js/director-topics.js'],
         keep=[],
         nav=None,
+        reviewed=True,
         checks=(('id="drForm"', 'the four questions'),
                 ('Rules as at 24 September 2026', 'the date the rules were checked'),
                 ('Topics to discuss, not advice', 'the list says what it is')),
@@ -324,6 +345,7 @@ PAGES = {
         modules=['assets/js/pots.js'],
         keep=[],
         nav=None,
+        reviewed=True,
         checks=(('id="ptForm"', 'the list'),
                 ('id="ptPrint"', 'print or save'),
                 ('Nothing you type is sent or stored', 'said on the page')),
@@ -343,6 +365,7 @@ PAGES = {
         modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
         keep=['amount', 'years', 'growth', 'piaRate'],
         floor16=True,
+        reviewed=True,
         nav=None,
         checks=(('Proposed · as at 25 September 2026', 'the date the proposal was checked'),
                 ('class="pb-warn"', 'the prescribed warnings'),
@@ -419,6 +442,11 @@ def assemble(page):
                   "KEEP = [%s]" % ','.join("'%s'" % k for k in page.keep), tail, count=1)
 
     body = read(os.path.join(page.parts_dir, 'main.html')).strip()
+    if page.reviewed:
+        # the last line of the page header, whatever the part put above it
+        body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
+                          lambda m: m.group(1) + '\n  ' + REVIEWED + m.group(2), body, count=1, flags=re.S)
+        assert n == 1, 'no page header to put the review line in'
     return stamp_html(head + body + tail)
 
 
@@ -434,6 +462,9 @@ def check(html, page):
          'the 16px floor' if page.floor16 else 'no 16px floor')
     want(html.count(NOINDEX) == (1 if page.noindex else 0),
          'held back: noindex' if page.noindex else 'indexable')
+    want(html.count(REVIEWED) == (1 if page.reviewed else 0),
+         'review line' if page.reviewed else 'no review line')
+    want(html.count(TRUST_OPEN) == 1, 'the trust recipe')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')
     want(html.count(CLOSE_MAIN) == 1, 'one </main>')
     want('class="skip"' in html, 'skip link')
@@ -762,6 +793,43 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             new = new[:f[0]] + foot + new[f[1]:]
         if new != text:
             out[page] = new
+    return out
+
+
+# ============================================================================
+# THE TRUST COMPONENTS (Run 26). The review line on exactly the pages that
+# should carry it and on no other; every .pb-reviewed and .pb-why written as
+# the one string at the top of this file; and the TRUST block of CSS on every
+# page, byte for byte the skeleton's. Like chrome_drift(), it never raises:
+# {page: [(kind, detail)]}, and a clean tree is {}.
+# ============================================================================
+def reviewed_pages():
+    return REVIEWED_BY_HAND + tuple(sorted(p.out for p in PAGES.values() if p.reviewed))
+
+
+def trust_block(text):
+    at = text.find(TRUST_OPEN)
+    end = text.find(TRUST_CLOSE, at) if at >= 0 else -1
+    return text[at:end + len(TRUST_CLOSE)] if end >= 0 else None
+
+
+def trust_drift(sources, skeleton=os.path.basename(SKELETON)):
+    want = trust_block(sources.get(skeleton, ''))
+    carry = set(reviewed_pages())
+    out = {}
+    for name, text in sorted(sources.items()):
+        fs = []
+        if want is None or text.count(TRUST_OPEN) != 1 or trust_block(text) != want:
+            fs.append(('trust-css', "the TRUST block is missing or differs from the skeleton's"))
+        n = text.count(REVIEWED)
+        if n != (1 if name in carry else 0):
+            fs.append(('reviewed', 'the review line appears %d time(s), %s' % (n, 'want 1' if name in carry else 'want none')))
+        if text.count('class="pb-reviewed') != n:
+            fs.append(('reviewed', 'a review line is not pagebuild.REVIEWED'))
+        if text.count('class="pb-why"') != text.count(REASON):
+            fs.append(('reason', 'a reason line is not pagebuild.REASON'))
+        if fs:
+            out[name] = fs
     return out
 
 

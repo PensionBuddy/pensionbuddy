@@ -259,7 +259,7 @@ AUDIT_JS = r"""
     const vis=el=>{if(!el)return false;const cs=getComputedStyle(el);return cs.display!=='none'&&cs.visibility!=='hidden'&&el.getBoundingClientRect().height>0};
     const g={formExists:!!form,embedVisibleBeforeSubmit:vis(embedWrap)};
     if(form){
-      // the Netlify honeypot (Run 25) is a field for bots, hidden from people: not one of the form's fields
+      // the Netlify honeypot (Run 27) is a field for bots, hidden from people: not one of the form's fields
       const fields=$$('#qualForm input,#qualForm select,#qualForm textarea').filter(i=>i.type!=='hidden'&&i.name!=='bot-field');
       g.fields=fields.map(i=>i.id||i.name||i.type);
       g.unlabelled=fields.filter(i=>!(i.labels&&i.labels.length)&&!i.getAttribute('aria-label')&&!i.getAttribute('aria-labelledby')).map(i=>i.id||i.type);
@@ -470,6 +470,10 @@ def static_checks(pages):
     # runs inside the iframe on glossary.html, so they have no nav or foot-top
     # to drift and asking would report every one of them as a structure fault.
     drift = pagebuild.chrome_drift({f: t for f, t in src.items() if is_root_page(f)})
+    # Run 26: the review line and the reason to book, one string each, and
+    # their CSS on every page byte for byte (pagebuild.trust_drift)
+    for f, fs in pagebuild.trust_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
+        drift.setdefault(f, []).extend(fs)
     # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
     # of reach until it is signed off, so no other page may link to it. Signing
     # a page off means removing that meta, which lifts this check by itself.

@@ -1922,6 +1922,21 @@ main .wt,
 main p.ec-note,
 main p.ec-note *{font-size:1rem !important}
 /* FLOOR16:END */
+/* TRUST:BEGIN (Run 26). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 
 /* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
 .vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
@@ -2151,6 +2166,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
   <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
   <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
+  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
@@ -2211,6 +2227,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="wtext verdict" id="leadOut"></div>
       <p class="phaseline" id="phaseLine"></p>
       <a class="wlink" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free, 20 minutes, no obligation.</p>
     </div>
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
@@ -2346,6 +2363,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="riskrule"><b>Higher potential returns mean a higher risk of loss.</b> The value of a pension can fall as well as rise, and you may get back less than you put in. These figures are illustrations, not a recommendation of any level, and not a forecast. Which level suits you depends on things this page cannot see, and choosing one is a conversation with Damian.</p>
       <p class="subnote">Under auto-enrolment on its own, your money goes into My Future Fund&rsquo;s standard funds and the choice is limited to those.</p>
       <a class="wlink" href="booking.html">Talk the choice through with Damian <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free, 20 minutes, no obligation.</p>
     </div>
 
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
@@ -2424,7 +2442,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-forms.js?v=66b39a01"></script>
+<script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/autoenrolment.js?v=f94c659a"></script>
 <script>
@@ -3117,7 +3135,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -3134,7 +3152,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
   });
 })();
 </script>
-<script src="assets/js/pb-consent.js?v=08e3c4b4"></script>
+<script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 <script>
 /* Pay & File: a contribution made before the deadline can be set against the

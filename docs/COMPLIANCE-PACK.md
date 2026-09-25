@@ -8,15 +8,19 @@ Pensionbuddy).
 Updated 25 September 2026: the new Personal Investment Account page
 (question 1.13, section 7, Appendix A.13 and Appendix B.11 to B.13).
 
-Updated again 25 September 2026, before launch: the website's forms now
-send to Netlify Forms, stored by Netlify, our website host (question 1.14,
+Updated again 25 September 2026: the review line on the calculators and
+rules pages, a reason next to each booking link, and the home page's
+subhead (question 1.14, section 7, Appendix B.14 to B.16).
+
+And again, 25 September 2026, before launch: the website's forms now
+send to Netlify Forms, stored by Netlify, our website host (question 1.15,
 section 3.3); the Website Terms of Use have a new clause in place of the
-liability cap (question 1.15); and analytics run through Google Tag Manager,
-loaded only after a visitor accepts (question 1.16, section 3.4).
+liability cap (question 1.16); and analytics run through Google Tag Manager,
+loaded only after a visitor accepts (question 1.17, section 3.4).
 
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
-of Authority, two sentences for the Privacy Notice, a brief on the readiness
+of Authority, the sentences for the Privacy Notice, a brief on the readiness
 check, findings under Regulations 71, 56 and 88, other findings, and every
 new line of copy added in September 2026. "Reg" means a regulation of the
 Consumer Protection Code 2025, the Central Bank's Consumer Protection
@@ -92,7 +96,7 @@ Letter of Authority, filled in and signed; what happens next). No PPS number
 is asked for. Phone contact and occasional emails are separate unticked
 boxes. From 25 September 2026 the form sends the details, the letter's
 text, the typed signature and any drawn signature to Netlify Forms, where
-Netlify, our website host, stores them for Damian (question 1.14). Only if
+Netlify, our website host, stores them for Damian (question 1.15). Only if
 that fails does it open a pre-filled email to Damian, as it did before, and
 the reader saves the signed letter as a PDF and attaches it.
 What we need: (a) approval of the letter's wording (section 2); (b) whether
@@ -252,7 +256,27 @@ its twelve month-end values, and the pension is taxed all at once at the
 end, a quarter as a lump sum. After Budget 2027 on 6 October 2026 the page
 will be updated with the announced figures and will need a second look.
 
-1.14 The website's forms, sent to Netlify (proposed)
+1.14 The review line, and the reason to book
+--------------------------------------------
+
+What the site does now: ten pages carry "Reviewed by Damian Condon,
+Qualified Financial Adviser (QFA) · Last reviewed September 2026" under the
+page heading: the pension calculator, the director calculator, the
+auto-enrolment comparison, the charges calculator, the pensions list, both
+State Pension pages, the directors' rules page, the Standard Fund Threshold
+page and the Personal Investment Account page. The held-back finder and
+readiness check do not carry it. Beside booking links whose own paragraph
+gives no reason to book, one line reads "Free, 20 minutes, no obligation.",
+the terms the booking page already states.
+
+Questions for you: (a) whether "Reviewed by" needs to say what the review
+covers (for example, that the figures and rules were checked, not that the
+page is advice), and whether a month without a day is enough of a date for a
+page with rules that change at a Budget; (b) whether "no obligation" beside
+a call to action needs anything further under the Code's rules on
+unsolicited contact and sales, given the booking page already says it.
+
+1.15 The website's forms, sent to Netlify (proposed)
 ----------------------------------------------------
 
 What the site does now: seven forms send what the reader types to Netlify
@@ -277,7 +301,7 @@ of birth, address and a signed letter may be held by Netlify at all, and
 whether the proposed wording in section 3.1 ("with no one else") must now
 name Netlify.
 
-1.15 The Website Terms of Use: the liability clause (proposed)
+1.16 The Website Terms of Use: the liability clause (proposed)
 --------------------------------------------------------------
 
 What the site does now: section 5 of the Website Terms of Use (terms.html,
@@ -297,7 +321,7 @@ engagement. The page's "Last updated" date is now 25 September 2026.
 What we need: sign-off of the clause, and whether the terms should state a
 cap at all. None is stated now.
 
-1.16 Analytics: Google Tag Manager, only after consent (proposed)
+1.17 Analytics: Google Tag Manager, only after consent (proposed)
 -----------------------------------------------------------------
 
 What the site does now: the cookie bar every page has carried, unused
@@ -705,19 +729,31 @@ changed. The footer and menu call the page "Auto-enrolment comparison".
 Reg 88 requires an advertisement to spell out any initialism it uses. Every
 initialism on the site is now spelled out at its first use on each page, in
 the form "Personal Retirement Savings Account (PRSA)", including the
-glossary's term index and the research bodies named on the home page. A scan
-of every page's text, as the browser renders it, checks this for 28
-initialisms (PRSA, PRSI, USC, ROS, AVC, ARF, PRB, SFT, TCA, QFA, CCPC, CSO,
-HMRC, QROPS, EEA, EU, NAERSA, PPS, MABS, IORP, HR and others) and finds none
-left unexplained at first use.
+glossary's term index and the research bodies named on the home page. A
+check of every page's text, as the browser renders it, finds every
+initialism the page uses, not only those on a list, and finds none left
+unexplained at first use. It reads text that is hidden until a reader opens
+it (a folded panel, a jargon definition, a result not yet shown) and what
+each tab shows once it is clicked. It is kept with the site so it can be run
+again after any change of wording.
 
 Left as they are, for you to confirm: "UK" (and the web address GOV.UK),
 "KPMG" (the firm's own name), "CEO" and "CMO" (job titles on the home page),
 "B.A." (a degree), and the jargon quiz on the glossary page, which asks what
-PRSI stands for, so spelling it out would give the answer away.
+PRSI stands for, so spelling it out would give the answer away. Two more,
+added on 25 September 2026: "HM" in "HM Revenue and Customs (HMRC)", part of
+the department's name, and "PDF" in the old pension finder's closing message
+("save it as a PDF"), the name of the option in the reader's own print
+window.
 
 A correction to our earlier status note: it said the pages new in September
-already spelled out every initialism. Several did not; all now do.
+already spelled out every initialism. Several did not; all now do. On 25
+September 2026 the fuller check found three more, now spelled out: "S.I."
+in the directors' rules page's sources ("Statutory Instrument (S.I.) No. 128
+of 2021"), "EEA" on the UK pensions page ("the European Economic Area
+(EEA)"), and "PRSI" in the description of the entitlement check's picture on
+the home page, read out by screen readers ("the year you first paid
+Pay-Related Social Insurance (PRSI)").
 
 6. Other findings
 =================
@@ -919,14 +955,26 @@ Changed wording on existing pages
   Contribution (AVC)"; and the pensions list's hint, "The kinds include a
   Personal Retirement Savings Account (PRSA) and additional voluntary
   contributions (AVCs), paid on top of a pension from a job."
+- Three more initialisms spelled out (25 September 2026): on the directors'
+  rules page, "Statutory Instrument (S.I.) No. 128 of 2021"; on the UK
+  pensions page, "a move to a QROPS in the European Economic Area (EEA)";
+  and on the home page, the description of the entitlement check's picture,
+  "The State Pension entitlement check: sliders for birth year, the year you
+  first paid Pay-Related Social Insurance (PRSI) and contributions, with the
+  weekly rate and both calculations side by side."
+- Run 26 (Appendix B.14 to B.16): the home page's subhead, "A pension
+  should be something you understand, not something you avoid.", which is
+  the story section's own line; the review line on ten pages (question
+  1.14); and "Free, 20 minutes, no obligation." beside booking links whose
+  own paragraph gives no reason to book.
 - Privacy Notice, "Booking and third parties": the sentence on Netlify
   (section 3.3).
-- Website Terms of Use, section 5: the clause in question 1.15, in place of
+- Website Terms of Use, section 5: the clause in question 1.16, in place of
   the liability cap.
 - Privacy Notice, "Cookies": the section in 3.4, with the button "Change
   your cookie choice".
 - Every page: the cookie bar, written earlier and shown for the first time
-  now (question 1.16), "We'd like to use a little analytics to see how the
+  now (question 1.17), "We'd like to use a little analytics to see how the
   site is used — nothing for ads, never sold. You choose. See our Privacy
   Notice.", with "That's fine" and "No thanks".
 - The two warnings of question 1.4 are the Regulations' own words and need
@@ -1452,9 +1500,9 @@ age. The Pensions Authority counted 40,644 one-member arrangements on 1
 September 2026, down from 141,500 in January 2023, including some being
 wound up.
 Sources: the Pensions Authority’s notice of 23 March 2026 and its conference
-figures of 15 September 2026; S.I. No. 128 of 2021; Revenue Pensions Manual,
-chapter 13. A one-member scheme set up on or after 22 April 2021 has had to
-meet the full rules since 1 July 2022.
+figures of 15 September 2026; Statutory Instrument (S.I.) No. 128 of 2021;
+Revenue Pensions Manual, chapter 13. A one-member scheme set up on or after
+22 April 2021 has had to meet the full rules since 1 July 2022.
 
 Your company paying into a PRSA
 -------------------------------
@@ -1861,12 +1909,12 @@ A UK workplace or personal pension can only be moved to an Irish scheme that
 HM Revenue and Customs (HMRC) recognises as a qualifying recognised overseas
 pension scheme, a QROPS. Moving it anywhere else, the UK scheme may refuse,
 or the move is taxed at 40% or more.
-Since 30 October 2024, a move to a QROPS in the European Economic Area is no
-longer free of the UK’s 25% Overseas Transfer Charge just because it is in
-the EEA. It stays free of it mainly when you live in the same country as the
-QROPS and the move is within your overseas transfer allowance, usually
-£1,073,100. If you then move to another country within five years, the 25%
-can apply after all.
+Since 30 October 2024, a move to a QROPS in the European Economic Area (EEA)
+is no longer free of the UK’s 25% Overseas Transfer Charge just because it
+is in the EEA. It stays free of it mainly when you live in the same country
+as the QROPS and the move is within your overseas transfer allowance,
+usually £1,073,100. If you then move to another country within five years,
+the 25% can apply after all.
 
 The UK State Pension
 --------------------
@@ -2456,3 +2504,38 @@ year on the account’s average value above a tax-free threshold, even in a
 year it falls. Proposed, as at 25 September 2026, and not yet law: the
 threshold, the rate and the annual limit are due on 6 October 2026. See it
 next to a pension.
+
+B.14 Home page: the subhead
+---------------------------
+
+Under the heading "One call. To know where you stand.":
+
+A pension should be something you understand, not something you avoid.
+
+The same sentence has been in the story section since before September
+("One idea: a pension should be something you understand, not something you
+avoid.").
+
+B.15 Ten pages: the review line
+-------------------------------
+
+At the foot of the page heading, on the pages listed in question 1.14:
+
+Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last
+reviewed September 2026
+
+B.16 Booking links: the reason to book
+--------------------------------------
+
+Free, 20 minutes, no obligation.
+
+Beside the booking links on the home, directors', starter and tracker
+pages' opening sections and in their chat pictures (not the home page's,
+whose last message already says it), the tracker page's "Start finding
+mine", "The cost of waiting" on the pension and director calculators, both
+links on the auto-enrolment comparison, the directors' rules list, the five
+guides, the 404 page, the held-back finder and readiness check, the Ask
+Buddy panel on every page, the booking bar on phones, and the end of the
+Buddy's Run game. Booking links
+whose own paragraph already says the call is free and twenty minutes carry
+nothing extra.

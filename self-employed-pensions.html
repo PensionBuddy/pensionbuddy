@@ -1562,6 +1562,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    dated, sourced at the foot, every risk in the main text at the size of
    the benefit it goes with. */
 .legal .ck-note{font-size:.9rem;color:var(--ink-2)}
+/* TRUST:BEGIN (Run 26). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 </style>
 </head>
 <body>
@@ -1605,6 +1620,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   <h2 id="help">See your own numbers</h2>
   <p>The <a href="pension-calculator.html">pension calculator</a> shows what a monthly amount could grow to and what tax relief gives back. Or <a href="booking.html">book a free call with Damian</a>.</p>
+  <p class="pb-why">Free, 20 minutes, no obligation.</p>
   <p class="ck-note">This page is general information, not advice. Sources: gov.ie, &ldquo;Auto-enrolment: your questions answered&rdquo; and the Department of Social Protection&rsquo;s release of 9 February 2026; Revenue, &ldquo;Tax relief limits on pension contributions&rdquo; and &ldquo;Filing your tax return&rdquo;; Revenue Pensions Manual, chapters 21 and 24 and appendix III; Revenue eBrief 034/26; the Pensions Authority, &ldquo;Private pensions&rdquo;; Citizens Information, &ldquo;Tax relief on pensions&rdquo;.</p>
 </div></div>
 </main>
@@ -1763,7 +1779,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -1780,7 +1796,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-consent.js?v=08e3c4b4"></script>
+<script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 <script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.

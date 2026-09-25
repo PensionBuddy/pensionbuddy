@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The cookie choice and Google Tag Manager, in headless Chrome (Run 25).
+"""The cookie choice and Google Tag Manager, in headless Chrome (Run 27).
 
     python3 tests/consent.test.py
 

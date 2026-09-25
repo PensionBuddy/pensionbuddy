@@ -1562,6 +1562,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    dated, sourced at the foot, every risk in the main text at the size of
    the benefit it goes with. */
 .legal .ck-note{font-size:.9rem;color:var(--ink-2)}
+/* TRUST:BEGIN (Run 26). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 </style>
 </head>
 <body>
@@ -1590,7 +1605,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   <h2 id="transfer">Moving a UK pension to Ireland</h2>
   <p>A UK workplace or personal pension can only be moved to an Irish scheme that HM Revenue and Customs (HMRC) recognises as a qualifying recognised overseas pension scheme, a QROPS. Moving it anywhere else, the UK scheme may refuse, or the move is taxed at 40% or more.</p>
-  <p>Since 30 October 2024, a move to a QROPS in the European Economic Area is no longer free of the UK&rsquo;s 25% Overseas Transfer Charge just because it is in the EEA. It stays free of it mainly when you live in the same country as the QROPS and the move is within your overseas transfer allowance, usually &pound;1,073,100. If you then move to another country within five years, the 25% can apply after all.</p>
+  <p>Since 30 October 2024, a move to a QROPS in the European Economic Area (EEA) is no longer free of the UK&rsquo;s 25% Overseas Transfer Charge just because it is in the EEA. It stays free of it mainly when you live in the same country as the QROPS and the move is within your overseas transfer allowance, usually &pound;1,073,100. If you then move to another country within five years, the 25% can apply after all.</p>
 
   <h2 id="state">The UK State Pension</h2>
   <p>The UK State Pension is claimed from, and paid by, the UK, if you paid enough National Insurance. It can be paid into an Irish bank account, and it goes up each year while you live in the EEA, which includes Ireland. The QROPS route above is for workplace and personal pensions, not the State Pension.</p>
@@ -1603,6 +1618,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   <h2 id="help">Worth a conversation</h2>
   <p>Whether moving a UK pension makes sense depends on what it gives you now, what a move would cost in tax and charges, and where you expect to live. There is no general answer, and this page does not give one. <a href="booking.html">Book a free call with Damian</a> to go through yours.</p>
+  <p class="pb-why">Free, 20 minutes, no obligation.</p>
   <p class="ck-note">This page is general information, not advice. Sources: GOV.UK, &ldquo;Transferring your pension: transferring to an overseas pension scheme&rdquo; and &ldquo;State Pension if you retire abroad&rdquo;; HMRC, &ldquo;Reducing tax-free overseas transfers of tax relieved UK pensions&rdquo; (30 October 2024) and Pensions Tax Manual PTM102200; Revenue, &ldquo;Taxation of foreign pensions&rdquo;; the Ireland&ndash;UK double taxation convention, articles 17 and 18; Citizens Information, &ldquo;Returning to Ireland from the United Kingdom&rdquo;.</p>
 </div></div>
 </main>
@@ -1761,7 +1777,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -1778,7 +1794,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-consent.js?v=08e3c4b4"></script>
+<script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 <script>
 /* Pay & File countdown, shared by the nav chip and (on the homepage) the band.

@@ -22,9 +22,9 @@ The five questions that matter most before launch:
 2. The Letter of Authority, and whether tracing is a regulated activity
    (1.2).
 3. Form submissions stored by Netlify: the privacy wording, and how long we
-   keep them (1.14).
-4. The liability clause, which states no cap (1.15).
-5. Analytics through Google Tag Manager, only after consent (1.16).
+   keep them (1.15).
+4. The liability clause, which states no cap (1.16).
+5. Analytics through Google Tag Manager, only after consent (1.17).
 
 The numbers are the pack's sections. Happy to talk any of it through.
 
