@@ -421,7 +421,7 @@ def assemble(page):
 
     # The skeleton's active pension calculator link carries aria-current AFTER
     # href, so an exact-string replace never fires. Match on the attributes,
-    # not order, and not on the label, which Run 28 changed.
+    # not order, and not on the label, which Run 29 changed.
     head, n = re.subn(
         r'<a class="lnk active"(?=[^>]*href="pension-calculator\.html")[^>]*>',
         '<a class="lnk" href="pension-calculator.html">', head, count=1)
@@ -562,8 +562,10 @@ LNK_PAT = re.compile(r'<a class="lnk[^"]*"[^>]*>')
 ACTIVE_PAT = re.compile(r'<a class="lnk active"(?=[^>]*href="([^"]+)")[^>]*>')
 CURRENT_PAT = re.compile(r'<a class="lnk"(?=[^>]*aria-current="page")(?=[^>]*href="([^"]+)")[^>]*>')
 HREF_PAT = re.compile(r'href="([^"]+)"')
-# Run 28: the nav's own stylesheet, one block last in every page's <style>.
-NAV_CSS_OPEN, NAV_CSS_CLOSE = '/* NAV:BEGIN', '/* NAV:END */\n'
+# Run 29: blocks of CSS that are the same on every page, last in every
+# page's <style>, each a (name, finding kind): the nav's own stylesheet, and
+# the rules that make everything clickable look clickable.
+SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'))
 
 
 def _once(text, marker):
@@ -595,14 +597,15 @@ def foot_top_span(text):
     return text.rfind('\n', 0, i) + 1, text.rfind('\n', 0, j) + 1
 
 
-def nav_css_span(text):
-    """(start, end) of the NAV block of CSS, from the start of its opening
-    comment to the end of the line closing it, or None unless both markers
-    occur exactly once, in that order."""
-    i, j = _once(text, NAV_CSS_OPEN), _once(text, NAV_CSS_CLOSE)
+def css_span(text, name):
+    """(start, end) of the shared block of CSS called name, from the start
+    of its opening comment to the end of the line closing it, or None unless
+    both markers occur exactly once, in that order."""
+    close = '/* %s:END */\n' % name
+    i, j = _once(text, '/* %s:BEGIN' % name), _once(text, close)
     if i is None or j is None or j < i:
         return None
-    return i, j + len(NAV_CSS_CLOSE)
+    return i, j + len(close)
 
 
 def nav_items(nav):
@@ -729,8 +732,8 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
 
     Kinds: structure, nav (the block, marker neutralised), active (which item
     is current), active-markup (both halves of the marker), foot-top, banner
-    (the announce bar and the skip link), regulatory, tokens, nav-css (the
-    NAV block of CSS, byte for byte)."""
+    (the announce bar and the skip link), regulatory, tokens, and one kind
+    per shared block of CSS, byte for byte: nav-css, click-css."""
     out = {}
 
     def add(page, kind, detail):
@@ -740,9 +743,12 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
     if skel is None or nav_span(skel) is None or foot_top_span(skel) is None:
         add(skeleton, 'structure', 'the skeleton is missing or has no single nav and foot-top block')
         return out
-    sn, sf, sc = nav_span(skel), foot_top_span(skel), nav_css_span(skel)
+    sn, sf = nav_span(skel), foot_top_span(skel)
     skel_nav = skel[sn[0]:sn[1]]
-    skel_css = skel[sc[0]:sc[1]] if sc else None
+    skel_css = {}
+    for name, kind in SHARED_CSS:
+        sc = css_span(skel, name)
+        skel_css[name] = skel[sc[0]:sc[1]] if sc else None
     targets = nav_targets(skel_nav)
     want = {
         'banner: announce': _line_holding(skel, ANNOUNCE_OPEN),
@@ -771,9 +777,10 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
             add(page, 'nav', 'the home page nav links its own sections as same-page anchors, #deadline and #story')
         if _squash(text[f[0]:f[1]]) != _squash(skel[sf[0]:sf[1]]):
             add(page, 'foot-top', _describe(text[f[0]:f[1]], skel[sf[0]:sf[1]]))
-        c = nav_css_span(text)
-        if skel_css is None or c is None or text[c[0]:c[1]] != skel_css:
-            add(page, 'nav-css', 'the NAV block of CSS is missing or differs from the skeleton\'s')
+        for name, kind in SHARED_CSS:
+            c = css_span(text, name)
+            if skel_css[name] is None or c is None or text[c[0]:c[1]] != skel_css[name]:
+                add(page, kind, 'the %s block of CSS is missing or differs from the skeleton\'s' % name)
         got = {
             'banner: announce': _line_holding(text, ANNOUNCE_OPEN),
             'banner: skip link': _line_holding(text, SKIP_LINK),
@@ -788,16 +795,18 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
 
 def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
     """{page: new text} for every hand-written page whose nav, foot-top or
-    NAV block of CSS has to change to match the skeleton's. The skeleton and the pages assemble()
+    shared blocks of CSS (NAV, CLICK) have to change to match the skeleton's. The skeleton and the pages assemble()
     writes are never in the result: pagebuild owns those. The foot-top is
     rewritten only when it differs beyond the whitespace between tags, so a
     page that renders the same is left byte for byte as it is. Raises, before
     anything is written, on a page whose blocks cannot be found."""
     skel = sources[skeleton]
-    sc = nav_css_span(skel)
-    if sc is None:
-        raise ValueError('the skeleton has no single NAV block of CSS')
-    css = skel[sc[0]:sc[1]]
+    css = []
+    for name, kind in SHARED_CSS:
+        sc = css_span(skel, name)
+        if sc is None:
+            raise ValueError('the skeleton has no single %s block of CSS' % name)
+        css.append((name, skel[sc[0]:sc[1]]))
     built = {p.out for p in PAGES.values()}
     out = {}
     for page in sorted(sources):
@@ -814,11 +823,12 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
         f = foot_top_span(new)
         if _squash(new[f[0]:f[1]]) != _squash(foot):
             new = new[:f[0]] + foot + new[f[1]:]
-        c = nav_css_span(new)
-        if c is None:
-            raise ValueError('%s has no single NAV block of CSS' % page)
-        if new[c[0]:c[1]] != css:
-            new = new[:c[0]] + css + new[c[1]:]
+        for name, block in css:
+            c = css_span(new, name)
+            if c is None:
+                raise ValueError('%s has no single %s block of CSS' % (page, name))
+            if new[c[0]:c[1]] != block:
+                new = new[:c[0]] + block + new[c[1]:]
         if new != text:
             out[page] = new
     return out

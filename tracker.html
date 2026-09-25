@@ -1775,7 +1775,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(5){transform:translate(0,-86px) rotate(4deg)}
 }
 @media(prefers-reduced-motion:reduce){.pb-mess-p,.pb-mess-sum{transition:none}}
-/* NAV:BEGIN (Run 28). The nav's own rules, last in every page's stylesheet
+/* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
    tools/sync-chrome.py copies this block and pagebuild.chrome_drift() fails
@@ -1863,6 +1863,40 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   #navTick{display:none}
 }
 /* NAV:END */
+/* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
+   for byte the skeleton's on every page, copied by tools/sync-chrome.py and
+   guarded by pagebuild.chrome_drift() (kind click-css), like the NAV block.
+   What an audit of all 1,357 clickable things on the 31 pages found, and the
+   rule for each; the rest (every button a filled or outlined button, every
+   link and button a pointer, a focus ring on every one, cards that are links
+   already lifting) was already true and is not repeated here:
+   1. links in running text were plain coloured text: underlined now;
+   2. the footer's links were plain text: underlined, faintly, and teal on
+      hover;
+   3. the six names in the home page's "Six places to begin" were big type
+      with nothing to say they were links until hovered: an arrow each;
+   4. the three cards on the thank-you page did nothing on hover: they lift;
+   5. the unchosen options in a segmented control did nothing on hover: a
+      tint. */
+main :is(p,li,dd,dt,td,th,figcaption,small,blockquote,h2,h3,h4) a:not([class]):not(:has(img,picture,svg)),
+main a.gref{text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+main :is(p,li,dd,dt,td,th,figcaption,small,blockquote,h2,h3,h4) a:not([class]):not(:has(img,picture,svg)):hover,
+main a.gref:hover{text-decoration-thickness:2px}
+.foot-col a{text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+  text-decoration-color:var(--line-2)}
+.foot-col a:hover{color:var(--teal-700);text-decoration-color:currentColor}
+.pb-offer-name::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.28em;
+  color:var(--teal);font-weight:600;transition:transform .25s ease}
+.pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:translateX(8px)}
+a.assure{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,31,28,.28);border-color:var(--teal)}
+:is(.seg,.pb-two-seg,.pb-life-hh,.pia-seg) button:not(.on):not([aria-pressed="true"]):not([aria-selected="true"]):hover{
+  color:var(--teal-700);background:var(--teal-50)}
+@media(prefers-reduced-motion:reduce){
+  a.assure:hover{transform:none}
+  .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
+}
+/* CLICK:END */
 /* TRUST:BEGIN (Run 26). Two shared components, each one string in
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
@@ -2404,6 +2438,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   io.observe(m);
 })();
 </script>
-<script src="assets/js/pb-navmenu.js?v=655d7f59"></script>
+<script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>
 </html>

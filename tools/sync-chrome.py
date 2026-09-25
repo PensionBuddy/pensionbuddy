@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy the shared chrome, the nav, the footer's link columns and (Run 28)
+"""Copy the shared chrome, the nav, the footer's link columns and (Run 29)
 the NAV block of CSS that styles the nav, from the skeleton to every
 hand-written page.
 

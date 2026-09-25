@@ -133,7 +133,7 @@ def run():
     sources = all_sources()
     eq('8. the shared chrome matches the skeleton on every page', findings(pagebuild.chrome_drift(sources)), [])
     skel_nav = pagebuild.chrome_for(sources['pension-calculator.html'], 'terms.html')[0]
-    # Run 28: the dropdowns put every page a reader can reach in the nav, so
+    # Run 29: the dropdowns put every page a reader can reach in the nav, so
     # every one of them marks itself; the three held pages stay out of it
     eq('8. the pages that mark themselves current are derived from the nav, and are these nineteen',
        sorted(pagebuild.nav_targets(skel_nav)),
@@ -204,6 +204,10 @@ def run():
          after('pensions-over-50.html', '/* NAV:BEGIN', 'font-size:17px;font-weight:600', 'font-size:15px;font-weight:600')),
         ('the NAV block of CSS missing', 'uk-pensions-in-ireland.html', 'nav-css',
          sources['uk-pensions-in-ireland.html'].replace('/* NAV:BEGIN', '/* NAV-BEGIN', 1)),
+        ('the CLICK block of CSS changed', 'director.html', 'click-css',
+         after('director.html', '/* CLICK:BEGIN', 'text-underline-offset:3px', 'text-underline-offset:1px')),
+        ('the CLICK block of CSS missing', 'booking.html', 'click-css',
+         sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
