@@ -266,6 +266,48 @@ def run():
     eq('11. after which --check is clean again', p.returncode, 0)
     shutil.rmtree(tmp, ignore_errors=True)
 
+    # ----------------------------------------------------------------- 12
+    # Run 26. The review line and the reason to book are one string each in
+    # pagebuild, and their CSS is one block every page carries. The guard is
+    # clean on the tree as it ships, and each mutant below is one way a page
+    # could drift: every one must be named, and only on the page it touched.
+    eq('12. the trust components are clean on the tree as it ships', pagebuild.trust_drift(sources), {})
+    eq('12. the review line is on the ten pages the brief names',
+       sorted(pagebuild.reviewed_pages()),
+       sorted(['pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
+               'pension-fees-calculator.html', 'my-pensions.html', 'state-pension-reality-check.html',
+               'state-pension-entitlement.html', 'director-pension-rules.html', 'standard-fund-threshold.html',
+               'pia.html']))
+    eq('12. and on neither held page', [p for p in ('find-my-pension.html', 'pension-readiness-check.html')
+                                        if pagebuild.REVIEWED in sources[p]], [])
+    trust_mutants = [
+        ('a built page lost its review line', 'pia.html', pagebuild.REVIEWED, '', 'reviewed'),
+        ('a hand-written calculator changed the date', 'director-calculator.html',
+         'Last reviewed September 2026', 'Last reviewed October 2026', 'reviewed'),
+        ('a page that should not carry it gained it', 'terms.html', '<main', pagebuild.REVIEWED + '<main', 'reviewed'),
+        ('a reason line reworded', 'index.html', 'Free, 20 minutes, no obligation.', 'Free, 30 minutes, no obligation.', 'reason'),
+        ('the recipe edited on one page', 'glossary.html', 'body p.pb-why{margin:10px 0 0', 'body p.pb-why{margin:12px 0 0', 'trust-css'),
+        ('the recipe missing from one page', 'booking.html', pagebuild.TRUST_OPEN, '/* TRUST-GONE', 'trust-css'),
+    ]
+    for label, page, find, repl, kind in trust_mutants:
+        m = dict(sources)
+        assert find in m[page], label
+        m[page] = m[page].replace(find, repl, 1)
+        eq('12. %s: named, on that page only' % label, sorted(set(findings(pagebuild.trust_drift(m)))), [(page, kind)])
+
+    # ----------------------------------------------------------------- 13
+    # Run 26. The home page's gap chart: its markup is the finished chart, so
+    # a reader without JavaScript sees the real figures, and the script never
+    # writes a euro zero. tests/gap-band.py proves the rest on real frames.
+    home = sources['index.html']
+    chart = home[home.index('id="pbGap"'):home.index('class="pb-src', home.index('id="pbGap"'))]
+    eq('13. the gap chart carries its three figures in the markup',
+       re.findall(r'data-pb-count="(\d+)">&euro;([\d,]+)<', chart),
+       [('40860', '40,860'), ('25296', '25,296'), ('15564', '15,564')])
+    script = home[home.index('/* the gap: bars grow'):home.index('/* the gap, your own')]
+    eq('13. the count-up script never writes a zero figure', 'fmt(0)' in script, False)
+    eq('13. and arms the bars without a transition', "classList.add('pb-still','pb-armed')" in script, True)
+
 
 if __name__ == '__main__':
     run()

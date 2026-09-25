@@ -83,6 +83,7 @@
   var bar = doc.createElement('div');
   bar.className = 'pb-bookbar';
   bar.innerHTML = '<a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a>'
+    + '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
     + '<button type="button" class="pb-bookbar-x" aria-label="Close">'
     + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
     + '</button>';

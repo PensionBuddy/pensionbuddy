@@ -8,6 +8,10 @@ Pensionbuddy).
 Updated 25 September 2026: the new Personal Investment Account page
 (question 1.13, section 7, Appendix A.13 and Appendix B.11 to B.13).
 
+Updated again 25 September 2026: the review line on the calculators and
+rules pages, a reason next to each booking link, and the home page's
+subhead (question 1.14, section 7, Appendix B.14 to B.16).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, two sentences for the Privacy Notice, a brief on the readiness
@@ -243,6 +247,26 @@ rate, the fall is 20% in the final year, the account's average is taken from
 its twelve month-end values, and the pension is taxed all at once at the
 end, a quarter as a lump sum. After Budget 2027 on 6 October 2026 the page
 will be updated with the announced figures and will need a second look.
+
+1.14 The review line, and the reason to book
+--------------------------------------------
+
+What the site does now: ten pages carry "Reviewed by Damian Condon,
+Qualified Financial Adviser (QFA) · Last reviewed September 2026" under the
+page heading: the pension calculator, the director calculator, the
+auto-enrolment comparison, the charges calculator, the pensions list, both
+State Pension pages, the directors' rules page, the Standard Fund Threshold
+page and the Personal Investment Account page. The held-back finder and
+readiness check do not carry it. Beside booking links whose own paragraph
+gives no reason to book, one line reads "Free, 20 minutes, no obligation.",
+the terms the booking page already states.
+
+Questions for you: (a) whether "Reviewed by" needs to say what the review
+covers (for example, that the figures and rules were checked, not that the
+page is advice), and whether a month without a day is enough of a date for a
+page with rules that change at a Budget; (b) whether "no obligation" beside
+a call to action needs anything further under the Code's rules on
+unsolicited contact and sales, given the booking page already says it.
 
 2. The Letter of Authority, full wording
 ========================================
@@ -807,6 +831,11 @@ Changed wording on existing pages
   "The State Pension entitlement check: sliders for birth year, the year you
   first paid Pay-Related Social Insurance (PRSI) and contributions, with the
   weekly rate and both calculations side by side."
+- Run 26 (Appendix B.14 to B.16): the home page's subhead, "A pension
+  should be something you understand, not something you avoid.", which is
+  the story section's own line; the review line on ten pages (question
+  1.14); and "Free, 20 minutes, no obligation." beside booking links whose
+  own paragraph gives no reason to book.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -2334,3 +2363,38 @@ year on the account’s average value above a tax-free threshold, even in a
 year it falls. Proposed, as at 25 September 2026, and not yet law: the
 threshold, the rate and the annual limit are due on 6 October 2026. See it
 next to a pension.
+
+B.14 Home page: the subhead
+---------------------------
+
+Under the heading "One call. To know where you stand.":
+
+A pension should be something you understand, not something you avoid.
+
+The same sentence has been in the story section since before September
+("One idea: a pension should be something you understand, not something you
+avoid.").
+
+B.15 Ten pages: the review line
+-------------------------------
+
+At the foot of the page heading, on the pages listed in question 1.14:
+
+Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last
+reviewed September 2026
+
+B.16 Booking links: the reason to book
+--------------------------------------
+
+Free, 20 minutes, no obligation.
+
+Beside the booking links on the home, directors', starter and tracker
+pages' opening sections and in their chat pictures (not the home page's,
+whose last message already says it), the tracker page's "Start finding
+mine", "The cost of waiting" on the pension and director calculators, both
+links on the auto-enrolment comparison, the directors' rules list, the five
+guides, the 404 page, the held-back finder and readiness check, the Ask
+Buddy panel on every page, the booking bar on phones, and the end of the
+Buddy's Run game. Booking links
+whose own paragraph already says the call is free and twenty minutes carry
+nothing extra.

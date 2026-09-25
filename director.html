@@ -1785,6 +1785,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-two-seg button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 .pb-two-out{margin:10px 0 0;font-size:14.5px;line-height:1.55;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .pb-two-out b{color:var(--ink)}
+/* TRUST:BEGIN (Run 26). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 </style>
 
 <script>
@@ -1827,6 +1842,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="lede">If you run your own company, you have funding options most people never get. Your business can contribute far beyond personal limits, and those contributions can reduce its <a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">corporation tax</a>.</p>
     <div class="hero-cta">
       <a class="btn btn-acc" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free, 20 minutes, no obligation.</p>
       <a class="btn btn-ghost" href="director-calculator.html">Try the director calculator</a>
     </div>
       <div class="pb-reg reveal" style="transition-delay:.28s">
@@ -1841,6 +1857,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="msg them">How much can my company actually contribute?</p>
         <p class="msg buddy">Often a lot more than you&rsquo;d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions.</p>
         <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>
+        <p class="pb-why">Free, 20 minutes, no obligation.</p>
       </div>
     </div>
   </div>
@@ -2202,7 +2219,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -2381,7 +2398,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   setTimeout(function(){if(!reported)sayAll();},3000);
 })();
 </script>
-<script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
+<script src="assets/js/pb-bookbar.js?v=38cc66f9"></script>
 <script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
 <script>
 /* €1,000 of profit, two ways: the director calculator's rates, PRSI by date */
