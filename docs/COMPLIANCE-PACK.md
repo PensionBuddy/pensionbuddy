@@ -12,9 +12,15 @@ Updated again 25 September 2026: the review line on the calculators and
 rules pages, a reason next to each booking link, and the home page's
 subhead (question 1.14, section 7, Appendix B.14 to B.16).
 
+And again, 25 September 2026, before launch: the website's forms now
+send to Netlify Forms, stored by Netlify, our website host (question 1.15,
+section 3.3); the Website Terms of Use have a new clause in place of the
+liability cap (question 1.16); and analytics run through Google Tag Manager,
+loaded only after a visitor accepts (question 1.17, section 3.4).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
-of Authority, two sentences for the Privacy Notice, a brief on the readiness
+of Authority, the sentences for the Privacy Notice, a brief on the readiness
 check, findings under Regulations 71, 56 and 88, other findings, and every
 new line of copy added in September 2026. "Reg" means a regulation of the
 Consumer Protection Code 2025, the Central Bank's Consumer Protection
@@ -45,7 +51,7 @@ Contents
 
   1. Open questions
   2. The Letter of Authority, full wording
-  3. The Privacy Notice: two sentences to add
+  3. The Privacy Notice: sentences to approve
   4. The readiness check: brief
   5. Findings under Regulations 71, 56 and 88
   6. Other findings: warnings, comparative claims, gamification,
@@ -88,9 +94,11 @@ and whether this layout meets Reg 32 as a summary on the website.
 What the site does now: a four-step form (where you worked; about you; the
 Letter of Authority, filled in and signed; what happens next). No PPS number
 is asked for. Phone contact and occasional emails are separate unticked
-boxes. Nothing is sent automatically, since the site has no form service
-yet: the form opens a pre-filled email to Damian, and the reader saves the
-signed letter as a PDF and attaches it.
+boxes. From 25 September 2026 the form sends the details, the letter's
+text, the typed signature and any drawn signature to Netlify Forms, where
+Netlify, our website host, stores them for Damian (question 1.15). Only if
+that fails does it open a pre-filled email to Damian, as it did before, and
+the reader saves the signed letter as a PDF and attaches it.
 What we need: (a) approval of the letter's wording (section 2); (b) whether
 the providers accept an e-signed letter, where the typed name is the
 signature and a drawn one is optional; (c) whether tracing is a regulated
@@ -268,6 +276,86 @@ page with rules that change at a Budget; (b) whether "no obligation" beside
 a call to action needs anything further under the Code's rules on
 unsolicited contact and sales, given the booking page already says it.
 
+1.15 The website's forms, sent to Netlify (proposed)
+----------------------------------------------------
+
+What the site does now: seven forms send what the reader types to Netlify
+Forms, a service of Netlify, the company that hosts the website. Netlify
+stores each submission and can email Damian that one has arrived. The forms:
+the booking form (name, email, which of three situations fits), "Email my
+results" on the pension and director calculators (email, the figures on
+screen, the link to them), the guide requests on the director, starter and
+tracker pages (email), and the old pension finder (held back; question
+1.2). Each records the separate, unticked occasional-emails box as "yes" or
+"no". If a form cannot reach Netlify, it opens a pre-filled email to Damian
+instead, as every form did before; the booking form needs no email, since
+Calendly receives the same details. The Privacy Notice now says so in one
+sentence (section 3.3).
+What we need: (a) approval of the sentence in section 3.3; (b) whether the
+Privacy Notice must say more about Netlify as our processor: its data
+processing terms, and where it stores the data (Netlify is a United States
+company); (c) how long submissions are kept in Netlify before they are
+deleted (Reg 117(2) allows 12 months for someone who does not become a
+client, with their consent); (d) for the old pension finder, whether date
+of birth, address and a signed letter may be held by Netlify at all, and
+whether the proposed wording in section 3.1 ("with no one else") must now
+name Netlify.
+
+1.16 The Website Terms of Use: the liability clause (proposed)
+--------------------------------------------------------------
+
+What the site does now: section 5 of the Website Terms of Use (terms.html,
+"Limitation of liability") used to end with a cap, "our total aggregate
+liability to you is capped at €[amount to be confirmed]", and no figure was
+ever given. Damian has asked for that sentence to be replaced, with no cap
+figure, by this clause, which is on the site now:
+
+"This website provides information and booking only. No advice is given
+through it, whether by its calculators, guides, glossary, Buddy or any form
+on it. Advice is only given after a fact-find with Damian Condon."
+
+The paragraphs either side are unchanged: liability that cannot be excluded
+is not excluded, no liability is accepted for use of or reliance on the
+site, and the section does not limit any duty owed under a regulated advice
+engagement. The page's "Last updated" date is now 25 September 2026.
+What we need: sign-off of the clause, and whether the terms should state a
+cap at all. None is stated now.
+
+1.17 Analytics: Google Tag Manager, only after consent (proposed)
+-----------------------------------------------------------------
+
+What the site does now: the cookie bar every page has carried, unused
+until an analytics service was chosen, now appears on a visitor's
+first page: "We'd like to use a little analytics to see how the site is
+used — nothing for ads, never sold. You choose. See our Privacy Notice.",
+with the buttons "That's fine" and "No thanks". Only "That's fine" loads
+Google Tag Manager (container GTM-KQCRZDNB). "No thanks", or no answer,
+loads nothing from Google, and "No thanks" also deletes any Google
+Analytics cookies left by an earlier yes. The answer is kept in the
+visitor's browser and can be changed from a button in the Privacy Notice.
+Three events are passed to Tag Manager: the booking form sent, a call
+booked in Calendly, and the first use of each calculator (which calculator;
+nothing the visitor typed). On 25 September 2026 the container, as
+published, holds no tags, so nothing is measured until tags are added to
+it in Google Tag Manager. The Privacy Notice's cookies section is rewritten
+(section 3.4).
+What we need: (a) approval of the cookies section and of the bar's wording,
+which visitors now see; (b) for the placeholder in section 3.4, which
+analytics tools Tag Manager will run, the cookies they set, how long they
+last, and where Google processes the data; (c) whether "nothing for ads,
+never sold" and "We do not use it for advertising" hold for the tools
+chosen (for Google Analytics 4, that means Google signals and ads
+personalisation off, and no link to Google Ads); (d) whether the notice's
+"Basic, non-identifying information about how the site is used" still
+describes analytics identifiers fairly; (e) whether the two buttons need
+equal weight: "That's fine" is a filled button and "No thanks" an outlined
+one, as they were designed. (Its fill was changed from the page's accent
+colour to cream, because dark text on the accent failed the contrast
+minimum on every page.) Separately, and unchanged: every page loads its
+typeface from Google Fonts before any choice, which sends the visitor's IP
+address to Google; it is not analytics, but it could be served from the
+site itself instead.
+
 2. The Letter of Authority, full wording
 ========================================
 
@@ -337,11 +425,13 @@ search: [full name]", reads:
     set out in the Letter of Authority, which I have attached.
     Signed: [the name typed as the signature], [date signed]
 
-3. The Privacy Notice: two sentences to add
-===========================================
+3. The Privacy Notice: sentences to approve
+==========================================
 
 The Privacy Notice (https://pensionbuddy.ie/privacy.html) shows a
-placeholder where each of these sentences will go. Below, for each: the
+placeholder where each of the first two sentences will go (3.1 and 3.2).
+Section 3.3 is different: it is on the site now, as proposed, because the
+forms send to Netlify from this version on. Below, for each: the
 placeholder as it stands, then proposed wording for you to approve or
 change. The proposed wording is not on the site. Words in square brackets
 are decisions for the firm.
@@ -377,6 +467,47 @@ Proposed: "If you tick the box to receive them, we use your email address to
 send you occasional emails about pension deadlines and rule changes. We send
 them only to people who tick the box. Every one tells you how to stop them,
 and you can ask us to stop at any time [how: to be confirmed]."
+
+3.3 Netlify, our website host (on the site, proposed)
+-----------------------------------------------------
+
+Added to "Booking and third parties", after the two sentences on Calendly:
+
+"What you send us through a form on this website, such as the booking form
+or a request for your figures or a guide, is stored by Netlify, our website
+host, so that it reaches us."
+
+The notice's "Last updated" date is now 25 September 2026. Separately, the
+notice's sentence on the calculators says the figures are not sent to us
+"unless you separately choose to email yourself the results"; the "Email my
+results" forms send them to us, not to the reader, so that sentence may need
+correcting. It is unchanged.
+
+3.4 Cookies (on the site, proposed)
+-----------------------------------
+
+The Privacy Notice's "Cookies" section used to read: "This site aims to use
+only what is necessary to work. If we add analytics or other non-essential
+cookies, we will ask for your consent first and update this notice." It now
+reads:
+
+"This site aims to use only what is necessary to work. Analytics are not
+necessary, so we ask first.
+
+When you first visit, a bar at the foot of the page asks whether we may use
+analytics. Only if you choose "That's fine" do we load Google Tag Manager, a
+Google service that runs our analytics tools. We use it to see how the site
+is used: which pages are visited, when a calculator is first used, when the
+booking form is sent and when a call is booked. We do not use it for
+advertising. If you choose "No thanks", or make no choice, it is never
+loaded. [To be confirmed: which analytics tools Google Tag Manager runs for
+us, the cookies they set, how long they last, and where Google processes
+the data]
+
+Your choice is kept in your browser, and you can change it at any time.
+[Change your cookie choice]"
+
+The button brings the bar back.
 
 4. The readiness check: brief
 =============================
@@ -836,6 +967,16 @@ Changed wording on existing pages
   the story section's own line; the review line on ten pages (question
   1.14); and "Free, 20 minutes, no obligation." beside booking links whose
   own paragraph gives no reason to book.
+- Privacy Notice, "Booking and third parties": the sentence on Netlify
+  (section 3.3).
+- Website Terms of Use, section 5: the clause in question 1.16, in place of
+  the liability cap.
+- Privacy Notice, "Cookies": the section in 3.4, with the button "Change
+  your cookie choice".
+- Every page: the cookie bar, written earlier and shown for the first time
+  now (question 1.17), "We'd like to use a little analytics to see how the
+  site is used — nothing for ads, never sold. You choose. See our Privacy
+  Notice.", with "That's fine" and "No thanks".
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 

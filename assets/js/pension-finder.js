@@ -173,7 +173,7 @@
     return lines.join('\n');
   }
 
-  /* what a configured LEAD_ENDPOINT receives */
+  /* the whole trace, as one object; fields() below flattens it for the form */
   function payload(data, today, page) {
     var d = data || {}, L = letter(d, today);
     return {
@@ -198,7 +198,39 @@
     };
   }
 
-  /* No endpoint yet: a prefilled email to Damian. It carries the details,
+  /* What Netlify Forms receives (Run 27): the trace as one flat text value
+     per field. Netlify keeps only the fields the page's static form declares,
+     so FIELDS is exactly the hidden fields of the form in
+     tools/finder-parts/main.html, in that order; pagebuild checks the built
+     page carries every one. Built from payload(), so the two cannot
+     disagree, and the consents are written "yes" or "no", never left blank. */
+  var FIELDS = ['full_name', 'other_names', 'date_of_birth', 'address', 'email', 'phone',
+                'employers', 'phone_ok', 'marketing_consent', 'signed_as', 'signed_on',
+                'letter_confirmed', 'signature_drawn', 'letter_text', 'page'];
+  function fields(data, today, page) {
+    var p = payload(data, today, page);
+    return {
+      full_name: p.person.fullName,
+      other_names: p.person.otherNames,
+      date_of_birth: p.person.dob,
+      address: p.person.address,
+      email: p.person.email,
+      phone: p.person.phone,
+      employers: p.employers.map(function (e) {
+        return e.name + ', ' + e.years + (e.provider ? ', ' + e.provider : '') + (e.ref ? ', ref ' + e.ref : '');
+      }).join('\n'),
+      phone_ok: p.consents.phone ? 'yes' : 'no',
+      marketing_consent: p.consents.marketing ? 'yes' : 'no',
+      signed_as: p.signature.typed,
+      signed_on: p.signature.signedOn,
+      letter_confirmed: p.signature.confirmed ? 'yes' : 'no',
+      signature_drawn: p.signature.drawn || '',
+      letter_text: p.letterText,
+      page: p.page
+    };
+  }
+
+  /* When the form cannot be posted: a prefilled email to Damian. It carries the details,
      the two choices and a one-line authority in the reader's own words, and
      asks for the saved letter to be attached, since a signature drawn on
      screen cannot travel in a mailto link. */
@@ -260,6 +292,8 @@
     letter: letter,
     letterText: letterText,
     payload: payload,
+    FIELDS: FIELDS,
+    fields: fields,
     mailto: mailto,
     tracker: tracker
   };

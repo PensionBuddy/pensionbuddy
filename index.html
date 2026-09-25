@@ -448,16 +448,16 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-foot .btn{width:100%;justify-content:center}
 @media (max-width:520px){.pb-b-panel{right:3vw;left:3vw;width:auto;bottom:80px}}
 @media (prefers-reduced-motion: reduce){.pb-b-btn{transition:none}.pb-b-a{transition:none}}
-/* ---- cookie consent (dormant until analytics URL is set) ---- */
+/* ---- cookie consent bar, built by pb-consent.js ---- */
 .pb-consent{position:fixed;left:0;right:0;bottom:0;z-index:239;background:var(--ink);color:#FBF7EF;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;box-shadow:0 -6px 24px rgba(11,31,28,.25)}
 .pb-consent p{margin:0;font-size:13.5px;flex:1 1 320px}
 .pb-consent p a{color:#FBF7EF;text-decoration:underline}
 .pb-consent .pb-c-yes,.pb-consent .pb-c-no{font:inherit;font-weight:700;font-size:14px;border-radius:999px;padding:9px 18px;cursor:pointer}
-.pb-consent .pb-c-yes{background:var(--ac,#0B7A6E);color:var(--ink);border:0}
+.pb-consent .pb-c-yes{background:#FBF7EF;color:var(--ink);border:0}
 .pb-consent .pb-c-no{background:none;color:#FBF7EF;border:1px solid rgba(255,255,255,.4)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-body.pb-banner-open .pb-b-btn{bottom:96px}
-body.pb-banner-open .pb-b-panel{bottom:162px}
+body.pb-banner-open .pb-b-btn{bottom:calc(var(--pb-consent-h,82px) + 14px)}
+body.pb-banner-open .pb-b-panel{bottom:calc(var(--pb-consent-h,82px) + 80px)}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
 /* shadow hierarchy: quiet cards are keyline-only; elevation reserved for hero card + calc panel */
@@ -2577,28 +2577,8 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
     });
   });
 })();
-
-/* ---- Analytics consent scaffold ----
-   DEVELOPER: set ANALYTICS_SRC to your real script URL (e.g. Plausible or GA4).
-   While it is still the [ANALYTICS_SCRIPT_URL] placeholder, NO banner is shown
-   and NO cookies or analytics run: the site stays cookie-free, exactly as the
-   Privacy Notice promises. Set a real URL and the consent banner activates
-   automatically on the next visit. ---- */
-(function(){
-  var ANALYTICS_SRC='[ANALYTICS_SCRIPT_URL]';
-  if(ANALYTICS_SRC.charAt(0)==='[')return;
-  var choice=null;try{choice=localStorage.getItem('pb-consent');}catch(e){}
-  function load(){var s=document.createElement('script');s.defer=true;s.src=ANALYTICS_SRC;s.setAttribute('data-domain','pensionbuddy.ie');document.head.appendChild(s);}
-  if(choice==='accepted'){load();return;}
-  if(choice==='rejected')return;
-  var bar=document.createElement('div');bar.className='pb-consent';bar.setAttribute('role','region');bar.setAttribute('aria-label','Cookie choice');
-  bar.innerHTML='<p>We\u2019d like to use a little analytics to see how the site is used \u2014 nothing for ads, never sold. You choose. See our <a href="privacy.html">Privacy Notice</a>.</p><button type="button" class="pb-c-yes">That\u2019s fine</button><button type="button" class="pb-c-no">No thanks</button>';
-  document.body.appendChild(bar);document.body.classList.add('pb-banner-open');
-  function done(v){try{localStorage.setItem('pb-consent',v);}catch(e){}bar.parentNode.removeChild(bar);document.body.classList.remove('pb-banner-open');}
-  bar.querySelector('.pb-c-yes').addEventListener('click',function(){done('accepted');load();});
-  bar.querySelector('.pb-c-no').addEventListener('click',function(){done('rejected');});
-})();
 </script>
+<script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 
 <script>
