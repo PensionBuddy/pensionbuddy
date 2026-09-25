@@ -1909,8 +1909,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    layer is anchored to the photo's top edge and scales with its width
    (aspect-ratio 2184 / 900, the shot's width in pixels), so its
    coordinates are the photo's own and survive a taller re-shoot; both
-   targets sit in the photo's top band. Decorative (the photo's alt says
-   what it shows). Hidden under 600px, where the photo is too small. */
+   targets sit in the photo's top band. Each label is centred (translateY)
+   on a gap in the photo, so it covers no text at any width: under the age
+   slider's track (y 423 to 546) and under the figures' paragraph (y 396
+   to 514), as re-shot on 2026-09-25. A re-shoot that moves those gaps
+   moves these. Decorative (the photo's alt says what it shows). Hidden
+   under 600px, where the photo is too small. */
 .pb-ann{position:absolute;left:0;top:0;width:100%;aspect-ratio:2184/900;pointer-events:none;display:none}
 @media(min-width:600px){.pb-ann{display:block}}
 .pb-ann svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -2227,7 +2231,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="btn btn-light" href="pension-calculator.html">See what I could build <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
-      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=0d59f58e"><img src="assets/img/product-pension-calculator.jpg?v=6ed190c6" width="2184" height="2534" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 520 Q470 520 425 420" class="pb-ann-under"/><path d="M560 520 Q470 520 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-under"/><path d="M1180 405 Q1110 360 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:52.2%">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:41.5%">The figures follow</span></span></span>
+      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=c6635025"><img src="assets/img/product-pension-calculator.jpg?v=81cb90d5" width="2184" height="2691" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 484 Q470 484 425 420" class="pb-ann-under"/><path d="M560 484 Q470 484 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-under"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:53.8%;transform:translateY(-50%)">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:50.6%;transform:translateY(-50%)">The figures follow</span></span></span>
       <figcaption class="pb-split-cap">Example figures.</figcaption>
     </figure>
   </div>
