@@ -10,7 +10,8 @@ Updated 25 September 2026: the new Personal Investment Account page
 
 Updated again 25 September 2026, before launch: the website's forms now
 send to Netlify Forms, stored by Netlify, our website host (question 1.14,
-section 3.3).
+section 3.3); the Website Terms of Use have a new clause in place of the
+liability cap (question 1.15).
 
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
@@ -274,6 +275,26 @@ client, with their consent); (d) for the old pension finder, whether date
 of birth, address and a signed letter may be held by Netlify at all, and
 whether the proposed wording in section 3.1 ("with no one else") must now
 name Netlify.
+
+1.15 The Website Terms of Use: the liability clause (proposed)
+--------------------------------------------------------------
+
+What the site does now: section 5 of the Website Terms of Use (terms.html,
+"Limitation of liability") used to end with a cap, "our total aggregate
+liability to you is capped at €[amount to be confirmed]", and no figure was
+ever given. Damian has asked for that sentence to be replaced, with no cap
+figure, by this clause, which is on the site now:
+
+"This website provides information and booking only. No advice is given
+through it, whether by its calculators, guides, glossary, Buddy or any form
+on it. Advice is only given after a fact-find with Damian Condon."
+
+The paragraphs either side are unchanged: liability that cannot be excluded
+is not excluded, no liability is accepted for use of or reliance on the
+site, and the section does not limit any duty owed under a regulated advice
+engagement. The page's "Last updated" date is now 25 September 2026.
+What we need: sign-off of the clause, and whether the terms should state a
+cap at all. None is stated now.
 
 2. The Letter of Authority, full wording
 ========================================
@@ -838,6 +859,8 @@ Changed wording on existing pages
   contributions (AVCs), paid on top of a pension from a job."
 - Privacy Notice, "Booking and third parties": the sentence on Netlify
   (section 3.3).
+- Website Terms of Use, section 5: the clause in question 1.15, in place of
+  the liability cap.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
