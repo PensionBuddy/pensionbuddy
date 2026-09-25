@@ -1922,6 +1922,21 @@ main .wt,
 main p.ec-note,
 main p.ec-note *{font-size:1rem !important}
 /* FLOOR16:END */
+/* TRUST:BEGIN (Run 25). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 
 /* ============================================================
    THE PERSONAL INVESTMENT ACCOUNT (pia.html, Run 23).
@@ -2065,6 +2080,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h1 class="reveal" style="transition-delay:.06s">The new Personal Investment Account (PIA), <span class="hl">next to a pension.</span></h1>
   <p class="reveal" style="transition-delay:.12s">The Government has proposed a new account for investing, with its own simpler tax. Here is what has been confirmed, what is still to come, and how the same monthly amount could compare in a pension, in the new account, and in a fund held the way you would hold it today.</p>
   <p class="pia-asat reveal" style="transition-delay:.14s">Proposed · as at 25 September 2026. The tax-free threshold, the tax rate and the annual limit are to be announced on 6 October 2026, in Budget 2027. Accounts are to open during 2027. None of it is law yet.</p>
+  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <section class="pia-sec" id="what"><div class="wrap">
@@ -2699,7 +2715,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}

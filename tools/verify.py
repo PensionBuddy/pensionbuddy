@@ -469,6 +469,10 @@ def static_checks(pages):
     # runs inside the iframe on glossary.html, so they have no nav or foot-top
     # to drift and asking would report every one of them as a structure fault.
     drift = pagebuild.chrome_drift({f: t for f, t in src.items() if is_root_page(f)})
+    # Run 25: the review line and the reason to book, one string each, and
+    # their CSS on every page byte for byte (pagebuild.trust_drift)
+    for f, fs in pagebuild.trust_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
+        drift.setdefault(f, []).extend(fs)
     # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
     # of reach until it is signed off, so no other page may link to it. Signing
     # a page off means removing that meta, which lifts this check by itself.

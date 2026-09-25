@@ -6,6 +6,150 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 25 — 2026-09-25 · Trust copy: a subhead, the review line, the gap chart, the reason to book
+
+Damian's brief, branch `claude/trust-copy` off `main` `faf4c0e`: the home
+hero's subhead from Our story, word for word; "Reviewed by Damian Condon,
+QFA · Last reviewed September 2026" on every calculator, the State Pension
+pages, the directors' rules, the SFT and the PIA page, as one shared
+component; readers never see €0 in the gap chart, tested with JavaScript off
+and with the band in view on load; a list (no changes) of every "best",
+"leading", "top", "number one" and "better than"; next to every booking call
+to action one reason from existing copy, no new claims. Then gate, commit,
+push, merge, push `main`.
+
+## Items
+
+| # | Item | Result |
+|---|---|---|
+| 1 | Home hero subhead | done: "A pension should be something you understand, not something you avoid." under the heading, above the existing line, in Inter 500 at 1.12 to 1.4rem. The story section's line ("One idea: a pension should be…") stays where it is |
+| 2 | The review line | done, as one component: the string is `pagebuild.REVIEWED`, `assemble()` puts it at the foot of the page header of every record with `reviewed=True` (8 built pages), the two hand-written calculators carry it by hand, and `pagebuild.trust_drift()` fails any page that should carry it and does not, carries it and should not, or carries a different wording (in `verify.py` as a chrome FAIL, and `tests/build.test.py` section 12 with six mutants). On: pension calculator, director calculator, auto-enrolment comparison, charges calculator, pensions list, both State Pension pages, directors' rules, SFT, PIA. Not on the held finder and readiness check (not signed off). **Wording: QFA is spelled out**, "Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026", because Run 22's rule spells out every initialism at its first use and this line is the first QFA on all ten pages |
+| 3 | The gap chart never shows €0 | fixed. Two faults on `main`: the script wrote "€0" into the figures as the page loaded, and arming the chart shrank the bars with a 1.15 s transition, so a reader who landed with the band on screen watched €0 bars collapse and regrow. Now the figures are never written as zero (they keep the markup's until the count-up starts, whose first frame is already 16% of the way); the band is judged once the page has loaded: on screen then, or reached by a link to `#gap`, it stays finished; below the fold, it is armed in one frame with no transition and counts up when scrolled to. Moving the slider mid-count now stops the count-up instead of being overwritten by it, and a printed page shows the bars. `tests/gap-band.py` (new, real frames, not in the runner: about 40 s) drives nine scenarios: no JavaScript at two widths, #gap at two widths, a tall window, a slow page scrolled before load, reduced motion, and two where the count-up must still play. 45/45 on the branch; on `main` 13 fail, with €0 on screen in three of them. `tests/build.test.py` section 13 guards the markup's three figures and the script statically |
+| 4 | Superlatives scan | listed below, nothing changed: 50 hits, all "top" (37) or "best" (13); no "leading", "number one", "No. 1" or "better than" anywhere a reader can see, and none in code either. None is a claim about the firm |
+| 5 | A reason next to every booking call to action | done where missing, from existing copy only: "Free, 20 minutes, no obligation." (the booking page's own terms: "Free, with no obligation", "Twenty minutes with Damian"). One string, `pagebuild.REASON`, one CSS recipe, guarded like item 2. Where the call to action's own block already gives the reason, nothing was added, so no card says "free" three times. The inventory is below |
+
+The two components share one block of CSS (`/* TRUST:BEGIN` to `TRUST:END */`),
+byte-identical on all 29 pages and guarded (the games carry their own one rule). `assets/js/pb-bookbar.js` changed,
+so its `?v=` stamp moved on the five pages that load it. render-diff against
+`main`: the five calculators load to the same render write for write, and
+80,000 scripted events (16,000 a page) differ nowhere.
+
+## Booking calls to action: which reason each has
+
+| Where | Reason next to it |
+|---|---|
+| Home hero "Get my free review"; the director, starter and tracker heroes | added: the reason line under the two buttons |
+| Director, starter and tracker phone pictures' link | added, under the link |
+| Home phone picture's link | already: Buddy's line above it, "Yes, completely, with no obligation afterwards. Twenty minutes…" |
+| Tracker "Start finding mine" (dark band) | added |
+| "The cost of waiting" link, pension and director calculators | added |
+| Auto-enrolment comparison: "In one sentence" link, and the funds-and-risk link | added, both |
+| Directors' rules: "Book a call with Damian for free to go through them." | added, under the list's source line |
+| Five guides (director year-end checklist, old pension checklist, over-50s, self-employed, UK pensions) | added, under the paragraph with the link |
+| 404 page's booking button | added |
+| Held finder and readiness check, their booking buttons | added (the pages stay held) |
+| Ask Buddy panel's button, every page | added |
+| Buddy's Run, the game-over panel's booking button | added (hidden in a very shallow game box, with the panel's other extras) |
+| Jargon Battle, the end screen's booking button | already: "Damian explains them for a living, and the first call is free." |
+| Booking bar on phones (5 pages) | added: a line under the button, so the bar is one line taller; its measured height already lifts the Ask Buddy button |
+| The 8 calculator cards (pension, comparison, director, charges, SFT, PIA, both State Pension pages) | already: each card's paragraph says "a free 20-minute chat/call" |
+| Closing bands: home, director, starter, tracker, glossary | already: "Twenty minutes. Phone or video. Free, with no pressure." and the like |
+| The saved report's line (`pb-report.js`) | already: "…in a free 20-minute call" |
+| Not calls to action, left as they are: the nav button ("…for free"), the footer's "Book a call", "booking page" in the privacy notice, terms and complaints text, and "book a free call" inside the email forms' error and thank-you messages | none added |
+
+## The scan: every hit (item 4, not changed)
+
+Word-bounded, case-insensitive, over the text a reader can meet on all 29
+pages and the two games: page text, visible attributes, meta and JSON-LD, and strings the
+scripts write (`assets/js` included). CSS and code (`r.top`, `best` as a
+variable) are not copy and are left out; a raw grep confirms no
+"leading", "number one" or "better than" anywhere at all. Line numbers are on
+this branch.
+
+**"best" (13): the games' score labels, Damian's pull quote, the reality check's starting point, the checklist's "best made with advice", and the held readiness check's scoring**
+
+| Where | Kind | Words around it |
+|---|---|---|
+| `glossary.html:1763` | text | …llect the benefits, jump the excuses. Endless, three lives, best score kept. Play <svg class="ico" viewBox="0 0 24 2 |
+| `index.html:2106` | text | ndon I’ve spent thirty years explaining how money can best serve real people. Clarity is the whole point. After gradua… |
+| `old-pension-checklist.html:1643` | text | …ned benefit scheme promised. Moving is a separate decision, best made with advice. Want help with it? We can |
+| `pension-readiness-check.html:1895` | text | id="rdMoves"> Nothing to add: you gave the best answer to every question. Things change, so it is worth a l… |
+| `pension-readiness-check.html:1911` | text | …stions after the first is worth up to 20 points: 20 for the best answer, 10 for a partial one, and 0 otherwise. The first qu… |
+| `state-pension-reality-check.html:2082` | text | …using the Pensions Council's own research. It starts at the best case, a full forty years of contributions, and you can move… |
+| `games/buddys-run.html:183` | text | ="k">Score 0 Best 0 Lives</span |
+| `games/buddys-run.html:220` | text | ie down. Score 0 Best 0 New be |
+| `games/buddys-run.html:221` | text | st 0 New best. Buddy is delighted with himself. <p class="pb-paw-note" da… |
+| `games/buddys-run.html:1123` | script text | …howOver(); say('Game over. Score ' + S.score + '. ' + (S.newBest ? 'A new best.' : 'Best ' + S.best + '.')); } else if (S.ph… |
+| `games/buddys-run.html:1123` | script text | wOver(); say('Game over. Score ' + S.score + '. ' + (S.newBest ? 'A new best.' : 'Best ' + S.best + '.')); } else if (S.ph… |
+| `games/jargon-battle.html:249` | text | > 0 of 8 Best ever 0 of 8 <p class="pb- |
+| `games/jargon-battle.html:974` | script text | …nap. ') + 'Hits landed: ' + s.hits + ' of ' + s.total + '. Best ever: ' + best + ' of ' + s.total + '.'); if (againBtn) { a… |
+
+**"top" (37): every one means "in addition" ("on top of", "top-up"), a position ("off the top of your taxable income", "at the top of this page") or is the jargon quiz**
+
+| Where | Kind | Words around it |
+|---|---|---|
+| `broker-vs-autoenrolment.html:2188` | text | …esults" tabindex="-1" type="button" onclick="setMode(2)">On top of auto-enrolment Same money |
+| `broker-vs-autoenrolment.html:2205` | text | …"0" max="2000" step="5" value="0"> From your own pocket, on top of auto-enrolment. It goes through a personal pension, beca… |
+| `broker-vs-autoenrolment.html:2209` | text | data-for="tmatchOn" hidden> How much of your top-up they would match 0% <input type="ran |
+| `broker-vs-autoenrolment.html:2209` | text | …match" min="0" max="100" step="5" value="0"> A share of the top-up itself, not of your salary. |
+| `broker-vs-autoenrolment.html:2327` | text | iv> €0 Of which your top-up adds €0 </d |
+| `broker-vs-autoenrolment.html:2329` | text | v> Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.… |
+| `broker-vs-autoenrolment.html:2343` | text | smark">+ Your top-up €0 <div class="lab |
+| `broker-vs-autoenrolment.html:2352` | text | iv> Your top-up, broken down You pay in <span clas |
+| `broker-vs-autoenrolment.html:2357` | text | " id="cMatch">€0 Total from the top-up €0 <p class="subnote" id="cRe |
+| `broker-vs-autoenrolment.html:2365` | text | …pension here, whether it is instead of auto-enrolment or on top of it. Funds carry a risk rating from 1 (lowest) to 7 (high… |
+| `broker-vs-autoenrolment.html:2418` | text | …arginal income tax relief. The employer match and the State top-up are the benefit on that layer. My Future Fund does not c… |
+| `broker-vs-autoenrolment.html:2420` | text | …nd at 20% on the rest, because a contribution comes off the top of your taxable income. It is limited to Revenue’s age-rela… |
+| `broker-vs-autoenrolment.html:2420` | text | …iversal Social Charge (USC) are not modelled. In Mode 2 the top-up is treated as its own contribution, independent of the a… |
+| `broker-vs-autoenrolment.html:2423` | text | …a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only appl… |
+| `broker-vs-autoenrolment.html:2540` | script text | …tra: v => euro(v) + ' a month', tmatch: v => v + '% of your top-up' }; /* paintSlider takes the wording map as an argument,… |
+| `broker-vs-autoenrolment.html:2771` | script text | …of your pocket puts ' + euro(c.totalIn) + ' in.' : 'With no top-up this is just auto-enrolment: ' + euro(ae.netCost) + ' pu… |
+| `broker-vs-autoenrolment.html:2778` | script text | …chCap').textContent = tmatch > 0 ? '(' + tmatch + '% of the top-up)' : '(none)'; $('cReliefNote').textContent = extraMonthl… |
+| `broker-vs-autoenrolment.html:2788` | script text | …+= ' Add an amount on the left to see what saving extra on top would put in.'; } $('leadOut').textContent = mode === 1 ? v… |
+| `glossary.html:1836` | text | …on Extra payments you can make into a workplace pension, on top of the standard contributions, to build your pot faster. Th… |
+| `glossary.html:1860` | text | …Social Insurance (PRSI) contributions. It may be payable on top of your own pension, but for most people it isn't enough on… |
+| `my-pensions.html:1887` | text | …RSA) and additional voluntary contributions (AVCs), paid on top of a pension from a job. |
+| `old-pension-checklist.html:1629` | text | …al pension, or AVCs (additional voluntary contributions) on top of a work scheme. Finding them <ul class="ck-li |
+| `pension-calculator.html:2032` | text | …h work differently, and the State Pension may be payable on top. Warning: These figures are estimates onl |
+| `pension-calculator.html:2114` | text | …rgon buster">State Pension (Contributory) may be payable on top, €15,564 a year for a full entitlement. Check gov.ie for th… |
+| `pension-calculator.html:2314` | script text | const capNote=annualMine>relievableAnnual ?' At '+age+', Reven… |
+| `pia.html:2269` | text | …gure. If your employer would pay into a pension, that is on top. <div |
+| `starter.html:2110` | text | …te Pension pays €15,564 a year at the maximum. What sits on top of it is up to you, and the chart below shows what time doe… |
+| `state-pension-entitlement.html:2308` | text | ure> Now you have the figure, the question is what sits on top of it. Whichever calculation the Department uses, the State… |
+| `state-pension-entitlement.html:2308` | text | …ributory) is the starting point, not the plan. What goes on top, and how much of it you need, depends on when you start and… |
+| `state-pension-reality-check.html:2229` | text | …ion. The State Pension is a floor, not a plan. What sits on top of it, and how much of it you need, depends on when you sta… |
+| `state-pension-reality-check.html:2310` | script text | …return 'You would need ' + euro(g.gapAnnual) + ' a year on top, about ' + euro(g.gapMonthly) + ' a month .'; } function re… |
+| `terms.html:1659` | text | …ese terms from time to time. The "Last updated" date at the top of this page shows the current version, and your continued… |
+| `games/buddys-run.html:256` | script text | …========= */ var LABELS = { good: [ 'Tax relief', 'Employer top-up', 'Compound growth', 'Tax-free lump sum', 'Tax back', 'S… |
+| `games/buddys-run.html:270` | script text | …var FACTS = [ { text: 'A pension contribution comes off the top of your taxable income, so for a higher-rate taxpayer a hun… |
+| `assets/js/pb-jargon-bank.js:24` | script text | …, "correct": "Extra money you put into your work pension on top.", "wrong": [ "Advanced Vocal Coaching, for anyone who sing… |
+| `assets/js/pb-jargon-bank.js:52` | script text | …he January sales.", "A savings stamp book, filled in at the top of the kitchen press." ], "buddySays": "The A stands for ac… |
+| `assets/js/pb-jargon-bank.js:120` | script text | …n tax relief?", "correct": "Your contribution comes off the top of your taxable income.", "wrong": [ "The great relief of g… |
+
+## NEEDS DAMIAN INPUT from this run
+
+- The review line spells out QFA (Run 22's rule). If you want the shorter
+  "Reviewed by Damian Condon, QFA", it is one string in `tools/pagebuild.py`
+  (`REVIEWED`) plus the two hand-written calculators, and the Run 22
+  exception list gains QFA on these ten pages.
+- "Last reviewed September 2026" is fixed text. After Budget 2027 on 6
+  October 2026 the SFT, directors' rules and PIA pages change; the date
+  should move with them.
+- The scan's "best" lines to look at: the reality check's "It starts at the
+  best case" and the old pension checklist's "Moving is a separate decision,
+  best made with advice". Neither is a claim about the firm.
+- The compliance pack gains question 1.14 (what "Reviewed by" covers) and
+  Appendix B.14 to B.16.
+- Out of scope, found on the way: the calculator product pictures
+  (`assets/img/product-*`) predate Run 21's 16px floor and Run 22's
+  initialisms, so all five are shorter than the pages they show. A re-shoot
+  (`python3 tools/shoot-product.py && python3 tools/stamp-images.py`, then
+  the declared width/height) changes the home page's pictures, so it is left
+  for its own review. `tools/shoot-product.py` now leaves the reason line out
+  of its frames, as it does the share link.
+
+---
+
 # Run 24 — 2026-09-25 · Damian's answers on the PIA page, and the merge
 
 Damian's instructions after Run 23: fill the placeholders with his answers,

@@ -1486,9 +1486,12 @@ button{font-family:inherit}
 .pb-gap-col{min-width:0}
 .pb-gap-stage{position:relative;height:var(--gh)}
 /* the bars stand at their full height by default, figures in the markup, so a
-   page without script shows the finished chart. The script arms them
-   (.pb-armed: height 0, figures at zero) as the page loads and lets them go
-   (.pb-go) when the band scrolls into view. */
+   page without script shows the finished chart. Once the page has loaded,
+   the script arms them (.pb-armed: height 0) if the band is below the fold,
+   in one frame with no transition (.pb-still), and lets them go (.pb-go)
+   when it scrolls into view; a band on screen by then is left finished.
+   The figures are never written as zero (Run 25): they keep the markup's
+   until the count-up starts, and its first frame is already 16% of the way. */
 .pb-gap-bar,.pb-gap-short{position:absolute;left:0;right:0;height:var(--h);overflow:hidden;
   border-radius:14px 14px 0 0;transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
 .pb-gap-bar{bottom:0}
@@ -1496,6 +1499,8 @@ button{font-family:inherit}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
 .pb-gap-short{bottom:var(--from);background:var(--amber-soft);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
+.pb-gap.pb-still .pb-gap-bar,.pb-gap.pb-still .pb-gap-short{transition:none}
+@media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
 .pb-gap-n{position:absolute;left:20px;top:18px;font-family:var(--font);font-variant-numeric:tabular-nums;
   font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
 .pb-gap-need .pb-gap-n{color:#fff}
@@ -1874,6 +1879,24 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-rw-out{margin:12px 0 8px;font-size:1rem;line-height:1.55;color:inherit;font-variant-numeric:tabular-nums}
 .pb-rw-out b{font-weight:700;color:inherit}
 .pb-rw-link{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+/* Run 25: the hero's subhead, Our story's line word for word */
+.hero .pb-sub{margin:18px 0 0;max-width:30em;font-size:clamp(1.12rem,1.8vw,1.4rem);font-weight:500;line-height:1.45;color:var(--ink);text-wrap:balance}
+.hero .pb-sub + .lede{margin-top:12px}
+/* TRUST:BEGIN (Run 25). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 </style>
 </head>
 <body>
@@ -1902,9 +1925,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <div class="hero-copy">
     <span class="eyebrow reveal"><span class="pip"></span>Pensions, in plain English</span>
     <h1 class="reveal" style="transition-delay:.06s">One call.<br>To know<br><span class="hl">where you stand</span>.</h1>
+    <p class="pb-sub reveal" style="transition-delay:.09s">A pension should be something you understand, not something you avoid.</p>
     <p class="lede reveal" style="transition-delay:.12s">Most people in Ireland have a pension they&rsquo;ve never really looked at.</p>
     <div class="hero-cta reveal" style="transition-delay:.18s">
       <a class="btn btn-primary" href="booking.html">Get my free review <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free, 20 minutes, no obligation.</p>
       <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
     <div class="pb-reg reveal" style="transition-delay:.24s">
@@ -2254,8 +2279,11 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   /* the markup carries the finished chart; without an observer, or with
      reduced motion, it stays exactly as written */
   if(REDUCE||!('IntersectionObserver' in window)||!('requestAnimationFrame' in window)) return;
-  gap.classList.add('pb-armed');
-  nums.forEach(function(n){n.textContent=fmt(0);});
+  function inView(){var r=gap.getBoundingClientRect();return r.top<window.innerHeight&&r.bottom>0;}
+  /* a link to the band itself (#gap) lands on it: that reader is looking at
+     the finished chart, so it stays finished */
+  var to=null; try{to=location.hash.length>1&&document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch(e){}
+  if(to&&(to===gap||to.contains(gap))) return;
   var done=false;
   function run(){
     if(done) return; done=true;
@@ -2263,6 +2291,8 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
     /* the calculators' display engine: each frame closes a fixed fraction of what is left */
     var anims=nums.map(function(n){return {el:n,cur:0,target:+n.getAttribute('data-pb-count')};});
     function step(){
+      /* the reader has moved the slider: their figures stand, the count-up stops */
+      if(gap.classList.contains('pb-gap-live')) return;
       var active=false;
       anims.forEach(function(a){
         var d=a.target-a.cur;
@@ -2273,12 +2303,22 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
     }
     requestAnimationFrame(step);
   }
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){io.disconnect();run();}});
-  },{threshold:0.3});
-  io.observe(gap);
-  /* never leave the figures at zero: a band that is already past the fold when the observer attaches, or a browser that never fires it */
-  setTimeout(function(){var r=gap.getBoundingClientRect();if(r.top<window.innerHeight&&r.bottom>0)run();},1200);
+  /* decided once the page has settled, after any restored scroll: a band on
+     screen then (a tall window, a reload part-way down) stays finished; one
+     below the fold is armed in a single frame, with no transition that could
+     shrink bars in view, and let go when it scrolls in */
+  function arm(){
+    if(inView()) return;
+    gap.classList.add('pb-still','pb-armed'); void gap.offsetHeight; gap.classList.remove('pb-still');
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){io.disconnect();run();}});
+    },{threshold:0.3});
+    io.observe(gap);
+    /* never leave the bars empty: a browser whose observer never reports */
+    setTimeout(function(){if(inView())run();},1200);
+  }
+  if(document.readyState==='complete') requestAnimationFrame(arm);
+  else addEventListener('load',function(){requestAnimationFrame(arm);});
 })();
 /* the gap, your own: the reader's figure for what they expect to need, against
    the State Pension figure the chart already carries. Only the chart's own
@@ -2521,7 +2561,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
@@ -2677,7 +2717,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   setTimeout(function(){if(!reported)sayAll();},3000);
 })();
 </script>
-<script src="assets/js/pb-bookbar.js?v=bf67cfb3"></script>
+<script src="assets/js/pb-bookbar.js?v=38cc66f9"></script>
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){

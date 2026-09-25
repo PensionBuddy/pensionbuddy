@@ -1734,6 +1734,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
   .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
 }
+/* TRUST:BEGIN (Run 25). Two shared components, each one string in
+   tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
+   page carries byte for byte; pagebuild.trust_drift() is the guard.
+   .pb-reviewed: who reviewed a calculator or rules page, and when, at the
+   foot of the page header. .pb-why: the one reason to book, next to a
+   booking call to action whose own block gives none. */
+body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
+body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+.hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
+.phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
+.pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
+.pb-bookbar{flex-wrap:wrap}
+.pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
+/* TRUST:END */
 
 /* ============================================================
    DIRECTORS' RULES, 2026 (director-pension-rules.html, Run 20 #6).
@@ -1826,6 +1841,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h1 class="reveal" style="transition-delay:.06s">Directors&rsquo; pensions in 2026: <span class="hl">what changed, and what to talk about.</span></h1>
   <p class="reveal" style="transition-delay:.12s">Three things changed in the last two years: what happens to company pensions set up for one person before April 2021, how much a company can pay into a Personal Retirement Savings Account (PRSA) for you tax-free, and how high the Standard Fund Threshold goes. Here they are in plain English, with four questions to see which of them apply to you.</p>
   <p class="dr-asat reveal" style="transition-delay:.14s">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
+  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap dr-wrap">
@@ -1894,6 +1910,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <h3 id="drOutH" tabindex="-1">Worth talking through</h3>
       <ul id="drList"></ul>
       <p class="dr-src">Topics to discuss, not advice. <a href="booking.html" id="drBook">Book a call with Damian for free</a> to go through them.</p>
+      <p class="pb-why">Free, 20 minutes, no obligation.</p>
     </div>
   </section>
 </div>
@@ -2229,7 +2246,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
   panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a></div>';
+    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}

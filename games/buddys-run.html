@@ -103,6 +103,8 @@ canvas.game{display:block;width:100%;height:100%;background:#E8F6F3}
 .fact .src{font-size:.78em;color:var(--ink-2);margin-top:.3em}
 .fact .src a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 .panel .back{font-size:.85em;margin-top:.1em}
+/* Run 25: the reason to book, the site's one string (tools/pagebuild.py REASON) */
+.panel .pb-why{margin-top:.35em;font-size:.85em;color:var(--ink-2)}
 .paused-card{background:var(--surface);border-radius:.9em;padding:1.2em 1.5em;text-align:center}
 .paused-card h2{font-family:var(--display);font-weight:800;font-size:1.6em}
 
@@ -118,7 +120,7 @@ canvas.game{display:block;width:100%;height:100%;background:#E8F6F3}
 .stage.tight .fact p{line-height:1.38}
 .stage.short .panel h1{font-size:1.8em}
 .stage.short .how{font-size:.88em;line-height:1.32;gap:.18em}
-.stage.short #ovStart .lede,.stage.short #ovStart .opt{display:none}
+.stage.short #ovStart .lede,.stage.short #ovStart .opt,.stage.short .panel .pb-why{display:none}
 
 /* a screen at the top with a control deck under it, for tall boxes */
 .stage.deck{align-items:flex-start}
@@ -225,6 +227,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
         </div>
         <button class="btn btn-teal" id="againBtn" type="button">Run it again</button>
         <a class="btn btn-pine" href="../booking.html" target="_top">Book a call with Damian for free</a>
+        <p class="pb-why">Free, 20 minutes, no obligation.</p>
         <a class="back" href="../glossary.html" target="_top">Back to the jargon buster</a>
       </div>
     </div>
