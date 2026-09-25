@@ -25,7 +25,7 @@ push, merge, push `main`.
 | 1 | Home hero subhead | done: "A pension should be something you understand, not something you avoid." under the heading, above the existing line, in Inter 500 at 1.12 to 1.4rem. The story section's line ("One idea: a pension should be…") stays where it is |
 | 2 | The review line | done, as one component: the string is `pagebuild.REVIEWED`, `assemble()` puts it at the foot of the page header of every record with `reviewed=True` (8 built pages), the two hand-written calculators carry it by hand, and `pagebuild.trust_drift()` fails any page that should carry it and does not, carries it and should not, or carries a different wording (in `verify.py` as a chrome FAIL, and `tests/build.test.py` section 12 with six mutants). On: pension calculator, director calculator, auto-enrolment comparison, charges calculator, pensions list, both State Pension pages, directors' rules, SFT, PIA. Not on the held finder and readiness check (not signed off). **Wording: QFA is spelled out**, "Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026", because Run 22's rule spells out every initialism at its first use and this line is the first QFA on all ten pages |
 | 3 | The gap chart never shows €0 | fixed. Two faults on `main`: the script wrote "€0" into the figures as the page loaded, and arming the chart shrank the bars with a 1.15 s transition, so a reader who landed with the band on screen watched €0 bars collapse and regrow. Now the figures are never written as zero (they keep the markup's until the count-up starts, whose first frame is already 16% of the way); the band is judged once the page has loaded: on screen then, or reached by a link to `#gap`, it stays finished; below the fold, it is armed in one frame with no transition and counts up when scrolled to. Moving the slider mid-count now stops the count-up instead of being overwritten by it, and a printed page shows the bars. `tests/gap-band.py` (new, real frames, not in the runner: about 40 s) drives nine scenarios: no JavaScript at two widths, #gap at two widths, a tall window, a slow page scrolled before load, reduced motion, and two where the count-up must still play. 45/45 on the branch; on `main` 13 fail, with €0 on screen in three of them. `tests/build.test.py` section 13 guards the markup's three figures and the script statically |
-| 4 | Superlatives scan | listed below, nothing changed: 50 hits, all "top" (37) or "best" (13); no "leading", "number one", "No. 1" or "better than" anywhere a reader can see, and none in code either. None is a claim about the firm |
+| 4 | Superlatives scan | listed below, nothing changed: 49 hits, all "top" (36) or "best" (13); no "leading", "number one", "No. 1" or "better than" anywhere a reader can see, and none in code either. None is a claim about the firm |
 | 5 | A reason next to every booking call to action | done where missing, from existing copy only: "Free, 20 minutes, no obligation." (the booking page's own terms: "Free, with no obligation", "Twenty minutes with Damian"). One string, `pagebuild.REASON`, one CSS recipe, guarded like item 2. Where the call to action's own block already gives the reason, nothing was added, so no card says "free" three times. The inventory is below |
 
 The two components share one block of CSS (`/* TRUST:BEGIN` to `TRUST:END */`),
@@ -84,7 +84,7 @@ this branch.
 | `games/jargon-battle.html:249` | text | > 0 of 8 Best ever 0 of 8 <p class="pb- |
 | `games/jargon-battle.html:974` | script text | …nap. ') + 'Hits landed: ' + s.hits + ' of ' + s.total + '. Best ever: ' + best + ' of ' + s.total + '.'); if (againBtn) { a… |
 
-**"top" (37): every one means "in addition" ("on top of", "top-up"), a position ("off the top of your taxable income", "at the top of this page") or is the jargon quiz**
+**"top" (36): every one means "in addition" ("on top of", "top-up"), a position ("off the top of your taxable income", "at the top of this page") or is the jargon quiz**
 
 | Where | Kind | Words around it |
 |---|---|---|
@@ -112,7 +112,6 @@ this branch.
 | `old-pension-checklist.html:1629` | text | …al pension, or AVCs (additional voluntary contributions) on top of a work scheme. Finding them <ul class="ck-li |
 | `pension-calculator.html:2032` | text | …h work differently, and the State Pension may be payable on top. Warning: These figures are estimates onl |
 | `pension-calculator.html:2114` | text | …rgon buster">State Pension (Contributory) may be payable on top, €15,564 a year for a full entitlement. Check gov.ie for th… |
-| `pension-calculator.html:2314` | script text | const capNote=annualMine>relievableAnnual ?' At '+age+', Reven… |
 | `pia.html:2269` | text | …gure. If your employer would pay into a pension, that is on top. <div |
 | `starter.html:2110` | text | …te Pension pays €15,564 a year at the maximum. What sits on top of it is up to you, and the chart below shows what time doe… |
 | `state-pension-entitlement.html:2308` | text | ure> Now you have the figure, the question is what sits on top of it. Whichever calculation the Department uses, the State… |
