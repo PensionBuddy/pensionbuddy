@@ -32,6 +32,7 @@ pins the same instant `runpage.js` does, and it borrows the traps below.
 | `sequences.js` | the **event path**: scripted sessions of real `input`/`change`/`click`/`keydown`, compared after every action |
 | `browser-diff.py` | the same pages in **real headless Chrome**, baseline checkout against working tree; each run makes its own checkout in a fresh temp directory and names its probe page by process id, so runs can overlap |
 | `mutate-shared.js` | breaks `assets/js/calc-page.js` on purpose, one change at a time, and requires the sweep to notice |
+| `classify-director-floor.js` | Run 29: not a refactor, so the claim is WHERE the director calculator differs once its retirement age cannot go below 50: nowhere at age 49 and over, only in the slider's `min` and fill at 48 and under, and the figures only where retirement was below 50 |
 
 ## What "the same" means here
 

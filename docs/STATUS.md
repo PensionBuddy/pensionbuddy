@@ -117,6 +117,7 @@ the first commit and this run is 29.
 | 3 | Provider ticker, built and switched off | done, **off**. `assets/js/pb-providers.js` is the one file to edit: `ON` (false), `LABEL` ("Providers we hold agencies with") and `PROVIDERS` (Zurich, Irish Life, Aviva, New Ireland, Royal London, Standard Life, each `logo: null`, which draws a box with the name in text; no logo files anywhere). With `ON` false the script returns before doing anything, and the home page's mount, `<div data-pb-providers hidden>` under the hero, stays empty and hidden: nothing shows on the live site. Switched on, it builds a strip under the label: the boxes scroll right to left in a loop, faded at both edges, pausing on hover; a small Pause button stops it for keyboard and touch users (moving content needs a way to stop it, WCAG 2.2.2); with reduced motion it is a still, centred, wrapped row with no button. Screen readers get one list of the six names; the copies that make the loop seamless are hidden from them. The label is "Providers we hold agencies with", nowhere "partners" or "we work with". **To switch on:** set `var ON = true;` in that file, after R29-1 and R29-2 below. `tests/providers.test.py` (new, 39 checks, two Chrome launches): off as shipped, and switched on in the served bytes only (label, order, boxes, fades, motion, Pause and Play, hover, reduced motion, no overflow at 375 and 1440px); nine mutants caught | this commit |
 | 4 | The 15 October cut-off | done. The chip, the home page's band and the calculators' row all count to the end of 15 October and say "Book by 15 October so we have time to process before the Revenue deadline."; Revenue's own deadline is stated beside it wherever the cut-off is: **31 October, or 18 November if you pay and file online through the Revenue Online Service** (revenue.ie, "Filing your tax return", published 19 March 2026: "The Pay and File deadline for the 2025 Income Tax Return (Form 11) is Saturday 31 October 2026 ... Wednesday 18 November 2026" on ROS; Revenue eBrief No. 034/26). The dates carry no year, like the cut-off, beside the tax year they are for (2025), because `verify.py` warns (E1) when the band shows two years. After 15 October everything moves on to the next year's cut-off and tax year, as the old countdown did after 31 October (R29-4). Every place changed is listed below. `tests/deadline.test.py` (new, 161 checks, one Chrome launch with the clock pinned): every page, the band's words with and without JavaScript, the three calculators' rows, an hour before the cut-off, a second after it; seven mutants caught | this commit |
 | 5 | Clickable looks clickable | done. Audited first, in headless Chrome: every link, button, summary, label and control on all 31 pages at 1440 and 375px, 1,357 of them, for an underline or arrow, the pointer cursor, what a hover rule changes, and the focus ring when focused. **Already true, unchanged**: every link and button shows the pointer; every one has a visible focus ring (outline or a 3-4px teal ring); every button is filled or outlined (the segmented controls sit in a bordered track); the cards that are links already lift on hover (the home page's fork cards and product picture, the glossary's game cards); no card that is not a link lifts. **Changed**, in one `CLICK` block of CSS, byte for byte the same on all 29 pages, copied and guarded like the NAV block (`click-css`): (1) links in running text, 48 of them on 11 pages (the glossary's index, the checklists' and guides' links, the calculators' glossary references) and the four card titles on the directors' page, were coloured text only: underlined, thicker on hover; (2) the footer's links on every page were plain text: a faint underline, teal on hover; (3) the six big names under "Six places to begin" on the home page gave no sign they were links until hovered: a teal arrow after each, which moves on hover; (4) the three cards on the thank-you page did nothing on hover: they lift, with a shadow and a teal border; (5) the unchosen option in a segmented control did nothing on hover: a pale teal tint. After it, the same audit finds nothing left (the six home page names count as bare to it only because it cannot see an arrow drawn by CSS). No product picture shows a link the block changes | this commit |
+| 6 | Directors: the ages, against Revenue's Pensions Manual | checked; **one clear error, fixed**: the director calculator's retirement-age slider is `min="50"` in the markup, but its script replaced that with the reader's age plus one on every change, so a 25-year-old director could retire at 26 and the default reader (48) at 49. Before 50, benefits are paid only on ill health (Manual 9.1, 9.2). The floor is now the higher of 50 and the age plus one. Everything else the director pages, the calculator and the glossary say about ages is right, or says nothing (the director pages and the glossary give no age for taking benefits at all). Five things need your call, listed below with the manual's words. **Render-diff** against the commit before: at load two cells differ, both the slider (`min` 49 to 50, its fill 65.4% to 64%); across 22,301 states every state with the age at 49 or over is identical (10,175), every state at 48 or under with retirement at 50 or over differs in the slider's `min` and fill and nowhere else (11,826: no figure moves), and the 300 states with retirement below 50, which the old page allowed, now read 50 (`tests/render-diff/classify-director-floor.js`, which fails on a floor of 51 and on a changed figure). The director picture on the home and directors' pages was re-shot: the retirement thumb sits 1.4% further left, same size, 2184x3187 | this commit |
 
 
 ## The nav, as built (item 2)
@@ -204,6 +205,63 @@ October window", the same dates), the glossary's quiz bank ("Pay and File
 deadline (31 October)", online filers "usually get until the middle of
 November"), and Buddy's Run's fact card ("usually have until mid-November",
 which cites the home page's band; still true).
+
+## Directors' ages: the rules, and what needs your call (item 6)
+
+Revenue's Pensions Manual, read 25 September 2026 (revenue.ie, Tax and Duty
+Manuals, Pensions):
+
+- **Normal retirement age**, Chapter 6.7 (last reviewed August 2026): the
+  scheme's rules set it "between 60 and 70 years"; Revenue can accept
+  another age for some occupations, "but 20% directors must be within the
+  60-70 years age range".
+- **Early retirement**, Chapter 9.1 (June 2025): benefits "may be provided
+  on or after the employee reaches 50 years of age", on leaving the
+  employment. Chapter 9.6: a director "with at least 20% interest" who takes
+  early retirement benefits "must sever all links with the business,
+  including the disposal of all shares in the company". Ill health, 9.2: at
+  any age.
+- **Personal Retirement Savings Account (PRSA)**, Chapter 24.5 (May 2025):
+  "Benefits may be taken when the individual reaches age 60 years"; its
+  footnote: "retirement from age 50 may be allowed in the case of employed
+  contributors" (and occupations that customarily retire before 60). A PRSA
+  is deemed to vest at 75 (24.5, 24.14).
+
+What the site says, checked: `pensions-over-50.html` (from 50 on leaving the
+job, with the scheme's and trustees' agreement; a 20% director cuts all
+links first, including selling the shares; a PRSA normally from 60, from
+50 on retiring from an employment; a personal pension from 60) is right.
+`pia.html`'s "normally from 60, and from 50 in some cases" is right as a
+summary. The directors' rules page's "A move to a PRSA is not allowed after
+the scheme's normal retirement age" matches Chapter 13, paragraph 2.1. The director pages and the glossary give no age for
+taking benefits.
+
+**R29-5 to R29-9, for your call** (nothing changed):
+
+- **R29-5 The top of the director calculator's retirement slider: 75 or
+  70?** A company scheme's normal retirement age is at most 70 (6.7), and a
+  deferred pension from a job left starts by 70 (Chapter 12); but a PRSA the
+  company pays into vests at 75, and the manual's own example (8.7) has a
+  20% director retiring at 73. The page does not say which kind of pension
+  it models. Now 50 to 75.
+- **R29-6 Say something about 50 to 59?** The slider allows it, and nothing
+  on the calculator mentions the condition. A line under the slider that
+  keeps to the manual: "Before the scheme's normal retirement age, a
+  director with 20% or more of the company generally has to cut all links
+  with it, including selling the shares." Not added: new copy.
+- **R29-7 "20% or more" or "more than 20%"?** The site (and Chapter 9.6)
+  say at least 20%; the manual's glossary (Appendix I, December 2024)
+  defines a 20% director as one who "owned or controlled more than 20% of
+  the voting rights" in the last three years. The manual disagrees with
+  itself; one wording should be picked.
+- **R29-8 PRSA from 50.** The over-50s guide says "from 50 if you retire
+  from an employment"; the manual says it "may be allowed" for employed
+  contributors. "can be taken from 50" would match it more closely.
+- **R29-9 The pension calculator has the same bug.** `pension-calculator.html`
+  replaces its retirement slider's `min="50"` with the age plus one, so an
+  18-year-old can retire at 19. The fix is the same line; it moves that
+  slider's fill at the default (age 40: 41 to 50) and so the home page's
+  pension picture needs a re-shoot. Outside this brief, so left.
 ---
 
 # Run 28 — 2026-09-25 · Tidy-up before launch
