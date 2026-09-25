@@ -4,7 +4,7 @@
     python3 tests/gap-band.py            # the working tree
     python3 tests/gap-band.py <root>     # any checkout, e.g. a baseline
 
-Run 25. Serves the site with a probe injected as the first thing in the home
+Run 26. Serves the site with a probe injected as the first thing in the home
 page's <head> and records every state of the chart's three figures: their
 text, and whether each is actually visible (the band's opacity, inside the
 viewport, not clipped by its bar). Real frames, no virtual time, which would

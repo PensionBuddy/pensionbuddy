@@ -130,13 +130,13 @@ def versioned(rel):
 # already use. verify.py fails any page that links to a page carrying it.
 NOINDEX = '<meta name="robots" content="noindex">'
 
-# Run 25. Two shared components, each one string here, styled by the TRUST
+# Run 26. Two shared components, each one string here, styled by the TRUST
 # block of CSS that every page carries byte for byte. REVIEWED sits at the
 # foot of the page header on every calculator, the State Pension pages, the
 # director rules, the SFT and the PIA page: assemble() puts it into each
 # record with reviewed=True, and the two hand-written calculators carry it by
 # hand. REASON sits next to a booking call to action whose own block gives no
-# reason to book; docs/STATUS.md, Run 25, lists every call to action and which
+# reason to book; docs/STATUS.md, Run 26, lists every call to action and which
 # reason it has. trust_drift(), at the end of this file, is the guard.
 REVIEWED = ('<p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
@@ -784,7 +784,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 
 
 # ============================================================================
-# THE TRUST COMPONENTS (Run 25). The review line on exactly the pages that
+# THE TRUST COMPONENTS (Run 26). The review line on exactly the pages that
 # should carry it and on no other; every .pb-reviewed and .pb-why written as
 # the one string at the top of this file; and the TRUST block of CSS on every
 # page, byte for byte the skeleton's. Like chrome_drift(), it never raises:

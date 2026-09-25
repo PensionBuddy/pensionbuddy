@@ -6,9 +6,9 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Run 25 — 2026-09-25 · Trust copy: a subhead, the review line, the gap chart, the reason to book
+# Run 26 — 2026-09-25 · Trust copy: a subhead, the review line, the gap chart, the reason to book
 
-Damian's brief, branch `claude/trust-copy` off `main` `faf4c0e`: the home
+Damian's brief, branch `claude/trust-copy` off `main` `faf4c0e`, merged with Run 25 (`d202369`, which landed on `main` meanwhile) before its own merge: the home
 hero's subhead from Our story, word for word; "Reviewed by Damian Condon,
 QFA · Last reviewed September 2026" on every calculator, the State Pension
 pages, the directors' rules, the SFT and the PIA page, as one shared
@@ -130,8 +130,9 @@ this branch.
 
 - The review line spells out QFA (Run 22's rule). If you want the shorter
   "Reviewed by Damian Condon, QFA", it is one string in `tools/pagebuild.py`
-  (`REVIEWED`) plus the two hand-written calculators, and the Run 22
-  exception list gains QFA on these ten pages.
+  (`REVIEWED`) plus the two hand-written calculators, and QFA joins the
+  exceptions in `tools/check-initialisms.py` (Run 25's check, which fails
+  the short form today).
 - "Last reviewed September 2026" is fixed text. After Budget 2027 on 6
   October 2026 the SFT, directors' rules and PIA pages change; the date
   should move with them.
@@ -147,6 +148,48 @@ this branch.
   the declared width/height) changes the home page's pictures, so it is left
   for its own review. `tools/shoot-product.py` now leaves the reason line out
   of its frames, as it does the share link.
+
+---
+
+# Run 25 — 2026-09-25 · Run 22 confirmed on main, and three initialisms it missed
+
+Damian's instructions: confirm on `main` (`faf4c0e`) that the auto-enrolment
+comparison has the locked warning box under "Everything paid in, by 66" and
+that initialisms are spelled out at first use on each page; if not, do it,
+gate, merge, push. Branch `claude/initialisms-first-use` off `faf4c0e`.
+
+## Items
+
+| # | Item | Result |
+|---|---|---|
+| 1 | The comparison's warning box | confirmed, no change: in `tools/compare-parts/main.html` and the built page, the two prescribed warnings sit inside the "Everything paid in, by 66" card directly after its second figure, with nothing between (16px gap), above the card's note. Probed in Chrome at two widths: visible in mode 1 with both figures; hidden with the card in mode 2 (the card is mode 1's); visible again on return. Word for word the same as the other 7 boxes on the site (8 boxes on 6 pages, one distinct text). `pb-warn` is still on the copy editor's deny list, `tools/edit-server.py` |
+| 2 | Initialisms at first use | confirmed on every page except three first uses, now spelled out. Run 22's scan was never committed, so it was rebuilt, wider: it finds every token of two or more capitals instead of checking a list, reads hidden text (folded panels, jargon chip definitions, results not shown yet) and what each tab shows once clicked. The three: "S.I. No. 128 of 2021" in the directors' rules page's sources, now "Statutory Instrument (S.I.) No. 128 of 2021"; "the EEA" on the UK page, which followed "the European Economic Area" in the same sentence without linking the two, now "the European Economic Area (EEA)"; and "first PRSI year" in the alt text of the entitlement check's photograph, which the home page's tool picker swaps in when that tab is clicked (a screen reader reads it; the home page never spells out PRSI), now "the year you first paid Pay-Related Social Insurance (PRSI)". Every new PIA-page initialism (PIA, ETF, CGT, DIRT, PPSN, SIA, USC, PRSI) and the footer's "Personal Investment Account (PIA)" on every page pass. The compliance pack's 5.3, section 7, A.6 and A.12 are updated to match |
+| 3 | The check, kept | `tools/check-initialisms.py`: every page, or named pages, `--all` to list what passes; exit 1 on any initialism not spelled out at first use. Accepted forms: "Full name (INIT)", "INIT (Full name)", and the full name right before or after (the glossary's headings, "a qualifying recognised overseas pension scheme, a QROPS", "The Money Advice and Budgeting Service, MABS"). Exceptions carry their reasons in the file. Shown to fail: run against an untouched copy of `faf4c0e` it reports exactly the three above (the PRSI one through the tab), and a planted mutant (pia.html's h1 without its expansion) |
+
+Not covered by the check, searched by hand instead: text a script writes only
+after other interaction. Every string in `assets/js` and the parts' page
+scripts carrying an initialism was listed and read against its page: all
+are preceded by the spelled-out form (director topics' PRSA, the pensions
+list's "A PRSA", the entitlement check's PRSI and TCA lines, the PIA page's
+sentences), except "PDF" in the old pension finder's closing message.
+
+## NEEDS DAMIAN INPUT from this run
+
+- Two exceptions added to Run 22's list, both left as they are: "HM" in "HM
+  Revenue and Customs (HMRC)" (part of the department's name) and "PDF" in
+  the old pension finder's closing message, "then save it as a PDF" (the
+  name of the option in the reader's own print window; the page is held
+  back). Say if either should be spelled out.
+
+## Proof
+
+- `tools/check-initialisms.py`: 29 pages, every one ok, exit 0.
+- `tests/run-tests.py` ALL SUITES PASS; `tests/build.test.py` 148,
+  `tests/runner.test.py` 95, `tests/games.test.py` 157, all pass;
+  `stamp-images.py --check` and `sync-chrome.py --check` clean.
+- `tools/verify.py` on the three changed pages (index, the UK page, the
+  directors' rules) at 375, 1200 and 1440: 0 FAIL, 0 WARN. No calculator
+  page changed, so render-diff does not apply.
 
 ---
 

@@ -267,7 +267,7 @@ def run():
     shutil.rmtree(tmp, ignore_errors=True)
 
     # ----------------------------------------------------------------- 12
-    # Run 25. The review line and the reason to book are one string each in
+    # Run 26. The review line and the reason to book are one string each in
     # pagebuild, and their CSS is one block every page carries. The guard is
     # clean on the tree as it ships, and each mutant below is one way a page
     # could drift: every one must be named, and only on the page it touched.
@@ -296,7 +296,7 @@ def run():
         eq('12. %s: named, on that page only' % label, sorted(set(findings(pagebuild.trust_drift(m)))), [(page, kind)])
 
     # ----------------------------------------------------------------- 13
-    # Run 25. The home page's gap chart: its markup is the finished chart, so
+    # Run 26. The home page's gap chart: its markup is the finished chart, so
     # a reader without JavaScript sees the real figures, and the script never
     # writes a euro zero. tests/gap-band.py proves the rest on real frames.
     home = sources['index.html']
