@@ -80,7 +80,7 @@ SUITES = {
     'living-standards': (['/assets/js/state-pension.js', '/assets/js/living-standards.js'],
                          '/tests/living-standards.test.js', ['PBStatePension', 'PBLivingStandards'], 66),
     'pension-finder': (['/assets/js/pension-finder.js'],
-                       '/tests/pension-finder.test.js', ['PBFinder'], 65),
+                       '/tests/pension-finder.test.js', ['PBFinder'], 76),
     'pension-fees': (['/assets/js/cost-of-waiting.js', '/assets/js/pension-fees.js'],
                      '/tests/pension-fees.test.js', ['PBWaiting', 'PBFees'], 35),
     'readiness': (['/assets/js/readiness.js'],

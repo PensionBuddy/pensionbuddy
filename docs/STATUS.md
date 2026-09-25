@@ -6,6 +6,104 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 27 — 2026-09-25 · Launch gaps: the forms, the liability clause, analytics after consent
+
+Damian's brief: branch `claude/launch-gaps` off `main` (`faf4c0e`), fast
+mode, locked rules; the gate before each commit; merge and push `main` at
+the end. While it was open, two other sessions merged Runs 25 and 26 into
+`main` and pushed it (`d6ff3dc`), so this run was merged with them at the
+end and numbered 27, and its pack questions became 1.15 to 1.17. The gate
+each time: `tests/run-tests.py`, `tests/build.test.py`,
+`tests/runner.test.py`, `tests/games.test.py`, the two new browser tests
+below, `stamp-images.py --check`, `sync-chrome.py --check`, and
+`tools/verify.py` over every page at 375, 1360 and 1440; after the merge,
+also `tests/gap-band.py` and `tools/check-initialisms.py` from Runs 25-26.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Netlify Forms, every lead form | done: seven `<form data-netlify="true" netlify-honeypot="bot-field" method="POST">` forms, each in its page's static HTML with a hidden `form-name`, a honeypot, and every field it posts declared as an element, since Netlify stores only declared fields (the form itself is the static copy Netlify reads at deploy). `assets/js/pb-forms.js` posts the form urlencoded to `/`; only a 2xx shows the existing success state, and a refusal, a network failure or 4 s of silence opens the existing pre-filled email. The booking form posts without waiting: Calendly gets the same details, so it needs no email route. The occasional-emails box stays separate and unticked, sent as `yes` or `no`. Privacy Notice: one sentence naming Netlify, our website host (pack 1.15, 3.3, proposed). `LEAD_ENDPOINT` removed everywhere. `tests/lead-forms.test.py` (207 checks) submits every form in headless Chrome against a stand-in for Netlify, accepted and refused; `build.test.py` check 12 pins the seven names; the finder suite gains `fields()` (gate 65 to 76) | `3309bb4` |
+| 2 | Terms liability clause | done: the A1 cap sentence is replaced by "This website provides information and booking only. No advice is given through it, whether by its calculators, guides, glossary, Buddy or any form on it. Advice is only given after a fact-find with Damian Condon." No cap figure. "Last updated" 25 September 2026. Pack 1.16 | `02c86c0` |
+| 3 | Analytics, GTM-KQCRZDNB | done: `assets/js/pb-consent.js` on all 29 root pages replaces the dormant inline scaffold; Google's snippet runs only after "That's fine" (now or on an earlier page); "No thanks" or no answer loads nothing, and "No thanks" deletes any `_ga`/`_gid`/`_gat` cookies. No `<noscript>` iframe, on purpose. `PBTrack` events: `booking_form_submit`, `calendly_booking`, `calculator_first_interaction` with `calculator` (the page name) on eleven tools marked `data-pb-calc`; an event before the answer is sent only on a yes. Privacy Notice cookies section rewritten with a "Change your cookie choice" button (pack 1.17, 3.4, proposed). `tests/consent.test.py` (263 checks) | `87d0fbd` |
+| 4 | Central Bank reference number | report only, not filled: one placeholder on the site, `how-we-work.html:1618` (R20-9a, the held page). In the docs: `docs/COMPLIANCE-PACK.md:84` (question 1.1 asks for it) and `:1008` (Appendix A.1 quotes the page). Line numbers as merged with `main`. No other page shows or asks for the number | this commit |
+| 5 | Compliance email | done: `docs/COMPLIANCE-EMAIL.md`, 195 words with the subject line: the pack attached, the pages waiting on sign-off, five questions | this commit |
+
+## The form names, for Netlify's notifications
+
+`booking` (booking.html) · `pension-calculator-results` (pension-calculator.html) ·
+`director-calculator-results` (director-calculator.html) · `director-guide`
+(director.html) · `starter-guide` (starter.html) · `tracker-guide`
+(tracker.html) · `pension-finder` (find-my-pension.html, held back).
+
+## Found and fixed on the way
+
+- The bar had never been shown, and two faults came with it. "That's fine"
+  put dark text on the page's accent colour: 3.3:1 to 3.6:1 on 28 pages,
+  1.24:1 on director.html (verify.py: 87 FAIL, three widths each). Its fill is now cream. And on a phone
+  the bar wraps to about 154px, but Ask Buddy was lifted a fixed 96px, so
+  Buddy covered "That's fine"; the bar now publishes its height
+  (`--pb-consent-h`) and Buddy sits on it (consent test section 8, at 320,
+  375 and 1200px).
+
+## NEEDS DAMIAN INPUT from this run
+
+- **R27-1 Netlify setup.** In the Netlify site's Forms settings, check that
+  form detection is on before this deploy: without it no form is
+  registered, and every form falls back to email. Then set a notification
+  for each form name above.
+- **R27-2 Promises the forms now make.** On a successful post the pages say
+  "Thanks. Your figures are on the way." and "Thanks. The guide is on its
+  way.", under a note "If nothing arrives in a few minutes, check your spam
+  folder." Netlify stores the submission and can email you; it sends nothing
+  to the visitor. Someone has to send the figures or the guide, or the
+  wording changes, or an automatic reply is set up. Kept as they were (the
+  brief said keep the existing success state).
+- **R27-3 The GTM container is empty.** Fetched 25 September 2026: version
+  1, no tags. Nothing is measured until tags are added and published in
+  Google Tag Manager (for example a Google Analytics 4 tag, and triggers on
+  the three custom events above).
+- **R27-GTM** (privacy.html): which tools Tag Manager runs, their cookies,
+  how long they last, where Google processes the data. The banner's "nothing
+  for ads, never sold" holds only if the tags are set up that way.
+- **Pack 1.15 and 3.3**: Netlify as processor, retention of submissions,
+  and the finder's date of birth, address and signature in Netlify; the
+  finder's own privacy sentence (R20-1b) should name Netlify before the page
+  is released. The notice's line that calculator figures go nowhere
+  "unless you separately choose to email yourself the results" does not
+  describe the "Email my results" forms, which send them to us; unchanged.
+- **Not tracked, by choice**: the two game pages (`games/`) load no consent
+  script (they are chromeless and run inside the glossary's iframe); the
+  home and starter pages' small calculators are not marked. Either can be
+  added.
+
+## Proof
+
+- On the merge with `main` (`d6ff3dc`, Runs 25 and 26), the whole gate
+  again: every suite at its gate, `build.test.py` 197 (Run 26's checks 12
+  and 13, this run's lead-form check now 14), `lead-forms.test.py` 207,
+  `consent.test.py` 263, `gap-band.py` and `check-initialisms.py` pass (no
+  initialism in this run's copy), `verify.py` 0 FAIL with the same WARNs
+  as below. The built pages were rebuilt from their merged parts, not
+  merged by hand.
+- Gate before each of the three code commits, final run on `87d0fbd`:
+  every suite at its gate (`pension-finder` 76), ALL SUITES PASS;
+  `build.test.py` 185, `runner.test.py` 95, `games.test.py` 157,
+  `lead-forms.test.py` 207, `consent.test.py` 263, all pass;
+  `stamp-images.py --check` and `sync-chrome.py --check` clean;
+  `verify.py`, 31 pages at 375, 1360 and 1440: 0 FAIL. WARNs: the
+  placeholders (find-my-pension R20-1a, how-we-work R20-9a to 9e, privacy
+  R20-1b, R20-A2 and the new R27-GTM) and glossary's C4, all as on `main`
+  except R27-GTM added and terms.html's A1 gone.
+- Both new tests were shown able to fail. Lead forms: a dropped hidden
+  field, a send that always succeeds, a missing page value. Consent: loading
+  without consent, counting replayed events, keeping the cookies, keeping
+  events after a no, a page without the script, the old fixed lift.
+- Rendered and looked at: the bar at 500 and 1300px, the Privacy Notice's
+  new section and button at 375px.
+
+---
+
 # Run 26 — 2026-09-25 · Trust copy: a subhead, the review line, the gap chart, the reason to book
 
 Damian's brief, branch `claude/trust-copy` off `main` `faf4c0e`, merged with Run 25 (`d202369`, which landed on `main` meanwhile) before its own merge: the home

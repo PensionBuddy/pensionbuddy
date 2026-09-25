@@ -125,6 +125,21 @@
   eq('7. the blank employer row is not sent', P.employers.length, 2);
   has('7. the letter travels as text', P.letterText, 'Letter of Authority');
 
+  group('7b the same trace as form fields, for Netlify');
+  var N = F.fields(sample(), TODAY, 'https://pensionbuddy.ie/find-my-pension.html');
+  eq('7b. exactly the fields the form declares, in its order', Object.keys(N).join(' '), F.FIELDS.join(' '));
+  eq('7b. every value is text', Object.keys(N).filter(function (k) { return typeof N[k] !== 'string'; }).length, 0);
+  eq('7b. both consents written out as no', N.phone_ok + ' ' + N.marketing_consent, 'no no');
+  var Ny = sample(); Ny.consents = { phone: true, marketing: true };
+  eq('7b. and as yes only when ticked', F.fields(Ny, TODAY).phone_ok + ' ' + F.fields(Ny, TODAY).marketing_consent, 'yes yes');
+  eq('7b. one employer to a line', N.employers.split('\n').length, 2);
+  has('7b. in the email\'s words', N.employers, 'Harbour Bank, from 2005');
+  eq('7b. no drawn signature is an empty field', N.signature_drawn, '');
+  eq('7b. a drawn one travels as its PNG', F.fields(drawn, TODAY).signature_drawn, 'data:image/png;base64,AAAA');
+  eq('7b. anything else is still dropped', F.fields(notPng, TODAY).signature_drawn, '');
+  eq('7b. the letter is the payload\'s letter', N.letter_text, P.letterText);
+  eq('7b. no PPS number here either', JSON.stringify(N).toLowerCase().indexOf('pps'), -1);
+
   group('8  the fallback email');
   var M = F.mailto(sample(), TODAY, 'hello@pensionbuddy.ie');
   var body = decodeURIComponent(M.split('&body=')[1]);

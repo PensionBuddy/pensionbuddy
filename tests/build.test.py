@@ -308,6 +308,71 @@ def run():
     eq('13. the count-up script never writes a zero figure', 'fmt(0)' in script, False)
     eq('13. and arms the bars without a transition', "classList.add('pb-still','pb-armed')" in script, True)
 
+    # ----------------------------------------------------------------- 14
+    # Run 27: the lead forms, as Netlify reads them at deploy. Netlify finds a
+    # form by name in the static HTML and stores only the fields that form
+    # declares, so each must be in the source, not built by script, with a
+    # hidden form-name and the honeypot, under a name no other page uses.
+    # These names are the ones Damian sets notifications on in Netlify.
+    from html.parser import HTMLParser
+
+    class Forms(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.forms, self.cur = [], None
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag == 'form':
+                self.cur = {'attrs': a, 'fields': []}
+                self.forms.append(self.cur)
+            elif self.cur is not None and tag in ('input', 'textarea', 'select') and a.get('name'):
+                self.cur['fields'].append((a.get('type', tag), a['name'], a.get('value')))
+
+        def handle_endtag(self, tag):
+            if tag == 'form':
+                self.cur = None
+
+    netlify = {}
+    for name, text in sources.items():
+        parser = Forms()
+        parser.feed(text)
+        for form in parser.forms:
+            if form['attrs'].get('data-netlify') == 'true':
+                netlify.setdefault(form['attrs'].get('name'), []).append((name, form))
+    eq('14. the seven lead forms, each on its page', sorted((n, [p for p, _ in v]) for n, v in netlify.items()),
+       sorted((n, [p]) for p, n in LEAD_FORMS.items()))
+    for form_name, where in sorted(netlify.items()):
+        page, form = where[0]
+        names = [f[1] for f in form['fields']]
+        eq('14. %s: posts to Netlify with the honeypot' % form_name,
+           (form['attrs'].get('method'), form['attrs'].get('netlify-honeypot')), ('POST', 'bot-field'))
+        eq('14. %s: a hidden form-name carrying its own name' % form_name,
+           [f for f in form['fields'] if f[1] == 'form-name'], [('hidden', 'form-name', form_name)])
+        eq('14. %s: one honeypot field, not hidden by type' % form_name,
+           [f[0] for f in form['fields'] if f[1] == 'bot-field'], ['input'])
+        eq('14. %s: an email field' % form_name, 'email' in names, True)
+        single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
+        eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
+    finder = read('assets/js/pension-finder.js')
+    m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
+    eq('14. the finder declares exactly what PBFinder.fields() sends',
+       re.findall(r"'([a-z_]+)'", m.group(1)) if m else None, pagebuild.FINDER_FIELDS)
+
+
+
+# Run 27: every Netlify form on the site, by page. Adding a lead form means
+# adding it here, and telling Damian its name for the notification settings.
+LEAD_FORMS = {
+    'booking.html': 'booking',
+    'pension-calculator.html': 'pension-calculator-results',
+    'director-calculator.html': 'director-calculator-results',
+    'director.html': 'director-guide',
+    'starter.html': 'starter-guide',
+    'tracker.html': 'tracker-guide',
+    'find-my-pension.html': 'pension-finder',
+}
+
 
 if __name__ == '__main__':
     run()

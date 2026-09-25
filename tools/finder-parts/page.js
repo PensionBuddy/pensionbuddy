@@ -5,13 +5,14 @@
    file only moves between the four steps, reads the form into the shape the
    module expects, and paints what the module returns.
 
-   SENDING. With LEAD_ENDPOINT set (it is empty today, as on every page),
-   the whole trace is posted as JSON and the page only says "sent" on a real
-   success. Without it, the reader's email app opens with the details and a
-   one-line authority ready to go to Damian, and the page says exactly that:
-   nothing has been sent by the page itself. A signature drawn on screen
-   cannot travel in an email link, so the last step offers the letter to
-   save as a PDF and attach.
+   SENDING (Run 27). The whole trace is posted to Netlify Forms as the
+   form's hidden fields (PBFinder.fields, assets/js/pb-forms.js), and the
+   page only says "sent" on a real success. When the post is refused or
+   fails, the reader's email app opens with the details and a one-line
+   authority ready to go to Damian, and the page says exactly that: nothing
+   has been sent by the page itself. A signature drawn on screen cannot
+   travel in an email link, so that route offers the letter to save as a
+   PDF and attach.
 
    TONE: no urgency, no promise of a find. The module's messages say what is
    missing and nothing else. */
@@ -231,18 +232,18 @@
     e.preventDefault();
     var d = data();
     if (!show(F.problems('sign', d, today))) return;
-    if (typeof LEAD_ENDPOINT === 'string' && LEAD_ENDPOINT.indexOf('http') === 0) {
-      fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(F.payload(d, today, location.href)) })
-        .then(function (r) {
-          if (r.ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
-          else show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]);
-        })
-        .catch(function () { show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]); });
-    } else {
+    function viaEmail() {
       window.location.href = F.mailto(d, today, LEAD_FALLBACK_ADDRESS);
       finish('Your email app should have opened with your details ready to send to Damian. Nothing has been sent until you press send there. Please attach your signed letter: choose "Save or print your letter" below, then save it as a PDF.');
     }
+    if (!window.PBForms) { viaEmail(); return; }
+    if (form.getAttribute('aria-busy') === 'true') return;   // one send per click
+    form.setAttribute('aria-busy', 'true');
+    PBForms.send(form, F.fields(d, today, location.href)).then(function (ok) {
+      form.removeAttribute('aria-busy');
+      if (ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
+      else viaEmail();
+    });
   });
   $('pfPrint').addEventListener('click', function () { window.print(); });
 

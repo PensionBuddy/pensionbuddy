@@ -69,6 +69,14 @@ JS_PAT = re.compile(r'(<script src=")(assets/js/[A-Za-z0-9_.-]+\.js)(\?v=[0-9a-f
 # having to remember to ask. check() asserts that below.
 SHARED_RUNTIME = 'assets/js/calc-page.js'
 
+# Run 27: the fields assets/js/pension-finder.js FIELDS sends to Netlify Forms.
+# Netlify stores only the fields a form declares in the HTML it reads at
+# deploy, so the built finder must declare every one; tests/build.test.py
+# reads FIELDS out of the module and holds the two lists together.
+FINDER_FIELDS = ['full_name', 'other_names', 'date_of_birth', 'address', 'email', 'phone',
+                 'employers', 'phone_ok', 'marketing_consent', 'signed_as', 'signed_on',
+                 'letter_confirmed', 'signature_drawn', 'letter_text', 'page']
+
 _img_hash = {}
 
 
@@ -244,6 +252,11 @@ PAGES = {
         # drop this and put back the links listed in docs/STATUS.md, Run 21
         noindex=True,
         checks=(('id="pfForm"', 'the finder form'),
+                ('name="pension-finder" method="POST" data-netlify="true" netlify-honeypot="bot-field"',
+                 'the finder form is a Netlify form'),
+                ('<input type="hidden" name="form-name" value="pension-finder">'
+                 + ''.join('<input type="hidden" name="%s">' % f for f in FINDER_FIELDS),
+                 'every field PBFinder.fields() sends, declared in the static form'),
                 ('data-issue="R20-1a"', 'the draft letter flagged for compliance'),
                 ('id="pfPhoneOk"', 'phone consent is its own box'),
                 ('id="pfOptin"', 'email consent is its own box')),
