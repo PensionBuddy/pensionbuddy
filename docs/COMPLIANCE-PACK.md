@@ -18,6 +18,11 @@ section 3.3); the Website Terms of Use have a new clause in place of the
 liability cap (question 1.16); and analytics run through Google Tag Manager,
 loaded only after a visitor accepts (question 1.17, section 3.4).
 
+And a last pass, 25 September 2026: every form's success message now
+promises only what happens, since Netlify emails the visitor nothing, and
+hello@pensionbuddy.ie, now a monitored inbox, is in every page's footer
+(section 7).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -818,9 +823,8 @@ Held back until signed off
   is not" ("We cannot promise every pension will be found: schemes close,
   merge and change hands, and old records are not always complete."), the
   boxes "You can phone me about this search." and the occasional-emails box,
-  and the confirmations "Thanks. Your signed letter and your details are
-  with Damian, and the search has started." (shown only after the details
-  really arrive) and "Your email app should have opened with your details
+  and the confirmations "Thanks - we've got it. Damian will be in touch
+  personally." (shown only after the details really arrive) and "Your email app should have opened with your details
   ready to send to Damian. Nothing has been sent until you press send there.
   Please attach your signed letter: choose "Save or print your letter"
   below, then save it as a PDF." When signed off, the footer gains "Old
@@ -977,6 +981,24 @@ Changed wording on existing pages
   now (question 1.17), "We'd like to use a little analytics to see how the
   site is used — nothing for ads, never sold. You choose. See our Privacy
   Notice.", with "That's fine" and "No thanks".
+- Run 28, every form's success message: "Thanks - we've got it. Damian will
+  be in touch personally.", shown only after the form's details really
+  arrive, in place of "Thanks. Your figures are on the way." (the pension
+  and director calculators), "Thanks. The guide is on its way." (the
+  director, starter and tracker pages) and the held finder's "...and the
+  search has started.". Netlify stores a submission and can email us; it
+  sends nothing to the visitor, so nothing is promised that is not sent.
+  The notes "If nothing arrives in a few minutes, check your spam folder."
+  and "Delivery depends on email providers outside our control." are gone
+  from those five forms, and the first from the booking thank-you page, which
+  keeps "Calendly emails you the details and a reminder before the call.":
+  Calendly sends that by itself. Unchanged: the booking form's "Thanks,
+  [name]. Pick a time below, the calendar already has your details.", a
+  step in booking rather than a promise, and every "Your email app should
+  have opened..." line, which says nothing has been sent.
+- Run 28, every page's footer: "hello@pensionbuddy.ie" in the Company
+  column, the address the Privacy Notice, Terms and Complaints pages
+  already give.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 

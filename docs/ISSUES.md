@@ -34,9 +34,12 @@ post to Netlify Forms, and analytics is Google Tag Manager behind the
 consent bar (`assets/js/pb-consent.js`); `LEAD_ENDPOINT` and
 `ANALYTICS_SRC` are gone.
 
-Also open from run 1: **A4** — phone number placeholder in `terms.html` and
-`complaints.html`, and confirmation that `hello@pensionbuddy.ie` is a real
-monitored mailbox.
+**A4**, open since run 1, is closed: the phone number placeholders in
+`terms.html` and `complaints.html` were deleted on Damian's call (STATUS,
+"Placeholders deleted, not filled"), and on 25 September 2026 Damian
+confirmed `hello@pensionbuddy.ie` is a real, monitored inbox (Run 28: the
+awaiting-confirmation comments are gone, and the address is in every
+page's footer).
 
 ---
 

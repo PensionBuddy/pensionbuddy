@@ -685,17 +685,12 @@ def site_checks():
         t = open(bk, encoding='utf-8', errors='replace').read()
         if 'thank-you' not in t:
             out.append(('F6', 'booking.html never references thank-you.html — redirect not wired in the page'))
-    sm = os.path.join(ROOT, 'sitemap.xml')
-    if os.path.isfile(sm):
-        s = open(sm, encoding='utf-8', errors='replace').read()
-        for page in ('thank-you.html',):
-            if os.path.isfile(os.path.join(ROOT, page)) and page not in s and page != 'thank-you.html':
-                out.append(('sitemap', '%s exists but is not in sitemap.xml' % page))
-        # a page held back with noindex has no place in the sitemap either
-        for page in all_pages():
-            t = open(os.path.join(ROOT, page), encoding='utf-8', errors='replace').read()
-            if pagebuild.NOINDEX in t and '/%s<' % page in s:
-                out.append(('held', '%s is held back with noindex but listed in sitemap.xml' % page))
+    # Run 28: the sitemap lists exactly the live, indexable pages (no held or
+    # noindex page), each dated no earlier than its last commit; the rules and
+    # the rewrite live in tools/sitemap.py
+    import sitemap
+    for problem in sitemap.problems():
+        out.append(('sitemap', problem + ' (run tools/sitemap.py)'))
     return out
 
 
