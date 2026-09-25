@@ -574,19 +574,31 @@ changed. The footer and menu call the page "Auto-enrolment comparison".
 Reg 88 requires an advertisement to spell out any initialism it uses. Every
 initialism on the site is now spelled out at its first use on each page, in
 the form "Personal Retirement Savings Account (PRSA)", including the
-glossary's term index and the research bodies named on the home page. A scan
-of every page's text, as the browser renders it, checks this for 28
-initialisms (PRSA, PRSI, USC, ROS, AVC, ARF, PRB, SFT, TCA, QFA, CCPC, CSO,
-HMRC, QROPS, EEA, EU, NAERSA, PPS, MABS, IORP, HR and others) and finds none
-left unexplained at first use.
+glossary's term index and the research bodies named on the home page. A
+check of every page's text, as the browser renders it, finds every
+initialism the page uses, not only those on a list, and finds none left
+unexplained at first use. It reads text that is hidden until a reader opens
+it (a folded panel, a jargon definition, a result not yet shown) and what
+each tab shows once it is clicked. It is kept with the site so it can be run
+again after any change of wording.
 
 Left as they are, for you to confirm: "UK" (and the web address GOV.UK),
 "KPMG" (the firm's own name), "CEO" and "CMO" (job titles on the home page),
 "B.A." (a degree), and the jargon quiz on the glossary page, which asks what
-PRSI stands for, so spelling it out would give the answer away.
+PRSI stands for, so spelling it out would give the answer away. Two more,
+added on 25 September 2026: "HM" in "HM Revenue and Customs (HMRC)", part of
+the department's name, and "PDF" in the old pension finder's closing message
+("save it as a PDF"), the name of the option in the reader's own print
+window.
 
 A correction to our earlier status note: it said the pages new in September
-already spelled out every initialism. Several did not; all now do.
+already spelled out every initialism. Several did not; all now do. On 25
+September 2026 the fuller check found three more, now spelled out: "S.I."
+in the directors' rules page's sources ("Statutory Instrument (S.I.) No. 128
+of 2021"), "EEA" on the UK pensions page ("the European Economic Area
+(EEA)"), and "PRSI" in the description of the entitlement check's picture on
+the home page, read out by screen readers ("the year you first paid
+Pay-Related Social Insurance (PRSI)").
 
 6. Other findings
 =================
@@ -788,6 +800,13 @@ Changed wording on existing pages
   Contribution (AVC)"; and the pensions list's hint, "The kinds include a
   Personal Retirement Savings Account (PRSA) and additional voluntary
   contributions (AVCs), paid on top of a pension from a job."
+- Three more initialisms spelled out (25 September 2026): on the directors'
+  rules page, "Statutory Instrument (S.I.) No. 128 of 2021"; on the UK
+  pensions page, "a move to a QROPS in the European Economic Area (EEA)";
+  and on the home page, the description of the entitlement check's picture,
+  "The State Pension entitlement check: sliders for birth year, the year you
+  first paid Pay-Related Social Insurance (PRSI) and contributions, with the
+  weekly rate and both calculations side by side."
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -1311,9 +1330,9 @@ age. The Pensions Authority counted 40,644 one-member arrangements on 1
 September 2026, down from 141,500 in January 2023, including some being
 wound up.
 Sources: the Pensions Authority’s notice of 23 March 2026 and its conference
-figures of 15 September 2026; S.I. No. 128 of 2021; Revenue Pensions Manual,
-chapter 13. A one-member scheme set up on or after 22 April 2021 has had to
-meet the full rules since 1 July 2022.
+figures of 15 September 2026; Statutory Instrument (S.I.) No. 128 of 2021;
+Revenue Pensions Manual, chapter 13. A one-member scheme set up on or after
+22 April 2021 has had to meet the full rules since 1 July 2022.
 
 Your company paying into a PRSA
 -------------------------------
@@ -1720,12 +1739,12 @@ A UK workplace or personal pension can only be moved to an Irish scheme that
 HM Revenue and Customs (HMRC) recognises as a qualifying recognised overseas
 pension scheme, a QROPS. Moving it anywhere else, the UK scheme may refuse,
 or the move is taxed at 40% or more.
-Since 30 October 2024, a move to a QROPS in the European Economic Area is no
-longer free of the UK’s 25% Overseas Transfer Charge just because it is in
-the EEA. It stays free of it mainly when you live in the same country as the
-QROPS and the move is within your overseas transfer allowance, usually
-£1,073,100. If you then move to another country within five years, the 25%
-can apply after all.
+Since 30 October 2024, a move to a QROPS in the European Economic Area (EEA)
+is no longer free of the UK’s 25% Overseas Transfer Charge just because it
+is in the EEA. It stays free of it mainly when you live in the same country
+as the QROPS and the move is within your overseas transfer allowance,
+usually £1,073,100. If you then move to another country within five years,
+the 25% can apply after all.
 
 The UK State Pension
 --------------------
