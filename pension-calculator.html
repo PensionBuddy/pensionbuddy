@@ -1941,18 +1941,13 @@ main p.ec-note *{font-size:1rem !important}
 /* ------------------------------------------------------------------
    LEAD CAPTURE CONFIG
 
-   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
-   a CRM webhook, anything that accepts a JSON POST). Once it starts with
-   http, results are posted there and the visitor only sees a confirmation
-   when the send actually succeeds.
-
-   Until then the form opens the visitor's mail client with their figures
-   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
-   lost and nobody is told an email is coming that isn't.
-   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
-   set, the mailto fallback below is what actually runs.
+   The lead forms post to Netlify Forms (assets/js/pb-forms.js), and only
+   a real success tells the visitor anything is on its way. When the post
+   is refused or fails, or the site is not on Netlify, the form opens the
+   visitor's mail client with the details already filled in and addressed
+   to LEAD_FALLBACK_ADDRESS, so nothing is lost and nobody is told an
+   email is coming that isn't.
    ------------------------------------------------------------------ */
-var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
@@ -2059,15 +2054,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
         <div class="ect"><b>Want these figures emailed to you?</b><span>And what they'd look like for your actual situation.</span></div>
       </div>
-      <div id="ecForm">
+      <form id="ecForm" name="pension-calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendResults();return false" novalidate>
+        <input type="hidden" name="form-name" value="pension-calculator-results"><input type="hidden" name="marketing_consent"><input type="hidden" name="pot"><input type="hidden" name="income"><input type="hidden" name="relief"><input type="hidden" name="cost_of_waiting"><input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
         <div class="ec-row">
-          <span class="ffield"><input type="email" id="ecEmail" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
-          <button class="btn btn-primary" style="width:auto" onclick="sendResults()" type="button">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          <span class="ffield"><input type="email" id="ecEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
+          <button class="btn btn-primary" style="width:auto" type="submit">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
         <label class="pb-optin"><input type="checkbox" id="ecOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
         <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
         <p class="ec-note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control. This is information, not advice.</p>
-      </div>
+      </form>
       <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Your figures are on the way.</span></div>
     </div>
     <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
@@ -2121,6 +2118,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pb-forms.js?v=66b39a01"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* Formatting, the slider fill, the wiring and the debounced live region are
@@ -2406,21 +2404,10 @@ function sendResults(){
     document.getElementById('ecOk').classList.add('show');
     document.getElementById('ecOk').focus(); /* #15: land on the confirmation, not the hidden form */
   };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead, and we will go through it with you.';
-    err.style.display='block';
-  };
-
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    /* configured: post it and only confirm on a real success */
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. Your figures are on the way.') : failed(); })
-      .catch(failed);
-  }else{
-    /* not configured: hand the visitor a prefilled email rather than a fake
-       confirmation. The lead still reaches Damian, today, with no backend. */
+  /* Run 25: posted to Netlify Forms ("pension-calculator-results") first, and only a real
+     success says the figures are on the way. Anything else opens a
+     prefilled email to Damian instead, the route this page always had. */
+  var viaEmail=function(){
     var body='Please send me my pension figures.%0D%0A%0D%0A'+
       'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
       'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
@@ -2434,7 +2421,19 @@ function sendResults(){
       '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
     /* nothing has been sent by this page, so say so: no "on its way" claim */
     done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
-  }
+  };
+  var form=document.getElementById('ecForm');
+  if(!window.PBForms){ viaEmail(); return; }
+  if(form.getAttribute('aria-busy')==='true')return;   /* one send per click */
+  form.setAttribute('aria-busy','true');
+  PBForms.send(form,{
+    marketing_consent:payload.marketingConsent, pot:payload.pot, income:payload.income,
+    relief:payload.relief, cost_of_waiting:payload.costOfWaiting, inputs:payload.inputs,
+    link:payload.link, page:payload.page
+  }).then(function(ok){
+    form.removeAttribute('aria-busy');
+    if(ok)done('Thanks. Your figures are on the way.'); else viaEmail();
+  });
 }
 </script>
 

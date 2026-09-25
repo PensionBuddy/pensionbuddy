@@ -1588,7 +1588,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     </div>
 
     <div class="qual">
-      <form id="qualForm" novalidate>
+      <form id="qualForm" name="booking" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="booking">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
         <p class="qual-lead">Just so Damian knows who he is talking to, and so the calendar arrives with your name already on it.</p>
 
         <div class="qgrid">
@@ -1656,6 +1658,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
+<script src="assets/js/pb-forms.js?v=66b39a01"></script>
 <script>
 /* ---- F4 · routing form gate + deferred Calendly embed ----------------------
    The calendar is hidden until #qualForm is completed. Only three routing
@@ -1801,6 +1804,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       return;
     }
 
+    /* Run 25: the three answers also go to Netlify Forms ("booking"), so
+       Damian has them even if no time is ever picked. The calendar does
+       not wait for the answer: Calendly is handed the same name and email
+       either way, so a refused post loses nothing and needs no email. */
+    if(window.PBForms)PBForms.send(form);
     var url=bookingUrl();
     stage.hidden=false;
     mount(url);

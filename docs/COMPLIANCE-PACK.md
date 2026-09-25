@@ -8,6 +8,10 @@ Pensionbuddy).
 Updated 25 September 2026: the new Personal Investment Account page
 (question 1.13, section 7, Appendix A.13 and Appendix B.11 to B.13).
 
+Updated again 25 September 2026, before launch: the website's forms now
+send to Netlify Forms, stored by Netlify, our website host (question 1.14,
+section 3.3).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, two sentences for the Privacy Notice, a brief on the readiness
@@ -41,7 +45,7 @@ Contents
 
   1. Open questions
   2. The Letter of Authority, full wording
-  3. The Privacy Notice: two sentences to add
+  3. The Privacy Notice: sentences to approve
   4. The readiness check: brief
   5. Findings under Regulations 71, 56 and 88
   6. Other findings: warnings, comparative claims, gamification,
@@ -84,9 +88,11 @@ and whether this layout meets Reg 32 as a summary on the website.
 What the site does now: a four-step form (where you worked; about you; the
 Letter of Authority, filled in and signed; what happens next). No PPS number
 is asked for. Phone contact and occasional emails are separate unticked
-boxes. Nothing is sent automatically, since the site has no form service
-yet: the form opens a pre-filled email to Damian, and the reader saves the
-signed letter as a PDF and attaches it.
+boxes. From 25 September 2026 the form sends the details, the letter's
+text, the typed signature and any drawn signature to Netlify Forms, where
+Netlify, our website host, stores them for Damian (question 1.14). Only if
+that fails does it open a pre-filled email to Damian, as it did before, and
+the reader saves the signed letter as a PDF and attaches it.
 What we need: (a) approval of the letter's wording (section 2); (b) whether
 the providers accept an e-signed letter, where the typed name is the
 signature and a drawn one is optional; (c) whether tracing is a regulated
@@ -244,6 +250,31 @@ its twelve month-end values, and the pension is taxed all at once at the
 end, a quarter as a lump sum. After Budget 2027 on 6 October 2026 the page
 will be updated with the announced figures and will need a second look.
 
+1.14 The website's forms, sent to Netlify (proposed)
+----------------------------------------------------
+
+What the site does now: seven forms send what the reader types to Netlify
+Forms, a service of Netlify, the company that hosts the website. Netlify
+stores each submission and can email Damian that one has arrived. The forms:
+the booking form (name, email, which of three situations fits), "Email my
+results" on the pension and director calculators (email, the figures on
+screen, the link to them), the guide requests on the director, starter and
+tracker pages (email), and the old pension finder (held back; question
+1.2). Each records the separate, unticked occasional-emails box as "yes" or
+"no". If a form cannot reach Netlify, it opens a pre-filled email to Damian
+instead, as every form did before; the booking form needs no email, since
+Calendly receives the same details. The Privacy Notice now says so in one
+sentence (section 3.3).
+What we need: (a) approval of the sentence in section 3.3; (b) whether the
+Privacy Notice must say more about Netlify as our processor: its data
+processing terms, and where it stores the data (Netlify is a United States
+company); (c) how long submissions are kept in Netlify before they are
+deleted (Reg 117(2) allows 12 months for someone who does not become a
+client, with their consent); (d) for the old pension finder, whether date
+of birth, address and a signed letter may be held by Netlify at all, and
+whether the proposed wording in section 3.1 ("with no one else") must now
+name Netlify.
+
 2. The Letter of Authority, full wording
 ========================================
 
@@ -313,11 +344,13 @@ search: [full name]", reads:
     set out in the Letter of Authority, which I have attached.
     Signed: [the name typed as the signature], [date signed]
 
-3. The Privacy Notice: two sentences to add
-===========================================
+3. The Privacy Notice: sentences to approve
+==========================================
 
 The Privacy Notice (https://pensionbuddy.ie/privacy.html) shows a
-placeholder where each of these sentences will go. Below, for each: the
+placeholder where each of the first two sentences will go (3.1 and 3.2).
+Section 3.3 is different: it is on the site now, as proposed, because the
+forms send to Netlify from this version on. Below, for each: the
 placeholder as it stands, then proposed wording for you to approve or
 change. The proposed wording is not on the site. Words in square brackets
 are decisions for the firm.
@@ -353,6 +386,21 @@ Proposed: "If you tick the box to receive them, we use your email address to
 send you occasional emails about pension deadlines and rule changes. We send
 them only to people who tick the box. Every one tells you how to stop them,
 and you can ask us to stop at any time [how: to be confirmed]."
+
+3.3 Netlify, our website host (on the site, proposed)
+-----------------------------------------------------
+
+Added to "Booking and third parties", after the two sentences on Calendly:
+
+"What you send us through a form on this website, such as the booking form
+or a request for your figures or a guide, is stored by Netlify, our website
+host, so that it reaches us."
+
+The notice's "Last updated" date is now 25 September 2026. Separately, the
+notice's sentence on the calculators says the figures are not sent to us
+"unless you separately choose to email yourself the results"; the "Email my
+results" forms send them to us, not to the reader, so that sentence may need
+correcting. It is unchanged.
 
 4. The readiness check: brief
 =============================
@@ -788,6 +836,8 @@ Changed wording on existing pages
   Contribution (AVC)"; and the pensions list's hint, "The kinds include a
   Personal Retirement Savings Account (PRSA) and additional voluntary
   contributions (AVCs), paid on top of a pension from a job."
+- Privacy Notice, "Booking and third parties": the sentence on Netlify
+  (section 3.3).
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 

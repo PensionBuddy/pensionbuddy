@@ -259,7 +259,8 @@ AUDIT_JS = r"""
     const vis=el=>{if(!el)return false;const cs=getComputedStyle(el);return cs.display!=='none'&&cs.visibility!=='hidden'&&el.getBoundingClientRect().height>0};
     const g={formExists:!!form,embedVisibleBeforeSubmit:vis(embedWrap)};
     if(form){
-      const fields=$$('#qualForm input,#qualForm select,#qualForm textarea').filter(i=>i.type!=='hidden');
+      // the Netlify honeypot (Run 25) is a field for bots, hidden from people: not one of the form's fields
+      const fields=$$('#qualForm input,#qualForm select,#qualForm textarea').filter(i=>i.type!=='hidden'&&i.name!=='bot-field');
       g.fields=fields.map(i=>i.id||i.name||i.type);
       g.unlabelled=fields.filter(i=>!(i.labels&&i.labels.length)&&!i.getAttribute('aria-label')&&!i.getAttribute('aria-labelledby')).map(i=>i.id||i.type);
       g.smallTargets=fields.filter(i=>i.getBoundingClientRect().height<44).map(i=>i.id||i.type);

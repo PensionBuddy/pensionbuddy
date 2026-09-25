@@ -1997,15 +1997,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
 <script>
 /* ------------------------------------------------------------------
-   LEAD CAPTURE CONFIG - same two values as the calculator pages.
-   Set LEAD_ENDPOINT to a form endpoint (Formspree, Netlify Forms, a CRM
-   webhook) that accepts a JSON POST. Until it starts with http, the form
-   opens the visitor's mail client instead, so no lead is lost and nobody
-   is told an email is coming that isn't.
-   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
-   set, the mailto fallback below is what actually runs.
+   LEAD CAPTURE CONFIG - the same value as the calculator pages.
+   The guide form posts to Netlify Forms (assets/js/pb-forms.js). When
+   that post is refused or fails, it opens the visitor's mail client
+   instead, addressed to LEAD_FALLBACK_ADDRESS, so no lead is lost and
+   nobody is told an email is coming that isn't.
    ------------------------------------------------------------------ */
-var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 </head>
@@ -2319,15 +2316,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p>How a pension works, how tax relief helps, how to begin.</p>
   </div>
   <div>
-    <div class="magnet-form" id="mForm">
+    <form class="magnet-form" id="mForm" name="starter-guide" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendMagnet();return false" novalidate>
+      <input type="hidden" name="form-name" value="starter-guide"><input type="hidden" name="marketing_consent"><input type="hidden" name="page">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="row">
-        <span class="ffield"><input type="email" id="mEmail" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
-        <button class="btn btn-acc" onclick="sendMagnet()" type="button">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        <span class="ffield"><input type="email" id="mEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
+        <button class="btn btn-acc" type="submit">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       </div>
       <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
       <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. If nothing arrives in a few minutes, check your spam folder. Delivery depends on email providers outside our control.</p>
       <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
-    </div>
+    </form>
     <div class="ok" id="mOk" role="status" tabindex="-1">
       <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
       <h3>Check your inbox.</h3>
@@ -2374,6 +2373,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
+<script src="assets/js/pb-forms.js?v=66b39a01"></script>
 <script>
 function sendMagnet(){
   var input=document.getElementById('mEmail');
@@ -2398,18 +2398,10 @@ function sendMagnet(){
     document.getElementById('mOk').classList.add('show');
     document.getElementById('mOk').focus(); /* #15: land on the confirmation, not the hidden form */
   };
-  var failed=function(){
-    err.innerHTML='That did not send. You can '+
-      '<a href="booking.html">book a free call</a> instead and we will talk it through.';
-    err.style.display='block';
-  };
-
-  if(LEAD_ENDPOINT && LEAD_ENDPOINT.indexOf('http')===0){
-    fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)})
-      .then(function(r){ r.ok ? done('Thanks. The guide is on its way.') : failed(); })
-      .catch(failed);
-  }else{
+  /* Run 25: posted to Netlify Forms ("starter-guide") first, and only a real
+     success says the guide is on its way. Anything else opens a
+     prefilled email to Damian instead, the route this page always had. */
+  var viaEmail=function(){
     var body='Please send me the guide.%0D%0A%0D%0AMy email: '+
       encodeURIComponent(payload.email)+'%0D%0A'+
       'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
@@ -2419,7 +2411,16 @@ function sendMagnet(){
     /* nothing has been sent by this page, so the panel must not say "on its way" */
     done('Your email app should have opened with the request ready to send. '+
          'If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through it.', true, 'One more step.');
-  }
+  };
+  var form=document.getElementById('mForm');
+  if(!window.PBForms){ viaEmail(); return; }
+  if(form.getAttribute('aria-busy')==='true')return;   /* one send per click */
+  form.setAttribute('aria-busy','true');
+  PBForms.send(form,{marketing_consent:payload.marketingConsent, page:payload.page})
+    .then(function(ok){
+      form.removeAttribute('aria-busy');
+      if(ok)done('Thanks. The guide is on its way.'); else viaEmail();
+    });
 }
 </script>
 <script>

@@ -1980,18 +1980,13 @@ main p.ec-note *{font-size:1rem !important}
 /* ------------------------------------------------------------------
    LEAD CAPTURE CONFIG
 
-   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
-   a CRM webhook, anything that accepts a JSON POST). Once it starts with
-   http, results are posted there and the visitor only sees a confirmation
-   when the send actually succeeds.
-
-   Until then the form opens the visitor's mail client with their figures
-   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
-   lost and nobody is told an email is coming that isn't.
-   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
-   set, the mailto fallback below is what actually runs.
+   The lead forms post to Netlify Forms (assets/js/pb-forms.js), and only
+   a real success tells the visitor anything is on its way. When the post
+   is refused or fails, or the site is not on Netlify, the form opens the
+   visitor's mail client with the details already filled in and addressed
+   to LEAD_FALLBACK_ADDRESS, so nothing is lost and nobody is told an
+   email is coming that isn't.
    ------------------------------------------------------------------ */
-var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
@@ -2125,6 +2120,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pb-forms.js?v=66b39a01"></script>
 <script src="assets/js/pension-fees.js?v=8ac63932"></script>
 <script>
 /* pension-fees-calculator.html, what a pension's charges cost (Run 20 #3).

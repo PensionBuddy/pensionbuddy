@@ -14,7 +14,9 @@
       <li><span class="pf-n">4</span> What happens next</li>
     </ol>
 
-    <form id="pfForm" novalidate>
+    <form id="pfForm" name="pension-finder" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="pension-finder"><input type="hidden" name="full_name"><input type="hidden" name="other_names"><input type="hidden" name="date_of_birth"><input type="hidden" name="address"><input type="hidden" name="email"><input type="hidden" name="phone"><input type="hidden" name="employers"><input type="hidden" name="phone_ok"><input type="hidden" name="marketing_consent"><input type="hidden" name="signed_as"><input type="hidden" name="signed_on"><input type="hidden" name="letter_confirmed"><input type="hidden" name="signature_drawn"><input type="hidden" name="letter_text"><input type="hidden" name="page">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <p class="pf-err" id="pfErr" role="alert"></p>
 
       <section class="panel pf-panel" id="pfStep1" aria-labelledby="pfH1">

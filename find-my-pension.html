@@ -1866,18 +1866,13 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* ------------------------------------------------------------------
    LEAD CAPTURE CONFIG
 
-   LEAD_ENDPOINT: paste a form endpoint here (Formspree, Netlify Forms,
-   a CRM webhook, anything that accepts a JSON POST). Once it starts with
-   http, results are posted there and the visitor only sees a confirmation
-   when the send actually succeeds.
-
-   Until then the form opens the visitor's mail client with their figures
-   already filled in and addressed to LEAD_FALLBACK_ADDRESS, so nothing is
-   lost and nobody is told an email is coming that isn't.
-   NOTE (F1b): the endpoint value is pending Damian's input. Until it is
-   set, the mailto fallback below is what actually runs.
+   The lead forms post to Netlify Forms (assets/js/pb-forms.js), and only
+   a real success tells the visitor anything is on its way. When the post
+   is refused or fails, or the site is not on Netlify, the form opens the
+   visitor's mail client with the details already filled in and addressed
+   to LEAD_FALLBACK_ADDRESS, so nothing is lost and nobody is told an
+   email is coming that isn't.
    ------------------------------------------------------------------ */
-var LEAD_ENDPOINT = '';
 var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script>/* pb-share: the address as it arrived, before any page script tidies the fragment away */window.pbShareHash=location.hash;</script>
@@ -1916,7 +1911,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <li><span class="pf-n">4</span> What happens next</li>
     </ol>
 
-    <form id="pfForm" novalidate>
+    <form id="pfForm" name="pension-finder" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="pension-finder"><input type="hidden" name="full_name"><input type="hidden" name="other_names"><input type="hidden" name="date_of_birth"><input type="hidden" name="address"><input type="hidden" name="email"><input type="hidden" name="phone"><input type="hidden" name="employers"><input type="hidden" name="phone_ok"><input type="hidden" name="marketing_consent"><input type="hidden" name="signed_as"><input type="hidden" name="signed_on"><input type="hidden" name="letter_confirmed"><input type="hidden" name="signature_drawn"><input type="hidden" name="letter_text"><input type="hidden" name="page">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <p class="pf-err" id="pfErr" role="alert"></p>
 
       <section class="panel pf-panel" id="pfStep1" aria-labelledby="pfH1">
@@ -2028,7 +2025,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pension-finder.js?v=e25757ae"></script>
+<script src="assets/js/pb-forms.js?v=66b39a01"></script>
+<script src="assets/js/pension-finder.js?v=1d93978d"></script>
 <script>
 /* find-my-pension.html, the old pension finder (Run 20 #1).
 
@@ -2037,13 +2035,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
    file only moves between the four steps, reads the form into the shape the
    module expects, and paints what the module returns.
 
-   SENDING. With LEAD_ENDPOINT set (it is empty today, as on every page),
-   the whole trace is posted as JSON and the page only says "sent" on a real
-   success. Without it, the reader's email app opens with the details and a
-   one-line authority ready to go to Damian, and the page says exactly that:
-   nothing has been sent by the page itself. A signature drawn on screen
-   cannot travel in an email link, so the last step offers the letter to
-   save as a PDF and attach.
+   SENDING (Run 25). The whole trace is posted to Netlify Forms as the
+   form's hidden fields (PBFinder.fields, assets/js/pb-forms.js), and the
+   page only says "sent" on a real success. When the post is refused or
+   fails, the reader's email app opens with the details and a one-line
+   authority ready to go to Damian, and the page says exactly that: nothing
+   has been sent by the page itself. A signature drawn on screen cannot
+   travel in an email link, so that route offers the letter to save as a
+   PDF and attach.
 
    TONE: no urgency, no promise of a find. The module's messages say what is
    missing and nothing else. */
@@ -2263,18 +2262,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     e.preventDefault();
     var d = data();
     if (!show(F.problems('sign', d, today))) return;
-    if (typeof LEAD_ENDPOINT === 'string' && LEAD_ENDPOINT.indexOf('http') === 0) {
-      fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(F.payload(d, today, location.href)) })
-        .then(function (r) {
-          if (r.ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
-          else show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]);
-        })
-        .catch(function () { show([{ field: 'pfSend', message: 'That did not send. Please try again, or book a free call and Damian will take the details by phone.' }]); });
-    } else {
+    function viaEmail() {
       window.location.href = F.mailto(d, today, LEAD_FALLBACK_ADDRESS);
       finish('Your email app should have opened with your details ready to send to Damian. Nothing has been sent until you press send there. Please attach your signed letter: choose "Save or print your letter" below, then save it as a PDF.');
     }
+    if (!window.PBForms) { viaEmail(); return; }
+    if (form.getAttribute('aria-busy') === 'true') return;   // one send per click
+    form.setAttribute('aria-busy', 'true');
+    PBForms.send(form, F.fields(d, today, location.href)).then(function (ok) {
+      form.removeAttribute('aria-busy');
+      if (ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
+      else viaEmail();
+    });
   });
   $('pfPrint').addEventListener('click', function () { window.print(); });
 
