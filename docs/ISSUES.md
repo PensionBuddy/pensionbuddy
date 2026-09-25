@@ -25,6 +25,15 @@ NEEDS DAMIAN INPUT at the end of run 1 and are **still open**:
 | Report 2, F1: "lead endpoint + analytics wiring — already resolved" | `LEAD_ENDPOINT` is still `''` on all five capture pages; `ANALYTICS_SRC` is still `'[ANALYTICS_SCRIPT_URL]'`. Both fail safely (mailto fallback with honest on-screen copy; analytics self-disables) but no lead reaches a backend and nothing is measured. **Still NEEDS DAMIAN INPUT.** |
 | Report 2, F3: "index.html is 476KB from three base64-inlined photos" | Already fixed in run 1 (`e028438`): index.html is **125,862 bytes**, photos live in `assets/img/` as JPEG + WebP inside `<picture>`. Description is stale — demoted to verify-only. |
 
+Run 25 (25 September 2026) closed two of them. **A1**: Damian replaced the
+cap sentence with the clause "This website provides information and booking
+only. No advice is given through it, whether by its calculators, guides,
+glossary, Buddy or any form on it. Advice is only given after a fact-find
+with Damian Condon.", and asked for no cap figure. **F1**: the lead forms
+post to Netlify Forms, and analytics is Google Tag Manager behind the
+consent bar (`assets/js/pb-consent.js`); `LEAD_ENDPOINT` and
+`ANALYTICS_SRC` are gone.
+
 Also open from run 1: **A4** — phone number placeholder in `terms.html` and
 `complaints.html`, and confirmation that `hello@pensionbuddy.ie` is a real
 monitored mailbox.
