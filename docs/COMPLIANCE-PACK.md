@@ -11,7 +11,8 @@ Updated 25 September 2026: the new Personal Investment Account page
 Updated again 25 September 2026, before launch: the website's forms now
 send to Netlify Forms, stored by Netlify, our website host (question 1.14,
 section 3.3); the Website Terms of Use have a new clause in place of the
-liability cap (question 1.15).
+liability cap (question 1.15); and analytics run through Google Tag Manager,
+loaded only after a visitor accepts (question 1.16, section 3.4).
 
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
@@ -296,6 +297,41 @@ engagement. The page's "Last updated" date is now 25 September 2026.
 What we need: sign-off of the clause, and whether the terms should state a
 cap at all. None is stated now.
 
+1.16 Analytics: Google Tag Manager, only after consent (proposed)
+-----------------------------------------------------------------
+
+What the site does now: the cookie bar every page has carried, unused
+until an analytics service was chosen, now appears on a visitor's
+first page: "We'd like to use a little analytics to see how the site is
+used — nothing for ads, never sold. You choose. See our Privacy Notice.",
+with the buttons "That's fine" and "No thanks". Only "That's fine" loads
+Google Tag Manager (container GTM-KQCRZDNB). "No thanks", or no answer,
+loads nothing from Google, and "No thanks" also deletes any Google
+Analytics cookies left by an earlier yes. The answer is kept in the
+visitor's browser and can be changed from a button in the Privacy Notice.
+Three events are passed to Tag Manager: the booking form sent, a call
+booked in Calendly, and the first use of each calculator (which calculator;
+nothing the visitor typed). On 25 September 2026 the container, as
+published, holds no tags, so nothing is measured until tags are added to
+it in Google Tag Manager. The Privacy Notice's cookies section is rewritten
+(section 3.4).
+What we need: (a) approval of the cookies section and of the bar's wording,
+which visitors now see; (b) for the placeholder in section 3.4, which
+analytics tools Tag Manager will run, the cookies they set, how long they
+last, and where Google processes the data; (c) whether "nothing for ads,
+never sold" and "We do not use it for advertising" hold for the tools
+chosen (for Google Analytics 4, that means Google signals and ads
+personalisation off, and no link to Google Ads); (d) whether the notice's
+"Basic, non-identifying information about how the site is used" still
+describes analytics identifiers fairly; (e) whether the two buttons need
+equal weight: "That's fine" is a filled button and "No thanks" an outlined
+one, as they were designed. (Its fill was changed from the page's accent
+colour to cream, because dark text on the accent failed the contrast
+minimum on every page.) Separately, and unchanged: every page loads its
+typeface from Google Fonts before any choice, which sends the visitor's IP
+address to Google; it is not analytics, but it could be served from the
+site itself instead.
+
 2. The Letter of Authority, full wording
 ========================================
 
@@ -422,6 +458,32 @@ notice's sentence on the calculators says the figures are not sent to us
 "unless you separately choose to email yourself the results"; the "Email my
 results" forms send them to us, not to the reader, so that sentence may need
 correcting. It is unchanged.
+
+3.4 Cookies (on the site, proposed)
+-----------------------------------
+
+The Privacy Notice's "Cookies" section used to read: "This site aims to use
+only what is necessary to work. If we add analytics or other non-essential
+cookies, we will ask for your consent first and update this notice." It now
+reads:
+
+"This site aims to use only what is necessary to work. Analytics are not
+necessary, so we ask first.
+
+When you first visit, a bar at the foot of the page asks whether we may use
+analytics. Only if you choose "That's fine" do we load Google Tag Manager, a
+Google service that runs our analytics tools. We use it to see how the site
+is used: which pages are visited, when a calculator is first used, when the
+booking form is sent and when a call is booked. We do not use it for
+advertising. If you choose "No thanks", or make no choice, it is never
+loaded. [To be confirmed: which analytics tools Google Tag Manager runs for
+us, the cookies they set, how long they last, and where Google processes
+the data]
+
+Your choice is kept in your browser, and you can change it at any time.
+[Change your cookie choice]"
+
+The button brings the bar back.
 
 4. The readiness check: brief
 =============================
@@ -861,6 +923,12 @@ Changed wording on existing pages
   (section 3.3).
 - Website Terms of Use, section 5: the clause in question 1.15, in place of
   the liability cap.
+- Privacy Notice, "Cookies": the section in 3.4, with the button "Change
+  your cookie choice".
+- Every page: the cookie bar, written earlier and shown for the first time
+  now (question 1.16), "We'd like to use a little analytics to see how the
+  site is used — nothing for ads, never sold. You choose. See our Privacy
+  Notice.", with "That's fine" and "No thanks".
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
