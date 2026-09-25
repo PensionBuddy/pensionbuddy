@@ -1949,9 +1949,8 @@ main p.ec-note *{font-size:1rem !important}
 .pia-side ul,.pia-today ul{margin:14px 0 0;padding-left:20px}
 .pia-side li,.pia-today li{font-size:1rem;line-height:1.6;color:var(--ink);margin:0 0 8px}
 .pia-src{margin:14px 0 0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
-.pia-src a,.pia-sec p a,.pia-p a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
+.pia-src a,.pia-sec p a,.pia-p a,.pia-today li a,.pia-t td a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
 .pia-today{margin-top:18px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px}
-.needs-input{display:inline-block;background:var(--surface-2);border:1px dashed var(--ink-3);border-radius:var(--r-sm);padding:0 6px;color:var(--ink-2);font-size:1rem}
 
 .pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
 .pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
@@ -2072,7 +2071,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h2>What it is</h2>
   <p class="pia-asat">Proposed · as at 25 September 2026</p>
   <div class="pia-lede">
-    <p>The Personal Investment Account is a proposed account for investing in listed shares, bonds, funds and exchange-traded funds (ETFs), with one flat tax each year instead of today&rsquo;s mix of rules. It is also called the Investment Account, or SIA<span class="needs-input" data-issue="PIA-1">[what SIA stands for: to be confirmed]</span>: these are the same thing. Nothing you pay in gets tax relief, and the tax is charged every year on the account&rsquo;s average value above a tax-free threshold, even in a year it falls. It is not a pension and not a deposit: you can take money out at any time, and its value can fall.</p>
+    <p>The Personal Investment Account is a proposed account for investing in listed shares, bonds, funds and exchange-traded funds (ETFs), with one flat tax each year instead of today&rsquo;s mix of rules. Official documents call it the Investment Account, and the media the Savings and Investment Account (SIA): all three names mean the same account. Nothing you pay in gets tax relief, and the tax is charged every year on the account&rsquo;s average value above a tax-free threshold, even in a year it falls. It is not a pension and not a deposit: you can take money out at any time, and its value can fall.</p>
   </div>
 
   <div class="pia-pair">
@@ -2133,11 +2132,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pia-today">
     <h3>How the same money is taxed today, outside the account</h3>
     <ul>
-      <li><b>Funds and ETFs:</b> 38% exit tax on the gain, and a deemed disposal every eight years, when tax is due as if you had sold.</li>
-      <li><b>Shares:</b> 33% CGT on the gain, after an exemption of &euro;1,270 a year.</li>
-      <li><b>Deposits:</b> 33% Deposit Interest Retention Tax (DIRT) on the interest.</li>
+      <li><b>Funds and ETFs:</b> 38% exit tax on the gain, and a deemed disposal every eight years, when tax is due as if you had sold. Source: Revenue, <a href="https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-27/27-01a-02.pdf" rel="noopener">Tax and Duty Manual Part 27-01A-02, Investment Undertakings</a> (updated January 2026).</li>
+      <li><b>Shares:</b> 33% CGT on the gain, after an exemption of &euro;1,270 a year. Source: Revenue, <a href="https://www.revenue.ie/en/gains-gifts-and-inheritance/transfering-an-asset/how-to-calculate-cgt.aspx" rel="noopener">How to calculate CGT</a>.</li>
+      <li><b>Deposits:</b> 33% Deposit Interest Retention Tax (DIRT) on the interest. Source: Revenue, <a href="https://www.revenue.ie/en/additional-incomes/dirt/what-dirt-rate-is-applicable.aspx" rel="noopener">What DIRT rate is applicable?</a></li>
     </ul>
-    <p class="pia-src">Source: <a href="https://www.revenue.ie" rel="noopener">Revenue</a>, as at 25 September 2026.</p>
+    <p class="pia-src">All three checked on 25 September 2026.</p>
   </div>
 </div></section>
 
@@ -2158,19 +2157,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <td data-l="PIA, proposed">A flat yearly tax on the average value above the threshold, even in a falling year. Rate and threshold not yet announced</td>
           <td data-l="Pension">None while it stays in the pension</td>
           <td data-l="ETF outside a wrapper">38% on the gain at each eight-year deemed disposal</td>
-          <td data-l="My Future Fund"><span class="needs-input" data-issue="PIA-2">[to be confirmed]</span></td></tr>
+          <td data-l="My Future Fund">See <a href="https://myfuturefund.ie" rel="noopener">myfuturefund.ie</a></td></tr>
         <tr><th scope="row">Tax on the way out</th>
           <td data-l="PIA, proposed">None: no exit tax or CGT inside the account</td>
           <td data-l="Pension">Up to 25% can usually be taken as a lump sum, the first &euro;200,000 of it tax-free. The rest is taxed as income</td>
           <td data-l="ETF outside a wrapper">38% exit tax on the gain, less tax already paid on deemed disposals</td>
-          <td data-l="My Future Fund"><span class="needs-input" data-issue="PIA-2">[to be confirmed]</span></td></tr>
+          <td data-l="My Future Fund">See <a href="https://myfuturefund.ie" rel="noopener">myfuturefund.ie</a></td></tr>
         <tr><th scope="row">When you can take it</th>
           <td data-l="PIA, proposed">Any time. No lock-in</td>
           <td data-l="Pension">Normally from 60, and from 50 in some cases</td>
           <td data-l="ETF outside a wrapper">Any time</td>
           <td data-l="My Future Fund">At 66</td></tr>
         <tr><th scope="row">Employer money</th>
-          <td data-l="PIA, proposed"><span class="needs-input" data-issue="PIA-3">[to be confirmed]</span></td>
+          <td data-l="PIA, proposed">Not mentioned in the proposals</td>
           <td data-l="Pension">Yes, where your employer pays in</td>
           <td data-l="ETF outside a wrapper">None</td>
           <td data-l="My Future Fund">Yes: your employer pays in the same as you</td></tr>
@@ -2178,7 +2177,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <td data-l="PIA, proposed">None. Not a deposit, not capital-guaranteed</td>
           <td data-l="Pension">None on a defined contribution pension. Values can fall</td>
           <td data-l="ETF outside a wrapper">None. Values can fall</td>
-          <td data-l="My Future Fund"><span class="needs-input" data-issue="PIA-2">[to be confirmed]</span></td></tr>
+          <td data-l="My Future Fund">No</td></tr>
       </tbody>
     </table>
   </div>
@@ -2317,7 +2316,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
-<script src="assets/js/pia.js?v=a38bcbe8"></script>
+<script src="assets/js/pia.js?v=87675e88"></script>
 <script>
 /* pia.html, the same take-home cost in a pension, the proposed PIA and an
    ETF outside a wrapper.

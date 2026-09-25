@@ -5,6 +5,9 @@ Prepared 24 September 2026 for Damian Condon, to send to the compliance
 officer of Damian Condon T/A Gresham Wealth Management (trading as
 Pensionbuddy).
 
+Updated 25 September 2026: the new Personal Investment Account page
+(question 1.13, section 7, Appendix A.13 and Appendix B.11 to B.13).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, two sentences for the Privacy Notice, a brief on the readiness
@@ -205,6 +208,41 @@ The link to book a call that appeared when a reader had collected all four
 paw-print badges is gone (the badges stay, and reward nothing). The line
 "The best time to start is now" is gone from the starter page. A WhatsApp
 contact option is not being built. The three pages above are held back.
+
+1.13 The Personal Investment Account page
+-----------------------------------------
+
+What the site does now: pia.html describes a Government proposal, the
+Department of Finance's Roadmap for the Taxation of Retail Investment (31
+August 2026), which is not yet law. Every statement about the account is
+stamped "Proposed · as at 25 September 2026", and the page states only what
+the Roadmap confirms: the tax-free threshold, the tax rate, the annual
+limit, the launch date, providers and fees are not given. A calculator puts
+the same take-home amount into a pension, the proposed account and an
+exchange-traded fund held outside any wrapper, and shows what each could
+leave after its tax, with a lower-growth and a fall scenario beside it. The
+account's tax rate and threshold are the reader's own inputs, starting at 0%
+and empty, labelled "not yet announced, try a figure"; until a threshold is
+typed the page shows no figure for the account. The two prescribed warnings
+(question 1.4) sit directly under the figures. A section "Who it might suit"
+describes six situations, each opening "It depends on", and says to look at
+the pension first where there is employer money or tax relief, and at the
+account for money needed before 60.
+
+What we need: (a) sign-off of every statement on the page, including the
+list of how the same money is taxed today (38% exit tax and the eight-year
+deemed disposal, 33% Capital Gains Tax with the €1,270 exemption, 33%
+Deposit Interest Retention Tax), each cited to a Revenue page; (b) whether
+illustrating a product that does not exist yet, with tax figures the reader
+chooses, is acceptable, and whether it needs wording beyond the prescribed
+warnings; (c) whether "Who it might suit", which says which product to look
+at first in each situation, stays general information rather than a
+recommendation; (d) your view on the illustration's assumptions, which
+Damian approved on 25 September 2026: lower growth is half the reader's
+rate, the fall is 20% in the final year, the account's average is taken from
+its twelve month-end values, and the pension is taxed all at once at the
+end, a quarter as a lump sum. After Budget 2027 on 6 October 2026 the page
+will be updated with the announced figures and will need a second look.
 
 2. The Letter of Authority, full wording
 ========================================
@@ -658,6 +696,21 @@ New calculators and tools
   entered:"; in the calculators' emails to Damian, "Open these figures
   again: [link]".
 
+- The new Personal Investment Account (PIA), next to a pension (pia.html):
+  the whole page (Appendix A), including the lines its calculator writes:
+  "What each could leave you after [n] years, after its tax"; "You would be
+  [age]. A pension is normally taken from 60." or "You would be [age]. After
+  tax on the way out."; for the account, "No figure yet" with "Type a
+  threshold to see this. Neither the threshold nor the rate has been
+  announced: try any figure.", or "At a 0% rate there is no PIA tax at all.
+  Try a rate: none has been announced.", or "At the rate and threshold you
+  chose, not announced figures."; "Each costs you [x] from take-home pay over
+  [n] years. The pension gets [y] of tax relief going in and is taxed on the
+  way out.", followed, when the account pays tax, by "The PIA pays [z] in
+  yearly tax at the figures you chose."; and under the scenarios, "In the
+  fall, the PIA still pays [t] of tax for the year it lost money." Footer link
+  "Personal Investment Account (PIA)" on every page.
+
 New guides and checklists
 -------------------------
 
@@ -692,6 +745,9 @@ New sections on existing pages (Appendix B)
 - Jargon buster: four entries (inflation, with its calculator; risk rating;
   Personal Retirement Bond; pension adjustment order), and a new last
   sentence on the Standard Fund Threshold entry.
+- The Personal Investment Account (Appendix B.11 to B.13): a line on the
+  starter page under "Once you are enrolled: what happens when.", a card on
+  the director page under "The rules for 2026", and a jargon buster entry.
 
 Changed wording on existing pages
 ---------------------------------
@@ -1709,6 +1765,320 @@ Revenue, “Taxation of foreign pensions”; the Ireland–UK double taxation
 convention, articles 17 and 18; Citizens Information, “Returning to Ireland
 from the United Kingdom”.
 
+A.13 The new Personal Investment Account (PIA), next to a pension
+------------------------------------------------------------------
+
+Address: https://pensionbuddy.ie/pia.html
+
+A guide and a free tool · proposed, not yet law
+
+The new Personal Investment Account (PIA), next to a pension.
+-------------------------------------------------------------
+The Government has proposed a new account for investing, with its own
+simpler tax. Here is what has been confirmed, what is still to come, and how
+the same monthly amount could compare in a pension, in the new account, and
+in a fund held the way you would hold it today.
+Proposed · as at 25 September 2026. The tax-free threshold, the tax rate and
+the annual limit are to be announced on 6 October 2026, in Budget 2027.
+Accounts are to open during 2027. None of it is law yet.
+
+What it is
+----------
+Proposed · as at 25 September 2026
+The Personal Investment Account is a proposed account for investing in
+listed shares, bonds, funds and exchange-traded funds (ETFs), with one flat
+tax each year instead of today’s mix of rules. Official documents call it
+the Investment Account, and the media the Savings and Investment Account
+(SIA): all three names mean the same account. Nothing you pay in gets tax
+relief, and the tax is charged every year on the account’s average value
+above a tax-free threshold, even in a year it falls. It is not a pension and
+not a deposit: you can take money out at any time, and its value can fall.
+
+What it offers
+--------------
+- No deemed disposal every eight years, no exit tax and no Capital Gains Tax
+  (CGT) on what happens inside it.
+- The provider pays the tax for you.
+- No lock-in: you can take money out at any time.
+- No tax at all while the account’s average value stays under the threshold.
+
+What it costs you, and the risks
+--------------------------------
+- Tax is due every year the average is over the threshold, even a year the
+  account falls in value.
+- No tax relief on what you pay in, unlike a pension.
+- Not a deposit and not capital-guaranteed: what it holds can fall, and you
+  can get back less than you paid in.
+- Fees are unknown: no provider has published a price, and none is named
+  here.
+
+What’s confirmed, and what’s coming on 6 October
+------------------------------------------------
+
+Confirmed in the Roadmap
+------------------------
+Proposed · as at 25 September 2026
+- For Irish tax residents aged 18 or over with a Personal Public Service
+  Number (PPSN). One account per person.
+- It can hold listed shares, bonds, funds and ETFs, and insurance-based
+  investments. Not crypto assets, not derivatives.
+- Cash can sit in it only for a short time, and earns nothing there.
+- No tax relief on what goes in.
+- A flat tax each year on the account’s average value above a tax-free
+  threshold, due even in a year the account falls in value.
+- No deemed disposal, exit tax or CGT inside it. The provider pays the tax.
+- No lock-in: money can be taken out at any time.
+- Not a deposit, and not capital-guaranteed. Values can fall.
+Source for every item: Department of Finance, Roadmap for the Taxation of
+Retail Investment, 31 August 2026, published on gov.ie.
+
+Still to come
+-------------
+Proposed · as at 25 September 2026
+- The tax-free threshold: to be announced on 6 October 2026, in Budget 2027.
+- The tax rate: to be announced on 6 October 2026.
+- The annual limit on what you can pay in: to be announced on 6 October
+  2026.
+- When accounts open: during 2027.
+- The law itself: it is a proposal, and is not yet law.
+- Also not yet published: which providers will offer it and what they will
+  charge.
+Figures you may have read for the rate, the threshold or the launch month
+are not confirmed, and this page does not use them.
+
+How the same money is taxed today, outside the account
+------------------------------------------------------
+- Funds and ETFs: 38% exit tax on the gain, and a deemed disposal every
+  eight years, when tax is due as if you had sold. Source: Revenue, Tax and
+  Duty Manual Part 27-01A-02, Investment Undertakings (updated January
+  2026).
+- Shares: 33% CGT on the gain, after an exemption of €1,270 a year. Source:
+  Revenue, How to calculate CGT.
+- Deposits: 33% Deposit Interest Retention Tax (DIRT) on the interest.
+  Source: Revenue, What DIRT rate is applicable?
+All three checked on 25 September 2026.
+
+Side by side with a pension, a fund and My Future Fund
+------------------------------------------------------
+The PIA column is proposed · as at 25 September 2026
+Tax relief going in:
+  - PIA, proposed: None
+  - Pension: Yes, at 20% or 40%, within Revenue’s age-related limits
+  - ETF outside a wrapper: None
+  - My Future Fund: No income tax relief. The State adds €1 for every €3 you
+    pay
+Tax while it grows:
+  - PIA, proposed: A flat yearly tax on the average value above the
+    threshold, even in a falling year. Rate and threshold not yet announced
+  - Pension: None while it stays in the pension
+  - ETF outside a wrapper: 38% on the gain at each eight-year deemed
+    disposal
+  - My Future Fund: See myfuturefund.ie
+Tax on the way out:
+  - PIA, proposed: None: no exit tax or CGT inside the account
+  - Pension: Up to 25% can usually be taken as a lump sum, the first
+    €200,000 of it tax-free. The rest is taxed as income
+  - ETF outside a wrapper: 38% exit tax on the gain, less tax already paid
+    on deemed disposals
+  - My Future Fund: See myfuturefund.ie
+When you can take it:
+  - PIA, proposed: Any time. No lock-in
+  - Pension: Normally from 60, and from 50 in some cases
+  - ETF outside a wrapper: Any time
+  - My Future Fund: At 66
+Employer money:
+  - PIA, proposed: Not mentioned in the proposals
+  - Pension: Yes, where your employer pays in
+  - ETF outside a wrapper: None
+  - My Future Fund: Yes: your employer pays in the same as you
+Guarantee:
+  - PIA, proposed: None. Not a deposit, not capital-guaranteed
+  - Pension: None on a defined contribution pension. Values can fall
+  - ETF outside a wrapper: None. Values can fall
+  - My Future Fund: No
+Pension and My Future Fund rules as the rest of this site states them; see
+the auto-enrolment comparison and the Standard Fund Threshold page for their
+sources. Auto-enrolment contribution rates are phased in, three from you to
+three from your employer to one from the State.
+
+Same take-home cost: pension vs PIA vs ETF
+------------------------------------------
+Put the same amount from your take-home pay into each, every month, and see
+what each could leave you with after its tax. The PIA’s rate and threshold
+have not been announced, so you choose them.
+
+Your details
+------------
+Slide, or tap a value to type any amount.
+From your take-home pay each month
+€200
+For how many years
+10
+Assumed yearly growth, before tax
+5%
+The same for all three. Real returns vary year to year and can be negative.
+Your income tax rate
+20%
+40%
+Sets the pension’s tax relief going in and the tax on what it pays out.
+The PIA’s tax: not yet announced, try a figure
+PIA tax rate: not yet announced, try a figure
+0%
+A yearly rate on the average value above the threshold. It starts at 0%: no
+rate has been announced.
+PIA tax-free threshold: not yet announced, try a figure
+Empty until you type one. No threshold has been announced.
+Your age now
+35
+For the pension: the share of earnings that gets tax relief rises with age,
+and a pension is normally taken from 60.
+Your yearly earnings
+€50,000
+For the pension’s tax relief limit only.
+What each could leave you after 10 years, after its tax
+Pension
+€36,018
+You would be 45. A pension is normally taken from 60.
+PIA, proposed
+No figure yet
+Type a threshold to see this. Neither the threshold nor the rate has been
+announced: try any figure.
+ETF outside a wrapper
+€28,235
+After 38% exit tax, and deemed disposals.
+Each costs you €24,000 from take-home pay over 10 years. The pension gets
+€16,000 of tax relief going in and is taxed on the way out.
+An illustration only. Fees and charges, inflation, and the Universal Social
+Charge (USC) and Pay-Related Social Insurance (PRSI) are left out of every
+figure.
+Warning: These figures are estimates only. They are not a reliable guide to
+the future performance of your investment.
+Warning: The value of your investment may go down as well as up.
+
+If growth is lower, or it falls
+-------------------------------
+Pension:
+  - 5% a year: €36,018
+  - 2.5% a year: €31,727
+  - A fall: €27,794
+PIA, proposed:
+  - 5% a year: No figure yet
+  - 2.5% a year: No figure yet
+  - A fall: No figure yet
+ETF outside a wrapper:
+  - 5% a year: €28,235
+  - 2.5% a year: €25,975
+  - A fall: €23,431
+Lower growth is half the rate you chose. A fall is your rate every year,
+then a 20% fall in the last year: an example, not a forecast. In a fall, the
+PIA’s tax is still due for that year.
+
+Where the tax comes in, at your growth rate
+-------------------------------------------
+From your take-home pay:
+  - Pension: €24,000
+  - PIA: €24,000
+  - ETF: €24,000
+Tax relief going in:
+  - Pension: €16,000
+  - PIA: €0
+  - ETF: €0
+Tax while it grows:
+  - Pension: €0
+  - PIA: No figure yet
+  - ETF: €871
+Tax on the way out:
+  - Pension: €15,436
+  - PIA: €0
+  - ETF: €1,725
+Left after tax:
+  - Pension: €36,018
+  - PIA: No figure yet
+  - ETF: €28,235
+Employer money is not in the pension figure. If your employer would pay into
+a pension, that is on top.
+
+Who it might suit
+-----------------
+Proposed · as at 25 September 2026
+It depends on your circumstances, and on figures that are not out yet. Where
+there is employer money or tax relief on offer, look at the pension first.
+Where the money is for something before 60, the PIA is the one to look at.
+
+You have an employer who pays into a pension
+--------------------------------------------
+It depends on how much your employer pays in and whether you are taking all
+of it. Employer money and tax relief go into a pension before any growth;
+the PIA has neither. Look at the pension first.
+
+You pay tax at 40%
+------------------
+It depends on when you need the money and the tax rate you pay when you take
+it out. A pension gets relief at 40% going in, within Revenue’s age-related
+limits. Look at the pension first.
+
+You run your own company
+------------------------
+It depends on whether the money comes from the company or from your own
+take-home pay. A company can pay into your pension; a PIA is paid into from
+your own money, with no relief. See pensions for company directors.
+
+You are saving for something before 60
+--------------------------------------
+It depends on the threshold and rate still to come, and on whether you can
+accept a fall in value. A pension is normally locked until 60; the PIA has
+no lock-in, so it is the one to look at for this money.
+
+You already hold funds or ETFs
+------------------------------
+It depends on the threshold and the rate, and on the tax due if you sell
+what you hold now, since selling is taxed under today’s rules.
+
+You cannot afford to see the money fall
+---------------------------------------
+It depends on how soon you need it. The PIA is not a deposit and is not
+guaranteed; a deposit’s interest is taxed at 33% DIRT instead.
+
+Pension, PIA, or both?
+----------------------
+The answer depends on your employer, your tax, and when you need the money,
+and on figures due on 6 October. Damian can talk it through in a free
+20-minute call. Plain English, no obligation.
+Book a call with Damian for free
+This page is information, not advice. It describes a proposal as at 25
+September 2026 and shows figures you choose, as an illustration. It names no
+provider and says nothing about whether any product is right for you.
+Regulated financial advice is given in a personal consultation with Damian.
+
+The assumptions behind these numbers
+------------------------------------
+- The same amount comes out of your take-home pay every month into each. The
+  pension gets tax relief at the rate you choose, within Revenue’s age-
+  related limit for your age each year, so more goes in than you pay. The
+  PIA and the ETF get none.
+- All three grow at the same yearly rate, a month at a time, with each
+  payment at the end of its month.
+- The PIA’s tax is the rate you enter, on the average of the account’s
+  twelve month-end values above the threshold you enter, taken from the
+  account at the end of each year. How the average will really be measured
+  has not been published. No annual limit is applied, because none has been
+  announced.
+- The ETF is an accumulating fund, so it pays out nothing along the way.
+  Each month’s purchase has its own deemed disposal every eighth
+  anniversary: 38% of the gain since the last one, paid by selling part of
+  the holding. At the end everything is sold and 38% exit tax is due on what
+  gain is left; where a holding has fallen since a deemed disposal, tax paid
+  then is given back, up to the tax on the fall.
+- The pension is taken at the end: a quarter as a lump sum, taxed in
+  Revenue’s bands, and the rest taxed as income at the rate you chose, in
+  one go. In practice the rest is usually drawn over years, and your rate
+  then may differ.
+- Fees and charges are left out of all three; the PIA’s are unknown.
+  Inflation, the Universal Social Charge and Pay-Related Social Insurance
+  are left out. Employer contributions are left out.
+- Figures are illustrations, not a guarantee of any outcome, and not
+  personalised advice.
+
 Appendix B. New sections on existing pages
 ==========================================
 
@@ -1914,3 +2284,34 @@ relief. Anything above it is taxed when it is drawn down, so it sets a
 practical ceiling on how much is worth funding. The threshold was legislated
 to rise in steps from 2026 to 2029: the Standard Fund Threshold check shows
 each year’s figure and how much of it your pensions would use.
+
+B.11 Starter page: the Personal Investment Account line
+-------------------------------------------------------
+
+Saving for something before 60 as well? The proposed Personal Investment
+Account (PIA) is not a pension: no tax relief going in, a flat yearly tax,
+and no lock-in. Proposed, as at 25 September 2026, and not yet law.
+
+B.12 Director page: the Personal Investment Account card
+--------------------------------------------------------
+
+The new Personal Investment Account (PIA)
+-----------------------------------------
+Proposed, as at 25 September 2026, and not yet law: an account for investing
+from your own take-home pay, with no tax relief going in and a flat yearly
+tax. See it next to a pension, which your company can pay into.
+
+B.13 Jargon buster: Personal Investment Account
+-----------------------------------------------
+
+PIA Personal Investment Account
+-------------------------------
+A proposed account for investing in listed shares, bonds, funds and
+exchange-traded funds, called the Investment Account in official documents
+and the Savings and Investment Account (SIA) in the media. It is not a
+pension: there is no tax relief going in and no lock-in. Instead of today’s
+exit tax, deemed disposal and Capital Gains Tax, a flat tax is charged each
+year on the account’s average value above a tax-free threshold, even in a
+year it falls. Proposed, as at 25 September 2026, and not yet law: the
+threshold, the rate and the annual limit are due on 6 October 2026. See it
+next to a pension.

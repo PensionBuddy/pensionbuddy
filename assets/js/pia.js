@@ -16,8 +16,10 @@
                     announced on 6 October 2026. NOTHING HERE HOLDS A FIGURE
                     FOR ANY OF THEM: the rate and the threshold are the
                     reader's own inputs, and no limit is applied.
-     ETF            38% exit tax on the gain, and a deemed disposal on each
-                    eighth anniversary of a purchase (Revenue).
+     ETF            38% exit tax on the gain from 1 January 2026, and a deemed
+                    disposal on each eighth anniversary of a purchase: Revenue,
+                    Tax and Duty Manual Part 27-01A-02, Investment
+                    Undertakings (updated January 2026).
      Pension        tax relief from assets/js/pension-tax-relief.js (PBRelief),
                     the lump sum's bands from assets/js/sft.js (PBSft). Nothing
                     about pensions is restated here.

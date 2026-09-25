@@ -75,7 +75,10 @@ them in the same places, and the pagebuild check "said to be a proposal".
   exemption and 33% DIRT (`tools/pia-parts/main.html` "How the same money is
   taxed today", and `assets/js/pia.js` `ETF_EXIT_TAX`): Budgets have moved
   these before.
-- The open placeholders in `docs/STATUS.md`, Run 23 (PIA-1 to PIA-3).
+- The My Future Fund cells that point to myfuturefund.ie (Run 24): if
+  compliance or Damian later wants a tax treatment stated, it goes there.
+- The Revenue pages cited under "How the same money is taxed today": still
+  live, and still saying 38%, 33% and 33%.
 - The other dated rules pages, as Run 20 noted: director rules, Standard
   Fund Threshold, over-50s, self-employed, UK.
 

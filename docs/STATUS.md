@@ -6,6 +6,28 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 24 — 2026-09-25 · Damian's answers on the PIA page, and the merge
+
+Damian's instructions after Run 23: fill the placeholders with his answers,
+cite the specific Revenue pages, add the page's copy to the compliance pack,
+then gate, commit, push, merge to `main` and push `main`.
+
+## Items
+
+| # | Item | Result |
+|---|---|---|
+| 1 | PIA-1, the name | done: "What it is" now reads "Official documents call it the Investment Account, and the media the Savings and Investment Account (SIA): all three names mean the same account." Still four sentences. The glossary entry says the same |
+| 2 | PIA-2, My Future Fund | done: guarantee "No"; tax while it grows and tax on the way out "See myfuturefund.ie", linked (checked live on 25 September 2026). No tax treatment is stated |
+| 3 | PIA-3, employer money into a PIA | done: "Not mentioned in the proposals" |
+| 4 | Pension "tax while it grows" wording; the illustration choices | approved as they are; no change |
+| 5 | Revenue citations | done: one source per rule, each fetched and read on 25 September 2026 to confirm it states the figure. Funds and ETFs: Tax and Duty Manual Part 27-01A-02, Investment Undertakings (updated January 2026: 38% on or after 1 January 2026, and the deemed disposal at the end of each eight-year period). Shares: "How to calculate CGT" (33%, the €1,270 personal exemption). Deposits: "What DIRT rate is applicable?" (33%). Three plausible-looking revenue.ie addresses were rejected: they answer 200 with a "Page not found" page. `assets/js/pia.js` names the manual in its header |
+| 6 | Compliance pack | done: `docs/COMPLIANCE-PACK.md` gains question 1.13 (what the page does, and four questions for compliance: the statements, illustrating a product that does not exist yet with reader-chosen tax figures, whether "Who it might suit" stays information, and the assumptions Damian approved), a section 7 entry quoting every sentence the calculator writes, Appendix A.13 (the page's full text, generated from the built page, tables row by row) and B.11 to B.13 (the starter line, the director card, the glossary entry). Insertions only: nothing already in the pack changed |
+
+The page has no placeholders left, so the unused `.needs-input` rule is out
+of `tools/pia-parts/page.css`.
+
+---
+
 # Run 23 — 2026-09-25 · The Personal Investment Account page
 
 Damian's brief: a new page, `pia.html`, "The new Personal Investment Account
