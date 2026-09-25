@@ -100,6 +100,22 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 29 — 2026-09-25 · Nav, provider ticker, the 15 October cut-off, clickable things, directors' ages, Poolbeg
+
+Damian's brief: branch `claude/nav-providers-fixes` off `main`, fast mode,
+locked rules; the gate before each commit; merge and push `main` at the
+end. Seven items. The branch was cut from `6e556ec`; Run 28 landed on
+`main` (`fbd5b6f`) while it was open, so the work was moved onto it before
+the first commit and this run is 29.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Hide "Out of office" | done: the one section of that name, the photo strip on `index.html` ("Off duty" / "Out of office.", eight photos and their clones). Hidden, not deleted: the `<section class="snaps">` carries `hidden`, a comment above it says why and how to restore, and one CSS rule (`.snaps[hidden]{display:none}`) makes sure nothing overrides the attribute. **To restore: delete the word `hidden` from `<section class="snaps" hidden>` in `index.html`.** Nothing else changes; the eight photos stay in `assets/img/` and lazy-load, so while hidden they are never fetched | this commit |
+
+---
+
 # Run 28 — 2026-09-25 · Tidy-up before launch
 
 Damian's brief, fast mode, locked rules: first merge

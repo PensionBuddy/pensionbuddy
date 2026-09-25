@@ -1304,6 +1304,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    edge fades, .strip-in gives the pbMarquee track, the hover/focus pause and
    the prefers-reduced-motion fallback. Only the photo treatment is new. */
 .snaps{padding:6px 0 0}
+.snaps[hidden]{display:none} /* Run 29: "Out of office" is switched off; see the comment on the section */
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -2140,7 +2141,9 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   </div>
 </div></section>
 
-<section class="snaps"><div class="wrap">
+<!-- OUT OF OFFICE: switched off 25 September 2026 at Damian's request (Run 29); may come back.
+     To restore: delete the hidden attribute on the next line. Nothing else was removed. -->
+<section class="snaps" hidden><div class="wrap">
   <div class="sec-head reveal">
     <span class="kicker">Off duty</span>
     <h2>Out of office.</h2>
