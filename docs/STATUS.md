@@ -6,6 +6,138 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Launch status — as at 25 September 2026, after Run 28
+
+Kept current at the top of this file. The runs below say how each item got
+here.
+
+## Live: 26 pages, all indexable and all in `sitemap.xml`
+
+- **Home and the audiences:** `index.html`, `starter.html`, `tracker.html`,
+  `director.html`, `booking.html`.
+- **Calculators and tools:** `pension-calculator.html`,
+  `director-calculator.html`, `broker-vs-autoenrolment.html`,
+  `pension-fees-calculator.html`, `my-pensions.html`,
+  `state-pension-reality-check.html`, `state-pension-entitlement.html`,
+  `standard-fund-threshold.html`, `pia.html`.
+- **Guides:** `director-pension-rules.html`, `pensions-over-50.html`,
+  `self-employed-pensions.html`, `uk-pensions-in-ireland.html`,
+  `old-pension-checklist.html`, `director-year-end-checklist.html`,
+  `glossary.html`, and the two games, `games/buddys-run.html` and
+  `games/jargon-battle.html`.
+- **Legal:** `privacy.html`, `terms.html`, `complaints.html`.
+
+`python3 tools/sitemap.py` rewrites the sitemap from the pages themselves
+(held pages out, each lastmod the file's last commit); `verify.py` reports
+any drift as a site row. The seven lead forms post to Netlify Forms, with a
+pre-filled email as the fallback; `hello@pensionbuddy.ie` is a real inbox
+and in every footer.
+
+## Held back (noindex, unlinked, out of the sitemap), and why
+
+| Page | Why | Comes back when |
+|---|---|---|
+| `how-we-work.html` | The Reg 32 disclosure of how we are paid is a template: the Central Bank reference number (R20-9a) and every commission and fee figure (R20-9b to 9e) are placeholders | The figures are in and compliance signs it off; the footer then gains "How we are paid" and the Terms sentence changes (STATUS, Run 21) |
+| `find-my-pension.html` | The Letter of Authority is a draft for compliance (R20-1a); the Privacy Notice does not yet describe the finder (R20-1b), which should name Netlify (pack 1.15) | Compliance signs off the letter and the privacy wording; the footer then gains "Old pension finder" and the tracker page's links come back |
+| `pension-readiness-check.html` | A score is a gamified element (Central Bank General Guidance 3.5.7): compliance needs the brief on it (pack section 4) | Compliance signs off the questions, points and zone names |
+
+Not held, noindex by design: `thank-you.html` (the booking confirmation)
+and `404.html`. `about.html` does not exist: it was folded into
+`index.html#story` in Run 4, and `verify.py` fails the site if it returns.
+
+## Needs Damian
+
+1. **Netlify (R27-1).** In the site's Forms settings, turn form detection on
+   before the deploy, then set a notification for each form: `booking`,
+   `pension-calculator-results`, `director-calculator-results`,
+   `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`.
+   Without detection every form falls back to email.
+2. **Three placeholders a visitor can read on `privacy.html`:** R20-A2 (the
+   optional emails; the tick box is live on every form), R27-GTM (which
+   tools Tag Manager runs, their cookies and where Google processes the
+   data), and R20-1b (the finder; it could come out while the finder is
+   held, your call).
+3. **The comparison's fund figures (R1, R2).** `broker-vs-autoenrolment.html`
+   says, in text a visitor can read, "All six figures are placeholders
+   awaiting confirmation against the fund ranges Gresham can actually
+   arrange." The six figures, and which fund ranges Gresham can arrange.
+4. **Compliance.** Send the pack (`docs/COMPLIANCE-PACK.md`, covering email
+   drafted in `docs/COMPLIANCE-EMAIL.md`); the three held pages come back
+   as it signs each off. Its open questions include 1.14 to 1.17 (the review
+   line, Netlify, the Terms clause, analytics).
+5. **About.** The brief asked to add `about.html` to the sitemap; there is no
+   such page (see above), so it was not added. Say if you want a standalone
+   About page again.
+6. **Smaller calls, none blocking:** the review line spells out QFA (Run
+   26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
+   quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
+   21).
+
+## Parked, with a date or a trigger
+
+- **Calendly redirect.** An event-type setting in the Calendly account, not
+  code: Calendly → Event Types → `pensionbuddy-1-1` → Confirmation page →
+  "Redirect to an external site" → `https://pensionbuddy.ie/thank-you.html`.
+  Until then the booking page's own listener is the only route to the
+  thank-you page.
+- **GTM tags (R27-3).** Container `GTM-KQCRZDNB` loads only after "That's
+  fine", but it was empty on 25 September 2026 (version 1, no tags), so
+  nothing is measured until tags (for example Google Analytics 4, with
+  triggers on `booking_form_submit`, `calendly_booking` and
+  `calculator_first_interaction`) are added and published. The games load no consent script, by
+  choice.
+- **6 October 2026, Budget 2027.** `pia.html` per `docs/PIA-BUDGET-DAY.md`
+  (threshold, rate, annual limit, launch date, the as-at stamps); re-check
+  the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
+  and the over-50s and self-employed guides, and the UK page after the UK
+  Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 28
+
+R27-2 (the forms' success messages promised things nothing sends), A4
+(`hello@pensionbuddy.ie` confirmed), and the stale calculator pictures
+(re-shot, merged `6e556ec`).
+
+---
+
+# Run 28 — 2026-09-25 · Tidy-up before launch
+
+Damian's brief, fast mode, locked rules: first merge
+`claude/reshoot-product-rasters` into `main`; then branch `claude/tidy-up`
+off `main` for the sitemap, the forms' success messages, the contact
+address, a stale check of the live pages and a launch status at the top of
+this file; gate before commit; merge and push `main`.
+
+## Items
+
+| # | Item | Result |
+|---|---|---|
+| 0 | The re-shot pictures | merged: `main` (Run 27, `5174f45`) merged into the branch with no conflicts. Run 27 changed the calculators only outside what the pictures show, and a re-shoot on the merged tree was pixel-identical to the branch's five pictures, so they stand. The arrow labels still cover no text at 1024 and 1440 on the home and starter pages. Gate green (below), merged to `main` as `6e556ec`, pushed; its worktree removed |
+| 1 | Sitemap | the list was already right: exactly the 26 live, indexable pages, no held page, 404 or thank-you. 25 of the 26 lastmod dates were stale (as old as 9 July); each is now the date of the file's last commit, all 25 September 2026 except `games/jargon-battle.html`, 22 September. **`about.html` not added**: there is no such page (folded into `index.html#story` in Run 4; `verify.py`'s F5 fails the site if it comes back), so an entry would list a 404. New `tools/sitemap.py` rewrites the file (and `--check`s it) from the pages themselves; `verify.py`'s sitemap rows now come from it (the old "exists but is not in sitemap.xml" loop checked nothing); `tests/build.test.py` 15 guards the list, with three mutants |
+| 2 | Success messages | every form's success message is now "Thanks - we've got it. Damian will be in touch personally.", shown only after a real success: the pension and director calculators' "Email my results" (was "Thanks. Your figures are on the way."), the director, starter and tracker guide forms (was "Thanks. The guide is on its way."), and the held finder (was "…and the search has started."), in the page's HTML and in its script. "If nothing arrives in a few minutes, check your spam folder." is gone from those five forms and from `thank-you.html`, and so is the sentence after it on the five forms, "Delivery depends on email providers outside our control.", which was about an email to the visitor. Kept: the thank-you page's "Calendly emails you the details and a reminder before the call." (Calendly sends it by itself), the booking form's "Thanks, [name]. Pick a time below…" (a step, not a promise), and every "Your email app should have opened…" line. Left alone: the readiness check's "On the way" score band and "tax on the way out". Pack section 7 updated. Closes R27-2 |
+| 3 | Contact details | `hello@pensionbuddy.ie` is the only address we give: the Privacy Notice, Terms and Complaints pages (link and text on each) and the email fallback of all 15 pages with a form or the shared calculator script (`LEAD_FALLBACK_ADDRESS`). **The footer had no address at all**; it is now in the Company column on all 29 pages (added once in the skeleton, carried by `sync-chrome.py` and `pagebuild.py`). The three "A4: email address awaiting confirmation" comments are gone. Other addresses on the site: `info@fspo.ie`, the Financial Services and Pensions Ombudsman, on the complaints page; `you@example.com`, the booking form's input hint. Closes A4 |
+| 4 | Stale check, live pages | 1,017 internal links and 15 external links, 0 broken (external fetched with a browser user agent, titles read for soft 404s); no live page links to a held one. No TODO, FIXME, lorem, `CALENDLY_URL` or test data. Needing Damian, all visible to visitors: the three `privacy.html` placeholders (R20-A2, R27-GTM, R20-1b) and the comparison's "All six figures are placeholders…" (R1, R2). Fixed: the A4 comments. Left: `booking.html`'s `DEVELOPER NOTE` comment (it is the Calendly redirect instructions, invisible, and still needed) |
+| 5 | Launch status | the section above |
+
+## Proof
+
+On the branch before commit, one suite at a time: `tests/run-tests.py`
+ALL SUITES PASS; `build.test.py` 202 (15 is new), `lead-forms.test.py` 213,
+`consent.test.py` 263, `games.test.py` 157, `runner.test.py` 95,
+`gap-band.py` all pass; `tools/sitemap.py --check`, `stamp-images.py
+--check`, `sync-chrome.py --check` and `check-initialisms.py` clean;
+`verify.py` on every page at 375, 1360 and 1440: 0 FAIL, every site-level
+row passing, and the WARNs as on `main` (the placeholders above and
+glossary's C4). `lead-forms.test.py` had asserted a success by the word
+"Thanks." and failed on the new wording (6 forms); it now pins the message
+word for word and fails any success message that promises a delivery.
+
+Run alongside each other, the Chrome suites fail at random (the runner test
+failed 2 or 3 checks that pass alone, and `verify.py` once lost the font
+service): run them one at a time.
+
+---
+
 # Run 27 — 2026-09-25 · Launch gaps: the forms, the liability clause, analytics after consent
 
 Damian's brief: branch `claude/launch-gaps` off `main` (`faf4c0e`), fast

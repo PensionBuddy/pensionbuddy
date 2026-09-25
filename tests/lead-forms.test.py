@@ -191,6 +191,9 @@ class Declared(HTMLParser):
             self.inside = False
 
 
+# Run 28: every lead form's success message, word for word
+SUCCESS = "Thanks - we've got it. Damian will be in touch personally."
+
 def main():
     if not os.path.exists(CHROME):
         print('Chrome not found at %s' % CHROME)
@@ -249,7 +252,11 @@ def main():
             if page == 'booking.html':
                 eq('%s: the calendar opens either way' % tag, said.startswith('Thanks, Test.'), True)
             elif mode == 'ok':
-                eq('%s: says it arrived' % tag, 'Thanks.' in said and 'email app' not in said, True)
+                # Run 28: one success message on every form, promising only
+                # what happens (Netlify emails the visitor nothing)
+                eq('%s: says it arrived' % tag, SUCCESS in said and 'email app' not in said, True)
+                eq('%s: and promises nothing that is not sent' % tag,
+                   [w for w in ('on its way', 'on the way', 'if nothing arrives', 'delivery depends') if w in said.lower()], [])
             else:
                 eq('%s: opens the email instead' % tag, 'Your email app should have opened' in said, True)
 

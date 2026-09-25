@@ -241,7 +241,7 @@
     form.setAttribute('aria-busy', 'true');
     PBForms.send(form, F.fields(d, today, location.href)).then(function (ok) {
       form.removeAttribute('aria-busy');
-      if (ok) finish('Thanks. Your signed letter and your details are with Damian, and the search has started.');
+      if (ok) finish('Thanks - we\'ve got it. Damian will be in touch personally.');
       else viaEmail();
     });
   });

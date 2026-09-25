@@ -359,6 +359,31 @@ def run():
     eq('14. the finder declares exactly what PBFinder.fields() sends',
        re.findall(r"'([a-z_]+)'", m.group(1)) if m else None, pagebuild.FINDER_FIELDS)
 
+    # ----------------------------------------------------------------- 15
+    # Run 28. sitemap.xml lists exactly the live, indexable pages: none held
+    # back with noindex, no about.html, nothing missing. Dates are left to
+    # verify.py's site rows: a stale lastmod only shows after the commit that
+    # made it stale, one run too late for a gate. Mutants: an extra entry, a
+    # dropped entry, a held page listed.
+    import sitemap
+    members = lambda: [p for p in sitemap.problems() if not p.startswith('stale')]
+    eq('15. the sitemap lists exactly the live, indexable pages', members(), [])
+    live = sitemap.pages()
+    eq('15. none of them held back or the 404', [p for p in ('404.html', 'thank-you.html', 'how-we-work.html',
+       'find-my-pension.html', 'pension-readiness-check.html') if p in live], [])
+    real = sitemap.current
+    for label, rows, want in (
+            ('an about.html entry', lambda: real() + [('https://pensionbuddy.ie/about.html', '2026-09-25', '0.5')],
+             'listed but not a live, indexable page: https://pensionbuddy.ie/about.html'),
+            ('a dropped page', lambda: [r for r in real() if not r[0].endswith('/pia.html')],
+             'missing: https://pensionbuddy.ie/pia.html'),
+            ('a held page listed', lambda: real() + [('https://pensionbuddy.ie/how-we-work.html', '2026-09-25', '0.5')],
+             'listed but not a live, indexable page: https://pensionbuddy.ie/how-we-work.html')):
+        sitemap.current = rows
+        eq('15. %s is named' % label, members(), [want])
+    sitemap.current = real
+
+
 
 
 # Run 27: every Netlify form on the site, by page. Adding a lead form means
