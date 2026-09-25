@@ -1,0 +1,84 @@
+/* ============================================================
+   THE PERSONAL INVESTMENT ACCOUNT (pia.html, Run 23).
+   A guide and a calculator: what the proposal is, what is
+   confirmed and what comes on 6 October 2026, a four-way table,
+   the same take-home cost three ways, and who it might suit.
+   Every figure in the calculator is from assets/js/pia.js.
+   EQUAL PROMINENCE: the two halves of every .pia-pair share one
+   rule, so the risks can never be set smaller than the benefits.
+   No text here is under 1rem: the page is a calculator and keeps
+   the 16px floor.
+   ============================================================ */
+.pia-asat{margin:10px 0 0;font-size:1rem;font-weight:600;color:var(--ink-2)}
+.phead .pia-asat{max-width:760px}
+.pia-sec{padding:56px 0 8px}
+.pia-sec.pia-alt{background:var(--surface-2);padding-bottom:48px;margin-top:40px}
+.pia-sec h2{margin:0}
+.pia-sec h3{font-size:20px;line-height:1.24;margin:0 0 10px}
+.pia-intro{margin:14px 0 0;max-width:760px;font-size:1.05rem;line-height:1.6;color:var(--ink)}
+.pia-lede{margin:18px 0 0;max-width:760px}
+.pia-lede p{font-size:1.1rem;line-height:1.65;color:var(--ink)}
+.pia-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+.pia-side{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px;min-width:0}
+.pia-side h3{margin-bottom:4px}
+.pia-side ul,.pia-today ul{margin:14px 0 0;padding-left:20px}
+.pia-side li,.pia-today li{font-size:1rem;line-height:1.6;color:var(--ink);margin:0 0 8px}
+.pia-src{margin:14px 0 0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.pia-src a,.pia-sec p a,.pia-p a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
+.pia-today{margin-top:18px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px}
+.needs-input{display:inline-block;background:var(--surface-2);border:1px dashed var(--ink-3);border-radius:var(--r-sm);padding:0 6px;color:var(--ink-2);font-size:1rem}
+
+.pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+.pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
+.pia-t th,.pia-t td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.pia-t thead th{background:var(--surface-2);font-weight:700;color:var(--ink)}
+.pia-t tbody th{font-weight:600;color:var(--ink);width:17%}
+.pia-t tbody tr:last-child th,.pia-t tbody tr:last-child td{border-bottom:0}
+
+.pia-sec#calculator{padding-bottom:0}
+.pia-sec#calculator > .wrap:first-child{margin-bottom:26px}
+.pia-lbl{font-weight:600;color:var(--ink)}
+.pia-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.pia-seg button{min-height:48px;border:0;border-radius:var(--r-sm);background:none;font:600 1rem var(--font);color:var(--ink-2);cursor:pointer}
+.pia-seg button.on{background:var(--surface);color:var(--teal-700);box-shadow:0 0 0 1px var(--line-2)}
+.pia-seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.pia-grp{margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--line);font-weight:700;color:var(--ink);font-size:1rem}
+.pia-euro{display:flex;align-items:center;gap:8px;margin-top:8px;border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:0 12px;background:var(--surface)}
+.pia-euro span{font-weight:600;color:var(--ink-2)}
+.pia-euro input{flex:1;min-width:0;border:0;background:none;font:600 1.05rem var(--font);color:var(--ink);padding:12px 0;font-variant-numeric:tabular-nums}
+.pia-euro:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-100)}
+.pia-euro input:focus{outline:none}
+
+.res-hero .pia-hl,.res-hero .pia-three{grid-column:1/-1}
+.res-hero .pia-hl{margin-bottom:0}
+.res-hero .pia-note{color:#9FDDD2}
+.pia-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pia-three .big{font-size:clamp(26px,2.6vw,34px);overflow-wrap:anywhere}
+.pia-note{margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pia-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px}
+.pia-card h3{margin:0 0 12px}
+.pia-st{width:100%;border-collapse:collapse;font-size:1rem;font-variant-numeric:tabular-nums}
+.pia-st th,.pia-st td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+.pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
+.pia-st thead th{font-weight:700;color:var(--ink)}
+.pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
+
+.pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.pia-p{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 22px}
+.pia-p p{font-size:1rem;line-height:1.6;color:var(--ink);margin:0}
+
+@media(max-width:900px){
+  .pia-who{grid-template-columns:1fr 1fr}
+  .pia-three{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .pia-pair,.pia-who{grid-template-columns:1fr}
+  .pia-side,.pia-today,.pia-card{padding:18px 16px}
+  /* the four-way table becomes one card per row, each cell labelled */
+  .pia-t thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .pia-t,.pia-t tbody,.pia-t tr,.pia-t th,.pia-t td{display:block;width:auto}
+  .pia-t tbody th{width:auto;background:var(--surface-2);padding:12px 16px}
+  .pia-t td{padding:10px 16px}
+  .pia-t td::before{content:attr(data-l);display:block;font-weight:700;color:var(--ink)}
+  .pia-st th,.pia-st td{padding:10px 4px}
+}

@@ -315,6 +315,30 @@ PAGES = {
                 ('id="ptPrint"', 'print or save'),
                 ('Nothing you type is sent or stored', 'said on the page')),
     ),
+    # Run 23. The proposed Personal Investment Account: a dated guide and the
+    # same take-home cost in a pension, the PIA and an ETF. The PIA's rate and
+    # threshold are the reader's inputs, never defaults; docs/PIA-BUDGET-DAY.md
+    # lists what changes on 6 October 2026. The tax-rate buttons are not a
+    # .seg, so they stay out of More options; age and earnings fold into it.
+    'pia': Page(
+        out='pia.html',
+        parts='pia-parts',
+        title='The new Personal Investment Account (PIA), next to a pension, Pensionbuddy',
+        desc=('The proposed Personal Investment Account, as at 25 September 2026: what is confirmed, '
+              'what Budget 2027 announces on 6 October, and the same take-home cost in a pension, '
+              'the PIA and an ETF. Proposed, not yet law. An illustration, not advice.'),
+        modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
+        keep=['amount', 'years', 'growth', 'piaRate'],
+        floor16=True,
+        nav=None,
+        checks=(('Proposed · as at 25 September 2026', 'the date the proposal was checked'),
+                ('class="pb-warn"', 'the prescribed warnings'),
+                ('6 October 2026', 'Budget day named'),
+                ('not yet law', 'said to be a proposal'),
+                ('id="piaThreshold" inputmode="numeric" autocomplete="off" value=""', 'no threshold filled in'),
+                ('id="piaRate" min="0" max="5" step="0.05" value="0"', 'the rate starts at 0%'),
+                ('Roadmap for the Taxation of Retail Investment', 'the Roadmap cited')),
+    ),
 }
 
 

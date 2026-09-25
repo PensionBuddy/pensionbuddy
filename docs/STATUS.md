@@ -6,6 +6,64 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
+# Run 23 — 2026-09-25 · The Personal Investment Account page
+
+Damian's brief: a new page, `pia.html`, "The new Personal Investment Account
+(PIA)", on branch `claude/pia-page` off `main` (`c3120b8`); linked from the
+footer's Tools column, the glossary (new entry), starter.html and
+director.html; in the sitemap. Every PIA fact dated "as at 25 September
+2026" and "proposed". No figure for the rate, the threshold, the launch
+month, take-up, any provider or any fee. Not merged: Damian reviews first.
+
+## Items
+
+| # | Item | Result |
+|---|---|---|
+| 1 | The page | done: built by `tools/pagebuild.py` (record `pia`, parts in `tools/pia-parts/`), a calculator like the charges page (16px floor, pb-warn, share and report rows). Sections: what it is (four sentences) with what it offers and what it costs you side by side under one CSS rule, so the risks cannot be set smaller than the benefits; confirmed vs still to come (threshold, rate, annual limit on 6 October 2026; accounts during 2027; not yet law); today's rules outside it (38% exit tax and eight-year deemed disposal, 33% CGT with the €1,270 exemption, 33% DIRT); a four-way table (PIA, pension, ETF, My Future Fund) on the six rows asked for, one card per row on a phone; the calculator; who it might suit, six personas, each "it depends on", pension first where there is employer money or relief, PIA for money needed before 60; the call to action; the information box; the assumptions |
+| 2 | The calculator | done: the same take-home cost into a pension, the PIA and an ETF. Inputs: amount, years, growth, tax rate 20/40 (visible, not folded), the PIA rate (slider starting at 0%) and threshold (empty text field), both labelled "not yet announced, try a figure"; age and earnings under More options, for the pension's relief limit and the access age. Until a threshold is typed the PIA shows "No figure yet" and says why; at 0% it says there is no PIA tax at all. A lower-growth (half the rate) and a fall (a 20% fall in the last year) scenario beside the reader's own; the tax table shows where each product's tax comes in. The prescribed warnings box directly under the figures, then the share row. Static fallback: the markup carries the page's own default render (pension €36,018, ETF €28,235, PIA prompt) |
+| 3 | New maths in its own module | done: `assets/js/pia.js` (`PBPia`), pension via `PBRelief.grossForNetCost` (age each year) and `PBSft.lumpSum`; ETF per-lot deemed disposal and exit tax; the PIA's tax on the twelve-month-end average. Spec `docs/CALC-SPEC-PIA.md`; `tests/pia.test.js`, 44 assertions, gated in `tests/run-tests.py` and run under node by `tests/runner.test.py`. Section 1 asserts the module holds no PIA rate or threshold |
+| 4 | Links | done: footer Tools column "Personal Investment Account (PIA)" in the skeleton, carried to every page by `sync-chrome.py` and `pagebuild.py` (proved the only change to the other 29 pages); glossary `#pia` with an index entry; a line under starter's auto-enrolment section; a fourth card under director's "The rules for 2026"; sitemap |
+| 5 | Budget day | done: `docs/PIA-BUDGET-DAY.md`, each item (threshold, rate, annual limit, valuation method, launch date, the as-at stamps, "proposed") with the file and line it lives on |
+
+## NEEDS DAMIAN INPUT from this run
+
+- **PIA-1** What "SIA" stands for. The brief gives the name only; the page
+  says it is the same account and shows a placeholder for the expansion.
+- **PIA-2** My Future Fund in the comparison table: tax while it grows, tax
+  on the way out, and any guarantee. The site's modules do not state them,
+  so they are placeholders. "At 66" for access is the site's own (starter.html).
+- **PIA-3** Employer money into a PIA: not among the confirmed facts, so a
+  placeholder.
+- **Wording to confirm, not in the confirmed list:** the pension column's
+  "None while it stays in the pension" (tax while it grows). The site's
+  calculators all grow a pension untaxed, but no page says so in words.
+- **Illustration choices to sign off:** lower growth is half the reader's
+  rate; the fall is 20% in the final year; the PIA's average is the twelve
+  month-end values; the pension is taxed in one go at the end, a quarter as
+  a lump sum and the rest at the reader's rate. Each is said on the page.
+- **Sources:** the Roadmap is linked through the gov.ie press release of
+  31 August 2026, which links the document on assets.gov.ie; today's rates
+  cite revenue.ie's home page. Deeper links if you want them.
+- New copy on every section of `pia.html`, the glossary entry, and the
+  starter and director lines needs the usual sign-off; the compliance pack
+  has not been rebuilt for it.
+
+## Proof
+
+- `tests/run-tests.py`: every suite at its gate, `pia` 44; ALL SUITES PASS.
+  `tests/build.test.py` 148, `tests/runner.test.py` 95, `tests/games.test.py`
+  157, all pass. `stamp-images.py --check` and `sync-chrome.py --check` clean.
+- The built page driven headless through a scripted session (threshold typed,
+  rate moved to 1%, 20% tax, 30 years, threshold cleared): every figure
+  followed, the loss-year line appeared, and clearing the threshold put the
+  prompt back.
+- `tools/verify.py` over every page (31) at 375, 1200 and 1440: 0 FAIL.
+  WARNs: the placeholder lists (pia PIA-1 to PIA-3, and the older ones on
+  privacy, terms, how-we-work, find-my-pension) and glossary's C4 deep link
+  to #tax-relief, which main `c3120b8` shows too.
+
+---
+
 # Run 22 — 2026-09-24 · The comparison's warning box, and every initialism spelled out
 
 Damian's instructions after Run 21: add the locked warning box to the
