@@ -133,10 +133,19 @@ def run():
     sources = all_sources()
     eq('8. the shared chrome matches the skeleton on every page', findings(pagebuild.chrome_drift(sources)), [])
     skel_nav = pagebuild.chrome_for(sources['pension-calculator.html'], 'terms.html')[0]
-    eq('8. the pages that mark themselves current are derived from the nav, and are these six',
+    # Run 29: the dropdowns put every page a reader can reach in the nav, so
+    # every one of them marks itself; the three held pages stay out of it
+    eq('8. the pages that mark themselves current are derived from the nav, and are these nineteen',
        sorted(pagebuild.nav_targets(skel_nav)),
-       ['director.html', 'glossary.html', 'pension-calculator.html', 'starter.html',
-        'state-pension-reality-check.html', 'tracker.html'])
+       ['broker-vs-autoenrolment.html', 'director-calculator.html', 'director-pension-rules.html',
+        'director-year-end-checklist.html', 'director.html', 'glossary.html', 'my-pensions.html',
+        'old-pension-checklist.html', 'pension-calculator.html', 'pension-fees-calculator.html',
+        'pensions-over-50.html', 'pia.html', 'self-employed-pensions.html', 'standard-fund-threshold.html',
+        'starter.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html', 'tracker.html',
+        'uk-pensions-in-ireland.html'])
+    eq('8. and none of them is a held page',
+       sorted(pagebuild.nav_targets(skel_nav) &
+              ({p.out for p in pagebuild.PAGES.values() if p.noindex} | {'how-we-work.html'})), [])
 
     # ------------------------------------------------------------------ 9
     # Mutants. Each is caught as the kind named, on the page mutated. The two
@@ -163,15 +172,17 @@ def run():
 
     MUTANTS = [
         ('an extra nav item', 'terms.html', 'nav',
-         nav_only('terms.html', '<a class="lnk" href="glossary.html">Jargon buster</a>',
-                  '<a class="lnk" href="glossary.html">Jargon buster</a>\n    <a class="lnk" href="glossary.html#tax-relief">Tax relief</a>')),
+         nav_only('terms.html', '<li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>',
+                  '<li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>\n        <li><a class="lnk" href="glossary.html#tax-relief">Tax relief</a></li>')),
         ('a relabelled nav item', 'privacy.html', 'nav',
-         nav_only('privacy.html', '>Jargon buster</a>', '>Jargon</a>')),
+         nav_only('privacy.html', '>Pension jargon buster</a>', '>Jargon</a>')),
+        ('a dropdown relabelled', 'complaints.html', 'nav',
+         nav_only('complaints.html', '>Guides<svg', '>Reading<svg')),
         ('the current marker on the wrong item', 'tracker.html', 'active',
          nav_only('tracker.html', '<a class="lnk active" href="tracker.html" aria-current="page">Find a pension</a>',
                   '<a class="lnk" href="tracker.html">Find a pension</a>').replace(
-             '<a class="lnk" href="glossary.html">Jargon buster</a>',
-             '<a class="lnk active" href="glossary.html" aria-current="page">Jargon buster</a>', 1)),
+             '<a class="lnk" href="glossary.html">Pension jargon buster</a>',
+             '<a class="lnk active" href="glossary.html" aria-current="page">Pension jargon buster</a>', 1)),
         ('aria-current dropped from the current item', 'director.html', 'active-markup',
          nav_only('director.html', ' aria-current="page"', '')),
         ('the active class dropped but aria-current kept', 'starter.html', 'active-markup',
@@ -189,6 +200,14 @@ def run():
          sources['glossary.html'].replace('--teal:#0C8175', '--teal:#0C8176', 1)),
         ('the announce bar changed', 'tracker.html', 'banner',
          sources['tracker.html'].replace('<b>Free</b> first consultation', 'Free first consultation', 1)),
+        ('the NAV block of CSS changed', 'pensions-over-50.html', 'nav-css',
+         after('pensions-over-50.html', '/* NAV:BEGIN', 'font-size:17px;font-weight:600', 'font-size:15px;font-weight:600')),
+        ('the NAV block of CSS missing', 'uk-pensions-in-ireland.html', 'nav-css',
+         sources['uk-pensions-in-ireland.html'].replace('/* NAV:BEGIN', '/* NAV-BEGIN', 1)),
+        ('the CLICK block of CSS changed', 'director.html', 'click-css',
+         after('director.html', '/* CLICK:BEGIN', 'text-underline-offset:3px', 'text-underline-offset:1px')),
+        ('the CLICK block of CSS missing', 'booking.html', 'click-css',
+         sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -215,8 +234,8 @@ def run():
     eq('10. and touches only that page', sorted(fixed), ['terms.html'])
     moved = dict(sources)
     moved['pension-calculator.html'] = nav_only('pension-calculator.html',
-        '<a class="lnk" href="glossary.html">Jargon buster</a>',
-        '<a class="lnk" href="glossary.html">Jargon buster</a>\n    <a class="lnk" href="state-pension-entitlement.html">Entitlement</a>')
+        '<li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>',
+        '<li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>\n        <li><a class="lnk" href="complaints.html">Complaints</a></li>')
     out = pagebuild.sync_blocks(moved)
     eq('10. a new item in the skeleton reaches every hand-written page',
        sorted(out), sorted(p for p in sources if p != 'pension-calculator.html' and p not in {q.out for q in pagebuild.PAGES.values()}))
@@ -224,7 +243,7 @@ def run():
        [p for p in out if p == 'pension-calculator.html' or p in {q.out for q in pagebuild.PAGES.values()}], [])
     eq('10. the new item lands on the page that marks itself current, still marked',
        '<a class="lnk active" href="tracker.html" aria-current="page">' in out['tracker.html'] and
-       'href="state-pension-entitlement.html">Entitlement' in out['tracker.html'], True)
+       'href="complaints.html">Complaints</a></li>' in out['tracker.html'][pagebuild.nav_span(out['tracker.html'])[0]:pagebuild.nav_span(out['tracker.html'])[1]], True)
     eq('10. and on the home page with its same-page anchors kept',
        'href="#story"' in out['index.html'] and 'href="index.html#story"' not in
        out['index.html'][pagebuild.nav_span(out['index.html'])[0]:pagebuild.nav_span(out['index.html'])[1]], True)

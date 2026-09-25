@@ -1,69 +1,96 @@
-/* The calculators, from the nav (Mercury's menu with a line per item).
+/* The nav's dropdowns (Run 29): Directors, Tools, State Pension, Guides.
 
-   Built here, at runtime, so the nav's markup stays exactly the one
-   tools/pagebuild.py guards and tools/sync-chrome.py copies: without script,
-   "Calculator" is the plain link it always was. From 1201px, where the nav
-   is a row rather than the phone drawer, hovering or focusing "Calculator"
-   opens a panel under it naming the calculators, each with one line in its
-   own page's words (six since Run 20 added the charges calculator). It takes no width in the row. Escape closes it and
-   returns focus to the link; leaving both closes it. */
+   Each is a disclosure, not an ARIA menu: a <button aria-expanded
+   aria-controls> and the list of ordinary links it shows, so a screen reader
+   announces "Directors, collapsed, button" and then a list of links, and Tab
+   moves through them like any other links. The markup is the nav that
+   tools/pagebuild.py guards and tools/sync-chrome.py copies; nothing is built
+   here. Without this script the NAV block of CSS opens a panel on hover and on
+   keyboard focus, so every page is still reachable.
+
+   With it:
+   - a click, a tap, Enter or Space opens or closes a panel; opening one
+     closes the others;
+   - on the row (from 1301px) with a mouse, hovering opens a panel and leaving
+     closes it after a short grace; a click on a panel that hovering opened
+     keeps it open rather than closing it under the pointer;
+   - Escape closes the open panel and puts focus back on its button; the
+     drawer's own Escape then closes the drawer;
+   - ArrowDown on a button opens it and moves to the first link; ArrowUp and
+     ArrowDown move within a panel;
+   - a click outside, Tab leaving a panel on the row, the header hiding on
+     scroll, or a change between row and drawer closes whatever is open.
+   In the drawer (1300px and below) the same buttons open their lists in
+   place, and Tab leaving one leaves it open. */
 (function () {
   'use strict';
   var links = document.getElementById('navLinks');
-  var calc = links && links.querySelector('a.lnk[href="pension-calculator.html"]');
-  if (!calc || !window.matchMedia) return;
-  var wide = window.matchMedia('(min-width: 1201px)');
-  var TOOLS = [
-    ['pension-calculator.html', 'Pension calculator', 'See what your pension could pay you, including what Revenue adds back through tax relief.'],
-    ['director-calculator.html', 'Director calculator', 'If you run a company: what it could contribute, and the corporation tax that could save.'],
-    ['pension-fees-calculator.html', 'Pension charges calculator', 'What your plan\u2019s charges take out of your pot by retirement.'],
-    ['broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'Auto-enrolment against a personal pension, for your own salary and age.'],
-    ['state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension leaves you to find.'],
-    ['state-pension-entitlement.html', 'State Pension entitlement check', 'What the State Pension would actually pay you.']
-  ];
-  var here = String(location.pathname || '').split('/').pop() || 'index.html';
-  var panel = document.createElement('div');
-  panel.className = 'pb-navmenu';
-  panel.id = 'pbNavMenu';
-  panel.hidden = true;
-  TOOLS.forEach(function (t) {
-    var a = document.createElement('a');
-    a.href = t[0];
-    if (t[0] === here) a.setAttribute('aria-current', 'page');
-    var b = document.createElement('b'); b.textContent = t[1];
-    var s = document.createElement('span'); s.textContent = t[2];
-    a.appendChild(b); a.appendChild(s);
-    panel.appendChild(a);
-  });
-  calc.parentNode.insertBefore(panel, calc.nextSibling);
-  var timer = 0;
-  function place() {
-    panel.style.left = calc.offsetLeft + 'px';
-    panel.style.top = (calc.offsetTop + calc.offsetHeight) + 'px';
+  if (!links || !document.querySelectorAll) return;
+  var dds = [].slice.call(links.querySelectorAll('.nav-dd'));
+  if (!dds.length) return;
+  links.classList.add('dd-js');
+
+  var mm = window.matchMedia ? function (q) { return window.matchMedia(q); } : function () { return { matches: false }; };
+  var row = mm('(min-width: 1301px)');
+  var mouse = mm('(hover: hover) and (pointer: fine)');
+  var timer = 0, hovered = null;
+
+  function btn(dd) { return dd.querySelector('.nav-dd-btn'); }
+  function items(dd) { return [].slice.call(dd.querySelectorAll('.nav-dd-panel a')); }
+  function isOpen(dd) { return btn(dd).getAttribute('aria-expanded') === 'true'; }
+  function set(dd, open) {
+    btn(dd).setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (!open && hovered === dd) hovered = null;
   }
-  function open() {
-    if (!wide.matches) return;
-    clearTimeout(timer);
-    place();
-    panel.hidden = false;
-  }
-  function closeSoon() { clearTimeout(timer); timer = setTimeout(function () { panel.hidden = true; }, 180); }
-  function inside(el) { return el && (el === calc || panel.contains(el)); }
-  calc.addEventListener('mouseenter', open);
-  calc.addEventListener('focus', open);
-  panel.addEventListener('mouseenter', open);
-  calc.addEventListener('mouseleave', closeSoon);
-  panel.addEventListener('mouseleave', closeSoon);
-  [calc, panel].forEach(function (el) {
-    el.addEventListener('focusout', function (e) { if (!inside(e.relatedTarget)) closeSoon(); });
+  function closeAll(except) { dds.forEach(function (d) { if (d !== except) set(d, false); }); }
+  function open(dd) { clearTimeout(timer); closeAll(dd); set(dd, true); }
+  function hoverable() { return row.matches && mouse.matches; }
+
+  dds.forEach(function (dd) {
+    var b = btn(dd);
+    b.addEventListener('click', function () {
+      clearTimeout(timer);
+      if (isOpen(dd) && hovered === dd) { hovered = null; return; }
+      if (isOpen(dd)) set(dd, false); else open(dd);
+    });
+    dd.addEventListener('mouseenter', function () {
+      if (!hoverable()) return;
+      clearTimeout(timer);
+      if (!isOpen(dd)) { open(dd); hovered = dd; }
+    });
+    dd.addEventListener('mouseleave', function () {
+      if (!hoverable() || hovered !== dd) return;
+      clearTimeout(timer);
+      timer = setTimeout(function () { set(dd, false); }, 220);
+    });
+    dd.addEventListener('focusout', function (e) {
+      if (row.matches && isOpen(dd) && !dd.contains(e.relatedTarget)) set(dd, false);
+    });
+    dd.addEventListener('keydown', function (e) {
+      var list = items(dd), at = list.indexOf(document.activeElement);
+      if (e.key === 'Escape' && isOpen(dd)) {
+        set(dd, false);
+        b.focus();
+        e.stopPropagation();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (!list.length) return;
+        e.preventDefault();
+        if (!isOpen(dd)) open(dd);
+        if (e.key === 'ArrowDown') list[at < 0 ? 0 : Math.min(at + 1, list.length - 1)].focus();
+        else if (at > 0) list[at - 1].focus();
+        else b.focus();
+      }
+    });
   });
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !panel.hidden) {
-      var back = panel.contains(document.activeElement);
-      panel.hidden = true;
-      if (back) calc.focus();
-    }
+
+  document.addEventListener('click', function (e) {
+    if (!links.contains(e.target)) closeAll();
   });
-  function onChange() { if (!wide.matches) panel.hidden = true; }
-  if (wide.addEventListener) wide.addEventListener('change', onChange); else if (wide.addListener) wide.addListener(onChange);
+  var nav = document.getElementById('nav');
+  if (nav) window.addEventListener('scroll', function () {
+    if (nav.classList.contains('nav-hidden')) closeAll();
+  }, { passive: true });
+  function onChange() { closeAll(); }
+  if (row.addEventListener) row.addEventListener('change', onChange);
+  else if (row.addListener) row.addListener(onChange);
 })();

@@ -888,15 +888,28 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     }
   }
 
+  /* One of the Poolbeg stacks (Run 29): a grey concrete base, then red and
+     white bands the rest of the way up, red at the top, each band shaded on
+     its right so the stack reads round. Scenery only: the same place, height
+     and footprint as before, so nothing in the game moves. */
   function chimney(x, hgt) {
     var base = HORIZON + 1, top = base - hgt;
+    var baseH = Math.round(hgt * 0.16), span = hgt - baseH;
+    var n = Math.round(span / 6) | 1, i, y0, y1;   /* an odd number of whole bands of about 6px: red at both ends, none a sliver */
     ctx.fillStyle = '#CBEBE4';
     ctx.fillRect(x - 1, top - 1, 11, hgt + 1);
-    ctx.fillStyle = '#FBF7EF';
-    ctx.fillRect(x, top, 9, hgt);
-    ctx.fillStyle = '#C1502E';
-    ctx.fillRect(x, top + 6, 9, 3);
-    ctx.fillRect(x, top + 13, 9, 3);
+    for (i = 0; i < n; i++) {
+      y0 = top + Math.round(i * span / n);
+      y1 = top + Math.round((i + 1) * span / n);
+      ctx.fillStyle = i % 2 ? '#FBF7EF' : '#C1502E';
+      ctx.fillRect(x, y0, 9, y1 - y0);
+      ctx.fillStyle = i % 2 ? '#E4DCCF' : '#9E3F24';
+      ctx.fillRect(x + 7, y0, 2, y1 - y0);
+    }
+    ctx.fillStyle = '#9AA6A2';
+    ctx.fillRect(x - 1, base - baseH, 11, baseH);
+    ctx.fillStyle = '#7F8B88';
+    ctx.fillRect(x + 7, base - baseH, 3, baseH);
   }
 
   function tuft(x, y) {

@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 25 September 2026, after Run 28
+# Launch status — as at 25 September 2026, after Run 29
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -68,7 +68,12 @@ and `404.html`. `about.html` does not exist: it was folded into
 5. **About.** The brief asked to add `about.html` to the sitemap; there is no
    such page (see above), so it was not added. Say if you want a standalone
    About page again.
-6. **Smaller calls, none blocking:** the review line spells out QFA (Run
+6. **Run 29:** the provider ticker is built and switched off until each
+   provider's written permission is in and the agencies on How we work are
+   filled in (R29-1, R29-2); the filled nav button (R29-3); what the
+   countdown does after 15 October (R29-4); five calls on directors' ages
+   (R29-5 to R29-9). All in Run 29 below.
+7. **Smaller calls, none blocking:** the review line spells out QFA (Run
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
    quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
    21).
@@ -92,12 +97,241 @@ and `404.html`. `about.html` does not exist: it was folded into
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
 
+## Closed in Run 29
+
+"Out of office" is switched off, not deleted (restore: delete `hidden` on
+`<section class="snaps">` in `index.html`). Every live page is now in the
+nav. The countdown is to your 15 October cut-off, with Revenue's dates
+beside it. The director calculator can no longer be set to retire before
+50.
+
 ## Closed in Run 28
 
 R27-2 (the forms' success messages promised things nothing sends), A4
 (`hello@pensionbuddy.ie` confirmed), and the stale calculator pictures
 (re-shot, merged `6e556ec`).
 
+---
+
+# Run 29 — 2026-09-25 · Nav, provider ticker, the 15 October cut-off, clickable things, directors' ages, Poolbeg
+
+Damian's brief: branch `claude/nav-providers-fixes` off `main`, fast mode,
+locked rules; the gate before each commit; merge and push `main` at the
+end. Seven items. The branch was cut from `6e556ec`; Run 28 landed on
+`main` (`fbd5b6f`) while it was open, so the work was moved onto it before
+the first commit and this run is 29.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Hide "Out of office" | done: the one section of that name, the photo strip on `index.html` ("Off duty" / "Out of office.", eight photos and their clones). Hidden, not deleted: the `<section class="snaps">` carries `hidden`, a comment above it says why and how to restore, and one CSS rule (`.snaps[hidden]{display:none}`) makes sure nothing overrides the attribute. **To restore: delete the word `hidden` from `<section class="snaps" hidden>` in `index.html`.** Nothing else changes; the eight photos stay in `assets/img/` and lazy-load, so while hidden they are never fetched | `a724d6d` |
+| 2 | Nav: bigger, and every page reachable | done. **The row**: Find a pension, Start a pension, then four dropdowns, Directors, Tools, State Pension, Guides, then "Book a call with Damian for free". Items are 17px at weight 600 (were 14.4px at 500), dark ink, a teal underline on hover and on the current page or section, a chevron on each dropdown. **Every page a reader can reach is in the nav**, 19 of them (list below); "About" is now "About Pensionbuddy", the last line of Guides, under a rule, because the row had no room for it. The three held pages stay out, and `tests/nav.test.py` fails if one appears. **The button** is now the one filled control in the nav, aqua with dark text. It was an outline since the PB-AUDIT pass (von Restorff: one filled aqua button per screen, the hero's); the brief says it is the filled one, so it is, and on pages whose hero has a filled button there are now two above the fold. Deleting the three `#nav #navLinks .btn-primary` rules in the NAV block puts the outline back. **Widths**, measured in Chrome: at 17px the row needs 1,228px, 1,365px with the deadline chip, and the content column gives it 1,092, so the header now has its own container up to 1,440px wide (the logo and button sit nearer the window's edges than the page text does). The row runs from 1301px, the chip joins it from 1440px, and at 1300px and below the nav is the drawer (was 1200px): the logo, the chip (from 561px) and the menu button, with the dropdowns opening in place as lists, the drawer scrolling if it is taller than the screen. No sideways scroll at 375, 768, 1200, 1300, 1301, 1360, 1440 or 1920. **How the dropdowns work**: each is a button (`aria-expanded`, `aria-controls`) and the list of ordinary links it opens, the disclosure pattern, so a screen reader hears "Directors, collapsed, button" and then a list. Click, tap, Enter or Space opens and closes; opening one closes the others; with a mouse on the row, hovering opens and leaving closes after a moment, and a click on a hovered panel keeps it open; Escape closes and returns focus to the button (in the drawer, a second Escape closes the drawer); ArrowDown and ArrowUp move through a panel; Tab out of a panel, a click outside, or the header hiding on scroll closes it. Without JavaScript a panel opens on hover and on keyboard focus. Focus rings: 3px teal on every item and link | `242645d` |
+| 3 | Provider ticker, built and switched off | done, **off**. `assets/js/pb-providers.js` is the one file to edit: `ON` (false), `LABEL` ("Providers we hold agencies with") and `PROVIDERS` (Zurich, Irish Life, Aviva, New Ireland, Royal London, Standard Life, each `logo: null`, which draws a box with the name in text; no logo files anywhere). With `ON` false the script returns before doing anything, and the home page's mount, `<div data-pb-providers hidden>` under the hero, stays empty and hidden: nothing shows on the live site. Switched on, it builds a strip under the label: the boxes scroll right to left in a loop, faded at both edges, pausing on hover; a small Pause button stops it for keyboard and touch users (moving content needs a way to stop it, WCAG 2.2.2); with reduced motion it is a still, centred, wrapped row with no button. Screen readers get one list of the six names; the copies that make the loop seamless are hidden from them. The label is "Providers we hold agencies with", nowhere "partners" or "we work with". **To switch on:** set `var ON = true;` in that file, after R29-1 and R29-2 below. `tests/providers.test.py` (new, 39 checks, two Chrome launches): off as shipped, and switched on in the served bytes only (label, order, boxes, fades, motion, Pause and Play, hover, reduced motion, no overflow at 375 and 1440px); nine mutants caught | `855e1d0` |
+| 4 | The 15 October cut-off | done. The chip, the home page's band and the calculators' row all count to the end of 15 October and say "Book by 15 October so we have time to process before the Revenue deadline."; Revenue's own deadline is stated beside it wherever the cut-off is: **31 October, or 18 November if you pay and file online through the Revenue Online Service** (revenue.ie, "Filing your tax return", published 19 March 2026: "The Pay and File deadline for the 2025 Income Tax Return (Form 11) is Saturday 31 October 2026 ... Wednesday 18 November 2026" on ROS; Revenue eBrief No. 034/26). The dates carry no year, like the cut-off, beside the tax year they are for (2025), because `verify.py` warns (E1) when the band shows two years. After 15 October everything moves on to the next year's cut-off and tax year, as the old countdown did after 31 October (R29-4). Every place changed is listed below. `tests/deadline.test.py` (new, 161 checks, one Chrome launch with the clock pinned): every page, the band's words with and without JavaScript, the three calculators' rows, an hour before the cut-off, a second after it; seven mutants caught | `f2d6cf6` |
+| 5 | Clickable looks clickable | done. Audited first, in headless Chrome: every link, button, summary, label and control on all 31 pages at 1440 and 375px, 1,357 of them, for an underline or arrow, the pointer cursor, what a hover rule changes, and the focus ring when focused. **Already true, unchanged**: every link and button shows the pointer; every one has a visible focus ring (outline or a 3-4px teal ring); every button is filled or outlined (the segmented controls sit in a bordered track); the cards that are links already lift on hover (the home page's fork cards and product picture, the glossary's game cards); no card that is not a link lifts. **Changed**, in one `CLICK` block of CSS, byte for byte the same on all 29 pages, copied and guarded like the NAV block (`click-css`): (1) links in running text, 48 of them on 11 pages (the glossary's index, the checklists' and guides' links, the calculators' glossary references) and the four card titles on the directors' page, were coloured text only: underlined, thicker on hover; (2) the footer's links on every page were plain text: a faint underline, teal on hover; (3) the six big names under "Six places to begin" on the home page gave no sign they were links until hovered: a teal arrow after each, which moves on hover; (4) the three cards on the thank-you page did nothing on hover: they lift, with a shadow and a teal border; (5) the unchosen option in a segmented control did nothing on hover: a pale teal tint. After it, the same audit finds nothing left (the six home page names count as bare to it only because it cannot see an arrow drawn by CSS). No product picture shows a link the block changes | `3701e2e` |
+| 6 | Directors: the ages, against Revenue's Pensions Manual | checked; **one clear error, fixed**: the director calculator's retirement-age slider is `min="50"` in the markup, but its script replaced that with the reader's age plus one on every change, so a 25-year-old director could retire at 26 and the default reader (48) at 49. Before 50, benefits are paid only on ill health (Manual 9.1, 9.2). The floor is now the higher of 50 and the age plus one. Everything else the director pages, the calculator and the glossary say about ages is right, or says nothing (the director pages and the glossary give no age for taking benefits at all). Five things need your call, listed below with the manual's words. **Render-diff** against the commit before: at load two cells differ, both the slider (`min` 49 to 50, its fill 65.4% to 64%); across 22,301 states every state with the age at 49 or over is identical (10,175), every state at 48 or under with retirement at 50 or over differs in the slider's `min` and fill and nowhere else (11,826: no figure moves), and the 300 states with retirement below 50, which the old page allowed, now read 50 (`tests/render-diff/classify-director-floor.js`, which fails on a floor of 51 and on a changed figure). The director picture on the home and directors' pages was re-shot: the retirement thumb sits 1.4% further left, same size, 2184x3187 | `0a80a55` |
+| 7 | Buddy's Run: the Poolbeg chimneys | done. The two towers on the far shore were cream with two thin red stripes near the top. Now they are the Poolbeg stacks: a grey concrete base (with a darker shaded side), then red and white bands the rest of the way up, red at the top and at the bottom, an odd number of whole bands of about 6px (nine each) so none ends in a sliver, each band shaded on its right so the stack reads round. Drawn in `chimney()` only: the same place, heights (62 and 54px), footprint and parallax as before, and nothing in the game reads it, so play is unchanged. `tests/games.test.py` passes, 157 checks as before | `43ec100` |
+
+
+## NEEDS DAMIAN INPUT from this run
+
+- **R29-1 Each provider's written permission** before the ticker is
+  switched on: Zurich, Irish Life, Aviva, New Ireland, Royal London,
+  Standard Life. Permission to show the name as well as the logo; and the
+  logo files themselves, from each provider, once it is given.
+- **R29-2 The agencies match How we work.** `how-we-work.html` (held) lists
+  "The product providers we hold agencies with" as a placeholder (R20-9c),
+  so there is nothing yet to check the six names against. The ticker's list
+  and that sentence should name the same providers before either goes live.
+- **R29-3 The nav button is filled.** The brief called it the one filled
+  button, so it is; since the PB-AUDIT pass it had been an outline, so that
+  only the hero's call to action was filled. Pages whose hero has a filled
+  button (home, directors, starter, tracker) now show two above the fold.
+  Deleting the three `#nav #navLinks .btn-primary` rules in the NAV block
+  (skeleton, then `tools/sync-chrome.py` and `tools/pagebuild.py`) puts the
+  outline back.
+- **R29-4 After 15 October.** From 16 October the chip, the band and the
+  calculators' row count to 15 October 2027 and the 2026 tax year, while
+  Revenue's own deadline for 2025 (31 October, 18 November online) is still
+  open. That is how the old countdown behaved after 31 October. If you
+  would rather they count to Revenue's deadline between your cut-off and
+  Revenue's, that is a change to `assets/js/pb-deadline.js` and some words.
+- **R29-5 to R29-9, directors' ages**: the five calls listed under item 6
+  (the slider's top, a line about 50 to 59, "20% or more" or "more than
+  20%", "may be allowed" for a PRSA from 50, and the same floor bug on the
+  pension calculator).
+- **Not a question, a note**: "About" moved from the row into the Guides
+  menu as "About Pensionbuddy"; the header now runs wider than the page's
+  text column at wide screens. Both were forced by the width of 17px items.
+
+## Proof
+
+- The gate before each of the seven commits, each run on a clean checkout
+  of exactly what was committed (the working tree already held the next
+  item): `tests/run-tests.py` ALL SUITES PASS; `build.test.py` 202 on
+  `main`, then 206, then 208; `nav.test.py` 441, `providers.test.py` 39 and
+  `deadline.test.py` 161 (new); `runner.test.py` 95, `games.test.py` 157,
+  `lead-forms.test.py` 213, `consent.test.py` 263, `gap-band.py` and
+  `check-initialisms.py` pass; `stamp-images.py --check` and
+  `sync-chrome.py --check` clean; `verify.py` over 31 pages at 375, 1360 and
+  1440: 0 FAIL every time, and the same four WARNs as `main` (the
+  placeholders on find-my-pension, how-we-work and privacy, and glossary's
+  C4).
+- Each new test was shown able to fail: nav 12 mutants, ticker 9, deadline
+  7; the director classifier on a floor of 51 and on a changed figure.
+- render-diff against the branch's base (`fbd5b6f`): the pension
+  calculator, the comparison, and both State Pension pages load to the same
+  render write for write; the pension calculator's axes and corners (6,550
+  states) and the comparison's axes (45,600) differ nowhere. Only the
+  director calculator differs, as item 6 says.
+- Looked at: the nav at 1440 (two menus open), 1301, 1200 and 375 (the
+  drawer with a menu open); the ticker switched on at 1440 and 375; the
+  band and the calculators' row; the offer arrows and the footer; the
+  chimneys before and after.
+
+## The nav, as built (item 2)
+
+| Dropdown | Links, in order |
+|---|---|
+| Directors | Pensions for company directors (`director.html`) · Director calculator · What changed for directors in 2026 (`director-pension-rules.html`) · Year-end pension checklist (`director-year-end-checklist.html`) |
+| Tools | Pension calculator · Pension charges calculator · Auto-enrolment comparison · All your pensions in one view (`my-pensions.html`) · The Standard Fund Threshold |
+| State Pension | State Pension reality check · State Pension entitlement check |
+| Guides | The old pension hunt: a checklist · Pensions after 50 · Pensions when you are self-employed · A UK pension, and living in Ireland · Personal Investment Account (PIA) · Pension jargon buster · About Pensionbuddy (`index.html#story`) |
+
+The labels are the pages' own titles or footer names, shortened where a
+title is a sentence. Each page is in the nav once, so the director
+calculator is under Directors, not Tools. Four pages were reachable from
+no menu or footer before: the directors' rules, the year-end checklist,
+the old pension checklist and the Standard Fund Threshold.
+
+How it is kept one nav: the markup is the skeleton's
+(`pension-calculator.html`) as before, and its styling is now one block,
+`/* NAV:BEGIN */` to `/* NAV:END */`, last in every page's stylesheet in
+place of the old Calculators menu block, byte for byte the same on all 29
+pages. `tools/sync-chrome.py` copies it with the nav, `pagebuild.chrome_drift()`
+fails a page whose copy differs (kind `nav-css`), and every rule in it is
+scoped by id, so none of the five older layers of nav CSS can reach in.
+`assets/js/pb-navmenu.js` drives the dropdowns; it builds nothing. Every
+built page in the nav now marks itself current (`nav=` in `PAGES`), and
+`assemble()` no longer looks for the label "Calculator".
+
+Tests: `tests/nav.test.py` (new, 441 checks, one Chrome launch, about 5 s):
+every root page at 1440px (one nav, inside the window, 17px at 600, four
+collapsed buttons each controlling the list after it, the booking button
+the one filled control, the page's own link current once and its dropdown
+underlined), every reachable page in every page's nav and no held page,
+the keyboard and pointer behaviour above, the no-JavaScript fallback, the
+drawer at 1200 and 375px on three pages, and the row at 1301px. Twelve
+mutants, each caught (Escape doing nothing, a hovered panel closing on
+click, no hover grace, two panels open at once, no no-JavaScript fallback,
+the drawer breakpoint lowered, a drawer panel floating, a held page linked,
+a guide dropped from one page's nav, the button outlined again, 14.4px
+items, the row too wide at 1301px); the first run missed two, and the test
+was tightened until it caught them. `tests/build.test.py` 206 (was 202 on
+`main`: the nav targets are now nineteen, and a new check that none is
+held; three new mutants, a relabelled dropdown and the NAV block changed
+or missing).
+
+## Every place the deadline changed (item 4)
+
+- **`assets/js/pb-deadline.js`** (new): the one home for both dates. The
+  cut-off (`CUTOFF`, 15 October) and Revenue's online date by year (`ROS`,
+  `{2026: '18 November'}`; a year with no entry says "mid-November") are
+  written once. It replaces the two scripts every page carried inline: the
+  countdown for the chip and the band (29 copies, 28 identical and one on
+  `index.html` that also set the tax year) and the calculators' row (12
+  copies). Every root page loads it once, at the foot of `<body>`.
+- **The nav chip, on every page** (the skeleton's nav, synced): counts to
+  23:59:59 on 15 October, "20d 11h 59m"; its name for a screen reader is
+  "About 20 days left to book by 15 October, so we have time to process your
+  contribution before the Revenue deadline for the 2025 tax year. Opens the
+  full explanation."; its hidden label says "to book by 15 October". It
+  still links to the band.
+- **The home page's band (`index.html#deadline`)**: the eyebrow "Damian's
+  cut-off" (was "Revenue deadline"); the heading "Book by 15 October so we
+  have time to process before the Revenue deadline." (was "Contributions for
+  the 2025 tax year close on 31 October."); the paragraph "Revenue's own
+  deadline is 31 October, or 18 November if you pay and file online through
+  the Revenue Online Service. Pay into a pension before it and you can set it
+  against last year's tax bill. Miss it and that year is gone for good."
+  (was "... If you file your return online, you usually have until
+  mid-November."); the clock to 15 October; the screen reader's sentence
+  adds Revenue's deadline. The markup says the same as the script writes.
+- **The calculators' "Tax deadline" row** (`pension-calculator.html`,
+  `director-calculator.html`, `broker-vs-autoenrolment.html`): "About 20
+  days left to book by 15 October, so we have time to process before the
+  Revenue deadline. Revenue's deadline for a contribution against your 2025
+  tax bill is 31 October, or 18 November if you pay and file online through
+  the Revenue Online Service. After that, 2025's allowance is gone for
+  good." (was a count of days to 31 October and "mid-November if you file
+  online").
+
+Checked and left as they are, because they state Revenue's deadline
+correctly and are not the countdown: `self-employed-pensions.html` and
+`director-year-end-checklist.html` (31 October 2026, 18 November 2026
+through the Revenue Online Service), `director-pension-rules.html` ("The
+October window", the same dates), the glossary's quiz bank ("Pay and File
+deadline (31 October)", online filers "usually get until the middle of
+November"), and Buddy's Run's fact card ("usually have until mid-November",
+which cites the home page's band; still true).
+
+## Directors' ages: the rules, and what needs your call (item 6)
+
+Revenue's Pensions Manual, read 25 September 2026 (revenue.ie, Tax and Duty
+Manuals, Pensions):
+
+- **Normal retirement age**, Chapter 6.7 (last reviewed August 2026): the
+  scheme's rules set it "between 60 and 70 years"; Revenue can accept
+  another age for some occupations, "but 20% directors must be within the
+  60-70 years age range".
+- **Early retirement**, Chapter 9.1 (June 2025): benefits "may be provided
+  on or after the employee reaches 50 years of age", on leaving the
+  employment. Chapter 9.6: a director "with at least 20% interest" who takes
+  early retirement benefits "must sever all links with the business,
+  including the disposal of all shares in the company". Ill health, 9.2: at
+  any age.
+- **Personal Retirement Savings Account (PRSA)**, Chapter 24.5 (May 2025):
+  "Benefits may be taken when the individual reaches age 60 years"; its
+  footnote: "retirement from age 50 may be allowed in the case of employed
+  contributors" (and occupations that customarily retire before 60). A PRSA
+  is deemed to vest at 75 (24.5, 24.14).
+
+What the site says, checked: `pensions-over-50.html` (from 50 on leaving the
+job, with the scheme's and trustees' agreement; a 20% director cuts all
+links first, including selling the shares; a PRSA normally from 60, from
+50 on retiring from an employment; a personal pension from 60) is right.
+`pia.html`'s "normally from 60, and from 50 in some cases" is right as a
+summary. The directors' rules page's "A move to a PRSA is not allowed after
+the scheme's normal retirement age" matches Chapter 13, paragraph 2.1. The director pages and the glossary give no age for
+taking benefits.
+
+**R29-5 to R29-9, for your call** (nothing changed):
+
+- **R29-5 The top of the director calculator's retirement slider: 75 or
+  70?** A company scheme's normal retirement age is at most 70 (6.7), and a
+  deferred pension from a job left starts by 70 (Chapter 12); but a PRSA the
+  company pays into vests at 75, and the manual's own example (8.7) has a
+  20% director retiring at 73. The page does not say which kind of pension
+  it models. Now 50 to 75.
+- **R29-6 Say something about 50 to 59?** The slider allows it, and nothing
+  on the calculator mentions the condition. A line under the slider that
+  keeps to the manual: "Before the scheme's normal retirement age, a
+  director with 20% or more of the company generally has to cut all links
+  with it, including selling the shares." Not added: new copy.
+- **R29-7 "20% or more" or "more than 20%"?** The site (and Chapter 9.6)
+  say at least 20%; the manual's glossary (Appendix I, December 2024)
+  defines a 20% director as one who "owned or controlled more than 20% of
+  the voting rights" in the last three years. The manual disagrees with
+  itself; one wording should be picked.
+- **R29-8 PRSA from 50.** The over-50s guide says "from 50 if you retire
+  from an employment"; the manual says it "may be allowed" for employed
+  contributors. "can be taken from 50" would match it more closely.
+- **R29-9 The pension calculator has the same bug.** `pension-calculator.html`
+  replaces its retirement slider's `min="50"` with the age plus one, so an
+  18-year-old can retire at 19. The fix is the same line; it moves that
+  slider's fill at the default (age 40: 41 to 50) and so the home page's
+  pension picture needs a re-shoot. Outside this brief, so left.
 ---
 
 # Run 28 — 2026-09-25 · Tidy-up before launch

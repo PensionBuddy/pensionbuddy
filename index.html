@@ -1304,6 +1304,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    edge fades, .strip-in gives the pbMarquee track, the hover/focus pause and
    the prefers-reduced-motion fallback. Only the photo treatment is new. */
 .snaps{padding:6px 0 0}
+.snaps[hidden]{display:none} /* Run 29: "Out of office" is switched off; see the comment on the section */
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -1840,22 +1841,128 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-fork-card .ico{display:block;flex:none;position:static;transform:none;margin-top:4px;width:20px;height:20px;color:var(--teal-700);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:820px){.pb-fork{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.pb-fork-card{transition:none}.pb-fork-card:hover{transform:none}}
-/* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
-   the nav's "Calculator" link, from 1201px only (the row, not the drawer);
-   the nav's own markup is untouched. Takes no width in the row. */
-.pb-navmenu{display:none}
-@media(min-width:1201px){
-  .nav-links{position:relative}
-  .pb-navmenu{position:absolute;z-index:60;display:block;width:340px;margin-top:4px;padding:8px;background:var(--surface);
-    border:1px solid var(--line-2);border-radius:var(--r-xl);box-shadow:0 18px 40px rgba(11,31,28,.14)}
-  .pb-navmenu[hidden]{display:none}
-  .pb-navmenu a{display:block;padding:10px 12px;border-radius:var(--r-md);color:var(--ink);text-decoration:none}
-  .pb-navmenu a:hover,.pb-navmenu a:focus-visible{background:var(--teal-50)}
-  .pb-navmenu a:focus-visible{outline:3px solid var(--ring);outline-offset:0}
-  .pb-navmenu a[aria-current="page"] b{color:var(--teal-700)}
-  .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
-  .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
+/* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
+   so they win over the layers above (PB-NAV, C6, F5, the booking-button
+   trade-off), and byte for byte the skeleton's on every page:
+   tools/sync-chrome.py copies this block and pagebuild.chrome_drift() fails
+   a page whose copy differs. Replaces the Calculators menu block.
+   The row: 17px items at weight 600, four dropdowns (Directors, Tools, State
+   Pension, Guides) built as disclosure buttons, "Book a call with Damian for
+   free" the one filled button. assets/js/pb-navmenu.js drives the buttons;
+   without it a panel opens on hover and on keyboard focus. Every rule is
+   scoped by id, so no older nav rule can reach in.
+   Widths are measured in Chrome, not guessed. At 17px the row needs 1,228px
+   (logo 190, six items 700, the button 304) and 1,365px with the deadline
+   chip, against 1,092px inside the 1,140px content column. So the header
+   gets its own container, up to 1,440px wide: the row runs from 1301px, the
+   chip joins it from 1440px, and at 1300px and below the whole nav is the
+   drawer, where the dropdowns open in place. "About" is the last line of
+   Guides rather than a seventh item: the row had no 69px for it. */
+#nav .nav-in{max-width:1440px}
+#navLinks{display:flex;align-items:center;gap:2px;margin:0 0 0 14px;padding:0;position:static;
+  flex-direction:row;background:none;border:0;max-height:none;overflow:visible}
+#navLinks > a.lnk,#navLinks .nav-dd-btn{position:relative;display:inline-flex;align-items:center;gap:5px;
+  margin:0;padding:10px 8px;font-family:var(--font);font-size:17px;font-weight:600;line-height:1.2;
+  letter-spacing:-.01em;color:var(--ink);background:none;border:0;border-radius:8px;cursor:pointer;
+  white-space:nowrap;text-decoration:none;transition:color .18s ease}
+#navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{content:"";position:absolute;left:8px;right:8px;
+  bottom:3px;height:2px;margin:0;display:block;border-radius:2px;background:var(--teal);
+  transform:scaleX(0);transform-origin:center;transition:transform .22s cubic-bezier(.4,0,.2,1)}
+#navLinks > a.lnk:hover,#navLinks .nav-dd-btn:hover,#navLinks .nav-dd-btn[aria-expanded="true"]{color:var(--teal-700)}
+#navLinks > a.lnk:hover::after,#navLinks .nav-dd-btn:hover::after,#navLinks > a.lnk.active::after,
+#navLinks .nav-dd:has(a[aria-current="page"]) > .nav-dd-btn::after{transform:scaleX(1)}
+#navLinks > a.lnk:focus-visible,#navLinks .nav-dd-btn:focus-visible,#navLinks .nav-dd-panel a.lnk:focus-visible{
+  outline:3px solid var(--ring);outline-offset:2px}
+#navLinks .nav-chev{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+#navLinks .nav-dd-btn[aria-expanded="true"] .nav-chev{transform:rotate(180deg)}
+#navLinks .nav-dd{position:relative}
+#navLinks .nav-dd-panel{display:none;position:absolute;top:100%;left:0;z-index:70;min-width:270px;
+  margin:8px 0 0;padding:8px;list-style:none;background:var(--surface);border:1px solid var(--line-2);
+  border-radius:12px;box-shadow:0 18px 40px rgba(11,31,28,.14)}
+/* a bridge over the 8px gap, so the pointer can travel from button to panel */
+#navLinks .nav-dd-panel::before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
+#navLinks .nav-dd:last-of-type .nav-dd-panel{left:auto;right:0}
+#navLinks:not(.dd-js) .nav-dd:hover > .nav-dd-panel,#navLinks:not(.dd-js) .nav-dd:focus-within > .nav-dd-panel,
+#navLinks .nav-dd-btn[aria-expanded="true"] + .nav-dd-panel{display:block}
+#navLinks .nav-dd-panel li{margin:0;padding:0;list-style:none}
+#navLinks .nav-dd-panel li.nav-dd-sep{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+#navLinks .nav-dd-panel a.lnk{position:relative;display:block;margin:0;padding:11px 14px;font-size:16px;
+  font-weight:500;line-height:1.35;color:var(--ink);background:none;border:0;border-radius:8px;
+  white-space:nowrap;text-decoration:none;cursor:pointer}
+#navLinks .nav-dd-panel a.lnk::after{content:none;display:none}
+#navLinks .nav-dd-panel a.lnk:hover{background:var(--teal-50);color:var(--teal-700);
+  text-decoration:underline;text-underline-offset:3px}
+#navLinks .nav-dd-panel a.lnk.active{color:var(--teal-700);font-weight:700;background:var(--teal-50)}
+#navLinks .btn{margin:0 0 0 10px;padding:14px 16px;font-size:16px}
+/* the one filled button in the nav, as the brief asks. PB-AUDIT (von
+   Restorff) had made it an outline so that only the hero's call to action
+   was filled; deleting these three rules puts the outline back. */
+#nav #navLinks .btn-primary{background:var(--aqua);color:var(--aqua-ink);border:0}
+#nav #navLinks .btn-primary:hover{background:var(--aqua-600);color:var(--aqua-ink)}
+#nav #navLinks .btn-primary .ico{stroke:var(--aqua-ink)}
+#navToggle{display:none}
+#navTick{display:inline-flex}
+@media(max-width:1439px){
+  #navTick{display:none}
 }
+@media(max-width:1300px){
+  #navToggle{display:inline-flex}
+  #navTick{display:inline-flex}
+  #navLinks{display:none;position:absolute;top:100%;left:0;right:0;z-index:60;flex-direction:column;
+    align-items:stretch;gap:0;margin:0;padding:4px 20px 18px;background:var(--bg);
+    border-bottom:1px solid var(--line-2);max-height:calc(100vh - 62px);overflow-y:auto;
+    overscroll-behavior:contain}
+  #navLinks.open{display:flex}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{display:flex;width:100%;justify-content:space-between;
+    padding:15px 4px;font-size:17px;border-bottom:1px solid var(--line);border-radius:0}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{content:none;display:none}
+  #navLinks > a.lnk.active,#navLinks .nav-dd:has(a[aria-current="page"]) > .nav-dd-btn{color:var(--teal-700)}
+  #navLinks > a.lnk:focus-visible,#navLinks .nav-dd-btn:focus-visible,#navLinks .nav-dd-panel a.lnk:focus-visible{outline-offset:-3px}
+  #navLinks .nav-dd-panel,#navLinks .nav-dd:last-of-type .nav-dd-panel{position:static;min-width:0;margin:0;
+    padding:4px 0 10px;border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;background:none}
+  #navLinks .nav-dd-panel::before{content:none}
+  #navLinks .nav-dd-panel a.lnk{padding:12px 12px 12px 14px;white-space:normal}
+  #navLinks .btn{margin:16px 0 0;width:100%;justify-content:center;white-space:normal;line-height:1.3;text-align:center}
+}
+@media(max-width:560px){
+  #navTick{display:none}
+}
+/* NAV:END */
+/* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
+   for byte the skeleton's on every page, copied by tools/sync-chrome.py and
+   guarded by pagebuild.chrome_drift() (kind click-css), like the NAV block.
+   What an audit of all 1,357 clickable things on the 31 pages found, and the
+   rule for each; the rest (every button a filled or outlined button, every
+   link and button a pointer, a focus ring on every one, cards that are links
+   already lifting) was already true and is not repeated here:
+   1. links in running text were plain coloured text: underlined now;
+   2. the footer's links were plain text: underlined, faintly, and teal on
+      hover;
+   3. the six names in the home page's "Six places to begin" were big type
+      with nothing to say they were links until hovered: an arrow each;
+   4. the three cards on the thank-you page did nothing on hover: they lift;
+   5. the unchosen options in a segmented control did nothing on hover: a
+      tint. */
+main :is(p,li,dd,dt,td,th,figcaption,small,blockquote,h2,h3,h4) a:not([class]):not(:has(img,picture,svg)),
+main a.gref{text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+main :is(p,li,dd,dt,td,th,figcaption,small,blockquote,h2,h3,h4) a:not([class]):not(:has(img,picture,svg)):hover,
+main a.gref:hover{text-decoration-thickness:2px}
+.foot-col a{text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+  text-decoration-color:var(--line-2)}
+.foot-col a:hover{color:var(--teal-700);text-decoration-color:currentColor}
+.pb-offer-name::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.28em;
+  color:var(--teal);font-weight:600;transition:transform .25s ease}
+.pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:translateX(8px)}
+a.assure{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,31,28,.28);border-color:var(--teal)}
+:is(.seg,.pb-two-seg,.pb-life-hh,.pia-seg) button:not(.on):not([aria-pressed="true"]):not([aria-selected="true"]):hover{
+  color:var(--teal-700);background:var(--teal-50)}
+@media(prefers-reduced-motion:reduce){
+  a.assure:hover{transform:none}
+  .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
+}
+/* CLICK:END */
 /* COLOUR FADE INTO AND OUT OF THE DARK BAND (#calc). Mercury fades the
    page between its bands; here the dark product band fades in from the pale
    wash above it and back out to the page below, inside its own padding
@@ -1910,15 +2017,48 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
+  <a class="nav-tick" id="navTick" href="#deadline" aria-label="Countdown to 15 October, the last day to book so we have time to process before the Revenue deadline. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to book by 15 October</span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
-    <a class="lnk" href="director.html">Directors</a>
-    <a class="lnk" href="pension-calculator.html">Calculator</a>
-    <a class="lnk" href="state-pension-reality-check.html">State pension</a>
-    <a class="lnk" href="glossary.html">Jargon buster</a>
-    <a class="lnk" href="#story">About</a>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navDirectors">Directors<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navDirectors">
+        <li><a class="lnk" href="director.html">Pensions for company directors</a></li>
+        <li><a class="lnk" href="director-calculator.html">Director calculator</a></li>
+        <li><a class="lnk" href="director-pension-rules.html">What changed for directors in 2026</a></li>
+        <li><a class="lnk" href="director-year-end-checklist.html">Year-end pension checklist</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navTools">Tools<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navTools">
+        <li><a class="lnk" href="pension-calculator.html">Pension calculator</a></li>
+        <li><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
+        <li><a class="lnk" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
+        <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
+        <li><a class="lnk" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navStatePension">State Pension<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navStatePension">
+        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">State Pension entitlement check</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navGuides">
+        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
+        <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
+        <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
+        <li class="nav-dd-sep"><a class="lnk" href="#story">About Pensionbuddy</a></li>
+      </ul>
+    </div>
     <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -1960,6 +2100,10 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   </div>
 
 </div></header>
+
+<!-- PROVIDER TICKER (Run 29), switched off: assets/js/pb-providers.js fills this only when its ON flag
+     is true. Read that file before switching it on: each provider's written permission first. -->
+<div data-pb-providers hidden></div>
 
 <section class="gapband pb-bleed pb-wash" id="gap">
   <div class="wrap">
@@ -2063,10 +2207,11 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   <div class="wrap">
     <div class="tick reveal">
       <div class="tk-copy">
-        <div class="eyebrow"><i class="pip"></i>Revenue deadline</div>
-        <h2>Contributions for the 2025 tax year close on 31 October.</h2>
-        <p>Pay into a pension before the deadline and you can set it against last year&rsquo;s
-        tax bill. Miss it and that year is gone for good. If you file your return online, you usually have until mid&#8209;November.</p>
+        <div class="eyebrow"><i class="pip"></i>Damian&rsquo;s cut-off</div>
+        <h2>Book by 15 October so we have time to process before the Revenue deadline.</h2>
+        <p>Revenue&rsquo;s own deadline is <span id="tkRev">31 October, or 18 November if you pay and file online
+        through the Revenue Online Service</span>. Pay into a pension before it and you can set it against last
+        year&rsquo;s tax bill. Miss it and that year is gone for good.</p>
         <p class="tk-who">Applies to anyone claiming relief for the <span id="tkYear">2025</span> tax year, including
         additional voluntary contributions (AVCs), self-assessed income and company directors.</p>
 <div class="pb-rw">
@@ -2140,7 +2285,9 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   </div>
 </div></section>
 
-<section class="snaps"><div class="wrap">
+<!-- OUT OF OFFICE: switched off 25 September 2026 at Damian's request (Run 29); may come back.
+     To restore: delete the hidden attribute on the next line. Nothing else was removed. -->
+<section class="snaps" hidden><div class="wrap">
   <div class="sec-head reveal">
     <span class="kicker">Off duty</span>
     <h2>Out of office.</h2>
@@ -2585,56 +2732,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 
-<script>
-/* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
-   Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
-   conservative end of the window since ROS filers get into mid-November.
-   Rolls to the next year on its own, so the date never needs editing. */
-(function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var pad = function(n){ return n < 10 ? '0' + n : '' + n; };
-
-  function target(){
-    var now = new Date(), y = now.getFullYear();
-    var t = new Date(y, 9, 31, 23, 59, 59);
-    if (now > t) { y += 1; t = new Date(y, 9, 31, 23, 59, 59); }
-    return t;
-  }
-
-  var chip = document.getElementById('navTick'),
-      chipVal = document.getElementById('ntVal'),
-      bD = document.getElementById('tkD'), bH = document.getElementById('tkH'),
-      bM = document.getElementById('tkM'), bS = document.getElementById('tkS'),
-      sr = document.getElementById('tkSr'), head = document.querySelector('.tick h2'),
-      who = document.getElementById('tkYear');
-
-  function tick(){
-    var t = target(), diff = Math.max(0, t - new Date());
-    var days = Math.floor(diff / 86400000),
-        hrs  = Math.floor(diff % 86400000 / 3600000),
-        min  = Math.floor(diff % 3600000 / 60000),
-        sec  = Math.floor(diff % 60000 / 1000),
-        taxYear = t.getFullYear() - 1;
-
-    if (chipVal) chipVal.textContent = days + 'd ' + pad(hrs) + 'h ' + pad(min) + 'm';
-    if (chip) chip.setAttribute('aria-label',
-      'About ' + days + ' days left until the 31 October Pay and File deadline for the ' +
-      taxYear + ' tax year. Opens the full explanation.');
-
-    if (bD){ bD.textContent = pad(days); bH.textContent = pad(hrs);
-             bM.textContent = pad(min);  bS.textContent = pad(sec); }
-    if (head) head.textContent = 'Contributions for the ' + taxYear +
-      ' tax year close on 31 October.';
-    if (who) who.textContent = taxYear;
-    if (sr) sr.textContent = 'About ' + days +
-      ' days left until the 31 October Pay and File deadline for the ' + taxYear + ' tax year.';
-  }
-
-  tick();
-  /* the band ticks per second; the chip alone only needs a minute */
-  setInterval(tick, (bD && !reduce) ? 1000 : 60000);
-})();
-</script>
+<script src="assets/js/pb-deadline.js?v=e68a64c1"></script>
 <script>
 /* ---- the hero chat, played out against scroll position ----
    IntersectionObserver only, no library, no scroll handler. Each step of the
@@ -2705,7 +2803,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){
-  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2691, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=81cb90d5", "webp": "assets/img/product-pension-calculator.webp?v=c6635025"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 3187, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=4f252902", "webp": "assets/img/product-director-calculator.webp?v=a05e84c6"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2449, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=fc8c96db", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=c709784c"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2082, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=4f3e142b", "webp": "assets/img/product-state-pension-reality-check.webp?v=cf0270f6"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would actually pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2909, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=bd731fa2", "webp": "assets/img/product-state-pension-entitlement.webp?v=9c507600"}];
+  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2691, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=81cb90d5", "webp": "assets/img/product-pension-calculator.webp?v=c6635025"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 3187, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=51db25a9", "webp": "assets/img/product-director-calculator.webp?v=5046cf55"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2449, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=fc8c96db", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=c709784c"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2082, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=4f3e142b", "webp": "assets/img/product-state-pension-reality-check.webp?v=cf0270f6"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would actually pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2909, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=bd731fa2", "webp": "assets/img/product-state-pension-entitlement.webp?v=9c507600"}];
   var copy=document.querySelector('#calc .calc-copy'), desc=document.getElementById('pbPtDesc'), btn=document.getElementById('pbPtBtn'),
       btnT=document.getElementById('pbPtBtnT'), fig=document.getElementById('pbPtFig'), shot=document.getElementById('pbPtShot'), list=document.getElementById('pbPtList');
   if(!copy||!desc||!btn||!btnT||!fig||!shot||!list) return;
@@ -2741,7 +2839,8 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   pick(0,false);
 })();
 </script>
-<script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
+<script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-providers.js?v=847cf641"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>
