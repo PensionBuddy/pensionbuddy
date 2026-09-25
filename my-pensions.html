@@ -1929,7 +1929,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Revenue Pay and File deadline countdown. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to the tax deadline</span></a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Countdown to 15 October, the last day to book so we have time to process before the Revenue deadline. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to book by 15 October</span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
@@ -2439,70 +2439,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script>
-/* Pay & File: a contribution made before the deadline can be set against the
-   previous tax year. 31 October for paper filers, extended into mid-November on
-   ROS. The ROS date shifts year to year, so it is described, not hard-coded. */
-(function(){
-  var el=document.getElementById('deadlineText'); if(!el) return;
-  var now=new Date(), y=now.getFullYear();
-  var due=new Date(y,9,31);
-  if(now>due){ y+=1; due=new Date(y,9,31); }
-  var days=Math.ceil((due-now)/86400000), taxYear=y-1;
-  el.innerHTML='About <b>'+days+' days</b> left to make a contribution that counts against your '+
-    taxYear+' tax bill. The deadline is 31 October, or mid-November if you file online. After that, '+
-    taxYear+"'s allowance is gone for good.";
-})();
-</script>
-
-<script>
-/* Pay & File countdown, shared by the nav chip and (on the homepage) the band.
-   Target is 31 October 23:59:59 local - Revenue's deadline for paper returns, and the
-   conservative end of the window since ROS filers get into mid-November.
-   Rolls to the next year on its own, so the date never needs editing. */
-(function(){
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var pad = function(n){ return n < 10 ? '0' + n : '' + n; };
-
-  function target(){
-    var now = new Date(), y = now.getFullYear();
-    var t = new Date(y, 9, 31, 23, 59, 59);
-    if (now > t) { y += 1; t = new Date(y, 9, 31, 23, 59, 59); }
-    return t;
-  }
-
-  var chip = document.getElementById('navTick'),
-      chipVal = document.getElementById('ntVal'),
-      bD = document.getElementById('tkD'), bH = document.getElementById('tkH'),
-      bM = document.getElementById('tkM'), bS = document.getElementById('tkS'),
-      sr = document.getElementById('tkSr'), head = document.querySelector('.tick h2');
-
-  function tick(){
-    var t = target(), diff = Math.max(0, t - new Date());
-    var days = Math.floor(diff / 86400000),
-        hrs  = Math.floor(diff % 86400000 / 3600000),
-        min  = Math.floor(diff % 3600000 / 60000),
-        sec  = Math.floor(diff % 60000 / 1000),
-        taxYear = t.getFullYear() - 1;
-
-    if (chipVal) chipVal.textContent = days + 'd ' + pad(hrs) + 'h ' + pad(min) + 'm';
-    if (chip) chip.setAttribute('aria-label',
-      'About ' + days + ' days left until the 31 October Pay and File deadline for the ' +
-      taxYear + ' tax year. Opens the full explanation.');
-
-    if (bD){ bD.textContent = pad(days); bH.textContent = pad(hrs);
-             bM.textContent = pad(min);  bS.textContent = pad(sec); }
-    if (head) head.textContent = 'Contributions for the ' + taxYear +
-      ' tax year close on 31 October.';
-    if (sr) sr.textContent = 'About ' + days +
-      ' days left until the 31 October Pay and File deadline for the ' + taxYear + ' tax year.';
-  }
-
-  tick();
-  /* the band ticks per second; the chip alone only needs a minute */
-  setInterval(tick, (bD && !reduce) ? 1000 : 60000);
-})();
-</script>
+<script src="assets/js/pb-deadline.js?v=e68a64c1"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the

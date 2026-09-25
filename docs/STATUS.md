@@ -115,6 +115,7 @@ the first commit and this run is 29.
 | 1 | Hide "Out of office" | done: the one section of that name, the photo strip on `index.html` ("Off duty" / "Out of office.", eight photos and their clones). Hidden, not deleted: the `<section class="snaps">` carries `hidden`, a comment above it says why and how to restore, and one CSS rule (`.snaps[hidden]{display:none}`) makes sure nothing overrides the attribute. **To restore: delete the word `hidden` from `<section class="snaps" hidden>` in `index.html`.** Nothing else changes; the eight photos stay in `assets/img/` and lazy-load, so while hidden they are never fetched | this commit |
 | 2 | Nav: bigger, and every page reachable | done. **The row**: Find a pension, Start a pension, then four dropdowns, Directors, Tools, State Pension, Guides, then "Book a call with Damian for free". Items are 17px at weight 600 (were 14.4px at 500), dark ink, a teal underline on hover and on the current page or section, a chevron on each dropdown. **Every page a reader can reach is in the nav**, 19 of them (list below); "About" is now "About Pensionbuddy", the last line of Guides, under a rule, because the row had no room for it. The three held pages stay out, and `tests/nav.test.py` fails if one appears. **The button** is now the one filled control in the nav, aqua with dark text. It was an outline since the PB-AUDIT pass (von Restorff: one filled aqua button per screen, the hero's); the brief says it is the filled one, so it is, and on pages whose hero has a filled button there are now two above the fold. Deleting the three `#nav #navLinks .btn-primary` rules in the NAV block puts the outline back. **Widths**, measured in Chrome: at 17px the row needs 1,228px, 1,365px with the deadline chip, and the content column gives it 1,092, so the header now has its own container up to 1,440px wide (the logo and button sit nearer the window's edges than the page text does). The row runs from 1301px, the chip joins it from 1440px, and at 1300px and below the nav is the drawer (was 1200px): the logo, the chip (from 561px) and the menu button, with the dropdowns opening in place as lists, the drawer scrolling if it is taller than the screen. No sideways scroll at 375, 768, 1200, 1300, 1301, 1360, 1440 or 1920. **How the dropdowns work**: each is a button (`aria-expanded`, `aria-controls`) and the list of ordinary links it opens, the disclosure pattern, so a screen reader hears "Directors, collapsed, button" and then a list. Click, tap, Enter or Space opens and closes; opening one closes the others; with a mouse on the row, hovering opens and leaving closes after a moment, and a click on a hovered panel keeps it open; Escape closes and returns focus to the button (in the drawer, a second Escape closes the drawer); ArrowDown and ArrowUp move through a panel; Tab out of a panel, a click outside, or the header hiding on scroll closes it. Without JavaScript a panel opens on hover and on keyboard focus. Focus rings: 3px teal on every item and link | this commit |
 | 3 | Provider ticker, built and switched off | done, **off**. `assets/js/pb-providers.js` is the one file to edit: `ON` (false), `LABEL` ("Providers we hold agencies with") and `PROVIDERS` (Zurich, Irish Life, Aviva, New Ireland, Royal London, Standard Life, each `logo: null`, which draws a box with the name in text; no logo files anywhere). With `ON` false the script returns before doing anything, and the home page's mount, `<div data-pb-providers hidden>` under the hero, stays empty and hidden: nothing shows on the live site. Switched on, it builds a strip under the label: the boxes scroll right to left in a loop, faded at both edges, pausing on hover; a small Pause button stops it for keyboard and touch users (moving content needs a way to stop it, WCAG 2.2.2); with reduced motion it is a still, centred, wrapped row with no button. Screen readers get one list of the six names; the copies that make the loop seamless are hidden from them. The label is "Providers we hold agencies with", nowhere "partners" or "we work with". **To switch on:** set `var ON = true;` in that file, after R29-1 and R29-2 below. `tests/providers.test.py` (new, 39 checks, two Chrome launches): off as shipped, and switched on in the served bytes only (label, order, boxes, fades, motion, Pause and Play, hover, reduced motion, no overflow at 375 and 1440px); nine mutants caught | this commit |
+| 4 | The 15 October cut-off | done. The chip, the home page's band and the calculators' row all count to the end of 15 October and say "Book by 15 October so we have time to process before the Revenue deadline."; Revenue's own deadline is stated beside it wherever the cut-off is: **31 October, or 18 November if you pay and file online through the Revenue Online Service** (revenue.ie, "Filing your tax return", published 19 March 2026: "The Pay and File deadline for the 2025 Income Tax Return (Form 11) is Saturday 31 October 2026 ... Wednesday 18 November 2026" on ROS; Revenue eBrief No. 034/26). The dates carry no year, like the cut-off, beside the tax year they are for (2025), because `verify.py` warns (E1) when the band shows two years. After 15 October everything moves on to the next year's cut-off and tax year, as the old countdown did after 31 October (R29-4). Every place changed is listed below. `tests/deadline.test.py` (new, 161 checks, one Chrome launch with the clock pinned): every page, the band's words with and without JavaScript, the three calculators' rows, an hour before the cut-off, a second after it; seven mutants caught | this commit |
 
 
 ## The nav, as built (item 2)
@@ -159,6 +160,49 @@ was tightened until it caught them. `tests/build.test.py` 206 (was 202 on
 `main`: the nav targets are now nineteen, and a new check that none is
 held; three new mutants, a relabelled dropdown and the NAV block changed
 or missing).
+
+## Every place the deadline changed (item 4)
+
+- **`assets/js/pb-deadline.js`** (new): the one home for both dates. The
+  cut-off (`CUTOFF`, 15 October) and Revenue's online date by year (`ROS`,
+  `{2026: '18 November'}`; a year with no entry says "mid-November") are
+  written once. It replaces the two scripts every page carried inline: the
+  countdown for the chip and the band (29 copies, 28 identical and one on
+  `index.html` that also set the tax year) and the calculators' row (12
+  copies). Every root page loads it once, at the foot of `<body>`.
+- **The nav chip, on every page** (the skeleton's nav, synced): counts to
+  23:59:59 on 15 October, "20d 11h 59m"; its name for a screen reader is
+  "About 20 days left to book by 15 October, so we have time to process your
+  contribution before the Revenue deadline for the 2025 tax year. Opens the
+  full explanation."; its hidden label says "to book by 15 October". It
+  still links to the band.
+- **The home page's band (`index.html#deadline`)**: the eyebrow "Damian's
+  cut-off" (was "Revenue deadline"); the heading "Book by 15 October so we
+  have time to process before the Revenue deadline." (was "Contributions for
+  the 2025 tax year close on 31 October."); the paragraph "Revenue's own
+  deadline is 31 October, or 18 November if you pay and file online through
+  the Revenue Online Service. Pay into a pension before it and you can set it
+  against last year's tax bill. Miss it and that year is gone for good."
+  (was "... If you file your return online, you usually have until
+  mid-November."); the clock to 15 October; the screen reader's sentence
+  adds Revenue's deadline. The markup says the same as the script writes.
+- **The calculators' "Tax deadline" row** (`pension-calculator.html`,
+  `director-calculator.html`, `broker-vs-autoenrolment.html`): "About 20
+  days left to book by 15 October, so we have time to process before the
+  Revenue deadline. Revenue's deadline for a contribution against your 2025
+  tax bill is 31 October, or 18 November if you pay and file online through
+  the Revenue Online Service. After that, 2025's allowance is gone for
+  good." (was a count of days to 31 October and "mid-November if you file
+  online").
+
+Checked and left as they are, because they state Revenue's deadline
+correctly and are not the countdown: `self-employed-pensions.html` and
+`director-year-end-checklist.html` (31 October 2026, 18 November 2026
+through the Revenue Online Service), `director-pension-rules.html` ("The
+October window", the same dates), the glossary's quiz bank ("Pay and File
+deadline (31 October)", online filers "usually get until the middle of
+November"), and Buddy's Run's fact card ("usually have until mid-November",
+which cites the home page's band; still true).
 ---
 
 # Run 28 — 2026-09-25 · Tidy-up before launch
