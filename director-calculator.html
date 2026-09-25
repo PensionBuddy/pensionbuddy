@@ -1887,22 +1887,94 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
 .pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
 .pb-warn p+p{margin-top:6px}
-/* CALCULATORS MENU (#pbNavMenu). Built by assets/js/pb-navmenu.js under
-   the nav's "Calculator" link, from 1201px only (the row, not the drawer);
-   the nav's own markup is untouched. Takes no width in the row. */
-.pb-navmenu{display:none}
-@media(min-width:1201px){
-  .nav-links{position:relative}
-  .pb-navmenu{position:absolute;z-index:60;display:block;width:340px;margin-top:4px;padding:8px;background:var(--surface);
-    border:1px solid var(--line-2);border-radius:var(--r-xl);box-shadow:0 18px 40px rgba(11,31,28,.14)}
-  .pb-navmenu[hidden]{display:none}
-  .pb-navmenu a{display:block;padding:10px 12px;border-radius:var(--r-md);color:var(--ink);text-decoration:none}
-  .pb-navmenu a:hover,.pb-navmenu a:focus-visible{background:var(--teal-50)}
-  .pb-navmenu a:focus-visible{outline:3px solid var(--ring);outline-offset:0}
-  .pb-navmenu a[aria-current="page"] b{color:var(--teal-700)}
-  .pb-navmenu b{display:block;font-size:14.5px;font-weight:600}
-  .pb-navmenu span{display:block;margin-top:2px;font-size:13px;line-height:1.45;color:var(--ink-2)}
+/* NAV:BEGIN (Run 28). The nav's own rules, last in every page's stylesheet
+   so they win over the layers above (PB-NAV, C6, F5, the booking-button
+   trade-off), and byte for byte the skeleton's on every page:
+   tools/sync-chrome.py copies this block and pagebuild.chrome_drift() fails
+   a page whose copy differs. Replaces the Calculators menu block.
+   The row: 17px items at weight 600, four dropdowns (Directors, Tools, State
+   Pension, Guides) built as disclosure buttons, "Book a call with Damian for
+   free" the one filled button. assets/js/pb-navmenu.js drives the buttons;
+   without it a panel opens on hover and on keyboard focus. Every rule is
+   scoped by id, so no older nav rule can reach in.
+   Widths are measured in Chrome, not guessed. At 17px the row needs 1,228px
+   (logo 190, six items 700, the button 304) and 1,365px with the deadline
+   chip, against 1,092px inside the 1,140px content column. So the header
+   gets its own container, up to 1,440px wide: the row runs from 1301px, the
+   chip joins it from 1440px, and at 1300px and below the whole nav is the
+   drawer, where the dropdowns open in place. "About" is the last line of
+   Guides rather than a seventh item: the row had no 69px for it. */
+#nav .nav-in{max-width:1440px}
+#navLinks{display:flex;align-items:center;gap:2px;margin:0 0 0 14px;padding:0;position:static;
+  flex-direction:row;background:none;border:0;max-height:none;overflow:visible}
+#navLinks > a.lnk,#navLinks .nav-dd-btn{position:relative;display:inline-flex;align-items:center;gap:5px;
+  margin:0;padding:10px 8px;font-family:var(--font);font-size:17px;font-weight:600;line-height:1.2;
+  letter-spacing:-.01em;color:var(--ink);background:none;border:0;border-radius:8px;cursor:pointer;
+  white-space:nowrap;text-decoration:none;transition:color .18s ease}
+#navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{content:"";position:absolute;left:8px;right:8px;
+  bottom:3px;height:2px;margin:0;display:block;border-radius:2px;background:var(--teal);
+  transform:scaleX(0);transform-origin:center;transition:transform .22s cubic-bezier(.4,0,.2,1)}
+#navLinks > a.lnk:hover,#navLinks .nav-dd-btn:hover,#navLinks .nav-dd-btn[aria-expanded="true"]{color:var(--teal-700)}
+#navLinks > a.lnk:hover::after,#navLinks .nav-dd-btn:hover::after,#navLinks > a.lnk.active::after,
+#navLinks .nav-dd:has(a[aria-current="page"]) > .nav-dd-btn::after{transform:scaleX(1)}
+#navLinks > a.lnk:focus-visible,#navLinks .nav-dd-btn:focus-visible,#navLinks .nav-dd-panel a.lnk:focus-visible{
+  outline:3px solid var(--ring);outline-offset:2px}
+#navLinks .nav-chev{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+#navLinks .nav-dd-btn[aria-expanded="true"] .nav-chev{transform:rotate(180deg)}
+#navLinks .nav-dd{position:relative}
+#navLinks .nav-dd-panel{display:none;position:absolute;top:100%;left:0;z-index:70;min-width:270px;
+  margin:8px 0 0;padding:8px;list-style:none;background:var(--surface);border:1px solid var(--line-2);
+  border-radius:12px;box-shadow:0 18px 40px rgba(11,31,28,.14)}
+/* a bridge over the 8px gap, so the pointer can travel from button to panel */
+#navLinks .nav-dd-panel::before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
+#navLinks .nav-dd:last-of-type .nav-dd-panel{left:auto;right:0}
+#navLinks:not(.dd-js) .nav-dd:hover > .nav-dd-panel,#navLinks:not(.dd-js) .nav-dd:focus-within > .nav-dd-panel,
+#navLinks .nav-dd-btn[aria-expanded="true"] + .nav-dd-panel{display:block}
+#navLinks .nav-dd-panel li{margin:0;padding:0;list-style:none}
+#navLinks .nav-dd-panel li.nav-dd-sep{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+#navLinks .nav-dd-panel a.lnk{position:relative;display:block;margin:0;padding:11px 14px;font-size:16px;
+  font-weight:500;line-height:1.35;color:var(--ink);background:none;border:0;border-radius:8px;
+  white-space:nowrap;text-decoration:none;cursor:pointer}
+#navLinks .nav-dd-panel a.lnk::after{content:none;display:none}
+#navLinks .nav-dd-panel a.lnk:hover{background:var(--teal-50);color:var(--teal-700);
+  text-decoration:underline;text-underline-offset:3px}
+#navLinks .nav-dd-panel a.lnk.active{color:var(--teal-700);font-weight:700;background:var(--teal-50)}
+#navLinks .btn{margin:0 0 0 10px;padding:14px 16px;font-size:16px}
+/* the one filled button in the nav, as the brief asks. PB-AUDIT (von
+   Restorff) had made it an outline so that only the hero's call to action
+   was filled; deleting these three rules puts the outline back. */
+#nav #navLinks .btn-primary{background:var(--aqua);color:var(--aqua-ink);border:0}
+#nav #navLinks .btn-primary:hover{background:var(--aqua-600);color:var(--aqua-ink)}
+#nav #navLinks .btn-primary .ico{stroke:var(--aqua-ink)}
+#navToggle{display:none}
+#navTick{display:inline-flex}
+@media(max-width:1439px){
+  #navTick{display:none}
 }
+@media(max-width:1300px){
+  #navToggle{display:inline-flex}
+  #navTick{display:inline-flex}
+  #navLinks{display:none;position:absolute;top:100%;left:0;right:0;z-index:60;flex-direction:column;
+    align-items:stretch;gap:0;margin:0;padding:4px 20px 18px;background:var(--bg);
+    border-bottom:1px solid var(--line-2);max-height:calc(100vh - 62px);overflow-y:auto;
+    overscroll-behavior:contain}
+  #navLinks.open{display:flex}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{display:flex;width:100%;justify-content:space-between;
+    padding:15px 4px;font-size:17px;border-bottom:1px solid var(--line);border-radius:0}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{content:none;display:none}
+  #navLinks > a.lnk.active,#navLinks .nav-dd:has(a[aria-current="page"]) > .nav-dd-btn{color:var(--teal-700)}
+  #navLinks > a.lnk:focus-visible,#navLinks .nav-dd-btn:focus-visible,#navLinks .nav-dd-panel a.lnk:focus-visible{outline-offset:-3px}
+  #navLinks .nav-dd-panel,#navLinks .nav-dd:last-of-type .nav-dd-panel{position:static;min-width:0;margin:0;
+    padding:4px 0 10px;border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;background:none}
+  #navLinks .nav-dd-panel::before{content:none}
+  #navLinks .nav-dd-panel a.lnk{padding:12px 12px 12px 14px;white-space:normal}
+  #navLinks .btn{margin:16px 0 0;width:100%;justify-content:center;white-space:normal;line-height:1.3;text-align:center}
+}
+@media(max-width:560px){
+  #navTick{display:none}
+}
+/* NAV:END */
 /* THE 52.2% IN THREE PARTS (.pb-cut): what comes off each euro taken as
    salary, 40% income tax, 8% USC and PRSI at the dated rate (PRSI, above).
    Written once at load; the rest of the bar is what reaches the pocket. */
@@ -2159,11 +2231,44 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
-    <a class="lnk" href="director.html">Directors</a>
-    <a class="lnk" href="pension-calculator.html">Calculator</a>
-    <a class="lnk" href="state-pension-reality-check.html">State pension</a>
-    <a class="lnk" href="glossary.html">Jargon buster</a>
-    <a class="lnk" href="index.html#story">About</a>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navDirectors">Directors<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navDirectors">
+        <li><a class="lnk" href="director.html">Pensions for company directors</a></li>
+        <li><a class="lnk active" href="director-calculator.html" aria-current="page">Director calculator</a></li>
+        <li><a class="lnk" href="director-pension-rules.html">What changed for directors in 2026</a></li>
+        <li><a class="lnk" href="director-year-end-checklist.html">Year-end pension checklist</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navTools">Tools<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navTools">
+        <li><a class="lnk" href="pension-calculator.html">Pension calculator</a></li>
+        <li><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
+        <li><a class="lnk" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
+        <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
+        <li><a class="lnk" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navStatePension">State Pension<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navStatePension">
+        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">State Pension entitlement check</a></li>
+      </ul>
+    </div>
+    <div class="nav-dd">
+      <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <ul class="nav-dd-panel" id="navGuides">
+        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
+        <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
+        <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
+        <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
+      </ul>
+    </div>
     <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -3068,6 +3173,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-share.js?v=0c417a51"></script>
 <script src="assets/js/pb-report.js?v=572ada0b"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
-<script src="assets/js/pb-navmenu.js?v=0185ad81"></script>
+<script src="assets/js/pb-navmenu.js?v=655d7f59"></script>
 </body>
 </html>

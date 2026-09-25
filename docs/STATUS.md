@@ -113,7 +113,51 @@ the first commit and this run is 29.
 | # | Item | Result | Commit |
 |---|---|---|---|
 | 1 | Hide "Out of office" | done: the one section of that name, the photo strip on `index.html` ("Off duty" / "Out of office.", eight photos and their clones). Hidden, not deleted: the `<section class="snaps">` carries `hidden`, a comment above it says why and how to restore, and one CSS rule (`.snaps[hidden]{display:none}`) makes sure nothing overrides the attribute. **To restore: delete the word `hidden` from `<section class="snaps" hidden>` in `index.html`.** Nothing else changes; the eight photos stay in `assets/img/` and lazy-load, so while hidden they are never fetched | this commit |
+| 2 | Nav: bigger, and every page reachable | done. **The row**: Find a pension, Start a pension, then four dropdowns, Directors, Tools, State Pension, Guides, then "Book a call with Damian for free". Items are 17px at weight 600 (were 14.4px at 500), dark ink, a teal underline on hover and on the current page or section, a chevron on each dropdown. **Every page a reader can reach is in the nav**, 19 of them (list below); "About" is now "About Pensionbuddy", the last line of Guides, under a rule, because the row had no room for it. The three held pages stay out, and `tests/nav.test.py` fails if one appears. **The button** is now the one filled control in the nav, aqua with dark text. It was an outline since the PB-AUDIT pass (von Restorff: one filled aqua button per screen, the hero's); the brief says it is the filled one, so it is, and on pages whose hero has a filled button there are now two above the fold. Deleting the three `#nav #navLinks .btn-primary` rules in the NAV block puts the outline back. **Widths**, measured in Chrome: at 17px the row needs 1,228px, 1,365px with the deadline chip, and the content column gives it 1,092, so the header now has its own container up to 1,440px wide (the logo and button sit nearer the window's edges than the page text does). The row runs from 1301px, the chip joins it from 1440px, and at 1300px and below the nav is the drawer (was 1200px): the logo, the chip (from 561px) and the menu button, with the dropdowns opening in place as lists, the drawer scrolling if it is taller than the screen. No sideways scroll at 375, 768, 1200, 1300, 1301, 1360, 1440 or 1920. **How the dropdowns work**: each is a button (`aria-expanded`, `aria-controls`) and the list of ordinary links it opens, the disclosure pattern, so a screen reader hears "Directors, collapsed, button" and then a list. Click, tap, Enter or Space opens and closes; opening one closes the others; with a mouse on the row, hovering opens and leaving closes after a moment, and a click on a hovered panel keeps it open; Escape closes and returns focus to the button (in the drawer, a second Escape closes the drawer); ArrowDown and ArrowUp move through a panel; Tab out of a panel, a click outside, or the header hiding on scroll closes it. Without JavaScript a panel opens on hover and on keyboard focus. Focus rings: 3px teal on every item and link | this commit |
 
+
+## The nav, as built (item 2)
+
+| Dropdown | Links, in order |
+|---|---|
+| Directors | Pensions for company directors (`director.html`) · Director calculator · What changed for directors in 2026 (`director-pension-rules.html`) · Year-end pension checklist (`director-year-end-checklist.html`) |
+| Tools | Pension calculator · Pension charges calculator · Auto-enrolment comparison · All your pensions in one view (`my-pensions.html`) · The Standard Fund Threshold |
+| State Pension | State Pension reality check · State Pension entitlement check |
+| Guides | The old pension hunt: a checklist · Pensions after 50 · Pensions when you are self-employed · A UK pension, and living in Ireland · Personal Investment Account (PIA) · Pension jargon buster · About Pensionbuddy (`index.html#story`) |
+
+The labels are the pages' own titles or footer names, shortened where a
+title is a sentence. Each page is in the nav once, so the director
+calculator is under Directors, not Tools. Four pages were reachable from
+no menu or footer before: the directors' rules, the year-end checklist,
+the old pension checklist and the Standard Fund Threshold.
+
+How it is kept one nav: the markup is the skeleton's
+(`pension-calculator.html`) as before, and its styling is now one block,
+`/* NAV:BEGIN */` to `/* NAV:END */`, last in every page's stylesheet in
+place of the old Calculators menu block, byte for byte the same on all 29
+pages. `tools/sync-chrome.py` copies it with the nav, `pagebuild.chrome_drift()`
+fails a page whose copy differs (kind `nav-css`), and every rule in it is
+scoped by id, so none of the five older layers of nav CSS can reach in.
+`assets/js/pb-navmenu.js` drives the dropdowns; it builds nothing. Every
+built page in the nav now marks itself current (`nav=` in `PAGES`), and
+`assemble()` no longer looks for the label "Calculator".
+
+Tests: `tests/nav.test.py` (new, 441 checks, one Chrome launch, about 5 s):
+every root page at 1440px (one nav, inside the window, 17px at 600, four
+collapsed buttons each controlling the list after it, the booking button
+the one filled control, the page's own link current once and its dropdown
+underlined), every reachable page in every page's nav and no held page,
+the keyboard and pointer behaviour above, the no-JavaScript fallback, the
+drawer at 1200 and 375px on three pages, and the row at 1301px. Twelve
+mutants, each caught (Escape doing nothing, a hovered panel closing on
+click, no hover grace, two panels open at once, no no-JavaScript fallback,
+the drawer breakpoint lowered, a drawer panel floating, a held page linked,
+a guide dropped from one page's nav, the button outlined again, 14.4px
+items, the row too wide at 1301px); the first run missed two, and the test
+was tightened until it caught them. `tests/build.test.py` 206 (was 202 on
+`main`: the nav targets are now nineteen, and a new check that none is
+held; three new mutants, a relabelled dropdown and the NAV block changed
+or missing).
 ---
 
 # Run 28 — 2026-09-25 · Tidy-up before launch

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Copy the shared chrome, the nav and the footer's link columns, from the
-skeleton to every hand-written page.
+"""Copy the shared chrome, the nav, the footer's link columns and (Run 28)
+the NAV block of CSS that styles the nav, from the skeleton to every
+hand-written page.
 
     python3 tools/sync-chrome.py
     python3 tools/sync-chrome.py --check     # report, change nothing, exit 1 if stale
