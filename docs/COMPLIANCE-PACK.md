@@ -29,6 +29,13 @@ Appendix A.10 and B.17); and the three placeholders a visitor could read
 on the Privacy Notice are off the site, their subjects still yours to
 approve (section 3, questions 1.9 and 1.17).
 
+Updated again 26 September 2026: the director calculator's line now opens
+"Retiring before your scheme's normal retirement age?" and the PRSA line
+quotes the manual's footnote in full (question 1.18); the optional-emails
+placeholder is back on the Privacy Notice, because the box is live
+(section 3.2); and the deadline countdown on every page now counts to
+Revenue's online deadline, with 31 October beside it (section 7).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -196,9 +203,10 @@ receive occasional emails are separate; the box is unticked (Reg 39: no
 pre-ticked boxes). The note under each form says: "We use your email to
 reply to this request, and for nothing else unless you tick the box."
 What we need: approval of the Privacy Notice sentence on these emails
-(section 3). Since 26 September 2026 the notice says nothing about them
-(its placeholder is off the site) while the box is on every form, so the
-sentence is the gap to close first.
+(section 3). The notice's placeholder for it was taken off the site on
+26 September 2026 and put back the same day, because the box is on every
+form: visitors read "[Wording to be confirmed: ...]" there until you
+approve the sentence, so it is the one to close first.
 
 1.10 Reviews and testimonials (Reg 85)
 --------------------------------------
@@ -379,7 +387,8 @@ Appendix B.17 and A.10).
 
 (a) The director calculator
 (https://pensionbuddy.ie/director-calculator.html), under the retirement
-age slider: "Retiring before 60? Revenue's Pensions Manual, Chapter 9.6:
+age slider: "Retiring before your scheme's normal retirement age?
+Revenue's Pensions Manual, Chapter 9.6:
 "Generally, where a director with at least 20% interest in a company
 takes early retirement benefits, the director must sever all links with
 the business, including the disposal of all shares in the company."" The slider now runs from 50 to 70 (it ran to 75),
@@ -395,9 +404,12 @@ replaces "A director with 20% or more of the company generally has to cut
 all links with it first, including selling the shares."
 
 (c) The same page, on a PRSA: "A PRSA (Personal Retirement Savings Account)
-is normally taken from 60. In the words of Revenue's Pensions Manual
-(Chapter 24.5), "retirement from age 50 may be allowed in the case of
-employed contributors"." It replaces "A PRSA (Personal Retirement Savings
+is normally taken from 60. Revenue's Pensions Manual (Chapter 24.5,
+footnote 5) says: "Benefits may be taken at any age, if an individual is permanently
+incapacitated through infirmity from carrying on their occupation (see
+Chapter 9). In addition, retirement from age 50 may be allowed in the
+case of employed contributors and of individuals whose occupation is one
+from which people customarily retire before age 60."" It replaces "A PRSA (Personal Retirement Savings
 Account) is normally taken from 60, and from 50 if you retire from an
 employment."
 
@@ -418,16 +430,12 @@ between 60 and 70, "but 20% directors must be within the 60-70 years age
 range", which is why the calculator's slider stops at 70. All read on 26
 September 2026.
 
-What we need: sign-off of the three statements. Two points on them. (i)
-The calculator's line opens "Retiring before 60?", as briefed; the
-manual's rule is about any early retirement, that is, before the scheme's
-normal retirement age, which for these directors is between 60 and 70. A
-director retiring at 62 from a scheme whose normal retirement age is 65 is
-caught by it too, and the line does not say so. "Retiring before your
-scheme's normal retirement age?" would cover it. (ii) The PRSA line quotes
-the first half of the manual's footnote; the second half, "and of
-individuals whose occupation is one from which people customarily retire
-before age 60", is not on the page.
+What we need: sign-off of the three statements. (The calculator's line
+first opened "Retiring before 60?"; the manual's rule is about any early
+retirement, that is, before the scheme's normal retirement age, which for
+these directors is between 60 and 70, so it now says that. The PRSA line
+first quoted only the start of the footnote's second sentence; it now
+quotes the whole footnote.)
 
 2. The Letter of Authority, full wording
 ========================================
@@ -506,10 +514,11 @@ Until 26 September 2026 the Privacy Notice
 visitor could read, where each of the first two sentences will go (3.1
 and 3.2) and at the end of the cookies section (3.4). All three were taken
 off the site on 26 September 2026, at Damian's instruction, and are kept
-here and in the site's status notes as drafts. The notice now says nothing
-about the old pension finder (held back) or the occasional emails (whose
-box is on every form), and its cookies section ends at "it is never
-loaded." Section 3.3 is different: it is on the site now, as proposed,
+here and in the site's status notes as drafts. The same day the one for
+the occasional emails (3.2) was put back, because their box is on every
+form. So the notice now says nothing about the old pension finder (held
+back), shows the 3.2 placeholder, and its cookies section ends at "it is
+never loaded." until the analytics tags go live. Section 3.3 is different: it is on the site now, as proposed,
 because the forms send to Netlify from this version on. Below, for each:
 the placeholder as it stood, then proposed wording for you to approve or
 change. The proposed wording is not on the site. Words in square brackets
@@ -539,8 +548,8 @@ to us, and we will stop asking."
 3.2 The occasional emails
 -------------------------
 
-The placeholder, off the site since 26 September 2026: [Wording to be
-confirmed: the optional emails about
+The placeholder, on the site (taken off and put back on 26 September
+2026): [Wording to be confirmed: the optional emails about
 pension deadlines and rule changes, sent only to people who tick the
 separate box, and how to stop them]
 
@@ -1083,10 +1092,31 @@ Changed wording on existing pages
   guide, on a pension from a job you have left and on a PRSA (Appendix
   A.10).
 - Run 30, taken off the site rather than changed: the three Privacy Notice
-  placeholders (section 3); and, on the auto-enrolment comparison, the card
+  placeholders (section 3; the optional-emails one is back); and, on the auto-enrolment comparison, the card
   "Choosing your funds, and how much risk" with its three risk
   illustrations, and the assumption that called their six figures
   placeholders, both hidden until the fund figures and ranges are confirmed.
+- Every page, the deadline countdown (26 September 2026): it counts to
+  Revenue's online deadline, and the site no longer mentions a cut-off
+  date of our own. The chip beside the logo reads "[days]d [hours]h
+  [minutes]m to Revenue's deadline", and a screen reader hears "About
+  [n] days left until 18 November, Revenue's deadline for the 2025 tax
+  year if you pay and file online through the Revenue Online Service."
+  The home page's band: "Revenue's deadline" over "Revenue's deadline is
+  18 November if you pay and file online.", then "If you do not pay and
+  file online through the Revenue Online Service, it is 31 October. Pay
+  into a pension before your deadline and you can set it against last
+  year's tax bill. Miss it and that year is gone for good." The
+  calculators' row: "About [n] days left until 18 November, Revenue's
+  deadline for the 2025 tax year if you pay and file online through the
+  Revenue Online Service. If you do not pay and file online through the
+  Revenue Online Service, it is 31 October. After that, 2025's allowance
+  is gone for good." After 31 October the second line reads "... it was 31
+  October, and that has passed."; after 18 November everything moves on to
+  the next tax year. The dates are Revenue's ("Filing your tax return",
+  published 19 March 2026; eBrief No. 034/26). Until Revenue publishes the
+  2027 online date, the 2026 tax year's count is to 31 October 2027 and
+  the band says the online date is "usually later, in mid-November".
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -1902,8 +1932,12 @@ Taking benefits early
   director must sever all links with the business, including the disposal
   of all shares in the company.”
 - A PRSA (Personal Retirement Savings Account) is normally taken from 60.
-  In the words of Revenue’s Pensions Manual (Chapter 24.5), “retirement
-  from age 50 may be allowed in the case of employed contributors”.
+  Revenue’s Pensions Manual (Chapter 24.5, footnote 5) says: “Benefits may
+  be taken at any age, if an individual is permanently incapacitated
+  through infirmity from carrying on their occupation (see Chapter 9). In
+  addition, retirement from age 50 may be allowed in the case of employed
+  contributors and of individuals whose occupation is one from which
+  people customarily retire before age 60.”
 - A personal pension is taken from 60, earlier only in a few occupations and
   with Revenue’s approval.
 - A Personal Retirement Bond follows the rules of the scheme its money came
@@ -2656,9 +2690,9 @@ nothing extra.
 B.17 Director calculator: under the retirement age slider
 ---------------------------------------------------------
 
-Retiring before 60? Revenue’s Pensions Manual, Chapter 9.6: “Generally,
-where a director with at least 20% interest in a company takes early
-retirement benefits, the director must sever all links with the business,
+Retiring before your scheme’s normal retirement age? Revenue’s Pensions
+Manual, Chapter 9.6: “Generally, where a director with at least 20%
+interest in a company takes early retirement benefits, the director must sever all links with the business,
 including the disposal of all shares in the company.”
 
 The slider it sits under runs from 50 to 70.
