@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 26 September 2026, after Run 30
+# Launch status — as at 26 September 2026, after Run 31
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -52,14 +52,13 @@ and `404.html`. `about.html` does not exist: it was folded into
    `pension-calculator-results`, `director-calculator-results`,
    `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`.
    Without detection every form falls back to email.
-2. **Three sentences the Privacy Notice now leaves out** (R30-3). The
-   placeholders are off `privacy.html` (Run 30; kept word for word under
-   Run 30's "Drafts"), so nothing unfinished shows, but the notice now says
-   nothing about the optional emails, whose tick box is live on every form
-   (R20-A2), or which tools Tag Manager runs, their cookies and where
-   Google processes the data (R27-GTM); and nothing about the finder
-   (R20-1b), which is held. The pack's section 3 has proposed wording for
-   each: R20-A2 and R27-GTM are the two to get approved first.
+2. **The Privacy Notice's missing sentences.** R20-A2, the optional
+   emails: the placeholder is back on `privacy.html` (Run 31), because
+   the tick box is live on every form, so visitors read "[Wording to be
+   confirmed: ...]" there until compliance approves the sentence (pack
+   3.2). R27-GTM, Tag Manager's tools and cookies: a draft (Run 30's
+   "Drafts") until you say the tags are live. R20-1b, the finder: off,
+   while the finder is held.
 3. **The comparison's fund figures (R1, R2).** The card "Choosing your
    funds, and how much risk" on `broker-vs-autoenrolment.html`, and the
    assumption that called its six figures placeholders, are hidden (Run
@@ -78,10 +77,7 @@ and `404.html`. `about.html` does not exist: it was folded into
 6. **Run 29:** the provider ticker is built and switched off until each
    provider's written permission is in and the agencies on How we work are
    filled in (R29-1, R29-2). R29-3 to R29-9 were answered in Run 30.
-7. **Run 30:** "Retiring before 60?" or before the scheme's normal
-   retirement age (R30-1); the director calculator's age slider now stops
-   at 69 (R30-2); the countdown's words after 15 October (R30-4); half of
-   the PRSA footnote (R30-5). All in Run 30 below.
+7. **Run 30's calls** were answered in Run 31 (below).
 8. **Smaller calls, none blocking:** the review line spells out QFA (Run
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
    quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
@@ -103,19 +99,29 @@ and `404.html`. `about.html` does not exist: it was folded into
 - **Revenue's online date for 2027.** When Revenue publishes the 2027 Pay
   and File date for the Revenue Online Service (usually in the spring), add
   it to `ROS` in `assets/js/pb-deadline.js` (`2027: { month: 10, day: N }`).
-  Without it, after 15 October 2027 the countdown runs to 31 October and
-  moves on to 2028 on 1 November, and the band says "mid-November".
+  Without it, from 19 November 2026 the countdown runs to 31 October 2027,
+  says the online date is "usually later, in mid-November", and moves on
+  to 2028 on 1 November 2027 while the online date may still be open.
 - **6 October 2026, Budget 2027.** `pia.html` per `docs/PIA-BUDGET-DAY.md`
   (threshold, rate, annual limit, launch date, the as-at stamps); re-check
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
 
+## Closed in Run 31
+
+The countdown on every page counts to Revenue's online deadline, 18
+November, with 31 October beside it, and moves on a year once it has
+passed; it no longer counts to any date of ours (R30-6).
+The director calculator's line reads "Retiring before your scheme's
+normal retirement age?" (R30-1); the over-50s guide quotes the PRSA
+footnote in full (R30-5); the optional-emails placeholder is back on the
+Privacy Notice (R30-2, above).
+
 ## Closed in Run 30
 
-R29-3 to R29-9: the nav's booking button is an outline again; after 15
-October the countdown runs to Revenue's deadline (18 November online) and
-only then moves on a year; both calculators' retirement age starts at 50,
+R29-3 to R29-9: the nav's booking button is an outline again; the
+countdown's handling of Revenue's deadline (since replaced, Run 31); both calculators' retirement age starts at 50,
 and the director's stops at 70; the 20% test is in the Pensions Manual's
 words (Chapter 9.6) on the two pages that state it, and the over-50s
 guide's PRSA line says "may be allowed". The comparison's risk card and
@@ -125,8 +131,8 @@ the Privacy Notice's three placeholders are off the site, both restorable.
 
 "Out of office" is switched off, not deleted (restore: delete `hidden` on
 `<section class="snaps">` in `index.html`). Every live page is now in the
-nav. The countdown is to your 15 October cut-off, with Revenue's dates
-beside it. The director calculator can no longer be set to retire before
+nav. The countdown moved into one script, `assets/js/pb-deadline.js`
+(what it counts to: Run 31). The director calculator can no longer be set to retire before
 50.
 
 ## Closed in Run 28
@@ -134,6 +140,92 @@ beside it. The director calculator can no longer be set to retire before
 R27-2 (the forms' success messages promised things nothing sends), A4
 (`hello@pensionbuddy.ie` confirmed), and the stale calculator pictures
 (re-shot, merged `6e556ec`).
+
+---
+
+# Run 31 — 2026-09-26 · The countdown counts to Revenue's online deadline; Run 30's calls answered
+
+Damian's brief: fast mode, the gate, merge and push; branch
+`claude/r30-calls` off `main` (`4d2b0a9`). Run 30's open calls, and R30-6,
+the countdown.
+
+A note on numbering: the report at the end of Run 30 listed its five calls
+in a different order from this file. Damian's R30-2 (the optional-emails
+sentence) is this file's R30-3, and his R30-4 ("accepted") is the report's
+fourth, the director calculator's age slider stopping at 69, this file's
+R30-2. Either reading of R30-4 needs no change: the slider stays at 69,
+and the words after 15 October are gone with R30-6.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| R30-1 | The director calculator's line | "Retiring before your scheme's normal retirement age? Revenue's Pensions Manual, Chapter 9.6:" then the manual's sentence, unchanged. Static markup (`#retNote`); the director picture leaves the line out, so no re-shoot | `27890e0` |
+| R30-5 | The PRSA line quotes the whole footnote | "A PRSA (Personal Retirement Savings Account) is normally taken from 60. Revenue's Pensions Manual (Chapter 24.5, footnote 5) says: “Benefits may be taken at any age, if an individual is permanently incapacitated through infirmity from carrying on their occupation (see Chapter 9). In addition, retirement from age 50 may be allowed in the case of employed contributors and of individuals whose occupation is one from which people customarily retire before age 60.”" Copied from the Chapter 24 PDF (last updated May 2025) | `bec600a` |
+| R30-2 | The optional-emails passage back on `privacy.html` | restored from Run 30's draft, byte for byte the line that was removed, in its old place under "How we use it". **It is the placeholder**, "[Wording to be confirmed: the optional emails about pension deadlines and rule changes, sent only to people who tick the separate box, and how to stop them]": the only wording in the draft, because the sentence itself is compliance's to approve (pack 3.2 has the proposal). So `verify.py` warns on privacy again (NEEDS-INPUT R20-A2). The Tag Manager passage stays a draft | `62f47e0` |
+| R30-6 | The countdown counts to Revenue's online deadline | done, below. Every mention of the 15 October cut-off is gone from the site: the nav chip on all 29 pages, the home page's band, the calculators' row, `assets/js/pb-deadline.js`, and this file's Launch status. `tests/deadline.test.py` rewritten, 228 checks (was 207), eight mutants caught (below) | `9ea7204` |
+| — | Compliance pack | question 1.18 (the calculator's new opening, the whole footnote, its two points closed), 1.9 and section 3 (the optional-emails placeholder back), section 7 (the countdown's words, new: the cut-off was never in the pack), Appendix A.10 and B.17 | this commit |
+
+## The countdown now (R30-6)
+
+`assets/js/pb-deadline.js` counts to one date a year: Revenue's online
+deadline (`ROS`, 18 November in 2026), or 31 October in a year with no
+online date yet. Once it has passed, everything moves on to the next
+year's deadline and tax year. 31 October is the second line.
+
+| Where | Today (26 September 2026) |
+|---|---|
+| Nav chip, every page | days, hours and minutes to the end of 18 November ("53d …"), label "to Revenue's deadline"; a screen reader hears "About 53 days left until 18 November, Revenue's deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation." |
+| Home page band | eyebrow "Revenue's deadline"; heading "Revenue's deadline is 18 November if you pay and file online."; then "If you do not pay and file online through the Revenue Online Service, it is 31 October. Pay into a pension before your deadline and you can set it against last year's tax bill. Miss it and that year is gone for good."; the clock; "Applies to anyone claiming relief for the 2025 tax year, ..." as before |
+| Calculators' "Tax deadline" row | "About 53 days left until 18 November, Revenue's deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online through the Revenue Online Service, it is 31 October. After that, 2025's allowance is gone for good." |
+
+From 1 November the second line reads "... it was 31 October, and that has
+passed." From 19 November: 31 October 2027 and the 2026 tax year, with
+"If you pay and file online through the Revenue Online Service, it is
+usually later, in mid-November." until the 2027 online date is added
+(Launch status, Parked). The markup of the band and the chip says what the
+script writes today, for a reader without JavaScript; the chip's static
+name gives no date ("Countdown to Revenue's deadline for setting a pension
+contribution against last year's tax."), so it does not go stale.
+
+Left as they are, because they state Revenue's dates and are not the
+countdown: `self-employed-pensions.html`, `director-year-end-checklist.html`
+and `director-pension-rules.html` (31 October and 18 November 2026), the
+glossary's quiz and Buddy's Run's fact card ("usually have until
+mid-November").
+
+## NEEDS DAMIAN INPUT from this run
+
+- **The optional-emails sentence (pack 3.2).** The placeholder is what
+  visitors read now; the sentence replaces it once compliance approves.
+- **Nothing else new.** Revenue's 2027 online date stays parked (Launch
+  status).
+
+## Proof
+
+- **The gate, on a clean checkout of exactly what was committed**, one
+  Chrome suite at a time: on `62f47e0` (the three copy commits) and on
+  `9ea7204` (the countdown): `tests/run-tests.py` ALL SUITES PASS;
+  `build.test.py` 213; `nav.test.py` 470; `providers.test.py` 39;
+  `deadline.test.py` 207 then 228; `runner.test.py` 95; `games.test.py`
+  157; `lead-forms.test.py` 213; `consent.test.py` 263; `gap-band.py` and
+  `check-initialisms.py` pass; `stamp-images.py`, `sync-chrome.py` and
+  `sitemap.py` `--check` clean; `verify.py` over 31 pages at 375, 1360
+  and 1440: 0 FAIL, and four WARNs: the placeholders on the two held
+  pages and, again, on privacy (R20-A2, restored on purpose), and
+  glossary's C4. The docs commit changes no page.
+- **The new deadline test can fail:** eight mutants, all caught (never
+  moving on after the deadline, the online date ignored, 31 October never
+  marked passed, a guessed 2027 online date, the heading naming 31 October
+  while an online date is known, the band's markup or one page's chip
+  still carrying the cut-off, the chip's screen-reader name never
+  written). A ninth, the chip's label never written, went unnoticed,
+  correctly: the markup already said it, so the write was dead and has
+  been taken out, with the eyebrow's.
+- **render-diff at load:** all five calculator pages identical, write for
+  write (their scripts are untouched; the countdown is not theirs).
+- **Looked at:** the home page's chip and band at 1440 as they ship
+  today (53 days to 18 November).
 
 ---
 
