@@ -14,7 +14,8 @@ What it proves:
   1. every root page at 1440px: one nav; the row does not run past the
      window; 17px items at weight 600; four dropdown buttons, each
      type="button", collapsed, controlling the list that follows it, every
-     panel closed; the booking button the one filled control in the nav;
+     panel closed; no control in the nav filled, the booking button an
+     aqua outline (R29-3, Run 30);
      the page's own link marked current, once, and its dropdown underlined;
      no script error
   2. on every page, every page a reader can reach is in its nav (or is the
@@ -84,6 +85,8 @@ PROBE = r"""<script>
          inside a panel is a highlight on a link, not a button */
       R.filled=[].slice.call(L.querySelectorAll(':scope > a, .nav-dd-btn')).filter(function(e){ var bg=getComputedStyle(e).backgroundColor;
         return bg!=='rgba(0, 0, 0, 0)' && bg!=='transparent'; }).map(function(e){return e.className;});
+      var bk=L.querySelector(':scope > a.btn-primary'), bs=bk?getComputedStyle(bk):null;
+      R.booking=bs?[bs.backgroundColor,bs.borderTopStyle,parseFloat(bs.borderTopWidth)>=1,bs.borderTopColor]:null;  /* 1.5px computes as 1px at a scale of 1 */
       return done();
     }
     if(job==='keys'){
@@ -222,7 +225,9 @@ def main():
         eq('1. %s: each a collapsed type="button" controlling the list after it, closed' % page,
            [(d['type'], d['exp'], d['next'], d['list'], d['links'] > 0, d['open'], d['js']) for d in r['dd']],
            [('button', 'false', True, 'UL', True, False, True)] * 4)
-        eq('1. %s: the booking button is the one filled control' % page, r['filled'], ['btn btn-primary'])
+        eq('1. %s: no control in the nav is filled' % page, r['filled'], [])
+        eq('1. %s: the booking button is an aqua outline' % page, r['booking'],
+           ['rgba(0, 0, 0, 0)', 'solid', True, 'rgb(22, 201, 176)'])
         want = [page] if page in targets else []
         eq('1. %s: its own link marked current, once' % page, r['current'], want)
         # the two plain links carry their own underline; a page inside a
