@@ -402,6 +402,54 @@ def run():
         eq('15. %s is named' % label, members(), [want])
     sitemap.current = real
 
+    # ----------------------------------------------------------------- 16
+    # Run 30, R29-7: the 20% test for a director is stated in one wording
+    # everywhere, the words of Revenue's Pensions Manual, Chapter 9.6 (the
+    # early retirement chapter): "a director with at least 20% interest in a
+    # company". Every sentence a reader can see on any page, or in any
+    # page's parts, that puts a 20% beside a director, shares or a company
+    # must be that wording. Mutants: Run 29's "20% or more of the company",
+    # the manual's glossary's "more than 20%", and a 20% that is not about
+    # directors at all, which must not be flagged.
+    import html as htmllib
+    TEST = 'a director with at least 20% interest in a company'
+    def text_of(src):
+        src = re.sub(r'(?is)<(script|style)\b.*?</\1>|<!--.*?-->', ' ', src)
+        return ' '.join(htmllib.unescape(re.sub(r'<[^>]+>', ' ', src)).split())
+    def off_wording(docs):
+        out = []
+        for name, src in sorted(docs.items()):
+            for sent in re.split(r'(?<=[.!?”])\s+', text_of(src)):
+                if not re.search(r'20\s?%|20 per ?cent|twenty per ?cent', sent, re.I):
+                    continue
+                # "share" alone is not ownership: "the share rises with age"
+                if not re.search(r'director|shareholder|shareholding|\bshares\b|voting|'
+                                 r'20\s?%[^.]{0,40}\b(company|business)\b', sent, re.I):
+                    continue
+                rest = sent.replace(TEST, '')
+                if re.search(r'20\s?%|20 per ?cent|twenty per ?cent', rest, re.I):
+                    out.append((name, sent[:120]))
+        return out
+    docs = dict(sources)
+    for d in ('tools/director-rules-parts', 'tools/compare-parts', 'tools/pia-parts'):
+        for f in sorted(os.listdir(os.path.join(ROOT, d))):
+            if f.endswith('.html'):
+                docs[d + '/' + f] = read(d + '/' + f)
+    eq('16. every 20% beside a director is the manual\'s wording', off_wording(docs), [])
+    eq('16. the wording is on the over-50s guide and under the director calculator\'s slider',
+       sorted(n for n, src in docs.items() if TEST in text_of(src)),
+       ['director-calculator.html', 'pensions-over-50.html'])
+    for label, page, find, repl, flagged in (
+            ('Run 29\'s "20% or more of the company"', 'pensions-over-50.html', TEST,
+             'a director with 20% or more of the company', True),
+            ('the glossary\'s "more than 20%"', 'director-calculator.html', TEST,
+             'a director who owned or controlled more than 20% of the voting rights', True),
+            ('a 20% that is not about directors', 'pensions-over-50.html', 'Early access is a trade, not a bonus.',
+             'Early access is a trade, not a bonus. Tax at 20% is the standard rate.', False)):
+        m = dict(docs); m[page] = m[page].replace(find, repl, 1)
+        eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
+           [n for n, _ in off_wording(m)], [page] if flagged else [])
+
 
 
 
