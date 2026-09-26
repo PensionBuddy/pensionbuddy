@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 25 September 2026, after Run 29
+# Launch status — as at 26 September 2026, after Run 30
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -52,28 +52,37 @@ and `404.html`. `about.html` does not exist: it was folded into
    `pension-calculator-results`, `director-calculator-results`,
    `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`.
    Without detection every form falls back to email.
-2. **Three placeholders a visitor can read on `privacy.html`:** R20-A2 (the
-   optional emails; the tick box is live on every form), R27-GTM (which
-   tools Tag Manager runs, their cookies and where Google processes the
-   data), and R20-1b (the finder; it could come out while the finder is
-   held, your call).
-3. **The comparison's fund figures (R1, R2).** `broker-vs-autoenrolment.html`
-   says, in text a visitor can read, "All six figures are placeholders
-   awaiting confirmation against the fund ranges Gresham can actually
-   arrange." The six figures, and which fund ranges Gresham can arrange.
+2. **Three sentences the Privacy Notice now leaves out** (R30-3). The
+   placeholders are off `privacy.html` (Run 30; kept word for word under
+   Run 30's "Drafts"), so nothing unfinished shows, but the notice now says
+   nothing about the optional emails, whose tick box is live on every form
+   (R20-A2), or which tools Tag Manager runs, their cookies and where
+   Google processes the data (R27-GTM); and nothing about the finder
+   (R20-1b), which is held. The pack's section 3 has proposed wording for
+   each: R20-A2 and R27-GTM are the two to get approved first.
+3. **The comparison's fund figures (R1, R2).** The card "Choosing your
+   funds, and how much risk" on `broker-vs-autoenrolment.html`, and the
+   assumption that called its six figures placeholders, are hidden (Run
+   30), not deleted. The six figures, and which fund ranges Gresham can
+   arrange; then delete `hidden` on `#riskCard` and `li#riskAssume` in
+   `tools/compare-parts/main.html` and run `python3 tools/pagebuild.py
+   compare`.
 4. **Compliance.** Send the pack (`docs/COMPLIANCE-PACK.md`, covering email
    drafted in `docs/COMPLIANCE-EMAIL.md`); the three held pages come back
-   as it signs each off. Its open questions include 1.14 to 1.17 (the review
-   line, Netlify, the Terms clause, analytics).
+   as it signs each off. Its open questions include 1.14 to 1.18 (the review
+   line, Netlify, the Terms clause, analytics, and the three directors'
+   statements in the Pensions Manual's words).
 5. **About.** The brief asked to add `about.html` to the sitemap; there is no
    such page (see above), so it was not added. Say if you want a standalone
    About page again.
 6. **Run 29:** the provider ticker is built and switched off until each
    provider's written permission is in and the agencies on How we work are
-   filled in (R29-1, R29-2); the filled nav button (R29-3); what the
-   countdown does after 15 October (R29-4); five calls on directors' ages
-   (R29-5 to R29-9). All in Run 29 below.
-7. **Smaller calls, none blocking:** the review line spells out QFA (Run
+   filled in (R29-1, R29-2). R29-3 to R29-9 were answered in Run 30.
+7. **Run 30:** "Retiring before 60?" or before the scheme's normal
+   retirement age (R30-1); the director calculator's age slider now stops
+   at 69 (R30-2); the countdown's words after 15 October (R30-4); half of
+   the PRSA footnote (R30-5). All in Run 30 below.
+8. **Smaller calls, none blocking:** the review line spells out QFA (Run
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
    quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
    21).
@@ -91,11 +100,26 @@ and `404.html`. `about.html` does not exist: it was folded into
   triggers on `booking_form_submit`, `calendly_booking` and
   `calculator_first_interaction`) are added and published. The games load no consent script, by
   choice.
+- **Revenue's online date for 2027.** When Revenue publishes the 2027 Pay
+  and File date for the Revenue Online Service (usually in the spring), add
+  it to `ROS` in `assets/js/pb-deadline.js` (`2027: { month: 10, day: N }`).
+  Without it, after 15 October 2027 the countdown runs to 31 October and
+  moves on to 2028 on 1 November, and the band says "mid-November".
 - **6 October 2026, Budget 2027.** `pia.html` per `docs/PIA-BUDGET-DAY.md`
   (threshold, rate, annual limit, launch date, the as-at stamps); re-check
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 30
+
+R29-3 to R29-9: the nav's booking button is an outline again; after 15
+October the countdown runs to Revenue's deadline (18 November online) and
+only then moves on a year; both calculators' retirement age starts at 50,
+and the director's stops at 70; the 20% test is in the Pensions Manual's
+words (Chapter 9.6) on the two pages that state it, and the over-50s
+guide's PRSA line says "may be allowed". The comparison's risk card and
+the Privacy Notice's three placeholders are off the site, both restorable.
 
 ## Closed in Run 29
 
@@ -110,6 +134,153 @@ beside it. The director calculator can no longer be set to retire before
 R27-2 (the forms' success messages promised things nothing sends), A4
 (`hello@pensionbuddy.ie` confirmed), and the stale calculator pictures
 (re-shot, merged `6e556ec`).
+
+---
+
+# Run 30 — 2026-09-26 · Run 29's calls answered: the nav button, after 15 October, directors' ages in the manual's words; the risk card and the privacy placeholders off the site
+
+Damian's brief: branch `claude/r29-calls` off `main` (`3e865bf`), fast
+mode, locked rules; the gate before each commit; merge and push `main` at
+the end. Seven of Run 29's calls (R29-3 to R29-9), answered, and three
+more: hide the comparison's risk card, take the three placeholders off the
+Privacy Notice, and put the new director statements in the compliance pack.
+
+Revenue's Pensions Manual was read again on 26 September 2026 (revenue.ie,
+Tax and Duty Manuals, Pensions, the chapter PDFs): Chapter 9, "Retirement
+before 'normal retirement age'", last reviewed June 2025; Chapter 24,
+"Personal Retirement Savings Accounts", last updated May 2025; Chapter 6,
+last reviewed August 2026. Every sentence below that quotes it was copied
+from those files, not from Run 29's notes.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| R29-3 | Nav booking button back to an outline | done. Run 29's three `#nav #navLinks .btn-primary` rules are gone from the NAV block (skeleton, then `tools/sync-chrome.py` and `tools/pagebuild.py`, all 29 pages), so PB-AUDIT's outline draws it again: transparent, a 1.5px aqua border, dark teal text, a pale teal wash on hover. It is the same rule set as before Run 29, not a new one: every page's stylesheet still carries PB-AUDIT's `#nav .btn-primary` block. The hero's button is again the only filled aqua button above the fold. `tests/nav.test.py` check 1 now asserts no control in the nav is filled and the booking button is an aqua outline (470 checks, was 441) | `49a169e` |
+| R29-4 | After 15 October, count to Revenue's deadline | done. Three stretches a year now, in `assets/js/pb-deadline.js` (the one home for both dates): **to 15 October** everything is as Run 29 left it; **from the end of 15 October until Revenue's deadline for the year has passed** the chip, the home page's band and the calculators' row count to Revenue's deadline, 18 November in 2026 (pay and file online through the Revenue Online Service), and say the cut-off has passed; **after 18 November** everything moves on to 15 October next year and the next tax year. The words, as written, are in the table below. A year with no Revenue Online Service date in `ROS` (2027 today) counts to 31 October after the cut-off, rather than guess at the online date. `tests/deadline.test.py` 207 checks (was 161), part 5 new | `0e3f71f` |
+| R29-9 | Pension calculator: retirement never below 50 | done, the same line as the director calculator's (Run 29): the floor is the higher of 50 and the age plus one; it was the age plus one, so an 18-year-old could retire at 19. Render-diff: of 25,924 states at both tax rates, age 49 and over identical (9,543), age 48 and under with retirement 50 or over different only in the slider's `min` and fill (15,389), and the 992 below-50 states the old page allowed now read 50 (`tests/render-diff/classify-pension-floor.js`, new; fails on a floor of 51 and on a changed figure). At load: `min` 41 to 50, fill 73.5% to 64%. The pension picture (home and starter pages) re-shot: the retirement thumb further left, same size, 2184x2691, so the annotation labels' gaps and the `width`/`height` attributes hold | `cdb4e74` |
+| R29-5 | Director calculator: retirement slider top 70 | done: 50 to 70 (was 75). **And "Your age now" stops at 69 (was 70)**, which the brief did not ask for: at 70 the floor would be 71, above the new top, and Chrome would then show 71 on a slider that ends at 70 and project nothing. See R30-2. Render-diff (`tests/render-diff/classify-director-bounds.js`, new; the change is in the markup, so the old side is the new html with the old maxima put back and the old script): of 22,001 states, 8,130 are no longer reachable; of the 13,871 that are, nothing differs but the two sliders' fills, at load or after; it fails on a floor of 51 and on a figure changed at 69 and 70. The script itself is unchanged (sweep 1,507 states and 8,000 scripted events, identical). The director picture re-shot: two thumbs further right, same size, 2184x3187 | `2888f1e` |
+| R29-6 | Director calculator: the 20% rule | done, a line under the retirement age slider, always shown: "Retiring before 60? Revenue's Pensions Manual, Chapter 9.6: “Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.”" Static markup, which no script writes (`#retNote`). The manual's rule is about any early retirement, not only before 60: see R30-1. Left out of the director picture, as the pension picture leaves out its State Pension line (`tools/shoot-product.py`) | `2888f1e` |
+| R29-7 | One wording for the 20% test | done. The manual's early retirement chapter (9.6) says "a director with at least 20% interest in a company". The site said it in one other place, the over-50s guide ("A director with 20% or more of the company generally has to cut all links with it first, including selling the shares."), which now quotes 9.6 whole: "For a company director, Revenue's Pensions Manual (Chapter 9.6) says: “Generally, where …”". Those two are the only places the site states the test (every page and every page part searched for a 20% beside a director, shares, voting or a company). `tests/build.test.py` check 16 (new) fails any other wording, with three mutants: Run 29's "20% or more of the company", the manual glossary's "more than 20%" (both flagged) and a 20% that is not about directors (left alone) | `cdc6a31` |
+| R29-8 | Over-50s guide: PRSA from 50 | done: "A PRSA (Personal Retirement Savings Account) is normally taken from 60. In the words of Revenue's Pensions Manual (Chapter 24.5), “retirement from age 50 may be allowed in the case of employed contributors”." (was "…normally taken from 60, and from 50 if you retire from an employment."). The quote is the first half of footnote 5 to 24.5: R30-5 | `cdc6a31` |
+| — | Comparison: the risk card hidden | done: "Choosing your funds, and how much risk" (`#riskCard`, the three risk tiles) and the assumption that said "All six figures are placeholders awaiting confirmation…" (now `li#riskAssume`) both carry `hidden`, with a comment in `tools/compare-parts/main.html` saying why and how to restore, and one CSS rule (`#riskCard[hidden],#riskAssume[hidden]{display:none}`) so nothing overrides the attribute. Nothing else on the page mentions the card. The script still fills the tiles, so it is unchanged: render-diff, load and axes, identical. The home page's picture of the comparison already left the card out. **To restore:** delete `hidden` from `<div class="chart-card reveal" id="riskCard" …>` and from `<li id="riskAssume" hidden>` in `tools/compare-parts/main.html`, then `python3 tools/pagebuild.py compare` | `cbbfa30` |
+| — | Privacy: the three "[to be confirmed]" passages | done: R20-1b (the finder, a list item under "What we collect"), R20-A2 (the optional emails, a list item under "How we use it") and R27-GTM (the last sentence of the cookies section's second paragraph) are off `privacy.html`, each whole; nothing around them changed. Kept word for word under "Drafts" below. `verify.py`'s NEEDS-INPUT warning on privacy is gone. **What the notice now leaves out** is R30-3 | `0d93b80` |
+| — | Compliance pack | done: question 1.18 (new), the three director statements with their sources and two points for compliance; section 7 and Appendix A.10 (the over-50s text) and B.17 (new, the calculator's line); section 3 and questions 1.9 and 1.17 now say the privacy placeholders are off the site and the notice is silent on those subjects | this commit |
+
+## The countdown, stretch by stretch (R29-4)
+
+| When (the reader's clock) | Chip | Band: eyebrow, then heading | Calculators' row |
+|---|---|---|---|
+| Up to the end of 15 October | "20d 11h 59m", "to book by 15 October" | "Damian's cut-off"; "Book by 15 October so we have time to process before the Revenue deadline." | as in Run 29 |
+| 16 to 31 October | days to the end of 18 November ("34d 00h 59m" a second after the cut-off), "to Revenue's deadline" | "Revenue's deadline"; "Our 15 October cut-off has passed. Revenue's deadline is 18 November if you pay and file online." | a second after the cut-off: "Our 15 October cut-off has passed. About 34 days left until 18 November, Revenue's deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online, it is 31 October. After that, 2025's allowance is gone for good." |
+| 1 to 18 November | the same | the same | the same, without "If you do not…" |
+| From 19 November | to 15 October next year, "to book by 15 October" | as in the first row, for the 2026 tax year | as in the first row, for 2026 |
+
+The band's paragraph keeps "Revenue's own deadline is 31 October, or 18
+November if you pay and file online through the Revenue Online Service."
+until 31 October, then "…is 18 November if you pay and file online
+through the Revenue Online Service (the 31 October date has passed)."
+The chip's name for a screen reader and the band's hidden line say the
+same as the row. The clocks go back on 25 October, so a count from 16
+October has an hour more in it than the calendar suggests ("34d 00h 59m"
+a second after the cut-off); that is right, and the test pins it.
+
+## Drafts: the three privacy passages, as they were on the site
+
+Taken off `privacy.html` in Run 30, word for word. The wording the pack
+proposes for each is in `docs/COMPLIANCE-PACK.md` section 3.
+
+- Under "What we collect", a list item (R20-1b): "[Wording to be
+  confirmed: what the old pension finder asks for (employers and years,
+  names used, date of birth, address, email, phone) and the signed Letter
+  of Authority; why we hold them, that we share them only with the
+  providers and trustees named, and how long we keep them]"
+- Under "How we use it", a list item (R20-A2): "[Wording to be confirmed:
+  the optional emails about pension deadlines and rule changes, sent only
+  to people who tick the separate box, and how to stop them]"
+- In "Cookies", the last sentence of the second paragraph, after "…it is
+  never loaded." (R27-GTM): "[To be confirmed: which analytics tools
+  Google Tag Manager runs for us, the cookies they set, how long they last,
+  and where Google processes the data]"
+
+Each was a `<span class="needs-input" data-issue="…">` (the two list items
+each a whole `<li>`). When compliance approves a sentence, it goes where
+its placeholder was.
+
+## NEEDS DAMIAN INPUT from this run
+
+- **R30-1 "Retiring before 60?"** The calculator's line opens with the
+  brief's words. The manual's rule (9.6) is about taking early retirement
+  benefits, that is, before the scheme's normal retirement age, which for
+  these directors must be between 60 and 70 (6.7). So a director retiring
+  at 62 from a scheme whose normal retirement age is 65 is caught too, and
+  the line does not say so. "Retiring before your scheme's normal
+  retirement age?" would cover it. One word change in
+  `director-calculator.html` (`#retNote`) and the pack.
+- **R30-2 "Your age now" on the director calculator stops at 69.** Forced
+  by R29-5's top of 70 (see the table). If a 70-year-old director should
+  still be able to use it, the retirement slider needs to reach 71, or the
+  page needs a sentence for a reader already at the top.
+- **R30-3 The Privacy Notice is now silent on two live things.** The box
+  to receive occasional emails is on every form, and the notice no longer
+  mentions those emails at all; and Tag Manager (after "That's fine") runs
+  tools the notice does not name. Both were placeholders because the
+  sentences need compliance's approval (pack section 3, questions 1.9 and
+  1.17). Until then the notice is quieter, not wrong about anything it
+  says, but these two sentences are the ones to get approved first.
+- **R30-4 After 15 October.** The words in the table are mine, built from
+  Revenue's dates and nothing else; say if you want them changed. Two
+  things carried over: a reader without JavaScript still sees "Book by 15
+  October" after it has passed (the markup is written for the first
+  stretch, as it always was), and next year's online date must be added to
+  `ROS` in `assets/js/pb-deadline.js` when Revenue publishes it, or after
+  15 October 2027 the count runs to 31 October and moves on to 2028 on 1
+  November, while the online date may still be open.
+- **R30-5 The PRSA line quotes half the footnote.** Footnote 5 to 24.5
+  goes on: "and of individuals whose occupation is one from which people
+  customarily retire before age 60". Not on the page; say if it should be.
+
+## Proof
+
+- **The gate, on a clean checkout of exactly what was committed** (a
+  detached worktree per commit, one Chrome suite at a time). Full gate on
+  `49a169e`, `0e3f71f`, `cdb4e74` and `0d93b80` (the last code commit,
+  which holds every change): `tests/run-tests.py` ALL SUITES PASS;
+  `build.test.py` 208, then 213 from `cdc6a31` (check 16); `nav.test.py`
+  470; `providers.test.py` 39; `deadline.test.py` 161, then 207;
+  `runner.test.py` 95; `games.test.py` 157; `lead-forms.test.py` 213;
+  `consent.test.py` 263; `gap-band.py` and `check-initialisms.py` pass;
+  `stamp-images.py`, `sync-chrome.py` and `sitemap.py` `--check` clean;
+  `verify.py` over 31 pages at 375, 1360 and 1440: 0 FAIL every time, and
+  `main`'s four WARNs until `0d93b80`, after which three (the placeholders
+  on the two held pages, find-my-pension and how-we-work, and glossary's
+  C4). The quick gate (the runner, `build.test.py`, the three checks, and
+  `verify.py` on the pages the commit touched) on `2888f1e`, `cdc6a31` and
+  `cbbfa30`: pass.
+- **Not as Run 29 did it, said plainly:** the first commit went in before
+  its gate, which then failed one step, `sitemap.py --check` (I had not
+  rewritten the sitemap, so 24 lastmod dates were a day old); it was
+  amended with the rewritten sitemap before anything else was committed,
+  and the amended tree passes. Commits `cdb4e74` to `0d93b80` were made
+  while their gates ran; every gate passed before the merge.
+- **Each new test shown able to fail:** the nav test on a page with the
+  filled button back (caught); the deadline test on six mutants, all
+  caught (no after-cut-off stretch, the online date ignored, 31 October
+  never marked passed, the eyebrow or the chip's label never changing, a
+  guessed 2027 online date); check 16 on its three in-memory mutants;
+  both new render-diff classifiers on a floor of 51 and on a changed
+  figure.
+- **render-diff**, each against the commit before: at load, only the
+  pension calculator differs, in the two cells R29-9 moves; the director
+  calculator, the comparison and both State Pension pages load to the same
+  render write for write. The two classifiers as in the items table. The
+  director script is unchanged (axes and corners 1,507 states, 8,000
+  scripted events: identical), and so is the comparison's (axes and
+  corners, 150,576 states: identical).
+- **Looked at:** the director calculator at 1440 and 375 with its new line,
+  the nav's outline button at 1440, the over-50s guide at 1440, the home
+  page's band with the clock pinned to a second after the cut-off at 1440,
+  and both calculator pictures old against new (only the thumbs move).
 
 ---
 
