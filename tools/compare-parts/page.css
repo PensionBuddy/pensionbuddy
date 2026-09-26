@@ -54,7 +54,9 @@
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
 .togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 .togbody[hidden]{display:none}
-/* funds and risk: three illustration tiles, each carrying its own downside */
+/* funds and risk: three illustration tiles, each carrying its own downside.
+   Hidden in Run 30 (see main.html); this rule keeps the attribute winning. */
+#riskCard[hidden],#riskAssume[hidden]{display:none}
 #riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
 #riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
 /* one tile a row (Run 21): at the calculators' 16px floor, three across no

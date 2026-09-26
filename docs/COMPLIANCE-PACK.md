@@ -23,6 +23,12 @@ promises only what happens, since Netlify emails the visitor nothing, and
 hello@pensionbuddy.ie, now a monitored inbox, is in every page's footer
 (section 7).
 
+Updated 26 September 2026: three statements for company directors, each
+in the words of Revenue's Pensions Manual (question 1.18, section 7,
+Appendix A.10 and B.17); and the three placeholders a visitor could read
+on the Privacy Notice are off the site, their subjects still yours to
+approve (section 3, questions 1.9 and 1.17).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -190,7 +196,9 @@ receive occasional emails are separate; the box is unticked (Reg 39: no
 pre-ticked boxes). The note under each form says: "We use your email to
 reply to this request, and for nothing else unless you tick the box."
 What we need: approval of the Privacy Notice sentence on these emails
-(section 3).
+(section 3). Since 26 September 2026 the notice says nothing about them
+(its placeholder is off the site) while the box is on every form, so the
+sentence is the gap to close first.
 
 1.10 Reviews and testimonials (Reg 85)
 --------------------------------------
@@ -345,8 +353,9 @@ published, holds no tags, so nothing is measured until tags are added to
 it in Google Tag Manager. The Privacy Notice's cookies section is rewritten
 (section 3.4).
 What we need: (a) approval of the cookies section and of the bar's wording,
-which visitors now see; (b) for the placeholder in section 3.4, which
-analytics tools Tag Manager will run, the cookies they set, how long they
+which visitors now see; (b) for the sentence the placeholder in section
+3.4 stood for (off the site since 26 September 2026), which analytics tools
+Tag Manager will run, the cookies they set, how long they
 last, and where Google processes the data; (c) whether "nothing for ads,
 never sold" and "We do not use it for advertising" hold for the tools
 chosen (for Google Analytics 4, that means Google signals and ads
@@ -360,6 +369,65 @@ minimum on every page.) Separately, and unchanged: every page loads its
 typeface from Google Fonts before any choice, which sends the visitor's IP
 address to Google; it is not analytics, but it could be served from the
 site itself instead.
+
+1.18 Directors: three statements in the Pensions Manual's words
+---------------------------------------------------------------
+
+What the site does now: three statements, each quoting Revenue's Pensions
+Manual word for word, with its chapter named beside it (full text in
+Appendix B.17 and A.10).
+
+(a) The director calculator
+(https://pensionbuddy.ie/director-calculator.html), under the retirement
+age slider: "Retiring before 60? Revenue's Pensions Manual, Chapter 9.6:
+"Generally, where a director with at least 20% interest in a company
+takes early retirement benefits, the director must sever all links with
+the business, including the disposal of all shares in the company."" The slider now runs from 50 to 70 (it ran to 75),
+and "Your age now" stops at 69 (it stopped at 70), so there is always a
+year to retire in.
+
+(b) Pensions after 50 (pensions-over-50.html), under "Taking benefits
+early", on a pension from a job you have left: "For a company director,
+Revenue's Pensions Manual (Chapter 9.6) says: "Generally, where a director with at least 20% interest in a company
+takes early retirement benefits, the director must sever all links with
+the business, including the disposal of all shares in the company."" It
+replaces "A director with 20% or more of the company generally has to cut
+all links with it first, including selling the shares."
+
+(c) The same page, on a PRSA: "A PRSA (Personal Retirement Savings Account)
+is normally taken from 60. In the words of Revenue's Pensions Manual
+(Chapter 24.5), "retirement from age 50 may be allowed in the case of
+employed contributors"." It replaces "A PRSA (Personal Retirement Savings
+Account) is normally taken from 60, and from 50 if you retire from an
+employment."
+
+The rule the site now follows: who counts as a 20% director is always
+said in Chapter 9.6's words, "a director with at least 20% interest in a
+company", and (a) and (b) are the only places the site says it. A test of
+the site fails if any other wording appears. The manual is not consistent
+with itself here: its glossary (Appendix I) defines a 20% director as one
+who "owned or controlled more than 20% of the voting rights" in the last
+three years. The site follows Chapter 9, the early retirement chapter.
+
+Sources: Revenue, Tax and Duty Manual, Pensions Manual: Chapter 9,
+"Retirement before 'normal retirement age'" (last reviewed June 2025),
+paragraph 9.6; Chapter 24, "Personal Retirement Savings Accounts" (last
+updated May 2025), paragraph 24.5 and its footnote 5; Chapter 6 (last
+reviewed August 2026), paragraph 6.7: a scheme's normal retirement age is
+between 60 and 70, "but 20% directors must be within the 60-70 years age
+range", which is why the calculator's slider stops at 70. All read on 26
+September 2026.
+
+What we need: sign-off of the three statements. Two points on them. (i)
+The calculator's line opens "Retiring before 60?", as briefed; the
+manual's rule is about any early retirement, that is, before the scheme's
+normal retirement age, which for these directors is between 60 and 70. A
+director retiring at 62 from a scheme whose normal retirement age is 65 is
+caught by it too, and the line does not say so. "Retiring before your
+scheme's normal retirement age?" would cover it. (ii) The PRSA line quotes
+the first half of the manual's footnote; the second half, "and of
+individuals whose occupation is one from which people customarily retire
+before age 60", is not on the page.
 
 2. The Letter of Authority, full wording
 ========================================
@@ -433,18 +501,25 @@ search: [full name]", reads:
 3. The Privacy Notice: sentences to approve
 ==========================================
 
-The Privacy Notice (https://pensionbuddy.ie/privacy.html) shows a
-placeholder where each of the first two sentences will go (3.1 and 3.2).
-Section 3.3 is different: it is on the site now, as proposed, because the
-forms send to Netlify from this version on. Below, for each: the
-placeholder as it stands, then proposed wording for you to approve or
+Until 26 September 2026 the Privacy Notice
+(https://pensionbuddy.ie/privacy.html) showed a placeholder, in text a
+visitor could read, where each of the first two sentences will go (3.1
+and 3.2) and at the end of the cookies section (3.4). All three were taken
+off the site on 26 September 2026, at Damian's instruction, and are kept
+here and in the site's status notes as drafts. The notice now says nothing
+about the old pension finder (held back) or the occasional emails (whose
+box is on every form), and its cookies section ends at "it is never
+loaded." Section 3.3 is different: it is on the site now, as proposed,
+because the forms send to Netlify from this version on. Below, for each:
+the placeholder as it stood, then proposed wording for you to approve or
 change. The proposed wording is not on the site. Words in square brackets
 are decisions for the firm.
 
 3.1 The old pension finder
 --------------------------
 
-The placeholder now: [Wording to be confirmed: what the old pension finder
+The placeholder, off the site since 26 September 2026: [Wording to be
+confirmed: what the old pension finder
 asks for (employers and years, names used, date of birth, address, email,
 phone) and the signed Letter of Authority; why we hold them, that we share
 them only with the providers and trustees named, and how long we keep them]
@@ -464,7 +539,8 @@ to us, and we will stop asking."
 3.2 The occasional emails
 -------------------------
 
-The placeholder now: [Wording to be confirmed: the optional emails about
+The placeholder, off the site since 26 September 2026: [Wording to be
+confirmed: the optional emails about
 pension deadlines and rule changes, sent only to people who tick the
 separate box, and how to stop them]
 
@@ -512,7 +588,9 @@ the data]
 Your choice is kept in your browser, and you can change it at any time.
 [Change your cookie choice]"
 
-The button brings the bar back.
+The button brings the bar back. The placeholder at the end of the second
+paragraph was taken off the site on 26 September 2026; the rest is on the
+site as quoted.
 
 4. The readiness check: brief
 =============================
@@ -999,6 +1077,16 @@ Changed wording on existing pages
 - Run 28, every page's footer: "hello@pensionbuddy.ie" in the Company
   column, the address the Privacy Notice, Terms and Complaints pages
   already give.
+- Run 30, three statements for company directors, each in the words of
+  Revenue's Pensions Manual (question 1.18): under the director
+  calculator's retirement age slider (Appendix B.17), and in the over-50s
+  guide, on a pension from a job you have left and on a PRSA (Appendix
+  A.10).
+- Run 30, taken off the site rather than changed: the three Privacy Notice
+  placeholders (section 3); and, on the auto-enrolment comparison, the card
+  "Choosing your funds, and how much risk" with its three risk
+  illustrations, and the assumption that called their six figures
+  placeholders, both hidden until the fund figures and ranges are confirmed.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -1808,11 +1896,14 @@ Taking benefits early
 ---------------------
 - A pension from a job you have left can, if the scheme’s rules allow it, be
   taken from 50. You have to have left that employment, and the employer or
-  the trustees generally have to agree. A director with 20% or more of the
-  company generally has to cut all links with it first, including selling
-  the shares.
-- A PRSA (Personal Retirement Savings Account) is normally taken from 60,
-  and from 50 if you retire from an employment.
+  the trustees generally have to agree. For a company director, Revenue’s
+  Pensions Manual (Chapter 9.6) says: “Generally, where a director with at
+  least 20% interest in a company takes early retirement benefits, the
+  director must sever all links with the business, including the disposal
+  of all shares in the company.”
+- A PRSA (Personal Retirement Savings Account) is normally taken from 60.
+  In the words of Revenue’s Pensions Manual (Chapter 24.5), “retirement
+  from age 50 may be allowed in the case of employed contributors”.
 - A personal pension is taken from 60, earlier only in a few occupations and
   with Revenue’s approval.
 - A Personal Retirement Bond follows the rules of the scheme its money came
@@ -2561,3 +2652,13 @@ Buddy panel on every page, the booking bar on phones, and the end of the
 Buddy's Run game. Booking links
 whose own paragraph already says the call is free and twenty minutes carry
 nothing extra.
+
+B.17 Director calculator: under the retirement age slider
+---------------------------------------------------------
+
+Retiring before 60? Revenue’s Pensions Manual, Chapter 9.6: “Generally,
+where a director with at least 20% interest in a company takes early
+retirement benefits, the director must sever all links with the business,
+including the disposal of all shares in the company.”
+
+The slider it sits under runs from 50 to 70.

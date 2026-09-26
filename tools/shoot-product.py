@@ -49,9 +49,12 @@ SHOTS = {
     'pension-calculator': {'page': 'pension-calculator.html', 'target': '.calc-wrap',
                            'hide': '#pbSpTop{display:none!important}'},
     # the director page stacks five cards under its headline figure; the shot
-    # keeps the sliders, the headline and the salary-versus-pension comparison
+    # keeps the sliders, the headline and the salary-versus-pension comparison.
+    # The Pensions Manual's words under the retirement slider (#retNote, Run
+    # 30) are left out like the pension page's State Pension line: a legal
+    # sentence too small to read in the picture, which would make it taller
     'director-calculator': {'page': 'director-calculator.html', 'target': '.calc-wrap',
-                            'hide': '.waitcard,.chart-card,.max-card{display:none!important}'},
+                            'hide': '.waitcard,.chart-card,.max-card,#retNote{display:none!important}'},
     # #13, the home page's product tabs: the other three calculators, each
     # cropped to its sliders and the part of its result that says the most
     'broker-vs-autoenrolment': {'page': 'broker-vs-autoenrolment.html', 'target': '.calc-wrap',

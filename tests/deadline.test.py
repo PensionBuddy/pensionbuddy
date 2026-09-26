@@ -17,9 +17,16 @@ What it proves:
      without JavaScript reads what a reader with it reads
   3. the calculators' "Tax deadline" row counts to 15 October and states
      Revenue's deadline for the tax year
-  4. an hour before the cut-off the chip says 0d 00h 59m; a second after it,
-     everything moves on to 15 October next year and the next tax year, and
-     a year with no Revenue Online Service date says "mid-November"
+  4. an hour before the cut-off the chip says 0d 00h 59m
+  5. after the cut-off (R29-4, Run 30): a second after it, everything counts
+     to Revenue's own deadline, 18 November online, and says the cut-off has
+     passed (chip, its label, the band's eyebrow, heading, clock and
+     screen-reader line, the calculators' row), with 31 October named while
+     it is still ahead and marked passed once it is not; an hour before
+     18 November ends the chip says 0d 00h 59m; a second after it,
+     everything moves on to 15 October next year and the next tax year; and
+     in a year with no Revenue Online Service date (2027) the count after the
+     cut-off is to 31 October, and the band says "mid-November"
 """
 import base64, glob, html, json, os, re, socket, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -51,6 +58,7 @@ PROBE = r"""<script>
   setTimeout(function(){
     var chip=document.getElementById('navTick');
     R.chip=t('ntVal'); R.label=chip?chip.getAttribute('aria-label'):null;
+    var cl=chip?chip.querySelector('.nt-l'):null; R.chipLab=cl?cl.textContent:null;
     R.band=[t('tkD'),t('tkH'),t('tkM'),t('tkS')];
     var h=document.querySelector('.tick h2'); R.head=h?h.textContent:null;
     var e=document.querySelector('.tick .eyebrow'); R.eyebrow=e?e.textContent:null;
@@ -112,8 +120,12 @@ def main():
 
     pages = sorted(os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*.html')))
     NOW, HOUR, AFTER = '2026-09-25T12:00:00', '2026-10-15T23:00:00', '2026-10-16T00:00:01'
+    NOV, LAST, ROLL, NOROS = '2026-11-01T00:00:00', '2026-11-18T23:00:00', '2026-11-19T00:00:01', '2027-10-16T00:00:00'
     jobs = [[p, NOW] for p in pages]
-    jobs += [['index.html', HOUR], ['index.html', AFTER], ['pension-calculator.html', AFTER]]
+    jobs += [['index.html', HOUR], ['index.html', AFTER], ['pension-calculator.html', AFTER],
+             ['index.html', NOV], ['director-calculator.html', NOV], ['index.html', LAST],
+             ['index.html', ROLL], ['pension-calculator.html', ROLL], ['index.html', NOROS],
+             ['broker-vs-autoenrolment.html', NOROS]]
     url = 'http://127.0.0.1:%d/__dl?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,900',
@@ -139,6 +151,7 @@ def main():
             continue
         eq('1. %s: the chip counts to the end of 15 October' % page, r['chip'], '20d 11h 59m')
         eq('1. %s: and says so to a screen reader' % page, r['label'], LEFT + ' Opens the full explanation.')
+        eq('1. %s: its label names the cut-off' % page, r['chipLab'], 'to book by 15 October')
         eq('1. %s: no script error' % page, r['errors'], [])
     # 2
     r = R[('index.html', NOW)]
@@ -162,12 +175,47 @@ def main():
     # 4
     r = R[('index.html', HOUR)]
     eq('4. an hour before the cut-off', (r['chip'], r['band'][:3]), ('0d 00h 59m', ['00', '00', '59']))
+    # 5
+    ROS_T = '18 November, Revenue’s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service'
+    PASSED = 'Our 15 October cut-off has passed. '
+    OTHER = ' If you do not pay and file online, it is 31 October.'
+    left = PASSED + 'About 34 days left until ' + ROS_T + '.'
     r = R[('index.html', AFTER)]
-    eq('4. a second after it, the next year\'s cut-off', (r['chip'], r['band'][:2]), ('364d 23h 59m', ['364', '23']))
-    eq('4. for the next tax year', r['year'], '2026')
-    eq('4. and a year with no Revenue Online Service date says mid-November', r['rev'], REV_NEXT)
+    # the clocks go back on 25 October, so the count has an hour more in it
+    eq('5. a second after the cut-off, the chip counts to 18 November', (r['chip'], r['chipLab']), ('34d 00h 59m', 'to Revenue’s deadline'))
+    eq('5. and says so to a screen reader', r['label'], left + ' Opens the full explanation.')
+    eq('5. the band: its eyebrow is Revenue\'s now', r['eyebrow'], 'Revenue’s deadline')
+    eq('5. the band: the cut-off has passed, Revenue\'s has not', r['head'],
+       PASSED + 'Revenue’s deadline is 18 November if you pay and file online.')
+    eq('5. the band: its clock, to 18 November', r['band'][:3], ['34', '00', '59'])
+    eq('5. the band: both of Revenue\'s dates, while 31 October is ahead', (r['rev'], r['year']), (REV, '2025'))
+    eq('5. the band: for a screen reader', r['sr'], left + OTHER)
     r = R[('pension-calculator.html', AFTER)]
-    eq('4. the row moves on too', r['row'].startswith('About 364 days left') and '2026 tax bill' in r['row'], True)
+    eq('5. the row counts to 18 November', r['row'],
+       left + OTHER + ' After that, 2025’s allowance is gone for good.')
+    r = R[('index.html', NOV)]
+    left = PASSED + 'About 17 days left until ' + ROS_T + '.'
+    eq('5. on 1 November: still counting to 18 November', (r['chip'], r['band'][:3]), ('17d 23h 59m', ['17', '23', '59']))
+    eq('5. and 31 October is marked passed', r['rev'],
+       '18 November if you pay and file online through the Revenue Online Service (the 31 October date has passed)')
+    eq('5. and no longer offered to a screen reader', r['sr'], left)
+    r = R[('director-calculator.html', NOV)]
+    eq('5. nor in the row', r['row'], left + ' After that, 2025’s allowance is gone for good.')
+    r = R[('index.html', LAST)]
+    eq('5. an hour before 18 November ends', (r['chip'], r['band'][:3], r['head'].startswith(PASSED)), ('0d 00h 59m', ['00', '00', '59'], True))
+    r = R[('index.html', ROLL)]
+    eq('5. a second after it, the next year\'s cut-off', (r['chip'], r['band'][:2], r['chipLab']), ('330d 22h 59m', ['330', '22'], 'to book by 15 October'))
+    eq('5. in the cut-off\'s words again', (r['eyebrow'], r['head']), ('Damian\u2019s cut-off', HEAD))
+    eq('5. for the next tax year', r['year'], '2026')
+    eq('5. and a year with no Revenue Online Service date says mid-November', r['rev'], REV_NEXT)
+    r = R[('pension-calculator.html', ROLL)]
+    eq('5. the row moves on too', r['row'].startswith('About 330 days left to book by 15 October') and '2026 tax bill' in r['row'], True)
+    r = R[('index.html', NOROS)]
+    left = PASSED + 'About 16 days left until 31 October, Revenue’s deadline for the 2026 tax year.'
+    eq('5. with no online date for the year, the count after the cut-off is to 31 October', (r['chip'], r['band'][:3]), ('16d 00h 59m', ['16', '00', '59']))
+    eq('5. and the band says so', (r['head'], r['sr'], r['year']), (PASSED + 'Revenue’s deadline is 31 October.', left, '2026'))
+    r = R[('broker-vs-autoenrolment.html', NOROS)]
+    eq('5. and the row', r['row'], left + ' After that, 2026’s allowance is gone for good.')
     srv.shutdown()
     report()
 

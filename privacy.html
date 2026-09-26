@@ -1547,8 +1547,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    tools/sync-chrome.py copies this block and pagebuild.chrome_drift() fails
    a page whose copy differs. Replaces the Calculators menu block.
    The row: 17px items at weight 600, four dropdowns (Directors, Tools, State
-   Pension, Guides) built as disclosure buttons, "Book a call with Damian for
-   free" the one filled button. assets/js/pb-navmenu.js drives the buttons;
+   Pension, Guides) built as disclosure buttons, then "Book a call with
+   Damian for free", an outline button. assets/js/pb-navmenu.js drives the buttons;
    without it a panel opens on hover and on keyboard focus. Every rule is
    scoped by id, so no older nav rule can reach in.
    Widths are measured in Chrome, not guessed. At 17px the row needs 1,228px
@@ -1595,12 +1595,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   text-decoration:underline;text-underline-offset:3px}
 #navLinks .nav-dd-panel a.lnk.active{color:var(--teal-700);font-weight:700;background:var(--teal-50)}
 #navLinks .btn{margin:0 0 0 10px;padding:14px 16px;font-size:16px}
-/* the one filled button in the nav, as the brief asks. PB-AUDIT (von
-   Restorff) had made it an outline so that only the hero's call to action
-   was filled; deleting these three rules puts the outline back. */
-#nav #navLinks .btn-primary{background:var(--aqua);color:var(--aqua-ink);border:0}
-#nav #navLinks .btn-primary:hover{background:var(--aqua-600);color:var(--aqua-ink)}
-#nav #navLinks .btn-primary .ico{stroke:var(--aqua-ink)}
+/* The booking button is an outline, PB-AUDIT's (von Restorff: one filled
+   aqua button per screen, the hero's). Run 29 filled it with three rules
+   here; R29-3 took them out again, and nothing in this block sets its
+   colours, so PB-AUDIT's `#nav .btn-primary` rules draw it. */
 #navToggle{display:none}
 #navTick{display:inline-flex}
 @media(max-width:1439px){
@@ -1744,7 +1742,6 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   <ul>
     <li>Contact details you give us when you book a call or request a guide, such as your name and email address.</li>
     <li>Anything you choose to tell us about your situation when you get in touch.</li>
-    <li><span class="needs-input" data-issue="R20-1b">[Wording to be confirmed: what the old pension finder asks for (employers and years, names used, date of birth, address, email, phone) and the signed Letter of Authority; why we hold them, that we share them only with the providers and trustees named, and how long we keep them]</span></li>
     <li>Basic, non-identifying information about how the site is used, where you have agreed to cookies or analytics.</li>
   </ul>
   <p>The pension calculators on this site run entirely in your browser. The figures you enter into them are not sent to us or stored, unless you separately choose to email yourself the results.</p>
@@ -1754,7 +1751,6 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
     <li>To arrange and prepare for your free consultation.</li>
     <li>To answer your enquiry and, if you become a client, to provide our services.</li>
     <li>To send you a guide or follow-up information you have asked for. You can unsubscribe at any time.</li>
-    <li><span class="needs-input" data-issue="R20-A2">[Wording to be confirmed: the optional emails about pension deadlines and rule changes, sent only to people who tick the separate box, and how to stop them]</span></li>
   </ul>
   <p>We will only use your information for the purpose you gave it to us. We do not sell your data to anyone.</p>
 
@@ -1769,7 +1765,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 
   <h2 id="cookies">Cookies</h2>
   <p>This site aims to use only what is necessary to work. Analytics are not necessary, so we ask first.</p>
-  <p>When you first visit, a bar at the foot of the page asks whether we may use analytics. Only if you choose &ldquo;That&rsquo;s fine&rdquo; do we load Google Tag Manager, a Google service that runs our analytics tools. We use it to see how the site is used: which pages are visited, when a calculator is first used, when the booking form is sent and when a call is booked. We do not use it for advertising. If you choose &ldquo;No thanks&rdquo;, or make no choice, it is never loaded. <span class="needs-input" data-issue="R27-GTM">[To be confirmed: which analytics tools Google Tag Manager runs for us, the cookies they set, how long they last, and where Google processes the data]</span></p>
+  <p>When you first visit, a bar at the foot of the page asks whether we may use analytics. Only if you choose &ldquo;That&rsquo;s fine&rdquo; do we load Google Tag Manager, a Google service that runs our analytics tools. We use it to see how the site is used: which pages are visited, when a calculator is first used, when the booking form is sent and when a call is booked. We do not use it for advertising. If you choose &ldquo;No thanks&rdquo;, or make no choice, it is never loaded.</p>
   <p>Your choice is kept in your browser, and you can change it at any time. <button type="button" class="btn btn-ghost pb-consent-reset" data-pb-consent-reset>Change your cookie choice</button></p>
 
   <h2>Contact</h2>
@@ -1952,7 +1948,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=e68a64c1"></script>
+<script src="assets/js/pb-deadline.js?v=2a2613da"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the

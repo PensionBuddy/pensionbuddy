@@ -1764,8 +1764,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    tools/sync-chrome.py copies this block and pagebuild.chrome_drift() fails
    a page whose copy differs. Replaces the Calculators menu block.
    The row: 17px items at weight 600, four dropdowns (Directors, Tools, State
-   Pension, Guides) built as disclosure buttons, "Book a call with Damian for
-   free" the one filled button. assets/js/pb-navmenu.js drives the buttons;
+   Pension, Guides) built as disclosure buttons, then "Book a call with
+   Damian for free", an outline button. assets/js/pb-navmenu.js drives the buttons;
    without it a panel opens on hover and on keyboard focus. Every rule is
    scoped by id, so no older nav rule can reach in.
    Widths are measured in Chrome, not guessed. At 17px the row needs 1,228px
@@ -1812,12 +1812,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   text-decoration:underline;text-underline-offset:3px}
 #navLinks .nav-dd-panel a.lnk.active{color:var(--teal-700);font-weight:700;background:var(--teal-50)}
 #navLinks .btn{margin:0 0 0 10px;padding:14px 16px;font-size:16px}
-/* the one filled button in the nav, as the brief asks. PB-AUDIT (von
-   Restorff) had made it an outline so that only the hero's call to action
-   was filled; deleting these three rules puts the outline back. */
-#nav #navLinks .btn-primary{background:var(--aqua);color:var(--aqua-ink);border:0}
-#nav #navLinks .btn-primary:hover{background:var(--aqua-600);color:var(--aqua-ink)}
-#nav #navLinks .btn-primary .ico{stroke:var(--aqua-ink)}
+/* The booking button is an outline, PB-AUDIT's (von Restorff: one filled
+   aqua button per screen, the hero's). Run 29 filled it with three rules
+   here; R29-3 took them out again, and nothing in this block sets its
+   colours, so PB-AUDIT's `#nav .btn-primary` rules draw it. */
 #navToggle{display:none}
 #navTick{display:inline-flex}
 @media(max-width:1439px){
@@ -2075,7 +2073,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <a class="btn btn-light" href="director-calculator.html">Open the director calculator <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
-      <picture><source type="image/webp" srcset="assets/img/product-director-calculator.webp?v=5046cf55"><img src="assets/img/product-director-calculator.jpg?v=51db25a9" width="2184" height="3187" alt="The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension." loading="lazy"></picture>
+      <picture><source type="image/webp" srcset="assets/img/product-director-calculator.webp?v=b877962d"><img src="assets/img/product-director-calculator.jpg?v=18566da2" width="2184" height="3187" alt="The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension." loading="lazy"></picture>
       <figcaption class="pb-split-cap">Example figures.</figcaption>
     </figure>
   </div>
@@ -2378,7 +2376,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=e68a64c1"></script>
+<script src="assets/js/pb-deadline.js?v=2a2613da"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the
