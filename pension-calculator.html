@@ -2378,8 +2378,13 @@ const paint=el=>paintSlider(el,VALTEXT);
 function calc(){
   let age=+$('age').value, ret=+$('ret').value;
   const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
-  $('ret').min=age+1;
-  if(ret<=age){ret=age+1;$('ret').value=ret;}
+  /* R29-9 (Run 30): never below 50, as on the director calculator (Run 29):
+     the earliest age Revenue allows benefits other than on ill health
+     (Pensions Manual 9.1); the slider's own min="50" was being replaced by
+     age + 1, which let an 18-year-old retire at 19 */
+  const retFloor=Math.max(50,age+1);
+  $('ret').min=retFloor;
+  if(ret<retFloor){ret=retFloor;$('ret').value=ret;}
   paint($('ret'));  /* repaint AFTER min is updated so fill matches thumb */
   $('ageV').textContent=age;
   $('retV').textContent=ret;
