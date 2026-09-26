@@ -191,7 +191,12 @@
     </div>
 
     <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
-    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s">
+    <!-- Hidden, not deleted (Run 30): its six return and fall figures are
+         placeholders until the fund ranges Gresham can arrange are confirmed
+         (R1, R2), and the assumptions said so in text a visitor could read.
+         The script still fills #riskTiles. To restore: delete `hidden` here
+         and on the risk bullet in the assumptions below (li#riskAssume). -->
+    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s" hidden>
       <h3>Choosing your funds, and how much risk</h3>
       <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
       <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
@@ -253,7 +258,7 @@
     <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
     <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
     <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
-    <li>The three risk illustrations use the 1 to 7 Summary Risk Indicator that European Union (EU) rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
+    <li id="riskAssume" hidden>The three risk illustrations use the 1 to 7 Summary Risk Indicator that European Union (EU) rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
     <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
     <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
   </ul>
