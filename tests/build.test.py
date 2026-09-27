@@ -583,10 +583,17 @@ def run():
     # back, the hero lockup's delayed reveal, the review line's, and a legal
     # page's whole-document reveal.
     from html.parser import HTMLParser
-    REG = re.compile(r'Central Bank of Ireland|Qualified Financial Adviser|\bQFA\b')
+    REG = re.compile(r'Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b')
     VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+    BAD_STYLE = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:;|$)'
+                           r'|transition\s*:[^;]*\d(?:\.\d+)?m?s[^;,]*\s\d*\.?\d+m?s')
 
     class RegLines(HTMLParser):
+        """The text of each element, its descendants' included but the
+        glossary's term cards left out, so a name split by a tag or written
+        with &nbsp; is still whole; an element whose text names the regulator
+        or the credential must not be, or sit under, a .reveal or anything
+        with an inline delay, animation or zero opacity."""
         def __init__(self):
             super().__init__(convert_charrefs=True)
             self.stack, self.skip, self.bad = [], 0, []
@@ -596,29 +603,55 @@ def run():
                 self.skip += 1
             if tag not in VOID:
                 a = dict(attrs)
-                self.stack.append((tag, a.get('class') or '', a.get('style') or ''))
+                cls = a.get('class') or ''
+                self.stack.append([tag, cls, a.get('style') or '', [], 'gterm' in cls.split()])
 
         def handle_endtag(self, tag):
             if tag in ('script', 'style'):
                 self.skip -= 1
             for i in range(len(self.stack) - 1, -1, -1):
                 if self.stack[i][0] == tag:
+                    for e in reversed(self.stack[i:]):
+                        self.close(e)
                     del self.stack[i:]
                     break
 
+        def close(self, e):
+            text = ' '.join(''.join(e[3]).split())
+            if not REG.search(text):
+                return
+            chain = [x for x in self.stack if x is not e] + [e]
+            if any(re.search(r'(^|\s)reveal(\s|$)', c) or BAD_STYLE.search(st) for _, c, st, _, _ in chain):
+                self.bad.append(text[:50])
+
         def handle_data(self, d):
-            if self.skip or not REG.search(d):
+            if self.skip:
                 return
-            if any(re.search(r'(^|\s)gterm(\s|$)', c) for _, c, _ in self.stack):
-                return
-            if any(re.search(r'(^|\s)reveal(\s|$)', c) or re.search(r'transition-delay|animation', s)
-                   for _, c, s in self.stack):
-                self.bad.append(' '.join(d.split())[:50])
+            d = d.replace('\xa0', ' ')
+            for e in self.stack:
+                if e[4]:
+                    return
+            for e in self.stack:
+                e[3].append(d)
+
+    KEY = r'(?:html|body|main|footer|\.announce|\.pb-reg|\.pb-reviewed|\.legal|\.disclosure)'
+
+    def page_fades(src):
+        css = ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src))
+        css = re.sub(r'(?s)/\*.*?\*/', ' ', css)
+        names = set(re.findall(r'@keyframes\s+([\w-]+)\s*\{\s*(?:from|0%)\s*\{[^}]*opacity\s*:\s*0(?:\.0*)?\s*[;}]', css))
+        for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', css):
+            if not re.search(r'(?:^|[\s,>+~(])' + KEY + r'(?=$|[\s,:.#\[>+~)])', sel.strip()):
+                continue
+            for m in re.finditer(r'animation(?:-name)?\s*:\s*([^;]+)', body):
+                if any(w in names for w in re.findall(r'[\w-]+', m.group(1))):
+                    return True
+        return False
 
     def reg_findings(docs):
         out = []
         for name, src in sorted(docs.items()):
-            if re.search(r'@keyframes\s+pageIn|(?<![\w-])body\s*\{[^}]*\banimation\s*:\s*(?!none\b)', src):
+            if page_fades(src):
                 out.append((name, 'the page fades in'))
             p = RegLines()
             p.feed(src)
@@ -628,19 +661,51 @@ def run():
     games = {g: read('games/' + g) for g in ('buddys-run.html', 'jargon-battle.html')}
     eq('19. no page fades in, and no regulator or QFA line is revealed or delayed',
        reg_findings(dict(sources, **games)), [])
+    FADE_KF = '@keyframes pbUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}\n'
     for label, page, find, repl, want in (
             ('the page fade put back', 'privacy.html', '</style>',
              '@keyframes pageIn{from{opacity:0}to{opacity:1}}\nbody{animation:pageIn .4s ease both}\n</style>',
              'the page fades in'),
+            ('a fade on main, the footer and the strip', 'privacy.html', '</style>',
+             '@keyframes fadeIn{0%{opacity:0}to{opacity:1}}\nmain,footer,.announce{animation:fadeIn .4s ease both}\n</style>',
+             'the page fades in'),
+            ('the page fade by animation-name', 'terms.html', '</style>',
+             '@keyframes fadeIn{from{opacity:0}to{opacity:1}}\nbody{animation-name:fadeIn;animation-duration:.4s}\n</style>',
+             'the page fades in'),
+            ('the lockup animated by a CSS rule', 'index.html', '</style>',
+             FADE_KF + '.pb-reg{animation:pbUp .5s .3s both}\n</style>', 'the page fades in'),
             ('the hero lockup delayed again', 'index.html', '<div class="pb-reg">',
              '<div class="pb-reg reveal" style="transition-delay:.24s">', 'in a reveal'),
+            ('the lockup at zero opacity inline', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="opacity:0">', 'in a reveal'),
             ('the review line delayed again', 'pia.html', '<p class="pb-reviewed">',
              '<p class="pb-reviewed reveal" style="transition-delay:.16s">', 'in a reveal'),
+            ('the review line with a delay in its transition', 'pia.html', '<p class="pb-reviewed">',
+             '<p class="pb-reviewed" style="opacity:.5;transition:opacity .5s ease .16s">', 'in a reveal'),
             ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
-             'in a reveal')):
-        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+             'in a reveal'),
+            ('the strip in a reveal, its name split by a line break', 'booking.html',
+             'Regulated by the Central Bank of Ireland</span>',
+             'Regulated by the Central Bank<br> of Ireland</span>', None),
+            ('the strip in a reveal, with a no-break space', 'complaints.html',
+             'Regulated by the Central Bank of Ireland</span>',
+             'Regulated by the Central&nbsp;Bank of Ireland</span>', None)):
+        m = dict(sources)
+        if want is None:   # the split name, inside a reveal: put the strip in one
+            m[page] = m[page].replace(find, repl, 1).replace('<div class="announce"', '<div class="announce reveal"', 1)
+            want = 'in a reveal'
+        else:
+            m[page] = m[page].replace(find, repl, 1)
+        assert m[page] != sources[page], label
         eq('19. %s is caught' % label,
            sorted({k.split(':')[0] for n, k in reg_findings(m) if n == page}), [want])
+    for label, page, find, repl in (
+            ('an inline animation:none is not a fade', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="animation:none">'),
+            ('a reduced-motion body{animation:none} is not a fade', 'privacy.html', '</style>',
+             'body{transition:none;animation:none}\n</style>')):
+        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+        eq('19. %s' % label, [k for n, k in reg_findings(m) if n == page], [])
 
 
 
