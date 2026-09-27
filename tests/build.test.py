@@ -841,6 +841,32 @@ def run():
         assert m != sources[page], label
         eq('23. %s is caught' % label, want in leftovers(m), True)
 
+    # ----------------------------------------------------------------- 24
+    # Run 32, part 3a: Ask Buddy is one file, assets/js/pb-buddy.js, loaded
+    # once by every root page, with no inline copy left to drift; the six
+    # pages that carried the shorter first shared answer ask for it with
+    # data-first-answer="short", and no other page does.
+    SHORT_FIRST = ['booking.html', 'director.html', 'index.html', 'starter.html', 'thank-you.html', 'tracker.html']
+    def buddy(src):
+        out = []
+        tags = re.findall(r'<script src="assets/js/pb-buddy\.js(?:\?v=[0-9a-f]+)?"([^>]*)></script>', src)
+        if len(tags) != 1:
+            out.append('loaded %d times' % len(tags))
+        if re.search(r"btn\.id='pbBuddyBtn'|Ask Buddy: quick answers", ' '.join(re.findall(r'(?is)<script>(.*?)</script>', src))):
+            out.append('inline copy')
+        return out, bool(tags and 'data-first-answer="short"' in tags[0])
+    eq('24. every page loads pb-buddy.js once and carries no inline copy',
+       {n: buddy(t)[0] for n, t in sources.items() if buddy(t)[0]}, {})
+    eq('24. the short first answer on exactly the six pages that had it',
+       sorted(n for n, t in sources.items() if buddy(t)[1]), SHORT_FIRST)
+    tag_i = sources['privacy.html'].find('<script src="assets/js/pb-buddy.js')
+    for label, page, mut, want in (
+            ('an inline copy put back', 'terms.html',
+             sources['terms.html'].replace('</body>', "<script>(function(){btn.id='pbBuddyBtn';})();</script>\n</body>", 1), 'inline copy'),
+            ('the script dropped', 'privacy.html',
+             sources['privacy.html'][:tag_i] + sources['privacy.html'][sources['privacy.html'].find('</script>', tag_i) + 9:], 'loaded 0 times')):
+        eq('24. %s is caught' % label, want in buddy(mut)[0], True)
+
 
 
 
