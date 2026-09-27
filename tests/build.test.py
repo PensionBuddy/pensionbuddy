@@ -947,6 +947,38 @@ def run():
         assert mut != sp, label
         eq('26. %s is caught' % label, spill(mut), True)
 
+    # ----------------------------------------------------------------- 27
+    # Run 32, part 5a: the director calculator's safe is a still picture, the
+    # same for every figure (Damian: "neutral reveal, no reward"). Nothing
+    # drives it from the relief figure, and nothing on it moves or fills:
+    # no --pb-t level, no data-pb-state, no amber, no rotation or transition
+    # beyond the dial's fixed cross, and no script that writes #pbSafe.
+    def safe(src):
+        out = []
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        rules = [(' '.join(sel.split()), b) for sel, b in re.findall(r'([^{}]*)\{([^{}]*)\}', css) if 'pb-safe' in sel]
+        if not rules:
+            out.append('no safe')
+        for sel, b in rules:
+            if re.search(r'var\(--pb-t\b(?!-)|--amber|transition|animation|rotateY|perspective', b):
+                out.append('moves: ' + sel)
+            if 'rotate(' in b and sel != '.pb-safe-dial::after':
+                out.append('turns: ' + sel)
+        if 'data-pb-state' in src or re.search(r"--pb-t['\"]", src):
+            out.append('driven')
+        if re.search(r"getElementById\(['\"]pbSafe['\"]\)", src):
+            out.append('scripted')
+        return out
+    dc = sources['director-calculator.html']
+    eq('27. the director safe is still, the same for every figure', safe(dc), [])
+    for label, find, repl, want in (
+            ('the door swing put back', '.pb-safe-door{position:absolute;', '.pb-safe-door{transform:rotateY(calc(var(--pb-t,0)*74deg));position:absolute;', 'moves: .pb-safe-door'),
+            ('the amber fill put back', '</style>', '.pb-safe-fill{background:var(--amber)}\n</style>', 'moves: .pb-safe-fill'),
+            ('the driver put back', '</body>', "<script>var el=document.getElementById('pbSafe');el.style.setProperty('--pb-t','0.5');</script>\n</body>", 'scripted')):
+        m = dc.replace(find, repl, 1)
+        assert m != dc, label
+        eq('27. %s is caught' % label, want in safe(m), True)
+
 
 
 
