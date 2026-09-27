@@ -981,14 +981,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     ctx.fillStyle = '#E4DCCF';
     ctx.fillRect(Math.round(b.x + BW / 2 - sw / 2), GROUND + 1, Math.round(sw), 3);
 
-    var show = true;
-    if (S.invuln > 0 && S.phase === 'running') {
-      if (reduced) { ctx.globalAlpha = 0.55; }
-      else { show = (Math.floor(S.invuln * 12) % 2) === 0; }
-    }
-    if (show) {
-      ctx.drawImage(window.PBSprites.bake(buddyFrame(), SC), Math.round(b.x), Math.round(b.y));
-    }
+    /* After a hit Buddy is steadily see-through while he cannot be hurt. He
+       used to blink on and off 12 times a second (6 flashes a second) for the
+       1.2 seconds, twice the most anything on the site may flash (3 a
+       second); every player now gets what reduced-motion players did. */
+    if (S.invuln > 0 && S.phase === 'running') { ctx.globalAlpha = 0.55; }
+    ctx.drawImage(window.PBSprites.bake(buddyFrame(), SC), Math.round(b.x), Math.round(b.y));
     ctx.globalAlpha = 1;
   }
 
@@ -1291,6 +1289,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     },
     labelHit: labelHit,
     buddyHit: buddyHit,
+    _render: render,
     _setScore: function (n) { S.score = Math.max(0, Math.floor(Number(n) || 0)); S.speed = speedFor(S.score); }
   };
 }());

@@ -287,6 +287,54 @@ __boot(function () {
   R.bad = { lives1: hit1.lives, invuln1: hit1.invulnerableFor,
             lives2: hit2.lives, invuln2: hit2.invulnerableFor, overlapped: overlapped };
 
+  /* ---- nothing flashes more than three times a second (Run 32) ----
+     A hit, then two seconds drawn by the game's own render() at 120 frames a
+     second. Every frame, the mean relative luminance of Buddy's box and of
+     the whole canvas is sampled; a flash is a pair of opposing changes of
+     0.1 or more (WCAG 2.3.1's general flash, counted on the means), and the
+     most in any one-second window is reported. */
+  function lum(cx, x, y, w, h) {
+    x = Math.max(0, Math.floor(x)); y = Math.max(0, Math.floor(y));
+    w = Math.max(1, Math.floor(w)); h = Math.max(1, Math.floor(h));
+    var d = cx.getImageData(x, y, w, h).data, sum = 0, n = 0, k;
+    function lin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+    for (k = 0; k < d.length; k += 16) { sum += 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]); n += 1; }
+    return sum / n;
+  }
+  function mostFlashes(series, perSecond) {
+    var ext = series[0], dir = 0, at = [], i, v, best = 0, j;
+    for (i = 1; i < series.length; i++) {
+      v = series[i];
+      if (dir >= 0 && v <= ext - 0.1) { at.push(i); dir = -1; ext = v; }
+      else if (dir <= 0 && v >= ext + 0.1) { at.push(i); dir = 1; ext = v; }
+      else if ((dir > 0 && v > ext) || (dir < 0 && v < ext)) { ext = v; }
+    }
+    for (i = 0; i < at.length; i++) {
+      for (j = i; j < at.length && at[j] - at[i] < perSecond; j++) {}
+      best = Math.max(best, Math.floor((j - i) / 2));
+    }
+    return best;
+  }
+  var cv = document.querySelector('canvas'), cx = cv ? cv.getContext('2d') : null;
+  R.flash = { canvas: !!cx, render: typeof B._render === 'function' };
+  if (cx && R.flash.render) {
+    fresh();
+    var fb = B.spawnLabel('bad', 'Probe flash', false);
+    fb.x = B.buddyHit().x + 40;
+    for (i = 0; i < 1400 && B.state().lives === 3; i++) { B.tick(1 / 120); }
+    var sc = cv.width / B.config.W, box = [], whole = [], st;
+    for (i = 0; i < 240; i++) {
+      B.tick(1 / 120); B._render();
+      st = B.state();
+      box.push(lum(cx, st.buddy.x * sc, st.buddy.y * sc, st.buddy.w * sc, st.buddy.h * sc));
+      whole.push(lum(cx, 0, 0, cv.width, cv.height));
+    }
+    R.flash.hit = B.state().lives === 2;
+    R.flash.box = mostFlashes(box, 120);
+    R.flash.whole = mostFlashes(whole, 120);
+    R.flash.boxRange = [Math.min.apply(null, box), Math.max.apply(null, box)];
+  }
+
   /* ---- three bad hits end it ---- */
   function killRun(preScore) {
     fresh();
@@ -463,6 +511,15 @@ def check_buddys_run(data):
     ok('8. and leaves Buddy invulnerable for a moment (%.2fs)' % b['invuln1'], b['invuln1'] > 0)
     eq('8. a second bad label inside that window really did touch him', b['overlapped'], True)
     eq('8. but it costs no second life', b['lives2'], 2)
+
+    f = data['flash']
+    eq('8. the flash probe can draw the canvas', [f['canvas'], f['render']], [True, True])
+    eq('8. the flash probe really was hit', f.get('hit'), True)
+    ok('8. after a hit, Buddy flashes at most 3 times in any second (%s; luminance %.3f to %.3f)'
+       % (f.get('box'), f.get('boxRange', [0, 0])[0], f.get('boxRange', [0, 0])[1]),
+       f.get('box') is not None and f['box'] <= 3)
+    ok('8. and the whole game flashes at most 3 times in any second (%s)' % f.get('whole'),
+       f.get('whole') is not None and f['whole'] <= 3)
 
     t = data['three']
     eq('9. three bad hits and no more end the game', t['losses'], 3)
