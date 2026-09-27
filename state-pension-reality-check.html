@@ -2142,9 +2142,13 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
 
    Every text node in here is var(--ink-3), which is 5:1 on --surface-2.
    --aqua and --amber carry no text: they are dot fills only, and tools/
-   verify.py samples colour on elements with a direct text child. The spill
-   lives inside .pb-jar-stage, which is overflow:hidden, so no keyframe can
-   push a dot past the panel edge and into a horizontal overflow FAIL. */
+   verify.py samples colour on elements with a direct text child.
+
+   A full record is simply a full jar (Run 32, docs/UX-MOTION-AUDIT.md 5a):
+   the five dots that rose onto the rim when the slider reached 2,080, and
+   rested there after, went with D15, because a celebration there rewards a
+   number and dots above the rim suggest more than a full record. The page
+   script still marks the jar pb-full and pb-spill; nothing styles either. */
 .pb-jar{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);
   grid-template-rows:auto auto 1fr;column-gap:16px}
 .pb-jar-stage{position:relative;width:200px;max-width:100%;padding-top:12px;overflow:hidden;
@@ -2168,31 +2172,8 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
   .pb-jar{display:block}
   .pb-jar-cap{margin-top:10px}
 }
-/* The spill: five dots resting ON the rim once the record is full. .pb-jar-body
-   is position:relative and comes after this in the DOM, so it paints over any
-   part of a dot that drops below the rim, and .pb-jar-stage is overflow:hidden,
-   which is what keeps a keyframe from ever pushing a dot past the panel edge
-   and into a horizontal overflow FAIL. */
-.pb-jar-spill{position:absolute;left:14px;right:14px;top:5px;height:16px;
-  display:flex;justify-content:space-between;pointer-events:none}
-.pb-jar-spill i{display:block;width:7px;height:7px;border-radius:50%;background:var(--aqua);
-  opacity:0;transform:translateY(3px)}
-.pb-jar.pb-full .pb-jar-spill i{opacity:1}
-/* and it only ANIMATES when the slider arrives at a full record during the
-   session; at load the dots are simply already resting there */
-.pb-jar.pb-full.pb-spill .pb-jar-spill i{animation:pb-jar-lift .8s cubic-bezier(.22,.61,.36,1) both}
-.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(2){animation-delay:.06s}
-.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(3){animation-delay:.12s}
-.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(4){animation-delay:.18s}
-.pb-jar.pb-full.pb-spill .pb-jar-spill i:nth-child(5){animation-delay:.24s}
-@keyframes pb-jar-lift{
-  0%{opacity:0;transform:translateY(16px) scale(.5)}
-  45%{opacity:1;transform:translateY(-4px) scale(1)}
-  100%{opacity:1;transform:translateY(3px) scale(1)}
-}
 @media(prefers-reduced-motion:reduce){
   .pb-jar-dot{transition:none}
-  .pb-jar.pb-full.pb-spill .pb-jar-spill i{animation:none;opacity:1;transform:translateY(3px)}
 }
 /* the two result states are wrappers inside the results column, so they carry
    the column's own vertical rhythm or the cards inside them touch */
@@ -2327,7 +2308,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
          else. -->
     <div class="pb-jar" id="pbJar" aria-hidden="true">
       <div class="pb-jar-stage">
-        <div class="pb-jar-spill"><i></i><i></i><i></i><i></i><i></i></div>
         <div class="pb-jar-body">
           <div class="pb-jar-dots">
             <i class="pb-jar-dot pb-jar-first"></i>

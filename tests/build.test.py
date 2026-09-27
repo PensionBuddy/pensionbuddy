@@ -931,6 +931,22 @@ def run():
         assert m != sources[page], label
         eq('25. %s is caught' % label, bool(lifts(m)), True)
 
+    # ----------------------------------------------------------------- 26
+    # Run 32, part 5a: a full record is simply a full jar. No celebration
+    # rises onto the jar's rim when the State Pension reality check's slider
+    # reaches 2,080, and no dots rest there after (D15): no page carries the
+    # spill's markup, its rules or its keyframes.
+    def spill(src):
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        return bool(re.search(r'class="[^"]*\bpb-jar-spill\b', src) or re.search(r'\.pb-jar-spill\b|@keyframes\s+pb-jar-lift', css))
+    eq('26. no page celebrates a full record on the jar', sorted(n for n, t in sources.items() if spill(t)), [])
+    sp = sources['state-pension-reality-check.html']
+    for label, mut in (
+            ('the rim dots put back', sp.replace('<div class="pb-jar-body">', '<div class="pb-jar-spill"><i></i></div>\n        <div class="pb-jar-body">', 1)),
+            ('the lift put back', sp.replace('</style>', '@keyframes pb-jar-lift{0%{opacity:0}100%{opacity:1}}\n</style>', 1))):
+        assert mut != sp, label
+        eq('26. %s is caught' % label, spill(mut), True)
+
 
 
 
