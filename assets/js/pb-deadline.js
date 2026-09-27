@@ -26,14 +26,19 @@
    pushed the calculator down. Nothing here needs more of the page than the
    nav and the element it writes. What it writes, when the element is on
    the page:
-     #ntVal, #navTick   the chip: "53d 12h 59m", and its accessible name
-     #tkD #tkH #tkM #tkS  the band's clock, per second (per minute with
-                        reduced motion); .tick h2, #tkRev, #tkYear, #tkSr
+     #ntVal, #navTick   the chip: "54 days", and its accessible name
+     #tkD, .tk-clock    the band's days, and the band's clock shown once
+                        filled; .tick h2, #tkRev, #tkYear, #tkSr
      #deadlineText      the calculators' row
+   Days only, and never on a timer (Run 32, D21): it works the count out
+   when the page opens, when the browser brings the page back from its
+   back-forward cache, and when you come back to the tab. A clock running
+   to the second read as pressure.
    The markup carries what this writes today, for a reader without
-   JavaScript; the chip's label and the band's eyebrow, "to Revenue's
-   deadline" and "Revenue's deadline", never change and are markup only. PBDeadline.at(date) is the arithmetic alone, for
-   tests/deadline.test.py. */
+   JavaScript, except the band's clock, which stays hidden, leaving the
+   date sentence; the chip's label and the band's eyebrow, "to Revenue's
+   deadline" and "Revenue's deadline", never change and are markup only.
+   PBDeadline.at(date) is the arithmetic alone, for tests/deadline.test.py. */
 (function () {
   'use strict';
 
@@ -92,23 +97,19 @@
 
   window.PBDeadline = { at: at, targetLine: targetLine, revenueLine: revenueLine, heading: heading };
 
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
   var $ = function (id) { return document.getElementById(id); };
-  var chip = $('navTick'), chipVal = $('ntVal'),
-      bD = $('tkD'), bH = $('tkH'), bM = $('tkM'), bS = $('tkS'),
+  var chip = $('navTick'), chipVal = $('ntVal'), bD = $('tkD'),
+      clock = document.querySelector('.tk-clock'),
       sr = $('tkSr'), rev = $('tkRev'), who = $('tkYear'), row = $('deadlineText'),
       head = document.querySelector('.tick h2');
 
   function tick() {
     var d = at(new Date());
     var left = 'About ' + d.days + ' days left until ' + targetLine(d) + '.';
-    if (chipVal) chipVal.textContent = d.days + 'd ' + pad(d.hrs) + 'h ' + pad(d.min) + 'm';
+    if (chipVal) chipVal.textContent = d.days === 1 ? '1 day' : d.days + ' days';
     if (chip) chip.setAttribute('aria-label', left + ' Opens the full explanation.');
-    if (bD) {
-      bD.textContent = pad(d.days); bH.textContent = pad(d.hrs);
-      bM.textContent = pad(d.min); bS.textContent = pad(d.sec);
-    }
+    if (bD) bD.textContent = '' + d.days;
+    if (clock && bD) clock.hidden = false;
     if (head) head.textContent = heading(d);
     if (rev) rev.textContent = revenueLine(d);
     if (who) who.textContent = d.taxYear;
@@ -118,6 +119,7 @@
   }
 
   tick();
-  /* the band ticks per second; the chip and the row only need a minute */
-  if (chip || bD || row) setInterval(tick, (bD && !reduce) ? 1000 : 60000);
+  /* no timer: again only when the page comes back into view */
+  window.addEventListener('pageshow', function (e) { if (e.persisted) tick(); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
 })();

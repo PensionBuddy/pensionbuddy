@@ -889,6 +889,7 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tick .btn-light{background:#fff;color:var(--teal-900);border:0}
 
 .tk-clock{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.tk-clock[hidden]{display:none}
 .tk-unit{flex:0 0 auto;min-width:82px;text-align:center;padding:16px 10px 12px;
   border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.04)}
 .tk-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
@@ -896,8 +897,8 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tk-l{display:block;margin-top:8px;font-family:var(--font);font-size:.58rem;
   font-weight:500;color:rgba(255,255,255,.6)}
 
-/* the digits change every second, so the clock is hidden from assistive tech
-   and this sentence carries the same information instead */
+/* the clock is hidden from assistive tech, and this sentence carries the
+   same information in words instead */
 .tk-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
@@ -907,13 +908,11 @@ span.ai,.assure .ai{border-radius:6px !important}
   .tk-unit{min-width:0;flex:1 1 68px;padding:12px 6px 10px}
   .tk-n{font-size:1.55rem}
 }
-@media(prefers-reduced-motion:reduce){
-  .tk-sec{display:none}
-}
 
 /* ============================================================
    PB-NAVTICK - deadline chip in the sticky header
-   Minutes, not seconds: a per-second repaint in a fixed header
+   Days only, worked out when the page opens and when you come back to
+   it, never on a timer (Run 32, D21): a clock running in a fixed header
    reads as pressure and distracts while reading.
    ============================================================ */
 .nav-tick{display:inline-flex;align-items:center;gap:8px;margin-left:18px;
@@ -935,10 +934,6 @@ span.ai,.assure .ai{border-radius:6px !important}
 /* the site already sets html{scroll-padding-top:90px}; adding scroll-margin
    here stacked on top of it and overshot the target by ~90px */
 
-@media(prefers-reduced-motion:no-preference){
-  .nt-dot{animation:ntPulse 2.6s ease-in-out infinite}
-}
-@keyframes ntPulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 @media(max-width:1080px){
   .nt-l{display:none}
@@ -1302,8 +1297,9 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    transitions height. Neither communicates a state change or a spatial
    relationship - they are decoration, and height transitions on a layout
    wrapper can cause reflow jitter. Removed.
-   Kept: reveals (spatial entry), .btn transform (affordance),
-   marquee (continuous ambient), ntPulse (liveness of a live counter). --- */
+   Kept: .btn transform (affordance), marquee (continuous ambient). The
+   reveals went in Run 32 (part 2b), and the chip's pulse with the ticking
+   clock (D21). --- */
 .logo-mark{transition:none}
 .wrap{transition:none}
 
@@ -1976,7 +1972,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-buddy.js?v=d8a8609f"></script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=4bf79414"></script>
+<script src="assets/js/pb-deadline.js?v=5d74aa60"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the
