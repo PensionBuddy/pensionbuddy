@@ -501,6 +501,31 @@ def run():
         m = dict(sources); m[page] = m[page].replace(find, repl, 1)
         eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
 
+    # ----------------------------------------------------------------- 18
+    # Run 32: the comparison page shows its warning box in both modes. The
+    # first mode's sits under its "Everything paid in, by 66" projection; the
+    # second mode hides that panel, so it carries the same box under its own
+    # figures. Mutants: either copy removed.
+    WARN = ('<div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a '
+            'reliable guide to the future performance of your investment.</b></p><p><b>Warning: The '
+            'value of your investment may go down as well as up.</b></p></div>')
+
+    def modes_warned(src):
+        a, b = src.find('id="mode1Results"'), src.find('id="mode2Results"')
+        c = src.find('<!-- ============ SHARED', b)
+        if min(a, b, c) < 0:
+            return None
+        return [WARN in src[a:b], WARN in src[b:c]]
+
+    cmp_src = sources['broker-vs-autoenrolment.html']
+    eq('18. the comparison shows its warning in both modes', modes_warned(cmp_src), [True, True])
+    eq('18. and the parts it is built from say the same',
+       modes_warned(read('tools/compare-parts/main.html') + '<!-- ============ SHARED'), [True, True])
+    first, second = cmp_src.find(WARN), cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
+    for label, cut, want in (('the second mode\'s copy removed', second, [True, False]),
+                             ('the first mode\'s copy removed', first, [False, True])):
+        eq('18. %s is caught' % label, modes_warned(cmp_src[:cut] + cmp_src[cut + len(WARN):]), want)
+
 
 
 
