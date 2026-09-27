@@ -172,9 +172,11 @@ AUDIT_JS = r"""
     const DROPPED=/Fraunces|Hanken|Bricolage|Sora|Plex/i;
     const hs=$$('h1,h2,h3,h4');
     R.fonts={
-      /* fonts.check() reports true for families that fall back, so ask the FontFace set directly */
-      interLoaded:[...document.fonts].some(f=>/Inter/i.test(f.family)&&f.status==='loaded'),
-      interFaces:[...document.fonts].filter(f=>/Inter/i.test(f.family)).length,
+      /* fonts.check() reports true for families that fall back, so ask the FontFace set directly.
+         The family must be Inter exactly: the FONTS block's local 'Inter Fallback' faces (Run 32)
+         are loaded wherever Arial is, and would otherwise pass this with no Inter at all. */
+      interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Inter'&&f.status==='loaded'),
+      interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Inter').length,
       linkRequestsInter:$$('link[rel=stylesheet]').some(l=>/Inter/i.test(l.href)),
       linkRequestsDropped:$$('link[rel=stylesheet]').filter(l=>DROPPED.test(l.href)).map(l=>l.href.slice(0,90)),
       h1:first(famOf(document.querySelector('h1'))),
