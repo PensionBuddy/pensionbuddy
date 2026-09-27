@@ -39,7 +39,9 @@ function makePage(opts) {
     modules = [],               // assets/js/*.js, in load order
     pageScript,                 // the page's own script, as a string
     scriptName = 'page.js',
-    now = '2026-09-16T12:00:00Z',
+    /* RD_CLOCK moves the pinned instant, e.g. to either side of a dated
+       change such as PRSI on 1 October 2026 (assets/js/pb-prsi.js) */
+    now = process.env.RD_CLOCK || '2026-09-16T12:00:00Z',
     reduce = true,              // matchMedia('(prefers-reduced-motion: reduce)')
   } = opts;
 

@@ -146,9 +146,10 @@ NOINDEX = '<meta name="robots" content="noindex">'
 # hand. REASON sits next to a booking call to action whose own block gives no
 # reason to book; docs/STATUS.md, Run 26, lists every call to action and which
 # reason it has. trust_drift(), at the end of this file, is the guard.
-REVIEWED = ('<p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, '
+REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
 REASON = '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
+DEADLINE_JS = 'assets/js/pb-deadline.js'
 REVIEWED_BY_HAND = ('pension-calculator.html', 'director-calculator.html')
 TRUST_OPEN, TRUST_CLOSE = '/* TRUST:BEGIN', '/* TRUST:END */\n'
 
@@ -449,6 +450,14 @@ def assemble(page):
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
                           lambda m: m.group(1) + '\n  ' + REVIEWED + m.group(2), body, count=1, flags=re.S)
         assert n == 1, 'no page header to put the review line in'
+    # Run 32: the skeleton loads pb-deadline.js straight after its "Tax
+    # deadline" row, inside <main>, so the tail it lends carries none. A page
+    # whose own <main> has the row loads it there too; every other page gets
+    # it at the foot, after the consent script, where it always was.
+    if DEADLINE_JS not in body:
+        consent = re.search(r'<script src="assets/js/pb-consent\.js(?:\?v=[0-9a-f]+)?"></script>\n', tail)
+        assert consent, 'no consent script to put the deadline script after'
+        tail = tail[:consent.end()] + '\n<script src="%s"></script>\n' % DEADLINE_JS + tail[consent.end():]
     return stamp_html(head + body + tail)
 
 
@@ -467,6 +476,9 @@ def check(html, page):
     want(html.count(REVIEWED) == (1 if page.reviewed else 0),
          'review line' if page.reviewed else 'no review line')
     want(html.count(TRUST_OPEN) == 1, 'the trust recipe')
+    want(html.count(DEADLINE_JS) == 1 and ('id="deadlineText"' not in html or
+         html.find('id="deadlineText"') < html.find(DEADLINE_JS) < html.find(CLOSE_MAIN)),
+         'the deadline script once, and straight after the row where there is one')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')
     want(html.count(CLOSE_MAIN) == 1, 'one </main>')
     want('class="skip"' in html, 'skip link')
@@ -563,9 +575,10 @@ ACTIVE_PAT = re.compile(r'<a class="lnk active"(?=[^>]*href="([^"]+)")[^>]*>')
 CURRENT_PAT = re.compile(r'<a class="lnk"(?=[^>]*aria-current="page")(?=[^>]*href="([^"]+)")[^>]*>')
 HREF_PAT = re.compile(r'href="([^"]+)"')
 # Run 29: blocks of CSS that are the same on every page, last in every
-# page's <style>, each a (name, finding kind): the nav's own stylesheet, and
-# the rules that make everything clickable look clickable.
-SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'))
+# page's <style>, each a (name, finding kind): the nav's own stylesheet,
+# the rules that make everything clickable look clickable, and (Run 32) the
+# metric-matched fallback for Inter.
+SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'))
 
 
 def _once(text, marker):

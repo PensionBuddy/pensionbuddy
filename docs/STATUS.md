@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 26 September 2026, after Run 31
+# Launch status — as at 27 September 2026, after Run 32
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -82,8 +82,30 @@ and `404.html`. `about.html` does not exist: it was folded into
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
    quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
    21).
+9. **Run 32:** on a phone, at first load, the analytics bar sits over the
+   hero's QFA line (index, director) and the review line (director rules,
+   SFT, entitlement) until the reader answers it; the "Regulated by the
+   Central Bank of Ireland" strip at the top is never covered, and nothing
+   covers any line once the bar is answered. Is "never faded" enough, or
+   should the bar push the page up instead of covering it (a layout
+   change, not motion)? Also found, not fixed: the pension and director
+   calculators' chart labels ask for Plus Jakarta Sans, which is never
+   loaded, so they are not in Inter (a one-line CSS fix, `svg text`); and
+   the comparison's share row (link, print, email) sits in the first mode
+   only, so "On top of auto-enrolment" has none.
 
 ## Parked, with a date or a trigger
+
+- **1 October 2026, the director calculator's photograph.**
+  `assets/img/product-director-calculator.*` (on `director.html` and in
+  the home page's tool tabs) shows PRSI at 4.2%, EUR 19,120 and EUR 9,560;
+  from 1 October the live calculator says 4.35%, EUR 19,060 and EUR 9,530.
+  On or after 1 October: `python3 tools/shoot-product.py`, then
+  `python3 tools/stamp-images.py`, and check width and height.
+- **PRSI's next step.** The rate lives in one table,
+  `assets/js/pb-prsi.js` (4.2% from 1 October 2025, 4.35% from 1 October
+  2026). When the next rise is announced, add it there; the director pages'
+  markup must then carry it (tests/build.test.py check 17 says so).
 
 - **Calendly redirect.** An event-type setting in the Calendly account, not
   code: Calendly → Event Types → `pensionbuddy-1-1` → Confirmation page →
@@ -107,6 +129,19 @@ and `404.html`. `about.html` does not exist: it was folded into
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 32 (urgent fixes, merged to main)
+
+PRSI is stated from one dated table, `assets/js/pb-prsi.js`, and the
+director pages are right with JavaScript off (4.35%, EUR 477, EUR 9,530;
+both scripts would also have printed "4.4%" from 1 October). Buddy's Run
+flashes nothing more than three times a second (the hit blink was six; a
+held pause key toggled the pause card at key-repeat speed). The
+comparison's warning shows in both modes. The regulator line and the QFA
+line are at full opacity from the first frame on every page: the whole-page
+fade is gone. With it gone, two older layout shifts showed and are fixed:
+the font swap (a metric-matched Arial fallback for Inter) and the
+calculators' deadline row (the script loads straight after it).
 
 ## Closed in Run 31
 
@@ -142,6 +177,42 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 32 — 2026-09-27 · Urgent fixes: PRSI with JavaScript off, a flash in the game, the comparison's warning, the regulator line from the first frame
+
+Damian's four urgent items, on `claude/urgent-fixes`, reviewed twice by
+independent agents and fixed after each review, merged to main. (Step 3
+of the UX motion work, `docs/UX-MOTION-AUDIT.md`, carries on separately
+on `claude/ux-motion` and is not merged.)
+
+## Items
+
+| # | Item | Status | Note |
+|---|---|---|---|
+| 1 | N1: no hard-coded PRSI on `director.html` and the director calculator | **Done** | `assets/js/pb-prsi.js` holds the rates by date, the `pb-deadline.js` pattern; both pages read it. Markup carries the latest rate for JavaScript-off readers: the key 4.35%, "EUR 477 ... 4.35% PRSI (the rate from 1 October 2026)", and "EUR 20,000 as salary is EUR 9,530". Both old scripts formatted 0.0435 as "4.4%"; now "4.35%". Guards: `tests/prsi.test.js` (14, in the runner), `tests/build.test.py` check 17. |
+| 2 | Buddy's Run: nothing flashes more than 3 times a second | **Done** | The hit blink (6 a second) is a steady see-through Buddy; the shake and tint no longer freeze behind the game-over and pause cards; the pause keys ignore key repeats (holding one toggled the pause card 15 to 30 times a second). `tests/games.test.py` measures flashes frame by frame (whole canvas, a 6 x 3 grid, Buddy, every label, and pixel by pixel behind both cards) and fails on each of seven mutants. |
+| 3 | The comparison's warning in both modes | **Done** | The second mode carries the first mode's box, byte for byte, under its own figures. Check 18 and `tests/render-diff/classify-compare-warning.py`. |
+| 4 | The regulator and QFA lines: never faded, every page | **Done** | The page fade is gone from all 29 pages; the hero lockup, the review line, three legal documents and the home page's QFA bio and badge carry no reveal or delay. Check 19 (static) and the new `tests/regulator-lines.test.py` (real Chrome, every frame from the first, all 31 pages; not in the runner). |
+| 4a | What the fade had been hiding | **Done** | Lighthouse saw two older layout shifts once the page stopped fading in: the font swap (director 98 -> 94) and the calculators' deadline row. Fixed: a `FONTS` shared block declaring a metric-matched Arial fallback for Inter's own characters (`tools/pagebuild.py` SHARED_CSS), and `pb-deadline.js` loading straight after the row on the three calculators (guarded by `deadline.test.py` and pagebuild). |
+
+## Proof
+
+- Render-diff against main: every calculator loads to the same render,
+  scripted sessions 0 differing; the director calculator swept at
+  2026-09-16 and 2026-10-02 (201,507 states each, 0 differing; from local
+  midnight on 1 October only its key's "4.4%" becomes "4.35%"). Real
+  Chrome: the comparison differs only by the added warning (122 of 122
+  cells explained); the others are identical.
+- Every test suite, `tools/verify.py` (0 FAIL), stamps and sync-chrome
+  clean.
+- Lighthouse mobile, local fonts, interleaved against main, median of 3:
+  no page's performance score is lower (index 97 -> 98, broker 97 -> 98,
+  starter 98 -> 99, reality check 98 -> 99, the rest equal), largest
+  contentful paint equal or faster. Layout shift is lower on the
+  calculators (0.04 -> 0.008) and a little higher on starter (0.003 ->
+  0.009) and the glossary (0.007 -> 0.017): with no fade, a heading that
+  wraps differently in the fallback now counts. Real readers, fonts held
+  back a second: director 0.126 -> 0.0004 and starter 0.091 -> 0.0008.
 
 # Run 31 — 2026-09-26 · The countdown counts to Revenue's online deadline; Run 30's calls answered
 

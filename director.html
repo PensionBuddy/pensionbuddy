@@ -47,11 +47,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -434,9 +434,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -1878,10 +1875,30 @@ a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,3
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
+/* FONTS:BEGIN (Run 32). What the text is set in while Inter is still on
+   its way: Arial, sized per weight to Inter's widths (measured in Chrome
+   on the site's own headings and copy), so the text barely reflows when
+   Inter arrives and nothing below it jumps. With the page fade gone, that
+   reflow was the director hero's 0.12 layout shift. Each face covers only
+   the characters Google's Inter stylesheet serves (its 42 faces' ranges,
+   joined), so a character Inter does not have, such as the offer arrows'
+   U+2192, still goes on to the system font once Inter has loaded, as
+   before. Where Arial is not installed (most Android phones) the face is
+   skipped and the stack goes on to the system font, as before. Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
+   chrome_drift. */
+@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:100 449;size-adjust:105.7%;ascent-override:91.8%;descent-override:22.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:450 549;size-adjust:107.6%;ascent-override:90.1%;descent-override:22.3%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:550 649;size-adjust:101.4%;ascent-override:95.7%;descent-override:23.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:650 749;size-adjust:102.4%;ascent-override:94.7%;descent-override:23.4%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:750 1000;size-adjust:103.7%;ascent-override:93.5%;descent-override:23.1%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+/* FONTS:END */
 /* €1,000 OF PROFIT, TWO WAYS (#pbTwo). The director calculator's own
    rates on a round amount: salary after 40% income tax, 8% USC and PRSI
-   (4.2%, 4.35% from 1 October 2026), or all of it into the pension. The
-   markup carries the salary state; the buttons need script. */
+   at the rate assets/js/pb-prsi.js gives for today, or all of it into the
+   pension. The markup carries the salary state at the latest rate there, for
+   a reader without JavaScript (tests/build.test.py check 17); the buttons
+   need script. */
 .pb-two{margin-top:14px}
 .pb-two-seg{display:inline-flex;gap:4px;padding:3px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
 .pb-two-seg button{font:inherit;font-size:13.5px;font-weight:600;padding:6px 12px;border:0;border-radius:99px;background:transparent;color:var(--ink-2);cursor:pointer}
@@ -1970,7 +1987,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <header class="hero aud-hero"><div class="wrap hero-grid">
-  <div class="reveal">
+  <div>
     <span class="eyebrow acc"><span class="pip"></span>For company directors</span>
     <h1>Your profit is sitting in the company account. It could be building your pension and <span class="hl">cutting the tax bill</span>.</h1>
     <p class="lede">If you run your own company, you have funding options most people never get. Your business can contribute far beyond personal limits, and those contributions can reduce its <a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">corporation tax</a>.</p>
@@ -1979,7 +1996,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="pb-why">Free, 20 minutes, no obligation.</p>
       <a class="btn btn-ghost" href="director-calculator.html">Try the director calculator</a>
     </div>
-      <div class="pb-reg reveal" style="transition-delay:.28s">
+      <div class="pb-reg">
         <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
         <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
       </div>
@@ -2013,7 +2030,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg></span>
       <div><h3>Salary versus pension, compared</h3><p>Take it as salary and it is taxed three ways: income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI). Put it into a pension instead and far more of it stays yours.</p>
         <div class="pb-two" id="pbTwo"><div class="pb-two-seg" role="group" aria-label="€1,000 of profit"><button type="button" aria-pressed="true" data-pb-way="salary">As salary</button><button type="button" aria-pressed="false" data-pb-way="pension">Into your pension</button></div>
-        <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;478</b> in your pocket, after 40% income tax, 8% USC and 4.2% PRSI.</p></div></div>
+        <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026).</p></div></div>
     </div>
     <div class="benefit reveal" style="transition-delay:.24s">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-6"/></svg></span>
@@ -2376,7 +2393,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=ec115f1e"></script>
+<script src="assets/js/pb-deadline.js?v=4bf79414"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the
@@ -2471,13 +2488,15 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-bookbar.js?v=38cc66f9"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-prsi.js?v=23c9b7e2"></script>
 <script>
-/* €1,000 of profit, two ways: the director calculator's rates, PRSI by date */
+/* €1,000 of profit, two ways: the director calculator's rates, PRSI by date
+   from assets/js/pb-prsi.js */
 (function(){
   var w=document.getElementById('pbTwo'); if(!w) return;
-  var prsi=new Date()<new Date(2026,9,1)?0.042:0.0435, keep=Math.round(1000*(1-(0.40+0.08+prsi))*100)/100;
+  var p=PBPrsi.at(new Date()), prsi=p.rate, keep=Math.round(1000*(1-(0.40+0.08+prsi))*100)/100;
   var out=document.getElementById('pbTwoOut'), bs=[].slice.call(w.querySelectorAll('button'));
-  var pct=(Math.round(prsi*1000)/10)+'%';
+  var pct=p.pct;
   function show(way){
     bs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-pb-way')===way?'true':'false');});
     out.innerHTML=way==='salary'

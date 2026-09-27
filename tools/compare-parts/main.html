@@ -10,6 +10,10 @@
       <span class="dl-tag">Tax deadline</span>
       <span class="dl-text" id="deadlineText"></span>
     </div>
+<!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
+     not at the foot of the page: filled at the foot, the row grew from nothing
+     after the first paint and pushed the calculator down (0.04 layout shift). -->
+<script src="assets/js/pb-deadline.js"></script>
 
     <div class="modebar reveal">
       <div class="row"><span class="modelab">Which question?</span></div>
@@ -159,6 +163,10 @@
         <div class="divline"></div>
         <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
       </div>
+
+      <!-- Run 32: the same warning as the first mode's, so it shows in both
+           modes (it sits in #pbMyCard there, which this mode hides). -->
+      <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
 
       <div class="vs-card reveal" style="transition-delay:.14s">
         <h3>What it actually costs you</h3>
