@@ -1,6 +1,9 @@
 /* Ask Buddy, the floating quick-answers widget, in one place (Run 32,
    docs/UX-MOTION-AUDIT.md part 3a). Every root page loads it once, where its
-   inline copy used to be; until then 23 pages carried one copy and six
+   inline copy used to be, marked type="text/pb-late": the script in <head>
+   (tools/pagebuild.py MOTION_HEAD) starts it once the first frame has
+   painted, so the first paint never waits for it. Until then 23 pages
+   carried one copy and six
    another, differing only in the first shared answer, which the six now ask
    for with data-first-answer="short". Nothing else changes: the same
    button, panel, questions (the page's own FAQ, or the site-wide set below,
@@ -163,7 +166,7 @@
     new MutationObserver(function(){if(!panel.hidden){aside=false;clearTimeout(clearT);clearT=null;}place();watch();}).observe(panel,{attributes:true,attributeFilter:['hidden']});
     tuck();place();watch();
   }
-  /* after every script at the foot has run: the bars, pb-motion.js's list */
+  /* after the page's own scripts have run (the bars); PBMotion is the head script's */
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',giveWay);
   else giveWay();
 })();

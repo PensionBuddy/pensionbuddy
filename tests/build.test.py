@@ -778,9 +778,11 @@ def run():
     # ----------------------------------------------------------------- 22
     # Run 32, part 2a: the motion vocabulary's plumbing. The MOTION block's
     # rule 2 selector is pagebuild.caveat_selector(), so the caveat list and
-    # the rule cannot drift; every root page sets html.pb-motion with the one
-    # head line, directly after the viewport meta and before any stylesheet;
-    # and loads assets/js/pb-motion.js once, at the foot of <body>.
+    # the rule cannot drift; every root page carries the one head script,
+    # pagebuild.MOTION_HEAD (the whole motion runtime since the Lighthouse
+    # follow-up), directly after the viewport meta and before any stylesheet;
+    # and no page loads assets/js/pb-motion.js, which it replaced: one
+    # request fewer before the first paint.
     VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
     def plumbing(src):
         out = []
@@ -792,17 +794,21 @@ def run():
         if src.count(pagebuild.MOTION_HEAD) != 1 or VIEWPORT + '\n' + pagebuild.MOTION_HEAD not in src or \
                 src.find(pagebuild.MOTION_HEAD) > src.find('<link rel="stylesheet"') > -1:
             out.append('head line')
-        tags = re.findall(r'<script src="assets/js/pb-motion\.js(?:\?v=[0-9a-f]+)?"></script>', src)
-        if len(tags) != 1 or src.find(tags[0]) < src.rfind('</main>') or src.find(tags[0]) > src.find('</body>'):
+        if re.search(r'<script[^>]*assets/js/pb-motion\.js', src):
             out.append('script')
         return out
-    eq('22. every page: rule 2 is the caveat list, the head line, pb-motion.js once at the foot',
+    eq('22. every page: rule 2 is the caveat list, the head script, no pb-motion.js',
        {n: plumbing(t) for n, t in sources.items() if plumbing(t)}, {})
+    ix = sources['index.html']
+    k = ix.index('/* MOTION:BEGIN')
+    eq('22. a caveat dropped from rule 2 is caught',
+       'rule 2' in plumbing(ix[:k] + ix[k:].replace(',.pb-warn,', ',', 1)), True)
     for label, page, find, repl, want in (
-            ('a caveat dropped from rule 2', 'index.html', ',.pb-warn,', ',', 'rule 2'),
-            ('the head line moved after the stylesheets', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
+            ('the head script moved after the stylesheets', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
              VIEWPORT, 'head line'),
-            ('pb-motion.js loaded twice', 'terms.html', '</body>',
+            ('a caveat dropped from the head script', 'pia.html', pagebuild.MOTION_HEAD,
+             pagebuild.MOTION_HEAD.replace('.pb-warn,', '', 1), 'head line'),
+            ('pb-motion.js loaded again', 'terms.html', '</body>',
              '<script src="assets/js/pb-motion.js"></script>\n</body>', 'script')):
         m = sources[page].replace(find, repl, 1)
         assert m != sources[page], label
@@ -849,13 +855,17 @@ def run():
     # Run 32, part 3a: Ask Buddy is one file, assets/js/pb-buddy.js, loaded
     # once by every root page, with no inline copy left to drift; the six
     # pages that carried the shorter first shared answer ask for it with
-    # data-first-answer="short", and no other page does.
+    # data-first-answer="short", and no other page does. Since the Lighthouse
+    # follow-up the tag is type="text/pb-late": the head script starts it
+    # after the first frame, so the first paint never waits for it.
     SHORT_FIRST = ['booking.html', 'director.html', 'index.html', 'starter.html', 'thank-you.html', 'tracker.html']
     def buddy(src):
         out = []
         tags = re.findall(r'<script src="assets/js/pb-buddy\.js(?:\?v=[0-9a-f]+)?"([^>]*)></script>', src)
         if len(tags) != 1:
             out.append('loaded %d times' % len(tags))
+        elif 'type="text/pb-late"' not in tags[0]:
+            out.append('loaded before the first paint')
         if re.search(r"btn\.id='pbBuddyBtn'|Ask Buddy: quick answers", ' '.join(re.findall(r'(?is)<script>(.*?)</script>', src))):
             out.append('inline copy')
         return out, bool(tags and 'data-first-answer="short"' in tags[0])
@@ -868,24 +878,23 @@ def run():
             ('an inline copy put back', 'terms.html',
              sources['terms.html'].replace('</body>', "<script>(function(){btn.id='pbBuddyBtn';})();</script>\n</body>", 1), 'inline copy'),
             ('the script dropped', 'privacy.html',
-             sources['privacy.html'][:tag_i] + sources['privacy.html'][sources['privacy.html'].find('</script>', tag_i) + 9:], 'loaded 0 times')):
+             sources['privacy.html'][:tag_i] + sources['privacy.html'][sources['privacy.html'].find('</script>', tag_i) + 9:], 'loaded 0 times'),
+            ('the script loaded before the first paint again', 'glossary.html',
+             sources['glossary.html'].replace(' type="text/pb-late"', '', 1), 'loaded before the first paint')):
         eq('24. %s is caught' % label, want in buddy(mut)[0], True)
 
     # ----------------------------------------------------------------- 25
     # Run 32, part 3b: floating chrome gives way to caveats. The scripts that
     # step aside (pb-buddy.js, pb-bookbar.js, pb-peek.js) read the caveat list
-    # from PBMotion.CAVEATS, which is pagebuild.caveat_selector() word for
-    # word; Ask Buddy moves only by translate (the BUDDY block), so no page
+    # from PBMotion.CAVEATS, which the head script makes from
+    # pagebuild.caveat_selector() (a page's copy drifting is check 22); Ask Buddy moves only by translate (the BUDDY block), so no page
     # lifts it by `bottom` over the analytics choice or a bar, or transitions
     # its `bottom`, which would shift what is behind it and leave it on a
     # caveat.
-    motion_js = open(os.path.join(ROOT, 'assets/js/pb-motion.js')).read()
     def caveats_js(js):
-        m = re.search(r'var CAVEATS = "([^"]*)";', js)
+        m = re.search(r'CAVEATS:"([^"]*)"', js)
         return m.group(1) if m else None
-    eq('25. PBMotion.CAVEATS is the caveat list', caveats_js(motion_js), pagebuild.caveat_selector())
-    eq('25. a caveat dropped from PBMotion.CAVEATS is caught',
-       caveats_js(motion_js.replace(',.pb-warn,', ',', 1)) == pagebuild.caveat_selector(), False)
+    eq('25. PBMotion.CAVEATS, in the head script, is the caveat list', caveats_js(pagebuild.MOTION_HEAD), pagebuild.caveat_selector())
     readers = {f: open(os.path.join(ROOT, 'assets/js', f)).read() for f in ('pb-buddy.js', 'pb-bookbar.js', 'pb-peek.js')}
     eq('25. Ask Buddy and the booking bar read PBMotion.CAVEATS',
        sorted(f for f in ('pb-buddy.js', 'pb-bookbar.js') if 'PBMotion.CAVEATS' not in readers[f]), [])

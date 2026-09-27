@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>if(matchMedia('(prefers-reduced-motion: no-preference)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('pb-motion');</script>
+<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot,.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>Your call is booked, Pensionbuddy</title>
 <meta name="description" content="Your free pension chat with Damian is booked. What happens next, what to have ready, and where to look while you wait.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -1626,8 +1626,8 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
    never raw milliseconds or curves. The rules and why: docs/UX-MOTION-AUDIT.md,
    "The motion system". This block holds the tokens and the rules the parts
    built so far use; the fills, rolls, scenes and swaps arrive with the parts
-   that need them. html.pb-motion (set in <head>, kept true by
-   assets/js/pb-motion.js) means motion is allowed. */
+   that need them. html.pb-motion (set and kept true by the script in
+   <head>, tools/pagebuild.py MOTION_HEAD) means motion is allowed. */
 :root{
   /* curves, named by intent; none overshoots */
   --pb-ease-out:cubic-bezier(.16,1,.3,1);  /* arrive and settle: the house curve */
@@ -1672,8 +1672,8 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   opacity:1!important;transform:none!important;filter:none!important;
   transition:none!important;animation:none!important}
 
-/* In-page taps scroll smoothly after load; arrival never does. pb-motion.js
-   adds html.pb-smooth once the page has arrived. */
+/* In-page taps scroll smoothly after load; arrival never does. The head
+   script adds html.pb-smooth once the page has arrived. */
 @media (prefers-reduced-motion:no-preference){html.pb-smooth{scroll-behavior:smooth}}
 
 /* Reduced motion: every token still. Durations are .01ms rather than 0 so
@@ -1959,7 +1959,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=d8a8609f" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=55fca5c6" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 <script src="assets/js/pb-deadline.js?v=5d74aa60"></script>
@@ -1987,6 +1987,5 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-motion.js?v=657a9b94"></script>
 </body>
 </html>

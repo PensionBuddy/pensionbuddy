@@ -107,11 +107,16 @@ PROBE = r"""<script>
               onBar:!!(kr&&br)&&kr.bottom>br.top&&kr.top<br.bottom&&kr.right>br.left&&kr.left<br.right,
               inView:!!kr&&kr.left>=0&&kr.right<=document.documentElement.clientWidth&&kr.top>=0&&kr.bottom<=innerHeight};
     }
-    later(50,function(){
-      R.open=buddy();
-      document.querySelector('.pb-c-no').click();
-      later(50,function(){ R.after=buddy(); done(); });
-    });
+    // Ask Buddy's script starts after the first frame (type="text/pb-late"):
+    // wait for its button, so "unseen" is never just "not there yet"
+    (function wait(n){
+      if(!document.getElementById('pbBuddyBtn')&&n<80){ later(25,function(){ wait(n+1); }); return; }
+      later(50,function(){
+        R.exists=!!document.getElementById('pbBuddyBtn'); R.open=buddy();
+        document.querySelector('.pb-c-no').click();
+        later(50,function(){ R.after=buddy(); done(); });
+      });
+    })(0);
     return;
   }
   if(job==='reset'){ document.querySelector('[data-pb-consent-reset]').click(); R.after=state();
@@ -274,7 +279,7 @@ def main():
             eq('8. %s at %dpx: reported' % (page, w), r is not None, True)
             if r:
                 eq('8. %s at %dpx: while the choice is open, Ask Buddy waits unseen, not on the bar' % (page, w),
-                   (r['open']['shown'], r['open']['onBar']), (False, False))
+                   (r['exists'], r['open']['shown'], r['open']['onBar']), (True, False, False))
                 # back in its corner, or aside for a caveat or a field that lies there
                 # (whether the observer has reported it yet varies under virtual time)
                 back = r['after']['shown'] and r['after']['barTop'] is None and (
