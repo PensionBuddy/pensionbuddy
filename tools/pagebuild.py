@@ -476,6 +476,9 @@ def check(html, page):
     want(html.count(REVIEWED) == (1 if page.reviewed else 0),
          'review line' if page.reviewed else 'no review line')
     want(html.count(TRUST_OPEN) == 1, 'the trust recipe')
+    want(html.count(DEADLINE_JS) == 1 and ('id="deadlineText"' not in html or
+         html.find('id="deadlineText"') < html.find(DEADLINE_JS) < html.find(CLOSE_MAIN)),
+         'the deadline script once, and straight after the row where there is one')
     want(len(re.findall(r'<main\b', html)) == 1, 'one <main>')
     want(html.count(CLOSE_MAIN) == 1, 'one </main>')
     want('class="skip"' in html, 'skip link')
