@@ -288,51 +288,149 @@ __boot(function () {
             lives2: hit2.lives, invuln2: hit2.invulnerableFor, overlapped: overlapped };
 
   /* ---- nothing flashes more than three times a second (Run 32) ----
-     A hit, then two seconds drawn by the game's own render() at 120 frames a
-     second. Every frame, the mean relative luminance of Buddy's box and of
-     the whole canvas is sampled; a flash is a pair of opposing changes of
-     0.1 or more (WCAG 2.3.1's general flash, counted on the means), and the
-     most in any one-second window is reported. */
-  function lum(cx, x, y, w, h) {
-    x = Math.max(0, Math.floor(x)); y = Math.max(0, Math.floor(y));
-    w = Math.max(1, Math.floor(w)); h = Math.max(1, Math.floor(h));
-    var d = cx.getImageData(x, y, w, h).data, sum = 0, n = 0, k;
-    function lin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
-    for (k = 0; k < d.length; k += 16) { sum += 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]); n += 1; }
-    return sum / n;
+     Drawn by the game's own render() at 120 frames a second: three seconds
+     from before a hit, through it and its 1.2 seconds of invulnerability,
+     then a second and a half of the game-over card. Every frame, one read of
+     the canvas gives the mean relative luminance of the whole canvas, of each
+     cell of a 6 x 3 grid over it (so a flash in one corner is not averaged
+     away), and of Buddy's box. A transition is a change of 0.1 or more from
+     the last turning point (WCAG 2.3.1's general flash, on the means); a
+     flash is two, so more than six transitions in any one-second window
+     fails. While the game runs, each label's own box is followed too, as it
+     moves, so a blinking label is seen however small it is. Behind the
+     game-over card the scene should be still, and means miss a small
+     jitter, so there every fourth pixel is also followed on its own: the
+     pixels that change more than six times in a second must cover less than
+     WCAG's flash area, 25% of a 10-degree field, taken as 21,824 CSS px
+     (341 x 256 x 0.25). (While the game runs, single pixels change that
+     often wherever anything moves past them, which is motion, not a flash.)
+     The host must not ask for reduced motion, or the old blink would never
+     have been drawn. */
+  function Pixels(w, h) {
+    var n = Math.ceil(w / 4) * Math.ceil(h / 4), self = this;
+    this.ext = new Float32Array(n); this.dir = new Int8Array(n); this.seen = false;
+    this.ring = new Int32Array(n * 7).fill(-100000); this.head = new Uint8Array(n); this.bad = new Uint8Array(n);
+    this.feed = function (d, f) {
+      var i = 0, x, y, k, L, r;
+      for (y = 0; y < h; y += 4) {
+        for (x = 0; x < w; x += 4, i++) {
+          k = (y * w + x) * 4;
+          L = 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]);
+          if (!self.seen) { self.ext[i] = L; continue; }
+          r = 0;
+          if (self.dir[i] >= 0 && L <= self.ext[i] - 0.1) { self.dir[i] = -1; self.ext[i] = L; r = 1; }
+          else if (self.dir[i] <= 0 && L >= self.ext[i] + 0.1) { self.dir[i] = 1; self.ext[i] = L; r = 1; }
+          else if ((self.dir[i] > 0 && L > self.ext[i]) || (self.dir[i] < 0 && L < self.ext[i])) { self.ext[i] = L; }
+          if (r) {
+            /* the seventh-last change inside 120 frames means more than 6 in a second */
+            var h7 = self.head[i]; self.ring[i * 7 + h7] = f; self.head[i] = (h7 + 1) % 7;
+            if (f - self.ring[i * 7 + self.head[i]] < 120) { self.bad[i] = 1; }
+          }
+        }
+      }
+      self.seen = true;
+    };
+    this.area = function (cssPerCanvasPx) {
+      var c = 0, i; for (i = 0; i < self.bad.length; i++) { c += self.bad[i]; }
+      return Math.round(c * 16 * cssPerCanvasPx * cssPerCanvasPx);
+    };
   }
-  function mostFlashes(series, perSecond) {
-    var ext = series[0], dir = 0, at = [], i, v, best = 0, j;
+  function lin(c) { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
+  function frameMeans(cx, w, h, bx, px, f) {
+    var d = cx.getImageData(0, 0, w, h).data, G = [], n = [], x, y, k, L, gi, all = 0, cnt = 0, bs = 0, bn = 0;
+    for (k = 0; k < 18; k++) { G.push(0); n.push(0); }
+    for (y = 0; y < h; y += 2) {
+      for (x = 0; x < w; x += 2) {
+        k = (y * w + x) * 4;
+        L = 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]);
+        gi = Math.min(2, Math.floor(y / h * 3)) * 6 + Math.min(5, Math.floor(x / w * 6));
+        G[gi] += L; n[gi] += 1; all += L; cnt += 1;
+        if (x >= bx[0] && x < bx[0] + bx[2] && y >= bx[1] && y < bx[1] + bx[3]) { bs += L; bn += 1; }
+      }
+    }
+    for (k = 0; k < 18; k++) { G[k] = n[k] ? G[k] / n[k] : 0; }
+    if (px) { px.feed(d, f); }
+    return { whole: all / cnt, cells: G, box: bn ? bs / bn : 0 };
+  }
+  function turns(series) {
+    var ext = series[0], dir = 0, at = [], i, v;
     for (i = 1; i < series.length; i++) {
       v = series[i];
       if (dir >= 0 && v <= ext - 0.1) { at.push(i); dir = -1; ext = v; }
       else if (dir <= 0 && v >= ext + 0.1) { at.push(i); dir = 1; ext = v; }
       else if ((dir > 0 && v > ext) || (dir < 0 && v < ext)) { ext = v; }
     }
+    return at;
+  }
+  function mostInASecond(at, perSecond) {
+    var best = 0, i, j;
     for (i = 0; i < at.length; i++) {
       for (j = i; j < at.length && at[j] - at[i] < perSecond; j++) {}
-      best = Math.max(best, Math.floor((j - i) / 2));
+      best = Math.max(best, j - i);
     }
     return best;
   }
+  function worst(frames) {
+    var out = { whole: mostInASecond(turns(frames.map(function (f) { return f.whole; })), 120),
+                box: mostInASecond(turns(frames.map(function (f) { return f.box; })), 120), cell: 0 }, c;
+    for (c = 0; c < 18; c++) {
+      out.cell = Math.max(out.cell, mostInASecond(turns(frames.map(function (f) { return f.cells[c]; })), 120));
+    }
+    return out;
+  }
   var cv = document.querySelector('canvas'), cx = cv ? cv.getContext('2d') : null;
-  R.flash = { canvas: !!cx, render: typeof B._render === 'function' };
+  R.flash = { canvas: !!cx, render: typeof B._render === 'function',
+              reduced: !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) };
   if (cx && R.flash.render) {
+    var sc = cv.width / B.config.W, run = [], over = [], st, bx;
+    var pxOver = new Pixels(cv.width, cv.height), labs = {};
+    var cssPer = (cv.getBoundingClientRect().width || cv.width) / cv.width;
+    function sample(into, px) {
+      B._render();
+      st = B.state();
+      bx = [st.buddy.x * sc, st.buddy.y * sc, st.buddy.w * sc, st.buddy.h * sc];
+      into.push(frameMeans(cx, cv.width, cv.height, bx, px, into.length));
+      if (!px) {
+        st.labels.forEach(function (l) {
+          if (l.x * sc > cv.width || (l.x + l.w) * sc < 0) { return; }
+          var x0 = Math.max(0, Math.floor(l.x * sc)), y0 = Math.max(0, Math.floor(l.y * sc)),
+              w0 = Math.max(1, Math.min(cv.width - x0, Math.floor(l.w * sc))), h0 = Math.max(1, Math.floor(l.h * sc));
+          var d = cx.getImageData(x0, y0, w0, h0).data, t = 0, m = 0, k;
+          for (k = 0; k < d.length; k += 16) { t += 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]); m += 1; }
+          (labs[l.text] = labs[l.text] || []).push({ f: run.length, v: t / m });
+        });
+      }
+    }
     fresh();
     var fb = B.spawnLabel('bad', 'Probe flash', false);
-    fb.x = B.buddyHit().x + 40;
-    for (i = 0; i < 1400 && B.state().lives === 3; i++) { B.tick(1 / 120); }
-    var sc = cv.width / B.config.W, box = [], whole = [], st;
-    for (i = 0; i < 240; i++) {
-      B.tick(1 / 120); B._render();
-      st = B.state();
-      box.push(lum(cx, st.buddy.x * sc, st.buddy.y * sc, st.buddy.w * sc, st.buddy.h * sc));
-      whole.push(lum(cx, 0, 0, cv.width, cv.height));
-    }
+    fb.x = B.buddyHit().x + 120;
+    for (i = 0; i < 360; i++) { B.tick(1 / 120); sample(run, null); }
     R.flash.hit = B.state().lives === 2;
-    R.flash.box = mostFlashes(box, 120);
-    R.flash.whole = mostFlashes(whole, 120);
-    R.flash.boxRange = [Math.min.apply(null, box), Math.max.apply(null, box)];
+    var g2 = 0, tg = 0, lb;
+    while (B.state().phase === 'running' && g2 < 20000) {
+      if (B.state().invulnerableFor <= 0 && !find('Probe end ' + tg)) {
+        tg += 1; lb = B.spawnLabel('bad', 'Probe end ' + tg, false); lb.x = B.buddyHit().x + 30;
+      }
+      B.tick(1 / 120); g2 += 1;
+    }
+    R.flash.over = B.state().phase === 'over';
+    /* a varying, repeatable rng from here: with the fixed one, a shake would
+       draw the same offset every frame and could never be seen */
+    var seed = 12345;
+    B.setRng(function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; });
+    for (i = 0; i < 180; i++) { B.tick(1 / 120); sample(over, pxOver); }
+    R.flash.run = worst(run);
+    R.flash.card = worst(over);
+    R.flash.card.area = pxOver.area(cssPer);
+    R.flash.run.labels = 0;
+    Object.keys(labs).forEach(function (t) {
+      if (labs[t].length < 30) { return; }
+      var at = turns(labs[t].map(function (e) { return e.v; })).map(function (ix) { return labs[t][ix].f; });
+      R.flash.run.labels = Math.max(R.flash.run.labels, mostInASecond(at, 120));
+    });
+    R.flash.run.labelsSeen = Object.keys(labs).length;
+    R.flash.boxRange = [Math.min.apply(null, run.map(function (f) { return f.box; })),
+                        Math.max.apply(null, run.map(function (f) { return f.box; }))];
   }
 
   /* ---- three bad hits end it ---- */
@@ -514,12 +612,20 @@ def check_buddys_run(data):
 
     f = data['flash']
     eq('8. the flash probe can draw the canvas', [f['canvas'], f['render']], [True, True])
-    eq('8. the flash probe really was hit', f.get('hit'), True)
-    ok('8. after a hit, Buddy flashes at most 3 times in any second (%s; luminance %.3f to %.3f)'
-       % (f.get('box'), f.get('boxRange', [0, 0])[0], f.get('boxRange', [0, 0])[1]),
-       f.get('box') is not None and f['box'] <= 3)
-    ok('8. and the whole game flashes at most 3 times in any second (%s)' % f.get('whole'),
-       f.get('whole') is not None and f['whole'] <= 3)
+    eq('8. and runs with reduced motion off, where the effects are drawn', f['reduced'], False)
+    eq('8. the flash probe really was hit, and really reached game over', [f.get('hit'), f.get('over')], [True, True])
+    r, c = f.get('run') or {}, f.get('card') or {}
+    ok('8. through a hit, Buddy changes at most 6 times in any second, 3 flashes (%s; luminance %.3f to %.3f)'
+       % (r.get('box'), f.get('boxRange', [0, 0])[0], f.get('boxRange', [0, 0])[1]),
+       r.get('box') is not None and r['box'] <= 6)
+    ok('8. and no part of the game does either (whole %s, worst of 18 cells %s)' % (r.get('whole'), r.get('cell')),
+       r.get('whole') is not None and r['whole'] <= 6 and r['cell'] <= 6)
+    ok('8. nor behind the game-over card (whole %s, worst cell %s)' % (c.get('whole'), c.get('cell')),
+       c.get('whole') is not None and c['whole'] <= 6 and c['cell'] <= 6)
+    ok('8. no label changes more than 6 times in any second either (worst %s, of %s labels followed)'
+       % (r.get('labels'), r.get('labelsSeen')), r.get('labels') is not None and r['labels'] <= 6 and r.get('labelsSeen', 0) > 0)
+    ok('8. behind the card, pixels changing more than 6 times a second cover less than 21,824 px (%s px)'
+       % c.get('area'), c.get('area') is not None and c['area'] < 21824)
 
     t = data['three']
     eq('9. three bad hits and no more end the game', t['losses'], 3)

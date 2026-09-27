@@ -1015,7 +1015,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   function render() {
     var ox = 0, oy = 0;
-    if (S.shake > 0 && !reduced) {
+    /* The shake and the red tint only while the game runs: the decay stops
+       with the game, so on the game-over or pause card they used to freeze
+       and the shake re-rolled a new offset every frame behind it. */
+    var live = S.phase === 'running';
+    if (S.shake > 0 && !reduced && live) {
       ox = Math.round((rng() * 2 - 1) * S.shake * 10);
       oy = Math.round((rng() * 2 - 1) * S.shake * 6);
     }
@@ -1027,7 +1031,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     for (i = 0; i < S.labels.length; i++) { drawLabel(S.labels[i]); }
     drawBuddy();
     drawTrimmings();
-    if (S.flash > 0 && !reduced) {
+    if (S.flash > 0 && !reduced && live) {
       ctx.globalAlpha = Math.min(0.4, S.flash);
       ctx.fillStyle = '#C1502E';
       ctx.fillRect(-20, -20, W + 40, H + 40);
