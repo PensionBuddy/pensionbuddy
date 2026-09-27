@@ -19,8 +19,13 @@
    tools/verify.py warns (E1) when the band shows two years, and "the 2025
    tax year ... 18 November 2026" is two.
 
-   Every page loads this at the foot of <body>. What it writes, when the
-   element is on the page:
+   Every page loads this at the foot of <body>, except the three calculators
+   with the "Tax deadline" row (pension-calculator, director-calculator and
+   broker-vs-autoenrolment), which load it straight after that row (Run 32):
+   filled from the foot, the row grew from nothing after the first paint and
+   pushed the calculator down. Nothing here needs more of the page than the
+   nav and the element it writes. What it writes, when the element is on
+   the page:
      #ntVal, #navTick   the chip: "53d 12h 59m", and its accessible name
      #tkD #tkH #tkM #tkS  the band's clock, per second (per minute with
                         reduced motion); .tick h2, #tkRev, #tkYear, #tkSr

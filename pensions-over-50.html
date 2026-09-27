@@ -46,11 +46,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -415,9 +415,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -1661,6 +1658,24 @@ a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,3
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
+/* FONTS:BEGIN (Run 32). What the text is set in while Inter is still on
+   its way: Arial, sized per weight to Inter's widths (measured in Chrome
+   on the site's own headings and copy), so the text barely reflows when
+   Inter arrives and nothing below it jumps. With the page fade gone, that
+   reflow was the director hero's 0.12 layout shift. Each face covers only
+   the characters Google's Inter stylesheet serves (its 42 faces' ranges,
+   joined), so a character Inter does not have, such as the offer arrows'
+   U+2192, still goes on to the system font once Inter has loaded, as
+   before. Where Arial is not installed (most Android phones) the face is
+   skipped and the stack goes on to the system font, as before. Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
+   chrome_drift. */
+@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:100 449;size-adjust:105.7%;ascent-override:91.8%;descent-override:22.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:450 549;size-adjust:107.6%;ascent-override:90.1%;descent-override:22.3%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:550 649;size-adjust:101.4%;ascent-override:95.7%;descent-override:23.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:650 749;size-adjust:102.4%;ascent-override:94.7%;descent-override:23.4%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:750 1000;size-adjust:103.7%;ascent-override:93.5%;descent-override:23.1%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
+/* FONTS:END */
 /* EXPLAINERS (pensions-over-50.html, self-employed-pensions.html,
    uk-pensions-in-ireland.html, Run 20 #18, #20, #11). Legal-family pages:
    dated, sourced at the foot, every risk in the main text at the size of
@@ -1941,7 +1956,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=ec115f1e"></script>
+<script src="assets/js/pb-deadline.js?v=4bf79414"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the

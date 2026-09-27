@@ -208,6 +208,10 @@ def run():
          after('director.html', '/* CLICK:BEGIN', 'text-underline-offset:3px', 'text-underline-offset:1px')),
         ('the CLICK block of CSS missing', 'booking.html', 'click-css',
          sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
+        ('the FONTS block of CSS changed', 'terms.html', 'fonts-css',
+         after('terms.html', '/* FONTS:BEGIN', 'size-adjust:103.7%', 'size-adjust:110.0%')),
+        ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
+         sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -449,6 +453,280 @@ def run():
         m = dict(docs); m[page] = m[page].replace(find, repl, 1)
         eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
            [n for n, _ in off_wording(m)], [page] if flagged else [])
+
+    # ----------------------------------------------------------------- 17
+    # Run 32 (N1): PRSI is stated from one dated table, assets/js/pb-prsi.js.
+    # The two director pages' scripts read it and hold no rate or date of
+    # their own; their markup carries the table's LATEST rate, so a reader
+    # without JavaScript sees the rate that applies from its date: the
+    # calculator's key (bar width and label) and director.html's "€1,000 of
+    # profit" line, with the euro figure the page's own arithmetic gives and
+    # the date the rate applies from, and the calculator's "€20,000 as salary"
+    # line at that rate. Both pages load the table before the
+    # script that reads it. Mutants: each piece of markup at the old rate,
+    # and a script that brings back its own rate.
+    prsi_js = read('assets/js/pb-prsi.js')
+    rates = [dict(pct=m.group(4), rate=float(m.group(3)), said=m.group(5))
+             for m in re.finditer(r"\{ from: \[(\d+), (\d+), \d+\], rate: ([0-9.]+), pct: '([^']+)', said: '([^']+)' \}", prsi_js)]
+    eq('17. the PRSI table has its rates', [r['pct'] for r in rates], ['4.2%', '4.35%'])
+    latest = rates[-1]
+    keep = round(round(1000 * (1 - (0.40 + 0.08 + latest['rate'])) * 100) / 100 + 1e-9)
+
+    def prsi_findings(docs):
+        out = []
+        calc, dire = docs['director-calculator.html'], docs['director.html']
+        if 'id="pbCutPrsi" style="width:%s"' % latest['pct'] not in calc:
+            out.append(('director-calculator.html', 'key bar'))
+        if '<b id="pbCutPrsiN">%s</b> PRSI' % latest['pct'] not in calc:
+            out.append(('director-calculator.html', 'key label'))
+        split = round(20000 * (1 - (0.40 + 0.08 + latest['rate'])) + 1e-9)
+        if '<p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€{:,}</b> in your pocket.'.format(split) not in calc:
+            out.append(('director-calculator.html', 'split line'))
+        m = re.search(r'<p class="pb-two-out" id="pbTwoOut">(.*?)</p>', dire)
+        want = ('is about <b>&euro;%d</b> in your pocket, after 40%% income tax, 8%% USC and %s PRSI '
+                '(the rate from %s).' % (keep, latest['pct'], latest['said']))
+        if not m or want not in m.group(1):
+            out.append(('director.html', 'profit line'))
+        for name in ('director.html', 'director-calculator.html'):
+            src = docs[name]
+            scripts = ' '.join(re.findall(r'(?is)<script>(.*?)</script>', src))
+            if re.search(r'0\.042\b|0\.0435\b|new Date\(\s*2026\s*,\s*9\s*,\s*1\s*\)|Math\.round\(\s*\w*PRSI\w*\s*\*\s*1000', scripts, re.I):
+                out.append((name, 'a rate in the script'))
+            tag = src.find('<script src="assets/js/pb-prsi.js')
+            use = src.find('PBPrsi.at(')
+            if tag < 0 or use < 0 or tag > use:
+                out.append((name, 'the table is not loaded first'))
+        return out
+
+    eq('17. the director pages state PRSI from the table, and their markup carries %s' % latest['pct'],
+       prsi_findings(sources), [])
+    for label, page, find, repl, want in (
+            ('the key bar at the old rate', 'director-calculator.html', 'style="width:%s"' % latest['pct'], 'style="width:4.2%"', 'key bar'),
+            ('the key label at the old rate', 'director-calculator.html', '<b id="pbCutPrsiN">%s</b>' % latest['pct'], '<b id="pbCutPrsiN">4.2%</b>', 'key label'),
+            ('the split line at the old figure', 'director-calculator.html', 'is <b>€9,530</b> in your pocket', 'is <b>€9,560</b> in your pocket', 'split line'),
+            ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
+            ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
+            ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script')):
+        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+        eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
+
+    # ----------------------------------------------------------------- 18
+    from html.parser import HTMLParser as HTMLParser18
+    VOID18 = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+    # Run 32: the comparison page shows its warning box in both modes. The
+    # first mode's sits under its "Everything paid in, by 66" projection; the
+    # second mode hides that panel, so it carries the same box under its own
+    # figures. Mutants: either copy removed.
+    WARN = ('<div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a '
+            'reliable guide to the future performance of your investment.</b></p><p><b>Warning: The '
+            'value of your investment may go down as well as up.</b></p></div>')
+
+    def modes_warned(src):
+        a, b = src.find('id="mode1Results"'), src.find('id="mode2Results"')
+        c = src.find('<!-- ============ SHARED', b)
+        if min(a, b, c) < 0:
+            return None
+        return [WARN in src[a:b], WARN in src[b:c]]
+
+    class Boxes(HTMLParser18):
+        """every .pb-warn: the mode panel it is in, and whether anything
+        between that panel and the box (the box included) is hidden or
+        belongs to the other mode"""
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.out = [], []
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag in VOID18:
+                return
+            self.stack.append((tag, a))
+            if 'pb-warn' in (a.get('class') or '').split():
+                ids = [x.get('id') for _, x in self.stack]
+                panel = next((i for i in reversed(ids) if i in ('mode1Results', 'mode2Results')), None)
+                n = str(panel[4]) if panel else None
+                below = self.stack[ids.index(panel) + 1:] if panel else self.stack
+                bad = [t for t, x in below if 'hidden' in x or x.get('data-mode') not in (None, n)]
+                self.out.append((panel, bad))
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    del self.stack[i:]
+                    break
+
+    def boxes(src):
+        p = Boxes(); p.feed(src)
+        return sorted((panel, bool(bad)) for panel, bad in p.out)
+
+    cmp_src = sources['broker-vs-autoenrolment.html']
+    eq('18. the comparison shows its warning in both modes', modes_warned(cmp_src), [True, True])
+    eq('18. one box in each mode panel, and nothing between panel and box hides it or ties it to the other mode',
+       boxes(cmp_src), [('mode1Results', False), ('mode2Results', False)])
+    m2 = cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
+    for label, repl in (('the second mode\'s box hidden', '<div class="pb-warn" hidden>'),
+                        ('the second mode\'s box tied to the first mode', '<div class="pb-warn" data-mode="1">')):
+        mut = cmp_src[:m2] + WARN.replace('<div class="pb-warn">', repl, 1) + cmp_src[m2 + len(WARN):]
+        eq('18. %s is caught' % label, boxes(mut), [('mode1Results', False), ('mode2Results', True)])
+    eq('18. and the parts it is built from say the same',
+       modes_warned(read('tools/compare-parts/main.html') + '<!-- ============ SHARED'), [True, True])
+    first, second = cmp_src.find(WARN), cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
+    for label, cut, want in (('the second mode\'s copy removed', second, [True, False]),
+                             ('the first mode\'s copy removed', first, [False, True])):
+        eq('18. %s is caught' % label, modes_warned(cmp_src[:cut] + cmp_src[cut + len(WARN):]), want)
+
+    # ----------------------------------------------------------------- 19
+    # Run 32: the regulator line and the QFA line are there from the first
+    # frame, on every page (the old body{animation:pageIn .4s} faded the
+    # "Regulated by the Central Bank of Ireland" strip and the footer's
+    # disclosure from blank on every load). Static, on every page's markup
+    # and CSS: no @keyframes that starts at opacity 0 (from or 0%, in any
+    # order in its selector list) is used by a rule on html, body, main, the
+    # footer, the strip, the lockup, the review line, the legal text or the
+    # disclosure; and no element whose joined text (a name split by a tag or
+    # written with &nbsp; is still whole) names the Central Bank of Ireland,
+    # a Qualified Financial Adviser, QFA or Q.F.A. is, or sits under, a
+    # .reveal or anything with an inline delay, animation (not none), zero
+    # opacity (!important too) or delayed transition. The glossary's term
+    # cards define those words and are left out. What markup cannot show
+    # (a rule on a class, a script) is tests/regulator-lines.test.py's job.
+    from html.parser import HTMLParser
+    REG = re.compile(r'Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b|\bQ\.\s*F\.\s*A\b')
+    VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+    BAD_STYLE = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)'
+                           r'|transition\s*:[^;]*\d(?:\.\d+)?m?s[^;,]*\s\d*\.?\d+m?s')
+
+    class RegLines(HTMLParser):
+        """The text of each element, its descendants' included but the
+        glossary's term cards left out, so a name split by a tag or written
+        with &nbsp; is still whole; an element whose text names the regulator
+        or the credential must not be, or sit under, a .reveal or anything
+        with an inline delay, animation or zero opacity."""
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.skip, self.bad = [], 0, []
+
+        def handle_starttag(self, tag, attrs):
+            if tag in ('script', 'style'):
+                self.skip += 1
+            if tag not in VOID:
+                a = dict(attrs)
+                cls = a.get('class') or ''
+                self.stack.append([tag, cls, a.get('style') or '', [], 'gterm' in cls.split()])
+
+        def handle_endtag(self, tag):
+            if tag in ('script', 'style'):
+                self.skip -= 1
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    for e in reversed(self.stack[i:]):
+                        self.close(e)
+                    del self.stack[i:]
+                    break
+
+        def close(self, e):
+            text = ' '.join(''.join(e[3]).split())
+            if not REG.search(text):
+                return
+            chain = [x for x in self.stack if x is not e] + [e]
+            if any(re.search(r'(^|\s)reveal(\s|$)', c) or BAD_STYLE.search(st) for _, c, st, _, _ in chain):
+                self.bad.append(text[:50])
+
+        def handle_data(self, d):
+            if self.skip:
+                return
+            d = d.replace('\xa0', ' ')
+            for e in self.stack:
+                if e[4]:
+                    return
+            for e in self.stack:
+                e[3].append(d)
+
+    KEY = r'(?:html|body|main|footer|\.announce|\.pb-reg|\.pb-reviewed|\.legal|\.disclosure)'
+
+    def page_fades(src):
+        css = ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src))
+        css = re.sub(r'(?s)/\*.*?\*/', ' ', css)
+        names = set()
+        for name, frames in re.findall(r'@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}', css):
+            for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', frames):
+                if re.search(r'(?:^|,)\s*(?:from|0%)\s*(?:,|$)', sel.strip()) and \
+                        re.search(r'opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)', body.strip()):
+                    names.add(name)
+        for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', css):
+            if not re.search(r'(?:^|[\s,>+~(])' + KEY + r'(?=$|[\s,:.#\[>+~)])', sel.strip()):
+                continue
+            for m in re.finditer(r'animation(?:-name)?\s*:\s*([^;]+)', body):
+                if any(w in names for w in re.findall(r'[\w-]+', m.group(1))):
+                    return True
+        return False
+
+    def reg_findings(docs):
+        out = []
+        for name, src in sorted(docs.items()):
+            if page_fades(src):
+                out.append((name, 'the page fades in'))
+            p = RegLines()
+            p.feed(src)
+            out += [(name, 'in a reveal: ' + t) for t in p.bad]
+        return out
+
+    games = {g: read('games/' + g) for g in ('buddys-run.html', 'jargon-battle.html')}
+    eq('19. no page fades in, and no regulator or QFA line is revealed or delayed',
+       reg_findings(dict(sources, **games)), [])
+    FADE_KF = '@keyframes pbUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}\n'
+    for label, page, find, repl, want in (
+            ('the page fade put back', 'privacy.html', '</style>',
+             '@keyframes pageIn{from{opacity:0}to{opacity:1}}\nbody{animation:pageIn .4s ease both}\n</style>',
+             'the page fades in'),
+            ('a fade on main, the footer and the strip', 'privacy.html', '</style>',
+             '@keyframes fadeIn{0%{opacity:0}to{opacity:1}}\nmain,footer,.announce{animation:fadeIn .4s ease both}\n</style>',
+             'the page fades in'),
+            ('the page fade by animation-name', 'terms.html', '</style>',
+             '@keyframes fadeIn{from{opacity:0}to{opacity:1}}\nbody{animation-name:fadeIn;animation-duration:.4s}\n</style>',
+             'the page fades in'),
+            ('the lockup animated by a CSS rule', 'index.html', '</style>',
+             FADE_KF + '.pb-reg{animation:pbUp .5s .3s both}\n</style>', 'the page fades in'),
+            ('the hero lockup delayed again', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg reveal" style="transition-delay:.24s">', 'in a reveal'),
+            ('the lockup at zero opacity inline', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="opacity:0">', 'in a reveal'),
+            ('the review line delayed again', 'pia.html', '<p class="pb-reviewed">',
+             '<p class="pb-reviewed reveal" style="transition-delay:.16s">', 'in a reveal'),
+            ('the review line with a delay in its transition', 'pia.html', '<p class="pb-reviewed">',
+             '<p class="pb-reviewed" style="opacity:.5;transition:opacity .5s ease .16s">', 'in a reveal'),
+            ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
+             'in a reveal'),
+            ('a fade whose 0% shares its selector list', 'terms.html', '</style>',
+             '@keyframes f{0%,20%{opacity:0}to{opacity:1}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
+            ('a fade written to-then-from', 'terms.html', '</style>',
+             '@keyframes f{to{opacity:1}from{opacity:0}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
+            ('the lockup at zero opacity, !important', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="opacity:0!important">', 'in a reveal'),
+            ('the Q.F.A. badge in a reveal again', 'index.html', '<div class="about-port">\n    <picture>',
+             '<div class="about-port reveal">\n    <picture>', 'in a reveal'),
+            ('the strip in a reveal, its name split by a line break', 'booking.html',
+             'Regulated by the Central Bank of Ireland</span>',
+             'Regulated by the Central Bank<br> of Ireland</span>', None),
+            ('the strip in a reveal, with a no-break space', 'complaints.html',
+             'Regulated by the Central Bank of Ireland</span>',
+             'Regulated by the Central&nbsp;Bank of Ireland</span>', None)):
+        m = dict(sources)
+        if want is None:   # the split name, inside a reveal: put the strip in one
+            m[page] = m[page].replace(find, repl, 1).replace('<div class="announce"', '<div class="announce reveal"', 1)
+            want = 'in a reveal'
+        else:
+            m[page] = m[page].replace(find, repl, 1)
+        assert m[page] != sources[page], label
+        eq('19. %s is caught' % label,
+           sorted({k.split(':')[0] for n, k in reg_findings(m) if n == page}), [want])
+    for label, page, find, repl in (
+            ('an inline animation:none is not a fade', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="animation:none">'),
+            ('a reduced-motion body{animation:none} is not a fade', 'privacy.html', '</style>',
+             'body{transition:none;animation:none}\n</style>')):
+        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+        eq('19. %s' % label, [k for n, k in reg_findings(m) if n == page], [])
 
 
 

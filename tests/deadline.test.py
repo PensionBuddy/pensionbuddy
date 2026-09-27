@@ -114,6 +114,18 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(b)
 
 
+
+def right_after_row(src):
+    """pb-deadline.js loads inside <main>, and nothing but a comment stands
+    between the "Tax deadline" row's closing tag and its script tag"""
+    row = src.find('id="deadlineText"')
+    tag = src.find('<script src="assets/js/pb-deadline.js')
+    close = src.find('</main>')
+    if not (0 <= row < tag < close):
+        return False
+    between = re.sub(r'(?s)<!--.*?-->', '', src[src.find('</div>', row) + len('</div>'):tag])
+    return between.strip() == ''
+
 def main():
     if not os.path.exists(CHROME):
         print('Chrome not found at %s' % CHROME)
@@ -152,6 +164,11 @@ def main():
         eq('1. %s: loads pb-deadline.js once, and neither old inline script' % page,
            (src.count('assets/js/pb-deadline.js'), '/* Pay & File countdown' in src, '/* Pay & File: a contribution' in src),
            (1, False, False))
+        if 'id="deadlineText"' in src:
+            # Run 32: straight after the row it fills, inside <main>, or the row
+            # grows after the first paint and pushes the calculator down
+            eq('1. %s: loads it straight after its "Tax deadline" row, inside <main>' % page,
+               right_after_row(src), True)
         r = R.get((page, NOW))
         eq('1. %s: reported' % page, r is not None, True)
         if not r:
