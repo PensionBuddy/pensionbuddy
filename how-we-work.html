@@ -416,9 +416,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -1745,7 +1742,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<div class="wrap"><div class="legal reveal">
+<div class="wrap"><div class="legal">
   <h1>How we work, and how we are paid</h1>
   <p class="updated">Last updated: 24 September 2026</p>
   <p class="intro">Who gives the advice, how we are paid for it, and what you can check for yourself before you talk to us.</p>

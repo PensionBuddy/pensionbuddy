@@ -526,6 +526,77 @@ def run():
                              ('the first mode\'s copy removed', first, [False, True])):
         eq('18. %s is caught' % label, modes_warned(cmp_src[:cut] + cmp_src[cut + len(WARN):]), want)
 
+    # ----------------------------------------------------------------- 19
+    # Run 32: the regulator line and the QFA line are there from the first
+    # frame, on every page. No page fades itself in (the old body{animation:
+    # pageIn .4s} faded the "Regulated by the Central Bank of Ireland" strip
+    # and the footer's disclosure from blank on every load), and no text
+    # naming the Central Bank of Ireland, a Qualified Financial Adviser or
+    # QFA sits in, or under, a .reveal or anything with an inline delay or
+    # animation. The glossary's term cards are definitions of those words,
+    # not the lines themselves, and are left out. Mutants: the page fade put
+    # back, the hero lockup's delayed reveal, the review line's, and a legal
+    # page's whole-document reveal.
+    from html.parser import HTMLParser
+    REG = re.compile(r'Central Bank of Ireland|Qualified Financial Adviser|\bQFA\b')
+    VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+
+    class RegLines(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.skip, self.bad = [], 0, []
+
+        def handle_starttag(self, tag, attrs):
+            if tag in ('script', 'style'):
+                self.skip += 1
+            if tag not in VOID:
+                a = dict(attrs)
+                self.stack.append((tag, a.get('class') or '', a.get('style') or ''))
+
+        def handle_endtag(self, tag):
+            if tag in ('script', 'style'):
+                self.skip -= 1
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    del self.stack[i:]
+                    break
+
+        def handle_data(self, d):
+            if self.skip or not REG.search(d):
+                return
+            if any(re.search(r'(^|\s)gterm(\s|$)', c) for _, c, _ in self.stack):
+                return
+            if any(re.search(r'(^|\s)reveal(\s|$)', c) or re.search(r'transition-delay|animation', s)
+                   for _, c, s in self.stack):
+                self.bad.append(' '.join(d.split())[:50])
+
+    def reg_findings(docs):
+        out = []
+        for name, src in sorted(docs.items()):
+            if re.search(r'@keyframes\s+pageIn|(?<![\w-])body\s*\{[^}]*\banimation\s*:\s*(?!none\b)', src):
+                out.append((name, 'the page fades in'))
+            p = RegLines()
+            p.feed(src)
+            out += [(name, 'in a reveal: ' + t) for t in p.bad]
+        return out
+
+    games = {g: read('games/' + g) for g in ('buddys-run.html', 'jargon-battle.html')}
+    eq('19. no page fades in, and no regulator or QFA line is revealed or delayed',
+       reg_findings(dict(sources, **games)), [])
+    for label, page, find, repl, want in (
+            ('the page fade put back', 'privacy.html', '</style>',
+             '@keyframes pageIn{from{opacity:0}to{opacity:1}}\nbody{animation:pageIn .4s ease both}\n</style>',
+             'the page fades in'),
+            ('the hero lockup delayed again', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg reveal" style="transition-delay:.24s">', 'in a reveal'),
+            ('the review line delayed again', 'pia.html', '<p class="pb-reviewed">',
+             '<p class="pb-reviewed reveal" style="transition-delay:.16s">', 'in a reveal'),
+            ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
+             'in a reveal')):
+        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+        eq('19. %s is caught' % label,
+           sorted({k.split(':')[0] for n, k in reg_findings(m) if n == page}), [want])
+
 
 
 

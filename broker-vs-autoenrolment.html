@@ -382,9 +382,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -2307,7 +2304,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
   <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
   <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
-  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
+  <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">

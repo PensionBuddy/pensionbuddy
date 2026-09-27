@@ -382,9 +382,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -2214,7 +2211,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h1 class="reveal" style="transition-delay:.06s">The new Personal Investment Account (PIA), <span class="hl">next to a pension.</span></h1>
   <p class="reveal" style="transition-delay:.12s">The Government has proposed a new account for investing, with its own simpler tax. Here is what has been confirmed, what is still to come, and how the same monthly amount could compare in a pension, in the new account, and in a fund held the way you would hold it today.</p>
   <p class="pia-asat reveal" style="transition-delay:.14s">Proposed · as at 25 September 2026. The tax-free threshold, the tax rate and the annual limit are to be announced on 6 October 2026, in Budget 2027. Accounts are to open during 2027. None of it is law yet.</p>
-  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
+  <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <section class="pia-sec" id="what"><div class="wrap">

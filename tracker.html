@@ -437,9 +437,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -1976,7 +1973,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <header class="hero aud-hero"><div class="wrap hero-grid">
-  <div class="reveal">
+  <div>
     <span class="eyebrow acc"><span class="pip"></span>For pension trackers</span>
     <h1>The statements went in the bin. <span class="hl">The pension didn't.</span></h1>
     <p class="lede">Most people who've changed jobs have pension money sitting somewhere, often more than they'd guess.</p>
@@ -1985,7 +1982,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="pb-why">Free, 20 minutes, no obligation.</p>
       <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
-      <div class="pb-reg reveal" style="transition-delay:.28s">
+      <div class="pb-reg">
         <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
         <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
       </div>

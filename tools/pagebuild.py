@@ -146,7 +146,7 @@ NOINDEX = '<meta name="robots" content="noindex">'
 # hand. REASON sits next to a booking call to action whose own block gives no
 # reason to book; docs/STATUS.md, Run 26, lists every call to action and which
 # reason it has. trust_drift(), at the end of this file, is the guard.
-REVIEWED = ('<p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, '
+REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
 REASON = '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
 REVIEWED_BY_HAND = ('pension-calculator.html', 'director-calculator.html')

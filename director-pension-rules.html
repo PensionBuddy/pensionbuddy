@@ -382,9 +382,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -1975,7 +1972,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h1 class="reveal" style="transition-delay:.06s">Directors&rsquo; pensions in 2026: <span class="hl">what changed, and what to talk about.</span></h1>
   <p class="reveal" style="transition-delay:.12s">Three things changed in the last two years: what happens to company pensions set up for one person before April 2021, how much a company can pay into a Personal Retirement Savings Account (PRSA) for you tax-free, and how high the Standard Fund Threshold goes. Here they are in plain English, with four questions to see which of them apply to you.</p>
   <p class="dr-asat reveal" style="transition-delay:.14s">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
-  <p class="pb-reviewed reveal" style="transition-delay:.16s">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
+  <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap dr-wrap">

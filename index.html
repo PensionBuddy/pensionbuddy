@@ -288,9 +288,6 @@ details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
-/* gentle entrance for the page itself, avoids first-paint flash */
-@keyframes pageIn{from{opacity:0}to{opacity:1}}
-body{animation:pageIn .4s ease both}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
@@ -2074,7 +2071,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
       <p class="pb-why">Free, 20 minutes, no obligation.</p>
       <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
-    <div class="pb-reg reveal" style="transition-delay:.24s">
+    <div class="pb-reg">
       <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
       <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
     </div>
@@ -2247,7 +2244,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
     <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=cb50b8e2"><img src="assets/img/damian-condon-portrait.jpg?v=dbe5acaf" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management"></picture>
     <span class="badge">B.A., Q.F.A.</span>
   </div>
-  <div class="about reveal" style="transition-delay:.1s">
+  <div class="about">
     <span class="kicker">Founder and CEO, QFA</span>
     <h2>Damian Condon</h2>
     <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can best serve real people. Clarity is the whole point.</p>
@@ -2314,7 +2311,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   </div>
 </section>
 <section><div class="wrap">
-  <div class="sec-head reveal">
+  <div class="sec-head">
     <span class="kicker">No small print</span>
     <h2>Who you are actually dealing with.</h2>
     <p>Pensionbuddy is a name, not a separate company. The business behind it is Damian Condon T/A Gresham Wealth Management, and that is the business the Central Bank of Ireland regulates. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3.</p>
