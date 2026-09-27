@@ -457,7 +457,8 @@ def run():
     # without JavaScript sees the rate that applies from its date: the
     # calculator's key (bar width and label) and director.html's "€1,000 of
     # profit" line, with the euro figure the page's own arithmetic gives and
-    # the date the rate applies from. Both pages load the table before the
+    # the date the rate applies from, and the calculator's "€20,000 as salary"
+    # line at that rate. Both pages load the table before the
     # script that reads it. Mutants: each piece of markup at the old rate,
     # and a script that brings back its own rate.
     prsi_js = read('assets/js/pb-prsi.js')
@@ -474,6 +475,9 @@ def run():
             out.append(('director-calculator.html', 'key bar'))
         if '<b id="pbCutPrsiN">%s</b> PRSI' % latest['pct'] not in calc:
             out.append(('director-calculator.html', 'key label'))
+        split = round(20000 * (1 - (0.40 + 0.08 + latest['rate'])) + 1e-9)
+        if '<p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€{:,}</b> in your pocket.'.format(split) not in calc:
+            out.append(('director-calculator.html', 'split line'))
         m = re.search(r'<p class="pb-two-out" id="pbTwoOut">(.*?)</p>', dire)
         want = ('is about <b>&euro;%d</b> in your pocket, after 40%% income tax, 8%% USC and %s PRSI '
                 '(the rate from %s).' % (keep, latest['pct'], latest['said']))
@@ -495,6 +499,7 @@ def run():
     for label, page, find, repl, want in (
             ('the key bar at the old rate', 'director-calculator.html', 'style="width:%s"' % latest['pct'], 'style="width:4.2%"', 'key bar'),
             ('the key label at the old rate', 'director-calculator.html', '<b id="pbCutPrsiN">%s</b>' % latest['pct'], '<b id="pbCutPrsiN">4.2%</b>', 'key label'),
+            ('the split line at the old figure', 'director-calculator.html', 'is <b>€9,530</b> in your pocket', 'is <b>€9,560</b> in your pocket', 'split line'),
             ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
             ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
             ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script')):

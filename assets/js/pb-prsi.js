@@ -18,7 +18,7 @@
    director-calculator.html (the rate itself, and the key under "Taken as
    salary"). Their markup carries the LATEST rate here, so a reader without
    JavaScript sees the rate that applies from its date: tests/build.test.py
-   check 18 holds the markup to this table.
+   check 17 holds the markup to this table.
 
    PBPrsi.at(date)   { rate: 0.0435, pct: '4.35%', from: Date, said: '1 October 2026' }
    PBPrsi.latest()   the last entry, in the same shape */
