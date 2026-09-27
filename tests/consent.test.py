@@ -26,8 +26,9 @@ What it proves:
      a replayed (untrusted) event and a lead form inside it are not
   7. the booking form's submit is an event; the Privacy Notice's button
      forgets the answer and brings the bar back
-  8. at 320, 375 and 1200px, Ask Buddy's button sits above the bar, not on
-     "That's fine"
+  8. at 320, 375 and 1200px, while the choice is open Ask Buddy's button
+     waits unseen (and so out of the tab order), never on the bar; once
+     the choice is made it is back, whole, in its corner (Run 32, part 3b)
 """
 import base64, glob, html, json, os, re, socket, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -86,16 +87,30 @@ PROBE = r"""<script>
     later(200,function(){ R.after=state(); done(); }); return;
   }
   if(job==='overlap'){
-    // Ask Buddy moves with a 0.2s transition, and virtual time runs no frames,
-    // so the probe reads where it comes to rest: transitions off, then measure
+    // Ask Buddy moves with a transition, and virtual time runs no frames, so
+    // the probe reads where it comes to rest: transitions off, then measure.
+    // While the choice is open it waits unseen (Run 32, part 3b); once the
+    // choice is made it comes back to its corner
     var st=document.createElement('style'); st.textContent='*{transition:none!important}'; document.head.appendChild(st);
+    function buddy(){
+      var b=document.querySelector('.pb-consent'), k=document.getElementById('pbBuddyBtn');
+      var kr=k?k.getBoundingClientRect():null, br=b&&document.body.classList.contains('pb-banner-open')?b.getBoundingClientRect():null;
+      // its corner, whether or not it is aside now, and what of the page lies there
+      var aside=!!k&&k.classList.contains('pb-b-aside'), home=kr&&{left:kr.left-(aside?kr.width+32:0),top:kr.top,bottom:kr.bottom};
+      if(home)home.right=home.left+kr.width;
+      var under=!!home&&[].some.call(document.querySelectorAll(PBMotion.CAVEATS+',input:not([type=hidden]),select,textarea'),function(el){
+        if(el.closest('.pb-bookbar,.pb-peek,.pb-consent,#pbBuddyPanel,#pbBuddyBtn'))return false;
+        var r=el.getBoundingClientRect(); return r.width>0&&r.left<home.right+8&&r.right>home.left-8&&r.top<home.bottom+8&&r.bottom>home.top-8;
+      });
+      return {width:innerWidth, barTop:br?Math.round(br.top):null, aside:aside, under:under,
+              shown:!!k&&getComputedStyle(k).visibility==='visible',
+              onBar:!!(kr&&br)&&kr.bottom>br.top&&kr.top<br.bottom&&kr.right>br.left&&kr.left<br.right,
+              inView:!!kr&&kr.left>=0&&kr.right<=document.documentElement.clientWidth&&kr.top>=0&&kr.bottom<=innerHeight};
+    }
     later(50,function(){
-      var b=document.querySelector('.pb-consent'), k=document.getElementById('pbBuddyBtn')||document.querySelector('.pb-b-btn');
-      var br=b.getBoundingClientRect(), kr=k?k.getBoundingClientRect():null;
-      R.width=innerWidth; R.barTop=Math.round(br.top); R.barHeight=Math.round(br.height);
-      R.lift=getComputedStyle(document.body).getPropertyValue('--pb-consent-h');
-      R.buddyCss=k?getComputedStyle(k).bottom:null;
-      R.buddyBottom=kr?Math.round(kr.bottom):null; done();
+      R.open=buddy();
+      document.querySelector('.pb-c-no').click();
+      later(50,function(){ R.after=buddy(); done(); });
     });
     return;
   }
@@ -254,13 +269,18 @@ def main():
     # 8
     for page in ('director.html', 'index.html', 'pension-calculator.html'):
         for w in (320, 375, 1200):
-            r = R.get((page, 'overlap', 'fresh'))
             r = [x for x in OVER if x[0] == page and x[1] == w]
             r = r[0][2] if r else None
             eq('8. %s at %dpx: reported' % (page, w), r is not None, True)
             if r:
-                eq('8. %s at %dpx: Ask Buddy sits above the bar, not on it' % (page, w),
-                   r['buddyBottom'] is not None and r['buddyBottom'] <= r['barTop'], True)
+                eq('8. %s at %dpx: while the choice is open, Ask Buddy waits unseen, not on the bar' % (page, w),
+                   (r['open']['shown'], r['open']['onBar']), (False, False))
+                # back in its corner, or aside for a caveat or a field that lies there
+                # (whether the observer has reported it yet varies under virtual time)
+                back = r['after']['shown'] and r['after']['barTop'] is None and (
+                    (not r['after']['aside'] and r['after']['inView']) or (r['after']['aside'] and r['after']['under']))
+                eq('8. %s at %dpx: once it is made, Ask Buddy is back in its corner, or aside for a caveat there' % (page, w),
+                   back, True)
     # 7
     r = R[('booking.html', 'booking', 'accepted')]['after']
     eq('7. the booking form\'s submit is an event', r['dl'], ['gtm.js', 'booking_form_submit'])

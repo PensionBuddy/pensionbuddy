@@ -28,7 +28,7 @@
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
   btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-expanded','false');
-  btn.innerHTML='<img src="'+AV+'" alt="">Ask Buddy';
+  btn.innerHTML='<img src="'+AV+'" alt=""><span class="pb-b-label">Ask Buddy</span>';
   var panel=document.createElement('div');
   panel.className='pb-b-panel';panel.id='pbBuddyPanel';panel.hidden=true;
   panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Ask Buddy: common questions');
@@ -53,4 +53,117 @@
       if(!was){item.classList.add('open');b.setAttribute('aria-expanded','true');}
     });
   });
+
+  /* ---- Floating chrome gives way (Run 32, docs/UX-MOTION-AUDIT.md part 3b) ----
+     The button never sits on what the reader needs, and never moves the page.
+     It moves only by the translate property, from --pb-b-x and --pb-b-y
+     written here (the BUDDY block of CSS turns them into a translate and
+     times it), never by bottom, so it causes no layout shift.
+       - Tucked: after the first scroll it is Buddy's photo alone, at least
+         44 by 44px; its name, "Ask Buddy", stays for screen readers.
+       - Stepping aside: while a caveat (PBMotion.CAVEATS), a form field or
+         the booking calendar is under it, or the element that has focus is,
+         it slides off to the right, at once; it comes back once that area
+         has been clear for 600ms, and never returns sooner than a second
+         after its last move, so it cannot flicker. It never moves while it
+         or its panel has focus, and focus on it brings it back.
+       - Above the bars: with the phone booking bar or the calculators'
+         results bar up it rides just over it, as before, and comes down
+         with it when the bar steps down for a caveat.
+       - Away: while the analytics choice is open it waits off screen and out
+         of the tab order, so it covers neither the choice nor the page.
+     Under reduced motion the positions are the same and the moves instant.
+     Without IntersectionObserver it stays where it is, as before. */
+  function giveWay(){
+    if(!('IntersectionObserver' in window))return;
+    var root=document.documentElement, body=document.body;
+    var CAVEATS=(window.PBMotion&&PBMotion.CAVEATS)||'.pb-warn,.infoadvice,.disclosure';
+    var FIELDS='input:not([type=hidden]),select,textarea,#calEmbed,#calStage';
+    var CHROME='.pb-bookbar,.pb-peek,.pb-consent,#pbBuddyPanel,#pbBuddyBtn';
+    var hx=0,hy=0,aside=false,covered=false,last=0,clearT=null,io=null,hits=[];
+    function has(c){return root.classList.contains(c);}
+    function focusIn(){var a=document.activeElement;return !!a&&(btn.contains(a)||panel.contains(a));}
+    /* where the button sits when it is not aside, in viewport px */
+    function home(){
+      var w=btn.offsetWidth,h=btn.offsetHeight,vw=root.clientWidth,vh=window.innerHeight;
+      var right=vw-18+hx,bottom=vh-18+hy;
+      return {left:right-w,top:bottom-h,right:right,bottom:bottom};
+    }
+    function meets(r,h,m){return r.left<h.right+m&&r.right>h.left-m&&r.top<h.bottom+m&&r.bottom>h.top-m;}
+    function place(){
+      var bar=document.querySelector('.pb-bookbar'),peek=document.querySelector('.pb-peek');
+      var away=body.classList.contains('pb-banner-open')&&panel.hidden;
+      hx=0;hy=0;
+      if(has('pb-peek-on')&&peek&&!has('pb-peek-yield'))hy=-(peek.offsetHeight+12);
+      else if(has('pb-bookbar-on')&&bar&&!has('pb-bookbar-yield')&&panel.hidden)hy=-(bar.offsetHeight+12);
+      btn.classList.toggle('pb-b-away',away);
+      var off=(aside||away)&&panel.hidden;
+      btn.classList.toggle('pb-b-aside',off);
+      btn.style.setProperty('--pb-b-x',off?'calc(100% + 32px)':hx+'px');
+      btn.style.setProperty('--pb-b-y',hy+'px');
+    }
+    function decide(){
+      var want=(hits.length>0||covered)&&panel.hidden&&!focusIn();
+      if(want){
+        clearTimeout(clearT);clearT=null;
+        if(!aside){aside=true;last=Date.now();place();}
+      }else if(aside&&!clearT){
+        clearT=setTimeout(function again(){
+          clearT=null;
+          if((hits.length>0||covered)&&!focusIn())return;
+          var wait=1000-(Date.now()-last);
+          if(wait>0){clearT=setTimeout(again,wait);return;}
+          aside=false;last=Date.now();place();
+        },600);
+      }
+    }
+    function watch(){
+      if(io)io.disconnect();hits=[];
+      var h=home(),m=8,vw=root.clientWidth,vh=window.innerHeight;
+      var rm=[h.top-m,vw-h.right-m,vh-h.bottom-m,h.left-m].map(function(v){return -Math.max(0,Math.round(v))+'px';}).join(' ');
+      io=new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          var i=hits.indexOf(e.target);
+          if(e.isIntersecting&&i<0)hits.push(e.target);
+          else if(!e.isIntersecting&&i>=0)hits.splice(i,1);
+        });
+        decide();
+      },{rootMargin:rm,threshold:0});
+      [].slice.call(document.querySelectorAll(CAVEATS+','+FIELDS)).forEach(function(el){
+        if(!el.closest(CHROME))io.observe(el);
+      });
+    }
+    /* the element that has focus: if it meets the button's place, step aside */
+    function checkFocus(){
+      var a=document.activeElement;
+      covered=!!a&&a!==body&&a!==root&&!btn.contains(a)&&!panel.contains(a)&&!a.closest('.pb-bookbar,.pb-peek,.pb-consent')&&
+        (function(r){return r.width>0&&meets(r,home(),8);})(a.getBoundingClientRect());
+      decide();
+    }
+    function tuck(){
+      var t=window.scrollY>40;
+      if(t!==has('pb-b-tucked')){root.classList.toggle('pb-b-tucked',t);place();watch();}
+    }
+    var raf=0;
+    window.addEventListener('scroll',function(){
+      if(raf)return;
+      raf=requestAnimationFrame(function(){raf=0;tuck();if(covered||document.activeElement!==body)checkFocus();});
+    },{passive:true});
+    window.addEventListener('resize',function(){place();watch();});
+    document.addEventListener('focusin',function(e){
+      if(btn.contains(e.target)||panel.contains(e.target)){if(aside){aside=false;covered=false;last=Date.now();place();}return;}
+      checkFocus();
+    });
+    document.addEventListener('focusout',function(){setTimeout(checkFocus,0);});
+    /* the bars and the analytics choice come and go by classes on <html> and <body> */
+    var mo=new MutationObserver(function(){place();watch();decide();});
+    mo.observe(root,{attributes:true,attributeFilter:['class']});
+    mo.observe(body,{attributes:true,attributeFilter:['class']});
+    /* the panel open or shut: it opens where the button is, never aside */
+    new MutationObserver(function(){if(!panel.hidden){aside=false;clearTimeout(clearT);clearT=null;}place();watch();}).observe(panel,{attributes:true,attributeFilter:['hidden']});
+    tuck();place();watch();
+  }
+  /* after every script at the foot has run: the bars, pb-motion.js's list */
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',giveWay);
+  else giveWay();
 })();

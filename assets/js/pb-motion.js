@@ -16,7 +16,8 @@
      index.html#gap or a glossary term lands at once, and a tap on an in-page
      link afterwards still glides.
 
-   PBMotion.on() says whether motion is allowed right now. */
+   PBMotion.on() says whether motion is allowed right now; PBMotion.CAVEATS is
+   the caveat inventory as a selector. */
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -40,5 +41,11 @@
   if (document.readyState === 'complete') setTimeout(smooth, 0);
   else window.addEventListener('load', function () { setTimeout(smooth, 0); });
 
-  window.PBMotion = { on: function () { return root.classList.contains('pb-motion'); } };
+  /* The caveat inventory as one selector, for the floating chrome that must
+     never sit on one (pb-buddy.js, pb-bookbar.js, pb-peek.js read it once the
+     page has loaded). The same list as tools/pagebuild.py caveat_selector();
+     tests/build.test.py check 25 holds them together. */
+  var CAVEATS = ".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot,.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap";
+
+  window.PBMotion = { on: function () { return root.classList.contains('pb-motion'); }, CAVEATS: CAVEATS };
 })();

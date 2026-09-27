@@ -436,7 +436,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes{background:#FBF7EF;color:var(--ink);border:0}
 .pb-consent .pb-c-no{background:none;color:#FBF7EF;border:1px solid rgba(255,255,255,.4)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-body.pb-banner-open .pb-b-btn{bottom:calc(var(--pb-consent-h,82px) + 14px)}
 body.pb-banner-open .pb-b-panel{bottom:calc(var(--pb-consent-h,82px) + 80px)}
 @media(max-width:600px){footer{padding-bottom:112px}}/*pb-b-footclear*/h1,h2,h3,.logo{font-family:var(--font-display,var(--font))}/*pb-display*/.big,.val{font-family:var(--font);font-weight:600;font-variant-numeric:tabular-nums}/*pb-num*/
 /*pb-edit4*/.email-cap input{border-radius:8px}.gterm .abbr{border-radius:6px}
@@ -1721,10 +1720,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
   .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
   html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
-  html.pb-bookbar-on .pb-b-btn{bottom:calc(var(--pb-bookbar-h, 68px) + 12px)}
-}
-@media(max-width:920px) and (prefers-reduced-motion:no-preference){
-  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
 /* PRODUCT TABS (#pbPtTabs). One tab per tool on the dark product band,
@@ -2034,6 +2029,37 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   html{scroll-behavior:auto}
 }
 /* MOTION:END */
+/* BUDDY:BEGIN (Run 32, part 3b of docs/UX-MOTION-AUDIT.md). Floating chrome
+   gives way. Ask Buddy (assets/js/pb-buddy.js) moves only by the translate
+   property, from --pb-b-x and --pb-b-y that the script writes, and never by
+   bottom, so it never shifts the page; the booking and results bars step
+   down by transform while a caveat passes behind them. Byte for byte on
+   every page: tools/pagebuild.py SHARED_CSS ('BUDDY', 'buddy-css'), guarded
+   by chrome_drift. */
+.pb-b-btn{translate:var(--pb-b-x,0px) var(--pb-b-y,0px)}
+/* its starting point is its top right corner (right to left, the photo
+   still first on the left), and it keeps its height, so tucking, which
+   only narrows it, moves no starting point and is no layout shift */
+.pb-b-btn{direction:rtl;flex-direction:row-reverse}
+.pb-b-btn .pb-b-label{white-space:nowrap;direction:ltr}
+/* tucked after the first scroll: the photo alone, still named "Ask Buddy".
+   The name stays in the flow at no width, not absolutely positioned: an
+   absolutely positioned label in this fixed button stopped Chrome's scroll
+   anchoring for the whole page, so a card growing above the reader (the
+   starter guide's story) pushed the page instead of being absorbed */
+html.pb-b-tucked .pb-b-btn{padding:8px;gap:0}
+html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
+/* off screen while the analytics choice is open, and out of the tab order */
+.pb-b-btn.pb-b-away{visibility:hidden}
+@media (prefers-reduced-motion:no-preference){
+  html.pb-motion .pb-b-btn{transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s linear var(--pb-d-3)}
+  html.pb-motion .pb-b-btn:not(.pb-b-away){transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s}
+}
+@media(max-width:920px){
+  /* stepping down while a caveat passes behind */
+  html.pb-bookbar-yield .pb-bookbar.pb-bookbar-on,html.pb-peek-yield .pb-peek.pb-peek-on{transform:translateY(calc(100% + 8px))}
+}
+/* BUDDY:END */
 </style>
 </head>
 <body>
@@ -2670,12 +2696,12 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=7db2a1ea" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=d8a8609f" data-first-answer="short"></script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
 
 <script src="assets/js/pb-deadline.js?v=4bf79414"></script>
-<script src="assets/js/pb-bookbar.js?v=38cc66f9"></script>
+<script src="assets/js/pb-bookbar.js?v=1e0886af"></script>
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){
@@ -2718,6 +2744,6 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-providers.js?v=847cf641"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
-<script src="assets/js/pb-motion.js?v=968a7ac6"></script>
+<script src="assets/js/pb-motion.js?v=657a9b94"></script>
 </body>
 </html>

@@ -580,8 +580,10 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # Run 29: blocks of CSS that are the same on every page, last in every
 # page's <style>, each a (name, finding kind): the nav's own stylesheet,
 # the rules that make everything clickable look clickable, and (Run 32) the
-# metric-matched fallback for Inter and the motion vocabulary.
-SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'))
+# metric-matched fallback for Inter, the motion vocabulary, and how the
+# floating chrome gives way.
+SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
+              ('BUDDY', 'buddy-css'))
 
 
 def _once(text, marker):

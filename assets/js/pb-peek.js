@@ -393,11 +393,45 @@
     if (!coverRaf) { coverRaf = window.requestAnimationFrame(checkCover); }
   }
 
+  /* STEPPING DOWN (Run 32, docs/UX-MOTION-AUDIT.md part 3b). While a
+     warning box passes behind the bar, the bar steps down out of its way,
+     and comes back once it has been clear for 600ms; never while the bar has
+     focus. html.pb-peek-yield moves it (the BUDDY block of CSS), so Ask
+     Buddy, riding just above it, comes down with it. */
+  var behind = [], yieldT = null, yieldIO = null;
+  function yieldNow() {
+    if (behind.length && !focusIn) {
+      clearTimeout(yieldT); yieldT = null;
+      html.classList.add('pb-peek-yield');
+    } else if (html.classList.contains('pb-peek-yield') && !yieldT) {
+      yieldT = setTimeout(function () {
+        yieldT = null;
+        if (!(behind.length && !focusIn)) { html.classList.remove('pb-peek-yield'); }
+      }, 600);
+    }
+  }
+  function watchYield() {
+    if (yieldIO) { yieldIO.disconnect(); }
+    behind = [];
+    var band = Math.max(barH || bar.offsetHeight || 56, 56) + 8;
+    yieldIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var i = behind.indexOf(e.target);
+        if (e.isIntersecting && i < 0) { behind.push(e.target); }
+        if (!e.isIntersecting && i >= 0) { behind.splice(i, 1); }
+      });
+      yieldNow();
+    }, { rootMargin: '-' + Math.max(0, window.innerHeight - band) + 'px 0px 0px 0px' });
+    all('.pb-warn').forEach(function (el) { yieldIO.observe(el); });
+  }
+  watchYield();
+
   doc.addEventListener('focusin', function (e) {
     focusIn = bar.contains(e.target);
     typing = !focusIn && isField(e.target);
     update();
     queueCover();
+    yieldNow();
   });
   doc.addEventListener('focusout', function (e) {
     if (!e.relatedTarget) { focusIn = false; typing = false; update(); }
@@ -406,7 +440,7 @@
   window.addEventListener('scroll', function () {
     if (covered || (doc.activeElement && doc.activeElement !== body)) { queueCover(); }
   }, { passive: true });
-  window.addEventListener('resize', function () { measure(); queueCover(); });
+  window.addEventListener('resize', function () { measure(); queueCover(); watchYield(); });
   /* a long figure can wrap the bar onto a second line mid-drag: Ask Buddy's
      lift and the controls' margin follow its height */
   if ('ResizeObserver' in window) {

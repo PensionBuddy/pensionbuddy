@@ -216,6 +216,10 @@ def run():
          after('privacy.html', '/* MOTION:BEGIN', '--pb-d-2:200ms', '--pb-d-2:250ms')),
         ('the MOTION block of CSS missing', 'starter.html', 'motion-css',
          sources['starter.html'].replace('/* MOTION:END */', '/* MOTION-END */', 1)),
+        ('the BUDDY block of CSS changed', 'how-we-work.html', 'buddy-css',
+         after('how-we-work.html', '/* BUDDY:BEGIN', 'direction:rtl;flex-direction:row-reverse', 'flex-direction:row')),
+        ('the BUDDY block of CSS missing', 'pia.html', 'buddy-css',
+         sources['pia.html'].replace('/* BUDDY:END */', '/* BUDDY-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -866,6 +870,66 @@ def run():
             ('the script dropped', 'privacy.html',
              sources['privacy.html'][:tag_i] + sources['privacy.html'][sources['privacy.html'].find('</script>', tag_i) + 9:], 'loaded 0 times')):
         eq('24. %s is caught' % label, want in buddy(mut)[0], True)
+
+    # ----------------------------------------------------------------- 25
+    # Run 32, part 3b: floating chrome gives way to caveats. The scripts that
+    # step aside (pb-buddy.js, pb-bookbar.js, pb-peek.js) read the caveat list
+    # from PBMotion.CAVEATS, which is pagebuild.caveat_selector() word for
+    # word; Ask Buddy moves only by translate (the BUDDY block), so no page
+    # lifts it by `bottom` over the analytics choice or a bar, or transitions
+    # its `bottom`, which would shift what is behind it and leave it on a
+    # caveat.
+    motion_js = open(os.path.join(ROOT, 'assets/js/pb-motion.js')).read()
+    def caveats_js(js):
+        m = re.search(r'var CAVEATS = "([^"]*)";', js)
+        return m.group(1) if m else None
+    eq('25. PBMotion.CAVEATS is the caveat list', caveats_js(motion_js), pagebuild.caveat_selector())
+    eq('25. a caveat dropped from PBMotion.CAVEATS is caught',
+       caveats_js(motion_js.replace(',.pb-warn,', ',', 1)) == pagebuild.caveat_selector(), False)
+    readers = {f: open(os.path.join(ROOT, 'assets/js', f)).read() for f in ('pb-buddy.js', 'pb-bookbar.js', 'pb-peek.js')}
+    eq('25. Ask Buddy and the booking bar read PBMotion.CAVEATS',
+       sorted(f for f in ('pb-buddy.js', 'pb-bookbar.js') if 'PBMotion.CAVEATS' not in readers[f]), [])
+    # the results bar steps down for the warning boxes only: any caveat would
+    # hide it for a fifth to over half of a calculator's length (Run 32)
+    eq('25. the results bar steps down for the warning boxes, a caveat on the list',
+       ("all('.pb-warn').forEach(function (el) { yieldIO.observe(el); });" in readers['pb-peek.js'],
+        '.pb-warn' in pagebuild.caveat_selector().split(',')), (True, True))
+    # tucked, Ask Buddy's name stays in the flow at no width: absolutely
+    # positioned inside the fixed button it stopped Chrome's scroll anchoring
+    # for the whole page (the starter story card pushed the page, 0.03 CLS)
+    def name_in_flow(src):
+        blk = src[src.find('/* BUDDY:BEGIN'):src.find('/* BUDDY:END */')]
+        blk = re.sub(r'(?s)/\*.*?\*/', '', blk)
+        rules = [b for sel, b in re.findall(r'([^{}]*)\{([^{}]*)\}', blk) if '.pb-b-label' in sel]
+        return bool(rules) and not any(re.search(r'position\s*:\s*(?:absolute|fixed)', b) for b in rules)
+    eq('25. tucked, Ask Buddy\'s name stays in the flow', name_in_flow(sources['pension-calculator.html']), True)
+    eq('25. an absolutely positioned name is caught',
+       name_in_flow(sources['pension-calculator.html'].replace('.pb-b-label{width:0;overflow:hidden}',
+                                                               '.pb-b-label{position:absolute;width:1px;overflow:hidden}', 1)), False)
+    def lifts(src):
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        out = []
+        for sel, body in re.findall(r'([^{}]*)\{([^{}]*)\}', css):
+            if '.pb-b-btn' not in sel:
+                continue
+            sel = ' '.join(sel.split())
+            if re.search(r'(?:^|[;\s])bottom\s*:', body) and sel != '.pb-b-btn':
+                out.append('lift: ' + sel)
+            if re.search(r'transition[^;]*\bbottom\b', body):
+                out.append('bottom transition: ' + sel)
+        return out
+    eq('25. no page lifts Ask Buddy by bottom, or transitions its bottom',
+       {n: lifts(t) for n, t in sources.items() if lifts(t)}, {})
+    for label, page, find, repl in (
+            ('the lift over the analytics choice put back', 'privacy.html', '</style>',
+             'body.pb-banner-open .pb-b-btn{bottom:calc(var(--pb-consent-h,0px) + 18px)}\n</style>'),
+            ('the lift over the booking bar put back', 'index.html', '</style>',
+             '@media(max-width:920px){html.pb-bookbar-on .pb-b-btn{bottom:86px}}\n</style>'),
+            ('a bottom transition put back', 'glossary.html', '</style>',
+             '@media (prefers-reduced-motion:no-preference){.pb-b-btn{transition:bottom .2s ease}}\n</style>')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('25. %s is caught' % label, bool(lifts(m)), True)
 
 
 

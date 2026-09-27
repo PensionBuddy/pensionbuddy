@@ -107,8 +107,11 @@
     return !!b && b.getAttribute('aria-expanded') === 'true';
   }
 
+  var yieldBand = 0;
   function measure() {
     html.style.setProperty('--pb-bookbar-h', bar.offsetHeight + 'px');
+    /* the band the bar steps down for is at least its own height */
+    if (yieldIO && Math.max(100, bar.offsetHeight + 8) !== yieldBand) watchYield();
   }
 
   function update() {
@@ -146,6 +149,48 @@
 
   if (watch) watch.observe(body, { childList: true, attributes: true, attributeFilter: ['class'] });
 
+  /* STEPPING DOWN (Run 32, docs/UX-MOTION-AUDIT.md part 3b). While a caveat
+     (a warning, a source, "information, not advice", the disclosure:
+     PBMotion.CAVEATS) passes through the bottom 100px of the screen (or the
+     bar's own height and 8px, if that is more), the bar
+     steps down out of its way, and comes back once that band has been clear
+     for 600ms. Never while the bar has focus. The bar stays "on"; the class
+     html.pb-bookbar-yield moves it (the BUDDY block of CSS), so Ask Buddy,
+     riding just above it, comes down with it. */
+  var under = [], yieldT = null, yieldIO = null;
+  function yieldNow() {
+    if (under.length && !focusIn) {
+      clearTimeout(yieldT); yieldT = null;
+      html.classList.add('pb-bookbar-yield');
+    } else if (html.classList.contains('pb-bookbar-yield') && !yieldT) {
+      yieldT = setTimeout(function () {
+        yieldT = null;
+        if (!(under.length && !focusIn)) html.classList.remove('pb-bookbar-yield');
+      }, 600);
+    }
+  }
+  function watchYield() {
+    if (closed) return;
+    if (yieldIO) yieldIO.disconnect();
+    under = [];
+    var sel = window.PBMotion && window.PBMotion.CAVEATS;
+    if (!sel) return;
+    yieldBand = Math.max(100, bar.offsetHeight + 8);
+    yieldIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var i = under.indexOf(e.target);
+        if (e.isIntersecting && i < 0) under.push(e.target);
+        if (!e.isIntersecting && i >= 0) under.splice(i, 1);
+      });
+      yieldNow();
+    }, { rootMargin: '-' + Math.max(0, window.innerHeight - yieldBand) + 'px 0px 0px 0px' });
+    [].slice.call(doc.querySelectorAll(sel)).forEach(function (el) {
+      if (!el.closest('.pb-bookbar, .pb-consent, #pbBuddyPanel')) yieldIO.observe(el);
+    });
+  }
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', watchYield);
+  else watchYield();
+
   function isField(el) {
     if (!el || !el.tagName) return false;
     if (el.isContentEditable || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return true;
@@ -158,12 +203,13 @@
     typing = !focusIn && isField(e.target);
     if (!focusIn) lastFocus = e.target;
     update();
+    yieldNow();
   }
   function onFocusOut(e) {
     if (!e.relatedTarget) { focusIn = false; typing = false; update(); }
   }
   function onChange() { update(); }
-  function onResize() { if (shown) measure(); }
+  function onResize() { if (shown) measure(); watchYield(); }
 
   doc.addEventListener('focusin', onFocusIn);
   doc.addEventListener('focusout', onFocusOut);
@@ -179,6 +225,9 @@
     closed = true;
     heroIO.disconnect();
     stopIO.disconnect();
+    if (yieldIO) yieldIO.disconnect();
+    clearTimeout(yieldT);
+    html.classList.remove('pb-bookbar-yield');
     if (watch) watch.disconnect();
     doc.removeEventListener('focusin', onFocusIn);
     doc.removeEventListener('focusout', onFocusOut);
