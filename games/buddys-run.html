@@ -1206,6 +1206,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       press();
     } else if (k === 'p' || k === 'P' || k === 'Escape' || k === 'Esc') {
       e.preventDefault();
+      /* a held key repeats about 15 to 30 times a second, and every toggle
+         shows or hides the full-screen pause card: once per press only */
+      if (e.repeat) { return; }
       togglePause();
     }
   });

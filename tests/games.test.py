@@ -419,8 +419,35 @@ __boot(function () {
     var seed = 12345;
     B.setRng(function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; });
     for (i = 0; i < 180; i++) { B.tick(1 / 120); sample(over, pxOver); }
+    /* the pause card, 0.1 seconds after a hit, still sampled pixel by pixel */
+    var pxPause = new Pixels(cv.width, cv.height), paused = [];
+    B.setRng(FIX); fresh();
+    var fp = B.spawnLabel('bad', 'Probe pause flash', false);
+    fp.x = B.buddyHit().x + 30;
+    for (i = 0; i < 1400 && B.state().lives === 3; i++) { B.tick(1 / 120); }
+    for (i = 0; i < 12; i++) { B.tick(1 / 120); }
+    B.pause();
+    R.flash.pausedAfterHit = B.state().phase;
+    seed = 777;
+    B.setRng(function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; });
+    for (i = 0; i < 180; i++) { B.tick(1 / 120); sample(paused, pxPause); }
+    B.resume();
+    /* a held pause key: one press, then key repeats; only the press counts */
+    B.setRng(FIX); fresh();
+    var phases = [];
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    phases.push(B.state().phase);
+    for (i = 0; i < 29; i++) {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', repeat: true, bubbles: true }));
+      phases.push(B.state().phase);
+    }
+    window.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }));
+    R.flash.heldEscape = { phases: phases.filter(function (x, j) { return j === 0 || x !== phases[j - 1]; }), last: phases[phases.length - 1] };
+    B.resume();
     R.flash.run = worst(run);
     R.flash.card = worst(over);
+    R.flash.pause = worst(paused);
+    R.flash.pause.area = pxPause.area(cssPer);
     R.flash.card.area = pxOver.area(cssPer);
     R.flash.run.labels = 0;
     Object.keys(labs).forEach(function (t) {
@@ -626,6 +653,11 @@ def check_buddys_run(data):
        % (r.get('labels'), r.get('labelsSeen')), r.get('labels') is not None and r['labels'] <= 6 and r.get('labelsSeen', 0) > 0)
     ok('8. behind the card, pixels changing more than 6 times a second cover less than 21,824 px (%s px)'
        % c.get('area'), c.get('area') is not None and c['area'] < 21824)
+    pz = f.get('pause') or {}
+    eq('8. the pause probe really paused, just after a hit', f.get('pausedAfterHit'), 'paused')
+    ok('8. and behind the pause card too: %s px, worst cell %s' % (pz.get('area'), pz.get('cell')),
+       pz.get('area') is not None and pz['area'] < 21824 and pz['cell'] <= 6)
+    eq('8. holding the pause key pauses once, and key repeats do not toggle it', (f.get('heldEscape') or {}).get('phases'), ['paused'])
 
     t = data['three']
     eq('9. three bad hits and no more end the game', t['losses'], 3)
