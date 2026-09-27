@@ -1784,7 +1784,6 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 
         <button class="btn btn-primary qsubmit" type="submit" id="qualSubmit">Show me the calendar <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
 
-        <p class="qnote">That is the lot. We do not ask what you earn, what your pension is worth, how old you are or who you work for: none of it is needed to book a chat, and this site gives information, not advice. Your name and email go to Calendly with the booking and are handled in line with our <a href="privacy.html">Privacy Notice</a>.</p>
       </form>
 
       <div class="qdone" id="qualDone" role="status" tabindex="-1">
@@ -1792,6 +1791,10 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
         <p id="qualDoneMsg"></p>
         <button type="button" class="qedit" id="qualEdit">Change details</button>
       </div>
+      <!-- Run 32 (part 1c): outside the form, so it stays on screen when the form
+           gives way to the confirmation and the calendar: the name and email are
+           going to Calendly just as it would otherwise disappear. -->
+      <p class="qnote">That is the lot. We do not ask what you earn, what your pension is worth, how old you are or who you work for: none of it is needed to book a chat, and this site gives information, not advice. Your name and email go to Calendly with the booking and are handled in line with our <a href="privacy.html">Privacy Notice</a>.</p>
     </div>
 
     <div id="calStage" hidden>

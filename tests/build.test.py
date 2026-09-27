@@ -752,6 +752,21 @@ def run():
         m[page] = m[page].replace(find, repl, 1)
         eq('20. %s is caught' % label, sorted(pagebuild.caveat_drift(m)), [page])
 
+    # ----------------------------------------------------------------- 21
+    # Run 32, part 1c: booking's not-advice and privacy note is outside the
+    # form, so it stays on screen when the form gives way to the
+    # confirmation and the calendar (the submit handler hides the form).
+    def note_outside(src):
+        f_open, f_close = src.find('<form id="qualForm"'), src.find('</form>')
+        note, stage = src.find('<p class="qnote">That is the lot.'), src.find('<div id="calStage"')
+        return 0 <= f_open < f_close < note < stage
+    bk = sources['booking.html']
+    eq('21. booking\'s note sits after the form and before the calendar', note_outside(bk), True)
+    i = bk.find('<p class="qnote">That is the lot.'); j = bk.find('</p>', i) + 4
+    back = bk[:i] + bk[j:]
+    back = back.replace('</form>', bk[i:j] + '\n      </form>', 1)
+    eq('21. the note put back inside the form is caught', note_outside(back), False)
+
 
 
 
