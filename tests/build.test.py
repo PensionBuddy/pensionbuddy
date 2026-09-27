@@ -695,8 +695,8 @@ def run():
              '<p class="pb-reviewed reveal" style="transition-delay:.16s">', 'in a reveal'),
             ('the review line with a delay in its transition', 'pia.html', '<p class="pb-reviewed">',
              '<p class="pb-reviewed" style="opacity:.5;transition:opacity .5s ease .16s">', 'in a reveal'),
-            ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
-             'in a reveal'),
+            ('a legal page revealed whole', 'terms.html', '<div class="legal pb-caveat">',
+             '<div class="legal pb-caveat reveal">', 'in a reveal'),
             ('a fade whose 0% shares its selector list', 'terms.html', '</style>',
              '@keyframes f{0%,20%{opacity:0}to{opacity:1}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
             ('a fade written to-then-from', 'terms.html', '</style>',
@@ -727,6 +727,30 @@ def run():
              'body{transition:none;animation:none}\n</style>')):
         m = dict(sources); m[page] = m[page].replace(find, repl, 1)
         eq('19. %s' % label, [k for n, k in reg_findings(m) if n == page], [])
+
+    # ----------------------------------------------------------------- 20
+    # Run 32, part 1a: every caveat in pagebuild's list (warnings, sources,
+    # "information, not advice", assumptions, "as at" dates, the legal
+    # notices) is furniture: not a .reveal, not inside one, no inline delay,
+    # animation or zero opacity. In the pages and in the built pages' parts.
+    parts = {'tools/%s/main.html' % p.parts: read('tools/%s/main.html' % p.parts) for _, p in pages}
+    eq('20. no caveat is revealed, delayed or faded', pagebuild.caveat_drift(dict(sources, **parts)), {})
+    eq('20. the list finds the caveats', sum(len(pagebuild.caveat_elements(t)) for t in sources.values()) > 150, True)
+    for label, page, find, repl in (
+            ('a warning box in a reveal', 'starter.html', '<div class="pb-sa">', '<div class="pb-sa reveal">'),
+            ('the result caveat under a revealed hero', 'pension-calculator.html', '<div class="res-hero"',
+             '<div class="res-hero reveal"'),
+            ('"information, not advice" delayed', 'index.html', '<div class="infoadvice">',
+             '<div class="infoadvice" style="transition-delay:.1s">'),
+            ('a guide\'s "Rules as at" under a revealed article', 'pensions-over-50.html', '<div class="legal">',
+             '<div class="legal reveal">'),
+            ('a legal notice revealed whole', 'terms.html', '<div class="legal pb-caveat">',
+             '<div class="legal pb-caveat reveal">'),
+            ('the hero caveat in a revealed phone', 'index.html', '<div class="hero-phone"', '<div class="hero-phone reveal"')):
+        m = dict(sources)
+        assert find in m[page], (label, find)
+        m[page] = m[page].replace(find, repl, 1)
+        eq('20. %s is caught' % label, sorted(pagebuild.caveat_drift(m)), [page])
 
 
 

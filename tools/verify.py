@@ -476,6 +476,10 @@ def static_checks(pages):
     # their CSS on every page byte for byte (pagebuild.trust_drift)
     for f, fs in pagebuild.trust_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
         drift.setdefault(f, []).extend(fs)
+    # Run 32 (part 1a): no caveat is, or sits under, a reveal or anything
+    # with an inline delay, animation or zero opacity (pagebuild.caveat_drift)
+    for f, fs in pagebuild.caveat_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
+        drift.setdefault(f, []).extend(fs)
     # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
     # of reach until it is signed off, so no other page may link to it. Signing
     # a page off means removing that meta, which lifts this check by itself.

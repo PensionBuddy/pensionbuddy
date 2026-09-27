@@ -884,6 +884,93 @@ def trust_drift(sources, skeleton=os.path.basename(SKELETON)):
     return out
 
 
+
+# ============================================================================
+# CAVEATS (Run 32, part 1a of docs/UX-MOTION-AUDIT.md). Every warning,
+# disclaimer, source line, "as at" date, assumption and regulatory line is
+# furniture: never revealed, delayed, faded or moved, and never inside
+# anything that is. This is the one list: the caveat inventory's selector
+# column. A caveat is an element with one of CAVEAT_CLASSES, one of
+# CAVEAT_IDS, or a class of CAVEAT_WITHIN inside its named ancestor; new
+# caveats can simply carry .pb-caveat. caveat_drift() is the static guard
+# (verify.py, tests/build.test.py check 20); tests/caveats.test.py watches
+# them frame by frame in Chrome. Like chrome_drift() it never raises.
+# ============================================================================
+CAVEAT_CLASSES = ('pb-caveat', 'announce', 'pb-reg', 'pb-reviewed', 'pb-warn', 'infoadvice', 'assume',
+                  'disclosure', 'pb-src', 'srcnote', 'gap-note', 'hc-note', 'qnote', 'sft-note',
+                  'pb-product-cap', 'tk-who', 'pb-life-note', 'pb-sa-note', 'pb-lad-note', 'pb-my-note',
+                  'pia-note', 'dr-src', 'pt-note', 'ec-note', 'pia-asat', 'sft-asat', 'dr-asat')
+# (the legal notices' whole text, and thank-you's two "Illustration only."
+# tool cards, carry .pb-caveat: .legal and .assure .ad also dress guides and
+# plain card copy, which are not caveats)
+CAVEAT_WITHIN = (('res-hero', 'foot'), ('legal', 'updated'), ('legal', 'ck-note'), ('legal', 'callbox'),
+                 ('max-card', 'mnote'))
+CAVEAT_IDS = ('mScale', 'mWhy', 'm1Cap')
+_VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+_HELD = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)')
+
+
+def caveat_selector():
+    """The same list as one CSS selector, for the MOTION block's rule 2."""
+    return ','.join(['.' + c for c in CAVEAT_CLASSES] + ['.%s .%s' % w for w in CAVEAT_WITHIN] +
+                    ['#' + i for i in CAVEAT_IDS])
+
+
+def caveat_elements(text):
+    """[(caveat, chain)] for every caveat in text: each item a dict with the
+    start tag's offset, raw text, tag, classes, id and style, and chain its
+    ancestors outermost first (the same dicts). Script and style skipped."""
+    from html.parser import HTMLParser
+    starts = [0]
+    for line in text.split('\n'):
+        starts.append(starts[-1] + len(line) + 1)
+    found = []
+
+    class P(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack = []
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            line, col = self.getpos()
+            el = {'at': starts[line - 1] + col, 'raw': self.get_starttag_text(), 'tag': tag,
+                  'cls': (a.get('class') or '').split(), 'id': a.get('id') or '', 'style': a.get('style') or ''}
+            if tag in _VOID:
+                return
+            anc = [c for x in self.stack for c in x['cls']]
+            if (any(c in CAVEAT_CLASSES for c in el['cls']) or el['id'] in CAVEAT_IDS or
+                    any(c == cls and a2 in anc for a2, cls in CAVEAT_WITHIN for c in el['cls'])):
+                found.append((el, list(self.stack)))
+            if tag not in ('script', 'style'):
+                self.stack.append(el)
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i]['tag'] == tag:
+                    del self.stack[i:]
+                    break
+
+    P().feed(text)
+    return found
+
+
+def caveat_drift(sources):
+    """{page: [('caveat', detail)]} for every caveat that is, or sits under,
+    a .reveal or anything with an inline delay, animation or zero opacity."""
+    out = {}
+    for name, text in sorted(sources.items()):
+        fs = []
+        for el, chain in caveat_elements(text):
+            bad = [x for x in chain + [el] if 'reveal' in x['cls'] or _HELD.search(x['style'])]
+            if bad:
+                what = '.'.join([el['tag']] + el['cls'][:2]) + (('#' + el['id']) if el['id'] else '')
+                fs.append(('caveat', '%s is under %s' % (what, ', '.join(
+                    '.'.join([b['tag']] + b['cls'][:2]) for b in bad))))
+        if fs:
+            out[name] = fs
+    return out
+
 def main():
     names = [a for a in sys.argv[1:] if not a.startswith('-')] or sorted(PAGES)
     unknown = [n for n in names if n not in PAGES]

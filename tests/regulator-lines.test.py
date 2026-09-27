@@ -3,6 +3,8 @@
 
     python3 tests/regulator-lines.test.py            # the working tree
     python3 tests/regulator-lines.test.py <root>     # any checkout, e.g. main
+    python3 tests/regulator-lines.test.py --caveats [<root>]
+                                   # every caveat instead (Run 32, part 1a)
 
 Run 32. Every page (the 29 at the root and the two games) is served with a
 probe injected as the first thing in its <head>. From the first animation
@@ -23,6 +25,12 @@ first, and move none of them. On main before Run 32 this fails on 29 pages:
 the page faded itself in from blank. tests/build.test.py check 19 is the
 static guard; this is the one that sees CSS rules and scripts. Not part of
 tests/run-tests.py: 31 Chrome launches, about a minute. Exit 0 or 1.
+
+With --caveats the probe follows every caveat instead: every element that
+tools/pagebuild.py's caveat list names (warnings, sources, "information, not
+advice", assumptions, "as at" dates, the legal notices; caveat_selector()),
+found again on every frame so a caveat a script writes later is counted
+too, and held to the same rule. Pages with no caveat are passed as such.
 """
 import http.server
 import json
@@ -35,18 +43,22 @@ import threading
 import time
 import urllib.parse
 
-ROOT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+CAVEATS = '--caveats' in sys.argv
+ARGS = [a for a in sys.argv[1:] if not a.startswith('--')]
+ROOT = os.path.abspath(ARGS[0] if ARGS else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 REPORTS = {}
 
 PROBE = r"""<script>
 (function(){
+  var SEL=__SEL__;
   var REG=/Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b|\bQ\.\s*F\.\s*A\b/, t0=performance.now();
   var out={frames:0, first:null, min:1, worst:null, moved:0, targets:0}, els=null;
   /* the smallest elements whose joined text names them, so a name split
      by a tag or written with a no-break space is still found */
   function txt(e){ return (e.textContent||'').replace(/\u00a0/g,' ').replace(/\s+/g,' '); }
   function collect(){
+    if(SEL){ els=[].slice.call(document.querySelectorAll(SEL)); out.targets=Math.max(out.targets,els.length); return; }
     els=[];
     var all=document.body.getElementsByTagName('*'), i, e, k, kid;
     for(i=0;i<all.length;i++){
@@ -74,7 +86,7 @@ PROBE = r"""<script>
   }
   function frame(){
     if(!document.body){ requestAnimationFrame(frame); return; }
-    if(!els||document.readyState==='loading') collect();
+    if(!els||document.readyState==='loading'||SEL) collect();
     var m=1, mv=0, worst=null;
     els.forEach(function(el){
       if(!el.getClientRects().length||el.closest('[hidden]')) return;
@@ -91,6 +103,15 @@ PROBE = r"""<script>
   requestAnimationFrame(frame);
 })();
 </script>"""
+
+
+if CAVEATS:
+    # the list comes from this test's own tree, so a baseline checkout is held to it
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools'))
+    import pagebuild  # noqa: E402
+    PROBE = PROBE.replace('__SEL__', json.dumps(pagebuild.caveat_selector()))
+else:
+    PROBE = PROBE.replace('__SEL__', 'null')
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -157,9 +178,9 @@ def main():
         if not r:
             ok, why = False, 'no report from the probe'
         else:
-            ok = r['targets'] > 0 and r['min'] >= 0.999 and r['moved'] == 0
-            why = '%d line(s), first frame %s, least %s over %d frames, %d moved%s' % (
-                r['targets'], r['first'], r['min'], r['frames'], r['moved'],
+            ok = (r['targets'] > 0 or CAVEATS) and r['min'] >= 0.999 and r['moved'] == 0
+            why = '%d %s, first frame %s, least %s over %d frames, %d moved%s' % (
+                r['targets'], 'caveat(s)' if CAVEATS else 'line(s)', r['first'], r['min'], r['frames'], r['moved'],
                 '' if ok or not r.get('worst') else '; worst: ' + r['worst'])
         print('  %s %-36s %s' % ('ok  ' if ok else 'FAIL', pg, why))
         passes += ok
