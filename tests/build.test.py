@@ -212,6 +212,10 @@ def run():
          after('terms.html', '/* FONTS:BEGIN', 'size-adjust:103.7%', 'size-adjust:110.0%')),
         ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
          sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
+        ('the MOTION block of CSS changed', 'privacy.html', 'motion-css',
+         after('privacy.html', '/* MOTION:BEGIN', '--pb-d-2:200ms', '--pb-d-2:250ms')),
+        ('the MOTION block of CSS missing', 'starter.html', 'motion-css',
+         sources['starter.html'].replace('/* MOTION:END */', '/* MOTION-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -766,6 +770,39 @@ def run():
     back = bk[:i] + bk[j:]
     back = back.replace('</form>', bk[i:j] + '\n      </form>', 1)
     eq('21. the note put back inside the form is caught', note_outside(back), False)
+
+    # ----------------------------------------------------------------- 22
+    # Run 32, part 2a: the motion vocabulary's plumbing. The MOTION block's
+    # rule 2 selector is pagebuild.caveat_selector(), so the caveat list and
+    # the rule cannot drift; every root page sets html.pb-motion with the one
+    # head line, directly after the viewport meta and before any stylesheet;
+    # and loads assets/js/pb-motion.js once, at the foot of <body>.
+    VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    def plumbing(src):
+        out = []
+        blk = src[src.find('/* MOTION:BEGIN'):src.find('/* MOTION:END */')]
+        m = re.search(r':is\(([^)]*)\)\{\s*opacity:1!important', blk)
+        norm = lambda x: re.sub(r'\s*,\s*', ',', ' '.join(x.split()))
+        if not m or norm(m.group(1)) != norm(pagebuild.caveat_selector()):
+            out.append('rule 2')
+        if src.count(pagebuild.MOTION_HEAD) != 1 or VIEWPORT + '\n' + pagebuild.MOTION_HEAD not in src or \
+                src.find(pagebuild.MOTION_HEAD) > src.find('<link rel="stylesheet"') > -1:
+            out.append('head line')
+        tags = re.findall(r'<script src="assets/js/pb-motion\.js(?:\?v=[0-9a-f]+)?"></script>', src)
+        if len(tags) != 1 or src.find(tags[0]) < src.rfind('</main>') or src.find(tags[0]) > src.find('</body>'):
+            out.append('script')
+        return out
+    eq('22. every page: rule 2 is the caveat list, the head line, pb-motion.js once at the foot',
+       {n: plumbing(t) for n, t in sources.items() if plumbing(t)}, {})
+    for label, page, find, repl, want in (
+            ('a caveat dropped from rule 2', 'index.html', ',.pb-warn,', ',', 'rule 2'),
+            ('the head line moved after the stylesheets', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
+             VIEWPORT, 'head line'),
+            ('pb-motion.js loaded twice', 'terms.html', '</body>',
+             '<script src="assets/js/pb-motion.js"></script>\n</body>', 'script')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('22. %s is caught' % label, want in plumbing(m), True)
 
 
 

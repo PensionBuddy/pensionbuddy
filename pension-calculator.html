@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(matchMedia('(prefers-reduced-motion: no-preference)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('pb-motion');</script>
 <title>Pension Calculator, Pensionbuddy</title>
 <meta name="description" content="A free, two-minute pension projection. Move the sliders to see what your pension could pay you in retirement, including tax relief. Illustration only.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -2056,6 +2057,72 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 .pb-bookbar{flex-wrap:wrap}
 .pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
 /* TRUST:END */
+/* MOTION:BEGIN (Run 32). One motion vocabulary for every page, byte for
+   byte: tools/pagebuild.py SHARED_CSS ('MOTION', 'motion-css'), guarded by
+   chrome_drift. Components name motion only through the --pb-t-* pairs,
+   never raw milliseconds or curves. The rules and why: docs/UX-MOTION-AUDIT.md,
+   "The motion system". This block holds the tokens and the rules the parts
+   built so far use; the fills, rolls, scenes and swaps arrive with the parts
+   that need them. html.pb-motion (set in <head>, kept true by
+   assets/js/pb-motion.js) means motion is allowed. */
+:root{
+  /* curves, named by intent; none overshoots */
+  --pb-ease-out:cubic-bezier(.16,1,.3,1);  /* arrive and settle: the house curve */
+  --pb-ease-move:cubic-bezier(.4,0,.2,1);  /* on screen already, changes place or state */
+  --pb-ease-exit:cubic-bezier(.4,0,1,1);   /* steps aside or leaves; never text */
+  --pb-ease-scroll:linear;                 /* scroll timelines only */
+  /* durations */
+  --pb-d-1:120ms;  /* press */
+  --pb-d-2:200ms;  /* hover, crossfade, bubble, digit roll, row arriving, chrome leaving */
+  --pb-d-3:320ms;  /* a component changes state: Ask Buddy, indicator, split bar */
+  --pb-d-4:480ms;  /* a mark reaches its true value: bar, fill */
+  --pb-d-5:640ms;  /* a line drawn once; the ceiling */
+  /* distances */
+  --pb-lift:2px;   /* buttons only; cards get a shadow, never travel */
+  --pb-nudge:6px;  /* a digit roll, a row just added */
+  --pb-rise:12px;  /* the furthest content travels; floating chrome and the
+                      nav move by their own size, and only to step aside */
+  /* order */
+  --pb-stagger:40ms;    /* between marks only, three steps at most */
+  --pb-ripple:20ms;     /* between jar dots only; the whole ripple within --pb-d-2 */
+  --pb-beat-gap:160ms;  /* after one build finishes, before the next starts */
+  --pb-arrive:300ms;    /* the longest an armed mark may show empty */
+  --pb-pin-max:50svh;   /* the most extra scroll a pinned scene may add */
+  /* pairs: the only way components name motion */
+  --pb-t-press:var(--pb-d-1) var(--pb-ease-out);
+  --pb-t-swap:var(--pb-d-2) var(--pb-ease-move);
+  --pb-t-exit:var(--pb-d-2) var(--pb-ease-exit);
+  --pb-t-state:var(--pb-d-3) var(--pb-ease-move);
+  --pb-t-fill:var(--pb-d-4) var(--pb-ease-out);
+  --pb-t-draw:var(--pb-d-5) var(--pb-ease-out)
+}
+
+/* 2 Caveats are furniture: never revealed, delayed, faded, veiled or moved.
+   The selector is pagebuild.caveat_selector(), the caveat inventory, so the
+   list and this rule cannot drift apart (tests/build.test.py check 22). */
+:is(.pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,
+    .disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,
+    .pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,
+    .pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,
+    .dr-asat,.res-hero .foot,.legal .updated,.legal .ck-note,.legal .callbox,
+    .max-card .mnote,#mScale,#mWhy,#m1Cap){
+  opacity:1!important;transform:none!important;filter:none!important;
+  transition:none!important;animation:none!important}
+
+/* In-page taps scroll smoothly after load; arrival never does. pb-motion.js
+   adds html.pb-smooth once the page has arrived. */
+@media (prefers-reduced-motion:no-preference){html.pb-smooth{scroll-behavior:smooth}}
+
+/* Reduced motion: every token still. Durations are .01ms rather than 0 so
+   any old script waiting on an end event gets one; new scripts never wait on
+   one. */
+@media (prefers-reduced-motion:reduce){
+  :root{--pb-d-1:.01ms;--pb-d-2:.01ms;--pb-d-3:.01ms;--pb-d-4:.01ms;--pb-d-5:.01ms;
+    --pb-lift:0px;--pb-nudge:0px;--pb-rise:0px;--pb-stagger:0ms;--pb-ripple:0ms;
+    --pb-beat-gap:0ms;--pb-arrive:0ms}
+  html{scroll-behavior:auto}
+}
+/* MOTION:END */
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2968,5 +3035,6 @@ function sendResults(){
 <script src="assets/js/pb-report.js?v=572ada0b"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-motion.js?v=968a7ac6"></script>
 </body>
 </html>

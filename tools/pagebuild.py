@@ -149,6 +149,9 @@ NOINDEX = '<meta name="robots" content="noindex">'
 REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
 REASON = '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
+# Run 32: the line that sets html.pb-motion before anything paints (part 2a)
+MOTION_HEAD = ("<script>if(matchMedia('(prefers-reduced-motion: no-preference)').matches&&'IntersectionObserver' in window)"
+               "document.documentElement.classList.add('pb-motion');</script>")
 DEADLINE_JS = 'assets/js/pb-deadline.js'
 REVIEWED_BY_HAND = ('pension-calculator.html', 'director-calculator.html')
 TRUST_OPEN, TRUST_CLOSE = '/* TRUST:BEGIN', '/* TRUST:END */\n'
@@ -577,8 +580,8 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # Run 29: blocks of CSS that are the same on every page, last in every
 # page's <style>, each a (name, finding kind): the nav's own stylesheet,
 # the rules that make everything clickable look clickable, and (Run 32) the
-# metric-matched fallback for Inter.
-SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'))
+# metric-matched fallback for Inter and the motion vocabulary.
+SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'))
 
 
 def _once(text, marker):
