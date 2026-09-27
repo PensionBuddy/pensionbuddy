@@ -10,6 +10,10 @@
       <span class="dl-tag">Tax deadline</span>
       <span class="dl-text" id="deadlineText"></span>
     </div>
+<!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
+     not at the foot of the page: filled at the foot, the row grew from nothing
+     after the first paint and pushed the calculator down (0.04 layout shift). -->
+<script src="assets/js/pb-deadline.js"></script>
 
     <div class="modebar reveal">
       <div class="row"><span class="modelab">Which question?</span></div>

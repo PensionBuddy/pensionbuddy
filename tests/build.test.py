@@ -208,6 +208,10 @@ def run():
          after('director.html', '/* CLICK:BEGIN', 'text-underline-offset:3px', 'text-underline-offset:1px')),
         ('the CLICK block of CSS missing', 'booking.html', 'click-css',
          sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
+        ('the FONTS block of CSS changed', 'terms.html', 'fonts-css',
+         after('terms.html', '/* FONTS:BEGIN', 'size-adjust:103.7%', 'size-adjust:110.0%')),
+        ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
+         sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
