@@ -804,6 +804,43 @@ def run():
         assert m != sources[page], label
         eq('22. %s is caught' % label, want in plumbing(m), True)
 
+    # ----------------------------------------------------------------- 23
+    # Run 32, part 2b: the reveal system is gone and stays gone. Words never
+    # wait: no element carries .reveal, no CSS selects it, no script looks for
+    # it or hands off from it; the nav keeps its height when the page scrolls;
+    # no page's own html rule scrolls smoothly on arrival (MOTION's
+    # html.pb-smooth does, for in-page taps once the page has loaded); and the
+    # Buddy chat has no play-out (D25).
+    def leftovers(src):
+        out = []
+        noscript = re.sub(r'(?is)<script\b.*?</script>|<style\b.*?</style>', '', src)
+        if re.search(r'class="[^"]*\breveal\b', noscript):
+            out.append('reveal class')
+        css = ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src))
+        css = re.sub(r'(?s)/\*.*?\*/', '', css)
+        if re.search(r'\.(?:js-)?reveal\b', css):
+            out.append('reveal css')
+        if re.search(r"querySelectorAll\(['\"]\.reveal['\"]\)|classList\.add\(['\"]js-reveal", src):
+            out.append('reveal script')
+        if re.search(r'nav\.scrolled \.nav-in\{height:', css):
+            out.append('nav hop')
+        if re.search(r'(?<![\w.-])html\{[^}]*scroll-behavior:smooth', css):
+            out.append('smooth arrival')
+        if 'pb-chat-play' in src:
+            out.append('chat play-out')
+        return out
+    eq('23. no reveal, no nav hop, no smooth arrival, no chat play-out, on any page',
+       {n: leftovers(t) for n, t in sources.items() if leftovers(t)}, {})
+    for label, page, find, repl, want in (
+            ('a reveal class put back', 'index.html', '<div class="pb-reg">', '<div class="pb-reg reveal">', 'reveal class'),
+            ('a reveal rule put back', 'privacy.html', '</style>', '.js-reveal .reveal:not(.settled){opacity:0}\n</style>', 'reveal css'),
+            ('the nav hop put back', 'glossary.html', '</style>', 'nav.scrolled .nav-in{height:62px}\n</style>', 'nav hop'),
+            ('smooth arrival put back', 'terms.html', 'html{-webkit-text-size-adjust:100%}',
+             'html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}', 'smooth arrival')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('23. %s is caught' % label, want in leftovers(m), True)
+
 
 
 

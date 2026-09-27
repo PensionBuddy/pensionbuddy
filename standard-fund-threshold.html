@@ -46,7 +46,7 @@
   --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--teal-100);color:var(--teal-900)}
@@ -62,12 +62,10 @@ h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--
 .btn-primary:hover svg{transform:translateX(3px)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-.reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
 .announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
@@ -359,26 +357,20 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 /* anchor jumps clear the sticky nav */
 html{scroll-padding-top:90px}
 /* smoother nav shrink + subtle elevation on scroll */
-nav{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
 nav.scrolled{box-shadow:0 1px 0 rgba(11,31,28,.04),0 8px 30px -18px rgba(11,31,28,.18)}
-.nav-in{transition:height .3s cubic-bezier(.4,0,.2,1)}
-nav.scrolled .nav-in{height:62px}
 .logo-mark{transition:width .3s cubic-bezier(.4,0,.2,1),height .3s cubic-bezier(.4,0,.2,1)}
 nav.scrolled .logo-mark{width:34px;height:34px}
 /* active-section underline for header links */
 .nav-links a.lnk{position:relative}
 .nav-links a.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.4,0,.2,1);opacity:.9}
 .nav-links a.lnk:hover::after,.nav-links a.lnk.active::after{transform:scaleX(1)}
-/* refined reveal: shorter travel, snappier curve, gentle */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
 .benefit:active{transform:translateY(-2px) scale(.995)}
 .back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
 /* smooth FAQ expand/collapse */
 details{overflow:hidden}
-details summary{transition:padding .2s ease}
-details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
+details .faq-inner{display:grid;grid-template-rows:0fr}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
@@ -386,11 +378,8 @@ summary:focus-visible{border-radius:8px}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
-  nav.scrolled .nav-in{height:72px}
+    nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
 }
-
 
 /* ---- fintech slider polish: floating value bubble + richer thumb ---- */
 .field{position:relative}
@@ -404,7 +393,6 @@ input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.
 @keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
 .res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
 @media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
-
 
 /* ============================================================
    TONE-DOWN PASS , calmer teal, brand intact  (additive, overrides)
@@ -428,7 +416,6 @@ input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.
 .callout{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
 /* trim solid-teal chrome that adds visual noise: logo mark stays teal (brand), but reduce shadow intensity */
 .logo-mark{box-shadow:none}
-
 
 /* ============================================================
    A11Y + UX PASS , verified contrast fixes & interaction polish
@@ -459,7 +446,6 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
-
 /* ---- click-to-type values (precision beyond slider steps) ---- */
 .field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
 .field .val:hover{border-bottom-color:var(--teal-700)}
@@ -469,14 +455,11 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 .val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .val-edit{-moz-appearance:textfield;appearance:textfield}
 
-
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
    ============================================================ */
-/* 1) Reveal: 30px rise, 800ms, ease-out-expo, GPU-hinted */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .tmember{will-change:transform}
 .tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
 .tmember:active{transform:translateY(-2px) scale(1.005) !important}
@@ -491,7 +474,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 input[type=range]:hover::-moz-range-thumb{transform:scale(1.15)}
 input[type=range]:active::-moz-range-thumb{transform:scale(1.15)}
 /* 4) Smart sticky header: hides on scroll down, returns on scroll up */
-nav{will-change:transform;transition:transform .38s cubic-bezier(.16,1,.3,1),background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+nav{will-change:transform;transition:transform var(--pb-d-3) var(--pb-ease-out)}
 nav.nav-hidden{transform:translateY(-100%)}
 /* 5) Floating labels for capture inputs */
 .ffield{position:relative;flex:1;min-width:0;display:block}
@@ -499,12 +482,10 @@ nav.nav-hidden{transform:translateY(-100%)}
 .ffield .flabel{position:absolute;left:21px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-3);font-size:15px;font-weight:500;line-height:1.15;transition:top .22s cubic-bezier(.16,1,.3,1),transform .22s cubic-bezier(.16,1,.3,1),font-size .22s cubic-bezier(.16,1,.3,1),color .22s ease,letter-spacing .22s ease;white-space:nowrap}
 .ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;color:var(--teal-700)}
 @media(prefers-reduced-motion:reduce){
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav{transition:none}
+    nav{transition:none}
   .ffield .flabel,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{transition:none}
   .tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
 }
-
 
 /* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
 @media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
@@ -526,7 +507,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
 .pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
 .pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
-.pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.pb-b-a{overflow:hidden;max-height:0;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
 .pb-b-a>div{padding:2px 8px 14px}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
@@ -694,13 +675,6 @@ nav.scrolled{background:var(--bg)}
 .strip-item:first-child{border-left:1px solid var(--line-2)}
 @keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* reveals no longer move in lockstep */
-.js-reveal .reveal:not(.settled){transform:translateY(14px);
-  transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
-.js-reveal .sec-head.reveal:not(.settled){transition-duration:.46s;transform:translateY(10px)}
-.js-reveal .hero-card.reveal:not(.settled){transition-duration:.92s;transform:translateY(26px)}
-.js-reveal .tcard.reveal:not(.settled){transition-duration:.68s}
-details .faq-inner{transition:grid-template-rows .42s cubic-bezier(.16,1,.3,1)}
 
 /* --- 8. Sliders: real touch targets, scroll-safe on mobile --- */
 input[type=range]{height:26px;touch-action:pan-y;
@@ -722,8 +696,7 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
     padding:20px 24px;flex-wrap:wrap;justify-content:center}
   .strip-item.is-clone{display:none}
   .strip::before,.strip::after{display:none}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  details .faq-inner{transition:none}
+    details .faq-inner{transition:none}
 }
 
 /* --- pass 4 additions --- */
@@ -2240,15 +2213,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · for larger pensions</span>
-  <h1 class="reveal" style="transition-delay:.06s">The Standard Fund Threshold, <span class="hl">and how much of it you would use.</span></h1>
-  <p class="reveal" style="transition-delay:.12s">Revenue caps the pension savings that get full tax relief. The cap is rising every year to 2029, so when you take your benefits changes how much room you have. See where you stand, and what a lump sum would be taxed.</p>
+  <span class="eyebrow"><span class="pip"></span>The free tool · for larger pensions</span>
+  <h1>The Standard Fund Threshold, <span class="hl">and how much of it you would use.</span></h1>
+  <p>Revenue caps the pension savings that get full tax relief. The cap is rising every year to 2029, so when you take your benefits changes how much room you have. See where you stand, and what a lump sum would be taxed.</p>
   <p class="sft-asat">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="standard-fund-threshold">
-  <div class="panel reveal">
+  <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="total">All your pensions, when you take them</label><span class="val" id="totalV">€1,650,000</span></div><input type="range" id="total" min="0" max="4000000" step="25000" value="1650000"><p class="subnote">Every pension you have, added up. A defined benefit pension is given a capital value using Revenue&rsquo;s factors, which Damian can work out with you.</p></div>
@@ -2266,7 +2239,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">An illustration of Revenue&rsquo;s rules, not a calculation of your own tax. A Personal Fund Threshold, if you have one, may apply instead.</div>
     </div>
 
-    <div class="chart-card sft-strip-card reveal" style="transition-delay:.12s">
+    <div class="chart-card sft-strip-card">
       <h3>The threshold, year by year</h3>
       <ol class="sft-strip" id="sftStrip">
         <li data-y="2025"><b>2025</b><span>€2.0m</span></li>
@@ -2279,13 +2252,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="sft-strip-note">Set by Finance Act 2024. From 2030 it rises each year with average earnings, as the Central Statistics Office (CSO) measures them, and cannot fall.</p>
     </div>
 
-    <div class="sft-card reveal" style="transition-delay:.14s" id="sftOver" hidden>
+    <div class="sft-card" id="sftOver" hidden>
       <h3>Over the threshold</h3>
       <p id="sftOverText"></p>
       <p class="sft-small">What is left of the excess stays in the pension and is taxed again as income when it is drawn. The Department of Finance&rsquo;s independent examination of the threshold (2024) put the combined rate at up to 68.8%, or 71.2% with Pay-Related Social Insurance (PRSI).</p>
     </div>
 
-    <div class="sft-card reveal" style="transition-delay:.16s">
+    <div class="sft-card">
       <h3>Tax on the lump sum</h3>
       <table class="sft-t">
         <caption class="tk-sr">How the lump sum is taxed, band by band</caption>
@@ -2301,7 +2274,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+<div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
   <div class="ctext"><h2>Close to the threshold, or over it?</h2><p>Timing, the order benefits are taken in, and how a defined benefit pension is valued all change the answer, and the tax on getting it wrong is steep. Damian works through this with directors and higher earners in a free 20-minute call.</p></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -2316,7 +2289,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <section class="assume"><div class="wrap">
   <h3>The rules behind these numbers</h3>
-  <ul class="reveal">
+  <ul>
     <li>The Standard Fund Threshold is €2.2 million for 2026, €2.4 million for 2027, €2.6 million for 2028 and €2.8 million for 2029 (Finance Act 2024, section 13). It was €2 million from 2014 to 2025. From 2030 it follows average weekly earnings as the CSO measures them, and it can never fall, so a year from 2030 on is shown here at €2.8 million, the least it can be.</li>
     <li>The threshold is measured each time you take a benefit, against everything you have taken since 7 December 2005. This page treats all your pensions as taken in one year.</li>
     <li>Any excess is taxed at 40% when the benefit is taken, as chargeable excess tax, with no reliefs set against it. Tax paid at 20% on a lump sum, up to €60,000, can be set against it. See <a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue&rsquo;s page on chargeable excess tax</a>.</li>
@@ -2604,7 +2577,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 (function(){
   var nav=document.getElementById('nav');
   if(!nav)return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var lastY=window.scrollY, downAcc=0, upAcc=0;
   window.addEventListener('scroll',function(){
     var y=window.scrollY, d=y-lastY; lastY=y;
@@ -2617,25 +2589,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 })();
 </script>
 
-
-<script>
-/* Reveal handoff: after the 800ms entrance completes, mark elements settled so
-   component-level hover transitions (cards, buttons) regain control and the
-   entrance's will-change GPU hint is released. */
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length)return;
-  function settle(el){ if(!el.classList.contains('settled')) setTimeout(function(){el.classList.add('settled');},900); }
-  var mo=('MutationObserver' in window)?new MutationObserver(function(ms){
-    ms.forEach(function(m){ if(m.target.classList.contains('in')) settle(m.target); });
-  }):null;
-  els.forEach(function(el){
-    if(el.classList.contains('in')) settle(el);
-    if(mo) mo.observe(el,{attributes:true,attributeFilter:['class']});
-  });
-  if(!mo){ setTimeout(function(){ els.forEach(function(el){el.classList.add('settled');}); },1800); }
-})();
-</script>
 
 <script>
 /* ---- Ask Buddy: quick answers, never advice. Content comes from this page's

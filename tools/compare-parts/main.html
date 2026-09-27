@@ -1,8 +1,8 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p class="reveal" style="transition-delay:.12s">Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
+  <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1>Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
+  <p>Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
@@ -15,7 +15,7 @@
      after the first paint and pushed the calculator down (0.04 layout shift). -->
 <script src="assets/js/pb-deadline.js"></script>
 
-    <div class="modebar reveal">
+    <div class="modebar">
       <div class="row"><span class="modelab">Which question?</span></div>
       <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
         <span class="ind" id="modeInd"></span>
@@ -25,7 +25,7 @@
       <p class="subnote" id="modeNote">Same money out of your pocket. Auto-enrolment, or a personal pension instead?</p>
     </div>
 
-    <div class="panel reveal">
+    <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
@@ -62,7 +62,7 @@
   </div>
 
   <div class="results">
-    <div class="waitcard lead reveal">
+    <div class="waitcard lead">
       <div class="wt">In one sentence</div>
       <div class="wtext verdict" id="leadOut"></div>
       <p class="phaseline" id="phaseLine"></p>
@@ -80,7 +80,7 @@
         <div class="foot">One year, at your salary and age. An illustration only.</div>
       </div>
 
-      <div class="pb-scale-card reveal" id="pbScaleCard" style="transition-delay:.1s" aria-hidden="true">
+      <div class="pb-scale-card" id="pbScaleCard" aria-hidden="true">
         <div class="pb-scale-title">Side by side</div>
         <p class="pb-scale-sub" id="pbScaleSub">One year of contributions each, at year 1 of the phase-in, on the same scale. The longer bar reaches the end of the scale.</p>
         <div class="pb-scale-lane pb-scale-ae"><span class="pb-scale-lab">Auto-enrolment</span><div class="pb-scale-track"><div class="pb-scale-bar" id="pbScaleAeBar"></div></div></div>
@@ -104,7 +104,7 @@
         <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
       </div>
 
-      <div class="chart-card reveal" id="capCard" style="transition-delay:.12s" hidden>
+      <div class="chart-card" id="capCard" hidden>
         <h3>Money above the cap</h3>
         <div class="bd"><span class="bl">Salary above €80,000</span><span class="bv" id="capAbove">€0</span></div>
         <div class="bd"><span class="bl">Your own rate on that part <span class="capnote" id="capRate"></span></span><span class="bv" id="capStranded">€0</span></div>
@@ -112,7 +112,7 @@
         <p class="subnote" id="capNote"></p>
       </div>
 
-      <div class="vs-card reveal" style="transition-delay:.14s">
+      <div class="vs-card">
         <h3>What it actually costs you</h3>
         <div class="sub">Out of your own pocket this year.</div>
         <div class="vs">
@@ -131,7 +131,7 @@
         <p class="vs-note subnote" id="vsNote"></p>
       </div>
 
-      <div class="chart-card reveal" style="transition-delay:.22s">
+      <div class="chart-card">
         <h3>Personal pension, broken down</h3>
         <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
         <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
@@ -168,7 +168,7 @@
            modes (it sits in #pbMyCard there, which this mode hides). -->
       <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
 
-      <div class="vs-card reveal" style="transition-delay:.14s">
+      <div class="vs-card">
         <h3>What it actually costs you</h3>
         <div class="sub">Out of your own pocket this year, in two parts.</div>
         <div class="vs">
@@ -187,7 +187,7 @@
         <p class="vs-note subnote" id="cNote"></p>
       </div>
 
-      <div class="chart-card reveal" style="transition-delay:.22s">
+      <div class="chart-card">
         <h3>Your top-up, broken down</h3>
         <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
         <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
@@ -204,7 +204,7 @@
          (R1, R2), and the assumptions said so in text a visitor could read.
          The script still fills #riskTiles. To restore: delete `hidden` here
          and on the risk bullet in the assumptions below (li#riskAssume). -->
-    <div class="chart-card reveal" id="riskCard" style="transition-delay:.2s" hidden>
+    <div class="chart-card" id="riskCard" hidden>
       <h3>Choosing your funds, and how much risk</h3>
       <p class="riskintro">My Future Fund invests your money in a small set of standard funds, with limited choice. A personal pension arranged through a broker gives access to a wider range of funds, and lets you choose a risk level that suits you. That applies to the personal pension here, whether it is instead of auto-enrolment or on top of it.</p>
       <p class="risksub">Funds carry a risk rating from 1 (lowest) to 7 (highest), the same scale you will see on any fund&rsquo;s Key Information Document. Three illustrations, not a menu:</p>
@@ -216,7 +216,7 @@
     </div>
 
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
-    <div class="chart-card reveal" style="transition-delay:.18s">
+    <div class="chart-card">
       <h3>Auto-enrolment, broken down</h3>
       <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
       <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
@@ -225,7 +225,7 @@
       <p class="subnote" id="aeRatesNote"></p>
     </div>
 
-    <div class="chart-card reveal" style="transition-delay:.26s">
+    <div class="chart-card">
       <h3>Before you rely on these rates</h3>
       <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at €80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years, and the position that the scheme does not currently accept contributions above its set rate. Confirm those against gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA) before relying on them. Rates and rules can change.</p>
     </div>
@@ -233,7 +233,7 @@
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+<div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
   <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
   <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -248,7 +248,7 @@
 
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
-  <ul class="reveal">
+  <ul>
     <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
     <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.
     <ol class="pb-stair">

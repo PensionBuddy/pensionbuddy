@@ -54,7 +54,7 @@
   --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
@@ -81,11 +81,8 @@ h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(-
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
 
-/* ---- reveal on scroll ---- */
-.reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
-.reveal.in{opacity:1;transform:none}
 .back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
-@media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 /* ---- announcement ---- */
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
@@ -93,7 +90,7 @@ h1,h2,h3,h4{font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(-
 .announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
 
 /* ---- nav ---- */
-nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
@@ -385,33 +382,26 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
   .magnet-form .row .btn{width:100%}
 }
 
-
 /* ============================================================
    UX POLISH  (scroll + click feel), additive
    ============================================================ */
 /* anchor jumps clear the sticky nav */
 html{scroll-padding-top:90px}
 /* smoother nav shrink + subtle elevation on scroll */
-nav{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
 nav.scrolled{box-shadow:0 1px 0 rgba(11,31,28,.04),0 8px 30px -18px rgba(11,31,28,.18)}
-.nav-in{transition:height .3s cubic-bezier(.4,0,.2,1)}
-nav.scrolled .nav-in{height:62px}
 .logo-mark{transition:width .3s cubic-bezier(.4,0,.2,1),height .3s cubic-bezier(.4,0,.2,1)}
 nav.scrolled .logo-mark{width:34px;height:34px}
 /* active-section underline for header links */
 .nav-links a.lnk{position:relative}
 .nav-links a.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.4,0,.2,1);opacity:.9}
 .nav-links a.lnk:hover::after,.nav-links a.lnk.active::after{transform:scaleX(1)}
-/* refined reveal: shorter travel, snappier curve, gentle */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
 .benefit:active{transform:translateY(-2px) scale(.995)}
 .back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
 /* smooth FAQ expand/collapse */
 details{overflow:hidden}
-details summary{transition:padding .2s ease}
-details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
+details .faq-inner{display:grid;grid-template-rows:0fr}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
@@ -419,11 +409,8 @@ summary:focus-visible{border-radius:8px}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
-  nav.scrolled .nav-in{height:72px}
+    nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
 }
-
 
 /* ============================================================
    TONE-DOWN PASS , calmer teal, brand intact  (additive, overrides)
@@ -447,7 +434,6 @@ summary:focus-visible{border-radius:8px}
 .callout{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
 /* trim solid-teal chrome that adds visual noise: logo mark stays teal (brand), but reduce shadow intensity */
 .logo-mark{box-shadow:none}
-
 
 /* ============================================================
    A11Y + UX PASS , verified contrast fixes & interaction polish
@@ -478,14 +464,11 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
-
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
    ============================================================ */
-/* 1) Reveal: 30px rise, 800ms, ease-out-expo, GPU-hinted */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .tmember{will-change:transform}
 .tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
 .tmember:active{transform:translateY(-2px) scale(1.005) !important}
@@ -500,7 +483,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 input[type=range]:hover::-moz-range-thumb{transform:scale(1.15)}
 input[type=range]:active::-moz-range-thumb{transform:scale(1.15)}
 /* 4) Smart sticky header: hides on scroll down, returns on scroll up */
-nav{will-change:transform;transition:transform .38s cubic-bezier(.16,1,.3,1),background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+nav{will-change:transform;transition:transform var(--pb-d-3) var(--pb-ease-out)}
 nav.nav-hidden{transform:translateY(-100%)}
 /* 5) Floating labels for capture inputs */
 .ffield{position:relative;flex:1;min-width:0;display:block}
@@ -508,12 +491,10 @@ nav.nav-hidden{transform:translateY(-100%)}
 .ffield .flabel{position:absolute;left:21px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-3);font-size:15px;font-weight:500;line-height:1.15;transition:top .22s cubic-bezier(.16,1,.3,1),transform .22s cubic-bezier(.16,1,.3,1),font-size .22s cubic-bezier(.16,1,.3,1),color .22s ease,letter-spacing .22s ease;white-space:nowrap}
 .ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;color:var(--teal-700)}
 @media(prefers-reduced-motion:reduce){
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav{transition:none}
+    nav{transition:none}
   .ffield .flabel,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{transition:none}
   .tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
 }
-
 
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
@@ -532,7 +513,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
 .pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
 .pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
-.pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.pb-b-a{overflow:hidden;max-height:0;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
 .pb-b-a>div{padding:2px 8px 14px}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
@@ -696,13 +677,6 @@ nav.scrolled{background:var(--bg)}
 .strip-item:first-child{border-left:1px solid var(--line-2)}
 @keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* reveals no longer move in lockstep */
-.js-reveal .reveal:not(.settled){transform:translateY(14px);
-  transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
-.js-reveal .sec-head.reveal:not(.settled){transition-duration:.46s;transform:translateY(10px)}
-.js-reveal .hero-card.reveal:not(.settled){transition-duration:.92s;transform:translateY(26px)}
-.js-reveal .tcard.reveal:not(.settled){transition-duration:.68s}
-details .faq-inner{transition:grid-template-rows .42s cubic-bezier(.16,1,.3,1)}
 
 /* --- 8. Sliders: real touch targets, scroll-safe on mobile --- */
 input[type=range]{height:26px;touch-action:pan-y;
@@ -724,8 +698,7 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
     padding:20px 24px;flex-wrap:wrap;justify-content:center}
   .strip-item.is-clone{display:none}
   .strip::before,.strip::after{display:none}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  details .faq-inner{transition:none}
+    details .faq-inner{transition:none}
 }
 
 /* --- pass 4 additions --- */
@@ -1860,23 +1833,6 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 </div></footer>
 <script>
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length){return;}
-  if(!('IntersectionObserver' in window)){return;}
-  document.documentElement.classList.add('js-reveal');
-  function reveal(el){el.classList.add('in');}
-  // Reveal anything already within ~1.4 screens immediately (no waiting on scroll)
-  function revealVisible(){var h=window.innerHeight*1.4;els.forEach(function(el){if(!el.classList.contains('in')){var r=el.getBoundingClientRect();if(r.top<h){reveal(el);}}});}
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:0.05,rootMargin:'0px 0px -4% 0px'});
-  els.forEach(function(el){io.observe(el);});
-  revealVisible();
-  window.addEventListener('load',revealVisible);
-  window.addEventListener('scroll',revealVisible,{passive:true});
-  window.addEventListener('resize',revealVisible);
-  // hard safety net: never leave anything hidden
-  setTimeout(function(){els.forEach(reveal);},900);
-})();
 </script>
 
 <script>
@@ -1934,7 +1890,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 (function(){
   var nav=document.getElementById('nav');
   if(!nav)return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var lastY=window.scrollY, downAcc=0, upAcc=0;
   window.addEventListener('scroll',function(){
     var y=window.scrollY, d=y-lastY; lastY=y;
@@ -1947,25 +1902,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 
-
-<script>
-/* Reveal handoff: after the 800ms entrance completes, mark elements settled so
-   component-level hover transitions (cards, buttons) regain control and the
-   entrance's will-change GPU hint is released. */
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length)return;
-  function settle(el){ if(!el.classList.contains('settled')) setTimeout(function(){el.classList.add('settled');},900); }
-  var mo=('MutationObserver' in window)?new MutationObserver(function(ms){
-    ms.forEach(function(m){ if(m.target.classList.contains('in')) settle(m.target); });
-  }):null;
-  els.forEach(function(el){
-    if(el.classList.contains('in')) settle(el);
-    if(mo) mo.observe(el,{attributes:true,attributeFilter:['class']});
-  });
-  if(!mo){ setTimeout(function(){ els.forEach(function(el){el.classList.add('settled');}); },1800); }
-})();
-</script>
 
 <script>
 /* ---- Ask Buddy: quick answers, never advice. Content comes from this page's
