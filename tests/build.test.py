@@ -507,6 +507,8 @@ def run():
         eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
 
     # ----------------------------------------------------------------- 18
+    from html.parser import HTMLParser as HTMLParser18
+    VOID18 = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
     # Run 32: the comparison page shows its warning box in both modes. The
     # first mode's sits under its "Everything paid in, by 66" projection; the
     # second mode hides that panel, so it carries the same box under its own
@@ -522,8 +524,46 @@ def run():
             return None
         return [WARN in src[a:b], WARN in src[b:c]]
 
+    class Boxes(HTMLParser18):
+        """every .pb-warn: the mode panel it is in, and whether anything
+        between that panel and the box (the box included) is hidden or
+        belongs to the other mode"""
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.out = [], []
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag in VOID18:
+                return
+            self.stack.append((tag, a))
+            if 'pb-warn' in (a.get('class') or '').split():
+                ids = [x.get('id') for _, x in self.stack]
+                panel = next((i for i in reversed(ids) if i in ('mode1Results', 'mode2Results')), None)
+                n = str(panel[4]) if panel else None
+                below = self.stack[ids.index(panel) + 1:] if panel else self.stack
+                bad = [t for t, x in below if 'hidden' in x or x.get('data-mode') not in (None, n)]
+                self.out.append((panel, bad))
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    del self.stack[i:]
+                    break
+
+    def boxes(src):
+        p = Boxes(); p.feed(src)
+        return sorted((panel, bool(bad)) for panel, bad in p.out)
+
     cmp_src = sources['broker-vs-autoenrolment.html']
     eq('18. the comparison shows its warning in both modes', modes_warned(cmp_src), [True, True])
+    eq('18. one box in each mode panel, and nothing between panel and box hides it or ties it to the other mode',
+       boxes(cmp_src), [('mode1Results', False), ('mode2Results', False)])
+    m2 = cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
+    for label, repl in (('the second mode\'s box hidden', '<div class="pb-warn" hidden>'),
+                        ('the second mode\'s box tied to the first mode', '<div class="pb-warn" data-mode="1">')):
+        mut = cmp_src[:m2] + WARN.replace('<div class="pb-warn">', repl, 1) + cmp_src[m2 + len(WARN):]
+        eq('18. %s is caught' % label, boxes(mut), [('mode1Results', False), ('mode2Results', True)])
     eq('18. and the parts it is built from say the same',
        modes_warned(read('tools/compare-parts/main.html') + '<!-- ============ SHARED'), [True, True])
     first, second = cmp_src.find(WARN), cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))

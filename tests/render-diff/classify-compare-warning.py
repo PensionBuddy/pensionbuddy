@@ -7,9 +7,14 @@ working tree, over every frame it takes (load, every state, every toggle).
 Every differing cell must be one of the two that contain the new box,
 #mode2Results and #main, and each must be the old cell with the warning's
 text inserted exactly once and nothing else changed: no figure, no class,
-no other text. The other four calculators must not differ at all.
+no other text. The other four calculators must not differ at all. On the
+comparison page the proof must not be vacuous: every frame must differ in
+exactly those two cells, or it fails (a tree that has lost the box, or a
+baseline that already has it, differs nowhere).
 
-    BASELINE_REF=HEAD~1 python3 classify-compare-warning.py
+Run against the commit before the box was added:
+
+    BASELINE_REF=417d101 python3 classify-compare-warning.py
 """
 import importlib.util
 import json
@@ -81,6 +86,9 @@ def main():
                     else:
                         reasons.setdefault(why, []).append('%s #%s' % (fa['label'], k))
             errs = a['errors'] + b['errors']
+            if page == PAGE and not (diffs and explained == diffs == 2 * len(a['frames'])):
+                reasons.setdefault('expected #mode2Results and #main to differ in every one of the %d frames, '
+                                   'got %d differing cells' % (len(a['frames']), diffs), []).append('all frames')
             ok = not reasons and not errs
             bad += 0 if ok else 1
             print('  %s %-32s %d frames, %d cells, %d differing, %d are the warning inserted once%s'
