@@ -7,11 +7,13 @@
 Run 32. Every page (the 29 at the root and the two games) is served with a
 probe injected as the first thing in its <head>. From the first animation
 frame, for 1.5 seconds, the probe finds every element whose own text names
-the Central Bank of Ireland, a Qualified Financial Adviser or QFA (not the
-glossary's term cards, which define those words), and records on every frame
-the least effective opacity among them (their own and every ancestor's,
-multiplied) and whether any of them, or an ancestor, is moved by a
-transform. Real frames, no virtual time; Chrome is launched, the probe posts
+the Central Bank of Ireland, a Qualified Financial Adviser, QFA or Q.F.A.
+(the smallest element whose joined text names it, so a name split by a tag
+is still found; not the glossary's term cards, which define those words),
+and records on every frame the least effective opacity among them (their
+own and every ancestor's, multiplied, and 0 while visibility hides them)
+and whether any of them, or an ancestor, is moved by a transform or by the
+translate property. Real frames, no virtual time; Chrome is launched, the probe posts
 its record, Chrome is killed (the pattern tests/gap-band.py uses). The font
 links are left out of the served copy, as there, so the font service cannot
 stall a run.
@@ -39,23 +41,34 @@ REPORTS = {}
 
 PROBE = r"""<script>
 (function(){
-  var REG=/Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b/, t0=performance.now();
+  var REG=/Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b|\bQ\.\s*F\.\s*A\b/, t0=performance.now();
   var out={frames:0, first:null, min:1, worst:null, moved:0, targets:0}, els=null;
+  /* the smallest elements whose joined text names them, so a name split
+     by a tag or written with a no-break space is still found */
+  function txt(e){ return (e.textContent||'').replace(/\u00a0/g,' ').replace(/\s+/g,' '); }
   function collect(){
     els=[];
-    var w=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), n;
-    while((n=w.nextNode())){
-      var p=n.parentElement;
-      if(!p||!REG.test(n.nodeValue.replace(/ /g,' '))||p.closest('script,style,.gterm')) continue;
-      if(els.indexOf(p)<0) els.push(p);
+    var all=document.body.getElementsByTagName('*'), i, e, k, kid;
+    for(i=0;i<all.length;i++){
+      e=all[i];
+      if(/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(e.tagName)||e.closest('.gterm')||!REG.test(txt(e))) continue;
+      kid=false;
+      for(k=0;k<e.children.length;k++){ if(REG.test(txt(e.children[k]))){ kid=true; break; } }
+      if(!kid) els.push(e);
     }
     out.targets=els.length;
   }
-  function eff(el){ var o=1; for(var e=el;e&&e.nodeType===1;e=e.parentElement) o*=parseFloat(getComputedStyle(e).opacity); return o; }
+  /* opacity, multiplied up the chain; hidden by visibility counts as 0 */
+  function eff(el){
+    if(getComputedStyle(el).visibility!=='visible') return 0;
+    var o=1; for(var e=el;e&&e.nodeType===1;e=e.parentElement) o*=parseFloat(getComputedStyle(e).opacity); return o;
+  }
+  /* moved by transform, or by the separate translate property */
   function moved(el){
     for(var e=el;e&&e.nodeType===1;e=e.parentElement){
-      var t=getComputedStyle(e).transform, m=t&&t.match(/matrix\(([^)]+)\)/);
+      var cs=getComputedStyle(e), t=cs.transform, m=t&&t.match(/matrix\(([^)]+)\)/), tr=cs.translate;
       if(m){ var v=m[1].split(',').map(Number); if(Math.abs(v[4])>0.5||Math.abs(v[5])>0.5) return true; }
+      if(tr&&tr!=='none'&&tr.split(/\s+/).some(function(x){ return Math.abs(parseFloat(x))>0.5; })) return true;
     }
     return false;
   }

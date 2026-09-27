@@ -577,19 +577,23 @@ def run():
 
     # ----------------------------------------------------------------- 19
     # Run 32: the regulator line and the QFA line are there from the first
-    # frame, on every page. No page fades itself in (the old body{animation:
-    # pageIn .4s} faded the "Regulated by the Central Bank of Ireland" strip
-    # and the footer's disclosure from blank on every load), and no text
-    # naming the Central Bank of Ireland, a Qualified Financial Adviser or
-    # QFA sits in, or under, a .reveal or anything with an inline delay or
-    # animation. The glossary's term cards are definitions of those words,
-    # not the lines themselves, and are left out. Mutants: the page fade put
-    # back, the hero lockup's delayed reveal, the review line's, and a legal
-    # page's whole-document reveal.
+    # frame, on every page (the old body{animation:pageIn .4s} faded the
+    # "Regulated by the Central Bank of Ireland" strip and the footer's
+    # disclosure from blank on every load). Static, on every page's markup
+    # and CSS: no @keyframes that starts at opacity 0 (from or 0%, in any
+    # order in its selector list) is used by a rule on html, body, main, the
+    # footer, the strip, the lockup, the review line, the legal text or the
+    # disclosure; and no element whose joined text (a name split by a tag or
+    # written with &nbsp; is still whole) names the Central Bank of Ireland,
+    # a Qualified Financial Adviser, QFA or Q.F.A. is, or sits under, a
+    # .reveal or anything with an inline delay, animation (not none), zero
+    # opacity (!important too) or delayed transition. The glossary's term
+    # cards define those words and are left out. What markup cannot show
+    # (a rule on a class, a script) is tests/regulator-lines.test.py's job.
     from html.parser import HTMLParser
-    REG = re.compile(r'Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b')
+    REG = re.compile(r'Central\s+Bank\s+of\s+Ireland|Qualified\s+Financial\s+Adviser|\bQFA\b|\bQ\.\s*F\.\s*A\b')
     VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
-    BAD_STYLE = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:;|$)'
+    BAD_STYLE = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)'
                            r'|transition\s*:[^;]*\d(?:\.\d+)?m?s[^;,]*\s\d*\.?\d+m?s')
 
     class RegLines(HTMLParser):
@@ -643,7 +647,12 @@ def run():
     def page_fades(src):
         css = ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src))
         css = re.sub(r'(?s)/\*.*?\*/', ' ', css)
-        names = set(re.findall(r'@keyframes\s+([\w-]+)\s*\{\s*(?:from|0%)\s*\{[^}]*opacity\s*:\s*0(?:\.0*)?\s*[;}]', css))
+        names = set()
+        for name, frames in re.findall(r'@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}', css):
+            for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', frames):
+                if re.search(r'(?:^|,)\s*(?:from|0%)\s*(?:,|$)', sel.strip()) and \
+                        re.search(r'opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)', body.strip()):
+                    names.add(name)
         for sel, body in re.findall(r'([^{}]+)\{([^{}]*)\}', css):
             if not re.search(r'(?:^|[\s,>+~(])' + KEY + r'(?=$|[\s,:.#\[>+~)])', sel.strip()):
                 continue
@@ -688,6 +697,14 @@ def run():
              '<p class="pb-reviewed" style="opacity:.5;transition:opacity .5s ease .16s">', 'in a reveal'),
             ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
              'in a reveal'),
+            ('a fade whose 0% shares its selector list', 'terms.html', '</style>',
+             '@keyframes f{0%,20%{opacity:0}to{opacity:1}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
+            ('a fade written to-then-from', 'terms.html', '</style>',
+             '@keyframes f{to{opacity:1}from{opacity:0}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
+            ('the lockup at zero opacity, !important', 'index.html', '<div class="pb-reg">',
+             '<div class="pb-reg" style="opacity:0!important">', 'in a reveal'),
+            ('the Q.F.A. badge in a reveal again', 'index.html', '<div class="about-port">\n    <picture>',
+             '<div class="about-port reveal">\n    <picture>', 'in a reveal'),
             ('the strip in a reveal, its name split by a line break', 'booking.html',
              'Regulated by the Central Bank of Ireland</span>',
              'Regulated by the Central Bank<br> of Ireland</span>', None),
