@@ -2357,8 +2357,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <div class="vt">Taken as salary</div>
           <div class="amt" id="salaryNet">€0</div>
           <div class="lab">lands in your pocket after up to 52.2% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), or 52.35% from 1 October 2026</div>
-          <div class="pb-cut"><div class="pb-cut-bar" aria-hidden="true"><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.2%"></i></div>
-          <p class="pb-cut-key"><span><i class="pb-cut-sw pb-cut-it"></i>40% income tax</span><span><i class="pb-cut-sw pb-cut-usc"></i>8% USC</span><span><i class="pb-cut-sw pb-cut-prsi"></i><b id="pbCutPrsiN">4.2%</b> PRSI</span></p></div>
+          <div class="pb-cut"><div class="pb-cut-bar" aria-hidden="true"><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.35%"></i></div>
+          <p class="pb-cut-key"><span><i class="pb-cut-sw pb-cut-it"></i>40% income tax</span><span><i class="pb-cut-sw pb-cut-usc"></i>8% USC</span><span><i class="pb-cut-sw pb-cut-prsi"></i><b id="pbCutPrsiN">4.35%</b> PRSI</span></p></div>
         </div>
         <div class="vsmark">vs</div>
         <div class="vs-col vs-pension">
@@ -2456,6 +2456,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pb-prsi.js?v=6b957beb"></script>
 <script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2467,16 +2468,18 @@ const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
    fit in, so a seven-figure fund is shown in thousands */
 const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE')+'k':euro(v);};
 
-/* PRSI on additional income: 4.2% to 30 September 2026, 4.35% from 1 October
-   2026 (Department of Social Protection, PRSI Contribution Rates and User
-   Guide 2026, SW14). With 40% income tax and 8% USC, the share of salary that
-   reaches the pocket is what is left. */
-var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;
+/* PRSI on additional income, by date: assets/js/pb-prsi.js holds the rates
+   and their sources (4.2% to 30 September 2026, 4.35% from 1 October 2026).
+   With 40% income tax and 8% USC, the share of salary that reaches the pocket
+   is what is left. The key's markup carries the latest rate, for a reader
+   without JavaScript. */
+var PRSI_NOW = PBPrsi.at(new Date());
+var PRSI = PRSI_NOW.rate;
 var TAKE_HOME = 1 - (0.40 + 0.08 + PRSI);
 /* #21: the PRSI part of the three-part bar under "Taken as salary" */
 (function () {
   var f = document.getElementById('pbCutPrsi'), n = document.getElementById('pbCutPrsiN');
-  var pc = (Math.round(PRSI * 1000) / 10) + '%';
+  var pc = PRSI_NOW.pct;
   if (f) f.style.width = pc;
   if (n) n.textContent = pc;
 })();

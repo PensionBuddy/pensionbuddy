@@ -1880,8 +1880,10 @@ a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,3
 /* CLICK:END */
 /* €1,000 OF PROFIT, TWO WAYS (#pbTwo). The director calculator's own
    rates on a round amount: salary after 40% income tax, 8% USC and PRSI
-   (4.2%, 4.35% from 1 October 2026), or all of it into the pension. The
-   markup carries the salary state; the buttons need script. */
+   at the rate assets/js/pb-prsi.js gives for today, or all of it into the
+   pension. The markup carries the salary state at the latest rate there, for
+   a reader without JavaScript (tests/build.test.py check 18); the buttons
+   need script. */
 .pb-two{margin-top:14px}
 .pb-two-seg{display:inline-flex;gap:4px;padding:3px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line)}
 .pb-two-seg button{font:inherit;font-size:13.5px;font-weight:600;padding:6px 12px;border:0;border-radius:99px;background:transparent;color:var(--ink-2);cursor:pointer}
@@ -2013,7 +2015,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg></span>
       <div><h3>Salary versus pension, compared</h3><p>Take it as salary and it is taxed three ways: income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI). Put it into a pension instead and far more of it stays yours.</p>
         <div class="pb-two" id="pbTwo"><div class="pb-two-seg" role="group" aria-label="€1,000 of profit"><button type="button" aria-pressed="true" data-pb-way="salary">As salary</button><button type="button" aria-pressed="false" data-pb-way="pension">Into your pension</button></div>
-        <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;478</b> in your pocket, after 40% income tax, 8% USC and 4.2% PRSI.</p></div></div>
+        <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026).</p></div></div>
     </div>
     <div class="benefit reveal" style="transition-delay:.24s">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-6"/></svg></span>
@@ -2471,13 +2473,15 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-bookbar.js?v=38cc66f9"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-prsi.js?v=6b957beb"></script>
 <script>
-/* €1,000 of profit, two ways: the director calculator's rates, PRSI by date */
+/* €1,000 of profit, two ways: the director calculator's rates, PRSI by date
+   from assets/js/pb-prsi.js */
 (function(){
   var w=document.getElementById('pbTwo'); if(!w) return;
-  var prsi=new Date()<new Date(2026,9,1)?0.042:0.0435, keep=Math.round(1000*(1-(0.40+0.08+prsi))*100)/100;
+  var p=PBPrsi.at(new Date()), prsi=p.rate, keep=Math.round(1000*(1-(0.40+0.08+prsi))*100)/100;
   var out=document.getElementById('pbTwoOut'), bs=[].slice.call(w.querySelectorAll('button'));
-  var pct=(Math.round(prsi*1000)/10)+'%';
+  var pct=p.pct;
   function show(way){
     bs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-pb-way')===way?'true':'false');});
     out.innerHTML=way==='salary'

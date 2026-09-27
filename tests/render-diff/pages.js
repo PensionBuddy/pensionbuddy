@@ -37,7 +37,7 @@ const PAGES = {
   'director-calculator': {
     html: 'director-calculator.html',
     parts: null,                                   // inline, hand-written page
-    modules: [SHARED],
+    modules: [SHARED, 'assets/js/pb-prsi.js'],     // Run 32: PRSI by date
     // 'split' is the share of the company contribution the reader puts into
     // the pension rather than taking as salary; it drives the one line under
     // the two columns and is swept like every other control on the page

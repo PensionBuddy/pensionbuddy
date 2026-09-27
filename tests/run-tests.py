@@ -89,6 +89,7 @@ SUITES = {
     'director-topics': (['/assets/js/director-topics.js'],
                         '/tests/director-topics.test.js', ['PBDirectorTopics'], 10),
     'pots': (['/assets/js/pots.js'], '/tests/pots.test.js', ['PBPots'], 33),
+    'prsi': (['/assets/js/pb-prsi.js'], '/tests/prsi.test.js', ['PBPrsi'], 14),
     'pia': (['/assets/js/pension-tax-relief.js', '/assets/js/sft.js', '/assets/js/pia.js'],
             '/tests/pia.test.js', ['PBRelief', 'PBSft', 'PBPia'], 44),
 }

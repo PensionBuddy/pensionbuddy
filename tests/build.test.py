@@ -450,6 +450,57 @@ def run():
         eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
            [n for n, _ in off_wording(m)], [page] if flagged else [])
 
+    # ----------------------------------------------------------------- 17
+    # Run 32 (N1): PRSI is stated from one dated table, assets/js/pb-prsi.js.
+    # The two director pages' scripts read it and hold no rate or date of
+    # their own; their markup carries the table's LATEST rate, so a reader
+    # without JavaScript sees the rate that applies from its date: the
+    # calculator's key (bar width and label) and director.html's "€1,000 of
+    # profit" line, with the euro figure the page's own arithmetic gives and
+    # the date the rate applies from. Both pages load the table before the
+    # script that reads it. Mutants: each piece of markup at the old rate,
+    # and a script that brings back its own rate.
+    prsi_js = read('assets/js/pb-prsi.js')
+    rates = [dict(pct=m.group(4), rate=float(m.group(3)), said=m.group(5))
+             for m in re.finditer(r"\{ from: \[(\d+), (\d+), \d+\], rate: ([0-9.]+), pct: '([^']+)', said: '([^']+)' \}", prsi_js)]
+    eq('17. the PRSI table has its rates', [r['pct'] for r in rates], ['4.2%', '4.35%'])
+    latest = rates[-1]
+    keep = round(round(1000 * (1 - (0.40 + 0.08 + latest['rate'])) * 100) / 100 + 1e-9)
+
+    def prsi_findings(docs):
+        out = []
+        calc, dire = docs['director-calculator.html'], docs['director.html']
+        if 'id="pbCutPrsi" style="width:%s"' % latest['pct'] not in calc:
+            out.append(('director-calculator.html', 'key bar'))
+        if '<b id="pbCutPrsiN">%s</b> PRSI' % latest['pct'] not in calc:
+            out.append(('director-calculator.html', 'key label'))
+        m = re.search(r'<p class="pb-two-out" id="pbTwoOut">(.*?)</p>', dire)
+        want = ('is about <b>&euro;%d</b> in your pocket, after 40%% income tax, 8%% USC and %s PRSI '
+                '(the rate from %s).' % (keep, latest['pct'], latest['said']))
+        if not m or want not in m.group(1):
+            out.append(('director.html', 'profit line'))
+        for name in ('director.html', 'director-calculator.html'):
+            src = docs[name]
+            scripts = ' '.join(re.findall(r'(?is)<script>(.*?)</script>', src))
+            if re.search(r'0\.042\b|0\.0435\b|new Date\(\s*2026\s*,\s*9\s*,\s*1\s*\)|Math\.round\(\s*\w*PRSI\w*\s*\*\s*1000', scripts, re.I):
+                out.append((name, 'a rate in the script'))
+            tag = src.find('<script src="assets/js/pb-prsi.js')
+            use = src.find('PBPrsi.at(')
+            if tag < 0 or use < 0 or tag > use:
+                out.append((name, 'the table is not loaded first'))
+        return out
+
+    eq('17. the director pages state PRSI from the table, and their markup carries %s' % latest['pct'],
+       prsi_findings(sources), [])
+    for label, page, find, repl, want in (
+            ('the key bar at the old rate', 'director-calculator.html', 'style="width:%s"' % latest['pct'], 'style="width:4.2%"', 'key bar'),
+            ('the key label at the old rate', 'director-calculator.html', '<b id="pbCutPrsiN">%s</b>' % latest['pct'], '<b id="pbCutPrsiN">4.2%</b>', 'key label'),
+            ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
+            ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
+            ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script')):
+        m = dict(sources); m[page] = m[page].replace(find, repl, 1)
+        eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
+
 
 
 
