@@ -263,10 +263,15 @@ focused bar; it fails on the pre-review tree and on each mutant).
 - Every commit gated in a detached worktree: every suite, the render-diffs
   (the five calculators' figures unchanged throughout), `tools/verify.py`
   0 FAIL.
-- Lighthouse mobile, local fonts, 5 interleaved runs a page, before (the
-  branch base) against after: the pension and director calculators 99 to 98
-  (LCP 1.96s and 1.81s to 2.26s; accepted by Damian), the other six measured
-  pages equal; layout shift lower on every page.
+- Lighthouse mobile, local fonts, 5 interleaved runs a page, the branch
+  base (`25dc9f2`) against the merged tree (`c8836d2`), medians: the
+  director calculator 99 to 98 (LCP 1.96s to 2.12s) and the pension
+  calculator 98 to 98 in that session (99 to 98 in earlier ones: the base
+  itself flips between 98 and 99 from session to session), the point Damian
+  accepted; the home page, the reality check, starter, booking, the
+  glossary and director equal; blocking time 0 (one home-page run 127ms);
+  layout shift lower on every page (the calculators 0.007 to 0.001, the
+  home page 0.007 to 0).
 - Headless Chrome, the branch's scratch probes at 3b: caveats under a
   floating layer at some scroll stop, 41 at 375 and 6 at 1440 before, none
   after; focused controls under Ask Buddy at 375, 71 of 350 before, none
