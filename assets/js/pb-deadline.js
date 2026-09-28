@@ -34,11 +34,16 @@
    when the page opens, when the browser brings the page back from its
    back-forward cache, and when you come back to the tab. A clock running
    to the second read as pressure.
-   The markup carries what this writes today, for a reader without
-   JavaScript, except the band's clock, which stays hidden, leaving the
-   date sentence; the chip's label and the band's eyebrow, "to Revenue's
-   deadline" and "Revenue's deadline", never change and are markup only.
-   PBDeadline.at(date) is the arithmetic alone, for tests/deadline.test.py. */
+   For a reader without JavaScript the markup carries the date instead
+   (Run 32): the band what this writes today, its clock hidden; the
+   calculators' row and the chip's name the words of PBDeadline.statics(),
+   with no count; and the chip a static span, "18 Nov 2026, online"
+   (.nt-off), which shows only while <html> lacks pb-js, the class the
+   script in <head> sets before anything paints. With JavaScript the chip
+   shows its live spans (.nt-on) as before. The chip's
+   live label and the band's eyebrow, "to Revenue's deadline" and "Revenue's
+   deadline", never change and are markup only. PBDeadline.at(date) is the
+   arithmetic alone, for tests/deadline.test.py. */
 (function () {
   'use strict';
 
@@ -95,7 +100,33 @@
     return 'Revenue’s deadline is ' + (d.ros ? d.ros + ' if you pay and file online.' : d.revenue + '.');
   }
 
-  window.PBDeadline = { at: at, targetLine: targetLine, revenueLine: revenueLine, heading: heading };
+  /* What the markup says for a reader without JavaScript (Run 32): the same
+     words with no count, and the year on each date, since nothing tells that
+     reader which year it is. Nothing here runs on the page: the chip's
+     static spans, its accessible name and the calculators' row carry these
+     strings as markup, and tests/deadline.test.py holds them to this, and
+     fails once the real date has moved past them. They change only when the
+     deadline moves on to the next year, so they never say "was". */
+  function statics(d) {
+    var date = (d.ros || d.revenue) + ' ' + d.year;
+    var target = date + ', Revenue’s deadline for the ' + d.taxYear + ' tax year' +
+      (d.ros ? ' if you pay and file online through the Revenue Online Service' : '');
+    var online = 'pay and file online through the Revenue Online Service';
+    var second = d.ros
+      ? 'If you do not ' + online + ', it is ' + d.revenue + ' ' + d.year + '.'
+      : 'If you ' + online + ', it is usually later, in mid-November.';
+    /* the chip has room for the short month alone: at 1440, where it sits
+       beside the nav's links, "18 November 2026, online" overruns the row */
+    var md = d.ros ? ROS[d.year] : REVENUE;
+    return {
+      chip: md.day + ' ' + MONTHS[md.month].slice(0, 3) + ' ' + d.year + (d.ros ? ', online' : ''),
+      chipName: target + '. Opens the full explanation.',
+      row: '<b>' + date + '</b>' + target.slice(date.length) + '. ' + second +
+        ' After that, ' + d.taxYear + '’s allowance is gone for good.'
+    };
+  }
+
+  window.PBDeadline = { at: at, targetLine: targetLine, revenueLine: revenueLine, heading: heading, statics: statics };
 
   var $ = function (id) { return document.getElementById(id); };
   var chip = $('navTick'), chipVal = $('ntVal'), bD = $('tkD'),

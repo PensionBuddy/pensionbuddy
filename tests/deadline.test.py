@@ -19,10 +19,6 @@ What it proves:
      the tax year and the screen-reader line; the same words as the page's
      markup, so a reader without JavaScript reads what a reader with it
      reads, and without JavaScript the clock stays hidden, not "--"
-  5. never on a timer (Run 32, D21): pb-deadline.js sets no interval or
-     timeout; a day later, coming back to the tab (visibilitychange) or to
-     the page from the back-forward cache (pageshow) counts again, and
-     nothing else does; and no page pulses the chip's dot
   3. the calculators' "Tax deadline" row counts to 18 November and gives 31
      October beside it
   4. through the year: the day after the old cut-off changes nothing; on 1
@@ -31,6 +27,19 @@ What it proves:
      next tax year, and in a year with no Revenue Online Service date (2027)
      the count is to 31 October and the online date is "usually later, in
      mid-November"; a second after that 31 October, on to 2028
+  5. never on a timer (Run 32, D21): pb-deadline.js sets no interval or
+     timeout; a day later, coming back to the tab (visibilitychange) or to
+     the page from the back-forward cache (pageshow) counts again, and
+     nothing else does; and no page pulses the chip's dot
+  6. without JavaScript (Run 32): on every page the chip carries the date,
+     "18 Nov 2026, online", and a name that says so, and the calculators'
+     row the date sentence, all in the words of PBDeadline.statics();
+     rendered with every script stripped, at 1440 (the chip beside the
+     links, the least room), 1200 and 900, that is what shows, the live
+     spans do not, and the nav still fits its row; with JavaScript only the
+     live spans show. And by the real clock, not a pinned one, the static words
+     are still today's: once 18 November 2026 has passed this fails until
+     the markup moves on to what PBDeadline.statics() gives then
 """
 import base64, glob, html, json, os, re, socket, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -73,6 +82,10 @@ PROBE = r"""<script>
     var h=document.querySelector('.tick h2'); R.head=h?h.textContent:null;
     var e=document.querySelector('.tick .eyebrow'); R.eyebrow=e?e.textContent:null;
     R.rev=t('tkRev'); R.year=t('tkYear'); R.sr=t('tkSr'); R.row=t('deadlineText');
+    R.statics=window.PBDeadline ? PBDeadline.statics(PBDeadline.at(new Date())) : null;
+    R.shown=chip ? [].filter.call(chip.querySelectorAll('span'),function(x){ return getComputedStyle(x).display!=='none'; })
+      .map(function(x){ return x.className; }) : null;
+    R.pbjs=document.documentElement.classList.contains('pb-js');
     function out(){ var p=document.createElement('pre'); p.id='__dl';
       p.textContent=btoa(unescape(encodeURIComponent(JSON.stringify(R)))); document.body.appendChild(p); }
     if(!/[?&]__dlBack=1/.test(location.search)) return out();
@@ -104,21 +117,42 @@ class Handler(SimpleHTTPRequestHandler):
         if u.path == '/__dl':
             body = ('<!doctype html><meta charset="utf-8"><body><script>'
                     'var JOBS=%s,OUT=[];localStorage.setItem("pb-consent","rejected");'
+                    # a page with every script stripped runs no probe: read it from here
+                    'function off(f){var d=f.contentDocument;'
+                    # the frame's first document is about:blank, "complete" at once: wait for the page
+                    'if(!d||d.readyState!=="complete"||d.location.search.indexOf("__nojs")<0)return null;'
+                    'var w=f.contentWindow,ch=d.getElementById("navTick"),row=d.getElementById("deadlineText");'
+                    'var vis=function(x){return w.getComputedStyle(x).display!=="none";};'
+                    'var sp=ch?[].filter.call(ch.querySelectorAll("span"),vis):[];'
+                    'var R={shown:sp.map(function(x){return x.className;}),text:sp.map(function(x){return x.textContent;}),'
+                    'name:ch?ch.getAttribute("aria-label"):null,row:row?row.textContent:null,rowShown:row?vis(row):null,'
+                    'pbjs:d.documentElement.classList.contains("pb-js"),scripts:d.scripts.length};'
+                    'var nv=d.querySelector(".nav-in");R.overrun=nv?Math.round(Math.max.apply(null,[].filter.call(nv.children,vis)'
+                    '.map(function(k){return k.getBoundingClientRect().right;}))-w.innerWidth):null;'
+                    'return {textContent:btoa(unescape(encodeURIComponent(JSON.stringify(R))))};}'
                     'function next(){var j=JOBS.shift();if(!j){var p=document.createElement("pre");p.id="__all";'
                     'p.textContent=JSON.stringify(OUT);document.body.appendChild(p);return;}'
                     'var f=document.createElement("iframe");f.style.cssText="width:1200px;height:800px";'
-                    'var c=j[1].split("|");f.src="/"+j[0]+"?__dl="+encodeURIComponent(c[0])+(c[1]?"&__dlBack=1":"");'
+                    'var c=j[1].split("|"),nojs=c[0].indexOf("nojs:")===0;'
+                    'if(nojs)f.style.width=c[0].split(":")[1]+"px";'
+                    'f.src="/"+j[0]+(nojs?"?__nojs=1":"?__dl="+encodeURIComponent(c[0])+(c[1]?"&__dlBack=1":""));'
                     'document.body.appendChild(f);var n=0;'
-                    '(function poll(){n++;var p=null;try{p=f.contentDocument.getElementById("__dl");}catch(e){}'
+                    '(function poll(){n++;var p=null;try{p=nojs?off(f):f.contentDocument.getElementById("__dl");}catch(e){}'
                     'if(p){OUT.push([j[0],j[1],p.textContent]);f.remove();next();return;}'
                     'if(n>800){OUT.push([j[0],j[1],null]);f.remove();next();return;}setTimeout(poll,25);})();}'
                     'next();</script></body>') % q['jobs'][0]
             return self._send(body.encode('utf-8'))
         path = u.path.lstrip('/')
         fs = os.path.join(ROOT, path)
+        if path.endswith('.html') and os.path.isfile(fs) and '__nojs' in q:
+            # the markup and CSS a reader without JavaScript gets: every script out
+            t = re.sub(r'<script\b[^>]*>.*?</script>', '', open(fs, encoding='utf-8').read(), flags=re.S)
+            return self._send(t.encode('utf-8'))
         if path.endswith('.html') and os.path.isfile(fs) and '__dl' in q:
             t = open(fs, encoding='utf-8').read()
-            t = re.sub(r'(<head[^>]*>)', lambda m: m.group(1) + CLOCK % json.dumps(q['__dl'][0].split('|')[0]), t, count=1)
+            clock = q['__dl'][0].split('|')[0]
+            if clock != 'real':
+                t = re.sub(r'(<head[^>]*>)', lambda m: m.group(1) + CLOCK % json.dumps(clock), t, count=1)
             t = t.replace('</body>', PROBE + '</body>', 1)
             return self._send(t.encode('utf-8'))
         return super().do_GET()
@@ -129,7 +163,10 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_header('Content-Length', str(len(b)))
         self.send_header('Cache-Control', 'no-store')
         self.end_headers()
-        self.wfile.write(b)
+        try:
+            self.wfile.write(b)
+        except (BrokenPipeError, ConnectionResetError):
+            pass    # a frame removed before its page arrived
 
 
 
@@ -160,7 +197,12 @@ def main():
     jobs += [['index.html', OCT16], ['index.html', NOV], ['director-calculator.html', NOV],
              ['index.html', LAST], ['index.html', ROLL], ['pension-calculator.html', ROLL],
              ['index.html', ROLL2], ['broker-vs-autoenrolment.html', ROLL2],
-             ['index.html', DAY1], ['index.html', NOW + '|back']]
+             ['index.html', DAY1], ['index.html', NOW + '|back'],
+             ['index.html', 'real'], ['pension-calculator.html', 'real']]
+    # 1440 is where the chip sits beside the nav's links, with the least room;
+    # 1200 and 900 put the links in the menu
+    NOJS, NOJS_W = ['index.html', 'glossary.html', 'pia.html'] + list(CALCS), (1440, 1200, 900)
+    jobs += [[p, 'nojs:%d' % w] for p in NOJS for w in NOJS_W]
     url = 'http://127.0.0.1:%d/__dl?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,900',
@@ -217,8 +259,8 @@ def main():
        bool(clock) and ' hidden' in clock.group(1) and clock.group(2).count('class="tk-unit"') == 1 and
        'id="tkH"' not in src and 'id="tkS"' not in src, True)
     chip = re.search(r'<a class="nav-tick" id="navTick"[^>]*>.*?</a>', flat)
-    eq('2. without JavaScript the chip names Revenue\'s deadline',
-       bool(chip) and 'to Revenue’s deadline</span>' in chip.group(0) and 'Countdown to Revenue’s deadline' in chip.group(0), True)
+    eq('2. the chip\'s live label names Revenue\'s deadline',
+       bool(chip) and '<span class="nt-l nt-on" aria-hidden="true">to Revenue’s deadline</span>' in chip.group(0), True)
     # 3
     for page in CALCS:
         r = R[(page, NOW)]
@@ -266,6 +308,53 @@ def main():
         if found:
             pulse[os.path.basename(f)] = found
     eq('5. no page pulses the chip\'s dot', pulse, {})
+
+    # 6
+    S = R[('index.html', NOW)]['statics']
+    eq('6. PBDeadline.statics() on 25 September 2026: the chip', S['chip'], '18 Nov 2026, online')
+    def chip_off(src):
+        flat = re.sub(r'\s+', ' ', html.unescape(src))
+        m = re.search(r'<a class="nav-tick" id="navTick"[^>]*aria-label="([^"]*)"[^>]*>(.*?)</a>', flat)
+        if not m:
+            return None
+        spans = re.findall(r'<span class="([^"]*)"[^>]*>([^<]*)</span>', m.group(2))
+        return m.group(1), spans
+    LIVE = [('nt-dot', ''), ('nt-n nt-on', '--'), ('nt-l nt-on', 'to Revenue’s deadline')]
+    WANT = (S['chipName'], LIVE + [('nt-n nt-off', S['chip'])])
+    eq('6. every page: the chip carries the date and a name that says so, for a reader without JavaScript',
+       {pg: chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) for pg in pages
+        if chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) != WANT}, {})
+    def row_markup(src):
+        m = re.search(r'<span class="dl-text" id="deadlineText">(.*?)</span>', src, re.S)
+        return re.sub(r'\s+', ' ', html.unescape(m.group(1))).strip() if m else None
+    for page in CALCS:
+        eq('6. %s: the row carries the date sentence' % page,
+           row_markup(open(os.path.join(ROOT, page), encoding='utf-8').read()), S['row'])
+    for page in pages:
+        r = R.get((page, NOW))
+        if r:
+            eq('6. %s: with JavaScript only the live spans show' % page,
+               (r['pbjs'], r['shown']), (True, ['nt-dot', 'nt-n nt-on']))
+    plain = re.sub(r'<[^>]+>', '', S['row'])
+    for page in NOJS:
+        for w in NOJS_W:
+            r = R.get((page, 'nojs:%d' % w))
+            eq('6. %s at %dpx without JavaScript: reported, with no script left' % (page, w),
+               bool(r) and (r['scripts'], r['pbjs']) == (0, False), True)
+            if not r:
+                continue
+            eq('6. %s at %dpx without JavaScript: the chip shows the date, not "--"' % (page, w),
+               list(zip(r['shown'], r['text'])), [('nt-dot', ''), ('nt-n nt-off', S['chip'])])
+            eq('6. %s at %dpx without JavaScript: the nav still fits its row' % (page, w), r['overrun'] <= 0, True)
+            eq('6. %s at %dpx without JavaScript: the chip\'s name says the date' % (page, w), r['name'], S['chipName'])
+            if page in CALCS:
+                eq('6. %s at %dpx without JavaScript: the row shows the date sentence, not nothing' % (page, w),
+                   (r['rowShown'], re.sub(r'\s+', ' ', r['row'] or '').strip()), (True, plain))
+    for page in ('index.html', 'pension-calculator.html'):
+        r = R.get((page, 'real'))
+        eq('6. by the real clock (%s), the static deadline words are still today\'s: if not, move the chip, '
+           'its name and the calculators\' row on to these' % page,
+           r and r['statics'], S)
     srv.shutdown()
     report()
 

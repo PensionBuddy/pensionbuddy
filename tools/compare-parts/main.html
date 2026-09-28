@@ -8,11 +8,13 @@
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
   <div class="deadline" id="deadlineBand">
       <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"></span>
+      <span class="dl-text" id="deadlineText"><b>18 November 2026</b>, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online through the Revenue Online Service, it is 31 October 2026. After that, 2025&rsquo;s allowance is gone for good.</span>
     </div>
 <!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
      not at the foot of the page: filled at the foot, the row grew from nothing
-     after the first paint and pushed the calculator down (0.04 layout shift). -->
+     after the first paint and pushed the calculator down (0.04 layout shift).
+     The row's markup is the date sentence a reader without JavaScript gets
+     (PBDeadline.statics()); the script puts the count in its place. -->
 <script src="assets/js/pb-deadline.js"></script>
 
     <div class="modebar">

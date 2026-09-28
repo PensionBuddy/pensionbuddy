@@ -941,6 +941,8 @@ def caveat_selector():
 # a line here that set html.pb-motion; since the Lighthouse follow-up it is
 # the whole motion runtime, and assets/js/pb-motion.js is gone: one request
 # fewer before the first paint. It
+#  - sets html.pb-js, so the markup a reader without JavaScript gets (the nav
+#    chip's date, .nt-off) can step aside for the live one before any paint;
 #  - sets html.pb-motion before anything paints, only when motion is allowed,
 #    and keeps it true while the page is open: a reader who turns on reduced
 #    motion gets it at once (html.pb-motion and html.pb-smooth come off, and
@@ -956,6 +958,7 @@ def caveat_selector():
 #    rule 2 read one list.
 MOTION_HEAD = (
     "<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;"
+    "r.classList.add('pb-js');"
     "function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}"
     "if(ok())r.classList.add('pb-motion');"
     "function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');"
