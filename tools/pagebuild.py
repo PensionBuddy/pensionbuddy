@@ -168,7 +168,7 @@ class Page(object):
         self.keep = keep              # ids the progressive disclosure keeps visible
         self.page_js = page_js        # the page script inside the parts directory
         self.nav = nav                # href of the nav item to mark current, or None
-        self.fonts = fonts            # extra Google Fonts family parameter, or None
+        self.fonts = fonts            # retired in Run 34 (the fonts are self-hosted); must be None
         self.checks = checks          # (needle, label) pairs particular to this page
         self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
         self.floor16 = floor16        # a calculator: keeps the skeleton's 16px floor on the text in <main>
@@ -417,11 +417,9 @@ def assemble(page):
     css = read(os.path.join(page.parts_dir, 'page.css')).strip()
     head = head.replace('</style>', '\n' + css + '\n</style>', 1)
 
-    if page.fonts:
-        m = re.search(r'(<link href="https://fonts\.googleapis\.com/css2\?)([^"]*)(")', head)
-        assert m, 'could not find the Google Fonts request'
-        if page.fonts not in m.group(2):
-            head = head[:m.start(2)] + page.fonts + head[m.start(2):]
+    # Run 34: the fonts are the site's own (the FONTS block in SHARED_CSS);
+    # a page needing another face adds it to that block, not a request here.
+    assert page.fonts is None, 'no font service to extend: add the face to the FONTS block'
 
     # The skeleton's active pension calculator link carries aria-current AFTER
     # href, so an exact-string replace never fires. Match on the attributes,

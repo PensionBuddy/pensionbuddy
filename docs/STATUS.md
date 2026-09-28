@@ -225,6 +225,29 @@ option, logged as a question. Branch off `main` (`669becc`).
 |---|---|---|---|---|
 | 1 | Leftovers | **Done** | see git log | The cookie bar's "Privacy Notice" opens the notice at its Cookies section (`privacy.html#cookies`; consent check 9). At 320 to 351px wide the starter guide's "See the State Pension reality check" takes two lines (`.pb-btn-long`), and the PIA page's two results tables each scroll inside their own box, which the keyboard can reach (`.pia-stwrap`, named by its caption); no page is wider than a 320px screen (all 29 measured). The PIA page is now in the render-diff harness (load, sequences, browser-diff); `classify-pia-tablewrap.py` proves the only differences are whitespace and the two captions' new ids. Question 1. |
 
+| 2 | Self-hosted fonts | **Done** | see git log | Inter and the footer wordmark's Schibsted Grotesk 800 are in `assets/fonts/` (the nine woff2 files Google Fonts served on 28 September, byte for byte, with their SIL Open Font License texts); the `@font-face` rules are in the shared FONTS block, with the Inter Fallback metrics kept; each page preloads `inter-latin.woff2`; no page, the two games included, asks Google for anything (build check 29; verify F2). Every page at 375 and 1440 is pixel for pixel main's (62 full-page shots; the games' animation aside). The Privacy Notice never mentioned Google Fonts, so it is unchanged; pack 1.17's note says the fonts are now the site's own. Lighthouse below. |
+
+### Lighthouse, item 2 (interleaved, 5 runs a side, median; before = main with Google Fonts over the network)
+
+| Page | Perf | FCP ms | LCP ms | Speed Index ms | CLS |
+|---|---|---|---|---|---|
+| Home | 98 → 98 | 1683 → 1056 | 1958 → 2330 | 1683 → 1056 | 0 → 0 |
+| Directors | 99 → 99 | 1682 → 1057 | 1682 → 2107 | 1682 → 1057 | 0.0004 → 0 |
+| Starter | 99 → 99 | 1683 → 1056 | 1683 → 1958 | 1683 → 1056 | 0.0011 → 0.0012 |
+| Tracker | 99 → 99 | 1682 → 1060 | 1682 → 2183 | 1682 → 1060 | 0.0029 → 0 |
+| Pension calculator | 99 → 98 | 1681 → 1209 | 1742 → 2259 | 1681 → 1209 | 0.0007 → 0 |
+| Director calculator | 99 → 99 | 1681 → 1209 | 1681 → 2106 | 1681 → 1209 | 0.0007 → 0 |
+| PIA | 99 → 99 | 1680 → 1056 | 1742 → 2256 | 1680 → 1056 | 0.0013 → 0 |
+
+First paint is about 0.6s sooner everywhere. The simulated LCP is 0.3 to 0.5s
+later: Lighthouse's simulation counts every request that finishes before
+the LCP paint, and the site's own font files (about 73KB on a page) now
+finish in time and are counted, where Google's, on another origin, finished
+after it and were not, though every reader downloaded them too, behind a
+render-blocking stylesheet. With the fonts self-hosted but not preloaded,
+LCP is the same and first paint 0.45s later, with the small layout shifts
+back (index, directors, tracker, pension calculator), so the preload stays.
+
 ## Questions for Damian
 
 1. On the narrowest phones (320 to 351px) the PIA's results tables scroll

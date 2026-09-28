@@ -822,14 +822,15 @@ def run():
         m = sources[page].replace(find, repl, 1)
         assert m != sources[page], label
         eq('22. %s is caught' % label, want in plumbing(m), True)
-    # the viewport meta and the head script, together, moved below the font stylesheet
+    # the viewport meta and the head script, together, moved below the first
+    # stylesheet (since Run 34 the page's own <style>: no font stylesheet)
     bk = sources['booking.html']
     pair = VIEWPORT + '\n' + pagebuild.MOTION_HEAD + '\n'
-    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', bk)
-    assert pair in bk and link and bk.find(pair) < link.start()
+    first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', bk)
+    assert pair in bk and first and bk.find(pair) < first.start()
     moved = bk.replace(pair, '', 1)
-    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', moved)
-    moved = moved[:link.end()] + pair + moved[link.end():]
+    end = moved.index('</style>\n') + len('</style>\n')
+    moved = moved[:end] + pair + moved[end:]
     eq('22. the head script moved below the stylesheet is caught', plumbing(moved), ['head order'])
 
     # ----------------------------------------------------------------- 23
@@ -1052,6 +1053,46 @@ def run():
             ('the copies drifting apart', dr.replace('30 years in financial services', '31 years in financial services', 1), 'the two copies differ')):
         assert mut != dr, label
         eq('28. %s is caught' % label, lockups(mut), want)
+
+    # ----------------------------------------------------------------- 29
+    # Run 34, item 2: the fonts are the site's own. No page (the games
+    # included) asks Google Fonts for anything; the FONTS block names every
+    # file in assets/fonts/, each a real woff2 there, with its licence; each
+    # page preloads the Latin Inter file once, before its first stylesheet,
+    # with crossorigin (a font preload without it is fetched twice).
+    FONT_FILES = ['inter-cyrillic-ext', 'inter-cyrillic', 'inter-greek-ext', 'inter-greek', 'inter-vietnamese',
+                  'inter-latin-ext', 'inter-latin', 'schibsted-grotesk-latin-ext', 'schibsted-grotesk-latin']
+    def fonts(src, prefix=''):
+        out = []
+        if re.search(r'fonts\.(?:googleapis|gstatic)\.com', src):
+            out.append('asks Google Fonts')
+        named = re.findall(r"url\(%sassets/fonts/([a-z-]+)\.woff2\) format\('woff2'\)" % re.escape(prefix), src)
+        if sorted(named) != sorted(FONT_FILES):
+            out.append('font files named: %s' % sorted(set(named) ^ set(FONT_FILES)))
+        pre = '<link rel="preload" href="%sassets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>' % prefix
+        first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)
+        if src.count(pre) != 1 or not first or src.find(pre) > first.start():
+            out.append('preload')
+        return out
+    eq('29. every page: no request to Google Fonts, its own nine font files, the Latin Inter preloaded',
+       {n: fonts(t) for n, t in sources.items() if fonts(t)}, {})
+    eq('29. and the two games, from one level down',
+       {g: fonts(t, '../') for g, t in games.items() if fonts(t, '../')}, {})
+    real = {}
+    for f in FONT_FILES:
+        path = os.path.join(ROOT, 'assets', 'fonts', f + '.woff2')
+        real[f] = os.path.isfile(path) and open(path, 'rb').read(4) == b'wOF2' and os.path.getsize(path) > 5000
+    eq('29. each named file is a woff2 in assets/fonts/', [f for f, ok in real.items() if not ok], [])
+    eq('29. with the two licences beside them',
+       [n for n in ('OFL-Inter.txt', 'OFL-SchibstedGrotesk.txt')
+        if 'SIL Open Font License' not in read('assets/fonts/' + n)], [])
+    pc = sources['pension-calculator.html']
+    for label, mut, want in (
+            ('the Google stylesheet back', pc.replace('</title>', '</title>\n<link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">', 1), 'asks Google Fonts'),
+            ('a font file dropped from the block', pc.replace("url(assets/fonts/inter-latin-ext.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
+            ('the preload without crossorigin', pc.replace('type="font/woff2" crossorigin>', 'type="font/woff2">', 1), 'preload')):
+        assert mut != pc, label
+        eq('29. %s is caught' % label, any(x.startswith(want) for x in fonts(mut)), True)
 
 
 

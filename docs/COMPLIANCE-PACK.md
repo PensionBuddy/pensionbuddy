@@ -396,10 +396,12 @@ describes analytics identifiers fairly; (e) whether the two buttons need
 equal weight: "That's fine" is a filled button and "No thanks" an outlined
 one, as they were designed. (Its fill was changed from the page's accent
 colour to cream, because dark text on the accent failed the contrast
-minimum on every page.) Separately, and unchanged: every page loads its
-typeface from Google Fonts before any choice, which sends the visitor's IP
-address to Google; it is not analytics, but it could be served from the
-site itself instead.
+minimum on every page.) Separately: until Run 34 every page loaded its
+typeface from Google Fonts before any choice, which sent the visitor's IP
+address to Google. The typefaces (Inter, and Schibsted Grotesk for the
+footer's name) are now served from the site itself, under their open
+licence, so loading them sends nothing to Google. The Privacy Notice never
+mentioned Google Fonts, so it is unchanged.
 
 1.18 Directors: three statements in the Pensions Manual's words
 ---------------------------------------------------------------

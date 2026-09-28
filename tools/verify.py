@@ -515,7 +515,9 @@ def static_checks(pages):
             'skipInSource': bool(re.search(r'<a[^>]+class="skip"', t)),
             'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono', t)}),
             'uppercaseRules': len(re.findall(r'text-transform\s*:\s*uppercase', t)),
-            'requestsInter': bool(re.search(r'fonts\.googleapis\.com[^"\']*Inter', t)),
+            # Run 34: Inter is the site's own file, and nothing is asked of Google Fonts
+            'requestsInter': bool(re.search(r"@font-face\{font-family:'Inter';[^}]*url\(assets/fonts/inter-latin\.woff2\)", t))
+                             and not re.search(r'fonts\.(?:googleapis|gstatic)\.com', t),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
             'chromeDrift': ['%s: %s' % d for d in drift.get(f, [])],
@@ -560,7 +562,7 @@ def evaluate(page, st, audits):
     # CASE (v4): sentence case everywhere, one face. The rule may not be in the
     # source, and the runtime check below catches it arriving any other way.
     if st.get('uppercaseRules'): F.append(('CASE', '%d text-transform:uppercase rule(s) in source' % st['uppercaseRules']))
-    if not st['requestsInter']: F.append(('F2', 'source does not request Inter from the font service'))
+    if not st['requestsInter']: F.append(('F2', 'source does not load Inter from assets/fonts/, or still asks Google Fonts for a font'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
