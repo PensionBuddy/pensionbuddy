@@ -2130,6 +2130,42 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
   html.pb-bookbar-yield .pb-bookbar.pb-bookbar-on,html.pb-peek-yield .pb-peek.pb-peek-on{transform:translateY(calc(100% + 8px))}
 }
 /* BUDDY:END */
+/* FIRSTSCREEN:BEGIN (Run 33). What a phone shows on first load: the hero's
+   regulator and QFA lockup, and the cookie choice, which must never cover
+   it. Byte for byte on every page: tools/pagebuild.py SHARED_CSS
+   ('FIRSTSCREEN', 'firstscreen-css'), guarded by chrome_drift; checked on
+   real layouts by tests/consent.test.py check 9.
+   - The cookie choice (built by the consent script): on a phone one line
+     and two buttons of equal width, 44px tall; one row on a wider screen.
+     While it is up, keyboard focus is scrolled clear of it (the script puts
+     html.pb-consent-open and its height, --pb-consent-h, on <html>).
+   - The lockup (.pb-reg): the home, director, starter and tracker heroes
+     end with it, below the first screen on a phone. They carry a second
+     copy straight after the eyebrow (.pb-reg-top), shown on a phone or a
+     phone held sideways (560px wide or less, or 500px tall or less up to
+     1000px wide) in place of the one at the end. Each copy is display:none
+     where the other shows, so a keyboard and a screen reader meet exactly
+     one, in the order it is drawn: it holds a link.
+   - The review line (.pb-reviewed, "Reviewed by Damian Condon, Qualified
+     Financial Adviser (QFA)", the last line of the page header on ten
+     pages) is drawn under the eyebrow on the same screens. It holds no
+     link, so only the drawing order changes; it is found by :has(), and a
+     browser without :has() keeps the old order. */
+.pb-hero-copy > .pb-reg-top{display:none}
+html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)}
+@media(max-width:560px){
+  .pb-consent{padding:10px 14px;gap:8px 10px}
+  .pb-consent p{flex:1 1 100%}
+  .pb-consent .pb-c-yes,.pb-consent .pb-c-no{flex:1 1 0;min-height:44px;padding:9px 12px}
+}
+@media(max-width:560px),(max-height:500px) and (max-width:1000px){
+  .pb-hero-copy > .pb-reg-top{display:flex}
+  .pb-hero-copy > .pb-reg:not(.pb-reg-top){display:none}
+  .phead > .wrap:has(> .pb-reviewed){display:flex;flex-direction:column}
+  .phead > .wrap:has(> .pb-reviewed) > .eyebrow{order:-2;align-self:flex-start}
+  .phead > .wrap:has(> .pb-reviewed) > .pb-reviewed{order:-1}
+}
+/* FIRSTSCREEN:END */
 
 /* ============================================================
    THE PERSONAL INVESTMENT ACCOUNT (pia.html, Run 23).
@@ -2889,7 +2925,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 
 <script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=d99dabed"></script>
+<script src="assets/js/pb-consent.js?v=28c28c96"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 

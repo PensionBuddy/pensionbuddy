@@ -36,6 +36,12 @@ placeholder is back on the Privacy Notice, because the box is live
 (section 3.2); and the deadline countdown on every page now counts to
 Revenue's online deadline, with 31 October beside it (section 7).
 
+Updated 28 September 2026: the cookie bar is one line, "May we use a
+little analytics? Privacy Notice", so that on a phone it no longer covers
+the regulator and QFA line; on a phone that line, and the review line, are
+drawn under the small label above the page's heading, their words
+unchanged (questions 1.14 and 1.17).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -282,7 +288,10 @@ will be updated with the announced figures and will need a second look.
 
 What the site does now: ten pages carry "Reviewed by Damian Condon,
 Qualified Financial Adviser (QFA) · Last reviewed September 2026" under the
-page heading: the pension calculator, the director calculator, the
+page heading (on a phone, and a phone held sideways, it is drawn above
+the heading instead, under the small label that opens the page, so that
+it is on the first screen and the cookie bar does not cover it): the
+pension calculator, the director calculator, the
 auto-enrolment comparison, the charges calculator, the pensions list, both
 State Pension pages, the directors' rules page, the Standard Fund Threshold
 page and the Personal Investment Account page. The held-back finder and
@@ -347,9 +356,21 @@ cap at all. None is stated now.
 
 What the site does now: the cookie bar every page has carried, unused
 until an analytics service was chosen, now appears on a visitor's
-first page: "We'd like to use a little analytics to see how the site is
-used — nothing for ads, never sold. You choose. See our Privacy Notice.",
-with the buttons "That's fine" and "No thanks". Only "That's fine" loads
+first page: "May we use a little analytics? Privacy Notice" (the words
+"Privacy Notice" link to it), with the buttons "That's fine" and "No
+thanks", side by side and the same width on a phone. (Until 28 September
+2026 it read "We'd like to use a little analytics to see how the site is
+used — nothing for ads, never sold. You choose. See our Privacy Notice.";
+it was cut to one line so that on a phone the bar no longer covers the
+hero's regulator and QFA line, Run 33.) For the same reason, on a phone
+the home, directors', starter and tracker pages draw their opening
+section's regulator line ("Regulated by the Central Bank of Ireland",
+linked to the Central Bank's register, then "Damian Condon, Qualified
+Financial Adviser (QFA)" and the years of experience) under the small
+label above the heading, not at the end of the section, and the review
+line of question 1.14 moves above the heading in the same way; the words
+are unchanged and the bar sits below them on a phone's first screen.
+Only "That's fine" loads
 Google Tag Manager (container GTM-KQCRZDNB). "No thanks", or no answer,
 loads nothing from Google, and "No thanks" also deletes any Google
 Analytics cookies left by an earlier yes. The answer is kept in the
@@ -361,12 +382,14 @@ published, holds no tags, so nothing is measured until tags are added to
 it in Google Tag Manager. The Privacy Notice's cookies section is rewritten
 (section 3.4).
 What we need: (a) approval of the cookies section and of the bar's wording,
-which visitors now see; (b) for the sentence the placeholder in section
+which visitors now see, including whether one line, with the detail in
+the Privacy Notice, says enough for the consent to be informed; (b) for the
+sentence the placeholder in section
 3.4 stood for (off the site since 26 September 2026), which analytics tools
 Tag Manager will run, the cookies they set, how long they
-last, and where Google processes the data; (c) whether "nothing for ads,
-never sold" and "We do not use it for advertising" hold for the tools
-chosen (for Google Analytics 4, that means Google signals and ads
+last, and where Google processes the data; (c) whether the Privacy Notice's
+"We do not use it for advertising" holds for the tools chosen (the bar no
+longer says "nothing for ads, never sold") (for Google Analytics 4, that means Google signals and ads
 personalisation off, and no link to Google Ads); (d) whether the notice's
 "Basic, non-identifying information about how the site is used" still
 describes analytics identifiers fairly; (e) whether the two buttons need
@@ -1064,10 +1087,12 @@ Changed wording on existing pages
   the liability cap.
 - Privacy Notice, "Cookies": the section in 3.4, with the button "Change
   your cookie choice".
-- Every page: the cookie bar, written earlier and shown for the first time
-  now (question 1.17), "We'd like to use a little analytics to see how the
-  site is used — nothing for ads, never sold. You choose. See our Privacy
-  Notice.", with "That's fine" and "No thanks".
+- Every page: the cookie bar (question 1.17), shown to visitors since
+  Run 27, "May we use a little analytics? Privacy Notice",
+  with "That's fine" and "No thanks" (one line since Run 33, 28 September
+  2026; it read "We'd like to use a little analytics to see how the site is
+  used — nothing for ads, never sold. You choose. See our Privacy
+  Notice.").
 - Run 28, every form's success message: "Thanks - we've got it. Damian will
   be in touch personally.", shown only after the form's details really
   arrive, in place of "Thanks. Your figures are on the way." (the pension
@@ -2666,7 +2691,9 @@ avoid.").
 B.15 Ten pages: the review line
 -------------------------------
 
-At the foot of the page heading, on the pages listed in question 1.14:
+At the foot of the page heading, on the pages listed in question 1.14
+(on a phone, above the heading, under the small label that opens the
+page):
 
 Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last
 reviewed September 2026

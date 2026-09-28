@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 28 September 2026, after Run 32 (the UX motion work merged)
+# Launch status — as at 28 September 2026, after Run 33 (the cookie bar on a phone)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -82,13 +82,7 @@ and `404.html`. `about.html` does not exist: it was folded into
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
    quiz: Runs 22 and 25); whether the nav and footer get the 16px floor (Run
    21).
-9. **Run 32:** on a phone, at first load, the analytics bar sits over the
-   hero's QFA line (index, director) and the review line (director rules,
-   SFT, entitlement) until the reader answers it; the "Regulated by the
-   Central Bank of Ireland" strip at the top is never covered, and nothing
-   covers any line once the bar is answered. Is "never faded" enough, or
-   should the bar push the page up instead of covering it (a layout
-   change, not motion)? Also found, not fixed: the pension and director
+9. **Run 32, found, not fixed:** the pension and director
    calculators' chart labels ask for Plus Jakarta Sans, which is never
    loaded, so they are not in Inter (a one-line CSS fix, `svg text`); and
    the comparison's share row (link, print, email) sits in the first mode
@@ -143,6 +137,18 @@ and `404.html`. `about.html` does not exist: it was folded into
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 33 (the cookie bar on a phone, merged to main on 28 September)
+
+On a phone the cookie bar no longer covers the regulator and QFA line on
+the first screen (Launch status item 9, as it was). The bar is one line
+and two buttons, "May we use a little analytics? Privacy Notice" (the
+wording goes to compliance with pack 1.17), and on phones, upright or
+sideways, the hero's lockup and the page header's review line come up
+under the eyebrow, above the headline. Checked on 14 pages at 320x568,
+375x667, 375x812, 412x915, 560x800, 667x375 and 915x412: the line drawn,
+whole, on the first screen and the bar below it (`tests/consent.test.py`
+check 9). Details: Run 33, below.
 
 ## Closed in Run 32 (UX motion, merged to main on 28 September)
 
@@ -205,6 +211,74 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
+
+Damian's brief: on phones the cookie bar must not cover the hero's QFA and
+regulator line; make it compact (one line and two buttons) and check at
+320, 375 and 412 that the lockup is fully visible on first load; gate,
+merge, push. Branch `claude/consent-compact` off `main` (`8ea6714`).
+
+The compact bar alone was not enough: the lockup is the last thing in the
+hero, so at 320x568 and 375x667 it sat below the first screen whatever the
+bar did (it started 691px down on the home page at 320). Put to Damian: on
+phones the lockup comes up under the eyebrow, above the headline, and the
+bar's words become one line. Both agreed on 28 September.
+
+## Items
+
+| # | Item | Status | Note |
+|---|---|---|---|
+| 1 | The bar: one line and two buttons | **Done** | "May we use a little analytics? Privacy Notice"; "That's fine" and "No thanks" side by side under it, the same width, 44px tall. 96px tall on a phone, where it was 154. On a wide screen, and on a phone held sideways, one row (73px). |
+| 2 | The lockup on the first screen | **Done** | On a phone (560px wide and below) or a phone held sideways (500px tall and below, up to 1000px wide), the home, director, starter and tracker heroes show their lockup under the eyebrow, above the headline. It is a second copy in the markup (`.pb-reg-top`), straight after the eyebrow; each copy is `display:none` where the other shows, so a keyboard and a screen reader meet exactly one, where it is drawn (it holds the register link). The page header's review line on the 10 pages that carry one is drawn under the eyebrow on the same screens; it holds no link, so only the drawing order changes (`:has()`; a browser without it keeps the old order). Desktop is unchanged (pixel for pixel at 1440 on six pages). |
+| 3 | Focus clear of the bar | **Done** | While the bar is up, a focused link is scrolled clear of it (`html.pb-consent-open`, the bar's height in `--pb-consent-h` on `<html>`), as the booking and results bars already did. Missing before this run. |
+| 4 | The guards | **Done** | The shared FIRSTSCREEN block of CSS (drift-guarded); `tests/build.test.py` check 28 (the approved words; the four heroes: a copy straight after the eyebrow and one last, saying the same; faults for a dropped class, a dropped copy, copies that differ); `tests/consent.test.py` check 9 (real layouts, 14 pages, 5 phone sizes, 2 sideways, and 1200x800: exactly one lockup copy drawn, before the headline on a phone, the line whole on the first screen above the bar, the bar's words, link and buttons) and check 1 (the room kept while the bar is up, gone after an answer). |
+
+## Proof
+
+- At first load, with the bar up, on the 14 pages at 320x568, 375x667,
+  375x812, 390x844 and 412x915: before, the line was covered or off the
+  first screen on 40 of the 70; after, on none. With 667x375, 844x390,
+  915x412 and 768x1024 too, 126 of 126 pass, one lockup drawn on each.
+- Faults put in on purpose, each caught by consent check 9 or check 1: the
+  top copy never shown; both copies shown; the buttons' 44px floor gone;
+  the old wording back; the review line's move gone; the bar's line not
+  forced onto its own row (at 540 to 560px the buttons then squeeze to
+  67px with their labels on two lines); the room for focus never kept, or
+  never given back.
+- Desktop at 1440, with the bar declined: the home, director, starter,
+  tracker, pension calculator and Standard Fund Threshold pages are pixel
+  for pixel main's. Lighthouse against main: equal on the home, director,
+  starter, tracker, pension calculator and State Pension entitlement pages.
+
+## The pre-merge review
+
+Three reviewers (layout and accessibility, consent and compliance, tests
+and build), each followed by a skeptic: 18 findings, 6 confirmed, all
+fixed. The lockup moved by CSS `order` was drawn above the headline but
+reached by the keyboard after the hero's buttons (WCAG 2.4.3): now two
+copies, one shown at a time. No room was kept for focus behind the bar
+(WCAG 2.4.11, from before this run): now kept. Check 9 passed with the line
+not drawn at all, and never looked at the buttons or the link: now it
+does. The pack still put the review line at the foot of the heading, and
+had no 28 September entry: both written. Of the 12 rejected, two were done
+anyway because they were cheap and real on a device: phones held sideways
+(the bar covered the pension calculator's review line at 915x412) and the
+buttons' 44px floor (they were 42 and 44).
+
+## Open
+
+- Compliance: the bar's new wording (pack 1.17, which now says what
+  changed, and asks whether one line says enough for the consent to be
+  informed), and the lines' new place on a phone (1.14, B.15).
+- Rejected in review, noted: the bar's link opens the Privacy Notice at its
+  top, not its Cookies section; check 9's heights are the device's screen,
+  not the smaller window a phone's browser gives on first load. At 320
+  wide the line ends at most 309px down, so it stays above the 96px bar in
+  any window 405px tall or more (an iPhone SE's Safari gives about 460).
+- Found, not fixed: at 320 the starter guide and the PIA page are wider
+  than the screen, so a phone shows them zoomed out (true before this run
+  too).
 
 # Run 32 (continued) — 2026-09-28 · UX motion, Step 3: built, reviewed, merged
 
@@ -281,7 +355,7 @@ focused bar; it fails on the pre-review tree and on each mutant).
 ## Open
 
 - The consent bar still covers the hero's QFA line on phones until it is
-  answered (Launch status, item 9).
+  answered (closed in Run 33).
 - 1 October: re-shoot the director photo for PRSI 4.35% (Parked).
 - 19 November: move the JavaScript-off deadline words on (Parked).
 
@@ -871,8 +945,9 @@ also `tests/gap-band.py` and `tools/check-initialisms.py` from Runs 25-26.
   Google Tag Manager (for example a Google Analytics 4 tag, and triggers on
   the three custom events above).
 - **R27-GTM** (privacy.html): which tools Tag Manager runs, their cookies,
-  how long they last, where Google processes the data. The banner's "nothing
-  for ads, never sold" holds only if the tags are set up that way.
+  how long they last, where Google processes the data. The notice's "We do
+  not use it for advertising" holds only if the tags are set up that way
+  (the banner no longer says "nothing for ads, never sold": Run 33).
 - **Pack 1.15 and 3.3**: Netlify as processor, retention of submissions,
   and the finder's date of birth, address and signature in Netlify; the
   finder's own privacy sentence (R20-1b) should name Netlify before the page

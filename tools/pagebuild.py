@@ -583,7 +583,7 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # metric-matched fallback for Inter, the motion vocabulary, and how the
 # floating chrome gives way.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
-              ('BUDDY', 'buddy-css'))
+              ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'))
 
 
 def _once(text, marker):
