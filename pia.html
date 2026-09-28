@@ -2247,10 +2247,13 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
 /* Below about 352px wide the two results tables (three columns of euros
    at the 16px floor) are wider than their card: each scrolls inside its
-   own box, not the page, and can be scrolled from the keyboard. The
+   own box, not the page, and can be scrolled from the keyboard. The box
+   reaches across the card's side padding (and pads itself by as much), so
+   where a table only runs into that padding, as it does from 370px to
+   about 400px, it is drawn where it always was and nothing is clipped. The
    calculator's two columns may then be narrower than a table. */
-.pia-stwrap{overflow-x:auto;border-radius:6px}
-.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pia-stwrap{overflow-x:auto;margin:0 -24px;padding:0 24px}
+.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
 .calc-wrap > .panel,.calc-wrap > .results{min-width:0}
 
 .pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
@@ -2271,6 +2274,14 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .pia-t td{padding:10px 16px}
   .pia-t td::before{content:attr(data-l);display:block;font-weight:700;color:var(--ink)}
   .pia-st th,.pia-st td{padding:10px 4px}
+  .pia-stwrap{margin:0 -16px;padding:0 16px}
+}
+/* Below 370px the table is wider than the card itself; with a little less
+   side padding it fits down to 352px, and below that it scrolls. */
+@media(max-width:369px){
+  .pia-card{padding-left:12px;padding-right:12px}
+  .pia-stwrap{margin:0 -12px;padding:0 12px}
+  .pia-st th,.pia-st td{padding-left:2px;padding-right:2px}
 }
 </style>
 <script>
