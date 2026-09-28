@@ -61,6 +61,13 @@
 .pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
 .pia-st thead th{font-weight:700;color:var(--ink)}
 .pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
+/* Below about 352px wide the two results tables (three columns of euros
+   at the 16px floor) are wider than their card: each scrolls inside its
+   own box, not the page, and can be scrolled from the keyboard. The
+   calculator's two columns may then be narrower than a table. */
+.pia-stwrap{overflow-x:auto;border-radius:6px}
+.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.calc-wrap > .panel,.calc-wrap > .results{min-width:0}
 
 .pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
 .pia-p{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 22px}

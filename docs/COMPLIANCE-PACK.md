@@ -357,7 +357,7 @@ cap at all. None is stated now.
 What the site does now: the cookie bar every page has carried, unused
 until an analytics service was chosen, now appears on a visitor's
 first page: "May we use a little analytics? Privacy Notice" (the words
-"Privacy Notice" link to it), with the buttons "That's fine" and "No
+"Privacy Notice" link to its Cookies section), with the buttons "That's fine" and "No
 thanks", side by side and the same width on a phone. (Until 28 September
 2026 it read "We'd like to use a little analytics to see how the site is
 used — nothing for ads, never sold. You choose. See our Privacy Notice.";

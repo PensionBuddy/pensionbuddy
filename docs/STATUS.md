@@ -212,6 +212,27 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 34 — 2026-09-28 overnight · Seven items on `claude/overnight-3` (not merged)
+
+Damian's brief: an unattended run, one item at a time, each built, gated,
+committed and pushed; the branch is reviewed on the Netlify deploy preview
+and not merged. Anything needing his judgement: the most conservative
+option, logged as a question. Branch off `main` (`669becc`).
+
+## Items
+
+| # | Item | Status | Commit | Note |
+|---|---|---|---|---|
+| 1 | Leftovers | **Done** | see git log | The cookie bar's "Privacy Notice" opens the notice at its Cookies section (`privacy.html#cookies`; consent check 9). At 320 to 351px wide the starter guide's "See the State Pension reality check" takes two lines (`.pb-btn-long`), and the PIA page's two results tables each scroll inside their own box, which the keyboard can reach (`.pia-stwrap`, named by its caption); no page is wider than a 320px screen (all 29 measured). The PIA page is now in the render-diff harness (load, sequences, browser-diff); `classify-pia-tablewrap.py` proves the only differences are whitespace and the two captions' new ids. Question 1. |
+
+## Questions for Damian
+
+1. On the narrowest phones (320 to 351px) the PIA's results tables scroll
+   sideways inside their card, so the "A fall" column is partly off the
+   screen until scrolled. The other ways: type under the 16px floor below
+   352px, or one stacked card per product (the column labels change with the
+   growth rate, so that needs a script change). Picked the scroll.
+
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 
 Damian's brief: on phones the cookie bar must not cover the hero's QFA and

@@ -1867,6 +1867,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* A long button label (.pb-btn-long) may take two lines on the narrowest
+   phones: "See the State Pension reality check" is wider than a 320px
+   screen on one. Where it fits, nothing changes. */
+@media(max-width:400px){.pb-btn-long{max-width:100%;white-space:normal;text-align:center;line-height:1.25}}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2564,7 +2568,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
   </div>
   <p class="pb-src">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. The maximum personal rate is &euro;299.30 a week from January 2026.</p>
-  <a class="btn btn-primary" href="state-pension-reality-check.html">See the State Pension reality check <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <a class="btn btn-primary pb-btn-long" href="state-pension-reality-check.html">See the State Pension reality check <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
 
 <section class="pb-bleed pb-wash pb-magnetband"><div class="wrap"><div class="magnet">
@@ -2754,7 +2758,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 
 <script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late" data-first-answer="short"></script>
-<script src="assets/js/pb-consent.js?v=28c28c96"></script>
+<script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 

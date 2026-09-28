@@ -2230,6 +2230,13 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
 .pia-st thead th{font-weight:700;color:var(--ink)}
 .pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
+/* Below about 352px wide the two results tables (three columns of euros
+   at the 16px floor) are wider than their card: each scrolls inside its
+   own box, not the page, and can be scrolled from the keyboard. The
+   calculator's two columns may then be narrower than a table. */
+.pia-stwrap{overflow-x:auto;border-radius:6px}
+.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.calc-wrap > .panel,.calc-wrap > .results{min-width:0}
 
 .pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
 .pia-p{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 22px}
@@ -2500,8 +2507,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div class="pia-card">
       <h3>If growth is lower, or it falls</h3>
+      <div class="pia-stwrap" role="region" aria-labelledby="piaStCapPaths" tabindex="0">
       <table class="pia-st">
-        <caption class="tk-sr">What each could leave you after tax, under three growth paths</caption>
+        <caption class="tk-sr" id="piaStCapPaths">What each could leave you after tax, under three growth paths</caption>
         <thead><tr><th scope="col"><span class="tk-sr">Product</span></th><th scope="col" id="scYours">5% a year</th><th scope="col" id="scLower">2.5% a year</th><th scope="col">A fall</th></tr></thead>
         <tbody>
           <tr><th scope="row">Pension</th><td id="penYours">€36,018</td><td id="penLower">€31,727</td><td id="penFall">€27,794</td></tr>
@@ -2509,13 +2517,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">ETF outside a wrapper</th><td id="etfYours">€28,235</td><td id="etfLower">€25,975</td><td id="etfFall">€23,431</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="pia-note">Lower growth is half the rate you chose. A fall is your rate every year, then a 20% fall in the last year: an example, not a forecast. <span id="fallLine">In a fall, the PIA&rsquo;s tax is still due for that year.</span></p>
     </div>
 
     <div class="pia-card">
       <h3>Where the tax comes in, at your growth rate</h3>
+      <div class="pia-stwrap" role="region" aria-labelledby="piaStCapTax" tabindex="0">
       <table class="pia-st">
-        <caption class="tk-sr">Tax relief and tax for each product, at your growth rate</caption>
+        <caption class="tk-sr" id="piaStCapTax">Tax relief and tax for each product, at your growth rate</caption>
         <thead><tr><th scope="col"><span class="tk-sr">Item</span></th><th scope="col">Pension</th><th scope="col">PIA</th><th scope="col">ETF</th></tr></thead>
         <tbody>
           <tr><th scope="row">From your take-home pay</th><td id="paidPen">€24,000</td><td id="paidPia">€24,000</td><td id="paidEtf">€24,000</td></tr>
@@ -2525,6 +2535,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">Left after tax</th><td id="endPen">€36,018</td><td id="endPia">No figure yet</td><td id="endEtf">€28,235</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="pia-note">Employer money is not in the pension figure. If your employer would pay into a pension, that is on top.</p>
     </div>
   </div>
@@ -2925,7 +2936,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 
 <script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=28c28c96"></script>
+<script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 

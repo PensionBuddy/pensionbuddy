@@ -1,5 +1,5 @@
 'use strict';
-/* The five calculator pages, each described once: where its html and its script
+/* The calculator pages, each described once: where its html and its script
    live, which modules it needs, which controls it has, and how one state is
    applied to it.
 
@@ -80,6 +80,17 @@ const PAGES = {
     settle: p => { p.flushTimers(); },
     apply(p, s) { for (const id of this.ranges) p.set(id, s[id]); },
     driver: 'paid',
+  },
+  /* Run 34: the Personal Investment Account page. Its tax-rate buttons are
+     not a .seg; the sweep and the sessions move its six sliders. */
+  pia: {
+    html: 'pia.html',
+    parts: 'tools/pia-parts/page.js',
+    modules: [SHARED, 'assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
+    ranges: ['amount', 'years', 'growth', 'piaRate', 'age', 'salary'],
+    settle: p => { p.flushTimers(); },
+    apply(p, s) { for (const id of this.ranges) p.set(id, s[id]); },
+    driver: 'growth',
   },
 };
 

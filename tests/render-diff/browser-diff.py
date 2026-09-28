@@ -104,6 +104,18 @@ PAGES = {
         # moving the birth year is the one action that clamps another slider
         'birthWalk': [1960, 1999, 1961, 2008, 1970],
     },
+    # Run 34: the PIA page; its tax-rate buttons are r20 and r40
+    'pia.html': {
+        'ranges': ['amount', 'years', 'growth', 'piaRate', 'age', 'salary'],
+        'states': [
+            {'amount': 200, 'years': 10, 'growth': 5, 'piaRate': 0, 'age': 35, 'salary': 50000},
+            {'amount': 25, 'years': 1, 'growth': 0, 'piaRate': 0, 'age': 18, 'salary': 10000},
+            {'amount': 2000, 'years': 40, 'growth': 8, 'piaRate': 5, 'age': 70, 'salary': 200000},
+            {'amount': 650, 'years': 23, 'growth': 3.5, 'piaRate': 1.25, 'age': 52, 'salary': 87000},
+            {'amount': 1225, 'years': 7, 'growth': 6.5, 'piaRate': 2.4, 'age': 29, 'salary': 31000},
+        ],
+        'clicks': ['r20', 'r40'],
+    },
 }
 
 PROBE = r"""

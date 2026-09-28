@@ -1021,7 +1021,7 @@ def run():
     # phone, and keep the lockup last in the markup, so screen readers meet
     # it where they did. tests/consent.test.py check 9 measures the layouts.
     consent_js = open(os.path.join(ROOT, 'assets/js/pb-consent.js')).read()
-    WORDS = '<p>May we use a little analytics? <a href="privacy.html">Privacy Notice</a></p>'
+    WORDS = '<p>May we use a little analytics? <a href="privacy.html#cookies">Privacy Notice</a></p>'
     eq('28. the cookie bar says the approved line, and only it', (consent_js.count(WORDS), 'never sold' in consent_js), (1, False))
     HEROES = ('index.html', 'director.html', 'starter.html', 'tracker.html')
     def lockups(src):
