@@ -2134,28 +2134,33 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
    regulator and QFA lockup, and the cookie choice, which must never cover
    it. Byte for byte on every page: tools/pagebuild.py SHARED_CSS
    ('FIRSTSCREEN', 'firstscreen-css'), guarded by chrome_drift; checked on
-   real layouts at 320x568, 375x667, 375x812 and 412x915 by
-   tests/consent.test.py check 9.
-   - The cookie choice (built by the consent script): one line and two
-     buttons of equal width, 96px tall where it was 154.
-   - The lockup (.pb-reg, the last thing in the hero on the home, director,
-     starter and tracker pages) comes up under the eyebrow, above the
-     headline: at the end of the hero it sat below the first screen. Only
-     the order it is drawn in changes; screen readers still meet it after
-     the buttons, as on a wide screen. The four containers carry
-     .pb-hero-copy.
+   real layouts by tests/consent.test.py check 9.
+   - The cookie choice (built by the consent script): on a phone one line
+     and two buttons of equal width, 44px tall; one row on a wider screen.
+     While it is up, keyboard focus is scrolled clear of it (the script puts
+     html.pb-consent-open and its height, --pb-consent-h, on <html>).
+   - The lockup (.pb-reg): the home, director, starter and tracker heroes
+     end with it, below the first screen on a phone. They carry a second
+     copy straight after the eyebrow (.pb-reg-top), shown on a phone or a
+     phone held sideways (560px wide or less, or 500px tall or less up to
+     1000px wide) in place of the one at the end. Each copy is display:none
+     where the other shows, so a keyboard and a screen reader meet exactly
+     one, in the order it is drawn: it holds a link.
    - The review line (.pb-reviewed, "Reviewed by Damian Condon, Qualified
-     Financial Adviser (QFA)", the last line of the page header on the
-     calculators, the State Pension pages, the director rules, the SFT and
-     PIA) likewise comes up under the eyebrow, above the headline. Found by
-     :has(), so a browser without it keeps the old order. */
+     Financial Adviser (QFA)", the last line of the page header on ten
+     pages) is drawn under the eyebrow on the same screens. It holds no
+     link, so only the drawing order changes; it is found by :has(), and a
+     browser without :has() keeps the old order. */
+.pb-hero-copy > .pb-reg-top{display:none}
+html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)}
 @media(max-width:560px){
   .pb-consent{padding:10px 14px;gap:8px 10px}
   .pb-consent p{flex:1 1 100%}
-  .pb-consent .pb-c-yes,.pb-consent .pb-c-no{flex:1 1 0;padding:9px 12px}
-  .pb-hero-copy{display:flex;flex-direction:column}
-  .pb-hero-copy > .eyebrow{order:-2;align-self:center}
-  .pb-hero-copy > .pb-reg{order:-1}
+  .pb-consent .pb-c-yes,.pb-consent .pb-c-no{flex:1 1 0;min-height:44px;padding:9px 12px}
+}
+@media(max-width:560px),(max-height:500px) and (max-width:1000px){
+  .pb-hero-copy > .pb-reg-top{display:flex}
+  .pb-hero-copy > .pb-reg:not(.pb-reg-top){display:none}
   .phead > .wrap:has(> .pb-reviewed){display:flex;flex-direction:column}
   .phead > .wrap:has(> .pb-reviewed) > .eyebrow{order:-2;align-self:flex-start}
   .phead > .wrap:has(> .pb-reviewed) > .pb-reviewed{order:-1}
@@ -2985,7 +2990,7 @@ initJar();
 
 
 <script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=50e18d10"></script>
+<script src="assets/js/pb-consent.js?v=28c28c96"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 

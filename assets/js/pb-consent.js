@@ -94,15 +94,19 @@
     });
   }
 
-  /* The bar's real height, for Ask Buddy's panel, which opens above it
-     (--pb-consent-h in each page's CSS), or it would cover "That's fine". */
-  function fit() { if (bar) document.body.style.setProperty('--pb-consent-h', bar.offsetHeight + 'px'); }
+  /* The bar's real height, on <html>: Ask Buddy's panel opens above it
+     (--pb-consent-h in each page's CSS), or it would cover "That's fine",
+     and while html.pb-consent-open is on, the FIRSTSCREEN block scrolls
+     keyboard focus clear of it. */
+  var root = document.documentElement;
+  function fit() { if (bar) root.style.setProperty('--pb-consent-h', bar.offsetHeight + 'px'); }
 
   function choose(v) {
     remember(v);
     if (bar) { bar.parentNode.removeChild(bar); bar = null; }
     document.body.classList.remove('pb-banner-open');
-    document.body.style.removeProperty('--pb-consent-h');
+    root.classList.remove('pb-consent-open');
+    root.style.removeProperty('--pb-consent-h');
     window.removeEventListener('resize', fit);
     if (v === 'accepted') { loadGtm(); return; }
     queue.length = 0;
@@ -117,6 +121,7 @@
     document.body.appendChild(bar);
     fit(); window.addEventListener('resize', fit);   // measured first, so Ask Buddy moves once
     document.body.classList.add('pb-banner-open');
+    root.classList.add('pb-consent-open');
     bar.querySelector('.pb-c-yes').addEventListener('click', function () { choose('accepted'); });
     bar.querySelector('.pb-c-no').addEventListener('click', function () { choose('rejected'); });
     return bar;

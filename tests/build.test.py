@@ -222,7 +222,7 @@ def run():
         ('the BUDDY block of CSS missing', 'pia.html', 'buddy-css',
          sources['pia.html'].replace('/* BUDDY:END */', '/* BUDDY-END */', 1)),
         ('the FIRSTSCREEN block of CSS changed', 'glossary.html', 'firstscreen-css',
-         after('glossary.html', '/* FIRSTSCREEN:BEGIN', '.pb-hero-copy > .pb-reg{order:-1}', '.pb-hero-copy > .pb-reg{order:0}')),
+         after('glossary.html', '/* FIRSTSCREEN:BEGIN', '.pb-hero-copy > .pb-reg-top{display:flex}', '.pb-hero-copy > .pb-reg-top{display:block}')),
         ('the FIRSTSCREEN block of CSS missing', 'booking.html', 'firstscreen-css',
          sources['booking.html'].replace('/* FIRSTSCREEN:END */', '/* FIRSTSCREEN-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
@@ -1024,22 +1024,34 @@ def run():
     WORDS = '<p>May we use a little analytics? <a href="privacy.html">Privacy Notice</a></p>'
     eq('28. the cookie bar says the approved line, and only it', (consent_js.count(WORDS), 'never sold' in consent_js), (1, False))
     HEROES = ('index.html', 'director.html', 'starter.html', 'tracker.html')
-    def marked(src):
-        i = src.find('<div class="pb-reg">')
-        j = src.rfind('<div class="', 0, src.rfind('<h1', 0, i))
-        return i > 0 and 'pb-hero-copy' in src[j:src.find('>', j)]
-    eq('28. the four heroes that end with the lockup mark their container .pb-hero-copy',
-       [n for n in HEROES if not marked(sources[n])], [])
+    def lockups(src):
+        # the hero's container, its two copies, where each sits, and whether they say the same
+        i = src.find('<div class="pb-hero-copy">') if '<div class="pb-hero-copy">' in src else src.find('<div class="hero-copy pb-hero-copy">')
+        end = src.find('\n  <div class="hero-phone">', i)
+        if i < 0 or end < 0:
+            return 'no .pb-hero-copy container'
+        box = src[i:end]
+        top = re.search(r'<span class="eyebrow[^"]*"><span class="pip"></span>[^<]*</span>\s*<div class="pb-reg pb-reg-top">(.*?)\n\s*</div>\n', box, re.S)
+        tail = re.search(r'<div class="pb-reg">(.*?)\n\s*</div>\s*</div>\s*$', box, re.S)
+        if box.count('pb-reg pb-reg-top') != 1 or not top:
+            return 'the copy under the eyebrow is missing or not straight after it'
+        if box.count('<div class="pb-reg">') != 1 or not tail:
+            return 'the copy at the end is missing or not last'
+        if ' '.join(top.group(1).split()) != ' '.join(tail.group(1).split()):
+            return 'the two copies differ'
+        return None
+    eq('28. the four heroes: a lockup straight after the eyebrow and one last, saying the same, in a .pb-hero-copy container',
+       {n: lockups(sources[n]) for n in HEROES if lockups(sources[n])}, {})
     eq('28. and no other page carries the lockup in a hero', sorted(n for n, t in sources.items()
-       if '<div class="pb-reg">' in t and n not in HEROES and t.find('<div class="pb-reg">') < t.find('</header>')), [])
-    def last_in_copy(src):
-        i = src.find('<div class="pb-reg">')
-        close = src.find('</div>\n  <div class="hero-phone">', i)
-        rest = src[src.find('</div>', src.find('</span>\n', i)) + 6:close] if close > 0 else None
-        return close > 0 and '<div class="pb-reg">' in src[:close] and re.sub(r'\s+|</div>', '', rest or '') == ''
-    eq('28. the lockup stays last in the hero\'s markup (reading order unchanged)', [n for n in HEROES if not last_in_copy(sources[n])], [])
-    m = sources['director.html'].replace('<div class="pb-hero-copy">', '<div>', 1)
-    eq('28. the class dropped from a hero is caught', marked(m), False)
+       if '<div class="pb-reg' in t and n not in HEROES and t.find('<div class="pb-reg') < t.find('</header>')), [])
+    dr = sources['director.html']
+    for label, mut, want in (
+            ('the class dropped from a hero', dr.replace('<div class="pb-hero-copy">', '<div>', 1), 'no .pb-hero-copy container'),
+            ('the copy under the eyebrow dropped', re.sub(r'\n\s*<div class="pb-reg pb-reg-top">.*?\n\s*</div>(?=\n)', '', dr, count=1, flags=re.S),
+             'the copy under the eyebrow is missing or not straight after it'),
+            ('the copies drifting apart', dr.replace('30 years in financial services', '31 years in financial services', 1), 'the two copies differ')):
+        assert mut != dr, label
+        eq('28. %s is caught' % label, lockups(mut), want)
 
 
 
