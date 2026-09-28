@@ -33,14 +33,16 @@ What it proves:
      nothing else does; and no page pulses the chip's dot
   6. without JavaScript (Run 32): on every page the chip carries the date,
      "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where
-     ", online" would overrun the row), and a name that says so, and the calculators'
-     row the date sentence, all in the words of PBDeadline.statics();
-     rendered with every script stripped, at 1440 (the chip beside the
-     links, the least room), 1200 and 900, that is what shows, the live
-     spans do not, and the nav still fits its row; with JavaScript only the
-     live spans show. And by the real clock, not a pinned one, the static words
-     are still today's: once 18 November 2026 has passed this fails until
-     the markup moves on to what PBDeadline.statics() gives then
+     ", online" would overrun the row), and a name that says so, and the
+     calculators' row the date sentence, all in the words of
+     PBDeadline.statics(); rendered with every script stripped, at 1440 (the
+     chip beside the links, the least room), 1200 and 900, that is what
+     shows, the live spans do not, and the nav still fits its row; with
+     JavaScript only the live spans show. Every markup check here, and the
+     band's in 2, holds the markup to PBDeadline.statics() by the REAL clock,
+     not a pinned one: from 19 November 2026 they fail, printing the words
+     the markup must move on to, and pass again once it has; the pinned date
+     tests statics() itself
 """
 import base64, glob, html, json, os, re, socket, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -256,9 +258,14 @@ def main():
     eq('2. the band: for a screen reader', r['sr'], LEFT + ' ' + REV)
     src = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
     flat = re.sub(r'\s+', ' ', html.unescape(src))
-    eq('2. without JavaScript the band says the same',
-       ('<span id="tkTag">Revenue’s deadline</span>' in flat, '<h2>%s</h2>' % HEAD in flat,
-        '<span id="tkRev">%s</span>' % REV in flat, '<span id="tkYear">2025</span>' in flat), (True, True, True, True))
+    # the band's markup is what a reader without JavaScript gets: held to
+    # today's words by the real clock (section 6), and they are these words
+    # until 19 November 2026
+    T = R[('index.html', 'real')]['statics']
+    eq('2. without JavaScript the band says what the script says (by the real clock: move the markup on if not)',
+       ('<span id="tkTag">Revenue’s deadline</span>' in flat, '<h2>%s</h2>' % T['bandHead'] in flat,
+        '<span id="tkRev">%s</span>' % T['bandRev'] in flat, '<span id="tkYear">%s</span>' % T['bandYear'] in flat),
+       (True, True, True, True))
     clock = re.search(r'<div class="tk-clock"([^>]*)>(.*?)</div> </div>', flat)
     # in the markup from the first paint (a hidden clock grew the band when the
     # foot script showed it), and hidden without JavaScript by html:not(.pb-js)
@@ -317,8 +324,17 @@ def main():
     eq('5. no page pulses the chip\'s dot', pulse, {})
 
     # 6
-    S = R[('index.html', NOW)]['statics']
-    eq('6. PBDeadline.statics() on 25 September 2026: the chip', (S['chipDate'], S['chipMore']), ('18 Nov 2026', ', online'))
+    P = R[('index.html', NOW)]['statics']
+    eq('6. PBDeadline.statics() on 25 September 2026',
+       (P['chipDate'], P['chipMore'], P['bandHead'], P['bandRev'], P['bandYear']),
+       ('18 Nov 2026', ', online', HEAD, REV, '2025'))
+    eq('6. PBDeadline.statics() on 25 September 2026: the row', P['row'],
+       '<b>18 November 2026</b>, Revenue’s deadline for the 2025 tax year if you ' + ONLINE +
+       '. If you do not ' + ONLINE + ', it is 31 October 2026. After that, 2025’s allowance is gone for good.')
+    # everything below holds the markup to the words by the REAL clock, so on
+    # 19 November 2026 these fail until the markup moves on to what they print
+    S = R[('index.html', 'real')]['statics']
+    eq('6. by the real clock, the same words on the calculators\' page', R[('pension-calculator.html', 'real')]['statics'], S)
     def chip_off(src):
         flat = re.sub(r'\s+', ' ', html.unescape(src))
         m = re.search(r'<a class="nav-tick" id="navTick"[^>]*aria-label="([^"]*)"[^>]*>(.*?)</a>', flat)
@@ -330,14 +346,14 @@ def main():
         return m.group(1), spans, more.group(1) if more else None
     LIVE = [('nt-dot', ''), ('nt-n nt-on', '--'), ('nt-l nt-on', 'to Revenue’s deadline')]
     WANT = (S['chipName'], LIVE + [('nt-n nt-off', S['chipDate'] + S['chipMore'])], S['chipMore'] or None)
-    eq('6. every page: the chip carries the date and a name that says so, for a reader without JavaScript',
+    eq('6. every page: the chip carries today\'s date and a name that says so, for a reader without JavaScript',
        {pg: chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) for pg in pages
         if chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) != WANT}, {})
     def row_markup(src):
         m = re.search(r'<span class="dl-text" id="deadlineText">(.*?)</span>', src, re.S)
         return re.sub(r'\s+', ' ', html.unescape(m.group(1))).strip() if m else None
     for page in CALCS:
-        eq('6. %s: the row carries the date sentence' % page,
+        eq('6. %s: the row carries today\'s date sentence' % page,
            row_markup(open(os.path.join(ROOT, page), encoding='utf-8').read()), S['row'])
     for page in pages:
         r = R.get((page, NOW))
@@ -363,11 +379,6 @@ def main():
             if page in CALCS:
                 eq('6. %s at %dpx without JavaScript: the row shows the date sentence, not nothing' % (page, w),
                    (r['rowShown'], re.sub(r'\s+', ' ', r['row'] or '').strip()), (True, plain))
-    for page in ('index.html', 'pension-calculator.html'):
-        r = R.get((page, 'real'))
-        eq('6. by the real clock (%s), the static deadline words are still today\'s: if not, move the chip, '
-           'its name and the calculators\' row on to these' % page,
-           r and r['statics'], S)
     srv.shutdown()
     report()
 

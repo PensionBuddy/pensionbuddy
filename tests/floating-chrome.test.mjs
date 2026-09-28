@@ -31,6 +31,11 @@
         send Ask Buddy away while nothing lies under it
      4. focus in the booking bar while it has stepped down for a caveat
         brings it back at once
+     5. the results bar steps down while a warning box is behind it (the
+        box pinned into its band: on the calculators no scroll position puts
+        one there), and focus in it brings it back at once
+   and, on every page in 1, that each layer under test was on screen at
+   some stop, so no check passes because its layer never appeared.
    Not in tests/run-tests.py: about three minutes. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -135,16 +140,22 @@ const PROBE = `(() => {
       if (w > 1 && h > 1) out.push(layer + ' on ' + name(c) + ' ' + Math.round(w * h / (r.width * r.height) * 100) + '%');
     });
   });
-  return { y: Math.round(scrollY), covered: out, sideways: document.documentElement.scrollWidth > innerWidth };
+  return { y: Math.round(scrollY), covered: out, sideways: document.documentElement.scrollWidth > innerWidth,
+    seen: { buddy: !!shown(document.getElementById('pbBuddyBtn')), book: !!shown(document.querySelector('.pb-bookbar.pb-bookbar-on')),
+            peek: !!shown(document.querySelector('.pb-peek.pb-peek-on')) } };
 })()`;
 
 /* 1 */
-const COVER = [['index.html', 375], ['pension-calculator.html', 375], ['director-calculator.html', 375], ['director.html', 375],
-  ['starter.html', 375], ['booking.html', 375], ['index.html', 1440], ['pension-calculator.html', 1440]];
-for (const [page, w] of COVER) {
+/* and each layer the page has was on screen at some stop, so no check passes
+   because its layer never appeared: [page, width, the layers it must show] */
+const COVER = [['index.html', 375, ['buddy', 'book']], ['pension-calculator.html', 375, ['buddy', 'peek']],
+  ['director-calculator.html', 375, ['buddy', 'peek']], ['director.html', 375, ['buddy', 'book']],
+  ['starter.html', 375, ['buddy', 'book']], ['booking.html', 375, ['buddy']], ['index.html', 1440, ['buddy']],
+  ['pension-calculator.html', 1440, ['buddy']]];
+for (const [page, w, layers] of COVER) {
   await open(page, w);
   const H = await ev('innerHeight'), max = await ev('document.documentElement.scrollHeight - innerHeight');
-  const bad = [], sideways = [];
+  const bad = [], sideways = [], seen = {};
   let stops = 0;
   for (let y = 0; ; y = Math.min(max, y + Math.round(H * 0.8))) {
     await ev(`window.scrollTo({ top: ${y}, behavior: 'instant' })`);
@@ -153,8 +164,10 @@ for (const [page, w] of COVER) {
     stops++;
     r.covered.forEach(c => bad.push('at ' + r.y + ': ' + c));
     if (r.sideways) sideways.push(r.y);
+    for (const k in r.seen) if (r.seen[k]) seen[k] = true;
     if (y >= max) break;
   }
+  eq(`1. ${page} at ${w}px: the floating chrome under test was on screen (${layers.join(', ')})`, layers.filter(k => !seen[k]), []);
   eq(`1. ${page} at ${w}px: nothing a reader needs under the floating chrome, at ${stops} stops`, bad, []);
   eq(`1. ${page} at ${w}px: nothing scrolls sideways`, sideways, []);
 }
@@ -229,6 +242,34 @@ const bar = await ev(`(async () => {
 })()`, true);
 eq('4. the booking bar, up, has stepped down for the deadline band\'s caveat (the case under test)', bar.before, { on: true, yielded: true });
 eq('4. focus in it brings it back at once', [bar.focused, bar.yieldedAfter], [true, false]);
+
+/* 5: the results bar steps down while a warning box is behind it, and focus
+   brings it back at once. On the calculators the bar shows only while their
+   headline figures are off screen, and their warning box sits below those, so
+   no scroll position puts the box behind the bar: the box is pinned into the
+   bar's band here instead, which is what the bar's observer sees */
+await open('pension-calculator.html', 375);
+const peek = await ev(`(async () => {
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const R = document.documentElement.classList, bar = document.querySelector('.pb-peek'), warn = document.querySelector('.pb-warn');
+  if (!bar || !warn) return { found: false };
+  let on = false;
+  for (let y = 0; y < document.documentElement.scrollHeight && !on; y += 120) {
+    scrollTo({ top: y, behavior: 'instant' }); await sleep(250); on = R.contains('pb-peek-on');
+  }
+  if (!on) return { found: false };
+  warn.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:1';
+  await sleep(700);
+  const stepped = R.contains('pb-peek-yield');
+  bar.focus({ focusVisible: true });
+  await sleep(60);
+  const back = !R.contains('pb-peek-yield'), focused = document.activeElement === bar;
+  bar.blur(); warn.style.cssText = ''; await sleep(900);
+  return { found: true, stepped, focused, back, afterwards: R.contains('pb-peek-yield') };
+})()`, true);
+eq('5. the pension calculator at 375px: the results bar, up, steps down for a warning box behind it', [peek.found, peek.stepped], [true, true]);
+eq('5. focus in it brings it back at once', [peek.focused, peek.back], [true, true]);
+eq('5. and with the box gone and focus out, it stays up', peek.afterwards, false);
 
 server.close();
 console.log('\n%s  %d passed, %d failed', failed ? 'FAILURES' : 'ALL PASS', passed, failed);

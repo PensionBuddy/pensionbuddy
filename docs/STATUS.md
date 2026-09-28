@@ -126,13 +126,18 @@ and `404.html`. `about.html` does not exist: it was folded into
   Without it, from 19 November 2026 the countdown runs to 31 October 2027,
   says the online date is "usually later, in mid-November", and moves on
   to 2028 on 1 November 2027 while the online date may still be open.
-  **On 19 November 2026 `tests/deadline.test.py` section 6 fails, on
-  purpose,** until the words a reader without JavaScript gets move on: the
-  nav chip's static date and its name (in the skeleton's nav, then
-  `python3 tools/sync-chrome.py` and `python3 tools/pagebuild.py`) and the
-  three calculators' "Tax deadline" row (`pension-calculator.html`,
-  `director-calculator.html`, `tools/compare-parts/main.html`). The failure
-  prints the new words, from `PBDeadline.statics()` in `pb-deadline.js`.
+  **On 19 November 2026 `tests/deadline.test.py` fails, on purpose,**
+  (sections 2 and 6) until the words a reader without JavaScript gets move
+  on, because it holds the markup to `PBDeadline.statics()` by the real
+  clock. The failures print the new words. Move: the nav chip's static span
+  and its `aria-label` in the skeleton's nav (`pension-calculator.html`; with
+  no online date the span has no `nt-more` part, so drop that span), then
+  `python3 tools/sync-chrome.py`, `python3 tools/pagebuild.py`,
+  `python3 tools/sync-chrome.py` again; the three calculators' "Tax
+  deadline" row (`pension-calculator.html`, `director-calculator.html`,
+  `tools/compare-parts/main.html`); and the home band's heading, `#tkRev` and
+  `#tkYear` in `index.html`. Tried on a copy with the clock moved to 19
+  November: 50 checks fail before, none after.
 - **6 October 2026, Budget 2027.** `pia.html` per `docs/PIA-BUDGET-DAY.md`
   (threshold, rate, annual limit, launch date, the as-at stamps); re-check
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
@@ -226,14 +231,20 @@ JavaScript, iPhone check passed, gate, merge, push.
 | Jar | No spill at a full record | **Done** | Check 26. |
 | Safe | A still picture | **Done** | Closed, the same for every figure; its driver script gone (check 27); the director photo re-shot. |
 | LH | Two requests fewer | **Done** | `pb-motion.js` folded into the head script (`pagebuild.MOTION_HEAD`); Ask Buddy starts after the first frame (`type="text/pb-late"`). |
-| JS off | The deadline as a date | **Done** | The calculators' row: "18 November 2026, Revenue's deadline for the 2025 tax year if you pay and file online ...". The chip: "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where more overruns the row), shown only while `<html>` lacks `pb-js`; the home band's clock likewise. Deadline section 6. |
+| JS off | The deadline as a date | **Done** | The calculators' row: "18 November 2026, Revenue's deadline for the 2025 tax year if you pay and file online ...". The chip: "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where more overruns the row), shown only while `<html>` lacks `pb-js`. The home band's clock is the other way round: shown only with `pb-js`, from the first paint, so without JavaScript the band gives its date sentence alone. Deadline sections 2 and 6. |
 
 ## The pre-merge review
 
-Six independent reviewers (JavaScript off, the floating chrome, compliance
-and copy, the tests, calculator integrity and the build, motion and
-performance), each followed by a skeptic trying to refute its findings: 20
-findings, 12 confirmed, all fixed before the merge. The ones a reader would
+Two rounds, each of independent reviewers followed by a skeptic per
+reviewer trying to refute its findings. The first, six reviewers over the
+whole branch (JavaScript off, the floating chrome, compliance and copy, the
+tests, calculator integrity and the build, motion and performance): 20
+findings, 12 confirmed, all fixed. The second, three reviewers over those
+fixes: 16 findings, 9 confirmed, all fixed (the `#spFoot` exclusion had
+also caught the entitlement check's own `#spFoot`, which is a caveat, so it
+now names the calculator; the 19 November check could never have passed
+again, now held to the real clock; the results bar's step-down had no
+kept test; and three sentences here were wrong). The ones a reader would
 meet: a click on page text focused `<main tabindex="-1">` and sent Ask
 Buddy away for the rest of the page (it now counts only a control in the
 tab order, focused from the keyboard or typed in); the reality check's
@@ -256,9 +267,11 @@ focused bar; it fails on the pre-review tree and on each mutant).
   branch base) against after: the pension and director calculators 99 to 98
   (LCP 1.96s and 1.81s to 2.26s; accepted by Damian), the other six measured
   pages equal; layout shift lower on every page.
-- Headless Chrome at 375 and 1440: before, 41 caveats under a floating layer
-  at some scroll stop and 71 of 350 focused controls under Ask Buddy; after,
-  none of either.
+- Headless Chrome, the branch's scratch probes at 3b: caveats under a
+  floating layer at some scroll stop, 41 at 375 and 6 at 1440 before, none
+  after; focused controls under Ask Buddy at 375, 71 of 350 before, none
+  after (none at 1440 either way). `tests/floating-chrome.test.mjs` now
+  keeps the same checks.
 
 ## Open
 

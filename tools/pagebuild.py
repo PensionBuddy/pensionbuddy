@@ -925,19 +925,21 @@ CAVEAT_CLASSES = ('pb-caveat', 'announce', 'pb-reg', 'pb-reviewed', 'pb-warn', '
 CAVEAT_WITHIN = (('res-hero', 'foot'), ('legal', 'updated'), ('legal', 'ck-note'), ('legal', 'callbox'),
                  ('max-card', 'mnote'))
 CAVEAT_IDS = ('mScale', 'mWhy', 'm1Cap')
-# ids a CAVEAT_WITHIN pair would catch that are not caveats: the State Pension
-# reality check's #spFoot is its result in words ("... 75% of a full record,
-# so the rate is 75% of the maximum"), which its guess card blurs because it
-# gives the answer away; as a caveat, rule 2's filter:none!important un-blurred
-# it (the pre-merge review, Run 32)
-CAVEAT_NOT = ('spFoot',)
+# elements a CAVEAT_WITHIN pair would catch that are not caveats, as (the
+# calculator's data-pb-calc, the id): the State Pension reality check's #spFoot
+# is its result in words ("... 75% of a full record, so the rate is 75% of the
+# maximum"), which its guess card blurs because it gives the answer away; as a
+# caveat, rule 2's filter:none!important un-blurred it (the pre-merge review,
+# Run 32). The entitlement check's own #spFoot, the basis its figure is worked
+# out on, stays a caveat.
+CAVEAT_NOT = (('state-pension-reality-check', 'spFoot'),)
 _VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 _HELD = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)')
 
 
 def caveat_selector():
     """The same list as one CSS selector, for the MOTION block's rule 2."""
-    nots = ''.join(':not(#%s)' % i for i in CAVEAT_NOT)
+    nots = ''.join(':not([data-pb-calc="%s"] #%s)' % n for n in CAVEAT_NOT)
     return ','.join(['.' + c for c in CAVEAT_CLASSES] +
                     ['.%s .%s%s' % (a, c, nots if a == 'res-hero' else '') for a, c in CAVEAT_WITHIN] +
                     ['#' + i for i in CAVEAT_IDS])
@@ -1000,12 +1002,13 @@ def caveat_elements(text):
             a = dict(attrs)
             line, col = self.getpos()
             el = {'at': starts[line - 1] + col, 'raw': self.get_starttag_text(), 'tag': tag,
-                  'cls': (a.get('class') or '').split(), 'id': a.get('id') or '', 'style': a.get('style') or ''}
+                  'cls': (a.get('class') or '').split(), 'id': a.get('id') or '', 'style': a.get('style') or '',
+                  'calc': a.get('data-pb-calc') or ''}
             if tag in _VOID:
                 return
             anc = [c for x in self.stack for c in x['cls']]
             if (any(c in CAVEAT_CLASSES for c in el['cls']) or el['id'] in CAVEAT_IDS or
-                    (el['id'] not in CAVEAT_NOT and
+                    (not any((x['calc'], el['id']) in CAVEAT_NOT for x in self.stack) and
                      any(c == cls and a2 in anc for a2, cls in CAVEAT_WITHIN for c in el['cls']))):
                 found.append((el, list(self.stack)))
             if tag not in ('script', 'style'):

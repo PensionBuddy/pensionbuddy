@@ -106,8 +106,10 @@
      words with no count, and the year on each date, since nothing tells that
      reader which year it is. Nothing here runs on the page: the chip's
      static spans, its accessible name and the calculators' row carry these
-     strings as markup, and tests/deadline.test.py holds them to this, and
-     fails once the real date has moved past them. They change only when the
+     strings as markup (and the home band its bandHead, bandRev and
+     bandYear), and tests/deadline.test.py holds the markup to this by the
+     real clock, so it fails once the deadline has moved on a year, until
+     the markup moves on to what this gives then. They change only when the
      deadline moves on to the next year, so they never say "was". */
   function statics(d) {
     var date = (d.ros || d.revenue) + ' ' + d.year;
@@ -122,6 +124,10 @@
        block hides there, where "18 Nov 2026, online" overruns the row */
     var md = d.ros ? ROS[d.year] : REVENUE;
     return {
+      /* the home band's markup, as this writes it before 31 October */
+      bandHead: heading(d),
+      bandRev: d.ros ? 'If you do not ' + online + ', it is ' + d.revenue + '.' : second,
+      bandYear: '' + d.taxYear,
       chipDate: md.day + ' ' + MONTHS[md.month].slice(0, 3) + ' ' + d.year,
       chipMore: d.ros ? ', online' : '',
       chipName: target + '. Opens the full explanation.',

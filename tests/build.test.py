@@ -13,6 +13,7 @@ whether or not the build has been re-run.
 Same report as the JavaScript suites, from tests/harness.py: one line per
 assertion, ALL PASS or FAILURES at the end, exit 0 or 1.
 """
+import json
 import os
 import re
 import sys
@@ -905,16 +906,15 @@ def run():
     # its `bottom`, which would shift what is behind it and leave it on a
     # caveat.
     def caveats_js(js):
-        m = re.search(r'CAVEATS:"([^"]*)"', js)
-        return m.group(1) if m else None
+        m = re.search(r'CAVEATS:("(?:[^"\\]|\\.)*")', js)
+        return json.loads(m.group(1)) if m else None
     eq('25. PBMotion.CAVEATS, in the head script, is the caveat list', caveats_js(pagebuild.MOTION_HEAD), pagebuild.caveat_selector())
     # the reality check's #spFoot is its result in words, which its guess card
     # blurs: a caveat, rule 2 would un-blur it (the pre-merge review)
-    feet = {n: sorted(e['id'] or '-' for e, _ in pagebuild.caveat_elements(t) if 'foot' in e['cls'])
-            for n, t in sources.items() if 'class="foot"' in t}
-    eq('25. the reality check\'s result sentence (#spFoot) is not a caveat, and no other page lost its result caveat',
-       ('spFoot' in sum(feet.values(), []), [n for n, v in feet.items() if not v and n != 'state-pension-reality-check.html']),
-       (False, []))
+    feet = {n: sorted(e['id'] or '-' for e, _ in pagebuild.caveat_elements(sources[n]) if 'foot' in e['cls'])
+            for n in ('state-pension-reality-check.html', 'state-pension-entitlement.html')}
+    eq('25. the reality check\'s result sentence (#spFoot) is not a caveat; the entitlement check\'s #spFoot, its basis, is',
+       ('spFoot' in feet['state-pension-reality-check.html'], 'spFoot' in feet['state-pension-entitlement.html']), (False, True))
     readers = {f: open(os.path.join(ROOT, 'assets/js', f)).read() for f in ('pb-buddy.js', 'pb-bookbar.js', 'pb-peek.js')}
     eq('25. Ask Buddy and the booking bar read PBMotion.CAVEATS',
        sorted(f for f in ('pb-buddy.js', 'pb-bookbar.js') if 'PBMotion.CAVEATS' not in readers[f]), [])
