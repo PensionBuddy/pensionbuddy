@@ -787,13 +787,17 @@ def run():
     def plumbing(src):
         out = []
         blk = src[src.find('/* MOTION:BEGIN'):src.find('/* MOTION:END */')]
-        m = re.search(r':is\(([^)]*)\)\{\s*opacity:1!important', blk)
+        m = re.search(r':is\((.*?)\)\{\s*opacity:1!important', blk, re.S)
         norm = lambda x: re.sub(r'\s*,\s*', ',', ' '.join(x.split()))
         if not m or norm(m.group(1)) != norm(pagebuild.caveat_selector()):
             out.append('rule 2')
-        if src.count(pagebuild.MOTION_HEAD) != 1 or VIEWPORT + '\n' + pagebuild.MOTION_HEAD not in src or \
-                src.find(pagebuild.MOTION_HEAD) > src.find('<link rel="stylesheet"') > -1:
+        if src.count(pagebuild.MOTION_HEAD) != 1 or VIEWPORT + '\n' + pagebuild.MOTION_HEAD not in src:
             out.append('head line')
+        # before every stylesheet, or it would wait for them: the font link
+        # puts href first, so find any <link ... rel="stylesheet"> and <style>
+        sheets = [m.start() for m in re.finditer(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)]
+        if not sheets or not 0 <= src.find(pagebuild.MOTION_HEAD) < min(sheets):
+            out.append('head order')
         if re.search(r'<script[^>]*assets/js/pb-motion\.js', src):
             out.append('script')
         return out
@@ -804,7 +808,7 @@ def run():
     eq('22. a caveat dropped from rule 2 is caught',
        'rule 2' in plumbing(ix[:k] + ix[k:].replace(',.pb-warn,', ',', 1)), True)
     for label, page, find, repl, want in (
-            ('the head script moved after the stylesheets', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
+            ('the head script dropped from its place', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
              VIEWPORT, 'head line'),
             ('a caveat dropped from the head script', 'pia.html', pagebuild.MOTION_HEAD,
              pagebuild.MOTION_HEAD.replace('.pb-warn,', '', 1), 'head line'),
@@ -813,6 +817,15 @@ def run():
         m = sources[page].replace(find, repl, 1)
         assert m != sources[page], label
         eq('22. %s is caught' % label, want in plumbing(m), True)
+    # the viewport meta and the head script, together, moved below the font stylesheet
+    bk = sources['booking.html']
+    pair = VIEWPORT + '\n' + pagebuild.MOTION_HEAD + '\n'
+    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', bk)
+    assert pair in bk and link and bk.find(pair) < link.start()
+    moved = bk.replace(pair, '', 1)
+    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', moved)
+    moved = moved[:link.end()] + pair + moved[link.end():]
+    eq('22. the head script moved below the stylesheet is caught', plumbing(moved), ['head order'])
 
     # ----------------------------------------------------------------- 23
     # Run 32, part 2b: the reveal system is gone and stays gone. Words never
@@ -895,6 +908,13 @@ def run():
         m = re.search(r'CAVEATS:"([^"]*)"', js)
         return m.group(1) if m else None
     eq('25. PBMotion.CAVEATS, in the head script, is the caveat list', caveats_js(pagebuild.MOTION_HEAD), pagebuild.caveat_selector())
+    # the reality check's #spFoot is its result in words, which its guess card
+    # blurs: a caveat, rule 2 would un-blur it (the pre-merge review)
+    feet = {n: sorted(e['id'] or '-' for e, _ in pagebuild.caveat_elements(t) if 'foot' in e['cls'])
+            for n, t in sources.items() if 'class="foot"' in t}
+    eq('25. the reality check\'s result sentence (#spFoot) is not a caveat, and no other page lost its result caveat',
+       ('spFoot' in sum(feet.values(), []), [n for n, v in feet.items() if not v and n != 'state-pension-reality-check.html']),
+       (False, []))
     readers = {f: open(os.path.join(ROOT, 'assets/js', f)).read() for f in ('pb-buddy.js', 'pb-bookbar.js', 'pb-peek.js')}
     eq('25. Ask Buddy and the booking bar read PBMotion.CAVEATS',
        sorted(f for f in ('pb-buddy.js', 'pb-bookbar.js') if 'PBMotion.CAVEATS' not in readers[f]), [])

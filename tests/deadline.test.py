@@ -32,7 +32,8 @@ What it proves:
      the page from the back-forward cache (pageshow) counts again, and
      nothing else does; and no page pulses the chip's dot
   6. without JavaScript (Run 32): on every page the chip carries the date,
-     "18 Nov 2026, online", and a name that says so, and the calculators'
+     "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where
+     ", online" would overrun the row), and a name that says so, and the calculators'
      row the date sentence, all in the words of PBDeadline.statics();
      rendered with every script stripped, at 1440 (the chip beside the
      links, the least room), 1200 and 900, that is what shows, the live
@@ -83,8 +84,9 @@ PROBE = r"""<script>
     var e=document.querySelector('.tick .eyebrow'); R.eyebrow=e?e.textContent:null;
     R.rev=t('tkRev'); R.year=t('tkYear'); R.sr=t('tkSr'); R.row=t('deadlineText');
     R.statics=window.PBDeadline ? PBDeadline.statics(PBDeadline.at(new Date())) : null;
-    R.shown=chip ? [].filter.call(chip.querySelectorAll('span'),function(x){ return getComputedStyle(x).display!=='none'; })
-      .map(function(x){ return x.className; }) : null;
+    var vis=function(x){ return x.getClientRects().length>0 && getComputedStyle(x).visibility!=='hidden'; };
+    R.shown=chip ? [].filter.call(chip.children,vis).map(function(x){ return x.className; }) : null;
+    R.chipShown=chip ? vis(chip) : null; R.clockShown=ck ? vis(ck) : null;
     R.pbjs=document.documentElement.classList.contains('pb-js');
     function out(){ var p=document.createElement('pre'); p.id='__dl';
       p.textContent=btoa(unescape(encodeURIComponent(JSON.stringify(R)))); document.body.appendChild(p); }
@@ -122,13 +124,16 @@ class Handler(SimpleHTTPRequestHandler):
                     # the frame's first document is about:blank, "complete" at once: wait for the page
                     'if(!d||d.readyState!=="complete"||d.location.search.indexOf("__nojs")<0)return null;'
                     'var w=f.contentWindow,ch=d.getElementById("navTick"),row=d.getElementById("deadlineText");'
-                    'var vis=function(x){return w.getComputedStyle(x).display!=="none";};'
-                    'var sp=ch?[].filter.call(ch.querySelectorAll("span"),vis):[];'
-                    'var R={shown:sp.map(function(x){return x.className;}),text:sp.map(function(x){return x.textContent;}),'
+                    # rendered: no box when it or any ancestor is display:none
+                    'var vis=function(x){return x.getClientRects().length>0&&w.getComputedStyle(x).visibility!=="hidden";};'
+                    'var sp=ch?[].filter.call(ch.children,vis):[];'
+                    'var R={shown:sp.map(function(x){return x.className;}),text:sp.map(function(x){return x.innerText.replace(/\\s+/g," ").trim();}),'
                     'name:ch?ch.getAttribute("aria-label"):null,row:row?row.textContent:null,rowShown:row?vis(row):null,'
-                    'pbjs:d.documentElement.classList.contains("pb-js"),scripts:d.scripts.length};'
+                    'pbjs:d.documentElement.classList.contains("pb-js"),scripts:d.scripts.length,chipShown:ch?vis(ch):null,'
+                    'clock:d.querySelector(".tk-clock")?vis(d.querySelector(".tk-clock")):null};'
+                    # against the row's own content edge, not the viewport: .nav-in is a padded .wrap
                     'var nv=d.querySelector(".nav-in");R.overrun=nv?Math.round(Math.max.apply(null,[].filter.call(nv.children,vis)'
-                    '.map(function(k){return k.getBoundingClientRect().right;}))-w.innerWidth):null;'
+                    '.map(function(k){return k.getBoundingClientRect().right;}))-(nv.getBoundingClientRect().right-parseFloat(w.getComputedStyle(nv).paddingRight))):null;'
                     'return {textContent:btoa(unescape(encodeURIComponent(JSON.stringify(R))))};}'
                     'function next(){var j=JOBS.shift();if(!j){var p=document.createElement("pre");p.id="__all";'
                     'p.textContent=JSON.stringify(OUT);document.body.appendChild(p);return;}'
@@ -244,8 +249,8 @@ def main():
     r = R[('index.html', NOW)]
     eq('2. the band: its eyebrow names whose date it is', r['eyebrow'], 'Revenue’s deadline')
     eq('2. the band: the online deadline', r['head'], HEAD)
-    eq('2. the band: its clock, the "Days" unit alone, shown once filled', (r['band'], r['units'], r['clockHidden']),
-       ('54', 1, False))
+    eq('2. the band: its clock, the "Days" unit alone, there with JavaScript', (r['band'], r['units'], r['clockShown']),
+       ('54', 1, True))
     eq('2. the band: 31 October as the second line', r['rev'], REV)
     eq('2. the band: the tax year', r['year'], '2025')
     eq('2. the band: for a screen reader', r['sr'], LEFT + ' ' + REV)
@@ -255,9 +260,11 @@ def main():
        ('<span id="tkTag">Revenue’s deadline</span>' in flat, '<h2>%s</h2>' % HEAD in flat,
         '<span id="tkRev">%s</span>' % REV in flat, '<span id="tkYear">2025</span>' in flat), (True, True, True, True))
     clock = re.search(r'<div class="tk-clock"([^>]*)>(.*?)</div> </div>', flat)
-    eq('2. without JavaScript the clock stays hidden, and holds the days alone',
-       bool(clock) and ' hidden' in clock.group(1) and clock.group(2).count('class="tk-unit"') == 1 and
-       'id="tkH"' not in src and 'id="tkS"' not in src, True)
+    # in the markup from the first paint (a hidden clock grew the band when the
+    # foot script showed it), and hidden without JavaScript by html:not(.pb-js)
+    eq('2. the clock is in the markup, shown from the first paint, and holds the days alone',
+       bool(clock) and not re.search(r'(?<![\w-])hidden\b', clock.group(1)) and clock.group(2).count('class="tk-unit"') == 1 and
+       'id="tkH"' not in src and 'id="tkS"' not in src and 'html:not(.pb-js) .tk-clock{display:none}' in src, True)
     chip = re.search(r'<a class="nav-tick" id="navTick"[^>]*>.*?</a>', flat)
     eq('2. the chip\'s live label names Revenue\'s deadline',
        bool(chip) and '<span class="nt-l nt-on" aria-hidden="true">to Revenue’s deadline</span>' in chip.group(0), True)
@@ -311,16 +318,18 @@ def main():
 
     # 6
     S = R[('index.html', NOW)]['statics']
-    eq('6. PBDeadline.statics() on 25 September 2026: the chip', S['chip'], '18 Nov 2026, online')
+    eq('6. PBDeadline.statics() on 25 September 2026: the chip', (S['chipDate'], S['chipMore']), ('18 Nov 2026', ', online'))
     def chip_off(src):
         flat = re.sub(r'\s+', ' ', html.unescape(src))
         m = re.search(r'<a class="nav-tick" id="navTick"[^>]*aria-label="([^"]*)"[^>]*>(.*?)</a>', flat)
         if not m:
             return None
-        spans = re.findall(r'<span class="([^"]*)"[^>]*>([^<]*)</span>', m.group(2))
-        return m.group(1), spans
+        spans = [(c, re.sub(r'<[^>]+>', '', body)) for c, body in
+                 re.findall(r'<span class="(nt-[^"]*)"[^>]*>((?:[^<]|<span class="nt-more">[^<]*</span>)*)</span>', m.group(2))]
+        more = re.search(r'<span class="nt-n nt-off"[^>]*>[^<]*<span class="nt-more">([^<]*)</span></span>', m.group(2))
+        return m.group(1), spans, more.group(1) if more else None
     LIVE = [('nt-dot', ''), ('nt-n nt-on', '--'), ('nt-l nt-on', 'to Revenue’s deadline')]
-    WANT = (S['chipName'], LIVE + [('nt-n nt-off', S['chip'])])
+    WANT = (S['chipName'], LIVE + [('nt-n nt-off', S['chipDate'] + S['chipMore'])], S['chipMore'] or None)
     eq('6. every page: the chip carries the date and a name that says so, for a reader without JavaScript',
        {pg: chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) for pg in pages
         if chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) != WANT}, {})
@@ -334,7 +343,7 @@ def main():
         r = R.get((page, NOW))
         if r:
             eq('6. %s: with JavaScript only the live spans show' % page,
-               (r['pbjs'], r['shown']), (True, ['nt-dot', 'nt-n nt-on']))
+               (r['pbjs'], r['chipShown'], r['shown']), (True, True, ['nt-dot', 'nt-n nt-on']))
     plain = re.sub(r'<[^>]+>', '', S['row'])
     for page in NOJS:
         for w in NOJS_W:
@@ -344,7 +353,11 @@ def main():
             if not r:
                 continue
             eq('6. %s at %dpx without JavaScript: the chip shows the date, not "--"' % (page, w),
-               list(zip(r['shown'], r['text'])), [('nt-dot', ''), ('nt-n nt-off', S['chip'])])
+               (r['chipShown'], list(zip(r['shown'], r['text']))),
+               (True, [('nt-dot', ''), ('nt-n nt-off', S['chipDate'] + ('' if w >= 1440 else S['chipMore']))]))
+            if page == 'index.html':
+                eq('6. index.html at %dpx without JavaScript: the band\'s clock is not shown, only its date sentence' % w,
+                   r['clock'], False)
             eq('6. %s at %dpx without JavaScript: the nav still fits its row' % (page, w), r['overrun'] <= 0, True)
             eq('6. %s at %dpx without JavaScript: the chip\'s name says the date' % (page, w), r['name'], S['chipName'])
             if page in CALCS:

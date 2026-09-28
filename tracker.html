@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot,.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
+<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not(#spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>Track down old pensions, Pensionbuddy</title>
 <meta name="description" content="Lost track of a pension from an old job in Ireland? We'll help you find it and work out what it's worth. Free plain-English consultation with a QFA.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -887,7 +887,9 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tick .btn-light{background:#fff;color:var(--teal-900);border:0}
 
 .tk-clock{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-.tk-clock[hidden]{display:none}
+/* without JavaScript the band gives the date sentence alone; with it (html.pb-js,
+   set in <head>) the clock is there from the first paint, so filling it moves nothing */
+html:not(.pb-js) .tk-clock{display:none}
 .tk-unit{flex:0 0 auto;min-width:82px;text-align:center;padding:16px 10px 12px;
   border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.04)}
 .tk-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
@@ -1796,8 +1798,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* Run 32: without JavaScript the chip gives the date itself, "18 Nov 2026,
    online" (.nt-off); with it, html.pb-js, set by the script in <head> before
    anything paints, shows the day count (.nt-on) as before. The words are the
-   deadline script's PBDeadline.statics(). */
+   deadline script's PBDeadline.statics(). Beside the links, from 1440, the
+   row has room for the date alone: ", online" there would overrun it. */
 html.pb-js .nav-tick .nt-off,html:not(.pb-js) .nav-tick .nt-on{display:none}
+@media(min-width:1440px){
+  #navTick .nt-more{display:none}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -1913,7 +1919,7 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
     .disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,
     .pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,
     .pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,
-    .dr-asat,.res-hero .foot,.legal .updated,.legal .ck-note,.legal .callbox,
+    .dr-asat,.res-hero .foot:not(#spFoot),.legal .updated,.legal .ck-note,.legal .callbox,
     .max-card .mnote,#mScale,#mWhy,#m1Cap){
   opacity:1!important;transform:none!important;filter:none!important;
   transition:none!important;animation:none!important}
@@ -1981,7 +1987,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true">--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026, online</span></a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true">--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk active" href="tracker.html" aria-current="page">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
@@ -2294,10 +2300,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=55fca5c6" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=9933cbc3"></script>
+<script src="assets/js/pb-deadline.js?v=40fde779"></script>
 
 <script>
 /* Mobile menu. This handler previously existed on index.html only, so the
@@ -2324,7 +2330,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
-<script src="assets/js/pb-bookbar.js?v=1e0886af"></script>
+<script src="assets/js/pb-bookbar.js?v=0b2a330b"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script>
 /* mess to order: scatter the paperwork, then let it settle once, when the

@@ -403,6 +403,10 @@
     if (behind.length && !focusIn) {
       clearTimeout(yieldT); yieldT = null;
       html.classList.add('pb-peek-yield');
+    } else if (focusIn) {
+      /* focus in the bar brings it back at once */
+      clearTimeout(yieldT); yieldT = null;
+      html.classList.remove('pb-peek-yield');
     } else if (html.classList.contains('pb-peek-yield') && !yieldT) {
       yieldT = setTimeout(function () {
         yieldT = null;

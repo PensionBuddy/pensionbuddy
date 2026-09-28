@@ -912,8 +912,8 @@ def trust_drift(sources, skeleton=os.path.basename(SKELETON)):
 # column. A caveat is an element with one of CAVEAT_CLASSES, one of
 # CAVEAT_IDS, or a class of CAVEAT_WITHIN inside its named ancestor; new
 # caveats can simply carry .pb-caveat. caveat_drift() is the static guard
-# (verify.py, tests/build.test.py check 20); tests/caveats.test.py watches
-# them frame by frame in Chrome. Like chrome_drift() it never raises.
+# (verify.py, tests/build.test.py check 20); tests/regulator-lines.test.py
+# --caveats watches them frame by frame in Chrome. Like chrome_drift() it never raises.
 # ============================================================================
 CAVEAT_CLASSES = ('pb-caveat', 'announce', 'pb-reg', 'pb-reviewed', 'pb-warn', 'infoadvice', 'assume',
                   'disclosure', 'pb-src', 'srcnote', 'gap-note', 'hc-note', 'qnote', 'sft-note',
@@ -925,13 +925,21 @@ CAVEAT_CLASSES = ('pb-caveat', 'announce', 'pb-reg', 'pb-reviewed', 'pb-warn', '
 CAVEAT_WITHIN = (('res-hero', 'foot'), ('legal', 'updated'), ('legal', 'ck-note'), ('legal', 'callbox'),
                  ('max-card', 'mnote'))
 CAVEAT_IDS = ('mScale', 'mWhy', 'm1Cap')
+# ids a CAVEAT_WITHIN pair would catch that are not caveats: the State Pension
+# reality check's #spFoot is its result in words ("... 75% of a full record,
+# so the rate is 75% of the maximum"), which its guess card blurs because it
+# gives the answer away; as a caveat, rule 2's filter:none!important un-blurred
+# it (the pre-merge review, Run 32)
+CAVEAT_NOT = ('spFoot',)
 _VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 _HELD = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)')
 
 
 def caveat_selector():
     """The same list as one CSS selector, for the MOTION block's rule 2."""
-    return ','.join(['.' + c for c in CAVEAT_CLASSES] + ['.%s .%s' % w for w in CAVEAT_WITHIN] +
+    nots = ''.join(':not(#%s)' % i for i in CAVEAT_NOT)
+    return ','.join(['.' + c for c in CAVEAT_CLASSES] +
+                    ['.%s .%s%s' % (a, c, nots if a == 'res-hero' else '') for a, c in CAVEAT_WITHIN] +
                     ['#' + i for i in CAVEAT_IDS])
 
 
@@ -997,7 +1005,8 @@ def caveat_elements(text):
                 return
             anc = [c for x in self.stack for c in x['cls']]
             if (any(c in CAVEAT_CLASSES for c in el['cls']) or el['id'] in CAVEAT_IDS or
-                    any(c == cls and a2 in anc for a2, cls in CAVEAT_WITHIN for c in el['cls'])):
+                    (el['id'] not in CAVEAT_NOT and
+                     any(c == cls and a2 in anc for a2, cls in CAVEAT_WITHIN for c in el['cls']))):
                 found.append((el, list(self.stack)))
             if tag not in ('script', 'style'):
                 self.stack.append(el)

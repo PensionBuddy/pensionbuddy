@@ -162,6 +162,11 @@
     if (under.length && !focusIn) {
       clearTimeout(yieldT); yieldT = null;
       html.classList.add('pb-bookbar-yield');
+    } else if (focusIn) {
+      /* focus in the bar brings it back at once: a focused link must never
+         wait off screen for the band to clear */
+      clearTimeout(yieldT); yieldT = null;
+      html.classList.remove('pb-bookbar-yield');
     } else if (html.classList.contains('pb-bookbar-yield') && !yieldT) {
       yieldT = setTimeout(function () {
         yieldT = null;
@@ -256,7 +261,10 @@
     if (how === 'page') {
       if (bar.parentNode) bar.parentNode.removeChild(bar);
       html.style.removeProperty('--pb-bookbar-h');
-      if (b) { void b.offsetWidth; b.style.transition = ''; }
+      /* Ask Buddy's lift is written by pb-buddy.js's observer of <html>'s
+         classes, a microtask after this returns: restore its transition in a
+         task after that, once its new place has been applied */
+      if (b) setTimeout(function () { void b.offsetWidth; b.style.transition = ''; }, 0);
       return;
     }
     setTimeout(function () {

@@ -27,18 +27,20 @@
    nav and the element it writes. What it writes, when the element is on
    the page:
      #ntVal, #navTick   the chip: "54 days", and its accessible name
-     #tkD, .tk-clock    the band's days, and the band's clock shown once
-                        filled; .tick h2, #tkRev, #tkYear, #tkSr
+     #tkD               the band's days; .tick h2, #tkRev, #tkYear, #tkSr
      #deadlineText      the calculators' row
    Days only, and never on a timer (Run 32, D21): it works the count out
    when the page opens, when the browser brings the page back from its
    back-forward cache, and when you come back to the tab. A clock running
    to the second read as pressure.
    For a reader without JavaScript the markup carries the date instead
-   (Run 32): the band what this writes today, its clock hidden; the
+   (Run 32): the band what this writes today, its clock not shown (it
+   shows only with html.pb-js, from the first paint, so filling it moves
+   nothing); the
    calculators' row and the chip's name the words of PBDeadline.statics(),
-   with no count; and the chip a static span, "18 Nov 2026, online"
-   (.nt-off), which shows only while <html> lacks pb-js, the class the
+   with no count; and the chip a static span, "18 Nov 2026, online" (just
+   "18 Nov 2026" beside the nav's links, from 1440) (.nt-off), which shows
+   only while <html> lacks pb-js, the class the
    script in <head> sets before anything paints. With JavaScript the chip
    shows its live spans (.nt-on) as before. The chip's
    live label and the band's eyebrow, "to Revenue's deadline" and "Revenue's
@@ -115,11 +117,13 @@
     var second = d.ros
       ? 'If you do not ' + online + ', it is ' + d.revenue + ' ' + d.year + '.'
       : 'If you ' + online + ', it is usually later, in mid-November.';
-    /* the chip has room for the short month alone: at 1440, where it sits
-       beside the nav's links, "18 November 2026, online" overruns the row */
+    /* the chip has room for the short month alone, and beside the nav's links
+       (1440 and wider) for the date alone: its ", online" is a span the NAV
+       block hides there, where "18 Nov 2026, online" overruns the row */
     var md = d.ros ? ROS[d.year] : REVENUE;
     return {
-      chip: md.day + ' ' + MONTHS[md.month].slice(0, 3) + ' ' + d.year + (d.ros ? ', online' : ''),
+      chipDate: md.day + ' ' + MONTHS[md.month].slice(0, 3) + ' ' + d.year,
+      chipMore: d.ros ? ', online' : '',
       chipName: target + '. Opens the full explanation.',
       row: '<b>' + date + '</b>' + target.slice(date.length) + '. ' + second +
         ' After that, ' + d.taxYear + '’s allowance is gone for good.'
@@ -130,7 +134,6 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var chip = $('navTick'), chipVal = $('ntVal'), bD = $('tkD'),
-      clock = document.querySelector('.tk-clock'),
       sr = $('tkSr'), rev = $('tkRev'), who = $('tkYear'), row = $('deadlineText'),
       head = document.querySelector('.tick h2');
 
@@ -140,7 +143,6 @@
     if (chipVal) chipVal.textContent = d.days === 1 ? '1 day' : d.days + ' days';
     if (chip) chip.setAttribute('aria-label', left + ' Opens the full explanation.');
     if (bD) bD.textContent = '' + d.days;
-    if (clock && bD) clock.hidden = false;
     if (head) head.textContent = heading(d);
     if (rev) rev.textContent = revenueLine(d);
     if (who) who.textContent = d.taxYear;

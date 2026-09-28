@@ -65,7 +65,9 @@
        - Tucked: after the first scroll it is Buddy's photo alone, at least
          44 by 44px; its name, "Ask Buddy", stays for screen readers.
        - Stepping aside: while a caveat (PBMotion.CAVEATS), a form field or
-         the booking calendar is under it, or the element that has focus is,
+         the booking calendar is under it, or a control with focus is (one in
+         the tab order, focused from the keyboard or typed in: not <main>,
+         which a click on page text focuses),
          it slides off to the right, at once; it comes back once that area
          has been clear for 600ms, and never returns sooner than a second
          after its last move, so it cannot flicker. It never moves while it
@@ -137,10 +139,19 @@
       });
     }
     /* the element that has focus: if it meets the button's place, step aside */
+    /* a real control, as pb-peek.js counts one: in the tab order, and focused
+       from the keyboard or a field being typed in. Not <main tabindex="-1">,
+       which takes focus from a click on its text or the skip link and, as
+       wide as the page, would keep Buddy aside all the way down */
+    function control(a){
+      if(!a||a===body||a===root||a.tabIndex<0||btn.contains(a)||panel.contains(a)||a.closest('.pb-bookbar,.pb-peek,.pb-consent'))return false;
+      if(a.isContentEditable||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||
+         (a.tagName==='INPUT'&&!/^(range|checkbox|radio|button|submit|reset|color|file|image|hidden)$/i.test(a.type||'')))return true;
+      try{return a.matches(':focus-visible');}catch(e){return true;}
+    }
     function checkFocus(){
       var a=document.activeElement;
-      covered=!!a&&a!==body&&a!==root&&!btn.contains(a)&&!panel.contains(a)&&!a.closest('.pb-bookbar,.pb-peek,.pb-consent')&&
-        (function(r){return r.width>0&&meets(r,home(),8);})(a.getBoundingClientRect());
+      covered=control(a)&&(function(r){return r.width>0&&meets(r,home(),8);})(a.getBoundingClientRect());
       decide();
     }
     function tuck(){

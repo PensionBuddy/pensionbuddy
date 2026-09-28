@@ -146,7 +146,8 @@
         target: 'potOut',
         fmt: euro,
         min: 0, max: 4000000, step: 20000, value: 500000,
-        /* #taxOut stays sharp on purpose: the safe on this page animates it.
+        /* #taxOut stays sharp on purpose: the guess is the pot, and the
+           relief beside it gives the pot no more away than the sliders do.
            #pbSay repeats #taxOut's figure too, but it states the pot as well,
            so the whole sentence is veiled */
         veil: function () { return [$('potOut'), card('chart'), $('pbSay'), $('pbWork')]; }
