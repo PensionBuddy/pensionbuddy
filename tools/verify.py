@@ -177,7 +177,10 @@ AUDIT_JS = r"""
          are loaded wherever Arial is, and would otherwise pass this with no Inter at all. */
       interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Inter'&&f.status==='loaded'),
       interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Inter').length,
-      linkRequestsInter:$$('link[rel=stylesheet]').some(l=>/Inter/i.test(l.href)),
+      /* Run 34: Inter is the site's own file (assets/fonts/), and nothing is
+         fetched from Google Fonts */
+      ownInter:performance.getEntriesByType('resource').some(e=>/\/assets\/fonts\/inter-[a-z-]+\.woff2$/.test(e.name)),
+      googleFonts:performance.getEntriesByType('resource').map(e=>e.name).concat($$('link').map(l=>l.href)).filter(u=>/fonts\.(googleapis|gstatic)\.com/.test(u)).slice(0,2),
       linkRequestsDropped:$$('link[rel=stylesheet]').filter(l=>DROPPED.test(l.href)).map(l=>l.href.slice(0,90)),
       h1:first(famOf(document.querySelector('h1'))),
       h2:first(famOf(document.querySelector('h2'))),
@@ -516,7 +519,7 @@ def static_checks(pages):
             'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono', t)}),
             'uppercaseRules': len(re.findall(r'text-transform\s*:\s*uppercase', t)),
             # Run 34: Inter is the site's own file, and nothing is asked of Google Fonts
-            'requestsInter': bool(re.search(r"@font-face\{font-family:'Inter';[^}]*url\(assets/fonts/inter-latin\.woff2\)", t))
+            'requestsInter': bool(re.search(r"@font-face\{font-family:'Inter';[^}]*url\((?:\.\./)*assets/fonts/inter-latin\.woff2\)", t))
                              and not re.search(r'fonts\.(?:googleapis|gstatic)\.com', t),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
@@ -596,7 +599,8 @@ def evaluate(page, st, audits):
     # in at most the three sizes the one heading recipe allows at a given width
     fo = a.get('fonts') or {}
     if fo and not fo.get('error'):
-        if not fo.get('linkRequestsInter'): F.append(('F2', 'stylesheet does not request Inter'))
+        if not fo.get('ownInter') or fo.get('googleFonts'):
+            F.append(('F2', 'Inter not fetched from assets/fonts/, or a font fetched from Google Fonts: %s' % (fo.get('googleFonts') or 'no Inter file')))
         elif not fo.get('interLoaded'): F.append(('F2', 'Inter requested but did not load'))
         if fo.get('linkRequestsDropped'): F.append(('F2', 'a dropped family is still requested: %s' % fo['linkRequestsDropped'][0]))
         if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Inter: %s' % fo['headingsOffInter']))
