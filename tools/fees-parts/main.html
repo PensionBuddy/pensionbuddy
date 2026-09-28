@@ -1,12 +1,12 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1 class="reveal" style="transition-delay:.06s">What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
-  <p class="reveal" style="transition-delay:.12s">Small percentages add up. Put in your pot and your plan&rsquo;s charges, and see what they take out of it by the time you retire, next to a plan with other charges. Your charges are on your annual statement.</p>
+  <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <h1>What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
+  <p>Small percentages add up. Put in your pot and your plan&rsquo;s charges, and see what they take out of it by the time you retire, next to a plan with other charges. Your charges are on your annual statement.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pension-fees-calculator">
-  <div class="panel reveal">
+  <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
@@ -26,7 +26,7 @@
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-    <div class="res-hero reveal" style="transition-delay:.08s">
+    <div class="res-hero">
       <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
       <div><div class="rl">The other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
@@ -35,7 +35,7 @@
     </div>
     <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
 
-    <div class="chart-card reveal" style="transition-delay:.14s">
+    <div class="chart-card">
       <h3>How your pot could grow, three ways</h3>
       <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
       <ul class="fee-key" aria-hidden="true">
@@ -45,7 +45,7 @@
       </ul>
     </div>
 
-    <div class="fee-card reveal" style="transition-delay:.16s">
+    <div class="fee-card">
       <h3>Where it goes</h3>
       <table class="fee-t">
         <caption class="tk-sr">What the charges take, for each plan</caption>
@@ -59,21 +59,21 @@
       <p class="fee-note">The last line is larger than the two above it because every euro a charge takes stops growing. It is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
     </div>
 
-    <div class="fee-side reveal" style="transition-delay:.18s">
+    <div class="fee-side">
       <h3>The other side</h3>
       <p>A lower charge is not the only thing that matters. Some older plans carry terms worth more than any charge saved, such as a pension a defined benefit scheme promised, and moving a pension can mean giving them up. Charges, terms and the funds themselves are weighed together in a review.</p>
     </div>
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card reveal">
+<div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
   <div class="ctext"><h2>Not sure what your old plans charge?</h2><p>Charges hide in allocation rates, policy fees and fund charges, and older plans rarely spell them out. Damian can find out what yours are and what they mean, in a free 20-minute call. If you have lost track of a plan, <a href="tracker.html">we can help you find it</a>.</p></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
-  <div class="infoadvice reveal">
+  <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
     <p><b>This calculator is information, not advice.</b> It shows what the charges you enter would do to a pot, as an illustration. It names no provider and says nothing about whether any plan is right for you. Regulated financial advice is given in a personal consultation with Damian.</p>
   </div>
@@ -81,7 +81,7 @@
 
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
-  <ul class="reveal">
+  <ul>
     <li>The pot grows each month at the yearly rate you choose, before charges. Then the annual management charge is taken from the fund, a twelfth of a year&rsquo;s worth at a time, so a year of it takes exactly the percentage shown. Then the month&rsquo;s payment goes in, less the charge on payments.</li>
     <li>The defaults for your plan, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or charge in other ways.</li>
     <li>Plans can also carry policy fees, set-up charges, bid/offer spreads on older contracts, and exit or switching charges. None of these is included, so a plan that has them costs more than shown. The Competition and Consumer Protection Commission (CCPC) has a guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a> explains each one.</li>

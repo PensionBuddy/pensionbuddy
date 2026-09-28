@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 27 September 2026, after Run 32
+# Launch status — as at 28 September 2026, after Run 32 (the UX motion work merged)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -100,6 +100,8 @@ and `404.html`. `about.html` does not exist: it was folded into
   `assets/img/product-director-calculator.*` (on `director.html` and in
   the home page's tool tabs) shows PRSI at 4.2%, EUR 19,120 and EUR 9,560;
   from 1 October the live calculator says 4.35%, EUR 19,060 and EUR 9,530.
+  (Re-shot on 28 September for the still safe, so the picture matches the
+  calculator in every other way; the rate still needs this re-shoot.)
   On or after 1 October: `python3 tools/shoot-product.py`, then
   `python3 tools/stamp-images.py`, and check width and height.
 - **PRSI's next step.** The rate lives in one table,
@@ -124,11 +126,37 @@ and `404.html`. `about.html` does not exist: it was folded into
   Without it, from 19 November 2026 the countdown runs to 31 October 2027,
   says the online date is "usually later, in mid-November", and moves on
   to 2028 on 1 November 2027 while the online date may still be open.
+  **On 19 November 2026 `tests/deadline.test.py` fails, on purpose,**
+  (sections 2 and 6) until the words a reader without JavaScript gets move
+  on, because it holds the markup to `PBDeadline.statics()` by the real
+  clock. The failures print the new words. Move: the nav chip's static span
+  and its `aria-label` in the skeleton's nav (`pension-calculator.html`; with
+  no online date the span has no `nt-more` part, so drop that span), then
+  `python3 tools/sync-chrome.py`, `python3 tools/pagebuild.py`,
+  `python3 tools/sync-chrome.py` again; the three calculators' "Tax
+  deadline" row (`pension-calculator.html`, `director-calculator.html`,
+  `tools/compare-parts/main.html`); and the home band's heading, `#tkRev` and
+  `#tkYear` in `index.html`. Tried on a copy with the clock moved to 19
+  November: 50 checks fail before, none after.
 - **6 October 2026, Budget 2027.** `pia.html` per `docs/PIA-BUDGET-DAY.md`
   (threshold, rate, annual limit, launch date, the as-at stamps); re-check
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 32 (UX motion, merged to main on 28 September)
+
+The UX motion work (`docs/UX-MOTION-AUDIT.md`, Step 3, the parts Damian
+picked, with his decisions: defaults): caveats never revealed, delayed or
+moved; the reveal system gone, so words are there on arrival; one motion
+vocabulary, calm under reduced motion; Ask Buddy one script, tucking to its
+photo and stepping aside for caveats, fields and focus; the booking and
+results bars stepping down for caveats; the deadline in days with no
+ticking clock or pulse; no celebration on the jar or the safe. Without
+JavaScript the calculators' "Tax deadline" row and the nav chip give the
+date. Damian checked it on an iPhone (Safari) and accepted one Lighthouse
+point on the pension and director calculators (99 to 98). Details: Run 32
+(continued), below.
 
 ## Closed in Run 32 (urgent fixes, merged to main)
 
@@ -177,6 +205,85 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 32 (continued) — 2026-09-28 · UX motion, Step 3: built, reviewed, merged
+
+Damian's brief (26 September): make the site feel premium, every movement
+helping someone understand their pension or book a call; research, then an
+audit (`docs/UX-MOTION-AUDIT.md`), then build only what he picked, one
+commit each, gated, on `claude/ux-motion`. Picked: 1a, 1c, 2a, 2b, 3a, 3b,
+decisions "defaults", and three gamification risks: the ticking clock, the
+jar spill, the director safe ("neutral reveal, no reward"). On 28
+September: accept the Lighthouse point, give the deadline without
+JavaScript, iPhone check passed, gate, merge, push.
+
+## Items
+
+| # | Item | Status | Note |
+|---|---|---|---|
+| 1a | Caveats held still | **Done** | No warning, source, "information, not advice", "as at" date or legal notice, nor anything holding one, is revealed, delayed or moved. One caveat list, `pagebuild.caveat_selector()`; checks 20, 22; `tests/regulator-lines.test.py --caveats`. |
+| 1c | Booking's note | **Done** | The not-advice and privacy note stays above the calendar once the form is done (check 21). |
+| 2a | The motion system | **Done** | The MOTION block of tokens (three curves, five durations, pairs), byte for byte on every page; rule 2 holds caveats still. |
+| 2b | Words never wait | **Done** | The reveal system, the nav's height hop, smooth arrival, the hero chat's play-out and the answers' height animations are gone (check 23). |
+| 3a | Ask Buddy, one script | **Done** | `assets/js/pb-buddy.js`, loaded by every page (check 24); about 7.5KB off each page. |
+| 3b | Floating chrome gives way | **Done** | Ask Buddy moves only by `translate`, tucks to a 58px photo after the first scroll (no layout shift), slides aside for caveats, fields and a focused control, waits unseen while the analytics choice is open; the booking bar steps down for caveats, the results bar for warning boxes (checks 25; consent check 8; `tests/floating-chrome.test.mjs`). |
+| Clock | The deadline in days | **Done** | "52 days", no timer, no pulse; the count again on return to the tab (deadline section 5). |
+| Jar | No spill at a full record | **Done** | Check 26. |
+| Safe | A still picture | **Done** | Closed, the same for every figure; its driver script gone (check 27); the director photo re-shot. |
+| LH | Two requests fewer | **Done** | `pb-motion.js` folded into the head script (`pagebuild.MOTION_HEAD`); Ask Buddy starts after the first frame (`type="text/pb-late"`). |
+| JS off | The deadline as a date | **Done** | The calculators' row: "18 November 2026, Revenue's deadline for the 2025 tax year if you pay and file online ...". The chip: "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where more overruns the row), shown only while `<html>` lacks `pb-js`. The home band's clock is the other way round: shown only with `pb-js`, from the first paint, so without JavaScript the band gives its date sentence alone. Deadline sections 2 and 6. |
+
+## The pre-merge review
+
+Two rounds, each of independent reviewers followed by a skeptic per
+reviewer trying to refute its findings. The first, six reviewers over the
+whole branch (JavaScript off, the floating chrome, compliance and copy, the
+tests, calculator integrity and the build, motion and performance): 20
+findings, 12 confirmed, all fixed. The second, three reviewers over those
+fixes: 16 findings, 9 confirmed, all fixed (the `#spFoot` exclusion had
+also caught the entitlement check's own `#spFoot`, which is a caveat, so it
+now names the calculator; the 19 November check could never have passed
+again, now held to the real clock; the results bar's step-down had no
+kept test; and three sentences here were wrong). The ones a reader would
+meet: a click on page text focused `<main tabindex="-1">` and sent Ask
+Buddy away for the rest of the page (it now counts only a control in the
+tab order, focused from the keyboard or typed in); the reality check's
+result sentence, `#spFoot`, had been swept into the caveat list and so
+un-blurred behind its guess card (now `CAVEAT_NOT`); a keyboard focus in a
+stepped-down bar waited 600ms off screen; the home band's clock, hidden in
+the markup, grew the band after the first paint; and a page from the
+back-forward cache let Ask Buddy slide. The rest were guards that could
+pass without testing what they said, now fixed, and the missing kept test
+for the floating chrome, now `tests/floating-chrome.test.mjs` (real
+frames, a 375px phone, every scroll stop, the tab walk, a click on text, a
+focused bar; it fails on the pre-review tree and on each mutant).
+
+## Proof
+
+- Every commit gated in a detached worktree: every suite, the render-diffs
+  (the five calculators' figures unchanged throughout), `tools/verify.py`
+  0 FAIL.
+- Lighthouse mobile, local fonts, 5 interleaved runs a page, the branch
+  base (`25dc9f2`) against the merged tree (`c8836d2`), medians: the
+  director calculator 99 to 98 (LCP 1.96s to 2.12s) and the pension
+  calculator 98 to 98 in that session (99 to 98 in earlier ones: the base
+  itself flips between 98 and 99 from session to session), the point Damian
+  accepted; the home page, the reality check, starter, booking, the
+  glossary and director equal; blocking time 0 (one home-page run 127ms);
+  layout shift lower on every page (the calculators 0.007 to 0.001, the
+  home page 0.007 to 0).
+- Headless Chrome, the branch's scratch probes at 3b: caveats under a
+  floating layer at some scroll stop, 41 at 375 and 6 at 1440 before, none
+  after; focused controls under Ask Buddy at 375, 71 of 350 before, none
+  after (none at 1440 either way). `tests/floating-chrome.test.mjs` now
+  keeps the same checks.
+
+## Open
+
+- The consent bar still covers the hero's QFA line on phones until it is
+  answered (Launch status, item 9).
+- 1 October: re-shoot the director photo for PRSI 4.35% (Parked).
+- 19 November: move the JavaScript-off deadline words on (Parked).
 
 # Run 32 — 2026-09-27 · Urgent fixes: PRSI with JavaScript off, a flash in the game, the comparison's warning, the regulator line from the first frame
 

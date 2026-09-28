@@ -13,6 +13,7 @@ whether or not the build has been re-run.
 Same report as the JavaScript suites, from tests/harness.py: one line per
 assertion, ALL PASS or FAILURES at the end, exit 0 or 1.
 """
+import json
 import os
 import re
 import sys
@@ -212,6 +213,14 @@ def run():
          after('terms.html', '/* FONTS:BEGIN', 'size-adjust:103.7%', 'size-adjust:110.0%')),
         ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
          sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
+        ('the MOTION block of CSS changed', 'privacy.html', 'motion-css',
+         after('privacy.html', '/* MOTION:BEGIN', '--pb-d-2:200ms', '--pb-d-2:250ms')),
+        ('the MOTION block of CSS missing', 'starter.html', 'motion-css',
+         sources['starter.html'].replace('/* MOTION:END */', '/* MOTION-END */', 1)),
+        ('the BUDDY block of CSS changed', 'how-we-work.html', 'buddy-css',
+         after('how-we-work.html', '/* BUDDY:BEGIN', 'direction:rtl;flex-direction:row-reverse', 'flex-direction:row')),
+        ('the BUDDY block of CSS missing', 'pia.html', 'buddy-css',
+         sources['pia.html'].replace('/* BUDDY:END */', '/* BUDDY-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -695,8 +704,8 @@ def run():
              '<p class="pb-reviewed reveal" style="transition-delay:.16s">', 'in a reveal'),
             ('the review line with a delay in its transition', 'pia.html', '<p class="pb-reviewed">',
              '<p class="pb-reviewed" style="opacity:.5;transition:opacity .5s ease .16s">', 'in a reveal'),
-            ('a legal page revealed whole', 'terms.html', '<div class="legal">', '<div class="legal reveal">',
-             'in a reveal'),
+            ('a legal page revealed whole', 'terms.html', '<div class="legal pb-caveat">',
+             '<div class="legal pb-caveat reveal">', 'in a reveal'),
             ('a fade whose 0% shares its selector list', 'terms.html', '</style>',
              '@keyframes f{0%,20%{opacity:0}to{opacity:1}}\nbody{animation:f .4s}\n</style>', 'the page fades in'),
             ('a fade written to-then-from', 'terms.html', '</style>',
@@ -727,6 +736,277 @@ def run():
              'body{transition:none;animation:none}\n</style>')):
         m = dict(sources); m[page] = m[page].replace(find, repl, 1)
         eq('19. %s' % label, [k for n, k in reg_findings(m) if n == page], [])
+
+    # ----------------------------------------------------------------- 20
+    # Run 32, part 1a: every caveat in pagebuild's list (warnings, sources,
+    # "information, not advice", assumptions, "as at" dates, the legal
+    # notices) is furniture: not a .reveal, not inside one, no inline delay,
+    # animation or zero opacity. In the pages and in the built pages' parts.
+    parts = {'tools/%s/main.html' % p.parts: read('tools/%s/main.html' % p.parts) for _, p in pages}
+    eq('20. no caveat is revealed, delayed or faded', pagebuild.caveat_drift(dict(sources, **parts)), {})
+    eq('20. the list finds the caveats', sum(len(pagebuild.caveat_elements(t)) for t in sources.values()) > 150, True)
+    for label, page, find, repl in (
+            ('a warning box in a reveal', 'starter.html', '<div class="pb-sa">', '<div class="pb-sa reveal">'),
+            ('the result caveat under a revealed hero', 'pension-calculator.html', '<div class="res-hero"',
+             '<div class="res-hero reveal"'),
+            ('"information, not advice" delayed', 'index.html', '<div class="infoadvice">',
+             '<div class="infoadvice" style="transition-delay:.1s">'),
+            ('a guide\'s "Rules as at" under a revealed article', 'pensions-over-50.html', '<div class="legal">',
+             '<div class="legal reveal">'),
+            ('a legal notice revealed whole', 'terms.html', '<div class="legal pb-caveat">',
+             '<div class="legal pb-caveat reveal">'),
+            ('the hero caveat in a revealed phone', 'index.html', '<div class="hero-phone"', '<div class="hero-phone reveal"')):
+        m = dict(sources)
+        assert find in m[page], (label, find)
+        m[page] = m[page].replace(find, repl, 1)
+        eq('20. %s is caught' % label, sorted(pagebuild.caveat_drift(m)), [page])
+
+    # ----------------------------------------------------------------- 21
+    # Run 32, part 1c: booking's not-advice and privacy note is outside the
+    # form, so it stays on screen when the form gives way to the
+    # confirmation and the calendar (the submit handler hides the form).
+    def note_outside(src):
+        f_open, f_close = src.find('<form id="qualForm"'), src.find('</form>')
+        note, stage = src.find('<p class="qnote">That is the lot.'), src.find('<div id="calStage"')
+        return 0 <= f_open < f_close < note < stage
+    bk = sources['booking.html']
+    eq('21. booking\'s note sits after the form and before the calendar', note_outside(bk), True)
+    i = bk.find('<p class="qnote">That is the lot.'); j = bk.find('</p>', i) + 4
+    back = bk[:i] + bk[j:]
+    back = back.replace('</form>', bk[i:j] + '\n      </form>', 1)
+    eq('21. the note put back inside the form is caught', note_outside(back), False)
+
+    # ----------------------------------------------------------------- 22
+    # Run 32, part 2a: the motion vocabulary's plumbing. The MOTION block's
+    # rule 2 selector is pagebuild.caveat_selector(), so the caveat list and
+    # the rule cannot drift; every root page carries the one head script,
+    # pagebuild.MOTION_HEAD (the whole motion runtime since the Lighthouse
+    # follow-up), directly after the viewport meta and before any stylesheet;
+    # and no page loads assets/js/pb-motion.js, which it replaced: one
+    # request fewer before the first paint.
+    VIEWPORT = '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    def plumbing(src):
+        out = []
+        blk = src[src.find('/* MOTION:BEGIN'):src.find('/* MOTION:END */')]
+        m = re.search(r':is\((.*?)\)\{\s*opacity:1!important', blk, re.S)
+        norm = lambda x: re.sub(r'\s*,\s*', ',', ' '.join(x.split()))
+        if not m or norm(m.group(1)) != norm(pagebuild.caveat_selector()):
+            out.append('rule 2')
+        if src.count(pagebuild.MOTION_HEAD) != 1 or VIEWPORT + '\n' + pagebuild.MOTION_HEAD not in src:
+            out.append('head line')
+        # before every stylesheet, or it would wait for them: the font link
+        # puts href first, so find any <link ... rel="stylesheet"> and <style>
+        sheets = [m.start() for m in re.finditer(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)]
+        if not sheets or not 0 <= src.find(pagebuild.MOTION_HEAD) < min(sheets):
+            out.append('head order')
+        if re.search(r'<script[^>]*assets/js/pb-motion\.js', src):
+            out.append('script')
+        return out
+    eq('22. every page: rule 2 is the caveat list, the head script, no pb-motion.js',
+       {n: plumbing(t) for n, t in sources.items() if plumbing(t)}, {})
+    ix = sources['index.html']
+    k = ix.index('/* MOTION:BEGIN')
+    eq('22. a caveat dropped from rule 2 is caught',
+       'rule 2' in plumbing(ix[:k] + ix[k:].replace(',.pb-warn,', ',', 1)), True)
+    for label, page, find, repl, want in (
+            ('the head script dropped from its place', 'booking.html', VIEWPORT + '\n' + pagebuild.MOTION_HEAD,
+             VIEWPORT, 'head line'),
+            ('a caveat dropped from the head script', 'pia.html', pagebuild.MOTION_HEAD,
+             pagebuild.MOTION_HEAD.replace('.pb-warn,', '', 1), 'head line'),
+            ('pb-motion.js loaded again', 'terms.html', '</body>',
+             '<script src="assets/js/pb-motion.js"></script>\n</body>', 'script')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('22. %s is caught' % label, want in plumbing(m), True)
+    # the viewport meta and the head script, together, moved below the font stylesheet
+    bk = sources['booking.html']
+    pair = VIEWPORT + '\n' + pagebuild.MOTION_HEAD + '\n'
+    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', bk)
+    assert pair in bk and link and bk.find(pair) < link.start()
+    moved = bk.replace(pair, '', 1)
+    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', moved)
+    moved = moved[:link.end()] + pair + moved[link.end():]
+    eq('22. the head script moved below the stylesheet is caught', plumbing(moved), ['head order'])
+
+    # ----------------------------------------------------------------- 23
+    # Run 32, part 2b: the reveal system is gone and stays gone. Words never
+    # wait: no element carries .reveal, no CSS selects it, no script looks for
+    # it or hands off from it; the nav keeps its height when the page scrolls;
+    # no page's own html rule scrolls smoothly on arrival (MOTION's
+    # html.pb-smooth does, for in-page taps once the page has loaded); and the
+    # Buddy chat has no play-out (D25).
+    def leftovers(src):
+        out = []
+        noscript = re.sub(r'(?is)<script\b.*?</script>|<style\b.*?</style>', '', src)
+        if re.search(r'class="[^"]*\breveal\b', noscript):
+            out.append('reveal class')
+        css = ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src))
+        css = re.sub(r'(?s)/\*.*?\*/', '', css)
+        if re.search(r'\.(?:js-)?reveal\b', css):
+            out.append('reveal css')
+        if re.search(r"querySelectorAll\(['\"]\.reveal['\"]\)|classList\.add\(['\"]js-reveal", src):
+            out.append('reveal script')
+        if re.search(r'nav\.scrolled \.nav-in\{height:', css):
+            out.append('nav hop')
+        if re.search(r'(?<![\w.-])html\{[^}]*scroll-behavior:smooth', css):
+            out.append('smooth arrival')
+        if 'pb-chat-play' in src:
+            out.append('chat play-out')
+        return out
+    eq('23. no reveal, no nav hop, no smooth arrival, no chat play-out, on any page',
+       {n: leftovers(t) for n, t in sources.items() if leftovers(t)}, {})
+    for label, page, find, repl, want in (
+            ('a reveal class put back', 'index.html', '<div class="pb-reg">', '<div class="pb-reg reveal">', 'reveal class'),
+            ('a reveal rule put back', 'privacy.html', '</style>', '.js-reveal .reveal:not(.settled){opacity:0}\n</style>', 'reveal css'),
+            ('the nav hop put back', 'glossary.html', '</style>', 'nav.scrolled .nav-in{height:62px}\n</style>', 'nav hop'),
+            ('smooth arrival put back', 'terms.html', 'html{-webkit-text-size-adjust:100%}',
+             'html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}', 'smooth arrival')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('23. %s is caught' % label, want in leftovers(m), True)
+
+    # ----------------------------------------------------------------- 24
+    # Run 32, part 3a: Ask Buddy is one file, assets/js/pb-buddy.js, loaded
+    # once by every root page, with no inline copy left to drift; the six
+    # pages that carried the shorter first shared answer ask for it with
+    # data-first-answer="short", and no other page does. Since the Lighthouse
+    # follow-up the tag is type="text/pb-late": the head script starts it
+    # after the first frame, so the first paint never waits for it.
+    SHORT_FIRST = ['booking.html', 'director.html', 'index.html', 'starter.html', 'thank-you.html', 'tracker.html']
+    def buddy(src):
+        out = []
+        tags = re.findall(r'<script src="assets/js/pb-buddy\.js(?:\?v=[0-9a-f]+)?"([^>]*)></script>', src)
+        if len(tags) != 1:
+            out.append('loaded %d times' % len(tags))
+        elif 'type="text/pb-late"' not in tags[0]:
+            out.append('loaded before the first paint')
+        if re.search(r"btn\.id='pbBuddyBtn'|Ask Buddy: quick answers", ' '.join(re.findall(r'(?is)<script>(.*?)</script>', src))):
+            out.append('inline copy')
+        return out, bool(tags and 'data-first-answer="short"' in tags[0])
+    eq('24. every page loads pb-buddy.js once and carries no inline copy',
+       {n: buddy(t)[0] for n, t in sources.items() if buddy(t)[0]}, {})
+    eq('24. the short first answer on exactly the six pages that had it',
+       sorted(n for n, t in sources.items() if buddy(t)[1]), SHORT_FIRST)
+    tag_i = sources['privacy.html'].find('<script src="assets/js/pb-buddy.js')
+    for label, page, mut, want in (
+            ('an inline copy put back', 'terms.html',
+             sources['terms.html'].replace('</body>', "<script>(function(){btn.id='pbBuddyBtn';})();</script>\n</body>", 1), 'inline copy'),
+            ('the script dropped', 'privacy.html',
+             sources['privacy.html'][:tag_i] + sources['privacy.html'][sources['privacy.html'].find('</script>', tag_i) + 9:], 'loaded 0 times'),
+            ('the script loaded before the first paint again', 'glossary.html',
+             sources['glossary.html'].replace(' type="text/pb-late"', '', 1), 'loaded before the first paint')):
+        eq('24. %s is caught' % label, want in buddy(mut)[0], True)
+
+    # ----------------------------------------------------------------- 25
+    # Run 32, part 3b: floating chrome gives way to caveats. The scripts that
+    # step aside (pb-buddy.js, pb-bookbar.js, pb-peek.js) read the caveat list
+    # from PBMotion.CAVEATS, which the head script makes from
+    # pagebuild.caveat_selector() (a page's copy drifting is check 22); Ask Buddy moves only by translate (the BUDDY block), so no page
+    # lifts it by `bottom` over the analytics choice or a bar, or transitions
+    # its `bottom`, which would shift what is behind it and leave it on a
+    # caveat.
+    def caveats_js(js):
+        m = re.search(r'CAVEATS:("(?:[^"\\]|\\.)*")', js)
+        return json.loads(m.group(1)) if m else None
+    eq('25. PBMotion.CAVEATS, in the head script, is the caveat list', caveats_js(pagebuild.MOTION_HEAD), pagebuild.caveat_selector())
+    # the reality check's #spFoot is its result in words, which its guess card
+    # blurs: a caveat, rule 2 would un-blur it (the pre-merge review)
+    feet = {n: sorted(e['id'] or '-' for e, _ in pagebuild.caveat_elements(sources[n]) if 'foot' in e['cls'])
+            for n in ('state-pension-reality-check.html', 'state-pension-entitlement.html')}
+    eq('25. the reality check\'s result sentence (#spFoot) is not a caveat; the entitlement check\'s #spFoot, its basis, is',
+       ('spFoot' in feet['state-pension-reality-check.html'], 'spFoot' in feet['state-pension-entitlement.html']), (False, True))
+    readers = {f: open(os.path.join(ROOT, 'assets/js', f)).read() for f in ('pb-buddy.js', 'pb-bookbar.js', 'pb-peek.js')}
+    eq('25. Ask Buddy and the booking bar read PBMotion.CAVEATS',
+       sorted(f for f in ('pb-buddy.js', 'pb-bookbar.js') if 'PBMotion.CAVEATS' not in readers[f]), [])
+    # the results bar steps down for the warning boxes only: any caveat would
+    # hide it for a fifth to over half of a calculator's length (Run 32)
+    eq('25. the results bar steps down for the warning boxes, a caveat on the list',
+       ("all('.pb-warn').forEach(function (el) { yieldIO.observe(el); });" in readers['pb-peek.js'],
+        '.pb-warn' in pagebuild.caveat_selector().split(',')), (True, True))
+    # tucked, Ask Buddy's name stays in the flow at no width: absolutely
+    # positioned inside the fixed button it stopped Chrome's scroll anchoring
+    # for the whole page (the starter story card pushed the page, 0.03 CLS)
+    def name_in_flow(src):
+        blk = src[src.find('/* BUDDY:BEGIN'):src.find('/* BUDDY:END */')]
+        blk = re.sub(r'(?s)/\*.*?\*/', '', blk)
+        rules = [b for sel, b in re.findall(r'([^{}]*)\{([^{}]*)\}', blk) if '.pb-b-label' in sel]
+        return bool(rules) and not any(re.search(r'position\s*:\s*(?:absolute|fixed)', b) for b in rules)
+    eq('25. tucked, Ask Buddy\'s name stays in the flow', name_in_flow(sources['pension-calculator.html']), True)
+    eq('25. an absolutely positioned name is caught',
+       name_in_flow(sources['pension-calculator.html'].replace('.pb-b-label{width:0;overflow:hidden}',
+                                                               '.pb-b-label{position:absolute;width:1px;overflow:hidden}', 1)), False)
+    def lifts(src):
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        out = []
+        for sel, body in re.findall(r'([^{}]*)\{([^{}]*)\}', css):
+            if '.pb-b-btn' not in sel:
+                continue
+            sel = ' '.join(sel.split())
+            if re.search(r'(?:^|[;\s])bottom\s*:', body) and sel != '.pb-b-btn':
+                out.append('lift: ' + sel)
+            if re.search(r'transition[^;]*\bbottom\b', body):
+                out.append('bottom transition: ' + sel)
+        return out
+    eq('25. no page lifts Ask Buddy by bottom, or transitions its bottom',
+       {n: lifts(t) for n, t in sources.items() if lifts(t)}, {})
+    for label, page, find, repl in (
+            ('the lift over the analytics choice put back', 'privacy.html', '</style>',
+             'body.pb-banner-open .pb-b-btn{bottom:calc(var(--pb-consent-h,0px) + 18px)}\n</style>'),
+            ('the lift over the booking bar put back', 'index.html', '</style>',
+             '@media(max-width:920px){html.pb-bookbar-on .pb-b-btn{bottom:86px}}\n</style>'),
+            ('a bottom transition put back', 'glossary.html', '</style>',
+             '@media (prefers-reduced-motion:no-preference){.pb-b-btn{transition:bottom .2s ease}}\n</style>')):
+        m = sources[page].replace(find, repl, 1)
+        assert m != sources[page], label
+        eq('25. %s is caught' % label, bool(lifts(m)), True)
+
+    # ----------------------------------------------------------------- 26
+    # Run 32, part 5a: a full record is simply a full jar. No celebration
+    # rises onto the jar's rim when the State Pension reality check's slider
+    # reaches 2,080, and no dots rest there after (D15): no page carries the
+    # spill's markup, its rules or its keyframes.
+    def spill(src):
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        return bool(re.search(r'class="[^"]*\bpb-jar-spill\b', src) or re.search(r'\.pb-jar-spill\b|@keyframes\s+pb-jar-lift', css))
+    eq('26. no page celebrates a full record on the jar', sorted(n for n, t in sources.items() if spill(t)), [])
+    sp = sources['state-pension-reality-check.html']
+    for label, mut in (
+            ('the rim dots put back', sp.replace('<div class="pb-jar-body">', '<div class="pb-jar-spill"><i></i></div>\n        <div class="pb-jar-body">', 1)),
+            ('the lift put back', sp.replace('</style>', '@keyframes pb-jar-lift{0%{opacity:0}100%{opacity:1}}\n</style>', 1))):
+        assert mut != sp, label
+        eq('26. %s is caught' % label, spill(mut), True)
+
+    # ----------------------------------------------------------------- 27
+    # Run 32, part 5a: the director calculator's safe is a still picture, the
+    # same for every figure (Damian: "neutral reveal, no reward"). Nothing
+    # drives it from the relief figure, and nothing on it moves or fills:
+    # no --pb-t level, no data-pb-state, no amber, no rotation or transition
+    # beyond the dial's fixed cross, and no script that writes #pbSafe.
+    def safe(src):
+        out = []
+        css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
+        rules = [(' '.join(sel.split()), b) for sel, b in re.findall(r'([^{}]*)\{([^{}]*)\}', css) if 'pb-safe' in sel]
+        if not rules:
+            out.append('no safe')
+        for sel, b in rules:
+            if re.search(r'var\(--pb-t\b(?!-)|--amber|transition|animation|rotateY|perspective', b):
+                out.append('moves: ' + sel)
+            if 'rotate(' in b and sel != '.pb-safe-dial::after':
+                out.append('turns: ' + sel)
+        if 'data-pb-state' in src or re.search(r"--pb-t['\"]", src):
+            out.append('driven')
+        if re.search(r"getElementById\(['\"]pbSafe['\"]\)", src):
+            out.append('scripted')
+        return out
+    dc = sources['director-calculator.html']
+    eq('27. the director safe is still, the same for every figure', safe(dc), [])
+    for label, find, repl, want in (
+            ('the door swing put back', '.pb-safe-door{position:absolute;', '.pb-safe-door{transform:rotateY(calc(var(--pb-t,0)*74deg));position:absolute;', 'moves: .pb-safe-door'),
+            ('the amber fill put back', '</style>', '.pb-safe-fill{background:var(--amber)}\n</style>', 'moves: .pb-safe-fill'),
+            ('the driver put back', '</body>', "<script>var el=document.getElementById('pbSafe');el.style.setProperty('--pb-t','0.5');</script>\n</body>", 'scripted')):
+        m = dc.replace(find, repl, 1)
+        assert m != dc, label
+        eq('27. %s is caught' % label, want in safe(m), True)
 
 
 

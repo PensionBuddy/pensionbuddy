@@ -45,6 +45,7 @@ pension-calculator.html, then run both tools; either order reaches the same
 tree.
 """
 import hashlib
+import json
 import os
 import re
 import sys
@@ -149,6 +150,8 @@ NOINDEX = '<meta name="robots" content="noindex">'
 REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
 REASON = '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
+# Run 32: MOTION_HEAD, the script in every page's <head>, is defined after
+# caveat_selector() below, because it carries the caveat list.
 DEADLINE_JS = 'assets/js/pb-deadline.js'
 REVIEWED_BY_HAND = ('pension-calculator.html', 'director-calculator.html')
 TRUST_OPEN, TRUST_CLOSE = '/* TRUST:BEGIN', '/* TRUST:END */\n'
@@ -577,8 +580,10 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # Run 29: blocks of CSS that are the same on every page, last in every
 # page's <style>, each a (name, finding kind): the nav's own stylesheet,
 # the rules that make everything clickable look clickable, and (Run 32) the
-# metric-matched fallback for Inter.
-SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'))
+# metric-matched fallback for Inter, the motion vocabulary, and how the
+# floating chrome gives way.
+SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
+              ('BUDDY', 'buddy-css'))
 
 
 def _once(text, marker):
@@ -808,7 +813,8 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
 
 def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
     """{page: new text} for every hand-written page whose nav, foot-top or
-    shared blocks of CSS (NAV, CLICK) have to change to match the skeleton's. The skeleton and the pages assemble()
+    shared blocks of CSS (NAV, CLICK, ...) or the head script (MOTION_HEAD) have
+    to change to match the skeleton's. The skeleton and the pages assemble()
     writes are never in the result: pagebuild owns those. The foot-top is
     rewritten only when it differs beyond the whitespace between tags, so a
     page that renders the same is left byte for byte as it is. Raises, before
@@ -823,7 +829,15 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
     built = {p.out for p in PAGES.values()}
     out = {}
     for page in sorted(sources):
-        if page == skeleton or page in built:
+        if page == skeleton:
+            # the skeleton's own head script comes from MOTION_HEAD, not from itself
+            if len(HEAD_LINE.findall(sources[page])) != 1:
+                raise ValueError('%s has no single motion script after its viewport meta' % page)
+            new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, sources[page], count=1)
+            if new != sources[page]:
+                out[page] = new
+            continue
+        if page in built:
             continue
         text = sources[page]
         n, f = nav_span(text), foot_top_span(text)
@@ -842,6 +856,11 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
                 raise ValueError('%s has no single %s block of CSS' % (page, name))
             if new[c[0]:c[1]] != block:
                 new = new[:c[0]] + block + new[c[1]:]
+        # Run 32: the head script, MOTION_HEAD, straight after the viewport meta
+        heads = HEAD_LINE.findall(new)
+        if len(heads) != 1:
+            raise ValueError('%s has no single motion script after its viewport meta' % page)
+        new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, new, count=1)
         if new != text:
             out[page] = new
     return out
@@ -883,6 +902,143 @@ def trust_drift(sources, skeleton=os.path.basename(SKELETON)):
             out[name] = fs
     return out
 
+
+
+# ============================================================================
+# CAVEATS (Run 32, part 1a of docs/UX-MOTION-AUDIT.md). Every warning,
+# disclaimer, source line, "as at" date, assumption and regulatory line is
+# furniture: never revealed, delayed, faded or moved, and never inside
+# anything that is. This is the one list: the caveat inventory's selector
+# column. A caveat is an element with one of CAVEAT_CLASSES, one of
+# CAVEAT_IDS, or a class of CAVEAT_WITHIN inside its named ancestor; new
+# caveats can simply carry .pb-caveat. caveat_drift() is the static guard
+# (verify.py, tests/build.test.py check 20); tests/regulator-lines.test.py
+# --caveats watches them frame by frame in Chrome. Like chrome_drift() it never raises.
+# ============================================================================
+CAVEAT_CLASSES = ('pb-caveat', 'announce', 'pb-reg', 'pb-reviewed', 'pb-warn', 'infoadvice', 'assume',
+                  'disclosure', 'pb-src', 'srcnote', 'gap-note', 'hc-note', 'qnote', 'sft-note',
+                  'pb-product-cap', 'tk-who', 'pb-life-note', 'pb-sa-note', 'pb-lad-note', 'pb-my-note',
+                  'pia-note', 'dr-src', 'pt-note', 'ec-note', 'pia-asat', 'sft-asat', 'dr-asat')
+# (the legal notices' whole text, and thank-you's two "Illustration only."
+# tool cards, carry .pb-caveat: .legal and .assure .ad also dress guides and
+# plain card copy, which are not caveats)
+CAVEAT_WITHIN = (('res-hero', 'foot'), ('legal', 'updated'), ('legal', 'ck-note'), ('legal', 'callbox'),
+                 ('max-card', 'mnote'))
+CAVEAT_IDS = ('mScale', 'mWhy', 'm1Cap')
+# elements a CAVEAT_WITHIN pair would catch that are not caveats, as (the
+# calculator's data-pb-calc, the id): the State Pension reality check's #spFoot
+# is its result in words ("... 75% of a full record, so the rate is 75% of the
+# maximum"), which its guess card blurs because it gives the answer away; as a
+# caveat, rule 2's filter:none!important un-blurred it (the pre-merge review,
+# Run 32). The entitlement check's own #spFoot, the basis its figure is worked
+# out on, stays a caveat.
+CAVEAT_NOT = (('state-pension-reality-check', 'spFoot'),)
+_VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
+_HELD = re.compile(r'transition-delay|animation(?:-name)?\s*:\s*(?!none\b)|opacity\s*:\s*0(?:\.0*)?\s*(?:!\s*important\s*)?(?:;|$)')
+
+
+def caveat_selector():
+    """The same list as one CSS selector, for the MOTION block's rule 2."""
+    nots = ''.join(':not([data-pb-calc="%s"] #%s)' % n for n in CAVEAT_NOT)
+    return ','.join(['.' + c for c in CAVEAT_CLASSES] +
+                    ['.%s .%s%s' % (a, c, nots if a == 'res-hero' else '') for a, c in CAVEAT_WITHIN] +
+                    ['#' + i for i in CAVEAT_IDS])
+
+
+# Run 32: the one script in <head>, directly after the viewport meta and
+# before any stylesheet, on every page, byte for byte (tests/build.test.py
+# check 22; sync_blocks() writes it into the hand-written pages). Part 2a put
+# a line here that set html.pb-motion; since the Lighthouse follow-up it is
+# the whole motion runtime, and assets/js/pb-motion.js is gone: one request
+# fewer before the first paint. It
+#  - sets html.pb-js, so the markup a reader without JavaScript gets (the nav
+#    chip's date, .nt-off) can step aside for the live one before any paint;
+#  - sets html.pb-motion before anything paints, only when motion is allowed,
+#    and keeps it true while the page is open: a reader who turns on reduced
+#    motion gets it at once (html.pb-motion and html.pb-smooth come off, and
+#    the 'pb:motion' event says so, detail {motion: false});
+#  - adds html.pb-smooth once the page has loaded (the MOTION block makes it
+#    scroll-behavior:smooth), so arrival is instant and in-page taps glide;
+#  - starts the scripts a page marks type="text/pb-late" (Ask Buddy's) once
+#    the first frame after DOMContentLoaded has painted, or 200ms after it
+#    where no frame comes, so the first paint never waits for them;
+#  - gives window.PBMotion: on(), whether motion is allowed now, and CAVEATS,
+#    the caveat list as a selector, made here from caveat_selector() so the
+#    floating chrome (pb-buddy.js, pb-bookbar.js) and the MOTION block's
+#    rule 2 read one list.
+MOTION_HEAD = (
+    "<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;"
+    "r.classList.add('pb-js');"
+    "function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}"
+    "if(ok())r.classList.add('pb-motion');"
+    "function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');"
+    "try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}"
+    "if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}"
+    "addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});"
+    "var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type=\"text/pb-late\"]'),function(o){"
+    "var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});"
+    "o.parentNode.replaceChild(n,o);});}"
+    "document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});"
+    "window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:" + json.dumps(caveat_selector()) + "};})();</script>")
+HEAD_LINE = re.compile(r'(<meta name="viewport" content="width=device-width, initial-scale=1\.0">\n)<script>[^\n]*pb-motion[^\n]*</script>')
+
+
+def caveat_elements(text):
+    """[(caveat, chain)] for every caveat in text: each item a dict with the
+    start tag's offset, raw text, tag, classes, id and style, and chain its
+    ancestors outermost first (the same dicts). Script and style skipped."""
+    from html.parser import HTMLParser
+    starts = [0]
+    for line in text.split('\n'):
+        starts.append(starts[-1] + len(line) + 1)
+    found = []
+
+    class P(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack = []
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            line, col = self.getpos()
+            el = {'at': starts[line - 1] + col, 'raw': self.get_starttag_text(), 'tag': tag,
+                  'cls': (a.get('class') or '').split(), 'id': a.get('id') or '', 'style': a.get('style') or '',
+                  'calc': a.get('data-pb-calc') or ''}
+            if tag in _VOID:
+                return
+            anc = [c for x in self.stack for c in x['cls']]
+            if (any(c in CAVEAT_CLASSES for c in el['cls']) or el['id'] in CAVEAT_IDS or
+                    (not any((x['calc'], el['id']) in CAVEAT_NOT for x in self.stack) and
+                     any(c == cls and a2 in anc for a2, cls in CAVEAT_WITHIN for c in el['cls']))):
+                found.append((el, list(self.stack)))
+            if tag not in ('script', 'style'):
+                self.stack.append(el)
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i]['tag'] == tag:
+                    del self.stack[i:]
+                    break
+
+    P().feed(text)
+    return found
+
+
+def caveat_drift(sources):
+    """{page: [('caveat', detail)]} for every caveat that is, or sits under,
+    a .reveal or anything with an inline delay, animation or zero opacity."""
+    out = {}
+    for name, text in sorted(sources.items()):
+        fs = []
+        for el, chain in caveat_elements(text):
+            bad = [x for x in chain + [el] if 'reveal' in x['cls'] or _HELD.search(x['style'])]
+            if bad:
+                what = '.'.join([el['tag']] + el['cls'][:2]) + (('#' + el['id']) if el['id'] else '')
+                fs.append(('caveat', '%s is under %s' % (what, ', '.join(
+                    '.'.join([b['tag']] + b['cls'][:2]) for b in bad))))
+        if fs:
+            out[name] = fs
+    return out
 
 def main():
     names = [a for a in sys.argv[1:] if not a.startswith('-')] or sorted(PAGES)

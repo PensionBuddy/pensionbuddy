@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>All your pensions in one view, Pensionbuddy</title>
 <meta name="description" content="List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year. Nothing you type leaves the page.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -45,7 +46,7 @@
   --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--teal-100);color:var(--teal-900)}
@@ -61,12 +62,10 @@ h1,h2,h3,h4{font-weight:700;line-height:1.1;letter-spacing:-0.025em;color:var(--
 .btn-primary:hover svg{transform:translateX(3px)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-.reveal{opacity:1;transform:none}.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .5s cubic-bezier(.2,.7,.3,1),transform .5s cubic-bezier(.2,.7,.3,1)}.js-reveal .reveal.in{opacity:1;transform:none}
-.reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal,.js-reveal .reveal{transition:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 .announce{background:var(--teal-900);color:#CFEFE9;font-size:13px;text-align:center;padding:9px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;z-index:60}
 .announce b{color:#fff;font-weight:600}.announce .sep{width:4px;height:4px;border-radius:50%;background:var(--teal)}
-nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+nav{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.97);border-bottom:1px solid transparent}
 nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:72px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-0.03em;color:var(--ink)}
@@ -358,26 +357,20 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 /* anchor jumps clear the sticky nav */
 html{scroll-padding-top:90px}
 /* smoother nav shrink + subtle elevation on scroll */
-nav{transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
 nav.scrolled{box-shadow:0 1px 0 rgba(11,31,28,.04),0 8px 30px -18px rgba(11,31,28,.18)}
-.nav-in{transition:height .3s cubic-bezier(.4,0,.2,1)}
-nav.scrolled .nav-in{height:62px}
 .logo-mark{transition:width .3s cubic-bezier(.4,0,.2,1),height .3s cubic-bezier(.4,0,.2,1)}
 nav.scrolled .logo-mark{width:34px;height:34px}
 /* active-section underline for header links */
 .nav-links a.lnk{position:relative}
 .nav-links a.lnk::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;border-radius:2px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.4,0,.2,1);opacity:.9}
 .nav-links a.lnk:hover::after,.nav-links a.lnk.active::after{transform:scaleX(1)}
-/* refined reveal: shorter travel, snappier curve, gentle */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .45s cubic-bezier(.22,.61,.36,1),transform .45s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
 .benefit:active{transform:translateY(-2px) scale(.995)}
 .back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
 /* smooth FAQ expand/collapse */
 details{overflow:hidden}
-details summary{transition:padding .2s ease}
-details .faq-inner{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1)}
+details .faq-inner{display:grid;grid-template-rows:0fr}
 details[open] .faq-inner{grid-template-rows:1fr}
 details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
@@ -385,11 +378,8 @@ summary:focus-visible{border-radius:8px}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
-  nav.scrolled .nav-in{height:72px}
+    nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
 }
-
 
 /* ---- fintech slider polish: floating value bubble + richer thumb ---- */
 .field{position:relative}
@@ -403,7 +393,6 @@ input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.
 @keyframes resPulse{0%{transform:none}30%{transform:translateY(-2px)}100%{transform:none}}
 .res-hero.pulse{animation:resPulse .5s cubic-bezier(.22,.61,.36,1)}
 @media(prefers-reduced-motion:reduce){.sbubble{transition:opacity .15s ease}.res-hero.pulse{animation:none}.slider-wrap.dragging input[type=range]::-webkit-slider-thumb{box-shadow:0 4px 14px rgba(11,122,110,.5)}}
-
 
 /* ============================================================
    TONE-DOWN PASS , calmer teal, brand intact  (additive, overrides)
@@ -427,7 +416,6 @@ input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.
 .callout{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
 /* trim solid-teal chrome that adds visual noise: logo mark stays teal (brand), but reduce shadow intensity */
 .logo-mark{box-shadow:none}
-
 
 /* ============================================================
    A11Y + UX PASS , verified contrast fixes & interaction polish
@@ -458,7 +446,6 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
-
 /* ---- click-to-type values (precision beyond slider steps) ---- */
 .field .val{cursor:pointer;border-bottom:1.5px dashed rgba(8,94,84,.4);padding-bottom:1px;transition:border-color .2s,color .2s}
 .field .val:hover{border-bottom-color:var(--teal-700)}
@@ -468,14 +455,11 @@ details:not([open]) summary:hover{color:var(--teal-700)}
 .val-edit::-webkit-outer-spin-button,.val-edit::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .val-edit{-moz-appearance:textfield;appearance:textfield}
 
-
 /* ============================================================
    PREMIUM MOTION SPEC, tuned to Stripe/Revolut/Klarna feel.
    Additive overrides. Calculation engines untouched.
    ============================================================ */
-/* 1) Reveal: 30px rise, 800ms, ease-out-expo, GPU-hinted */
-.js-reveal .reveal:not(.settled){opacity:0;transform:translateY(10px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
-.js-reveal .reveal.in{opacity:1;transform:none}
+
 .tmember{will-change:transform}
 .tmember:hover{transform:translateY(-4px) scale(1.015) !important;box-shadow:0 20px 40px rgba(15,110,86,.08) !important}
 .tmember:active{transform:translateY(-2px) scale(1.005) !important}
@@ -490,7 +474,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 input[type=range]:hover::-moz-range-thumb{transform:scale(1.15)}
 input[type=range]:active::-moz-range-thumb{transform:scale(1.15)}
 /* 4) Smart sticky header: hides on scroll down, returns on scroll up */
-nav{will-change:transform;transition:transform .38s cubic-bezier(.16,1,.3,1),background .35s ease,border-color .35s ease,box-shadow .35s ease,backdrop-filter .35s ease}
+nav{will-change:transform;transition:transform var(--pb-d-3) var(--pb-ease-out)}
 nav.nav-hidden{transform:translateY(-100%)}
 /* 5) Floating labels for capture inputs */
 .ffield{position:relative;flex:1;min-width:0;display:block}
@@ -498,12 +482,10 @@ nav.nav-hidden{transform:translateY(-100%)}
 .ffield .flabel{position:absolute;left:21px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-3);font-size:15px;font-weight:500;line-height:1.15;transition:top .22s cubic-bezier(.16,1,.3,1),transform .22s cubic-bezier(.16,1,.3,1),font-size .22s cubic-bezier(.16,1,.3,1),color .22s ease,letter-spacing .22s ease;white-space:nowrap}
 .ffield input:focus~.flabel,.ffield input:not(:placeholder-shown)~.flabel{top:7px;transform:none;font-size:10.5px;font-weight:700;color:var(--teal-700)}
 @media(prefers-reduced-motion:reduce){
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  nav{transition:none}
+    nav{transition:none}
   .ffield .flabel,input[type=range]::-webkit-slider-thumb,input[type=range]::-moz-range-thumb{transition:none}
   .tmember:hover,.btn-primary:hover,.btn-acc:hover,.btn-light:hover{transform:none !important;box-shadow:none !important}
 }
-
 
 /* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
 @media(min-width:921px){.res-hero{min-height:260px}.chart-card{min-height:338px}.boost-card{min-height:114px}.email-cap{min-height:187px}}
@@ -525,7 +507,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-b-list{overflow-y:auto;padding:8px 10px;flex:1}
 .pb-b-q{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;font-weight:600;font-size:14.5px;color:var(--ink);padding:13px 8px;display:flex;gap:10px;align-items:baseline}
 .pb-b-q:focus-visible{outline:none;box-shadow:inset 0 0 0 3px var(--ring);border-radius:8px}
-.pb-b-a{overflow:hidden;max-height:0;transition:max-height .28s ease;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+.pb-b-a{overflow:hidden;max-height:0;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--line)}
 .pb-b-a>div{padding:2px 8px 14px}
 .pb-b-a p{margin:8px 0}
 .pb-b-item.open .pb-b-a{max-height:400px}
@@ -541,7 +523,6 @@ nav.nav-hidden{transform:translateY(-100%)}
 .pb-consent .pb-c-yes{background:#FBF7EF;color:var(--ink);border:0}
 .pb-consent .pb-c-no{background:none;color:#FBF7EF;border:1px solid rgba(255,255,255,.4)}
 .pb-consent .pb-c-yes:focus-visible,.pb-consent .pb-c-no:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-body.pb-banner-open .pb-b-btn{bottom:calc(var(--pb-consent-h,82px) + 14px)}
 body.pb-banner-open .pb-b-panel{bottom:calc(var(--pb-consent-h,82px) + 80px)}
 
 /* dashed underline = term explained in the jargon buster */
@@ -693,13 +674,6 @@ nav.scrolled{background:var(--bg)}
 .strip-item:first-child{border-left:1px solid var(--line-2)}
 @keyframes pbMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* reveals no longer move in lockstep */
-.js-reveal .reveal:not(.settled){transform:translateY(14px);
-  transition:opacity .62s cubic-bezier(.16,1,.3,1),transform .62s cubic-bezier(.16,1,.3,1)}
-.js-reveal .sec-head.reveal:not(.settled){transition-duration:.46s;transform:translateY(10px)}
-.js-reveal .hero-card.reveal:not(.settled){transition-duration:.92s;transform:translateY(26px)}
-.js-reveal .tcard.reveal:not(.settled){transition-duration:.68s}
-details .faq-inner{transition:grid-template-rows .42s cubic-bezier(.16,1,.3,1)}
 
 /* --- 8. Sliders: real touch targets, scroll-safe on mobile --- */
 input[type=range]{height:26px;touch-action:pan-y;
@@ -721,8 +695,7 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
     padding:20px 24px;flex-wrap:wrap;justify-content:center}
   .strip-item.is-clone{display:none}
   .strip::before,.strip::after{display:none}
-  .js-reveal .reveal,.js-reveal .reveal.in{transition:none;opacity:1;transform:none}
-  details .faq-inner{transition:none}
+    details .faq-inner{transition:none}
 }
 
 /* --- pass 4 additions --- */
@@ -918,6 +891,9 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tick .btn-light{background:#fff;color:var(--teal-900);border:0}
 
 .tk-clock{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+/* without JavaScript the band gives the date sentence alone; with it (html.pb-js,
+   set in <head>) the clock is there from the first paint, so filling it moves nothing */
+html:not(.pb-js) .tk-clock{display:none}
 .tk-unit{flex:0 0 auto;min-width:82px;text-align:center;padding:16px 10px 12px;
   border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.04)}
 .tk-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;
@@ -925,8 +901,8 @@ span.ai,.assure .ai{border-radius:6px !important}
 .tk-l{display:block;margin-top:8px;font-family:var(--font);font-size:.58rem;
   font-weight:500;color:rgba(255,255,255,.6)}
 
-/* the digits change every second, so the clock is hidden from assistive tech
-   and this sentence carries the same information instead */
+/* the clock is hidden from assistive tech, and this sentence carries the
+   same information in words instead */
 .tk-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
@@ -936,13 +912,11 @@ span.ai,.assure .ai{border-radius:6px !important}
   .tk-unit{min-width:0;flex:1 1 68px;padding:12px 6px 10px}
   .tk-n{font-size:1.55rem}
 }
-@media(prefers-reduced-motion:reduce){
-  .tk-sec{display:none}
-}
 
 /* ============================================================
    PB-NAVTICK - deadline chip in the sticky header
-   Minutes, not seconds: a per-second repaint in a fixed header
+   Days only, worked out when the page opens and when you come back to
+   it, never on a timer (Run 32, D21): a clock running in a fixed header
    reads as pressure and distracts while reading.
    ============================================================ */
 .nav-tick{display:inline-flex;align-items:center;gap:8px;margin-left:18px;
@@ -964,10 +938,6 @@ span.ai,.assure .ai{border-radius:6px !important}
 /* the site already sets html{scroll-padding-top:90px}; adding scroll-margin
    here stacked on top of it and overshot the target by ~90px */
 
-@media(prefers-reduced-motion:no-preference){
-  .nt-dot{animation:ntPulse 2.6s ease-in-out infinite}
-}
-@keyframes ntPulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 @media(max-width:1080px){
   .nt-l{display:none}
@@ -1344,8 +1314,9 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    transitions height. Neither communicates a state change or a spatial
    relationship - they are decoration, and height transitions on a layout
    wrapper can cause reflow jitter. Removed.
-   Kept: reveals (spatial entry), .btn transform (affordance),
-   marquee (continuous ambient), ntPulse (liveness of a live counter). --- */
+   Kept: .btn transform (affordance), marquee (continuous ambient). The
+   reveals went in Run 32 (part 2b), and the chip's pulse with the ticking
+   clock (D21). --- */
 .logo-mark{transition:none}
 .wrap{transition:none}
 
@@ -1650,12 +1621,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     width:36px;height:36px;border-radius:50%;background:var(--teal-700);color:#fff}
   .pb-peek-go svg{width:18px;height:18px}
   html.pb-peek-on{scroll-padding-bottom:calc(var(--pb-peek-h, 56px) + 8px)}
-  html.pb-peek-on .pb-b-btn{bottom:calc(var(--pb-peek-h, 56px) + 12px)}
   .res-hero[tabindex="-1"]:focus,.pb-guess[tabindex="-1"]:focus{outline:none}
   .res-hero[tabindex="-1"]:focus-visible,.pb-guess[tabindex="-1"]:focus-visible{outline:3px solid var(--ring);outline-offset:3px}
-}
-@media(max-width:920px) and (prefers-reduced-motion:no-preference){
-  .pb-b-btn{transition:transform .18s ease,box-shadow .18s ease,bottom .2s cubic-bezier(.22,.61,.36,1)}
 }
 @media(prefers-reduced-motion:reduce){.pb-peek{transition:none}}
 /* ============================================================
@@ -1800,6 +1767,15 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 @media(max-width:560px){
   #navTick{display:none}
 }
+/* Run 32: without JavaScript the chip gives the date itself, "18 Nov 2026,
+   online" (.nt-off); with it, html.pb-js, set by the script in <head> before
+   anything paints, shows the day count (.nt-on) as before. The words are the
+   deadline script's PBDeadline.statics(). Beside the links, from 1440, the
+   row has room for the date alone: ", online" there would overrun it. */
+html.pb-js .nav-tick .nt-off,html:not(.pb-js) .nav-tick .nt-on{display:none}
+@media(min-width:1440px){
+  #navTick .nt-more{display:none}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -1868,6 +1844,104 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
 .pb-bookbar{flex-wrap:wrap}
 .pb-bookbar p.pb-why{flex:1 0 100%;order:3;margin:0;font-size:15px;text-align:center}
 /* TRUST:END */
+/* MOTION:BEGIN (Run 32). One motion vocabulary for every page, byte for
+   byte: tools/pagebuild.py SHARED_CSS ('MOTION', 'motion-css'), guarded by
+   chrome_drift. Components name motion only through the --pb-t-* pairs,
+   never raw milliseconds or curves. The rules and why: docs/UX-MOTION-AUDIT.md,
+   "The motion system". This block holds the tokens and the rules the parts
+   built so far use; the fills, rolls, scenes and swaps arrive with the parts
+   that need them. html.pb-motion (set and kept true by the script in
+   <head>, tools/pagebuild.py MOTION_HEAD) means motion is allowed. */
+:root{
+  /* curves, named by intent; none overshoots */
+  --pb-ease-out:cubic-bezier(.16,1,.3,1);  /* arrive and settle: the house curve */
+  --pb-ease-move:cubic-bezier(.4,0,.2,1);  /* on screen already, changes place or state */
+  --pb-ease-exit:cubic-bezier(.4,0,1,1);   /* steps aside or leaves; never text */
+  --pb-ease-scroll:linear;                 /* scroll timelines only */
+  /* durations */
+  --pb-d-1:120ms;  /* press */
+  --pb-d-2:200ms;  /* hover, crossfade, bubble, digit roll, row arriving, chrome leaving */
+  --pb-d-3:320ms;  /* a component changes state: Ask Buddy, indicator, split bar */
+  --pb-d-4:480ms;  /* a mark reaches its true value: bar, fill */
+  --pb-d-5:640ms;  /* a line drawn once; the ceiling */
+  /* distances */
+  --pb-lift:2px;   /* buttons only; cards get a shadow, never travel */
+  --pb-nudge:6px;  /* a digit roll, a row just added */
+  --pb-rise:12px;  /* the furthest content travels; floating chrome and the
+                      nav move by their own size, and only to step aside */
+  /* order */
+  --pb-stagger:40ms;    /* between marks only, three steps at most */
+  --pb-ripple:20ms;     /* between jar dots only; the whole ripple within --pb-d-2 */
+  --pb-beat-gap:160ms;  /* after one build finishes, before the next starts */
+  --pb-arrive:300ms;    /* the longest an armed mark may show empty */
+  --pb-pin-max:50svh;   /* the most extra scroll a pinned scene may add */
+  /* pairs: the only way components name motion */
+  --pb-t-press:var(--pb-d-1) var(--pb-ease-out);
+  --pb-t-swap:var(--pb-d-2) var(--pb-ease-move);
+  --pb-t-exit:var(--pb-d-2) var(--pb-ease-exit);
+  --pb-t-state:var(--pb-d-3) var(--pb-ease-move);
+  --pb-t-fill:var(--pb-d-4) var(--pb-ease-out);
+  --pb-t-draw:var(--pb-d-5) var(--pb-ease-out)
+}
+
+/* 2 Caveats are furniture: never revealed, delayed, faded, veiled or moved.
+   The selector is pagebuild.caveat_selector(), the caveat inventory, so the
+   list and this rule cannot drift apart (tests/build.test.py check 22). */
+:is(.pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,
+    .disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,
+    .pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,
+    .pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,
+    .dr-asat,.res-hero .foot:not([data-pb-calc="state-pension-reality-check"] #spFoot),
+    .legal .updated,.legal .ck-note,.legal .callbox,
+    .max-card .mnote,#mScale,#mWhy,#m1Cap){
+  opacity:1!important;transform:none!important;filter:none!important;
+  transition:none!important;animation:none!important}
+
+/* In-page taps scroll smoothly after load; arrival never does. The head
+   script adds html.pb-smooth once the page has arrived. */
+@media (prefers-reduced-motion:no-preference){html.pb-smooth{scroll-behavior:smooth}}
+
+/* Reduced motion: every token still. Durations are .01ms rather than 0 so
+   any old script waiting on an end event gets one; new scripts never wait on
+   one. */
+@media (prefers-reduced-motion:reduce){
+  :root{--pb-d-1:.01ms;--pb-d-2:.01ms;--pb-d-3:.01ms;--pb-d-4:.01ms;--pb-d-5:.01ms;
+    --pb-lift:0px;--pb-nudge:0px;--pb-rise:0px;--pb-stagger:0ms;--pb-ripple:0ms;
+    --pb-beat-gap:0ms;--pb-arrive:0ms}
+  html{scroll-behavior:auto}
+}
+/* MOTION:END */
+/* BUDDY:BEGIN (Run 32, part 3b of docs/UX-MOTION-AUDIT.md). Floating chrome
+   gives way. Ask Buddy (assets/js/pb-buddy.js) moves only by the translate
+   property, from --pb-b-x and --pb-b-y that the script writes, and never by
+   bottom, so it never shifts the page; the booking and results bars step
+   down by transform while a caveat passes behind them. Byte for byte on
+   every page: tools/pagebuild.py SHARED_CSS ('BUDDY', 'buddy-css'), guarded
+   by chrome_drift. */
+.pb-b-btn{translate:var(--pb-b-x,0px) var(--pb-b-y,0px)}
+/* its starting point is its top right corner (right to left, the photo
+   still first on the left), and it keeps its height, so tucking, which
+   only narrows it, moves no starting point and is no layout shift */
+.pb-b-btn{direction:rtl;flex-direction:row-reverse}
+.pb-b-btn .pb-b-label{white-space:nowrap;direction:ltr}
+/* tucked after the first scroll: the photo alone, still named "Ask Buddy".
+   The name stays in the flow at no width, not absolutely positioned: an
+   absolutely positioned label in this fixed button stopped Chrome's scroll
+   anchoring for the whole page, so a card growing above the reader (the
+   starter guide's story) pushed the page instead of being absorbed */
+html.pb-b-tucked .pb-b-btn{padding:8px;gap:0}
+html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
+/* off screen while the analytics choice is open, and out of the tab order */
+.pb-b-btn.pb-b-away{visibility:hidden}
+@media (prefers-reduced-motion:no-preference){
+  html.pb-motion .pb-b-btn{transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s linear var(--pb-d-3)}
+  html.pb-motion .pb-b-btn:not(.pb-b-away){transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s}
+}
+@media(max-width:920px){
+  /* stepping down while a caveat passes behind */
+  html.pb-bookbar-yield .pb-bookbar.pb-bookbar-on,html.pb-peek-yield .pb-peek.pb-peek-on{transform:translateY(calc(100% + 8px))}
+}
+/* BUDDY:END */
 
 /* ============================================================
    ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
@@ -1976,7 +2050,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="Countdown to Revenue&rsquo;s deadline for setting a pension contribution against last year&rsquo;s tax. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n" id="ntVal" aria-hidden="true">--</span><span class="nt-l" aria-hidden="true">to Revenue&rsquo;s deadline</span></a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true">--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
@@ -2024,9 +2098,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow reveal"><span class="pip"></span>The free tool · nothing leaves this page</span>
-  <h1 class="reveal" style="transition-delay:.06s">All your pensions, <span class="hl">in one view.</span></h1>
-  <p class="reveal" style="transition-delay:.12s">List what you have, from statements or from memory. See the total, how it is split, and what the annual charges come to in euro. Nothing you type is sent or stored: print or save the list if you want to keep it.</p>
+  <span class="eyebrow"><span class="pip"></span>The free tool · nothing leaves this page</span>
+  <h1>All your pensions, <span class="hl">in one view.</span></h1>
+  <p>List what you have, from statements or from memory. See the total, how it is split, and what the annual charges come to in euro. Nothing you type is sent or stored: print or save the list if you want to keep it.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2065,7 +2139,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
-  <div class="infoadvice reveal">
+  <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
     <p><b>This is a list, not advice.</b> It adds up what you enter and nothing else. Bringing pensions together is not always right: some carry terms worth more than the convenience. Advice on what to do with yours is given in a personal consultation with Damian.</p>
   </div>
@@ -2403,7 +2477,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 (function(){
   var nav=document.getElementById('nav');
   if(!nav)return;
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var lastY=window.scrollY, downAcc=0, upAcc=0;
   window.addEventListener('scroll',function(){
     var y=window.scrollY, d=y-lastY; lastY=y;
@@ -2417,76 +2490,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script>
-/* Reveal handoff: after the 800ms entrance completes, mark elements settled so
-   component-level hover transitions (cards, buttons) regain control and the
-   entrance's will-change GPU hint is released. */
-(function(){
-  var els=[].slice.call(document.querySelectorAll('.reveal'));
-  if(!els.length)return;
-  function settle(el){ if(!el.classList.contains('settled')) setTimeout(function(){el.classList.add('settled');},900); }
-  var mo=('MutationObserver' in window)?new MutationObserver(function(ms){
-    ms.forEach(function(m){ if(m.target.classList.contains('in')) settle(m.target); });
-  }):null;
-  els.forEach(function(el){
-    if(el.classList.contains('in')) settle(el);
-    if(mo) mo.observe(el,{attributes:true,attributeFilter:['class']});
-  });
-  if(!mo){ setTimeout(function(){ els.forEach(function(el){el.classList.add('settled');}); },1800); }
-})();
-</script>
-
-<script>
-/* ---- Ask Buddy: quick answers, never advice. Content comes from this page's
-   existing FAQ blocks (or the site-wide set below, copied verbatim from the
-   homepage FAQ). Vanilla JS, no external calls. ---- */
-(function(){
-  if(document.getElementById('pbBuddyBtn'))return;
-  var SHARED=[{"q": "Is the first chat really free?", "a": "<p>Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions. If we're not the right fit, we'll say so.</p>"}, {"q": "What does it cost if I become a client?", "a": "<p>That depends on what you need, and we'll be upfront before you commit to anything. How we're paid, by fee, commission or a mix, is set out in our Terms of Business.</p>"}, {"q": "Do I need to know anything before we talk?", "a": "<p>Not at all. Come as you are, with whatever you remember. Doing the digging and turning it into something that makes sense is the job.</p>"}, {"q": "Is my information kept private?", "a": "<p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p>"}];
-  var AV='data:image/jpeg;base64,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';
-  var qs=[];
-  document.querySelectorAll('.faq-list details').forEach(function(d){
-    var s=d.querySelector('summary'); if(!s)return;
-    var q=s.textContent.replace(/\+\s*$/,'').trim();
-    var c=d.cloneNode(true); var cs=c.querySelector('summary'); if(cs)cs.parentNode.removeChild(cs);
-    qs.push({q:q,a:c.innerHTML});
-  });
-  if(!qs.length)qs=SHARED.slice();
-  qs=qs.slice(0,5);
-
-  var btn=document.createElement('button');
-  btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
-  btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-expanded','false');
-  btn.innerHTML='<img src="'+AV+'" alt="">Ask Buddy';
-  var panel=document.createElement('div');
-  panel.className='pb-b-panel';panel.id='pbBuddyPanel';panel.hidden=true;
-  panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Ask Buddy: common questions');
-  var listHtml='';
-  qs.forEach(function(x,i){
-    listHtml+='<div class="pb-b-item"><button type="button" class="pb-b-q" aria-expanded="false" data-i="'+i+'">'+x.q+'<span class="pm" aria-hidden="true">+</span></button><div class="pb-b-a" id="pbA'+i+'"><div>'+x.a+'</div></div></div>';
-  });
-  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
-    +'<div class="pb-b-list">'+listHtml+'</div>'
-    +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
-  document.body.appendChild(btn);document.body.appendChild(panel);
-
-  function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=panel.querySelector('.pb-b-close');if(f)f.focus();}
-  function close(){panel.hidden=true;btn.setAttribute('aria-expanded','false');btn.focus();}
-  btn.addEventListener('click',function(){panel.hidden?open():close();});
-  panel.querySelector('.pb-b-close').addEventListener('click',close);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!panel.hidden)close();});
-  panel.querySelectorAll('.pb-b-q').forEach(function(b){
-    b.addEventListener('click',function(){
-      var item=b.parentNode,was=item.classList.contains('open');
-      panel.querySelectorAll('.pb-b-item.open').forEach(function(o){o.classList.remove('open');o.querySelector('.pb-b-q').setAttribute('aria-expanded','false');});
-      if(!was){item.classList.add('open');b.setAttribute('aria-expanded','true');}
-    });
-  });
-})();
-</script>
+<script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=d99dabed"></script>
 
-<script src="assets/js/pb-deadline.js?v=4bf79414"></script>
+<script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 
 
 <script>
@@ -2559,8 +2566,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=3213e251"></script>
-<script src="assets/js/pb-peek.js?v=eb145ab4"></script>
+<script src="assets/js/pb-guess.js?v=988458d5"></script>
+<script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=0c417a51"></script>
 <script src="assets/js/pb-report.js?v=572ada0b"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
