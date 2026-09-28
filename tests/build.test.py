@@ -221,6 +221,10 @@ def run():
          after('how-we-work.html', '/* BUDDY:BEGIN', 'direction:rtl;flex-direction:row-reverse', 'flex-direction:row')),
         ('the BUDDY block of CSS missing', 'pia.html', 'buddy-css',
          sources['pia.html'].replace('/* BUDDY:END */', '/* BUDDY-END */', 1)),
+        ('the FIRSTSCREEN block of CSS changed', 'glossary.html', 'firstscreen-css',
+         after('glossary.html', '/* FIRSTSCREEN:BEGIN', '.pb-hero-copy > .pb-reg{order:-1}', '.pb-hero-copy > .pb-reg{order:0}')),
+        ('the FIRSTSCREEN block of CSS missing', 'booking.html', 'firstscreen-css',
+         sources['booking.html'].replace('/* FIRSTSCREEN:END */', '/* FIRSTSCREEN-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -1007,6 +1011,35 @@ def run():
         m = dc.replace(find, repl, 1)
         assert m != dc, label
         eq('27. %s is caught' % label, want in safe(m), True)
+
+    # ----------------------------------------------------------------- 28
+    # Run 33: on a phone the cookie bar must never cover the regulator and
+    # QFA line on the first screen. The bar's words are the one line Damian
+    # approved (docs/COMPLIANCE-PACK.md 1.17 has them for sign-off: a change
+    # goes there too); the four heroes that end with the lockup mark their
+    # container .pb-hero-copy, which the FIRSTSCREEN block reorders on a
+    # phone, and keep the lockup last in the markup, so screen readers meet
+    # it where they did. tests/consent.test.py check 9 measures the layouts.
+    consent_js = open(os.path.join(ROOT, 'assets/js/pb-consent.js')).read()
+    WORDS = '<p>May we use a little analytics? <a href="privacy.html">Privacy Notice</a></p>'
+    eq('28. the cookie bar says the approved line, and only it', (consent_js.count(WORDS), 'never sold' in consent_js), (1, False))
+    HEROES = ('index.html', 'director.html', 'starter.html', 'tracker.html')
+    def marked(src):
+        i = src.find('<div class="pb-reg">')
+        j = src.rfind('<div class="', 0, src.rfind('<h1', 0, i))
+        return i > 0 and 'pb-hero-copy' in src[j:src.find('>', j)]
+    eq('28. the four heroes that end with the lockup mark their container .pb-hero-copy',
+       [n for n in HEROES if not marked(sources[n])], [])
+    eq('28. and no other page carries the lockup in a hero', sorted(n for n, t in sources.items()
+       if '<div class="pb-reg">' in t and n not in HEROES and t.find('<div class="pb-reg">') < t.find('</header>')), [])
+    def last_in_copy(src):
+        i = src.find('<div class="pb-reg">')
+        close = src.find('</div>\n  <div class="hero-phone">', i)
+        rest = src[src.find('</div>', src.find('</span>\n', i)) + 6:close] if close > 0 else None
+        return close > 0 and '<div class="pb-reg">' in src[:close] and re.sub(r'\s+|</div>', '', rest or '') == ''
+    eq('28. the lockup stays last in the hero\'s markup (reading order unchanged)', [n for n in HEROES if not last_in_copy(sources[n])], [])
+    m = sources['director.html'].replace('<div class="pb-hero-copy">', '<div>', 1)
+    eq('28. the class dropped from a hero is caught', marked(m), False)
 
 
 

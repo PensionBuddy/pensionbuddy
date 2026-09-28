@@ -26,6 +26,11 @@ What it proves:
      a replayed (untrusted) event and a lead form inside it are not
   7. the booking form's submit is an event; the Privacy Notice's button
      forgets the answer and brings the bar back
+  9. on a phone's first load (320x568, 375x667, 375x812, 412x915), on the
+     14 pages whose first screen carries the regulator and QFA line (the
+     hero's lockup or the page header's review line): that line is on the
+     screen, whole, and the cookie bar is below it; the bar is one line of
+     text and two buttons, 100px or less (Run 33)
   8. at 320, 375 and 1200px, while the choice is open Ask Buddy's button
      waits unseen (and so out of the tab order), never on the bar; once
      the choice is made it is back, whole, in its corner (Run 32, part 3b)
@@ -119,6 +124,21 @@ PROBE = r"""<script>
     })(0);
     return;
   }
+  if(job==='lockup'){
+    // first load, no answer yet: the bar is up. The line a phone must show
+    // on its first screen: the hero's lockup, or the page header's review line
+    later(50,function(){
+      var b=document.querySelector('.pb-consent'), l=document.querySelector('.pb-hero-copy > .pb-reg, .phead .pb-reviewed');
+      var br=b?b.getBoundingClientRect():null, lr=l?l.getBoundingClientRect():null, p=b?b.querySelector('p'):null;
+      R.vh=innerHeight; R.line=l?l.className:null;
+      R.lineTop=lr?Math.round(lr.top):null; R.lineBottom=lr?Math.round(lr.bottom):null;
+      R.barTop=br?Math.round(br.top):null; R.barH=br?Math.round(br.height):null;
+      R.textLines=p?Math.round(p.getBoundingClientRect().height/parseFloat(getComputedStyle(p).lineHeight)):null;
+      R.text=p?p.textContent:null;
+      done();
+    });
+    return;
+  }
   if(job==='reset'){ document.querySelector('[data-pb-consent-reset]').click(); R.after=state();
     R.focus=document.activeElement&&document.activeElement.className; return done(); }
 })();
@@ -141,11 +161,11 @@ class Handler(SimpleHTTPRequestHandler):
                     'function next(){var j=JOBS.shift();if(!j){var p=document.createElement("pre");p.id="__all";'
                     'p.textContent=JSON.stringify(OUT);document.body.appendChild(p);return;}'
                     'if(j[2]==="fresh")localStorage.removeItem("pb-consent");else localStorage.setItem("pb-consent",j[2]);'
-                    'var f=document.createElement("iframe");f.style.cssText="width:"+(j[3]||1200)+"px;height:800px";'
+                    'var f=document.createElement("iframe");f.style.cssText="width:"+(j[3]||1200)+"px;height:"+(j[4]||800)+"px";'
                     'f.src="/"+j[0]+"?__consent="+j[1];document.body.appendChild(f);var n=0;'
                     '(function poll(){n++;var p=null;try{p=f.contentDocument.getElementById("__consent");}catch(e){}'
-                    'if(p){OUT.push([j[0],j[1],j[2],p.textContent,j[3]||1200]);f.remove();next();return;}'
-                    'if(n>1200){OUT.push([j[0],j[1],j[2],null,j[3]||1200]);f.remove();next();return;}setTimeout(poll,25);})();}'
+                    'if(p){OUT.push([j[0],j[1],j[2],p.textContent,j[3]||1200,j[4]||800]);f.remove();next();return;}'
+                    'if(n>1200){OUT.push([j[0],j[1],j[2],null,j[3]||1200,j[4]||800]);f.remove();next();return;}setTimeout(poll,25);})();}'
                     'next();</script></body>') % q['jobs'][0]
             return self._send(body.encode('utf-8'))
         path = u.path.lstrip('/')
@@ -164,6 +184,17 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b)
 
+
+# Run 33: the pages whose first screen carries the regulator and QFA line
+# (the hero's lockup, or the page header's review line), and the phones they
+# are checked on: the widths Damian named, at the screens of the devices
+# that have them (iPhone SE first and third generation, iPhone 12 mini,
+# Pixel 7)
+FIRST_SCREEN = ('index.html', 'director.html', 'starter.html', 'tracker.html',
+                'pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
+                'director-pension-rules.html', 'my-pensions.html', 'pension-fees-calculator.html', 'pia.html',
+                'standard-fund-threshold.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html')
+PHONES = ((320, 568), (375, 667), (375, 812), (412, 915))
 
 CALCS = {
     'pension-calculator.html': 'pension-calculator',
@@ -195,6 +226,7 @@ def main():
     jobs += [[p, 'first', 'accepted'] for p in sorted(CALCS)]
     jobs += [[p, 'overlap', 'fresh', w] for p in ('director.html', 'index.html', 'pension-calculator.html')
              for w in (320, 375, 1200)]
+    jobs += [[p, 'lockup', 'fresh', w, h] for p in FIRST_SCREEN for (w, h) in PHONES]
     url = 'http://127.0.0.1:%d/__consent?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,1000',
@@ -206,12 +238,14 @@ def main():
     eq('0. one Chrome launch returned every job', bool(m), True)
     if not m:
         report(); return
-    R, OVER = {}, []
+    R, OVER, LOCK = {}, [], {}
     for row in json.loads(html.unescape(m.group(1))):
         page, job, start, b64 = row[:4]
         got = json.loads(base64.b64decode(b64).decode('utf-8')) if b64 else None
         if job == 'overlap':
             OVER.append((page, row[4], got))
+        if job == 'lockup':
+            LOCK[(page, row[4], row[5])] = got
         R[(page, job, start)] = got
 
     # 1
@@ -286,6 +320,19 @@ def main():
                     (not r['after']['aside'] and r['after']['inView']) or (r['after']['aside'] and r['after']['under']))
                 eq('8. %s at %dpx: once it is made, Ask Buddy is back in its corner, or aside for a caveat there' % (page, w),
                    back, True)
+    # 9
+    for page in FIRST_SCREEN:
+        for (w, h) in PHONES:
+            r = LOCK.get((page, w, h))
+            eq('9. %s at %dx%d: reported' % (page, w, h), bool(r) and r['line'] is not None, True)
+            if not r or r['line'] is None:
+                continue
+            eq('9. %s at %dx%d: the %s is on the first screen, whole, and the cookie bar is below it'
+               % (page, w, h, 'lockup' if 'pb-reg' in r['line'] else 'review line'),
+               (r['lineTop'] >= 0, r['lineBottom'] <= r['vh'], r['barTop'] is not None and r['lineBottom'] <= r['barTop']),
+               (True, True, True))
+            eq('9. %s at %dx%d: the bar is one line and two buttons, 100px or less' % (page, w, h),
+               (r['textLines'], r['barH'] <= 100, r['text']), (1, True, 'May we use a little analytics? Privacy Notice'))
     # 7
     r = R[('booking.html', 'booking', 'accepted')]['after']
     eq('7. the booking form\'s submit is an event', r['dl'], ['gtm.js', 'booking_form_submit'])

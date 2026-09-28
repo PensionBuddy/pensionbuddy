@@ -347,9 +347,13 @@ cap at all. None is stated now.
 
 What the site does now: the cookie bar every page has carried, unused
 until an analytics service was chosen, now appears on a visitor's
-first page: "We'd like to use a little analytics to see how the site is
-used — nothing for ads, never sold. You choose. See our Privacy Notice.",
-with the buttons "That's fine" and "No thanks". Only "That's fine" loads
+first page: "May we use a little analytics? Privacy Notice" (the words
+"Privacy Notice" link to it), with the buttons "That's fine" and "No
+thanks", side by side and the same width on a phone. (Until 28 September
+2026 it read "We'd like to use a little analytics to see how the site is
+used — nothing for ads, never sold. You choose. See our Privacy Notice.";
+it was cut to one line so that on a phone the bar no longer covers the
+hero's regulator and QFA line, Run 33.) Only "That's fine" loads
 Google Tag Manager (container GTM-KQCRZDNB). "No thanks", or no answer,
 loads nothing from Google, and "No thanks" also deletes any Google
 Analytics cookies left by an earlier yes. The answer is kept in the
@@ -361,12 +365,14 @@ published, holds no tags, so nothing is measured until tags are added to
 it in Google Tag Manager. The Privacy Notice's cookies section is rewritten
 (section 3.4).
 What we need: (a) approval of the cookies section and of the bar's wording,
-which visitors now see; (b) for the sentence the placeholder in section
+which visitors now see, including whether one line, with the detail in
+the Privacy Notice, says enough for the consent to be informed; (b) for the
+sentence the placeholder in section
 3.4 stood for (off the site since 26 September 2026), which analytics tools
 Tag Manager will run, the cookies they set, how long they
-last, and where Google processes the data; (c) whether "nothing for ads,
-never sold" and "We do not use it for advertising" hold for the tools
-chosen (for Google Analytics 4, that means Google signals and ads
+last, and where Google processes the data; (c) whether the Privacy Notice's
+"We do not use it for advertising" holds for the tools chosen (the bar no
+longer says "nothing for ads, never sold") (for Google Analytics 4, that means Google signals and ads
 personalisation off, and no link to Google Ads); (d) whether the notice's
 "Basic, non-identifying information about how the site is used" still
 describes analytics identifiers fairly; (e) whether the two buttons need
@@ -1065,9 +1071,11 @@ Changed wording on existing pages
 - Privacy Notice, "Cookies": the section in 3.4, with the button "Change
   your cookie choice".
 - Every page: the cookie bar, written earlier and shown for the first time
-  now (question 1.17), "We'd like to use a little analytics to see how the
-  site is used — nothing for ads, never sold. You choose. See our Privacy
-  Notice.", with "That's fine" and "No thanks".
+  now (question 1.17), "May we use a little analytics? Privacy Notice",
+  with "That's fine" and "No thanks" (one line since Run 33, 28 September
+  2026; it read "We'd like to use a little analytics to see how the site is
+  used — nothing for ads, never sold. You choose. See our Privacy
+  Notice.").
 - Run 28, every form's success message: "Thanks - we've got it. Damian will
   be in touch personally.", shown only after the form's details really
   arrive, in place of "Thanks. Your figures are on the way." (the pension
