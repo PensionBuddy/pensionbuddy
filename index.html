@@ -1274,6 +1274,15 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    the prefers-reduced-motion fallback. Only the photo treatment is new. */
 .snaps{padding:6px 0 0}
 .snaps[hidden]{display:none} /* Run 29: "Out of office" is switched off; see the comment on the section */
+/* Run 35: the provider ticker without JavaScript. The same list as
+   assets/js/pb-providers.js, still, in one centred row, grey until the pointer
+   is on a logo; tests/providers.test.py holds the two lists together. */
+.pb-prov-ns{padding:26px 18px 30px;text-align:center}
+.pb-prov-ns-label{margin:0 0 14px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.pb-prov-ns-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 40px;margin:0;padding:0;list-style:none}
+.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}
+.pb-prov-ns-list li:hover img{filter:none;opacity:1}
+@media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:28px}}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -2202,8 +2211,21 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 </div></header>
 
 <!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35): assets/js/pb-providers.js fills
-     this. Its list must match the agencies on how-we-work.html when that page is released. -->
+     this; the <noscript> row after it is the same list, still, for a reader without JavaScript
+     (tests/providers.test.py holds the two together). The list must match the agencies on
+     how-we-work.html when that page is released. -->
 <div data-pb-providers hidden></div>
+<noscript><div class="pb-prov-ns">
+  <p class="pb-prov-ns-label" id="pbProvNsLabel">Providers we hold agencies with</p>
+  <ul class="pb-prov-ns-list" aria-labelledby="pbProvNsLabel">
+    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34"></li>
+    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40"></li>
+    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40"></li>
+    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120"></li>
+    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40"></li>
+    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40"></li>
+  </ul>
+</div></noscript>
 
 <section class="gapband pb-bleed pb-wash" id="gap">
   <div class="wrap">

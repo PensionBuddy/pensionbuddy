@@ -28,6 +28,9 @@ What it proves:
      empty and hidden, no .pb-prov, no injected style
   5. the words: "partner" and "we work with" appear only in the comment
      that rules them out; the label is set once
+  6. without JavaScript: the home page's <noscript> row has the same label
+     and the same providers, in the same order, with the same files, alt
+     text and sizes, grey until the pointer is on a logo
 """
 import base64, html, json, os, re, socket, struct, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -55,7 +58,7 @@ PROBE = r"""<script>
     var m=document.querySelector('[data-pb-providers]'), root=document.querySelector('.pb-prov');
     R.mounts=document.querySelectorAll('[data-pb-providers]').length;
     R.mount=m?{hidden:m.hidden, kids:m.children.length, shown:getComputedStyle(m).display!=='none'}:null;
-    R.root=!!root; R.style=[].some.call(document.querySelectorAll('style'),function(s){return s.textContent.indexOf('.pb-prov')>=0;});
+    R.root=!!root; R.style=[].some.call(document.querySelectorAll('style'),function(s){return s.textContent.indexOf('.pb-prov-track')>=0;});
     R.w=innerWidth; R.sw=document.documentElement.scrollWidth;
     if(!root) return done();
     var track=root.querySelector('.pb-prov-track'), strip=root.querySelector('.pb-prov-strip');
@@ -262,6 +265,20 @@ def main():
         '"we work with": an agency is the fact, a partnership is a claim.'])
     eq('5. the label is set in one place, and is the brief\'s', re.findall(r"var LABEL = '([^']*)';", SRC),
        ['Providers we hold agencies with'])
+    # 6
+    home = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
+    ns = re.findall(r'<noscript><div class="pb-prov-ns">(.*?)</div></noscript>', home, re.S)
+    eq('6. without JavaScript: one still row, straight after the mount', (len(ns), home.find('<noscript><div class="pb-prov-ns">')
+       == home.find('<div data-pb-providers hidden></div>') + len('<div data-pb-providers hidden></div>\n')), (1, True))
+    row = ns[0] if ns else ''
+    eq('6. without JavaScript: the same label', re.findall(r'<p class="pb-prov-ns-label" id="([^"]+)">([^<]*)</p>\s*<ul class="pb-prov-ns-list" aria-labelledby="([^"]+)">', row),
+       [('pbProvNsLabel', 'Providers we hold agencies with', 'pbProvNsLabel')])
+    eq('6. without JavaScript: the same providers, files, alt text and sizes, in order',
+       re.findall(r'<li><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"></li>', row),
+       [(e[1], e[0], str(round(float(e[2]))), str(round(float(e[3])))) for e in ENTRIES])
+    eq('6. without JavaScript: grey, and its own colours under the pointer',
+       ('.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}' in home,
+        '.pb-prov-ns-list li:hover img{filter:none;opacity:1}' in home), (True, True))
     srv.shutdown()
     report()
 
