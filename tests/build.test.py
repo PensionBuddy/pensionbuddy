@@ -1094,6 +1094,103 @@ def run():
         assert mut != pc, label
         eq('29. %s is caught' % label, any(x.startswith(want) for x in fonts(mut)), True)
 
+    # ----------------------------------------------------------------- 30
+    # Run 34, item 3: search and sharing. tools/seo.py writes every page's
+    # block; this holds what it writes to the pages' own words. Every page
+    # in the sitemap: a title under 60 characters and a description under
+    # 155, each its own; the canonical and og:url its sitemap address; the
+    # share picture there at its stated size. Structured data: valid JSON,
+    # schema.org, only the three types the site uses; a two-step
+    # BreadcrumbList ending at the page; the business on the home page, in
+    # the footer's own sentence and address, with no phone (the site shows
+    # none); FAQPage only where the page shows those questions and answers,
+    # word for word. A page the sitemap leaves out carries none of it.
+    import seo
+    import html as htmllib
+    from PIL import Image
+    everything = dict(sources, **{'games/' + g: t for g, t in games.items()})
+    INDEX = seo.indexable()
+    def norm(t):
+        t = htmllib.unescape(t).replace('’', "'").replace('‘', "'").replace('“', '"').replace('”', '"')
+        return re.sub(r'\s+', ' ', t).strip()
+    def visible(src):
+        body = src[src.find('<body'):]
+        return norm(re.sub(r'<[^>]+>', ' ', re.sub(r'(?is)<script\b.*?</script>|<style\b.*?</style>', '', body)))
+    def seo_findings(name, src):
+        out = []
+        head = src[:src.find('</head>')]
+        if seo.apply(name, src) != src:
+            out.append('block not as tools/seo.py writes it')
+        title = norm(re.search(r'<title>(.*?)</title>', head, re.S).group(1))
+        desc = norm(re.search(r'<meta name="description" content="([^"]*)"', head).group(1))
+        blocks = []
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', src, re.S):
+            try:
+                blocks.append(json.loads(m.group(1)))
+            except ValueError as e:
+                out.append('JSON-LD does not parse: %s' % e)
+        can = re.findall(r'<link rel="canonical" href="([^"]*)">', head)
+        if name not in INDEX:
+            if can or 'og:url' in head or blocks:
+                out.append('not in the sitemap, yet carries a canonical, og:url or JSON-LD')
+            return out
+        if len(title) >= 60: out.append('title %d characters' % len(title))
+        if len(desc) >= 155: out.append('description %d characters' % len(desc))
+        if can != [seo.url_of(name)] or head.count('<meta property="og:url" content="%s">' % seo.url_of(name)) != 1:
+            out.append('canonical or og:url is not the sitemap address')
+        img = re.search(r'<meta property="og:image" content="https://pensionbuddy\.ie/([^"]+)">', head)
+        wh = (int(re.search(r'og:image:width" content="(\d+)"', head).group(1)), int(re.search(r'og:image:height" content="(\d+)"', head).group(1)))
+        path = os.path.join(ROOT, img.group(1)) if img else ''
+        if not img or not os.path.isfile(path) or Image.open(path).size != wh:
+            out.append('share picture missing or not %dx%d' % wh)
+        types = [b.get('@type') for b in blocks]
+        if any(b.get('@context') != 'https://schema.org' for b in blocks) or not set(types) <= {'FinancialService', 'FAQPage', 'BreadcrumbList'}:
+            out.append('JSON-LD types: %s' % types)
+        for b in blocks:
+            if b.get('@type') == 'BreadcrumbList':
+                items = b['itemListElement']
+                if ([i['position'] for i in items] != [1, 2] or items[0]['item'] != seo.SITE
+                        or items[-1]['item'] != seo.url_of(name) or not all(i.get('name') for i in items)):
+                    out.append('breadcrumb is not Home, then the page')
+            if b.get('@type') == 'FAQPage':
+                vis = visible(src)
+                for q in b['mainEntity']:
+                    if norm(q['name']) not in vis or norm(q['acceptedAnswer']['text']) not in vis:
+                        out.append('FAQ not word for word on the page: %s' % q['name'][:40])
+            if b.get('@type') == 'FinancialService':
+                foot = norm(re.sub(r'<[^>]+>', ' ', src[src.rfind('<footer'):]))
+                addr = b['address']
+                if (b['description'] not in foot or addr['streetAddress'] not in foot or addr['addressLocality'] not in foot
+                        or addr['addressRegion'] not in foot or 'mailto:%s' % b['email'] not in src or 'telephone' in b
+                        or b['legalName'] not in foot or b['url'] != seo.SITE):
+                    out.append('the business data is not the footer\'s')
+        want = ['FinancialService'] if name == 'index.html' else ['BreadcrumbList']
+        if [t for t in types if t != 'FAQPage'] != want:
+            out.append('JSON-LD should be %s (and FAQPage where a FAQ is shown)' % want)
+        return out
+    eq('30. every page: its search and sharing tags, and its structured data, held to its own words',
+       {n: seo_findings(n, t) for n, t in everything.items() if seo_findings(n, t)}, {})
+    titles = {}
+    descs = {}
+    for n in INDEX:
+        h = everything[n][:everything[n].find('</head>')]
+        titles.setdefault(norm(re.search(r'<title>(.*?)</title>', h, re.S).group(1)), []).append(n)
+        descs.setdefault(norm(re.search(r'<meta name="description" content="([^"]*)"', h).group(1)), []).append(n)
+    eq('30. no two pages in the sitemap share a title or a description',
+       [v for v in list(titles.values()) + list(descs.values()) if len(v) > 1], [])
+    eq('30. and every page in the sitemap is a page', [n for n in INDEX if n not in everything], [])
+    st = sources['starter.html']
+    ix = sources['index.html']
+    q = "We'll look at what you've got and explain whether it's set up well for you."
+    for label, name, src, want in (
+            ('a title of 60 characters', 'terms.html', sources['terms.html'].replace('<title>Terms of Business, Pensionbuddy</title>',
+                                                                                    '<title>' + 'T' * 60 + '</title>', 1), 'title 60'),
+            ('a FAQ answer the page no longer shows', 'starter.html', st.replace(q, "We'll tell you whether it's set up well for you.", 1), 'FAQ not word for word'),
+            ('a phone number added to the business', 'index.html', ix.replace('"email": "hello@pensionbuddy.ie"', '"telephone": "+353 1 000 0000", "email": "hello@pensionbuddy.ie"', 1), 'block not as'),
+            ('a canonical on a held page', 'thank-you.html', sources['thank-you.html'].replace('</title>', '</title>\n<link rel="canonical" href="https://pensionbuddy.ie/thank-you.html">', 1), 'block not as')):
+        assert src != everything[name], label
+        eq('30. %s is caught' % label, any(x.startswith(want) for x in seo_findings(name, src)), True)
+
 
 
 

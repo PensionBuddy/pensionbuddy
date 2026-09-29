@@ -42,6 +42,12 @@ the regulator and QFA line; on a phone that line, and the review line, are
 drawn under the small label above the page's heading, their words
 unchanged (questions 1.14 and 1.17).
 
+Updated 29 September 2026, on the branch reviewed before it goes live:
+the typefaces are served from the site itself, so no visit sends anything
+to Google for them (question 1.17); the cookie bar's "Privacy Notice"
+opens at its Cookies section (1.17); and search results and share
+pictures, with fourteen search lines shortened (question 1.19).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -461,6 +467,111 @@ retirement, that is, before the scheme's normal retirement age, which for
 these directors is between 60 and 70, so it now says that. The PRSA line
 first quoted only the start of the footnote's second sentence; it now
 quotes the whole footnote.)
+
+1.19 Search results and share pictures (proposed, Run 34)
+---------------------------------------------------------
+
+What the site would do (on the branch claude/overnight-3, not yet live):
+every page tells search engines its one address, and, when a link to it
+is shared, shows a title, a description and a picture. The title and
+description are the page's own, as they appear in a search result. The
+picture, for the home page and the six pages for an audience (starters,
+old pensions, company directors, over 50, self-employed, worked in the
+UK), is a new card, 1200 by 630: the Pensionbuddy logo, the page's small
+label and its headline, word for word as the page shows them, then
+"pensionbuddy.ie" and "Regulated by the Central Bank of Ireland", as the
+announcement bar at the top of every page says it. No figures. Every other
+page shows the paw mark, as before. For search engines, the home page also
+describes the business in the footer's own words ("Pensionbuddy is a
+trading name of Damian Condon T/A Gresham Wealth Management, which is
+regulated by the Central Bank of Ireland.", the registered office and
+hello@pensionbuddy.ie), and every other page names itself under Home.
+
+Fourteen search titles and descriptions were over the length a search
+result shows, and were shortened, each only by taking words out of the
+approved text (one "and" joins two kept phrases on the director rules
+page):
+
+- index.html, description: "Pensions made friendly. Understand and grow
+  your pension over a relaxed, jargon-free chat. Regulated by the Central
+  Bank of Ireland." (was "Pensions made friendly. Understand and grow your
+  pension over a relaxed, jargon-free chat. A brand of Gresham Wealth
+  Management, regulated by the Central Bank of Ireland.")
+- director.html, description: "How company directors can fund a pension
+  through their business and cut corporation tax. Free plain-English
+  consultation with a QFA." (was "How company directors can fund a pension
+  through their business, fund beyond personal limits and cut corporation
+  tax. Free plain-English consultation with a QFA.")
+- terms.html, description: "Who we are, what we do, and how we are paid.
+  Terms of Business for Damian Condon T/A Gresham Wealth Management,
+  regulated by the Central Bank of Ireland." (was "Who we are, what we do,
+  and how we are paid. Plain-English Terms of Business for Damian Condon
+  T/A Gresham Wealth Management, regulated by the Central Bank of
+  Ireland.")
+- pensions-over-50.html, title: "Pensions after 50, Pensionbuddy" (was
+  "Pensions after 50: catching up, taking benefits early, and what comes
+  after, Pensionbuddy")
+- pensions-over-50.html, description: "Higher tax relief limits from 50,
+  when some pensions can be taken early, and the choice between an ARF and
+  an annuity. Rules as at September 2026." (was "Higher tax relief limits
+  from 50, when some pensions can be taken early and what that costs, and
+  the choice between an ARF and an annuity. Rules as at September 2026.")
+- uk-pensions-in-ireland.html, description: "Moving a UK pension to
+  Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how
+  Ireland taxes UK pensions. Rules as at September 2026." (was "Moving a
+  UK workplace or personal pension to Ireland, the 25% Overseas Transfer
+  Charge, the UK State Pension, and how Ireland taxes UK pensions. Rules
+  as at September 2026.")
+- broker-vs-autoenrolment.html, description: "Compare what goes into your
+  pension under My Future Fund auto-enrolment against a personal pension
+  through a broker. An illustration, not advice." (was "Compare what goes
+  into your pension under My Future Fund auto-enrolment against a personal
+  pension arranged through a broker, for your own salary and age. An
+  illustration, not advice.")
+- state-pension-entitlement.html, description: "What the State Pension
+  would pay, worked out both ways the Department does until the end of
+  2033, and which one is paid. An illustration, not advice." (was "What
+  the State Pension (Contributory) would actually pay, worked out both
+  ways the Department does until the end of 2033, and which one is paid.
+  An illustration, not advice.")
+- director-pension-rules.html, description: "What changed for company
+  directors: executive pensions set up before April 2021, and a company's
+  payments into a PRSA. Information, not advice." (was "What changed for
+  company directors: executive pensions set up before April 2021, a
+  company's payments into a PRSA, the October window and the Standard Fund
+  Threshold. Rules as at September 2026. Information, not advice.")
+- standard-fund-threshold.html, title: "The Standard Fund Threshold,
+  Pensionbuddy" (was "The Standard Fund Threshold, and how much of it you
+  would use, Pensionbuddy")
+- standard-fund-threshold.html, description: "The Standard Fund Threshold,
+  how much of it your pensions would use, and how a retirement lump sum is
+  taxed. An illustration, not advice." (was "The Standard Fund Threshold
+  from 2026 to 2029 and after, how much of it your pensions would use in
+  the year you take them, and how a retirement lump sum is taxed. Rules as
+  at September 2026. An illustration, not advice.")
+- pension-fees-calculator.html, description: "What an annual management
+  charge and a charge on each payment take out of a pension pot by
+  retirement. An illustration, not advice." (was "What an annual
+  management charge and a charge on each payment take out of a pension pot
+  by retirement, next to another plan's charges. An illustration, not
+  advice.")
+- pia.html, title: "The new Personal Investment Account (PIA),
+  Pensionbuddy" (was "The new Personal Investment Account (PIA), next to a
+  pension, Pensionbuddy")
+- pia.html, description: "The proposed Personal Investment Account, and
+  the same take-home cost in a pension, the PIA and an ETF. Not yet law.
+  An illustration, not advice." (was "The proposed Personal Investment
+  Account, as at 25 September 2026: what is confirmed, what Budget 2027
+  announces on 6 October, and the same take-home cost in a pension, the
+  PIA and an ETF. Proposed, not yet law. An illustration, not advice.")
+
+What we need: (a) whether a share card is an advertisement that must
+carry the full regulatory disclosure, the footer's sentence, rather than
+"Regulated by the Central Bank of Ireland"; (b) approval of the fourteen
+shortened lines; (c) the over-50 card's headline is "Pensions after 50:
+catching up, taking benefits early, and what comes after": the 50 is an
+age, not a figure, but it is the one number on any card.
+
 
 2. The Letter of Authority, full wording
 ========================================

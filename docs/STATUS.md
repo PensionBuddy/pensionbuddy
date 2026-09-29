@@ -227,6 +227,23 @@ option, logged as a question. Branch off `main` (`669becc`).
 
 | 2 | Self-hosted fonts | **Done** | see git log | Inter and the footer wordmark's Schibsted Grotesk 800 are in `assets/fonts/` (the nine woff2 files Google Fonts served on 28 September, byte for byte, with their SIL Open Font License texts); the `@font-face` rules are in the shared FONTS block, with the Inter Fallback metrics kept; each page preloads `inter-latin.woff2`; no page, the two games included, asks Google for anything (build check 29; verify F2). Every page at 375 and 1440 is pixel for pixel main's (62 full-page shots; the games' animation aside). The Privacy Notice never mentioned Google Fonts, so it is unchanged; pack 1.17's note says the fonts are now the site's own. Lighthouse below. |
 
+| 3 | SEO basics | **Done** | see git log | `tools/seo.py` writes each page's block (between `SEO:BEGIN` and `SEO:END` in its `<head>`; `pagebuild.assemble()` calls it, so a rebuild keeps it): the canonical address, the Open Graph and Twitter card tags from the page's own title and description, and its JSON-LD. The 26 pages in the sitemap each get a canonical and og:url at their sitemap address; the five held pages (404, thank-you, how-we-work, the finder, the readiness check) the sharing tags only. Fourteen titles and descriptions over 60 or 155 characters are shortened by taking words out of the approved text (pack 1.19 lists each, old and new). Seven share cards, 1200x630 (`tools/og-images.py`, `assets/brand/og/`): the home page and the six audience pages, each with the logo, the page's eyebrow and headline word for word, the address and "Regulated by the Central Bank of Ireland"; no figures. JSON-LD: the business on the home page as a FinancialService in the footer's own sentence, address and email (no phone: the site shows none); a two-step BreadcrumbList, Home then the page, everywhere else; the four existing FAQPages kept, one answer (starter's third) brought into line with the words the page now shows. Build check 30 holds all of it (lengths, uniqueness, addresses, pictures, JSON-LD shape, the business against the footer, every FAQ against the page), with four faults it catches. Question 2 and pack 1.19. |
+
+What Google's Rich Results Test would say (checked against Google's
+structured-data rules by hand and by check 30; no page was sent to Google):
+
+- FinancialService (a LocalBusiness): valid; "telephone" is recommended
+  and absent, as are "openingHoursSpecification", "priceRange" and "geo",
+  none of which the site states.
+- FAQPage: valid, but since August 2023 Google shows FAQ results only for
+  well-known government and health sites, so expect none.
+- BreadcrumbList: valid; the pages show no breadcrumb trail, which Google
+  allows.
+- Every page answers at both `/page` and `/page.html` (and `/` and
+  `/index.html`), all 200 from Netlify: the canonical now names one, and
+  Search Console will list the others as "Alternate page with proper
+  canonical tag", which is expected.
+
 ### Lighthouse, item 2 (interleaved, 5 runs a side, median; before = main with Google Fonts over the network)
 
 | Page | Perf | FCP ms | LCP ms | Speed Index ms | CLS |
@@ -255,6 +272,14 @@ back (index, directors, tracker, pension calculator), so the preload stays.
    screen until scrolled. The other ways: type under the 16px floor below
    352px, or one stacked card per product (the column labels change with the
    growth rate, so that needs a script change). Picked the scroll.
+2. The site shows no phone number, so the business data for search
+   engines has none, and Google will call that a missing recommended field.
+   If there is a public number to show, it goes on the site first, then in
+   `tools/seo.py`. Also pack 1.19: whether a share card must carry the full
+   regulatory disclosure (the footer's sentence) rather than "Regulated by
+   the Central Bank of Ireland", and the "50" in the over-50 card's
+   headline (an age, not a figure). Picked: the short line, as the
+   announcement bar has it, and the headline as the page has it.
 
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 
