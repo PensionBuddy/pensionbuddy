@@ -2032,6 +2032,8 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .dr-out h3{margin:0 0 10px}
 .dr-out h3:focus{outline:none}
 .dr-out ul{margin:0 0 12px;padding-left:20px}
+/* Run 34 (part 4d): the list follows the not-advice line and its reason to book */
+.dr-out .pb-why + ul{margin-top:16px}
 .dr-out li{margin:0 0 10px;font-size:.98rem;line-height:1.55;color:var(--ink)}
 .dr-out li a{color:var(--teal-700);font-weight:600}
 </style>
@@ -2190,9 +2192,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </form>
     <div class="dr-out" id="drOut" hidden>
       <h3 id="drOutH" tabindex="-1">Worth talking through</h3>
-      <ul id="drList"></ul>
       <p class="dr-src">Topics to discuss, not advice. <a href="booking.html" id="drBook">Book a call with Damian for free</a> to go through them.</p>
       <p class="pb-why">Free, 20 minutes, no obligation.</p>
+      <ul id="drList"></ul>
     </div>
   </section>
 </div>
