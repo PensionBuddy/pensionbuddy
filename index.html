@@ -1585,7 +1585,7 @@ button{font-family:inherit}
 #audience,#audience .wrap,.pb-offer,.pb-offer li,.pb-offer-item{overflow:visible}
 .pb-offer{list-style:none;margin:0;padding:0}
 .pb-offer li{margin:0;padding:0}
-.pb-offer-item{display:block;padding:14px 0;color:var(--ink);text-decoration:none;transition:opacity .3s ease}
+.pb-offer-item{display:block;padding:14px 0;color:var(--ink);text-decoration:none}
 .pb-offer-name{display:block;font-weight:800;font-size:clamp(2.1rem,6vw,4.7rem);line-height:1.06;padding:.02em 0 .06em;
   letter-spacing:-.035em;color:inherit;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
 .pb-offer-desc{display:block;margin-top:10px;max-width:46ch;font-size:1rem;line-height:1.55;color:var(--ink-2)}
@@ -1593,10 +1593,14 @@ button{font-family:inherit}
   /* the description sits beside its own item, centred on it whether the
      name runs to one line or two */
   .pb-offer-item{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:center;padding:18px 0}
-  .pb-offer-desc{margin:0;opacity:0;transition:opacity .3s ease}
-  .pb-offer-item:hover .pb-offer-desc,.pb-offer-item:focus-visible .pb-offer-desc{opacity:1}
-  .pb-offer-item:hover .pb-offer-name,.pb-offer-item:focus-visible .pb-offer-name{transform:translateX(10px)}
-  .pb-offer:hover .pb-offer-item:not(:hover):not(:focus-visible){opacity:.38}
+  /* Run 34 (part 14a of docs/UX-MOTION-AUDIT.md): every explanation is
+     always there to read, in ink-2, darkening to ink beside the item under
+     the pointer or the keyboard; only the other items' names soften */
+  .pb-offer-desc{margin:0;color:var(--ink-2);transition:color var(--pb-d-2) var(--pb-ease-out)}
+  .pb-offer-item:hover .pb-offer-desc,.pb-offer-item:focus-visible .pb-offer-desc{color:var(--ink)}
+  .pb-offer-name{transition:transform var(--pb-d-2) var(--pb-ease-out),opacity var(--pb-d-2) var(--pb-ease-out)}
+  .pb-offer-item:hover .pb-offer-name,.pb-offer-item:focus-visible .pb-offer-name{transform:translateX(var(--pb-rise))}
+  .pb-offer:hover .pb-offer-item:not(:hover):not(:focus-visible) .pb-offer-name{opacity:.7}
 }
 .pb-offer-item:focus-visible{outline:3px solid var(--teal);outline-offset:4px;border-radius:6px}
 @media(prefers-reduced-motion:reduce){
