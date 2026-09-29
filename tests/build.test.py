@@ -1055,16 +1055,17 @@ def run():
 
     # ----------------------------------------------------------------- 31
     # Run 35: Damian's qualifications and memberships. One list, the same
-    # words everywhere, in the places the brief named: the end of the home
-    # page's story, under Damian's own section, beside the booking form, and
-    # small in every page's footer (the foot-top, so chrome_drift holds it
+    # words everywhere, in the places the brief named: under Damian's own
+    # section of the home page (Run 36 took the second copy, at the end of
+    # the story, off, at Damian's word), beside the booking form, and small
+    # in every page's footer (the foot-top, so chrome_drift holds it
     # to the skeleton's on every page, and check 8 says so). The label says
     # whose they are, so no body seems to endorse Pensionbuddy; nothing else
     # is said in the strip, and nothing in it moves. (Checks 29 and 30 are
     # numbered on the unmerged claude/overnight-3 branch.)
     QUAL_LABEL = 'Damian&rsquo;s qualifications and memberships'
     QUAL_ITEMS = ['Qualified Financial Adviser (QFA)', 'Life Insurance Association (LIA)']
-    WHERE = {'index.html': ['pbQualsStory', 'pbQualsDamian', 'pbQualsFoot'],
+    WHERE = {'index.html': ['pbQualsDamian', 'pbQualsFoot'],
              'booking.html': ['pbQualsBook', 'pbQualsFoot']}
 
     def quals(src):
@@ -1113,9 +1114,9 @@ def run():
             if [g[0] for g in got] != ['pbQualsFoot']:
                 f.append('%s: strips %s, expected the footer\'s only' % (page, [g[0] for g in got]))
         ix = srcs['index.html']
-        story, damian = ix.find('<section id="story">'), ix.find('<section id="damian"')
-        if not (story < ix.find('id="pbQualsStory"') < damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
-            f.append('index.html: the strips are not at the end of the story and in Damian\'s section')
+        damian = ix.find('<section id="damian"')
+        if not (damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
+            f.append('index.html: the strip is not in Damian\'s section')
         bk = srcs['booking.html']
         if not (bk.find('<div class="lead">') < bk.find('id="pbQualsBook"') < bk.find('<div class="book-card">')):
             f.append('booking.html: the strip is not in the column beside the form, before its card')
@@ -1126,15 +1127,18 @@ def run():
             f.append('the QUALS block is missing, or something in it moves')
         return f
 
-    eq('31. Damian\'s qualifications and memberships: the same label and names in the four places, and nothing else',
+    eq('31. Damian\'s qualifications and memberships: the same label and names in the three places, and nothing else',
        quals_faults(sources), [])
     for label, page, find, repl, want in (
-            ('the label changed to a claim', 'index.html', 'id="pbQualsStory">Damian&rsquo;s qualifications and memberships',
-             'id="pbQualsStory">Accredited by', 'the label is'),
+            ('the label changed to a claim', 'index.html', 'id="pbQualsDamian">Damian&rsquo;s qualifications and memberships',
+             'id="pbQualsDamian">Accredited by', 'the label is'),
             ('a name dropped from the booking page', 'booking.html',
              'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
-            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"',
-             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"', 'the items are'),
+            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"',
+             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"', 'the items are'),
+            ('the story\'s copy put back', 'index.html', 'someone qualified to help.</p>\n  </div>\n</div></section>',
+             'someone qualified to help.</p>\n<div class="pb-quals"><p class="pb-quals-label" id="pbQualsStory">Damian&rsquo;s qualifications and memberships</p>'
+             '<ul class="pb-quals-list" aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div>\n  </div>\n</div></section>', 'strips'),
             ('an endorsement line added', 'index.html',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
@@ -1143,8 +1147,8 @@ def run():
              '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
             ('a logo with no alt at all', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
              '<li><img src="assets/logos/qfa.svg">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
-            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li>',
-             'aria-labelledby="pbQualsStory"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
+            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li>',
+             'aria-labelledby="pbQualsDamian"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
             ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
             ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
              '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),
