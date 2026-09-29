@@ -1280,9 +1280,9 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .pb-prov-ns{padding:26px 18px 30px;text-align:center}
 .pb-prov-ns-label{margin:0 0 14px;font-size:14px;font-weight:600;color:var(--ink-2)}
 .pb-prov-ns-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 40px;margin:0;padding:0;list-style:none}
-.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}
+.pb-prov-ns-list img{display:block;width:auto;height:calc(var(--pb-logo-h,32) * 1px);filter:grayscale(1);opacity:.72}
 .pb-prov-ns-list li:hover img{filter:none;opacity:1}
-@media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:28px}}
+@media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:calc(var(--pb-logo-h,32) * .875px)}}
 /* Run 35: "Just here to learn?", straight after the first section. The two
    games, each a still photograph of the real game mid-play, shot by
    tools/shoot-product.py like the calculators' pictures, then a line and a
@@ -2268,12 +2268,12 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 <noscript><div class="pb-prov-ns">
   <p class="pb-prov-ns-label" id="pbProvNsLabel">Providers we hold agencies with</p>
   <ul class="pb-prov-ns-list" aria-labelledby="pbProvNsLabel">
-    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34"></li>
-    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40"></li>
-    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40"></li>
-    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120"></li>
-    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40"></li>
-    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40"></li>
+    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34" style="--pb-logo-h:30"></li>
+    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40" style="--pb-logo-h:29"></li>
+    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40" style="--pb-logo-h:23"></li>
+    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120" style="--pb-logo-h:44"></li>
+    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40" style="--pb-logo-h:34"></li>
+    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40" style="--pb-logo-h:27"></li>
   </ul>
 </div></noscript>
 
@@ -2890,7 +2890,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-providers.js?v=2fc3649b"></script>
+<script src="assets/js/pb-providers.js?v=6a5e606e"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>

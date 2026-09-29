@@ -22,7 +22,13 @@
      PROVIDERS  in the order shown. `logo` is a file in assets/logos/ (made
                 with tools/logos.py) and `w` and `h` its width and height,
                 so the page keeps the logo's space before it loads; the name
-                is its alt text. `logo: null` draws the name in a box instead
+                is its alt text. `size` is the height it is drawn at on a
+                computer, in pixels (seven-eighths of it on a phone): set by
+                eye, so that none looks heavier or smaller than the rest
+                (Run 36). A bold, wide word like Aviva's is drawn shorter; a
+                light one on two lines like Royal London's, or a round crest
+                like New Ireland's, taller. `logo: null` draws the name in a
+                box instead
 
    How it behaves: the logos scroll right to left in a loop, faded at both
    edges, in grey; a logo turns to its own colours under the pointer, and
@@ -37,12 +43,12 @@
   var ON = true;
   var LABEL = 'Providers we hold agencies with';
   var PROVIDERS = [
-    { name: 'Zurich', logo: 'assets/logos/zurich.webp', w: 145, h: 34 },
-    { name: 'Irish Life', logo: 'assets/logos/irish-life.svg', w: 86.8, h: 40 },
-    { name: 'Aviva', logo: 'assets/logos/aviva.svg', w: 223.21, h: 40 },
-    { name: 'New Ireland', logo: 'assets/logos/new-ireland.webp', w: 119, h: 120 },
-    { name: 'Royal London', logo: 'assets/logos/royal-london.svg', w: 179.72, h: 40 },
-    { name: 'Standard Life', logo: 'assets/logos/standard-life.svg', w: 193.98, h: 40 }
+    { name: 'Zurich', logo: 'assets/logos/zurich.webp', w: 145, h: 34, size: 30 },
+    { name: 'Irish Life', logo: 'assets/logos/irish-life.svg', w: 86.8, h: 40, size: 29 },
+    { name: 'Aviva', logo: 'assets/logos/aviva.svg', w: 223.21, h: 40, size: 23 },
+    { name: 'New Ireland', logo: 'assets/logos/new-ireland.webp', w: 119, h: 120, size: 44 },
+    { name: 'Royal London', logo: 'assets/logos/royal-london.svg', w: 179.72, h: 40, size: 34 },
+    { name: 'Standard Life', logo: 'assets/logos/standard-life.svg', w: 193.98, h: 40, size: 27 }
   ];
 
   if (!ON) return;
@@ -74,14 +80,15 @@
     '.pb-prov-box{display:flex;align-items:center;justify-content:center;min-width:150px;height:60px;',
     '  padding:0 22px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);',
     '  font-size:16px;font-weight:600;color:var(--ink-2);white-space:nowrap}',
-    /* a logo: no box, one height for all, grey until the pointer is on it */
+    /* a logo: no box, each at its own height (--pb-logo-h, set from `size`),
+       grey until the pointer is on it */
     '.pb-prov-box.pb-prov-logo{min-width:0;padding:0 16px;border:0;background:none}',
-    '.pb-prov-box img{display:block;height:32px;width:auto;max-width:none;filter:grayscale(1);opacity:.72;',
+    '.pb-prov-box img{display:block;height:calc(var(--pb-logo-h,32) * 1px);width:auto;max-width:none;filter:grayscale(1);opacity:.72;',
     '  transition:filter var(--pb-t-swap),opacity var(--pb-t-swap)}',
     '.pb-prov-item:hover img{filter:none;opacity:1}',
     '@keyframes pbProv{from{transform:translateX(0)}to{transform:translateX(-' + (100 / copies) + '%)}}',
     '@media(max-width:600px){.pb-prov-box{min-width:124px;height:52px;padding:0 16px;font-size:15px}',
-    '  .pb-prov-box img{height:28px}',
+    '  .pb-prov-box img{height:calc(var(--pb-logo-h,32) * .875px)}',
     '  .pb-prov-item{margin:0 8px}}',
     '@media(prefers-reduced-motion:reduce){',
     '  .pb-prov-strip{-webkit-mask-image:none;mask-image:none}',
@@ -134,6 +141,7 @@
         img.alt = c ? '' : p.name;
         img.width = Math.round(p.w);
         img.height = Math.round(p.h);
+        if (p.size) img.style.setProperty('--pb-logo-h', String(p.size));
         img.loading = 'lazy';
         img.decoding = 'async';
         box.appendChild(img);
