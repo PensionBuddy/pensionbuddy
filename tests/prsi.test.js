@@ -50,4 +50,28 @@
   eq('4. and EUR 477 at 4.35% (476.5 rounds up)', keep(after.rate), 477);
   eq('4. the calculator\'s share that reaches the pocket from 1 October: 47.65%',
      Math.round((1 - (0.40 + 0.08 + after.rate)) * 1e6) / 1e6, 0.4765);
+
+  group('5  the two sentences in words (Run 36)');
+  var LB = P.lines(new Date(2026, 8, 30, 23, 59, 59)), LA = P.lines(new Date(2026, 9, 1, 0, 0, 0));
+  eq('5. to 30 September: the salary line as it always read',
+     LB.salary, 'lands in your pocket after up to 52.2% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), or 52.35% from 1 October 2026');
+  eq('5. to 30 September: the assumption as it always read',
+     LB.assume, 'The salary comparison assumes a higher-rate taxpayer facing up to 52.2% on additional income (40% income tax, 8% USC, 4.2% PRSI), and 52.35% from 1 October 2026, when PRSI rises to 4.35%. Your rate may differ.');
+  eq('5. from 1 October: 52.35%, and nothing still to come',
+     LA.salary, 'lands in your pocket after up to 52.35% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI)');
+  eq('5. from 1 October: the assumption at 4.35%',
+     LA.assume, 'The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income (40% income tax, 8% USC, 4.35% PRSI). Your rate may differ.');
+  eq('5. still so in 2027', P.lines(new Date(2027, 5, 1)).salary, LA.salary);
+  var S = P.statics();
+  eq('5. without JavaScript, the salary line is true on any date',
+     S.salary, 'lands in your pocket after up to 52.35% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), the rate from 1 October 2026 (52.2% before then)');
+  eq('5. without JavaScript, so is the assumption',
+     S.assume, 'The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.');
+  var cells = { pbPrsiSalary: { textContent: 'old' }, pbPrsiAssume: { textContent: 'old' } };
+  P.write({ getElementById: function (id) { return cells[id] || null; } }, new Date(2026, 9, 2));
+  eq('5. write() puts the day\'s sentences into both elements',
+     [cells.pbPrsiSalary.textContent, cells.pbPrsiAssume.textContent].join(' | '), LA.salary + ' | ' + LA.assume);
+  var none = true;
+  try { P.write({ getElementById: function () { return null; } }, new Date()); P.write(null, new Date()); } catch (e) { none = false; }
+  yes('5. and does nothing on a page without them', none);
 }(typeof self !== 'undefined' ? self : this));

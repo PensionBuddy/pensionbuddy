@@ -2536,7 +2536,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="vs-col vs-salary">
           <div class="vt">Taken as salary</div>
           <div class="amt" id="salaryNet">€0</div>
-          <div class="lab">lands in your pocket after up to 52.2% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), or 52.35% from 1 October 2026</div>
+          <div class="lab" id="pbPrsiSalary">lands in your pocket after up to 52.35% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), the rate from 1 October 2026 (52.2% before then)</div>
           <div class="pb-cut"><div class="pb-cut-bar" aria-hidden="true"><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.35%"></i></div>
           <p class="pb-cut-key"><span><i class="pb-cut-sw pb-cut-it"></i>40% income tax</span><span><i class="pb-cut-sw pb-cut-usc"></i>8% USC</span><span><i class="pb-cut-sw pb-cut-prsi"></i><b id="pbCutPrsiN">4.35%</b> PRSI</span></p></div>
         </div>
@@ -2611,7 +2611,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <h3>The assumptions behind these numbers</h3>
   <ul>
     <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is shown at the 12.5% trading rate, and assumes the contribution is wholly and exclusively for the business and within Revenue funding limits.</li>
-    <li>The salary comparison assumes a higher-rate taxpayer facing up to 52.2% on additional income (40% income tax, 8% USC, 4.2% PRSI), and 52.35% from 1 October 2026, when PRSI rises to 4.35%. Your rate may differ.</li>
+    <li id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.</li>
     <li>Pension benefits are taxed when drawn, though up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
     <li>Maximum funding (up to two-thirds of salary) requires sufficient service and an actuarial calculation. This tool does not perform that calculation.</li>
     <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures here are not adjusted for inflation and ignore product charges.</li>
@@ -2636,7 +2636,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-prsi.js?v=23c9b7e2"></script>
+<script src="assets/js/pb-prsi.js?v=fc12215a"></script>
 <script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
