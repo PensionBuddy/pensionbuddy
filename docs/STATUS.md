@@ -290,6 +290,42 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (not merged)
+
+Damian's brief: a UX audit (`docs/UX-AUDIT-4.md`), then ten items in order,
+each built, gated, committed and pushed; the branch is NOT merged (he reviews
+on the Netlify deploy preview). Branch off main `30f8d12`.
+
+**Where to resume:** the table says which items are pushed. Start at the first
+row that is not "done", on `claude/overnight-ux-4`, with the gate in
+`docs/UX-AUDIT-4.md` ("How each item is built and gated").
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 0 | Audit, `docs/UX-AUDIT-4.md` | done | this commit |
+| 1 | Life-event picker on the home page | not reached | |
+| 2 | Jargon definitions on first use, sitewide | not reached | |
+| 3 | Site search in the nav | not reached | |
+| 4 | "Your pension through life" timeline | not reached | |
+| 5 | Scenario compare on the pension calculator | not reached | |
+| 6 | Long guides: on this page, progress, next step | not reached | |
+| 7 | Related pages at the end of every page | not reached | |
+| 8 | The 404 page | not reached | |
+| 9 | Slider feel | not reached | |
+| 10 | Figures that wait: skeletons | not reached | |
+
+## Questions for Damian
+
+1. **Age 75 is not on the site.** The brief lists "75 vesting" among the
+   milestones the site covers; no page or module mentions 75. The timeline
+   stops its milestones at 71 (the ARF's 5%, the last age the site names).
+   Words for 75, or leave it out?
+2. **Terms with no glossary entry get no definition:** auto-enrolment and My
+   Future Fund, PRSI, USC, small self-administered schemes, HomeCaring
+   Periods, credits. New glossary entries would be new copy.
+
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 
 Damian's brief, in two parts. First: take the qualifications strip off Our
