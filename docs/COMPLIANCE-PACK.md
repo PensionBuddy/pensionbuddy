@@ -636,6 +636,10 @@ shortened lines; (c) the over-50 card's headline is "Pensions after 50:
 catching up, taking benefits early, and what comes after": the 50 is an
 age, not a figure, but it is the one number on any card.
 
+Damian's view, 29 September 2026, for you to confirm: (a) no, the picture
+does not carry the full sentence; the page it links to does; (b) the
+fourteen lines are approved; (c) the "50" is fine.
+
 
 2. The Letter of Authority, full wording
 ========================================
