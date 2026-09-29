@@ -1630,6 +1630,18 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    only over the terms. .pb-tix-scope ends before the not-advice note, which
    the held index used to slide over. */
 @media(prefers-reduced-motion:reduce){.pb-tix{transition:none}}
+/* Run 34 (part 15b of docs/UX-MOTION-AUDIT.md): on this page only (the
+   ladder block above is the calculators' too, and is left as it is), the
+   ladder's bars fill once, in age order, when the ladder arrives on screen.
+   The script below arms them empty only while the ladder is off screen and
+   motion is allowed, then they grow to their true lengths on --pb-t-fill,
+   two rows a step, three steps. The percentages beside them are final
+   throughout; without script, or under reduced motion, the bars are full. */
+.gloss .pb-lad .pb-lad-track i{transform-origin:left center}
+.gloss .pb-lad.pb-lad-armed .pb-lad-track i{transform:scaleX(0)}
+.gloss .pb-lad.pb-lad-fill .pb-lad-track i{transition:transform var(--pb-t-fill)}
+.gloss .pb-lad.pb-lad-fill .pb-lad-row:nth-of-type(3) i,.gloss .pb-lad.pb-lad-fill .pb-lad-row:nth-of-type(4) i{transition-delay:var(--pb-stagger)}
+.gloss .pb-lad.pb-lad-fill .pb-lad-row:nth-of-type(5) i,.gloss .pb-lad.pb-lad-fill .pb-lad-row:nth-of-type(6) i{transition-delay:calc(var(--pb-stagger) * 2)}
 /* DRAWDOWN AT 4% (.pb-dd). A pot in, a month out, at the pension
    calculator's own illustration rate (4% of the pot a year, over twelve)
    and its pot slider's range. The markup carries its default pot; the
@@ -2403,6 +2415,31 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     });
   },{rootMargin:'-45% 0px -50% 0px',threshold:0});
   Object.keys(links).forEach(function(k){var t=document.getElementById(k);if(t)io.observe(t);});
+})();
+</script>
+<script>
+/* the relief ladder fills once, in age order, on arrival (part 15b; the CSS
+   beside .pb-tix says how). Armed only off screen and only with motion on;
+   "arrival" is fully on screen, or 300ms after any of it first shows. */
+(function(){
+  var lad=document.querySelector('.gloss .pb-lad');
+  if(!lad||!window.PBMotion||!PBMotion.on()||!('IntersectionObserver' in window)) return;
+  var r=lad.getBoundingClientRect();
+  if(r.bottom>0&&r.top<innerHeight) return;
+  lad.classList.add('pb-lad-armed');
+  var done=false, t=0, io;
+  function play(){
+    if(done) return; done=true; clearTimeout(t); if(io) io.disconnect();
+    lad.classList.add('pb-lad-fill');
+    requestAnimationFrame(function(){ lad.classList.remove('pb-lad-armed'); });
+  }
+  io=new IntersectionObserver(function(es){
+    var e=es[es.length-1];
+    if(e.intersectionRatio>=0.99) play();
+    else if(e.isIntersecting&&!t) t=setTimeout(play,300);
+  },{threshold:[0,1]});
+  io.observe(lad);
+  document.addEventListener('pb:motion',function(ev){ if(ev.detail&&!ev.detail.motion) play(); });
 })();
 </script>
 <script>
