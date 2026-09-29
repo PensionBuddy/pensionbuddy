@@ -1,43 +1,48 @@
-/* The provider ticker (Run 29): a strip of provider logos under the home
-   page's hero, labelled "Providers we hold agencies with".
+/* The provider ticker (Run 29, switched on in Run 35): a strip of provider
+   logos under the home page's hero, labelled "Providers we hold agencies
+   with".
 
-   IT IS SWITCHED OFF. With ON false this file does nothing at all: no markup,
-   no styles, and the page's mount (<div data-pb-providers hidden>) stays
-   empty and hidden, so nothing shows on the live site.
+   SWITCHED ON 29 September 2026. Damian confirmed that day that written
+   permission is held for every provider logo used here (docs/STATUS.md,
+   Run 35). The logos are the providers' own artwork, trimmed to one height
+   by tools/logos.py into assets/logos/; nothing is redrawn or recoloured
+   except by the greyscale filter below.
 
-   BEFORE SWITCHING IT ON (docs/STATUS.md, Run 29, R29-1 and R29-2):
-     1. each provider's written permission to show its name and logo here;
-     2. the list below matches the agencies named on how-we-work.html, which
-        is still a placeholder there (R20-9c);
-     3. real logo files, each set as `logo` below; until then every provider
-        is a box with its name in text.
+   STILL TO DO (docs/STATUS.md, Run 35): when how-we-work.html is released,
+   the list below must name exactly the agencies that page names (its list
+   is still a placeholder, R20-9c). Change one, change the other.
+
    The wording is "Providers we hold agencies with". Not "partners", not
    "we work with": an agency is the fact, a partnership is a claim.
 
    THE ONE PLACE TO EDIT: ON, LABEL and PROVIDERS, just below.
-     ON         true shows the strip, false (the default) shows nothing
-     PROVIDERS  in the order shown; `logo` is null (the name in a box) or a
-                path such as 'assets/img/providers/zurich.svg', used once
-                permission is in, with the name as its alt text
+     ON         true shows the strip, false shows nothing at all: no markup,
+                no styles, and the page's mount (<div data-pb-providers
+                hidden>) stays empty and hidden
+     PROVIDERS  in the order shown. `logo` is a file in assets/logos/ (made
+                with tools/logos.py) and `w` and `h` its width and height,
+                so the page keeps the logo's space before it loads; the name
+                is its alt text. `logo: null` draws the name in a box instead
 
-   How it behaves, once on: the logos scroll right to left in a loop, faded
-   at both edges; hovering pauses them, and a Pause button stops them for
-   anyone not using a mouse (movement over five seconds needs a way to stop
-   it: WCAG 2.2.2). With reduced motion asked for, it is a still row, centred
-   and wrapped, with no button. Screen readers get one list of the providers;
-   the copies that make the loop seamless are hidden from them. */
+   How it behaves: the logos scroll right to left in a loop, faded at both
+   edges, in grey; a logo turns to its own colours under the pointer, and
+   hovering pauses the strip. A Pause button stops it for anyone not using a
+   mouse (movement over five seconds needs a way to stop it: WCAG 2.2.2).
+   With reduced motion asked for, it is a still row, centred and wrapped,
+   with no button. Screen readers get one list of the providers; the copies
+   that make the loop seamless are hidden from them. */
 (function () {
   'use strict';
 
-  var ON = false;
+  var ON = true;
   var LABEL = 'Providers we hold agencies with';
   var PROVIDERS = [
-    { name: 'Zurich', logo: null },
-    { name: 'Irish Life', logo: null },
-    { name: 'Aviva', logo: null },
-    { name: 'New Ireland', logo: null },
-    { name: 'Royal London', logo: null },
-    { name: 'Standard Life', logo: null }
+    { name: 'Zurich', logo: 'assets/logos/zurich.webp', w: 145, h: 34 },
+    { name: 'Irish Life', logo: 'assets/logos/irish-life.svg', w: 86.8, h: 40 },
+    { name: 'Aviva', logo: 'assets/logos/aviva.svg', w: 223.21, h: 40 },
+    { name: 'New Ireland', logo: 'assets/logos/new-ireland.webp', w: 119, h: 120 },
+    { name: 'Royal London', logo: 'assets/logos/royal-london.svg', w: 179.72, h: 40 },
+    { name: 'Standard Life', logo: 'assets/logos/standard-life.svg', w: 193.98, h: 40 }
   ];
 
   if (!ON) return;
@@ -45,7 +50,8 @@
   if (!mount || !PROVIDERS.length) return;
 
   /* The loop moves the track by one set. The set is repeated until there are
-     at least 24 boxes, about 4,000px, so the track outruns the widest screen
+     at least 24 boxes, about 4,000px (the six logos make a set of about
+     1,300px, so four sets, 5,200px), so the track outruns the widest screen
      at any point in the loop, whatever the length of the list. */
   var copies = Math.max(2, Math.ceil(24 / PROVIDERS.length));
   var secs = PROVIDERS.length * 5;
@@ -68,13 +74,18 @@
     '.pb-prov-box{display:flex;align-items:center;justify-content:center;min-width:150px;height:60px;',
     '  padding:0 22px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);',
     '  font-size:16px;font-weight:600;color:var(--ink-2);white-space:nowrap}',
-    '.pb-prov-box img{display:block;max-height:36px;max-width:150px;width:auto;height:auto}',
+    /* a logo: no box, one height for all, grey until the pointer is on it */
+    '.pb-prov-box.pb-prov-logo{min-width:0;padding:0 16px;border:0;background:none}',
+    '.pb-prov-box img{display:block;height:32px;width:auto;max-width:none;filter:grayscale(1);opacity:.72;',
+    '  transition:filter var(--pb-t-swap),opacity var(--pb-t-swap)}',
+    '.pb-prov-item:hover img{filter:none;opacity:1}',
     '@keyframes pbProv{from{transform:translateX(0)}to{transform:translateX(-' + (100 / copies) + '%)}}',
     '@media(max-width:600px){.pb-prov-box{min-width:124px;height:52px;padding:0 16px;font-size:15px}',
+    '  .pb-prov-box img{height:28px}',
     '  .pb-prov-item{margin:0 8px}}',
     '@media(prefers-reduced-motion:reduce){',
     '  .pb-prov-strip{-webkit-mask-image:none;mask-image:none}',
-    '  .pb-prov-track{animation:none;width:auto;max-width:var(--maxw);margin:0 auto;padding:0 18px;',
+    '  .pb-prov-track{animation:none;width:auto;max-width:none;margin:0 auto;padding:0 18px;',
     '    flex-wrap:wrap;justify-content:center;row-gap:12px}',
     '  .pb-prov-item.is-clone,.pb-prov-pause{display:none}}'
   ].join('\n');
@@ -113,12 +124,15 @@
     PROVIDERS.forEach(function (p) {
       var li = el('li', 'pb-prov-item' + (c ? ' is-clone' : ''));
       if (c) li.setAttribute('aria-hidden', 'true');
-      var box = el('span', 'pb-prov-box');
+      var box = el('span', 'pb-prov-box' + (p.logo ? ' pb-prov-logo' : ''));
       if (p.logo) {
         var img = el('img');
         img.src = p.logo;
         img.alt = c ? '' : p.name;
+        img.width = Math.round(p.w);
+        img.height = Math.round(p.h);
         img.loading = 'lazy';
+        img.decoding = 'async';
         box.appendChild(img);
       } else {
         box.textContent = p.name;
