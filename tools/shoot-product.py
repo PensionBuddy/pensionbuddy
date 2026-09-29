@@ -3,6 +3,9 @@
 
     python3 tools/shoot-product.py                    # every shot
     python3 tools/shoot-product.py pension-calculator # one
+    python3 tools/shoot-product.py director-calculator --clock=2026-10-01T12:00:00
+                                  # as the page will be at that moment (Run 36:
+                                  # PRSI's rise on 1 October, shot two days early)
 
 The reference sites this design follows (Stripe, Ramp, Revolut, Plaid) show
 their real interface on the marketing pages rather than a card that describes
@@ -25,6 +28,12 @@ keys on the filename it is served under.
 Writes assets/img/product-<name>.jpg and .webp (Pillow). Re-run after any
 change to a calculator's interface, then tools/stamp-images.py so the URLs
 that reference the files pick up the new bytes.
+
+THE CLOCK (Run 36). A page that states a dated figure (PRSI, from
+assets/js/pb-prsi.js) shows the figure for the day it is photographed.
+--clock=<ISO local time> sets the page's clock to that moment for the
+shot, running on from there, so a picture can be taken ahead of a change
+it must show on the day.
 
 THE GAMES (Run 35), for the home page's "Just here to learn?" cards, are
 shot the same way: the real page, at 1200 CSS pixels and a device scale of
@@ -56,6 +65,12 @@ import threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CLOCK = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--clock=')), None)
+# the page's Date, moved to CLOCK and running on; new Date(y, m, d) still works
+CLOCK_JS = ('<script>(function(){var F=new Date(%s).getTime(),D=Date,t0=D.now();function N(){return F+(D.now()-t0);}'
+            'function X(){var a=[].slice.call(arguments);if(!(this instanceof X))return new D(N()).toString();'
+            'return a.length?new (Function.prototype.bind.apply(D,[null].concat(a)))():new D(N());}'
+            'X.prototype=D.prototype;X.now=N;X.UTC=D.UTC;X.parse=D.parse;window.Date=X;})();</script>')
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 OUT_DIR = os.path.join(ROOT, 'assets', 'img')
 WIDTH, SCALE = 1200, 2
@@ -229,6 +244,8 @@ class Handler(SimpleHTTPRequestHandler):
         m = re.match(r'/((?:games/)?)__product-([A-Za-z0-9.-]+\.html)$', path)
         if m:
             t = open(os.path.join(ROOT, m.group(1) + m.group(2)), encoding='utf-8').read()
+            if CLOCK:
+                t = t.replace('<head>', '<head>' + CLOCK_JS % json.dumps(CLOCK), 1)
             if m.group(1):
                 # A game keeps its own clock running from load (Buddy's Run's
                 # world scrolls even before the start button), and the frames

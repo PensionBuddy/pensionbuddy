@@ -4,26 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
-<title>The new Personal Investment Account (PIA), next to a pension, Pensionbuddy</title>
-<meta name="description" content="The proposed Personal Investment Account, as at 25 September 2026: what is confirmed, what Budget 2027 announces on 6 October, and the same take-home cost in a pension, the PIA and an ETF. Proposed, not yet law. An illustration, not advice.">
+<title>The new Personal Investment Account (PIA), Pensionbuddy</title>
+<meta name="description" content="The proposed Personal Investment Account, and the same take-home cost in a pension, the PIA and an ETF. Not yet law. An illustration, not advice.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon-180.png">
-<meta property="og:title" content="The new Personal Investment Account (PIA), next to a pension, Pensionbuddy">
-<meta property="og:description" content="The proposed Personal Investment Account, as at 25 September 2026: what is confirmed, what Budget 2027 announces on 6 October, and the same take-home cost in a pension, the PIA and an ETF. Proposed, not yet law. An illustration, not advice.">
+<!-- SEO:BEGIN (tools/seo.py writes this block; edit the table there, not here) -->
+<link rel="canonical" href="https://pensionbuddy.ie/pia.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Pensionbuddy">
 <meta property="og:locale" content="en_IE">
+<meta property="og:url" content="https://pensionbuddy.ie/pia.html">
+<meta property="og:title" content="The new Personal Investment Account (PIA), Pensionbuddy">
+<meta property="og:description" content="The proposed Personal Investment Account, and the same take-home cost in a pension, the PIA and an ETF. Not yet law. An illustration, not advice.">
 <meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:image:alt" content="The Pensionbuddy paw mark">
-<meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:card" content="summary">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Schibsted+Grotesk:wght@800&display=swap" rel="stylesheet">
+<meta name="twitter:title" content="The new Personal Investment Account (PIA), Pensionbuddy">
+<meta name="twitter:description" content="The proposed Personal Investment Account, and the same take-home cost in a pension, the PIA and an ETF. Not yet law. An illustration, not advice.">
+<meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
+<meta name="twitter:image:alt" content="The Pensionbuddy paw mark">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Personal Investment Account (PIA)", "item": "https://pensionbuddy.ie/pia.html"}]}</script>
+<!-- SEO:END -->
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -1802,8 +1808,8 @@ main a.gref:hover{text-decoration-thickness:2px}
 .pb-offer-name::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.28em;
   color:var(--teal);font-weight:600;transition:transform .25s ease}
 .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:translateX(8px)}
-a.assure{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,31,28,.28);border-color:var(--teal)}
+a.assure{transition:border-color .2s ease}
+a.assure:hover{border-color:var(--teal)}
 :is(.seg,.pb-two-seg,.pb-life-hh,.pia-seg) button:not(.on):not([aria-pressed="true"]):not([aria-selected="true"]):hover{
   color:var(--teal-700);background:var(--teal-50)}
 @media(prefers-reduced-motion:reduce){
@@ -1811,18 +1817,35 @@ a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,3
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32). What the text is set in while Inter is still on
+/* FONTS:BEGIN (Run 32; served from the site since Run 34). Inter and the
+   footer wordmark's Schibsted Grotesk 800 come from assets/fonts/, not
+   from Google Fonts, so a visit sends nothing to Google before the cookie
+   choice. The same files and character ranges Google's stylesheet served
+   on 28 September 2026 (Inter v20, one variable file per range for every
+   weight the site uses, 300 to 800; Schibsted Grotesk v7), under the SIL
+   Open Font License (assets/fonts/OFL-*.txt). Each page preloads
+   inter-latin.woff2 in its <head>.
+   What the text is set in while Inter is still on
    its way: Arial, sized per weight to Inter's widths (measured in Chrome
    on the site's own headings and copy), so the text barely reflows when
    Inter arrives and nothing below it jumps. With the page fade gone, that
    reflow was the director hero's 0.12 layout shift. Each face covers only
-   the characters Google's Inter stylesheet serves (its 42 faces' ranges,
-   joined), so a character Inter does not have, such as the offer arrows'
+   the characters Inter's files cover (the seven ranges below, joined),
+   so a character Inter does not have, such as the offer arrows'
    U+2192, still goes on to the system font once Inter has loaded, as
    before. Where Arial is not installed (most Android phones) the face is
    skipped and the stack goes on to the system font, as before. Byte for byte on every page:
    tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
    chrome_drift. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek-ext.woff2) format('woff2');unicode-range:U+1F00-1FFF}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek.woff2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-vietnamese.woff2) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:100 449;size-adjust:105.7%;ascent-override:91.8%;descent-override:22.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 @font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:450 549;size-adjust:107.6%;ascent-override:90.1%;descent-override:22.3%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 @font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:550 649;size-adjust:101.4%;ascent-override:95.7%;descent-override:23.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
@@ -2085,6 +2108,17 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
   opacity:1!important;transform:none!important;filter:none!important;
   transition:none!important;animation:none!important}
 
+/* 5 Depth says "this is a link": whole-card links only (Run 34, part 14c).
+   Depth is a pre-drawn shadow fading in, the shadow the site's cards
+   already take on hover; nothing travels, so the hit area never moves and
+   a card holding a caveat stays still. */
+.pb-card-link{position:relative}
+.pb-card-link::before{content:'';position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;box-shadow:0 14px 30px -14px rgba(11,31,28,.28);opacity:0}
+.pb-card-link:focus-visible::before,.pb-card-link:has(:focus-visible)::before{opacity:1}
+@media (hover:hover) and (pointer:fine){.pb-card-link:hover::before{opacity:1}}
+@media (prefers-reduced-motion:no-preference){.pb-card-link::before{transition:opacity var(--pb-t-swap)}}
+
 /* In-page taps scroll smoothly after load; arrival never does. The head
    script adds html.pb-smooth once the page has arrived. */
 @media (prefers-reduced-motion:no-preference){html.pb-smooth{scroll-behavior:smooth}}
@@ -2167,9 +2201,9 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 }
 /* FIRSTSCREEN:END */
 /* QUALS:BEGIN (Run 35). Damian's qualifications and memberships, one list
-   wherever it appears: the end of the home page's story, under Damian's own
-   section, beside the booking form, and small in every footer. Byte for
-   byte on every page: tools/pagebuild.py SHARED_CSS ('QUALS', 'quals-css'),
+   wherever it appears: under Damian's own section of the home page, beside
+   the booking form, and small in every footer. Byte for byte on every
+   page: tools/pagebuild.py SHARED_CSS ('QUALS', 'quals-css'),
    guarded by chrome_drift; the words and places are held by
    tests/build.test.py check 31.
    - The label says whose they are, "Damian's qualifications and
@@ -2257,6 +2291,16 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
 .pia-st thead th{font-weight:700;color:var(--ink)}
 .pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
+/* Below about 352px wide the two results tables (three columns of euros
+   at the 16px floor) are wider than their card: each scrolls inside its
+   own box, not the page, and can be scrolled from the keyboard. The box
+   reaches across the card's side padding (and pads itself by as much), so
+   where a table only runs into that padding, as it does from 370px to
+   about 400px, it is drawn where it always was and nothing is clipped. The
+   calculator's two columns may then be narrower than a table. */
+.pia-stwrap{overflow-x:auto;margin:0 -24px;padding:0 24px}
+.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
+.calc-wrap > .panel,.calc-wrap > .results{min-width:0}
 
 .pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
 .pia-p{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 22px}
@@ -2276,6 +2320,14 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .pia-t td{padding:10px 16px}
   .pia-t td::before{content:attr(data-l);display:block;font-weight:700;color:var(--ink)}
   .pia-st th,.pia-st td{padding:10px 4px}
+  .pia-stwrap{margin:0 -16px;padding:0 16px}
+}
+/* Below 370px the table is wider than the card itself; with a little less
+   side padding it fits down to 352px, and below that it scrolls. */
+@media(max-width:369px){
+  .pia-card{padding-left:12px;padding-right:12px}
+  .pia-stwrap{margin:0 -12px;padding:0 12px}
+  .pia-st th,.pia-st td{padding-left:2px;padding-right:2px}
 }
 </style>
 <script>
@@ -2527,8 +2579,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div class="pia-card">
       <h3>If growth is lower, or it falls</h3>
+      <div class="pia-stwrap" role="region" aria-labelledby="piaStCapPaths" tabindex="0">
       <table class="pia-st">
-        <caption class="tk-sr">What each could leave you after tax, under three growth paths</caption>
+        <caption class="tk-sr" id="piaStCapPaths">What each could leave you after tax, under three growth paths</caption>
         <thead><tr><th scope="col"><span class="tk-sr">Product</span></th><th scope="col" id="scYours">5% a year</th><th scope="col" id="scLower">2.5% a year</th><th scope="col">A fall</th></tr></thead>
         <tbody>
           <tr><th scope="row">Pension</th><td id="penYours">€36,018</td><td id="penLower">€31,727</td><td id="penFall">€27,794</td></tr>
@@ -2536,13 +2589,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">ETF outside a wrapper</th><td id="etfYours">€28,235</td><td id="etfLower">€25,975</td><td id="etfFall">€23,431</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="pia-note">Lower growth is half the rate you chose. A fall is your rate every year, then a 20% fall in the last year: an example, not a forecast. <span id="fallLine">In a fall, the PIA&rsquo;s tax is still due for that year.</span></p>
     </div>
 
     <div class="pia-card">
       <h3>Where the tax comes in, at your growth rate</h3>
+      <div class="pia-stwrap" role="region" aria-labelledby="piaStCapTax" tabindex="0">
       <table class="pia-st">
-        <caption class="tk-sr">Tax relief and tax for each product, at your growth rate</caption>
+        <caption class="tk-sr" id="piaStCapTax">Tax relief and tax for each product, at your growth rate</caption>
         <thead><tr><th scope="col"><span class="tk-sr">Item</span></th><th scope="col">Pension</th><th scope="col">PIA</th><th scope="col">ETF</th></tr></thead>
         <tbody>
           <tr><th scope="row">From your take-home pay</th><td id="paidPen">€24,000</td><td id="paidPia">€24,000</td><td id="paidEtf">€24,000</td></tr>
@@ -2552,6 +2607,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">Left after tax</th><td id="endPen">€36,018</td><td id="endPia">No figure yet</td><td id="endEtf">€28,235</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="pia-note">Employer money is not in the pension figure. If your employer would pay into a pension, that is on top.</p>
     </div>
   </div>
@@ -2573,7 +2629,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></div>
+  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
   <div class="ctext"><h2>Pension, PIA, or both?</h2><p>The answer depends on your employer, your tax, and when you need the money, and on figures due on 6 October. Damian can talk it through in a free 20-minute call. Plain English, no obligation.</p></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
@@ -2951,8 +3007,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=8da25e3a" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=28c28c96"></script>
+<script src="assets/js/pb-buddy.js?v=0de079f7" type="text/pb-late"></script>
+<script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
 
@@ -3024,6 +3080,29 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     inner.querySelectorAll('input[type=range]').forEach(function(s){
       s.dispatchEvent(new Event('input', {bubbles:true}));
     });
+  });
+})();
+</script>
+<script>
+/* Keyboard focus in a held panel (Run 34, item 5; WCAG 2.4.11). The inputs
+   panel is held under the nav, and on a short window it is taller than the
+   screen, so a control reached from the keyboard could sit below the
+   window with nothing to bring it up. While focus is in a control off the
+   screen, the panel lets go of the window and the control is scrolled into
+   view; once focus leaves the panel it is held again. A pointer, and what
+   the calculator shows, are untouched. */
+(function(){
+  var p=document.querySelector('.calc-wrap > .panel');
+  if(!p) return;
+  p.addEventListener('focusin',function(e){
+    if(p.style.position||getComputedStyle(p).position!=='sticky') return;
+    var r=e.target.getBoundingClientRect();
+    if(r.top>=0&&r.bottom<=innerHeight) return;
+    p.style.position='relative';
+    e.target.scrollIntoView({block:'nearest'});
+  });
+  p.addEventListener('focusout',function(e){
+    if(!e.relatedTarget||!p.contains(e.relatedTarget)) p.style.position='';
   });
 })();
 </script>

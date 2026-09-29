@@ -31,7 +31,7 @@
   var btn=document.createElement('button');
   btn.id='pbBuddyBtn';btn.className='pb-b-btn';btn.type='button';
   btn.setAttribute('aria-haspopup','dialog');btn.setAttribute('aria-expanded','false');
-  btn.innerHTML='<img src="'+AV+'" alt=""><span class="pb-b-label">Ask Buddy</span>';
+  btn.innerHTML='<img src="'+AV+'" width="96" height="96" alt=""><span class="pb-b-label">Ask Buddy</span>';
   var panel=document.createElement('div');
   panel.className='pb-b-panel';panel.id='pbBuddyPanel';panel.hidden=true;
   panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Ask Buddy: common questions');
@@ -39,7 +39,7 @@
   qs.forEach(function(x,i){
     listHtml+='<div class="pb-b-item"><button type="button" class="pb-b-q" aria-expanded="false" data-i="'+i+'">'+x.q+'<span class="pm" aria-hidden="true">+</span></button><div class="pb-b-a" id="pbA'+i+'"><div>'+x.a+'</div></div></div>';
   });
-  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
+  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" width="96" height="96" alt=""><div><div class="t">Ask Buddy</div><div class="s">Quick answers. General info only \u2014 never advice.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<div class="pb-b-list">'+listHtml+'</div>'
     +'<div class="pb-b-foot"><a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a><p class="pb-why">Free, 20 minutes, no obligation.</p></div>';
   document.body.appendChild(btn);document.body.appendChild(panel);

@@ -168,7 +168,7 @@ class Page(object):
         self.keep = keep              # ids the progressive disclosure keeps visible
         self.page_js = page_js        # the page script inside the parts directory
         self.nav = nav                # href of the nav item to mark current, or None
-        self.fonts = fonts            # extra Google Fonts family parameter, or None
+        self.fonts = fonts            # retired in Run 34 (the fonts are self-hosted); must be None
         self.checks = checks          # (needle, label) pairs particular to this page
         self.noindex = noindex        # live but held back: robots noindex, and verify.py fails any link to it
         self.floor16 = floor16        # a calculator: keeps the skeleton's 16px floor on the text in <main>
@@ -186,9 +186,7 @@ PAGES = {
         parts='compare-parts',
         page_js='compare-page.js',
         title='Auto-enrolment or a broker pension, Pensionbuddy',
-        desc=('Compare what goes into your pension under My Future Fund auto-enrolment '
-              'against a personal pension arranged through a broker, for your own salary '
-              'and age. An illustration, not advice.'),
+        desc='Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension through a broker. An illustration, not advice.',
         modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js'],
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
@@ -218,8 +216,7 @@ PAGES = {
         out='state-pension-entitlement.html',
         parts='state-pension-entitlement-parts',
         title='The State Pension entitlement check, Pensionbuddy',
-        desc=('What the State Pension (Contributory) would actually pay, worked out both ways '
-              'the Department does until the end of 2033, and which one is paid. An illustration, not advice.'),
+        desc='What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid. An illustration, not advice.',
         # order matters: the entitlement module throws if state-pension.js is
         # not already on the page
         modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js'],
@@ -274,8 +271,7 @@ PAGES = {
         out='pension-fees-calculator.html',
         parts='fees-parts',
         title='What your pension charges cost, Pensionbuddy',
-        desc=('What an annual management charge and a charge on each payment take out of a '
-              'pension pot by retirement, next to another plan\'s charges. An illustration, not advice.'),
+        desc='What an annual management charge and a charge on each payment take out of a pension pot by retirement. An illustration, not advice.',
         modules=['assets/js/pension-fees.js'],
         keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
         floor16=True,
@@ -309,10 +305,8 @@ PAGES = {
     'sft': Page(
         out='standard-fund-threshold.html',
         parts='sft-parts',
-        title='The Standard Fund Threshold, and how much of it you would use, Pensionbuddy',
-        desc=('The Standard Fund Threshold from 2026 to 2029 and after, how much of it your pensions '
-              'would use in the year you take them, and how a retirement lump sum is taxed. '
-              'Rules as at September 2026. An illustration, not advice.'),
+        title='The Standard Fund Threshold, Pensionbuddy',
+        desc='The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed. An illustration, not advice.',
         modules=['assets/js/sft.js'],
         keep=['total', 'year', 'lump'],
         floor16=True,
@@ -328,9 +322,7 @@ PAGES = {
         out='director-pension-rules.html',
         parts='director-rules-parts',
         title="Directors' pensions in 2026: what changed, Pensionbuddy",
-        desc=('What changed for company directors: executive pensions set up before April 2021, a '
-              "company's payments into a PRSA, the October window and the Standard Fund Threshold. "
-              'Rules as at September 2026. Information, not advice.'),
+        desc="What changed for company directors: executive pensions set up before April 2021, and a company's payments into a PRSA. Information, not advice.",
         modules=['assets/js/director-topics.js'],
         keep=[],
         nav='director-pension-rules.html',
@@ -363,10 +355,8 @@ PAGES = {
     'pia': Page(
         out='pia.html',
         parts='pia-parts',
-        title='The new Personal Investment Account (PIA), next to a pension, Pensionbuddy',
-        desc=('The proposed Personal Investment Account, as at 25 September 2026: what is confirmed, '
-              'what Budget 2027 announces on 6 October, and the same take-home cost in a pension, '
-              'the PIA and an ETF. Proposed, not yet law. An illustration, not advice.'),
+        title='The new Personal Investment Account (PIA), Pensionbuddy',
+        desc='The proposed Personal Investment Account, and the same take-home cost in a pension, the PIA and an ETF. Not yet law. An illustration, not advice.',
         modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
         keep=['amount', 'years', 'growth', 'piaRate'],
         floor16=True,
@@ -417,11 +407,9 @@ def assemble(page):
     css = read(os.path.join(page.parts_dir, 'page.css')).strip()
     head = head.replace('</style>', '\n' + css + '\n</style>', 1)
 
-    if page.fonts:
-        m = re.search(r'(<link href="https://fonts\.googleapis\.com/css2\?)([^"]*)(")', head)
-        assert m, 'could not find the Google Fonts request'
-        if page.fonts not in m.group(2):
-            head = head[:m.start(2)] + page.fonts + head[m.start(2):]
+    # Run 34: the fonts are the site's own (the FONTS block in SHARED_CSS);
+    # a page needing another face adds it to that block, not a request here.
+    assert page.fonts is None, 'no font service to extend: add the face to the FONTS block'
 
     # The skeleton's active pension calculator link carries aria-current AFTER
     # href, so an exact-string replace never fires. Match on the attributes,
@@ -461,7 +449,10 @@ def assemble(page):
         consent = re.search(r'<script src="assets/js/pb-consent\.js(?:\?v=[0-9a-f]+)?"></script>\n', tail)
         assert consent, 'no consent script to put the deadline script after'
         tail = tail[:consent.end()] + '\n<script src="%s"></script>\n' % DEADLINE_JS + tail[consent.end():]
-    return stamp_html(head + body + tail)
+    # Run 34: the search and sharing tags (canonical, Open Graph, Twitter,
+    # JSON-LD) are tools/seo.py's, from the page's own title and description
+    import seo
+    return seo.apply(page.out, stamp_html(head + body + tail))
 
 
 def check(html, page):

@@ -477,13 +477,19 @@ def run():
     # the date the rate applies from, and the calculator's "€20,000 as salary"
     # line at that rate. Both pages load the table before the
     # script that reads it. Mutants: each piece of markup at the old rate,
-    # and a script that brings back its own rate.
+    # and a script that brings back its own rate. Run 36: the calculator's
+    # two sentences in words (#pbPrsiSalary under "Taken as salary",
+    # #pbPrsiAssume in the assumptions) carry the table's statics(), true on
+    # any date; pb-prsi.js writes the day's own as it loads (prsi.test.js 5).
     prsi_js = read('assets/js/pb-prsi.js')
     rates = [dict(pct=m.group(4), rate=float(m.group(3)), said=m.group(5))
              for m in re.finditer(r"\{ from: \[(\d+), (\d+), \d+\], rate: ([0-9.]+), pct: '([^']+)', said: '([^']+)' \}", prsi_js)]
     eq('17. the PRSI table has its rates', [r['pct'] for r in rates], ['4.2%', '4.35%'])
     latest = rates[-1]
     keep = round(round(1000 * (1 - (0.40 + 0.08 + latest['rate'])) * 100) / 100 + 1e-9)
+    import subprocess as sp17
+    words = json.loads(sp17.run(['node', '-e', "process.stdout.write(JSON.stringify(require('./assets/js/pb-prsi.js').statics()))"],
+                                cwd=ROOT, capture_output=True, text=True).stdout or '{}')
 
     def prsi_findings(docs):
         out = []
@@ -495,6 +501,10 @@ def run():
         split = round(20000 * (1 - (0.40 + 0.08 + latest['rate'])) + 1e-9)
         if '<p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€{:,}</b> in your pocket.'.format(split) not in calc:
             out.append(('director-calculator.html', 'split line'))
+        if not words or '<div class="lab" id="pbPrsiSalary">%s</div>' % words.get('salary') not in calc:
+            out.append(('director-calculator.html', 'salary sentence'))
+        if not words or '<li id="pbPrsiAssume">%s</li>' % words.get('assume') not in calc:
+            out.append(('director-calculator.html', 'assumption sentence'))
         m = re.search(r'<p class="pb-two-out" id="pbTwoOut">(.*?)</p>', dire)
         want = ('is about <b>&euro;%d</b> in your pocket, after 40%% income tax, 8%% USC and %s PRSI '
                 '(the rate from %s).' % (keep, latest['pct'], latest['said']))
@@ -519,7 +529,11 @@ def run():
             ('the split line at the old figure', 'director-calculator.html', 'is <b>€9,530</b> in your pocket', 'is <b>€9,560</b> in your pocket', 'split line'),
             ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
             ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
-            ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script')):
+            ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script'),
+            ('the salary sentence as it read to 30 September', 'director-calculator.html', 'id="pbPrsiSalary">lands in your pocket after up to 52.35%',
+             'id="pbPrsiSalary">lands in your pocket after up to 52.2%', 'salary sentence'),
+            ('the assumption as it read to 30 September', 'director-calculator.html', 'id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35%',
+             'id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.2%', 'assumption sentence')):
         m = dict(sources); m[page] = m[page].replace(find, repl, 1)
         eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
 
@@ -822,14 +836,15 @@ def run():
         m = sources[page].replace(find, repl, 1)
         assert m != sources[page], label
         eq('22. %s is caught' % label, want in plumbing(m), True)
-    # the viewport meta and the head script, together, moved below the font stylesheet
+    # the viewport meta and the head script, together, moved below the first
+    # stylesheet (since Run 34 the page's own <style>: no font stylesheet)
     bk = sources['booking.html']
     pair = VIEWPORT + '\n' + pagebuild.MOTION_HEAD + '\n'
-    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', bk)
-    assert pair in bk and link and bk.find(pair) < link.start()
+    first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', bk)
+    assert pair in bk and first and bk.find(pair) < first.start()
     moved = bk.replace(pair, '', 1)
-    link = re.search(r'<link\b[^>]*\brel="stylesheet"[^>]*>\n', moved)
-    moved = moved[:link.end()] + pair + moved[link.end():]
+    end = moved.index('</style>\n') + len('</style>\n')
+    moved = moved[:end] + pair + moved[end:]
     eq('22. the head script moved below the stylesheet is caught', plumbing(moved), ['head order'])
 
     # ----------------------------------------------------------------- 23
@@ -1021,7 +1036,7 @@ def run():
     # phone, and keep the lockup last in the markup, so screen readers meet
     # it where they did. tests/consent.test.py check 9 measures the layouts.
     consent_js = open(os.path.join(ROOT, 'assets/js/pb-consent.js')).read()
-    WORDS = '<p>May we use a little analytics? <a href="privacy.html">Privacy Notice</a></p>'
+    WORDS = '<p>May we use a little analytics? <a href="privacy.html#cookies">Privacy Notice</a></p>'
     eq('28. the cookie bar says the approved line, and only it', (consent_js.count(WORDS), 'never sold' in consent_js), (1, False))
     HEROES = ('index.html', 'director.html', 'starter.html', 'tracker.html')
     def lockups(src):
@@ -1053,18 +1068,156 @@ def run():
         assert mut != dr, label
         eq('28. %s is caught' % label, lockups(mut), want)
 
+    # ----------------------------------------------------------------- 29
+    # Run 34, item 2: the fonts are the site's own. No page (the games
+    # included) asks Google Fonts for anything; the FONTS block names every
+    # file in assets/fonts/, each a real woff2 there, with its licence; each
+    # page preloads the Latin Inter file once, before its first stylesheet,
+    # with crossorigin (a font preload without it is fetched twice).
+    FONT_FILES = ['inter-cyrillic-ext', 'inter-cyrillic', 'inter-greek-ext', 'inter-greek', 'inter-vietnamese',
+                  'inter-latin-ext', 'inter-latin', 'schibsted-grotesk-latin-ext', 'schibsted-grotesk-latin']
+    def fonts(src, prefix=''):
+        out = []
+        if re.search(r'fonts\.(?:googleapis|gstatic)\.com', src):
+            out.append('asks Google Fonts')
+        named = re.findall(r"url\(%sassets/fonts/([a-z-]+)\.woff2\) format\('woff2'\)" % re.escape(prefix), src)
+        if sorted(named) != sorted(FONT_FILES):
+            out.append('font files named: %s' % sorted(set(named) ^ set(FONT_FILES)))
+        pre = '<link rel="preload" href="%sassets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>' % prefix
+        first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)
+        if src.count(pre) != 1 or not first or src.find(pre) > first.start():
+            out.append('preload')
+        return out
+    eq('29. every page: no request to Google Fonts, its own nine font files, the Latin Inter preloaded',
+       {n: fonts(t) for n, t in sources.items() if fonts(t)}, {})
+    eq('29. and the two games, from one level down',
+       {g: fonts(t, '../') for g, t in games.items() if fonts(t, '../')}, {})
+    real = {}
+    for f in FONT_FILES:
+        path = os.path.join(ROOT, 'assets', 'fonts', f + '.woff2')
+        real[f] = os.path.isfile(path) and open(path, 'rb').read(4) == b'wOF2' and os.path.getsize(path) > 5000
+    eq('29. each named file is a woff2 in assets/fonts/', [f for f, ok in real.items() if not ok], [])
+    eq('29. with the two licences beside them',
+       [n for n in ('OFL-Inter.txt', 'OFL-SchibstedGrotesk.txt')
+        if 'SIL Open Font License' not in read('assets/fonts/' + n)], [])
+    pc = sources['pension-calculator.html']
+    for label, mut, want in (
+            ('the Google stylesheet back', pc.replace('</title>', '</title>\n<link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">', 1), 'asks Google Fonts'),
+            ('a font file dropped from the block', pc.replace("url(assets/fonts/inter-latin-ext.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
+            ('the preload without crossorigin', pc.replace('type="font/woff2" crossorigin>', 'type="font/woff2">', 1), 'preload')):
+        assert mut != pc, label
+        eq('29. %s is caught' % label, any(x.startswith(want) for x in fonts(mut)), True)
+
+    # ----------------------------------------------------------------- 30
+    # Run 34, item 3: search and sharing. tools/seo.py writes every page's
+    # block; this holds what it writes to the pages' own words. Every page
+    # in the sitemap: a title under 60 characters and a description under
+    # 155, each its own; the canonical and og:url its sitemap address; the
+    # share picture there at its stated size. Structured data: valid JSON,
+    # schema.org, only the three types the site uses; a two-step
+    # BreadcrumbList ending at the page; the business on the home page, in
+    # the footer's own sentence and address, with no phone (the site shows
+    # none); FAQPage only where the page shows those questions and answers,
+    # word for word. A page the sitemap leaves out carries none of it.
+    import seo
+    import html as htmllib
+    from PIL import Image
+    everything = dict(sources, **{'games/' + g: t for g, t in games.items()})
+    INDEX = seo.indexable()
+    def norm(t):
+        t = htmllib.unescape(t).replace('’', "'").replace('‘', "'").replace('“', '"').replace('”', '"')
+        return re.sub(r'\s+', ' ', t).strip()
+    def visible(src):
+        body = src[src.find('<body'):]
+        return norm(re.sub(r'<[^>]+>', ' ', re.sub(r'(?is)<script\b.*?</script>|<style\b.*?</style>', '', body)))
+    def seo_findings(name, src):
+        out = []
+        head = src[:src.find('</head>')]
+        if seo.apply(name, src) != src:
+            out.append('block not as tools/seo.py writes it')
+        title = norm(re.search(r'<title>(.*?)</title>', head, re.S).group(1))
+        desc = norm(re.search(r'<meta name="description" content="([^"]*)"', head).group(1))
+        blocks = []
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', src, re.S):
+            try:
+                blocks.append(json.loads(m.group(1)))
+            except ValueError as e:
+                out.append('JSON-LD does not parse: %s' % e)
+        can = re.findall(r'<link rel="canonical" href="([^"]*)">', head)
+        if name not in INDEX:
+            if can or 'og:url' in head or blocks:
+                out.append('not in the sitemap, yet carries a canonical, og:url or JSON-LD')
+            return out
+        if len(title) >= 60: out.append('title %d characters' % len(title))
+        if len(desc) >= 155: out.append('description %d characters' % len(desc))
+        if can != [seo.url_of(name)] or head.count('<meta property="og:url" content="%s">' % seo.url_of(name)) != 1:
+            out.append('canonical or og:url is not the sitemap address')
+        img = re.search(r'<meta property="og:image" content="https://pensionbuddy\.ie/([^"]+)">', head)
+        wh = (int(re.search(r'og:image:width" content="(\d+)"', head).group(1)), int(re.search(r'og:image:height" content="(\d+)"', head).group(1)))
+        path = os.path.join(ROOT, img.group(1)) if img else ''
+        if not img or not os.path.isfile(path) or Image.open(path).size != wh:
+            out.append('share picture missing or not %dx%d' % wh)
+        types = [b.get('@type') for b in blocks]
+        if any(b.get('@context') != 'https://schema.org' for b in blocks) or not set(types) <= {'FinancialService', 'FAQPage', 'BreadcrumbList'}:
+            out.append('JSON-LD types: %s' % types)
+        for b in blocks:
+            if b.get('@type') == 'BreadcrumbList':
+                items = b['itemListElement']
+                if ([i['position'] for i in items] != [1, 2] or items[0]['item'] != seo.SITE
+                        or items[-1]['item'] != seo.url_of(name) or not all(i.get('name') for i in items)):
+                    out.append('breadcrumb is not Home, then the page')
+            if b.get('@type') == 'FAQPage':
+                vis = visible(src)
+                for q in b['mainEntity']:
+                    if norm(q['name']) not in vis or norm(q['acceptedAnswer']['text']) not in vis:
+                        out.append('FAQ not word for word on the page: %s' % q['name'][:40])
+            if b.get('@type') == 'FinancialService':
+                foot = norm(re.sub(r'<[^>]+>', ' ', src[src.rfind('<footer'):]))
+                addr = b['address']
+                if (b['description'] not in foot or addr['streetAddress'] not in foot or addr['addressLocality'] not in foot
+                        or addr['addressRegion'] not in foot or 'mailto:%s' % b['email'] not in src or 'telephone' in b
+                        or b['legalName'] not in foot or b['url'] != seo.SITE):
+                    out.append('the business data is not the footer\'s')
+        want = ['FinancialService'] if name == 'index.html' else ['BreadcrumbList']
+        if [t for t in types if t != 'FAQPage'] != want:
+            out.append('JSON-LD should be %s (and FAQPage where a FAQ is shown)' % want)
+        return out
+    eq('30. every page: its search and sharing tags, and its structured data, held to its own words',
+       {n: seo_findings(n, t) for n, t in everything.items() if seo_findings(n, t)}, {})
+    titles = {}
+    descs = {}
+    for n in INDEX:
+        h = everything[n][:everything[n].find('</head>')]
+        titles.setdefault(norm(re.search(r'<title>(.*?)</title>', h, re.S).group(1)), []).append(n)
+        descs.setdefault(norm(re.search(r'<meta name="description" content="([^"]*)"', h).group(1)), []).append(n)
+    eq('30. no two pages in the sitemap share a title or a description',
+       [v for v in list(titles.values()) + list(descs.values()) if len(v) > 1], [])
+    eq('30. and every page in the sitemap is a page', [n for n in INDEX if n not in everything], [])
+    st = sources['starter.html']
+    ix = sources['index.html']
+    q = "We'll look at what you've got and explain whether it's set up well for you."
+    for label, name, src, want in (
+            ('a title of 60 characters', 'terms.html', sources['terms.html'].replace('<title>Terms of Business, Pensionbuddy</title>',
+                                                                                    '<title>' + 'T' * 60 + '</title>', 1), 'title 60'),
+            ('a FAQ answer the page no longer shows', 'starter.html', st.replace(q, "We'll tell you whether it's set up well for you.", 1), 'FAQ not word for word'),
+            ('a phone number added to the business', 'index.html', ix.replace('"email": "hello@pensionbuddy.ie"', '"telephone": "+353 1 000 0000", "email": "hello@pensionbuddy.ie"', 1), 'block not as'),
+            ('a canonical on a held page', 'thank-you.html', sources['thank-you.html'].replace('</title>', '</title>\n<link rel="canonical" href="https://pensionbuddy.ie/thank-you.html">', 1), 'block not as')):
+        assert src != everything[name], label
+        eq('30. %s is caught' % label, any(x.startswith(want) for x in seo_findings(name, src)), True)
+
     # ----------------------------------------------------------------- 31
     # Run 35: Damian's qualifications and memberships. One list, the same
-    # words everywhere, in the places the brief named: the end of the home
-    # page's story, under Damian's own section, beside the booking form, and
-    # small in every page's footer (the foot-top, so chrome_drift holds it
+    # words everywhere, in the places the brief named: under Damian's own
+    # section of the home page (Run 36 took the second copy, at the end of
+    # the story, off, at Damian's word), beside the booking form, and small
+    # in every page's footer (the foot-top, so chrome_drift holds it
     # to the skeleton's on every page, and check 8 says so). The label says
     # whose they are, so no body seems to endorse Pensionbuddy; nothing else
     # is said in the strip, and nothing in it moves. (Checks 29 and 30 are
-    # numbered on the unmerged claude/overnight-3 branch.)
+    # Run 34's, merged into main in Run 36.)
     QUAL_LABEL = 'Damian&rsquo;s qualifications and memberships'
     QUAL_ITEMS = ['Qualified Financial Adviser (QFA)', 'Life Insurance Association (LIA)']
-    WHERE = {'index.html': ['pbQualsStory', 'pbQualsDamian', 'pbQualsFoot'],
+    WHERE = {'index.html': ['pbQualsDamian', 'pbQualsFoot'],
              'booking.html': ['pbQualsBook', 'pbQualsFoot']}
 
     def quals(src):
@@ -1113,9 +1266,9 @@ def run():
             if [g[0] for g in got] != ['pbQualsFoot']:
                 f.append('%s: strips %s, expected the footer\'s only' % (page, [g[0] for g in got]))
         ix = srcs['index.html']
-        story, damian = ix.find('<section id="story">'), ix.find('<section id="damian"')
-        if not (story < ix.find('id="pbQualsStory"') < damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
-            f.append('index.html: the strips are not at the end of the story and in Damian\'s section')
+        damian = ix.find('<section id="damian"')
+        if not (damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
+            f.append('index.html: the strip is not in Damian\'s section')
         bk = srcs['booking.html']
         if not (bk.find('<div class="lead">') < bk.find('id="pbQualsBook"') < bk.find('<div class="book-card">')):
             f.append('booking.html: the strip is not in the column beside the form, before its card')
@@ -1126,15 +1279,18 @@ def run():
             f.append('the QUALS block is missing, or something in it moves')
         return f
 
-    eq('31. Damian\'s qualifications and memberships: the same label and names in the four places, and nothing else',
+    eq('31. Damian\'s qualifications and memberships: the same label and names in the three places, and nothing else',
        quals_faults(sources), [])
     for label, page, find, repl, want in (
-            ('the label changed to a claim', 'index.html', 'id="pbQualsStory">Damian&rsquo;s qualifications and memberships',
-             'id="pbQualsStory">Accredited by', 'the label is'),
+            ('the label changed to a claim', 'index.html', 'id="pbQualsDamian">Damian&rsquo;s qualifications and memberships',
+             'id="pbQualsDamian">Accredited by', 'the label is'),
             ('a name dropped from the booking page', 'booking.html',
              'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
-            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"',
-             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"', 'the items are'),
+            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"',
+             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"', 'the items are'),
+            ('the story\'s copy put back', 'index.html', 'someone qualified to help.</p>\n  </div>\n</div></section>',
+             'someone qualified to help.</p>\n<div class="pb-quals"><p class="pb-quals-label" id="pbQualsStory">Damian&rsquo;s qualifications and memberships</p>'
+             '<ul class="pb-quals-list" aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div>\n  </div>\n</div></section>', 'strips'),
             ('an endorsement line added', 'index.html',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
@@ -1143,8 +1299,8 @@ def run():
              '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
             ('a logo with no alt at all', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
              '<li><img src="assets/logos/qfa.svg">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
-            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li>',
-             'aria-labelledby="pbQualsStory"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
+            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li>',
+             'aria-labelledby="pbQualsDamian"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
             ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
             ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
              '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),
@@ -1163,7 +1319,9 @@ def run():
     # game mid-play, the picture tools/shoot-product.py takes (both in its
     # SHOTS), its width and height the file's own, a line, and a play link
     # to the game. Static: the section's rules move nothing, no script
-    # touches it, and it offers nothing to win.
+    # touches it, and it offers nothing to win. Each card is a whole-card
+    # link, so (Run 36) it carries .pb-card-link: MOTION rule 5's shadow on
+    # hover and focus, as every whole-card link does since Run 34.
     GAMES = [('Buddy&rsquo;s Run', 'buddys-run', 'Collect the benefits, jump the excuses.'),
              ('Jargon Battle', 'jargon-battle', 'Pick the right meaning to bust the Jargon Blob.')]
 
@@ -1188,7 +1346,7 @@ def run():
         box = m.group(1)
         if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
             f.append('the heading')
-        cards = re.findall(r'<li><div class="pb-learn-card">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
+        cards = re.findall(r'<li><div class="pb-learn-card pb-card-link">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
                            r'<img src="assets/img/product-([a-z-]+)\.jpg\?v=[0-9a-f]+" width="(\d+)" height="(\d+)" loading="lazy" alt="([^"]+)"></picture>\s*'
                            r'<div class="pb-learn-body">\s*<h3>([^<]+)</h3>\s*<p class="pb-learn-d">([^<]+)</p>\s*'
                            r'<a class="pb-learn-play" href="games/([a-z-]+)\.html">Play ([^<]+?) <svg[^>]*>.*?</svg></a>\s*</div>\s*</div></li>', box, re.S)

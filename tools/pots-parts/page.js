@@ -39,6 +39,7 @@
     var x = document.createElement('button');
     x.type = 'button'; x.className = 'pt-x'; x.textContent = 'Remove';
     copy.insertBefore(x, copy.querySelector('legend').nextSibling);
+    copy.classList.add('pt-new');   // arrives with a small rise (page.css); nothing fades
     list.appendChild(copy);
     renumber();
     copy.querySelector('input').focus();

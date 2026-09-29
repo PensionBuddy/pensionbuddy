@@ -16,8 +16,9 @@ What it proves:
   2. on, at 1440 and 375px: under the label "Providers we hold agencies
      with", one list of the providers in the file's order, each a logo with
      its name as alt text and its space kept (width and height set); the
-     loop's copies hidden from screen readers, with empty alt text; every
-     logo the same height (32px, 28px on a phone); grey (grayscale(1)) until
+     loop's copies hidden from screen readers, with empty alt text; each
+     logo drawn at its own `size`, set by eye (Run 36), seven-eighths of it
+     on a phone; grey (grayscale(1)) until
      the pointer is on it, then its own colours (the rule is in the
      stylesheet it injects); every logo file loads; the strip faded at both
      edges and moving; Pause stops it and Play starts it again, the
@@ -44,7 +45,7 @@ from harness import eq, report  # noqa: E402
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 JS = 'assets/js/pb-providers.js'
 SRC = open(os.path.join(ROOT, JS), encoding='utf-8').read()
-ENTRY = re.compile(r"\{ name: '([^']+)', logo: '([^']+)', w: ([\d.]+), h: ([\d.]+) \}")
+ENTRY = re.compile(r"\{ name: '([^']+)', logo: '([^']+)', w: ([\d.]+), h: ([\d.]+), size: (\d+) \}")
 ENTRIES = ENTRY.findall(SRC)
 NAMES = [e[0] for e in ENTRIES]
 LOGOS = 'assets/logos'
@@ -73,7 +74,9 @@ PROBE = r"""<script>
     R.cloneCount=track.querySelectorAll('li.is-clone').length;
     R.shownClones=[].filter.call(track.querySelectorAll('li.is-clone'),function(li){return getComputedStyle(li).display!=='none';}).length;
     var imgs=[].slice.call(track.querySelectorAll('img'));
-    R.heights=imgs.map(function(i){return Math.round(i.getBoundingClientRect().height*10)/10;}).filter(function(v,k,a){return a.indexOf(v)===k;});
+    R.drawn=first.map(function(li){var i=li.querySelector('img');return i?Math.round(i.getBoundingClientRect().height*10)/10:null;});
+    R.cloneDrawn=[].every.call(track.querySelectorAll('li.is-clone'),function(li,k){var i=li.querySelector('img');
+      return !i||Math.abs(i.getBoundingClientRect().height-R.drawn[k%first.length])<0.2;});
     R.filters=imgs.map(function(i){return getComputedStyle(i).filter;}).filter(function(v,k,a){return a.indexOf(v)===k;});
     R.rows=first.map(function(li){return Math.round(li.getBoundingClientRect().top);}).filter(function(v,k,a){return a.indexOf(v)===k;}).length;
     var cs=getComputedStyle(strip); R.mask=(cs.maskImage||cs.webkitMaskImage||'none');
@@ -210,10 +213,11 @@ def main():
        ['Zurich', 'Irish Life', 'Aviva', 'New Ireland', 'Royal London', 'Standard Life'])
     eq('1. and every entry is written the one way (no provider hidden from this test)',
        len(re.findall(r"\{ name: '", SRC)), len(ENTRIES))
-    for name, logo, w, h in ENTRIES:
+    for name, logo, w, h, drawn in ENTRIES:
         eq('1. %s: its logo is an SVG or a WebP in %s/, and there' % (name, LOGOS),
            (os.path.dirname(logo), os.path.splitext(logo)[1] in ('.svg', '.webp'), os.path.isfile(os.path.join(ROOT, logo))),
            (LOGOS, True, True))
+        eq('1. %s: drawn at a height set by eye, 20 to 48px, inside the 60px strip' % name, 20 <= int(drawn) <= 48, True)
         size = file_size(logo) if os.path.isfile(os.path.join(ROOT, logo)) else None
         eq('1. %s: the width and height in the list are the file\'s own' % name,
            size and (round(size[0], 2), round(size[1], 2)), (round(float(w), 2), round(float(h), 2)))
@@ -233,7 +237,9 @@ def main():
         eq('2. on at %dpx: every logo file loads' % w, r['loads'], [True] * len(ENTRIES))
         eq('2. on at %dpx: the loop\'s copies are hidden from screen readers, with empty alt text' % w,
            (r['clones'], r['cloneAlts'], r['cloneCount'] > 0), (True, True, True))
-        eq('2. on at %dpx: every logo the same height' % w, r['heights'], [32 if w > 600 else 28])
+        eq('2. on at %dpx: each logo at the height set for it (seven-eighths on a phone), its copies the same' % w,
+           (all(abs(d - int(e[4]) * (1 if w > 600 else .875)) < 0.3 for d, e in zip(r['drawn'], ENTRIES)),
+            len(r['drawn']) == len(ENTRIES), r['cloneDrawn']), (True, True, True))
         eq('2. on at %dpx: grey until the pointer is on one' % w, r['filters'], ['grayscale(1)'])
         eq('2. on at %dpx: under the pointer, its own colours' % w, r['colourRule'], True)
         eq('2. on at %dpx: faded at both edges' % w, 'linear-gradient' in r['mask'], True)
@@ -280,15 +286,15 @@ def main():
     row = ns[0] if ns else ''
     eq('6. without JavaScript: the same label', re.findall(r'<p class="pb-prov-ns-label" id="([^"]+)">([^<]*)</p>\s*<ul class="pb-prov-ns-list" aria-labelledby="([^"]+)">', row),
        [('pbProvNsLabel', 'Providers we hold agencies with', 'pbProvNsLabel')])
-    eq('6. without JavaScript: the same providers, files, alt text and sizes, in order',
-       re.findall(r'<li><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"></li>', row),
-       [(e[1], e[0], str(round(float(e[2]))), str(round(float(e[3])))) for e in ENTRIES])
+    eq('6. without JavaScript: the same providers, files, alt text, sizes and heights, in order',
+       re.findall(r'<li><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)" style="--pb-logo-h:(\d+)"></li>', row),
+       [(e[1], e[0], str(round(float(e[2]))), str(round(float(e[3]))), e[4]) for e in ENTRIES])
     # and nothing else in it: an item written any other way would slip past the pattern above
     eq('6. without JavaScript: no other item and no other image in the row',
        (row.count('<li'), row.count('<img'), len(re.findall(r'<img src="assets/logos/', row))),
        (len(ENTRIES), len(ENTRIES), len(ENTRIES)))
     eq('6. without JavaScript: grey, and its own colours under the pointer',
-       ('.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}' in home,
+       ('.pb-prov-ns-list img{display:block;width:auto;height:calc(var(--pb-logo-h,32) * 1px);filter:grayscale(1);opacity:.72}' in home,
         '.pb-prov-ns-list li:hover img{filter:none;opacity:1}' in home), (True, True))
     srv.shutdown()
     report()
