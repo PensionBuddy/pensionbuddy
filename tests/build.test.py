@@ -1305,7 +1305,9 @@ def run():
     # game mid-play, the picture tools/shoot-product.py takes (both in its
     # SHOTS), its width and height the file's own, a line, and a play link
     # to the game. Static: the section's rules move nothing, no script
-    # touches it, and it offers nothing to win.
+    # touches it, and it offers nothing to win. Each card is a whole-card
+    # link, so (Run 36) it carries .pb-card-link: MOTION rule 5's shadow on
+    # hover and focus, as every whole-card link does since Run 34.
     GAMES = [('Buddy&rsquo;s Run', 'buddys-run', 'Collect the benefits, jump the excuses.'),
              ('Jargon Battle', 'jargon-battle', 'Pick the right meaning to bust the Jargon Blob.')]
 
@@ -1330,7 +1332,7 @@ def run():
         box = m.group(1)
         if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
             f.append('the heading')
-        cards = re.findall(r'<li><div class="pb-learn-card">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
+        cards = re.findall(r'<li><div class="pb-learn-card pb-card-link">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
                            r'<img src="assets/img/product-([a-z-]+)\.jpg\?v=[0-9a-f]+" width="(\d+)" height="(\d+)" loading="lazy" alt="([^"]+)"></picture>\s*'
                            r'<div class="pb-learn-body">\s*<h3>([^<]+)</h3>\s*<p class="pb-learn-d">([^<]+)</p>\s*'
                            r'<a class="pb-learn-play" href="games/([a-z-]+)\.html">Play ([^<]+?) <svg[^>]*>.*?</svg></a>\s*</div>\s*</div></li>', box, re.S)

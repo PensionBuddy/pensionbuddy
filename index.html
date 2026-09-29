@@ -1297,10 +1297,11 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .pb-learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
 .pb-learn-grid li{margin:0}
 .pb-learn-card{position:relative;display:flex;flex-direction:column;height:100%;background:var(--surface);
-  border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+  border:1px solid var(--line-2);border-radius:var(--r-lg)}  /* no overflow:hidden: it would clip MOTION rule 5's shadow */
 .pb-learn-card:hover{border-color:var(--teal);background:var(--teal-50)}
 .pb-learn-card:has(.pb-learn-play:focus-visible){box-shadow:0 0 0 4px var(--ring)}
-.pb-learn-card picture{display:block;border-bottom:1px solid var(--line-2)}
+.pb-learn-card picture{display:block;overflow:hidden;border-bottom:1px solid var(--line-2);
+  border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
 .pb-learn-card img{display:block;width:100%;height:auto;aspect-ratio:16/9}
 .pb-learn-body{display:flex;flex-direction:column;gap:6px;padding:20px 22px 16px}
 .pb-learn-card h3{margin:0}
@@ -2383,7 +2384,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     <h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>
   </div>
   <ul class="pb-learn-grid">
-    <li><div class="pb-learn-card">
+    <li><div class="pb-learn-card pb-card-link">
       <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=5fbfaac5"><img src="assets/img/product-buddys-run.jpg?v=eca8ecce" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
       <div class="pb-learn-body">
         <h3>Buddy&rsquo;s Run</h3>
@@ -2391,7 +2392,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
         <a class="pb-learn-play" href="games/buddys-run.html">Play Buddy&rsquo;s Run <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
     </div></li>
-    <li><div class="pb-learn-card">
+    <li><div class="pb-learn-card pb-card-link">
       <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=f9a78730"><img src="assets/img/product-jargon-battle.jpg?v=ee5acf90" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
       <div class="pb-learn-body">
         <h3>Jargon Battle</h3>
