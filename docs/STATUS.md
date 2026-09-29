@@ -231,6 +231,8 @@ option, logged as a question. Branch off `main` (`669becc`).
 
 | 4 | UX-motion audit parts with no decision of Damian's | **Done, in part** | see git log | One commit each, in the audit's order: **3c** in part (the glossary's term index is held over the terms only, no longer over the not-advice note); **4d** (director rules: "Topics to discuss, not advice." and its reason to book before the list); **4e** (my pensions: an added pension rises 6px into place, nothing fades); **14a** (home, "Six places to begin": every explanation always readable at 1440, only the other names soften); **14c** (MOTION rule 5: whole-card links show a shadow, nothing travels; the thank-you tool cards no longer lift their "Illustration only." caveats 3px on hover); **15b** (the glossary's relief ladder fills once, in age order, on arrival); **6b** (starter: no figure counts up any more, the living-standards bars grow once, teal then amber, and "What time does" follows its slider with no in-between values: 195 on one step on main, none now); **15a** in part (the tracker's paperwork gathers on transform, its card's words there from the first frame). Not done: **7** and **12c** (both need part 1b, which waits on D9 and D10); **3d** (the director panel held by its bottom edge hides its top controls from the keyboard unless focus scrolling is rebuilt with it, on a protected calculator: not safe to half-build); **9a** (every slider page, a geometry probe and a 4x CPU drag: larger than the night allowed); 3c's wrapping index and 15a's fan (design calls: question 3). Every other part carries a decision. |
 
+| 5 | Accessibility sweep | **Done** | see git log | All 31 pages at 375 and 1440 (and the home page with the cookie bar up): axe 4.13 (WCAG 2.2 A and AA, and best practice), a keyboard-only Tab walk checking each stop is on screen, uncovered and ringed, the heading outline, and every control's size. Headings: one h1 a page, no level skipped. Names: no control, link or image without one. Fixed, two clear errors: (1) on a short window the calculators' held inputs panel is taller than the screen, so a keyboard user tabbed into controls below it with nothing to bring them up (WCAG 2.4.11): on main at 1280x720, 3 such stops on the pension calculator, 4 on the director calculator, 2 on the comparison; now none on any calculator at 1280x720 or 1440x900 (while focus is in an off-screen control the panel lets go of the window; a pointer is untouched); (2) the home page's product picture had the tab-panel role on a `<figure>` with a caption, which ARIA does not allow: the role is on a wrapper round the shot now. Judgement calls, question 4. |
+
 What Google's Rich Results Test would say (checked against Google's
 structured-data rules by hand and by check 30; no page was sent to Google):
 
@@ -290,6 +292,17 @@ back (index, directors, tracker, pension calculator), so the preload stays.
    side by side at 720px without their labels overlapping, less so at 375;
    left as the pile, which now gathers on transform with its card's words
    always shown).
+4. Accessibility, left as they are (item 5): the footer's large
+   "Pensionbuddy" wordmark measures 1.14:1 (it is the brand name, hidden
+   from screen readers and drawn at 7% ink on purpose; WCAG exempts a
+   logotype); the announcement bar ("Regulated by the Central Bank of
+   Ireland") sits outside any landmark on every page (axe best practice,
+   not a WCAG failure: it would go inside the page's banner, a change to
+   the shared chrome); the sliders' tap-to-type values are 23px wide
+   (11px for a single "0") and the PIA page's two "myfuturefund.ie" links
+   20px tall, under 24px in one direction, but with nothing else within
+   reach, which WCAG 2.5.8 allows; the PIA threshold field's focus shows
+   on its box (a teal border and glow) rather than on the input.
 
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 

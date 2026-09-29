@@ -3162,6 +3162,29 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+<script>
+/* Keyboard focus in a held panel (Run 34, item 5; WCAG 2.4.11). The inputs
+   panel is held under the nav, and on a short window it is taller than the
+   screen, so a control reached from the keyboard could sit below the
+   window with nothing to bring it up. While focus is in a control off the
+   screen, the panel lets go of the window and the control is scrolled into
+   view; once focus leaves the panel it is held again. A pointer, and what
+   the calculator shows, are untouched. */
+(function(){
+  var p=document.querySelector('.calc-wrap > .panel');
+  if(!p) return;
+  p.addEventListener('focusin',function(e){
+    if(p.style.position||getComputedStyle(p).position!=='sticky') return;
+    var r=e.target.getBoundingClientRect();
+    if(r.top>=0&&r.bottom<=innerHeight) return;
+    p.style.position='relative';
+    e.target.scrollIntoView({block:'nearest'});
+  });
+  p.addEventListener('focusout',function(e){
+    if(!e.relatedTarget||!p.contains(e.relatedTarget)) p.style.position='';
+  });
+})();
+</script>
 <script src="assets/js/pb-guess.js?v=988458d5"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=0c417a51"></script>
