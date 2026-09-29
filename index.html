@@ -2793,10 +2793,13 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   if(!copy||!desc||!btn||!btnT||!fig||!shot||!list) return;
   var img=shot.querySelector('img'), src=shot.querySelector('source');
   var tl=document.createElement('div'); tl.className='pb-pt-tabs'; tl.setAttribute('role','tablist'); tl.setAttribute('aria-label','The free tools');
-  fig.setAttribute('role','tabpanel'); fig.id='pbPtFig';
+  /* the tab panel is the picture itself: a <figure> with a caption cannot
+     take the role (Run 34, item 5), so the shot is wrapped in one */
+  var panel=document.createElement('div'); panel.id='pbPtPanel'; panel.setAttribute('role','tabpanel');
+  shot.parentNode.insertBefore(panel,shot); panel.appendChild(shot);
   var tabs=T.map(function(t,i){
     var b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab'); b.id='pbPtTab'+i;
-    b.setAttribute('aria-controls','pbPtFig'); b.textContent=t.tab; tl.appendChild(b);
+    b.setAttribute('aria-controls','pbPtPanel'); b.textContent=t.tab; tl.appendChild(b);
     b.addEventListener('click',function(){pick(i,false);});
     return b;
   });
@@ -2805,7 +2808,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   function pick(i,focus){
     var t=T[i];
     tabs.forEach(function(b,k){b.setAttribute('aria-selected',k===i?'true':'false');b.tabIndex=k===i?0:-1;});
-    fig.setAttribute('aria-labelledby','pbPtTab'+i);
+    panel.setAttribute('aria-labelledby','pbPtTab'+i);
     fig.setAttribute('data-pb-tool',t.href);
     desc.textContent=t.desc; btn.setAttribute('href',t.href); btnT.textContent=t.btn;
     shot.setAttribute('href',t.href); shot.setAttribute('aria-label',t.btn);
