@@ -2072,6 +2072,12 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .pt-row{break-inside:avoid}
   body{background:#fff!important}
 }
+/* Run 34 (part 4e of docs/UX-MOTION-AUDIT.md): an added pension rises into
+   place, --pb-nudge over --pb-d-2, on transform only; under reduced motion
+   both tokens are nil, so it is simply there. The share bars take no
+   transition. */
+.pt-row.pt-new{animation:ptRise var(--pb-d-2) var(--pb-ease-out)}
+@keyframes ptRise{from{transform:translateY(var(--pb-nudge))}to{transform:none}}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2266,6 +2272,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     var x = document.createElement('button');
     x.type = 'button'; x.className = 'pt-x'; x.textContent = 'Remove';
     copy.insertBefore(x, copy.querySelector('legend').nextSibling);
+    copy.classList.add('pt-new');   // arrives with a small rise (page.css); nothing fades
     list.appendChild(copy);
     renumber();
     copy.querySelector('input').focus();

@@ -68,3 +68,9 @@
   .pt-row{break-inside:avoid}
   body{background:#fff!important}
 }
+/* Run 34 (part 4e of docs/UX-MOTION-AUDIT.md): an added pension rises into
+   place, --pb-nudge over --pb-d-2, on transform only; under reduced motion
+   both tokens are nil, so it is simply there. The share bars take no
+   transition. */
+.pt-row.pt-new{animation:ptRise var(--pb-d-2) var(--pb-ease-out)}
+@keyframes ptRise{from{transform:translateY(var(--pb-nudge))}to{transform:none}}
