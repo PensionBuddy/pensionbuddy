@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 29 September 2026, after Run 35 (provider logos, qualifications, the games on the home page)
+# Launch status — as at 29 September 2026, after Run 36 (Run 34 merged, Run 35's calls)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -36,11 +36,18 @@ and in every footer.
 Since Run 35 (29 September 2026) the home page shows the six provider logos
 under its hero ("Providers we hold agencies with", switched on once Damian
 confirmed that written permission is held for every logo; the files are
-the logos on the providers' own websites) and two cards for the games after
-its gap chart, and "Damian's qualifications and memberships" (Qualified
-Financial Adviser (QFA), Life Insurance Association (LIA)) is at the end of
-the story, under Damian's section, beside the booking form and in the
-footer of every page but the two games' own.
+the logos on the providers' own websites; each drawn at a height set by
+eye, Run 36) and two cards for the games after its gap chart, and "Damian's
+qualifications and memberships" (Qualified Financial Adviser (QFA), Life
+Insurance Association (LIA)) is under Damian's section, beside the booking
+form and in the footer of every page but the two games' own.
+
+Since Run 36 (29 September 2026) Run 34 is live too: the typefaces are the
+site's own files (`assets/fonts/`), so no page asks Google for anything;
+every page carries its search and sharing tags (`tools/seo.py`), with share
+cards for the home page and the six audience pages; the calculators' held
+inputs panel lets a keyboard reach every control; and the motion parts
+Damian's decisions did not wait on (Run 34, item 4).
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -89,9 +96,32 @@ and `404.html`. `about.html` does not exist: it was folded into
    not files the providers sent, and compliance is asked whether the
    permissions cover showing them in grey (pack 1.19). Still open: its six
    names must match the agencies How we work names when that page is
-   released (R29-2, now R35-1; the brief switched the ticker on first). Also from Run 35: Zurich's logo is
-   a low-resolution web image (R35-2), and the smaller calls R35-3 to
-   R35-10 below, none blocking. R29-3 to R29-9 were answered in Run 30.
+   released (R29-2, now R35-1; the brief switched the ticker on first); a
+   Zurich SVG (R35-2); the QFA and LIA logo files, if the strip is to show
+   logos, and whether the B.A. belongs in it (R35-6). R35-5 (balance the
+   logos) and R35-7 (one strip on the home page) were answered in Run 36,
+   and R35-10 (merge Run 34) done. R29-3 to R29-9 were answered in Run 30.
+10. **Run 34, merged in Run 36, its questions** (Run 34, below): (1) the
+   PIA's results tables scroll sideways on the narrowest phones, 320 to
+   351px (picked over smaller type or stacked cards); (2) no phone number
+   on the site, so the business's search data has none, which Google calls
+   a missing recommended field (a public number goes on the site first,
+   then in `tools/seo.py`), and pack 1.20: whether a share card needs the
+   footer's full regulatory sentence rather than "Regulated by the Central
+   Bank of Ireland", the "50" in the over-50 card's headline, and the
+   fourteen shortened search lines; (3) two motion parts built in part,
+   the rest design calls: the glossary's term index as several rows over
+   the terms, and the tracker's papers as a fan; (4) accessibility left as
+   it is: the footer wordmark (a logotype, exempt), the announcement bar
+   outside a landmark (best practice, not WCAG), the sliders' tap-to-type
+   values and two PIA links under 24px in one direction (allowed by WCAG
+   2.5.8), the PIA threshold field's focus on its box. Not built: parts 7
+   and 12c (they need part 1b, which waits on decisions D9 and D10), 3d (the
+   director panel held by its bottom edge: focus scrolling would need
+   rebuilding with it) and 9a (a slider geometry probe on every page). Small
+   and optional: `buddy-beach.jpg` has no WebP (the original photo would
+   make a better one than the JPEG), and Buddy's 320px avatar is drawn at
+   28 or 78px (a smaller copy would save about 6KB a page).
 7. **Run 30's calls** were answered in Run 31 (below).
 8. **Smaller calls, none blocking:** the review line spells out QFA (Run
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
@@ -123,7 +153,11 @@ and `404.html`. `about.html` does not exist: it was folded into
   (Re-shot on 28 September for the still safe, so the picture matches the
   calculator in every other way; the rate still needs this re-shoot.)
   On or after 1 October: `python3 tools/shoot-product.py`, then
-  `python3 tools/stamp-images.py`, and check width and height.
+  `python3 tools/stamp-images.py`, and check width and height. The same
+  day (Run 34, item 7): the director calculator's assumption line, "up to
+  52.2% ... 4.2% PRSI), and 52.35% from 1 October 2026", reads backwards
+  from 1 October; the scripts already switch (pb-prsi.js), the words do
+  not.
 - **PRSI's next step.** The rate lives in one table,
   `assets/js/pb-prsi.js` (4.2% from 1 October 2025, 4.35% from 1 October
   2026). When the next rise is announced, add it there; the director pages'
@@ -163,6 +197,26 @@ and `404.html`. `about.html` does not exist: it was folded into
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+  Run 34 found seven pages saying "Budget 2027 is on 6 October 2026 and
+  could change them", the PIA lines "Proposed, as at 25 September 2026,
+  and not yet law", and the State Pension's "€299.30 a week from January
+  2026", which the same Budget may change from January 2027.
+- **October 2026, the month turns** (Run 34, item 7): "Last reviewed
+  September 2026" on the ten review lines, "Rules as at 24 September 2026"
+  on eight guides, and the checked-on dates (the comparison's gov.ie rates,
+  the entitlement check, the reality check) all age a month; dated figures
+  (My Future Fund's 835,000 members, the Pensions Authority's 40,644
+  one-member arrangements, the living standards of September 2024, the
+  complaints page's "Last updated: June 2026") stay true as at their dates.
+
+## Closed in Run 36 (Run 34 merged, Run 35's calls, merged to main on 29 September)
+
+R35-7: Damian's qualifications and memberships are on the home page once,
+under his own section (the copy at the end of the story is off). R35-5: the
+six logos are drawn at heights set by eye, so none looks heavier or
+smaller. R35-10: Run 34 (`claude/overnight-3`) is merged: self-hosted
+fonts, search and sharing tags, the motion parts, the accessibility and
+image fixes. Details: Run 36, below.
 
 ## Closed in Run 35 (the logos, the strip and the games, merged to main on 29 September)
 
@@ -348,7 +402,7 @@ professional-body logo, and any Central Bank of Ireland logo.
 - **R35-4 Seven brands not used**: Davy, Independent Trustee Company,
   Newcourt, Quest, AIB Life, LifeSight and (named, no file) BCWM. If any is
   an agency, it needs its permission and a line on How we work first.
-- **R35-5 One height, as asked.** At one height Aviva reads heaviest and
+- **R35-5 One height, as asked** (answered in Run 36: balanced by eye). At one height Aviva reads heaviest and
   New Ireland's crest smallest. Balancing them by eye is a one-line change
   per logo, if you want it.
 - **R35-6 The strip is text only.** No QFA or LIA logo file exists. When
@@ -361,7 +415,7 @@ professional-body logo, and any Central Bank of Ireland logo.
   line, so the strip says the same. Your portrait's badge says "B.A.,
   Q.F.A."; the strip leaves the degree out, because your answer named the
   QFA and the LIA. Say if the B.A. belongs in it too.
-- **R35-7 The home page shows the strip twice**, at the end of Our story
+- **R35-7 The home page shows the strip twice** (answered in Run 36: the one under Damian's section stays), at the end of Our story
   and under your own section, a screen apart, because the brief named both.
   Say if you want one (the one under your section reads as yours). Every
   page's footer carries the small one as well.
@@ -370,7 +424,7 @@ professional-body logo, and any Central Bank of Ireland logo.
   no stacks; nothing in the game was changed to add any.
 - **R35-9 The games' own pages** keep their one-line footer, which is not
   the site's, so the small strip is not on them.
-- **R35-10 Run 34 (`claude/overnight-3`)**, when you merge it onto this
+- **R35-10 Run 34 (`claude/overnight-3`)** (done in Run 36), when you merge it onto this
   `main`: git merges every page by itself; `sitemap.xml` and
   `tests/build.test.py` conflict (both add to the same places: regenerate
   the sitemap with `tools/sitemap.py`, keep both sets of checks), and then
