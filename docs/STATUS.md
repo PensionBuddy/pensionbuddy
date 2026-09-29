@@ -305,7 +305,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | # | Item | State | Commit |
 |---|---|---|---|
 | 0 | Audit, `docs/UX-AUDIT-4.md` | done | this commit |
-| 1 | Life-event picker on the home page | not reached | |
+| 1 | Life-event picker on the home page: "What's changed?", six links under the hero | done | this commit |
 | 2 | Jargon definitions on first use, sitewide | not reached | |
 | 3 | Site search in the nav | not reached | |
 | 4 | "Your pension through life" timeline | not reached | |
@@ -316,6 +316,15 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 9 | Slider feel | not reached | |
 | 10 | Figures that wait: skeletons | not reached | |
 
+## New words on the site (for the pack)
+
+- **Item 1**, the home page, under the hero: the heading "What's changed?"
+  and six links, "New job" (to the auto-enrolment comparison), "Left a job"
+  (Find a pension), "Started a company" (Pensions for company directors),
+  "Turning 50" (Pensions after 50), "Had a baby or a career break" (the State
+  Pension entitlement check) and "Moved from the UK" (A UK pension, and living
+  in Ireland). Each link's name for a screen reader adds the page's nav name.
+
 ## Questions for Damian
 
 1. **Age 75 is not on the site.** The brief lists "75 vesting" among the
@@ -325,6 +334,11 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 2. **Terms with no glossary entry get no definition:** auto-enrolment and My
    Future Fund, PRSI, USC, small self-administered schemes, HomeCaring
    Periods, credits. New glossary entries would be new copy.
+3. **Where "What's changed?" sits, and where each change goes.** Under the
+   hero, above the provider logos (the brief's "under the hero"). "New job"
+   goes to the auto-enrolment comparison (what a new job starts), "Had a baby
+   or a career break" to the entitlement check (HomeCaring Periods and
+   credits are there). Say if either should go elsewhere.
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

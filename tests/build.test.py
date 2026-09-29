@@ -1339,7 +1339,10 @@ def run():
 
     def learn_faults(ix):
         f = []
-        m = re.search(r'</section>\s*(?:<!--.*?-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
+        # one comment at most between the two, and never a span across others
+        # (Run 37: with a comment earlier on the page, `<!--.*?-->` reached
+        # from there to this one)
+        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
         gap = ix.find('<section class="gapband pb-bleed pb-wash" id="gap">')
         if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
             return ['the section is not straight after the gap band and before the calculator band']
@@ -1399,6 +1402,77 @@ def run():
             mut = ix.replace(find, repl, 1)
         assert mut != ix, label
         eq('32. %s is caught' % label, any(want in x for x in learn_faults(mut)), True)
+
+    # ----------------------------------------------------------------- 33
+    # Run 37, item 1: "What's changed?" on the home page, straight under the
+    # hero and before the provider logos. Six plain links, one per change in
+    # a life, each to the live page that already covers it; each link's name
+    # starts with its visible words and then names the page as the nav does
+    # (WCAG 2.5.3). Nothing runs and nothing is stored: no script mentions
+    # it, and its rules change colours only.
+    CHANGED = [('New job', 'broker-vs-autoenrolment.html'),
+               ('Left a job', 'tracker.html'),
+               ('Started a company', 'director.html'),
+               ('Turning 50', 'pensions-over-50.html'),
+               ('Had a baby or a career break', 'state-pension-entitlement.html'),
+               ('Moved from the UK', 'uk-pensions-in-ireland.html')]
+    skel_nav = sources['pension-calculator.html']
+    nav_label = dict((h, re.sub(r'<[^>]+>', '', l).strip()) for h, l in
+                     re.findall(r'<a class="lnk(?: active)?" href="([^"#]+)"(?: aria-current="page")?>(.*?)</a>', skel_nav))
+
+    def changed_faults(ix):
+        f = []
+        hero = ix.find('</div></header>')
+        m = re.search(r'<section class="pb-changed" id="changed" aria-labelledby="pbChangedH"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        mount = ix.find('<div data-pb-providers hidden></div>')
+        if not m or hero < 0 or not (hero < m.start() < mount) or re.search(r'<(?:section|div|header)\b', ix[hero + len('</div></header>'):m.start()]):
+            return ['the section is not straight under the hero, before the provider logos']
+        box = m.group(1)
+        if '<h2 class="pb-changed-h" id="pbChangedH">What&rsquo;s changed?</h2>' not in box:
+            f.append('the heading')
+        links = re.findall(r'<li><a class="pb-changed-chip" href="([^"]+)" aria-label="([^"]+)">([^<]+)</a></li>', box)
+        if len(links) != 6 or box.count('<li') != 6 or box.count('<a ') != 6:
+            f.append('%d links, expected 6' % len(links))
+        for (label, page), (href, name, text) in zip(CHANGED, links):
+            if (text, href) != (label, page):
+                f.append('%s: goes to %s, expected %s' % (text, href, page))
+            if name != '%s: %s' % (text, nav_label.get(href, '?')):
+                f.append('%s: its name does not start with its words and name the page as the nav does' % text)
+            target = os.path.join(ROOT, href)
+            if not os.path.isfile(target) or pagebuild.NOINDEX in read(href):
+                f.append('%s: %s is not a live page' % (text, href))
+        css = re.search(r'/\* Run 37, item 1: "What\'s changed\?".*?\*/(.*?)@media\(prefers-reduced-motion:reduce\)\{\.pb-changed-chip\{transition:none\}\}', ix, re.S)
+        scripts = ''.join(re.findall(r'<script\b[^>]*>(.*?)</script>', ix, re.S))
+        if not css or re.search(r'transform|animation|@keyframes|translate', css.group(1)) or re.search(r'pb-changed|#changed|getElementById\(.changed', scripts):
+            f.append('the section moves, or a script touches it')
+        return f
+
+    eq('33. "What\'s changed?": under the hero, six links to the live pages that cover each change, named for where they go, still',
+       changed_faults(sources['index.html']), [])
+    ix = sources['index.html']
+    for label, find, repl, want in (
+            ('the section moved below the provider logos', None, None, 'straight under'),
+            ('a link to a held page', 'href="tracker.html" aria-label="Left a job: Find a pension"',
+             'href="find-my-pension.html" aria-label="Left a job: Find a pension"', 'not a live page'),
+            ('a name that does not start with the words', 'aria-label="Turning 50: Pensions after 50"',
+             'aria-label="Pensions after 50"', 'its name'),
+            ('a hover that lifts', '.pb-changed-chip:hover{border-color:var(--teal);',
+             '.pb-changed-chip:hover{transform:translateY(-2px);border-color:var(--teal);', 'moves'),
+            ('a seventh link', '<li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html"',
+             '<li><a class="pb-changed-chip" href="glossary.html" aria-label="Other: Pension jargon buster">Other</a></li>\n    <li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html"', 'links, expected 6'),
+            ('a script that stores the choice', '</body>',
+             '<script>document.querySelector(\'#changed\').addEventListener(\'click\',function(){localStorage.x=1})</script></body>', 'a script touches it')):
+        if find is None:
+            s0 = ix.find("<!-- WHAT'S CHANGED?")
+            s1 = ix.find('<!-- PROVIDER TICKER')
+            sec = ix[s0:s1]
+            rest = ix[:s0] + ix[s1:]
+            n0 = rest.find('</noscript>', rest.find('<div data-pb-providers hidden></div>')) + len('</noscript>\n')
+            mut = rest[:n0] + '\n' + sec + rest[n0:]
+        else:
+            mut = ix.replace(find, repl, 1)
+        assert mut != ix, label
+        eq('33. %s is caught' % label, any(want in x for x in changed_faults(mut)), True)
 
 
 
