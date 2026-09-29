@@ -25,7 +25,7 @@ pins the same instant `runpage.js` does, and it borrows the traps below.
 |---|---|
 | `minidom.js` | a DOM built from the SHIPPED html, recording every write as `[element, property, value]` |
 | `runpage.js` | loads a page script into a `vm` behind that DOM and the page's real modules; fixed clock, collected timers, drained animation frames |
-| `pages.js` | the five pages, and where the baseline comes from |
+| `pages.js` | the six pages (the PIA page since Run 34), and where the baseline comes from |
 | `compare.js` | one state through both copies, compared four ways |
 | `load.js` | the render each page performs **as it loads** |
 | `sweep.js` | the state sweep: exhaustive where the input space allows, stratified where it does not |
@@ -37,6 +37,7 @@ pins the same instant `runpage.js` does, and it borrows the traps below.
 | `classify-director-bounds.js` | Run 30 (R29-5): the director calculator's retirement age now runs 50 to 70 and "Your age now" to 69. The change is in the markup, so the old side is the new html with the old maxima put back and the old script; across every state the new sliders reach, only the two sliders' fills may differ |
 | `classify-compare-warning.py` | Run 32 (`BASELINE_REF=417d101`): the comparison page's second mode gains the first mode's warning box. Real Chrome, baseline checkout against the working tree, every frame: the only cells that may differ are `#mode2Results` and `#main`, and each must be the old cell with the warning's text inserted exactly once; the other four calculators must not differ at all |
 | `classify-reveal-classes.py` | Run 32, parts 1a and 2b: reveal classes come off. Real Chrome, baseline checkout against the working tree, every frame of every calculator: a cell may differ only in its classes, and only by `reveal`, `in`, `settled` or `pb-caveat`; its text and hidden flag must be the same |
+| `classify-pia-tablewrap.py` | Run 34, item 1 (`BASELINE_REF=669becc`): the PIA page's two results tables each go into a box that scrolls below about 352px wide. Real Chrome, every frame of every calculator: a cell may differ only in whitespace, or be one of the two captions, newly given an id, with the old caption's words |
 
 ## What "the same" means here
 
@@ -69,7 +70,7 @@ slider would otherwise sweep clean.
 cd tests/render-diff
 export BASELINE_REF=HEAD~1
 
-node load.js                                     # the load render, all five pages
+node load.js                                     # the load render, all six pages
 node sequences.js all 400 40                     # real events, 16,000 per page
 node mutate-shared.js 200                        # can the sweep fail?
 python3 browser-diff.py                          # real Chrome; makes its own baseline checkout

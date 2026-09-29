@@ -459,6 +459,138 @@ found the Pause button), every one accepted and fixed before the merge.
   without JavaScript and with a logo under the pointer; the strip in all
   four places; the games section; the two game pictures at full size.
 
+# Run 34 — 2026-09-28 overnight · Seven items on `claude/overnight-3` (merged into main in Run 36, 29 September)
+
+Damian's brief: an unattended run, one item at a time, each built, gated,
+committed and pushed; the branch is reviewed on the Netlify deploy preview
+and not merged. Anything needing his judgement: the most conservative
+option, logged as a question. Branch off `main` (`669becc`).
+
+Where it stands: all seven items reached, each gated and pushed; nothing
+is merged. What was not done, and why, is in each row; the questions are
+below. To pick up: the Budget-day and deadline dates under item 7, and
+the parts of item 4 left for a daytime run (3d, 9a).
+
+## Items
+
+| # | Item | Status | Commit | Note |
+|---|---|---|---|---|
+| 1 | Leftovers | **Done** | see git log | The cookie bar's "Privacy Notice" opens the notice at its Cookies section (`privacy.html#cookies`; consent check 9). At 320 to 351px wide the starter guide's "See the State Pension reality check" takes two lines (`.pb-btn-long`), and the PIA page's two results tables each scroll inside their own box, which the keyboard can reach (`.pia-stwrap`, named by its caption); no page is wider than a 320px screen (all 29 measured). A follow-up commit: the first version clipped the tables' last column from 352px to about 400px, where on main they ran into the card's padding (and, below 370px, past its border); the box now spans the padding, and below 370px the card and cells have a little less side padding, so from 352px up nothing is clipped, from 390px the page is main's pixel for pixel (370 and 375: anti-aliasing only), and below 352px the tables scroll. The PIA page is now in the render-diff harness (load, sequences, browser-diff); `classify-pia-tablewrap.py` proves the only differences are whitespace and the two captions' new ids. Question 1. |
+
+| 2 | Self-hosted fonts | **Done** | see git log | Inter and the footer wordmark's Schibsted Grotesk 800 are in `assets/fonts/` (the nine woff2 files Google Fonts served on 28 September, byte for byte, with their SIL Open Font License texts); the `@font-face` rules are in the shared FONTS block, with the Inter Fallback metrics kept; each page preloads `inter-latin.woff2`; no page, the two games included, asks Google for anything (build check 29; verify F2). Every page at 375 and 1440 is pixel for pixel main's (62 full-page shots; the games' animation aside). The Privacy Notice never mentioned Google Fonts, so it is unchanged; pack 1.17's note says the fonts are now the site's own. Lighthouse below. |
+
+| 3 | SEO basics | **Done** | see git log | `tools/seo.py` writes each page's block (between `SEO:BEGIN` and `SEO:END` in its `<head>`; `pagebuild.assemble()` calls it, so a rebuild keeps it): the canonical address, the Open Graph and Twitter card tags from the page's own title and description, and its JSON-LD. The 26 pages in the sitemap each get a canonical and og:url at their sitemap address; the five held pages (404, thank-you, how-we-work, the finder, the readiness check) the sharing tags only. Fourteen titles and descriptions over 60 or 155 characters are shortened by taking words out of the approved text (pack 1.20 (1.19 on its branch) lists each, old and new). Seven share cards, 1200x630 (`tools/og-images.py`, `assets/brand/og/`): the home page and the six audience pages, each with the logo, the page's eyebrow and headline word for word, the address and "Regulated by the Central Bank of Ireland"; no figures. JSON-LD: the business on the home page as a FinancialService in the footer's own sentence, address and email (no phone: the site shows none); a two-step BreadcrumbList, Home then the page, everywhere else; the four existing FAQPages kept, one answer (starter's third) brought into line with the words the page now shows. Build check 30 holds all of it (lengths, uniqueness, addresses, pictures, JSON-LD shape, the business against the footer, every FAQ against the page), with four faults it catches. Question 2 and pack 1.20 (1.19 on its branch). |
+
+| 4 | UX-motion audit parts with no decision of Damian's | **Done, in part** | see git log | One commit each, in the audit's order: **3c** in part (the glossary's term index is held over the terms only, no longer over the not-advice note); **4d** (director rules: "Topics to discuss, not advice." and its reason to book before the list); **4e** (my pensions: an added pension rises 6px into place, nothing fades); **14a** (home, "Six places to begin": every explanation always readable at 1440, only the other names soften); **14c** (MOTION rule 5: whole-card links show a shadow, nothing travels; the thank-you tool cards no longer lift their "Illustration only." caveats 3px on hover); **15b** (the glossary's relief ladder fills once, in age order, on arrival); **6b** (starter: no figure counts up any more, the living-standards bars grow once, teal then amber, and "What time does" follows its slider with no in-between values: 195 on one step on main, none now); **15a** in part (the tracker's paperwork gathers on transform, its card's words there from the first frame). Not done: **7** and **12c** (both need part 1b, which waits on D9 and D10); **3d** (the director panel held by its bottom edge hides its top controls from the keyboard unless focus scrolling is rebuilt with it, on a protected calculator: not safe to half-build); **9a** (every slider page, a geometry probe and a 4x CPU drag: larger than the night allowed); 3c's wrapping index and 15a's fan (design calls: question 3). Every other part carries a decision. |
+
+| 5 | Accessibility sweep | **Done** | see git log | All 31 pages at 375 and 1440 (and the home page with the cookie bar up): axe 4.13 (WCAG 2.2 A and AA, and best practice), a keyboard-only Tab walk checking each stop is on screen, uncovered and ringed, the heading outline, and every control's size. Headings: one h1 a page, no level skipped. Names: no control, link or image without one. Fixed, two clear errors: (1) on a short window the calculators' held inputs panel is taller than the screen, so a keyboard user tabbed into controls below it with nothing to bring them up (WCAG 2.4.11): on main at 1280x720, 3 such stops on the pension calculator, 4 on the director calculator, 2 on the comparison; now none on any calculator at 1280x720 or 1440x900 (while focus is in an off-screen control the panel lets go of the window; a pointer is untouched); (2) the home page's product picture had the tab-panel role on a `<figure>` with a caption, which ARIA does not allow: the role is on a wrapper round the shot now. Judgement calls, question 4. |
+
+| 6 | Images | **Done** | see git log | Every `<img>` on the 31 pages at 375 and 1440, in Chrome. All 35 in the markup had width and height, and all but one a WebP beside it. Fixed: Buddy's avatar on the eight calculator pages, 2,000 to 14,000px down, loaded at once: now `loading="lazy"` (and on the home page, the founder portrait, 6,500px down); the Ask Buddy photo the script draws (a 96x96 image, twice a page) now carries its width and height. Left: `buddy-beach.jpg` on the home page has no WebP (one made from the JPEG saves 6KB, 8%, for a second round of compression; one from the original photo would do better, and the original is not in the repository); the avatar is 320px wide where it is drawn at 28 or 78 (9KB; a smaller copy would save about 6KB a page); the hero avatars on the four audience pages stay eager, as they are on the first screen. |
+
+| 7 | Broken links and stale content | **Report** | see git log | No broken link: every internal link and `#anchor` on the 31 pages resolves (verify.py, every gate tonight), and all 18 outside addresses answer 200 with the page they name (fetched 29 September; Revenue's soft 404s checked by title). One outside link redirects: the held how-we-work page's CCPC "money tools" now lands on CCPC's general "Manage your money" page. Stale content, below, is reported, not changed. |
+
+What Google's Rich Results Test would say (checked against Google's
+structured-data rules by hand and by check 30; no page was sent to Google):
+
+- FinancialService (a LocalBusiness): valid; "telephone" is recommended
+  and absent, as are "openingHoursSpecification", "priceRange" and "geo",
+  none of which the site states.
+- FAQPage: valid, but since August 2023 Google shows FAQ results only for
+  well-known government and health sites, so expect none.
+- BreadcrumbList: valid; the pages show no breadcrumb trail, which Google
+  allows.
+- Every page answers at both `/page` and `/page.html` (and `/` and
+  `/index.html`), all 200 from Netlify: the canonical now names one, and
+  Search Console will list the others as "Alternate page with proper
+  canonical tag", which is expected.
+
+### Stale content, by the date it turns (item 7)
+
+- **1 October 2026 (two days):** PRSI rises to 4.35%. The director
+  calculator's assumption line says "up to 52.2% ... 4.2% PRSI), and
+  52.35% from 1 October 2026", which will read backwards from Thursday;
+  the scripts already switch (pb-prsi.js). The director photo re-shoot
+  for 4.35% (Run 32) falls due the same day.
+- **6 October 2026, Budget 2027:** seven pages say "Budget 2027 is on 6
+  October 2026 and could change them" (director rules, year-end checklist,
+  over 50, self-employed, SFT, UK pensions, and the PIA page), and the PIA
+  page, the glossary's PIA entry and the starter and director pages'
+  PIA lines say "Proposed, as at 25 September 2026, and not yet law".
+  docs/PIA-BUDGET-DAY.md lists what changes. The State Pension's
+  "€299.30 a week from January 2026" (starter, both State Pension pages)
+  may change from January 2027 in the same Budget.
+- **31 October and 18 November 2026:** the tax deadlines for the 2025
+  tax year on the calculators, the director pages, self-employed and the
+  countdown; after 18 November the countdown needs Revenue's 2027 date
+  (tests/deadline.test.py fails from 19 November, on purpose).
+- **October 2026, the month turns:** "Last reviewed September 2026" on the
+  ten review lines, "Rules as at 24 September 2026" on eight guides, and
+  the checked-on dates (the comparison's gov.ie rates, 10 September; the
+  entitlement check, 11 September; the reality check, 9 September) all
+  age by a month.
+- **Dated figures that are true as at their date, but will be
+  overtaken:** My Future Fund "more than 835,000 people in it on 14
+  September 2026" (starter); the Pensions Authority's 40,644 one-member
+  arrangements "on 1 September 2026" (director rules); the Pensions
+  Council's living standards, "September 2024" (starter, reality check);
+  the complaints page's "Last updated: June 2026".
+
+### Lighthouse, item 2 (interleaved, 5 runs a side, median; before = main with Google Fonts over the network)
+
+| Page | Perf | FCP ms | LCP ms | Speed Index ms | CLS |
+|---|---|---|---|---|---|
+| Home | 98 → 98 | 1683 → 1056 | 1958 → 2330 | 1683 → 1056 | 0 → 0 |
+| Directors | 99 → 99 | 1682 → 1057 | 1682 → 2107 | 1682 → 1057 | 0.0004 → 0 |
+| Starter | 99 → 99 | 1683 → 1056 | 1683 → 1958 | 1683 → 1056 | 0.0011 → 0.0012 |
+| Tracker | 99 → 99 | 1682 → 1060 | 1682 → 2183 | 1682 → 1060 | 0.0029 → 0 |
+| Pension calculator | 99 → 98 | 1681 → 1209 | 1742 → 2259 | 1681 → 1209 | 0.0007 → 0 |
+| Director calculator | 99 → 99 | 1681 → 1209 | 1681 → 2106 | 1681 → 1209 | 0.0007 → 0 |
+| PIA | 99 → 99 | 1680 → 1056 | 1742 → 2256 | 1680 → 1056 | 0.0013 → 0 |
+
+First paint is about 0.6s sooner everywhere. The simulated LCP is 0.3 to 0.5s
+later: Lighthouse's simulation counts every request that finishes before
+the LCP paint, and the site's own font files (about 73KB on a page) now
+finish in time and are counted, where Google's, on another origin, finished
+after it and were not, though every reader downloaded them too, behind a
+render-blocking stylesheet. With the fonts self-hosted but not preloaded,
+LCP is the same and first paint 0.45s later, with the small layout shifts
+back (index, directors, tracker, pension calculator), so the preload stays.
+
+## Questions for Damian
+
+1. On the narrowest phones (320 to 351px) the PIA's results tables scroll
+   sideways inside their card, so the "A fall" column is partly off the
+   screen until scrolled. The other ways: type under the 16px floor below
+   352px, or one stacked card per product (the column labels change with the
+   growth rate, so that needs a script change). Picked the scroll.
+2. The site shows no phone number, so the business data for search
+   engines has none, and Google will call that a missing recommended field.
+   If there is a public number to show, it goes on the site first, then in
+   `tools/seo.py`. Also pack 1.20 (1.19 on its branch): whether a share card must carry the full
+   regulatory disclosure (the footer's sentence) rather than "Regulated by
+   the Central Bank of Ireland", and the "50" in the over-50 card's
+   headline (an age, not a figure). Picked: the short line, as the
+   announcement bar has it, and the headline as the page has it.
+3. Two motion parts built only in part, where the rest is a design call:
+   the glossary's term index showing all 22 terms from 920px (it becomes
+   four to five rows, 159px tall at 1440 and 195px at 1024, over the terms
+   it indexes; left as one scrolling row), and the tracker's paperwork as a
+   fan with the summary card beside it (five papers and the card do not fit
+   side by side at 720px without their labels overlapping, less so at 375;
+   left as the pile, which now gathers on transform with its card's words
+   always shown).
+4. Accessibility, left as they are (item 5): the footer's large
+   "Pensionbuddy" wordmark measures 1.14:1 (it is the brand name, hidden
+   from screen readers and drawn at 7% ink on purpose; WCAG exempts a
+   logotype); the announcement bar ("Regulated by the Central Bank of
+   Ireland") sits outside any landmark on every page (axe best practice,
+   not a WCAG failure: it would go inside the page's banner, a change to
+   the shared chrome); the sliders' tap-to-type values are 23px wide
+   (11px for a single "0") and the PIA page's two "myfuturefund.ie" links
+   20px tall, under 24px in one direction, but with nothing else within
+   reach, which WCAG 2.5.8 allows; the PIA threshold field's focus shows
+   on its box (a teal border and glow) rather than on the input.
+
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 
 Damian's brief: on phones the cookie bar must not cover the hero's QFA and

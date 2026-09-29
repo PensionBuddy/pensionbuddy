@@ -151,6 +151,7 @@ PROBE = r"""<script>
       R.textLines=p?Math.round(p.getBoundingClientRect().height/parseFloat(getComputedStyle(p).lineHeight)):null;
       R.text=p?p.textContent:null;
       R.link=p&&p.querySelector('a')?drawn(p.querySelector('a')):null;
+      R.href=p&&p.querySelector('a')?p.querySelector('a').getAttribute('href'):null;
       R.buttons=b?[].map.call(b.querySelectorAll('button'),function(x){ return drawn(x)?box(x):null; }):[];
       done();
     });
@@ -344,6 +345,10 @@ def main():
                 eq('8. %s at %dpx: once it is made, Ask Buddy is back in its corner, or aside for a caveat there' % (page, w),
                    back, True)
     # 9
+    hrefs = sorted(set(r.get('href') for r in LOCK.values() if r))
+    priv = open(os.path.join(ROOT, 'privacy.html'), encoding='utf-8').read()
+    eq('9. the bar\'s link opens the Privacy Notice at its Cookies section, and the section is there',
+       (hrefs, priv.count('<h2 id="cookies">Cookies</h2>'), priv.count('id="cookies"')), (['privacy.html#cookies'], 1, 1))
     for page in FIRST_SCREEN:
         hero = page in HERO_PAGES
         for (w, h) in PHONES + SIDEWAYS + WIDE:

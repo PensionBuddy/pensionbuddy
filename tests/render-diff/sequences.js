@@ -38,6 +38,8 @@ const SLIDERS = {
   'state-pension': { contribs: [0, 2080, 52], age: [18, 66, 1] },
   entitlement: { birth: [1960, 2008, 1], entry: null, paid: [0, 2600, 52],
     credited: [0, 1040, 52], homecaring: [0, 1040, 52] },
+  pia: { amount: [25, 2000, 25], years: [1, 40, 1], growth: [0, 8, 0.5], piaRate: [0, 5, 0.05],
+    age: [18, 70, 1], salary: [10000, 200000, 1000] },
 };
 
 /* one action, applied identically to both sides */

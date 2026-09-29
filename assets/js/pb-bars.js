@@ -1,37 +1,25 @@
-/* Bars that grow, and figures that count up, once, when they scroll into view.
+/* Bars that grow once, when they arrive on screen. The figures never move.
 
-   The home page's gap band did this inline first and this is the same contract,
-   made shareable so the second and third figure to need it do not each grow
-   their own copy:
+   Run 34 (part 6b of docs/UX-MOTION-AUDIT.md) rewrote this under the motion
+   rules: a figure is never shown at a value it does not have, so nothing
+   counts up any more (the old count ran every euro from zero, and the page
+   retargeted it on each slider move); only the bars grow, once, from empty
+   to their true size.
 
-     THE MARKUP CARRIES THE FINISHED PICTURE. Every bar's height or width is in
-     its own `--h` (and `--from`, where a segment starts part of the way up),
-     and every figure is written out in full. A reader with no JavaScript, or
-     with reduced motion, or on a browser without IntersectionObserver, gets
-     the chart as written and never sees a zero. That is why this file ARMS the
-     figure (heights to nothing, figures to zero) rather than the stylesheet
-     starting it empty: nothing can leave a reader looking at an empty chart
-     except a script that has already decided it can fill it again.
+     THE MARKUP CARRIES THE FINISHED PICTURE. Every bar's size and every
+     figure are in the markup. A reader with no JavaScript, with reduced
+     motion, or on a browser without IntersectionObserver gets the chart as
+     written. A chart already on screen when the script runs is left as it
+     is; one below the fold is armed (its bars emptied, in one frame, before
+     it can be seen) and takes .pb-go on arrival, and the page's own CSS
+     grows the bars on transform.
 
-     THE COUNT IS THE CALCULATORS' DISPLAY ENGINE. Each frame closes a fixed
-     fraction of what is left, `cur += (target - cur) * 0.16`, the same easing
-     the five calculators use for every figure they tween, so a number moves
-     the same way everywhere on the site.
+     ARRIVAL is the motion system's: the chart fully on screen, or 300ms
+     after any of it first shows, whichever comes first. It runs once.
 
-     IT RUNS ONCE. A figure that re-counts every time it scrolls past reads as
-     a toy. The observer disconnects on the first hit, and a timer covers the
-     band that was already past the fold when the observer attached.
-
-   A figure opts in with data-pb-bars on its container; the numbers inside it
-   are the elements carrying data-pb-count. The container is what takes the
-   .pb-armed and .pb-go classes, so the CSS that animates it is the page's own.
-
-   window.PBBars exposes the same two pieces to a page that has its own figures
-   to drive, so the easing and the once-on-scroll rule live here and not in
-   three page scripts: countTo(el, target, fmt) retargets a running count the
-   way the calculators' tween() does, and whenSeen(el, fn) runs fn the first
-   time el is on screen. A page that uses them is responsible for its own
-   static fallback, exactly as above. */
+   A chart opts in with data-pb-bars on its container, which is what takes
+   .pb-armed and .pb-go. window.PBBars.whenSeen(el, fn) runs fn once, on
+   el's arrival, for a page with its own picture to start. */
 (function (root) {
   var REDUCE = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var LIVE = !REDUCE && ('IntersectionObserver' in root) && ('requestAnimationFrame' in root);
@@ -40,70 +28,27 @@
     return '€' + Math.round(v).toLocaleString('en-IE');
   }
 
-  /* One record per element, so a second call while a count is still running
-     retargets it rather than starting a second loop against the first. */
-  var anims = [];
-  var rafId = null;
-
-  function step() {
-    var active = false;
-    anims.forEach(function (a) {
-      var d = a.target - a.cur;
-      /* the calculators' own stop condition: within 0.6 of the target, or
-         within 0.04% of it, whichever is looser */
-      if (Math.abs(d) > Math.max(0.6, Math.abs(a.target) * 0.0004)) {
-        a.cur += d * 0.16;
-        active = true;
-      } else {
-        a.cur = a.target;
-      }
-      a.el.textContent = a.fmt(a.cur);
-    });
-    rafId = active ? requestAnimationFrame(step) : null;
-  }
-
-  function countTo(el, target, fmt, from) {
-    var rec = null;
-    for (var i = 0; i < anims.length; i++) if (anims[i].el === el) rec = anims[i];
-    if (!rec) {
-      rec = { el: el, cur: typeof from === 'number' ? from : target, fmt: fmt || euro };
-      anims.push(rec);
-    }
-    rec.target = target;
-    if (fmt) rec.fmt = fmt;
-    if (typeof from === 'number') rec.cur = from;
-    if (!LIVE) {
-      rec.cur = target;
-      rec.el.textContent = rec.fmt(target);
-      return;
-    }
-    if (!rafId) rafId = requestAnimationFrame(step);
-  }
-
   function whenSeen(el, fn) {
     if (!LIVE) return;
-    var done = false;
-    function go() { if (!done) { done = true; fn(); } }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); go(); } });
-    }, { threshold: 0.3 });
+    var done = false, t = 0, io;
+    function go() { if (!done) { done = true; clearTimeout(t); io.disconnect(); fn(); } }
+    io = new IntersectionObserver(function (entries) {
+      var e = entries[entries.length - 1];
+      if (e.intersectionRatio >= 0.99) go();
+      else if (e.isIntersecting && !t) t = setTimeout(go, 300);
+    }, { threshold: [0, 1] });
     io.observe(el);
-    /* never leave a figure at zero: a band already past the fold when the
-       observer attached, or a browser that never fires it */
-    setTimeout(function () {
-      var r = el.getBoundingClientRect();
-      if (r.top < root.innerHeight && r.bottom > 0) go();
-    }, 1200);
+  }
+
+  function onScreen(el) {
+    var r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < root.innerHeight;
   }
 
   function drive(el) {
-    var nums = [].slice.call(el.querySelectorAll('[data-pb-count]'));
+    if (onScreen(el)) return;          // already in view: it stays as written
     el.classList.add('pb-armed');
-    nums.forEach(function (n) { n.textContent = euro(0); });
-    whenSeen(el, function () {
-      el.classList.add('pb-go');
-      nums.forEach(function (n) { countTo(n, +n.getAttribute('data-pb-count'), euro, 0); });
-    });
+    whenSeen(el, function () { el.classList.add('pb-go'); });
   }
 
   function start() {
@@ -111,7 +56,7 @@
     [].slice.call(document.querySelectorAll('[data-pb-bars]')).forEach(drive);
   }
 
-  root.PBBars = { countTo: countTo, whenSeen: whenSeen, euro: euro, live: LIVE };
+  root.PBBars = { whenSeen: whenSeen, euro: euro, live: LIVE };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', start);

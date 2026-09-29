@@ -117,7 +117,7 @@
   function showBar() {
     if (bar) return bar;
     bar = document.createElement('div'); bar.className = 'pb-consent'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Cookie choice');
-    bar.innerHTML = '<p>May we use a little analytics? <a href="privacy.html">Privacy Notice</a></p><button type="button" class="pb-c-yes">That’s fine</button><button type="button" class="pb-c-no">No thanks</button>';
+    bar.innerHTML = '<p>May we use a little analytics? <a href="privacy.html#cookies">Privacy Notice</a></p><button type="button" class="pb-c-yes">That’s fine</button><button type="button" class="pb-c-no">No thanks</button>';
     document.body.appendChild(bar);
     fit(); window.addEventListener('resize', fit);   // measured first, so Ask Buddy moves once
     document.body.classList.add('pb-banner-open');

@@ -28,5 +28,7 @@
 .dr-out h3{margin:0 0 10px}
 .dr-out h3:focus{outline:none}
 .dr-out ul{margin:0 0 12px;padding-left:20px}
+/* Run 34 (part 4d): the list follows the not-advice line and its reason to book */
+.dr-out .pb-why + ul{margin-top:16px}
 .dr-out li{margin:0 0 10px;font-size:.98rem;line-height:1.55;color:var(--ink)}
 .dr-out li a{color:var(--teal-700);font-weight:600}

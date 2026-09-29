@@ -42,15 +42,23 @@ the regulator and QFA line; on a phone that line, and the review line, are
 drawn under the small label above the page's heading, their words
 unchanged (questions 1.14 and 1.17).
 
-Updated 29 September 2026: the home page shows the logos of the six
+Updated 29 September 2026: the typefaces are served from the site itself,
+so no visit sends anything to Google for them (question 1.17); the cookie
+bar's "Privacy Notice" opens at its Cookies section (1.17); and search
+results and share pictures, with fourteen search lines shortened
+(question 1.20). Built overnight on a branch, reviewed, and put live the
+same day as the next paragraph's changes.
+
+And again, 29 September 2026: the home page shows the logos of the six
 product providers we hold agencies with, under its opening section, the
 hero (Damian confirmed that day that written permission is held for each
 provider's logo); "Damian's qualifications and memberships", the Qualified
 Financial Adviser (QFA) designation and the Life Insurance Association
-(LIA), is at the end of the home page's story, under Damian's own section,
-beside the booking form and in the footer of every page but the two games';
-and two cards for the jargon buster games follow the home page's gap chart
-(question 1.19, sections 6.3 and 7, Appendix B.18 to B.20).
+(LIA), is under Damian's own section of the home page, beside the booking
+form and in the footer of every page but the two games' (for a few hours
+that day it was also at the end of the home page's story); and two cards
+for the jargon buster games follow the home page's gap chart (question
+1.19, sections 6.3 and 7, Appendix B.18 to B.20).
 
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
@@ -369,7 +377,7 @@ cap at all. None is stated now.
 What the site does now: the cookie bar every page has carried, unused
 until an analytics service was chosen, now appears on a visitor's
 first page: "May we use a little analytics? Privacy Notice" (the words
-"Privacy Notice" link to it), with the buttons "That's fine" and "No
+"Privacy Notice" link to its Cookies section), with the buttons "That's fine" and "No
 thanks", side by side and the same width on a phone. (Until 28 September
 2026 it read "We'd like to use a little analytics to see how the site is
 used — nothing for ads, never sold. You choose. See our Privacy Notice.";
@@ -408,10 +416,12 @@ describes analytics identifiers fairly; (e) whether the two buttons need
 equal weight: "That's fine" is a filled button and "No thanks" an outlined
 one, as they were designed. (Its fill was changed from the page's accent
 colour to cream, because dark text on the accent failed the contrast
-minimum on every page.) Separately, and unchanged: every page loads its
-typeface from Google Fonts before any choice, which sends the visitor's IP
-address to Google; it is not analytics, but it could be served from the
-site itself instead.
+minimum on every page.) Separately: until Run 34 every page loaded its
+typeface from Google Fonts before any choice, which sent the visitor's IP
+address to Google. The typefaces (Inter, and Schibsted Grotesk for the
+footer's name) are now served from the site itself, under their open
+licence, so loading them sends nothing to Google. The Privacy Notice never
+mentioned Google Fonts, so it is unchanged.
 
 1.18 Directors: three statements in the Pensions Manual's words
 ---------------------------------------------------------------
@@ -484,16 +494,17 @@ Aviva, New Ireland, Royal London and Standard Life, fully grey until a
 visitor points at one. It moves slowly, with a Pause button, and stands
 still for a visitor who asks for less motion or has JavaScript off. Each
 logo is the one published on the provider's own website (the sources are
-in Appendix B.18), trimmed, nothing redrawn. Damian confirmed on 29
+in Appendix B.18), trimmed, nothing redrawn, and drawn at a height chosen
+by eye so that none looks heavier or smaller than the others. Damian confirmed on 29
 September 2026 that written permission is held for every provider logo.
 The wording is "Providers we hold agencies with", never "partners" or "we
 work with": an agency is the fact.
 
 (b) "Damian's qualifications and memberships", then "Qualified Financial
-Adviser (QFA)" and "Life Insurance Association (LIA)", in text, at the end
-of the home page's story, under Damian's own section of that page, beside
-the booking form, and in small type in the footer of every page except
-the two games' own pages. No body's logo is shown.
+Adviser (QFA)" and "Life Insurance Association (LIA)", in text, under
+Damian's own section of the home page, beside the booking form, and in
+small type in the footer of every page except the two games' own pages. No
+body's logo is shown.
 
 (c) After the home page's gap chart (its first section after the hero),
 "Just here to learn? Play the jargon buster.", with a card for each of the
@@ -520,6 +531,111 @@ current member of the LIA); and how the LIA wishes to be named (its website
 now calls it "LIA", and its history page "Life Insurance Association
 Ireland"; the site says "Life Insurance Association (LIA)", as it already
 did in the gap chart's source line).
+
+1.20 Search results and share pictures (Run 34)
+----------------------------------------------
+
+What the site does now (since 29 September 2026; built on a branch as Run 34):
+every page tells search engines its one address, and, when a link to it
+is shared, shows a title, a description and a picture. The title and
+description are the page's own, as they appear in a search result. The
+picture, for the home page and the six pages for an audience (starters,
+old pensions, company directors, over 50, self-employed, worked in the
+UK), is a new card, 1200 by 630: the Pensionbuddy logo, the page's small
+label and its headline, word for word as the page shows them, then
+"pensionbuddy.ie" and "Regulated by the Central Bank of Ireland", as the
+announcement bar at the top of every page says it. No figures. Every other
+page shows the paw mark, as before. For search engines, the home page also
+describes the business in the footer's own words ("Pensionbuddy is a
+trading name of Damian Condon T/A Gresham Wealth Management, which is
+regulated by the Central Bank of Ireland.", the registered office and
+hello@pensionbuddy.ie), and every other page names itself under Home.
+
+Fourteen search titles and descriptions were over the length a search
+result shows, and were shortened, each only by taking words out of the
+approved text (one "and" joins two kept phrases on the director rules
+page):
+
+- index.html, description: "Pensions made friendly. Understand and grow
+  your pension over a relaxed, jargon-free chat. Regulated by the Central
+  Bank of Ireland." (was "Pensions made friendly. Understand and grow your
+  pension over a relaxed, jargon-free chat. A brand of Gresham Wealth
+  Management, regulated by the Central Bank of Ireland.")
+- director.html, description: "How company directors can fund a pension
+  through their business and cut corporation tax. Free plain-English
+  consultation with a QFA." (was "How company directors can fund a pension
+  through their business, fund beyond personal limits and cut corporation
+  tax. Free plain-English consultation with a QFA.")
+- terms.html, description: "Who we are, what we do, and how we are paid.
+  Terms of Business for Damian Condon T/A Gresham Wealth Management,
+  regulated by the Central Bank of Ireland." (was "Who we are, what we do,
+  and how we are paid. Plain-English Terms of Business for Damian Condon
+  T/A Gresham Wealth Management, regulated by the Central Bank of
+  Ireland.")
+- pensions-over-50.html, title: "Pensions after 50, Pensionbuddy" (was
+  "Pensions after 50: catching up, taking benefits early, and what comes
+  after, Pensionbuddy")
+- pensions-over-50.html, description: "Higher tax relief limits from 50,
+  when some pensions can be taken early, and the choice between an ARF and
+  an annuity. Rules as at September 2026." (was "Higher tax relief limits
+  from 50, when some pensions can be taken early and what that costs, and
+  the choice between an ARF and an annuity. Rules as at September 2026.")
+- uk-pensions-in-ireland.html, description: "Moving a UK pension to
+  Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how
+  Ireland taxes UK pensions. Rules as at September 2026." (was "Moving a
+  UK workplace or personal pension to Ireland, the 25% Overseas Transfer
+  Charge, the UK State Pension, and how Ireland taxes UK pensions. Rules
+  as at September 2026.")
+- broker-vs-autoenrolment.html, description: "Compare what goes into your
+  pension under My Future Fund auto-enrolment against a personal pension
+  through a broker. An illustration, not advice." (was "Compare what goes
+  into your pension under My Future Fund auto-enrolment against a personal
+  pension arranged through a broker, for your own salary and age. An
+  illustration, not advice.")
+- state-pension-entitlement.html, description: "What the State Pension
+  would pay, worked out both ways the Department does until the end of
+  2033, and which one is paid. An illustration, not advice." (was "What
+  the State Pension (Contributory) would actually pay, worked out both
+  ways the Department does until the end of 2033, and which one is paid.
+  An illustration, not advice.")
+- director-pension-rules.html, description: "What changed for company
+  directors: executive pensions set up before April 2021, and a company's
+  payments into a PRSA. Information, not advice." (was "What changed for
+  company directors: executive pensions set up before April 2021, a
+  company's payments into a PRSA, the October window and the Standard Fund
+  Threshold. Rules as at September 2026. Information, not advice.")
+- standard-fund-threshold.html, title: "The Standard Fund Threshold,
+  Pensionbuddy" (was "The Standard Fund Threshold, and how much of it you
+  would use, Pensionbuddy")
+- standard-fund-threshold.html, description: "The Standard Fund Threshold,
+  how much of it your pensions would use, and how a retirement lump sum is
+  taxed. An illustration, not advice." (was "The Standard Fund Threshold
+  from 2026 to 2029 and after, how much of it your pensions would use in
+  the year you take them, and how a retirement lump sum is taxed. Rules as
+  at September 2026. An illustration, not advice.")
+- pension-fees-calculator.html, description: "What an annual management
+  charge and a charge on each payment take out of a pension pot by
+  retirement. An illustration, not advice." (was "What an annual
+  management charge and a charge on each payment take out of a pension pot
+  by retirement, next to another plan's charges. An illustration, not
+  advice.")
+- pia.html, title: "The new Personal Investment Account (PIA),
+  Pensionbuddy" (was "The new Personal Investment Account (PIA), next to a
+  pension, Pensionbuddy")
+- pia.html, description: "The proposed Personal Investment Account, and
+  the same take-home cost in a pension, the PIA and an ETF. Not yet law.
+  An illustration, not advice." (was "The proposed Personal Investment
+  Account, as at 25 September 2026: what is confirmed, what Budget 2027
+  announces on 6 October, and the same take-home cost in a pension, the
+  PIA and an ETF. Proposed, not yet law. An illustration, not advice.")
+
+What we need: (a) whether a share card is an advertisement that must
+carry the full regulatory disclosure, the footer's sentence, rather than
+"Regulated by the Central Bank of Ireland"; (b) approval of the fourteen
+shortened lines; (c) the over-50 card's headline is "Pensions after 50:
+catching up, taking benefits early, and what comes after": the 50 is an
+age, not a figure, but it is the one number on any card.
+
 
 2. The Letter of Authority, full wording
 ========================================
@@ -2812,7 +2928,8 @@ Providers we hold agencies with
 
 Then six logos, in this order, each named to a screen reader by the
 provider's name: Zurich, Irish Life, Aviva, New Ireland, Royal London,
-Standard Life. Beside the label, a button: "Pause" ("Play" once paused),
+Standard Life. Each is drawn at a height chosen by eye, so that none looks
+heavier or smaller than the others. Beside the label, a button: "Pause" ("Play" once paused),
 which a screen reader hears as "Pause the provider logos" ("Play the
 provider logos").
 
@@ -2848,10 +2965,11 @@ Damian’s qualifications and memberships
 Qualified Financial Adviser (QFA)
 Life Insurance Association (LIA)
 
-At the end of the home page's story ("Our story"), under Damian's own
-section of the home page, beside the booking form, and in small type in
-the footer of every page except the two games' own pages. Text only: no
-body's logo is shown.
+Under Damian's own section of the home page, beside the booking form, and
+in small type in the footer of every page except the two games' own pages.
+Text only: no body's logo is shown. (For a few hours on 29 September 2026
+it was also at the end of the home page's story; Damian had it taken off
+the same day.)
 
 B.20 Home page: "Just here to learn?"
 -------------------------------------
