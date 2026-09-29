@@ -25,6 +25,21 @@ keys on the filename it is served under.
 Writes assets/img/product-<name>.jpg and .webp (Pillow). Re-run after any
 change to a calculator's interface, then tools/stamp-images.py so the URLs
 that reference the files pick up the new bytes.
+
+THE GAMES (Run 35), for the home page's "Just here to learn?" cards, are
+shot the same way: the real page, at 1200 CSS pixels and a device scale of
+2, cropped to the game. In a frame the games take the layout the glossary's
+arcade shows (their embedded mode), so the frame is 1200x675, the arcade's
+16:9. A game has to be mid-game, so each shot has a `prepare` script, run
+in the page once its fonts have loaded, that plays it through the game's
+own API and buttons with a fixed random seed, so every run draws the same
+frame: Buddy's Run is played by a simple autopilot (jump when an excuse is
+close) until Buddy is at the top of a jump over an excuse, with all three
+lives, a score on the board and the two Poolbeg stacks on the far shore
+(found by their red, #C1502E, in the canvas); Jargon Battle answers three
+terms, two right and one wrong, and stops on the fourth question. Nothing
+is drawn by this tool: the frames are the games' own. Re-run after any
+change to a game's look.
 """
 import io
 import json
@@ -61,6 +76,86 @@ SHOTS = {
                                 'hide': '.chart-card,#pbMyCard,#riskCard,.cta-card,.waitcard.lead .phaseline{display:none!important}'},
     'state-pension-reality-check': {'page': 'state-pension-reality-check.html', 'target': '.calc-wrap', 'hide': ''},
     'state-pension-entitlement': {'page': 'state-pension-entitlement.html', 'target': '.calc-wrap', 'hide': ''},
+    # Run 35: the two games, mid-game (see THE GAMES above). The stage keeps
+    # the Jump button a player sees in its corner; the game's own header and
+    # footer are outside the crop.
+    'buddys-run': {'page': 'games/buddys-run.html', 'target': '#stage', 'hide': '', 'prepare': 'RUN', 'frame': 675},
+    'jargon-battle': {'page': 'games/jargon-battle.html', 'target': '#game', 'hide': '', 'prepare': 'BATTLE', 'frame': 675},
+}
+
+# A seeded random source for the games (mulberry32), so a shot is the same
+# frame every time it is taken.
+SEEDED = ('function pbSeed(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);'
+          't=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}')
+
+PREPARE = {
+    # Buddy's Run: play from the start button with a simple autopilot, at the
+    # game's own fixed step, until the frame has an excuse and a benefit on
+    # screen, Buddy in the air, and the Poolbeg stacks on the far shore; then
+    # draw it, and let the game's own pause and resume write the scoreboard.
+    'RUN': SEEDED + r'''
+(function(){
+  var B=window.BuddysRun, W=640, cv=document.getElementById('game');
+  B.setRng(pbSeed(20260929));
+  document.getElementById('startBtn').click();
+  function stacks(){
+    B._render();
+    var k=cv.width/W, c=cv.getContext('2d'), y0=Math.round(130*k), h=Math.round(55*k);
+    var d=c.getImageData(0,y0,cv.width,h).data, on={}, p, x;
+    for(p=0;p<d.length;p+=4){ if(Math.abs(d[p]-193)<8&&Math.abs(d[p+1]-80)<8&&Math.abs(d[p+2]-46)<8){ on[Math.floor(((p/4)%cv.width)/k)]=1; } }
+    var xs=Object.keys(on).map(Number).sort(function(a,b){return a-b;}), runs=[], s=null, q=null;
+    xs.forEach(function(v){ if(s===null||v>q+2){ if(s!==null)runs.push([s,q]); s=v; } q=v; });
+    if(s!==null)runs.push([s,q]);
+    return runs.filter(function(r){return r[0]>2&&r[1]<W-3&&r[1]-r[0]>=5;}).length>=2;
+  }
+  var held=false, n, st, hb, over;
+  for(n=0;n<9000;n++){
+    st=B.state(); if(st.phase==='paused'){ B.resume(); st=B.state(); }
+    if(st.phase!=='running') break;
+    hb=B.buddyHit();
+    var threat=st.labels.some(function(l){ var gap=l.x-(hb.x+hb.w);
+      return l.kind==='bad' && !l.spent && gap>0 && gap<st.speed*0.068+10; });
+    if(threat&&st.buddy.onGround){ B.jump(); held=true; }
+    if(held&&st.buddy.onGround&&st.buddy.vy===0&&!threat){ B.releaseJump(); held=false; }
+    B.tick(1/120);
+    if(n<900) continue;
+    /* the frame: at the top of a jump, over an excuse that is whole on
+       screen, all three lives, a score on the board, and the stacks there */
+    st=B.state(); hb=B.buddyHit();
+    over=st.labels.some(function(l){ var cx=hb.x+hb.w/2;
+      return l.kind==='bad' && l.x>8 && l.x+l.w<W-8 && l.x<cx && l.x+l.w>cx; });
+    if(over&&!st.buddy.onGround&&st.buddy.vy>=0&&st.lives===3&&st.score>=30&&stacks()) break;
+  }
+  B.releaseJump();
+  document.getElementById('pauseBtn').click();
+  document.getElementById('resumeBtn').click();
+  B._render();
+  if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
+  st=B.state();
+  return {steps:n, seconds:Math.round(n/120*10)/10, score:st.score, lives:st.lives, stacks:stacks(),
+          labels:st.labels.map(function(l){return l.kind+':'+l.text;})};
+})()''',
+    # Jargon Battle: start, then answer three terms through the page's own
+    # buttons, right, right and wrong, let the paper ball land, and stop on
+    # the fourth question with its four answers showing.
+    'BATTLE': SEEDED + r'''
+(function(){
+  var J=window.JargonBattle, opts=document.querySelectorAll('#menu .opt');
+  J.setRng(pbSeed(20260929));
+  document.getElementById('startBtn').click();
+  document.getElementById('nextBtn').click();
+  [true,true,false].forEach(function(right){
+    var ci=J.state().current.correctIndex;
+    opts[right?ci:(ci+1)%4].click();
+    for(var t=0;t<40;t++) J.tick(0.05);
+    document.getElementById('nextBtn').click();
+  });
+  for(var t=0;t<40;t++) J.tick(0.05);
+  window.dispatchEvent(new Event('resize'));
+  if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
+  var s=J.state();
+  return {question:s.index+1, of:s.total, blobHp:s.blobHp, hearts:s.hearts, term:s.current&&s.current.term};
+})()''',
 }
 
 HIDE = ('nav,footer,.announce,.skip,.phead,.deadline,#deadlineBand,.assume,section,'
@@ -84,16 +179,23 @@ SETTLE = ('html{scroll-behavior:auto}'
 
 WRAP = """<!doctype html><html><head><meta charset="utf-8"></head>
 <body style="margin:0;background:#FAFAF9">
-<iframe id="f" src="/__product-%(page)s" style="width:%(w)dpx;height:1800px;border:0;display:block"></iframe>
+<iframe id="f" src="/%(served)s" style="width:%(w)dpx;height:%(frame)dpx;border:0;display:block"></iframe>
 <script>
 var f=document.getElementById('f');
 f.addEventListener('load',function(){
   var d=f.contentDocument, s=d.createElement('style'); s.textContent=%(css)s; d.head.appendChild(s);
   d.documentElement.classList.remove('pb-preveil');
-  (d.fonts?d.fonts.ready:Promise.resolve()).then(function(){ setTimeout(function(){
+  (d.fonts?d.fonts.ready:Promise.resolve()).then(function(){
+    var info=null, prep=%(prepare)s;
+    if(prep){ try{ info=f.contentWindow.eval(prep); }catch(e){ info={error:String(e)}; } }
+    /* a game focuses its own buttons as it is played, and a focused
+       button scrolls this page to it: put the page back at the top */
+    window.scrollTo(0,0);
+    setTimeout(function(){
+    window.scrollTo(0,0);
     var el=d.querySelector(%(target)s); var r=el.getBoundingClientRect();
     var pre=document.createElement('pre'); pre.id='__box';
-    pre.textContent=JSON.stringify({x:r.left,y:r.top,w:r.width,h:r.height});
+    pre.textContent=JSON.stringify({x:r.left,y:r.top,w:r.width,h:r.height,info:info});
     document.body.appendChild(pre);
   },900); });
 });
@@ -112,12 +214,17 @@ class Handler(SimpleHTTPRequestHandler):
         if path == '/__shot':
             q = dict(p.split('=', 1) for p in query.split('&') if '=' in p)
             shot = SHOTS[q['name']]
-            body = WRAP % {'page': shot['page'], 'w': WIDTH,
-                           'css': json.dumps(HIDE + SETTLE + shot.get('hide', '')), 'target': json.dumps(shot['target'])}
+            # served under another name in the page's own folder, so a game's
+            # relative URLs (../assets, buddy-sprites.js) still resolve
+            folder, _, base = shot['page'].rpartition('/')
+            body = WRAP % {'served': (folder + '/' if folder else '') + '__product-' + base, 'w': WIDTH,
+                           'frame': shot.get('frame', 1800),
+                           'css': json.dumps(HIDE + SETTLE + shot.get('hide', '')), 'target': json.dumps(shot['target']),
+                           'prepare': json.dumps(PREPARE[shot['prepare']] if shot.get('prepare') else '')}
             return self._send(body.encode('utf-8'))
-        m = re.match(r'/__product-([A-Za-z0-9.-]+\.html)$', path)
+        m = re.match(r'/((?:games/)?)__product-([A-Za-z0-9.-]+\.html)$', path)
         if m:
-            t = open(os.path.join(ROOT, m.group(1)), encoding='utf-8').read()
+            t = open(os.path.join(ROOT, m.group(1) + m.group(2)), encoding='utf-8').read()
             return self._send(t.encode('utf-8'))
         return super().do_GET()
 
@@ -164,8 +271,9 @@ def shoot(name, port):
     stem = os.path.join(OUT_DIR, 'product-' + name)
     im.save(stem + '.jpg', 'JPEG', quality=82, optimize=True, progressive=True)
     im.save(stem + '.webp', 'WEBP', quality=76, method=6)
-    print('%-22s %dx%d  jpg %dKB  webp %dKB' % (name, im.width, im.height,
-          os.path.getsize(stem + '.jpg') // 1024, os.path.getsize(stem + '.webp') // 1024))
+    print('%-22s %dx%d  jpg %dKB  webp %dKB%s' % (name, im.width, im.height,
+          os.path.getsize(stem + '.jpg') // 1024, os.path.getsize(stem + '.webp') // 1024,
+          '  ' + json.dumps(box['info']) if box.get('info') else ''))
 
 
 def main():

@@ -1283,6 +1283,28 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}
 .pb-prov-ns-list li:hover img{filter:none;opacity:1}
 @media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:28px}}
+/* Run 35: "Just here to learn?", straight after the first section. The two
+   games, each a still photograph of the real game mid-play, shot by
+   tools/shoot-product.py like the calculators' pictures, then a line and a
+   play link. Static: nothing moves, nothing is rewarded; the whole card is
+   the play link's, and only colours change under the pointer. */
+.pb-learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
+.pb-learn-grid li{margin:0}
+.pb-learn-card{position:relative;display:flex;flex-direction:column;height:100%;background:var(--surface);
+  border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+.pb-learn-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-learn-card:has(.pb-learn-play:focus-visible){box-shadow:0 0 0 4px var(--ring)}
+.pb-learn-card picture{display:block;border-bottom:1px solid var(--line-2)}
+.pb-learn-card img{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.pb-learn-body{display:flex;flex-direction:column;gap:6px;padding:20px 22px 16px}
+.pb-learn-card h3{margin:0}
+.pb-learn-card .pb-learn-d{margin:0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.pb-learn-play{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:44px;margin-top:4px;
+  font-weight:600;color:var(--teal-700)}
+.pb-learn-play::after{content:"";position:absolute;inset:0}
+.pb-learn-play:focus-visible{outline:none}
+.pb-learn-play svg{width:16px;height:16px}
+@media(max-width:760px){.pb-learn-grid{grid-template-columns:1fr;gap:18px}}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -2314,6 +2336,33 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    </p>
   </div>
 </section>
+
+<!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
+     (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
+<section class="pb-learn" id="learn"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Learn it the fun way</span>
+    <h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>
+  </div>
+  <ul class="pb-learn-grid">
+    <li><div class="pb-learn-card">
+      <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=7e95dc00"><img src="assets/img/product-buddys-run.jpg?v=2ad843e4" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
+      <div class="pb-learn-body">
+        <h3>Buddy&rsquo;s Run</h3>
+        <p class="pb-learn-d">Collect the benefits, jump the excuses.</p>
+        <a class="pb-learn-play" href="games/buddys-run.html">Play Buddy&rsquo;s Run <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+    <li><div class="pb-learn-card">
+      <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=15711596"><img src="assets/img/product-jargon-battle.jpg?v=8678835e" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+      <div class="pb-learn-body">
+        <h3>Jargon Battle</h3>
+        <p class="pb-learn-d">Pick the right meaning to bust the Jargon Blob.</p>
+        <a class="pb-learn-play" href="games/jargon-battle.html">Play Jargon Battle <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+  </ul>
+</div></section>
 
 <section id="calc" class="pb-bleed pb-dark pb-product"><div class="wrap calc-grid">
   <div class="calc-copy">
