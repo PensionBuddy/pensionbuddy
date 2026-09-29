@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 28 September 2026, after Run 33 (the cookie bar on a phone)
+# Launch status — as at 29 September 2026, after Run 35 (provider logos, qualifications, the games on the home page)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -32,6 +32,15 @@ here.
 any drift as a site row. The seven lead forms post to Netlify Forms, with a
 pre-filled email as the fallback; `hello@pensionbuddy.ie` is a real inbox
 and in every footer.
+
+Since Run 35 (29 September 2026) the home page shows the six provider logos
+under its hero ("Providers we hold agencies with", switched on once Damian
+confirmed that written permission is held for every logo; the files are
+the logos on the providers' own websites) and two cards for the games after
+its gap chart, and "Damian's qualifications and memberships" (Qualified
+Financial Adviser (QFA), Life Insurance Association (LIA)) is at the end of
+the story, under Damian's section, beside the booking form and in the
+footer of every page but the two games' own.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -74,9 +83,15 @@ and `404.html`. `about.html` does not exist: it was folded into
 5. **About.** The brief asked to add `about.html` to the sitemap; there is no
    such page (see above), so it was not added. Say if you want a standalone
    About page again.
-6. **Run 29:** the provider ticker is built and switched off until each
-   provider's written permission is in and the agencies on How we work are
-   filled in (R29-1, R29-2). R29-3 to R29-9 were answered in Run 30.
+6. **Run 35:** the provider ticker is on. R29-1: Damian confirmed on 29
+   September 2026 that written permission is held for every provider logo;
+   the files are the providers' logos as published on their own websites,
+   not files the providers sent, and compliance is asked whether the
+   permissions cover showing them in grey (pack 1.19). Still open: its six
+   names must match the agencies How we work names when that page is
+   released (R29-2, now R35-1; the brief switched the ticker on first). Also from Run 35: Zurich's logo is
+   a low-resolution web image (R35-2), and the smaller calls R35-3 to
+   R35-10 below, none blocking. R29-3 to R29-9 were answered in Run 30.
 7. **Run 30's calls** were answered in Run 31 (below).
 8. **Smaller calls, none blocking:** the review line spells out QFA (Run
    26); the initialism exceptions (UK, KPMG, CEO, CMO, B.A., HM, PDF, the
@@ -90,6 +105,17 @@ and `404.html`. `about.html` does not exist: it was folded into
 
 ## Parked, with a date or a trigger
 
+- **Any change to a game's look: its picture on the home page.**
+  `assets/img/product-buddys-run.*` and `product-jargon-battle.*` are
+  photographs of the games mid-play, like the calculators' pictures, so a
+  change to a game does not reach them. Re-shoot:
+  `python3 tools/shoot-product.py buddys-run jargon-battle`, then
+  `python3 tools/stamp-images.py` (the size stays 2400x1350; check it).
+- **A new or better logo file.** `python3 tools/logos.py <folder>
+  <name>=<file>` writes it into `assets/logos/` and proves it is the
+  provider's own artwork; then its entry in `assets/js/pb-providers.js`
+  and the `<noscript>` row in `index.html` (`tests/providers.test.py`
+  says what width and height they need).
 - **1 October 2026, the director calculator's photograph.**
   `assets/img/product-director-calculator.*` (on `director.html` and in
   the home page's tool tabs) shows PRSI at 4.2%, EUR 19,120 and EUR 9,560;
@@ -137,6 +163,15 @@ and `404.html`. `about.html` does not exist: it was folded into
   the pages dated "Rules as at 24 September 2026" (SFT, directors' rules)
   and the over-50s and self-employed guides, and the UK page after the UK
   Budget; move "Last reviewed September 2026" on the pages that change.
+
+## Closed in Run 35 (the logos, the strip and the games, merged to main on 29 September)
+
+R29-1, as far as it can be: Damian confirmed on 29 September 2026 that
+written permission is held for every provider logo, and the ticker is on,
+with each provider's logo as published on its own website. The home page
+also gains Damian's qualifications and memberships and the two games'
+cards; the strip is beside the booking form and in the footer of every
+page but the two games' own. Details: Run 35, below.
 
 ## Closed in Run 33 (the cookie bar on a phone, merged to main on 28 September)
 
@@ -211,6 +246,207 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 35 — 2026-09-29 · The provider logos on, Damian's qualifications and memberships, the games on the home page
+
+Damian's brief: branch `claude/trust-logos-games` off `main` (`669becc`),
+fast mode, locked rules, the gate before each item, merge and push `main` at
+the end. Four items: sort the logo folder; switch the provider ticker on
+with the real logos; a strip of Damian's qualifications and professional
+bodies; a "Just here to learn?" section for the games. The new copy and the
+logo list go into `docs/COMPLIANCE-PACK.md` (question 1.19, Appendix B.18
+to B.20). Run 34 (`claude/overnight-3`) is pushed but not merged, so this
+run is 35, and its build checks are 31 and 32 (29 and 30 are that
+branch's).
+
+## Recorded, 29 September 2026
+
+- **Damian confirms: written permission is held for every provider logo
+  and every qualification or professional body logo in `incoming-logos/`.**
+- There was no `incoming-logos/` folder on this Mac. The only logo files
+  were in `~/Downloads/PensionBuddy_Provider_Logos`: 22 files, provider
+  logos only (the list is below). Asked, Damian confirmed the same day that
+  his permission covers that folder, and that only the six providers
+  already on the ticker go live. The other seven brands in it are not on
+  the agency list and are not on the site; the folder's own README calls
+  its files sourced from the providers' websites and "not a grant of
+  brand-use permission", which is why the question was asked.
+- The folder held no qualification or professional-body logo. The
+  question put to Damian said the site named one qualification, the QFA;
+  the portrait on the home page also carries a badge, "B.A., Q.F.A." (R35-6).
+  Asked what the strip should show, Damian answered: the LIA as well. So
+  the strip is text: "Qualified Financial Adviser (QFA)" and "Life
+  Insurance Association (LIA)".
+- No Central Bank of Ireland logo was in the folder, so none was skipped
+  and none is used anywhere.
+
+## Items
+
+| # | Item | Result | Commit |
+|---|---|---|---|
+| 1 | Sort the folder | done. Every file listed below. The six ticker providers' logos are in `assets/logos/`, made by `tools/logos.py` (new): the four SVGs (Irish Life, Aviva, Royal London, Standard Life) lose their editor leftovers, keep their paths (numbers to three decimals) and have their viewBox trimmed to the artwork; the two PNGs (Zurich, New Ireland) are lossless WebP, trimmed to their visible pixels, New Ireland also scaled down from 5,691px tall to 120px (three times the height it is drawn at) and Zurich kept at its own 34px. All one height: every SVG 40px tall, and every logo drawn at one height on the page. Proved to be the providers' artwork, unchanged: every SVG coordinate within 0.0005 of the original's (Aviva and Royal London exactly), and drawn at four times the size over the whole of the original, the two differ by more than an eighth, in any of red, green and blue, on at most 60 of 142,870 pixels (Standard Life's edges); six faults put in on purpose were caught (see the review). **Flagged:** Zurich's file is low resolution (R35-2); New Ireland's is its round crest (R35-3). | `e877f77` |
+| 2 | Provider ticker, on | done. `assets/js/pb-providers.js`: `ON` true, each provider with its logo file and size; the label is still "Providers we hold agencies with". The logos are 32px tall (28px on a phone), fully greyscale at 72% opacity until the pointer is on one, when it shows its own colours; hovering pauses the strip and the Pause button stops it, as before. The button's name now changes with its word ("Pause the provider logos", "Play the provider logos"), with no aria-pressed: it said "Pause the provider logos" while showing "Play" (WCAG 2.5.3, found in the pre-merge review). Reduced motion: a still, centred row (one line from 1200px). Without JavaScript: the same row, still, from a `<noscript>` straight after the mount, held to the same list by the test. Under the hero, where the mount already was; built at the page's foot, with no layout shift, because the hero ends below the first screen at every size measured (1,325 to 1,447px down at 375x812, 390x844, 768x1024, 1280x720, 1440x900, 1920x1080). The file's comment and `index.html`'s now say the list must match How we work's agencies when that page is released. `tests/providers.test.py` rewritten for "on" (80 checks after the review, ten faults caught). | `8520e6e`, `b4d4839` |
+| 3 | Qualifications strip | done. "Damian's qualifications and memberships", then "Qualified Financial Adviser (QFA)" and "Life Insurance Association (LIA)", each by its full name, in text (no logo files exist; R35-6). In four places: the end of the home page's Our story; under Damian's section, after his signature (the locked copy of both sections is unchanged, only added to); the left-hand column beside the booking form (on a phone, straight above the form's card); and small, in the brand column of the footer of every page (the skeleton's foot-top, synced to all 29 root pages and held there by chrome_drift; the two games keep their own footer, R35-9). Static. The label says whose they are, so neither body seems to endorse Pensionbuddy, and the strip says nothing else. Styles in a new shared block, `QUALS` (`pagebuild.SHARED_CSS`). `tests/build.test.py` check 31 (eleven faults caught, two of them added in the review). | `b0e533a` |
+| 4 | "Just here to learn?" | done. On the home page, straight after the first section (the gap band), before the calculator band: "Learn it the fun way" over "Just here to learn? Play the jargon buster.", and two cards: Buddy's Run ("Collect the benefits, jump the excuses.") and Jargon Battle ("Pick the right meaning to bust the Jargon Blob."), the glossary's own lines, each with a play link to the game ("Play Buddy's Run", "Play Jargon Battle") that the whole card answers to. The pictures are real games, mid-play, photographed by `tools/shoot-product.py` like the calculators (1200px at 2x, cropped to the game; the glossary arcade's layout, 16:9): Buddy at the top of a jump over "Plenty of time", three lives, score 30, the Poolbeg stacks behind him; Jargon Battle on its fourth term, "A wild Trustee appears!", two hits landed and a heart lost. Seeded, and the game's own frame loop is held still for the shot, so the frame measured is the frame shot and a re-shoot is byte for byte the same (the first shots were not: the world scrolled on before the play began); a shot that never reaches its frame stops rather than photograph another. The section sits on the gap band's last colour (#EEF8F5), so the dark band below still fades in from it. Static: no motion, and the home page offers nothing for playing. `tests/build.test.py` check 32 (six faults caught). | `55f3c64` |
+
+## The folder (item 1)
+
+`~/Downloads/PensionBuddy_Provider_Logos`, as it was on 29 September 2026.
+"Used" means in `assets/logos/`, on the site.
+
+| File | What it is | Format | Size | Used |
+|---|---|---|---|---|
+| `README.txt` | The collection's notes: scope, outstanding providers, "not a grant of brand-use permission" | text | 2,524 B | no |
+| `index.html` | A catalogue page of the 13 brands | HTML | 5,527 B | no |
+| `preview.jpg` | Contact sheet of the 13 brands | JPEG 1400x1200 | 112,849 B | no |
+| `sources.csv` | Where each file came from, and its quality | CSV | 3,235 B | no |
+| `originals/zurich.png` | Zurich | PNG 150x45, **low resolution** | 2,492 B | yes, `zurich.webp` (145x34, 1,280 B) |
+| `originals/irish-life.svg` | Irish Life (the header SVG from irishlife.ie) | SVG 217x100 | 10,365 B | yes, `irish-life.svg` (9,260 B) |
+| `originals/aviva.svg` | Aviva | SVG 226.8x40.6 (no viewBox) | 1,543 B | yes, `aviva.svg` (1,087 B) |
+| `originals/new-ireland.png` | New Ireland, the round crest | PNG 5658x5691 | 527,793 B | yes, `new-ireland.webp` (119x120, 7,478 B) |
+| `originals/royal-london.svg` | Royal London Ireland | SVG 646.3x143.8 | 9,059 B | yes, `royal-london.svg` (8,376 B) |
+| `originals/standard-life.svg` | Standard Life | SVG 380x88 | 17,653 B | yes, `standard-life.svg` (11,566 B) |
+| `originals/davy.svg` | Davy | SVG 80x80 | 2,876 B | no: not on the agency list |
+| `originals/itc.svg` | Independent Trustee Company | SVG 400x290 | 14,550 B | no: not on the agency list |
+| `originals/newcourt.png` | Newcourt Retirement Fund Managers | PNG 2596x498 | 27,497 B | no: not on the agency list |
+| `originals/quest.png` | Quest Retirement Solutions | PNG 294x142, **low resolution** | 2,761 B | no: not on the agency list |
+| `png/aib-life-2000px.png` | AIB Life (its SVG original is not in the folder) | PNG 2000x813 | 105,166 B | no: not on the agency list |
+| `png/lifesight-2000px.png` | LifeSight by WTW (its SVG original is not in the folder) | PNG 2000x918 | 59,060 B | no: not on the agency list |
+| `png/davy-2000px.png` | Davy | PNG 2000x2000 | 68,588 B | no |
+| `png/itc-2000px.png` | Independent Trustee Company | PNG 2000x1450 | 109,698 B | no |
+| `png/aviva-2000px.png` | Aviva, a 2000px copy of the SVG | PNG 2000x358 | 42,586 B | no: the SVG is used |
+| `png/irish-life-2000px.png` | Irish Life, 2000px copy | PNG 2000x922 | 140,092 B | no: the SVG is used |
+| `png/royal-london-2000px.png` | Royal London, 2000px copy | PNG 2000x445 | 87,137 B | no: the SVG is used |
+| `png/standard-life-2000px.png` | Standard Life, 2000px copy | PNG 2000x463 | 45,587 B | no: the SVG is used |
+
+Named in the catalogue and `sources.csv` but not in the folder:
+`originals/bcwm.png` (BCWM), `originals/aib-life.svg`,
+`originals/lifesight.svg`. Not in the folder at all: any qualification or
+professional-body logo, and any Central Bank of Ireland logo.
+
+## NEEDS DAMIAN INPUT from this run
+
+- **R35-1 The ticker's list and How we work** (R29-2, still open). R29-2
+  said both should name the same providers before either went live; the
+  brief switched the ticker on first and asked for this line instead. When
+  `how-we-work.html` is released, its list of the product producers we hold
+  agencies with must name exactly these six: Zurich, Irish Life, Aviva, New
+  Ireland, Royal London, Standard Life. Change `assets/js/pb-providers.js`,
+  the `<noscript>` row in `index.html` and the page together.
+- **R35-2 Zurich's logo is low resolution**: the 150x45 image from
+  zurich.ie, 34px tall once trimmed, drawn 32px tall. Sharp enough on an
+  ordinary screen, soft on a phone's or a Mac's. The README gives Zurich's
+  logo library (blueroom.zurich.com); an SVG from there goes in with
+  `tools/logos.py`. More generally, R29-1 asked for the logo files from
+  each provider: these are the logos from their websites, so a provider's
+  own approved file can replace any of them the same way.
+- **R35-3 New Ireland's logo is its round crest**, "New Ireland, 1918,
+  Securing your future" round the javelin thrower. At the strip's one
+  height it reads as a mark, not as words. A horizontal version, if New
+  Ireland has one, would read better; the brief asked for one height, so it
+  is not drawn larger.
+- **R35-4 Seven brands not used**: Davy, Independent Trustee Company,
+  Newcourt, Quest, AIB Life, LifeSight and (named, no file) BCWM. If any is
+  an agency, it needs its permission and a line on How we work first.
+- **R35-5 One height, as asked.** At one height Aviva reads heaviest and
+  New Ireland's crest smallest. Balancing them by eye is a one-line change
+  per logo, if you want it.
+- **R35-6 The strip is text only.** No QFA or LIA logo file exists. When
+  you have them (and the LIA's permission to show its logo, if it asks for
+  one), each goes inside its item as an image with the full name as alt
+  text; the styles are already in the QUALS block. The LIA's own website
+  now calls itself "LIA"; its history page says "Life Insurance
+  Association Ireland" (lia.ie, read 29 September 2026); the site already
+  said "the Life Insurance Association (LIA)" in the gap chart's source
+  line, so the strip says the same. Your portrait's badge says "B.A.,
+  Q.F.A."; the strip leaves the degree out, because your answer named the
+  QFA and the LIA. Say if the B.A. belongs in it too.
+- **R35-7 The home page shows the strip twice**, at the end of Our story
+  and under your own section, a screen apart, because the brief named both.
+  Say if you want one (the one under your section reads as yours). Every
+  page's footer carries the small one as well.
+- **R35-8 The Poolbeg stacks are Buddy's Run's.** Jargon Battle's scene is
+  Buddy and the Blob on a green hill, with no skyline, so its picture has
+  no stacks; nothing in the game was changed to add any.
+- **R35-9 The games' own pages** keep their one-line footer, which is not
+  the site's, so the small strip is not on them.
+- **R35-10 Run 34 (`claude/overnight-3`)**, when you merge it onto this
+  `main`: git merges every page by itself; `sitemap.xml` and
+  `tests/build.test.py` conflict (both add to the same places: regenerate
+  the sitemap with `tools/sitemap.py`, keep both sets of checks), and then
+  run `tools/pagebuild.py`, `tools/sync-chrome.py --check` and
+  `tools/stamp-images.py --check`.
+- **Compliance**: question 1.19 in the pack (the logos under "Providers we
+  hold agencies with", the strip's wording, the games on the home page).
+
+## The pre-merge review
+
+Two reviewers, one on the code, accessibility and tests, one on the copy,
+compliance and these notes: 18 findings between them, 17 different (both
+found the Pause button), every one accepted and fixed before the merge.
+
+- **A live accessibility fault**: the ticker's Pause button, once pressed,
+  showed "Play" but was still named "Pause the provider logos" (and
+  pressed), so "click Play" found nothing by voice (WCAG 2.5.3). Its name
+  now changes with its word, with no aria-pressed; tests/providers.test.py
+  holds the name to the word in both states.
+- **The seams round the dark band**: the new games section sat on the
+  page colour between the gap band's wash and the calculator band, which
+  fades in from the wash's last colour, so two hard edges appeared. The
+  section now sits on that colour (#EEF8F5), so both seams are soft again.
+- **Focus on the play links**: the link's outline was switched off and the
+  card's ring drawn with `:has()`, so a browser without `:has()`, or
+  forced colours, showed no focus. The outline is now transparent, and only
+  where `:has()` works.
+- **Proofs that could pass wrongly**, all fixed and shown to fail on the
+  fault: `tools/logos.py` compared lightness only (a purple logo drawn
+  black passed) and only inside the trimmed box (a crop passed), and
+  dropped fills given only by a class, the usual editor export; it now
+  compares red, green and blue, over the whole original, applies class
+  fills, and refuses strokes, markers and filters. The ticker test's
+  no-JavaScript check ignored an item written another way (a stray brand
+  passed); it now counts every item and image. Check 31 passed a logo with
+  no alt text, or the other body's name; each logo's alt text must now be
+  its own item's name (two more faults caught). `tools/shoot-product.py`
+  shot whatever was on screen if a game never reached its frame; it now
+  stops instead, since the alt text describes that frame. Checking that
+  fix found one more: Buddy's Run's world scrolls from the moment the page
+  loads, so the tool's two Chrome launches (one measures, one shoots) could
+  stop on different frames; the game's own frame loop is now held still for
+  the shot, and two shoots come out byte for byte the same.
+- **These notes and the pack**, made to say no more than was given: the
+  permission is Damian's confirmation, not a fact the site states; the
+  files are the logos on the providers' own websites, not files the
+  providers sent, and the pack asks whether the permissions cover showing
+  them in grey; the ticker went live ahead of R29-2, as the brief asked;
+  "every footer" is every page's but the two games'; only Buddy's Run's
+  picture shows a score, which the pack now names as a gamified element
+  (Guidance 3.5.7), and finishing a game earns a paw print, so "nothing is
+  offered for playing" is said of the home page only; the portrait's
+  "B.A." badge is noted where the question to Damian named only the QFA.
+- Rejected: none. Not done: the home page's two strips (R35-7) and the
+  games' own footers (R35-9) are left for Damian.
+
+## Proof
+
+- The gate before each item, each on a clean checkout of exactly what was
+  committed: `tests/run-tests.py` ALL SUITES PASS; `build.test.py`,
+  `runner.test.py`, `games.test.py`, `deadline.test.py`, `nav.test.py`,
+  `consent.test.py`, `lead-forms.test.py`, `providers.test.py`,
+  `gap-band.py`, `regulator-lines.test.py` (and `--caveats`),
+  `floating-chrome.test.mjs`, `check-initialisms.py`, `stamp-images.py
+  --check`, `sync-chrome.py --check`, render-diff (load, and 8,000 events
+  a page) against `main`, and `verify.py` at 375 and 1440: 0 FAIL.
+  `build.test.py` 303 on `main`, 313 after item 3, 320 after item 4, 322
+  after the review; `providers.test.py` 39 on `main`, 75, then 80.
+- Each new check shown able to fail: the logo proof 2 faults, then 4 more
+  after the review (a colour change, a crop, a stroke refused, and a file
+  whose fills are only in classes, now kept); the ticker 8, then 2 more (the
+  button's old name, a stray item in the no-JavaScript row); check 31 11;
+  check 32 6.
+- Looked at, at 1440 and 375: the ticker moving, still (reduced motion),
+  without JavaScript and with a logo under the pointer; the strip in all
+  four places; the games section; the two game pictures at full size.
 
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 

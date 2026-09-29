@@ -42,6 +42,16 @@ the regulator and QFA line; on a phone that line, and the review line, are
 drawn under the small label above the page's heading, their words
 unchanged (questions 1.14 and 1.17).
 
+Updated 29 September 2026: the home page shows the logos of the six
+product providers we hold agencies with, under its opening section, the
+hero (Damian confirmed that day that written permission is held for each
+provider's logo); "Damian's qualifications and memberships", the Qualified
+Financial Adviser (QFA) designation and the Life Insurance Association
+(LIA), is at the end of the home page's story, under Damian's own section,
+beside the booking form and in the footer of every page but the two games';
+and two cards for the jargon buster games follow the home page's gap chart
+(question 1.19, sections 6.3 and 7, Appendix B.18 to B.20).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -110,7 +120,9 @@ three commission figures (a single figure where possible; where it is a
 range, what decides the point in it, as the Guidance asks at 3.4.4); whether
 the product list is the list the firm is paid for; other fees and benefits,
 or "none"; the agencies; whether commission offsets a fee; the fee schedule;
-and whether this layout meets Reg 32 as a summary on the website.
+and whether this layout meets Reg 32 as a summary on the website. (Since 29
+September 2026 the home page names six providers under "Providers we hold
+agencies with", question 1.19 (a): the page's list should name the same.)
 
 1.2 The old pension finder (held back)
 --------------------------------------
@@ -459,6 +471,55 @@ retirement, that is, before the scheme's normal retirement age, which for
 these directors is between 60 and 70, so it now says that. The PRSA line
 first quoted only the start of the footnote's second sentence; it now
 quotes the whole footnote.)
+
+1.19 The provider logos, Damian's qualifications, and the games
+---------------------------------------------------------------
+
+What the site does now (since 29 September 2026; the full wording and the
+list of logo files are in Appendix B.18 to B.20):
+
+(a) Under the home page's opening section (the hero), a strip labelled
+"Providers we hold agencies with" shows the logos of Zurich, Irish Life,
+Aviva, New Ireland, Royal London and Standard Life, fully grey until a
+visitor points at one. It moves slowly, with a Pause button, and stands
+still for a visitor who asks for less motion or has JavaScript off. Each
+logo is the one published on the provider's own website (the sources are
+in Appendix B.18), trimmed, nothing redrawn. Damian confirmed on 29
+September 2026 that written permission is held for every provider logo.
+The wording is "Providers we hold agencies with", never "partners" or "we
+work with": an agency is the fact.
+
+(b) "Damian's qualifications and memberships", then "Qualified Financial
+Adviser (QFA)" and "Life Insurance Association (LIA)", in text, at the end
+of the home page's story, under Damian's own section of that page, beside
+the booking form, and in small type in the footer of every page except
+the two games' own pages. No body's logo is shown.
+
+(c) After the home page's gap chart (its first section after the hero),
+"Just here to learn? Play the jargon buster.", with a card for each of the
+two games: a picture of the game mid-play, a line, and a link to play.
+Buddy's Run's picture shows its score (30) and three lives; Jargon
+Battle's shows the Blob's health bar and Buddy's hearts.
+
+The rules it touches: (a) is a statement about the firm's agencies, so it
+has to agree with the list of product producers on the How we work page
+(question 1.1), which is still a placeholder; the six names are the ones
+Damian gave. (b) must not suggest that the LIA, or whoever awards the QFA,
+endorses Pensionbuddy: the label says whose they are, and the strip says
+nothing else. (c) sits with section 6.3 and the Guidance at 3.5.7: a score
+is a gamified element, and the Buddy's Run picture shows one; the games
+award a paw print for finishing (6.3); the home page itself offers nothing
+for playing and nothing for booking, and nothing in the section moves.
+
+What we need: sign-off of the three, and in particular that (a) may say
+"Providers we hold agencies with" of these six providers; whether each
+provider's permission covers showing its logo in grey, as the site does
+until a visitor points at it, and a copy of each permission for the file;
+that (b) describes Damian's standing correctly (a current QFA, and a
+current member of the LIA); and how the LIA wishes to be named (its website
+now calls it "LIA", and its history page "Life Insurance Association
+Ireland"; the site says "Life Insurance Association (LIA)", as it already
+did in the gap chart's source line).
 
 2. The Letter of Authority, full wording
 ========================================
@@ -903,6 +964,12 @@ booking, and since this month nothing is offered for collecting them all.
 The games award nothing for booking. The readiness check's score is covered
 in section 4.
 
+Since 29 September 2026 the home page shows the two games (question 1.19
+(c)): a picture of each mid-play (Buddy's Run's shows its score and lives,
+Jargon Battle's the Blob's health bar and Buddy's hearts), a line and a
+link to play. The home page itself offers nothing for playing (the paw
+prints above are the games' own), and nothing in that section moves.
+
 6.4 Accessibility (for information)
 -----------------------------------
 
@@ -1029,6 +1096,17 @@ New sections on existing pages (Appendix B)
 - The Personal Investment Account (Appendix B.11 to B.13): a line on the
   starter page under "Once you are enrolled: what happens when.", a card on
   the director page under "The rules for 2026", and a jargon buster entry.
+- Run 35, 29 September 2026 (question 1.19). Home page (Appendix B.18):
+  the provider logos, "Providers we hold agencies with", with the button
+  "Pause" ("Play" once paused; a screen reader hears "Pause the provider
+  logos" or "Play the provider logos"). Home page, booking page and the
+  footer of every page but the games' (Appendix B.19):
+  "Damian's qualifications and memberships", "Qualified Financial Adviser
+  (QFA)", "Life Insurance Association (LIA)". Home page (Appendix B.20):
+  "Learn it the fun way", "Just here to learn? Play the jargon buster.",
+  "Buddy's Run", "Collect the benefits, jump the excuses.", "Play Buddy's
+  Run", "Jargon Battle", "Pick the right meaning to bust the Jargon Blob.",
+  "Play Jargon Battle", and the two pictures' descriptions.
 
 Changed wording on existing pages
 ---------------------------------
@@ -2723,3 +2801,84 @@ interest in a company takes early retirement benefits, the director must sever a
 including the disposal of all shares in the company.”
 
 The slider it sits under runs from 50 to 70.
+
+B.18 Home page: the provider logos
+----------------------------------
+
+Under the home page's opening section (the heading "One call. To know
+where you stand."):
+
+Providers we hold agencies with
+
+Then six logos, in this order, each named to a screen reader by the
+provider's name: Zurich, Irish Life, Aviva, New Ireland, Royal London,
+Standard Life. Beside the label, a button: "Pause" ("Play" once paused),
+which a screen reader hears as "Pause the provider logos" ("Play the
+provider logos").
+
+The logo files. Each is the provider's logo as published on its own
+website, trimmed to its edges and saved smaller, nothing redrawn; on the
+page each is fully grey until pointed at. Damian confirmed on 29 September 2026 that written permission is held
+for every provider logo in the folder they came from.
+
+- Zurich: assets/logos/zurich.webp, from
+  https://www.zurich.ie/-/media/project/zurichie/zurichmainsite/global/new-brand/new-logo/zurich-logo150px-wide.png
+  (PNG, 150 by 45 pixels: low resolution; a better file is needed, STATUS
+  R35-2).
+- Irish Life: assets/logos/irish-life.svg, the logo in the header of
+  https://www.irishlife.ie/ (SVG).
+- Aviva: assets/logos/aviva.svg, from
+  https://static.aviva.io/assets/logo/aviva-logo.svg (SVG).
+- New Ireland: assets/logos/new-ireland.webp, from
+  https://www.newireland.ie/wp-content/uploads/2022/06/New-Ireland-Logo-Forest-Green-on-White.png
+  (PNG, the round crest).
+- Royal London: assets/logos/royal-london.svg, from
+  https://www.royallondon.ie/dist/assets/images/logos/rl-ie-logo-landscape.svg
+  (SVG; the logo reads "Royal London Ireland").
+- Standard Life: assets/logos/standard-life.svg, from
+  https://www.standardlife.ie/dam/jcr:73c1570a-c487-44de-b6bd-5e86062a877c/standardlife%20new%20logo.svg
+  (SVG).
+
+No Central Bank of Ireland logo is used anywhere on the site.
+
+B.19 Damian's qualifications and memberships
+--------------------------------------------
+
+Damian’s qualifications and memberships
+Qualified Financial Adviser (QFA)
+Life Insurance Association (LIA)
+
+At the end of the home page's story ("Our story"), under Damian's own
+section of the home page, beside the booking form, and in small type in
+the footer of every page except the two games' own pages. Text only: no
+body's logo is shown.
+
+B.20 Home page: "Just here to learn?"
+-------------------------------------
+
+After the home page's gap chart (its first section after the hero: what
+people expect to need, against what the State Pension pays):
+
+Learn it the fun way
+Just here to learn? Play the jargon buster.
+
+Buddy’s Run
+Collect the benefits, jump the excuses.
+Play Buddy’s Run
+
+Jargon Battle
+Pick the right meaning to bust the Jargon Blob.
+Play Jargon Battle
+
+The two lines come from the jargon buster page's own descriptions of the
+games: the first sentence of Buddy's Run's, the second of Jargon
+Battle's. The pictures' descriptions,
+for screen readers:
+
+"Buddy’s Run, mid-game: Buddy the boxer jumps an excuse, “Plenty of time”,
+on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three
+lives."
+
+"Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a
+pension scheme trustee is, with four answers to pick from. The Blob is down
+to six of eight, and Buddy has two hearts of three."
