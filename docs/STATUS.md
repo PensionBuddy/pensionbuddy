@@ -219,6 +219,11 @@ committed and pushed; the branch is reviewed on the Netlify deploy preview
 and not merged. Anything needing his judgement: the most conservative
 option, logged as a question. Branch off `main` (`669becc`).
 
+Where it stands: all seven items reached, each gated and pushed; nothing
+is merged. What was not done, and why, is in each row; the questions are
+below. To pick up: the Budget-day and deadline dates under item 7, and
+the parts of item 4 left for a daytime run (3d, 9a).
+
 ## Items
 
 | # | Item | Status | Commit | Note |
@@ -235,6 +240,8 @@ option, logged as a question. Branch off `main` (`669becc`).
 
 | 6 | Images | **Done** | see git log | Every `<img>` on the 31 pages at 375 and 1440, in Chrome. All 35 in the markup had width and height, and all but one a WebP beside it. Fixed: Buddy's avatar on the eight calculator pages, 2,000 to 14,000px down, loaded at once: now `loading="lazy"` (and on the home page, the founder portrait, 6,500px down); the Ask Buddy photo the script draws (a 96x96 image, twice a page) now carries its width and height. Left: `buddy-beach.jpg` on the home page has no WebP (one made from the JPEG saves 6KB, 8%, for a second round of compression; one from the original photo would do better, and the original is not in the repository); the avatar is 320px wide where it is drawn at 28 or 78 (9KB; a smaller copy would save about 6KB a page); the hero avatars on the four audience pages stay eager, as they are on the first screen. |
 
+| 7 | Broken links and stale content | **Report** | see git log | No broken link: every internal link and `#anchor` on the 31 pages resolves (verify.py, every gate tonight), and all 18 outside addresses answer 200 with the page they name (fetched 29 September; Revenue's soft 404s checked by title). One outside link redirects: the held how-we-work page's CCPC "money tools" now lands on CCPC's general "Manage your money" page. Stale content, below, is reported, not changed. |
+
 What Google's Rich Results Test would say (checked against Google's
 structured-data rules by hand and by check 30; no page was sent to Google):
 
@@ -249,6 +256,37 @@ structured-data rules by hand and by check 30; no page was sent to Google):
   `/index.html`), all 200 from Netlify: the canonical now names one, and
   Search Console will list the others as "Alternate page with proper
   canonical tag", which is expected.
+
+### Stale content, by the date it turns (item 7)
+
+- **1 October 2026 (two days):** PRSI rises to 4.35%. The director
+  calculator's assumption line says "up to 52.2% ... 4.2% PRSI), and
+  52.35% from 1 October 2026", which will read backwards from Thursday;
+  the scripts already switch (pb-prsi.js). The director photo re-shoot
+  for 4.35% (Run 32) falls due the same day.
+- **6 October 2026, Budget 2027:** seven pages say "Budget 2027 is on 6
+  October 2026 and could change them" (director rules, year-end checklist,
+  over 50, self-employed, SFT, UK pensions, and the PIA page), and the PIA
+  page, the glossary's PIA entry and the starter and director pages'
+  PIA lines say "Proposed, as at 25 September 2026, and not yet law".
+  docs/PIA-BUDGET-DAY.md lists what changes. The State Pension's
+  "€299.30 a week from January 2026" (starter, both State Pension pages)
+  may change from January 2027 in the same Budget.
+- **31 October and 18 November 2026:** the tax deadlines for the 2025
+  tax year on the calculators, the director pages, self-employed and the
+  countdown; after 18 November the countdown needs Revenue's 2027 date
+  (tests/deadline.test.py fails from 19 November, on purpose).
+- **October 2026, the month turns:** "Last reviewed September 2026" on the
+  ten review lines, "Rules as at 24 September 2026" on eight guides, and
+  the checked-on dates (the comparison's gov.ie rates, 10 September; the
+  entitlement check, 11 September; the reality check, 9 September) all
+  age by a month.
+- **Dated figures that are true as at their date, but will be
+  overtaken:** My Future Fund "more than 835,000 people in it on 14
+  September 2026" (starter); the Pensions Authority's 40,644 one-member
+  arrangements "on 1 September 2026" (director rules); the Pensions
+  Council's living standards, "September 2024" (starter, reality check);
+  the complaints page's "Last updated: June 2026".
 
 ### Lighthouse, item 2 (interleaved, 5 runs a side, median; before = main with Google Fonts over the network)
 
