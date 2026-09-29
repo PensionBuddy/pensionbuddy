@@ -1808,8 +1808,8 @@ main a.gref:hover{text-decoration-thickness:2px}
 .pb-offer-name::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.28em;
   color:var(--teal);font-weight:600;transition:transform .25s ease}
 .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:translateX(8px)}
-a.assure{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,31,28,.28);border-color:var(--teal)}
+a.assure{transition:border-color .2s ease}
+a.assure:hover{border-color:var(--teal)}
 :is(.seg,.pb-two-seg,.pb-life-hh,.pia-seg) button:not(.on):not([aria-pressed="true"]):not([aria-selected="true"]):hover{
   color:var(--teal-700);background:var(--teal-50)}
 @media(prefers-reduced-motion:reduce){
@@ -1919,6 +1919,17 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
     .max-card .mnote,#mScale,#mWhy,#m1Cap){
   opacity:1!important;transform:none!important;filter:none!important;
   transition:none!important;animation:none!important}
+
+/* 5 Depth says "this is a link": whole-card links only (Run 34, part 14c).
+   Depth is a pre-drawn shadow fading in, the shadow the site's cards
+   already take on hover; nothing travels, so the hit area never moves and
+   a card holding a caveat stays still. */
+.pb-card-link{position:relative}
+.pb-card-link::before{content:'';position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;box-shadow:0 14px 30px -14px rgba(11,31,28,.28);opacity:0}
+.pb-card-link:focus-visible::before,.pb-card-link:has(:focus-visible)::before{opacity:1}
+@media (hover:hover) and (pointer:fine){.pb-card-link:hover::before{opacity:1}}
+@media (prefers-reduced-motion:no-preference){.pb-card-link::before{transition:opacity var(--pb-t-swap)}}
 
 /* In-page taps scroll smoothly after load; arrival never does. The head
    script adds html.pb-smooth once the page has arrived. */

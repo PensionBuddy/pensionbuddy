@@ -1562,7 +1562,7 @@ button{font-family:inherit}
 .pb-product-shot{display:block;position:relative;border-radius:16px;overflow:hidden;
   box-shadow:0 32px 90px rgba(0,0,0,.45);background:var(--bg);
   transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
-.pb-product-shot:hover{transform:translateY(-4px);box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.pb-product-shot:hover{box-shadow:0 40px 100px rgba(0,0,0,.5)}
 .pb-product-shot:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
 .pb-product-shot img{display:block;width:100%;height:auto}
 .pb-product-fig{margin:0;min-width:0}
@@ -1780,7 +1780,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-fork{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .pb-fork li{display:flex}
 .pb-fork-card{flex:1;display:flex;flex-direction:column;gap:8px;padding:22px 22px 20px;border:1px solid var(--line-2);border-radius:var(--r-xl);background:var(--surface);color:var(--ink);text-decoration:none;transition:border-color .2s,transform .2s}
-.pb-fork-card:hover{border-color:var(--teal-700);transform:translateY(-2px)}
+.pb-fork-card:hover{border-color:var(--teal-700)}
 .pb-fork-card:focus-visible{outline:3px solid var(--ring);outline-offset:3px}
 .pb-fork-t{font-size:1.1rem;font-weight:700}
 .pb-fork-d{font-size:.95rem;line-height:1.55;color:var(--ink-2);flex:1}
@@ -1907,8 +1907,8 @@ main a.gref:hover{text-decoration-thickness:2px}
 .pb-offer-name::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.28em;
   color:var(--teal);font-weight:600;transition:transform .25s ease}
 .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:translateX(8px)}
-a.assure{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
-a.assure:hover{transform:translateY(-3px);box-shadow:0 14px 30px -14px rgba(11,31,28,.28);border-color:var(--teal)}
+a.assure{transition:border-color .2s ease}
+a.assure:hover{border-color:var(--teal)}
 :is(.seg,.pb-two-seg,.pb-life-hh,.pia-seg) button:not(.on):not([aria-pressed="true"]):not([aria-selected="true"]):hover{
   color:var(--teal-700);background:var(--teal-50)}
 @media(prefers-reduced-motion:reduce){
@@ -2048,6 +2048,17 @@ body .callout p.pb-why{color:rgba(255,255,255,.86)}
     .max-card .mnote,#mScale,#mWhy,#m1Cap){
   opacity:1!important;transform:none!important;filter:none!important;
   transition:none!important;animation:none!important}
+
+/* 5 Depth says "this is a link": whole-card links only (Run 34, part 14c).
+   Depth is a pre-drawn shadow fading in, the shadow the site's cards
+   already take on hover; nothing travels, so the hit area never moves and
+   a card holding a caveat stays still. */
+.pb-card-link{position:relative}
+.pb-card-link::before{content:'';position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;box-shadow:0 14px 30px -14px rgba(11,31,28,.28);opacity:0}
+.pb-card-link:focus-visible::before,.pb-card-link:has(:focus-visible)::before{opacity:1}
+@media (hover:hover) and (pointer:fine){.pb-card-link:hover::before{opacity:1}}
+@media (prefers-reduced-motion:no-preference){.pb-card-link::before{transition:opacity var(--pb-t-swap)}}
 
 /* In-page taps scroll smoothly after load; arrival never does. The head
    script adds html.pb-smooth once the page has arrived. */
@@ -2486,9 +2497,9 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 <section class="pb-fork-sec"><div class="wrap">
   <h2 class="pb-fork-h">Which of these sounds most like you?</h2>
   <ul class="pb-fork">
-    <li><a class="pb-fork-card" href="starter.html"><span class="pb-fork-t">Just starting out</span><span class="pb-fork-d">No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
-    <li><a class="pb-fork-card" href="tracker.html"><span class="pb-fork-t">Changed jobs a few times</span><span class="pb-fork-d">Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
-    <li><a class="pb-fork-card" href="director.html"><span class="pb-fork-t">Run my own company</span><span class="pb-fork-d">Your company can fund your pension far beyond personal limits, and cut its tax bill doing it.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
+    <li><a class="pb-fork-card pb-card-link" href="starter.html"><span class="pb-fork-t">Just starting out</span><span class="pb-fork-d">No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
+    <li><a class="pb-fork-card pb-card-link" href="tracker.html"><span class="pb-fork-t">Changed jobs a few times</span><span class="pb-fork-d">Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
+    <li><a class="pb-fork-card pb-card-link" href="director.html"><span class="pb-fork-t">Run my own company</span><span class="pb-fork-d">Your company can fund your pension far beyond personal limits, and cut its tax bill doing it.</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></li>
   </ul>
 </div></section>
 
