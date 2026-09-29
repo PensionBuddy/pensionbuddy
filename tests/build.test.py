@@ -1053,6 +1053,95 @@ def run():
         assert mut != dr, label
         eq('28. %s is caught' % label, lockups(mut), want)
 
+    # ----------------------------------------------------------------- 31
+    # Run 35: Damian's qualifications and memberships. One list, the same
+    # words everywhere, in the places the brief named: the end of the home
+    # page's story, under Damian's own section, beside the booking form, and
+    # small in every page's footer (the foot-top, so chrome_drift holds it
+    # to the skeleton's on every page, and check 8 says so). The label says
+    # whose they are, so no body seems to endorse Pensionbuddy; nothing else
+    # is said in the strip, and nothing in it moves. (Checks 29 and 30 are
+    # numbered on the unmerged claude/overnight-3 branch.)
+    QUAL_LABEL = 'Damian&rsquo;s qualifications and memberships'
+    QUAL_ITEMS = ['Qualified Financial Adviser (QFA)', 'Life Insurance Association (LIA)']
+    WHERE = {'index.html': ['pbQualsStory', 'pbQualsDamian', 'pbQualsFoot'],
+             'booking.html': ['pbQualsBook', 'pbQualsFoot']}
+
+    def quals(src):
+        """[(id, label, items, alts, extra words)] for every strip, in page order."""
+        out = []
+        for m in re.finditer(r'<div class="pb-quals(?: pb-quals-sm)?">', src):
+            # the strip holds no <div>, so it ends at the first </div>
+            box = src[m.end():src.find('</div>', m.end())]
+            lab = re.search(r'<p class="pb-quals-label" id="([^"]+)">(.*?)</p>\s*<ul class="pb-quals-list" aria-labelledby="([^"]+)">', box, re.S)
+            if not lab or lab.group(1) != lab.group(3):
+                out.append(('unlabelled', None, None, None, None))
+                continue
+            items = re.findall(r'<li>(.*?)</li>', box, re.S)
+            alts = re.findall(r'<img[^>]*\salt="([^"]*)"', box)
+            words = re.sub(r'<p class="pb-quals-label".*?</p>|<li>.*?</li>|<[^>]+>|\s', '', box, flags=re.S)
+            out.append((lab.group(1), lab.group(2), [re.sub(r'<img[^>]*>', '', i).strip() for i in items], alts, words))
+        return out
+
+    def quals_faults(srcs):
+        f = []
+        for page, want in sorted(WHERE.items()):
+            got = quals(srcs[page])
+            if [g[0] for g in got] != want:
+                f.append('%s: strips %s, expected %s' % (page, [g[0] for g in got], want))
+            for g in got:
+                if g[1] != QUAL_LABEL:
+                    f.append('%s %s: the label is %r' % (page, g[0], g[1]))
+                if g[2] != QUAL_ITEMS:
+                    f.append('%s %s: the items are %r' % (page, g[0], g[2]))
+                if g[3] and any(a not in QUAL_ITEMS for a in g[3]):
+                    f.append('%s %s: a logo without its full name as alt text' % (page, g[0]))
+                if g[4]:
+                    f.append('%s %s: words in the strip beyond its label and names: %r' % (page, g[0], g[4][:40]))
+        for page in sorted(n for n in srcs if n not in WHERE):
+            got = quals(srcs[page])
+            if [g[0] for g in got] != ['pbQualsFoot']:
+                f.append('%s: strips %s, expected the footer\'s only' % (page, [g[0] for g in got]))
+        ix = srcs['index.html']
+        story, damian = ix.find('<section id="story">'), ix.find('<section id="damian"')
+        if not (story < ix.find('id="pbQualsStory"') < damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
+            f.append('index.html: the strips are not at the end of the story and in Damian\'s section')
+        bk = srcs['booking.html']
+        if not (bk.find('<div class="lead">') < bk.find('id="pbQualsBook"') < bk.find('<div class="book-card">')):
+            f.append('booking.html: the strip is not in the column beside the form, before its card')
+        skel = srcs['pension-calculator.html']
+        c = pagebuild.css_span(skel, 'QUALS')
+        block = re.sub(r'/\*.*?\*/', '', skel[c[0]:c[1]], flags=re.S) if c else ''
+        if not block or re.search(r'transition|animation|transform|@keyframes', block):
+            f.append('the QUALS block is missing, or something in it moves')
+        return f
+
+    eq('31. Damian\'s qualifications and memberships: the same label and names in the four places, and nothing else',
+       quals_faults(sources), [])
+    for label, page, find, repl, want in (
+            ('the label changed to a claim', 'index.html', 'id="pbQualsStory">Damian&rsquo;s qualifications and memberships',
+             'id="pbQualsStory">Accredited by', 'the label is'),
+            ('a name dropped from the booking page', 'booking.html',
+             'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
+            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"',
+             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"', 'the items are'),
+            ('an endorsement line added', 'index.html',
+             'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
+             'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
+             '<p>Pensionbuddy is recommended by the LIA.</p>', 'beyond its label'),
+            ('a logo with no alt text', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+             '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its full name'),
+            ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
+            ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
+             '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),
+            ('a strip added to another page\'s main', 'director.html', '</main>',
+             '<div class="pb-quals"><p class="pb-quals-label" id="pbQualsX">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsX"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></main>', 'strips'),
+            ('motion put in the block', 'pension-calculator.html', '.pb-quals{margin:28px 0 0}', '.pb-quals{margin:28px 0 0;transition:opacity .3s}', 'moves')):
+        mut = dict(sources)
+        mut[page] = sources[page].replace(find, repl, 1)
+        assert mut[page] != sources[page], label
+        eq('31. %s is caught' % label, any(want in x for x in quals_faults(mut)), True)
+
 
 
 
