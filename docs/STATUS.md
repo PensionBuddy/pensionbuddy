@@ -229,6 +229,8 @@ option, logged as a question. Branch off `main` (`669becc`).
 
 | 3 | SEO basics | **Done** | see git log | `tools/seo.py` writes each page's block (between `SEO:BEGIN` and `SEO:END` in its `<head>`; `pagebuild.assemble()` calls it, so a rebuild keeps it): the canonical address, the Open Graph and Twitter card tags from the page's own title and description, and its JSON-LD. The 26 pages in the sitemap each get a canonical and og:url at their sitemap address; the five held pages (404, thank-you, how-we-work, the finder, the readiness check) the sharing tags only. Fourteen titles and descriptions over 60 or 155 characters are shortened by taking words out of the approved text (pack 1.19 lists each, old and new). Seven share cards, 1200x630 (`tools/og-images.py`, `assets/brand/og/`): the home page and the six audience pages, each with the logo, the page's eyebrow and headline word for word, the address and "Regulated by the Central Bank of Ireland"; no figures. JSON-LD: the business on the home page as a FinancialService in the footer's own sentence, address and email (no phone: the site shows none); a two-step BreadcrumbList, Home then the page, everywhere else; the four existing FAQPages kept, one answer (starter's third) brought into line with the words the page now shows. Build check 30 holds all of it (lengths, uniqueness, addresses, pictures, JSON-LD shape, the business against the footer, every FAQ against the page), with four faults it catches. Question 2 and pack 1.19. |
 
+| 4 | UX-motion audit parts with no decision of Damian's | **Done, in part** | see git log | One commit each, in the audit's order: **3c** in part (the glossary's term index is held over the terms only, no longer over the not-advice note); **4d** (director rules: "Topics to discuss, not advice." and its reason to book before the list); **4e** (my pensions: an added pension rises 6px into place, nothing fades); **14a** (home, "Six places to begin": every explanation always readable at 1440, only the other names soften); **14c** (MOTION rule 5: whole-card links show a shadow, nothing travels; the thank-you tool cards no longer lift their "Illustration only." caveats 3px on hover); **15b** (the glossary's relief ladder fills once, in age order, on arrival); **6b** (starter: no figure counts up any more, the living-standards bars grow once, teal then amber, and "What time does" follows its slider with no in-between values: 195 on one step on main, none now); **15a** in part (the tracker's paperwork gathers on transform, its card's words there from the first frame). Not done: **7** and **12c** (both need part 1b, which waits on D9 and D10); **3d** (the director panel held by its bottom edge hides its top controls from the keyboard unless focus scrolling is rebuilt with it, on a protected calculator: not safe to half-build); **9a** (every slider page, a geometry probe and a 4x CPU drag: larger than the night allowed); 3c's wrapping index and 15a's fan (design calls: question 3). Every other part carries a decision. |
+
 What Google's Rich Results Test would say (checked against Google's
 structured-data rules by hand and by check 30; no page was sent to Google):
 
@@ -280,6 +282,14 @@ back (index, directors, tracker, pension calculator), so the preload stays.
    the Central Bank of Ireland", and the "50" in the over-50 card's
    headline (an age, not a figure). Picked: the short line, as the
    announcement bar has it, and the headline as the page has it.
+3. Two motion parts built only in part, where the rest is a design call:
+   the glossary's term index showing all 22 terms from 920px (it becomes
+   four to five rows, 159px tall at 1440 and 195px at 1024, over the terms
+   it indexes; left as one scrolling row), and the tracker's paperwork as a
+   fan with the summary card beside it (five papers and the card do not fit
+   side by side at 720px without their labels overlapping, less so at 375;
+   left as the pile, which now gathers on transform with its card's words
+   always shown).
 
 # Run 33 — 2026-09-28 · The cookie bar on a phone: one line and two buttons, the lockup on the first screen
 
