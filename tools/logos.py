@@ -22,10 +22,14 @@ file is the provider's own artwork; nothing is redrawn, recoloured or traced.
           size and reported as low resolution.
 
 The proof, for every SVG: the numbers in each path of the output against the
-original's, and both drawn by Chrome through the same viewBox at four times
-the size, compared pixel by pixel. It fails (exit 1) if a path's commands or
-its count of numbers changed, if any number moved by more than 0.0005, or if
-more than 0.1% of the drawn pixels differ by more than an eighth.
+original's, and both drawn by Chrome at four times the size over the whole
+of the original's viewBox (so anything the trim cut off shows), compared
+pixel by pixel in each of red, green and blue (so a change of colour shows,
+not only of lightness). It fails (exit 1) if a path's commands or its count
+of numbers changed, if any number moved by more than 0.0005, or if more
+than 0.1% of the drawn pixels differ by more than an eighth in any channel.
+Strokes, markers and filters are refused rather than trimmed: the bounding
+box the trim uses does not include them.
 
 pb-providers.js lists the files, with each one's width and height.
 """
@@ -81,16 +85,47 @@ def clean_svg(text):
     t = re.sub(r'<!DOCTYPE[^>]*>', '', t)
     for tag in ('title', 'desc', 'metadata'):
         t = re.sub(r'<%s\b[^>]*>.*?</%s>' % (tag, tag), '', t, flags=re.S)
-    # a fill given twice, as a class in a <style> and again inline (Aviva's file)
-    t = re.sub(r'<defs[^>]*>\s*<style[^>]*>\s*\.cls-1\{[^}]*\}\s*</style>\s*</defs>', '', t)
-    t = re.sub(r'\s+class="cls-1"', '', t)
-    t = re.sub(r'\sstyle="fill:(#[0-9a-fA-F]{3,6});stroke-width:0"', r' fill="\1"', t)
+    # Class fills, as an editor exports them (Aviva's file gives each path its
+    # fill twice, in a class and inline): each becomes a fill attribute, with
+    # CSS's order kept (inline style over the class, the class over a fill
+    # attribute). A rule that is not a plain fill is refused.
+    fills = {}
+    style = re.search(r'<defs[^>]*>\s*<style[^>]*>(.*?)</style>\s*</defs>', t, re.S)
+    if style:
+        for m in re.finditer(r'\.([\w-]+)\s*\{([^}]*)\}', style.group(1)):
+            decl = dict(x.split(':', 1) for x in re.sub(r'\s', '', m.group(2)).split(';') if x)
+            if set(decl) - {'fill', 'stroke-width'} or decl.get('stroke-width', '0') not in ('0', '0px') or 'fill' not in decl:
+                raise ValueError('a class rule that is not a plain fill: .%s{%s}' % (m.group(1), m.group(2).strip()))
+            fills[m.group(1)] = decl['fill']
+        if re.sub(r'\.([\w-]+)\s*\{([^}]*)\}', '', style.group(1)).strip():
+            raise ValueError('a <style> rule that is not a class fill')
+        t = t[:style.start()] + t[style.end():]
+
+    def one_tag(m):
+        tag = m.group(0)
+        cm = re.search(r'\sclass="([^"]*)"', tag)
+        sm = re.search(r'\sstyle="fill:(#[0-9a-fA-F]{3,6});stroke-width:0"', tag)
+        fill = sm.group(1) if sm else None
+        if cm:
+            if cm.group(1) not in fills:
+                raise ValueError('an element whose class has no fill rule: %s' % cm.group(1))
+            fill = fill or fills[cm.group(1)]
+            tag = tag.replace(cm.group(0), '', 1)
+        if sm:
+            tag = tag.replace(sm.group(0), '', 1)
+        if fill:
+            tag = re.sub(r'\sfill="[^"]*"', '', tag)
+            tag = re.sub(r'\s*(/?>)$', lambda e: ' fill="%s"%s' % (fill, e.group(1)), tag)
+        return tag
+    t = re.sub(r'<(?![/!?])[a-zA-Z][^>]*>', one_tag, t)
     root = re.search(r'<svg\b[^>]*>', t)
     body = t[root.end():t.rindex('</svg>')]
     attrs = dict(re.findall(r'([\w:-]+)="([^"]*)"', root.group(0)))
     keep = {k: v for k, v in attrs.items() if k in ('fill', 'fill-rule', 'clip-rule', 'stroke')}
     if re.search(r'\sclass="|<style\b|\sstyle="', body):
         raise ValueError('a class or a style is left in the artwork; add a rule for it before trusting the output')
+    if re.search(r'\sstroke="(?!none")|<marker\b|<filter\b|\sfilter="|\smarker-', body):
+        raise ValueError('a stroke, marker or filter: the bounding box does not include it, so the trim could cut it')
     if re.search(r'\s(?:d)="[^"]*[aA]', body):
         raise ValueError('an arc command: its flags can be written without separators, and rounding would merge them')
     refs = set(re.findall(r'url\(#([^)]+)\)', body)) | set(re.findall(r'href="#([^"]+)"', body))
@@ -180,23 +215,31 @@ def prove(name, orig_text, attrs, new_path, vbox, tmp):
     if worst > 0.0005 + 1e-9:
         return 'a number moved by %.4f' % worst
     x0, y0, vw, vh = vbox
-    w4, h4 = int(round(4 * H * vw / vh)), 4 * H
+    ov = original_viewbox(attrs)
+    # the frame covers the original's viewBox and the trimmed box both, at the
+    # scale that draws the trimmed box 4 x 40px tall
+    fx0, fy0 = min(ov[0], x0), min(ov[1], y0)
+    fx1, fy1 = max(ov[0] + ov[2], x0 + vw), max(ov[1] + ov[3], y0 + vh)
+    k = 4.0 * H / vh
+    w4, h4 = int(round((fx1 - fx0) * k)), int(round((fy1 - fy0) * k))
 
     def frame(text, x, y, w, h):
         b64 = base64.b64encode(text.encode('utf-8')).decode()
         return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="%r %r %r %r" width="%d" height="%d" preserveAspectRatio="none" '
                 'style="display:block"><image href="data:image/svg+xml;base64,%s" x="%r" y="%r" width="%r" height="%r" '
-                'preserveAspectRatio="none"/></svg>' % (x0, y0, vw, vh, w4, h4, b64, x, y, w, h))
-    ov = original_viewbox(attrs)
+                'preserveAspectRatio="none"/></svg>' % (fx0, fy0, fx1 - fx0, fy1 - fy0, w4, h4, b64, x, y, w, h))
     page = ('<!doctype html><body style="margin:0;background:#fff">' + frame(orig_text, *ov) +
             frame(new_text, x0, y0, vw, vh) + '</body>')
     png = os.path.join(tmp, 'proof-%s.png' % name)
     chrome(['--window-size=%d,%d' % (max(w4, 600), 2 * h4 + 40), '--screenshot=' + png, page_file(page, tmp, 'proof.html')])
     im = Image.open(png).convert('RGB')
-    d = ImageChops.difference(im.crop((0, 0, w4, h4)), im.crop((0, h4, w4, 2 * h4))).convert('L')
+    d = ImageChops.difference(im.crop((0, 0, w4, h4)), im.crop((0, h4, w4, 2 * h4)))
+    r, g, b = d.split()
+    d = ImageChops.lighter(ImageChops.lighter(r, g), b)   # the largest of the three channels' differences
     over = sum(d.histogram()[33:])
     if over > 0.001 * w4 * h4:
         return '%d of %d pixels differ by more than an eighth' % (over, w4 * h4)
+    prove.last = '%d of %d pixels differ by more than an eighth, largest difference %d' % (over, w4 * h4, d.getextrema()[1])
     return None
 
 
@@ -220,13 +263,14 @@ def main():
                 failed = failed or bool(why)
                 print('%-14s %-18s %6d -> %6d bytes  viewBox %s  drawn %sx%s  %s'
                       % (name, f, os.path.getsize(src), os.path.getsize(os.path.join(OUT, name + '.svg')),
-                         ' '.join(fmt(v) for v in vbox), drawn[0], drawn[1], 'PROOF FAIL: ' + why if why else 'proof ok'))
+                         ' '.join(fmt(v) for v in vbox), drawn[0], drawn[1],
+                         'PROOF FAIL: ' + why if why else 'proof ok (%s)' % prove.last))
             else:
                 box, size, low = write_raster(name, src)
                 print('%-14s %-18s %6d -> %6d bytes  trimmed to %s, written %dx%d%s'
                       % (name, f, os.path.getsize(src), os.path.getsize(os.path.join(OUT, name + '.webp')), box,
-                         size[0], size[1], '  LOW RESOLUTION: %dpx tall, drawn at %d (x%.2f on a 2x screen)'
-                         % (size[1], H, 2.0 * H / size[1]) if low else ''))
+                         size[0], size[1], '  LOW RESOLUTION: %dpx tall, under the %dpx every logo is made at, and not enlarged'
+                         % (size[1], H) if low else ''))
     sys.exit(1 if failed else 0)
 
 

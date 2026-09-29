@@ -105,14 +105,17 @@
   var head = el('div', 'pb-prov-head');
   var label = el('p', 'pb-prov-label', LABEL);
   label.id = 'pbProvLabel';
+  /* The button's name says what a press will do, and holds the word shown
+     on it, so "Play" is found by voice control and heard by a screen reader
+     (WCAG 2.5.3, label in name). No aria-pressed as well: a name that
+     changes and a pressed state would say the same thing twice. */
   var pause = el('button', 'pb-prov-pause', 'Pause');
   pause.type = 'button';
-  pause.setAttribute('aria-pressed', 'false');
   pause.setAttribute('aria-label', 'Pause the provider logos');
   pause.addEventListener('click', function () {
     var paused = root.classList.toggle('is-paused');
     pause.textContent = paused ? 'Play' : 'Pause';
-    pause.setAttribute('aria-pressed', paused ? 'true' : 'false');
+    pause.setAttribute('aria-label', paused ? 'Play the provider logos' : 'Pause the provider logos');
   });
   head.appendChild(label);
   head.appendChild(pause);

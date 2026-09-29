@@ -20,8 +20,9 @@ What it proves:
      logo the same height (32px, 28px on a phone); grey (grayscale(1)) until
      the pointer is on it, then its own colours (the rule is in the
      stylesheet it injects); every logo file loads; the strip faded at both
-     edges and moving; Pause stops it and says so (aria-pressed), Play starts
-     it again; hovering pauses it; nothing runs past the window
+     edges and moving; Pause stops it and Play starts it again, the
+     button's name always holding the word shown on it (WCAG 2.5.3), with no
+     aria-pressed; hovering pauses it; nothing runs past the window
   3. on, with reduced motion: a still row, wrapped, one row at 1440px, no
      copies shown, no fades, no Pause button; still grey
   4. switched off (served bytes): the home page shows nothing: the mount is
@@ -95,8 +96,9 @@ PROBE = r"""<script>
     Promise.all(srcs.map(function(s){return new Promise(function(res){var t=new Image();
       t.onload=function(){res(t.naturalWidth>0);}; t.onerror=function(){res(false);}; t.src=s;});})).then(function(ok){
       R.loads=ok;
-      pb.click(); R.paused=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-pressed'),pb.textContent];
-      pb.click(); R.played=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-pressed'),pb.textContent];
+      R.before=[pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
+      pb.click(); R.paused=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
+      pb.click(); R.played=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
       R.hoverRule=rule(/\.pb-prov-strip:hover \.pb-prov-track/,function(st){return st.animationPlayState==='paused';});
       R.colourRule=rule(/^\.pb-prov-item:hover img$/,function(st){return st.filter==='none'&&st.opacity==='1';});
       R.sw2=document.documentElement.scrollWidth;
@@ -237,8 +239,13 @@ def main():
         eq('2. on at %dpx: faded at both edges' % w, 'linear-gradient' in r['mask'], True)
         eq('2. on at %dpx: moving, in a loop that never ends' % w, (r['anim'], r['moved'], r['loop']),
            (['pbProv', 'running'], True, [True, 'Infinity']))
-        eq('2. on at %dpx: Pause stops it and says so' % w, r['paused'], ['paused', 'true', 'Play'])
-        eq('2. on at %dpx: Play starts it again' % w, r['played'], ['running', 'false', 'Pause'])
+        eq('2. on at %dpx: the button, before a press: "Pause", named for it' % w, r['before'],
+           ['Pause the provider logos', 'Pause', False])
+        eq('2. on at %dpx: Pause stops it, and the button becomes "Play", named for it' % w, r['paused'],
+           ['paused', 'Play the provider logos', 'Play', False])
+        eq('2. on at %dpx: Play starts it again' % w, r['played'], ['running', 'Pause the provider logos', 'Pause', False])
+        eq('2. on at %dpx: the name always holds the word on the button (WCAG 2.5.3)' % w,
+           all(x[-3].lower().startswith(x[-2].lower()) for x in (r['before'], r['paused'], r['played'])), True)
         eq('2. on at %dpx: hovering pauses it' % w, r['hoverRule'], True)
         eq('2. on at %dpx: nothing past the window' % w, (r['sw'] <= w, r['sw2'] <= w), (True, True))
         eq('2. on at %dpx: no script error' % w, r['errors'], [])
@@ -276,6 +283,10 @@ def main():
     eq('6. without JavaScript: the same providers, files, alt text and sizes, in order',
        re.findall(r'<li><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"></li>', row),
        [(e[1], e[0], str(round(float(e[2]))), str(round(float(e[3])))) for e in ENTRIES])
+    # and nothing else in it: an item written any other way would slip past the pattern above
+    eq('6. without JavaScript: no other item and no other image in the row',
+       (row.count('<li'), row.count('<img'), len(re.findall(r'<img src="assets/logos/', row))),
+       (len(ENTRIES), len(ENTRIES), len(ENTRIES)))
     eq('6. without JavaScript: grey, and its own colours under the pointer',
        ('.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}' in home,
         '.pb-prov-ns-list li:hover img{filter:none;opacity:1}' in home), (True, True))

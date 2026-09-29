@@ -1068,7 +1068,10 @@ def run():
              'booking.html': ['pbQualsBook', 'pbQualsFoot']}
 
     def quals(src):
-        """[(id, label, items, alts, extra words)] for every strip, in page order."""
+        """[(id, label, names, image faults, extra words)] for every strip, in
+        page order. An item's name is its text, or, for an item that is only a
+        logo, the logo's alt text; every logo must carry the name of the item it
+        sits in as its alt text."""
         out = []
         for m in re.finditer(r'<div class="pb-quals(?: pb-quals-sm)?">', src):
             # the strip holds no <div>, so it ends at the first </div>
@@ -1077,10 +1080,17 @@ def run():
             if not lab or lab.group(1) != lab.group(3):
                 out.append(('unlabelled', None, None, None, None))
                 continue
-            items = re.findall(r'<li>(.*?)</li>', box, re.S)
-            alts = re.findall(r'<img[^>]*\salt="([^"]*)"', box)
+            names, bad = [], []
+            for li in re.findall(r'<li>(.*?)</li>', box, re.S):
+                imgs = re.findall(r'<img\b[^>]*>', li)
+                alts = [re.search(r'\salt="([^"]*)"', i) for i in imgs]
+                text = re.sub(r'<[^>]+>', '', li).strip()
+                name = text or (alts[0].group(1) if alts and alts[0] else '')
+                names.append(name)
+                if any(a is None or a.group(1) != name for a in alts):
+                    bad.append(name)
             words = re.sub(r'<p class="pb-quals-label".*?</p>|<li>.*?</li>|<[^>]+>|\s', '', box, flags=re.S)
-            out.append((lab.group(1), lab.group(2), [re.sub(r'<img[^>]*>', '', i).strip() for i in items], alts, words))
+            out.append((lab.group(1), lab.group(2), names, bad, words))
         return out
 
     def quals_faults(srcs):
@@ -1094,8 +1104,8 @@ def run():
                     f.append('%s %s: the label is %r' % (page, g[0], g[1]))
                 if g[2] != QUAL_ITEMS:
                     f.append('%s %s: the items are %r' % (page, g[0], g[2]))
-                if g[3] and any(a not in QUAL_ITEMS for a in g[3]):
-                    f.append('%s %s: a logo without its full name as alt text' % (page, g[0]))
+                if g[3]:
+                    f.append('%s %s: a logo without its own item\'s full name as alt text: %s' % (page, g[0], g[3]))
                 if g[4]:
                     f.append('%s %s: words in the strip beyond its label and names: %r' % (page, g[0], g[4][:40]))
         for page in sorted(n for n in srcs if n not in WHERE):
@@ -1129,8 +1139,12 @@ def run():
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
              '<p>Pensionbuddy is recommended by the LIA.</p>', 'beyond its label'),
-            ('a logo with no alt text', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
-             '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its full name'),
+            ('a logo with empty alt text', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+             '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
+            ('a logo with no alt at all', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+             '<li><img src="assets/logos/qfa.svg">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
+            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li>',
+             'aria-labelledby="pbQualsStory"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
             ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
             ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
              '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),

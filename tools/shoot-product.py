@@ -37,9 +37,12 @@ frame: Buddy's Run is played by a simple autopilot (jump when an excuse is
 close) until Buddy is at the top of a jump over an excuse, with all three
 lives, a score on the board and the two Poolbeg stacks on the far shore
 (found by their red, #C1502E, in the canvas); Jargon Battle answers three
-terms, two right and one wrong, and stops on the fourth question. Nothing
-is drawn by this tool: the frames are the games' own. Re-run after any
-change to a game's look.
+terms, two right and one wrong, and stops on the fourth question. If a game
+never reaches its frame (after a change to the game, say), the shot fails
+rather than photograph something else: the home page's alt text for each
+picture describes that frame (the score, the lives, the term), so check it
+after a re-shoot. Nothing is drawn by this tool: the frames are the games'
+own. Re-run after any change to a game's look.
 """
 import io
 import json
@@ -124,7 +127,7 @@ PREPARE = {
     st=B.state(); hb=B.buddyHit();
     over=st.labels.some(function(l){ var cx=hb.x+hb.w/2;
       return l.kind==='bad' && l.x>8 && l.x+l.w<W-8 && l.x<cx && l.x+l.w>cx; });
-    if(over&&!st.buddy.onGround&&st.buddy.vy>=0&&st.lives===3&&st.score>=30&&stacks()) break;
+    if(over&&!st.buddy.onGround&&st.buddy.vy>=0&&st.lives===3&&st.score>=30&&stacks()){ var found=true; break; }
   }
   B.releaseJump();
   document.getElementById('pauseBtn').click();
@@ -132,7 +135,7 @@ PREPARE = {
   B._render();
   if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
   st=B.state();
-  return {steps:n, seconds:Math.round(n/120*10)/10, score:st.score, lives:st.lives, stacks:stacks(),
+  return {ok:!!found, steps:n, seconds:Math.round(n/120*10)/10, score:st.score, lives:st.lives, stacks:stacks(),
           labels:st.labels.map(function(l){return l.kind+':'+l.text;})};
 })()''',
     # Jargon Battle: start, then answer three terms through the page's own
@@ -154,7 +157,8 @@ PREPARE = {
   window.dispatchEvent(new Event('resize'));
   if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
   var s=J.state();
-  return {question:s.index+1, of:s.total, blobHp:s.blobHp, hearts:s.hearts, term:s.current&&s.current.term};
+  return {ok:s.phase==='question'&&s.index===3&&s.blobHp===6&&s.hearts===2, question:s.index+1, of:s.total,
+          blobHp:s.blobHp, hearts:s.hearts, term:s.current&&s.current.term};
 })()''',
 }
 
@@ -225,6 +229,14 @@ class Handler(SimpleHTTPRequestHandler):
         m = re.match(r'/((?:games/)?)__product-([A-Za-z0-9.-]+\.html)$', path)
         if m:
             t = open(os.path.join(ROOT, m.group(1) + m.group(2)), encoding='utf-8').read()
+            if m.group(1):
+                # A game keeps its own clock running from load (Buddy's Run's
+                # world scrolls even before the start button), and the frames
+                # that run before `prepare` differ between the two Chrome
+                # launches below, so the frame measured and the frame shot
+                # were not the same. With no animation frames the game moves
+                # only as `prepare` plays it, and draws only when told to.
+                t = t.replace('<head>', '<head><script>window.requestAnimationFrame=function(){return 0;};</script>', 1)
             return self._send(t.encode('utf-8'))
         return super().do_GET()
 
@@ -258,6 +270,11 @@ def shoot(name, port):
     if not m:
         raise SystemExit('%s: the page never reported the calculator box' % name)
     box = json.loads(m.group(1))
+    info = box.get('info')
+    if info is not None and not info.get('ok'):
+        # the frame the game was played to was never reached: shooting it
+        # anyway would put a picture on the home page its alt text misdescribes
+        raise SystemExit('%s: the game never reached the frame it is played to: %s' % (name, json.dumps(info)))
     height = int(box['y'] + box['h'] + 24)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, 'shot.png')
@@ -274,6 +291,8 @@ def shoot(name, port):
     print('%-22s %dx%d  jpg %dKB  webp %dKB%s' % (name, im.width, im.height,
           os.path.getsize(stem + '.jpg') // 1024, os.path.getsize(stem + '.webp') // 1024,
           '  ' + json.dumps(box['info']) if box.get('info') else ''))
+    if box.get('info'):
+        print('%-22s the home page describes this picture in its alt text: check it still says what the frame shows' % '')
 
 
 def main():
