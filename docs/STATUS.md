@@ -444,6 +444,17 @@ found the Pause button), every one accepted and fixed before the merge.
   whose fills are only in classes, now kept); the ticker 8, then 2 more (the
   button's old name, a stray item in the no-JavaScript row); check 31 11;
   check 32 6.
+- The final gate, on `33c3ae0` (everything but this paragraph): every
+  suite above passes (`build.test.py` 322, `providers.test.py` 80), the
+  render-diff against `main` is identical, and `verify.py` finds 0 FAIL,
+  the same four WARNs as `main`, and no site rows.
+- Lighthouse, mobile, five runs each, `main` and this tree interleaved,
+  fonts served locally to both (medians, [range]): home 98 [97-98] to 98
+  [98-98], largest paint 2.34s to 2.33s, layout shift 0 to 0; booking 99 to
+  99, largest paint 1.66s to 1.81s, but both sides range 1.66 to 1.81s (the
+  page's two usual values, not a change); pension calculator 98 to 98,
+  largest paint 2.26s both, layout shift 0.0007 both. Total blocking time
+  0 everywhere.
 - Looked at, at 1440 and 375: the ticker moving, still (reduced motion),
   without JavaScript and with a logo under the pointer; the strip in all
   four places; the games section; the two game pictures at full size.
