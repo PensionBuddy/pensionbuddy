@@ -1626,6 +1626,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-tix a:hover{color:var(--ink);border-color:var(--ink-3)}
 .pb-tix a[aria-current="true"]{background:var(--teal-50);border-color:var(--teal-100);color:var(--teal-700);font-weight:600}
 .gterm{scroll-margin-top:calc(var(--pb-navh,72px) + 72px)}
+/* Run 34 (part 3c of docs/UX-MOTION-AUDIT.md, in part): the index is held
+   only over the terms. .pb-tix-scope ends before the not-advice note, which
+   the held index used to slide over. */
 @media(prefers-reduced-motion:reduce){.pb-tix{transition:none}}
 /* DRAWDOWN AT 4% (.pb-dd). A pot in, a month out, at the pension
    calculator's own illustration rate (4% of the pot a year, over twelve)
@@ -2080,6 +2083,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 </div></section>
 
 <section style="padding-top:36px"><div class="wrap">
+  <div class="pb-tix-scope">
   <div class="pb-tix" role="navigation" aria-label="Terms on this page">
     <ul>
       <li><a href="#pension">Pension</a></li>
@@ -2160,6 +2164,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     <div class="gterm" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029: the <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows each year&rsquo;s figure and how much of it your pensions would use.</p></div>
     <div class="gterm" id="pia"><h2>PIA<span class="abbr">Personal Investment Account</span></h2><p>A proposed account for investing in listed shares, bonds, funds and exchange-traded funds, called the Investment Account in official documents and the Savings and Investment Account (SIA) in the media. It is not a pension: there is no tax relief going in and no lock-in. Instead of today&rsquo;s exit tax, deemed disposal and Capital Gains Tax, a flat tax is charged each year on the account&rsquo;s average value above a tax-free threshold, even in a year it falls. Proposed, as at 25 September 2026, and not yet law: the threshold, the rate and the annual limit are due on 6 October 2026. <a href="pia.html">See it next to a pension</a>.</p></div>
     <div class="gterm" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>A professional qualification for financial advisers in Ireland. It means the adviser has met the standard required to give regulated financial advice.</p></div>
+  </div>
   </div>
   <div class="infoadvice" style="margin-top:8px">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
