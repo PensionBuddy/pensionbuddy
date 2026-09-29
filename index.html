@@ -1274,6 +1274,38 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    the prefers-reduced-motion fallback. Only the photo treatment is new. */
 .snaps{padding:6px 0 0}
 .snaps[hidden]{display:none} /* Run 29: "Out of office" is switched off; see the comment on the section */
+/* Run 35: the provider ticker without JavaScript. The same list as
+   assets/js/pb-providers.js, still, in one centred row, grey until the pointer
+   is on a logo; tests/providers.test.py holds the two lists together. */
+.pb-prov-ns{padding:26px 18px 30px;text-align:center}
+.pb-prov-ns-label{margin:0 0 14px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.pb-prov-ns-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 40px;margin:0;padding:0;list-style:none}
+.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}
+.pb-prov-ns-list li:hover img{filter:none;opacity:1}
+@media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:28px}}
+/* Run 35: "Just here to learn?", straight after the first section. The two
+   games, each a still photograph of the real game mid-play, shot by
+   tools/shoot-product.py like the calculators' pictures, then a line and a
+   play link. Static: nothing moves, nothing is rewarded; the whole card is
+   the play link's, and only colours change under the pointer. */
+.pb-learn{background:#EEF8F5}  /* the gap band's wash ends on this colour, and the dark band below fades in from it (#calc::before): the seams stay soft */
+.pb-learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
+.pb-learn-grid li{margin:0}
+.pb-learn-card{position:relative;display:flex;flex-direction:column;height:100%;background:var(--surface);
+  border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+.pb-learn-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-learn-card:has(.pb-learn-play:focus-visible){box-shadow:0 0 0 4px var(--ring)}
+.pb-learn-card picture{display:block;border-bottom:1px solid var(--line-2)}
+.pb-learn-card img{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.pb-learn-body{display:flex;flex-direction:column;gap:6px;padding:20px 22px 16px}
+.pb-learn-card h3{margin:0}
+.pb-learn-card .pb-learn-d{margin:0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.pb-learn-play{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;min-height:44px;margin-top:4px;
+  font-weight:600;color:var(--teal-700)}
+.pb-learn-play::after{content:"";position:absolute;inset:0}
+@supports selector(:has(*)){.pb-learn-play:focus-visible{outline:2px solid transparent}}  /* the card's ring shows focus; without :has() the link keeps its own, and forced colours draw the outline */
+.pb-learn-play svg{width:16px;height:16px}
+@media(max-width:760px){.pb-learn-grid{grid-template-columns:1fr;gap:18px}}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -2104,6 +2136,33 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .phead > .wrap:has(> .pb-reviewed) > .pb-reviewed{order:-1}
 }
 /* FIRSTSCREEN:END */
+/* QUALS:BEGIN (Run 35). Damian's qualifications and memberships, one list
+   wherever it appears: the end of the home page's story, under Damian's own
+   section, beside the booking form, and small in every footer. Byte for
+   byte on every page: tools/pagebuild.py SHARED_CSS ('QUALS', 'quals-css'),
+   guarded by chrome_drift; the words and places are held by
+   tests/build.test.py check 31.
+   - The label says whose they are, "Damian's qualifications and
+     memberships": his own qualification and a body he belongs to, never an
+     endorsement of Pensionbuddy by either.
+   - Each item is the full name, in text. A body's logo, when its file comes
+     with permission, goes inside the <li> as an <img> (28px tall, 20px in
+     the footer) with the full name as its alt text.
+   - Static: nothing here moves, fades or waits for anything. */
+.pb-quals{margin:28px 0 0}
+.pb-quals .pb-quals-label{margin:0 0 10px;max-width:none;font-size:14px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-quals .pb-quals-list{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.pb-quals .pb-quals-list li{display:flex;align-items:center;gap:10px;margin:0;padding:9px 14px;
+  border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);
+  font-size:15px;font-weight:600;line-height:1.35;color:var(--ink)}
+.pb-quals .pb-quals-list img{display:block;width:auto;height:28px}
+.pb-quals.pb-quals-sm{margin:18px 0 0}
+.pb-quals.pb-quals-sm .pb-quals-label{margin:0 0 6px;font-size:13px}
+.pb-quals.pb-quals-sm .pb-quals-list{flex-direction:column;gap:4px}
+.pb-quals.pb-quals-sm .pb-quals-list li{padding:0;border:0;border-radius:0;background:none;
+  font-size:13px;font-weight:500;color:var(--ink-2)}
+.pb-quals.pb-quals-sm .pb-quals-list img{height:20px}
+/* QUALS:END */
 </style>
 </head>
 <body>
@@ -2201,9 +2260,22 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 
 </div></header>
 
-<!-- PROVIDER TICKER (Run 29), switched off: assets/js/pb-providers.js fills this only when its ON flag
-     is true. Read that file before switching it on: each provider's written permission first. -->
+<!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35): assets/js/pb-providers.js fills
+     this; the <noscript> row after it is the same list, still, for a reader without JavaScript
+     (tests/providers.test.py holds the two together). The list must match the agencies on
+     how-we-work.html when that page is released. -->
 <div data-pb-providers hidden></div>
+<noscript><div class="pb-prov-ns">
+  <p class="pb-prov-ns-label" id="pbProvNsLabel">Providers we hold agencies with</p>
+  <ul class="pb-prov-ns-list" aria-labelledby="pbProvNsLabel">
+    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34"></li>
+    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40"></li>
+    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40"></li>
+    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120"></li>
+    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40"></li>
+    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40"></li>
+  </ul>
+</div></noscript>
 
 <section class="gapband pb-bleed pb-wash" id="gap">
   <div class="wrap">
@@ -2265,6 +2337,33 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    </p>
   </div>
 </section>
+
+<!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
+     (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
+<section class="pb-learn" id="learn"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Learn it the fun way</span>
+    <h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>
+  </div>
+  <ul class="pb-learn-grid">
+    <li><div class="pb-learn-card">
+      <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=5fbfaac5"><img src="assets/img/product-buddys-run.jpg?v=eca8ecce" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
+      <div class="pb-learn-body">
+        <h3>Buddy&rsquo;s Run</h3>
+        <p class="pb-learn-d">Collect the benefits, jump the excuses.</p>
+        <a class="pb-learn-play" href="games/buddys-run.html">Play Buddy&rsquo;s Run <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+    <li><div class="pb-learn-card">
+      <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=f9a78730"><img src="assets/img/product-jargon-battle.jpg?v=ee5acf90" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+      <div class="pb-learn-body">
+        <h3>Jargon Battle</h3>
+        <p class="pb-learn-d">Pick the right meaning to bust the Jargon Blob.</p>
+        <a class="pb-learn-play" href="games/jargon-battle.html">Play Jargon Battle <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+  </ul>
+</div></section>
 
 <section id="calc" class="pb-bleed pb-dark pb-product"><div class="wrap calc-grid">
   <div class="calc-copy">
@@ -2338,6 +2437,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     <p>Pensionbuddy started as a father-son conversation. Damian has 30 years' experience advising people on pensions, and kept seeing the same thing: people either ignored their pension completely, or only thought about it the day auto-enrolment came into effect.</p>
     <p>Adam, freshly out of Trinity, saw the same gap from the other side. Nobody was explaining any of it in a fun and digestible way that actually made sense. So they built Pensionbuddy together.</p>
     <p>The goal is simple: get you from &ldquo;I&rsquo;ve no idea what&rsquo;s happening with my pension&rdquo; to an actual conversation with someone qualified to help.</p>
+    <div class="pb-quals">
+      <p class="pb-quals-label" id="pbQualsStory">Damian&rsquo;s qualifications and memberships</p>
+      <ul class="pb-quals-list" aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
+    </div>
   </div>
 </div></section>
 
@@ -2353,6 +2456,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and have led it ever since, and I am the Qualified Financial Adviser behind Pensionbuddy.</p>
     <p class="bio">Thirty years of that work leaves you with one firm opinion: hardly anyone is bad with money. They have just never had it explained to them in words they felt allowed to ask questions about.</p>
         <span class="sig">Damian</span>
+    <div class="pb-quals">
+      <p class="pb-quals-label" id="pbQualsDamian">Damian&rsquo;s qualifications and memberships</p>
+      <ul class="pb-quals-list" aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
+    </div>
   </div>
 </div></section>
 
@@ -2477,7 +2584,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
-    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
     <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="my-pensions.html">All your pensions in one view</a><a href="pia.html">Personal Investment Account (PIA)</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>
@@ -2787,7 +2894,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-providers.js?v=847cf641"></script>
+<script src="assets/js/pb-providers.js?v=2fc3649b"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 </body>
 </html>

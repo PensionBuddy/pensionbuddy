@@ -1,28 +1,39 @@
 #!/usr/bin/env python3
-"""The provider ticker, in headless Chrome (Run 29).
+"""The provider ticker, in headless Chrome (Run 29; switched on in Run 35).
 
     python3 tests/providers.test.py
 
 Two Chrome launches, one with reduced motion forced on. The ticker ships
-switched off, so the page is loaded twice: as it ships, and with
-assets/js/pb-providers.js served with `var ON = true;` (the served bytes
-only: the file on disk is never touched).
+switched on with the providers' own logos; the page is also loaded once with
+assets/js/pb-providers.js served with `var ON = false;` (the served bytes
+only: the file on disk is never touched), so the switch is proved both ways.
 
 What it proves:
-  1. as shipped: the flag is off in the file, and the home page shows
-     nothing: the mount is empty and hidden, no .pb-prov, no injected style
-  2. switched on: under the label "Providers we hold agencies with", one list
-     of the providers in the file's order, each a box with its name, the
-     loop's copies hidden from screen readers; the strip is faded at both
-     edges and moving; the Pause button stops it and says so (aria-pressed)
-     and Play starts it again; hovering pauses it (the rule is in the
-     stylesheet it injects); nothing runs past the window at 375 or 1440px
-  3. switched on, with reduced motion: a still row, wrapped, no copies shown,
-     no fades, no Pause button
-  4. the words: "partner" and "we work with" appear only in the comment
+  1. the file: switched on; the six providers in order, each with a logo in
+     assets/logos/ whose stated width and height are the file's own; every
+     SVG 40px tall; nothing in assets/logos/ that is not on the list (no
+     brand shown that is not an agency)
+  2. on, at 1440 and 375px: under the label "Providers we hold agencies
+     with", one list of the providers in the file's order, each a logo with
+     its name as alt text and its space kept (width and height set); the
+     loop's copies hidden from screen readers, with empty alt text; every
+     logo the same height (32px, 28px on a phone); grey (grayscale(1)) until
+     the pointer is on it, then its own colours (the rule is in the
+     stylesheet it injects); every logo file loads; the strip faded at both
+     edges and moving; Pause stops it and Play starts it again, the
+     button's name always holding the word shown on it (WCAG 2.5.3), with no
+     aria-pressed; hovering pauses it; nothing runs past the window
+  3. on, with reduced motion: a still row, wrapped, one row at 1440px, no
+     copies shown, no fades, no Pause button; still grey
+  4. switched off (served bytes): the home page shows nothing: the mount is
+     empty and hidden, no .pb-prov, no injected style
+  5. the words: "partner" and "we work with" appear only in the comment
      that rules them out; the label is set once
+  6. without JavaScript: the home page's <noscript> row has the same label
+     and the same providers, in the same order, with the same files, alt
+     text and sizes, grey until the pointer is on a logo
 """
-import base64, html, json, os, re, socket, subprocess, sys, threading
+import base64, html, json, os, re, socket, struct, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
@@ -33,7 +44,10 @@ from harness import eq, report  # noqa: E402
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 JS = 'assets/js/pb-providers.js'
 SRC = open(os.path.join(ROOT, JS), encoding='utf-8').read()
-NAMES = re.findall(r"\{ name: '([^']+)', logo: null \}", SRC)
+ENTRY = re.compile(r"\{ name: '([^']+)', logo: '([^']+)', w: ([\d.]+), h: ([\d.]+) \}")
+ENTRIES = ENTRY.findall(SRC)
+NAMES = [e[0] for e in ENTRIES]
+LOGOS = 'assets/logos'
 
 PROBE = r"""<script>
 (function(){
@@ -45,17 +59,23 @@ PROBE = r"""<script>
     var m=document.querySelector('[data-pb-providers]'), root=document.querySelector('.pb-prov');
     R.mounts=document.querySelectorAll('[data-pb-providers]').length;
     R.mount=m?{hidden:m.hidden, kids:m.children.length, shown:getComputedStyle(m).display!=='none'}:null;
-    R.root=!!root; R.style=[].some.call(document.querySelectorAll('style'),function(s){return s.textContent.indexOf('.pb-prov')>=0;});
+    R.root=!!root; R.style=[].some.call(document.querySelectorAll('style'),function(s){return s.textContent.indexOf('.pb-prov-track')>=0;});
     R.w=innerWidth; R.sw=document.documentElement.scrollWidth;
     if(!root) return done();
     var track=root.querySelector('.pb-prov-track'), strip=root.querySelector('.pb-prov-strip');
     R.label=root.querySelector('.pb-prov-label').textContent;
     R.labelledby=track.getAttribute('aria-labelledby')==='pbProvLabel';
-    R.spoken=[].map.call(track.querySelectorAll('li:not([aria-hidden="true"])'),function(li){return li.textContent;});
+    var first=[].slice.call(track.querySelectorAll('li:not([aria-hidden="true"])'));
+    R.spoken=first.map(function(li){var i=li.querySelector('img');return i?i.alt:li.textContent;});
+    R.logos=first.map(function(li){var i=li.querySelector('img');return i?[i.getAttribute('src'),i.getAttribute('width'),i.getAttribute('height')]:null;});
     R.clones=[].every.call(track.querySelectorAll('li.is-clone'),function(li){return li.getAttribute('aria-hidden')==='true';});
+    R.cloneAlts=[].every.call(track.querySelectorAll('li.is-clone img'),function(i){return i.getAttribute('alt')==='';});
     R.cloneCount=track.querySelectorAll('li.is-clone').length;
     R.shownClones=[].filter.call(track.querySelectorAll('li.is-clone'),function(li){return getComputedStyle(li).display!=='none';}).length;
-    R.boxes=[].every.call(track.querySelectorAll('.pb-prov-box'),function(b){var r=b.getBoundingClientRect();return r.width>=100&&r.height>=40;});
+    var imgs=[].slice.call(track.querySelectorAll('img'));
+    R.heights=imgs.map(function(i){return Math.round(i.getBoundingClientRect().height*10)/10;}).filter(function(v,k,a){return a.indexOf(v)===k;});
+    R.filters=imgs.map(function(i){return getComputedStyle(i).filter;}).filter(function(v,k,a){return a.indexOf(v)===k;});
+    R.rows=first.map(function(li){return Math.round(li.getBoundingClientRect().top);}).filter(function(v,k,a){return a.indexOf(v)===k;}).length;
     var cs=getComputedStyle(strip); R.mask=(cs.maskImage||cs.webkitMaskImage||'none');
     R.anim=[getComputedStyle(track).animationName,getComputedStyle(track).animationPlayState];
     R.wrap=getComputedStyle(track).flexWrap;
@@ -68,14 +88,22 @@ PROBE = r"""<script>
     if(an){ var tm=an.effect.getTiming(); R.loop=[tm.duration>0, String(tm.iterations)];
       an.currentTime=tm.duration/2; R.moved=new DOMMatrix(getComputedStyle(track).transform).m41<-50; an.currentTime=0; }
     else { R.loop=null; R.moved=false; }
-    setTimeout(function(){
-      pb.click(); R.paused=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-pressed'),pb.textContent];
-      pb.click(); R.played=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-pressed'),pb.textContent];
-      R.hoverRule=[].some.call(document.styleSheets,function(s){try{return [].some.call(s.cssRules,function(r){
-        return /\.pb-prov-strip:hover \.pb-prov-track/.test(r.selectorText||'') && r.style.animationPlayState==='paused';});}catch(e){return false;}});
+    function rule(re, test){ return [].some.call(document.styleSheets,function(s){try{return [].some.call(s.cssRules,function r(x){
+      if(x.cssRules&&x.cssRules.length&&!x.selectorText) return [].some.call(x.cssRules,r);
+      return re.test(x.selectorText||'') && test(x.style);});}catch(e){return false;}}); }
+    /* the files, fetched as images: the strip's own are lazy and off screen */
+    var srcs=R.logos.filter(Boolean).map(function(l){return l[0];});
+    Promise.all(srcs.map(function(s){return new Promise(function(res){var t=new Image();
+      t.onload=function(){res(t.naturalWidth>0);}; t.onerror=function(){res(false);}; t.src=s;});})).then(function(ok){
+      R.loads=ok;
+      R.before=[pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
+      pb.click(); R.paused=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
+      pb.click(); R.played=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
+      R.hoverRule=rule(/\.pb-prov-strip:hover \.pb-prov-track/,function(st){return st.animationPlayState==='paused';});
+      R.colourRule=rule(/^\.pb-prov-item:hover img$/,function(st){return st.filter==='none'&&st.opacity==='1';});
       R.sw2=document.documentElement.scrollWidth;
       done();
-    },700);
+    });
   },300);
 })();
 </script>"""
@@ -114,8 +142,8 @@ class Handler(SimpleHTTPRequestHandler):
             return self._send(t.encode('utf-8'))
         if path == JS:
             t = SRC
-            if q.get('mode', [''])[0] == 'on':
-                t = t.replace('var ON = false;', 'var ON = true;', 1)
+            if q.get('mode', [''])[0] == 'off':
+                t = t.replace('var ON = true;', 'var ON = false;', 1)
             return self._send(t.encode('utf-8'), 'application/javascript')
         return super().do_GET()
 
@@ -141,6 +169,27 @@ def launch(port, jobs, extra=()):
             for j, w, b in json.loads(html.unescape(m.group(1)))}
 
 
+def file_size(rel):
+    """(width, height) a logo file declares: an SVG's width and height
+    attributes, a WebP's canvas (lossless VP8L, lossy VP8 or extended VP8X)."""
+    path = os.path.join(ROOT, rel)
+    if rel.endswith('.svg'):
+        root = re.search(r'<svg\b[^>]*>', open(path, encoding='utf-8').read()).group(0)
+        return (float(re.search(r'\swidth="([\d.]+)"', root).group(1)), float(re.search(r'\sheight="([\d.]+)"', root).group(1)))
+    b = open(path, 'rb').read(40)
+    if b[:4] != b'RIFF' or b[8:12] != b'WEBP':
+        return None
+    kind = b[12:16]
+    if kind == b'VP8L':
+        bits = struct.unpack('<I', b[21:25])[0]
+        return ((bits & 0x3FFF) + 1, ((bits >> 14) & 0x3FFF) + 1)
+    if kind == b'VP8X':
+        return (int.from_bytes(b[24:27], 'little') + 1, int.from_bytes(b[27:30], 'little') + 1)
+    if kind == b'VP8 ':
+        return (struct.unpack('<H', b[26:28])[0] & 0x3FFF, struct.unpack('<H', b[28:30])[0] & 0x3FFF)
+    return None
+
+
 def main():
     if not os.path.exists(CHROME):
         print('Chrome not found at %s' % CHROME)
@@ -149,51 +198,98 @@ def main():
     srv = ThreadingHTTPServer(('127.0.0.1', port), Handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
 
-    R = launch(port, [['off', 1440], ['off', 375], ['on', 1440], ['on', 375]])
-    M = launch(port, [['on', 1440]], ['--force-prefers-reduced-motion'])
+    R = launch(port, [['on', 1440], ['on', 375], ['off', 1440]])
+    M = launch(port, [['on', 1440], ['on', 375]], ['--force-prefers-reduced-motion'])
     eq('0. both Chrome launches returned every job', (R is not None, M is not None), (True, True))
     if R is None or M is None:
         srv.shutdown(); report(); return
 
     # 1
-    eq('1. the flag in the file is off', 'var ON = false;' in SRC and 'var ON = true;' not in SRC, True)
-    for w in (1440, 375):
-        r = R[('off', w)]
-        eq('1. off at %dpx: one mount on the home page, empty and hidden' % w,
-           (r['mounts'], r['mount']), (1, {'hidden': True, 'kids': 0, 'shown': False}))
-        eq('1. off at %dpx: no ticker and no styles for it' % w, (r['root'], r['style']), (False, False))
-        eq('1. off at %dpx: no script error' % w, r['errors'], [])
-    # 2
-    eq('2. the file lists the six providers, in order', NAMES,
+    eq('1. the flag in the file is on', ('var ON = true;' in SRC, 'var ON = false;' in SRC), (True, False))
+    eq('1. the file lists the six providers, in order, each with a logo', NAMES,
        ['Zurich', 'Irish Life', 'Aviva', 'New Ireland', 'Royal London', 'Standard Life'])
+    eq('1. and every entry is written the one way (no provider hidden from this test)',
+       len(re.findall(r"\{ name: '", SRC)), len(ENTRIES))
+    for name, logo, w, h in ENTRIES:
+        eq('1. %s: its logo is an SVG or a WebP in %s/, and there' % (name, LOGOS),
+           (os.path.dirname(logo), os.path.splitext(logo)[1] in ('.svg', '.webp'), os.path.isfile(os.path.join(ROOT, logo))),
+           (LOGOS, True, True))
+        size = file_size(logo) if os.path.isfile(os.path.join(ROOT, logo)) else None
+        eq('1. %s: the width and height in the list are the file\'s own' % name,
+           size and (round(size[0], 2), round(size[1], 2)), (round(float(w), 2), round(float(h), 2)))
+        if logo.endswith('.svg'):
+            eq('1. %s: the SVG is 40px tall, like every other' % name, size and size[1], 40.0)
+    shipped = sorted(f for f in os.listdir(os.path.join(ROOT, LOGOS)) if not f.startswith('.'))
+    eq('1. %s/ holds the listed logos and nothing else' % LOGOS, shipped, sorted(os.path.basename(e[1]) for e in ENTRIES))
+    # 2
     for w in (1440, 375):
         r = R[('on', w)]
         eq('2. on at %dpx: shown' % w, (r['root'], r['mount']['hidden'], r['mount']['shown']), (True, False, True))
         eq('2. on at %dpx: the label' % w, r['label'], 'Providers we hold agencies with')
-        eq('2. on at %dpx: one list, labelled, of the providers in order' % w, (r['labelledby'], r['spoken']), (True, NAMES))
-        eq('2. on at %dpx: the loop\'s copies are hidden from screen readers' % w, (r['clones'], r['cloneCount'] > 0), (True, True))
-        eq('2. on at %dpx: every provider a box with its name' % w, r['boxes'], True)
+        eq('2. on at %dpx: one list, labelled, of the providers in order, each named by its logo\'s alt text' % w,
+           (r['labelledby'], r['spoken']), (True, NAMES))
+        eq('2. on at %dpx: each logo is the listed file, its space kept' % w, r['logos'],
+           [[e[1], str(round(float(e[2]))), str(round(float(e[3])))] for e in ENTRIES])
+        eq('2. on at %dpx: every logo file loads' % w, r['loads'], [True] * len(ENTRIES))
+        eq('2. on at %dpx: the loop\'s copies are hidden from screen readers, with empty alt text' % w,
+           (r['clones'], r['cloneAlts'], r['cloneCount'] > 0), (True, True, True))
+        eq('2. on at %dpx: every logo the same height' % w, r['heights'], [32 if w > 600 else 28])
+        eq('2. on at %dpx: grey until the pointer is on one' % w, r['filters'], ['grayscale(1)'])
+        eq('2. on at %dpx: under the pointer, its own colours' % w, r['colourRule'], True)
         eq('2. on at %dpx: faded at both edges' % w, 'linear-gradient' in r['mask'], True)
         eq('2. on at %dpx: moving, in a loop that never ends' % w, (r['anim'], r['moved'], r['loop']),
            (['pbProv', 'running'], True, [True, 'Infinity']))
-        eq('2. on at %dpx: Pause stops it and says so' % w, r['paused'], ['paused', 'true', 'Play'])
-        eq('2. on at %dpx: Play starts it again' % w, r['played'], ['running', 'false', 'Pause'])
+        eq('2. on at %dpx: the button, before a press: "Pause", named for it' % w, r['before'],
+           ['Pause the provider logos', 'Pause', False])
+        eq('2. on at %dpx: Pause stops it, and the button becomes "Play", named for it' % w, r['paused'],
+           ['paused', 'Play the provider logos', 'Play', False])
+        eq('2. on at %dpx: Play starts it again' % w, r['played'], ['running', 'Pause the provider logos', 'Pause', False])
+        eq('2. on at %dpx: the name always holds the word on the button (WCAG 2.5.3)' % w,
+           all(x[-3].lower().startswith(x[-2].lower()) for x in (r['before'], r['paused'], r['played'])), True)
         eq('2. on at %dpx: hovering pauses it' % w, r['hoverRule'], True)
         eq('2. on at %dpx: nothing past the window' % w, (r['sw'] <= w, r['sw2'] <= w), (True, True))
         eq('2. on at %dpx: no script error' % w, r['errors'], [])
     # 3
-    r = M[('on', 1440)]
-    eq('3. reduced motion: shown', r['root'], True)
-    eq('3. reduced motion: a still row, wrapped', (r['anim'][0], r['loop'], r['wrap']), ('none', None, 'wrap'))
-    eq('3. reduced motion: the providers once, no copies shown', (r['spoken'], r['shownClones']), (NAMES, 0))
-    eq('3. reduced motion: no fades, no Pause button', (r['mask'], r['pauseShown']), ('none', False))
+    for w in (1440, 375):
+        r = M[('on', w)]
+        eq('3. reduced motion at %dpx: shown' % w, r['root'], True)
+        eq('3. reduced motion at %dpx: a still row, wrapped' % w, (r['anim'][0], r['loop'], r['wrap']), ('none', None, 'wrap'))
+        eq('3. reduced motion at %dpx: the providers once, no copies shown' % w, (r['spoken'], r['shownClones']), (NAMES, 0))
+        eq('3. reduced motion at %dpx: no fades, no Pause button' % w, (r['mask'], r['pauseShown']), ('none', False))
+        eq('3. reduced motion at %dpx: still grey' % w, r['filters'], ['grayscale(1)'])
+        eq('3. reduced motion at %dpx: nothing past the window' % w, r['sw'] <= w, True)
+    eq('3. reduced motion at 1440px: one row', M[('on', 1440)]['rows'], 1)
     # 4
-    eq('4. "partner" and "we work with" appear only in the comment that rules them out',
+    r = R[('off', 1440)]
+    eq('4. switched off: one mount on the home page, empty and hidden',
+       (r['mounts'], r['mount']), (1, {'hidden': True, 'kids': 0, 'shown': False}))
+    eq('4. switched off: no ticker and no styles for it', (r['root'], r['style']), (False, False))
+    eq('4. switched off: no script error', r['errors'], [])
+    # 5
+    eq('5. "partner" and "we work with" appear only in the comment that rules them out',
        [l.strip() for l in SRC.split('\n') if 'partner' in l.lower() or 'we work with' in l.lower()],
        ['The wording is "Providers we hold agencies with". Not "partners", not',
         '"we work with": an agency is the fact, a partnership is a claim.'])
-    eq('4. the label is set in one place, and is the brief\'s', re.findall(r"var LABEL = '([^']*)';", SRC),
+    eq('5. the label is set in one place, and is the brief\'s', re.findall(r"var LABEL = '([^']*)';", SRC),
        ['Providers we hold agencies with'])
+    # 6
+    home = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
+    ns = re.findall(r'<noscript><div class="pb-prov-ns">(.*?)</div></noscript>', home, re.S)
+    eq('6. without JavaScript: one still row, straight after the mount', (len(ns), home.find('<noscript><div class="pb-prov-ns">')
+       == home.find('<div data-pb-providers hidden></div>') + len('<div data-pb-providers hidden></div>\n')), (1, True))
+    row = ns[0] if ns else ''
+    eq('6. without JavaScript: the same label', re.findall(r'<p class="pb-prov-ns-label" id="([^"]+)">([^<]*)</p>\s*<ul class="pb-prov-ns-list" aria-labelledby="([^"]+)">', row),
+       [('pbProvNsLabel', 'Providers we hold agencies with', 'pbProvNsLabel')])
+    eq('6. without JavaScript: the same providers, files, alt text and sizes, in order',
+       re.findall(r'<li><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"></li>', row),
+       [(e[1], e[0], str(round(float(e[2]))), str(round(float(e[3])))) for e in ENTRIES])
+    # and nothing else in it: an item written any other way would slip past the pattern above
+    eq('6. without JavaScript: no other item and no other image in the row',
+       (row.count('<li'), row.count('<img'), len(re.findall(r'<img src="assets/logos/', row))),
+       (len(ENTRIES), len(ENTRIES), len(ENTRIES)))
+    eq('6. without JavaScript: grey, and its own colours under the pointer',
+       ('.pb-prov-ns-list img{display:block;width:auto;height:32px;filter:grayscale(1);opacity:.72}' in home,
+        '.pb-prov-ns-list li:hover img{filter:none;opacity:1}' in home), (True, True))
     srv.shutdown()
     report()
 

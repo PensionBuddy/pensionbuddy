@@ -1762,6 +1762,33 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .phead > .wrap:has(> .pb-reviewed) > .pb-reviewed{order:-1}
 }
 /* FIRSTSCREEN:END */
+/* QUALS:BEGIN (Run 35). Damian's qualifications and memberships, one list
+   wherever it appears: the end of the home page's story, under Damian's own
+   section, beside the booking form, and small in every footer. Byte for
+   byte on every page: tools/pagebuild.py SHARED_CSS ('QUALS', 'quals-css'),
+   guarded by chrome_drift; the words and places are held by
+   tests/build.test.py check 31.
+   - The label says whose they are, "Damian's qualifications and
+     memberships": his own qualification and a body he belongs to, never an
+     endorsement of Pensionbuddy by either.
+   - Each item is the full name, in text. A body's logo, when its file comes
+     with permission, goes inside the <li> as an <img> (28px tall, 20px in
+     the footer) with the full name as its alt text.
+   - Static: nothing here moves, fades or waits for anything. */
+.pb-quals{margin:28px 0 0}
+.pb-quals .pb-quals-label{margin:0 0 10px;max-width:none;font-size:14px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-quals .pb-quals-list{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.pb-quals .pb-quals-list li{display:flex;align-items:center;gap:10px;margin:0;padding:9px 14px;
+  border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface);
+  font-size:15px;font-weight:600;line-height:1.35;color:var(--ink)}
+.pb-quals .pb-quals-list img{display:block;width:auto;height:28px}
+.pb-quals.pb-quals-sm{margin:18px 0 0}
+.pb-quals.pb-quals-sm .pb-quals-label{margin:0 0 6px;font-size:13px}
+.pb-quals.pb-quals-sm .pb-quals-list{flex-direction:column;gap:4px}
+.pb-quals.pb-quals-sm .pb-quals-list li{padding:0;border:0;border-radius:0;background:none;
+  font-size:13px;font-weight:500;color:var(--ink-2)}
+.pb-quals.pb-quals-sm .pb-quals-list img{height:20px}
+/* QUALS:END */
 </style>
 </head>
 <body>
@@ -1857,6 +1884,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
         <div><div class="at">Phone or video</div><div class="ad">Pick whichever you prefer when you book.</div></div>
       </div>
     </div>
+    <div class="pb-quals">
+      <p class="pb-quals-label" id="pbQualsBook">Damian&rsquo;s qualifications and memberships</p>
+      <ul class="pb-quals-list" aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
+    </div>
   </div>
 
   <div class="book-card">
@@ -1930,7 +1961,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
-    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p></div>
+    <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
     <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="my-pensions.html">All your pensions in one view</a><a href="pia.html">Personal Investment Account (PIA)</a><a href="glossary.html">Pension jargon buster</a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>

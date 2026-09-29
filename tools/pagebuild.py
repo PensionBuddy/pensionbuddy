@@ -579,11 +579,12 @@ CURRENT_PAT = re.compile(r'<a class="lnk"(?=[^>]*aria-current="page")(?=[^>]*hre
 HREF_PAT = re.compile(r'href="([^"]+)"')
 # Run 29: blocks of CSS that are the same on every page, last in every
 # page's <style>, each a (name, finding kind): the nav's own stylesheet,
-# the rules that make everything clickable look clickable, and (Run 32) the
+# the rules that make everything clickable look clickable, (Run 32) the
 # metric-matched fallback for Inter, the motion vocabulary, and how the
-# floating chrome gives way.
+# floating chrome gives way, (Run 33) the first screen on a phone, and
+# (Run 35) Damian's qualifications and memberships.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
-              ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'))
+              ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'))
 
 
 def _once(text, marker):

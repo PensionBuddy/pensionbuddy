@@ -1053,6 +1053,195 @@ def run():
         assert mut != dr, label
         eq('28. %s is caught' % label, lockups(mut), want)
 
+    # ----------------------------------------------------------------- 31
+    # Run 35: Damian's qualifications and memberships. One list, the same
+    # words everywhere, in the places the brief named: the end of the home
+    # page's story, under Damian's own section, beside the booking form, and
+    # small in every page's footer (the foot-top, so chrome_drift holds it
+    # to the skeleton's on every page, and check 8 says so). The label says
+    # whose they are, so no body seems to endorse Pensionbuddy; nothing else
+    # is said in the strip, and nothing in it moves. (Checks 29 and 30 are
+    # numbered on the unmerged claude/overnight-3 branch.)
+    QUAL_LABEL = 'Damian&rsquo;s qualifications and memberships'
+    QUAL_ITEMS = ['Qualified Financial Adviser (QFA)', 'Life Insurance Association (LIA)']
+    WHERE = {'index.html': ['pbQualsStory', 'pbQualsDamian', 'pbQualsFoot'],
+             'booking.html': ['pbQualsBook', 'pbQualsFoot']}
+
+    def quals(src):
+        """[(id, label, names, image faults, extra words)] for every strip, in
+        page order. An item's name is its text, or, for an item that is only a
+        logo, the logo's alt text; every logo must carry the name of the item it
+        sits in as its alt text."""
+        out = []
+        for m in re.finditer(r'<div class="pb-quals(?: pb-quals-sm)?">', src):
+            # the strip holds no <div>, so it ends at the first </div>
+            box = src[m.end():src.find('</div>', m.end())]
+            lab = re.search(r'<p class="pb-quals-label" id="([^"]+)">(.*?)</p>\s*<ul class="pb-quals-list" aria-labelledby="([^"]+)">', box, re.S)
+            if not lab or lab.group(1) != lab.group(3):
+                out.append(('unlabelled', None, None, None, None))
+                continue
+            names, bad = [], []
+            for li in re.findall(r'<li>(.*?)</li>', box, re.S):
+                imgs = re.findall(r'<img\b[^>]*>', li)
+                alts = [re.search(r'\salt="([^"]*)"', i) for i in imgs]
+                text = re.sub(r'<[^>]+>', '', li).strip()
+                name = text or (alts[0].group(1) if alts and alts[0] else '')
+                names.append(name)
+                if any(a is None or a.group(1) != name for a in alts):
+                    bad.append(name)
+            words = re.sub(r'<p class="pb-quals-label".*?</p>|<li>.*?</li>|<[^>]+>|\s', '', box, flags=re.S)
+            out.append((lab.group(1), lab.group(2), names, bad, words))
+        return out
+
+    def quals_faults(srcs):
+        f = []
+        for page, want in sorted(WHERE.items()):
+            got = quals(srcs[page])
+            if [g[0] for g in got] != want:
+                f.append('%s: strips %s, expected %s' % (page, [g[0] for g in got], want))
+            for g in got:
+                if g[1] != QUAL_LABEL:
+                    f.append('%s %s: the label is %r' % (page, g[0], g[1]))
+                if g[2] != QUAL_ITEMS:
+                    f.append('%s %s: the items are %r' % (page, g[0], g[2]))
+                if g[3]:
+                    f.append('%s %s: a logo without its own item\'s full name as alt text: %s' % (page, g[0], g[3]))
+                if g[4]:
+                    f.append('%s %s: words in the strip beyond its label and names: %r' % (page, g[0], g[4][:40]))
+        for page in sorted(n for n in srcs if n not in WHERE):
+            got = quals(srcs[page])
+            if [g[0] for g in got] != ['pbQualsFoot']:
+                f.append('%s: strips %s, expected the footer\'s only' % (page, [g[0] for g in got]))
+        ix = srcs['index.html']
+        story, damian = ix.find('<section id="story">'), ix.find('<section id="damian"')
+        if not (story < ix.find('id="pbQualsStory"') < damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
+            f.append('index.html: the strips are not at the end of the story and in Damian\'s section')
+        bk = srcs['booking.html']
+        if not (bk.find('<div class="lead">') < bk.find('id="pbQualsBook"') < bk.find('<div class="book-card">')):
+            f.append('booking.html: the strip is not in the column beside the form, before its card')
+        skel = srcs['pension-calculator.html']
+        c = pagebuild.css_span(skel, 'QUALS')
+        block = re.sub(r'/\*.*?\*/', '', skel[c[0]:c[1]], flags=re.S) if c else ''
+        if not block or re.search(r'transition|animation|transform|@keyframes', block):
+            f.append('the QUALS block is missing, or something in it moves')
+        return f
+
+    eq('31. Damian\'s qualifications and memberships: the same label and names in the four places, and nothing else',
+       quals_faults(sources), [])
+    for label, page, find, repl, want in (
+            ('the label changed to a claim', 'index.html', 'id="pbQualsStory">Damian&rsquo;s qualifications and memberships',
+             'id="pbQualsStory">Accredited by', 'the label is'),
+            ('a name dropped from the booking page', 'booking.html',
+             'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
+            ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"',
+             '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="damian"', 'the items are'),
+            ('an endorsement line added', 'index.html',
+             'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
+             'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
+             '<p>Pensionbuddy is recommended by the LIA.</p>', 'beyond its label'),
+            ('a logo with empty alt text', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+             '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
+            ('a logo with no alt at all', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+             '<li><img src="assets/logos/qfa.svg">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
+            ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li>',
+             'aria-labelledby="pbQualsStory"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
+            ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
+            ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
+             '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),
+            ('a strip added to another page\'s main', 'director.html', '</main>',
+             '<div class="pb-quals"><p class="pb-quals-label" id="pbQualsX">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsX"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></main>', 'strips'),
+            ('motion put in the block', 'pension-calculator.html', '.pb-quals{margin:28px 0 0}', '.pb-quals{margin:28px 0 0;transition:opacity .3s}', 'moves')):
+        mut = dict(sources)
+        mut[page] = sources[page].replace(find, repl, 1)
+        assert mut[page] != sources[page], label
+        eq('31. %s is caught' % label, any(want in x for x in quals_faults(mut)), True)
+
+    # ----------------------------------------------------------------- 32
+    # Run 35: "Just here to learn?" on the home page, straight after its
+    # first section (the gap band), before the calculator band. Two cards,
+    # Buddy's Run then Jargon Battle: each a still photograph of the real
+    # game mid-play, the picture tools/shoot-product.py takes (both in its
+    # SHOTS), its width and height the file's own, a line, and a play link
+    # to the game. Static: the section's rules move nothing, no script
+    # touches it, and it offers nothing to win.
+    GAMES = [('Buddy&rsquo;s Run', 'buddys-run', 'Collect the benefits, jump the excuses.'),
+             ('Jargon Battle', 'jargon-battle', 'Pick the right meaning to bust the Jargon Blob.')]
+
+    def jpeg_size(rel):
+        b = open(os.path.join(ROOT, rel), 'rb').read()
+        i = 2
+        while i < len(b) - 9:
+            if b[i] != 0xFF:
+                return None
+            marker, length = b[i + 1], int.from_bytes(b[i + 2:i + 4], 'big')
+            if marker in (0xC0, 0xC1, 0xC2):
+                return int.from_bytes(b[i + 7:i + 9], 'big'), int.from_bytes(b[i + 5:i + 7], 'big')
+            i += 2 + length
+        return None
+
+    def learn_faults(ix):
+        f = []
+        m = re.search(r'</section>\s*(?:<!--.*?-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
+        gap = ix.find('<section class="gapband pb-bleed pb-wash" id="gap">')
+        if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
+            return ['the section is not straight after the gap band and before the calculator band']
+        box = m.group(1)
+        if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
+            f.append('the heading')
+        cards = re.findall(r'<li><div class="pb-learn-card">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
+                           r'<img src="assets/img/product-([a-z-]+)\.jpg\?v=[0-9a-f]+" width="(\d+)" height="(\d+)" loading="lazy" alt="([^"]+)"></picture>\s*'
+                           r'<div class="pb-learn-body">\s*<h3>([^<]+)</h3>\s*<p class="pb-learn-d">([^<]+)</p>\s*'
+                           r'<a class="pb-learn-play" href="games/([a-z-]+)\.html">Play ([^<]+?) <svg[^>]*>.*?</svg></a>\s*</div>\s*</div></li>', box, re.S)
+        if len(cards) != 2 or box.count('<li>') != 2:
+            f.append('%d whole cards, expected 2' % len(cards))
+        for (name, slug, line), c in zip(GAMES, cards):
+            webp, jpg, w, h, alt, title, d, href, play = c
+            if (webp, jpg, href) != (slug, slug, slug):
+                f.append('%s: the picture or the link is not the game\'s' % slug)
+            if (title, play, d) != (name, name, line):
+                f.append('%s: the title, the play link or the line' % slug)
+            if not alt.startswith(name + ', mid-game: '):
+                f.append('%s: the alt text' % slug)
+            size = jpeg_size('assets/img/product-%s.jpg' % slug) if os.path.isfile(os.path.join(ROOT, 'assets/img/product-%s.jpg' % slug)) else None
+            if size != (int(w), int(h)) or not os.path.isfile(os.path.join(ROOT, 'assets/img/product-%s.webp' % slug)):
+                f.append('%s: the files, or width and height not the picture\'s own (%s)' % (slug, size))
+        css = re.search(r'/\* Run 35: "Just here to learn\?".*?\*/(.*?)@media\(max-width:760px\)\{\.pb-learn-grid[^\n]*\n', ix, re.S)
+        if not css or re.search(r'transition|animation|transform|@keyframes', css.group(1)) or re.search(r'pb-learn|#learn', ''.join(re.findall(r'<script\b[^>]*>(.*?)</script>', ix, re.S))):
+            f.append('the section moves, or a script touches it')
+        text = re.sub(r'<[^>]+>', ' ', box).lower()
+        if re.search(r'\b(win|won|prize|reward|earn|badge|points|free gift)\b', text):
+            f.append('the section offers something to win')
+        return f
+
+    shots = open(os.path.join(ROOT, 'tools/shoot-product.py'), encoding='utf-8').read()
+    eq('32. "Just here to learn?": after the first section, two game cards, each the real game\'s picture, a line and a play link, still',
+       (learn_faults(sources['index.html']), "'buddys-run': {'page': 'games/buddys-run.html'" in shots,
+        "'jargon-battle': {'page': 'games/jargon-battle.html'" in shots), ([], True, True))
+    ix = sources['index.html']
+    for label, find, repl, want in (
+            ('the section moved below the calculator band', None, None, 'straight after'),
+            ('a card with no play link', 'href="games/jargon-battle.html">Play Jargon Battle', 'href="games/jargon-battle.html">Try it', 'whole cards'),
+            ('a card pointing at the other game', 'href="games/buddys-run.html">Play Buddy', 'href="games/jargon-battle.html">Play Buddy', 'the link is not'),
+            ('the picture\'s height not its own', 'jpg?v=', None, 'width and height'),
+            ('a hover that lifts', '.pb-learn-card:hover{border-color:var(--teal);background:var(--teal-50)}',
+             '.pb-learn-card:hover{border-color:var(--teal);background:var(--teal-50);transform:translateY(-2px)}', 'moves'),
+            ('a reward on offer', '<span class="kicker">Learn it the fun way</span>',
+             '<span class="kicker">Learn it the fun way, and win a prize</span>', 'offers something to win')):
+        if find is None:
+            # take the section out and put it back after the calculator band
+            s0 = ix.find('<!-- JUST HERE TO LEARN?')
+            s1 = ix.find('<section id="calc"')
+            sec = ix[s0:s1]
+            rest = ix[:s0] + ix[s1:]
+            c1 = rest.find('</div></section>', rest.find('<section id="calc"')) + len('</div></section>\n')
+            mut = rest[:c1] + '\n' + sec + rest[c1:]
+        elif repl is None:
+            mut = re.sub(r'(product-buddys-run\.jpg\?v=[0-9a-f]+" width="2400" height=")1350', r'\g<1>1400', ix, count=1)
+        else:
+            mut = ix.replace(find, repl, 1)
+        assert mut != ix, label
+        eq('32. %s is caught' % label, any(want in x for x in learn_faults(mut)), True)
+
 
 
 
