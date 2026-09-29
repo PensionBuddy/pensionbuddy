@@ -1563,7 +1563,9 @@ button{font-family:inherit}
    the State gives you, amber is the shortfall, and the total, in
    ink above each bar, is what you need. Heights and figures are
    in the markup, so the chart is finished before any script runs;
-   assets/js/pb-bars.js arms it and counts it up once, on scroll.
+   assets/js/pb-bars.js arms it, below the fold only, and it grows once
+   on arrival: the teal first, then the amber after it (Run 34, part 6b).
+   The figures are final throughout.
    ============================================================ */
 .pb-lsb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(12px,3.5vw,36px);max-width:720px;margin-bottom:26px}
@@ -1571,22 +1573,20 @@ button{font-family:inherit}
 .pb-lsb-fig{position:absolute;left:0;bottom:var(--h);margin-bottom:9px;
   font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
   font-size:clamp(1.3rem,3.4vw,2.2rem);letter-spacing:-.03em;line-height:1;
-  color:var(--ink);white-space:nowrap;
-  transition:bottom 1.15s cubic-bezier(.2,.7,.2,1)}
+  color:var(--ink);white-space:nowrap}
 /* the stage keeps room above the tallest bar for the figure that rides it */
 .pb-lsb-stage{position:relative;height:clamp(170px,25vw,280px);
   margin-top:calc(clamp(1.3rem,3.4vw,2.2rem) + 12px)}
-.pb-lsb-seg{position:absolute;left:0;right:0;border-radius:0;
-  transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
+.pb-lsb-seg{position:absolute;left:0;right:0;border-radius:0;transform-origin:50% 100%;
+  transition:transform var(--pb-t-fill)}
 .pb-lsb-top{border-radius:10px 10px 0 0}
 .pb-lsb-teal{bottom:0;height:var(--h);background:var(--aqua)}
 .pb-lsb-amber{bottom:var(--from);height:calc(var(--h) - var(--from));
-  background:var(--amber-soft);transition-delay:.12s}
+  background:var(--amber-soft);transition-delay:calc(var(--pb-d-4) + var(--pb-beat-gap))}
 /* arming is instant, growing is animated: the script adds .pb-armed after the
    markup has already painted at full height, so an animated collapse would
    show the reader the finished chart and then take it away */
-.pb-lsb.pb-armed:not(.pb-go) .pb-lsb-seg{height:0;transition:none}
-.pb-lsb.pb-armed:not(.pb-go) .pb-lsb-fig{bottom:0;transition:none}
+.pb-lsb.pb-armed:not(.pb-go) .pb-lsb-seg{transform:scaleY(0);transition:none}
 .pb-lsb-name{margin-top:14px;font-size:.98rem;line-height:1.4;font-weight:600;color:var(--ink)}
 .pb-lsb-short{margin-top:6px;font-size:.9rem;line-height:1.45;color:var(--ink-2);
   font-variant-numeric:tabular-nums}
@@ -1597,7 +1597,7 @@ button{font-family:inherit}
   .pb-lsb-short{font-size:.82rem}
 }
 @media(prefers-reduced-motion:reduce){
-  .pb-lsb-seg,.pb-lsb-fig{transition:none}
+  .pb-lsb-seg{transition:none}
 }
 
 /* ============================================================
@@ -2820,7 +2820,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-bars.js?v=29f2cb96"></script>
+<script src="assets/js/pb-bars.js?v=1504d494"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
 /* WHAT TIME DOES. One slider, one variable: the same monthly amount started
@@ -2843,35 +2843,24 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     return AGES.map(function (age) { return W.potFrom(age, W.PENSION_AGE, monthly, W.DEFAULT_GROWTH); });
   }
 
-  var seen = false;
-  function paint(animate) {
+  /* Run 34 (part 6b): the figures are written, never counted: each is its
+     true value in every frame, and follows the slider with no easing. The
+     bars' lengths are the same at every amount (the pots are in proportion),
+     so they are the markup's. With no script the markup already reads right. */
+  function paint() {
     var monthly = +slider.value;
     document.getElementById('saMonthlyV').textContent = euro(monthly);
     var p = pots(monthly), top = p[0];
     AGES.forEach(function (age, i) {
       var fig = document.getElementById('sa' + age);
       var less = document.getElementById('sa' + age + 'Less');
-      var lessFmt = function (v) { return euro(v) + ' less'; };
-      if (animate) {
-        window.PBBars.countTo(fig, p[i], euro, 0);
-        if (i) window.PBBars.countTo(less, top - p[i], lessFmt, 0);
-      } else {
-        window.PBBars.countTo(fig, p[i], euro);
-        if (i) window.PBBars.countTo(less, top - p[i], lessFmt);
-      }
-      if (!i) less.textContent = '';
+      fig.textContent = euro(p[i]);
+      less.textContent = i ? euro(top - p[i]) + ' less' : '';
     });
   }
 
-  window.PBPage.wireRanges({ saMonthly: function (v) { return euro(v) + ' a month'; } },
-                           function () { paint(false); });
-  /* the figures count up once, when the section is first seen, and follow the
-     slider after that; with no script at all the markup already reads right */
-  window.PBBars.whenSeen(document.querySelector('.pb-sa'), function () {
-    if (seen) return;
-    seen = true;
-    paint(true);
-  });
+  window.PBPage.wireRanges({ saMonthly: function (v) { return euro(v) + ' a month'; } }, paint);
+  paint();
 })();
 
 /* IF YOU WAIT (#8, Run 20). The chart above at the reader's own age: the
