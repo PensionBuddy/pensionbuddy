@@ -1737,6 +1737,58 @@ def run():
             assert s != skel, label
         eq('37. %s is caught' % label, any(want in x for x in ab_faults(s, built_srcs, j2)), True)
 
+    # ----------------------------------------------------------------- 39
+    # Run 37, item 7: related pages. Every page's block is the one the
+    # RELATED table gives it (sync-chrome and pagebuild write them; a page
+    # edited by hand fails here), last in <main>; every card goes to a live
+    # page other than its own, and its line is on the site word for word
+    # (on the page CARDS names); the table leaves out the home page,
+    # booking, the thank-you page, the 404, the held pages and the games.
+    def related_faults(srcs):
+        f = [p + ': ' + d for p, ks in sorted(pagebuild.related_drift(srcs).items()) for k, d in ks]
+        plain = lambda x: html.unescape(re.sub(r'<[^>]+>', ' ', x)).replace('’', "'")
+        for page, targets in sorted(pagebuild.RELATED.items()):
+            if page in ('index.html', 'booking.html', 'thank-you.html', '404.html') or pagebuild.NOINDEX in srcs.get(page, pagebuild.NOINDEX):
+                f.append('%s should carry none' % page)
+            if not 2 <= len(targets) <= 3 or page in targets or len(set(targets)) != len(targets):
+                f.append('%s: %d cards, or one to itself, or one twice' % (page, len(targets)))
+            for tgt in targets:
+                if tgt not in srcs or pagebuild.NOINDEX in srcs[tgt]:
+                    f.append('%s: %s is not a live page' % (page, tgt))
+        raw = lambda x: html.unescape(x).replace('\u2019', "'")
+        for tgt, (title, line, where) in sorted(pagebuild.CARDS.items()):
+            # in the page's text, or its own description
+            if plain(line).strip() not in plain(srcs.get(where, '')) and raw(line) not in raw(srcs.get(where, '')):
+                f.append('%s: its line is not on %s' % (tgt, where))
+        return f
+
+    import html
+    eq('39. related pages: every page\'s block is the table\'s, last in <main>; two or three live pages each, never itself; every line on the site word for word; none on the home page, booking, thank-you, the 404 or a held page',
+       related_faults(sources), [])
+    for label, target, find, repl, want in (
+            ('a card edited by hand', 'terms.html', '<span class="pb-related-t">Privacy Notice</span>', '<span class="pb-related-t">Our privacy</span>', 'not the table'),
+            ('a block moved out of <main>', 'complaints.html', None, None, 'outside'),
+            ('a block half lost', 'glossary.html', '<!-- RELATED:BEGIN', '<!-- RELATED:GONE', 'broken')):
+        srcs = dict(sources)
+        if find is None:
+            s = sources[target]
+            i = s.find('<!-- RELATED:BEGIN'); j = s.find('<!-- RELATED:END -->\n') + len('<!-- RELATED:END -->\n')
+            blk = s[i:j]; rest = s[:i] + s[j:]
+            k = rest.find('</footer>') + len('</footer>')
+            srcs[target] = rest[:k] + blk + rest[k:]
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+        assert srcs[target] != sources[target], label
+        eq('39. %s is caught' % label, any(want in x for x in related_faults(srcs)), True)
+    saved = (dict(pagebuild.RELATED), dict(pagebuild.CARDS))
+    for label, mut, want in (
+            ('a card to a held page', lambda: pagebuild.RELATED.__setitem__('terms.html', ('privacy.html', 'how-we-work.html')), 'not a live page'),
+            ('a line the site does not have', lambda: pagebuild.CARDS.__setitem__('complaints.html', ('Complaints', 'We always put things right.', 'complaints.html')), 'not on'),
+            ('related pages on the home page', lambda: pagebuild.RELATED.__setitem__('index.html', ('starter.html', 'tracker.html')), 'should carry none')):
+        mut()
+        eq('39. %s is caught' % label, any(want in x for x in related_faults(sources)), True)
+        pagebuild.RELATED.clear(); pagebuild.RELATED.update(saved[0]); pagebuild.CARDS.clear(); pagebuild.CARDS.update(saved[1])
+
 
 
 

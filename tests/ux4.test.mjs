@@ -19,6 +19,10 @@
         own figures; move a slider and A stays while now follows the page,
         the rows that changed marked; Clear A takes it away and gives focus
         back; without JavaScript there is no Save as A
+     7. related pages: last in <main>, two or three cards of at least 44px,
+        side by side on a wide screen and stacked on a phone, nothing
+        sideways; none on the home page
+   (item 6 was reverted: its section is on claude/overnight-ux-4-guides)
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -159,6 +163,24 @@ if (has('pension-calculator.html', 'id="pbAb"')) {
   await open('pension-calculator.html', 1440, { nojs: true });
   eq('5. without JavaScript there is no Save as A', await ev(`getComputedStyle(document.getElementById('pbAb')).display`), 'none');
 }
+
+/* ---- 7. related pages ---- */
+if (has('terms.html', 'class="pb-related"')) {
+  for (const [page, w] of [['pension-calculator.html', 375], ['pensions-over-50.html', 1440], ['privacy.html', 1440]]) {
+    await open(page, w);
+    const r = await ev(`(function(){var s=document.querySelector('.pb-related');var m=document.getElementById('main');var cards=[].slice.call(s.querySelectorAll('a.pb-related-card'));
+      var after=[].slice.call(m.querySelectorAll('*')).filter(function(e){return s.compareDocumentPosition(e)&Node.DOCUMENT_POSITION_FOLLOWING&&!s.contains(e)&&e.tagName!=='SCRIPT'&&e.getClientRects().length;}).length;
+      var rs=cards.map(function(a){return a.getBoundingClientRect();});
+      return {inMain:m.contains(s),after:after,n:cards.length,wide:document.documentElement.scrollWidth<=innerWidth,
+        tall:rs.every(function(q){return q.height>=44;}),sameRow:rs.length>1&&Math.abs(rs[0].top-rs[1].top)<1};})()`);
+    eq(`7. ${page} at ${w}: related pages last in <main>, two or three cards, each at least 44px tall, nothing sideways`,
+       [r.inMain, r.after, r.n >= 2 && r.n <= 3, r.tall, r.wide], [true, 0, true, true, true]);
+    eq(`7. ${page} at ${w}: cards side by side on a wide screen, stacked on a phone`, r.sameRow, w >= 1024);
+  }
+  await open('index.html', 1440);
+  eq('7. not on the home page', await ev(`!!document.querySelector('.pb-related')`), false);
+}
+
 
 console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);
 cleanup();

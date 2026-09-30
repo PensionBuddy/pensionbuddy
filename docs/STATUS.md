@@ -310,8 +310,8 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
 | 4 | "Your pension through life": nine ages from 18 to 71 on the home page, each a link; a card follows the reader on a wide screen | done | this commit |
 | 5 | Save as A on the pension calculator: A beside your figures now, a copy of what the page shows | done | this commit |
-| 6 | Long guides: on this page, progress, next step | not reached | |
-| 7 | Related pages at the end of every page | not reached | |
+| 6 | Long guides: on this page, progress, next step | skipped: failed the gate twice (an initialism first used in the new list; then 14-15px text under the calculators' 16px floor on the PIA and threshold pages). Reverted here; parked, with the 16px fix, on `claude/overnight-ux-4-guides` (not gated after the fix) | |
+| 7 | Related pages: two or three cards at the end of 22 pages, one shared component written into the markup | done | this commit |
 | 8 | The 404 page | not reached | |
 | 9 | Slider feel | not reached | |
 | 10 | Figures that wait: skeletons | not reached | |
@@ -371,6 +371,13 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   button says the saved report's own "Reveal the illustration first, then
   save it." Every figure in the table is copied off the page as the page
   wrote it: nothing is worked out.
+- **Item 7**, the end of 22 pages: the label "Related pages" over two or
+  three cards, each a page's name (as the nav or the home page's six places
+  writes it) and a line already on the site (its line in the six places, the
+  first sentence of its own description, or a sentence of its introduction
+  where that sentence carries an initialism a page might not have spelled
+  out). The table is `RELATED` in `tools/pagebuild.py`; build check 39 finds
+  every line on its page.
 
 ## Questions for Damian
 
@@ -411,6 +418,11 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
    home page is where every audience starts. It adds 1,474px to the home
    page on a phone and 2,364px at 1440 (the audit's third finding is the
    page's length). Starter, or its own page, instead?
+8. **Which pages the related cards pick, and where there are none.** The
+   table in `tools/pagebuild.py` (RELATED) is mine: say where it sends a
+   reader somewhere you would not. None on the home page (it is the map, and
+   ends on its own call), booking and the thank-you page (one job each), the
+   404 (its own six places), the held pages or the games.
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

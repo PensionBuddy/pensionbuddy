@@ -1887,6 +1887,27 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   font-size:13px;font-weight:500;color:var(--ink-2)}
 .pb-quals.pb-quals-sm .pb-quals-list img{height:20px}
 /* QUALS:END */
+/* RELATED:BEGIN (Run 37, item 7). "Related pages", last in the main part
+   of every page with somewhere to send a reader next: two or three whole-card
+   links, the words each page already has (tools/pagebuild.py RELATED says
+   where they come from). Written into the markup, so a reader without
+   JavaScript has them too. Its label is a paragraph that names the section,
+   not a heading: a heading here would be a fourth size on most pages, where
+   the one heading recipe allows three. Byte for byte on every page, like the blocks
+   above. Only colours change under the pointer; the cards take MOTION rule
+   5's shadow, as every whole-card link does. */
+.pb-related{padding:44px 0 8px}
+.pb-related .pb-related-h{margin:0 0 14px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;margin:0;padding:0;list-style:none}
+.pb-related .pb-related-list li{margin:0;padding:0}
+.pb-related .pb-related-card{display:flex;flex-direction:column;gap:6px;height:100%;margin:0;padding:18px 20px;border:1px solid var(--line-2);
+  border-radius:var(--r-lg);background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-related .pb-related-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-related .pb-related-card:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-related-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
+.pb-related-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
+/* RELATED:END */
 </style>
 </head>
 <body>
@@ -2012,6 +2033,15 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <h3>10. Contact</h3>
   <p>Questions about these terms? Use the contact details in the Contact section above.</p>
 </div></div>
+<!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
+<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
+  <p class="pb-related-h" id="pbRelatedH">Related pages</p>
+  <ul class="pb-related-list">
+    <li><a class="pb-related-card pb-card-link" href="privacy.html"><span class="pb-related-t">Privacy Notice</span><span class="pb-related-d">How Pensionbuddy collects, uses and protects your personal information.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="complaints.html"><span class="pb-related-t">Complaints</span><span class="pb-related-d">How to make a complaint to Pensionbuddy and your right to the Financial Services and Pensions Ombudsman.</span></a></li>
+  </ul>
+</div></section>
+<!-- RELATED:END -->
 </main>
 <footer><div class="wrap">
   <div class="foot-top">

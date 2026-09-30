@@ -436,6 +436,8 @@ def assemble(page):
                   "KEEP = [%s]" % ','.join("'%s'" % k for k in page.keep), tail, count=1)
 
     body = read(os.path.join(page.parts_dir, 'main.html')).strip()
+    # Run 37: the related pages, last in <main> (RELATED, above)
+    body = with_related(body, page.out)
     if page.reviewed:
         # the last line of the page header, whatever the part put above it
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
@@ -573,9 +575,11 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # the rules that make everything clickable look clickable, (Run 32) the
 # metric-matched fallback for Inter, the motion vocabulary, and how the
 # floating chrome gives way, (Run 33) the first screen on a phone, and
-# (Run 35) Damian's qualifications and memberships.
+# (Run 35) Damian's qualifications and memberships, and (Run 37) the related
+# pages at the end of a page.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
-              ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'))
+              ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
+              ('RELATED', 'related-css'))
 
 
 def _once(text, marker):
@@ -826,6 +830,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             if len(HEAD_LINE.findall(sources[page])) != 1:
                 raise ValueError('%s has no single motion script after its viewport meta' % page)
             new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, sources[page], count=1)
+            new = with_related(new, page)
             if new != sources[page]:
                 out[page] = new
             continue
@@ -853,8 +858,137 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
         if len(heads) != 1:
             raise ValueError('%s has no single motion script after its viewport meta' % page)
         new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, new, count=1)
+        new = with_related(new, page)
         if new != text:
             out[page] = new
+    return out
+
+
+# ============================================================================
+# RELATED PAGES (Run 37, item 7). The end of every page that has a reader to
+# send somewhere offers two or three next pages: one shared component, written
+# into each page's markup (so it is there without JavaScript) between two
+# comments, by tools/sync-chrome.py for the hand-written pages and by
+# assemble() for the built ones; related_drift() is the guard (verify.py and
+# tests/build.test.py check 39). Styled by the RELATED block of CSS.
+#
+# Not on: the home page (it is the map, and ends on its own call), booking and
+# the thank-you page (one job each), the 404 (its own six places, item 8), the
+# pages held back, and the games.
+#
+# Every word on a card is already on the site. CARDS says where: a title is
+# the page's name in the nav, or in the home page's "Six places to begin"
+# where it is one of them; a line is the one beside it there, or the first
+# sentence of the page's own description, or, where that sentence carries an
+# initialism a page might not have spelled out, a sentence from the page's
+# own introduction. Check 39 finds each line on its page, word for word.
+# ============================================================================
+RELATED = {
+    'starter.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
+    'tracker.html': ('old-pension-checklist.html', 'my-pensions.html', 'pension-fees-calculator.html'),
+    'director.html': ('director-calculator.html', 'director-pension-rules.html', 'director-year-end-checklist.html'),
+    'pension-calculator.html': ('pension-fees-calculator.html', 'state-pension-reality-check.html', 'broker-vs-autoenrolment.html'),
+    'director-calculator.html': ('director-pension-rules.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
+    'broker-vs-autoenrolment.html': ('pension-calculator.html', 'starter.html', 'self-employed-pensions.html'),
+    'pension-fees-calculator.html': ('my-pensions.html', 'old-pension-checklist.html', 'pension-calculator.html'),
+    'my-pensions.html': ('pension-fees-calculator.html', 'old-pension-checklist.html', 'standard-fund-threshold.html'),
+    'standard-fund-threshold.html': ('director-pension-rules.html', 'pensions-over-50.html', 'director-calculator.html'),
+    'state-pension-reality-check.html': ('state-pension-entitlement.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
+    'state-pension-entitlement.html': ('state-pension-reality-check.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
+    'pia.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
+    'director-pension-rules.html': ('director-calculator.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
+    'director-year-end-checklist.html': ('director-calculator.html', 'director-pension-rules.html', 'standard-fund-threshold.html'),
+    'pensions-over-50.html': ('standard-fund-threshold.html', 'state-pension-reality-check.html', 'glossary.html'),
+    'self-employed-pensions.html': ('broker-vs-autoenrolment.html', 'pensions-over-50.html', 'glossary.html'),
+    'uk-pensions-in-ireland.html': ('state-pension-entitlement.html', 'old-pension-checklist.html', 'glossary.html'),
+    'old-pension-checklist.html': ('tracker.html', 'my-pensions.html', 'pension-fees-calculator.html'),
+    'glossary.html': ('pension-calculator.html', 'starter.html', 'pensions-over-50.html'),
+    'privacy.html': ('terms.html', 'complaints.html'),
+    'terms.html': ('privacy.html', 'complaints.html'),
+    'complaints.html': ('terms.html', 'privacy.html'),
+}
+# page: (title, line, where the line is written, word for word)
+CARDS = {
+    'pension-calculator.html': ('Pension calculator', 'Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.', 'index.html'),
+    'starter.html': ('Start a pension', 'No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.', 'index.html'),
+    'tracker.html': ('Track down old pensions', 'Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.', 'index.html'),
+    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', 'index.html'),
+    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.', 'index.html'),
+    'old-pension-checklist.html': ('The old pension hunt: a checklist', 'Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.', 'old-pension-checklist.html'),
+    'my-pensions.html': ('All your pensions in one view', 'List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year.', 'my-pensions.html'),
+    'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),
+    'director-calculator.html': ('Director calculator', 'See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.', 'director-calculator.html'),
+    'director-pension-rules.html': ('What changed for directors in 2026', 'Here they are in plain English, with four questions to see which of them apply to you.', 'director-pension-rules.html'),
+    'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
+    'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
+    'state-pension-entitlement.html': ('State Pension entitlement check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
+    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50: how much of what you pay in gets tax relief, when some pensions can be taken, and the choice of what to do with a pension when you take it.', 'pensions-over-50.html'),
+    'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
+    'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
+    'glossary.html': ('Pension jargon buster', 'Pensions come with a lot of acronyms. Here&rsquo;s what the common ones actually mean, in normal words.', 'glossary.html'),
+    'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
+    'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),
+    'complaints.html': ('Complaints', 'How to make a complaint to Pensionbuddy and your right to the Financial Services and Pensions Ombudsman.', 'complaints.html'),
+}
+RELATED_OPEN = '<!-- RELATED:BEGIN'
+RELATED_CLOSE = '<!-- RELATED:END -->\n'
+
+
+def related_block(page):
+    """The block for page, or '' for a page that carries none."""
+    if page not in RELATED:
+        return ''
+    missing = [t for t in RELATED[page] if t not in CARDS]
+    if missing:
+        raise ValueError('no card in CARDS for %s' % ', '.join(missing))
+    cards = ''.join(
+        '    <li><a class="pb-related-card pb-card-link" href="%s"><span class="pb-related-t">%s</span>'
+        '<span class="pb-related-d">%s</span></a></li>\n' % (t, CARDS[t][0], CARDS[t][1]) for t in RELATED[page])
+    return ('<!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->\n'
+            '<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">\n'
+            '  <p class="pb-related-h" id="pbRelatedH">Related pages</p>\n'
+            '  <ul class="pb-related-list">\n' + cards +
+            '  </ul>\n</div></section>\n' + RELATED_CLOSE)
+
+
+def related_span(text):
+    """(start, end) of the block, None when absent; raises on a broken one."""
+    i, j = text.find(RELATED_OPEN), text.find(RELATED_CLOSE)
+    if i < 0 and j < 0:
+        return None
+    if _once(text, RELATED_OPEN) is None or _once(text, RELATED_CLOSE) is None or j < i:
+        raise ValueError('a broken RELATED block')
+    return i, j + len(RELATED_CLOSE)
+
+
+def with_related(text, page):
+    """text with the page's block in place: replaced where it is, or put last
+    in <main>, before its closing tag."""
+    want = related_block(page)
+    span = related_span(text)
+    if span:
+        return text[:span[0]] + want + text[span[1]:]
+    if not want:
+        return text
+    k = text.rindex(CLOSE_MAIN)
+    return text[:k] + want + text[k:]
+
+
+def related_drift(sources):
+    """{page: [(kind, detail)]} where a page's block is not the table's."""
+    out = {}
+    for page, text in sources.items():
+        try:
+            span = related_span(text)
+            want = related_block(page)
+        except ValueError as e:
+            out[page] = [('related', str(e))]
+            continue
+        have = text[span[0]:span[1]] if span else ''
+        if have != want:
+            out[page] = [('related', 'the related pages are not the table\'s: run tools/sync-chrome.py and tools/pagebuild.py')]
+        elif span and text.find(CLOSE_MAIN, span[1]) < 0:
+            out[page] = [('related', 'the related pages are outside <main>')]
     return out
 
 
