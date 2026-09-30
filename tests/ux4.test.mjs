@@ -26,6 +26,12 @@
         a search there finds the buster's entry; nothing moves as it loads;
         without JavaScript no box and the six places still there
    (item 6 was reverted: its section is on claude/overnight-ux-4-guides)
+   Run 38, 1. the game cards' videos, at 1440: nothing fetched while the
+        cards are far; near, both play and the button says Pause video; the
+        button's pause holds; far away the other pauses and plays on return;
+        each file 6 to 10 seconds with no more than three flashes a second,
+        read off the decoded frames; reduced motion and no JavaScript get
+        the picture alone
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -76,9 +82,10 @@ if (!port) { console.log('  FAIL no DevTools port from Chrome'); process.exit(1)
 const tab = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
 const ws = new WebSocket(tab.webSocketDebuggerUrl);
 await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
-let seq = 0; const pending = new Map(); const waiters = [];
+let seq = 0; const pending = new Map(); const waiters = []; const requests = [];
 ws.onmessage = m => {
   const d = JSON.parse(m.data);
+  if (d.method === 'Network.requestWillBeSent') requests.push(d.params.request.url);
   if (d.id && pending.has(d.id)) { const p = pending.get(d.id); pending.delete(d.id); d.error ? p.rej(new Error(JSON.stringify(d.error))) : p.res(d.result); }
   else if (d.method) for (let i = waiters.length - 1; i >= 0; i--) if (waiters[i].method === d.method) { waiters[i].res(d.params); waiters.splice(i, 1); }
 };
@@ -89,7 +96,7 @@ const ev = async (expr, awaitPromise = false) => {
   if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text);
   return r.result.value;
 };
-await send('Page.enable'); await send('Runtime.enable');
+await send('Page.enable'); await send('Runtime.enable'); await send('Network.enable');
 await send('Emulation.setFocusEmulationEnabled', { enabled: true });
 await send('Page.addScriptToEvaluateOnNewDocument', { source: `try{localStorage.setItem('pb-consent','rejected')}catch(e){}
   window.__shifts=[];try{new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(e.hadRecentInput)return;var nav=(e.sources||[]).every(function(s){return s.node&&s.node.closest&&s.node.closest('#nav');});window.__shifts.push({v:e.value,t:e.startTime,nav:nav});});}).observe({type:'layout-shift',buffered:true});}catch(e){}` });
@@ -98,6 +105,7 @@ async function open(page, w, opts = {}) {
   await send('Emulation.setDeviceMetricsOverride', { width: w, height: w < 700 ? 812 : 900, deviceScaleFactor: 1, mobile: w < 700 });
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: opts.reduce ? 'reduce' : 'no-preference' }] });
   await send('Emulation.setScriptExecutionDisabled', { value: !!opts.nojs });
+  requests.length = 0;
   const loaded = once('Page.loadEventFired', 30000);
   await send('Page.navigate', { url: ORIGIN + '/' + page });
   await loaded;
@@ -203,6 +211,58 @@ if (has('404.html', 'class="pb-nf-six"')) {
   eq('8. the 404 without JavaScript: no search box, the six places still there', await ev(`[getComputedStyle(document.querySelector('.pb-nf-search')).display, document.querySelectorAll('.pb-nf-six a').length]`), ['none', 6]);
 }
 
+
+/* ---- Run 38, 1. the game cards' videos ---- */
+if (has('index.html', 'data-pb-video')) {
+  const vids = () => requests.filter(u => /\/assets\/video\//.test(u));
+  const V = `(function(){return [].map.call(document.querySelectorAll('video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
+    return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none'};});})()`;
+  await open('index.html', 1440);
+  const far = vids().length;
+  await at('#learn', 0.2); await sleep(2500);
+  const near = await ev(V);
+  eq('R38-1. nothing fetched while the cards are far; near, both videos play, the button shows pause and is named Pause video: the game',
+     [far, vids().length >= 2, near.map(v => [v.shown, !v.paused, v.t > 0.3, v.btn, v.state, v.btnShown])],
+     [0, true, [[true, true, true, 'Pause video', 'playing', true], [true, true, true, 'Pause video', 'playing', true]]]);
+  await ev(`document.querySelector('[data-pb-video-btn]').click()`); await sleep(600);
+  const held = (await ev(V))[0];
+  await ev(`window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})`); await sleep(800);
+  const away = await ev(V);
+  await at('#learn', 0.2); await sleep(1500);
+  const back = await ev(V);
+  eq('R38-1. its button pauses it and it stays paused; scrolled far away the other pauses, and plays again on return',
+     [held.paused, held.btn, away[1].paused, back[0].paused, back[1].paused, back[0].btn],
+     [true, 'Play video', true, true, false, 'Play video']);
+  /* the flash check on the decoded video, frame by frame, as the games' probe */
+  const flash = await ev(`(async function(){
+    function lin(c){c/=255;return c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);}
+    function turns(s){var e=s[0],dir=0,at=[],i,v;for(i=1;i<s.length;i++){v=s[i];if(dir>=0&&v<=e-0.1){at.push(i);dir=-1;e=v;}else if(dir<=0&&v>=e+0.1){at.push(i);dir=1;e=v;}else if((dir>0&&v>e)||(dir<0&&v<e)){e=v;}}return at;}
+    function most(at,per){var b=0,i,j;for(i=0;i<at.length;i++){for(j=i;j<at.length&&at[j]-at[i]<per;j++){}b=Math.max(b,j-i);}return b;}
+    var out=[];
+    for (var src of ['assets/video/buddys-run.mp4','assets/video/buddys-run.webm','assets/video/jargon-battle.mp4','assets/video/jargon-battle.webm']){
+      var v=document.createElement('video');v.muted=true;v.src=src;v.preload='auto';
+      await new Promise(function(r){v.addEventListener('loadeddata',r,{once:true});});
+      var c=document.createElement('canvas');c.width=320;c.height=180;var cx=c.getContext('2d',{willReadFrequently:true}),fr=[],last=-1;
+      await new Promise(function(res){function cb(now,md){ if(md.mediaTime!==last){last=md.mediaTime;cx.drawImage(v,0,0,320,180);
+          var d=cx.getImageData(0,0,320,180).data,G=[],n=[],k,x,y,L,all=0,cnt=0;for(k=0;k<18;k++){G.push(0);n.push(0);}
+          for(y=0;y<180;y+=2){for(x=0;x<320;x+=2){k=(y*320+x)*4;L=0.2126*lin(d[k])+0.7152*lin(d[k+1])+0.0722*lin(d[k+2]);var gi=Math.min(2,Math.floor(y/180*3))*6+Math.min(5,Math.floor(x/320*6));G[gi]+=L;n[gi]++;all+=L;cnt++;}}
+          for(k=0;k<18;k++){G[k]/=n[k];}fr.push({t:md.mediaTime,whole:all/cnt,cells:G});}
+        if(v.ended||md.mediaTime>7.9){res();}else{v.requestVideoFrameCallback(cb);}}
+        v.requestVideoFrameCallback(cb);v.addEventListener('ended',res,{once:true});v.play();});
+      var per=30,worst=most(turns(fr.map(function(f){return f.whole;})),per),cell=0;
+      for(var ci=0;ci<18;ci++){cell=Math.max(cell,most(turns(fr.map(function(f){return f.cells[ci];})),per));}
+      out.push({src:src,frames:fr.length,duration:v.duration,whole:worst,cell:cell});}
+    return out;})()`, true);
+  eq('R38-1. each file plays 6 to 10 seconds, and nothing in it flashes more than three times a second (at most 6 changes a second, frame by frame)',
+     flash.map(f => [f.duration >= 6 && f.duration <= 10, f.frames >= 150, f.whole <= 6 && f.cell <= 6]), flash.map(() => [true, true, true]));
+  if (!flash.every(f => f.whole <= 6 && f.cell <= 6 && f.frames >= 150)) console.log('         ', JSON.stringify(flash));
+  await open('index.html', 1440, { reduce: true });
+  await at('#learn', 0.2); await sleep(2000);
+  const still = await ev(`[].map.call(document.querySelectorAll('.pb-learn-media'),function(m){var p=m.querySelector('picture img').getBoundingClientRect();return [getComputedStyle(m.querySelector('video')).display,getComputedStyle(m.querySelector('button')).display,p.width>0];})`);
+  eq('R38-1. asking for less motion: the picture only, nothing fetched, no button', [still, vids().length], [[['none', 'none', true], ['none', 'none', true]], 0]);
+  await open('index.html', 1440, { nojs: true });
+  eq('R38-1. without JavaScript: the picture only', await ev(`[].map.call(document.querySelectorAll('.pb-learn-media video'),function(v){return getComputedStyle(v).display;})`), ['none', 'none']);
+}
 
 console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);
 cleanup();

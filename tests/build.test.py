@@ -1349,8 +1349,11 @@ def run():
         box = m.group(1)
         if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
             f.append('the heading')
-        cards = re.findall(r'<li><div class="pb-learn-card pb-card-link">\s*<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
+        # (Run 38: the picture sits in .pb-learn-media with the video over it;
+        # check 43 holds the video and its button)
+        cards = re.findall(r'<li><div class="pb-learn-card pb-card-link">\s*(?:<div class="pb-learn-media">\s*)?<picture><source type="image/webp" srcset="assets/img/product-([a-z-]+)\.webp\?v=[0-9a-f]+">'
                            r'<img src="assets/img/product-([a-z-]+)\.jpg\?v=[0-9a-f]+" width="(\d+)" height="(\d+)" loading="lazy" alt="([^"]+)"></picture>\s*'
+                           r'(?:<video\b.*?</video>\s*<button\b[^>]*>.*?</button>\s*</div>\s*)?'
                            r'<div class="pb-learn-body">\s*<h3>([^<]+)</h3>\s*<p class="pb-learn-d">([^<]+)</p>\s*'
                            r'<a class="pb-learn-play" href="games/([a-z-]+)\.html">Play ([^<]+?) <svg[^>]*>.*?</svg></a>\s*</div>\s*</div></li>', box, re.S)
         if len(cards) != 2 or box.count('<li>') != 2:
@@ -1824,6 +1827,86 @@ def run():
         mut = nf.replace(find, repl, 1)
         assert mut != nf, label
         eq('40. %s is caught' % label, any(want in x for x in nf_faults(mut, ix)), True)
+
+    # ----------------------------------------------------------------- 43
+    # Run 38, item 1: the game cards' videos. Each card keeps its picture
+    # (the poster, and all there is without JavaScript or with reduced
+    # motion) and carries over it a video of the real game: muted, looping,
+    # inline, preload="none", aria-hidden, its poster the card's own
+    # picture, an MP4 first and a WebM second, each under 1.5 MB on disk;
+    # and a button whose name starts with its words (WCAG 2.2.2, 2.5.3).
+    # The CSS draws the video and the button only where motion is allowed;
+    # pb-video.js loads late, stores nothing, fetches near the viewport and
+    # pauses off it. tools/record-games.mjs made the files, seeded as the
+    # pictures are.
+    VIDEOS = [('buddys-run', 'Buddy&rsquo;s Run'), ('jargon-battle', 'Jargon Battle')]
+
+    def video_faults(ix, js, sizes, rec):
+        f = []
+        for slug, name in VIDEOS:
+            m = re.search(r'<div class="pb-learn-media">\s*<picture>.*?<img src="(assets/img/product-%s\.jpg)\?v=[0-9a-f]+"[^>]*></picture>\s*'
+                          r'<video ([^>]*)>(.*?)</video>\s*<button ([^>]*)>(.*?)</button>\s*</div>' % slug, ix, re.S)
+            if not m:
+                f.append('%s: no picture, video and button together' % slug)
+                continue
+            jpg, vattrs, sources, battrs, words = m.groups()
+            for want in ('class="pb-learn-vid"', ' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video'):
+                if want not in ' ' + vattrs:
+                    f.append('%s: the video is not %s' % (slug, want.strip()))
+            if 'autoplay' in vattrs or 'controls' in vattrs:
+                f.append('%s: the video plays by itself or shows controls' % slug)
+            if not re.search(r'poster="%s\?v=[0-9a-f]+"' % re.escape(jpg), vattrs):
+                f.append('%s: the poster is not the card\'s own picture' % slug)
+            if re.findall(r'<source src="([^"]+)" type="([^"]+)">', sources) != [('assets/video/%s.mp4' % slug, 'video/mp4'), ('assets/video/%s.webm' % slug, 'video/webm')]:
+                f.append('%s: not the MP4 then the WebM' % slug)
+            if ('type="button"' not in battrs or 'data-state="paused"' not in battrs or ('aria-label="Play video: %s"' % name) not in battrs
+                    or 'pb-vid-i-play' not in words or 'pb-vid-i-pause' not in words or re.sub(r'<[^>]+>', '', words).strip()):
+                f.append('%s: the button\'s icons or name' % slug)
+            for ext in ('mp4', 'webm'):
+                size = sizes.get('%s.%s' % (slug, ext))
+                if size is None or size >= 1.5 * 1024 * 1024:
+                    f.append('%s.%s: missing, or 1.5 MB or more (%s)' % (slug, ext, size))
+        for want in ('.pb-learn-vid,.pb-vid-btn{display:none}', 'html.pb-motion .pb-learn-vid{display:block;', 'html.pb-motion .pb-vid-btn{display:inline-flex;'):
+            if want not in ix:
+                f.append('the CSS: %s' % want[:36])
+        if len(re.findall(r'<script src="assets/js/pb-video\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', ix)) != 1:
+            f.append('pb-video.js is not loaded late, once')
+        code = re.sub(r'/\*.*?\*/', '', js, flags=re.S)
+        if re.search(r'localStorage|sessionStorage|document\.cookie|fetch\(|XMLHttpRequest', code):
+            f.append('pb-video.js stores or fetches something itself')
+        if 'new IntersectionObserver(' not in code or 'v.pause()' not in code or "classList.contains('pb-motion')" not in code:
+            f.append('pb-video.js does not pause off screen, or ignores reduced motion')
+        if "setRng(pbSeed(20260929))" not in rec or rec.count("setRng(pbSeed(20260929))") != 2:
+            f.append('the recorder does not seed both games as the pictures are')
+        return f
+
+    vdir = os.path.join(ROOT, 'assets', 'video')
+    vsizes = dict((n, os.path.getsize(os.path.join(vdir, n))) for n in (os.listdir(vdir) if os.path.isdir(vdir) else []))
+    vjs = read('assets/js/pb-video.js')
+    vrec = read('tools/record-games.mjs')
+    ix = sources['index.html']
+    eq('43. game videos: over each card\'s picture, muted, looping, inline, not preloaded, hidden from screen readers, the picture as poster, MP4 then WebM under 1.5 MB, a named pause button; drawn only with motion; late, pauses off screen',
+       video_faults(ix, vjs, vsizes, vrec), [])
+    for label, target, find, repl, want in (
+            ('a video that preloads', 'ix', 'preload="none" aria-hidden="true" disablepictureinpicture poster="assets/img/product-buddys-run',
+             'preload="auto" aria-hidden="true" disablepictureinpicture poster="assets/img/product-buddys-run', 'preload'),
+            ('a video with sound', 'ix', '<video class="pb-learn-vid" muted loop', '<video class="pb-learn-vid" loop', 'muted'),
+            ('a poster that is not the picture', 'ix', 'poster="assets/img/product-jargon-battle.jpg', 'poster="assets/img/product-buddys-run.jpg', 'poster'),
+            ('a video drawn for reduced motion', 'ix', '.pb-learn-vid,.pb-vid-btn{display:none}', '.pb-vid-btn{display:none}', 'the CSS'),
+            ('a button named otherwise', 'ix', 'aria-label="Play video: Jargon Battle"', 'aria-label="Start the animation"', 'button'),
+            ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
+            ('a video too big', 'sizes', None, None, '1.5 MB'),
+            ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause')):
+        mix, mjs, ms = ix, vjs, dict(vsizes)
+        if target == 'ix':
+            mix = ix.replace(find, repl, 1)
+            assert mix != ix, label
+        elif target == 'js':
+            mjs = vjs.replace(find, repl, 1)
+            assert mjs != vjs, label
+        else:
+            ms['buddys-run.webm'] = 2 * 1024 * 1024
+        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, vrec)), True)
 
 
 

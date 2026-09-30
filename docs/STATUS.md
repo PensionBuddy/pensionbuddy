@@ -290,6 +290,58 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
+
+Damian's brief, two items, built on the same branch as Run 37 (it is under
+review as one deploy preview), each gated, committed and pushed; not merged.
+Run 37's items 9 and 10 are still not reached.
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The two game cards' pictures get short loops of the real games | done | this commit |
+| 2 | Pop-ins on scroll, media only | not reached | |
+
+## Item 1, the videos
+
+- **Recorded headless from the real games** by `tools/record-games.mjs`:
+  each game in the stills' own 1200 x 675 frame and CSS (read from
+  `tools/shoot-product.py`), its clock turned by the script, the stills'
+  seed (20260929) and autopilot; eight seconds at 30 frames. Buddy's Run
+  keeps its three lives with the Poolbeg stacks on the far shore; Jargon
+  Battle answers its second and third questions right and ends on the
+  fourth. Chrome's own encoder (WebCodecs) makes H.264 and VP8, every frame
+  exactly 1/30 s, written by `tools/video-mux.js` (no other software): MP4
+  839 and 749 KB, WebM 1.13 and 1.18 MB, 1280 x 720.
+- **On the page:** the picture stays (it is the poster, and all a reader gets
+  without JavaScript or with reduced motion); the video sits over it, muted,
+  looping, inline, `preload="none"`, aria-hidden, fetched only within about
+  a screen of the viewport, paused off it and when the tab is hidden. The
+  button (WCAG 2.2.2) is a pause or play icon in the top corner, named
+  "Pause video: Buddy's Run" and so on.
+- **No flashing:** the frames are checked before encoding and the decoded
+  files again in Chrome, as the games' own probe does (at most 2 changes a
+  second in any cell, against a limit of 6).
+- **Why VP8 and not VP9 in the WebM:** a Mac's hardware VP9 decoder refused
+  one VP9 clip that Chrome's software decoder played; VP8 is only ever
+  decoded in software. The MP4 is listed first, so every current browser
+  plays the H.264.
+
+## New words on the site (for the pack)
+
+- **Item 1:** the video button's names, "Pause video: Buddy's Run", "Play
+  video: Buddy's Run", and the same for Jargon Battle (for a screen reader;
+  the button shows an icon).
+
+## Questions for Damian
+
+1. **Same branch.** Run 38 went on `claude/overnight-ux-4`, after Run 37's
+   item 8, so one deploy preview shows both. Say if you wanted it apart.
+2. **The clips.** Buddy's Run: eight seconds after a five-second run-up, no
+   life lost. Jargon Battle: two questions answered right, second to fourth.
+   Want a wrong answer shown too (a heart lost), or other moments?
+
 # Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (not merged)
 
 Damian's brief: a UX audit (`docs/UX-AUDIT-4.md`), then ten items in order,
