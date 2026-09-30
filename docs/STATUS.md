@@ -310,7 +310,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
 | 4 | "Your pension through life": nine ages from 18 to 71 on the home page, each a link; a card follows the reader on a wide screen | done | this commit |
 | 5 | Save as A on the pension calculator: A beside your figures now, a copy of what the page shows | done | this commit |
-| 6 | Long guides: on this page, progress, next step | not reached | |
+| 6 | The six long guides: "On this page", a bar that keeps it in reach with a reading line, and a next step | done | this commit |
 | 7 | Related pages at the end of every page | not reached | |
 | 8 | The 404 page | not reached | |
 | 9 | Slider feel | not reached | |
@@ -371,6 +371,16 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   button says the saved report's own "Reveal the illustration first, then
   save it." Every figure in the table is copied off the page as the page
   wrote it: nothing is worked out.
+- **Item 6**, the over-50s, self-employed and UK guides, the directors'
+  rules, the Standard Fund Threshold and the PIA page: "On this page" over a
+  numbered list of the page's own section headings (after the introduction),
+  and "Next step" over a card whose words are already on the site: the
+  pension calculator's line from the home page's six places (over-50s,
+  self-employed, PIA), "Track down old pensions" and its line (UK), the
+  director calculator's own description (directors' rules), and "Book a call
+  with Damian for free" with "Free, 20 minutes, no obligation." (Standard
+  Fund Threshold). The bar that follows repeats "On this page" and the
+  section headings.
 
 ## Questions for Damian
 
@@ -411,6 +421,11 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
    home page is where every audience starts. It adds 1,474px to the home
    page on a phone and 2,364px at 1440 (the audit's third finding is the
    page's length). Starter, or its own page, instead?
+8. **The guides' next steps.** Over-50s, self-employed and the PIA page to
+   the pension calculator; the UK guide to Track down old pensions; the
+   directors' rules to the director calculator; the Standard Fund Threshold
+   to booking (it is already a calculator, and its own closing band offers a
+   call). Say if any should point elsewhere.
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

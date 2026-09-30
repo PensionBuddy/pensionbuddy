@@ -19,6 +19,12 @@
         own figures; move a slider and A stays while now follows the page,
         the rows that changed marked; Clear A takes it away and gives focus
         back; without JavaScript there is no Save as A
+     6. the long guides, at 375 and 1440 (a written guide and two built
+        ones): no bar at the top; past the page's own list, a bar names each
+        section as it is read, sits under the nav, and its line only grows;
+        its button opens the list, a link closes it and lands the section
+        below the bar and the nav; without JavaScript the list is in the page
+        and there is no bar
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -158,6 +164,43 @@ if (has('pension-calculator.html', 'id="pbAb"')) {
   }
   await open('pension-calculator.html', 1440, { nojs: true });
   eq('5. without JavaScript there is no Save as A', await ev(`getComputedStyle(document.getElementById('pbAb')).display`), 'none');
+}
+
+/* ---- 6. the long guides ---- */
+if (has('pensions-over-50.html', 'class="pb-toc"')) {
+  const BAR = `(function(){var b=document.querySelector('.pb-tocbar');var n=document.getElementById('nav').getBoundingClientRect();
+    if(!b)return null;var r=b.getBoundingClientRect();var p=b.querySelector('.pb-tocbar-prog');var m=(p.style.transform.match(/scaleX\\(([\\d.]+)\\)/)||[])[1];
+    return {shown:!b.hidden&&r.height>0,top:Math.round(r.top),navBottom:Math.max(0,Math.round(n.bottom)),now:b.querySelector('.pb-tocbar-now').textContent,p:m?+m:null,
+      open:!document.getElementById('pbTocbarList').hidden};})()`;
+  for (const [page, w] of [['pensions-over-50.html', 375], ['pensions-over-50.html', 1440], ['pia.html', 375], ['director-pension-rules.html', 1440]]) {
+    await open(page, w);
+    const b0 = await ev(BAR);
+    const links = await ev(`[].map.call(document.querySelectorAll('.pb-toc a'),function(a){return [a.getAttribute('href').slice(1),a.textContent];})`);
+    const seen = [];
+    let lastP = -1, mono = true, under = true;
+    for (const [id, words] of links) {
+      await ev(`(function(){var e=document.getElementById(${JSON.stringify(id)});window.scrollTo({top:e.getBoundingClientRect().top+scrollY-innerHeight*0.3,behavior:'instant'});})()`);
+      await sleep(300);
+      const b = await ev(BAR);
+      seen.push(b.now === words);
+      if (b.p < lastP) mono = false;
+      lastP = b.p;
+      if (b.shown && Math.abs(b.top - b.navBottom) > 1) under = false;
+    }
+    eq(`6. ${page} at ${w}: no bar at the top; past the list it names each section as it is read, sits under the nav, and the line only grows`,
+       [b0.shown, seen.every(Boolean), mono, under], [false, true, true, true]);
+    await ev(`document.querySelector('.pb-tocbar-btn').click()`); await sleep(150);
+    const opened = (await ev(BAR)).open;
+    const [id] = links[1];
+    await ev(`document.querySelector('#pbTocbarList a[href="#${id}"]').click()`);
+    /* a smooth scroll up a long page takes a while: wait until it has stopped */
+    await ev(`new Promise(r => { let last = -1, same = 0, n = 0; (function t() { same = scrollY === last ? same + 1 : 0; last = scrollY; if (same >= 4 || ++n > 80) r(1); else setTimeout(t, 100); })(); })`, true);
+    await sleep(500);
+    const land = await ev(`(function(){var h=document.getElementById(${JSON.stringify(id)});var b=document.querySelector('.pb-tocbar').getBoundingClientRect();var n=document.getElementById('nav').getBoundingClientRect();return {open:!document.getElementById('pbTocbarList').hidden,clear:h.getBoundingClientRect().top>=Math.max(b.bottom,n.bottom)-1,hash:location.hash};})()`);
+    eq(`6. ${page} at ${w}: the button opens the list; a link closes it and lands its section below the bar and the nav`, [opened, land.open, land.clear, land.hash], [true, false, true, '#' + id]);
+  }
+  await open('pensions-over-50.html', 375, { nojs: true });
+  eq('6. without JavaScript: the list in the page, and no bar', await ev(`[document.querySelectorAll('.pb-toc a').length > 2, !!document.querySelector('.pb-tocbar')]`), [true, false]);
 }
 
 console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);
