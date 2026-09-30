@@ -1,0 +1,132 @@
+#!/usr/bin/env node
+/* Run 37 (UX audit 4), items 4 onwards, on real frames.
+
+       node tests/ux4.test.mjs            # the working tree
+       node tests/ux4.test.mjs <root>     # any checkout
+
+   One headless Chrome over the DevTools protocol (Node 24, no packages), the
+   pages from a small server here, the analytics choice already answered,
+   focus emulated so IntersectionObserver fires on real frames.
+
+   What it proves, item by item (each section runs only when its item is in
+   the tree):
+     4. "Your pension through life": at 1440 the card follows the step in the
+        middle of the screen (its figure, its heading, the mark on the ruler)
+        as the page scrolls, and the page scrolls exactly as far as it was
+        asked; at 375, and without JavaScript, there is no card, only the
+        list; opening the section moves nothing above it
+   Not in tests/run-tests.py. Exit 0 or 1. */
+import { spawn } from 'node:child_process';
+import { createServer } from 'node:http';
+import { mkdtempSync, readFileSync, existsSync, rmSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, dirname, extname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(process.argv[2] || join(HERE, '..'));
+const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let passed = 0, failed = 0;
+const eq = (label, got, want) => {
+  const ok = JSON.stringify(got) === JSON.stringify(want);
+  if (ok) passed++; else failed++;
+  console.log('  %s %s', ok ? 'ok  ' : 'FAIL', label);
+  if (!ok) console.log('         expected %s\n         actual   %s', JSON.stringify(want), JSON.stringify(got).slice(0, 900));
+};
+const has = (file, needle) => existsSync(join(ROOT, file)) && readFileSync(join(ROOT, file), 'utf8').includes(needle);
+
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
+  '.webp': 'image/webp', '.jpg': 'image/jpeg', '.png': 'image/png', '.json': 'application/json', '.woff2': 'font/woff2' };
+const server = createServer((req, res) => {
+  const path = decodeURIComponent(req.url.split('?')[0]);
+  const f = join(ROOT, path === '/' ? 'index.html' : path);
+  if (!f.startsWith(ROOT) || !existsSync(f) || statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
+  res.writeHead(200, { 'Content-Type': TYPES[extname(f)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+  res.end(readFileSync(f));
+});
+await new Promise(r => server.listen(0, '127.0.0.1', r));
+const ORIGIN = 'http://127.0.0.1:' + server.address().port;
+
+const prof = mkdtempSync(join(tmpdir(), 'pb-ux4-'));
+const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=0', '--user-data-dir=' + prof,
+  '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio', '--disable-extensions',
+  '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1', 'about:blank'], { stdio: 'ignore' });
+const cleanup = () => { try { chrome.kill('SIGKILL'); } catch {} try { rmSync(prof, { recursive: true, force: true }); } catch {} };
+process.on('exit', cleanup);
+setTimeout(() => { console.log('  FAIL timed out'); process.exit(1); }, 420000).unref();
+let port;
+for (let i = 0; i < 150 && !port; i++) {
+  await sleep(100);
+  const f = join(prof, 'DevToolsActivePort');
+  if (existsSync(f)) port = readFileSync(f, 'utf8').split('\n')[0].trim();
+}
+if (!port) { console.log('  FAIL no DevTools port from Chrome'); process.exit(1); }
+const tab = await (await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })).json();
+const ws = new WebSocket(tab.webSocketDebuggerUrl);
+await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
+let seq = 0; const pending = new Map(); const waiters = [];
+ws.onmessage = m => {
+  const d = JSON.parse(m.data);
+  if (d.id && pending.has(d.id)) { const p = pending.get(d.id); pending.delete(d.id); d.error ? p.rej(new Error(JSON.stringify(d.error))) : p.res(d.result); }
+  else if (d.method) for (let i = waiters.length - 1; i >= 0; i--) if (waiters[i].method === d.method) { waiters[i].res(d.params); waiters.splice(i, 1); }
+};
+const send = (method, params = {}) => new Promise((res, rej) => { const id = ++seq; pending.set(id, { res, rej }); ws.send(JSON.stringify({ id, method, params })); });
+const once = (method, ms) => new Promise(res => { waiters.push({ method, res }); setTimeout(() => res(null), ms); });
+const ev = async (expr, awaitPromise = false) => {
+  const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise });
+  if (r.exceptionDetails) throw new Error(r.exceptionDetails.exception?.description || r.exceptionDetails.text);
+  return r.result.value;
+};
+await send('Page.enable'); await send('Runtime.enable');
+await send('Emulation.setFocusEmulationEnabled', { enabled: true });
+await send('Page.addScriptToEvaluateOnNewDocument', { source: `try{localStorage.setItem('pb-consent','rejected')}catch(e){}
+  window.__shifts=[];try{new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(e.hadRecentInput)return;var nav=(e.sources||[]).every(function(s){return s.node&&s.node.closest&&s.node.closest('#nav');});window.__shifts.push({v:e.value,t:e.startTime,nav:nav});});}).observe({type:'layout-shift',buffered:true});}catch(e){}` });
+
+async function open(page, w, opts = {}) {
+  await send('Emulation.setDeviceMetricsOverride', { width: w, height: w < 700 ? 812 : 900, deviceScaleFactor: 1, mobile: w < 700 });
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: opts.reduce ? 'reduce' : 'no-preference' }] });
+  await send('Emulation.setScriptExecutionDisabled', { value: !!opts.nojs });
+  const loaded = once('Page.loadEventFired', 30000);
+  await send('Page.navigate', { url: ORIGIN + '/' + page });
+  await loaded;
+  if (opts.nojs) { await sleep(400); return; }
+  await ev('document.fonts ? document.fonts.ready.then(() => 1) : 1', true);
+  await sleep(500);
+}
+const at = async (sel, frac) => ev(`(function(){var e=document.querySelector(${JSON.stringify(sel)});var y=e.getBoundingClientRect().top+scrollY-innerHeight*${frac};window.scrollTo({top:y,behavior:'instant'});return Math.round(scrollY);})()`);
+
+/* ---- 4. Your pension through life ---- */
+if (has('index.html', 'id="through-life"')) {
+  await open('index.html', 1440);
+  const card = `(function(){var s=document.querySelector('.pb-tl-stage');var cs=getComputedStyle(s);
+    return {shown:cs.display!=='none'&&s.getBoundingClientRect().height>0,age:document.getElementById('pbTlAge').textContent,
+      what:document.getElementById('pbTlWhat').textContent,mark:document.getElementById('pbTlMark').style.left,
+      on:(document.querySelector('.pb-tl-step.pb-on h3')||{}).textContent||null};})()`;
+  const steps = await ev(`[].map.call(document.querySelectorAll('.pb-tl-step'),function(li){return {show:li.getAttribute('data-show'),head:li.querySelector('h3').textContent,age:+li.getAttribute('data-age')};})`);
+  const seen = [];
+  for (let i = 0; i < steps.length; i++) {
+    const asked = await at(`.pb-tl-step:nth-child(${i + 1})`, 0.5);
+    await sleep(350);
+    const c = await ev(card);
+    const now = await ev('Math.round(scrollY)');
+    seen.push([c.shown, c.age === steps[i].show && c.what === steps[i].head && c.on === steps[i].head, now === asked]);
+  }
+  eq('4. at 1440 the card follows each step in the middle of the screen, and the page stays where it was put', seen.every(s => s[0] && s[1] && s[2]), true);
+  if (!seen.every(s => s[0] && s[1] && s[2])) console.log('         ', JSON.stringify(seen));
+  const marks = await ev(`(function(){var r=[];var s=document.querySelectorAll('.pb-tl-step');return [].map.call(s,function(li){return li.getAttribute('data-age');});})()`);
+  eq('4. the ruler runs 18 to 75 and the last step\'s mark sits where its age falls', await ev(`document.getElementById('pbTlMark').style.left`),
+     (((+marks[marks.length - 1] - 18) / (75 - 18)) * 100).toFixed(2) + '%');
+  eq('4. nothing moved while it followed', await ev(`window.__shifts.filter(function(s){return !s.nav;}).reduce(function(a,s){return a+s.v;},0) < 0.001`), true);
+  await open('index.html', 375);
+  await at('#through-life', 0.2);
+  eq('4. at 375 the list alone: no card, every step a link', await ev(`[getComputedStyle(document.querySelector('.pb-tl-stage')).display, document.querySelectorAll('.pb-tl-step h3 a[href]').length === document.querySelectorAll('.pb-tl-step').length]`), ['none', true]);
+  await open('index.html', 1440, { nojs: true });
+  eq('4. without JavaScript at 1440, the list alone', await ev(`getComputedStyle(document.querySelector('.pb-tl-stage')).display`), 'none');
+  await open('index.html', 1440, { reduce: true });
+  eq('4. asking for less motion: the fill and the mark jump, they do not slide', await ev(`[getComputedStyle(document.getElementById('pbTlFill')).transitionDuration, getComputedStyle(document.getElementById('pbTlMark')).transitionDuration]`), ['0s', '0s']);
+}
+
+console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);
+cleanup();
+process.exit(failed ? 1 : 0);

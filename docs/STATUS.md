@@ -308,7 +308,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 1 | Life-event picker on the home page: "What's changed?", six links under the hero | done | this commit |
 | 2 | Jargon definitions at first use: the jargon buster's own words, on 21 pages | done | this commit |
 | 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
-| 4 | "Your pension through life" timeline | not reached | |
+| 4 | "Your pension through life": nine ages from 18 to 71 on the home page, each a link; a card follows the reader on a wide screen | done | this commit |
 | 5 | Scenario compare on the pension calculator | not reached | |
 | 6 | Long guides: on this page, progress, next step | not reached | |
 | 7 | Related pages at the end of every page | not reached | |
@@ -354,6 +354,14 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   a buster entry, and "The search could not load. Every page is in the
   menu." Results show each page's own title and description, and the
   heading of the section that matched.
+- **Item 4**, the home page, after "Six places to begin": the kicker "Your
+  pension through life" and the heading "What changes, and when."; step
+  headings "Under 30", "From 30" ... "At 66", "From 71". Every step's
+  sentence is the site's own (the relief bands from the self-employed and
+  over-50s guides, early access and the Approved Retirement Fund from the
+  over-50s guide, pension age from the starter page), under the guides' own
+  "Rules as at 24 September 2026" line; build check 36 finds each step's
+  figures on the page it links to.
 
 ## Questions for Damian
 
@@ -389,6 +397,11 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
    starts 6px nearer the logo: 42px, which the 40px button and its gap
    needed (the row had 25px spare at 1301 and 27px at 1440 with the chip).
    Measured to fit from 1301 to 1920 and in the drawer.
+7. **Where the timeline sits.** On the home page, after "Six places to
+   begin" and before Revenue's deadline: the brief named no page, and the
+   home page is where every audience starts. It adds 1,474px to the home
+   page on a phone and 2,364px at 1440 (the audit's third finding is the
+   page's length). Starter, or its own page, instead?
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

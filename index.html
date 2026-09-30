@@ -1327,6 +1327,51 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .pb-changed-chip:focus-visible{outline:2px solid transparent;box-shadow:0 0 0 4px var(--ring)}  /* the transparent outline is what forced colours draw */
 @media(max-width:560px){.pb-changed{padding:0 0 24px}.pb-changed-list{gap:8px}.pb-changed-chip{padding:10px 15px}}
 @media(prefers-reduced-motion:reduce){.pb-changed-chip{transition:none}}
+/* Run 37, item 4: "Your pension through life". The list reads on its own:
+   ages down a line, each step a whole-card link (MOTION rule 5's shadow is
+   the step's ::before, so its dot on the line is the ::after).
+   From 921px wide, with JavaScript, the card beside it follows the step in
+   the middle of the screen, like the starter page's "First payslip to 66";
+   its ruler runs from 18 to 75. Only the fill and the mark move, by the
+   motion tokens, and not at all for a reader who asks for less motion. */
+.pb-tl-sec{padding-top:0}
+.pb-tl{display:block}
+.pb-tl-stage{display:none}
+.pb-tl-steps{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.pb-tl-step{position:relative;margin:0 0 6px;padding:14px 16px 14px 22px;border-radius:0 var(--r-lg) var(--r-lg) 0}
+.pb-tl-step::after{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--teal)}
+.pb-tl-step h3{margin:0 0 4px;font-size:1.15rem}
+.pb-tl-step h3 a{color:var(--ink);text-decoration:none}
+.pb-tl-step h3 a::after{content:"";position:absolute;inset:0}
+.pb-tl-step h3 a:focus-visible{outline:2px solid transparent}
+.pb-tl-step:has(a:focus-visible){box-shadow:0 0 0 3px var(--ring)}
+.pb-tl-step:hover{background:var(--teal-50)}
+.pb-tl-step:hover h3 a{color:var(--teal-700)}
+.pb-tl-step p{margin:0;max-width:52ch;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+@media(min-width:921px){
+  html.pb-js .pb-tl{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
+  html.pb-js .pb-tl-stage{display:block;position:sticky;top:120px}
+  .pb-tl-card{display:flex;flex-direction:column;gap:6px;padding:26px 28px 22px;border:1px solid var(--line-2);
+    border-radius:var(--r-xl);background:var(--surface)}
+  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);
+    font-variant-numeric:tabular-nums}
+  .pb-tl-what{font-size:1rem;font-weight:600;color:var(--ink)}
+  .pb-tl-ruler{position:relative;display:block;height:10px;margin-top:14px;border-radius:99px;background:var(--surface-2);
+    border:1px solid var(--line)}
+  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--aqua,var(--teal));
+    transition:width var(--pb-t-fill)}
+  .pb-tl-mark{position:absolute;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--surface);
+    border:3px solid var(--teal-700);transition:left var(--pb-t-fill)}
+  .pb-tl-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .pb-tl-step{margin:0;padding:10vh 16px 10vh 22px}
+  .pb-tl-step:first-child{padding-top:14px}
+  .pb-tl-step:last-child{padding-bottom:14px}
+  .pb-tl-step::after{top:calc(10vh + 8px)}
+  .pb-tl-step:first-child::after{top:22px}
+  .pb-tl-step.pb-on::after{background:var(--teal)}
+}
+@media(prefers-reduced-motion:reduce){.pb-tl-fill,.pb-tl-mark{transition:none}}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -2493,6 +2538,43 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 </div></section>
 
 
+<!-- YOUR PENSION THROUGH LIFE (Run 37, item 4). The ages the site already
+     explains, from 18 to 75, each a link to the page that explains it: the
+     relief bands (the self-employed and over-50s guides, the calculators'
+     ladder), early access and the Approved Retirement Fund (the over-50s
+     guide), pension age (the starter page). Every figure and sentence is the
+     site's own. The list is the component and reads the same without script;
+     on a wide screen a card beside it follows the step in the middle of the
+     screen (assets/js/pb-timeline.js), and on a phone it is the list alone.
+     Age 75 has no milestone: nothing on the site says what happens at 75
+     (STATUS, Run 37, question 1). tests/build.test.py check 36 holds it. -->
+<section class="pb-tl-sec" id="through-life"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Your pension through life</span>
+    <h2>What changes, and when.</h2>
+  </div>
+  <div class="pb-tl" id="pbTl">
+    <div class="pb-tl-stage" aria-hidden="true"><div class="pb-tl-card">
+      <span class="pb-tl-age" id="pbTlAge">15%</span>
+      <span class="pb-tl-what" id="pbTlWhat">Under 30</span>
+      <span class="pb-tl-ruler"><i class="pb-tl-fill" id="pbTlFill" style="width:0%"></i><b class="pb-tl-mark" id="pbTlMark" style="left:0%"></b></span>
+      <span class="pb-tl-ends"><span>18</span><span>75</span></span>
+    </div></div>
+    <ol class="pb-tl-steps">
+      <li class="pb-tl-step pb-card-link" data-age="18" data-show="15%"><h3><a href="pension-calculator.html">Under 30</a></h3><p>Up to 15% of your earnings can get tax relief, on earnings up to &euro;115,000 a year.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="30" data-show="20%"><h3><a href="pension-calculator.html">From 30</a></h3><p>The share of your earnings that can get tax relief rises with age: 20% from 30 to 39.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="40" data-show="25%"><h3><a href="pension-calculator.html">From 40</a></h3><p>25% from 40 to 49.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="50" data-show="30%"><h3><a href="pensions-over-50.html#early">From 50</a></h3><p>30% from 50 to 54. And a pension from a job you have left can, if the scheme&rsquo;s rules allow it, be taken from 50.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="55" data-show="35%"><h3><a href="pensions-over-50.html#catch-up">From 55</a></h3><p>35% from 55 to 59.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="60" data-show="40%"><h3><a href="pensions-over-50.html#early">From 60</a></h3><p>40% from 60 on. A Personal Retirement Savings Account (PRSA) is normally taken from 60, and a personal pension from 60.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="61" data-show="4%"><h3><a href="pensions-over-50.html#after">From 61</a></h3><p>From the year you turn 61, an Approved Retirement Fund (ARF) is taxed on at least 4% of it a year, whether you take it or not.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="66" data-show="66"><h3><a href="state-pension-reality-check.html">At 66</a></h3><p>Pension age. The State Pension pays &euro;15,564 a year at the maximum.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="71" data-show="5%"><h3><a href="pensions-over-50.html#after">From 71</a></h3><p>From the year you turn 71, the ARF is taxed on at least 5% of it a year.</p></li>
+    </ol>
+  </div>
+  <p class="pb-src">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
+</div></section>
+
 <section class="tickband" id="deadline">
   <div class="wrap">
     <div class="tick">
@@ -2935,9 +3017,10 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
+<script src="assets/js/pb-timeline.js?v=b7fe8de6"></script>
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=5daeeb4d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>

@@ -1601,6 +1601,77 @@ def run():
             assert srcs[target] != live[target], label
         eq('35. %s is caught' % label, any(want in x for x in search_faults(srcs, ix_t, rt)), True)
 
+    # ----------------------------------------------------------------- 36
+    # Run 37, item 4: "Your pension through life" on the home page, after
+    # "Six places to begin", before Revenue's deadline. An ordered list of
+    # ages from 18 to 75, each a whole-card link to a live page; every
+    # percentage and euro figure a step states is on the page it links to,
+    # so the timeline says nothing the site does not. No step at 75 (nothing
+    # on the site says what happens then: STATUS, Run 37, question 1). The
+    # card beside the list is aria-hidden; the rules' date is under it; the
+    # script only listens (no scrolling, nothing stored), and only the fill
+    # and the mark move, never for a reader who asks for less motion.
+    def timeline_faults(ix, srcs, js):
+        f = []
+        aud = ix.find('<section id="audience">')
+        dl = ix.find('<section class="tickband" id="deadline">')
+        m = re.search(r'<section class="pb-tl-sec" id="through-life"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        if not m or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
+            return ['the section is not straight after "Six places to begin" and before the deadline']
+        box = m.group(1)
+        if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
+            f.append('the kicker or the heading')
+        if '<div class="pb-tl-stage" aria-hidden="true">' not in box:
+            f.append('the card is not aria-hidden')
+        if '<p class="pb-src">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>' not in box:
+            f.append('the rules\' date is missing')
+        steps = re.findall(r'<li class="pb-tl-step pb-card-link" data-age="(\d+)" data-show="([^"]+)"><h3><a href="([^"#]+)(?:#([a-z-]+))?">([^<]+)</a></h3><p>(.*?)</p></li>', box)
+        if len(steps) < 8 or len(steps) != box.count('<li'):
+            f.append('%d steps' % len(steps))
+        ages = [int(s[0]) for s in steps]
+        if ages != sorted(ages) or not ages or ages[0] < 18 or ages[-1] > 75:
+            f.append('the ages are not in order from 18 to 75')
+        if 75 in ages:
+            f.append('a step at 75, which nothing on the site describes')
+        for age, show, href, frag, head, text in steps:
+            page = srcs.get(href)
+            if page is None or pagebuild.NOINDEX in page:
+                f.append('%s: %s is not a live page' % (head, href))
+                continue
+            if frag and ('id="%s"' % frag) not in page:
+                f.append('%s: no #%s on %s' % (head, frag, href))
+            plain = html.unescape(re.sub(r'<[^>]+>', ' ', page))
+            for fig in re.findall(r'€[\d,]+|\d+%', html.unescape(text + ' ' + show)):
+                if fig not in plain:
+                    f.append('%s: %s is not on %s' % (head, fig, href))
+        if re.search(r'scrollTo|scrollBy|scrollIntoView|scrollTop\s*=|localStorage|sessionStorage|document\.cookie', js):
+            f.append('the script scrolls the page or stores something')
+        css = re.search(r'/\* Run 37, item 4: "Your pension through life"\..*?\*/(.*?)@media\(prefers-reduced-motion:reduce\)\{\.pb-tl-fill,\.pb-tl-mark\{transition:none\}\}', ix, re.S)
+        if not css or re.findall(r'transition:([^;}]+)', css.group(1)) != ['width var(--pb-t-fill)', 'left var(--pb-t-fill)'] or re.search(r'animation|@keyframes', css.group(1)):
+            f.append('something besides the fill and the mark moves, or it moves for a reader who asks for less')
+        return f
+
+    import html
+    tl_js = read('assets/js/pb-timeline.js')
+    ix = sources['index.html']
+    eq('36. "Your pension through life": after the six places, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
+       timeline_faults(ix, sources, tl_js), [])
+    for label, target, find, repl, want in (
+            ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
+            ('a step at 75', 'ix', 'data-age="71"', 'data-age="75"', 'at 75'),
+            ('a step to a held page', 'ix', '<h3><a href="state-pension-reality-check.html">At 66</a>', '<h3><a href="how-we-work.html">At 66</a>', 'not a live page'),
+            ('a card screen readers hear', 'ix', '<div class="pb-tl-stage" aria-hidden="true">', '<div class="pb-tl-stage">', 'aria-hidden'),
+            ('a script that scrolls', 'js', "steps.forEach(function (s) { io.observe(s); });", "steps.forEach(function (s) { io.observe(s); }); window.scrollTo(0, 0);", 'scrolls'),
+            ('a card that bounces', 'ix', '.pb-tl-mark{position:absolute;', '.pb-tl-mark{animation:pbBounce 1s infinite;position:absolute;', 'moves')):
+        mix, mjs = ix, tl_js
+        if target == 'ix':
+            mix = ix.replace(find, repl, 1)
+            assert mix != ix, label
+        else:
+            mjs = tl_js.replace(find, repl, 1)
+            assert mjs != tl_js, label
+        eq('36. %s is caught' % label, any(want in x for x in timeline_faults(mix, sources, mjs)), True)
+
 
 
 
