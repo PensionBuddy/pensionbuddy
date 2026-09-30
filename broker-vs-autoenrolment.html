@@ -1782,6 +1782,27 @@ html.pb-js .nav-tick .nt-off,html:not(.pb-js) .nav-tick .nt-on{display:none}
 @media(min-width:1440px){
   #navTick .nt-more{display:none}
 }
+/* Run 37 (item 3): the search button. The search is a script, so the button
+   is drawn only with JavaScript (html.pb-js, set in <head> before anything
+   paints, so it never appears late). Beside the links it follows the booking
+   button; with the drawer it sits beside the menu button. The row had no room
+   for it at 17px (1,228px needed from 1301px, 1,365px with the chip from
+   1440px), so beside the links each item gives 3px of its side padding and
+   the row starts 6px nearer the logo: 42px, for a 40px button and its gap. */
+#navSearch{display:none;align-items:center;justify-content:center;flex:0 0 auto;width:40px;height:40px;
+  margin:0 0 0 8px;padding:0;color:var(--ink);background:none;border:1px solid var(--line-2);border-radius:999px;cursor:pointer}
+html.pb-js #navSearch{display:inline-flex}
+#navSearch svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+#navSearch:hover{color:var(--teal-700);border-color:var(--teal);background:var(--teal-50)}
+#navSearch:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+@media(min-width:1301px){
+  #navLinks{margin-left:8px}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{padding-left:5px;padding-right:5px}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{left:5px;right:5px}
+}
+@media(max-width:1300px){
+  #navSearch{width:48px;height:48px;margin:0 0 0 auto;border-radius:6px}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -2486,6 +2507,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
+  <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
@@ -3427,6 +3449,8 @@ setMode(location.hash === '#combined' ? 2 : 1);
 
 
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
+<script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
+<script src="assets/js/pb-search-index.js?v=5daeeb4d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>

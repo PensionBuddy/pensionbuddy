@@ -307,7 +307,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 0 | Audit, `docs/UX-AUDIT-4.md` | done | this commit |
 | 1 | Life-event picker on the home page: "What's changed?", six links under the hero | done | this commit |
 | 2 | Jargon definitions at first use: the jargon buster's own words, on 21 pages | done | this commit |
-| 3 | Site search in the nav | not reached | |
+| 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
 | 4 | "Your pension through life" timeline | not reached | |
 | 5 | Scenario compare on the pension calculator | not reached | |
 | 6 | Long guides: on this page, progress, next step | not reached | |
@@ -347,6 +347,13 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   sum, annuity, ARF), self-employed (tax relief, PRSA, annuity), Standard
   Fund Threshold (tax relief, lump sum, defined benefit), the home page, the
   PIA page (tax relief) and the UK guide (State Pension).
+- **Item 3**, the search: the nav button's name "Search"; in the search,
+  "Search Pensionbuddy", "Search pages, guides and the jargon buster" (in
+  the empty field), "Close", "1 result" / "N results", "Nothing found. Try
+  one word, such as PRSA, or see the jargon buster.", "Jargon buster" under
+  a buster entry, and "The search could not load. Every page is in the
+  menu." Results show each page's own title and description, and the
+  heading of the section that matched.
 
 ## Questions for Damian
 
@@ -371,6 +378,17 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
    seven pages. The buster's "Tax relief" entry carries its own figure
    ("for every €100 you put in, around €40 can come back"), which now also
    shows beside "tax relief" on six pages. Wider, narrower, or as it is?
+5. **"Works offline".** Read as: no outside service, everything in the
+   browser. The index (18 KB) comes from the site the first time a reader
+   opens the search or points at the button, and from then on the search
+   works with no network. A search that works on a page opened with no
+   network at all would need the site installed (a service worker): say if
+   that is what you meant.
+6. **The nav made room for the search button.** From 1301px, where the nav
+   is one row, each item's side padding went from 8px to 5px and the row
+   starts 6px nearer the logo: 42px, which the 40px button and its gap
+   needed (the row had 25px spare at 1301 and 27px at 1440 with the chip).
+   Measured to fit from 1301 to 1920 and in the drawer.
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

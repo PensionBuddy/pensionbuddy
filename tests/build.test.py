@@ -1535,6 +1535,72 @@ def run():
             assert srcs[target] != sources[target], label
         eq('34. %s is caught' % label, any(want in x for x in terms_faults(srcs, g, r)), True)
 
+    # ----------------------------------------------------------------- 35
+    # Run 37, item 3: search. assets/js/pb-search-index.js is the live pages
+    # and the jargon buster as they stand (tools/site-index.py), and never a
+    # page held back with noindex. The nav carries one search button, after
+    # the links and before the menu button, named "Search", saying it opens a
+    # dialog and that "/" does the same; the NAV block draws it only with
+    # JavaScript. Every page loads the search late and holds the index's tag
+    # unexecuted (text/pb-lazy), so the index is fetched only when a reader
+    # opens the search. The search stores and sends nothing, keeps nothing in
+    # the address, and nothing it draws moves.
+    live = dict((n, s) for n, s in sources.items())
+    held = sorted(n for n, s in sources.items() if pagebuild.NOINDEX in s)
+    BTN = ('<button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/">')
+    TAGS = (r'<script src="assets/js/pb-search\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n'
+            r'<script src="assets/js/pb-search-index\.js\?v=[0-9a-f]+" type="text/pb-lazy"></script>\n')
+
+    def search_faults(srcs, index_text, runtime):
+        f = []
+        if site_index.search_js_from(dict(srcs), srcs['glossary.html']) != index_text:
+            f.append('pb-search-index.js is not the pages as they stand: run tools/site-index.py')
+        body = index_text[index_text.index('= ') + 2:index_text.index(';\nif')]
+        urls = [p['u'] for p in json.loads(body)['pages']]
+        if [u for u in urls if u in held]:
+            f.append('the index holds a page held back: %s' % [u for u in urls if u in held])
+        nav = srcs['pension-calculator.html']
+        i = nav.find('<nav id="nav">')
+        j = nav.find('</nav>', i)
+        n = nav[i:j]
+        if n.count(BTN) != 1 or not (n.find('id="navLinks"') < n.find(BTN) < n.find('id="navToggle"')):
+            f.append('the nav\'s search button: not one, not named, or not between the links and the menu button')
+        if '#navSearch{display:none;' not in nav or 'html.pb-js #navSearch{display:inline-flex}' not in nav:
+            f.append('the search button is drawn without JavaScript')
+        for name, s in sorted(srcs.items()):
+            if len(re.findall(TAGS, s)) != 1:
+                f.append('%s: not the search and its index, once, late and lazy' % name)
+        if re.search(r'localStorage|sessionStorage|document\.cookie|indexedDB|fetch\(|XMLHttpRequest|sendBeacon|pushState|replaceState|location\.hash\s*=', runtime):
+            f.append('pb-search.js stores, sends or writes the address')
+        if re.search(r'transition|animation|@keyframes|\.animate\(', runtime):
+            f.append('pb-search.js moves something')
+        return f
+
+    index_text = read('assets/js/pb-search-index.js')
+    search_rt = read('assets/js/pb-search.js')
+    eq('35. search: the index is the live pages and the buster as they stand; one named button in the nav, drawn with JavaScript; every page, late and lazy; stores nothing, moves nothing',
+       search_faults(live, index_text, search_rt), [])
+    for label, target, find, repl, want in (
+            ('a page retitled without a rerun', 'pensions-over-50.html', '<title>Pensions after 50, Pensionbuddy</title>',
+             '<title>Pensions over 50, Pensionbuddy</title>', 'not the pages as they stand'),
+            ('a held page in the index', 'index', '{"u":"index.html"', '{"u":"how-we-work.html","t":"How we work","d":"","h":"","s":[]},{"u":"index.html"', 'held back'),
+            ('the button without its name', 'pension-calculator.html', 'aria-label="Search" aria-haspopup', 'aria-haspopup', 'search button'),
+            ('the button drawn without JavaScript', 'pension-calculator.html', 'html.pb-js #navSearch{display:inline-flex}', '#navSearch{display:inline-flex}', 'without JavaScript'),
+            ('a page without the search', 'privacy.html', 'type="text/pb-lazy"', 'type="text/pb-late"', 'privacy.html'),
+            ('a search that remembers', 'runtime', "function typing(t) {", "function typing(t) { localStorage.setItem('q', 1);", 'stores'),
+            ('a search that puts the words in the address', 'runtime', "function typing(t) {", "function typing(t) { location.hash = 'q';", 'address')):
+        srcs, ix_t, rt = dict(live), index_text, search_rt
+        if target == 'index':
+            ix_t = index_text.replace(find, repl, 1)
+            assert ix_t != index_text, label
+        elif target == 'runtime':
+            rt = search_rt.replace(find, repl, 1)
+            assert rt != search_rt, label
+        else:
+            srcs[target] = live[target].replace(find, repl, 1)
+            assert srcs[target] != live[target], label
+        eq('35. %s is caught' % label, any(want in x for x in search_faults(srcs, ix_t, rt)), True)
+
 
 
 
