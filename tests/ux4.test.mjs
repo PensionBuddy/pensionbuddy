@@ -32,6 +32,18 @@
         each file 6 to 10 seconds with no more than three flashes a second,
         read off the decoded frames; reduced motion and no JavaScript get
         the picture alone
+   Run 38, 2. media pops in, and nothing else can: on seven pages and
+        widths, scrolled through, everything that pops (armed by pb-pop.js,
+        or any animation named pbPop or on a view timeline) holds no words
+        and nothing never to pop, and sits in nothing that is; each element
+        the list names is media only; nothing on the first screen is armed;
+        nothing is left faded or low; no layout shift is of a popped
+        element. Where scroll timelines work a picture follows the scroll
+        and, stopped part way, still arrives on the clock; at 375 a picture
+        behind the book bar waits, and arrives as it clears the bar; it
+        never plays again; reduced motion, from the start or turned on part way, leaves
+        nothing armed; without scroll timelines it waits faded and arrives
+        in 320ms
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -262,6 +274,141 @@ if (has('index.html', 'data-pb-video')) {
   eq('R38-1. asking for less motion: the picture only, nothing fetched, no button', [still, vids().length], [[['none', 'none', true], ['none', 'none', true]], 0]);
   await open('index.html', 1440, { nojs: true });
   eq('R38-1. without JavaScript: the picture only', await ev(`[].map.call(document.querySelectorAll('.pb-learn-media video'),function(v){return getComputedStyle(v).display;})`), ['none', 'none']);
+}
+
+/* ---- Run 38, 2. media pops in, and nothing else can ---- */
+if (has('assets/js/pb-pop.js', 'window.PBPop')) {
+  /* the guard, written here and not borrowed from pb-pop.js. Everything that
+     pops, however it was made to (armed by pb-pop.js, or any animation
+     named pbPop or on a view timeline), must hold no words (read from the
+     text itself, so a paragraph, a list item or a caption is caught by what
+     it says) and nothing that is never to pop, words or not (a heading, a
+     form and its parts, a table, a figure, a caveat, a warning, the
+     regulator or QFA line), and sit in nothing that is; and every element
+     the list names must be media only, wherever it is drawn */
+  const GUARD = `(function(){
+    var cav=(window.PBMotion&&PBMotion.CAVEATS)||'';
+    var NEVER='h1,h2,h3,h4,h5,h6,label,legend,input,select,textarea,button,form,table,.big,[data-pb-count],.pb-warn,.pb-reg,.pb-reviewed,.pb-quals,.badge'+(cav?','+cav:'');
+    var INSIDE='form,.pb-warn,.pb-reg,.pb-reviewed,.pb-quals'+(cav?','+cav:'');
+    function words(el){var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null,false),n;while((n=w.nextNode())){if(/\\S/.test(n.nodeValue))return n.nodeValue.trim().slice(0,30);}return '';}
+    function name(el){return el.tagName.toLowerCase()+(typeof el.className==='string'&&el.className.trim()?'.'+el.className.trim().split(/\\s+/).join('.'):'');}
+    function wrong(el){var w=words(el);return w?' "'+w+'"':(el.closest(INSIDE)||el.matches(NEVER)||el.querySelector(NEVER))?' (holds or sits in something never to pop)':'';}
+    var bad=[],listed=0;
+    [].forEach.call(document.querySelectorAll(PBPop.selector),function(el){if(!el.getClientRects().length)return;listed++;var w=wrong(el);if(w)bad.push('listed: '+name(el)+w);});
+    var armed=[].slice.call(document.querySelectorAll('[data-pb-pop]')),popping=armed.slice();
+    armed.forEach(function(el){if(!el.matches(PBPop.selector))bad.push('armed, not on the list: '+name(el));});
+    document.getAnimations().forEach(function(a){var t=a.effect&&a.effect.target;if(!t)return;
+      if(a.animationName==='pbPop'||(window.ViewTimeline&&a.timeline instanceof ViewTimeline)){if(popping.indexOf(t)<0)popping.push(t);}});
+    popping.forEach(function(el){var w=wrong(el);if(w)bad.push('pops: '+name(el)+w);});
+    return {listed:listed,armed:armed.length,sd:armed.filter(function(e){return e.getAttribute('data-pb-pop')==='sd';}).length,
+      io:armed.filter(function(e){return e.getAttribute('data-pb-pop')==='io';}).length,popping:popping.length,bad:bad.slice(0,6)};})()`;
+  /* a pop moves nothing: no layout shift is of, or inside, a listed element
+     (the page's own shifts, such as the gap chart's bars growing, are other
+     tests' business) */
+  const popRec = await send('Page.addScriptToEvaluateOnNewDocument', { source: "window.__popShift=[];try{new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(e.hadRecentInput)return;(e.sources||[]).forEach(function(s){if(s.node)window.__popShift.push({n:s.node,v:e.value});});});}).observe({type:'layout-shift',buffered:true});}catch(e){}" });
+  /* and directly: the layout box (offsets, which a transform does not
+     touch) of every heading, paragraph, list item and listed element,
+     taken once everything is armed, is where it was at every scroll
+     (sticky and fixed things, which move by design, left out) */
+  const LAY = `function(e){var y=0,x=0,o=e;while(o){y+=o.offsetTop;x+=o.offsetLeft;o=o.offsetParent;}return [y,x,e.offsetWidth,e.offsetHeight];}`;
+  const LAY_BASE = `(function(){var at=${LAY};window.__lay=[];[].forEach.call(document.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,'+PBPop.selector),function(e){
+    for(var a=e;a;a=a.parentElement){var q=getComputedStyle(a).position;if(q==='sticky'||q==='fixed')return;}window.__lay.push([e,at(e)]);});return window.__lay.length;})()`;
+  const LAY_MOVED = `(function(){var at=${LAY};return window.__lay.filter(function(r){if(!r[0].isConnected)return false;var n=at(r[0]);
+    return n.some(function(v,i){return Math.abs(v-r[1][i])>0.5;});}).slice(0,3).map(function(r){return r[0].tagName.toLowerCase()+(typeof r[0].className==='string'&&r[0].className?'.'+r[0].className.trim().split(/\\s+/)[0]:'');});})()`;
+  const PAGES_POP = [['index.html', 1440], ['index.html', 375], ['glossary.html', 1440], ['director.html', 375], ['tracker.html', 1440], ['pension-calculator.html', 375], ['404.html', 375]];
+  const seen = {};
+  for (const [page, w] of PAGES_POP) {
+    await open(page, w);
+    const first = await ev(`[].filter.call(document.querySelectorAll('[data-pb-pop]'),function(e){return e.getBoundingClientRect().top<innerHeight;}).length`);
+    /* every image loaded first, so a lazy image arriving (the tracker's
+       photograph grows from 161 to 523px as it loads) is not taken for a pop */
+    await ev(`Promise.race([Promise.all([].map.call(document.images,function(i){if(i.loading==='lazy')i.loading='eager';
+      return i.complete?0:new Promise(function(r){i.addEventListener('load',r,{once:true});i.addEventListener('error',r,{once:true});});})),
+      new Promise(function(r){setTimeout(r,8000);})]).then(function(){return new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});});})`, true);
+    await ev(LAY_BASE);
+    const moved = [];
+    const h = await ev('document.documentElement.scrollHeight');
+    const vh = w < 700 ? 812 : 900;
+    const bads = [];
+    const most = { listed: 0, armed: 0, sd: 0, io: 0, popping: 0 };
+    for (let y = 0; y <= h; y += Math.round(vh * 0.6)) {
+      await ev(`window.scrollTo({top:${y},behavior:'instant'})`); await sleep(120);
+      const g = await ev(GUARD);
+      for (const k of Object.keys(most)) most[k] = Math.max(most[k], g[k]);
+      g.bad.forEach(b => { if (!bads.includes(b)) bads.push(b); });
+      (await ev(LAY_MOVED)).forEach(m => { if (!moved.includes(m)) moved.push(m); });
+    }
+    await sleep(500);
+    /* a flick can pass a picture before its clock starts; it is then at its
+       end already, above the reader, so what matters is nothing left faded */
+    const left = await ev(`[].filter.call(document.querySelectorAll(PBPop.selector),function(e){if(!e.getClientRects().length)return false;var cs=getComputedStyle(e);return cs.opacity!=='1'||!/^(none|matrix\\(1, 0, 0, 1, 0, 0\\))$/.test(cs.transform);}).length`);
+    const shift = await ev(`window.__popShift.filter(function(s){var n=s.n.nodeType===1?s.n:s.n.parentElement;return n&&n.isConnected&&n.closest(PBPop.selector);}).reduce(function(a,s){return a+s.v;},0)`);
+    seen[page + w] = most;
+    eq(`R38-2. ${page} at ${w}: every element the list names is media only, and nothing with words, a figure, a caveat, a warning, the regulator or QFA line or a form pops, at any scroll; nothing on the first screen is armed; scrolled through, none of it is left faded or low; nothing shifts, and no heading, paragraph, list item or listed element moves in the layout`,
+       [bads, first, left, shift < 0.001, moved], [[], 0, 0, true, []]);
+  }
+  const home = seen['index.html1440'];
+  eq('R38-2. the home page has media below the fold to pop, on the scroll where it can be, and on the clock inside a box that clips (the portraits)',
+     [home.listed > 4, home.sd > 0, home.io > 0], [true, true, true]);
+
+  /* the scroll carries it; a reader who stops is not left with it half there */
+  await open('index.html', 1440);
+  const P = `.pb-learn-media picture`;
+  const kind = await ev(`[document.querySelector(${JSON.stringify(P)}).getAttribute('data-pb-pop'),document.querySelector('.about-port img').getAttribute('data-pb-pop')]`);
+  await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),r=p.getBoundingClientRect();window.scrollTo({top:r.top+scrollY-innerHeight+r.height*0.15,behavior:'instant'});})()`);
+  await ev('new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});})', true);
+  const mid = await ev(`+getComputedStyle(document.querySelector(${JSON.stringify(P)})).opacity`);
+  await sleep(900);
+  const end = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.hasAttribute('data-pb-pop'),p.classList.contains('pb-popped'),cs.opacity,cs.transform];})()`);
+  eq('R38-2. where scroll timelines work: the picture follows the scroll (part way in, part way up), and stopped there it still arrives, in full, on the clock',
+     [kind, mid > 0.05 && mid < 0.95, end], [['sd', 'io'], true, [false, true, '1', 'none']]);
+  /* once */
+  await ev(`window.scrollTo({top:0,behavior:'instant'})`); await sleep(300);
+  await at(P, 0.9); await sleep(80);
+  eq('R38-2. once: scrolled away and back, it does not play again',
+     await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.hasAttribute('data-pb-pop'),cs.animationName,cs.opacity,cs.transform];})()`),
+     [false, 'none', '1', 'none']);
+
+  /* on a phone the book bar covers the foot of the screen, and the site
+     keeps its height as scroll-padding: a picture behind it waits, and pops
+     as it clears the bar */
+  await open('index.html', 375);
+  await at(P, 1.3); await sleep(400);
+  await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),r=p.getBoundingClientRect();window.scrollTo({top:r.top+scrollY-innerHeight+40,behavior:'instant'});})()`);
+  await sleep(800);
+  const behind = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [document.documentElement.classList.contains('pb-bookbar-on'),parseFloat(getComputedStyle(document.documentElement).scrollPaddingBottom)>40,p.getAttribute('data-pb-pop'),cs.opacity];})()`);
+  await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),r=p.getBoundingClientRect(),pad=parseFloat(getComputedStyle(document.documentElement).scrollPaddingBottom)||0;window.scrollTo({top:r.top+scrollY-innerHeight+pad+r.height*0.2,behavior:'instant'});})()`);
+  await sleep(900);
+  const clear = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.hasAttribute('data-pb-pop'),p.classList.contains('pb-popped'),cs.opacity];})()`);
+  eq('R38-2. at 375 with the book bar up: a picture behind the bar waits, unseen; once it clears the bar it arrives, in full',
+     [behind, clear], [[true, true, 'sd', '0'], [false, true, '1']]);
+
+  /* a reader who turns on reduced motion part way: everything shows at once */
+  await open('index.html', 1440);
+  const before = await ev(`document.querySelectorAll('[data-pb-pop]').length`);
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+  await sleep(200);
+  eq('R38-2. reduced motion turned on part way: nothing is left armed, faded or low',
+     [before > 0, await ev(`[document.querySelectorAll('[data-pb-pop]').length,[].filter.call(document.querySelectorAll(PBPop.selector),function(e){var cs=getComputedStyle(e);return cs.opacity!=='1'||cs.transform!=='none';}).length]`)],
+     [true, [0, 0]]);
+  await open('index.html', 1440, { reduce: true });
+  await at('#learn', 0.2); await sleep(400);
+  await at('#damian', 0.2); await sleep(400);
+  eq('R38-2. asking for less motion: nothing is armed, nothing animates', await ev(`[document.querySelectorAll('[data-pb-pop]').length,document.getAnimations().filter(function(a){return a.animationName==='pbPop';}).length]`), [0, 0]);
+
+  /* the fallback, where scroll timelines are not supported (Firefox) */
+  const fake = await send('Page.addScriptToEvaluateOnNewDocument', { source: "(function(){var s=CSS.supports.bind(CSS);CSS.supports=function(a,b){if(String(a).indexOf('animation-timeline')>-1)return false;return b===undefined?s(a):s(a,b);};})();" });
+  await open('index.html', 1440);
+  const waiting = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.getAttribute('data-pb-pop'),cs.opacity,cs.animationName];})()`);
+  await at(P, 0.9);
+  await ev('new Promise(function(r){requestAnimationFrame(function(){requestAnimationFrame(r);});})', true);
+  const going = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.getAttribute('data-pb-pop'),cs.transitionDuration];})()`);
+  await sleep(700);
+  const arrived = await ev(`(function(){var p=document.querySelector(${JSON.stringify(P)}),cs=getComputedStyle(p);return [p.hasAttribute('data-pb-pop'),p.classList.contains('pb-popped'),cs.opacity,cs.transform];})()`);
+  await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: fake.identifier });
+  await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: popRec.identifier });
+  eq('R38-2. without scroll timelines: it waits faded, arrives in 320ms as it first shows, and stays',
+     [waiting, going, arrived], [['io', '0', 'none'], ['go', '0.32s, 0.32s'], [false, true, '1', 'none']]);
 }
 
 console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);

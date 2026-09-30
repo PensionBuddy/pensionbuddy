@@ -1908,6 +1908,101 @@ def run():
             ms['buddys-run.webm'] = 2 * 1024 * 1024
         eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, vrec)), True)
 
+    # ----------------------------------------------------------------- 44
+    # Run 38, item 2: media pops in, and nothing else can. pb-pop.js's list
+    # (POP) names only media: every selector ends on a picture, a video, an
+    # image or one of two media holders (the game tiles, Buddy on the 404
+    # page), and none names a heading, words, a figure, a
+    # caveat, a warning, the regulator line or a form. The POP block (on
+    # every page, byte for byte: chrome_drift) animates opacity and transform
+    # only, rises no further than --pb-rise, runs over at most half an
+    # element's entry or on a pair of 320ms or less, and only inside
+    # html.pb-motion (written :root.pb-motion, the same element, so check
+    # 19 does not read a rule on html) and prefers-reduced-motion:
+    # no-preference; paper gets everything. pb-pop.js loads late on every page, once.
+    POP_ENDS = re.compile(r'(?:^|\s|>)(?:picture|video|img)$|^\.(?:arc-tile|pb-nf-buddy)$')
+    POP_NEVER = re.compile(r'\bh[1-6]\b|(?:^|[\s>,])(?:p|li|label|input|select|textarea|button|form|table|figure|figcaption)\b'
+                           r'|\.pb-warn|\.pb-reg|\.pb-reviewed|\.big\b|data-pb-count|\.infoadvice|\.assume|\.disclosure|\.pb-src|\.announce'
+                           r'|\.pb-quals|\.badge|\.buddy-mini|\.cta-')
+
+    def pop_faults(srcs, js, css):
+        f = []
+        m = re.search(r"var POP = ((?:'[^']*'\s*\+?\s*)+);", js)
+        if not m:
+            return ['no POP list in pb-pop.js']
+        for s in [s.strip() for s in ''.join(re.findall(r"'([^']*)'", m.group(1))).split(',') if s.strip()]:
+            if POP_NEVER.search(s) or not POP_ENDS.search(s):
+                f.append('the list names more than media: %s' % s)
+        b = re.search(r'/\* POP:BEGIN.*?\*/(.*?)/\* POP:END \*/', css, re.S)
+        if not b:
+            return f + ['no POP block']
+        block = b.group(1)
+        k = re.search(r'@keyframes pbPop\{(.*?)\}\}', block, re.S)
+        props = set(re.findall(r'([a-z-]+):', k.group(1))) if k else set()
+        if not k or props - {'opacity', 'transform'}:
+            f.append('the pop moves more than opacity and transform: %s' % sorted(props))
+        for tr in re.findall(r'translate[XY]?\(([^)]*\)?)\)', block):
+            if tr != 'var(--pb-rise)':
+                f.append('the pop travels by %s, not --pb-rise' % tr)
+        for rule in re.findall(r'\{([^{}]*)\}', block):
+            if re.search(r'(?<![-\w])(?:(?:margin|padding|inset)(?:-[a-z]+)*|top|left|bottom|right|width|height|filter|box-shadow)\s*:', rule) and '!important' not in rule:
+                f.append('the pop moves more than opacity and transform: %s' % rule.strip()[:60])
+        rng = re.search(r'animation-range:entry 0% entry (\d+)%', block)
+        if not rng or int(rng.group(1)) > 50 or 'animation:pbPop var(--pb-ease-scroll) both;animation-timeline:view()' not in block:
+            f.append('the scroll-driven pop is not linear over the first half of the entry or less')
+        trs = re.findall(r'transition:([^;}]*)', block)
+        if not trs:
+            f.append('the pop has no clock to finish on')
+        for tr in trs:
+            if any(not re.fullmatch(r'(?:opacity|transform) var\(--pb-t-(?:press|swap|state)\)', p.strip()) for p in tr.split(',')):
+                f.append('the clock is longer than 320ms, or moves more than opacity and transform: %s' % tr)
+        outside = re.sub(r'@media \(prefers-reduced-motion:no-preference\)\{.*?\n\}\n', '', block, flags=re.S)
+        outside = re.sub(r'@keyframes pbPop\{.*?\}\}', '', outside, flags=re.S)
+        if re.search(r'\{[^}]*(?:animation:pbPop|opacity:0|transition:)', outside) or \
+                any(not r.startswith(':root.pb-motion ') for r in re.findall(r'\n\s*([^\n{}@]*data-pb-pop[^{]*)\{', block)):
+            f.append('a pop outside html.pb-motion and prefers-reduced-motion: no-preference')
+        if '@media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}' not in block:
+            f.append('paper does not get everything')
+        for name, s in sorted(srcs.items()):
+            if len(re.findall(r'<script src="assets/js/pb-pop\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', s)) != 1:
+                f.append('%s: pb-pop.js is not loaded late, once' % name)
+        return f
+
+    pop_js = read('assets/js/pb-pop.js')
+    pcss = sources['pension-calculator.html']
+    eq('44. pop-ins: the list names only media; opacity and transform, by --pb-rise, over at most half the entry or on a 320ms pair; only where motion is allowed; paper gets everything; on every page, late',
+       pop_faults(sources, pop_js, pcss), [])
+    for label, target, find, repl, want in (
+            ('a heading given a pop-in', 'js', "'.pb-split-media > picture > img,", "'.pb-split-media > picture > img,.sec-head h2,", 'more than media'),
+            ('words given a pop-in', 'js', "'.pb-split-media > picture > img,", "'.pb-split-media > picture > img,.pb-learn-d,", 'more than media'),
+            ('the regulator line given a pop-in', 'js', "'.pb-split-media > picture > img,", "'.pb-split-media > picture > img,.pb-reg,", 'more than media'),
+            ('the QFA badge given a pop-in', 'js', "'.pb-split-media > picture > img,", "'.pb-split-media > picture > img,.about-port .badge,", 'more than media'),
+            ('a whole card given a pop-in', 'js', "'.pb-split-media > picture > img,", "'.pb-split-media > picture > img,.pb-learn-card,", 'more than media'),
+            ('a pop that moves the layout', 'css', '@keyframes pbPop{from{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}',
+             '@keyframes pbPop{from{opacity:0;margin-top:14px}', 'opacity and transform'),
+            ('a pop that travels too far', 'css', '[data-pb-pop="io"]{opacity:0;transform:translateY(var(--pb-rise))',
+             '[data-pb-pop="io"]{opacity:0;transform:translateY(40px)', 'travels'),
+            ('a long scrub', 'css', 'animation-range:entry 0% entry 40%', 'animation-range:entry 0% cover 60%', 'first half'),
+            ('a slow clock', 'css', 'transition:opacity var(--pb-t-state),transform var(--pb-t-state)',
+             'transition:opacity var(--pb-t-draw),transform var(--pb-t-draw)', 'longer'),
+            ('a pop for a reader who asks for less motion', 'css', '@media (prefers-reduced-motion:no-preference){\n  @supports',
+             '@media all{\n  @supports', 'outside'),
+            ('a pop without html.pb-motion', 'css', '  :root.pb-motion [data-pb-pop="io"]', '  [data-pb-pop="io"]', 'outside'),
+            ('paper left waiting', 'css', '@media print{[data-pb-pop]{animation:none!important;opacity:1!important;',
+             '@media print{[data-pb-pop]{animation:none!important;', 'paper'),
+            ('a page without it', 'page', None, None, 'not loaded')):
+        srcs, j2, c2 = dict(sources), pop_js, pcss
+        if target == 'js':
+            j2 = pop_js.replace(find, repl, 1)
+            assert j2 != pop_js, label
+        elif target == 'css':
+            c2 = pcss.replace(find, repl, 1)
+            assert c2 != pcss, label
+        else:
+            srcs['terms.html'] = re.sub(r'<script src="assets/js/pb-pop\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n', '', sources['terms.html'])
+            assert srcs['terms.html'] != sources['terms.html'], label
+        eq('44. %s is caught' % label, any(want in x for x in pop_faults(srcs, j2, c2)), True)
+
 
 
 

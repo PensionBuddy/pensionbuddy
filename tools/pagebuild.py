@@ -575,11 +575,11 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # the rules that make everything clickable look clickable, (Run 32) the
 # metric-matched fallback for Inter, the motion vocabulary, and how the
 # floating chrome gives way, (Run 33) the first screen on a phone, and
-# (Run 35) Damian's qualifications and memberships, and (Run 37) the related
-# pages at the end of a page.
+# (Run 35) Damian's qualifications and memberships, (Run 37) the related
+# pages at the end of a page, and (Run 38) media popping in on scroll.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
-              ('RELATED', 'related-css'))
+              ('RELATED', 'related-css'), ('POP', 'pop-css'))
 
 
 def _once(text, marker):

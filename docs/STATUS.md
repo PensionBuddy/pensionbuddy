@@ -300,8 +300,8 @@ Run 37's items 9 and 10 are still not reached.
 
 | # | Item | State | Commit |
 |---|---|---|---|
-| 1 | The two game cards' pictures get short loops of the real games | done | this commit |
-| 2 | Pop-ins on scroll, media only | not reached | |
+| 1 | The two game cards' pictures get short loops of the real games | done | 6e54253 |
+| 2 | Pop-ins on scroll, media only | done | this commit |
 
 ## Item 1, the videos
 
@@ -327,12 +327,75 @@ Run 37's items 9 and 10 are still not reached.
   one VP9 clip that Chrome's software decoder played; VP8 is only ever
   decoded in software. The MP4 is listed first, so every current browser
   plays the H.264.
+- **Gate:** every suite passed on the committed tree. `floating-chrome` timed
+  out once in the full run while the machine was busy (other sessions);
+  alone on the same checkout it passed 35 of 35 in 165 s, the same time as
+  the branch without the videos (165 s).
+
+## Item 2, media pops in on scroll
+
+- **What pops, once:** the game cards' pictures and videos, the calculator
+  photograph and the three portraits (home), the photographs beside the
+  director and tracker pages' copy, the jargon buster's two game tiles, and
+  Buddy on the 404 page. The whole list is `POP` in `assets/js/pb-pop.js`.
+- **Never:** headings, words, figures, caveats, warnings, the regulator and
+  QFA lines, forms. Every element on the list must hold no words and sit in
+  none of those, or it is left alone. The portraits pop but the "B.A.,
+  Q.F.A." badge on Damian's does not. A card's picture pops but its heading
+  and words do not.
+- **Left out on purpose:** Starter's annotated calculator photograph (its
+  arrows and labels would float over a moving picture); Buddy beside the
+  booking button (motion rule 8, nothing moves near a call to action); the
+  provider logos (see question 6); the "Out of office" photo strip, which is
+  switched off (Run 29). Add the strip to the list if it comes back.
+- **The first gate failed** on `providers.test` check 2. It measures each
+  logo as drawn, under Chrome's virtual time, where an observer never fires.
+  The waiting strip was drawn at 97%, so every logo read 3% short. The
+  logos came off the list, and that test was left as it was.
+- **How it moves:** it rises 12px (`--pb-rise`, the site's limit) from 97%
+  size and fades in. Where scroll timelines work (Chrome, Edge, Safari 26)
+  it follows the scroll over the first 40% of its entry. If the reader
+  stops part way, it finishes on the clock 300 ms later (`--pb-arrive`), so
+  nothing is left half there. Elsewhere (Firefox), and for anything inside
+  a box that clips, it arrives in 320 ms (`--pb-t-state`) as it first
+  shows. "Shows" means below the nav and above the book bar or cookie bar,
+  the same room the site keeps as scroll-padding, so on a phone a picture
+  pops as it clears the book bar, not behind it. It is armed only off
+  screen, so nothing on the first screen moves. It never plays again,
+  moves only opacity and transform (no layout shift), and does nothing
+  with reduced motion (from the start or turned on part way) or on paper.
+- **Written `:root.pb-motion`, not `html.pb-motion`:** it is the same element.
+  Build check 19 treats any fade rule that names `html` as a page fade, and
+  that check stays as strict as it was.
+- **Guards:** build check 44 (the list names only media; opacity and
+  transform, by `--pb-rise`, over at most half the entry or on a pair of
+  320 ms or less; only with motion allowed; paper gets everything; on
+  every page, late; 13 mutants). ux4 R38-2, 14 checks on seven pages and
+  widths, each scrolled through:
+  - everything that pops holds no words and nothing that must never pop;
+  - nothing on the first screen is armed, and nothing is left faded;
+  - no heading, paragraph, list item or listed element moves in the layout;
+  - it completes when the reader stops, never replays, waits behind the
+    book bar, and does nothing with reduced motion;
+  - the fallback's 320 ms is checked.
+
+  I broke it ten ways (a heading on the list, a heading popped by CSS alone,
+  a whole card armed, two layout-moving pops, reduced motion ignored, the
+  first screen armed, no clock, the book bar ignored, replaying). The guard
+  caught all ten.
+- **Found on the way (not changed):** the tracker page's photograph of
+  Damian and Buddy has no box kept for it before it loads. It is 161px tall
+  until the lazy image arrives, then 523px, so the page below it moves down
+  as it loads (69px at 1440, where it sits beside the copy). At a normal
+  pace that happens off screen. On a slow connection it could happen in
+  view. See question 5.
 
 ## New words on the site (for the pack)
 
 - **Item 1:** the video button's names, "Pause video: Buddy's Run", "Play
   video: Buddy's Run", and the same for Jargon Battle (for a screen reader;
   the button shows an icon).
+- **Item 2:** none.
 
 ## Questions for Damian
 
@@ -341,6 +404,19 @@ Run 37's items 9 and 10 are still not reached.
 2. **The clips.** Buddy's Run: eight seconds after a five-second run-up, no
    life lost. Jargon Battle: two questions answered right, second to fourth.
    Want a wrong answer shown too (a heart lost), or other moments?
+3. **Cards.** The brief lets cards pop and never headings or body text. A
+   card holds both, so only a card's picture pops, and its heading and words
+   stay still. A card's frame (border and shadow) could pop without its
+   words, drawn behind them. Want that?
+4. **The feel.** A 12px rise from 97% size, and the first 40% of the entry
+   or 320 ms. Want it bigger, smaller or slower? The motion system's
+   limits are 12px and 640 ms.
+5. **The tracker photograph** (above): keep its box before it loads, one
+   line of CSS? It would not change how the page looks once loaded.
+6. **The provider logos.** The brief lets logos pop. These already move, in
+   their ticker, and `providers.test` checks their drawn size, which a
+   waiting pop shrinks to 97%. Want them to pop as well, with that test
+   measuring the settled size instead?
 
 # Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (not merged)
 

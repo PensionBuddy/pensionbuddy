@@ -2296,6 +2296,28 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
 /* RELATED:END */
+/* POP:BEGIN (Run 38, item 2). Media, and only media, may pop in once as it
+   scrolls into view. assets/js/pb-pop.js arms it off screen (data-pb-pop),
+   never words, a figure, a caveat, a warning, the regulator line or a form,
+   and never anything on screen when it runs. "sd": where scroll timelines
+   are supported and the page is its scroller, it rises --pb-rise and fades
+   up with the scroll over the first 40% of its entry (linear, as scroll
+   timelines are). "io": elsewhere it waits faded and low. "go": it arrives
+   on --pb-t-state, as it first shows ("io"), or 300ms after ("sd", a reader
+   who stops scrolling); then the attribute comes off and it never plays
+   again. Opacity and transform only, so nothing else moves. Never for a
+   reader who asks for less motion (MOTION's choreography rules 1, 2, 4, 5,
+   9 and 10), and never on paper. Byte for byte on every page. */
+@keyframes pbPop{from{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    :root.pb-motion [data-pb-pop="sd"]{animation:pbPop var(--pb-ease-scroll) both;animation-timeline:view();animation-range:entry 0% entry 40%}
+  }
+  :root.pb-motion [data-pb-pop="io"]{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}
+  :root.pb-motion [data-pb-pop="go"]{opacity:1;transform:none;transition:opacity var(--pb-t-state),transform var(--pb-t-state)}
+}
+@media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}
+/* POP:END */
 
 /* ============================================================
    THE PERSONAL INVESTMENT ACCOUNT (pia.html, Run 23).
@@ -3090,6 +3112,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
+<script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>
