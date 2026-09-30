@@ -15,6 +15,10 @@
         as the page scrolls, and the page scrolls exactly as far as it was
         asked; at 375, and without JavaScript, there is no card, only the
         list; opening the section moves nothing above it
+     5. Save as A, at 375 and 1440: the table shows A and now as the page's
+        own figures; move a slider and A stays while now follows the page,
+        the rows that changed marked; Clear A takes it away and gives focus
+        back; without JavaScript there is no Save as A
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -125,6 +129,35 @@ if (has('index.html', 'id="through-life"')) {
   eq('4. without JavaScript at 1440, the list alone', await ev(`getComputedStyle(document.querySelector('.pb-tl-stage')).display`), 'none');
   await open('index.html', 1440, { reduce: true });
   eq('4. asking for less motion: the fill and the mark jump, they do not slide', await ev(`[getComputedStyle(document.getElementById('pbTlFill')).transitionDuration, getComputedStyle(document.getElementById('pbTlMark')).transitionDuration]`), ['0s', '0s']);
+}
+
+/* ---- 5. Save as A ---- */
+if (has('pension-calculator.html', 'id="pbAb"')) {
+  const TABLE = `(function(){var rows=[].map.call(document.querySelectorAll('#pbAbRows tr'),function(tr){var c=tr.children;return [c[0].textContent,c[1].textContent,c[2].firstChild?c[2].firstChild.textContent:'',c[2].className];});
+    return {box:!document.getElementById('pbAbBox').hidden,rows:rows,pot:document.getElementById('potOut').textContent,inc:document.getElementById('incOut').textContent};})()`;
+  for (const w of [375, 1440]) {
+    await open('pension-calculator.html', w);
+    /* the guess card veils the figures until it is answered or skipped */
+    await ev(`(function(){var b=document.querySelector('.pb-guess-skip,[data-pb-guess-skip]');if(b)b.click();document.documentElement.classList.remove('pb-preveil');[].forEach.call(document.querySelectorAll('.pb-veiled'),function(e){e.classList.remove('pb-veiled');});})()`);
+    await sleep(900);
+    await ev(`document.getElementById('pbAbSave').click()`); await sleep(700);
+    const saved = await ev(TABLE);
+    const first = saved.rows[0], second = saved.rows[1];
+    eq(`5. at ${w}: Save as A shows the table, A and now the same, both the page's own figures`,
+       [saved.box, first[1] === saved.pot && first[2] === saved.pot, second[1] === saved.inc && second[2] === saved.inc, saved.rows.every(r => r[1] === r[2] && r[3] === '')],
+       [true, true, true, true]);
+    await ev(`(function(){var r=document.getElementById('age');r.value=String(+r.value+5);r.dispatchEvent(new Event('input',{bubbles:true}));r.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+    await sleep(1500);
+    const moved = await ev(TABLE);
+    const ageRow = moved.rows.find(r => r[0] === 'Your age now');
+    eq(`5. at ${w}: move a slider and A stays, now follows the page, the changed rows marked`,
+       [moved.rows[0][1] === saved.pot, moved.rows[0][2] === moved.pot, moved.pot !== saved.pot, !!ageRow && ageRow[3] === 'pb-ab-diff', moved.rows[0][3] === 'pb-ab-diff'],
+       [true, true, true, true, true]);
+    await ev(`document.getElementById('pbAbClear').click()`); await sleep(200);
+    eq(`5. at ${w}: Clear A takes the table away and focus goes back to Save as A`, await ev(`[document.getElementById('pbAbBox').hidden, document.activeElement.id]`), [true, 'pbAbSave']);
+  }
+  await open('pension-calculator.html', 1440, { nojs: true });
+  eq('5. without JavaScript there is no Save as A', await ev(`getComputedStyle(document.getElementById('pbAb')).display`), 'none');
 }
 
 console.log(failed ? `FAILURES  ${passed} passed, ${failed} failed` : `ALL PASS  ${passed} passed, 0 failed`);

@@ -1688,6 +1688,33 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-warn{margin:16px 0;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--r-md);background:var(--surface);color:var(--ink)}
 .pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
 .pb-warn p+p{margin-top:6px}
+/* Run 37, item 5: Save as A (the pension calculator's own; the pages built
+   on this skeleton carry the rules and never the block). Drawn only with
+   JavaScript, which it needs. Nothing moves. */
+html:not(.pb-js) .pb-ab{display:none}
+.pb-ab{margin:18px 0 0}
+.pb-ab-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.pb-ab-save,.pb-ab-clear{min-height:44px;padding:0 18px;font:600 16px var(--font);color:var(--teal-700);background:var(--surface);
+  border:1.5px solid var(--teal-700);border-radius:999px;cursor:pointer}
+.pb-ab-save:hover,.pb-ab-clear:hover{background:var(--teal-50)}
+.pb-ab-save:focus-visible,.pb-ab-clear:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-ab-hint{flex:1 1 220px;margin:0;font-size:16px;line-height:1.5;color:var(--ink-2)}
+.pb-ab-said{margin:8px 0 0;font-size:16px;line-height:1.5;color:var(--ink-2)}
+.pb-ab-said:empty{display:none}
+.pb-ab-box{margin:12px 0 0;padding:16px 18px;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface)}
+.pb-ab-table{width:100%;border-collapse:collapse;font-size:16px;font-variant-numeric:tabular-nums}
+.pb-ab-table caption{margin:0 0 8px;text-align:left;font-weight:700;color:var(--ink)}
+.pb-ab-table th,.pb-ab-table td{padding:7px 8px;text-align:right;vertical-align:top;border-bottom:1px solid var(--line)}
+.pb-ab-table thead th{font-weight:700;color:var(--ink)}
+.pb-ab-table tbody th{text-align:left;font-weight:500;color:var(--ink-2)}
+.pb-ab-table tr.pb-ab-fig td{font-weight:700;color:var(--ink)}
+.pb-ab-table td.pb-ab-diff{color:var(--teal-700);font-weight:700}
+.pb-ab-table td.pb-ab-diff::before{content:"";display:inline-block;width:7px;height:7px;margin:0 6px 1px 0;border-radius:50%;
+  background:var(--teal)}
+.pb-ab-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pb-ab-clear{margin:12px 0 0}
+.pb-ab-table td{white-space:nowrap}
+@media(max-width:560px){.pb-ab-box{padding:12px 12px}.pb-ab-table th,.pb-ab-table td{padding:7px 4px}}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2380,6 +2407,24 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
     </div>
     <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
+    <!-- Run 37, item 5: Save as A. A copy of what the calculator shows, set
+         beside what it shows now; assets/js/pb-scenario.js reads the page and
+         writes only this block. Not stored. Drawn only with JavaScript. -->
+    <div class="pb-ab" id="pbAb">
+      <div class="pb-ab-bar">
+        <button type="button" class="pb-ab-save" id="pbAbSave">Save as A</button>
+        <p class="pb-ab-hint">Keep these figures as A, then move the sliders to see A beside them. Nothing is stored.</p>
+      </div>
+      <p class="pb-ab-said" id="pbAbSaid" role="status"></p>
+      <div class="pb-ab-box" id="pbAbBox" hidden>
+        <table class="pb-ab-table">
+          <caption>A beside your figures now</caption>
+          <thead><tr><td></td><th scope="col">A</th><th scope="col">Now</th></tr></thead>
+          <tbody id="pbAbRows"></tbody>
+        </table>
+        <button type="button" class="pb-ab-clear" id="pbAbClear">Clear A</button>
+      </div>
+    </div>
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
     <div class="waitcard">
@@ -2469,6 +2514,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-ladder.js?v=a9ec3585"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
+<script src="assets/js/pb-scenario.js?v=4cfd31c3"></script>
 </main>
 <footer><div class="wrap">
   <div class="foot-top">

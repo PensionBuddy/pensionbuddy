@@ -309,7 +309,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 2 | Jargon definitions at first use: the jargon buster's own words, on 21 pages | done | this commit |
 | 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
 | 4 | "Your pension through life": nine ages from 18 to 71 on the home page, each a link; a card follows the reader on a wide screen | done | this commit |
-| 5 | Scenario compare on the pension calculator | not reached | |
+| 5 | Save as A on the pension calculator: A beside your figures now, a copy of what the page shows | done | this commit |
 | 6 | Long guides: on this page, progress, next step | not reached | |
 | 7 | Related pages at the end of every page | not reached | |
 | 8 | The 404 page | not reached | |
@@ -362,6 +362,15 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   over-50s guide, pension age from the starter page), under the guides' own
   "Rules as at 24 September 2026" line; build check 36 finds each step's
   figures on the page it links to.
+- **Item 5**, the pension calculator, after the two warnings: "Save as A",
+  "Keep these figures as A, then move the sliders to see A beside them.
+  Nothing is stored.", "A is saved. Change the sliders to see it beside your
+  figures now.", the table's caption "A beside your figures now" with columns
+  "A" and "Now", "Clear A", and (for a screen reader) "changed" beside a
+  value that differs. While the guess card still hides the figures, the
+  button says the saved report's own "Reveal the illustration first, then
+  save it." Every figure in the table is copied off the page as the page
+  wrote it: nothing is worked out.
 
 ## Questions for Damian
 
