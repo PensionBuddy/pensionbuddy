@@ -301,7 +301,8 @@ Run 37's items 9 and 10 are still not reached.
 | # | Item | State | Commit |
 |---|---|---|---|
 | 1 | The two game cards' pictures get short loops of the real games | done | 6e54253 |
-| 2 | Pop-ins on scroll, media only | done | this commit |
+| 2 | Pop-ins on scroll, media only | done | c916a6b |
+| 1, follow-up | The posters load only as a video comes near (Lighthouse found them slowing the home page) | done | this commit |
 
 ## Item 1, the videos
 
@@ -331,6 +332,16 @@ Run 37's items 9 and 10 are still not reached.
   out once in the full run while the machine was busy (other sessions);
   alone on the same checkout it passed 35 of 35 in 165 s, the same time as
   the branch without the videos (165 s).
+- **Follow-up, the posters:** a `poster` in the markup is fetched with the
+  page, however far down it is. The two JPGs (302 KB) went out in the first
+  20 ms, and on Lighthouse's phone the home page's LCP went from 3.23 s to
+  4.95 s (performance 92 to 80). The poster is now the card picture's own
+  WebP, carried as `data-poster`. `pb-video.js` makes it the poster only as
+  the video comes near, by which time the lazy picture has loaded that same
+  file. Nothing extra loads, and reduced motion loads no poster at all. The
+  home page is back to 92 and 93, LCP 3.23 s and 3.08 s (two runs). Build
+  check 43 and ux4 R38-1 now fail if a poster comes back into the markup
+  or is never set.
 
 ## Item 2, media pops in on scroll
 
@@ -389,6 +400,27 @@ Run 37's items 9 and 10 are still not reached.
   as it loads (69px at 1440, where it sits beside the copy). At a normal
   pace that happens off screen. On a slow connection it could happen in
   view. See question 5.
+
+## Lighthouse, before and after (mobile, median of three, interleaved)
+
+Before is `30f8d12`, where Run 37 began. After is `c916a6b`, Runs 37 and 38
+up to item 2, without the posters' follow-up.
+
+| Page | Performance | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|
+| index.html | 92 to 81 | 3.15 to 4.95 | 0 to 0 | 0 to 0 |
+| index.html, with the follow-up (two runs) | 92, 93 | 3.23, 3.08 | 0 | 0 |
+| pension-calculator.html | 87 to 86 | 3.31 to 3.46 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 87 to 87 | 3.31 to 3.31 | 0 to 0 | 0 to 0 |
+| glossary.html | 91 to 91 | 2.86 to 2.86 | 0 to 0 | 0 to 0 |
+| tracker.html | 95 to 93 | 2.93 to 3.08 | 0 to 0 | 0 to 0 |
+| starter.html | 91 to 91 | 3.30 to 3.31 | 0.0012 to 0.0012 | 0 to 0 |
+| 404.html | 97 to 96 | 2.25 to 2.71 | 0 to 0 | 0 to 0 |
+
+The 404 page gained Buddy's picture and a search box in Run 37 (item 8).
+The pension calculator and the tracker page are about 0.15 s slower. Run 37
+added scripts to both (search, jargon definitions, related pages), and I did
+not isolate which one costs it.
 
 ## New words on the site (for the pack)
 

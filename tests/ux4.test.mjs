@@ -227,15 +227,19 @@ if (has('404.html', 'class="pb-nf-six"')) {
 /* ---- Run 38, 1. the game cards' videos ---- */
 if (has('index.html', 'data-pb-video')) {
   const vids = () => requests.filter(u => /\/assets\/video\//.test(u));
+  /* the cards' own pictures, in any format: a poster in the markup would be
+     fetched with the page, however far down it is */
+  const stills = () => requests.filter(u => /\/assets\/img\/product-(buddys-run|jargon-battle)\./.test(u));
   const V = `(function(){return [].map.call(document.querySelectorAll('video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
-    return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none'};});})()`;
+    return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none',
+      poster:!!v.poster&&v.poster===v.parentNode.querySelector('picture img').currentSrc};});})()`;
   await open('index.html', 1440);
-  const far = vids().length;
+  const far = [vids().length, stills().length];
   await at('#learn', 0.2); await sleep(2500);
   const near = await ev(V);
-  eq('R38-1. nothing fetched while the cards are far; near, both videos play, the button shows pause and is named Pause video: the game',
-     [far, vids().length >= 2, near.map(v => [v.shown, !v.paused, v.t > 0.3, v.btn, v.state, v.btnShown])],
-     [0, true, [[true, true, true, 'Pause video', 'playing', true], [true, true, true, 'Pause video', 'playing', true]]]);
+  eq('R38-1. nothing fetched while the cards are far, not even a poster; near, both videos play, the poster is the card\'s own picture, the button shows pause and is named Pause video: the game',
+     [far, vids().length >= 2, near.map(v => [v.shown, !v.paused, v.t > 0.3, v.btn, v.state, v.btnShown, v.poster])],
+     [[0, 0], true, [[true, true, true, 'Pause video', 'playing', true, true], [true, true, true, 'Pause video', 'playing', true, true]]]);
   await ev(`document.querySelector('[data-pb-video-btn]').click()`); await sleep(600);
   const held = (await ev(V))[0];
   await ev(`window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})`); await sleep(800);
@@ -270,8 +274,8 @@ if (has('index.html', 'data-pb-video')) {
   if (!flash.every(f => f.whole <= 6 && f.cell <= 6 && f.frames >= 150)) console.log('         ', JSON.stringify(flash));
   await open('index.html', 1440, { reduce: true });
   await at('#learn', 0.2); await sleep(2000);
-  const still = await ev(`[].map.call(document.querySelectorAll('.pb-learn-media'),function(m){var p=m.querySelector('picture img').getBoundingClientRect();return [getComputedStyle(m.querySelector('video')).display,getComputedStyle(m.querySelector('button')).display,p.width>0];})`);
-  eq('R38-1. asking for less motion: the picture only, nothing fetched, no button', [still, vids().length], [[['none', 'none', true], ['none', 'none', true]], 0]);
+  const still = await ev(`[].map.call(document.querySelectorAll('.pb-learn-media'),function(m){var p=m.querySelector('picture img').getBoundingClientRect();return [getComputedStyle(m.querySelector('video')).display,getComputedStyle(m.querySelector('button')).display,p.width>0,m.querySelector('video').getAttribute('poster')];})`);
+  eq('R38-1. asking for less motion: the picture only, nothing fetched, no button, no poster', [still, vids().length], [[['none', 'none', true, null], ['none', 'none', true, null]], 0]);
   await open('index.html', 1440, { nojs: true });
   eq('R38-1. without JavaScript: the picture only', await ev(`[].map.call(document.querySelectorAll('.pb-learn-media video'),function(v){return getComputedStyle(v).display;})`), ['none', 'none']);
 }

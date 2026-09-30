@@ -2,7 +2,8 @@
   The game cards' videos (Run 38, item 1).
 
   Each card on the home page's "Just here to learn?" keeps its still
-  picture, which is the video's poster too, and what a reader gets without
+  picture, which is the video's poster too (data-poster, set only as the
+  video comes near, so nothing loads early), and what a reader gets without
   JavaScript, with reduced motion asked for, or with data saving on. Over it
   sits a short loop of the real game, recorded by tools/record-games.mjs:
   muted, looping, inline, hidden from screen readers (the picture's own
@@ -37,7 +38,15 @@
     }
     function sync() {
       if (motion() && near && !held) {
-        if (!fetched) { fetched = true; v.preload = 'auto'; v.load(); }
+        if (!fetched) {
+          fetched = true;
+          /* the poster is the card's own picture, the file the picture
+             beneath has just loaded; set only now, as a poster in the
+             markup is fetched at once, however far down the page it is */
+          if (v.getAttribute('data-poster')) { v.poster = v.getAttribute('data-poster'); }
+          v.preload = 'auto';
+          v.load();
+        }
         var p = v.play();
         if (p && p.catch) { p.catch(function () { label(); }); }
       } else if (!v.paused) {

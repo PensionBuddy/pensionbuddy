@@ -1833,7 +1833,10 @@ def run():
     # (the poster, and all there is without JavaScript or with reduced
     # motion) and carries over it a video of the real game: muted, looping,
     # inline, preload="none", aria-hidden, its poster the card's own
-    # picture, an MP4 first and a WebM second, each under 1.5 MB on disk;
+    # picture (the picture's WebP, as data-poster, which pb-video.js makes
+    # the poster only as the video comes near: a poster attribute in the
+    # markup is fetched at once, and two of them cost the home page 1.7 s of
+    # Lighthouse LCP), an MP4 first and a WebM second, each under 1.5 MB;
     # and a button whose name starts with its words (WCAG 2.2.2, 2.5.3).
     # The CSS draws the video and the button only where motion is allowed;
     # pb-video.js loads late, stores nothing, fetches near the viewport and
@@ -1844,19 +1847,22 @@ def run():
     def video_faults(ix, js, sizes, rec):
         f = []
         for slug, name in VIDEOS:
-            m = re.search(r'<div class="pb-learn-media">\s*<picture>.*?<img src="(assets/img/product-%s\.jpg)\?v=[0-9a-f]+"[^>]*></picture>\s*'
-                          r'<video ([^>]*)>(.*?)</video>\s*<button ([^>]*)>(.*?)</button>\s*</div>' % slug, ix, re.S)
+            m = re.search(r'<div class="pb-learn-media">\s*<picture><source type="image/webp" srcset="(assets/img/product-%s\.webp\?v=[0-9a-f]+)">'
+                          r'.*?<img src="assets/img/product-%s\.jpg\?v=[0-9a-f]+"[^>]*></picture>\s*'
+                          r'<video ([^>]*)>(.*?)</video>\s*<button ([^>]*)>(.*?)</button>\s*</div>' % (slug, slug), ix, re.S)
             if not m:
                 f.append('%s: no picture, video and button together' % slug)
                 continue
-            jpg, vattrs, sources, battrs, words = m.groups()
+            webp, vattrs, sources, battrs, words = m.groups()
             for want in ('class="pb-learn-vid"', ' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video'):
                 if want not in ' ' + vattrs:
                     f.append('%s: the video is not %s' % (slug, want.strip()))
             if 'autoplay' in vattrs or 'controls' in vattrs:
                 f.append('%s: the video plays by itself or shows controls' % slug)
-            if not re.search(r'poster="%s\?v=[0-9a-f]+"' % re.escape(jpg), vattrs):
+            if 'data-poster="%s"' % webp not in vattrs:
                 f.append('%s: the poster is not the card\'s own picture' % slug)
+            if re.search(r'(?<![-\w])poster=', vattrs):
+                f.append('%s: a poster in the markup, fetched at once' % slug)
             if re.findall(r'<source src="([^"]+)" type="([^"]+)">', sources) != [('assets/video/%s.mp4' % slug, 'video/mp4'), ('assets/video/%s.webm' % slug, 'video/webm')]:
                 f.append('%s: not the MP4 then the WebM' % slug)
             if ('type="button"' not in battrs or 'data-state="paused"' not in battrs or ('aria-label="Play video: %s"' % name) not in battrs
@@ -1876,6 +1882,8 @@ def run():
             f.append('pb-video.js stores or fetches something itself')
         if 'new IntersectionObserver(' not in code or 'v.pause()' not in code or "classList.contains('pb-motion')" not in code:
             f.append('pb-video.js does not pause off screen, or ignores reduced motion')
+        if "v.poster = v.getAttribute('data-poster')" not in code:
+            f.append('pb-video.js does not give the video its poster')
         if "setRng(pbSeed(20260929))" not in rec or rec.count("setRng(pbSeed(20260929))") != 2:
             f.append('the recorder does not seed both games as the pictures are')
         return f
@@ -1888,10 +1896,12 @@ def run():
     eq('43. game videos: over each card\'s picture, muted, looping, inline, not preloaded, hidden from screen readers, the picture as poster, MP4 then WebM under 1.5 MB, a named pause button; drawn only with motion; late, pauses off screen',
        video_faults(ix, vjs, vsizes, vrec), [])
     for label, target, find, repl, want in (
-            ('a video that preloads', 'ix', 'preload="none" aria-hidden="true" disablepictureinpicture poster="assets/img/product-buddys-run',
-             'preload="auto" aria-hidden="true" disablepictureinpicture poster="assets/img/product-buddys-run', 'preload'),
+            ('a video that preloads', 'ix', 'preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run',
+             'preload="auto" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run', 'preload'),
             ('a video with sound', 'ix', '<video class="pb-learn-vid" muted loop', '<video class="pb-learn-vid" loop', 'muted'),
-            ('a poster that is not the picture', 'ix', 'poster="assets/img/product-jargon-battle.jpg', 'poster="assets/img/product-buddys-run.jpg', 'poster'),
+            ('a poster that is not the picture', 'ix', 'data-poster="assets/img/product-jargon-battle.webp', 'data-poster="assets/img/product-buddys-run.webp', 'poster'),
+            ('a poster in the markup again', 'ix', ' data-poster="assets/img/product-jargon-battle.webp', ' poster="assets/img/product-jargon-battle.jpg" data-poster="assets/img/product-jargon-battle.webp', 'at once'),
+            ('a player that never sets the poster', 'js', "v.poster = v.getAttribute('data-poster')", "v.title = v.getAttribute('data-poster')", 'its poster'),
             ('a video drawn for reduced motion', 'ix', '.pb-learn-vid,.pb-vid-btn{display:none}', '.pb-vid-btn{display:none}', 'the CSS'),
             ('a button named otherwise', 'ix', 'aria-label="Play video: Jargon Battle"', 'aria-label="Start the animation"', 'button'),
             ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
