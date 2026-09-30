@@ -312,7 +312,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 5 | Save as A on the pension calculator: A beside your figures now, a copy of what the page shows | done | this commit |
 | 6 | Long guides: on this page, progress, next step | skipped: failed the gate twice (an initialism first used in the new list; then 14-15px text under the calculators' 16px floor on the PIA and threshold pages). Reverted here; parked, with the 16px fix, on `claude/overnight-ux-4-guides` (not gated after the fix) | |
 | 7 | Related pages: two or three cards at the end of 22 pages, one shared component written into the markup | done | this commit |
-| 8 | The 404 page | not reached | |
+| 8 | The 404: Buddy, a search box in the page, and the home page's six places to begin | done | this commit |
 | 9 | Slider feel | not reached | |
 | 10 | Figures that wait: skeletons | not reached | |
 
@@ -378,6 +378,10 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   where that sentence carries an initialism a page might not have spelled
   out). The table is `RELATED` in `tools/pagebuild.py`; build check 39 finds
   every line on its page.
+- **Item 8**, the 404, below its own words (kept as they were): Buddy's
+  picture ("Buddy, the Pensionbuddy dog", his usual alt text), the search
+  box with the search's own words (drawn only with JavaScript), and "Six
+  places to begin." with the home page's six names and lines, word for word.
 
 ## Questions for Damian
 

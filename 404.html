@@ -1513,6 +1513,35 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* Run 37, item 8: the 404. Buddy, the search box (the dialog's own look,
+   set here in full so nothing moves when the search script arrives with its
+   rules), and the home page's six places to begin as cards. */
+.pb-nf .pb-nf-buddy{display:block;width:96px;height:96px;margin:0 0 18px}
+.pb-nf .pb-nf-buddy img{display:block;width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--teal-100)}
+html:not(.pb-js) .pb-nf-search{display:none}
+.pb-nf .pb-nf-search{max-width:640px;margin:24px 0 8px}
+.pb-nf .pb-nf-search .pb-search-label{display:block;margin:0 0 8px;font-size:15px;font-weight:600;line-height:1.4;color:var(--ink)}
+.pb-nf .pb-nf-search .pb-search-q{display:block;width:100%;min-height:52px;margin:0;padding:12px 16px;font:400 17px var(--font);color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line-2);border-radius:10px;-webkit-appearance:none;appearance:none}
+.pb-nf .pb-nf-search .pb-search-q:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--ring)}
+.pb-nf .pb-nf-search .pb-search-count{min-height:1.5em;margin:10px 2px 6px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.pb-nf .pb-nf-search .pb-search-list{margin:0;padding:0;list-style:none}
+.pb-nf .pb-nf-search .pb-search-list li{margin:0;padding:0}
+.pb-nf .pb-nf-search .pb-sr{display:flex;flex-direction:column;gap:2px;margin:0;padding:12px;border-radius:10px;color:var(--ink);text-decoration:none}
+.pb-nf .pb-nf-search .pb-sr:hover,.pb-nf .pb-nf-search .pb-sr:focus-visible{background:var(--teal-50)}
+.pb-nf .pb-nf-h{margin:34px 0 14px}
+.pb-nf .pb-nf-six{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:760px;margin:0;padding:0;list-style:none}
+.pb-nf .pb-nf-six li{margin:0;padding:0}
+.pb-nf .pb-nf-six a{display:flex;flex-direction:column;gap:4px;height:100%;margin:0;padding:16px 18px;border:1px solid var(--line-2);
+  border-radius:var(--r-lg);background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-nf .pb-nf-six a:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-nf .pb-nf-six a:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-nf .pb-nf-six b{font-size:17px;font-weight:700;line-height:1.3}
+.pb-nf .pb-nf-six span{font-size:15px;line-height:1.5;color:var(--ink-2)}
+@media(max-width:700px){.pb-nf .pb-nf-six{grid-template-columns:1fr}}
+.pb-nf .pb-nf-six li::before,.pb-nf .pb-nf-search .pb-search-list li::before{content:none;display:none}  /* the legal pages' bullet: these are cards */
+.pb-nf .pb-nf-six li,.pb-nf .pb-nf-search .pb-search-list li{padding-left:0}
+.pb-nf .pb-nf-six span,.pb-nf .pb-nf-search .pb-sr{font-weight:400}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -1961,7 +1990,8 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<div class="wrap"><div class="legal">
+<div class="wrap"><div class="legal pb-nf">
+  <picture class="pb-nf-buddy"><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture>
   <h1>This page is gone. Everything else is still here.</h1>
   <p class="intro">Even Buddy couldn&rsquo;t sniff out this page. The link may be old, or the address mistyped. Either way, nothing&rsquo;s lost.</p>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin:26px 0 10px">
@@ -1970,6 +2000,24 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   </div>
   <p class="pb-why">Free, 20 minutes, no obligation.</p>
   <p style="margin-top:18px">Looking for something in particular? The <a href="glossary.html">jargon buster</a> or the <a href="pension-calculator.html">pension calculator</a> are good places to start.</p>
+  <!-- Run 37, item 8: the search, in the page (assets/js/pb-search.js wires
+       it; drawn only with JavaScript, which it needs), then the home page's
+       six places to begin, word for word. -->
+  <div class="pb-nf-search" data-pb-search>
+    <label class="pb-search-label" for="pbSearchIn">Search Pensionbuddy</label>
+    <input type="search" id="pbSearchIn" class="pb-search-q" autocomplete="off" spellcheck="false" placeholder="Search pages, guides and the jargon buster" aria-describedby="pbSearchInCount" aria-controls="pbSearchInList">
+    <p class="pb-search-count" id="pbSearchInCount" role="status"></p>
+    <ul class="pb-search-list" id="pbSearchInList"></ul>
+  </div>
+  <h2 class="pb-nf-h">Six places to begin.</h2>
+  <ul class="pb-nf-six">
+    <li><a href="tracker.html"><b>Track down old pensions</b><span>Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.</span></a></li>
+    <li><a href="starter.html"><b>Start a pension</b><span>No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.</span></a></li>
+    <li><a href="director.html"><b>Company directors</b><span>Your company can fund your pension far beyond personal limits, and cut its tax bill doing it.</span></a></li>
+    <li><a href="pension-calculator.html"><b>Pension calculator</b><span>Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.</span></a></li>
+    <li><a href="state-pension-reality-check.html"><b>State Pension reality check</b><span>What the State Pension leaves you to find.</span></a></li>
+    <li><a href="broker-vs-autoenrolment.html"><b>Auto-enrolment comparison</b><span>My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.</span></a></li>
+  </ul>
 </div></div>
 </main>
 <footer><div class="wrap">

@@ -22,6 +22,9 @@
      7. related pages: last in <main>, two or three cards of at least 44px,
         side by side on a wide screen and stacked on a phone, nothing
         sideways; none on the home page
+     8. the 404, at 375 and 1440: Buddy, the search box and the six places;
+        a search there finds the buster's entry; nothing moves as it loads;
+        without JavaScript no box and the six places still there
    (item 6 was reverted: its section is on claude/overnight-ux-4-guides)
    Not in tests/run-tests.py. Exit 0 or 1. */
 import { spawn } from 'node:child_process';
@@ -179,6 +182,25 @@ if (has('terms.html', 'class="pb-related"')) {
   }
   await open('index.html', 1440);
   eq('7. not on the home page', await ev(`!!document.querySelector('.pb-related')`), false);
+}
+
+
+/* ---- 8. the 404 ---- */
+if (has('404.html', 'class="pb-nf-six"')) {
+  for (const w of [375, 1440]) {
+    await open('404.html', w);
+    const shifts = await ev(`window.__shifts.filter(function(s){return !s.nav;}).reduce(function(a,s){return a+s.v;},0)`);
+    const r = await ev(`(function(){var b=document.querySelector('.pb-nf-buddy img');var q=document.getElementById('pbSearchIn');
+      return {buddy:!!b&&b.complete&&b.naturalWidth>0&&b.getBoundingClientRect().width>0,box:getComputedStyle(document.querySelector('.pb-nf-search')).display!=='none'&&q.getBoundingClientRect().height>=44,
+        six:document.querySelectorAll('.pb-nf-six a').length};})()`);
+    await ev(`(function(){var q=document.getElementById('pbSearchIn');q.focus();q.value='annuity';q.dispatchEvent(new Event('input'));})()`);
+    await sleep(900);
+    const hits = await ev(`[].map.call(document.querySelectorAll('#pbSearchInList a'),function(a){return a.getAttribute('href');})`);
+    eq(`8. the 404 at ${w}: Buddy, the search box, six places; a search finds the buster's entry; nothing moved as it loaded`,
+       [r.buddy, r.box, r.six, hits[0], shifts < 0.001], [true, true, 6, 'glossary.html#annuity', true]);
+  }
+  await open('404.html', 375, { nojs: true });
+  eq('8. the 404 without JavaScript: no search box, the six places still there', await ev(`[getComputedStyle(document.querySelector('.pb-nf-search')).display, document.querySelectorAll('.pb-nf-six a').length]`), ['none', 6]);
 }
 
 

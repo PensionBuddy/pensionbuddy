@@ -1789,6 +1789,42 @@ def run():
         eq('39. %s is caught' % label, any(want in x for x in related_faults(sources)), True)
         pagebuild.RELATED.clear(); pagebuild.RELATED.update(saved[0]); pagebuild.CARDS.clear(); pagebuild.CARDS.update(saved[1])
 
+    # ----------------------------------------------------------------- 40
+    # Run 37, item 8: the 404. Buddy's picture with his usual words for a
+    # screen reader; the search box in the page (label, field, a polite
+    # count, the list), drawn only with JavaScript, which it needs; and the
+    # home page's "Six places to begin", the same six places, names and lines
+    # word for word, in the same order. The page stays noindex.
+    def nf_faults(nf, ix):
+        f = []
+        if '<img src="assets/img/buddy-avatar.jpg' not in nf or 'alt="Buddy, the Pensionbuddy dog"' not in nf:
+            f.append('Buddy is not there')
+        for want in ('<div class="pb-nf-search" data-pb-search>', '<label class="pb-search-label" for="pbSearchIn">Search Pensionbuddy</label>',
+                     'id="pbSearchIn" class="pb-search-q"', '<p class="pb-search-count" id="pbSearchInCount" role="status"></p>',
+                     '<ul class="pb-search-list" id="pbSearchInList"></ul>', 'html:not(.pb-js) .pb-nf-search{display:none}'):
+            if want not in nf:
+                f.append('the search box: %s' % want[:40])
+        home = re.findall(r'<li><a class="pb-offer-item" href="([^"]+)"><span class="pb-offer-name">([^<]+)</span><span class="pb-offer-desc">([^<]+)</span></a></li>', ix)
+        here = re.findall(r'<li><a href="([^"]+)"><b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six">'):])
+        if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
+            f.append('not the home page\'s six places to begin')
+        if pagebuild.NOINDEX not in nf:
+            f.append('the 404 is indexable')
+        if len(re.findall(r'<script src="assets/js/pb-search\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', nf)) != 1:
+            f.append('the search script')
+        return f
+
+    nf, ix = sources['404.html'], sources['index.html']
+    eq('40. the 404: Buddy, the search box drawn with JavaScript, and the home page\'s six places to begin word for word; still noindex',
+       nf_faults(nf, ix), [])
+    for label, find, repl, want in (
+            ('a place missing', '<li><a href="director.html"><b>Company directors</b>', '<li><a href="director.html"><b>Directors</b>', 'six places'),
+            ('the box drawn without JavaScript', 'html:not(.pb-js) .pb-nf-search{display:none}', '', 'search box'),
+            ('Buddy with no words', 'alt="Buddy, the Pensionbuddy dog"', 'alt=""', 'Buddy')):
+        mut = nf.replace(find, repl, 1)
+        assert mut != nf, label
+        eq('40. %s is caught' % label, any(want in x for x in nf_faults(mut, ix)), True)
+
 
 
 
