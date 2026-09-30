@@ -169,8 +169,12 @@
       checkFocus();
     });
     document.addEventListener('focusout',function(){setTimeout(checkFocus,0);});
-    /* the bars and the analytics choice come and go by classes on <html> and <body> */
-    var mo=new MutationObserver(function(){place();watch();decide();});
+    /* the bars and the analytics choice come and go by classes on <html> and <body>.
+       A bar arriving moves the button's own place, so whether the focused
+       control is under it is asked again, not remembered from before (Run
+       37: with the booking bar coming up after a focus, the button came back
+       from aside onto the control it had stepped away from) */
+    var mo=new MutationObserver(function(){place();watch();checkFocus();});
     mo.observe(root,{attributes:true,attributeFilter:['class']});
     mo.observe(body,{attributes:true,attributeFilter:['class']});
     /* the panel open or shut: it opens where the button is, never aside */

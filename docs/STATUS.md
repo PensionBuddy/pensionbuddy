@@ -306,7 +306,7 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 |---|---|---|---|
 | 0 | Audit, `docs/UX-AUDIT-4.md` | done | this commit |
 | 1 | Life-event picker on the home page: "What's changed?", six links under the hero | done | this commit |
-| 2 | Jargon definitions on first use, sitewide | not reached | |
+| 2 | Jargon definitions at first use: the jargon buster's own words, on 21 pages | done | this commit |
 | 3 | Site search in the nav | not reached | |
 | 4 | "Your pension through life" timeline | not reached | |
 | 5 | Scenario compare on the pension calculator | not reached | |
@@ -316,6 +316,19 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
 | 9 | Slider feel | not reached | |
 | 10 | Figures that wait: skeletons | not reached | |
 
+## Found and fixed on the way
+
+- **Ask Buddy came back over a focused link (item 2's gate).** When the
+  booking bar comes up after a control has taken focus, Ask Buddy's place
+  moves up above the bar, but it had decided whether the focused control was
+  underneath it from its old place; so, once its step-aside timer ran out, it
+  came back onto the "Pension calculator" link in "Six places to begin" (the
+  floating-chrome test, tab walk, home page at 375). Item 2 did not cause it:
+  one more focusable control on the page moved the walk's timing onto it, and
+  the same walk with the definitions blocked fails too once its pace changes.
+  The fix is one line in `assets/js/pb-buddy.js`: when a bar comes or goes,
+  ask again whether the focused control is under the button.
+
 ## New words on the site (for the pack)
 
 - **Item 1**, the home page, under the hero: the heading "What's changed?"
@@ -324,6 +337,16 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
   "Turning 50" (Pensions after 50), "Had a baby or a career break" (the State
   Pension entitlement check) and "Moved from the UK" (A UK pension, and living
   in Ireland). Each link's name for a screen reader adds the page's nav name.
+
+- **Item 2**, no new words: the definition shows the jargon buster's name for
+  the term, its first paragraph word for word, and "See it in the jargon
+  buster" (the jargon chips' link text); a screen reader hears "What this
+  means" after the term (the chips' own title). Where they appear today:
+  director rules (PRSA, Standard Fund Threshold, AVCs, tax relief, lump
+  sums), over-50s (tax relief, AVCs, PRSA, Personal Retirement Bond, lump
+  sum, annuity, ARF), self-employed (tax relief, PRSA, annuity), Standard
+  Fund Threshold (tax relief, lump sum, defined benefit), the home page, the
+  PIA page (tax relief) and the UK guide (State Pension).
 
 ## Questions for Damian
 
@@ -339,6 +362,15 @@ row that is not "done", on `claude/overnight-ux-4`, with the gate in
    goes to the auto-enrolment comparison (what a new job starts), "Had a baby
    or a career break" to the entitlement check (HomeCaring Periods and
    credits are there). Say if either should go elsewhere.
+4. **Where the definitions do not go.** Not on the jargon buster, the legal
+   pages, How we work, booking, the thank-you page, the 404 or the games; not
+   in headings, links, a calculator's panel or results, the FAQ (Ask Buddy
+   copies it), the family's story (locked copy) or any caveat; not for
+   "Pension" (the subject of every page); and not for a term a jargon chip
+   already explains on the three audience pages. So today they appear on
+   seven pages. The buster's "Tax relief" entry carries its own figure
+   ("for every €100 you put in, around €40 can come back"), which now also
+   shows beside "tax relief" on six pages. Wider, narrower, or as it is?
 
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 

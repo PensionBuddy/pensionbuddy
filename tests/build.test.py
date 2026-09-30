@@ -1474,6 +1474,67 @@ def run():
         assert mut != ix, label
         eq('33. %s is caught' % label, any(want in x for x in changed_faults(mut)), True)
 
+    # ----------------------------------------------------------------- 34
+    # Run 37, item 2: the jargon buster's words at the first use of each term.
+    # assets/js/pb-glossary.js is the buster word for word (tools/site-index.py
+    # writes it; a buster edited without a rerun fails here). pb-terms.js is
+    # on the pages with running prose for a reader to meet a term in, and on
+    # none of the others: the buster itself, the legal pages, how we work,
+    # booking, the thank-you page and the 404. Both load late. It stores and
+    # sends nothing, and nothing it draws moves.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('site_index', os.path.join(ROOT, 'tools', 'site-index.py'))
+    site_index = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(site_index)
+    TERMS_HAND = ['director-calculator.html', 'director-year-end-checklist.html', 'director.html', 'index.html',
+                  'old-pension-checklist.html', 'pension-calculator.html', 'pensions-over-50.html',
+                  'self-employed-pensions.html', 'starter.html', 'tracker.html', 'uk-pensions-in-ireland.html']
+    TERMS_PAGES = sorted(TERMS_HAND + [p.out for p in pagebuild.PAGES.values()])
+    LATE = (r'<script src="assets/js/pb-glossary\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n'
+            r'<script src="assets/js/pb-terms\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n')
+
+    def terms_faults(srcs, gloss_src, runtime):
+        f = []
+        if site_index.glossary_js_from(gloss_src) != read('assets/js/pb-glossary.js'):
+            f.append('pb-glossary.js is not the jargon buster as it stands: run tools/site-index.py')
+        have = sorted(n for n, s in srcs.items() if 'assets/js/pb-terms.js' in s or 'assets/js/pb-glossary.js' in s)
+        if have != TERMS_PAGES:
+            f.append('on the wrong pages: %s' % sorted(set(have) ^ set(TERMS_PAGES)))
+        for n in have:
+            if len(re.findall(LATE, srcs[n])) != 1:
+                f.append('%s: not the two late tags, once' % n)
+        if re.search(r'localStorage|sessionStorage|document\.cookie|indexedDB|fetch\(|XMLHttpRequest|sendBeacon', runtime):
+            f.append('pb-terms.js stores or sends something')
+        if re.search(r'transition|animation|@keyframes|\.animate\(', runtime):
+            f.append('pb-terms.js moves something')
+        return f
+
+    runtime = read('assets/js/pb-terms.js')
+    gloss = sources['glossary.html']
+    eq('34. jargon definitions: pb-glossary.js is the buster word for word; pb-terms.js late, on the prose pages only; stores nothing, moves nothing',
+       terms_faults(sources, gloss, runtime), [])
+    for label, target, find, repl, want in (
+            ('a buster entry edited without a rerun', 'gloss', 'A flexible, portable personal pension you own yourself.',
+             'A flexible personal pension you own yourself.', 'not the jargon buster'),
+            ('the definitions on the privacy notice', 'privacy.html', '</body>',
+             '<script src="assets/js/pb-glossary.js?v=00000000" type="text/pb-late"></script>\n<script src="assets/js/pb-terms.js?v=00000000" type="text/pb-late"></script>\n</body>', 'wrong pages'),
+            ('the definitions dropped from a guide', 'pensions-over-50.html', '<script src="assets/js/pb-terms.js', '<script src="assets/js/pb-termz.js', 'not the two late tags'),
+            ('a definition that remembers', 'runtime', "pop.setAttribute('popover', 'manual');",
+             "pop.setAttribute('popover', 'manual'); localStorage.setItem('pb-seen', e.id);", 'stores'),
+            ('a definition that fades in', 'runtime', "'.pb-term-pop:not(:popover-open){display:none}'",
+             "'.pb-term-pop{transition:opacity .2s}.pb-term-pop:not(:popover-open){display:none}'", 'moves')):
+        srcs, g, r = dict(sources), gloss, runtime
+        if target == 'gloss':
+            g = gloss.replace(find, repl, 1)
+            assert g != gloss, label
+        elif target == 'runtime':
+            r = runtime.replace(find, repl, 1)
+            assert r != runtime, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('34. %s is caught' % label, any(want in x for x in terms_faults(srcs, g, r)), True)
+
 
 
 
