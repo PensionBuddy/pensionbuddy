@@ -343,9 +343,9 @@ merged.
 | 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | dd2f09d |
 | 4 | Run 37's item 9, slider feel | done | 372a16c |
 | 5 | Run 37's item 10, loading skeletons | done | 471f66d |
-| 6 | "How a call with Damian works", three steps, a video slot each | done | this commit |
-| 7 | "Your worries, answered", a draft for the compliance pack, not published | not started | |
-| 8 | Where painted illustrations would replace icons, a list | not started | |
+| 6 | "How a call with Damian works", three steps, a video slot each | done | 044ced4 |
+| 7 | "Your worries, answered", a draft for the compliance pack, not published | done | this commit |
+| 8 | Where painted illustrations would replace icons, a list | done | this commit |
 | 9 | Lighthouse, before (`30f8d12`) and after, seven pages | not started | |
 
 ## Item 1, boxes kept
@@ -498,6 +498,25 @@ merged.
   placeholder in a 16:9 box, sized, lazy, hidden from screen readers; a
   video put in one later must follow the game cards' rules; 5 mutants) and
   `tests/boxes.test.mjs` (the slots keep their boxes before they load).
+
+## Items 7 and 8, the worries draft and the illustration list
+
+- **"Your worries, answered"** is in the compliance pack, not on the site:
+  question 1.22 and Appendix C.1. Twelve questions a first call brings,
+  each answered in words already live, with the page each answer is on
+  (the home page's "Good to know" and steps, the tracker's and starter's
+  questions, the booking confirmation). Nine of the questions are already
+  on the site; three are new lines, marked "new words": "Will it be a sales
+  pitch?", "What happens on the call?" and "What if we're not the right
+  fit?". Where it would go, once approved, is your call.
+- **The pack also catches up:** Runs 37 and 38 went live today with words
+  compliance has not seen. Question 1.21 lists them all (from "What's
+  changed?" to the game videos' pause button), and the update log says so.
+- **`docs/ILLUSTRATIONS.md`:** nine places where a small painting would
+  replace an icon or a plain number, in order of worth, each with what it
+  could show and the size it is drawn today at 1440 and 375 (measured),
+  then what to leave alone (the warnings' "i", the paw, the working icons,
+  the photographs) and a short brief for the illustrator.
 
 ## Questions for Damian
 

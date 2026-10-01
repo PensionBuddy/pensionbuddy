@@ -60,6 +60,11 @@ that day it was also at the end of the home page's story); and two cards
 for the jargon buster games follow the home page's gap chart (question
 1.19, sections 6.3 and 7, Appendix B.18 to B.20).
 
+Updated 1 October 2026: what went live that day (question 1.21), the
+words of Runs 37 and 38 on the home page, the guides, the calculators and
+the 404 page; and a draft for your review that is not on the site, "Your
+worries, answered" (question 1.22, Appendix C.1).
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -101,6 +106,7 @@ Contents
   7. New copy needing sign-off
   Appendix A. Full text of the new pages
   Appendix B. New sections on existing pages
+  Appendix C. Drafts not on the site
 
 1. Open questions
 =================
@@ -640,6 +646,69 @@ Damian's view, 29 September 2026, for you to confirm: (a) no, the picture
 does not carry the full sentence; the page it links to does; (b) the
 fourteen lines are approved; (c) the "50" is fine.
 
+
+1.21 New words live since 1 October 2026 (Runs 37 and 38)
+---------------------------------------------------------
+
+What the site does now (since 1 October 2026; built on a branch as Runs
+37 and 38, reviewed on its preview, and put live that day). No figure,
+rate or claim is new: every figure and every sentence of substance below
+was already on the site, and is shown where it already was or beside a
+link to the page that says it.
+
+- The home page, under its opening section: the heading "What's changed?"
+  and six links, "New job" (to the auto-enrolment comparison), "Left a job"
+  (Find a pension), "Started a company" (Pensions for company directors),
+  "Turning 50" (Pensions after 50), "Had a baby or a career break" (the
+  State Pension entitlement check) and "Moved from the UK" (A UK pension,
+  and living in Ireland).
+- Pension terms in the guides can be opened where they are used: the jargon
+  buster's own name for the term, its first paragraph word for word, and
+  "See it in the jargon buster".
+- A search, from a button in the menu bar and the "/" key: "Search
+  Pensionbuddy", "Search pages, guides and the jargon buster", "Close", "1
+  result" or "N results", "Nothing found. Try one word, such as PRSA, or
+  see the jargon buster.", "Jargon buster" under a buster entry, and "The
+  search could not load. Every page is in the menu." Results show each
+  page's own title and description. Nothing is sent anywhere: the index is
+  part of the site.
+- The home page, after "Six places to begin": "Your pension through life"
+  and "What changes, and when.", with steps from "Under 30" to "From 71".
+  Every step's sentence is a guide's own (the relief bands, early access,
+  the Approved Retirement Fund, pension age), under the guides' own "Rules
+  as at 24 September 2026" line.
+- The pension calculator, after the two warnings: "Save as A", "Keep these
+  figures as A, then move the sliders to see A beside them. Nothing is
+  stored.", "A is saved. Change the sliders to see it beside your figures
+  now.", a table "A beside your figures now" (columns "A" and "Now"), and
+  "Clear A". Every figure in the table is copied off the page as the page
+  wrote it; nothing is worked out.
+- The end of 22 pages: "Related pages", two or three links, each a page's
+  name and a line already on the site.
+- The 404 page (an address that does not exist): Buddy's picture, the
+  search box, and "Six places to begin." with the home page's six names and
+  lines, word for word.
+- The home page's two game cards: an eight-second loop of each game,
+  recorded from the games themselves, with a pause button named "Pause
+  video: Buddy's Run" (and "Play video: ...", and the same for Jargon
+  Battle). Nothing in the games is new.
+- Pictures, the game videos and the game tiles fade and rise into place
+  once as they scroll into view. Words, figures, warnings, the regulatory
+  line and forms never move.
+
+Question: are these words acceptable as they stand?
+
+1.22 "Your worries, answered": a draft, not on the site (proposed)
+------------------------------------------------------------------
+
+Damian asked for a short set of questions and answers about the worries
+people bring to a first call, drafted only from wording the site already
+uses, for you to review before anything is published. It is in Appendix
+C.1. Every answer is a sentence or two already live, with the page it is
+on; three questions are new lines, marked "new words", and nothing else is.
+It is on no page, and where it would go, if approved, is Damian's call.
+
+Question: may it be published as it stands, or with which changes?
 
 2. The Letter of Authority, full wording
 ========================================
@@ -3004,3 +3073,74 @@ lives."
 "Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a
 pension scheme trustee is, with four answers to pick from. The Blob is down
 to six of eight, and Buddy has two hearts of three."
+
+Appendix C. Drafts not on the site
+==================================
+
+C.1 "Your worries, answered" (question 1.22)
+--------------------------------------------
+
+Heading: Your worries, answered
+
+Is the first chat really free?
+  Yes, completely, with no obligation afterwards. Twenty minutes to
+  understand your situation and answer your questions.
+  (Home page, "Good to know".)
+
+Will it be a sales pitch?   [new words: this question]
+  Most people brace for a sales pitch. This is a chat. No jargon. No
+  pressure. No obligation.
+  (Home page, "What to expect", its heading; the booking page and the
+  booking confirmation, the house promise.)
+
+What happens on the call?   [new words: this question]
+  Twenty relaxed minutes, phone or video. Your questions answered, nothing
+  assumed.
+  (Home page, "What to expect", step 2.)
+
+Do I need to know anything before we talk?
+  Not at all. Come as you are, with whatever you remember. Doing the digging
+  and turning it into something that makes sense is the job.
+  (Home page, "Good to know".)
+
+I don't have any of the paperwork, is that a problem?
+  Not at all. Roughly when you worked somewhere, and who for, is usually
+  enough to start tracing a pension.
+  (Tracker page, its questions.)
+
+Have I left it too late to start?
+  Almost certainly not. Earlier gives money more time to grow, but starting
+  now beats waiting longer, and tax relief is there at any age.
+  (Starter page, its questions.)
+
+Is it really worth the hassle?
+  There usually is money there. Knowing what you've got, and making sure
+  it's invested rather than sitting forgotten, can make a real difference.
+  (Tracker page, its questions.)
+
+What will I actually walk away with?
+  A clear picture of what you already have, what it is likely to be worth at
+  66, and the one or two things worth doing about it. Written down, so you
+  are not relying on memory a week later.
+  (Home page, "Good to know".)
+
+What if we're not the right fit?   [new words: this question]
+  You'll leave with a clear picture and a sensible next step. If we're not
+  the right fit, we'll say so.
+  (Home page, "What to expect", step 3.)
+
+What does it cost if I become a client?
+  That depends on what you need, and we'll be upfront before you commit to
+  anything. How we're paid, by fee, commission or a mix, is set out in our
+  Terms of Business.
+  (Home page, "Good to know".)
+
+Is my information kept private?
+  Yes. Anything you share is handled in line with our Privacy Notice and
+  data-protection law. We'll only ever use it to help with your enquiry.
+  (Home page, "Good to know".)
+
+Need to change or cancel the time?
+  The links are in your Calendly confirmation email. If anything else comes
+  up before the call, reply to that email and it will reach us.
+  (The booking confirmation page.)
