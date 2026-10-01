@@ -2055,7 +2055,7 @@ def run():
     # in its place: beside the card's real pause button it read as a second.
     VIDEOS = [('buddys-run', 'Buddy&rsquo;s Run'), ('jargon-battle', 'Jargon Battle')]
 
-    def video_faults(ix, js, sizes, rec):
+    def video_faults(ix, js, sizes, rec, shoot):
         f = []
         for slug, name in VIDEOS:
             m = re.search(r'<div class="pb-learn-media">\s*<picture><source type="image/webp" srcset="(assets/img/product-%s\.webp\?v=[0-9a-f]+)">'
@@ -2099,15 +2099,18 @@ def run():
             f.append('the recorder does not seed both games as the pictures are')
         if "hide: '#hud .hint,#pauseBtn{visibility:hidden!important}'" not in rec or 'SETTLE + (g.hide' not in rec:
             f.append("the recorder shows Buddy's Run's own pause control (Run 39: hidden, in its place)")
+        if "'hide': '#hud .hint,#pauseBtn{visibility:hidden!important}'" not in shoot:
+            f.append("the still shows Buddy's Run's own pause control (Run 40: hidden, as in the clip)")
         return f
 
     vdir = os.path.join(ROOT, 'assets', 'video')
     vsizes = dict((n, os.path.getsize(os.path.join(vdir, n))) for n in (os.listdir(vdir) if os.path.isdir(vdir) else []))
     vjs = read('assets/js/pb-video.js')
     vrec = read('tools/record-games.mjs')
+    vshoot = read('tools/shoot-product.py')
     ix = sources['index.html']
     eq('43. game videos: over each card\'s picture, muted, looping, inline, not preloaded, hidden from screen readers, the picture as poster, MP4 then WebM under 1.5 MB, a named pause button; drawn only with motion; late, pauses off screen',
-       video_faults(ix, vjs, vsizes, vrec), [])
+       video_faults(ix, vjs, vsizes, vrec, vshoot), [])
     for label, target, find, repl, want in (
             ('a video that preloads', 'ix', 'preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run',
              'preload="auto" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run', 'preload'),
@@ -2120,9 +2123,13 @@ def run():
             ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
             ('a video too big', 'sizes', None, None, '1.5 MB'),
             ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause'),
-            ('the game\'s own pause control back in the clip', 'rec', "    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',\n", '', 'pause control')):
-        mix, mjs, ms, mrec = ix, vjs, dict(vsizes), vrec
-        if target == 'rec':
+            ('the game\'s own pause control back in the clip', 'rec', "    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',\n", '', 'pause control'),
+            ('the game\'s own pause control back in the still', 'shoot', "'hide': '#hud .hint,#pauseBtn{visibility:hidden!important}'", "'hide': ''", 'the still shows')):
+        mix, mjs, ms, mrec, mshoot = ix, vjs, dict(vsizes), vrec, vshoot
+        if target == 'shoot':
+            mshoot = vshoot.replace(find, repl, 1)
+            assert mshoot != vshoot, label
+        elif target == 'rec':
             mrec = vrec.replace(find, repl, 1)
             assert mrec != vrec, label
         elif target == 'ix':
@@ -2133,7 +2140,7 @@ def run():
             assert mjs != vjs, label
         else:
             ms['buddys-run.webm'] = 2 * 1024 * 1024
-        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, mrec)), True)
+        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, mrec, mshoot)), True)
 
     # ----------------------------------------------------------------- 44
     # Run 38, item 2: media pops in, and nothing else can. pb-pop.js's list

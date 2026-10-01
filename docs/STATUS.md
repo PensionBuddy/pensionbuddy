@@ -346,7 +346,8 @@ merged.
 | 6 | "How a call with Damian works", three steps, a video slot each | done | 044ced4 |
 | 7 | "Your worries, answered", a draft for the compliance pack, not published | done | 0e19b4d |
 | 8 | Where painted illustrations would replace icons, a list | done | 0e19b4d |
-| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | done | this commit |
+| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | done | aaf9afb |
+| 10 | Q2 answered yes: the Buddy's Run still re-shot without its own pause control | done | this commit |
 
 ## Item 1, boxes kept
 
@@ -540,7 +541,25 @@ added a few small scripts to it, and I did not isolate which costs the
 the machine's own npm cache, offline (the copy Run 32 had used was cleared
 from its temporary folder overnight); nothing was downloaded.
 
-## Questions for Damian
+## Item 10, the Buddy's Run still without its own pause control
+
+- **Damian's answers, 1 October 2026:** Jargon Battle frame for frame, no;
+  re-shoot the stills to match the clip, yes; the call steps on the
+  booking page too, no; a hotfix of the 404's buttons to main ahead of the
+  rest, no (this branch is merged instead).
+- **The still:** `tools/shoot-product.py` hides Buddy's Run's "P to pause"
+  and Pause button in their place, as the clip's recorder does, and the
+  still was shot again: the same frame (score 30, three lives, "Plenty of
+  time" jumped, the Poolbeg stacks behind), so the home page's alt text
+  still says what it shows; only the top-right corner where the two sat
+  differs. 2400 x 1350 as before; JPG 90 KB, WebP 29 KB. It is the card's
+  picture, the video's poster (the same WebP) and all a reader with
+  reduced motion sees. Jargon Battle's still has no pause control; it is
+  unchanged.
+- **Guard:** build check 43 now also fails if the still stops hiding it (a
+  new mutant).
+
+## Questions for Damian (answered 1 October 2026: no, yes, no; see item 10)
 
 1. **Jargon Battle, frame for frame.** To make every frame of its clip
    reproducible, I would find what still runs on the real clock and put it
