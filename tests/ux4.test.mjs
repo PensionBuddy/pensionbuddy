@@ -31,6 +31,10 @@
         its button opens the list, a link closes it and lands the section
         below the bar and the nav; without JavaScript the list is in the page
         and there is no bar
+     9. slider feel (Run 37, built in Run 39), at 1440: marks on the pension
+        calculator's age and earnings sliders and the comparison's age, at
+        the relief module's own values, over the track, hidden from screen
+        readers; on a mark the value bubble shows it, off it does not
    Run 38, 1. the game cards' videos, at 1440: nothing fetched while the
         cards are far; near, both play and the button says Pause video; the
         button's pause holds; far away the other pauses and plays on return;
@@ -265,6 +269,25 @@ if (has('404.html', 'class="pb-nf-six"')) {
   eq('8. the 404 without JavaScript: no search box, the six places still there', await ev(`[getComputedStyle(document.querySelector('.pb-nf-search')).display, document.querySelectorAll('.pb-nf-six a').length]`), ['none', 6]);
 }
 
+
+/* ---- 9. slider feel (Run 37, built in Run 39) ---- */
+if (has('pension-calculator.html', 'data-pb-ticks=')) {
+  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]], ['pension-calculator.html', 'earn', [115000]], ['broker-vs-autoenrolment.html', 'age', [30, 40, 50, 55, 60]]]) {
+    await open(page, 1440);
+    const before = await ev(`document.getElementById('potOut') ? document.getElementById('potOut').textContent : document.body.innerText.length`);
+    const t = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');var ts=[].slice.call(w.querySelectorAll('.pb-tick'));
+      var rr=r.getBoundingClientRect();
+      return {vals:ts.map(function(x){return +x.getAttribute('data-v');}),inside:ts.every(function(x){var q=x.getBoundingClientRect();return q.left>=rr.left&&q.right<=rr.right;}),
+        hidden:w.querySelector('.pb-ticks').getAttribute('aria-hidden'),value:r.value};})()`);
+    eq(`9. ${page} #${id}: marks at the relief module's own values, over the track, hidden from screen readers; the slider's value untouched`,
+       [t.vals, t.inside, t.hidden], [want, true, 'true']);
+    /* land on a mark: the bubble signs it */
+    const land = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');w.classList.add('dragging');
+      r.value=String(${want[0]});r.dispatchEvent(new Event('input',{bubbles:true}));var b=w.querySelector('.sbubble');var on=b.classList.contains('pb-tick-on');
+      r.value=String(${want[0]}+ (+r.step||1));r.dispatchEvent(new Event('input',{bubbles:true}));var off=b.classList.contains('pb-tick-on');return [on,off];})()`);
+    eq(`9. ${page} #${id}: on a mark the bubble shows it, off it does not`, land, [true, false]);
+  }
+}
 
 /* ---- Run 38, 1. the game cards' videos ---- */
 if (has('index.html', 'data-pb-video')) {

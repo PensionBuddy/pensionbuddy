@@ -1928,6 +1928,62 @@ def run():
         assert mut != nf, label
         eq('40. %s is caught' % label, any(want in x for x in nf_faults(mut, ix)), True)
 
+
+    # ----------------------------------------------------------------- 41
+    # Run 37, item 9 (built in Run 39): slider feel. Marks go only on sliders whose values
+    # have a meaning the relief module already holds: the pension
+    # calculator's and the comparison's age (where the relief band changes)
+    # and earnings (the earnings cap). The script takes every mark from
+    # PBRelief, types no number of its own, never sets a slider's value or
+    # sends an event (the calculators' figures cannot change: render-diff
+    # proves the page scripts' writes), and adds no datalist, so the browser
+    # never snaps. It loads after the "slider polish" script that draws the
+    # bubble it signs on.
+    MARKED = {'pension-calculator.html': {'age': 'relief-age', 'earn': 'relief-cap'},
+              'broker-vs-autoenrolment.html': {'age': 'relief-age', 'salary': 'relief-cap'}}
+
+    def feel_faults(srcs, js):
+        f = []
+        for name, s in sorted(srcs.items()):
+            got = dict((i, k) for i, k in re.findall(r'<input type="range" id="([^"]+)"[^>]*\bdata-pb-ticks="([^"]+)"', s))
+            if got != MARKED.get(name, {}):
+                f.append('%s: marks on %s' % (name, got))
+            if '<datalist' in s or re.search(r'<input type="range"[^>]*\blist="', s):
+                f.append('%s: a datalist would make the slider snap' % name)
+            if name in MARKED:
+                polish = s.find('/* fintech slider polish: wrap each range')
+                me = s.find('<script src="assets/js/pb-slider-feel.js')
+                if polish < 0 or me < polish:
+                    f.append('%s: the marks load before the bubble they sign on' % name)
+        code = re.sub(r'/\*.*?\*/', '', js, flags=re.S)
+        # 22 the thumb, 3 the gap under it, 320 the sign's time: sizes, not figures
+        nums = [n for n in re.findall(r'(?<![\w.])\d+(?:\.\d+)?(?![\w.])', code) if n not in ('0', '1', '2', '3', '22', '100', '320', '0.5')]
+        if nums:
+            f.append('pb-slider-feel.js types numbers of its own: %s' % nums)
+        if re.search(r'\.value\s*=|dispatchEvent|localStorage|sessionStorage', code):
+            f.append('pb-slider-feel.js moves a slider, sends an event or stores something')
+        if 'R.reliefBand' not in code or 'R.EARN_CAP' not in code:
+            f.append('the marks do not come from the relief module')
+        return f
+
+    feel_js = read('assets/js/pb-slider-feel.js')
+    eq('41. slider feel: marks only on the ages and earnings the relief module gives meaning to, every mark from the module, no snapping, no slider moved',
+       feel_faults(sources, feel_js), [])
+    for label, target, find, repl, want in (
+            ('a mark typed in', 'js', "if (R.reliefBand(v) !== R.reliefBand(v - 1)) { out.push(v); }", "if (R.reliefBand(v) !== R.reliefBand(v - 1)) { out.push(v); } out.push(66);", 'numbers of its own'),
+            ('a slider that snaps', 'pension-calculator.html', '<input type="range" id="age"', '<input type="range" list="ageMarks" id="age"', 'datalist'),
+            ('the slider set by the marks', 'js', "    r.addEventListener('input', function () { mark(true); });", "    r.addEventListener('input', function () { mark(true); r.value = r.value; });", 'moves a slider'),
+            ('marks on a slider with no meaning for them', 'director-calculator.html', '<input type="range" id="age"', '<input type="range" id="age" data-pb-ticks="relief-age"', 'marks on'),
+            ('the marks loading before the bubble', 'pension-calculator.html', '/* fintech slider polish: wrap each range', '/* the bubble: wrap each range', 'before the bubble')):
+        srcs, j2 = dict(sources), feel_js
+        if target == 'js':
+            j2 = feel_js.replace(find, repl, 1)
+            assert j2 != feel_js, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('41. %s is caught' % label, any(want in x for x in feel_faults(srcs, j2)), True)
+
     # ----------------------------------------------------------------- 43
     # Run 38, item 1: the game cards' videos. Each card keeps its picture
     # (the poster, and all there is without JavaScript or with reduced

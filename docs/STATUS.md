@@ -340,8 +340,8 @@ merged.
 |---|---|---|---|
 | 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | c404c75 |
 | 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | 15a3757 |
-| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | this commit |
-| 4 | Run 37's item 9, slider feel | not started | |
+| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | dd2f09d |
+| 4 | Run 37's item 9, slider feel | done | this commit |
 | 5 | Run 37's item 10, loading skeletons | not started | |
 | 6 | "How a call with Damian works", three steps, a video slot each | not started | |
 | 7 | "Your worries, answered", a draft for the compliance pack, not published | not started | |
@@ -420,6 +420,31 @@ merged.
 - **Guards,** as Run 37 wrote them: build check 38, and ux4 section 6 (the
   bar names each section as it is read, sits under the nav, its line only
   grows, and a link from its list lands the section clear of both).
+
+## Item 4, slider feel (Run 37's item 9)
+
+- **What it is:** the calculators already float the value above the thumb
+  while a slider moves. Now a slider whose values mean something the relief
+  module already knows carries small marks just under its track: the
+  pension calculator's and the comparison's age (where the relief band
+  changes: 30, 40, 50, 55 and 60) and earnings (the earnings that count for
+  relief, €115,000). When the thumb lands on a mark the bubble shows a ring,
+  and with motion allowed it grows a little as it arrives.
+- **No new figures:** every mark comes from `assets/js/pension-tax-relief.js`
+  (`PBRelief.reliefBand()`, `PBRelief.EARN_CAP`). The script never sets a
+  slider or writes a figure, adds no datalist (so the browser never snaps),
+  and the marks are hidden from screen readers. Render-diff shows the
+  calculators' writes unchanged.
+- **Fixed on the way:** Run 37's prepared version drew the marks below the
+  slider's box, where the earnings mark touched the note under it, and its
+  script tag would have loaded before the slider polish that draws the
+  bubble. The marks now sit inside the slider's own box, 3px under the
+  thumb, and load after it; check 41 holds the order (a new mutant).
+- **Guards:** build check 41 (marks only where the module gives meaning,
+  none typed in, no snapping, no slider set, loaded after the bubble; 5
+  mutants) and ux4 section 9 (the marks at the module's values, over the
+  track, hidden from screen readers; the bubble signs a mark and only a
+  mark).
 
 ## Questions for Damian
 

@@ -1715,6 +1715,16 @@ html:not(.pb-js) .pb-ab{display:none}
 .pb-ab-clear{margin:12px 0 0}
 .pb-ab-table td{white-space:nowrap}
 @media(max-width:560px){.pb-ab-box{padding:12px 12px}.pb-ab-table th,.pb-ab-table td{padding:7px 4px}}
+/* Run 37, item 9 (built in Run 39): marks under a slider where the relief module says
+   something changes (assets/js/pb-slider-feel.js), and the bubble's sign when
+   the thumb lands on one: a ring, and for a reader who allows motion a short
+   grow. Drawn out of the flow, just under the track and inside the
+   slider's own box (pb-slider-feel.js places it); nothing moves. */
+.slider-wrap .pb-ticks{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none}
+.slider-wrap .pb-tick{position:absolute;top:0;width:2px;height:5px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.55}
+.slider-wrap .pb-tick.pb-tick-on{background:var(--teal-700);opacity:1}
+.slider-wrap .sbubble.pb-tick-on{box-shadow:0 0 0 3px var(--teal-100)}
+html.pb-motion .slider-wrap.dragging .sbubble.pb-tick-hit{transform:translateX(-50%) translateY(0) scale(1.1)}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -3036,6 +3046,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   }).observe(watch,{childList:true,characterData:true,subtree:true});
 })();
 </script>
+<script src="assets/js/pb-slider-feel.js?v=3d06a155"></script>
 
 
 <script>

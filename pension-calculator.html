@@ -1715,6 +1715,16 @@ html:not(.pb-js) .pb-ab{display:none}
 .pb-ab-clear{margin:12px 0 0}
 .pb-ab-table td{white-space:nowrap}
 @media(max-width:560px){.pb-ab-box{padding:12px 12px}.pb-ab-table th,.pb-ab-table td{padding:7px 4px}}
+/* Run 37, item 9 (built in Run 39): marks under a slider where the relief module says
+   something changes (assets/js/pb-slider-feel.js), and the bubble's sign when
+   the thumb lands on one: a ring, and for a reader who allows motion a short
+   grow. Drawn out of the flow, just under the track and inside the
+   slider's own box (pb-slider-feel.js places it); nothing moves. */
+.slider-wrap .pb-ticks{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none}
+.slider-wrap .pb-tick{position:absolute;top:0;width:2px;height:5px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.55}
+.slider-wrap .pb-tick.pb-tick-on{background:var(--teal-700);opacity:1}
+.slider-wrap .sbubble.pb-tick-on{box-shadow:0 0 0 3px var(--teal-100)}
+html.pb-motion .slider-wrap.dragging .sbubble.pb-tick-hit{transform:translateX(-50%) translateY(0) scale(1.1)}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2470,11 +2480,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40"></div>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40" data-pb-ticks="relief-age"></div>
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
     <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
     <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
+    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
     <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
     <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
     <div class="field" style="margin-bottom:0">
@@ -3023,6 +3033,7 @@ function sendResults(){
   }).observe(watch,{childList:true,characterData:true,subtree:true});
 })();
 </script>
+<script src="assets/js/pb-slider-feel.js?v=3d06a155"></script>
 
 
 <script>
