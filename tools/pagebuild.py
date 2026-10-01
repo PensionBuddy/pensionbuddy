@@ -576,10 +576,12 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # metric-matched fallback for Inter, the motion vocabulary, and how the
 # floating chrome gives way, (Run 33) the first screen on a phone, and
 # (Run 35) Damian's qualifications and memberships, (Run 37) the related
-# pages at the end of a page, and (Run 38) media popping in on scroll.
+# pages at the end of a page, (Run 38) media popping in on scroll, and (Run
+# 37's item 6, re-applied in Run 39) the long guides' "On this page", its bar
+# and their next step.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
-              ('RELATED', 'related-css'), ('POP', 'pop-css'))
+              ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'))
 
 
 def _once(text, marker):
@@ -895,8 +897,8 @@ RELATED = {
     'standard-fund-threshold.html': ('director-pension-rules.html', 'pensions-over-50.html', 'director-calculator.html'),
     'state-pension-reality-check.html': ('state-pension-entitlement.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
     'state-pension-entitlement.html': ('state-pension-reality-check.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
-    'pia.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
-    'director-pension-rules.html': ('director-calculator.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
+    'pia.html': ('broker-vs-autoenrolment.html', 'glossary.html'),
+    'director-pension-rules.html': ('director-year-end-checklist.html', 'standard-fund-threshold.html'),
     'director-year-end-checklist.html': ('director-calculator.html', 'director-pension-rules.html', 'standard-fund-threshold.html'),
     'pensions-over-50.html': ('standard-fund-threshold.html', 'state-pension-reality-check.html', 'glossary.html'),
     'self-employed-pensions.html': ('broker-vs-autoenrolment.html', 'pensions-over-50.html', 'glossary.html'),

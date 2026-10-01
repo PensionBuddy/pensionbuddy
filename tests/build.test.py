@@ -1740,6 +1740,106 @@ def run():
             assert s != skel, label
         eq('37. %s is caught' % label, any(want in x for x in ab_faults(s, built_srcs, j2)), True)
 
+    # ----------------------------------------------------------------- 38
+    # Run 37, item 6: the six long guides. Each carries one "On this page"
+    # list after its introduction, whose links are its own sections in
+    # order, each link's words its heading's words; one next-step card at
+    # the end, to a live page, in words already on the site; and
+    # assets/js/pb-guide.js once. No other page has any of the three. The
+    # script keeps the list in reach and never scrolls the page or stores
+    # anything; the bar's progress line has no transition (it follows the
+    # scroll one to one).
+    GUIDES = {'pensions-over-50.html': 'pension-calculator.html', 'self-employed-pensions.html': 'pension-calculator.html',
+              'uk-pensions-in-ireland.html': 'tracker.html', 'director-pension-rules.html': 'director-calculator.html',
+              'standard-fund-threshold.html': 'booking.html', 'pia.html': 'pension-calculator.html'}
+
+    def heading_text(s, hid):
+        m = re.search(r'<(h2|h3)\b[^>]*\bid="%s"[^>]*>(.*?)</\1>' % re.escape(hid), s, re.S)
+        if not m:
+            m = re.search(r'<(?:section|div)\b[^>]*\bid="%s"[^>]*>.*?<(h2)\b[^>]*>(.*?)</h2>' % re.escape(hid), s, re.S)
+        if not m:
+            return None, -1
+        return re.sub(r'\s+', ' ', re.sub(r'<br\s*/?>', ' ', m.group(2))).strip(), m.start()
+
+    def same_words(link, head):
+        """The heading's words, or the heading's words with an initialism
+        spelled out in front of it ("exchange-traded fund (ETF)"): the list
+        can come before the page first spells one out."""
+        if link == head:
+            return True
+        pat = re.escape(head)
+        for x in set(re.findall(r'\b[A-Z]{2,}\b', head)):
+            pat = re.sub(r'(?<![A-Za-z])%s(?![A-Za-z])' % x, '(?:%s|[a-z][a-z-]*(?: [a-z][a-z-]*){0,3} \\\\(%s\\\\))' % (x, x), pat)
+        return re.fullmatch(pat, link) is not None
+
+    def guide_faults(srcs, js, css_all):
+        f = []
+        for name, s in sorted(srcs.items()):
+            tocs = re.findall(r'<div class="pb-toc" role="navigation" aria-labelledby="pbTocH"><p class="pb-toc-h" id="pbTocH">On this page</p><ol class="pb-toc-list">(.*?)</ol></div>', s, re.S)
+            nexts = re.findall(r'<aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="([^"]+)"><span class="pb-next-t">([^<]+)</span><span class="pb-next-d">([^<]+)</span></a></aside>', s)
+            script = len(re.findall(r'<script src="assets/js/pb-guide\.js(?:\?v=[0-9a-f]+)?"></script>', s))
+            if name not in GUIDES:
+                if tocs or nexts or script or 'class="pb-toc"' in s:
+                    f.append('%s: a guide\'s parts on a page that is not one of the six' % name)
+                continue
+            if len(tocs) != 1 or len(nexts) != 1 or script != 1:
+                f.append('%s: %d lists, %d next steps, %d scripts' % (name, len(tocs), len(nexts), script))
+                continue
+            links = re.findall(r'<li><a href="#([^"]+)">([^<]+)</a></li>', tocs[0])
+            last = s.find('<div class="pb-toc"')
+            if len(links) < 2:
+                f.append('%s: a list of %d' % (name, len(links)))
+            for hid, words in links:
+                h, at = heading_text(s, hid)
+                if h is None:
+                    f.append('%s: #%s is not a section here' % (name, hid))
+                elif not same_words(words, h):
+                    f.append('%s: "%s" is not the heading\'s words ("%s")' % (name, words, h))
+                elif at < last:
+                    f.append('%s: #%s is out of order' % (name, hid))
+                else:
+                    last = at
+            href, title, line = nexts[0]
+            if href != GUIDES[name]:
+                f.append('%s: the next step goes to %s, not %s' % (name, href, GUIDES[name]))
+            if href not in srcs or pagebuild.NOINDEX in srcs[href]:
+                f.append('%s: the next step is not a live page' % name)
+            plain = lambda x: html.unescape(re.sub(r'<[^>]+>', ' ', x)).replace('’', "'")
+            # on another page, in its text or its own description
+            if not any(plain(line).strip() in plain(o) or html.unescape(line).replace('\u2019', "'") in html.unescape(o).replace('\u2019', "'")
+                       for o in srcs.values() if o is not s):
+                f.append('%s: the next step\'s words are not on the site' % name)
+        if re.search(r'scrollTo|scrollBy|scrollIntoView|scrollTop\s*=|localStorage|sessionStorage|document\.cookie', js):
+            f.append('pb-guide.js scrolls the page or stores something')
+        m = re.search(r'\.pb-tocbar-prog\{([^}]*)\}', css_all)
+        if not m or 'transition' in m.group(1):
+            f.append('the progress line eases')
+        return f
+
+    import html
+    guide_js = read('assets/js/pb-guide.js')
+    gcss = sources['pension-calculator.html']
+    eq('38. the long guides: each has its own sections listed in order under "On this page", one next step to a live page in the site\'s words, the script once; no other page any of it; nothing scrolls, nothing stored',
+       guide_faults(sources, guide_js, gcss), [])
+    for label, target, find, repl, want in (
+            ('a listed section the page does not have', 'pensions-over-50.html', '<li><a href="#early">', '<li><a href="#earlier">', 'not a section'),
+            ('a list word that is not the heading', 'uk-pensions-in-ireland.html', '<li><a href="#tax">How Ireland taxes it</a></li>', '<li><a href="#tax">Tax</a></li>', 'heading\'s words'),
+            ('a next step to a held page', 'standard-fund-threshold.html', 'class="pb-next-card pb-card-link" href="booking.html"', 'class="pb-next-card pb-card-link" href="how-we-work.html"', 'not a live page'),
+            ('a list on a page that is not a guide', 'privacy.html', '</main>', '<div class="pb-toc" role="navigation" aria-labelledby="pbTocH"></div></main>', 'not one of the six'),
+            ('a bar that scrolls', 'js', 'function later() {', 'function later() { window.scrollBy(0, 1);', 'scrolls'),
+            ('a line that eases', 'css', '.pb-tocbar-prog{position:absolute;', '.pb-tocbar-prog{transition:transform .3s;position:absolute;', 'eases')):
+        srcs, j2, c2 = dict(sources), guide_js, gcss
+        if target == 'js':
+            j2 = guide_js.replace(find, repl, 1)
+            assert j2 != guide_js, label
+        elif target == 'css':
+            c2 = gcss.replace(find, repl, 1)
+            assert c2 != gcss, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('38. %s is caught' % label, any(want in x for x in guide_faults(srcs, j2, c2)), True)
+
     # ----------------------------------------------------------------- 39
     # Run 37, item 7: related pages. Every page's block is the one the
     # RELATED table gives it (sync-chrome and pagebuild write them; a page

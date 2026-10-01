@@ -339,8 +339,8 @@ merged.
 | # | Item | State | Commit |
 |---|---|---|---|
 | 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | c404c75 |
-| 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | this commit |
-| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | not started | |
+| 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | 15a3757 |
+| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | this commit |
 | 4 | Run 37's item 9, slider feel | not started | |
 | 5 | Run 37's item 10, loading skeletons | not started | |
 | 6 | "How a call with Damian works", three steps, a video slot each | not started | |
@@ -396,6 +396,30 @@ merged.
   Run's pause control (a new mutant), beside its checks on seeding, size and
   markup; the recorder's own flash check and the ux4 decoded-frame flash
   check passed.
+
+## Item 3, the long guides (Run 37's item 6, re-applied)
+
+- **What it is,** as Run 37 built it: the six long guides
+  (`pensions-over-50`, `self-employed-pensions`, `uk-pensions-in-ireland`,
+  `pia`, `standard-fund-threshold`, `director-pension-rules`) get "On this
+  page", a numbered list after the introduction (all a reader without
+  JavaScript needs); a bar that keeps it in reach once it has scrolled away
+  (`assets/js/pb-guide.js`: the section being read, the list again, and a
+  reading line along its foot); and a "Next step" card at the end. The CSS
+  is the GUIDE block, byte for byte on every page, after POP.
+- **From `claude/overnight-ux-4-guides`** (0f8ad49, and c89dc45's 16px fix),
+  re-applied by a three-way merge of each guide's source onto today's
+  files; every merge was clean. Both fixes are in: the list's label and the
+  next step's words are 16px (the calculators' floor, which the PIA and
+  Standard Fund Threshold pages failed in Run 37), and the PIA's list spells
+  out "exchange-traded fund (ETF)".
+- **New since Run 37:** every page now ends with related pages (Run 37,
+  item 7). On `pia` and `director-pension-rules` the related list repeated
+  the next step (the pension calculator; the director calculator), so that
+  card came off those two lists, which keep two each.
+- **Guards,** as Run 37 wrote them: build check 38, and ux4 section 6 (the
+  bar names each section as it is read, sits under the nav, its line only
+  grows, and a link from its list lands the section clear of both).
 
 ## Questions for Damian
 
