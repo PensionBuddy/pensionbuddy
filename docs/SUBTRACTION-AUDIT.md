@@ -19,10 +19,11 @@ phone screens it gives back.
   everything after them out of the picture (8 of 18 screens blank on the
   home page at 1440, 6 of 22 on starter at 375). Every page was shot again
   screen by screen, and the two audits that had read the bad sheets read the
-  new ones. **The same trap is in `verify.py`'s full-page screenshots** for
-  those two pages: worth knowing before trusting them.
+  new ones. `verify.py`'s full-page screenshots had the same trap; since
+  Run 41 they are taken screen by screen too.
 - **Measurement.** Sections, buttons, pictures, colours and type per page,
-  from the same headless Chrome run that gives the rubric its numbers.
+  from the same headless Chrome run that gives the rubric its numbers
+  (`tools/design-measure.py`).
 - **Reading.** Six agents read every sheet of their pages against the
   rubric, with one brief (cut and merge only; the warnings, the information
   box, the regulator and review lines, sources, inputs and results, the nav,
@@ -478,9 +479,9 @@ seen.
   the optional emails about pension deadlines…]" shows on the page (R20-A2,
   already known and listed in STATUS).
 - **The director rules guide has no side gutter at 375** (above).
-- **`verify.py`'s full-page screenshots are wrong** for the home page at
+- **`verify.py`'s full-page screenshots were wrong** for the home page at
   1440 and the starter page: a section sized in viewport heights swells in
-  a window as tall as the page. Shooting screen by screen, as here, is the
-  fix; it is a tool change, so it waits for your word.
+  a window as tall as the page. Fixed in Run 41: they are taken screen by
+  screen now.
 - **The pension readiness check shows no "Reviewed" line** in the page
   (it is in the markup only); `my-pensions` shows one.

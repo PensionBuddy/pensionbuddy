@@ -265,9 +265,10 @@ section at most.**
 
 ## How a page is scored
 
-Run the measurement in a fresh session (the script is in Run 41's
-scratchpad, `measure.py`, and can be kept as `tools/design-measure.py` if
-Damian wants it), then for each page and each width:
+`python3 tools/design-measure.py` prints R1, R2, R3, R5, R6 and R7 for
+every page at both widths, and the site's totals, in one Chrome launch
+(`--pages` for some, `--json` to keep the raw figures). It reports and
+judges nothing. Then, for each page and each width:
 
 | # | Check | Passes when |
 |---|---|---|

@@ -309,8 +309,10 @@ and the references, listing only what to cut or merge, building nothing.
 | # | Item | State | Commit |
 |---|---|---|---|
 | 1 | The countdown in days, hours and minutes, turning each minute | done | 0eb295f |
-| 2 | `docs/DESIGN-RUBRIC.md` | done | this commit |
-| 3 | `docs/SUBTRACTION-AUDIT.md`, page by page; 20 calls for Damian at its end | done, nothing built | this commit |
+| 2 | `docs/DESIGN-RUBRIC.md` | done | 4fea3a3 |
+| 3 | `docs/SUBTRACTION-AUDIT.md`, page by page; 20 calls for Damian at its end | done, nothing built | 4fea3a3 |
+| 4 | `verify.py`'s full-page shots taken screen by screen (the tall-window bug) | done | this commit |
+| 5 | `tools/design-measure.py`, the rubric's measurement kept | done | this commit |
 
 ## Item 1, the countdown
 
@@ -342,8 +344,27 @@ and the references, listing only what to cut or merge, building nothing.
   `verify.py` shoots) is wrong for the home page at 1440 and the starter
   page, whose timelines are sized in viewport heights: 8 of 18 and 6 of 22
   screens came out blank. The audit shot every page screen by screen
-  instead (stacked viewport-sized frames, one Chrome launch per 14
-  screens). `verify.py` was not changed.
+  instead (stacked viewport-sized frames).
+
+## Items 4 and 5, Damian's follow-up: merge, fix the shots, keep the tool
+
+- **`verify.py` screenshots**: a new wrapper, `/__screens`, stacks one frame
+  per screen, each as tall as the audits' viewport (`SHOT_VIEWPORT`, 900,
+  which `run_audit` now takes as its default, so the page height the audit
+  measures is the height the frames add up to), each scrolled to its
+  screen; the last is clipped to the page's foot. Every frame is what a
+  reader sees there, sticky and fixed parts included (Ask Buddy appears on
+  each screen; the nav hides on scroll as it does live). The cookie choice
+  is made in the wrapper, or the bar would cover the foot of each screen.
+  The 16,000px cap is gone: Chrome drew a 22,100px window, and the home
+  page at 375 is 19,643. Checked: home and starter at 375 and 1440, a game
+  and the 404, no blank screen in any (the home page at 1440 had 8 of 18
+  before), the last frame meeting the footer cleanly.
+- **`tools/design-measure.py`**: one Chrome launch, every page at 375 x
+  812 and 1440 x 900; prints R1, R2, R3, R5, R6 and R7 per page and the
+  site's totals, which reproduce the rubric's figures (43 and 48 sizes,
+  seven weights, 39 and 42 spacing values, 58% off the steps, 20, 18 and
+  14 colours). Reports only; `--json` keeps the raw figures.
 - The audit's 20 numbered calls are for Damian; nothing in it is built.
 
 ---

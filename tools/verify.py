@@ -14,7 +14,7 @@ For every HTML page it:
     unnamed controls, unlabelled inputs, image decode, focus-ring contrast,
     clipped grid children, nav drawer behaviour, deep-link offset, and a set
     of page-specific expectations tied to backlog codes in docs/ISSUES.md
-  * takes a full-page screenshot at 375px and 1440px
+  * takes a full-page screenshot at 375px and 1440px, screen by screen
 
 Usage:
   python3 tools/verify.py                 # everything
@@ -40,6 +40,9 @@ sys.path.insert(0, os.path.join(ROOT, 'tools'))
 import pagebuild  # noqa: E402
 OUT = os.path.join(ROOT, 'verify-out')
 SHOTS = os.path.join(OUT, 'shots')
+# one screen's height in a screenshot: the audits' viewport (run_audit), so the
+# page height they measure is the height the screens add up to
+SHOT_VIEWPORT = 900
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 
 AUDIT_WIDTHS = [375, 1360, 1440]
@@ -349,6 +352,26 @@ class Handler(SimpleHTTPRequestHandler):
                     '<script>(function(){var f=document.getElementById("f");var tries=0;function poll(){tries++;try{var d=f.contentDocument;var p=d&&d.getElementById("__audit");if(p){var o=document.createElement("pre");o.id="__audit";o.textContent=p.textContent;document.body.appendChild(o);return;}}catch(e){}if(tries<400)setTimeout(poll,25);else{var o=document.createElement("pre");o.id="__audit";o.textContent=btoa(JSON.stringify({auditError:"timeout waiting for iframe audit"}));document.body.appendChild(o);}}f.addEventListener("load",poll);setTimeout(poll,500);})();</script>'
                     '</body></html>') % (page, mode, w, h)
             return self._send(body.encode('utf-8'))
+        if u.path == '/__screens':
+            # Run 41: the page as a reader scrolls it, one viewport-sized frame
+            # per screen, stacked. Each frame is scrolled to its screen; the
+            # last is clipped to the page's foot. See screenshot().
+            page = q.get('page', ['index.html'])[0]; w = int(q.get('w', ['375'])[0])
+            vh = int(q.get('vh', ['900'])[0]); H = max(int(q.get('h', ['900'])[0]), vh)
+            n = -(-H // vh); frames = []
+            for k in range(n):
+                top = min(k * vh, H - vh); clip = min(vh, H - k * vh)
+                frames.append('<div style="width:%dpx;height:%dpx;overflow:hidden;margin:0 auto">'
+                              '<iframe data-top="%d" src="/%s?shot=1" style="width:%dpx;height:%dpx;border:0;display:block;margin-top:%dpx"></iframe></div>'
+                              % (w, clip, top, page, w, vh, clip - vh))
+            body = ('<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#888}</style></head><body>'
+                    # the cookie choice made, or the bar would sit over the foot of every screen
+                    '<script>try{localStorage.setItem("pb-consent","rejected")}catch(e){}</script>' + ''.join(frames) +
+                    '<script>[].forEach.call(document.querySelectorAll("iframe"),function(f){function go(){try{var w=f.contentWindow;'
+                    'w.document.documentElement.style.scrollBehavior="auto";w.scrollTo(0,+f.dataset.top);}catch(e){}}'
+                    'f.addEventListener("load",function(){go();setTimeout(go,300);setTimeout(go,1500);});});</script>'
+                    '</body></html>')
+            return self._send(body.encode('utf-8'))
         fs = os.path.join(ROOT, path)
         if path.endswith('.html') and os.path.isfile(fs):
             t = open(fs, encoding='utf-8', errors='replace').read()
@@ -390,7 +413,7 @@ def chrome(args, timeout=90):
             print('(chrome stalled, retry %d)' % (attempt + 1), end=' ', flush=True)
     return ''
 
-def run_audit(port, page, width, height=900):
+def run_audit(port, page, width, height=SHOT_VIEWPORT):
     url = 'http://127.0.0.1:%d/__frame?page=%s&w=%d&h=%d' % (port, page, width, height)
     for budget in (6000, 15000):
         dom = chrome(['--window-size=%d,%d' % (max(width, 500) + 20, height + 20), '--virtual-time-budget=%d' % budget, '--dump-dom', url])
@@ -403,7 +426,7 @@ def run_audit(port, page, width, height=900):
     return {'auditError': 'no audit block returned'}
 
 def screenshot(port, page, width, doc_height):
-    """Full-page screenshot at an exact CSS width.
+    """Full-page screenshot at an exact CSS width, taken screen by screen.
 
     Taken with prefers-reduced-motion forced on, so anything that animates on
     entry (the reveals, the home page's count-up and growing bars, the jar's
@@ -411,23 +434,40 @@ def screenshot(port, page, width, doc_height):
     capture is proof of what the page says, and a figure caught halfway through
     a tween says the wrong number.
 
+    Run 41: the page used to be drawn in ONE frame as tall as the page. That
+    made 100vh the page's own height, so a section sized in viewport heights
+    (the home page's "Your pension through life", the starter page's
+    timeline) swelled to thousands of pixels and pushed everything after it
+    out of the picture: 8 of the home page's 18 screens at 1440 came out
+    blank. Now the wrapper (/__screens) stacks one frame per screen, each
+    SHOT_VIEWPORT tall and scrolled to its screen, so every frame is what a
+    reader sees at that scroll position, sticky and fixed parts included
+    (the nav, the booking bar on phones, Ask Buddy); the last frame is
+    clipped to the page's foot. The frames are the same height as the
+    audits' viewport, so the page's height, measured by the audit, is the
+    height the frames add up to. The cookie choice is made in the wrapper,
+    or the bar would sit over the foot of every screen.
+
     Headless Chrome enforces a ~500px minimum window width, so a direct
     --screenshot at 375px is really a 500px layout cropped to 375. Instead the
-    page is rendered inside a fixed-width iframe (same wrapper the audits use)
-    in a window at least 500px wide, then cropped to the iframe with sips."""
+    frames are a fixed width, centred in a window at least 500px wide, then
+    cropped to them with sips."""
     os.makedirs(SHOTS, exist_ok=True)
-    # 16000 rather than 9000: the home page passed 11,000px once the offering
-    # list and the product band arrived, and a capped shot proves nothing about
+    vh = SHOT_VIEWPORT
+    # no cap: the home page is about 20,000px at 375, and Chrome draws a
+    # window that tall (22,100 measured); a capped shot proves nothing about
     # the closing band it cuts off
-    h = max(812, min(int(doc_height or 900) + 40, 16000))
+    h = max(vh, int(doc_height or vh))
+    n = -(-h // vh)
     # a page in a subfolder ("games/buddys-run.html") flattens to one filename
     out = os.path.join(SHOTS, '%s-%d.png' % (page.replace('.html', '').replace('/', '-'), width))
     win_w = max(width, 500)
-    if (win_w - width) % 2: win_w += 1          # even side margins so the centre crop lands exactly on the iframe
-    chrome(['--force-prefers-reduced-motion', '--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=4000', '--screenshot=%s' % out,
-            'http://127.0.0.1:%d/__frame?page=%s&w=%d&h=%d&mode=shot' % (port, page, width, h)])
+    if (win_w - width) % 2: win_w += 1          # even side margins so the centre crop lands exactly on the frames
+    chrome(['--force-prefers-reduced-motion', '--window-size=%d,%d' % (win_w, h), '--virtual-time-budget=%d' % (6000 + 300 * n),
+            '--screenshot=%s' % out, 'http://127.0.0.1:%d/__screens?page=%s&w=%d&vh=%d&h=%d' % (port, page, width, vh, h)],
+           timeout=90 + 5 * n)
     if os.path.exists(out) and win_w != width:
-        # the iframe is centred in the wrapper, and sips -c crops about the centre
+        # the frames are centred in the wrapper, and sips -c crops about the centre
         subprocess.run(['sips', '-c', str(h), str(width), out, '--out', out], capture_output=True)
     return out if os.path.exists(out) else None
 
