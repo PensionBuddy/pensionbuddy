@@ -299,6 +299,55 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 41 — 2026-10-01 · The live countdown back; a design rubric; a subtraction audit (on `claude/countdown-rubric`, not merged)
+
+Damian's brief, three items: bring back the live countdown (days, hours,
+minutes, each minute, no seconds; the nav chip and the home page's band);
+write `docs/DESIGN-RUBRIC.md`; audit every page at 375 and 1440 against it
+and the references, listing only what to cut or merge, building nothing.
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The countdown in days, hours and minutes, turning each minute | done | 0eb295f |
+| 2 | `docs/DESIGN-RUBRIC.md` | done | this commit |
+| 3 | `docs/SUBTRACTION-AUDIT.md`, page by page; 20 calls for Damian at its end | done, nothing built | this commit |
+
+## Item 1, the countdown
+
+- The chip reads "48d 06h 14m" on every page; the home band has three
+  boxes, Days, Hours, Minutes. `pb-deadline.js` sets one timeout to the
+  turn of the count's minute (the deadline's 23:59:59, not the wall
+  clock's), set afresh each time; it still recounts when you come back to
+  the tab or from the back-forward cache. The screen-reader sentence, the
+  chip's name and the calculators' row stay in days. Without JavaScript,
+  nothing changes. No pulse.
+- This reverses Run 32's D21 (days only, no timer), by Damian's call.
+- Chip 121px (130 at a three-digit count), 37px wider: measured at ten
+  widths from 1600 to 375, no nav row overruns or wraps.
+- `tests/deadline.test.py` 360 checks; four mutants caught (no timer, a
+  per-second interval, a wall-clock minute, seconds shown).
+- Compliance pack section 7 names the band's boxes.
+
+## Items 2 and 3, the rubric and the audit
+
+- Measured: 43 type sizes at 375 and 48 at 1440, seven weights; 39 to 42
+  spacing values, 58% off a 4-based scale; 20 text and 18 background
+  colours; home page 19 sections and 24 phone screens.
+- References: there is no `/refs/` folder; the seven captures in
+  `~/Downloads` stand in for it, as in `docs/INTERACTIVE-AUDIT-2.md`.
+  Mercury's capture rendered only its hero and footer.
+- The `frontend-design` skill is not installed in this session;
+  `design:design-critique` was used.
+- **A screenshot trap:** a capture in one window as tall as the page (how
+  `verify.py` shoots) is wrong for the home page at 1440 and the starter
+  page, whose timelines are sized in viewport heights: 8 of 18 and 6 of 22
+  screens came out blank. The audit shot every page screen by screen
+  instead (stacked viewport-sized frames, one Chrome launch per 14
+  screens). `verify.py` was not changed.
+- The audit's 20 numbered calls are for Damian; nothing in it is built.
+
+---
+
 # Run 39 — 2026-10-01 · Runs 37 and 38 merged and live; then boxes kept, the clips, the guides, sliders, skeletons and the call (on `claude/ux-5`, not merged)
 
 Damian's brief: merge `claude/overnight-ux-4` (9453be1) into main after a
