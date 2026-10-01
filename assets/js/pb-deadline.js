@@ -26,13 +26,18 @@
    pushed the calculator down. Nothing here needs more of the page than the
    nav and the element it writes. What it writes, when the element is on
    the page:
-     #ntVal, #navTick   the chip: "54 days", and its accessible name
-     #tkD               the band's days; .tick h2, #tkRev, #tkYear, #tkSr
-     #deadlineText      the calculators' row
-   Days only, and never on a timer (Run 32, D21): it works the count out
-   when the page opens, when the browser brings the page back from its
-   back-forward cache, and when you come back to the tab. A clock running
-   to the second read as pressure.
+     #ntVal, #navTick   the chip: "54d 06h 41m", and its accessible name
+     #tkD #tkH #tkM     the band's days, hours and minutes; .tick h2,
+                        #tkRev, #tkYear, #tkSr
+     #deadlineText      the calculators' row, in days
+   Days, hours and minutes, never seconds (Run 41, Damian's call; Run 32
+   had cut it to days with no timer, D21). It counts again on the turn of
+   each minute, on a timeout set to that moment rather than a 60-second
+   interval, so it neither drifts nor lags a sleeping laptop by up to a
+   minute; and, as before, when the browser brings the page back from its
+   back-forward cache and when you come back to the tab. The words a
+   screen reader gets (#tkSr, the chip's name) and the calculators' row
+   stay in days: a sentence that changes every minute is noise there.
    For a reader without JavaScript the markup carries the date instead
    (Run 32): the band what this writes today, its clock not shown (it
    shows only with html.pb-js, from the first paint, so filling it moves
@@ -139,16 +144,19 @@
   window.PBDeadline = { at: at, targetLine: targetLine, revenueLine: revenueLine, heading: heading, statics: statics };
 
   var $ = function (id) { return document.getElementById(id); };
-  var chip = $('navTick'), chipVal = $('ntVal'), bD = $('tkD'),
+  var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+  var chip = $('navTick'), chipVal = $('ntVal'), bD = $('tkD'), bH = $('tkH'), bM = $('tkM'),
       sr = $('tkSr'), rev = $('tkRev'), who = $('tkYear'), row = $('deadlineText'),
       head = document.querySelector('.tick h2');
 
   function tick() {
     var d = at(new Date());
     var left = 'About ' + d.days + ' days left until ' + targetLine(d) + '.';
-    if (chipVal) chipVal.textContent = d.days === 1 ? '1 day' : d.days + ' days';
+    if (chipVal) chipVal.textContent = d.days + 'd ' + pad(d.hrs) + 'h ' + pad(d.min) + 'm';
     if (chip) chip.setAttribute('aria-label', left + ' Opens the full explanation.');
     if (bD) bD.textContent = '' + d.days;
+    if (bH) bH.textContent = pad(d.hrs);
+    if (bM) bM.textContent = pad(d.min);
     if (head) head.textContent = heading(d);
     if (rev) rev.textContent = revenueLine(d);
     if (who) who.textContent = d.taxYear;
@@ -157,8 +165,18 @@
       revenueLine(d) + ' After that, ' + d.taxYear + '’s allowance is gone for good.';
   }
 
+  /* on the turn of the count's minute, which is the deadline's (23:59:59),
+     not the wall clock's: worked out afresh each time, a few milliseconds
+     late so the count has moved when it runs */
+  var timer = null;
+  function next() {
+    clearTimeout(timer);
+    var now = new Date();
+    timer = setTimeout(function () { tick(); next(); }, Math.max(0, at(now).target - now) % 60000 + 20);
+  }
+
   tick();
-  /* no timer: again only when the page comes back into view */
-  window.addEventListener('pageshow', function (e) { if (e.persisted) tick(); });
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
+  if (chip || bD) next();
+  window.addEventListener('pageshow', function (e) { if (e.persisted) { tick(); if (chip || bD) next(); } });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { tick(); if (chip || bD) next(); } });
 })();

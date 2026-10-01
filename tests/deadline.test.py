@@ -11,11 +11,12 @@ What it proves:
      date, "to book by", "Damian's cut-off"; R30-6, Run 31); every root page
      loads pb-deadline.js once and carries neither of the two inline scripts
      it replaced; the chip counts to the end of 18 November, Revenue's online
-     deadline in days ("54 days", "1 day"), says so to a screen reader with
+     deadline in days, hours and minutes ("54d 12h 59m"), says so to a
+     screen reader in days with
      the tax year, and its label reads "to Revenue's deadline"
   2. the home page's band: eyebrow "Revenue's deadline", heading "Revenue's
-     deadline is 18 November if you pay and file online.", its clock the
-     "Days" unit alone, shown once filled, 31 October as the second line,
+     deadline is 18 November if you pay and file online.", its clock
+     days, hours and minutes and no seconds, 31 October as the second line,
      the tax year and the screen-reader line; the same words as the page's
      markup, so a reader without JavaScript reads what a reader with it
      reads, and without JavaScript the clock stays hidden, not "--"
@@ -23,14 +24,17 @@ What it proves:
      October beside it
   4. through the year: the day after the old cut-off changes nothing; on 1
      November 31 October is marked passed; an hour before 18 November ends
-     the chip says 0 days; a second after it, everything moves on to the
+     the chip says 0d 00h 59m; a second after it, everything moves on to the
      next tax year, and in a year with no Revenue Online Service date (2027)
      the count is to 31 October and the online date is "usually later, in
      mid-November"; a second after that 31 October, on to 2028
-  5. never on a timer (Run 32, D21): pb-deadline.js sets no interval or
-     timeout; a day later, coming back to the tab (visibilitychange) or to
-     the page from the back-forward cache (pageshow) counts again, and
-     nothing else does; and no page pulses the chip's dot
+  5. on the minute, never the second (Run 41; Run 32's D21 had no timer):
+     pb-deadline.js sets no interval, only a timeout to the turn of the
+     count's minute; pinned three seconds before that turn, the chip and
+     the band read the same a second later and one minute less after it;
+     within the minute nothing changes on its own, and coming back to the
+     tab (visibilitychange) or to the page from the back-forward cache
+     (pageshow) counts again; and no page pulses the chip's dot
   6. without JavaScript (Run 32): on every page the chip carries the date,
      "18 Nov 2026, online" ("18 Nov 2026" beside the links from 1440, where
      ", online" would overrun the row), and a name that says so, and the
@@ -80,7 +84,7 @@ PROBE = r"""<script>
     var chip=document.getElementById('navTick');
     R.chip=t('ntVal'); R.label=chip?chip.getAttribute('aria-label'):null;
     var cl=chip?chip.querySelector('.nt-l'):null; R.chipLab=cl?cl.textContent:null;
-    R.band=t('tkD'); var ck=document.querySelector('.tk-clock'); R.clockHidden=ck?ck.hidden:null;
+    R.band=t('tkD'); R.bandHM=[t('tkH'),t('tkM')]; var ck=document.querySelector('.tk-clock'); R.clockHidden=ck?ck.hidden:null;
     R.units=document.querySelectorAll('.tk-clock .tk-unit').length;
     var h=document.querySelector('.tick h2'); R.head=h?h.textContent:null;
     var e=document.querySelector('.tick .eyebrow'); R.eyebrow=e?e.textContent:null;
@@ -92,6 +96,14 @@ PROBE = r"""<script>
     R.pbjs=document.documentElement.classList.contains('pb-js');
     function out(){ var p=document.createElement('pre'); p.id='__dl';
       p.textContent=btoa(unescape(encodeURIComponent(JSON.stringify(R)))); document.body.appendChild(p); }
+    if(/[?&]__dlTick=1/.test(location.search)){
+      // pinned three seconds before the count's minute turns: read at about
+      // 1.2s (before it) and 2.5s (after it, and before a wall-clock minute would)
+      setTimeout(function(){ R.tickSoon=[t('ntVal'),t('tkM')];
+        setTimeout(function(){ R.tickAfter=[t('ntVal'),t('tkH'),t('tkM')]; out(); },1300);
+      },1000);
+      return;
+    }
     if(!/[?&]__dlBack=1/.test(location.search)) return out();
     // a day later: nothing changes on its own; coming back does
     window.__dlShift(86400000);
@@ -142,7 +154,7 @@ class Handler(SimpleHTTPRequestHandler):
                     'var f=document.createElement("iframe");f.style.cssText="width:1200px;height:800px";'
                     'var c=j[1].split("|"),nojs=c[0].indexOf("nojs:")===0;'
                     'if(nojs)f.style.width=c[0].split(":")[1]+"px";'
-                    'f.src="/"+j[0]+(nojs?"?__nojs=1":"?__dl="+encodeURIComponent(c[0])+(c[1]?"&__dlBack=1":""));'
+                    'f.src="/"+j[0]+(nojs?"?__nojs=1":"?__dl="+encodeURIComponent(c[0])+(c[1]?"&__dl"+(c[1]==="tick"?"Tick":"Back")+"=1":""));'
                     'document.body.appendChild(f);var n=0;'
                     '(function poll(){n++;var p=null;try{p=nojs?off(f):f.contentDocument.getElementById("__dl");}catch(e){}'
                     'if(p){OUT.push([j[0],j[1],p.textContent]);f.remove();next();return;}'
@@ -200,11 +212,12 @@ def main():
     NOW, OCT16, NOV = '2026-09-25T12:00:00', '2026-10-16T00:00:01', '2026-11-01T00:00:00'
     LAST, ROLL, ROLL2 = '2026-11-18T23:00:00', '2026-11-19T00:00:01', '2027-11-01T00:00:01'
     DAY1 = '2026-11-17T12:00:00'
+    TURN = '2026-09-25T12:00:57'    # the count's minute turns at :59, the deadline being 23:59:59
     jobs = [[p, NOW] for p in pages]
     jobs += [['index.html', OCT16], ['index.html', NOV], ['director-calculator.html', NOV],
              ['index.html', LAST], ['index.html', ROLL], ['pension-calculator.html', ROLL],
              ['index.html', ROLL2], ['broker-vs-autoenrolment.html', ROLL2],
-             ['index.html', DAY1], ['index.html', NOW + '|back'],
+             ['index.html', DAY1], ['index.html', NOW + '|back'], ['index.html', TURN + '|tick'],
              ['index.html', 'real'], ['pension-calculator.html', 'real']]
     # 1440 is where the chip sits beside the nav's links, with the least room;
     # 1200 and 900 put the links in the menu
@@ -243,7 +256,7 @@ def main():
         if not r:
             continue
         # the clocks go back on 25 October, so the count has an hour more in it
-        eq('1. %s: the chip counts the days to the end of 18 November' % page, r['chip'], '54 days')
+        eq('1. %s: the chip counts days, hours and minutes to the end of 18 November' % page, r['chip'], '54d 12h 59m')
         eq('1. %s: and says so to a screen reader' % page, r['label'], LEFT + ' Opens the full explanation.')
         eq('1. %s: its label names Revenue\'s deadline' % page, r['chipLab'], 'to Revenue’s deadline')
         eq('1. %s: no script error' % page, r['errors'], [])
@@ -251,8 +264,8 @@ def main():
     r = R[('index.html', NOW)]
     eq('2. the band: its eyebrow names whose date it is', r['eyebrow'], 'Revenue’s deadline')
     eq('2. the band: the online deadline', r['head'], HEAD)
-    eq('2. the band: its clock, the "Days" unit alone, there with JavaScript', (r['band'], r['units'], r['clockShown']),
-       ('54', 1, True))
+    eq('2. the band: its clock, days, hours and minutes, there with JavaScript',
+       (r['band'], r['bandHM'], r['units'], r['clockShown']), ('54', ['12', '59'], 3, True))
     eq('2. the band: 31 October as the second line', r['rev'], REV)
     eq('2. the band: the tax year', r['year'], '2025')
     eq('2. the band: for a screen reader', r['sr'], LEFT + ' ' + REV)
@@ -269,9 +282,10 @@ def main():
     clock = re.search(r'<div class="tk-clock"([^>]*)>(.*?)</div> </div>', flat)
     # in the markup from the first paint (a hidden clock grew the band when the
     # foot script showed it), and hidden without JavaScript by html:not(.pb-js)
-    eq('2. the clock is in the markup, shown from the first paint, and holds the days alone',
-       bool(clock) and not re.search(r'(?<![\w-])hidden\b', clock.group(1)) and clock.group(2).count('class="tk-unit"') == 1 and
-       'id="tkH"' not in src and 'id="tkS"' not in src and 'html:not(.pb-js) .tk-clock{display:none}' in src, True)
+    eq('2. the clock is in the markup, shown from the first paint: days, hours, minutes, no seconds',
+       bool(clock) and not re.search(r'(?<![\w-])hidden\b', clock.group(1)) and clock.group(2).count('class="tk-unit"') == 3 and
+       all('id="%s"' % i in clock.group(2) for i in ('tkD', 'tkH', 'tkM')) and 'id="tkS"' not in src and
+       'html:not(.pb-js) .tk-clock{display:none}' in src, True)
     chip = re.search(r'<a class="nav-tick" id="navTick"[^>]*>.*?</a>', flat)
     eq('2. the chip\'s live label names Revenue\'s deadline',
        bool(chip) and '<span class="nt-l nt-on" aria-hidden="true">to Revenue’s deadline</span>' in chip.group(0), True)
@@ -283,37 +297,42 @@ def main():
     # 4
     r = R[('index.html', OCT16)]
     eq('4. the day after the old cut-off changes nothing', (r['chip'], r['head'], r['eyebrow'], r['rev']),
-       ('34 days', HEAD, 'Revenue’s deadline', REV))
+       ('34d 00h 59m', HEAD, 'Revenue’s deadline', REV))
     r = R[('index.html', NOV)]
     left = 'About 17 days left until ' + T25 + '.'
-    eq('4. on 1 November: still counting to 18 November', (r['chip'], r['band']), ('17 days', '17'))
+    eq('4. on 1 November: still counting to 18 November', (r['chip'], r['band']), ('17d 23h 59m', '17'))
     eq('4. and 31 October is marked passed', (r['rev'], r['sr']), (REV_PASSED, left + ' ' + REV_PASSED))
     r = R[('director-calculator.html', NOV)]
     eq('4. in the row too', r['row'], left + ' ' + REV_PASSED + ' After that, 2025’s allowance is gone for good.')
     r = R[('index.html', LAST)]
-    eq('4. an hour before 18 November ends', (r['chip'], r['band'], r['head']), ('0 days', '0', HEAD))
+    eq('4. an hour before 18 November ends', (r['chip'], r['band'], r['bandHM'], r['head']), ('0d 00h 59m', '0', ['00', '59'], HEAD))
     r = R[('index.html', DAY1)]
-    eq('4. a day and a half before it, one day, singular', (r['chip'], r['band']), ('1 day', '1'))
+    eq('4. a day and a half before it', (r['chip'], r['band']), ('1d 11h 59m', '1'))
     r = R[('index.html', ROLL)]
     left = 'About 346 days left until 31 October, Revenue’s deadline for the 2026 tax year.'
-    eq('4. a second after it, the next tax year', (r['chip'], r['band'], r['year']), ('346 days', '346', '2026'))
+    eq('4. a second after it, the next tax year', (r['chip'], r['band'], r['year']), ('346d 23h 59m', '346', '2026'))  # both ends in GMT: the clocks go back on 31 October 2027
     eq('4. with no online date for 2027, the count is to 31 October',
        (r['head'], r['rev'], r['sr']), ('Revenue’s deadline is 31 October.', REV_NEXT, left + ' ' + REV_NEXT))
     r = R[('pension-calculator.html', ROLL)]
     eq('4. the row moves on too', r['row'], left + ' ' + REV_NEXT + ' After that, 2026’s allowance is gone for good.')
     r = R[('index.html', ROLL2)]
-    eq('4. a second after 31 October 2027, on to 2028 and the 2027 tax year', (r['chip'], r['year']), ('365 days', '2027'))
+    eq('4. a second after 31 October 2027, on to 2028 and the 2027 tax year', (r['chip'], r['year']), ('365d 23h 59m', '2027'))  # and on 29 October 2028
     r = R[('broker-vs-autoenrolment.html', ROLL2)]
     eq('4. and the row', r['row'].endswith('2027’s allowance is gone for good.'), True)
     # 5
     js = open(os.path.join(ROOT, 'assets', 'js', 'pb-deadline.js'), encoding='utf-8').read()
     code = re.sub(r'(?s)/\*.*?\*/', '', js)
-    eq('5. pb-deadline.js sets no timer', re.findall(r'set(?:Interval|Timeout)\s*\(', code), [])
+    eq('5. pb-deadline.js sets no interval, and one timeout', (re.findall(r'setInterval\s*\(', code),
+       len(re.findall(r'setTimeout\s*\(', code))), ([], 1))
+    r = R[('index.html', TURN + '|tick')]
+    eq('5. three seconds before the minute turns, then one second on: unchanged',
+       (r['chip'], r['bandHM'][1], r['tickSoon']), ('54d 12h 59m', '59', ['54d 12h 59m', '59']))
+    eq('5. once it turns, a minute less, without a reload', r['tickAfter'], ['54d 12h 58m', '12', '58'])
     r = R[('index.html', NOW + '|back')]
-    eq('5. a day later, nothing changes on its own, nor on a fresh pageshow',
-       (r['chip'], r['laterAlone'], r['laterReload']), ('54 days', '54 days', '54 days'))
-    eq('5. coming back to the tab counts again', r['laterTab'], '53 days')
-    eq('5. and so does coming back from the back-forward cache', r['laterCache'], '52 days')
+    eq('5. a day later, within the minute nothing changes on its own, nor on a fresh pageshow',
+       (r['chip'], r['laterAlone'], r['laterReload']), ('54d 12h 59m', '54d 12h 59m', '54d 12h 59m'))
+    eq('5. coming back to the tab counts again', r['laterTab'], '53d 12h 59m')
+    eq('5. and so does coming back from the back-forward cache', r['laterCache'], '52d 12h 59m')
     pulse = {}
     for f in sorted(glob.glob(os.path.join(ROOT, '*.html'))):
         t = open(f, encoding='utf-8').read()

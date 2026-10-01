@@ -921,9 +921,9 @@ html:not(.pb-js) .tk-clock{display:none}
 
 /* ============================================================
    PB-NAVTICK - deadline chip in the sticky header
-   Days only, worked out when the page opens and when you come back to
-   it, never on a timer (Run 32, D21): a clock running in a fixed header
-   reads as pressure and distracts while reading.
+   Days, hours and minutes, recounted on each minute and never to the
+   second (Run 41, Damian's call, reversing Run 32's days-only D21): a
+   seconds digit repainting in a fixed header distracts while reading.
    ============================================================ */
 .nav-tick{display:inline-flex;align-items:center;gap:8px;margin-left:18px;
   padding:6px 11px;border:1px solid var(--line-2);border-radius:6px;
@@ -2778,7 +2778,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>
 
-<script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
+<script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 
 
 <script>

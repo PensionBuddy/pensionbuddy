@@ -244,7 +244,8 @@ moved; the reveal system gone, so words are there on arrival; one motion
 vocabulary, calm under reduced motion; Ask Buddy one script, tucking to its
 photo and stepping aside for caveats, fields and focus; the booking and
 results bars stepping down for caveats; the deadline in days with no
-ticking clock or pulse; no celebration on the jar or the safe. Without
+ticking clock or pulse (the clock is back since Run 41, in days, hours
+and minutes, turning each minute, never seconds; still no pulse); no celebration on the jar or the safe. Without
 JavaScript the calculators' "Tax deadline" row and the nav chip give the
 date. Damian checked it on an iPhone (Safari) and accepted one Lighthouse
 point on the pension and director calculators (99 to 98). Details: Run 32
@@ -295,6 +296,76 @@ nav. The countdown moved into one script, `assets/js/pb-deadline.js`
 R27-2 (the forms' success messages promised things nothing sends), A4
 (`hello@pensionbuddy.ie` confirmed), and the stale calculator pictures
 (re-shot, merged `6e556ec`).
+
+---
+
+# Run 41 — 2026-10-01 · The live countdown back; a design rubric; a subtraction audit (on `claude/countdown-rubric`, not merged)
+
+Damian's brief, three items: bring back the live countdown (days, hours,
+minutes, each minute, no seconds; the nav chip and the home page's band);
+write `docs/DESIGN-RUBRIC.md`; audit every page at 375 and 1440 against it
+and the references, listing only what to cut or merge, building nothing.
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The countdown in days, hours and minutes, turning each minute | done | 0eb295f |
+| 2 | `docs/DESIGN-RUBRIC.md` | done | 4fea3a3 |
+| 3 | `docs/SUBTRACTION-AUDIT.md`, page by page; 20 calls for Damian at its end | done, nothing built | 4fea3a3 |
+| 4 | `verify.py`'s full-page shots taken screen by screen (the tall-window bug) | done | this commit |
+| 5 | `tools/design-measure.py`, the rubric's measurement kept | done | this commit |
+
+## Item 1, the countdown
+
+- The chip reads "48d 06h 14m" on every page; the home band has three
+  boxes, Days, Hours, Minutes. `pb-deadline.js` sets one timeout to the
+  turn of the count's minute (the deadline's 23:59:59, not the wall
+  clock's), set afresh each time; it still recounts when you come back to
+  the tab or from the back-forward cache. The screen-reader sentence, the
+  chip's name and the calculators' row stay in days. Without JavaScript,
+  nothing changes. No pulse.
+- This reverses Run 32's D21 (days only, no timer), by Damian's call.
+- Chip 121px (130 at a three-digit count), 37px wider: measured at ten
+  widths from 1600 to 375, no nav row overruns or wraps.
+- `tests/deadline.test.py` 360 checks; four mutants caught (no timer, a
+  per-second interval, a wall-clock minute, seconds shown).
+- Compliance pack section 7 names the band's boxes.
+
+## Items 2 and 3, the rubric and the audit
+
+- Measured: 43 type sizes at 375 and 48 at 1440, seven weights; 39 to 42
+  spacing values, 58% off a 4-based scale; 20 text and 18 background
+  colours; home page 19 sections and 24 phone screens.
+- References: there is no `/refs/` folder; the seven captures in
+  `~/Downloads` stand in for it, as in `docs/INTERACTIVE-AUDIT-2.md`.
+  Mercury's capture rendered only its hero and footer.
+- The `frontend-design` skill is not installed in this session;
+  `design:design-critique` was used.
+- **A screenshot trap:** a capture in one window as tall as the page (how
+  `verify.py` shoots) is wrong for the home page at 1440 and the starter
+  page, whose timelines are sized in viewport heights: 8 of 18 and 6 of 22
+  screens came out blank. The audit shot every page screen by screen
+  instead (stacked viewport-sized frames).
+
+## Items 4 and 5, Damian's follow-up: merge, fix the shots, keep the tool
+
+- **`verify.py` screenshots**: a new wrapper, `/__screens`, stacks one frame
+  per screen, each as tall as the audits' viewport (`SHOT_VIEWPORT`, 900,
+  which `run_audit` now takes as its default, so the page height the audit
+  measures is the height the frames add up to), each scrolled to its
+  screen; the last is clipped to the page's foot. Every frame is what a
+  reader sees there, sticky and fixed parts included (Ask Buddy appears on
+  each screen; the nav hides on scroll as it does live). The cookie choice
+  is made in the wrapper, or the bar would cover the foot of each screen.
+  The 16,000px cap is gone: Chrome drew a 22,100px window, and the home
+  page at 375 is 19,643. Checked: home and starter at 375 and 1440, a game
+  and the 404, no blank screen in any (the home page at 1440 had 8 of 18
+  before), the last frame meeting the footer cleanly.
+- **`tools/design-measure.py`**: one Chrome launch, every page at 375 x
+  812 and 1440 x 900; prints R1, R2, R3, R5, R6 and R7 per page and the
+  site's totals, which reproduce the rubric's figures (43 and 48 sizes,
+  seven weights, 39 and 42 spacing values, 58% off the steps, 20, 18 and
+  14 colours). Reports only; `--json` keeps the raw figures.
+- The audit's 20 numbered calls are for Damian; nothing in it is built.
 
 ---
 
