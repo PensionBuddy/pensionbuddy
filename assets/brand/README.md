@@ -17,7 +17,7 @@ Bright teal is a surface/graphic colour, not a text colour. Keep existing
 
 | File | Use |
 | --- | --- |
-| `pensionbuddy-lockup-horizontal.svg` | Header, email signature, docs. 560 × 104. |
+| `pensionbuddy-lockup-horizontal.svg` | Header, email signature, docs. 582 × 104 (the wordmark's ink ends at x≈581.3). |
 | `pensionbuddy-lockup-horizontal-reversed.svg` | Same, for deep-ink / photo grounds. |
 | `pensionbuddy-lockup-horizontal-mono.svg` | One colour via `currentColor` — print, embroidery, stamps. |
 | `pensionbuddy-mark.svg` | Square mark, 180 × 180. Favicon, social avatar, app icon. |
