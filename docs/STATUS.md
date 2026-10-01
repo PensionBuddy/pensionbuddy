@@ -244,7 +244,8 @@ moved; the reveal system gone, so words are there on arrival; one motion
 vocabulary, calm under reduced motion; Ask Buddy one script, tucking to its
 photo and stepping aside for caveats, fields and focus; the booking and
 results bars stepping down for caveats; the deadline in days with no
-ticking clock or pulse; no celebration on the jar or the safe. Without
+ticking clock or pulse (the clock is back since Run 41, in days, hours
+and minutes, turning each minute, never seconds; still no pulse); no celebration on the jar or the safe. Without
 JavaScript the calculators' "Tax deadline" row and the nav chip give the
 date. Damian checked it on an iPhone (Safari) and accepted one Lighthouse
 point on the pension and director calculators (99 to 98). Details: Run 32

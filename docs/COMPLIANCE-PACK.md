@@ -1398,8 +1398,10 @@ Changed wording on existing pages
   18 November if you pay and file online.", then "If you do not pay and
   file online through the Revenue Online Service, it is 31 October. Pay
   into a pension before your deadline and you can set it against last
-  year's tax bill. Miss it and that year is gone for good." The
-  calculators' row: "About [n] days left until 18 November, Revenue's
+  year's tax bill. Miss it and that year is gone for good." Beside it,
+  the same count in three boxes, Days, Hours and Minutes; the chip and
+  the boxes move on each minute, never showing seconds (Run 41, 1
+  October 2026). The calculators' row: "About [n] days left until 18 November, Revenue's
   deadline for the 2025 tax year if you pay and file online through the
   Revenue Online Service. If you do not pay and file online through the
   Revenue Online Service, it is 31 October. After that, 2025's allowance

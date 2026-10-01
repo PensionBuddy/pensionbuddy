@@ -836,9 +836,9 @@ html:not(.pb-js) .tk-clock{display:none}
 
 /* ============================================================
    PB-NAVTICK - deadline chip in the sticky header
-   Days only, worked out when the page opens and when you come back to
-   it, never on a timer (Run 32, D21): a clock running in a fixed header
-   reads as pressure and distracts while reading.
+   Days, hours and minutes, recounted on each minute and never to the
+   second (Run 41, Damian's call, reversing Run 32's days-only D21): a
+   seconds digit repainting in a fixed header distracts while reading.
    ============================================================ */
 .nav-tick{display:inline-flex;align-items:center;gap:8px;margin-left:18px;
   padding:6px 11px;border:1px solid var(--line-2);border-radius:6px;
@@ -2733,6 +2733,8 @@ html.pb-readying [data-pb-wait]{transition:none!important}
       </div>
       <div class="tk-clock" aria-hidden="true">
         <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
+        <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
+        <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
       </div>
       <p class="tk-sr" id="tkSr"></p>
     </div>
@@ -3174,7 +3176,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 
-<script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>
+<script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 <script src="assets/js/pb-bookbar.js?v=0b2a330b"></script>
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
