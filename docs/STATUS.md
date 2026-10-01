@@ -344,9 +344,9 @@ merged.
 | 4 | Run 37's item 9, slider feel | done | 372a16c |
 | 5 | Run 37's item 10, loading skeletons | done | 471f66d |
 | 6 | "How a call with Damian works", three steps, a video slot each | done | 044ced4 |
-| 7 | "Your worries, answered", a draft for the compliance pack, not published | done | this commit |
-| 8 | Where painted illustrations would replace icons, a list | done | this commit |
-| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | not started | |
+| 7 | "Your worries, answered", a draft for the compliance pack, not published | done | 0e19b4d |
+| 8 | Where painted illustrations would replace icons, a list | done | 0e19b4d |
+| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | done | this commit |
 
 ## Item 1, boxes kept
 
@@ -517,6 +517,28 @@ merged.
   could show and the size it is drawn today at 1440 and 375 (measured),
   then what to leave alone (the warnings' "i", the paw, the working icons,
   the photographs) and a short brief for the illustrator.
+
+## Item 9, Lighthouse, before and after (mobile, median of three, interleaved)
+
+Before is `30f8d12`, where Run 37 began; after is `0e19b4d`, this branch with
+items 1 to 8 (so Runs 37 to 39 together).
+
+| Page | Performance | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|
+| index.html | 93 to 91 | 3.08 to 3.23 | 0 to 0 | 0 to 0 |
+| pension-calculator.html | 87 to 86 | 3.31 to 3.46 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 87 to 88 | 3.31 to 3.16 | 0 to 0 | 0 to 0 |
+| glossary.html | 91 to 91 | 2.87 to 2.85 | 0 to 0 | 0 to 0 |
+| tracker.html | 94 to 93 | 2.94 to 3.11 | 0 to 0 | 0 to 0 |
+| starter.html | 90 to 91 | 3.46 to 3.31 | 0.0012 to 0.0012 | 0 to 0 |
+| 404.html | 97 to 96 | 2.40 to 2.70 | 0 to 0 | 0 to 0 |
+
+Every page within two points; no layout shift added anywhere, no blocking
+time. The home page sits 0.15 s later than before Run 37. Runs 37 to 39
+added a few small scripts to it, and I did not isolate which costs the
+0.15 s; it is not the 1.7 s the posters cost before Run 38's follow-up. Lighthouse 13.5.0 was put back from
+the machine's own npm cache, offline (the copy Run 32 had used was cleared
+from its temporary folder overnight); nothing was downloaded.
 
 ## Questions for Damian
 
