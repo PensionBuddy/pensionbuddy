@@ -1526,7 +1526,10 @@ button{font-family:inherit}
 .pb-split-media{margin:0}
 .pb-split-media img{display:block;width:100%;max-width:100%;height:auto;border-radius:12px;
   border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px rgba(0,0,0,.4)}
-.pb-split-media.pb-photo{max-width:420px;margin:0 auto}
+/* (Run 39) width:100% keeps the photograph's box before it loads: a grid
+   item centred by auto margins shrinks to its contents, and until the
+   image arrived that was only its caption (161px tall, then 523px) */
+.pb-split-media.pb-photo{width:100%;max-width:420px;margin:0 auto}
 .pb-split-cap{margin:14px 0 0;font-size:.86rem;line-height:1.5;color:rgba(255,255,255,.62)}
 /* the coverage figures: one borderless row on a wash, the source line beneath */
 .coverband.pb-bleed{padding:80px 0}

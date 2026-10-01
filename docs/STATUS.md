@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 29 September 2026, after Run 36 (Run 34 merged, Run 35's calls)
+# Launch status — as at 1 October 2026, after Runs 37 and 38 went live (Run 39)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -48,6 +48,14 @@ every page carries its search and sharing tags (`tools/seo.py`), with share
 cards for the home page and the six audience pages; the calculators' held
 inputs panel lets a keyboard reach every control; and the motion parts
 Damian's decisions did not wait on (Run 34, item 4).
+
+Since 1 October 2026 (main `09c5f80`, Run 39) Runs 37 and 38 are live too:
+"What's changed?" under the home page's hero, jargon defined where it is
+used, site search (the nav button and "/"), "Your pension through life",
+Save as A on the pension calculator, related pages at the end of each page,
+the new 404 page, short loops of the two games on the home page's game
+cards, and media that pops in on scroll. A flaw found on the live 404 at
+375 (its two buttons overlap) is fixed on `claude/ux-5`, not yet live.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -289,6 +297,79 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 39 — 2026-10-01 · Runs 37 and 38 merged and live; then boxes kept, the clips, the guides, sliders, skeletons and the call (on `claude/ux-5`, not merged)
+
+Damian's brief: merge `claude/overnight-ux-4` (9453be1) into main after a
+full gate on the merged tree, push main, check the live site; then a new
+branch off the new main for the rest, each item gated and pushed, not
+merged.
+
+## The merge
+
+- **main `09c5f80`** (`30f8d12..09c5f80`), the merge of 9453be1. Main had not
+  moved, so the merged tree is the branch's own. The full gate on it passed:
+  every suite, render-diff unchanged against `30f8d12`, `verify.py` 0
+  failures at 375 and 1440.
+- **The live site**, checked headless at 1440 and 375 once the deploy was
+  up (about 30 s): the merged build is served; "What's changed?" shows its
+  six chips, each page answering 200; media below the fold is armed and
+  pops in, and nothing on the first screen is; both game videos play
+  (MP4), the picture as poster, with a Pause button; the search opens from
+  its button and from "/", and "annuity" finds the jargon buster's entry
+  first; the 404 answers 404 with Buddy, its search box and six places to
+  begin. 21 checks, all passing.
+- **One flaw, live:** on the 404 at 375 the two buttons lie over each other,
+  their sides gone (item 1 below fixes it on this branch).
+
+## Decisions on Run 38's questions (Damian, 1 October 2026)
+
+| # | Question | Decision |
+|---|---|---|
+| 1 | Run 38 on the same branch as Run 37 | yes |
+| 2 | Show a wrong answer in the Jargon Battle clip | no |
+| 3 | Pop a card's frame behind its words | no |
+| 4 | The pop's feel (12px rise from 97% size) | keep |
+| 5 | Keep the tracker photograph's box before it loads | yes: item 1 |
+| 6 | Pop the provider logos too | no |
+| 7 | Hide the recorded game's own Pause label | yes: item 2 |
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | this commit |
+| 2 | Both clips re-recorded without the game's own Pause label (Q7) | not started | |
+| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | not started | |
+| 4 | Run 37's item 9, slider feel | not started | |
+| 5 | Run 37's item 10, loading skeletons | not started | |
+| 6 | "How a call with Damian works", three steps, a video slot each | not started | |
+| 7 | "Your worries, answered", a draft for the compliance pack, not published | not started | |
+| 8 | Where painted illustrations would replace icons, a list | not started | |
+| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | not started | |
+
+## Item 1, boxes kept
+
+- **The tracker photograph (Q5).** Its figure is centred by auto margins in
+  the product band's grid, which makes a grid item shrink to its contents.
+  Until the lazy image arrived, the only content with a width was the
+  caption, so the photograph was drawn about 127px wide and 158px tall, then
+  407 by 507 at 1440 (329 by 409 at 375) once it loaded, and everything
+  below it moved down. `width:100%` (still at most 420px) gives it its box
+  from the start, the image's own width and height making the height. The
+  rule is identical on `starter.html`, `tracker.html` and `director.html`,
+  so it changed on all three; only the tracker uses it.
+- **The 404's buttons.** The site's last reach pass pads every link inside
+  `.legal` for running text (padding 13px 0, margin −13px 0), and the 404
+  sits in `.legal`, so its two buttons lost their sides at every width and,
+  wrapped on a phone, lay one over the other. They keep the house button's
+  padding now (13px 22px), with no negative margin. No other page has a
+  button inside `.legal`.
+- **Guard: `tests/boxes.test.mjs`**, new, in the gate. Every page at 375
+  and 1440: each lazy image keeps its box before it loads; no two buttons
+  overlap, and each keeps its sides; and the two cases by name. With either
+  fix taken out it fails at both widths. A probe of every page before the
+  fixes found these two and nothing else.
 
 # Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
 

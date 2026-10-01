@@ -1516,6 +1516,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* Run 37, item 8: the 404. Buddy, the search box (the dialog's own look,
    set here in full so nothing moves when the search script arrives with its
    rules), and the home page's six places to begin as cards. */
+/* (Run 39) the reach pass pads every link inside .legal for running text
+   (padding 13px 0, margin -13px 0), which took these two buttons' sides
+   away and, wrapped on a phone, laid one over the other: buttons keep the
+   house button's own padding, and no negative margin */
+.pb-nf a.btn{margin:0;padding:13px 22px}
 .pb-nf .pb-nf-buddy{display:block;width:96px;height:96px;margin:0 0 18px}
 .pb-nf .pb-nf-buddy img{display:block;width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--teal-100)}
 html:not(.pb-js) .pb-nf-search{display:none}
