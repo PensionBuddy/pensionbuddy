@@ -338,8 +338,8 @@ merged.
 
 | # | Item | State | Commit |
 |---|---|---|---|
-| 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | this commit |
-| 2 | Both clips re-recorded without the game's own Pause label (Q7) | not started | |
+| 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | c404c75 |
+| 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | this commit |
 | 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | not started | |
 | 4 | Run 37's item 9, slider feel | not started | |
 | 5 | Run 37's item 10, loading skeletons | not started | |
@@ -370,6 +370,42 @@ merged.
   overlap, and each keeps its sides; and the two cases by name. With either
   fix taken out it fails at both widths. A probe of every page before the
   fixes found these two and nothing else.
+
+## Item 2, the clips without the game's own pause control (Q7)
+
+- **Buddy's Run** shows its own "P to pause" and a Pause button in its top
+  bar; beside the card's real pause button it read as a second one. The
+  recorder now hides both in their place (`visibility:hidden`), so the score
+  chips do not move, and the clip was recorded again: 8 s, 240 frames, at
+  most 2 changes a second in any cell against the limit of 6, MP4 834 KB,
+  WebM 1.11 MB. Its frames are reproducible: the WebM, encoded in software,
+  came out byte for byte the same twice. (The MP4s differ in their bytes
+  from run to run: the Mac's H.264 encoder is not byte-stable. What they
+  show is the same.)
+- **Jargon Battle** has no pause control of its own; its clip is unchanged
+  and its files are the committed ones. Recording it twice showed something
+  Run 38 did not say: the game plays the same answers, questions and hearts
+  every time (the recorder checks all three), but 27 of its 240 frames,
+  around the answers, come out a little different, the most 7% of the
+  picture, in the top of the frame where the battle is drawn. The recorder
+  turns the game's own clock, but not everything on the page follows it
+  (its CSS transitions and the dialogue's blinking caret run on the real
+  clock), and I have not pinned down which part moves the battle's frames.
+  See question 1.
+- **Guard:** build check 43 now fails if the recorder stops hiding Buddy's
+  Run's pause control (a new mutant), beside its checks on seeding, size and
+  markup; the recorder's own flash check and the ux4 decoded-frame flash
+  check passed.
+
+## Questions for Damian
+
+1. **Jargon Battle, frame for frame.** To make every frame of its clip
+   reproducible, I would find what still runs on the real clock and put it
+   on the recorder's. Want that? What the clip shows would not change.
+2. **The still pictures.** The game cards' pictures, which are also the
+   videos' posters and all a reader gets with reduced motion, still show
+   Buddy's Run's own "P to pause" and Pause. Re-shoot them without, to
+   match the clip?
 
 # Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
 

@@ -28,7 +28,11 @@
    Buddy's Run's clip starts after a run-up and must keep all three lives
    and show the Poolbeg stacks on the far shore; Jargon Battle's answers two
    questions right, from the second to the fourth, the question its still
-   shows. Exit 0, or 1 with the reason. */
+   shows. Buddy's Run's own pause control ("P to pause" and its Pause
+   button) is hidden in the clip (Run 39, Damian's call): beside the card's
+   real pause button it read as a second one. It keeps its place, so
+   nothing else in the game's top bar moves; Jargon Battle shows none.
+   Exit 0, or 1 with the reason. */
 import { spawn, execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { mkdtempSync, readFileSync, writeFileSync, existsSync, rmSync, statSync, mkdirSync } from 'node:fs';
@@ -61,6 +65,8 @@ const SEEDED = 'function pbSeed(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t
 const GAMES = {
   'buddys-run': {
     page: 'games/buddys-run.html', target: '#stage',
+    /* the game's own pause control, hidden in its place (Run 39) */
+    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',
     /* the stills' autopilot, one decision per 1/120 s step */
     setup: SEEDED + `
       window.__B=window.BuddysRun; __B.setRng(pbSeed(20260929));
@@ -206,7 +212,7 @@ for (const [name, g] of Object.entries(GAMES)) {
   await go(ORIGIN + '/__wrap.html?g=' + name);
   await ev(`new Promise(r=>{var f=document.getElementById('f');function ok(){var d=f.contentDocument;return d&&d.readyState==='complete'&&(!d.fonts||d.fonts.status==='loaded');}
     (function t(){ if(ok()) r(1); else setTimeout(t,50); })();})`, true);
-  await ev(`(function(){var d=document.getElementById('f').contentDocument,s=d.createElement('style');s.textContent=${JSON.stringify(SETTLE)};d.head.appendChild(s);d.documentElement.classList.remove('pb-preveil');})()`);
+  await ev(`(function(){var d=document.getElementById('f').contentDocument,s=d.createElement('style');s.textContent=${JSON.stringify(SETTLE + (g.hide || ''))};d.head.appendChild(s);d.documentElement.classList.remove('pb-preveil');})()`);
   await sleep(300);
   await inGame(g.setup);
   await ev('window.scrollTo(0,0)');

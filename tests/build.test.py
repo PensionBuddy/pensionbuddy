@@ -1841,7 +1841,8 @@ def run():
     # The CSS draws the video and the button only where motion is allowed;
     # pb-video.js loads late, stores nothing, fetches near the viewport and
     # pauses off it. tools/record-games.mjs made the files, seeded as the
-    # pictures are.
+    # pictures are, and (Run 39) with Buddy's Run's own pause control hidden
+    # in its place: beside the card's real pause button it read as a second.
     VIDEOS = [('buddys-run', 'Buddy&rsquo;s Run'), ('jargon-battle', 'Jargon Battle')]
 
     def video_faults(ix, js, sizes, rec):
@@ -1886,6 +1887,8 @@ def run():
             f.append('pb-video.js does not give the video its poster')
         if "setRng(pbSeed(20260929))" not in rec or rec.count("setRng(pbSeed(20260929))") != 2:
             f.append('the recorder does not seed both games as the pictures are')
+        if "hide: '#hud .hint,#pauseBtn{visibility:hidden!important}'" not in rec or 'SETTLE + (g.hide' not in rec:
+            f.append("the recorder shows Buddy's Run's own pause control (Run 39: hidden, in its place)")
         return f
 
     vdir = os.path.join(ROOT, 'assets', 'video')
@@ -1906,9 +1909,13 @@ def run():
             ('a button named otherwise', 'ix', 'aria-label="Play video: Jargon Battle"', 'aria-label="Start the animation"', 'button'),
             ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
             ('a video too big', 'sizes', None, None, '1.5 MB'),
-            ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause')):
-        mix, mjs, ms = ix, vjs, dict(vsizes)
-        if target == 'ix':
+            ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause'),
+            ('the game\'s own pause control back in the clip', 'rec', "    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',\n", '', 'pause control')):
+        mix, mjs, ms, mrec = ix, vjs, dict(vsizes), vrec
+        if target == 'rec':
+            mrec = vrec.replace(find, repl, 1)
+            assert mrec != vrec, label
+        elif target == 'ix':
             mix = ix.replace(find, repl, 1)
             assert mix != ix, label
         elif target == 'js':
@@ -1916,7 +1923,7 @@ def run():
             assert mjs != vjs, label
         else:
             ms['buddys-run.webm'] = 2 * 1024 * 1024
-        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, vrec)), True)
+        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, mrec)), True)
 
     # ----------------------------------------------------------------- 44
     # Run 38, item 2: media pops in, and nothing else can. pb-pop.js's list
