@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
+<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>A UK pension, and living in Ireland, Pensionbuddy</title>
 <meta name="description" content="Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions. Rules as at September 2026.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -1935,6 +1935,69 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 }
 @media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}
 /* POP:END */
+/* GUIDE:BEGIN (Run 37, item 6). The six long guides: their "On this page"
+   list (in each page's markup, after its introduction: all a reader without
+   JavaScript needs), the bar that keeps it in reach once it has scrolled away
+   (assets/js/pb-guide.js: the section being read, the list again, and along
+   its foot a line as long as the share read), and the next step at the end.
+   Byte for byte on every page, like the blocks above, so the six cannot
+   drift; the other pages carry the rules and none of the parts. The bar sits
+   under the nav while the nav shows, moved there by the script; nothing here
+   animates, and the progress line follows the scroll one to one. */
+.pb-toc{max-width:640px;margin:22px 0 30px;padding:16px 20px 12px;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface)}
+.pb-toc .pb-toc-h{margin:0 0 6px;font-size:16px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-toc .pb-toc-list{margin:0;padding:0 0 0 22px;list-style:decimal}
+.pb-toc .pb-toc-list li{margin:2px 0;padding:0;font-size:16px;line-height:1.5;color:var(--ink-2)}
+.pb-toc .pb-toc-list li::before{content:none;display:none}  /* the guides' own bullet: the list has its numbers */
+.pb-toc .pb-toc-list a{color:var(--teal-700);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.pb-toc .pb-toc-list a:hover{text-decoration-thickness:2px}
+.pb-tocbar{position:fixed;left:0;right:0;top:0;z-index:45;background:var(--bg);border-bottom:1px solid var(--line-2)}
+.pb-tocbar[hidden]{display:none}
+.pb-tocbar .pb-tocbar-btn{display:flex;align-items:center;gap:8px;width:100%;max-width:var(--maxw);min-height:46px;margin:0 auto;padding:0 24px;
+  font:600 15px/1.3 var(--font);color:var(--ink);background:none;border:0;border-radius:0;text-align:left;cursor:pointer}
+.pb-tocbar-k{flex:0 0 auto;font-weight:500;color:var(--ink-2)}
+.pb-tocbar-now{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-tocbar-chev{flex:0 0 auto;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pb-tocbar-btn[aria-expanded="true"] .pb-tocbar-chev{transform:rotate(180deg)}
+.pb-tocbar .pb-tocbar-btn:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
+.pb-tocbar .pb-tocbar-list{max-width:var(--maxw);max-height:60vh;margin:0 auto;padding:2px 24px 12px 46px;overflow-y:auto;list-style:decimal;color:var(--ink-2)}
+.pb-tocbar .pb-tocbar-list[hidden]{display:none}
+.pb-tocbar .pb-tocbar-list li{margin:0;padding:0}
+.pb-tocbar .pb-tocbar-list a{display:block;margin:0;padding:10px 0;font-size:16px;line-height:1.4;color:var(--ink);text-decoration:none}
+.pb-tocbar .pb-tocbar-list a:hover{text-decoration:underline;text-underline-offset:3px}
+.pb-tocbar .pb-tocbar-list a[aria-current]{color:var(--teal-700);font-weight:700}
+.pb-tocbar .pb-tocbar-list a:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-tocbar-prog{position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--teal);transform:scaleX(0);transform-origin:0 50%}
+html.pb-tocbar-on{scroll-padding-top:140px}
+.pb-next{max-width:640px;margin:34px 0 0}
+.pb-next .pb-next-k{margin:0 0 10px;font-size:16px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-next .pb-next-card{display:flex;flex-direction:column;gap:4px;margin:0;padding:18px 22px;border:1px solid var(--line-2);border-radius:var(--r-lg);
+  background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-next .pb-next-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-next .pb-next-card:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-next-t{font-size:18px;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-next-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
+.pb-next-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
+@media(max-width:560px){.pb-tocbar .pb-tocbar-btn{padding:0 16px}.pb-tocbar .pb-tocbar-list{padding:2px 16px 12px 38px}}
+/* GUIDE:END */
+/* WAIT:BEGIN (Run 37's item 10, built in Run 39). A figure a script is
+   about to write shows a quiet bar until the page's own scripts have run,
+   never the "--" or "€0" its markup holds for a reader without
+   JavaScript. The head script (tools/pagebuild.py MOTION_HEAD) sets
+   html.pb-ready at DOMContentLoaded, by which time every page script has
+   written its figures, and html.pb-readying for that moment, so a figure
+   with a colour transition of its own still arrives at once (figures never
+   wait). The bar is a background inside the element's own box and the
+   text is only made transparent, so nothing moves when the bar goes; it
+   pulses only for a reader who allows motion. Byte for byte on every page:
+   the nav's deadline chip has one. */
+html.pb-js:not(.pb-ready) [data-pb-wait]{color:transparent!important;-webkit-text-fill-color:transparent;
+  background-image:linear-gradient(var(--line-2),var(--line-2));background-repeat:no-repeat;background-position:left center;
+  background-size:min(100%,4.5ch) .8em;border-radius:4px}
+html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out infinite alternate}
+html.pb-readying [data-pb-wait]{transition:none!important}
+@keyframes pbWait{from{opacity:1}to{opacity:.55}}
+/* WAIT:END */
 </style>
 </head>
 <body>
@@ -1942,7 +2005,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true">--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true" data-pb-wait>--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
@@ -1994,6 +2057,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <h1>A UK pension, and living in Ireland</h1>
   <p class="updated">Rules as at 24 September 2026. Both countries change their rules at their Budgets.</p>
   <p class="intro">If you worked in the UK and now live in Ireland, you may have a UK workplace or personal pension, and a UK State Pension. What can move, what it can cost, and how Ireland taxes what you are paid.</p>
+  <div class="pb-toc" role="navigation" aria-labelledby="pbTocH"><p class="pb-toc-h" id="pbTocH">On this page</p><ol class="pb-toc-list"><li><a href="#transfer">Moving a UK pension to Ireland</a></li><li><a href="#state">The UK State Pension</a></li><li><a href="#tax">How Ireland taxes it</a></li><li><a href="#find">Finding a UK pension</a></li><li><a href="#help">Worth a conversation</a></li></ol></div>
 
   <h2 id="transfer">Moving a UK pension to Ireland</h2>
   <p>A UK workplace or personal pension can only be moved to an Irish scheme that HM Revenue and Customs (HMRC) recognises as a qualifying recognised overseas pension scheme, a QROPS. Moving it anywhere else, the UK scheme may refuse, or the move is taxed at 40% or more.</p>
@@ -2012,6 +2076,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <p>Whether moving a UK pension makes sense depends on what it gives you now, what a move would cost in tax and charges, and where you expect to live. There is no general answer, and this page does not give one. <a href="booking.html">Book a free call with Damian</a> to go through yours.</p>
   <p class="pb-why">Free, 20 minutes, no obligation.</p>
   <p class="ck-note">This page is general information, not advice. Sources: GOV.UK, &ldquo;Transferring your pension: transferring to an overseas pension scheme&rdquo; and &ldquo;State Pension if you retire abroad&rdquo;; HMRC, &ldquo;Reducing tax-free overseas transfers of tax relieved UK pensions&rdquo; (30 October 2024) and Pensions Tax Manual PTM102200; Revenue, &ldquo;Taxation of foreign pensions&rdquo;; the Ireland&ndash;UK double taxation convention, articles 17 and 18; Citizens Information, &ldquo;Returning to Ireland from the United Kingdom&rdquo;.</p>
+  <aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="tracker.html"><span class="pb-next-t">Track down old pensions</span><span class="pb-next-d">Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.</span></a></aside>
 </div></div>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
@@ -2113,7 +2178,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=fa0b2953" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -2143,6 +2208,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
+<script src="assets/js/pb-guide.js?v=6cc2dca8"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>
 </html>

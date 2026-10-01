@@ -1740,6 +1740,106 @@ def run():
             assert s != skel, label
         eq('37. %s is caught' % label, any(want in x for x in ab_faults(s, built_srcs, j2)), True)
 
+    # ----------------------------------------------------------------- 38
+    # Run 37, item 6: the six long guides. Each carries one "On this page"
+    # list after its introduction, whose links are its own sections in
+    # order, each link's words its heading's words; one next-step card at
+    # the end, to a live page, in words already on the site; and
+    # assets/js/pb-guide.js once. No other page has any of the three. The
+    # script keeps the list in reach and never scrolls the page or stores
+    # anything; the bar's progress line has no transition (it follows the
+    # scroll one to one).
+    GUIDES = {'pensions-over-50.html': 'pension-calculator.html', 'self-employed-pensions.html': 'pension-calculator.html',
+              'uk-pensions-in-ireland.html': 'tracker.html', 'director-pension-rules.html': 'director-calculator.html',
+              'standard-fund-threshold.html': 'booking.html', 'pia.html': 'pension-calculator.html'}
+
+    def heading_text(s, hid):
+        m = re.search(r'<(h2|h3)\b[^>]*\bid="%s"[^>]*>(.*?)</\1>' % re.escape(hid), s, re.S)
+        if not m:
+            m = re.search(r'<(?:section|div)\b[^>]*\bid="%s"[^>]*>.*?<(h2)\b[^>]*>(.*?)</h2>' % re.escape(hid), s, re.S)
+        if not m:
+            return None, -1
+        return re.sub(r'\s+', ' ', re.sub(r'<br\s*/?>', ' ', m.group(2))).strip(), m.start()
+
+    def same_words(link, head):
+        """The heading's words, or the heading's words with an initialism
+        spelled out in front of it ("exchange-traded fund (ETF)"): the list
+        can come before the page first spells one out."""
+        if link == head:
+            return True
+        pat = re.escape(head)
+        for x in set(re.findall(r'\b[A-Z]{2,}\b', head)):
+            pat = re.sub(r'(?<![A-Za-z])%s(?![A-Za-z])' % x, '(?:%s|[a-z][a-z-]*(?: [a-z][a-z-]*){0,3} \\\\(%s\\\\))' % (x, x), pat)
+        return re.fullmatch(pat, link) is not None
+
+    def guide_faults(srcs, js, css_all):
+        f = []
+        for name, s in sorted(srcs.items()):
+            tocs = re.findall(r'<div class="pb-toc" role="navigation" aria-labelledby="pbTocH"><p class="pb-toc-h" id="pbTocH">On this page</p><ol class="pb-toc-list">(.*?)</ol></div>', s, re.S)
+            nexts = re.findall(r'<aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="([^"]+)"><span class="pb-next-t">([^<]+)</span><span class="pb-next-d">([^<]+)</span></a></aside>', s)
+            script = len(re.findall(r'<script src="assets/js/pb-guide\.js(?:\?v=[0-9a-f]+)?"></script>', s))
+            if name not in GUIDES:
+                if tocs or nexts or script or 'class="pb-toc"' in s:
+                    f.append('%s: a guide\'s parts on a page that is not one of the six' % name)
+                continue
+            if len(tocs) != 1 or len(nexts) != 1 or script != 1:
+                f.append('%s: %d lists, %d next steps, %d scripts' % (name, len(tocs), len(nexts), script))
+                continue
+            links = re.findall(r'<li><a href="#([^"]+)">([^<]+)</a></li>', tocs[0])
+            last = s.find('<div class="pb-toc"')
+            if len(links) < 2:
+                f.append('%s: a list of %d' % (name, len(links)))
+            for hid, words in links:
+                h, at = heading_text(s, hid)
+                if h is None:
+                    f.append('%s: #%s is not a section here' % (name, hid))
+                elif not same_words(words, h):
+                    f.append('%s: "%s" is not the heading\'s words ("%s")' % (name, words, h))
+                elif at < last:
+                    f.append('%s: #%s is out of order' % (name, hid))
+                else:
+                    last = at
+            href, title, line = nexts[0]
+            if href != GUIDES[name]:
+                f.append('%s: the next step goes to %s, not %s' % (name, href, GUIDES[name]))
+            if href not in srcs or pagebuild.NOINDEX in srcs[href]:
+                f.append('%s: the next step is not a live page' % name)
+            plain = lambda x: html.unescape(re.sub(r'<[^>]+>', ' ', x)).replace('’', "'")
+            # on another page, in its text or its own description
+            if not any(plain(line).strip() in plain(o) or html.unescape(line).replace('\u2019', "'") in html.unescape(o).replace('\u2019', "'")
+                       for o in srcs.values() if o is not s):
+                f.append('%s: the next step\'s words are not on the site' % name)
+        if re.search(r'scrollTo|scrollBy|scrollIntoView|scrollTop\s*=|localStorage|sessionStorage|document\.cookie', js):
+            f.append('pb-guide.js scrolls the page or stores something')
+        m = re.search(r'\.pb-tocbar-prog\{([^}]*)\}', css_all)
+        if not m or 'transition' in m.group(1):
+            f.append('the progress line eases')
+        return f
+
+    import html
+    guide_js = read('assets/js/pb-guide.js')
+    gcss = sources['pension-calculator.html']
+    eq('38. the long guides: each has its own sections listed in order under "On this page", one next step to a live page in the site\'s words, the script once; no other page any of it; nothing scrolls, nothing stored',
+       guide_faults(sources, guide_js, gcss), [])
+    for label, target, find, repl, want in (
+            ('a listed section the page does not have', 'pensions-over-50.html', '<li><a href="#early">', '<li><a href="#earlier">', 'not a section'),
+            ('a list word that is not the heading', 'uk-pensions-in-ireland.html', '<li><a href="#tax">How Ireland taxes it</a></li>', '<li><a href="#tax">Tax</a></li>', 'heading\'s words'),
+            ('a next step to a held page', 'standard-fund-threshold.html', 'class="pb-next-card pb-card-link" href="booking.html"', 'class="pb-next-card pb-card-link" href="how-we-work.html"', 'not a live page'),
+            ('a list on a page that is not a guide', 'privacy.html', '</main>', '<div class="pb-toc" role="navigation" aria-labelledby="pbTocH"></div></main>', 'not one of the six'),
+            ('a bar that scrolls', 'js', 'function later() {', 'function later() { window.scrollBy(0, 1);', 'scrolls'),
+            ('a line that eases', 'css', '.pb-tocbar-prog{position:absolute;', '.pb-tocbar-prog{transition:transform .3s;position:absolute;', 'eases')):
+        srcs, j2, c2 = dict(sources), guide_js, gcss
+        if target == 'js':
+            j2 = guide_js.replace(find, repl, 1)
+            assert j2 != guide_js, label
+        elif target == 'css':
+            c2 = gcss.replace(find, repl, 1)
+            assert c2 != gcss, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('38. %s is caught' % label, any(want in x for x in guide_faults(srcs, j2, c2)), True)
+
     # ----------------------------------------------------------------- 39
     # Run 37, item 7: related pages. Every page's block is the one the
     # RELATED table gives it (sync-chrome and pagebuild write them; a page
@@ -1828,6 +1928,116 @@ def run():
         assert mut != nf, label
         eq('40. %s is caught' % label, any(want in x for x in nf_faults(mut, ix)), True)
 
+
+    # ----------------------------------------------------------------- 41
+    # Run 37, item 9 (built in Run 39): slider feel. Marks go only on sliders whose values
+    # have a meaning the relief module already holds: the pension
+    # calculator's and the comparison's age (where the relief band changes)
+    # and earnings (the earnings cap). The script takes every mark from
+    # PBRelief, types no number of its own, never sets a slider's value or
+    # sends an event (the calculators' figures cannot change: render-diff
+    # proves the page scripts' writes), and adds no datalist, so the browser
+    # never snaps. It loads after the "slider polish" script that draws the
+    # bubble it signs on.
+    MARKED = {'pension-calculator.html': {'age': 'relief-age', 'earn': 'relief-cap'},
+              'broker-vs-autoenrolment.html': {'age': 'relief-age', 'salary': 'relief-cap'}}
+
+    def feel_faults(srcs, js):
+        f = []
+        for name, s in sorted(srcs.items()):
+            got = dict((i, k) for i, k in re.findall(r'<input type="range" id="([^"]+)"[^>]*\bdata-pb-ticks="([^"]+)"', s))
+            if got != MARKED.get(name, {}):
+                f.append('%s: marks on %s' % (name, got))
+            if '<datalist' in s or re.search(r'<input type="range"[^>]*\blist="', s):
+                f.append('%s: a datalist would make the slider snap' % name)
+            if name in MARKED:
+                polish = s.find('/* fintech slider polish: wrap each range')
+                me = s.find('<script src="assets/js/pb-slider-feel.js')
+                if polish < 0 or me < polish:
+                    f.append('%s: the marks load before the bubble they sign on' % name)
+        code = re.sub(r'/\*.*?\*/', '', js, flags=re.S)
+        # 22 the thumb, 3 the gap under it, 320 the sign's time: sizes, not figures
+        nums = [n for n in re.findall(r'(?<![\w.])\d+(?:\.\d+)?(?![\w.])', code) if n not in ('0', '1', '2', '3', '22', '100', '320', '0.5')]
+        if nums:
+            f.append('pb-slider-feel.js types numbers of its own: %s' % nums)
+        if re.search(r'\.value\s*=|dispatchEvent|localStorage|sessionStorage', code):
+            f.append('pb-slider-feel.js moves a slider, sends an event or stores something')
+        if 'R.reliefBand' not in code or 'R.EARN_CAP' not in code:
+            f.append('the marks do not come from the relief module')
+        return f
+
+    feel_js = read('assets/js/pb-slider-feel.js')
+    eq('41. slider feel: marks only on the ages and earnings the relief module gives meaning to, every mark from the module, no snapping, no slider moved',
+       feel_faults(sources, feel_js), [])
+    for label, target, find, repl, want in (
+            ('a mark typed in', 'js', "if (R.reliefBand(v) !== R.reliefBand(v - 1)) { out.push(v); }", "if (R.reliefBand(v) !== R.reliefBand(v - 1)) { out.push(v); } out.push(66);", 'numbers of its own'),
+            ('a slider that snaps', 'pension-calculator.html', '<input type="range" id="age"', '<input type="range" list="ageMarks" id="age"', 'datalist'),
+            ('the slider set by the marks', 'js', "    r.addEventListener('input', function () { mark(true); });", "    r.addEventListener('input', function () { mark(true); r.value = r.value; });", 'moves a slider'),
+            ('marks on a slider with no meaning for them', 'director-calculator.html', '<input type="range" id="age"', '<input type="range" id="age" data-pb-ticks="relief-age"', 'marks on'),
+            ('the marks loading before the bubble', 'pension-calculator.html', '/* fintech slider polish: wrap each range', '/* the bubble: wrap each range', 'before the bubble')):
+        srcs, j2 = dict(sources), feel_js
+        if target == 'js':
+            j2 = feel_js.replace(find, repl, 1)
+            assert j2 != feel_js, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('41. %s is caught' % label, any(want in x for x in feel_faults(srcs, j2)), True)
+
+
+    # ----------------------------------------------------------------- 42
+    # Run 37's item 10 (built in Run 39): figures that wait. The head script sets html.pb-ready
+    # (and, for that moment, html.pb-readying, which stops a figure's own
+    # colour transition fading it in) at DOMContentLoaded (MOTION_HEAD, on every page), the WAIT block draws a
+    # bar only until then and only with JavaScript, and every element marked
+    # data-pb-wait is one a script replaces at load: its markup is a
+    # placeholder ("--", "€0", "€0/mo"), never a real figure or a sentence.
+    # The nav's deadline chip carries one on every page. The bar pulses only
+    # for a reader who allows motion.
+    WAIT_PLACEHOLDERS = ('--', '&euro;0', '€0', '€0/mo')
+
+    def wait_faults(srcs, head, css):
+        f = []
+        if "r.classList.add('pb-ready','pb-readying')" not in head or "r.classList.remove('pb-readying')" not in head:
+            f.append('the head script never says the page is ready')
+        if 'html.pb-readying [data-pb-wait]{transition:none!important}' not in css:
+            f.append('a figure fades in when the page is ready (figures never wait)')
+        for rule in ('html.pb-js:not(.pb-ready) [data-pb-wait]{color:transparent!important;',
+                     'html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait'):
+            if rule not in css:
+                f.append('the WAIT block: %s' % rule[:40])
+        if re.search(r'html:not\(\.pb-js\)[^{]*\[data-pb-wait\]|(?<!pb-motion)(?<!pb-motion:not\(\.pb-ready\) )\[data-pb-wait\]\{animation', css):
+            f.append('a bar without JavaScript, or one that pulses regardless')
+        for name, s in sorted(srcs.items()):
+            for m in re.finditer(r'<(\w+)\b[^>]*\bdata-pb-wait\b[^>]*>(.*?)</\1>', s, re.S):
+                if m.group(2) not in WAIT_PLACEHOLDERS:
+                    f.append('%s: a bar over "%s", which is not a placeholder' % (name, m.group(2)[:30]))
+            if 'id="ntVal"' in s and not re.search(r'id="ntVal" aria-hidden="true" data-pb-wait>--<', s):
+                f.append('%s: the nav chip\'s figure waits without a bar' % name)
+        return f
+
+    whead = pagebuild.MOTION_HEAD
+    wcss = sources['pension-calculator.html']
+    eq('42. figures that wait: html.pb-ready from the head script; a bar only before it and only with JavaScript; only over placeholders; the nav chip on every page',
+       wait_faults(sources, whead, wcss), [])
+    for label, target, find, repl, want in (
+            ('a bar over a real figure', 'index.html', '<h1>', '<h1 data-pb-wait>', 'not a placeholder'),
+            ('a chip without its bar', 'privacy.html', 'id="ntVal" aria-hidden="true" data-pb-wait>', 'id="ntVal" aria-hidden="true">', 'without a bar'),
+            ('a page that is never ready', 'head', "r.classList.add('pb-ready','pb-readying');", '', 'never says'),
+            ('a figure that fades in when ready', 'css', 'html.pb-readying [data-pb-wait]{transition:none!important}\n', '', 'fades in'),
+            ('a bar that always pulses', 'css', 'html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait', '[data-pb-wait]{animation:pbWait', 'pulses')):
+        srcs, h2, c2 = dict(sources), whead, wcss
+        if target == 'head':
+            h2 = whead.replace(find, repl, 1)
+            assert h2 != whead, label
+        elif target == 'css':
+            c2 = wcss.replace(find, repl, 1)
+            assert c2 != wcss, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('42. %s is caught' % label, any(want in x for x in wait_faults(srcs, h2, c2)), True)
+
     # ----------------------------------------------------------------- 43
     # Run 38, item 1: the game cards' videos. Each card keeps its picture
     # (the poster, and all there is without JavaScript or with reduced
@@ -1841,10 +2051,11 @@ def run():
     # The CSS draws the video and the button only where motion is allowed;
     # pb-video.js loads late, stores nothing, fetches near the viewport and
     # pauses off it. tools/record-games.mjs made the files, seeded as the
-    # pictures are.
+    # pictures are, and (Run 39) with Buddy's Run's own pause control hidden
+    # in its place: beside the card's real pause button it read as a second.
     VIDEOS = [('buddys-run', 'Buddy&rsquo;s Run'), ('jargon-battle', 'Jargon Battle')]
 
-    def video_faults(ix, js, sizes, rec):
+    def video_faults(ix, js, sizes, rec, shoot):
         f = []
         for slug, name in VIDEOS:
             m = re.search(r'<div class="pb-learn-media">\s*<picture><source type="image/webp" srcset="(assets/img/product-%s\.webp\?v=[0-9a-f]+)">'
@@ -1886,15 +2097,20 @@ def run():
             f.append('pb-video.js does not give the video its poster')
         if "setRng(pbSeed(20260929))" not in rec or rec.count("setRng(pbSeed(20260929))") != 2:
             f.append('the recorder does not seed both games as the pictures are')
+        if "hide: '#hud .hint,#pauseBtn{visibility:hidden!important}'" not in rec or 'SETTLE + (g.hide' not in rec:
+            f.append("the recorder shows Buddy's Run's own pause control (Run 39: hidden, in its place)")
+        if "'hide': '#hud .hint,#pauseBtn{visibility:hidden!important}'" not in shoot:
+            f.append("the still shows Buddy's Run's own pause control (Run 40: hidden, as in the clip)")
         return f
 
     vdir = os.path.join(ROOT, 'assets', 'video')
     vsizes = dict((n, os.path.getsize(os.path.join(vdir, n))) for n in (os.listdir(vdir) if os.path.isdir(vdir) else []))
     vjs = read('assets/js/pb-video.js')
     vrec = read('tools/record-games.mjs')
+    vshoot = read('tools/shoot-product.py')
     ix = sources['index.html']
     eq('43. game videos: over each card\'s picture, muted, looping, inline, not preloaded, hidden from screen readers, the picture as poster, MP4 then WebM under 1.5 MB, a named pause button; drawn only with motion; late, pauses off screen',
-       video_faults(ix, vjs, vsizes, vrec), [])
+       video_faults(ix, vjs, vsizes, vrec, vshoot), [])
     for label, target, find, repl, want in (
             ('a video that preloads', 'ix', 'preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run',
              'preload="auto" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run', 'preload'),
@@ -1906,9 +2122,17 @@ def run():
             ('a button named otherwise', 'ix', 'aria-label="Play video: Jargon Battle"', 'aria-label="Start the animation"', 'button'),
             ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
             ('a video too big', 'sizes', None, None, '1.5 MB'),
-            ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause')):
-        mix, mjs, ms = ix, vjs, dict(vsizes)
-        if target == 'ix':
+            ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause'),
+            ('the game\'s own pause control back in the clip', 'rec', "    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',\n", '', 'pause control'),
+            ('the game\'s own pause control back in the still', 'shoot', "'hide': '#hud .hint,#pauseBtn{visibility:hidden!important}'", "'hide': ''", 'the still shows')):
+        mix, mjs, ms, mrec, mshoot = ix, vjs, dict(vsizes), vrec, vshoot
+        if target == 'shoot':
+            mshoot = vshoot.replace(find, repl, 1)
+            assert mshoot != vshoot, label
+        elif target == 'rec':
+            mrec = vrec.replace(find, repl, 1)
+            assert mrec != vrec, label
+        elif target == 'ix':
             mix = ix.replace(find, repl, 1)
             assert mix != ix, label
         elif target == 'js':
@@ -1916,7 +2140,7 @@ def run():
             assert mjs != vjs, label
         else:
             ms['buddys-run.webm'] = 2 * 1024 * 1024
-        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, vrec)), True)
+        eq('43. %s is caught' % label, any(want in x for x in video_faults(mix, mjs, ms, mrec, mshoot)), True)
 
     # ----------------------------------------------------------------- 44
     # Run 38, item 2: media pops in, and nothing else can. pb-pop.js's list
@@ -2012,6 +2236,74 @@ def run():
             srcs['terms.html'] = re.sub(r'<script src="assets/js/pb-pop\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n', '', sources['terms.html'])
             assert srcs['terms.html'] != sources['terms.html'], label
         eq('44. %s is caught' % label, any(want in x for x in pop_faults(srcs, j2, c2)), True)
+
+    # ----------------------------------------------------------------- 45
+    # Run 39: "How a call with Damian works", the home page's three steps
+    # with a slot over each for Damian's own short video. The steps are the
+    # words the section already had, unchanged, under its heading; each slot
+    # keeps a 16:9 box (so nothing moves when a video arrives), shows the
+    # placeholder poster until then (sized, lazy, no words: aria-hidden, alt
+    # ""), and any video put in one later follows the game cards' rules
+    # (muted, inline, not preloaded, aria-hidden, its poster the slot's
+    # picture, pb-video.js to play and pause it).
+    CALL_STEPS = [('You reach out', 'A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.'),
+                  ('We talk it through', 'Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.'),
+                  ('You decide', "You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.")]
+
+    def call_faults(ix, sizes):
+        f = []
+        sec = re.search(r'<section class="expect" id="call">(.*?)</section>', ix, re.S)
+        if not sec:
+            return ['no "How a call with Damian works" section']
+        body = sec.group(1)
+        if '<span class="kicker">How a call with Damian works</span>' not in body or \
+                '<h2>Most people brace for a sales pitch. <span class="pb-soft">This is a chat.</span></h2>' not in body:
+            f.append('the label or the heading')
+        steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body, re.S)
+        if [(h, p) for _, _, h, p in steps] != CALL_STEPS:
+            f.append('the steps are not the words the section already had: %s' % [(h, p[:20]) for _, _, h, p in steps])
+        for slot, n, _, _ in steps:
+            m = re.fullmatch(r'<div class="pb-call-slot" data-pb-call-video="call-step-%s" aria-hidden="true"><picture>'
+                             r'<source type="image/webp" srcset="assets/img/call-video-placeholder\.webp\?v=[0-9a-f]+">'
+                             r'<img src="assets/img/call-video-placeholder\.jpg\?v=[0-9a-f]+" width="1280" height="720" alt="" loading="lazy"></picture>'
+                             r'(<video [^>]*>.*?</video>\s*<button [^>]*>.*?</button>)?</div>' % n, slot, re.S)
+            if not m:
+                f.append('step %s: its slot is not the placeholder poster in a 16:9 box' % n)
+                continue
+            if m.group(1):
+                v = re.match(r'<video ([^>]*)>', m.group(1)).group(1)
+                for want in (' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video',
+                             'data-poster="assets/img/call-video-placeholder.webp'):
+                    if want not in ' ' + v:
+                        f.append('step %s: its video is not %s' % (n, want.strip()))
+        if '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;' not in ix:
+            f.append('the slots do not keep a 16:9 box')
+        for ext in ('jpg', 'webp'):
+            size = sizes.get(ext)
+            if size is None or size > 60 * 1024:
+                f.append('the placeholder .%s is missing or over 60 KB (%s)' % (ext, size))
+        return f
+
+    csizes = {}
+    for ext in ('jpg', 'webp'):
+        pth = os.path.join(ROOT, 'assets', 'img', 'call-video-placeholder.' + ext)
+        if os.path.exists(pth):
+            csizes[ext] = os.path.getsize(pth)
+    cix = sources['index.html']
+    eq('45. "How a call with Damian works": the section\'s own three steps, word for word, each with a 16:9 slot showing the placeholder poster (sized, lazy, no words)',
+       call_faults(cix, csizes), [])
+    for label, find, repl, want in (
+            ('a step reworded', "If we're not the right fit, we'll say so.", "If we're not the right fit, we'll tell you.", 'not the words'),
+            ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2',
+             'alt="" loading="lazy"></picture></div><div class="sx">2', 'step 2'),
+            ('a slot that speaks', 'data-pb-call-video="call-step-3" aria-hidden="true"', 'data-pb-call-video="call-step-3"', 'step 3'),
+            ('a slot that does not keep its box', '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;',
+             '.step .pb-call-slot{display:block;margin:0 0 18px;', '16:9'),
+            ('a video with sound', '</picture></div><div class="sx">1',
+             '</picture><video class="pb-learn-vid" loop playsinline preload="none" aria-hidden="true" data-poster="assets/img/call-video-placeholder.webp" data-pb-video></video> <button type="button">x</button></div><div class="sx">1', 'muted')):
+        assert find in cix, label
+        mix = cix.replace(find, repl, 1)
+        eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, csizes)), True)
 
 
 

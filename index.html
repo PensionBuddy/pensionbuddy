@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
+<script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>Pensionbuddy: Your pension, finally explained</title>
 <meta name="description" content="Pensions made friendly. Understand and grow your pension over a relaxed, jargon-free chat. Regulated by the Central Bank of Ireland.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
@@ -170,6 +170,11 @@ section{padding:88px 0}
 .step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .step p{color:var(--ink-2);font-size:15px}
+/* Run 39: a 16:9 slot over each step of "How a call with Damian works",
+   for Damian's own videos; until they are filmed, a placeholder poster. The
+   box is kept by its ratio, so nothing moves when a video takes its place. */
+.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--teal-50)}
+.step .pb-call-slot img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---- calculator showcase ---- */
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
@@ -2343,6 +2348,69 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 }
 @media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}
 /* POP:END */
+/* GUIDE:BEGIN (Run 37, item 6). The six long guides: their "On this page"
+   list (in each page's markup, after its introduction: all a reader without
+   JavaScript needs), the bar that keeps it in reach once it has scrolled away
+   (assets/js/pb-guide.js: the section being read, the list again, and along
+   its foot a line as long as the share read), and the next step at the end.
+   Byte for byte on every page, like the blocks above, so the six cannot
+   drift; the other pages carry the rules and none of the parts. The bar sits
+   under the nav while the nav shows, moved there by the script; nothing here
+   animates, and the progress line follows the scroll one to one. */
+.pb-toc{max-width:640px;margin:22px 0 30px;padding:16px 20px 12px;border:1px solid var(--line-2);border-radius:var(--r-lg);background:var(--surface)}
+.pb-toc .pb-toc-h{margin:0 0 6px;font-size:16px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-toc .pb-toc-list{margin:0;padding:0 0 0 22px;list-style:decimal}
+.pb-toc .pb-toc-list li{margin:2px 0;padding:0;font-size:16px;line-height:1.5;color:var(--ink-2)}
+.pb-toc .pb-toc-list li::before{content:none;display:none}  /* the guides' own bullet: the list has its numbers */
+.pb-toc .pb-toc-list a{color:var(--teal-700);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.pb-toc .pb-toc-list a:hover{text-decoration-thickness:2px}
+.pb-tocbar{position:fixed;left:0;right:0;top:0;z-index:45;background:var(--bg);border-bottom:1px solid var(--line-2)}
+.pb-tocbar[hidden]{display:none}
+.pb-tocbar .pb-tocbar-btn{display:flex;align-items:center;gap:8px;width:100%;max-width:var(--maxw);min-height:46px;margin:0 auto;padding:0 24px;
+  font:600 15px/1.3 var(--font);color:var(--ink);background:none;border:0;border-radius:0;text-align:left;cursor:pointer}
+.pb-tocbar-k{flex:0 0 auto;font-weight:500;color:var(--ink-2)}
+.pb-tocbar-now{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-tocbar-chev{flex:0 0 auto;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pb-tocbar-btn[aria-expanded="true"] .pb-tocbar-chev{transform:rotate(180deg)}
+.pb-tocbar .pb-tocbar-btn:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
+.pb-tocbar .pb-tocbar-list{max-width:var(--maxw);max-height:60vh;margin:0 auto;padding:2px 24px 12px 46px;overflow-y:auto;list-style:decimal;color:var(--ink-2)}
+.pb-tocbar .pb-tocbar-list[hidden]{display:none}
+.pb-tocbar .pb-tocbar-list li{margin:0;padding:0}
+.pb-tocbar .pb-tocbar-list a{display:block;margin:0;padding:10px 0;font-size:16px;line-height:1.4;color:var(--ink);text-decoration:none}
+.pb-tocbar .pb-tocbar-list a:hover{text-decoration:underline;text-underline-offset:3px}
+.pb-tocbar .pb-tocbar-list a[aria-current]{color:var(--teal-700);font-weight:700}
+.pb-tocbar .pb-tocbar-list a:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-tocbar-prog{position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--teal);transform:scaleX(0);transform-origin:0 50%}
+html.pb-tocbar-on{scroll-padding-top:140px}
+.pb-next{max-width:640px;margin:34px 0 0}
+.pb-next .pb-next-k{margin:0 0 10px;font-size:16px;font-weight:600;line-height:1.4;color:var(--ink-2)}
+.pb-next .pb-next-card{display:flex;flex-direction:column;gap:4px;margin:0;padding:18px 22px;border:1px solid var(--line-2);border-radius:var(--r-lg);
+  background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-next .pb-next-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-next .pb-next-card:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-next-t{font-size:18px;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-next-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
+.pb-next-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
+@media(max-width:560px){.pb-tocbar .pb-tocbar-btn{padding:0 16px}.pb-tocbar .pb-tocbar-list{padding:2px 16px 12px 38px}}
+/* GUIDE:END */
+/* WAIT:BEGIN (Run 37's item 10, built in Run 39). A figure a script is
+   about to write shows a quiet bar until the page's own scripts have run,
+   never the "--" or "€0" its markup holds for a reader without
+   JavaScript. The head script (tools/pagebuild.py MOTION_HEAD) sets
+   html.pb-ready at DOMContentLoaded, by which time every page script has
+   written its figures, and html.pb-readying for that moment, so a figure
+   with a colour transition of its own still arrives at once (figures never
+   wait). The bar is a background inside the element's own box and the
+   text is only made transparent, so nothing moves when the bar goes; it
+   pulses only for a reader who allows motion. Byte for byte on every page:
+   the nav's deadline chip has one. */
+html.pb-js:not(.pb-ready) [data-pb-wait]{color:transparent!important;-webkit-text-fill-color:transparent;
+  background-image:linear-gradient(var(--line-2),var(--line-2));background-repeat:no-repeat;background-position:left center;
+  background-size:min(100%,4.5ch) .8em;border-radius:4px}
+html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out infinite alternate}
+html.pb-readying [data-pb-wait]{transition:none!important}
+@keyframes pbWait{from{opacity:1}to{opacity:.55}}
+/* WAIT:END */
 </style>
 </head>
 <body>
@@ -2352,7 +2420,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true">--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
+  <a class="nav-tick" id="navTick" href="#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true" data-pb-wait>--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
@@ -2545,8 +2613,8 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <ul class="pb-learn-grid">
     <li><div class="pb-learn-card pb-card-link">
       <div class="pb-learn-media">
-        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=5fbfaac5"><img src="assets/img/product-buddys-run.jpg?v=eca8ecce" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
-        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=5fbfaac5" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
+        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=98158915"><img src="assets/img/product-buddys-run.jpg?v=e55ffb6c" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=98158915" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
         <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Buddy&rsquo;s Run" data-state="paused" aria-label="Play video: Buddy&rsquo;s Run"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
       </div>
       <div class="pb-learn-body">
@@ -2664,7 +2732,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
         <a class="btn btn-light" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
       <div class="tk-clock" aria-hidden="true">
-        <div class="tk-unit"><span class="tk-n" id="tkD">--</span><span class="tk-l">Days</span></div>
+        <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
       </div>
       <p class="tk-sr" id="tkSr"></p>
     </div>
@@ -2773,15 +2841,24 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   </div>
 </div></section>
 
-<section class="expect"><div class="wrap">
+<!-- Run 39: "How a call with Damian works". The three steps are the words
+     this section already had; over each is a 16:9 slot for Damian's own
+     short video, which he is filming, and until then a placeholder poster
+     (assets/img/call-video-placeholder). To put a video in: save it as
+     assets/video/call-step-N.mp4 (H.264) and .webm, then give its slot the
+     game cards' markup (a <video data-pb-video ...> over the picture, its
+     data-poster the slot's picture, and the pause button); pb-video.js then
+     fetches it near the viewport, plays it muted and pauses it off screen.
+     tests/build.test.py check 45 holds the words and the slots. -->
+<section class="expect" id="call"><div class="wrap">
   <div class="sec-head ctr">
-    <span class="kicker">What to expect</span>
+    <span class="kicker">How a call with Damian works</span>
     <h2>Most people brace for a sales pitch. <span class="pb-soft">This is a chat.</span></h2>
   </div>
   <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
-    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
-    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-1" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-2" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-3" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
   </div>
 </div></section>
 
@@ -3090,7 +3167,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=fa0b2953" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

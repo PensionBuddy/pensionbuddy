@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 29 September 2026, after Run 36 (Run 34 merged, Run 35's calls)
+# Launch status — as at 1 October 2026, after Runs 37 and 38 went live (Run 39)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -48,6 +48,14 @@ every page carries its search and sharing tags (`tools/seo.py`), with share
 cards for the home page and the six audience pages; the calculators' held
 inputs panel lets a keyboard reach every control; and the motion parts
 Damian's decisions did not wait on (Run 34, item 4).
+
+Since 1 October 2026 (main `09c5f80`, Run 39) Runs 37 and 38 are live too:
+"What's changed?" under the home page's hero, jargon defined where it is
+used, site search (the nav button and "/"), "Your pension through life",
+Save as A on the pension calculator, related pages at the end of each page,
+the new 404 page, short loops of the two games on the home page's game
+cards, and media that pops in on scroll. A flaw found on the live 404 at
+375 (its two buttons overlap) is fixed on `claude/ux-5`, not yet live.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -289,6 +297,280 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 39 — 2026-10-01 · Runs 37 and 38 merged and live; then boxes kept, the clips, the guides, sliders, skeletons and the call (on `claude/ux-5`, not merged)
+
+Damian's brief: merge `claude/overnight-ux-4` (9453be1) into main after a
+full gate on the merged tree, push main, check the live site; then a new
+branch off the new main for the rest, each item gated and pushed, not
+merged.
+
+## The merge
+
+- **main `09c5f80`** (`30f8d12..09c5f80`), the merge of 9453be1. Main had not
+  moved, so the merged tree is the branch's own. The full gate on it passed:
+  every suite, render-diff unchanged against `30f8d12`, `verify.py` 0
+  failures at 375 and 1440.
+- **The live site**, checked headless at 1440 and 375 once the deploy was
+  up (about 30 s): the merged build is served; "What's changed?" shows its
+  six chips, each page answering 200; media below the fold is armed and
+  pops in, and nothing on the first screen is; both game videos play
+  (MP4), the picture as poster, with a Pause button; the search opens from
+  its button and from "/", and "annuity" finds the jargon buster's entry
+  first; the 404 answers 404 with Buddy, its search box and six places to
+  begin. 21 checks, all passing.
+- **One flaw, live:** on the 404 at 375 the two buttons lie over each other,
+  their sides gone (item 1 below fixes it on this branch).
+
+## Decisions on Run 38's questions (Damian, 1 October 2026)
+
+| # | Question | Decision |
+|---|---|---|
+| 1 | Run 38 on the same branch as Run 37 | yes |
+| 2 | Show a wrong answer in the Jargon Battle clip | no |
+| 3 | Pop a card's frame behind its words | no |
+| 4 | The pop's feel (12px rise from 97% size) | keep |
+| 5 | Keep the tracker photograph's box before it loads | yes: item 1 |
+| 6 | Pop the provider logos too | no |
+| 7 | Hide the recorded game's own Pause label | yes: item 2 |
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | c404c75 |
+| 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | 15a3757 |
+| 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | dd2f09d |
+| 4 | Run 37's item 9, slider feel | done | 372a16c |
+| 5 | Run 37's item 10, loading skeletons | done | 471f66d |
+| 6 | "How a call with Damian works", three steps, a video slot each | done | 044ced4 |
+| 7 | "Your worries, answered", a draft for the compliance pack, not published | done | 0e19b4d |
+| 8 | Where painted illustrations would replace icons, a list | done | 0e19b4d |
+| 9 | Lighthouse, before (`30f8d12`) and after, seven pages | done | aaf9afb |
+| 10 | Q2 answered yes: the Buddy's Run still re-shot without its own pause control | done | this commit |
+
+## Item 1, boxes kept
+
+- **The tracker photograph (Q5).** Its figure is centred by auto margins in
+  the product band's grid, which makes a grid item shrink to its contents.
+  Until the lazy image arrived, the only content with a width was the
+  caption, so the photograph was drawn about 127px wide and 158px tall, then
+  407 by 507 at 1440 (329 by 409 at 375) once it loaded, and everything
+  below it moved down. `width:100%` (still at most 420px) gives it its box
+  from the start, the image's own width and height making the height. The
+  rule is identical on `starter.html`, `tracker.html` and `director.html`,
+  so it changed on all three; only the tracker uses it.
+- **The 404's buttons.** The site's last reach pass pads every link inside
+  `.legal` for running text (padding 13px 0, margin −13px 0), and the 404
+  sits in `.legal`, so its two buttons lost their sides at every width and,
+  wrapped on a phone, lay one over the other. They keep the house button's
+  padding now (13px 22px), with no negative margin. No other page has a
+  button inside `.legal`.
+- **Guard: `tests/boxes.test.mjs`**, new, in the gate. Every page at 375
+  and 1440: each lazy image keeps its box before it loads; no two buttons
+  overlap, and each keeps its sides; and the two cases by name. With either
+  fix taken out it fails at both widths. A probe of every page before the
+  fixes found these two and nothing else.
+
+## Item 2, the clips without the game's own pause control (Q7)
+
+- **Buddy's Run** shows its own "P to pause" and a Pause button in its top
+  bar; beside the card's real pause button it read as a second one. The
+  recorder now hides both in their place (`visibility:hidden`), so the score
+  chips do not move, and the clip was recorded again: 8 s, 240 frames, at
+  most 2 changes a second in any cell against the limit of 6, MP4 834 KB,
+  WebM 1.11 MB. Its frames are reproducible: the WebM, encoded in software,
+  came out byte for byte the same twice. (The MP4s differ in their bytes
+  from run to run: the Mac's H.264 encoder is not byte-stable. What they
+  show is the same.)
+- **Jargon Battle** has no pause control of its own; its clip is unchanged
+  and its files are the committed ones. Recording it twice showed something
+  Run 38 did not say: the game plays the same answers, questions and hearts
+  every time (the recorder checks all three), but 27 of its 240 frames,
+  around the answers, come out a little different, the most 7% of the
+  picture, in the top of the frame where the battle is drawn. The recorder
+  turns the game's own clock, but not everything on the page follows it
+  (its CSS transitions and the dialogue's blinking caret run on the real
+  clock), and I have not pinned down which part moves the battle's frames.
+  See question 1.
+- **Guard:** build check 43 now fails if the recorder stops hiding Buddy's
+  Run's pause control (a new mutant), beside its checks on seeding, size and
+  markup; the recorder's own flash check and the ux4 decoded-frame flash
+  check passed.
+
+## Item 3, the long guides (Run 37's item 6, re-applied)
+
+- **What it is,** as Run 37 built it: the six long guides
+  (`pensions-over-50`, `self-employed-pensions`, `uk-pensions-in-ireland`,
+  `pia`, `standard-fund-threshold`, `director-pension-rules`) get "On this
+  page", a numbered list after the introduction (all a reader without
+  JavaScript needs); a bar that keeps it in reach once it has scrolled away
+  (`assets/js/pb-guide.js`: the section being read, the list again, and a
+  reading line along its foot); and a "Next step" card at the end. The CSS
+  is the GUIDE block, byte for byte on every page, after POP.
+- **From `claude/overnight-ux-4-guides`** (0f8ad49, and c89dc45's 16px fix),
+  re-applied by a three-way merge of each guide's source onto today's
+  files; every merge was clean. Both fixes are in: the list's label and the
+  next step's words are 16px (the calculators' floor, which the PIA and
+  Standard Fund Threshold pages failed in Run 37), and the PIA's list spells
+  out "exchange-traded fund (ETF)".
+- **New since Run 37:** every page now ends with related pages (Run 37,
+  item 7). On `pia` and `director-pension-rules` the related list repeated
+  the next step (the pension calculator; the director calculator), so that
+  card came off those two lists, which keep two each.
+- **Guards,** as Run 37 wrote them: build check 38, and ux4 section 6 (the
+  bar names each section as it is read, sits under the nav, its line only
+  grows, and a link from its list lands the section clear of both).
+
+## Item 4, slider feel (Run 37's item 9)
+
+- **What it is:** the calculators already float the value above the thumb
+  while a slider moves. Now a slider whose values mean something the relief
+  module already knows carries small marks just under its track: the
+  pension calculator's and the comparison's age (where the relief band
+  changes: 30, 40, 50, 55 and 60) and earnings (the earnings that count for
+  relief, €115,000). When the thumb lands on a mark the bubble shows a ring,
+  and with motion allowed it grows a little as it arrives.
+- **No new figures:** every mark comes from `assets/js/pension-tax-relief.js`
+  (`PBRelief.reliefBand()`, `PBRelief.EARN_CAP`). The script never sets a
+  slider or writes a figure, adds no datalist (so the browser never snaps),
+  and the marks are hidden from screen readers. Render-diff shows the
+  calculators' writes unchanged.
+- **Fixed on the way:** Run 37's prepared version drew the marks below the
+  slider's box, where the earnings mark touched the note under it, and its
+  script tag would have loaded before the slider polish that draws the
+  bubble. The marks now sit inside the slider's own box, 3px under the
+  thumb, and load after it; check 41 holds the order (a new mutant).
+- **Guards:** build check 41 (marks only where the module gives meaning,
+  none typed in, no snapping, no slider set, loaded after the bubble; 5
+  mutants) and ux4 section 9 (the marks at the module's values, over the
+  track, hidden from screen readers; the bubble signs a mark and only a
+  mark).
+
+## Item 5, figures that wait (Run 37's item 10)
+
+- **What it is:** a figure a script writes as the page loads shows a quiet
+  bar in its own box until the page's own scripts have run, instead of the
+  "--" or "€0" its markup holds for a reader without JavaScript. The head
+  script on every page says when (`html.pb-ready`, at DOMContentLoaded);
+  the bar pulses only when motion is allowed; nothing moves when it goes.
+  Without JavaScript the markup's text shows, as before.
+- **Which figures:** found by loading every page and comparing each
+  placeholder with what the page then shows: 25, the pension calculator's
+  pot, income and two workings, the director calculator's four headline
+  figures, sixteen on the comparison, and the home page's day count; and
+  the nav's deadline count on every page. A placeholder that is already a
+  figure's true first value (a slider at 0%, an empty list's €0) is left
+  alone.
+- **Fixed on the way:** the comparison's sixteen figures fade their colour
+  over 0.2 s when they change. At the moment the page became ready they
+  would have faded in rather than arrived, and figures never wait. The
+  head script now also sets `html.pb-readying` for that moment (100 ms),
+  which stops their own transition, so they arrive at once; their fades for
+  later changes are untouched.
+- **Guards:** build check 42 (ready from the head script, the readying
+  moment, a bar only before it and only with JavaScript, only over
+  placeholders, the nav chip on every page; 5 mutants) and ux4 section 10
+  (on four pages a bar in each figure's own box before ready and its text
+  after, nothing moving; no figure fading in on a real load, which fails
+  with the readying rule taken out; no bar without JavaScript; no pulse
+  with reduced motion).
+
+## Item 6, "How a call with Damian works"
+
+- **Where:** the home page's section that already told the call in three
+  steps ("What to expect": You reach out, We talk it through, You decide).
+  Its small label is now your title, "How a call with Damian works"; its
+  heading ("Most people brace for a sales pitch. This is a chat.") and the
+  three steps' words are as they were, word for word. The booking page has
+  its own three steps, about booking itself, so it was left alone (question
+  3).
+- **The video slots:** over each step, a 16:9 box for your own short video,
+  showing a placeholder poster until you have filmed it: the paw on the
+  palest teal, 8 KB. The box is kept by its ratio, so nothing moves when a
+  video arrives. To put one in: save it as `assets/video/call-step-1.mp4`
+  (H.264) and `.webm` (and 2, 3), and give its slot the game cards' markup
+  (the comment over the section says how); `pb-video.js` then fetches it
+  near the viewport, plays it muted and pauses it off screen, with the
+  pause button. Film landscape, 16:9; under 30 seconds keeps each file
+  small.
+- **New words:** "How a call with Damian works" (your title). Nothing else.
+- **Guards:** build check 45 (the steps word for word, each slot the
+  placeholder in a 16:9 box, sized, lazy, hidden from screen readers; a
+  video put in one later must follow the game cards' rules; 5 mutants) and
+  `tests/boxes.test.mjs` (the slots keep their boxes before they load).
+
+## Items 7 and 8, the worries draft and the illustration list
+
+- **"Your worries, answered"** is in the compliance pack, not on the site:
+  question 1.22 and Appendix C.1. Twelve questions a first call brings,
+  each answered in words already live, with the page each answer is on
+  (the home page's "Good to know" and steps, the tracker's and starter's
+  questions, the booking confirmation). Nine of the questions are already
+  on the site; three are new lines, marked "new words": "Will it be a sales
+  pitch?", "What happens on the call?" and "What if we're not the right
+  fit?". Where it would go, once approved, is your call.
+- **The pack also catches up:** Runs 37 and 38 went live today with words
+  compliance has not seen. Question 1.21 lists them all (from "What's
+  changed?" to the game videos' pause button), and the update log says so.
+- **`docs/ILLUSTRATIONS.md`:** nine places where a small painting would
+  replace an icon or a plain number, in order of worth, each with what it
+  could show and the size it is drawn today at 1440 and 375 (measured),
+  then what to leave alone (the warnings' "i", the paw, the working icons,
+  the photographs) and a short brief for the illustrator.
+
+## Item 9, Lighthouse, before and after (mobile, median of three, interleaved)
+
+Before is `30f8d12`, where Run 37 began; after is `0e19b4d`, this branch with
+items 1 to 8 (so Runs 37 to 39 together).
+
+| Page | Performance | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|
+| index.html | 93 to 91 | 3.08 to 3.23 | 0 to 0 | 0 to 0 |
+| pension-calculator.html | 87 to 86 | 3.31 to 3.46 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 87 to 88 | 3.31 to 3.16 | 0 to 0 | 0 to 0 |
+| glossary.html | 91 to 91 | 2.87 to 2.85 | 0 to 0 | 0 to 0 |
+| tracker.html | 94 to 93 | 2.94 to 3.11 | 0 to 0 | 0 to 0 |
+| starter.html | 90 to 91 | 3.46 to 3.31 | 0.0012 to 0.0012 | 0 to 0 |
+| 404.html | 97 to 96 | 2.40 to 2.70 | 0 to 0 | 0 to 0 |
+
+Every page within two points; no layout shift added anywhere, no blocking
+time. The home page sits 0.15 s later than before Run 37. Runs 37 to 39
+added a few small scripts to it, and I did not isolate which costs the
+0.15 s; it is not the 1.7 s the posters cost before Run 38's follow-up. Lighthouse 13.5.0 was put back from
+the machine's own npm cache, offline (the copy Run 32 had used was cleared
+from its temporary folder overnight); nothing was downloaded.
+
+## Item 10, the Buddy's Run still without its own pause control
+
+- **Damian's answers, 1 October 2026:** Jargon Battle frame for frame, no;
+  re-shoot the stills to match the clip, yes; the call steps on the
+  booking page too, no; a hotfix of the 404's buttons to main ahead of the
+  rest, no (this branch is merged instead).
+- **The still:** `tools/shoot-product.py` hides Buddy's Run's "P to pause"
+  and Pause button in their place, as the clip's recorder does, and the
+  still was shot again: the same frame (score 30, three lives, "Plenty of
+  time" jumped, the Poolbeg stacks behind), so the home page's alt text
+  still says what it shows; only the top-right corner where the two sat
+  differs. 2400 x 1350 as before; JPG 90 KB, WebP 29 KB. It is the card's
+  picture, the video's poster (the same WebP) and all a reader with
+  reduced motion sees. Jargon Battle's still has no pause control; it is
+  unchanged.
+- **Guard:** build check 43 now also fails if the still stops hiding it (a
+  new mutant).
+
+## Questions for Damian (answered 1 October 2026: no, yes, no; see item 10)
+
+1. **Jargon Battle, frame for frame.** To make every frame of its clip
+   reproducible, I would find what still runs on the real clock and put it
+   on the recorder's. Want that? What the clip shows would not change.
+2. **The still pictures.** The game cards' pictures, which are also the
+   videos' posters and all a reader gets with reduced motion, still show
+   Buddy's Run's own "P to pause" and Pause. Re-shoot them without, to
+   match the clip?
+3. **The call steps on the booking page too?** They are on the home page,
+   where the three steps already were. The booking page could carry the
+   same three slots under its form, beside its own booking steps.
 
 # Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
 

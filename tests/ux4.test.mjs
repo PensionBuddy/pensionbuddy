@@ -25,7 +25,20 @@
      8. the 404, at 375 and 1440: Buddy, the search box and the six places;
         a search there finds the buster's entry; nothing moves as it loads;
         without JavaScript no box and the six places still there
-   (item 6 was reverted: its section is on claude/overnight-ux-4-guides)
+     6. the long guides (Run 37, re-applied in Run 39), at 375 and 1440 (a written guide and two built
+        ones): no bar at the top; past the page's own list, a bar names each
+        section as it is read, sits under the nav, and its line only grows;
+        its button opens the list, a link closes it and lands the section
+        below the bar and the nav; without JavaScript the list is in the page
+        and there is no bar
+     9. slider feel (Run 37, built in Run 39), at 1440: marks on the pension
+        calculator's age and earnings sliders and the comparison's age, at
+        the relief module's own values, over the track, hidden from screen
+        readers; on a mark the value bubble shows it, off it does not
+    10. figures that wait (Run 37, built in Run 39): on four pages, each
+        figure a script writes at load shows a bar in its own box until the
+        page is ready, then its text, and nothing moves between the two;
+        without JavaScript the markup's text; with reduced motion no pulse
    Run 38, 1. the game cards' videos, at 1440: nothing fetched while the
         cards are far; near, both play and the button says Pause video; the
         button's pause holds; far away the other pauses and plays on return;
@@ -187,6 +200,43 @@ if (has('pension-calculator.html', 'id="pbAb"')) {
   eq('5. without JavaScript there is no Save as A', await ev(`getComputedStyle(document.getElementById('pbAb')).display`), 'none');
 }
 
+/* ---- 6. the long guides ---- */
+if (has('pensions-over-50.html', 'class="pb-toc"')) {
+  const BAR = `(function(){var b=document.querySelector('.pb-tocbar');var n=document.getElementById('nav').getBoundingClientRect();
+    if(!b)return null;var r=b.getBoundingClientRect();var p=b.querySelector('.pb-tocbar-prog');var m=(p.style.transform.match(/scaleX\\(([\\d.]+)\\)/)||[])[1];
+    return {shown:!b.hidden&&r.height>0,top:Math.round(r.top),navBottom:Math.max(0,Math.round(n.bottom)),now:b.querySelector('.pb-tocbar-now').textContent,p:m?+m:null,
+      open:!document.getElementById('pbTocbarList').hidden};})()`;
+  for (const [page, w] of [['pensions-over-50.html', 375], ['pensions-over-50.html', 1440], ['pia.html', 375], ['director-pension-rules.html', 1440]]) {
+    await open(page, w);
+    const b0 = await ev(BAR);
+    const links = await ev(`[].map.call(document.querySelectorAll('.pb-toc a'),function(a){return [a.getAttribute('href').slice(1),a.textContent];})`);
+    const seen = [];
+    let lastP = -1, mono = true, under = true;
+    for (const [id, words] of links) {
+      await ev(`(function(){var e=document.getElementById(${JSON.stringify(id)});window.scrollTo({top:e.getBoundingClientRect().top+scrollY-innerHeight*0.3,behavior:'instant'});})()`);
+      await sleep(300);
+      const b = await ev(BAR);
+      seen.push(b.now === words);
+      if (b.p < lastP) mono = false;
+      lastP = b.p;
+      if (b.shown && Math.abs(b.top - b.navBottom) > 1) under = false;
+    }
+    eq(`6. ${page} at ${w}: no bar at the top; past the list it names each section as it is read, sits under the nav, and the line only grows`,
+       [b0.shown, seen.every(Boolean), mono, under], [false, true, true, true]);
+    await ev(`document.querySelector('.pb-tocbar-btn').click()`); await sleep(150);
+    const opened = (await ev(BAR)).open;
+    const [id] = links[1];
+    await ev(`document.querySelector('#pbTocbarList a[href="#${id}"]').click()`);
+    /* a smooth scroll up a long page takes a while: wait until it has stopped */
+    await ev(`new Promise(r => { let last = -1, same = 0, n = 0; (function t() { same = scrollY === last ? same + 1 : 0; last = scrollY; if (same >= 4 || ++n > 80) r(1); else setTimeout(t, 100); })(); })`, true);
+    await sleep(500);
+    const land = await ev(`(function(){var h=document.getElementById(${JSON.stringify(id)});var b=document.querySelector('.pb-tocbar').getBoundingClientRect();var n=document.getElementById('nav').getBoundingClientRect();return {open:!document.getElementById('pbTocbarList').hidden,clear:h.getBoundingClientRect().top>=Math.max(b.bottom,n.bottom)-1,hash:location.hash};})()`);
+    eq(`6. ${page} at ${w}: the button opens the list; a link closes it and lands its section below the bar and the nav`, [opened, land.open, land.clear, land.hash], [true, false, true, '#' + id]);
+  }
+  await open('pensions-over-50.html', 375, { nojs: true });
+  eq('6. without JavaScript: the list in the page, and no bar', await ev(`[document.querySelectorAll('.pb-toc a').length > 2, !!document.querySelector('.pb-tocbar')]`), [true, false]);
+}
+
 /* ---- 7. related pages ---- */
 if (has('terms.html', 'class="pb-related"')) {
   for (const [page, w] of [['pension-calculator.html', 375], ['pensions-over-50.html', 1440], ['privacy.html', 1440]]) {
@@ -223,6 +273,51 @@ if (has('404.html', 'class="pb-nf-six"')) {
   eq('8. the 404 without JavaScript: no search box, the six places still there', await ev(`[getComputedStyle(document.querySelector('.pb-nf-search')).display, document.querySelectorAll('.pb-nf-six a').length]`), ['none', 6]);
 }
 
+
+/* ---- 9. slider feel (Run 37, built in Run 39) ---- */
+if (has('pension-calculator.html', 'data-pb-ticks=')) {
+  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]], ['pension-calculator.html', 'earn', [115000]], ['broker-vs-autoenrolment.html', 'age', [30, 40, 50, 55, 60]]]) {
+    await open(page, 1440);
+    const before = await ev(`document.getElementById('potOut') ? document.getElementById('potOut').textContent : document.body.innerText.length`);
+    const t = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');var ts=[].slice.call(w.querySelectorAll('.pb-tick'));
+      var rr=r.getBoundingClientRect();
+      return {vals:ts.map(function(x){return +x.getAttribute('data-v');}),inside:ts.every(function(x){var q=x.getBoundingClientRect();return q.left>=rr.left&&q.right<=rr.right;}),
+        hidden:w.querySelector('.pb-ticks').getAttribute('aria-hidden'),value:r.value};})()`);
+    eq(`9. ${page} #${id}: marks at the relief module's own values, over the track, hidden from screen readers; the slider's value untouched`,
+       [t.vals, t.inside, t.hidden], [want, true, 'true']);
+    /* land on a mark: the bubble signs it */
+    const land = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');w.classList.add('dragging');
+      r.value=String(${want[0]});r.dispatchEvent(new Event('input',{bubbles:true}));var b=w.querySelector('.sbubble');var on=b.classList.contains('pb-tick-on');
+      r.value=String(${want[0]}+ (+r.step||1));r.dispatchEvent(new Event('input',{bubbles:true}));var off=b.classList.contains('pb-tick-on');return [on,off];})()`);
+    eq(`9. ${page} #${id}: on a mark the bubble shows it, off it does not`, land, [true, false]);
+  }
+}
+
+/* ---- 10. figures that wait (Run 37, built in Run 39) ---- */
+if (has('pension-calculator.html', 'data-pb-wait')) {
+  for (const [page, w] of [['pension-calculator.html', 1440], ['director-calculator.html', 375], ['broker-vs-autoenrolment.html', 1440], ['index.html', 1440]]) {
+    await open(page, w);
+    const r = await ev(`(function(){var h=document.documentElement;var els=[].slice.call(document.querySelectorAll('[data-pb-wait]'));
+      function snap(){return els.map(function(e){var q=e.getBoundingClientRect();var c=getComputedStyle(e);return [Math.round(q.left),Math.round(q.top),Math.round(q.width),Math.round(q.height),c.color,c.backgroundImage!=='none'];});}
+      var ready=h.classList.contains('pb-ready');var after=snap();
+      /* as a page loading: the state before ready, switched as the head script switches it */
+      h.classList.add('pb-readying');h.classList.remove('pb-ready');var before=snap();h.classList.add('pb-ready');h.classList.remove('pb-readying');
+      var same=after.every(function(a,i){return a[0]===before[i][0]&&a[1]===before[i][1]&&a[2]===before[i][2]&&a[3]===before[i][3];});
+      return {n:els.length,ready:ready,same:same,barBefore:before.every(function(b){return b[4]==='rgba(0, 0, 0, 0)'&&b[5];}),textAfter:after.every(function(a){return a[4]!=='rgba(0, 0, 0, 0)'&&!a[5];})};})()`);
+    eq(`10. ${page} at ${w}: ${r.n} waiting figures; loaded, they show their text; before, a bar in the same box; nothing moves between the two`,
+       [r.n > 0, r.ready, r.barBefore, r.textAfter, r.same], [true, true, true, true, true]);
+  }
+  /* on a real load, the moment the page is ready a waiting figure arrives
+     at once: two frames later none of them is part way through a transition */
+  const rec = await send('Page.addScriptToEvaluateOnNewDocument', { source: "document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(function(){requestAnimationFrame(function(){window.__waitFades=document.getAnimations().filter(function(a){return a.effect&&a.effect.target&&a.effect.target.hasAttribute&&a.effect.target.hasAttribute('data-pb-wait')&&a.transitionProperty;}).map(function(a){return a.effect.target.id+':'+a.transitionProperty;});});});});" });
+  await open('broker-vs-autoenrolment.html', 1440);
+  await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: rec.identifier });
+  eq('10. when the page is ready its waiting figures arrive at once, none fading in', await ev('window.__waitFades'), []);
+  await open('pension-calculator.html', 1440, { nojs: true });
+  eq('10. without JavaScript the markup\'s own text shows, no bar', await ev(`(function(){var e=document.getElementById('potOut');var c=getComputedStyle(e);return [c.color!=='rgba(0, 0, 0, 0)', c.backgroundImage];})()`), [true, 'none']);
+  await open('pension-calculator.html', 1440, { reduce: true });
+  eq('10. asking for less motion: the bar does not pulse', await ev(`(function(){var h=document.documentElement;h.classList.remove('pb-ready');var a=getComputedStyle(document.getElementById('potOut')).animationName;h.classList.add('pb-ready');return a;})()`), 'none');
+}
 
 /* ---- Run 38, 1. the game cards' videos ---- */
 if (has('index.html', 'data-pb-video')) {

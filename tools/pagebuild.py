@@ -576,10 +576,14 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # metric-matched fallback for Inter, the motion vocabulary, and how the
 # floating chrome gives way, (Run 33) the first screen on a phone, and
 # (Run 35) Damian's qualifications and memberships, (Run 37) the related
-# pages at the end of a page, and (Run 38) media popping in on scroll.
+# pages at the end of a page, (Run 38) media popping in on scroll, and (Run
+# 37's item 6, re-applied in Run 39) the long guides' "On this page", its bar
+# and their next step, and (Run 37's item 10, built in Run 39) the bar a
+# waiting figure shows.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
-              ('RELATED', 'related-css'), ('POP', 'pop-css'))
+              ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
+              ('WAIT', 'wait-css'))
 
 
 def _once(text, marker):
@@ -895,8 +899,8 @@ RELATED = {
     'standard-fund-threshold.html': ('director-pension-rules.html', 'pensions-over-50.html', 'director-calculator.html'),
     'state-pension-reality-check.html': ('state-pension-entitlement.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
     'state-pension-entitlement.html': ('state-pension-reality-check.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
-    'pia.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
-    'director-pension-rules.html': ('director-calculator.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
+    'pia.html': ('broker-vs-autoenrolment.html', 'glossary.html'),
+    'director-pension-rules.html': ('director-year-end-checklist.html', 'standard-fund-threshold.html'),
     'director-year-end-checklist.html': ('director-calculator.html', 'director-pension-rules.html', 'standard-fund-threshold.html'),
     'pensions-over-50.html': ('standard-fund-threshold.html', 'state-pension-reality-check.html', 'glossary.html'),
     'self-employed-pensions.html': ('broker-vs-autoenrolment.html', 'pensions-over-50.html', 'glossary.html'),
@@ -1104,7 +1108,7 @@ MOTION_HEAD = (
     "var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type=\"text/pb-late\"]'),function(o){"
     "var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});"
     "o.parentNode.replaceChild(n,o);});}"
-    "document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});"
+    "document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});"
     "window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:" + json.dumps(caveat_selector()) + "};})();</script>")
 HEAD_LINE = re.compile(r'(<meta name="viewport" content="width=device-width, initial-scale=1\.0">\n)<script>[^\n]*pb-motion[^\n]*</script>')
 

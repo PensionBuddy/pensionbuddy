@@ -96,8 +96,12 @@ SHOTS = {
     'state-pension-entitlement': {'page': 'state-pension-entitlement.html', 'target': '.calc-wrap', 'hide': ''},
     # Run 35: the two games, mid-game (see THE GAMES above). The stage keeps
     # the Jump button a player sees in its corner; the game's own header and
-    # footer are outside the crop.
-    'buddys-run': {'page': 'games/buddys-run.html', 'target': '#stage', 'hide': '', 'prepare': 'RUN', 'frame': 675},
+    # footer are outside the crop. (Run 40) Buddy's Run's own pause control,
+    # "P to pause" and its Pause button, is hidden in its place, as in the
+    # card's video (tools/record-games.mjs): beside the card's real pause
+    # button it read as a second one.
+    'buddys-run': {'page': 'games/buddys-run.html', 'target': '#stage',
+                   'hide': '#hud .hint,#pauseBtn{visibility:hidden!important}', 'prepare': 'RUN', 'frame': 675},
     'jargon-battle': {'page': 'games/jargon-battle.html', 'target': '#game', 'hide': '', 'prepare': 'BATTLE', 'frame': 675},
 }
 

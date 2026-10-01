@@ -30,9 +30,9 @@
     <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV">€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
+    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35" data-pb-ticks="relief-age"></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV" data-pb-wait>€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
     <div class="field" data-mode="1">
       <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
       <div class="togbody" data-for="matchOn" hidden>
@@ -76,8 +76,8 @@
     <!-- ============ MODE 1: EQUIVALENT LAYER ============ -->
     <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
       <div class="res-hero">
-        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal">€0</div></div>
-        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal">€0</div></div>
+        <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal" data-pb-wait>€0</div></div>
+        <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal" data-pb-wait>€0</div></div>
         <div class="divline"></div>
         <div class="foot">One year, at your salary and age. An illustration only.</div>
       </div>
@@ -95,12 +95,12 @@
         <div class="pb-my-lane">
           <span class="pb-my-lab">Auto-enrolment</span>
           <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar"></i></span>
-          <span class="pb-my-fig" id="pbMyAe">€0</span>
+          <span class="pb-my-fig" id="pbMyAe" data-pb-wait>€0</span>
         </div>
         <div class="pb-my-lane">
           <span class="pb-my-lab">Personal pension</span>
           <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyPpBar"></i></span>
-          <span class="pb-my-fig" id="pbMyPp">€0</span>
+          <span class="pb-my-fig" id="pbMyPp" data-pb-wait>€0</span>
         </div>
         <div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div>
         <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
@@ -120,13 +120,13 @@
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment</div>
-            <div class="amt" id="aeNet">€0</div>
+            <div class="amt" id="aeNet" data-pb-wait>€0</div>
             <div class="lab">From your take-home pay. No tax relief.</div>
           </div>
           <div class="vsmark">vs</div>
           <div class="vs-col vs-pension">
             <div class="vt">Personal pension</div>
-            <div class="amt" id="ppNet">€0</div>
+            <div class="amt" id="ppNet" data-pb-wait>€0</div>
             <div class="lab" id="ppNetLab">Your contribution after tax relief.</div>
           </div>
         </div>
@@ -135,10 +135,10 @@
 
       <div class="chart-card">
         <h3>Personal pension, broken down</h3>
-        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross">€0</span></div>
-        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief">€0</span></div>
+        <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross" data-pb-wait>€0</span></div>
+        <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief" data-pb-wait>€0</span></div>
         <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
-        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2">€0</span></div>
+        <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2" data-pb-wait>€0</span></div>
         <p class="subnote" id="ppReliefNote"></p>
       </div>
       <div class="chart-card">
@@ -160,7 +160,7 @@
     <!-- ============ MODE 2: COMBINED ============ -->
     <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
       <div class="res-hero">
-        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal">€0</div></div>
+        <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal" data-pb-wait>€0</div></div>
         <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
         <div class="divline"></div>
         <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
@@ -176,7 +176,7 @@
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment minimum</div>
-            <div class="amt" id="cAeNet">€0</div>
+            <div class="amt" id="cAeNet" data-pb-wait>€0</div>
             <div class="lab">From your take-home pay. No tax relief.</div>
           </div>
           <div class="vsmark">+</div>
@@ -220,10 +220,10 @@
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
     <div class="chart-card">
       <h3>Auto-enrolment, broken down</h3>
-      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee">€0</span></div>
-      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer">€0</span></div>
-      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState">€0</span></div>
-      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2">€0</span></div>
+      <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee" data-pb-wait>€0</span></div>
+      <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer" data-pb-wait>€0</span></div>
+      <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState" data-pb-wait>€0</span></div>
+      <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2" data-pb-wait>€0</span></div>
       <p class="subnote" id="aeRatesNote"></p>
     </div>
 
