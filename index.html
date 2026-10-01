@@ -1312,6 +1312,84 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 @supports selector(:has(*)){.pb-learn-play:focus-visible{outline:2px solid transparent}}  /* the card's ring shows focus; without :has() the link keeps its own, and forced colours draw the outline */
 .pb-learn-play svg{width:16px;height:16px}
 @media(max-width:760px){.pb-learn-grid{grid-template-columns:1fr;gap:18px}}
+/* Run 38, item 1: each game card's picture carries a short loop of the real
+   game over it (tools/record-games.mjs; assets/js/pb-video.js), drawn only
+   where motion is allowed, which needs JavaScript: otherwise the picture is
+   all there is, as it is the video's poster. The button pauses and plays it
+   (WCAG 2.2.2): an icon in the top corner, over the game's own drawn pause
+   button rather than the game, named for a screen reader, and above the
+   card's own link. */
+.pb-learn-media{position:relative}
+.pb-learn-vid,.pb-vid-btn{display:none}
+html.pb-motion .pb-learn-vid{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0}
+html.pb-motion .pb-vid-btn{display:inline-flex;align-items:center;justify-content:center;position:absolute;top:10px;right:10px;z-index:2;
+  width:44px;height:44px;margin:0;padding:0;color:var(--ink);background:rgba(255,255,255,.94);border:1px solid var(--line-2);
+  border-radius:50%;cursor:pointer}
+.pb-vid-btn .pb-vid-i{width:18px;height:18px;fill:currentColor}
+.pb-vid-btn[data-state="playing"] .pb-vid-i-play,.pb-vid-btn[data-state="paused"] .pb-vid-i-pause{display:none}
+html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
+.pb-vid-btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+/* Run 37, item 1: "What's changed?", straight under the hero and centred like
+   it. Six plain links as chips, each to the page that already covers that
+   change; only colours change under the pointer, and nothing moves. The
+   margin undoes the reach pass's -13px on every li a: a chip is 44px already. */
+.pb-changed{padding:4px 0 30px;text-align:center}
+.pb-changed .pb-changed-h{margin:0 0 16px;font-size:20px;line-height:1.3;letter-spacing:-.01em}
+.pb-changed-list{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:980px;margin:0 auto;padding:0;list-style:none}
+.pb-changed-list li{margin:0}
+.pb-changed-chip{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:10px 18px;border:1px solid var(--line-2);
+  border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;line-height:1.3;
+  text-decoration:none;transition:background-color var(--pb-t-swap),border-color var(--pb-t-swap),color var(--pb-t-swap)}
+.pb-changed-chip:hover{border-color:var(--teal);background:var(--teal-50);color:var(--teal-900)}
+.pb-changed-chip:focus-visible{outline:2px solid transparent;box-shadow:0 0 0 4px var(--ring)}  /* the transparent outline is what forced colours draw */
+@media(max-width:560px){.pb-changed{padding:0 0 24px}.pb-changed-list{gap:8px}.pb-changed-chip{padding:10px 15px}}
+@media(prefers-reduced-motion:reduce){.pb-changed-chip{transition:none}}
+/* Run 37, item 4: "Your pension through life". The list reads on its own:
+   ages down a line, each step a whole-card link (MOTION rule 5's shadow is
+   the step's ::before, so its dot on the line is the ::after).
+   From 921px wide, with JavaScript, the card beside it follows the step in
+   the middle of the screen, like the starter page's "First payslip to 66";
+   its ruler runs from 18 to 75. Only the fill and the mark move, by the
+   motion tokens, and not at all for a reader who asks for less motion. */
+.pb-tl-sec{padding-top:0}
+.pb-tl{display:block}
+.pb-tl-stage{display:none}
+.pb-tl-steps{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.pb-tl-step{position:relative;margin:0 0 6px;padding:14px 16px 14px 22px;border-radius:0 var(--r-lg) var(--r-lg) 0}
+.pb-tl-step::after{content:"";position:absolute;left:-7px;top:22px;width:12px;height:12px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--teal)}
+.pb-tl-step h3{margin:0 0 4px}
+.pb-tl-step h3 a{color:var(--ink);text-decoration:none}
+.pb-tl-step h3 a::after{content:"";position:absolute;inset:0}
+.pb-tl-step h3 a:focus-visible{outline:2px solid transparent}
+.pb-tl-step:has(a:focus-visible){box-shadow:0 0 0 3px var(--ring)}
+.pb-tl-step:hover{background:var(--teal-50)}
+.pb-tl-step:hover h3 a{color:var(--teal-700)}
+.pb-tl-step p{margin:0;max-width:52ch;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+@media(min-width:921px){
+  html.pb-js .pb-tl{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
+  html.pb-js .pb-tl-stage{display:block;position:sticky;top:120px}
+  .pb-tl-card{display:flex;flex-direction:column;gap:6px;padding:26px 28px 22px;border:1px solid var(--line-2);
+    border-radius:var(--r-xl);background:var(--surface)}
+  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);
+    font-variant-numeric:tabular-nums}
+  .pb-tl-what{font-size:1rem;font-weight:600;color:var(--ink)}
+  .pb-tl-ruler{position:relative;display:block;height:10px;margin-top:14px;border-radius:99px;background:var(--surface-2);
+    border:1px solid var(--line)}
+  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--aqua,var(--teal));
+    transition:width var(--pb-t-fill)}
+  .pb-tl-mark{position:absolute;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--surface);
+    border:3px solid var(--teal-700);transition:left var(--pb-t-fill)}
+  .pb-tl-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .pb-tl-step{margin:0;padding:10vh 16px 10vh 22px}
+  .pb-tl-step:first-child{padding-top:14px}
+  .pb-tl-step:last-child{padding-bottom:14px}
+  .pb-tl-step::after{top:calc(10vh + 8px)}
+  .pb-tl-step:first-child::after{top:22px}
+  .pb-tl-step.pb-on::after{background:var(--teal)}
+}
+@media(prefers-reduced-motion:reduce){.pb-tl-fill,.pb-tl-mark{transition:none}}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -1914,6 +1992,27 @@ html.pb-js .nav-tick .nt-off,html:not(.pb-js) .nav-tick .nt-on{display:none}
 @media(min-width:1440px){
   #navTick .nt-more{display:none}
 }
+/* Run 37 (item 3): the search button. The search is a script, so the button
+   is drawn only with JavaScript (html.pb-js, set in <head> before anything
+   paints, so it never appears late). Beside the links it follows the booking
+   button; with the drawer it sits beside the menu button. The row had no room
+   for it at 17px (1,228px needed from 1301px, 1,365px with the chip from
+   1440px), so beside the links each item gives 3px of its side padding and
+   the row starts 6px nearer the logo: 42px, for a 40px button and its gap. */
+#navSearch{display:none;align-items:center;justify-content:center;flex:0 0 auto;width:40px;height:40px;
+  margin:0 0 0 8px;padding:0;color:var(--ink);background:none;border:1px solid var(--line-2);border-radius:999px;cursor:pointer}
+html.pb-js #navSearch{display:inline-flex}
+#navSearch svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+#navSearch:hover{color:var(--teal-700);border-color:var(--teal);background:var(--teal-50)}
+#navSearch:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+@media(min-width:1301px){
+  #navLinks{margin-left:8px}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{padding-left:5px;padding-right:5px}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{left:5px;right:5px}
+}
+@media(max-width:1300px){
+  #navSearch{width:48px;height:48px;margin:0 0 0 auto;border-radius:6px}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -2201,6 +2300,49 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   font-size:13px;font-weight:500;color:var(--ink-2)}
 .pb-quals.pb-quals-sm .pb-quals-list img{height:20px}
 /* QUALS:END */
+/* RELATED:BEGIN (Run 37, item 7). "Related pages", last in the main part
+   of every page with somewhere to send a reader next: two or three whole-card
+   links, the words each page already has (tools/pagebuild.py RELATED says
+   where they come from). Written into the markup, so a reader without
+   JavaScript has them too. Its label is a paragraph that names the section,
+   not a heading: a heading here would be a fourth size on most pages, where
+   the one heading recipe allows three. Byte for byte on every page, like the blocks
+   above. Only colours change under the pointer; the cards take MOTION rule
+   5's shadow, as every whole-card link does. */
+.pb-related{padding:44px 0 8px}
+.pb-related .pb-related-h{margin:0 0 14px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;margin:0;padding:0;list-style:none}
+.pb-related .pb-related-list li{margin:0;padding:0}
+.pb-related .pb-related-card{display:flex;flex-direction:column;gap:6px;height:100%;margin:0;padding:18px 20px;border:1px solid var(--line-2);
+  border-radius:var(--r-lg);background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-related .pb-related-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-related .pb-related-card:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-related-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
+.pb-related-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
+/* RELATED:END */
+/* POP:BEGIN (Run 38, item 2). Media, and only media, may pop in once as it
+   scrolls into view. assets/js/pb-pop.js arms it off screen (data-pb-pop),
+   never words, a figure, a caveat, a warning, the regulator line or a form,
+   and never anything on screen when it runs. "sd": where scroll timelines
+   are supported and the page is its scroller, it rises --pb-rise and fades
+   up with the scroll over the first 40% of its entry (linear, as scroll
+   timelines are). "io": elsewhere it waits faded and low. "go": it arrives
+   on --pb-t-state, as it first shows ("io"), or 300ms after ("sd", a reader
+   who stops scrolling); then the attribute comes off and it never plays
+   again. Opacity and transform only, so nothing else moves. Never for a
+   reader who asks for less motion (MOTION's choreography rules 1, 2, 4, 5,
+   9 and 10), and never on paper. Byte for byte on every page. */
+@keyframes pbPop{from{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    :root.pb-motion [data-pb-pop="sd"]{animation:pbPop var(--pb-ease-scroll) both;animation-timeline:view();animation-range:entry 0% entry 40%}
+  }
+  :root.pb-motion [data-pb-pop="io"]{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}
+  :root.pb-motion [data-pb-pop="go"]{opacity:1;transform:none;transition:opacity var(--pb-t-state),transform var(--pb-t-state)}
+}
+@media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}
+/* POP:END */
 </style>
 </head>
 <body>
@@ -2254,6 +2396,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     </div>
     <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
+  <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
@@ -2297,6 +2440,22 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   </div>
 
 </div></header>
+
+<!-- WHAT'S CHANGED? (Run 37, item 1). Straight under the hero: six plain links,
+     one for each change in a life, each to the page that already covers it.
+     Nothing runs and nothing is stored; each link's name says where it goes.
+     tests/build.test.py check 33 holds the six, their pages, and the stillness. -->
+<section class="pb-changed" id="changed" aria-labelledby="pbChangedH"><div class="wrap">
+  <h2 class="pb-changed-h" id="pbChangedH">What&rsquo;s changed?</h2>
+  <ul class="pb-changed-list">
+    <li><a class="pb-changed-chip" href="broker-vs-autoenrolment.html" aria-label="New job: Auto-enrolment comparison">New job</a></li>
+    <li><a class="pb-changed-chip" href="tracker.html" aria-label="Left a job: Find a pension">Left a job</a></li>
+    <li><a class="pb-changed-chip" href="director.html" aria-label="Started a company: Pensions for company directors">Started a company</a></li>
+    <li><a class="pb-changed-chip" href="pensions-over-50.html" aria-label="Turning 50: Pensions after 50">Turning 50</a></li>
+    <li><a class="pb-changed-chip" href="state-pension-entitlement.html" aria-label="Had a baby or a career break: State Pension entitlement check">Had a baby or a career break</a></li>
+    <li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html" aria-label="Moved from the UK: A UK pension, and living in Ireland">Moved from the UK</a></li>
+  </ul>
+</div></section>
 
 <!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35): assets/js/pb-providers.js fills
      this; the <noscript> row after it is the same list, still, for a reader without JavaScript
@@ -2385,7 +2544,11 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   </div>
   <ul class="pb-learn-grid">
     <li><div class="pb-learn-card pb-card-link">
-      <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=5fbfaac5"><img src="assets/img/product-buddys-run.jpg?v=eca8ecce" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
+      <div class="pb-learn-media">
+        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=5fbfaac5"><img src="assets/img/product-buddys-run.jpg?v=eca8ecce" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer jumps an excuse, &ldquo;Plenty of time&rdquo;, on Dollymount Strand, with the Poolbeg stacks behind him. Score 30, three lives."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=5fbfaac5" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
+        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Buddy&rsquo;s Run" data-state="paused" aria-label="Play video: Buddy&rsquo;s Run"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
       <div class="pb-learn-body">
         <h3>Buddy&rsquo;s Run</h3>
         <p class="pb-learn-d">Collect the benefits, jump the excuses.</p>
@@ -2393,7 +2556,11 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
       </div>
     </div></li>
     <li><div class="pb-learn-card pb-card-link">
-      <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=f9a78730"><img src="assets/img/product-jargon-battle.jpg?v=ee5acf90" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+      <div class="pb-learn-media">
+        <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=f9a78730"><img src="assets/img/product-jargon-battle.jpg?v=ee5acf90" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-jargon-battle.webp?v=f9a78730" width="1280" height="720" data-pb-video><source src="assets/video/jargon-battle.mp4" type="video/mp4"><source src="assets/video/jargon-battle.webm" type="video/webm"></video>
+        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Jargon Battle" data-state="paused" aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
       <div class="pb-learn-body">
         <h3>Jargon Battle</h3>
         <p class="pb-learn-d">Pick the right meaning to bust the Jargon Blob.</p>
@@ -2439,6 +2606,43 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   </ul>
 </div></section>
 
+
+<!-- YOUR PENSION THROUGH LIFE (Run 37, item 4). The ages the site already
+     explains, from 18 to 75, each a link to the page that explains it: the
+     relief bands (the self-employed and over-50s guides, the calculators'
+     ladder), early access and the Approved Retirement Fund (the over-50s
+     guide), pension age (the starter page). Every figure and sentence is the
+     site's own. The list is the component and reads the same without script;
+     on a wide screen a card beside it follows the step in the middle of the
+     screen (assets/js/pb-timeline.js), and on a phone it is the list alone.
+     Age 75 has no milestone: nothing on the site says what happens at 75
+     (STATUS, Run 37, question 1). tests/build.test.py check 36 holds it. -->
+<section class="pb-tl-sec" id="through-life"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Your pension through life</span>
+    <h2>What changes, and when.</h2>
+  </div>
+  <div class="pb-tl" id="pbTl">
+    <div class="pb-tl-stage" aria-hidden="true"><div class="pb-tl-card">
+      <span class="pb-tl-age" id="pbTlAge">15%</span>
+      <span class="pb-tl-what" id="pbTlWhat">Under 30</span>
+      <span class="pb-tl-ruler"><i class="pb-tl-fill" id="pbTlFill" style="width:0%"></i><b class="pb-tl-mark" id="pbTlMark" style="left:0%"></b></span>
+      <span class="pb-tl-ends"><span>18</span><span>75</span></span>
+    </div></div>
+    <ol class="pb-tl-steps">
+      <li class="pb-tl-step pb-card-link" data-age="18" data-show="15%"><h3><a href="pension-calculator.html">Under 30</a></h3><p>Up to 15% of your earnings can get tax relief, on earnings up to &euro;115,000 a year.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="30" data-show="20%"><h3><a href="pension-calculator.html">From 30</a></h3><p>The share of your earnings that can get tax relief rises with age: 20% from 30 to 39.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="40" data-show="25%"><h3><a href="pension-calculator.html">From 40</a></h3><p>25% from 40 to 49.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="50" data-show="30%"><h3><a href="pensions-over-50.html#early">From 50</a></h3><p>30% from 50 to 54. And a pension from a job you have left can, if the scheme&rsquo;s rules allow it, be taken from 50.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="55" data-show="35%"><h3><a href="pensions-over-50.html#catch-up">From 55</a></h3><p>35% from 55 to 59.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="60" data-show="40%"><h3><a href="pensions-over-50.html#early">From 60</a></h3><p>40% from 60 on. A Personal Retirement Savings Account (PRSA) is normally taken from 60, and a personal pension from 60.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="61" data-show="4%"><h3><a href="pensions-over-50.html#after">From 61</a></h3><p>From the year you turn 61, an Approved Retirement Fund (ARF) is taxed on at least 4% of it a year, whether you take it or not.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="66" data-show="66"><h3><a href="state-pension-reality-check.html">At 66</a></h3><p>Pension age. The State Pension pays &euro;15,564 a year at the maximum.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="71" data-show="5%"><h3><a href="pensions-over-50.html#after">From 71</a></h3><p>From the year you turn 71, the ARF is taxed on at least 5% of it a year.</p></li>
+    </ol>
+  </div>
+  <p class="pb-src">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
+</div></section>
 
 <section class="tickband" id="deadline">
   <div class="wrap">
@@ -2882,7 +3086,14 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=0de079f7" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-timeline.js?v=b7fe8de6"></script>
+<script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
+<script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
+<script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 

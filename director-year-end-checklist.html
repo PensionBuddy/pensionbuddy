@@ -1609,6 +1609,27 @@ html.pb-js .nav-tick .nt-off,html:not(.pb-js) .nav-tick .nt-on{display:none}
 @media(min-width:1440px){
   #navTick .nt-more{display:none}
 }
+/* Run 37 (item 3): the search button. The search is a script, so the button
+   is drawn only with JavaScript (html.pb-js, set in <head> before anything
+   paints, so it never appears late). Beside the links it follows the booking
+   button; with the drawer it sits beside the menu button. The row had no room
+   for it at 17px (1,228px needed from 1301px, 1,365px with the chip from
+   1440px), so beside the links each item gives 3px of its side padding and
+   the row starts 6px nearer the logo: 42px, for a 40px button and its gap. */
+#navSearch{display:none;align-items:center;justify-content:center;flex:0 0 auto;width:40px;height:40px;
+  margin:0 0 0 8px;padding:0;color:var(--ink);background:none;border:1px solid var(--line-2);border-radius:999px;cursor:pointer}
+html.pb-js #navSearch{display:inline-flex}
+#navSearch svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+#navSearch:hover{color:var(--teal-700);border-color:var(--teal);background:var(--teal-50)}
+#navSearch:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+@media(min-width:1301px){
+  #navLinks{margin-left:8px}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{padding-left:5px;padding-right:5px}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{left:5px;right:5px}
+}
+@media(max-width:1300px){
+  #navSearch{width:48px;height:48px;margin:0 0 0 auto;border-radius:6px}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -1888,6 +1909,49 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   font-size:13px;font-weight:500;color:var(--ink-2)}
 .pb-quals.pb-quals-sm .pb-quals-list img{height:20px}
 /* QUALS:END */
+/* RELATED:BEGIN (Run 37, item 7). "Related pages", last in the main part
+   of every page with somewhere to send a reader next: two or three whole-card
+   links, the words each page already has (tools/pagebuild.py RELATED says
+   where they come from). Written into the markup, so a reader without
+   JavaScript has them too. Its label is a paragraph that names the section,
+   not a heading: a heading here would be a fourth size on most pages, where
+   the one heading recipe allows three. Byte for byte on every page, like the blocks
+   above. Only colours change under the pointer; the cards take MOTION rule
+   5's shadow, as every whole-card link does. */
+.pb-related{padding:44px 0 8px}
+.pb-related .pb-related-h{margin:0 0 14px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;margin:0;padding:0;list-style:none}
+.pb-related .pb-related-list li{margin:0;padding:0}
+.pb-related .pb-related-card{display:flex;flex-direction:column;gap:6px;height:100%;margin:0;padding:18px 20px;border:1px solid var(--line-2);
+  border-radius:var(--r-lg);background:var(--surface);color:var(--ink);text-decoration:none}
+.pb-related .pb-related-card:hover{border-color:var(--teal);background:var(--teal-50)}
+.pb-related .pb-related-card:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-related-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
+.pb-related-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
+/* RELATED:END */
+/* POP:BEGIN (Run 38, item 2). Media, and only media, may pop in once as it
+   scrolls into view. assets/js/pb-pop.js arms it off screen (data-pb-pop),
+   never words, a figure, a caveat, a warning, the regulator line or a form,
+   and never anything on screen when it runs. "sd": where scroll timelines
+   are supported and the page is its scroller, it rises --pb-rise and fades
+   up with the scroll over the first 40% of its entry (linear, as scroll
+   timelines are). "io": elsewhere it waits faded and low. "go": it arrives
+   on --pb-t-state, as it first shows ("io"), or 300ms after ("sd", a reader
+   who stops scrolling); then the attribute comes off and it never plays
+   again. Opacity and transform only, so nothing else moves. Never for a
+   reader who asks for less motion (MOTION's choreography rules 1, 2, 4, 5,
+   9 and 10), and never on paper. Byte for byte on every page. */
+@keyframes pbPop{from{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    :root.pb-motion [data-pb-pop="sd"]{animation:pbPop var(--pb-ease-scroll) both;animation-timeline:view();animation-range:entry 0% entry 40%}
+  }
+  :root.pb-motion [data-pb-pop="io"]{opacity:0;transform:translateY(var(--pb-rise)) scale(.97)}
+  :root.pb-motion [data-pb-pop="go"]{opacity:1;transform:none;transition:opacity var(--pb-t-state),transform var(--pb-t-state)}
+}
+@media print{[data-pb-pop]{animation:none!important;opacity:1!important;transform:none!important}}
+/* POP:END */
 </style>
 </head>
 <body>
@@ -1939,6 +2003,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
     </div>
     <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
+  <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
@@ -1974,6 +2039,16 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   <p class="pb-why">Free, 20 minutes, no obligation.</p>
   <p class="ck-note">This checklist is general information, not advice. Tax treatment depends on your own circumstances and can change at any Budget. Sources: Revenue Pensions Manual, chapters 3, 4, 24 and appendix III; Revenue eBrief 034/26; Finance Act 2024, sections 12 and 13; the Pensions Authority.</p>
 </div></div>
+<!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
+<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
+  <p class="pb-related-h" id="pbRelatedH">Related pages</p>
+  <ul class="pb-related-list">
+    <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-t">Director calculator</span><span class="pb-related-d">See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Here they are in plain English, with four questions to see which of them apply to you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="standard-fund-threshold.html"><span class="pb-related-t">The Standard Fund Threshold</span><span class="pb-related-d">The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.</span></a></li>
+  </ul>
+</div></section>
+<!-- RELATED:END -->
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -2062,7 +2137,12 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=0de079f7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
+<script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
+<script src="assets/js/pb-search-index.js?v=556decd6" type="text/pb-lazy"></script>
+<script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=693b678b"></script>
 
 <script src="assets/js/pb-deadline.js?v=27c6dd8e"></script>

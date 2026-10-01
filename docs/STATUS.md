@@ -290,6 +290,304 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
+
+Damian's brief, two items, built on the same branch as Run 37 (it is under
+review as one deploy preview), each gated, committed and pushed; not merged.
+Run 37's items 9 and 10 are still not reached.
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The two game cards' pictures get short loops of the real games | done | 6e54253 |
+| 2 | Pop-ins on scroll, media only | done | c916a6b |
+| 1, follow-up | The posters load only as a video comes near (Lighthouse found them slowing the home page) | done | this commit |
+
+## Item 1, the videos
+
+- **Recorded headless from the real games** by `tools/record-games.mjs`:
+  each game in the stills' own 1200 x 675 frame and CSS (read from
+  `tools/shoot-product.py`), its clock turned by the script, the stills'
+  seed (20260929) and autopilot; eight seconds at 30 frames. Buddy's Run
+  keeps its three lives with the Poolbeg stacks on the far shore; Jargon
+  Battle answers its second and third questions right and ends on the
+  fourth. Chrome's own encoder (WebCodecs) makes H.264 and VP8, every frame
+  exactly 1/30 s, written by `tools/video-mux.js` (no other software): MP4
+  839 and 749 KB, WebM 1.13 and 1.18 MB, 1280 x 720.
+- **On the page:** the picture stays (it is the poster, and all a reader gets
+  without JavaScript or with reduced motion); the video sits over it, muted,
+  looping, inline, `preload="none"`, aria-hidden, fetched only within about
+  a screen of the viewport, paused off it and when the tab is hidden. The
+  button (WCAG 2.2.2) is a pause or play icon in the top corner, named
+  "Pause video: Buddy's Run" and so on.
+- **No flashing:** the frames are checked before encoding and the decoded
+  files again in Chrome, as the games' own probe does (at most 2 changes a
+  second in any cell, against a limit of 6).
+- **Why VP8 and not VP9 in the WebM:** a Mac's hardware VP9 decoder refused
+  one VP9 clip that Chrome's software decoder played; VP8 is only ever
+  decoded in software. The MP4 is listed first, so every current browser
+  plays the H.264.
+- **Gate:** every suite passed on the committed tree. `floating-chrome` timed
+  out once in the full run while the machine was busy (other sessions);
+  alone on the same checkout it passed 35 of 35 in 165 s, the same time as
+  the branch without the videos (165 s).
+- **Follow-up, the posters:** a `poster` in the markup is fetched with the
+  page, however far down it is. The two JPGs (302 KB) went out in the first
+  20 ms, and on Lighthouse's phone the home page's LCP went from 3.23 s to
+  4.95 s (performance 92 to 80). The poster is now the card picture's own
+  WebP, carried as `data-poster`. `pb-video.js` makes it the poster only as
+  the video comes near, by which time the lazy picture has loaded that same
+  file. Nothing extra loads, and reduced motion loads no poster at all. The
+  home page is back to 92 and 93, LCP 3.23 s and 3.08 s (two runs). Build
+  check 43 and ux4 R38-1 now fail if a poster comes back into the markup
+  or is never set.
+
+## Item 2, media pops in on scroll
+
+- **What pops, once:** the game cards' pictures and videos, the calculator
+  photograph and the three portraits (home), the photographs beside the
+  director and tracker pages' copy, the jargon buster's two game tiles, and
+  Buddy on the 404 page. The whole list is `POP` in `assets/js/pb-pop.js`.
+- **Never:** headings, words, figures, caveats, warnings, the regulator and
+  QFA lines, forms. Every element on the list must hold no words and sit in
+  none of those, or it is left alone. The portraits pop but the "B.A.,
+  Q.F.A." badge on Damian's does not. A card's picture pops but its heading
+  and words do not.
+- **Left out on purpose:** Starter's annotated calculator photograph (its
+  arrows and labels would float over a moving picture); Buddy beside the
+  booking button (motion rule 8, nothing moves near a call to action); the
+  provider logos (see question 6); the "Out of office" photo strip, which is
+  switched off (Run 29). Add the strip to the list if it comes back.
+- **The first gate failed** on `providers.test` check 2. It measures each
+  logo as drawn, under Chrome's virtual time, where an observer never fires.
+  The waiting strip was drawn at 97%, so every logo read 3% short. The
+  logos came off the list, and that test was left as it was.
+- **How it moves:** it rises 12px (`--pb-rise`, the site's limit) from 97%
+  size and fades in. Where scroll timelines work (Chrome, Edge, Safari 26)
+  it follows the scroll over the first 40% of its entry. If the reader
+  stops part way, it finishes on the clock 300 ms later (`--pb-arrive`), so
+  nothing is left half there. Elsewhere (Firefox), and for anything inside
+  a box that clips, it arrives in 320 ms (`--pb-t-state`) as it first
+  shows. "Shows" means below the nav and above the book bar or cookie bar,
+  the same room the site keeps as scroll-padding, so on a phone a picture
+  pops as it clears the book bar, not behind it. It is armed only off
+  screen, so nothing on the first screen moves. It never plays again,
+  moves only opacity and transform (no layout shift), and does nothing
+  with reduced motion (from the start or turned on part way) or on paper.
+- **Written `:root.pb-motion`, not `html.pb-motion`:** it is the same element.
+  Build check 19 treats any fade rule that names `html` as a page fade, and
+  that check stays as strict as it was.
+- **Guards:** build check 44 (the list names only media; opacity and
+  transform, by `--pb-rise`, over at most half the entry or on a pair of
+  320 ms or less; only with motion allowed; paper gets everything; on
+  every page, late; 13 mutants). ux4 R38-2, 14 checks on seven pages and
+  widths, each scrolled through:
+  - everything that pops holds no words and nothing that must never pop;
+  - nothing on the first screen is armed, and nothing is left faded;
+  - no heading, paragraph, list item or listed element moves in the layout;
+  - it completes when the reader stops, never replays, waits behind the
+    book bar, and does nothing with reduced motion;
+  - the fallback's 320 ms is checked.
+
+  I broke it ten ways (a heading on the list, a heading popped by CSS alone,
+  a whole card armed, two layout-moving pops, reduced motion ignored, the
+  first screen armed, no clock, the book bar ignored, replaying). The guard
+  caught all ten.
+- **Found on the way (not changed):** the tracker page's photograph of
+  Damian and Buddy has no box kept for it before it loads. It is 161px tall
+  until the lazy image arrives, then 523px, so the page below it moves down
+  as it loads (69px at 1440, where it sits beside the copy). At a normal
+  pace that happens off screen. On a slow connection it could happen in
+  view. See question 5.
+
+## Lighthouse, before and after (mobile, median of three, interleaved)
+
+Before is `30f8d12`, where Run 37 began. After is `c916a6b`, Runs 37 and 38
+up to item 2, without the posters' follow-up.
+
+| Page | Performance | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|
+| index.html | 92 to 81 | 3.15 to 4.95 | 0 to 0 | 0 to 0 |
+| index.html, with the follow-up (two runs) | 92, 93 | 3.23, 3.08 | 0 | 0 |
+| pension-calculator.html | 87 to 86 | 3.31 to 3.46 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 87 to 87 | 3.31 to 3.31 | 0 to 0 | 0 to 0 |
+| glossary.html | 91 to 91 | 2.86 to 2.86 | 0 to 0 | 0 to 0 |
+| tracker.html | 95 to 93 | 2.93 to 3.08 | 0 to 0 | 0 to 0 |
+| starter.html | 91 to 91 | 3.30 to 3.31 | 0.0012 to 0.0012 | 0 to 0 |
+| 404.html | 97 to 96 | 2.25 to 2.71 | 0 to 0 | 0 to 0 |
+
+The 404 page gained Buddy's picture and a search box in Run 37 (item 8).
+The pension calculator and the tracker page are about 0.15 s slower. Run 37
+added scripts to both (search, jargon definitions, related pages), and I did
+not isolate which one costs it.
+
+## New words on the site (for the pack)
+
+- **Item 1:** the video button's names, "Pause video: Buddy's Run", "Play
+  video: Buddy's Run", and the same for Jargon Battle (for a screen reader;
+  the button shows an icon).
+- **Item 2:** none.
+
+## Questions for Damian
+
+1. **Same branch.** Run 38 went on `claude/overnight-ux-4`, after Run 37's
+   item 8, so one deploy preview shows both. Say if you wanted it apart.
+2. **The clips.** Buddy's Run: eight seconds after a five-second run-up, no
+   life lost. Jargon Battle: two questions answered right, second to fourth.
+   Want a wrong answer shown too (a heart lost), or other moments?
+3. **Cards.** The brief lets cards pop and never headings or body text. A
+   card holds both, so only a card's picture pops, and its heading and words
+   stay still. A card's frame (border and shadow) could pop without its
+   words, drawn behind them. Want that?
+4. **The feel.** A 12px rise from 97% size, and the first 40% of the entry
+   or 320 ms. Want it bigger, smaller or slower? The motion system's
+   limits are 12px and 640 ms.
+5. **The tracker photograph** (above): keep its box before it loads, one
+   line of CSS? It would not change how the page looks once loaded.
+6. **The provider logos.** The brief lets logos pop. These already move, in
+   their ticker, and `providers.test` checks their drawn size, which a
+   waiting pop shrinks to 97%. Want them to pop as well, with that test
+   measuring the settled size instead?
+
+# Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (not merged)
+
+Damian's brief: a UX audit (`docs/UX-AUDIT-4.md`), then ten items in order,
+each built, gated, committed and pushed; the branch is NOT merged (he reviews
+on the Netlify deploy preview). Branch off main `30f8d12`.
+
+**Where to resume:** the table says which items are pushed. Start at the first
+row that is not "done", on `claude/overnight-ux-4`, with the gate in
+`docs/UX-AUDIT-4.md` ("How each item is built and gated").
+
+## Items
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 0 | Audit, `docs/UX-AUDIT-4.md` | done | this commit |
+| 1 | Life-event picker on the home page: "What's changed?", six links under the hero | done | this commit |
+| 2 | Jargon definitions at first use: the jargon buster's own words, on 21 pages | done | this commit |
+| 3 | Site search: the magnifier in the nav and "/", over pages, sections and the jargon buster, in the browser | done | this commit |
+| 4 | "Your pension through life": nine ages from 18 to 71 on the home page, each a link; a card follows the reader on a wide screen | done | this commit |
+| 5 | Save as A on the pension calculator: A beside your figures now, a copy of what the page shows | done | this commit |
+| 6 | Long guides: on this page, progress, next step | skipped: failed the gate twice (an initialism first used in the new list; then 14-15px text under the calculators' 16px floor on the PIA and threshold pages). Reverted here; parked, with the 16px fix, on `claude/overnight-ux-4-guides` (not gated after the fix) | |
+| 7 | Related pages: two or three cards at the end of 22 pages, one shared component written into the markup | done | this commit |
+| 8 | The 404: Buddy, a search box in the page, and the home page's six places to begin | done | this commit |
+| 9 | Slider feel | not reached | |
+| 10 | Figures that wait: skeletons | not reached | |
+
+## Found and fixed on the way
+
+- **Ask Buddy came back over a focused link (item 2's gate).** When the
+  booking bar comes up after a control has taken focus, Ask Buddy's place
+  moves up above the bar, but it had decided whether the focused control was
+  underneath it from its old place; so, once its step-aside timer ran out, it
+  came back onto the "Pension calculator" link in "Six places to begin" (the
+  floating-chrome test, tab walk, home page at 375). Item 2 did not cause it:
+  one more focusable control on the page moved the walk's timing onto it, and
+  the same walk with the definitions blocked fails too once its pace changes.
+  The fix is one line in `assets/js/pb-buddy.js`: when a bar comes or goes,
+  ask again whether the focused control is under the button.
+
+## New words on the site (for the pack)
+
+- **Item 1**, the home page, under the hero: the heading "What's changed?"
+  and six links, "New job" (to the auto-enrolment comparison), "Left a job"
+  (Find a pension), "Started a company" (Pensions for company directors),
+  "Turning 50" (Pensions after 50), "Had a baby or a career break" (the State
+  Pension entitlement check) and "Moved from the UK" (A UK pension, and living
+  in Ireland). Each link's name for a screen reader adds the page's nav name.
+
+- **Item 2**, no new words: the definition shows the jargon buster's name for
+  the term, its first paragraph word for word, and "See it in the jargon
+  buster" (the jargon chips' link text); a screen reader hears "What this
+  means" after the term (the chips' own title). Where they appear today:
+  director rules (PRSA, Standard Fund Threshold, AVCs, tax relief, lump
+  sums), over-50s (tax relief, AVCs, PRSA, Personal Retirement Bond, lump
+  sum, annuity, ARF), self-employed (tax relief, PRSA, annuity), Standard
+  Fund Threshold (tax relief, lump sum, defined benefit), the home page, the
+  PIA page (tax relief) and the UK guide (State Pension).
+- **Item 3**, the search: the nav button's name "Search"; in the search,
+  "Search Pensionbuddy", "Search pages, guides and the jargon buster" (in
+  the empty field), "Close", "1 result" / "N results", "Nothing found. Try
+  one word, such as PRSA, or see the jargon buster.", "Jargon buster" under
+  a buster entry, and "The search could not load. Every page is in the
+  menu." Results show each page's own title and description, and the
+  heading of the section that matched.
+- **Item 4**, the home page, after "Six places to begin": the kicker "Your
+  pension through life" and the heading "What changes, and when."; step
+  headings "Under 30", "From 30" ... "At 66", "From 71". Every step's
+  sentence is the site's own (the relief bands from the self-employed and
+  over-50s guides, early access and the Approved Retirement Fund from the
+  over-50s guide, pension age from the starter page), under the guides' own
+  "Rules as at 24 September 2026" line; build check 36 finds each step's
+  figures on the page it links to.
+- **Item 5**, the pension calculator, after the two warnings: "Save as A",
+  "Keep these figures as A, then move the sliders to see A beside them.
+  Nothing is stored.", "A is saved. Change the sliders to see it beside your
+  figures now.", the table's caption "A beside your figures now" with columns
+  "A" and "Now", "Clear A", and (for a screen reader) "changed" beside a
+  value that differs. While the guess card still hides the figures, the
+  button says the saved report's own "Reveal the illustration first, then
+  save it." Every figure in the table is copied off the page as the page
+  wrote it: nothing is worked out.
+- **Item 7**, the end of 22 pages: the label "Related pages" over two or
+  three cards, each a page's name (as the nav or the home page's six places
+  writes it) and a line already on the site (its line in the six places, the
+  first sentence of its own description, or a sentence of its introduction
+  where that sentence carries an initialism a page might not have spelled
+  out). The table is `RELATED` in `tools/pagebuild.py`; build check 39 finds
+  every line on its page.
+- **Item 8**, the 404, below its own words (kept as they were): Buddy's
+  picture ("Buddy, the Pensionbuddy dog", his usual alt text), the search
+  box with the search's own words (drawn only with JavaScript), and "Six
+  places to begin." with the home page's six names and lines, word for word.
+
+## Questions for Damian
+
+1. **Age 75 is not on the site.** The brief lists "75 vesting" among the
+   milestones the site covers; no page or module mentions 75. The timeline
+   stops its milestones at 71 (the ARF's 5%, the last age the site names).
+   Words for 75, or leave it out?
+2. **Terms with no glossary entry get no definition:** auto-enrolment and My
+   Future Fund, PRSI, USC, small self-administered schemes, HomeCaring
+   Periods, credits. New glossary entries would be new copy.
+3. **Where "What's changed?" sits, and where each change goes.** Under the
+   hero, above the provider logos (the brief's "under the hero"). "New job"
+   goes to the auto-enrolment comparison (what a new job starts), "Had a baby
+   or a career break" to the entitlement check (HomeCaring Periods and
+   credits are there). Say if either should go elsewhere.
+4. **Where the definitions do not go.** Not on the jargon buster, the legal
+   pages, How we work, booking, the thank-you page, the 404 or the games; not
+   in headings, links, a calculator's panel or results, the FAQ (Ask Buddy
+   copies it), the family's story (locked copy) or any caveat; not for
+   "Pension" (the subject of every page); and not for a term a jargon chip
+   already explains on the three audience pages. So today they appear on
+   seven pages. The buster's "Tax relief" entry carries its own figure
+   ("for every €100 you put in, around €40 can come back"), which now also
+   shows beside "tax relief" on six pages. Wider, narrower, or as it is?
+5. **"Works offline".** Read as: no outside service, everything in the
+   browser. The index (18 KB) comes from the site the first time a reader
+   opens the search or points at the button, and from then on the search
+   works with no network. A search that works on a page opened with no
+   network at all would need the site installed (a service worker): say if
+   that is what you meant.
+6. **The nav made room for the search button.** From 1301px, where the nav
+   is one row, each item's side padding went from 8px to 5px and the row
+   starts 6px nearer the logo: 42px, which the 40px button and its gap
+   needed (the row had 25px spare at 1301 and 27px at 1440 with the chip).
+   Measured to fit from 1301 to 1920 and in the drawer.
+7. **Where the timeline sits.** On the home page, after "Six places to
+   begin" and before Revenue's deadline: the brief named no page, and the
+   home page is where every audience starts. It adds 1,474px to the home
+   page on a phone and 2,364px at 1440 (the audit's third finding is the
+   page's length). Starter, or its own page, instead?
+8. **Which pages the related cards pick, and where there are none.** The
+   table in `tools/pagebuild.py` (RELATED) is mine: say where it sends a
+   reader somewhere you would not. None on the home page (it is the map, and
+   ends on its own call), booking and the thank-you page (one job each), the
+   404 (its own six places), the held pages or the games.
+
 # Run 36 — 2026-09-29 · Run 35's calls, Run 34 merged, and PRSI's rise on 1 October ahead of the day
 
 Damian's brief, in two parts. First: take the qualifications strip off Our
