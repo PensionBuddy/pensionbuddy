@@ -1984,6 +1984,60 @@ def run():
             assert srcs[target] != sources[target], label
         eq('41. %s is caught' % label, any(want in x for x in feel_faults(srcs, j2)), True)
 
+
+    # ----------------------------------------------------------------- 42
+    # Run 37's item 10 (built in Run 39): figures that wait. The head script sets html.pb-ready
+    # (and, for that moment, html.pb-readying, which stops a figure's own
+    # colour transition fading it in) at DOMContentLoaded (MOTION_HEAD, on every page), the WAIT block draws a
+    # bar only until then and only with JavaScript, and every element marked
+    # data-pb-wait is one a script replaces at load: its markup is a
+    # placeholder ("--", "€0", "€0/mo"), never a real figure or a sentence.
+    # The nav's deadline chip carries one on every page. The bar pulses only
+    # for a reader who allows motion.
+    WAIT_PLACEHOLDERS = ('--', '&euro;0', '€0', '€0/mo')
+
+    def wait_faults(srcs, head, css):
+        f = []
+        if "r.classList.add('pb-ready','pb-readying')" not in head or "r.classList.remove('pb-readying')" not in head:
+            f.append('the head script never says the page is ready')
+        if 'html.pb-readying [data-pb-wait]{transition:none!important}' not in css:
+            f.append('a figure fades in when the page is ready (figures never wait)')
+        for rule in ('html.pb-js:not(.pb-ready) [data-pb-wait]{color:transparent!important;',
+                     'html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait'):
+            if rule not in css:
+                f.append('the WAIT block: %s' % rule[:40])
+        if re.search(r'html:not\(\.pb-js\)[^{]*\[data-pb-wait\]|(?<!pb-motion)(?<!pb-motion:not\(\.pb-ready\) )\[data-pb-wait\]\{animation', css):
+            f.append('a bar without JavaScript, or one that pulses regardless')
+        for name, s in sorted(srcs.items()):
+            for m in re.finditer(r'<(\w+)\b[^>]*\bdata-pb-wait\b[^>]*>(.*?)</\1>', s, re.S):
+                if m.group(2) not in WAIT_PLACEHOLDERS:
+                    f.append('%s: a bar over "%s", which is not a placeholder' % (name, m.group(2)[:30]))
+            if 'id="ntVal"' in s and not re.search(r'id="ntVal" aria-hidden="true" data-pb-wait>--<', s):
+                f.append('%s: the nav chip\'s figure waits without a bar' % name)
+        return f
+
+    whead = pagebuild.MOTION_HEAD
+    wcss = sources['pension-calculator.html']
+    eq('42. figures that wait: html.pb-ready from the head script; a bar only before it and only with JavaScript; only over placeholders; the nav chip on every page',
+       wait_faults(sources, whead, wcss), [])
+    for label, target, find, repl, want in (
+            ('a bar over a real figure', 'index.html', '<h1>', '<h1 data-pb-wait>', 'not a placeholder'),
+            ('a chip without its bar', 'privacy.html', 'id="ntVal" aria-hidden="true" data-pb-wait>', 'id="ntVal" aria-hidden="true">', 'without a bar'),
+            ('a page that is never ready', 'head', "r.classList.add('pb-ready','pb-readying');", '', 'never says'),
+            ('a figure that fades in when ready', 'css', 'html.pb-readying [data-pb-wait]{transition:none!important}\n', '', 'fades in'),
+            ('a bar that always pulses', 'css', 'html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait', '[data-pb-wait]{animation:pbWait', 'pulses')):
+        srcs, h2, c2 = dict(sources), whead, wcss
+        if target == 'head':
+            h2 = whead.replace(find, repl, 1)
+            assert h2 != whead, label
+        elif target == 'css':
+            c2 = wcss.replace(find, repl, 1)
+            assert c2 != wcss, label
+        else:
+            srcs[target] = sources[target].replace(find, repl, 1)
+            assert srcs[target] != sources[target], label
+        eq('42. %s is caught' % label, any(want in x for x in wait_faults(srcs, h2, c2)), True)
+
     # ----------------------------------------------------------------- 43
     # Run 38, item 1: the game cards' videos. Each card keeps its picture
     # (the poster, and all there is without JavaScript or with reduced

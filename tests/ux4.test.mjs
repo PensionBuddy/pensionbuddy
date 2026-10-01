@@ -35,6 +35,10 @@
         calculator's age and earnings sliders and the comparison's age, at
         the relief module's own values, over the track, hidden from screen
         readers; on a mark the value bubble shows it, off it does not
+    10. figures that wait (Run 37, built in Run 39): on four pages, each
+        figure a script writes at load shows a bar in its own box until the
+        page is ready, then its text, and nothing moves between the two;
+        without JavaScript the markup's text; with reduced motion no pulse
    Run 38, 1. the game cards' videos, at 1440: nothing fetched while the
         cards are far; near, both play and the button says Pause video; the
         button's pause holds; far away the other pauses and plays on return;
@@ -287,6 +291,32 @@ if (has('pension-calculator.html', 'data-pb-ticks=')) {
       r.value=String(${want[0]}+ (+r.step||1));r.dispatchEvent(new Event('input',{bubbles:true}));var off=b.classList.contains('pb-tick-on');return [on,off];})()`);
     eq(`9. ${page} #${id}: on a mark the bubble shows it, off it does not`, land, [true, false]);
   }
+}
+
+/* ---- 10. figures that wait (Run 37, built in Run 39) ---- */
+if (has('pension-calculator.html', 'data-pb-wait')) {
+  for (const [page, w] of [['pension-calculator.html', 1440], ['director-calculator.html', 375], ['broker-vs-autoenrolment.html', 1440], ['index.html', 1440]]) {
+    await open(page, w);
+    const r = await ev(`(function(){var h=document.documentElement;var els=[].slice.call(document.querySelectorAll('[data-pb-wait]'));
+      function snap(){return els.map(function(e){var q=e.getBoundingClientRect();var c=getComputedStyle(e);return [Math.round(q.left),Math.round(q.top),Math.round(q.width),Math.round(q.height),c.color,c.backgroundImage!=='none'];});}
+      var ready=h.classList.contains('pb-ready');var after=snap();
+      /* as a page loading: the state before ready, switched as the head script switches it */
+      h.classList.add('pb-readying');h.classList.remove('pb-ready');var before=snap();h.classList.add('pb-ready');h.classList.remove('pb-readying');
+      var same=after.every(function(a,i){return a[0]===before[i][0]&&a[1]===before[i][1]&&a[2]===before[i][2]&&a[3]===before[i][3];});
+      return {n:els.length,ready:ready,same:same,barBefore:before.every(function(b){return b[4]==='rgba(0, 0, 0, 0)'&&b[5];}),textAfter:after.every(function(a){return a[4]!=='rgba(0, 0, 0, 0)'&&!a[5];})};})()`);
+    eq(`10. ${page} at ${w}: ${r.n} waiting figures; loaded, they show their text; before, a bar in the same box; nothing moves between the two`,
+       [r.n > 0, r.ready, r.barBefore, r.textAfter, r.same], [true, true, true, true, true]);
+  }
+  /* on a real load, the moment the page is ready a waiting figure arrives
+     at once: two frames later none of them is part way through a transition */
+  const rec = await send('Page.addScriptToEvaluateOnNewDocument', { source: "document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(function(){requestAnimationFrame(function(){window.__waitFades=document.getAnimations().filter(function(a){return a.effect&&a.effect.target&&a.effect.target.hasAttribute&&a.effect.target.hasAttribute('data-pb-wait')&&a.transitionProperty;}).map(function(a){return a.effect.target.id+':'+a.transitionProperty;});});});});" });
+  await open('broker-vs-autoenrolment.html', 1440);
+  await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: rec.identifier });
+  eq('10. when the page is ready its waiting figures arrive at once, none fading in', await ev('window.__waitFades'), []);
+  await open('pension-calculator.html', 1440, { nojs: true });
+  eq('10. without JavaScript the markup\'s own text shows, no bar', await ev(`(function(){var e=document.getElementById('potOut');var c=getComputedStyle(e);return [c.color!=='rgba(0, 0, 0, 0)', c.backgroundImage];})()`), [true, 'none']);
+  await open('pension-calculator.html', 1440, { reduce: true });
+  eq('10. asking for less motion: the bar does not pulse', await ev(`(function(){var h=document.documentElement;h.classList.remove('pb-ready');var a=getComputedStyle(document.getElementById('potOut')).animationName;h.classList.add('pb-ready');return a;})()`), 'none');
 }
 
 /* ---- Run 38, 1. the game cards' videos ---- */

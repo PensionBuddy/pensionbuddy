@@ -578,10 +578,12 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # (Run 35) Damian's qualifications and memberships, (Run 37) the related
 # pages at the end of a page, (Run 38) media popping in on scroll, and (Run
 # 37's item 6, re-applied in Run 39) the long guides' "On this page", its bar
-# and their next step.
+# and their next step, and (Run 37's item 10, built in Run 39) the bar a
+# waiting figure shows.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
-              ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'))
+              ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
+              ('WAIT', 'wait-css'))
 
 
 def _once(text, marker):
@@ -1106,7 +1108,7 @@ MOTION_HEAD = (
     "var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type=\"text/pb-late\"]'),function(o){"
     "var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});"
     "o.parentNode.replaceChild(n,o);});}"
-    "document.addEventListener('DOMContentLoaded',function(){if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});"
+    "document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});"
     "window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:" + json.dumps(caveat_selector()) + "};})();</script>")
 HEAD_LINE = re.compile(r'(<meta name="viewport" content="width=device-width, initial-scale=1\.0">\n)<script>[^\n]*pb-motion[^\n]*</script>')
 

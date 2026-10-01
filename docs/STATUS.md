@@ -341,8 +341,8 @@ merged.
 | 1 | Boxes kept: the tracker photograph's space before it loads (Q5), and the 404's buttons on a phone | done | c404c75 |
 | 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | 15a3757 |
 | 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | dd2f09d |
-| 4 | Run 37's item 9, slider feel | done | this commit |
-| 5 | Run 37's item 10, loading skeletons | not started | |
+| 4 | Run 37's item 9, slider feel | done | 372a16c |
+| 5 | Run 37's item 10, loading skeletons | done | this commit |
 | 6 | "How a call with Damian works", three steps, a video slot each | not started | |
 | 7 | "Your worries, answered", a draft for the compliance pack, not published | not started | |
 | 8 | Where painted illustrations would replace icons, a list | not started | |
@@ -445,6 +445,35 @@ merged.
   mutants) and ux4 section 9 (the marks at the module's values, over the
   track, hidden from screen readers; the bubble signs a mark and only a
   mark).
+
+## Item 5, figures that wait (Run 37's item 10)
+
+- **What it is:** a figure a script writes as the page loads shows a quiet
+  bar in its own box until the page's own scripts have run, instead of the
+  "--" or "€0" its markup holds for a reader without JavaScript. The head
+  script on every page says when (`html.pb-ready`, at DOMContentLoaded);
+  the bar pulses only when motion is allowed; nothing moves when it goes.
+  Without JavaScript the markup's text shows, as before.
+- **Which figures:** found by loading every page and comparing each
+  placeholder with what the page then shows: 25, the pension calculator's
+  pot, income and two workings, the director calculator's four headline
+  figures, sixteen on the comparison, and the home page's day count; and
+  the nav's deadline count on every page. A placeholder that is already a
+  figure's true first value (a slider at 0%, an empty list's €0) is left
+  alone.
+- **Fixed on the way:** the comparison's sixteen figures fade their colour
+  over 0.2 s when they change. At the moment the page became ready they
+  would have faded in rather than arrived, and figures never wait. The
+  head script now also sets `html.pb-readying` for that moment (100 ms),
+  which stops their own transition, so they arrive at once; their fades for
+  later changes are untouched.
+- **Guards:** build check 42 (ready from the head script, the readying
+  moment, a bar only before it and only with JavaScript, only over
+  placeholders, the nav chip on every page; 5 mutants) and ux4 section 10
+  (on four pages a bar in each figure's own box before ready and its text
+  after, nothing moving; no figure fading in on a real load, which fails
+  with the readying rule taken out; no bar without JavaScript; no pulse
+  with reduced motion).
 
 ## Questions for Damian
 
