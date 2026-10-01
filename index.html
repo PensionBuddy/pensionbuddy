@@ -170,6 +170,11 @@ section{padding:88px 0}
 .step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .step p{color:var(--ink-2);font-size:15px}
+/* Run 39: a 16:9 slot over each step of "How a call with Damian works",
+   for Damian's own videos; until they are filmed, a placeholder poster. The
+   box is kept by its ratio, so nothing moves when a video takes its place. */
+.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--teal-50)}
+.step .pb-call-slot img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---- calculator showcase ---- */
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
@@ -2836,15 +2841,24 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   </div>
 </div></section>
 
-<section class="expect"><div class="wrap">
+<!-- Run 39: "How a call with Damian works". The three steps are the words
+     this section already had; over each is a 16:9 slot for Damian's own
+     short video, which he is filming, and until then a placeholder poster
+     (assets/img/call-video-placeholder). To put a video in: save it as
+     assets/video/call-step-N.mp4 (H.264) and .webm, then give its slot the
+     game cards' markup (a <video data-pb-video ...> over the picture, its
+     data-poster the slot's picture, and the pause button); pb-video.js then
+     fetches it near the viewport, plays it muted and pauses it off screen.
+     tests/build.test.py check 45 holds the words and the slots. -->
+<section class="expect" id="call"><div class="wrap">
   <div class="sec-head ctr">
-    <span class="kicker">What to expect</span>
+    <span class="kicker">How a call with Damian works</span>
     <h2>Most people brace for a sales pitch. <span class="pb-soft">This is a chat.</span></h2>
   </div>
   <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
-    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
-    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-1" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">1</div><h3>You reach out</h3><p>A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-2" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2</div><h3>We talk it through</h3><p>Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-3" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">3</div><h3>You decide</h3><p>You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.</p></div>
   </div>
 </div></section>
 
@@ -3153,7 +3167,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=47fe7f41" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=fa0b2953" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

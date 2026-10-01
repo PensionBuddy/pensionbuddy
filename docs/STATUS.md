@@ -342,8 +342,8 @@ merged.
 | 2 | Both clips re-recorded without the game's own Pause label (Q7) | done | 15a3757 |
 | 3 | Run 37's item 6 (the long guides) re-applied, with the 16px and ETF fixes | done | dd2f09d |
 | 4 | Run 37's item 9, slider feel | done | 372a16c |
-| 5 | Run 37's item 10, loading skeletons | done | this commit |
-| 6 | "How a call with Damian works", three steps, a video slot each | not started | |
+| 5 | Run 37's item 10, loading skeletons | done | 471f66d |
+| 6 | "How a call with Damian works", three steps, a video slot each | done | this commit |
 | 7 | "Your worries, answered", a draft for the compliance pack, not published | not started | |
 | 8 | Where painted illustrations would replace icons, a list | not started | |
 | 9 | Lighthouse, before (`30f8d12`) and after, seven pages | not started | |
@@ -475,6 +475,30 @@ merged.
   with the readying rule taken out; no bar without JavaScript; no pulse
   with reduced motion).
 
+## Item 6, "How a call with Damian works"
+
+- **Where:** the home page's section that already told the call in three
+  steps ("What to expect": You reach out, We talk it through, You decide).
+  Its small label is now your title, "How a call with Damian works"; its
+  heading ("Most people brace for a sales pitch. This is a chat.") and the
+  three steps' words are as they were, word for word. The booking page has
+  its own three steps, about booking itself, so it was left alone (question
+  3).
+- **The video slots:** over each step, a 16:9 box for your own short video,
+  showing a placeholder poster until you have filmed it: the paw on the
+  palest teal, 8 KB. The box is kept by its ratio, so nothing moves when a
+  video arrives. To put one in: save it as `assets/video/call-step-1.mp4`
+  (H.264) and `.webm` (and 2, 3), and give its slot the game cards' markup
+  (the comment over the section says how); `pb-video.js` then fetches it
+  near the viewport, plays it muted and pauses it off screen, with the
+  pause button. Film landscape, 16:9; under 30 seconds keeps each file
+  small.
+- **New words:** "How a call with Damian works" (your title). Nothing else.
+- **Guards:** build check 45 (the steps word for word, each slot the
+  placeholder in a 16:9 box, sized, lazy, hidden from screen readers; a
+  video put in one later must follow the game cards' rules; 5 mutants) and
+  `tests/boxes.test.mjs` (the slots keep their boxes before they load).
+
 ## Questions for Damian
 
 1. **Jargon Battle, frame for frame.** To make every frame of its clip
@@ -484,6 +508,9 @@ merged.
    videos' posters and all a reader gets with reduced motion, still show
    Buddy's Run's own "P to pause" and Pause. Re-shoot them without, to
    match the clip?
+3. **The call steps on the booking page too?** They are on the home page,
+   where the three steps already were. The booking page could carry the
+   same three slots under its form, beside its own booking steps.
 
 # Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
 
