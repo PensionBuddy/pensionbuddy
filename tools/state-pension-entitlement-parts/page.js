@@ -203,7 +203,8 @@ function render() {
 
     /* The two bars, on one scale: the maximum personal rate. Each fill is
        that method's own rate, and the LOWER of the two carries an amber tail
-       up to the higher, which is the difference the closing sentence names.
+       up to the higher: the extra the higher method adds, which the closing
+       sentence names.
        Nothing is decided here: the module has already said which method wins
        and by how much, and this only measures the two figures the rows show. */
     const scale = c => (Math.max(0, Math.min(c, SP.MAX_WEEKLY_CENTS)) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
@@ -215,8 +216,8 @@ function render() {
     const lowCents = hasBoth(res) ? Math.min(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const highCents = hasBoth(res) ? Math.max(tca.weeklyCents, res.method2.weeklyCents) : tca.weeklyCents;
     const tailOn = highCents > lowCents ? (tca.weeklyCents < res.method2.weeklyCents ? 'm1' : 'm2') : null;
-    /* One label a row: the lower method is labelled with what it falls short
-       by, and whichever method the Department actually pays is labelled as
+    /* One label a row: the lower method is labelled with the extra the higher
+       one adds, and whichever method the Department actually pays is labelled as
        paid. At a tie both are paid, which is what the closing sentence says. */
     const paidOn = { m1: res.award.basis !== 'method2', m2: hasBoth(res) && res.award.basis !== 'method1' };
     ['m1', 'm2'].forEach(function (m) {

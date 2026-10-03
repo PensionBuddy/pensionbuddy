@@ -20,8 +20,8 @@ It prints, per page and width, the rubric's measurable checks:
     R1  text elements off the five type roles, as a share
     R2  font weights other than 300, 400, 600 and 800
     R3  margins, paddings and gaps off the spacing steps, as a share
-    R5  screens with two filled aqua elements; screens with amber beside aqua
-        (a chart's amber passes: read those screens before calling one)
+    R5  screens with two filled aqua elements; screens with amber or red beside aqua
+        (a chart's amber or red passes: read those screens before calling one)
     R6  top-level sections (<main>'s children; a guide wrapped in one
         container shows few, so count by heading there)
     R7  screens above the footer, at 375
@@ -153,7 +153,7 @@ def main():
     def on_role(w):
         return lambda k: any(abs(float(k.split('/')[0]) - r) < 0.25 for r in ROLES[w])
 
-    print('%-34s %5s %6s %7s %6s %6s %7s %8s %8s' % ('page', 'width', 'R1 off', 'R2 wts', 'R3 off', 'R6', 'R7 375', 'R5 2xaq', 'R5 amber'))
+    print('%-34s %5s %6s %7s %6s %6s %7s %8s %8s %8s' % ('page', 'width', 'R1 off', 'R2 wts', 'R3 off', 'R6', 'R7 375', 'R5 2xaq', 'R5 amber', 'R5 red'))
     site = {w: {'type': Counter(), 'space': Counter(), 'text': Counter(), 'bg': Counter(), 'border': Counter()} for w in WIDTHS}
     for page, w, R in data:
         if 'error' in R:
@@ -166,9 +166,10 @@ def main():
         above = (R['footTop'] or R['height']) / float(WIDTHS[w])
         two = [x['screen'] for x in R['screens'] if x['filled'] > 1]
         amber = [x['screen'] for x in R['screens'] if 'amber' in x['families'] and 'aqua' in x['families']]
-        print('%-34s %5d %5.0f%% %7s %5.0f%% %6d %7s %8s %8s' % (
+        red = [x['screen'] for x in R['screens'] if 'red' in x['families'] and 'aqua' in x['families']]
+        print('%-34s %5d %5.0f%% %7s %5.0f%% %6d %7s %8s %8s %8s' % (
             page, w, share(T, on_role(w)), ','.join(weights) or '-', share(S, lambda k: k in STEPS or k < 4),
-            len(R['sections']), '%.1f' % above if w == 375 else '', ','.join(map(str, two)) or '-', ','.join(map(str, amber)) or '-'))
+            len(R['sections']), '%.1f' % above if w == 375 else '', ','.join(map(str, two)) or '-', ','.join(map(str, amber)) or '-', ','.join(map(str, red)) or '-'))
     print()
     for w in sorted(WIDTHS):
         st = site[w]

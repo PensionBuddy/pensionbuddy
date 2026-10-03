@@ -20,8 +20,8 @@
 .pt-field input,.pt-field select{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
   background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:11px 12px;min-height:48px}
 .pt-field input:focus,.pt-field select:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
-.pt-field [aria-invalid="true"]{border-color:#A4291D}
-.pt-bad{margin:6px 0 0;font-size:.86rem;line-height:1.45;font-weight:600;color:#A4291D}
+.pt-field [aria-invalid="true"]{border-color:var(--red)}
+.pt-bad{margin:6px 0 0;font-size:.86rem;line-height:1.45;font-weight:600;color:var(--red)}
 .pt-add{font:inherit;font-size:.95rem;font-weight:600;color:var(--teal-700);background:var(--surface);border:1.5px dashed var(--line-2);
   border-radius:var(--r-md);padding:11px 16px;min-height:46px;cursor:pointer;width:100%}
 .pt-add[hidden]{display:none}

@@ -43,8 +43,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  /* amber: money that comes back or is added; red: money missing (Run 42) */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -460,11 +460,11 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.max-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
-.max-card .mt{font-size:13px;font-weight:700;color:#9A6B12;margin-bottom:9px}
-.max-card .mbig{font-size:19px;color:#5E4408;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.max-card .mbig b{font-weight:700;color:#3F2D04}
-.max-card .mnote{font-size:12.5px;color:#7A5A12;margin-top:12px;line-height:1.6}
+.max-card{background:var(--surface-2);border-radius:var(--r-lg);padding:24px 28px}
+.max-card .mt{font-size:13px;font-weight:700;color:var(--ink-3);margin-bottom:9px}
+.max-card .mbig{font-size:19px;color:var(--ink);line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.max-card .mbig b{font-weight:700;color:var(--ink)}
+.max-card .mnote{font-size:12.5px;color:var(--ink-2);margin-top:12px;line-height:1.6}
 .cta-band{padding:64px 0 8px}
 .cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
 .cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
@@ -907,9 +907,10 @@ a.btn{font-weight:600}
 /* `.relief-card .rt` is (0,2,0) and outranked the pass-7 fix at (0,1,0) */
 .relief-card .rt,.boost-card .rt,.panel .rt,.rt{color:#8C6010}
 
-/* `.max-card .mt` mirrors `.relief-card .rt` on the director calculator - same
-   amber label, same 4.1:1 shortfall. */
-.max-card .mt,.mt{color:#8C6010}
+/* `.max-card .mt` mirrored `.relief-card .rt` on the director calculator - the
+   same amber label - until Run 42 made the card neutral: a funding ceiling is
+   neither money missing nor money back. */
+.max-card .mt,.mt{color:var(--ink-3)}
 
 /* ============================================================
    PB-SONA pass 9 - radius discipline + one tier of elevation
@@ -1379,6 +1380,8 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
 .boost-ico{color:var(--aqua-600)}
 .waitcard{border-left-color:var(--aqua)}
+.waitcard:has(#waitOut){border-left-color:var(--red)}
+#waitOut b{color:var(--red)}
 .stars svg{fill:var(--aqua)}
 .rv-you,.rv-bar i:first-child{background:var(--aqua)}
 
@@ -2030,15 +2033,17 @@ a.assure:hover{border-color:var(--teal)}
 @font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:650 749;size-adjust:102.4%;ascent-override:94.7%;descent-override:23.4%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 @font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:750 1000;size-adjust:103.7%;ascent-override:93.5%;descent-override:23.1%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 /* FONTS:END */
-/* THE 52.2% IN THREE PARTS (.pb-cut): what comes off each euro taken as
-   salary, 40% income tax, 8% USC and PRSI at the dated rate (PRSI, above).
-   Written once at load; the rest of the bar is what reaches the pocket. */
+/* THE 52.35% (52.2% before 1 October 2026) IN THREE PARTS (.pb-cut): what
+   comes off each euro taken as salary, 40% income tax, 8% USC and PRSI at the
+   dated rate (PRSI, above). Written once at load; the rest of the bar is what
+   reaches the pocket. Tax you would pay, so drawn in the one red at three
+   strengths, 1 / .82 / .65, each named in the key (Run 42). */
 .pb-cut{margin:10px 0 0}
 .pb-cut-bar{display:flex;height:8px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-cut-bar i{display:block;height:100%}
-.pb-cut-it{background:var(--ink)}
-.pb-cut-usc{background:var(--ink-2)}
-.pb-cut-prsi{background:var(--ink-3);opacity:.7}
+.pb-cut-it{background:var(--red)}
+.pb-cut-usc{background:var(--red);opacity:.82}
+.pb-cut-prsi{background:var(--red);opacity:.65}
 .pb-cut-key{display:flex;flex-wrap:wrap;gap:2px 12px;margin:6px 0 0;font-size:12.5px;color:var(--ink-2)}
 .pb-cut-key b{font-weight:600;color:var(--ink-2)}
 .pb-cut-sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
@@ -2713,7 +2718,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <button class="btn btn-primary" style="width:auto" type="submit">Email my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
         </div>
         <label class="pb-optin"><input type="checkbox" id="ecOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
-        <p class="ec-note" id="ecErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+        <p class="ec-note" id="ecErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
         <p class="ec-note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. This is information, not advice.</p>
       </form>
       <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks - we've got it. Damian will be in touch personally.</span></div>

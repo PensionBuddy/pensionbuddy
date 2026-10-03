@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  /* amber: money that comes back or is added; red: money missing (Run 42) */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -2364,7 +2364,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
       <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>.</p>
-      <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+      <p class="note" id="mErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
     </form>
     <div class="ok" id="mOk" role="status" tabindex="-1">
       <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>

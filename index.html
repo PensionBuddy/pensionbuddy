@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  /* amber: money that comes back or is added; red: money missing (Run 42) */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1578,7 +1578,7 @@ button{font-family:inherit}
 .pb-gap-bar{bottom:0}
 .pb-gap-need .pb-gap-bar{background:var(--ink)}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
-.pb-gap-short{bottom:var(--from);background:var(--amber-soft);transition-delay:.12s}
+.pb-gap-short{bottom:var(--from);background:var(--red);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
 .pb-gap.pb-still .pb-gap-bar,.pb-gap.pb-still .pb-gap-short{transition:none}
 @media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
@@ -1586,9 +1586,9 @@ button{font-family:inherit}
   font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
 .pb-gap-need .pb-gap-n{color:#fff}
 .pb-gap-state .pb-gap-bar .pb-gap-n{color:var(--aqua-ink)}
-.pb-gap-short .pb-gap-n{color:var(--ink)}
+.pb-gap-short .pb-gap-n{color:#fff}
 .pb-gap-sl{position:absolute;left:20px;top:calc(18px + clamp(1.9rem,4.2vw,3.1rem) + 8px);
-  font-size:.92rem;color:var(--ink-2);white-space:nowrap}
+  font-size:.92rem;color:#fff;white-space:nowrap}
 .pb-gap-l{display:block;margin-top:14px;font-size:.98rem;line-height:1.5;color:var(--ink-2);max-width:26ch}
 .pb-gap-col:hover .pb-gap-bar{filter:brightness(1.06)}
 @media(max-width:600px){
@@ -1603,7 +1603,7 @@ button{font-family:inherit}
 /* THE GAP, YOUR OWN (#pbNeedCtl). A slider under the chart: the reader's own
    figure for what they expect to need a year, against the same €15,564. The
    chart re-scales to the larger of the two; at or under €15,564 the need is
-   covered and there is no amber block, never a negative gap. Hidden in the
+   covered and there is no red block, never a negative gap. Hidden in the
    markup and switched on by script, so a page without script shows the
    survey chart and no dead control. Bars follow the thumb with no easing. */
 .pb-gapctl{max-width:420px;margin-top:22px}
@@ -2332,6 +2332,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-hero-gap .pb-hero-copy > .pb-reg:not(.pb-reg-top){margin-top:28px}
 .pb-gap-big{margin:22px 0 0;font-family:var(--font);font-size:20px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.06;letter-spacing:-.03em;text-wrap:balance}
 .pb-gap-big-n{font-weight:300;font-size:34px;white-space:nowrap}
+.pb-gap-big-n{color:var(--red)}
 .pb-gap-big-w{display:inline-block;font-size:20px;font-weight:400;line-height:1.24;letter-spacing:0;color:var(--ink-2)}
 .pb-hero-chart .pb-gap{max-width:none}
 .pb-hero-chart .pb-src{margin-top:14px}

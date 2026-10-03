@@ -37,7 +37,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -113,7 +113,7 @@ nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .tl .td{font-size:14.5px;color:var(--ink-2);max-width:380px}
 .promise{background:var(--teal-900);color:#fff;border-radius:var(--r-lg);padding:26px 28px;margin-bottom:20px;position:relative;overflow:hidden}
 .promise::before{content:"";position:absolute;inset:0;pointer-events:none}
-.promise .pt{font-size:13px;font-weight:700;margin-bottom:9px;color:var(--amber);position:relative}
+.promise .pt{font-size:13px;font-weight:700;margin-bottom:9px;color:var(--mint);position:relative}
 .promise p{font-size:15px;color:#A7DED4;line-height:1.6;position:relative}
 .assurances{display:flex;flex-direction:column;gap:12px}
 .assure{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 20px;box-shadow:var(--sh-sm)}
@@ -1272,7 +1272,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .qfield input{width:100%;min-height:52px;font-family:var(--font);font-size:16px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:12px;padding:14px 18px;transition:border-color .2s,box-shadow .2s,background .2s}
 .qfield input::placeholder{color:var(--ink-3)}
 .qfield input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--ring)}
-.qfield input[aria-invalid="true"]{border-color:#8C6010;background:#fff}
+.qfield input[aria-invalid="true"]{border-color:var(--red);background:#fff}
 
 /* persona: a real radio group. The input itself fills the tile, so the hit
    target is the whole 76px card rather than a 13px dot. */
@@ -1288,10 +1288,10 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .popt input:focus+.pl{border-color:var(--teal);box-shadow:0 0 0 4px var(--ring)}
 .popt input:checked+.pl{border-color:var(--teal);background:var(--teal-50);box-shadow:inset 0 0 0 1px var(--teal)}
 .popt input:checked:focus+.pl{box-shadow:0 0 0 4px var(--ring),inset 0 0 0 1px var(--teal)}
-.popt input[aria-invalid="true"]+.pl{border-color:#8C6010}
+.popt input[aria-invalid="true"]+.pl{border-color:var(--red)}
 
 /* error region: always in the DOM for aria-live, chrome-free until it has text */
-.qerr{font-size:14px;font-weight:600;color:var(--ink);background:var(--amber-soft);border:1px solid var(--amber);border-radius:12px;padding:12px 15px;margin-bottom:16px;line-height:1.5}
+.qerr{font-size:14px;font-weight:600;color:var(--ink);background:var(--surface);border:1px solid var(--red);border-radius:12px;padding:12px 15px;margin-bottom:16px;line-height:1.5}
 .qerr:empty{display:none}
 .qsubmit{width:100%}
 .qnote{font-size:12.5px;line-height:1.6;color:var(--ink-2);margin-top:14px}

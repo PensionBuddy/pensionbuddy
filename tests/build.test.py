@@ -999,7 +999,7 @@ def run():
     # Run 32, part 5a: the director calculator's safe is a still picture, the
     # same for every figure (Damian: "neutral reveal, no reward"). Nothing
     # drives it from the relief figure, and nothing on it moves or fills:
-    # no --pb-t level, no data-pb-state, no amber, no rotation or transition
+    # no --pb-t level, no data-pb-state, no amber or red (Run 42), no rotation or transition
     # beyond the dial's fixed cross, and no script that writes #pbSafe.
     def safe(src):
         out = []
@@ -1008,7 +1008,7 @@ def run():
         if not rules:
             out.append('no safe')
         for sel, b in rules:
-            if re.search(r'var\(--pb-t\b(?!-)|--amber|transition|animation|rotateY|perspective', b):
+            if re.search(r'var\(--pb-t\b(?!-)|--amber|--red|transition|animation|rotateY|perspective', b):
                 out.append('moves: ' + sel)
             if 'rotate(' in b and sel != '.pb-safe-dial::after':
                 out.append('turns: ' + sel)
@@ -1022,6 +1022,7 @@ def run():
     for label, find, repl, want in (
             ('the door swing put back', '.pb-safe-door{position:absolute;', '.pb-safe-door{transform:rotateY(calc(var(--pb-t,0)*74deg));position:absolute;', 'moves: .pb-safe-door'),
             ('the amber fill put back', '</style>', '.pb-safe-fill{background:var(--amber)}\n</style>', 'moves: .pb-safe-fill'),
+            ('the red fill put back', '</style>', '.pb-safe-fill{background:var(--red)}\n</style>', 'moves: .pb-safe-fill'),
             ('the driver put back', '</body>', "<script>var el=document.getElementById('pbSafe');el.style.setProperty('--pb-t','0.5');</script>\n</body>", 'scripted')):
         m = dc.replace(find, repl, 1)
         assert m != dc, label

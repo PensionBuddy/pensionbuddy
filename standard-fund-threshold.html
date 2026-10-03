@@ -39,7 +39,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -141,12 +141,12 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .relief-card .rbig b{font-weight:700;color:#3F2D04}
 .relief-viz{margin-top:18px;transition:opacity .4s}
 .rv-bar{display:flex;height:13px;border-radius:99px;overflow:hidden;background:rgba(154,107,18,.16)}
-.rv-you{background:#B5821C;transition:width .6s cubic-bezier(.45,0,.25,1)}
+.rv-you{background:var(--ink-2);transition:width .6s cubic-bezier(.45,0,.25,1)}
 .rv-tax{background:var(--amber);transition:width .6s cubic-bezier(.45,0,.25,1)}
 .rv-keys{display:flex;justify-content:space-between;gap:12px;margin-top:11px;font-size:13px;color:#5E4408;flex-wrap:wrap}
 .rv-keys b{font-weight:700;font-variant-numeric:tabular-nums}
 .rv-d{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px;vertical-align:-1px}
-.rv-d.you{background:#B5821C}.rv-d.tax{background:var(--amber)}
+.rv-d.you{background:var(--ink-2)}.rv-d.tax{background:var(--amber)}
 @media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
 .boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
@@ -1239,8 +1239,10 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
 .boost-ico{color:var(--aqua-600)}
 .waitcard{border-left-color:var(--aqua)}
+.waitcard:has(#waitOut){border-left-color:var(--red)}
+#waitOut b{color:var(--red)}
 .stars svg{fill:var(--aqua)}
-.rv-you,.rv-bar i:first-child{background:var(--aqua)}
+.rv-you,.rv-bar i:first-child{background:var(--ink-2)}
 
 /* --- the pale wash does more work now,so sections feel lighter --- */
 .tag,.dl-tag,.magnet{background:var(--teal-50)}
@@ -1636,8 +1638,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    contributions that get tax relief, six steps from 15% under 30 to 40% at
    60 and over, from PBRelief.reliefBand(). Static markup; on the pension
    calculator and the comparison page assets/js/pb-ladder.js marks the
-   reader's step and says their limit in euro. Relief is money the State
-   puts in, so the fills are teal. Byte-identical wherever it appears.
+   reader's step and says their limit in euro. Relief is money that comes
+   back, so the fills are amber (Run 42). Byte-identical wherever it appears.
    ============================================================ */
 .pb-lad{max-width:560px}
 .pb-lad[hidden]{display:none}
@@ -1645,7 +1647,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
 .pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
 .pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
+.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--amber)}
 .pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
 .pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
 .pb-lad-you[hidden]{display:none}
@@ -2423,6 +2425,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   .sft-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sft-card{padding:18px 16px}
 }
+#lumpTax{color:var(--red)}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that

@@ -16,7 +16,7 @@
 .rd-opt input{flex:0 0 auto;width:24px;height:24px;margin:-1px 0 0;accent-color:var(--teal-700)}
 .rd-opt:has(input:checked){border-color:var(--teal-700);background:var(--teal-50)}
 .rd-opt input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
-.rd-err{margin:0;font-size:.95rem;font-weight:600;color:#A4291D}
+.rd-err{margin:0;font-size:.95rem;font-weight:600;color:var(--red)}
 .rd-err:not(:empty){margin:0 0 12px}
 .rd-nav{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:8px}
 .rd-nav .btn{width:auto}
@@ -35,7 +35,7 @@
 .rd-scale{margin:0 0 16px}
 .rd-bands{position:relative;display:flex;height:14px;border-radius:99px;overflow:visible}
 .rd-bands i{display:block;height:100%}
-.rd-b-early{width:40%;background:var(--amber-soft);border-radius:99px 0 0 99px}
+.rd-b-early{width:40%;background:var(--line-2);border-radius:99px 0 0 99px}
 .rd-b-onway{width:35%;background:var(--teal-100)}
 .rd-b-good{width:25%;background:var(--aqua);border-radius:0 99px 99px 0}
 .rd-mark{position:absolute;top:-5px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--ink)}

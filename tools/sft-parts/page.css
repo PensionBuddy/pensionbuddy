@@ -29,3 +29,4 @@
   .sft-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sft-card{padding:18px 16px}
 }
+#lumpTax{color:var(--red)}

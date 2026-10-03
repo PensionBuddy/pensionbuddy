@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* warm secondary, used sparingly for tax-relief visual */
-  --amber:#F4B740; --amber-soft:#FCEFCF;
+  /* amber: money that comes back or is added; red: money missing (Run 42) */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1561,13 +1561,13 @@ button{font-family:inherit}
    Pension pays a year, and the two living standards it gets
    measured against. The teal base is the same height in all three
    columns, because the State Pension does not change; what grows
-   across the row is the amber, the part a reader has to find.
+   across the row is the red, the part a reader has to find.
    Same colour grammar as the home page's gap band: teal is what
-   the State gives you, amber is the shortfall, and the total, in
+   the State gives you, red is the shortfall (amber until Run 42), and the total, in
    ink above each bar, is what you need. Heights and figures are
    in the markup, so the chart is finished before any script runs;
    assets/js/pb-bars.js arms it, below the fold only, and it grows once
-   on arrival: the teal first, then the amber after it (Run 34, part 6b).
+   on arrival: the teal first, then the red after it (Run 34, part 6b).
    The figures are final throughout.
    ============================================================ */
 .pb-lsb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
@@ -1585,7 +1585,7 @@ button{font-family:inherit}
 .pb-lsb-top{border-radius:10px 10px 0 0}
 .pb-lsb-teal{bottom:0;height:var(--h);background:var(--aqua)}
 .pb-lsb-amber{bottom:var(--from);height:calc(var(--h) - var(--from));
-  background:var(--amber-soft);transition-delay:calc(var(--pb-d-4) + var(--pb-beat-gap))}
+  background:var(--red);transition-delay:calc(var(--pb-d-4) + var(--pb-beat-gap))}
 /* arming is instant, growing is animated: the script adds .pb-armed after the
    markup has already painted at full height, so an animated collapse would
    show the reader the finished chart and then take it away */
@@ -1606,7 +1606,7 @@ button{font-family:inherit}
 /* ============================================================
    v4 - WHAT TIME DOES. The same monthly amount, started at three
    ages, on one scale. Teal is what the reader would have at 66;
-   amber is what starting later costs, which is the site's colour
+   red is what starting later costs (amber until Run 42), which is the site's colour
    grammar wherever a figure falls short of another. The bars'
    proportions do not move as the slider does, and that is the
    second half of the lesson: with nothing saved to start with,
@@ -1631,7 +1631,7 @@ button{font-family:inherit}
   background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-sa-fill,.pb-sa-gap{position:absolute;top:0;bottom:0;display:block}
 .pb-sa-fill{left:0;background:var(--aqua)}
-.pb-sa-gap{background:var(--amber-soft)}
+.pb-sa-gap{background:var(--red)}
 .pb-sa-fig{font-size:1.05rem;font-weight:600;color:var(--ink);
   font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
@@ -1679,12 +1679,13 @@ button{font-family:inherit}
 /* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
    one scale: what you pay in, what your employer adds, what the State adds,
    in a year at this year's auto-enrolment rates (PBCompare.autoEnrolment,
-   capped at the scheme's salary limit). Teal is the State; you and your
-   employer are neutral. The bars never change shape, only the figures do,
+   capped at the scheme's salary limit). You are neutral; what your
+   employer and the State add is amber, money added (Run 42). The bars never change shape, only the figures do,
    because the ratio is fixed. The markup carries the default. */
 .pb-ae{margin:6px 0 26px}
 .pb-ae-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em}
 .pb-sa-fill.pb-ae-own{background:var(--ink-2)}
+.pb-ae .pb-sa-rows .pb-ae-row:nth-child(2) .pb-sa-fill,.pb-ae .pb-sa-rows .pb-ae-row:nth-child(3) .pb-sa-fill{background:var(--amber)}
 @media(max-width:700px){
   .pb-sa-row{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
   .pb-sa-name{grid-column:1;grid-row:1}
@@ -1833,8 +1834,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    contributions that get tax relief, six steps from 15% under 30 to 40% at
    60 and over, from PBRelief.reliefBand(). Static markup; on the pension
    calculator and the comparison page assets/js/pb-ladder.js marks the
-   reader's step and says their limit in euro. Relief is money the State
-   puts in, so the fills are teal. Byte-identical wherever it appears.
+   reader's step and says their limit in euro. Relief is money that comes
+   back, so the fills are amber (Run 42). Byte-identical wherever it appears.
    ============================================================ */
 .pb-lad{max-width:560px}
 .pb-lad[hidden]{display:none}
@@ -1842,7 +1843,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-row{display:grid;grid-template-columns:8.6em minmax(0,1fr) 3.2em;gap:12px;align-items:center;padding:4px 0}
 .pb-lad-age{font-size:13.5px;font-weight:600;color:var(--ink)}
 .pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua)}
+.pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--amber)}
 .pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
 .pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
 .pb-lad-you[hidden]{display:none}
@@ -2779,7 +2780,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
       <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>.</p>
-      <p class="note" id="mErr" role="alert" style="color:#C0392B;display:none">Please enter a valid email address.</p>
+      <p class="note" id="mErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
     </form>
     <div class="ok" id="mOk" role="status" tabindex="-1">
       <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
