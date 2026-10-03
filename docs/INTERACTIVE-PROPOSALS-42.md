@@ -18,7 +18,11 @@ State Pension reality check, the entitlement check and the PIA page.
 
 Every file and line was checked against the branch after item 1, which
 rebuilt the home page's hero (so the home page's line numbers are not
-main's).
+main's). Later items in this run moved lines on index.html, starter.html
+and the two calculators; find each place by the id or text quoted beside
+its line number. The calculators' line numbers below are as they stand at
+the end of this run; the home and starter pages' are as they stood after
+item 1 (starter's are one line short since item 4).
 
 ## The rules every row keeps
 
@@ -43,12 +47,12 @@ main's).
 | 4 | standard-fund-threshold, "Tax on the lump sum" (`tools/sft-parts/main.html:53-56`) | €200,000 tax-free, the next €300,000 at 20%, the rest taxed as income | One stacked bar under the table, its slices sized from `#lump`, the taxed slices red, each labelled in euro. The table stays as the readable form | S |
 | 5 | state-pension-reality-check, "Against what retirement costs" (`tools/state-pension-parts/main.html:112-115`) | What the State Pension leaves you to find, for each standard of living | Draw the uncovered rest of each standard's bar as a red segment, sized by the `covered` share that `tools/state-pension-parts/page.js:88-91` already works out, and labelled by the sentence under each bar (`.lsgap`) that already says it | M (page.js; render-diff) |
 | 6 | starter.html, the relief ladder (`starter.html:2670-2680`); director.html's ladder (`director.html:2318-2327`) | "Tax relief is there at any age" (starter); the personal limit by age (director) | One "Your age" slider (18 to 70) above each ladder, named by `data-pb-age` on the `.pb-lad`. The page loads `assets/js/pension-tax-relief.js` and `assets/js/pb-ladder.js` (neither page loads them today). pb-ladder.js gets a small change so that an age slider on its own marks "You" on the reader's row and skips the euro line: today it marks nothing unless `data-pb-earn` and a `.pb-lad-out` are there too (`assets/js/pb-ladder.js:28-31`). No new figure appears | S (pb-ladder.js and two script tags; both ladders are subtraction-audit cut candidates, starter 6 and director 2) |
-| 7 | my-pensions, the summary line `#ptCharges` (`tools/pots-parts/main.html:30`, written by `tools/pots-parts/page.js:108`) | The yearly charges in euro | page.js wraps the euro figure in a `<b>` so the charges can be red, as the colour rule now says charges eating the pot are | S (page.js) |
+| 7 | my-pensions, the summary line `#ptCharges` (`tools/pots-parts/main.html:30`, written by `tools/pots-parts/page.js:108`) | The yearly charges in euro | page.js wraps the euro figure in a `<b>` so the charges can be red, as this run's colour rule (item 4) says charges eating the pot are | S (page.js) |
 | 8 | state-pension-reality-check, the living-standard bars (`#lsRows`, `tools/state-pension-parts/main.html:115`) | What the State Pension covers of a couple's costs (the page says today that couple figures are not shown, `main.html:170`) | A Single / Couple pair of buttons above `#lsRows`. Couple draws the bars against `PBLivingStandards.standard(level,'couple')` with two State Pensions at the maximum, as the home page's way-of-life picker already does (`index.html:3084-3092`). Single stays the default in the markup | M (protected; compliance saw the caveat wording) |
 | 9 | starter.html, auto-enrolment (`starter.html:2683-2709`; its dated list "Once you are enrolled: what happens when." at 2711-2723) | The rates rise 1.5 / 1.5 / 0.5 now, then 3 / 3 / 1, 4.5 / 4.5 / 1.5 and 6 / 6 / 2, always 3 : 3 : 1 | A four-step picker ("2026 to 2028", "2029 to 2031", "2032 to 2034", "2035 on") above `#aeSalary` (2690), repainting `#aeYou`, `#aeEmp` and `#aeState` (2696-2706) from `PBCompare.AE_PHASES` (`assets/js/autoenrolment.js:37`), at the reader's own salary | S (waits on subtraction audit question 18) |
 | 10 | broker-vs-autoenrolment, beside `#capCard` (`tools/compare-parts/main.html:109`) | Who auto-enrolment reaches: employees aged 23 to 59, earning €20,000 or more, not in a pension through payroll | One sentence written from the existing `#age` and `#salary`: "At 35 on €50,000 you would be enrolled", or "…so not enrolled", with the starter page's source line (`starter.html:2722`) | M (protected) |
-| 11 | pension-calculator, the growth chart (`#chart`, `pension-calculator.html:2555`) | The cost of waiting (`#waitOut`, 2548) | A red "€X less" tick at the retirement year on the chart | M (the page's inline script; render-diff) |
-| 12 | director-calculator, under `#pbSay` (`director-calculator.html:2651`) | A quarter of the pot, and how much of it is tax-free under the €200,000 and €500,000 limits | One line written from `#potOut` and the threshold module's limits. The wording must say "under the 25% route", because directors can also take the salary-and-service route (`director-calculator.html:2743` states the 25%) | M (protected; a question below) |
+| 11 | pension-calculator, the growth chart (`#chart`, `pension-calculator.html:2557`) | The cost of waiting (`#waitOut`, 2550) | A red "€X less" tick at the retirement year on the chart | M (the page's inline script; render-diff) |
+| 12 | director-calculator, under `#pbSay` (`director-calculator.html:2656`) | A quarter of the pot, and how it would be taxed: the first €200,000 tax-free, the next €300,000 (up to €500,000) at 20% | One line written from `#potOut` and the threshold module's limits. The wording must say "under the 25% route", because directors can also take the salary-and-service route (`director-calculator.html:2748` states the 25%) | M (protected; a question below) |
 | 13 | pia.html, "What each could leave you after 10 years, after its tax" (`tools/pia-parts/main.html:154-158`) | The three outcomes on one scale | Three horizontal bars under the headline figures, on one scale; the PIA bar outlined until a rate and a threshold are typed | S (protected, so the render-diff too; after Budget day, 6 October, once `docs/PIA-BUDGET-DAY.md` is done) |
 | 14 | index.html, "What changes, and when." at phone width (`index.html:2734-2758`) | The relief band for the reader's age, and the ages 50, 60, 61, 66 and 71 | At phone widths only, an age slider above the list: the step for that age takes `.pb-on` (as `assets/js/pb-timeline.js` already does on a wide screen) and a one-line card shows its `data-show` figure | S (the timeline is a subtraction-audit cut candidate) |
 | 15 | pensions-over-50, "Catching up" (`pensions-over-50.html:2062`); self-employed-pensions, "Tax relief" (`self-employed-pensions.html:2071`) | 30%, 35% and 40% at 50, 55 and 60 | The starter page's `.pb-lad` ladder, with an age slider, after the paragraph that states the bands (neither guide has a ladder today). The same pb-ladder.js change and the same two script tags as rank 6 apply, and each guide takes the ladder's CSS from starter.html, since neither has it today | S (costs about half a screen on guides the rubric measures by length) |
@@ -72,11 +76,13 @@ main's).
   68%, the FAQ answers, the legal pages.
 - **Needs a figure the site does not have:** audit 2's N1, N3, N5, N7, and
   N9 to N13.
-- **Colour, not interaction:** a red border on the threshold page's
-  `.sft-note` and on `#sftOver` (S each). They are listed with item 4's
-  colour changes as proposals.
+- **Colour, not interaction:** a red left border on the calculators'
+  threshold note `.sft-note` (`#sftNote`, pension-calculator.html:2547 and
+  director-calculator.html:2663), and on the threshold page's "Over the
+  threshold" card `#sftOver` (`tools/sft-parts/main.html:42-46`), S each.
+  They are colour proposals, put to you with the Run 42 colour questions.
 - **`#taxOut` in amber** on the director calculator's dark panel: also a
-  colour proposal, listed with item 4.
+  colour proposal, put to you with the Run 42 colour questions.
 
 ## Questions for you
 
