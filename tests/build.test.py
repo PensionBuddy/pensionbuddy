@@ -1042,7 +1042,10 @@ def run():
     def lockups(src):
         # the hero's container, its two copies, where each sits, and whether they say the same
         i = src.find('<div class="pb-hero-copy">') if '<div class="pb-hero-copy">' in src else src.find('<div class="hero-copy pb-hero-copy">')
-        end = src.find('\n  <div class="hero-phone">', i)
+        # the box ends at the nearer of the phone and the chart column (Run 42:
+        # the home hero ends on its chart; its phone now sits in #call, far below)
+        ends = [e for e in (src.find('\n  <div class="hero-phone">', i), src.find('\n  <div class="pb-hero-chart">', i)) if e >= 0]
+        end = min(ends) if ends else -1
         if i < 0 or end < 0:
             return 'no .pb-hero-copy container'
         box = src[i:end]
@@ -1343,9 +1346,9 @@ def run():
         # (Run 37: with a comment earlier on the page, `<!--.*?-->` reached
         # from there to this one)
         m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
-        gap = ix.find('<section class="gapband pb-bleed pb-wash" id="gap">')
+        gap = ix.find('<section class="pb-changed" id="changed" aria-labelledby="pbChangedH">')
         if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
-            return ['the section is not straight after the gap band and before the calculator band']
+            return ['the section is not straight after "What\'s changed?" and before the calculator band']
         box = m.group(1)
         if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
             f.append('the heading')
@@ -1407,8 +1410,9 @@ def run():
         eq('32. %s is caught' % label, any(want in x for x in learn_faults(mut)), True)
 
     # ----------------------------------------------------------------- 33
-    # Run 37, item 1: "What's changed?" on the home page, straight under the
-    # hero and before the provider logos. Six plain links, one per change in
+    # Run 37, item 1: "What's changed?" on the home page. Since Run 42 it sits
+    # straight after the way-of-life band (#life), which follows the provider
+    # logos under the hero, and before the games. Six plain links, one per change in
     # a life, each to the live page that already covers it; each link's name
     # starts with its visible words and then names the page as the nav does
     # (WCAG 2.5.3). Nothing runs and nothing is stored: no script mentions
@@ -1425,11 +1429,10 @@ def run():
 
     def changed_faults(ix):
         f = []
-        hero = ix.find('</div></header>')
+        life = ix.find('</section>', ix.find('<section class="pb-gap-more" id="life">'))
         m = re.search(r'<section class="pb-changed" id="changed" aria-labelledby="pbChangedH"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        mount = ix.find('<div data-pb-providers hidden></div>')
-        if not m or hero < 0 or not (hero < m.start() < mount) or re.search(r'<(?:section|div|header)\b', ix[hero + len('</div></header>'):m.start()]):
-            return ['the section is not straight under the hero, before the provider logos']
+        if not m or life < 0 or not (life < m.start() < ix.find('<section class="pb-learn"')) or re.search(r'<(?:section|div|header)\b', ix[life + len('</section>'):m.start()]):
+            return ['the section is not straight after the way-of-life band, before the games']
         box = m.group(1)
         if '<h2 class="pb-changed-h" id="pbChangedH">What&rsquo;s changed?</h2>' not in box:
             f.append('the heading')
@@ -1450,11 +1453,11 @@ def run():
             f.append('the section moves, or a script touches it')
         return f
 
-    eq('33. "What\'s changed?": under the hero, six links to the live pages that cover each change, named for where they go, still',
+    eq('33. "What\'s changed?": after the way-of-life band, six links to the live pages that cover each change, named for where they go, still',
        changed_faults(sources['index.html']), [])
     ix = sources['index.html']
     for label, find, repl, want in (
-            ('the section moved below the provider logos', None, None, 'straight under'),
+            ('the section moved above the provider logos', None, None, 'straight after'),
             ('a link to a held page', 'href="tracker.html" aria-label="Left a job: Find a pension"',
              'href="find-my-pension.html" aria-label="Left a job: Find a pension"', 'not a live page'),
             ('a name that does not start with the words', 'aria-label="Turning 50: Pensions after 50"',
@@ -1467,11 +1470,11 @@ def run():
              '<script>document.querySelector(\'#changed\').addEventListener(\'click\',function(){localStorage.x=1})</script></body>', 'a script touches it')):
         if find is None:
             s0 = ix.find("<!-- WHAT'S CHANGED?")
-            s1 = ix.find('<!-- PROVIDER TICKER')
+            s1 = ix.find('<!-- JUST HERE TO LEARN?')
             sec = ix[s0:s1]
             rest = ix[:s0] + ix[s1:]
-            n0 = rest.find('</noscript>', rest.find('<div data-pb-providers hidden></div>')) + len('</noscript>\n')
-            mut = rest[:n0] + '\n' + sec + rest[n0:]
+            tk = rest.find('<!-- PROVIDER TICKER')
+            mut = rest[:tk] + sec + rest[tk:]
         else:
             mut = ix.replace(find, repl, 1)
         assert mut != ix, label

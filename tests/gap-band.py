@@ -12,15 +12,20 @@ starve IntersectionObserver (see the README in tests/render-diff for the
 traps). Chrome is launched, the probe posts its record, Chrome is killed: the
 page's load event is never waited on, because the font service can stall it
 in a sandbox, and the served copy leaves the font links out for the same
-reason. Not part of tests/run-tests.py: nine Chrome launches, about 40 s.
+reason. Not part of tests/run-tests.py: eleven Chrome launches, about 50 s.
 
 Scenarios: no JavaScript (every page script stripped, the probe alone left:
 the markup and CSS such a reader gets), loaded with the band already in view
 (#gap at two widths, a tall window, a slow page scrolled before load),
-reduced motion, and scrolled to from the top, where the count-up must still
-play. In every one: no euro zero in the DOM or on screen, and the finished
+reduced motion, and scrolled to from the top, where, since Run 42 put the chart
+in the hero, it is already in view and only the finished figures show. The
+count-up now plays only when the page opens part-way down (a reload restored
+mid-page, or a link to a later section) and the reader then scrolls back up
+to the chart: loaded at #learn, and at #call 500 wide, then #gap scrolled to
+at 2 s. In every one: no euro zero in the DOM or on screen, and the finished
 figures at the end. Where the band is in view on load: only the finished
-figures, ever. Exit 0 or 1.
+figures, ever. Where it is scrolled to from part-way down: the count-up plays.
+Exit 0 or 1.
 """
 import http.server
 import json
@@ -141,8 +146,10 @@ SCEN = [
     ('in view on load: a tall window, 1440x3200', ['--window-size=1440,3200'], '', '', FINISHED),
     ('in view on load: a slow page (load held 3 s), scrolled to at 0.8 s', ['--window-size=1440,900'], '', '&scrollat=800&hold=3000', FINISHED),
     ('reduced motion, #gap', ['--window-size=1440,900', '--force-prefers-reduced-motion'], '#gap', '', FINISHED),
-    ('from the top, scrolled to at 2 s', ['--window-size=1440,900'], '', '&scrollat=2000', PLAYS),
-    ('a slow page (load held 3 s), scrolled to at 4 s', ['--window-size=1440,900'], '', '&scrollat=4000&hold=3000', PLAYS),
+    ('from the top, #gap scrolled to at 2 s: already in view', ['--window-size=1440,900'], '', '&scrollat=2000', FINISHED),
+    ('a slow page (load held 3 s), #gap scrolled to at 4 s: already in view', ['--window-size=1440,900'], '', '&scrollat=4000&hold=3000', FINISHED),
+    ('loaded at #learn, #gap scrolled to at 2 s: the count-up plays', ['--window-size=1440,900'], '#learn', '&scrollat=2000', PLAYS),
+    ('loaded at #call (500 wide), #gap scrolled to at 2 s: the count-up plays', ['--window-size=500,900'], '#call', '&scrollat=2000', PLAYS),
 ]
 FIGURES = ['\u20ac40,860', '\u20ac25,296', '\u20ac15,564']
 failed = 0

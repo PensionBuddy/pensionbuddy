@@ -87,7 +87,7 @@
   eq('7. every step names a page', mid.moves.every(function (m) { return !!m.href && !!m.link && !!m.text; }), true);
   has('7. losing points on "where are they" leads to the tracker page, while the finder is held back', mid.moves.filter(function (m) { return m.key === 'whereAll'; })[0].href, 'tracker.html');
   has('7. the State Pension step leads to the entitlement check', mid.moves.filter(function (m) { return m.key === 'statePension'; })[0].href, 'state-pension-entitlement.html');
-  has('7. the figure to aim for leads to the way-of-life picker', mid.moves.filter(function (m) { return m.key === 'target'; })[0].href, 'index.html#gap');
+  has('7. the figure to aim for leads to the way-of-life picker', mid.moves.filter(function (m) { return m.key === 'target'; })[0].href, 'index.html#life');
 
   group('8  nothing scores booking a call');
   var text = JSON.stringify(R.questions('tracker').concat(R.questions('starter'), R.questions('director')));
