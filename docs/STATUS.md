@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 1 October 2026, after Runs 37 and 38 went live (Run 39)
+# Launch status — as at 3 October 2026, after Runs 39, 40 and 41 went live (Run 42)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -55,7 +55,15 @@ used, site search (the nav button and "/"), "Your pension through life",
 Save as A on the pension calculator, related pages at the end of each page,
 the new 404 page, short loops of the two games on the home page's game
 cards, and media that pops in on scroll. A flaw found on the live 404 at
-375 (its two buttons overlap) is fixed on `claude/ux-5`, not yet live.
+375 (its two buttons overlap) was fixed on `claude/ux-5` (Run 39) and is
+live with it (next paragraph).
+
+Since 1 October 2026 (main `31cf29e`) Runs 39 and 40 are live, and since
+2 October 2026 (main `84a75cd`) Run 41: the live countdown, the design
+rubric, the subtraction audit, verify.py's screen-by-screen shots and
+tools/design-measure.py. Run 42 (the home page opening on the gap, red
+for money missing and amber for money back, booking asks after the give,
+the home cuts) is on `claude/pain-red`, not yet merged.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -132,6 +140,10 @@ and `404.html`. `about.html` does not exist: it was folded into
    loaded, so they are not in Inter (a one-line CSS fix, `svg text`); and
    the comparison's share row (link, print, email) sits in the first mode
    only, so "On top of auto-enrolment" has none.
+11. **Run 42** (on `claude/pain-red`): 24 numbered questions (22 open;
+   15 and 17 answered in the build) on the home page's new opening, the
+   colours, the moved asks and the lists of cuts; Run 42's "Needs Damian",
+   below.
 
 ## Parked, with a date or a trigger
 
@@ -299,7 +311,626 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
-# Run 41 — 2026-10-01 · The live countdown back; a design rubric; a subtraction audit (on `claude/countdown-rubric`, not merged)
+# Run 42 — 2026-10-03 · The home page opens on the gap; red for pain, amber for money back; give before ask; cuts (on `claude/pain-red`)
+
+Damian's brief, 3 October 2026: plan the run, build it with subagents, on
+a new branch off main, `claude/pain-red`; gate each item, merge, push
+main. Five items: (1) the home hero gives first and asks later: it opens
+on the gap, the shortfall figure, its bars, their source and the slider,
+with the provider logo ticker directly under the hero, as now; (2) keep
+every interactive and moving part, and list where a static section could
+teach its figure by being moved; (3) give before ask, a sitewide audit:
+move each booking ask below the first give where that is clear, list the
+rest; (4) red for pain, amber for money back: a gap, a shortfall, a loss
+or a cost in red, as a fill with white text, tax relief and top-ups in
+amber; (5) cut text that only pushes booking, repeats another section, or
+says nothing a figure does not, keeping every fact, source, caveat and
+warning. Add the colour change, the cuts and the moved asks to the
+compliance pack; screenshots at 375 and 1440, before and after;
+Lighthouse before and after; report the hash. Planned and built by
+Claude agents, each item reviewed before its commit.
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The home page opens on the gap: the regulator and QFA line, the heading, "€25,296 a year short.", the bars, their source, the slider, the caveat; the booking ask after the give | done | a6b1ba3 |
+| 2 | `docs/INTERACTIVE-PROPOSALS-42.md`: sixteen places a static section could teach its figure by moving; nothing built | done, a list | ed79141 |
+| 3 | Give before ask: the 404 page and the directors' rules list give first; `docs/GIVE-BEFORE-ASK-42.md`, the sitewide table | done (two pages moved; the rest for you) | 7177bda |
+| 4 | Red for money missing, amber for money back: one red token, every chart, bar and figure; the rubric, the glossary, a render-diff proving colours only | done | 62019bd |
+| 5 | Home cuts (the closing fork, one story line); `docs/CUT-LIST-42.md`, the per-page lists | done (home only; the rest for you) | 37e7048 |
+| 6 | This entry, the compliance pack (1.23, B.21 and the edits), the sitemap | done | this commit |
+
+Main was `84a75cd` (Run 41's merge) when the branch began and has not
+moved. The merge to main is the next step, after this commit's gate.
+
+## Item 1, the home page opens on the gap
+
+- **What a reader meets first now** (`index.html:2524-2564`,
+  `header.hero#gap`): the small label "Pensions, in plain English", the
+  heading "People know roughly what they’ll need." with "Far fewer know
+  what they’re on track for." under it (the gap band's own heading, split
+  in two: no new words), the figure "€25,296 a year short." (the number
+  large and light, the words beside it, one space between the two spans
+  so a screen reader hears the sentence), and the regulator and QFA line,
+  shown once: above the heading on a phone (`.pb-reg-top`), under the
+  figure on a wide screen (`index.html:2238`, `2245-2247`); beside it on
+  a wide screen, under it on a phone, the two bars, "Royal London Ireland,
+  2026.", the slider "What you expect to need" and the caveat "These are
+  survey averages, not a projection for you. …". No booking link in it.
+  The nav button stays.
+- **Cut, word for word** (all three from the old hero):
+  1. the heading "One call. To know where you stand." (only pushes
+     booking);
+  2. "A pension should be something you understand, not something you
+     avoid." (the story's "One idea: a pension should be something you
+     understand, not something you avoid." stays, `index.html:2779`);
+  3. "Most people in Ireland have a pension they’ve never really looked
+     at." ("79% feel unprepared." and its source say it).
+  A text diff of `<main>` shows nothing else changed in words: "€25,296 a
+  year short." is the same sentence in two spans.
+- **Moved, words unchanged:** "Get my free review", "Free, 20 minutes, no
+  obligation." and "Try the calculator", from the hero to the end of a new
+  band after the provider logos (`#life`, `index.html:2613-2617`), after
+  the small label "The gap", "79% feel unprepared." with its Amárach
+  source, and the way-of-life picker. The Buddy chat picture, its caption
+  "Illustration only · the value of investments can fall as well as rise"
+  included, byte for byte, from the hero into "How a call with Damian
+  works" (`#call`), after the three steps (`index.html:2895-2911`). The
+  provider logos (comment, mount and `<noscript>` row byte for byte) now
+  sit directly under the hero; "What’s changed?" and its six links follow
+  `#life`, before the games (build check 33 rewritten to hold that order).
+- **First screen, measured in Chrome** (top to bottom of each block, in
+  CSS pixels):
+
+| Reading | 375 x 812 | 1440 x 900 |
+|---|---|---|
+| Before (main), cookie answered | lockup 204-268, heading 288-396, sub-line 414-468, booking block 551-699; the gap chart started at 2047 | heading 234-450, sub-line 468-535, booking block 609-703, tail lockup 729-776; the hero ended at 1447, the chart at 2113 |
+| Before (main), first visit (no cookie choice yet) | the cookie bar 716-812; everything above it as answered (the booking block ends at 699, just clear of the bar); no figure on the first screen. At 390 x 844: bar 764-860 | bar 827-900; the hero's first screen as answered |
+| After, cookie answered | lockup 168-232, heading 246-318, sub-line 328-382, figure 394-430, chart 444-679, source 689-712, slider 724-811, caveat 827-920; the hero ends at 948, the logos 948-1106 | hero 114-773: heading 200-416, sub-line 430-464, figure 486-558, tail lockup 586-652; chart 154-512 (each bar 246px wide), source 526-549, slider 565-652, caveat 668-737; the logos 773-939 |
+| After, first visit (no cookie choice yet) | the cookie bar 716-812: lockup, heading, sub-line, figure, chart and source clear of it; the slider's label row (724-753) and track (763-811) under it until the reader chooses (question 19). At 390 x 844: bar 764-860, the track under it | bar 827-900: the whole hero clear of it |
+
+The booking block ("Get my free review", its reason, "Try the
+calculator") now starts at 1903 at 375 and at 1327 at 1440, after the
+logos, "79% feel unprepared." and the picker. Measured with one script on
+both trees (DevTools protocol, the device size set; cookie choice
+pre-answered, or a fresh profile for the first visit).
+
+- **Share picture:** `assets/brand/og/og-home.png` now reads "Pensions,
+  in plain English / People know roughly what they’ll need." with
+  "pensionbuddy.ie · Regulated by the Central Bank of Ireland";
+  `og:image:alt` and `twitter:image:alt` say the same (`index.html:24`,
+  29). Rendered over the DevTools protocol from the tool's own card,
+  because `tools/og-images.py`'s command-line screenshot clips the card's
+  foot on this Linux build (question 22).
+- **The count-up:** with the chart on the first screen, `tests/gap-band.py`
+  scenarios 8 and 9 (scrolled to from the top) now expect the finished
+  figures. Two new scenarios keep the count-up tested: loaded at `#learn`
+  (1440 x 900) and at `#call` (500 x 900), then scrolled back to the
+  chart; a copy with the count-up stopped fails both. It now plays only
+  when the page opens part-way down (question 4). Eleven scenarios.
+- **Search:** the home record's heading is now "People know roughly what
+  they’ll need."; the record lost its `#gap` section entry (the index keeps
+  `<h2>` headings only, and the gap's heading is now the `<h1>`), so search
+  no longer lands on the gap (question 20). The readiness check's "Start
+  from a way of life" link and its test point at `index.html#life`.
+- **Layout kept still:** until the page is ready, the slider and the logo
+  strip keep their room (166px; 158px at 600px and below; with reduced
+  motion 154, 226, 210, 274 or 338px, measured from the built strip at
+  each width). Without them Chrome measured layout shifts of 0.0168 at
+  1440 and 0.0115 at 375 (0.0096 to 0.027 with reduced motion in tall
+  narrow windows); with them, none.
+- **One cost:** at 1440 the games' section now starts at 1615px, inside
+  Chrome's lazy-load distance, so the home page's first load fetches the
+  two game pictures (`product-buddys-run.webp`, 30 KB, and
+  `product-jargon-battle.webp`, 61 KB). No video and no poster is fetched;
+  `tests/ux4.test.mjs` R38-1 now pins exactly that.
+- **No figure changed:** €40,860, €15,564 and €25,296 as before;
+  `data-pb-count` 10 before and after. Tests changed: build checks 28, 32
+  and 33, `tests/gap-band.py`, `tests/readiness.test.js` (`#life`), ux4
+  R38-1.
+
+## Item 2, the interactive proposals
+
+`docs/INTERACTIVE-PROPOSALS-42.md`: sixteen proposals, ranked by how much
+each teaches, eleven small and five medium, each with its page, section,
+file and line, the figure it teaches and the interaction; the rules every
+one keeps (a figure moves only because the reader moved a control; the
+markup carries the finished default; no reveal on text, figures or
+caveats); what was skipped and why; and four questions (folded into
+question 16 below). Nothing was built. This commit makes the two fixes a
+reviewer asked for after item 2: the "Colour, not interaction" line now
+names the calculators' threshold note `#sftNote`
+(`pension-calculator.html:2547`, `director-calculator.html:2663`) and the
+threshold page's "Over the threshold" card `#sftOver`
+(`tools/sft-parts/main.html:42-46`); and proposal 12's figure now reads
+"the first €200,000 tax-free, the next €300,000 (up to €500,000) at 20%",
+since only the first €200,000 is tax-free.
+
+## Item 3, give before ask
+
+- **Moved, words unchanged:**
+  - **404 page:** "Book a call with Damian for free" and "Free, 20
+    minutes, no obligation." left the top row (where "Back to the
+    homepage" now stands alone) and follow the search box and "Six places
+    to begin." (`404.html:2109-2110`). Measured: the button moved from the
+    first screen to y 1735 at 375 and 1294 at 1440.
+  - **Directors' rules:** "Topics to discuss, not advice. Book a call with
+    Damian for free to go through them." is now two paragraphs: "Topics
+    to discuss, not advice." stays above the list; "Book a call with
+    Damian for free to go through them." and its reason follow it
+    (`tools/director-rules-parts/main.html:74-77`). Driven in Chrome with
+    real clicks: the list, then the sentence 16px below it, then the
+    reason; focus lands on "Worth talking through"; the link still opens
+    `booking.html#persona=director`.
+  - **Home page:** done by item 1 (the hero's ask and the chat picture).
+- **`docs/GIVE-BEFORE-ASK-42.md`:** every booking ask on every page, word
+  for word with its file and line, what to give first, and a verdict, with
+  ready edits for the rows held for you: the starter, director and tracker
+  heroes (tracker gives nothing first, but its move would stack two asks,
+  question 7), their chat pictures, the comparison's "Talk through what
+  this means for you" (question 9), and the phone booking bar on the
+  glossary and the three audience pages (question 8).
+
+## Item 4, red for money missing, amber for money back
+
+- **The rule** (`docs/DESIGN-RUBRIC.md` section 3, `CONTEXT.md` "Gap",
+  "Covered" and the new "Money back"): in a chart, a bar or a figure, red
+  is money missing (a gap, a shortfall, a loss, the cost of waiting, tax
+  you would pay, charges taken from a pot) and amber is money that comes
+  back or is added (tax relief, Revenue's contribution, an employer's or
+  the State's top-up); dark stays what you need, teal what the State
+  pays. A red figure always has its words beside it. Red is also a form's
+  error colour, and never sits on a dark band.
+- **One token:** `--red:#A4291D`, after `--amber-soft` in the first
+  `:root` of all 31 pages (29 root pages, typed into the 19 hand-written
+  ones and taken by the ten built ones from the skeleton, and the two
+  games). It was already the form-error red in four part stylesheets; the
+  site had three reds before (#C0392B, #A4291D, #C1502E) and has one
+  (the games' drawn art keeps its terracotta).
+- **What changed colour:**
+
+| Page | What it shows | Old → new | Why |
+|---|---|---|---|
+| Home | The gap block "€25,296 / a year short" on the State's bar | amber tint, dark figure → red fill, white figure and words | the gap |
+| Home | The hero figure "€25,296" (beside "a year short.") | dark → red; the span is empty when the need is covered, so "Covered by the State Pension." is never red | the shortfall |
+| Starter | The two "a year to find" blocks (€3,636, €18,036) | amber tint → red | the gap |
+| Starter | The tails of the time charts ("€164,659 less", "€265,746 less", "€92,322 less", "€52,672 less") | amber tint → red | the cost of waiting |
+| Starter | My Future Fund rows "Your employer adds" and "The State adds" | grey and aqua → amber ("You pay in" stays grey) | top-ups |
+| Pension calculator, comparison, starter, director, glossary | The relief ladder's bars (the age-related limit) | aqua → amber | tax relief |
+| Pension and director calculators | "The cost of waiting": the figure in its sentence and the card's rule | teal figure, aqua rule → red (the comparison's "In one sentence" card shares the style and keeps aqua) | the price of delay |
+| Pension calculator | "You really pay": the bar and its key dot | aqua bar, brown dot → one grey | the dot did not match its bar; yours is neutral |
+| Director calculator | The 40% / 8% / 4.35% bar and its key | three greys → red at three strengths (1 / .82 / .65) | tax you would pay |
+| Director calculator | "Roughly what you could aim for" card | amber tint, brown text → light grey, dark text | a ceiling is neither pain nor money back |
+| Comparison | The staircase: the State's and the employer's shares | aqua; grey at .6 → amber; amber at .6 ("You" stays grey) | top-ups |
+| Reality check | The jar's bottom row (the first 520 contributions) | amber → aqua like every lit dot | it carried no label and was not money back (UX-MOTION-AUDIT D15 (a)) |
+| Charges calculator | "What they cost you by retirement" row's figures | dark → red (the row header stays dark) | charges taken from the pot |
+| Threshold page | "Tax at 20%" | dark → red | tax you would pay |
+| Readiness check (held) | The "Early days" third of the scale | amber tint → grey | not money |
+| Glossary | Risk rating tiles 5 to 7 (hidden from screen readers) | amber tint → dark teal, white digits | not money; keeps the "more" reading |
+| Booking, thank-you | "The house promise" label on the dark card | amber → mint | amber is never decoration |
+| Booking, thank-you | A field in error, and the error box | brown border; amber box → red border; white box with a red border | an error |
+| Every form | Error text (`#ecErr`, `#mErr`, the part forms) | #C0392B or a literal #A4291D → `var(--red)` | one red |
+| Jargon Battle | Low health, a wrong answer | terracotta → red (the pale tint stays; the drawn art unchanged) | a pain state |
+
+  Left as they were, on purpose: the need bar (dark), the State's bars
+  (aqua), Revenue's share and the relief card (amber), the entitlement
+  check's tail (amber: the extra the higher method adds, which the
+  Department pays; its three comments rewritten to say so), the PIA
+  table's tax rows (placeholders until Budget day), `#taxOut`, the
+  calculators' threshold note and the threshold page's "Over the
+  threshold" card (colour proposals, question 16), and three teal things
+  that are not the State (question 14 (i)).
+- **Every red figure and its words:** home block "€25,296" with "a year
+  short" inside it and "What the State Pension pays" under it, and the
+  chart's screen-reader label; hero figure "€25,296" with "a year short."
+  beside it; starter blocks "€3,636 a year to find", "€18,036 a year to
+  find" and the chart's label; starter tails "€164,659 less", "€265,746
+  less", "€92,322 less", "€52,672 less"; the cost of waiting, its own
+  sentence ("… roughly €X less" / "… lands roughly €X lower") under "The
+  cost of waiting"; the director bar, its key "40% income tax", "8% USC",
+  "4.35% PRSI" and the sentence above it; the charges row, its header
+  "What they cost you by retirement"; the threshold page, its row header
+  "Tax at 20%"; the form errors, their message; Jargon Battle, the
+  answer's words and the hearts.
+- **Contrast** (WCAG relative luminance, computed):
+
+| Pair | Ratio |
+|---|---|
+| Red text on white | 7.21 |
+| Red text on the page background #FAFAF9 | 6.90 |
+| Red text on the light grey surface | 6.59 |
+| Red text on the palest teal (the wash's darkest stop) | 6.49 |
+| Red text on the amber tint | 6.31 |
+| White text on red | 7.21 |
+| Red fill beside aqua / amber / the grey rule | 3.44 / 4.01 / 5.32 |
+| Never done: red on the dark teal band / against ink / against teal-700 | 1.91 / 2.37 / 1.04 |
+| The director bar on white: 1, .82, .65 | #A4291D 7.21, #B45046 5.03, #C4746C 3.46 |
+| The same on its grey track | 6.59, 4.72, 3.33 |
+| Its parts against each other | 1.43 and 1.45 on white, 1.40 and 1.42 on the track (told apart by the key, as the three greys were) |
+| The aim-for card: label / figure / note on light grey | 5.04 / 15.65 / 5.77 |
+| Risk tiles: white on dark teal | 6.95 |
+| "The house promise": mint on the dark card | 9.30 |
+| The form errors' text (`.qerr`, ink on white) | 17.12 |
+| Jargon Battle's wrong-answer key: white on red | 7.21 |
+| The staircase's employer (amber at .6) against "you" (ink-2) | 4.44 |
+| The relief ladder's amber against its track | 1.64 (the aqua before: 1.92; question 14 (b)) |
+
+- **Colours only, proved** against `BASELINE_REF=7177bda` (item 3's
+  commit):
+  - The existing render-diff: `load.js` the same render on every page;
+    `sequences.js all 400 40` 0 differing, 0 reordered, 0 errors on the
+    six calculators, 16,000 events each; `mutate-shared.js 200` every
+    claim held (it had crashed since Run 34, see below); `browser-diff.py`
+    0 differing on all six (frames and cells: pension calculator 16 /
+    1,008, director calculator 6 / 348, comparison 61 / 6,832, reality
+    check 6 / 198, entitlement 11 / 902, PIA 16 / 1,248).
+  - **New: `tests/render-diff/classify-pain-red.py`** (README row added).
+    Real Chrome, every page at 375 and 1440, every frame of the six
+    calculators: an element may differ only in paint (colours, opacity
+    between two non-zero values, the `:root` tokens); text, hidden flag,
+    classes, attributes, geometry and every other style must match, and
+    every new colour must be one of the site's own tokens. Its self-test:
+    FAIL "text changed" (the pension calculator's boost figure, €62,729),
+    FAIL "geometry changed" (the ladder's "Under 30" rung), FAIL "hidden
+    flag changed" (the home page's switched-off "Out of office." section),
+    PASS on a colour-only change (3 elements, 10 distinct changes, at
+    each width). The six calculators: PASS, 12 page-widths, 232 frames,
+    5,684 elements, 102 differing in colour, 67 distinct (property, old,
+    new) changes. The full run, 31 pages at both widths: PASS, 62
+    page-widths, 282 frames, 17,848 elements, 188 differing in colour, 112
+    distinct changes. It runs with reduced motion and CSS transitions off
+    on every page, the six calculators included: with motion on, a run of
+    the tree against itself caught bars mid-slide (`browser-diff.py`,
+    which reads no colour, still drives the six with motion on).
+  - The diff grep over every changed page and part stylesheet: no
+    transition, animation, width, height or count added or changed; no
+    script under `assets/js` changed; the entitlement page's script
+    changed in comments only.
+- **`tools/design-measure.py` R5** (a second colour beside aqua on one
+  screen), before → after. A new "R5 red" column: starter 375 screens 7,
+  8 and 16, starter 1440 screens 6 and 12, the charges calculator 1440
+  screen 3, the threshold page 1440 screen 3. "R5 amber", before: booking
+  (375 and 1440, screen 2), glossary (7 / 4), pension calculator (6 / 4),
+  starter (7, 8, 16 / 6, 12), entitlement (9 / 4), thank-you 375 (2),
+  Jargon Battle (1 / 1); after: pension calculator 1440 (4), entitlement
+  (9 / 4), Jargon Battle (1 / 1). Text colours site-wide 20 → 19. Every
+  red beside aqua was checked against the rubric: starter's reds are its
+  charts' bars (`.pb-lsb-amber`, `.pb-sa-gap`); the charges
+  calculator's (`.fee-t`'s last row, `tools/fees-parts/main.html:56`)
+  and the threshold page's (`#lumpTax`, `tools/sft-parts/main.html:55`)
+  are table figures beside a chart's aqua, which section 4's "inside a
+  chart" does not strictly cover (question 24). The home page is in no
+  column: the tool skips `header`, and the hero is now `header#gap`
+  (question 21); the calculators' cost-of-waiting card and
+  the director bar share no screen with aqua.
+- **Docs:** `docs/DESIGN-RUBRIC.md` and `CONTEXT.md` carry the rule;
+  `docs/UX-MOTION-AUDIT.md` (three lines) and `docs/INTERACTIVE-AUDIT-2.md`
+  (one) are marked "historic: Run 42 moved the gap to red".
+- Build check 27 (the still safe) gains a fourth mutant, a red fill; 436
+  checks.
+
+## Item 5, the cuts
+
+- **Cut on the home page, word for word:**
+  1. The closing section (main `index.html:2884-2891`, and its 16 lines of
+     CSS): the heading "Which of these sounds most like you?" and three
+     cards: "Just starting out" / "No pension yet, or one you’ve never
+     looked at? We’ll make starting simple, and it’s never too late to
+     begin."; "Changed jobs a few times" / "Changed jobs a few times and
+     lost the thread? We’ll find what you’ve built up and tell you what
+     it’s worth."; "Run my own company" / "Your company can fund your
+     pension far beyond personal limits, and cut its tax bill doing it."
+     The same three sentences stand in "Six places to begin." on the home
+     page (`index.html:2699-2701`) and on the 404 page
+     (`404.html:2102-2104`), linking to the same pages. Your veto:
+     question 18.
+  2. The story's last paragraph (main `index.html:2751`): "The goal is
+     simple: get you from “I’ve no idea what’s happening with my
+     pension” to an actual conversation with someone qualified to help."
+     It only pushes the call and holds no fact. The story keeps "Our
+     story", "Father, son, dog.", "One idea: …" and the paragraphs on
+     Damian and Adam; `#story` is intact. Build check 31's mutant now
+     anchors on the paragraph before.
+  And the three hero lines item 1 cut (above).
+- No fact, source, caveat or warning left the page. The search index lost
+  only the closing section's heading. "Twenty minutes" or "20 minutes"
+  stays on the home page six times: the reason line in `#life`, step 2,
+  the chat picture's Buddy line, the second FAQ answer, and the closing
+  band's heading and line.
+- **`docs/CUT-LIST-42.md`:** the cuts above; D1 to D12 on the home page
+  for you (D2 done here; D10 to D12 answered); and every other page,
+  27 headings, 130 items, nothing cut. Its 265 quoted fragments were
+  checked against the files: 257 word for word at the cited lines, 2 are
+  check names, 6 are sentences a script writes, checked against the page
+  as Chrome draws it.
+- Losing the fork's three cards also loses their hover (interactivity
+  audit row 34): a border colour and a shadow, kept by every other card
+  link on the page. Nothing moved on hover.
+
+## Booking calls to action after Run 42
+
+The four Run 26 rows ("Booking calls to action: which reason each has")
+that moved, as they now stand:
+
+| Where | Where it is now, and its reason |
+|---|---|
+| Home hero "Get my free review" | under the gap, the provider logos and the way-of-life picker (`#life`); the reason line under it still |
+| Home phone picture's link | the picture now sits under "How a call with Damian works", after the three steps; Buddy's line above the link still |
+| Directors' rules: "Book a call with Damian for free to go through them." | after the list, with its reason |
+| 404 page's booking button | after the search box and "Six places to begin", with its reason |
+
+## The gate, per commit
+
+Each commit ran the full gate (`run-tests.py`, every `tests/*.test.py`,
+`tests/gap-band.py`, every `tests/*.test.mjs`, `tools/verify.py
+--no-shots`), one suite at a time, and its failing lines were compared
+with main's own run of the same gate on the same machine (`84a75cd`,
+before the first commit). Pass: no failing line that main did not have,
+and no crash.
+
+| Commit | Result |
+|---|---|
+| a6b1ba3 | pass. build 435/0, gap-band 11 scenarios, providers 86/0, ux4 64/0, verify 0 FAIL |
+| ed79141 | pass, the same lines as item 1 |
+| 7177bda | pass, build 435/0 |
+| 62019bd | pass. build 436/0, games 168/0, boxes 8/0, verify 0 FAIL, 0 contrast findings, no token drift |
+| 37e7048 | pass. build 436/0, search 22/0, ux4 64/0, verify 0 FAIL; one baseline line relabelled (below) |
+| this commit | pass. build 436/0, gap-band 11 scenarios, ux4 64/0, verify 0 FAIL; `tools/sitemap.py --check`, `sync-chrome.py`, `stamp-images.py`, `site-index.py` and `seo.py --check` and `check-initialisms.py` clean; a fresh `pagebuild.py` leaves the tree byte for byte. lead-forms 211 passed, 2 failed, the baseline's two Calendly lines; the only baseline line not seen is floating-chrome's home line under its old label (89), now (86) |
+
+**What failed, and why it was the environment's, not the site's.** This
+machine's headless Chromium cannot play H.264, has no mouse, cannot load
+Calendly, and draws the cookie bar a little wider at 320px; ux4 ran from a
+copy with WebM videos only. On main the gate printed 34 failing lines, in
+five suites; the baseline list has 35 lines because one of them appears
+under two labels:
+- `consent.test.py`, 15: check 9 at 320 x 568 on 14 pages (the bar is one
+  line, 100px or less), and its summary line (700 passed, 14 failed);
+- `floating-chrome.test.mjs`, 6: check 2 (focused controls under the
+  floating chrome at 375) on booking, the directors' rules and the home
+  page, the home line counting 89 focus stops on main and 86 once item 5
+  cut the fork's three links (the same failure, so both labels are on the
+  list), check 5 (focus brings it back), and its summary (31 passed, 4
+  failed);
+- `lead-forms.test.py`, 3: the booking form's two "no script error" lines
+  (Calendly) and its summary (211 passed, 2 failed);
+- `nav.test.py`, 7: hovering on the home page and the director
+  calculator (opens, closes, reports a mouse) and its summary (464 passed,
+  6 failed);
+- `terms.test.mjs`, 4: the directors' rules marking check, hovering on
+  the over-50s and threshold pages at 1440, and its summary (45 passed, 3
+  failed).
+Every other suite exited 0 on every commit.
+
+## Lighthouse, before and after
+
+Lighthouse 13.5.0, mobile (default throttling), performance and
+accessibility; before is main `84a75cd`, after is `37e7048` (items 1 to
+5); three runs a side, interleaved, median; starter nine a side.
+
+| Page | Performance | Accessibility | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|---|
+| index.html | 93 to 92 | 97 to 97 | 2.85 to 3.01 | 0 to 0 | 3 to 0 |
+| pension-calculator.html | 92 to 91 | 97 to 97 | 2.86 to 3.01 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 92 to 92 | 97 to 97 | 2.85 to 2.85 | 0 to 0 | 0 to 0 |
+| starter.html (9 a side) | 92 to 93 | 96 to 96 | 3.00 to 2.93 | 0.0012 to 0.0012 | 22 to 10 |
+| broker-vs-autoenrolment.html | 90 to 90 | 97 to 97 | 3.01 to 3.01 | 0 to 0 | 10 to 0 |
+| director-pension-rules.html | 92 to 93 | 96 to 96 | 2.85 to 2.71 | 0 to 0 | 0 to 13 |
+| 404.html | 96 to 96 | 96 to 96 | 2.70 to 2.55 | 0 to 0.00001 | 0 to 0 |
+
+- Every page within two points; accessibility unchanged on all seven.
+- The home page's LCP element is the h1 on both sides. Its three
+  after-runs read 2.85, 3.08 and 3.01 s against 2.85 s three times before.
+  The spread equals pension-calculator's, a page this run changed in
+  colour only (2.78 to 3.23 s across both sides). Not isolated further.
+- Starter's first three runs: after 3.80, 3.84, 2.55 s against before
+  2.48, 2.55, 2.93 s (performance 94 to 84). The six extra runs: before
+  3.83, 3.81, 3.86, 3.00, 2.55 and one more, after 3.00, 2.93, 2.93, 3.00,
+  2.86 and one more. The slow mode (about 3.8 s) is the simulation, not
+  the change: starter changed in colour only, and its LCP element is the
+  h1 text on both sides.
+- Lighthouse runs a fresh profile, so the cookie bar shows on both sides.
+- Not taken: Lighthouse at desktop size on the home page. The layout
+  shift that the logo strip could have caused at 1440 was measured in
+  Chrome instead (item 1: none with the reservations).
+
+## Screenshots
+
+Not in the repo (about 150 MB; `verify-out/` is ignored by git). Taken
+with `tools/verify.py`, screen by screen (frames 900px tall, reduced
+motion forced, the cookie choice answered), every page at 375 and 1440:
+62 before (main `84a75cd`, in a worktree) and 62 after (`37e7048`); on the
+after tree verify.py reported 0 FAIL at 375, 1360 and 1440. The home
+page's first screen was also shot at 375 x 812, 390 x 844 and 1440 x 900,
+before and after, cookie answered and on a first visit (no cookie choice),
+through the DevTools protocol with the device size set (a bare
+`--screenshot` lays the page out wider than 375). Every Chrome run used
+this machine's Chromium 141, headless, `TZ=Europe/Dublin`.
+
+## Found on the way (not changed unless said)
+
+- The switched-off "Out of office." section is in the site search's index
+  (`["Out of office.",""]`): `tools/site-index.py` does not skip hidden
+  sections.
+- `tools/fees-parts/main.html:87`: "… has a guide to pension fees and
+  charges explains each one." (a word missing; `docs/CUT-LIST-42.md` lists
+  it).
+- `my-pensions.html` has no closing booking band (question 13).
+- `director-calculator.html`'s CSS comment over the tax bar said "52.2%";
+  fixed in item 4 ("52.35% (52.2% before 1 October 2026)").
+- `tests/render-diff/mutate-shared.js` had crashed before its first
+  mutation ("A is not a function") since Run 34 added the PIA page to
+  `pages.js`, on main too. Item 4 gave it a PIA generator from
+  `sequences.js`'s ranges; it now runs, and its 10 "must differ" mutants
+  are caught (6 of them on the PIA page too).
+- `browser-diff.py` prints "both sides loaded the same script URLs" on all
+  six for a change that touches no script: true, and it means
+  browser-diff alone cannot tell the two trees apart; the new
+  classifier's vacuity rule does.
+- Jargon Battle's wrong-answer states never appear at load, so only the
+  CSS diff checks their new red.
+- `index.html:1185` and `1526` still name `.gapband .eyebrow`; the class is
+  gone. Harmless ("The gap" in `#life` computes the same teal).
+- The directors' rules' booking sentence is in a `dr-src` paragraph, a
+  class on pagebuild's caveat list, so a sentence that only asks is
+  treated as a caveat (never revealed; floating chrome steps aside). It
+  already was before the move; nothing changed.
+- A Chrome window asked for 390 x 844 lays the page out 397px wide, on
+  main and on the branch alike.
+- `docs/DESIGN-RUBRIC.md:141` says the warnings are "black on
+  `--surface-2` with a rule"; on every page that carries them they are
+  bold black words on white (`--surface`) in a 2px black frame. The
+  rubric's words, not the pages, are off; the compliance pack (B.21)
+  describes them as they are.
+- `docs/SUBTRACTION-AUDIT.md`, the home page: row 11 (merge "Which of
+  these sounds most like you?" into "Six places to begin.") is done; rows
+  1 (the chat picture) and 2 ("What's changed?") moved out of the hero's
+  way, not cut. `docs/UX-MOTION-AUDIT.md` D15 (a) (the jar's first row)
+  and D16 (the fees shading and the director's tax: now red) are settled
+  by the colour rule; D23 (the count-up) is open (question 4).
+
+## Needs Damian
+
+Numbered as the run's other docs cite them. Questions 15 and 17 were
+answered in the build and are kept only so the numbers stay stable;
+neither asks for a decision.
+
+1. **The hero lede** "Most people in Ireland have a pension they’ve never
+   really looked at." is cut outright (no source; "79% feel unprepared."
+   says it with one). Keep it anywhere, or confirm?
+2. **The Buddy chat picture** moved whole from the hero into "How a call
+   with Damian works", after the three steps, because its caption
+   "Illustration only · the value of investments can fall as well as
+   rise" is one of the site's classified caveats and SUBTRACTION-AUDIT
+   question 7 about it is open. Its Buddy line repeats the second FAQ
+   answer and its link the nav button; with the closing section cut, its
+   "Which of these sounds most like you?" now appears only here. Keep it
+   there, or remove it, caption included?
+3. **The share picture** (og-home.png) and its alt text read "People know
+   roughly what they’ll need." without the second sentence. Acceptable,
+   or have `tools/og-images.py` print the sub-line too?
+4. **The gap chart's count-up** (UX-MOTION-AUDIT D23) no longer plays on a
+   normal load; it plays only when the page opens part-way down and the
+   reader scrolls back to the chart. Retire it, or leave it?
+5. **The booking ask** taken from the hero ("Get my free review", "Free,
+   20 minutes, no obligation.", "Try the calculator") sits at the end of
+   the band after the logos (`#life`). Keep it there, or none until the
+   closing band (the nav button, Ask Buddy, the phone bar and the band
+   remain)?
+6. **The way-of-life picker** now sits one logo strip below the slider it
+   sets. At 1440, when a card is tapped, the chart and the big figure are
+   490px above the window, so the reader sees only the picker's own
+   breakdown change (on main at 1440 both stayed on screen; on a phone
+   they were already off it). Live with it, move the picker into the hero
+   at the cost of one screen at 1440, or cut it (SUBTRACTION-AUDIT index
+   row 3)?
+7. **The three audience heroes** ask on the first screen. Starter's
+   heading states a rule first and director's lede two facts, so neither
+   is a clear move. Tracker's hero gives nothing first, but moving its
+   button lands it directly above the dark band's "Start finding mine":
+   move it, cut one of the two (T-1 or T-7), or keep it? Apply the moves on
+   starter and director too? And their chat pictures? Ready edits in
+   `docs/GIVE-BEFORE-ASK-42.md`.
+8. **The phone booking bar** on starter, tracker, director and the
+   glossary rises as soon as the hero or page heading scrolls off, before
+   any figure. Have it wait for the first figures (one line in
+   `assets/js/pb-bookbar.js:76` and an attribute per page), or leave it
+   (Run 41's question 20)?
+9. **The comparison's "Talk through what this means for you"** in "In one
+   sentence": cut (Run 41), move to the end of "Everything paid in, by
+   66", or leave?
+10. **The threshold page** ends with two booking asks (the band and the
+    "Next step" card). Merge the card into the band (a test change)? And
+    the guides' "Next step" cards generally (O-4, E-2, U-2, the rules
+    page)?
+11. **"The cost of waiting"'s "Talk it through, free"** on the two
+    calculators: keep or cut (P1, D1)?
+12. **Privacy, Terms and Complaints** each end with one booking sentence;
+    the complaints one may be a deliberate spoken route. Keep?
+13. **`my-pensions.html` has no closing booking band.** Intended?
+14. **Colour.** (a) My Future Fund's State contribution and the
+    comparison's staircase drawn as top-ups (amber, applied) rather than
+    the State's teal; the employer's share amber too (applied), or grey?
+    (b) The relief ladders amber (applied) or back to aqua? Either way the
+    fill is under 3:1 against its track (amber 1.64:1, aqua 1.92:1); the
+    percentage beside each rung says it in words. (c) Jargon Battle: the
+    one red in its two states only (applied), in the drawn art too, or
+    not at all? (d) The glossary's risk tiles 5 to 7 dark teal with white
+    digits (applied), or all one grey? (e) Solid red fills with white
+    figures (applied, the brief's "as a fill with white text") rather
+    than a second, lighter red? (f) "The house promise" label is now
+    mint; item 5 lists the card as a cut: cut or keep? (g) The director's
+    "Roughly what you could aim for" card grey (applied), or a dark "what
+    you need" panel? (h) "Corporation tax relief on contributions"
+    (`#taxOut`) white (kept) or amber on the dark panel? (i) Teal still
+    draws things that are not what the State pays: starter's time charts'
+    "your pot" fill (`starter.html`, `.pb-sa-fill`), the way-of-life
+    picker's category bars, what a household needs
+    (`.pb-life-rows i`), the charges chart's other-plan line, and your
+    plan's line and dot, "Into your pension", the comparison's lanes, the
+    my-pensions bars. Move each off teal in a later run (yours to grey,
+    need to dark)? (j) The extra-€100 dashed line: keep amber? (k) The
+    PIA table's tax rows: colour them when the Budget figures land? (l)
+    The entitlement check's tail kept amber as the extra the higher
+    method adds: amber, red or grey? (m) The calculator pictures still
+    show the old aqua cost-of-waiting rule and brown key dot: re-shoot now
+    or with the next image run? (n) The director's 40% / 8% / 4.35% bar
+    in one red at three strengths (every part 3.3:1 or better against
+    the page; the parts 1.4:1 to each other, told apart by the key, as
+    the three greys were): keep, or one flat red? (o) Not in the run and
+    left alone: the review stars still name amber on 16 pages (the
+    skeleton's rule fills them aqua, so it may not show), and Buddy's
+    Run's buttons are amber (game, not money). Leave them?
+15. **Answered in the build (the brief's €25,336):** the page shows
+    €25,296 (€40,860 less €15,564); €25,336 is the slider at €40,900.
+    €40,860 and €25,296 stay, as `docs/CUT-LIST-42.md` D12 says.
+16. **The lists for you.** The cuts in `docs/CUT-LIST-42.md` (home D1 and
+    D3 to D9; every other page); the colour proposals, a red left border
+    on the calculators' threshold note `#sftNote` and on the threshold
+    page's "Over the threshold" card `#sftOver`; and
+    `docs/INTERACTIVE-PROPOSALS-42.md`'s four questions: may proposals 5,
+    8, 10 and 12 (protected pages, compliance-reviewed words) be queued;
+    should 6, 9, 14 and 15 wait for the subtraction audit's answers;
+    proposal 12's wording (the 25% route only); and proposal 16
+    (question 19).
+17. **Answered by the brief:** the provider logos sit directly under the
+    hero; "What’s changed?" follows the way-of-life band.
+18. **The closing section "Which of these sounds most like you?"** (three
+    cards that repeat "Six places to begin." character for character) is
+    cut as item 5's one clear home cut, while item 1 said everything else
+    on the home page stays. Confirm, or put it back?
+19. **On a phone's first visit** the cookie bar covers the hero's slider
+    (label and track) until the reader chooses; the lockup, heading,
+    figure, chart and source are clear of it. Live with it, or draw the
+    slider above the chart on phones (proposal 16)? Measured: the slider
+    would then be clear (444-532), but the bar would cover the foot of
+    the chart, its two labels and the source line (788-811) instead.
+20. **Site search** no longer lands on the gap or "79% feel unprepared."
+    (the index keeps `<h2>` headings, and the gap's heading is the page's
+    `<h1>`). Live with it, or give the band after the logos a heading of
+    its own (new words, yours)?
+21. **`tools/design-measure.py` skips `header`,** so the home page's hero,
+    now the gap chart, is in none of its columns (R5 included). Have it
+    count the hero?
+22. **`tools/og-images.py`'s command-line screenshot clips the card's
+    foot** (the regulator line) on this Linux build; the home card was
+    rendered another way. Switch the tool to a capture with the device
+    size set?
+23. **To know, nothing to decide:** the room kept for the logo strip
+    before the page is ready (166 and 158px; with reduced motion 154, 226,
+    210, 274 and 338px) is measured from today's logos and sizes in
+    `assets/js/pb-providers.js`. If a logo is added, removed or resized,
+    measure again; a wrong height shows as a layout shift in ux4 check 4,
+    not as a broken page.
+24. **Red or amber in a table, beside a chart's aqua.** Rubric section 4
+    allows "no second chromatic colour except amber or red inside a
+    chart". The charges calculator's last table row (`.fee-t`,
+    `tools/fees-parts/main.html:56`) and the threshold page's tax cell
+    (`#lumpTax`, `tools/sft-parts/main.html:55`) are red table figures
+    on the same 1440 screen as a chart's aqua. Accept them, or reword
+    the rubric to "in a chart, bar or figure", as its section 3 has it?
+
+---
+
+# Run 41 — 2026-10-01 · The live countdown back; a design rubric; a subtraction audit (on `claude/countdown-rubric`, merged to main as `84a75cd` on 2 October 2026)
 
 Damian's brief, three items: bring back the live countdown (days, hours,
 minutes, each minute, no seconds; the nav chip and the home page's band);
@@ -369,7 +1000,7 @@ and the references, listing only what to cut or merge, building nothing.
 
 ---
 
-# Run 39 — 2026-10-01 · Runs 37 and 38 merged and live; then boxes kept, the clips, the guides, sliders, skeletons and the call (on `claude/ux-5`, not merged)
+# Run 39 — 2026-10-01 · Runs 37 and 38 merged and live; then boxes kept, the clips, the guides, sliders, skeletons and the call (on `claude/ux-5`, merged to main as `31cf29e` on 1 October 2026)
 
 Damian's brief: merge `claude/overnight-ux-4` (9453be1) into main after a
 full gate on the merged tree, push main, check the live site; then a new
@@ -643,7 +1274,7 @@ from its temporary folder overnight); nothing was downloaded.
    where the three steps already were. The booking page could carry the
    same three slots under its form, beside its own booking steps.
 
-# Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, not merged)
+# Run 38 — 2026-09-30 · The game cards' videos, and media that pops in on scroll (on `claude/overnight-ux-4`, merged to main as `09c5f80` on 1 October 2026)
 
 Damian's brief, two items, built on the same branch as Run 37 (it is under
 review as one deploy preview), each gated, committed and pushed; not merged.
@@ -803,7 +1434,7 @@ not isolate which one costs it.
    waiting pop shrinks to 97%. Want them to pop as well, with that test
    measuring the settled size instead?
 
-# Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (not merged)
+# Run 37 — 2026-09-29 overnight · UX 4 on `claude/overnight-ux-4` (merged to main as `09c5f80` on 1 October 2026)
 
 Damian's brief: a UX audit (`docs/UX-AUDIT-4.md`), then ten items in order,
 each built, gated, committed and pushed; the branch is NOT merged (he reviews
@@ -2206,6 +2837,8 @@ so its `?v=` stamp moved on the five pages that load it. render-diff against
 | Closing bands: home, director, starter, tracker, glossary | already: "Twenty minutes. Phone or video. Free, with no pressure." and the like |
 | The saved report's line (`pb-report.js`) | already: "…in a free 20-minute call" |
 | Not calls to action, left as they are: the nav button ("…for free"), the footer's "Book a call", "booking page" in the privacy notice, terms and complaints text, and "book a free call" inside the email forms' error and thank-you messages | none added |
+
+3 October 2026: Run 42 moved four of these; the table under Run 42 has them as they now stand.
 
 ## The scan: every hit (item 4, not changed)
 

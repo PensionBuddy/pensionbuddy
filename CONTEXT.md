@@ -177,11 +177,15 @@ tax would come on top.
 
 **Gap**:
 The difference between a living standard and an annual pension, stated as a
-year and a month.
+year and a month. On a chart a gap, a shortfall, a loss or the cost of waiting is drawn in red, with its figure and the words beside it; it is never shown by colour alone.
 
 **Covered**:
 The state where a pension meets or exceeds a standard. Shown as covered, never
-as a negative gap.
+as a negative gap, and never in red: when the need is met there is nothing red on the chart.
+
+**Money back**:
+Tax relief, Revenue's contribution, an employer's or the State's top-up: money that comes back or is added to what a person pays in. Drawn in amber on a chart. Not the State Pension itself, which is drawn in teal; what a person needs is drawn in dark.
+_Avoid_: calling the State Pension a top-up, or a top-up the State Pension.
 
 ## Naming
 

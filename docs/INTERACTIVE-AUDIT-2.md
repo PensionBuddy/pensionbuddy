@@ -4,7 +4,7 @@ Audit only. Nothing on the site was changed. Branch
 `claude/interactive-audit-2-efbbbb`, off `main` at `0a2461c`.
 
 Locked rules applied throughout: Inter only, no mono, no caps, sentence case,
-tabular figures; colour mapping dark = need, amber = gap, teal = State; no
+tabular figures; colour mapping dark = need, amber = gap, teal = State (historic: Run 42 moved the gap to red; see docs/DESIGN-RUBRIC.md section 3); no
 invented figures; render-diff proof on protected pages; a static fallback for
 every interactive element; locked disclaimer text.
 

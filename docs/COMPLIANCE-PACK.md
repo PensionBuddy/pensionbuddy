@@ -65,6 +65,18 @@ words of Runs 37 and 38 on the home page, the guides, the calculators and
 the 404 page; and a draft for your review that is not on the site, "Your
 worries, answered" (question 1.22, Appendix C.1).
 
+Updated 3 October 2026 (Run 42, built on a branch; live once merged): the
+home page now opens on the gap chart, the shortfall and its source, not on
+a heading about the call; three lines left its opening section and the
+booking button, its reason and Buddy's chat picture moved further down,
+their words unchanged (question 1.23, Appendix B.14, B.16, B.18 and
+B.20); on the 404 page and the directors' rules page the booking link now
+follows what the page gives (Appendix B.16, section 7); the home page's
+closing section "Which of these sounds most like you?" and one line of
+its story are removed (section 7); and the charts' colours have one
+meaning each: red for money missing, amber for money that comes back
+(Appendix B.21). No figure, rate, source, caveat or warning changed.
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -512,9 +524,12 @@ Damian's own section of the home page, beside the booking form, and in
 small type in the footer of every page except the two games' own pages. No
 body's logo is shown.
 
-(c) After the home page's gap chart (its first section after the hero),
-"Just here to learn? Play the jargon buster.", with a card for each of the
-two games: a picture of the game mid-play, a line, and a link to play.
+(c) After the home page's gap chart (its first section after the hero;
+since Run 42 the gap chart is the opening section, and the games follow
+the provider logos, the way-of-life band and "What's changed?", Appendix
+B.20), "Just here to learn? Play the jargon buster.", with a card for
+each of the two games: a picture of the game mid-play, a line, and a link
+to play.
 Buddy's Run's picture shows its score (30) and three lives; Jargon
 Battle's shows the Blob's health bar and Buddy's hearts.
 
@@ -556,6 +571,8 @@ describes the business in the footer's own words ("Pensionbuddy is a
 trading name of Damian Condon T/A Gresham Wealth Management, which is
 regulated by the Central Bank of Ireland.", the registered office and
 hello@pensionbuddy.ie), and every other page names itself under Home.
+Since Run 42 the home share picture and its alt text carry the new
+heading, "People know roughly what they’ll need." (question 1.23).
 
 Fourteen search titles and descriptions were over the length a search
 result shows, and were shortened, each only by taking words out of the
@@ -656,12 +673,13 @@ rate or claim is new: every figure and every sentence of substance below
 was already on the site, and is shown where it already was or beside a
 link to the page that says it.
 
-- The home page, under its opening section: the heading "What's changed?"
-  and six links, "New job" (to the auto-enrolment comparison), "Left a job"
-  (Find a pension), "Started a company" (Pensions for company directors),
-  "Turning 50" (Pensions after 50), "Had a baby or a career break" (the
-  State Pension entitlement check) and "Moved from the UK" (A UK pension,
-  and living in Ireland).
+- The home page, under its opening section (since Run 42, after the
+  provider logos and the way-of-life band; question 1.23): the heading
+  "What's changed?" and six links, "New job" (to the auto-enrolment
+  comparison), "Left a job" (Find a pension), "Started a company"
+  (Pensions for company directors), "Turning 50" (Pensions after 50), "Had
+  a baby or a career break" (the State Pension entitlement check) and
+  "Moved from the UK" (A UK pension, and living in Ireland).
 - Pension terms in the guides can be opened where they are used: the jargon
   buster's own name for the term, its first paragraph word for word, and
   "See it in the jargon buster".
@@ -709,6 +727,72 @@ on; three questions are new lines, marked "new words", and nothing else is.
 It is on no page, and where it would go, if approved, is Damian's call.
 
 Question: may it be published as it stands, or with which changes?
+
+1.23 The home page opens on the gap (Run 42)
+--------------------------------------------
+
+What the site does from Run 42 (built on a branch on 3 October 2026, live
+once merged): the home page's first screen no longer opens on a heading
+about the call and a booking button. It opens on the small label
+"Pensions, in plain English", the heading "People know roughly what
+they’ll need." with "Far fewer know what they’re on track for." under it
+(the gap section's own heading, split in two), the figure "€25,296 a year
+short.", the regulator and QFA line (shown once: above the heading on a
+phone, under the figure on a wide screen), and the two bars (what
+people expect to need, €40,860; what the State Pension pays, €15,564;
+the shortfall, €25,296, drawn in red with "a year short" on it) with
+their source "Royal London Ireland, 2026.", the reader's own slider
+"What you expect to need" (on a phone, under the cookie bar until it is
+answered), and the caveat "These are survey averages, not a projection
+for you. What you’ll actually need depends on your own circumstances,
+and the value of a pension can fall as well as rise." The caveat sits
+under the chart it qualifies, as it did; the way-of-life picker, now in
+the next section, keeps its own note and source. No figure, rate or source changed. One thing a reader without
+JavaScript now sees that they did not: "€25,296 a year short." was
+written only under the slider, which needs JavaScript; it is now in the
+page.
+
+Moved, words unchanged:
+
+- The booking button "Get my free review", its reason line "Free, 20
+  minutes, no obligation." and "Try the calculator", from the opening
+  section to the end of the next section but one: after the provider
+  logos, the small label "The gap", "79% feel unprepared." with its
+  source (Amárach Research for the Financial Planning Standards Board
+  Ireland (FPSB Ireland), the Institute of Banking (IOB), the Life
+  Insurance Association (LIA) and the Retirement Planning Council of
+  Ireland (RPCI), May 2026.) and the way-of-life picker.
+- Buddy's chat picture, whole, from the opening section to under "How a
+  call with Damian works", after the three steps: "Buddy", "Chief Pension
+  Dog", "Is the first chat really free?", "Yes, completely, with no
+  obligation afterwards. Twenty minutes to understand your situation and
+  answer your questions.", "Which of these sounds most like you?", the
+  three links "Just starting out", "Changed jobs a few times" and "Run my
+  own company", "Book a call with Damian for free", and its caption
+  "Illustration only · the value of investments can fall as well as
+  rise".
+- The provider logos (question 1.19) now sit directly under the opening
+  section; "What's changed?" and its six links (question 1.21) follow the
+  way-of-life band.
+
+Removed from the opening section, word for word:
+
+- the heading "One call. To know where you stand.";
+- "A pension should be something you understand, not something you
+  avoid." (Appendix B.14; the story's sentence "One idea: a pension should
+  be something you understand, not something you avoid." stays);
+- "Most people in Ireland have a pension they’ve never really looked at."
+
+The page's share picture now shows "Pensions, in plain English" and
+"People know roughly what they’ll need.", and its alt text reads
+"Pensionbuddy. Pensions, in plain English: People know roughly what
+they’ll need." (question 1.20). Two
+more removals from the home page, the closing section "Which of these
+sounds most like you?" and one line of the story, are in section 7.
+
+Question: are the opening screen, the moves and the three removals
+acceptable as they stand, and should the chat picture stay where it now
+is or go?
 
 2. The Letter of Authority, full wording
 ========================================
@@ -998,7 +1082,7 @@ page that helps:
   then see what it could pay." Link: "Open the entitlement check"
   (state-pension-entitlement.html)
 - "Pick a way of life to aim for, from the Pensions Council’s research."
-  Link: "Start from a way of life" (index.html#gap)
+  Link: "Start from a way of life" (index.html#life)
 - "See what a monthly amount could grow to, and what tax relief adds." Link:
   "Open the pension calculator" (pension-calculator.html)
 - "Ask your employer what they pay in, and compare auto-enrolment with a
@@ -1345,7 +1429,8 @@ Changed wording on existing pages
   weekly rate and both calculations side by side."
 - Run 26 (Appendix B.14 to B.16): the home page's subhead, "A pension
   should be something you understand, not something you avoid.", which is
-  the story section's own line; the review line on ten pages (question
+  the story section's own line (removed from the opening section in Run
+  42, question 1.23); the review line on ten pages (question
   1.14); and "Free, 20 minutes, no obligation." beside booking links whose
   own paragraph gives no reason to book.
 - Privacy Notice, "Booking and third parties": the sentence on Netlify
@@ -1411,6 +1496,33 @@ Changed wording on existing pages
   published 19 March 2026; eBrief No. 034/26). Until Revenue publishes the
   2027 online date, the 2026 tax year's count is to 31 October 2027 and
   the band says the online date is "usually later, in mid-November".
+- Home page (Run 42): no new words. The opening section's words were
+  removed or moved as question 1.23 records.
+- Home page (Run 42): the section "Which of these sounds most like you?"
+  removed: its heading and the three cards "Just starting out: No pension
+  yet, or one you’ve never looked at? We’ll make starting simple, and it’s
+  never too late to begin."; "Changed jobs a few times: Changed jobs a few
+  times and lost the thread? We’ll find what you’ve built up and tell you
+  what it’s worth."; "Run my own company: Your company can fund your
+  pension far beyond personal limits, and cut its tax bill doing it." The
+  same three sentences stand in "Six places to begin." on the home page
+  and on the 404 page. And the last paragraph of the story ("Our story",
+  "Father, son, dog.") removed: "The goal is simple: get you from “I’ve no
+  idea what’s happening with my pension” to an actual conversation with
+  someone qualified to help." The story keeps "One idea: a pension should
+  be something you understand, not something you avoid." and its
+  paragraphs on Damian and Adam. No fact, source, caveat or warning left
+  the page.
+- 404 page (Run 42): the booking link "Book a call with Damian for free"
+  and its reason "Free, 20 minutes, no obligation." now follow the search
+  box and "Six places to begin." instead of sitting beside "Back to the
+  homepage"; words unchanged.
+- Directors' rules page (Run 42): "Book a call with Damian for free to go
+  through them." and its reason "Free, 20 minutes, no obligation." now
+  follow the list of topics; "Topics to discuss, not advice." stays above
+  the list; words unchanged.
+- Changed in Run 42 without new words: the chart colours, as Appendix
+  B.21 records.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -2949,7 +3061,9 @@ next to a pension.
 B.14 Home page: the subhead
 ---------------------------
 
-Under the heading "One call. To know where you stand.":
+Until Run 42, under the home page's old heading "One call. To know where
+you stand."; removed from the opening section in Run 42 (question 1.23).
+The story's sentence stands:
 
 A pension should be something you understand, not something you avoid.
 
@@ -2972,16 +3086,19 @@ B.16 Booking links: the reason to book
 
 Free, 20 minutes, no obligation.
 
-Beside the booking links on the home, directors', starter and tracker
-pages' opening sections and in their chat pictures (not the home page's,
-whose last message already says it), the tracker page's "Start finding
-mine", "The cost of waiting" on the pension and director calculators, both
-links on the auto-enrolment comparison, the directors' rules list, the five
-guides, the 404 page, the held-back finder and readiness check, the Ask
-Buddy panel on every page, the booking bar on phones, and the end of the
-Buddy's Run game. Booking links
-whose own paragraph already says the call is free and twenty minutes carry
-nothing extra.
+Beside the booking links in the directors', starter and tracker pages'
+opening sections and in their chat pictures (not the home page's chat
+picture, whose last message already says it; since Run 42 that picture
+sits under "How a call with Damian works"); on the home page, under the
+gap and the way-of-life picker, beside the moved button; the tracker
+page's "Start finding mine"; "The cost of waiting" on the pension and
+director calculators; both links on the auto-enrolment comparison; the
+directors' rules page (after the rules list); the five guides; the 404
+page (after the search box and "Six places to begin"); the held-back
+finder and readiness check; the Ask Buddy panel on every page; the
+booking bar on phones; and the end of the Buddy's Run game. Booking
+links whose own paragraph already says the call is free and twenty
+minutes carry nothing extra.
 
 B.17 Director calculator: under the retirement age slider
 ---------------------------------------------------------
@@ -2996,8 +3113,8 @@ The slider it sits under runs from 50 to 70.
 B.18 Home page: the provider logos
 ----------------------------------
 
-Under the home page's opening section (the heading "One call. To know
-where you stand."):
+Directly under the home page's opening section, which since Run 42 is the
+gap chart (heading "People know roughly what they’ll need."):
 
 Providers we hold agencies with
 
@@ -3049,8 +3166,9 @@ the same day.)
 B.20 Home page: "Just here to learn?"
 -------------------------------------
 
-After the home page's gap chart (its first section after the hero: what
-people expect to need, against what the State Pension pays):
+After the home page's opening gap (since Run 42 the opening section: what
+people expect to need, against what the State Pension pays), the provider
+logos, the way-of-life band and "What's changed?":
 
 Learn it the fun way
 Just here to learn? Play the jargon buster.
@@ -3075,6 +3193,83 @@ lives."
 "Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a
 pension scheme trustee is, with four answers to pick from. The Blob is down
 to six of eight, and Buddy has two hearts of three."
+
+B.21 Colour: red for money missing, amber for money back (Run 42)
+-----------------------------------------------------------------
+
+No words, figures, caveats or warnings changed; the warnings stay as they
+are, bold black words in a black frame. In every chart, bar and figure:
+red (#A4291D, one colour for the whole site, 7.2:1 against white both
+ways, as text and as a fill under white text) now means money missing (a
+gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges
+taken from a pot), and amber means money that comes back or is added (tax
+relief, Revenue's contribution, an employer's or the State's top-up).
+Dark stays what you need, and teal what the State pays. Every red figure
+carries its words beside it; colour is never the only signal. Red is
+never put on a dark band.
+
+Changed, and why:
+
+- Home page: the gap block on the State Pension's bar, "€25,296" and "a
+  year short" (amber tint with dark figures → red with white figures),
+  and the opening figure "€25,296" beside "a year short." (dark → red):
+  the shortfall. When the reader's slider is at or under the State
+  Pension, that number is empty and "Covered by the State Pension." is
+  grey, never red.
+- Starter page: the two blocks "€3,636 a year to find" and "€18,036 a year
+  to find" (amber tint → red): the gap; the tails of the time charts,
+  "€164,659 less", "€265,746 less", "€92,322 less" and "€52,672 less"
+  (amber tint → red): the cost of starting later or stopping; and My
+  Future Fund's rows "Your employer adds" and "The State adds" (grey and
+  teal → amber): top-ups ("You pay in" stays grey).
+- The relief-limit ladders on the pension calculator, the auto-enrolment
+  comparison and the starter, directors' and glossary pages (teal →
+  amber): tax relief. The percentage beside each bar says it in words.
+- The pension and director calculators, "The cost of waiting": the figure
+  in its sentence ("… roughly €[x] less"; "… lands roughly €[x] lower")
+  and the card's edge (teal → red): the price of delay.
+- The pension calculator's "You really pay" bar and its key dot (teal bar,
+  brown dot → one grey): the key showed a different colour from its bar,
+  and what you pay is yours, so neutral. "Revenue adds" stays amber.
+- The director calculator's bar of what salary loses, "40% income tax",
+  "8% USC", "4.35% PRSI" (three greys → red at three strengths): tax you
+  would pay. Each part is named in the key beside it, and every part is
+  3:1 or better against the page.
+- The director calculator's "Roughly what you could aim for" card (amber
+  tint, brown text → light grey, dark text): a ceiling is neither money
+  missing nor money back.
+- The auto-enrolment comparison's staircase: the State's share and the
+  employer's share (teal; grey → amber; the employer's lighter): top-ups.
+  "You" stays grey; the key names all three.
+- The State Pension reality check's jar: its bottom row, the first 520
+  contributions (amber → teal, like every other lit dot): it carried no
+  label and was not money back.
+- The charges calculator's row "What they cost you by retirement" and the
+  threshold page's row "Tax at 20%" (dark figures → red; the row headers
+  stay dark): charges taken from the pot; tax you would pay.
+- The readiness check (held back): its "Early days" third of the scale
+  (amber tint → grey): not money.
+- The jargon buster's risk rating tiles 5 to 7 (amber tint → dark teal
+  with white digits): not money.
+- Every form's error message and the border of a field in error (two
+  reds, a brown border and an amber box → the one red): an error.
+- "The house promise" label on the booking and confirmation pages (amber
+  → mint, the site's colour for a small label on a dark card): amber is
+  never decoration.
+- Jargon Battle: low health and a wrong answer (terracotta → the one red);
+  the game's drawn art is unchanged.
+
+Not changed: the need bar (dark), the State Pension's bars (teal), the
+pension calculator's relief card and "Revenue adds" (amber), the
+entitlement check's amber tail (the extra the higher method adds, which
+the Department pays), the PIA page's tax rows (placeholders until Budget
+day), and the director calculator's "Corporation tax relief on
+contributions" (white on its dark panel). The calculator pictures on the
+site (photographs of the pages) still show the old colours until they
+are re-shot.
+
+Question: is the colour grammar acceptable, red for money missing and
+amber for money back?
 
 Appendix C. Drafts not on the site
 ==================================

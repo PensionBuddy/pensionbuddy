@@ -39,8 +39,8 @@
         figure a script writes at load shows a bar in its own box until the
         page is ready, then its text, and nothing moves between the two;
         without JavaScript the markup's text; with reduced motion no pulse
-   Run 38, 1. the game cards' videos, at 1440: nothing fetched while the
-        cards are far; near, both play and the button says Pause video; the
+   Run 38, 1. the game cards' videos, at 1440: no video fetched and no
+        poster set while the cards are off screen; near, both play and the button says Pause video; the
         button's pause holds; far away the other pauses and plays on return;
         each file 6 to 10 seconds with no more than three flashes a second,
         read off the decoded frames; reduced motion and no JavaScript get
@@ -322,17 +322,21 @@ if (has('pension-calculator.html', 'data-pb-wait')) {
 /* ---- Run 38, 1. the game cards' videos ---- */
 if (has('index.html', 'data-pb-video')) {
   const vids = () => requests.filter(u => /\/assets\/video\//.test(u));
-  /* the cards' own pictures, in any format: a poster in the markup would be
-     fetched with the page, however far down it is */
-  const stills = () => requests.filter(u => /\/assets\/img\/product-(buddys-run|jargon-battle)\./.test(u));
+  /* a poster in the markup would be fetched with the page, however far down
+     it is. Since Run 42 the cards sit about 700px under the first screen at
+     1440, inside the browser's own lazy-loading distance, so the cards'
+     pictures (<img loading="lazy">, the same files a poster would name) are
+     fetched with the page by design; what must not be there yet is a video
+     file or a poster on a video */
+  const posters = () => ev(`[].filter.call(document.querySelectorAll('video[data-pb-video]'),function(v){return v.hasAttribute('poster');}).length`);
   const V = `(function(){return [].map.call(document.querySelectorAll('video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
     return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none',
       poster:!!v.poster&&v.poster===v.parentNode.querySelector('picture img').currentSrc};});})()`;
   await open('index.html', 1440);
-  const far = [vids().length, stills().length];
+  const far = [vids().length, await posters()];
   await at('#learn', 0.2); await sleep(2500);
   const near = await ev(V);
-  eq('R38-1. nothing fetched while the cards are far, not even a poster; near, both videos play, the poster is the card\'s own picture, the button shows pause and is named Pause video: the game',
+  eq('R38-1. no video fetched and no poster set while the cards are off screen; near, both videos play, the poster is the card\'s own picture, the button shows pause and is named Pause video: the game',
      [far, vids().length >= 2, near.map(v => [v.shown, !v.paused, v.t > 0.3, v.btn, v.state, v.btnShown, v.poster])],
      [[0, 0], true, [[true, true, true, 'Pause video', 'playing', true, true], [true, true, true, 'Pause video', 'playing', true, true]]]);
   await ev(`document.querySelector('[data-pb-video-btn]').click()`); await sleep(600);

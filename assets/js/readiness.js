@@ -64,7 +64,7 @@
       step: { text: 'Check your Pay-Related Social Insurance (PRSI) record on MyWelfare.ie, then see what it could pay.', href: 'state-pension-entitlement.html', link: 'Open the entitlement check' } },
     target: { text: 'Do you have a figure for what you will need a year in retirement?', options: [
       ['Yes', 20], ['A rough idea', 10], ['Not really', 0]],
-      step: { text: 'Pick a way of life to aim for, from the Pensions Council’s research.', href: 'index.html#gap', link: 'Start from a way of life' } }
+      step: { text: 'Pick a way of life to aim for, from the Pensions Council’s research.', href: 'index.html#life', link: 'Start from a way of life' } }
   };
 
   var SETS = {

@@ -29,6 +29,7 @@
 .fee-t th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
 .fee-t thead th{font-size:.86rem;font-weight:600;color:var(--ink-2)}
 .fee-t tbody tr:last-child th,.fee-t tbody tr:last-child td{font-weight:700;color:var(--ink);border-bottom:0}
+.fee-t tbody tr:last-child td{color:var(--red)}
 .fee-note{margin:10px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
 .fee-side p{margin:0;font-size:.95rem;line-height:1.6;color:var(--ink)}
 @media(max-width:480px){

@@ -67,6 +67,11 @@ function states(name, n) {
     entitlement: () => { const birth = pick(rand, 1960, 2008, 1);
       return { birth, entry: pick(rand, birth + 16, Math.min(2026, birth + 65), 1),
         paid: pick(rand, 0, 2600, 52), credited: pick(rand, 0, 1040, 52), homecaring: pick(rand, 0, 1040, 52) }; },
+    // Run 42: pages.js has carried the PIA page since Run 34 and this table
+    // had no states for it, so the script stopped at "A is not a function"
+    // before its first mutation; the ranges are sequences.js's for the page
+    pia: () => ({ amount: pick(rand, 25, 2000, 25), years: pick(rand, 1, 40, 1), growth: pick(rand, 0, 8, 0.5),
+      piaRate: pick(rand, 0, 5, 0.05), age: pick(rand, 18, 70, 1), salary: pick(rand, 10000, 200000, 1000) }),
   }[name];
   const out = []; for (let i = 0; i < n; i++) out.push(A()); return out;
 }
