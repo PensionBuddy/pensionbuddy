@@ -18,7 +18,8 @@ What it proves:
      page nothing loads and no bar returns; Google Analytics cookies an
      earlier "accepted" left are deleted
   3. "That's fine": remembered, GTM's script for GTM-KQCRZDNB is added
-     once, and on the next page it loads with no bar
+     once, and the Meta, TikTok and LinkedIn pixels once each (never before,
+     never after "No thanks"), and on the next page it loads with no bar
   4. an event sent before the answer waits in memory: accepted, it reaches
      the dataLayer after gtm.js; refused, it is gone; sent after a refusal,
      it is never kept, so changing to yes later on the page sends neither
@@ -51,6 +52,8 @@ from harness import eq, report  # noqa: E402
 
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 GTM = 'https://www.googletagmanager.com/gtm.js?id=GTM-KQCRZDNB'
+PIXELS = ['https://analytics.tiktok.com/i18n/pixel/events.js', 'https://connect.facebook.net/en_US/fbevents.js',
+          'https://snap.licdn.com/li.lms-analytics/insight.min.js']
 
 PROBE = r"""<script>
 (function(){
@@ -59,7 +62,8 @@ PROBE = r"""<script>
   function gtm(){ return [].map.call(document.querySelectorAll('script[src*="googletagmanager"]'),function(s){return s.src;}); }
   function state(){
     return {bar:!!document.querySelector('.pb-consent'), open:document.body.classList.contains('pb-banner-open'),
-            gtm:gtm(), dl:window.dataLayer?window.dataLayer.map(function(e){return e.event||'';}):null,
+            gtm:gtm(), px:[].map.call(document.querySelectorAll('script[src*="connect.facebook.net"],script[src*="analytics.tiktok.com"],script[src*="snap.licdn.com"]'),function(s){return s.src.split('?')[0];}),
+            dl:window.dataLayer?window.dataLayer.map(function(e){return e.event||'';}):null,
             stored:localStorage.getItem('pb-consent'), track:typeof window.PBTrack,
             // while the bar is up, focus is scrolled clear of it: the class and its height on <html>
             pad:(function(){ var d=document.documentElement, b=document.querySelector('.pb-consent');
@@ -279,6 +283,7 @@ def main():
         eq('1. %s: no answer yet, the bar is up' % page, (L['bar'], L['open']), (True, True))
         eq('1. %s: and keyboard focus is scrolled clear of it (8px over its height)' % page, L['pad'][:2], [True, L['pad'][2]])
         eq('1. %s: and nothing from Google is loaded' % page, (L['gtm'], L['dl']), ([], None))
+        eq('1. %s: and no Meta, TikTok or LinkedIn pixel' % page, L['px'], [])
         eq('1. %s: PBTrack is there for the page' % page, L['track'], 'function')
         eq('1. %s: no script error' % page, r['errors'], [])
         src = open(os.path.join(ROOT, page), encoding='utf-8').read()
@@ -290,11 +295,12 @@ def main():
     eq('2. "No thanks" is remembered', r['stored'], 'rejected')
     eq('2. the bar goes, and nothing loads', (r['bar'], r['open'], r['gtm'], r['dl']), (False, False, [], None))
     eq('2. and the room kept for it goes', r['pad'], [False, 'auto', None])
+    eq('2. and no pixel loads', r['px'], [])
     rr = R[('index.html', 'no', 'fresh')]
     eq('2. the analytics cookies were there', '_ga=' in rr['cookieBefore'] and '_gid=' in rr['cookieBefore'], True)
     eq('2. and are deleted', ('_ga=' in rr['cookieAfter'], '_gid=' in rr['cookieAfter']), (False, False))
     L = R[('starter.html', 'load', 'rejected')]['load']
-    eq('2. on the next page: no bar, nothing loads', (L['bar'], L['gtm'], L['dl']), (False, [], None))
+    eq('2. on the next page: no bar, nothing loads', (L['bar'], L['gtm'], L['dl'], L['px']), (False, [], None, []))
     # 3
     r = R[('index.html', 'yes', 'fresh')]['after']
     eq('3. "That\'s fine" is remembered', r['stored'], 'accepted')
@@ -302,6 +308,7 @@ def main():
     eq('3. and the room kept for it goes', r['pad'], [False, 'auto', None])
     eq('3. GTM-KQCRZDNB is loaded, once', r['gtm'], [GTM])
     eq('3. gtm.js starts the dataLayer', r['dl'], ['gtm.js'])
+    eq('3. the LinkedIn, TikTok and Meta pixels load, once each', sorted(r['px']), PIXELS)
     L = R[('starter.html', 'load', 'accepted')]['load']
     eq('3. on the next page: loaded, no bar', (L['bar'], L['gtm'], L['dl']), (False, [GTM], ['gtm.js']))
     # 4
