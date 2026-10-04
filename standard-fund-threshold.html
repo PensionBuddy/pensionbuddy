@@ -2430,6 +2430,45 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   .sft-card{padding:18px 16px}
 }
 #lumpTax{color:var(--red)}
+/* THE LIMIT BAR (Run 43, item 4; docs/INTERACTIVE-PROPOSALS-42.md rank 2). The year's
+   threshold against your pensions, on one scale. Yours in slate (neutral); the part over
+   the threshold hatched, not red: the excess is not money missing (its tax is in "Over the
+   threshold"). The mark is the threshold. No transition: it follows the sliders. */
+.sft-lim{margin:14px 0 18px}
+.sft-lim-track{position:relative;height:14px;border-radius:4px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+.sft-lim-fill,.sft-lim-over{position:absolute;top:0;bottom:0;transition:none}
+.sft-lim-fill{left:0;width:var(--w);background:var(--slate);border-radius:4px 0 0 4px}
+.sft-lim-over{left:var(--from);width:var(--w);background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lim-mark{position:absolute;top:-5px;bottom:-5px;left:var(--at);margin-left:-1px;border-left:2px solid var(--ink)}
+.sft-lim-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lim-k>span{display:block}
+.sft-lim-k>span[hidden]{display:none}
+.sft-lim-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sft-lim-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
+.sft-lim-k-you i{background:var(--slate)}
+.sft-lim-k-thr i{width:0;height:14px;border-radius:0;vertical-align:-2px;border-left:2px solid var(--ink)}
+.sft-lim-k-ov i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lim,.sft-lim *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media(min-width:601px){.sft-lim-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+/* THE LUMP-SUM BAR (Run 43, item 4; docs/INTERACTIVE-PROPOSALS-42.md rank 4, adapted). The
+   lump sum on one bar, split by Revenue's bands: tax-free (an outline), the 20% band (hatched),
+   taxed as income (solid). Slate, every part edged at 5.45:1 against the page, told apart by
+   pattern and a gap, never by strength alone; each named in the key with the table's figure.
+   Not red: only the tax itself is money missing, and that is the table's "Tax at 20%". */
+.sft-lb{margin:16px 0 0}
+.sft-lb-track{display:flex;gap:3px;height:16px;border-radius:4px}
+.sft-lb-track i{display:block;flex-shrink:1;flex-basis:0;min-width:0;height:100%;border-radius:3px;transition:none}
+.sft-lb-track i[hidden]{display:none}
+.sft-lb-free,.sft-lb-k-free i{background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lb-std,.sft-lb-k-std i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lb-inc,.sft-lb-k-inc i{background:var(--slate)}
+.sft-card .sft-lb-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lb-k>span{display:block}
+.sft-lb-k>span[hidden]{display:none}
+.sft-lb-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sft-lb-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
+.sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2545,6 +2584,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div class="chart-card sft-strip-card">
       <h3>The threshold, year by year</h3>
+      <div class="sft-lim" id="sftLim" aria-hidden="true">
+        <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
+        <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
+      </div>
       <ol class="sft-strip" id="sftStrip">
         <li data-y="2025"><b>2025</b><span>€2.0m</span></li>
         <li data-y="2026" class="sft-on"><b>2026</b><span>€2.2m</span></li>
@@ -2574,6 +2617,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         </tbody>
       </table>
       <p class="sft-small">Anything above €500,000 is taxed as income at your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025, so it no longer rises with the threshold.</p>
+      <div class="sft-lb" id="sftLb" aria-hidden="true">
+        <div class="sft-lb-track"><i class="sft-lb-free" id="sftLbFree" style="flex-grow:200000"></i><i class="sft-lb-std" id="sftLbStd" style="flex-grow:200000"></i><i class="sft-lb-inc" id="sftLbInc" style="flex-grow:0" hidden></i></div>
+        <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
+      </div>
     </div>
   </div>
 </div></div>
@@ -2666,6 +2713,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('thrL').textContent = 'The threshold for ' + yearWord(year);
     $('thr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
     $('share').textContent = pc + '%';
+    /* the limit bar (Run 43): the year's threshold against the total, on one scale,
+       the larger of the two; it follows the sliders in the same frame */
+    var top = Math.max(total, u.threshold) || 1, at = function (v) { return (v / top * 100).toFixed(2) + '%'; };
+    $('sftLimFill').style.setProperty('--w', at(Math.min(total, u.threshold)));
+    $('sftLimOver').style.setProperty('--from', at(u.threshold));
+    $('sftLimOver').style.setProperty('--w', at(u.excess));
+    $('sftLimMark').style.setProperty('--at', at(u.threshold));
+    $('sftLimYou').textContent = euro(total);
+    $('sftLimThrL').textContent = 'The threshold for ' + yearWord(year);
+    $('sftLimThr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
+    $('sftLimOvK').hidden = !(u.excess > 0);
+    $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
     var when = year >= 2030 ? 'from 2030' : 'in ' + year;
     var say;
     if (u.excess > 0) {
@@ -2693,6 +2752,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('lumpStd').textContent = euro(l.atStandardRate);
     $('lumpTax').textContent = euro(l.standardTax);
     $('lumpInc').textContent = euro(l.asIncome);
+    /* the lump-sum bar (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 4, adapted): the lump
+       sum on one bar, split by Revenue's bands, each part as wide as its euro (flex-grow), a
+       part with nothing in it not drawn. Slate in three patterns, each named in the key with
+       the table's own figure; not red, since only the 20% of the middle band is tax
+       (#lumpTax). No transition: it follows the slider. */
+    [['sftLbFree', l.taxFree], ['sftLbStd', l.atStandardRate], ['sftLbInc', l.asIncome]].forEach(function (p) {
+      var el = $(p[0]); el.style.flexGrow = String(Math.max(0, Math.round(p[1]))); el.hidden = !(p[1] > 0);
+    });
+    $('sftLbFreeN').textContent = euro(l.taxFree);
+    $('sftLbStdN').textContent = euro(l.atStandardRate);
+    $('sftLbIncN').textContent = euro(l.asIncome);
+    $('sftLbIncK').hidden = !(l.asIncome > 0);
     P.announce('The threshold for ' + yearWord(year) + ' is ' + (u.atLeast ? 'at least ' : '') + euro(u.threshold) + '. ' + say +
       ' Tax at 20% on the lump sum: ' + euro(l.standardTax) + '.');
   }

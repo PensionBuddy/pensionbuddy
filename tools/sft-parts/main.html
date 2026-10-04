@@ -28,6 +28,10 @@
 
     <div class="chart-card sft-strip-card">
       <h3>The threshold, year by year</h3>
+      <div class="sft-lim" id="sftLim" aria-hidden="true">
+        <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
+        <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
+      </div>
       <ol class="sft-strip" id="sftStrip">
         <li data-y="2025"><b>2025</b><span>€2.0m</span></li>
         <li data-y="2026" class="sft-on"><b>2026</b><span>€2.2m</span></li>
@@ -57,6 +61,10 @@
         </tbody>
       </table>
       <p class="sft-small">Anything above €500,000 is taxed as income at your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025, so it no longer rises with the threshold.</p>
+      <div class="sft-lb" id="sftLb" aria-hidden="true">
+        <div class="sft-lb-track"><i class="sft-lb-free" id="sftLbFree" style="flex-grow:200000"></i><i class="sft-lb-std" id="sftLbStd" style="flex-grow:200000"></i><i class="sft-lb-inc" id="sftLbInc" style="flex-grow:0" hidden></i></div>
+        <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
+      </div>
     </div>
   </div>
 </div></div>

@@ -280,7 +280,8 @@ PAGES = {
         checks=(('id="feeChart"', 'the chart'),
                 ('class="pb-warn"', 'the prescribed warnings'),
                 ('ccpc.ie', 'the CCPC cited'),
-                ('under the Pensions Act', 'the Standard PRSA maximums sourced')),
+                ('under the Pensions Act', 'the Standard PRSA maximums sourced'),
+                ('class="fee-k-gap"', 'the key for what the charges take')),
     ),
     # Run 20 #4. A short form and a result, like the finder: no sliders, and
     # none of the class names the calculators' shared scripts look for.
@@ -314,7 +315,9 @@ PAGES = {
         nav='standard-fund-threshold.html',
         checks=(('id="sftStrip"', 'the year-by-year strip'),
                 ('Rules as at 24 September 2026', 'the date the rules were checked'),
-                ('Finance Act 2024', 'the statute cited')),
+                ('Finance Act 2024', 'the statute cited'),
+                ('id="sftLim"', 'the limit bar'),
+                ('id="sftLb"', 'the lump-sum bar')),
     ),
     # Run 20 #6. A dated summary of the rules that changed for directors, and
     # four questions that list topics to discuss, never a recommendation.

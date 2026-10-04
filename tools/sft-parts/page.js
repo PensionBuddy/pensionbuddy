@@ -28,6 +28,18 @@
     $('thrL').textContent = 'The threshold for ' + yearWord(year);
     $('thr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
     $('share').textContent = pc + '%';
+    /* the limit bar (Run 43): the year's threshold against the total, on one scale,
+       the larger of the two; it follows the sliders in the same frame */
+    var top = Math.max(total, u.threshold) || 1, at = function (v) { return (v / top * 100).toFixed(2) + '%'; };
+    $('sftLimFill').style.setProperty('--w', at(Math.min(total, u.threshold)));
+    $('sftLimOver').style.setProperty('--from', at(u.threshold));
+    $('sftLimOver').style.setProperty('--w', at(u.excess));
+    $('sftLimMark').style.setProperty('--at', at(u.threshold));
+    $('sftLimYou').textContent = euro(total);
+    $('sftLimThrL').textContent = 'The threshold for ' + yearWord(year);
+    $('sftLimThr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
+    $('sftLimOvK').hidden = !(u.excess > 0);
+    $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
     var when = year >= 2030 ? 'from 2030' : 'in ' + year;
     var say;
     if (u.excess > 0) {
@@ -55,6 +67,18 @@
     $('lumpStd').textContent = euro(l.atStandardRate);
     $('lumpTax').textContent = euro(l.standardTax);
     $('lumpInc').textContent = euro(l.asIncome);
+    /* the lump-sum bar (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 4, adapted): the lump
+       sum on one bar, split by Revenue's bands, each part as wide as its euro (flex-grow), a
+       part with nothing in it not drawn. Slate in three patterns, each named in the key with
+       the table's own figure; not red, since only the 20% of the middle band is tax
+       (#lumpTax). No transition: it follows the slider. */
+    [['sftLbFree', l.taxFree], ['sftLbStd', l.atStandardRate], ['sftLbInc', l.asIncome]].forEach(function (p) {
+      var el = $(p[0]); el.style.flexGrow = String(Math.max(0, Math.round(p[1]))); el.hidden = !(p[1] > 0);
+    });
+    $('sftLbFreeN').textContent = euro(l.taxFree);
+    $('sftLbStdN').textContent = euro(l.atStandardRate);
+    $('sftLbIncN').textContent = euro(l.asIncome);
+    $('sftLbIncK').hidden = !(l.asIncome > 0);
     P.announce('The threshold for ' + yearWord(year) + ' is ' + (u.atLeast ? 'at least ' : '') + euro(u.threshold) + '. ' + say +
       ' Tax at 20% on the lump sum: ' + euro(l.standardTax) + '.');
   }
