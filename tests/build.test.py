@@ -321,7 +321,7 @@ def run():
         ('a hand-written calculator changed the date', 'director-calculator.html',
          'Last reviewed September 2026', 'Last reviewed October 2026', 'reviewed'),
         ('a page that should not carry it gained it', 'terms.html', '<main', pagebuild.REVIEWED + '<main', 'reviewed'),
-        ('a reason line reworded', 'index.html', 'Free, 20 minutes, no obligation.', 'Free, 30 minutes, no obligation.', 'reason'),
+        ('a reason line reworded', 'index.html', 'Free · 20 minutes · no obligation · reschedule any time.', 'Free · 30 minutes · no obligation · reschedule any time.', 'reason'),
         ('the recipe edited on one page', 'glossary.html', 'body p.pb-why{margin:10px 0 0', 'body p.pb-why{margin:12px 0 0', 'trust-css'),
         ('the recipe missing from one page', 'booking.html', pagebuild.TRUST_OPEN, '/* TRUST-GONE', 'trust-css'),
     ]
