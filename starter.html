@@ -1687,6 +1687,13 @@ button{font-family:inherit}
 .pb-ae-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em}
 .pb-sa-fill.pb-ae-own{background:var(--ink-2)}
 .pb-ae .pb-sa-rows .pb-ae-row:nth-child(2) .pb-sa-fill,.pb-ae .pb-sa-rows .pb-ae-row:nth-child(3) .pb-sa-fill{background:var(--amber)}
+/* the phase picker (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 9): a press changes the
+   pressed colour and the figures below, nothing else */
+.pb-ae-ph{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.pb-ae-ph[hidden]{display:none}
+.pb-ae-ph button{font:inherit;font-size:15px;font-weight:600;min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);cursor:pointer;transition:none}
+.pb-ae-ph button[aria-pressed="true"]{border-color:var(--teal-700);background:var(--teal-50);color:var(--teal-700)}
+.pb-ae-ph button:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
 @media(max-width:700px){
   .pb-sa-row{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
   .pb-sa-name{grid-column:1;grid-row:1}
@@ -1850,6 +1857,18 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
+/* the age slider over an age-only ladder (Run 43, item 4; INTERACTIVE-PROPOSALS-42 ranks
+   6 and 15). Drawn only with script; assets/js/pb-ladder.js marks the step. Nothing moves
+   but the "You" mark, and only because the reader moved the slider; its negative margins
+   keep its row the height of the others, so no row moves when it does. */
+.pb-lad-ctl{display:none;margin:0 0 12px;max-width:440px}
+html.pb-js .pb-lad-ctl{display:block}
+.pb-lad-ctl-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pb-lad-ctl-row label{font-size:.98rem;font-weight:600;color:var(--ink)}
+.pb-lad-ctl-v{font-size:1.05rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-lad-ctl input[type=range]{display:block;width:100%}
+html:not(.pb-js) .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{display:none}
+.pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{margin-top:-2px;margin-bottom:-2px}
 /* ANNOTATED SHOT (.pb-ann). Two labelled arrows over the pension
    calculator's photograph: a slider, and the figures that follow it. The
    layer is anchored to the photo's top edge and scales with its width
@@ -2669,10 +2688,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
-  <div class="pb-lad">
+  <div class="pb-lad" data-pb-age="ladAge">
     <p class="pb-lad-cap">Tax relief is there at any age. Revenue's limit on the contributions that get it rises with age, as a share of earnings.</p>
+    <div class="pb-lad-ctl"><div class="pb-lad-ctl-row"><label for="ladAge">Your age</label><span class="pb-lad-ctl-v" id="ladAgeV">30</span></div><input type="range" id="ladAge" min="18" max="70" step="1" value="30" aria-valuetext="30, 20%" style="--fill:23.08%"></div>
     <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-    <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
+    <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
     <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
     <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
     <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
@@ -2687,6 +2707,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="pb-sa pb-ae">
     <div class="pb-sa-ctl">
+      <div class="pb-ae-ph" id="aePh" role="group" aria-label="Auto-enrolment rates, by years" hidden><button type="button" id="aePh1" aria-pressed="true">2026 to 2028</button><button type="button" id="aePh2" aria-pressed="false">2029 to 2031</button><button type="button" id="aePh3" aria-pressed="false">2032 to 2034</button><button type="button" id="aePh4" aria-pressed="false">2035 onward</button></div>
       <div class="pb-sa-row0"><label for="aeSalary">Your gross salary</label><span class="pb-sa-val" id="aeSalaryV">€50,000</span></div>
       <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year">
     </div>
@@ -2708,6 +2729,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000. Whatever the rates, the ratio is always 3 to 3 to 1.</p>
+    <p class="pb-sa-note pb-caveat pb-noterms" id="aePhNote">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at &euro;80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years. Confirm those against gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA) before relying on them. Rates and rules can change.</p>
   </div>
   <div class="pb-mff" id="pbMff">
     <h3>Once you are enrolled: what happens when.</h3>
@@ -2994,6 +3016,8 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
+<script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <script src="assets/js/pb-bars.js?v=1504d494"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
@@ -3188,6 +3212,22 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
       ', and ' + pct(a.rates.state) + ' from the State';
   }
 
+  /* Run 43 (INTERACTIVE-PROPOSALS-42 rank 9): the four phases of rates, one button each;
+     the current phase is pressed at load. A press repaints the three rows from
+     PBCompare.autoEnrolment at the phase's first scheme year, at the reader's own salary.
+     The widths stay 3 : 3 : 1; only the figures and the dated line change. The caveat under
+     the rows (#aePhNote) says which rates are confirmed. */
+  var PH = window.PBCompare.AE_PHASES, ph = document.getElementById('aePh');
+  var phB = ph ? [].slice.call(ph.querySelectorAll('button')) : [];
+  function pressPhase() {
+    PH.forEach(function (p, i) { if (phB[i]) phB[i].setAttribute('aria-pressed', year >= p.fromYear && year <= p.toYear ? 'true' : 'false'); });
+  }
+  if (ph && PH && phB.length === PH.length) {
+    phB.forEach(function (b, i) { b.addEventListener('click', function () { year = PH[i].fromYear; pressPhase(); paint(); }); });
+    pressPhase();
+    ph.hidden = false;
+  }
+
   /* wired on its own: wireRanges() takes every slider on the page and would
      repaint the start-age slider's "a month" wording with this one's */
   var vt = { aeSalary: function (v) { return euro(v) + ' a year'; } };
@@ -3197,7 +3237,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
-<script src="assets/js/pb-jargon-chips.js?v=74da7476"></script>
+<script src="assets/js/pb-jargon-chips.js?v=7bb8e78f"></script>
 <script src="assets/js/pb-bookbar.js?v=0b2a330b"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script>

@@ -22,6 +22,11 @@ C4b (INTERACTIVE-PROPOSALS-42 ranks 3 and 14), index.html:
   the hero figures, each a toggle that says where it comes from (H1-H14)
   the phone slider in "What changes, and when." picking the relief step (T1-T8)
 
+C4c (INTERACTIVE-PROPOSALS-42 ranks 6, 15 and 9):
+  starter.html, director.html, pensions-over-50.html, self-employed-pensions.html
+                               the age slider over the relief ladder (LD1-LD5)
+  starter.html                 the auto-enrolment phases, one button each, and their caveat (A1-A7)
+
 Not part of tests/run-tests.py: one Chrome launch per scenario. Exit 0 or 1.
 """
 import http.server
@@ -49,6 +54,10 @@ PAGES = {
     'sft': 'standard-fund-threshold.html',
     'fees': 'pension-fees-calculator.html',
     'home': 'index.html',
+    'starter': 'starter.html',
+    'director': 'director.html',
+    'over50': 'pensions-over-50.html',
+    'selfemp': 'self-employed-pensions.html',
 }
 
 PROBE = r"""<script>
@@ -304,12 +313,54 @@ PROBE = r"""<script>
     return r;
   }
 
+  /* ---- the age-only relief ladders (ranks 6 and 15) and the starter's phases (rank 9) ---- */
+  function lad(){
+    var root=document.querySelector('.pb-lad[data-pb-age]'), ctl=root?root.querySelector('.pb-lad-ctl'):null, r=$('ladAge');
+    var you=[].slice.call(root.querySelectorAll('.pb-lad-you')).filter(function(y){ return y.getClientRects().length>0; });
+    var prev=root.previousElementSibling;
+    return {ctlShown:!!ctl&&ctl.getClientRects().length>0&&cs(ctl).display!=='none',
+      value:r?r.value:null, valuetext:r?r.getAttribute('aria-valuetext'):null, fill:r?r.style.getPropertyValue('--fill'):null,
+      v:txt($('ladAgeV')), out:root.querySelectorAll('.pb-lad-out').length,
+      you:you.map(function(y){ return y.closest('.pb-lad-row').getAttribute('data-from'); }),
+      pct:[].map.call(root.querySelectorAll('.pb-lad-pct'),function(e){ return txt(e); }),
+      cap:txt(root.querySelector('.pb-lad-cap')), note:txt(root.querySelector('.pb-lad-note')),
+      prev:prev?[prev.tagName.toLowerCase(),seen(prev)]:null, ladders:document.querySelectorAll('.pb-lad').length,
+      rows:[].map.call(root.querySelectorAll('.pb-lad-row'),rect)};
+  }
+  function ae(){
+    var ph=$('aePh'), note=$('aePhNote');
+    return {shown:!!ph&&ph.getClientRects().length>0, hidden:ph?ph.hidden:null,
+      pressed:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return b.getAttribute('aria-pressed'); }):null,
+      labels:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return txt(b); }):null,
+      figs:['aeYou','aeEmp','aeState'].map(function(i){ return txt($(i)); }),
+      widths:[].map.call(document.querySelectorAll('.pb-ae .pb-sa-fill'),function(f){ return f.style.width; }),
+      years:txt($('aeYears')), rates:txt($('aeRates')),
+      trans:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return cs(b).transitionDuration; }):null,
+      note:note?[note.getClientRects().length>0&&cs(note).display!=='none',note.previousElementSibling?note.previousElementSibling.id:null,seen(note)]:null,
+      chips:note?note.querySelectorAll('.pb-chip,.pb-term').length:null};
+  }
+  async function ladder(){
+    var r={}, root=document.querySelector('.pb-lad[data-pb-age]');
+    r.LD1=lad();
+    if($('aePh')) r.A1=ae();
+    if(nojs) return r;
+    var d=$('ladAge').value;
+    setv('ladAge',62); await frames(); r.LD2=lad();
+    setv('ladAge',18); await frames(); r.LD3=lad();
+    setv('ladAge',d); await frames(); r.LDback=lad();
+    if($('aePh')){
+      $('aePh2').click(); await frames(); r.A2=ae();
+      $('aePh4').click(); setv('aeSalary',100000); await frames(); r.A3=ae();
+    }
+    return r;
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     setTimeout(async function(){
       /* the probe's own input events are not a reader's (hadRecentInput stays false), so
          only the shifts before it starts acting are the page's own */
       var body={id:id,kind:kind,nojs:nojs,width:innerWidth,reduce:matchMedia('(prefers-reduced-motion: reduce)').matches,actAt:Math.round(performance.now())};
-      try{ body.r=await ({pots:pots,sft:sft,fees:fees,home:home})[kind](); }catch(e){ body.crash=String(e&&e.stack||e); }
+      try{ body.r=await ({pots:pots,sft:sft,fees:fees,home:home,starter:ladder,director:ladder,over50:ladder,selfemp:ladder})[kind](); }catch(e){ body.crash=String(e&&e.stack||e); }
       await wait(100);
       body.shifts=shifts; body.errors=errors;
       var x=new XMLHttpRequest(); x.open('POST','/__result?id='+encodeURIComponent(id),false); x.send(JSON.stringify(body));
@@ -376,6 +427,15 @@ SCEN = {
     'home-reduce-500': ('home', 500, False, [REDUCE]),
     'home-nojs-1440': ('home', 1440, True, []),
     'home-nojs-500': ('home', 500, True, []),
+    'starter-1440': ('starter', 1440, False, []),
+    'starter-500': ('starter', 500, False, []),
+    'starter-nojs-1440': ('starter', 1440, True, []),
+    'director-1440': ('director', 1440, False, []),
+    'director-nojs-1440': ('director', 1440, True, []),
+    'over50-1440': ('over50', 1440, False, []),
+    'over50-nojs-1440': ('over50', 1440, True, []),
+    'selfemp-1440': ('selfemp', 1440, False, []),
+    'selfemp-nojs-1440': ('selfemp', 1440, True, []),
 }
 EXPECTED = list(SCEN)
 
@@ -404,7 +464,7 @@ def run_all():
 run_all()
 
 RED, INK, WHITE, SLATE = 'rgb(164, 41, 29)', 'rgb(11, 31, 28)', 'rgb(255, 255, 255)', 'rgb(88, 107, 133)'
-NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl')
+NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl|pb-lad|ladAge|aePh|pb-ae-ph')
 
 
 def near(a, b, tol):
@@ -633,6 +693,108 @@ def check_t1(sid, r):
     eq('T1 %s: no layout shift has a source in the timeline' % sid, bad, [])
 
 
+# ---------------------------------------------------------------- the age-only ladders and the phases
+# page kind: (default age, the default row's data-from, caption, note) -- the guides' caption and note
+# are the plan's words; the starter's and director's are the pages' own, unchanged
+LAD = {
+    'starter': (30, '30', None, None),
+    'director': (48, '40', None, None),
+    'over50': (50, '50', "Revenue's limit on the contributions that get tax relief, as a share of earnings.",
+               'Earnings count up to €115,000.'),
+    'selfemp': (40, '40', "Revenue's limit on the contributions that get tax relief, as a share of net relevant earnings.",
+                'Net relevant earnings count up to €115,000.'),
+}
+BANDS = {
+    'over50': 'The share of your earnings that can get tax relief rises with age: 30% from 50 to 54',
+    'selfemp': 'What you pay in gets income tax relief up to a share of your net relevant earnings',
+}
+PCT = ['15%', '20%', '25%', '30%', '35%', '40%']
+FROMS = ['0', '30', '40', '50', '55', '60']
+
+
+def band_of(age):
+    return PCT[max(i for i, f in enumerate(FROMS) if age >= int(f))]
+
+
+def fill_of(age):
+    return '%.2f%%' % ((age - 18) / (70 - 18) * 100)
+
+
+AE_NOTE = ('Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at '
+           '€80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and '
+           'years. Confirm those against gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA) '
+           'before relying on them. Rates and rules can change.')
+AE_LABELS = ['2026 to 2028', '2029 to 2031', '2032 to 2034', '2035 onward']
+AE_RATES = [(0.015, 0.005), (0.03, 0.01), (0.045, 0.015), (0.06, 0.02)]
+
+
+def ae_phase_now():
+    # the page's own sum: scheme year 1 is 2026, held to 1-12; phases from scheme years 1, 4, 7 and 10
+    y = min(12, max(1, time.localtime().tm_year - 2025))
+    return 0 if y <= 3 else 1 if y <= 6 else 2 if y <= 9 else 3
+
+
+def check_ladder(sid, kind, r, nojs):
+    age, row, cap, note = LAD[kind]
+    l = r['LD1']
+    eq('LD1 %s: one ladder named for the age slider, no euro line' % sid, [l['ladders'] >= 1, l['out']], [True, 0])
+    if kind in BANDS:
+        eq('LD5 %s: the six steps read 15%% to 40%%' % sid, l['pct'], PCT)
+        eq('LD5 %s: the caption and the note' % sid, [l['cap'], l['note']], [cap, note])
+        eq('LD5 %s: the ladder directly follows the paragraph stating the bands' % sid,
+           [l['prev'][0], l['prev'][1].startswith(BANDS[kind])], ['p', True])
+    if nojs:
+        eq('LD4 %s: no JavaScript: the slider is not drawn, no "You" shown' % sid, [l['ctlShown'], l['you']], [False, []])
+        return
+    eq('LD1 %s: the slider drawn, at its default, "You" in the default row alone' % sid,
+       [l['ctlShown'], l['value'], l['v'], l['you']], [True, str(age), str(age), [row]])
+    eq('LD1 %s: its spoken value and fill, as pb-ladder.js writes them last' % sid,
+       [l['valuetext'], l['fill']], ['%d, %s' % (age, band_of(age)), fill_of(age)])
+    l2 = r['LD2']
+    eq('LD2 %s: 62: "You" in "60 and over" alone, "62", "62, 40%%", fill 84.62%%' % sid,
+       [l2['you'], l2['v'], l2['valuetext'], l2['fill']], [['60'], '62', '62, 40%', '84.62%'])
+    l3 = r['LD3']
+    eq('LD3 %s: 18: "You" in "Under 30" alone, "18, 15%%"' % sid, [l3['you'], l3['v'], l3['valuetext']], [['0'], '18', '18, 15%'])
+    lb = r['LDback']
+    eq('LD1 %s: back at the default, as at load' % sid, [lb['you'], lb['v'], lb['valuetext'], lb['fill']],
+       [l['you'], l['v'], l['valuetext'], l['fill']])
+    eq('LD1 %s: no row moves when the slider does (62, 18, then back)' % sid, [l2['rows'], l3['rows'], lb['rows']], [l['rows']] * 3)
+    bad = [x for x in r_shifts(sid) if any('pb-lad' in p or 'ladAge' in p for p in x.get('sources', []))]
+    eq('LD1 %s: no layout shift has a source in the ladder' % sid, bad, [])
+
+
+def ae_figs(i, salary):
+    e, st = AE_RATES[i]
+    c = min(salary, 80000)
+    return [fmt(e * c), fmt(e * c), fmt(st * c)]
+
+
+def check_ae(sid, r, nojs):
+    a = r['A1']
+    eq('A7 %s: the caveat displayed, directly after #aeNote, word for word' % sid, a['note'], [True, 'aeNote', AE_NOTE])
+    eq('A7 %s: no jargon chip or term in the caveat (the authority\'s name stays whole)' % sid, a['chips'], 0)
+    if nojs:
+        eq('A5 %s: no JavaScript: the phase buttons hidden, the rows at the markup\'s 2026 figures' % sid,
+           [a['shown'], a['hidden'], a['figs']], [False, True, ['€750', '€750', '€250']])
+        return
+    now = ae_phase_now()
+    eq('A1 %s: the buttons shown, the current phase pressed alone' % sid,
+       [a['shown'], a['labels'], a['pressed']], [True, AE_LABELS, ['true' if i == now else 'false' for i in range(4)]])
+    eq('A1 %s: the rows at this phase\'s rates on €50,000' % sid, [a['figs'], a['years']], [ae_figs(now, 50000), AE_LABELS[now]])
+    a2 = r['A2']
+    eq('A2 %s: 2029 to 2031 pressed alone: the figures, the years and the rates' % sid,
+       [a2['figs'], a2['years'], a2['rates'], a2['pressed']],
+       [['€1,500', '€1,500', '€500'], '2029 to 2031', '3% of salary each from you and your employer, and 1% from the State',
+        ['false', 'true', 'false', 'false']])
+    a3 = r['A3']
+    eq('A3 %s: 2035 onward at €100,000: capped at €80,000' % sid, [a3['figs'], a3['years'], a3['pressed']],
+       [['€4,800', '€4,800', '€1,600'], '2035 onward', ['false', 'false', 'false', 'true']])
+    # the script writes (v / top * 100).toFixed(4) + '%'; the browser reads "100.0000%" back as "100%"
+    eq('A4 %s: the widths stay 3 : 3 : 1' % sid, [a['widths'], a2['widths'], a3['widths']], [['100%', '100%', '33.3333%']] * 3)
+    eq('A6 %s: no transition on the buttons' % sid, sorted(set(a['trans'])), ['0s'])
+    eq('A7 %s: the caveat still there after the presses' % sid, a3['note'], [True, 'aeNote', AE_NOTE])
+
+
 def r_shifts(sid):
     return REPORTS[sid].get('shifts', [])
 
@@ -653,6 +815,10 @@ for sid in EXPECTED:
         check_sft(sid, r, nojs, REDUCE in flags)
     elif kind == 'home':
         check_home(sid, rep, r, nojs, REDUCE in flags)
+    elif kind in LAD:
+        check_ladder(sid, kind, r, nojs)
+        if kind == 'starter':
+            check_ae(sid, r, nojs)
     else:
         check_fees(sid, r, nojs)
 

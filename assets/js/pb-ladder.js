@@ -9,7 +9,14 @@
    waits for DOMContentLoaded so the module has loaded wherever its tag sits.
    The steps' figures are PBRelief.reliefBand()'s; on a page that loads the
    module they are checked against it and a mismatch hides the ladder rather
-   than show a figure the module does not give. */
+   than show a figure the module does not give.
+
+   Run 43 (INTERACTIVE-PROPOSALS-42 ranks 6 and 15): a ladder may name an age
+   slider and no earnings slider (the starter and directors' pages, and two
+   guides). Its control (.pb-lad-ctl) is drawn only with script (html.pb-js);
+   this file marks the reader's step and writes the slider's value and spoken
+   value, and nothing else: no euro line, since the page has no earnings to
+   work it from. On a calculator nothing changes. */
 (function () {
   'use strict';
   function init() {
@@ -28,19 +35,29 @@
       var ageEl = document.getElementById(root.getAttribute('data-pb-age') || '');
       var earnEl = document.getElementById(root.getAttribute('data-pb-earn') || '');
       var out = root.querySelector('.pb-lad-out');
-      if (!ageEl || !earnEl || !out) return;
+      var full = !!(ageEl && earnEl && out);
+      var ctl = root.querySelector('.pb-lad-ctl');
+      if (!ageEl || (!full && !ctl)) return;
+      var shown = full ? null : document.getElementById(ageEl.id + 'V');
       function paint() {
-        var age = +ageEl.value, earn = +earnEl.value;
+        var age = +ageEl.value;
         rows.forEach(function (r) {
           r.querySelector('.pb-lad-you').hidden =
             !(age >= +r.getAttribute('data-from') && age <= +r.getAttribute('data-to'));
         });
+        if (!full) {
+          ageEl.style.setProperty('--fill', ((age - ageEl.min) / (ageEl.max - ageEl.min) * 100).toFixed(2) + '%');
+          ageEl.setAttribute('aria-valuetext', age + ', ' + pct(R.reliefBand(age)));
+          if (shown) shown.textContent = String(age);
+          return;
+        }
+        var earn = +earnEl.value;
         out.textContent = 'At ' + age + ', relief applies to contributions up to ' +
           euro(R.reliefLimit(age, earn)) + ' a year: ' + pct(R.reliefBand(age)) + ' of ' +
           (earn > R.EARN_CAP ? euro(R.EARN_CAP) + ', the most Revenue counts.' : euro(earn) + '.');
       }
       ageEl.addEventListener('input', paint);
-      earnEl.addEventListener('input', paint);
+      if (full) earnEl.addEventListener('input', paint);
       paint();
     });
   }
