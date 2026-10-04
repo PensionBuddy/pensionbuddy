@@ -2310,6 +2310,78 @@ def run():
         eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, csizes)), True)
 
 
+    # ----------------------------------------------------------------- 46
+    # Run 43, item 1 (Damian's "yes" to Run 42's question 7): the starter,
+    # tracker and director heroes give before they ask. Each hero keeps its
+    # second button, its two lockups (check 28) and its chat picture's
+    # question and Buddy's answer (its booking link and reason are cut, P1),
+    # and carries no booking link in its copy; the booking button and its
+    # reason (pagebuild.REASON) stand, moved word for word, after the page's
+    # first figures: the starter page's 30, 40 and 50 chart with its
+    # warnings and note, the director page's €1,000 example and relief
+    # ladder with its note; the tracker page gives no figure, so after its
+    # tick list (docs/GIVE-BEFORE-ASK-42.md S1, T1, D1).
+    ARROW = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
+             '<polyline points="12 5 19 12 12 19"/></svg></a>')
+    GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
+        'starter.html': ('Help me get started', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
+                         '  <div class="pb-sa pb-wait" id="pbWait">'),
+        'tracker.html': ('Help me find my pensions', ('id="pbTrace"', 'data-pb-award="ticks"'),
+                         '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
+                         '  <div class="callout pb-bleed pb-dark pb-split">'),
+        'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
+                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
+                          '  <div class="sec-head"><span class="kicker">Sound familiar?</span>'),
+    }
+
+    def moved_block(words):
+        return ('  <div class="hero-cta" style="margin-top:22px">\n      <a class="btn btn-acc" href="booking.html">'
+                + words + ARROW + '\n      ' + pagebuild.REASON + '\n  </div>\n')
+
+    def gives_first(name, src):
+        words, before, follows = GIVE_FIRST[name]
+        h = src.find('<header class="hero aud-hero">')
+        end = src.find('</header>', h)
+        hero = src[h:end]
+        copy = src[h:src.find('\n  <div class="hero-phone">', h)]
+        if h < 0 or end < 0 or 'href="booking.html"' in hero:
+            return 'the hero asks before the page gives'
+        if '<a class="btn btn-ghost"' not in copy:
+            return 'the hero lost its second button'
+        if '<p class="msg buddy">' not in hero:
+            return 'the hero lost its chat picture'
+        block = moved_block(words)
+        if src.count(block) != 1:
+            return 'the moved button and its reason are missing, doubled or reworded'
+        i = src.index(block)
+        if not all(0 <= src.find(b) < i for b in before):
+            return 'the button comes before the first figures'
+        if not src.startswith(follows, i + len(block)):
+            return 'the button is not where it was put'
+        return None
+    eq('46. the starter, tracker and director heroes give before they ask: the button and its reason after the first figures (the tracker: its tick list)',
+       {n: gives_first(n, sources[n]) for n in GIVE_FIRST if gives_first(n, sources[n])}, {})
+    st, dr = sources['starter.html'], sources['director.html']
+    sblock = moved_block('Help me get started')
+    for label, name, mut, want in (
+            ('the button put back in a hero', 'director.html',
+             dr.replace('<a class="btn btn-ghost" href="director-calculator.html">',
+                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="btn btn-ghost" href="director-calculator.html">', 1),
+             'the hero asks before the page gives'),
+            ('the button above the chart', 'starter.html',
+             st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
+             'the button comes before the first figures'),
+            ('its reason reworded', 'starter.html', st.replace(sblock, sblock.replace('20 minutes', '30 minutes'), 1),
+             'the moved button and its reason are missing, doubled or reworded'),
+            ('the chat picture\'s link put back', 'tracker.html',
+             sources['tracker.html'].replace(
+                 'is usually enough to start tracing a pension.</p>\n',
+                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
+             'the hero asks before the page gives')):
+        assert mut != sources[name], label
+        eq('46. %s is caught' % label, gives_first(name, mut), want)
+
+
 
 
 # Run 27: every Netlify form on the site, by page. Adding a lead form means
