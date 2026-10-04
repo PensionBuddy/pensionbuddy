@@ -23,6 +23,20 @@ its part file (`:77` is a line of the part file named in its heading).
 A sentence a script writes (the calculators' results) was checked against
 the page as a browser draws it with its first values.
 
+**Run 43 (4 October 2026).** Damian's brief: "apply every cut that only
+removes repetition. List the rest." Applied, each marked below: S-8, T-6,
+D-9, D-8 (its second sentence only), B-2, Y-2, Y-3, R-3, C-2 and M1, nine
+edits (Y-2 and Y-3 are one), commit `e53afba` (STATUS, Run 43, item 3; pack
+section 7). Kept, each marked: D7 (the home FAQ: its answer holds facts,
+and SUBTRACTION-AUDIT question 6 is open), O-2 and Z-2 (each would leave a
+bare ask), and D-8's first sentence. Every other row stays a list for you,
+for the reason its row gives. Run 43 also removed the three chat pictures'
+booking links and reason lines (S-2, T-2, D-2: the link and reason only,
+by Damian's "yes" to question 7) and changed every reason line's words to
+"Free · 20 minutes · no obligation · reschedule any time." (the S-1, T-1,
+D-1, R-1, O-3, E-1, U-1, C-3, Z-3 and F-1 rows quote the old words). Line
+numbers below are Run 42's.
+
 ## The three tests, and what is never a cut
 
 A paragraph is listed when it (i) only pushes booking; (ii) repeats
@@ -63,7 +77,7 @@ By item 5 (this item):
 - **D4** the team block 2785-2828 (SUBTRACTION-AUDIT Q4 open): 2793 "I’ve spent thirty years explaining how money can best serve real people. Clarity is the whole point."; 2795 "Thirty years of that work leaves you with one firm opinion: hardly anyone is bad with money. They have just never had it explained to them in words they felt allowed to ask questions about."; 2811 "Nobody out there was explaining any of it in a way that actually made sense. That is the part I wanted to fix."; 2812 "Adam graduated from Trinity College Dublin this year with an honours degree in Business, Economics and Social Sciences. He’s bringing a fresh perspective to how pensions get talked about, transforming three decades of his dad’s experience into something people can actually follow, from auto-enrolment to retirement planning."; 2813 "Adam runs the social and education side of Pensionbuddy, the goal being to educate and remove the fear around pensions."; 2825 "Buddy is a beloved boxer, and the namesake of Pensionbuddy. He is the mascot, and the paw print in the logo is his."; 2826 "He is also the point, in a way. A pension should feel like something with someone in your corner, and Buddy is the loyal embodiment of that." Keep 2794 (facts) and 2797-2800 (check 31). `#story` must survive (nav 2514, footer 2945, verify.py:660).
 - **D5** 2862-2863 "Who you are actually dealing with." — repeats the footer disclosure; holds the legal name, registered office and register reference: compliance's call only.
 - **D6** 2888 h2 "Most people brace for a sales pitch. This is a chat." (i); steps 2892 "Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed." = 2935; 2893 "You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so." = FAQ 1 (2922). Check 45 pins kicker, h2 and steps word for word. (The Buddy picture now sits in this section; its Buddy line repeats FAQ 2.)
-- **D7** the FAQ 2914-2929 (SUBTRACTION-AUDIT Q6): Q3 (2925) and Q5 (2927) hold facts and stay; Q2 "Is the first chat really free?" / "Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions." (2924) is still a same-page repeat of the picture's Buddy line (now in `#call`, 2900, one section above). Any cut edits the FAQPage JSON-LD at index.html:32 too (check 30).
+- **D7** *(kept in Run 43: the answer holds facts, and SUBTRACTION-AUDIT question 6 is open)* the FAQ 2914-2929 (SUBTRACTION-AUDIT Q6): Q3 (2925) and Q5 (2927) hold facts and stay; Q2 "Is the first chat really free?" / "Yes, completely, with no obligation afterwards. Twenty minutes to understand your situation and answer your questions." (2924) is still a same-page repeat of the picture's Buddy line (now in `#call`, 2900, one section above). Any cut edits the FAQPage JSON-LD at index.html:32 too (check 30).
 - **D8** 2935 "Twenty minutes. Phone or video. Free, with no pressure." — (ii) its own h2 and step 2; it is B.16's reason for "Book your free call".
 - **D9** 2761 "See it for your age and salary" and 2763 "See what it’s worth to you", both to pension-calculator.html (R8 counts buttons; not text).
 - **D10** answered by this run: the provider logos directly under the hero, as the brief asks (Q17 settled by the brief), then `#life`, then "What’s changed?".
@@ -77,13 +91,13 @@ Guards: G1 a `p.pb-why` is cut whole, never reworded (trust_drift; each is a B.1
 ### starter.html
 
 - **S-1** 2488 "Free, 20 minutes, no obligation." (i; clean, G1).
-- **S-2** 2500-2503 "Have I left it too late to start?" / "Almost certainly not. Earlier gives money more time to grow, but starting now beats waiting longer, and tax relief is there at any age." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2796 word for word; clean).
+- **S-2** *(Run 43: the link and its reason removed by item 1, P1; the question and answer stay)* 2500-2503 "Have I left it too late to start?" / "Almost certainly not. Earlier gives money more time to grow, but starting now beats waiting longer, and tax relief is there at any age." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2796 word for word; clean).
 - **S-3** 2511-2515 "Sound familiar?" / "If any of this is you, you're in the right place." / "Not started · No pension at all yet · You've been meaning to sort one for a while, but never quite knew where to begin or who to ask." / "Ignored · A scheme you've never looked at · There's a workplace pension ticking away, but you've no real idea what's in it or whether it's set up well." / "Worried it's late · Feeling behind · You think you've left it too long to bother. The good news: starting now still makes a real difference." (ii: lede 2485, FAQ 2798, h1; clean).
 - **S-4** 2520-2524 "How we'll get you going" / "Three steps. Plain English, no pressure." / "1 Tell us where you're at · A quick, relaxed chat about your situation. There's nothing you need to prepare or know in advance." / "2 We explain your options · What a pension is, how the tax relief works in your favour, and what makes sense to start with, all in plain English." / "3 You start with confidence · If you decide to go ahead, we'll help you set it up properly and make sure it's working from day one." (i, ii: booking's steps; clean).
 - **S-5** 2655 "Pension contributions get tax relief, so some of what you'd have paid in tax goes into your future instead. Our calculator shows how much that could add up to." (iii: the slider's line 2659; clean).
 - **S-6** 2660 "See it for your age and salary" (ii: 2662 same page; clean).
 - **S-7** 2672 "Tax relief is there at any age. Revenue's limit on the contributions that get it rises with age, as a share of earnings." (sentence 1 only; sentence 2 is the bars' caption).
-- **S-8** 2686 "My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age." (ii: related card 2820; clean).
+- **S-8** *(applied in Run 43, 4 October 2026)* 2686 "My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age." (ii: related card 2820; clean).
 - **S-9** 2715 second sentence "From 2026 to 2028 that is 1.5% of your gross pay from you, 1.5% from your employer and 0.5% from the State, on pay up to €80,000 a year." (ii: 2710 `pb-sa-note` keeps the fact).
 - **S-10** 2725 "Compare the two side by side" (ii; the block's only button: yours).
 - **S-11** 2733 "The reality check shows the difference, for a full record and for your own." (iii; clean).
@@ -92,11 +106,11 @@ Guards: G1 a `p.pb-why` is cut whole, never reworded (trust_drift; each is a B.1
 ### tracker.html
 
 - **T-1** 2279 "Free, 20 minutes, no obligation." (i; clean).
-- **T-2** 2291-2294 "I don’t have any of the paperwork, is that a problem?" / "Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2380; clean).
+- **T-2** *(Run 43: the link and its reason removed by item 1, P1; the question and answer stay)* 2291-2294 "I don’t have any of the paperwork, is that a problem?" / "Not at all. Roughly when you worked somewhere, and who for, is usually enough to start tracing a pension." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2380; clean).
 - **T-3** 2302-2306 "Sound familiar?" / "If any of this rings true, you're in the right place." / "A few jobs in · Pensions all over the place · You've worked for two, three or more employers, and joined a scheme with some of them." / "Long gone · The paperwork vanished · Statements binned years ago, and some of those providers have merged or changed names since." / "A mystery · No idea what it's worth · You genuinely don't know how much is in any of them, or whether it's growing or just sitting there." (ii; clean).
 - **T-4** 2311, 2321-2323 "How we'll sort it" / "Three steps. No paperwork to begin." / "1 Tell us where you worked · Rough employer names and rough dates are plenty. We don't need the old statements." / "2 We trace and value them · We help locate each pension you built up and find out what it's actually worth today." / "3 We explain your options · In plain English, including whether bringing them together into one plan makes sense for you." (ii: FAQ 2380-2381, thank-you 2064; clean as a block, step 2 said nowhere else).
 - **T-5** 2326-2329 "Tick these off as you go" / "Listed the employers I have had" / "Found out what each pension is worth" / "Talked the options through" (ii, but interactive: G6, yours).
-- **T-6** 2330 "Know roughly what some are worth already? List them in one view, with the total and what the charges come to." (ii: related card 2405; clean).
+- **T-6** *(applied in Run 43, 4 October 2026)* 2330 "Know roughly what some are worth already? List them in one view, with the total and what the charges come to." (ii: related card 2405; clean).
 - **T-7** 2339-2342 "Forgotten pensions are more common than you'd think." / "Bringing scattered pensions together can make them easier to manage and, sometimes, work harder. We'll tell you honestly whether it's worth it for you." / "Start finding mine" / "Free, 20 minutes, no obligation." (ii, i: FAQ 2381 and the footer keep the caveat; clean).
 - **T-8** 2382 "Is it really worth the hassle?" / "There usually is money there. Knowing what you've got, and making sure it's invested rather than sitting forgotten, can make a real difference." (borderline, G5; not proposed).
 - Note for Q7: T-1 and T-7 are the two asks the tracker move would stack.
@@ -104,14 +118,14 @@ Guards: G1 a `p.pb-why` is cut whole, never reworded (trust_drift; each is a B.1
 ### director.html
 
 - **D-1** 2273 "Free, 20 minutes, no obligation." (clean).
-- **D-2** 2285-2288 "How much can my company actually contribute?" / "Often a lot more than you’d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2427; clean).
+- **D-2** *(Run 43: the link and its reason removed by item 1, P1; the question and answer stay)* 2285-2288 "How much can my company actually contribute?" / "Often a lot more than you’d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions." / "Book a call with Damian for free" / "Free, 20 minutes, no obligation." (ii: FAQ 2427; clean).
 - **D-3** 2300 "Fund well beyond personal limits" / "Personal pension contributions are capped as a percentage of salary. Company contributions to a director's pension can be far larger, letting you build a serious fund faster." (ii ×4; rewrite: the h2 2296 counts "Four things").
 - **D-4** 2304 "Cut your corporation tax" / "Money your company puts into your pension normally counts as a business expense, so it can cut the company’s tax bill while the money works for your future rather than the tax bill." (ii; rewrite).
 - **D-5** 2308 "Take it as salary and it is taxed three ways: income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI). Put it into a pension instead and far more of it stays yours." (NOT clean: G4, the page's only spelled-out USC and PRSI).
 - **D-6** 2314 "Use the funding headroom you've built" / "Years of trading often create room to make large one-off contributions based on your salary and service." (ii; rewrite).
 - **D-7** 2331-2335 "Sound familiar?" / "If any of this is you, it's worth a chat." / "Profit sitting still · Cash building in the company · The business is doing well and profit is accumulating, but it's just sitting there rather than working for your retirement." / "Paying more tax than needed · Taking it all as salary · You're drawing profit as income and feeling the full weight of income tax, USC and PRSI on money you don't immediately need." / "No clear plan · Pension on the long finger · You've meant to sort a proper pension for years, but running the business always came first. It's not too late to make it count." (i, ii; clean).
-- **D-8** 2345-2347 "Directors and the self-employed are the least likely group to have retirement provision behind them, and the ones with the most room to fix it. Company funding is not capped by the salary percentages that limit everyone else." (iii/ii; clean; the 57% / 68% stats and the CSO source stay).
-- **D-9** 2348 "Try the director calculator" (ii: 2274, 2367; clean).
+- **D-8** *(second sentence applied in Run 43, 4 October 2026; the first kept: it holds the claim the figures support, said nowhere else)* 2345-2347 "Directors and the self-employed are the least likely group to have retirement provision behind them, and the ones with the most room to fix it. Company funding is not capped by the salary percentages that limit everyone else." (iii/ii; clean; the 57% / 68% stats and the CSO source stay).
+- **D-9** *(applied in Run 43, 4 October 2026)* 2348 "Try the director calculator" (ii: 2274, 2367; clean).
 - **D-10** 2366 "The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up." (ii: related card 2452, its own h2; clean).
 - **D-11** 2377-2393 "The rules for 2026" / "What changed, and how close you are to the cap." and four cards: "Directors’ pensions in 2026 · Executive pensions set up before April 2021, a company’s payments into a Personal Retirement Savings Account (PRSA), the October window and small self-administered schemes, dated and sourced, with four questions to see which of it applies to you." / "The Standard Fund Threshold check · The threshold rises every year to 2029. See how much of it your pensions would use in the year you take them, and how a retirement lump sum is taxed." / "The year-end checklist · Nine things to check before your company’s year end and the October deadline, on one page you can print for your accountant." / "The new Personal Investment Account (PIA) · Proposed, as at 25 September 2026, and not yet law: an account for investing from your own take-home pay, with no tax relief going in and a flat yearly tax. See it next to a pension, which your company can pay into." (cards 1 and 3 clean: related 2453-2454; cards 2 and 4 are the page's only in-body links to those pages: yours).
 - **D-12** 2427 last clause "The right figure is specific to you, and the free chat works it out." (i; rewrite + G5).
@@ -121,7 +135,7 @@ Guards: G1 a `p.pb-why` is cut whole, never reworded (trust_drift; each is a B.1
 ### booking.html
 
 - **B-1** 2035-2036 "The house promise" / "No jargon. No pressure. No obligation." (ii; clean; pack 3092-3096 cites it).
-- **B-2** 2042 "20 minutes, that's it" / "A short, no-strings chat about your pension." (ii; clean).
+- **B-2** *(applied in Run 43, 4 October 2026)* 2042 "20 minutes, that's it" / "A short, no-strings chat about your pension." (ii; clean).
 - **B-3** 2046 "Phone or video" / "Pick whichever you prefer when you book." (ii; clean).
 - **B-4** 2050-2051 "Damian’s qualifications and memberships" / "Qualified Financial Adviser (QFA)" / "Life Insurance Association (LIA)" (NOT clean: G3).
 - **B-5** 2063 "Three quick details, then pick a time that suits. You will get a confirmation by email straight away." (ii; clean).
@@ -130,8 +144,8 @@ Guards: G1 a `p.pb-why` is cut whole, never reworded (trust_drift; each is a B.1
 ### thank-you.html
 
 - **Y-1** 2033-2034 "The house promise" / "No jargon. No pressure. No obligation." (clean).
-- **Y-2** 2040 "20 minutes, that’s it" / "A short, no-strings chat about your pension." (clean).
-- **Y-3** 2044 "Phone or video" / "Whichever you picked when you booked." (ii: 2028; clean).
+- **Y-2** *(applied in Run 43, 4 October 2026)* 2040 "20 minutes, that’s it" / "A short, no-strings chat about your pension." (clean).
+- **Y-3** *(applied in Run 43, 4 October 2026)* 2044 "Phone or video" / "Whichever you picked when you booked." (ii: 2028; clean).
 - **Y-4** 2072 "And if you have none of it, come anyway" / "Bring what you remember, Damian will help track down the rest." (ii: 2057, 2064, tracker 2397; clean).
 - Borderline: 2068 "Whatever you have been wondering" / "No question is too basic. That is what the twenty minutes are for."
 
@@ -152,13 +166,13 @@ Nothing (the end-screen lines come after the game).
 
 - **R-1** :77 "Free, 20 minutes, no obligation." (i; clean, G1).
 - **R-2** :30 "The director’s year-end checklist puts these dates and limits on one page you can print for your accountant." (ii: related card; clean, low value).
-- **R-3** :36 last sentence "The Standard Fund Threshold check shows how much of it your pensions would use in a given year." (ii; clean; the €2.2m→€2.8m and €500,000 facts before it stay).
+- **R-3** *(applied in Run 43, 4 October 2026)* :36 last sentence "The Standard Fund Threshold check shows how much of it your pensions would use in a given year." (ii; clean; the €2.2m→€2.8m and €500,000 facts before it stay).
 - Not a cut: the Next-step card (G2).
 
 ### pensions-over-50.html
 
 - **O-1** 2060 list item "Want to go through it?" (i; clean while the list keeps two items).
-- **O-2** 2084 clause ", or check how much of the Standard Fund Threshold your pensions would use" (ii; clean).
+- **O-2** *(kept in Run 43: the paragraph would be left a bare ask)* 2084 clause ", or check how much of the Standard Fund Threshold your pensions would use" (ii; clean).
 - **O-3** 2085 "Free, 20 minutes, no obligation." (clean).
 - **O-4** 2087 "Next step · Pension calculator · Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up." (NOT clean: G2).
 
@@ -177,13 +191,13 @@ Nothing (the end-screen lines come after the game).
 ### old-pension-checklist.html
 
 - **C-1** 2102 "We can do the asking for you: see how we help you find old pensions." (ii: related 2110; clean).
-- **C-2** 2102 "Once you know what you have, the pension charges calculator shows what its charges could take by retirement." (ii: related 2112; clean, "Or book…" loses its "Or").
+- **C-2** *(applied in Run 43, 4 October 2026; "Or book a free call with Damian." keeps its "Or")* 2102 "Once you know what you have, the pension charges calculator shows what its charges could take by retirement." (ii: related 2112; clean, "Or book…" loses its "Or").
 - **C-3** 2103 "Free, 20 minutes, no obligation." (clean).
 
 ### director-year-end-checklist.html
 
 - **Z-1** 2101 "Damian works through year-end funding with directors all the time." (i; clean).
-- **Z-2** 2101 clause ", or read what changed for directors in 2026 first" (ii; clean).
+- **Z-2** *(kept in Run 43: the paragraph would be left a bare ask)* 2101 clause ", or read what changed for directors in 2026 first" (ii; clean).
 - **Z-3** 2102 "Free, 20 minutes, no obligation." (clean).
 
 ### glossary.html
@@ -235,7 +249,7 @@ Nothing (the end-screen lines come after the game).
 
 ### my-pensions.html (`tools/pots-parts/`)
 
-- **M1** :36 "What could the charges cost by retirement? The charges calculator." (ii: related card; clean).
+- **M1** *(applied in Run 43, 4 October 2026)* :36 "What could the charges cost by retirement? The charges calculator." (ii: related card; clean).
 - **M2** :37 "Near €2 million altogether? The Standard Fund Threshold check." (ii; clean).
 - Keep :35.
 
