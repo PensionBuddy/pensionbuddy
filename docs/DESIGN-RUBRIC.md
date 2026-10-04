@@ -116,7 +116,7 @@ two-fifths of a screen, top to bottom.
 
 ## 3. Colour
 
-**Neutrals carry the page. One accent. Two chart colours with one meaning each: red is money missing, amber is money coming back.**
+**Neutrals carry the page. One accent. Three chart colours with one meaning each: red is money missing, amber is money coming back, teal is what the State pays; everything else in a chart is slate, a neutral.**
 
 | Token | Value | The only things it is for |
 |---|---|---|
@@ -126,21 +126,21 @@ two-fifths of a screen, top to bottom.
 | `--ink` | #0B1F1C | headings and body text |
 | `--ink-2` | #54635F | secondary text, the muted half of a two-tone heading |
 | `--ink-3` | #5D6C67 | meta text (13px), hints |
-| `--aqua` | #16C9B0 | **the accent:** the primary button's fill, one highlighted figure, a slider's track |
+| `--aqua` | #16C9B0 | **the accent:** the primary button's fill, a slider's track; in a chart, bar or figure, what the State pays (the State Pension) and nothing else |
 | `--aqua-ink` | #04302A | text on aqua (7.4:1) |
-| `--teal-700` | #08655A | links and small accent text on light |
+| `--teal-700` | #08655A | links and small accent text on light; a State Pension figure or mark (the entitlement check's rates, its paid contributions) |
 | `--teal-900` | #0A332E | the dark band's surface (a surface, not an accent) |
 | `--mint` | #5EEAD4 | small accent text on the dark band (eyebrows) |
 | `--amber` | #F4B740 | in a chart or bar: money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up). Nowhere else |
 | `--red` | #A4291D | in a chart, bar or figure: money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot); and a form's error state. White text on it (7.21:1); as text it passes AA on every light surface (6.49:1 on the wash); never on a dark band; at a lighter strength (opacity, never a second token) only inside one bar whose parts are named in a key, every part 3:1 or better against the page |
+| `--slate` | #586B85 | in a chart, bar, line, key or figure: everything that is not the State's, not money missing, not money back and not what you need (your own pot, a projection, the other plan, a way of life's costs, a statistic, a scale), as decided in Run 43. A neutral blue-grey (saturation 0.20; `tools/design-measure.py` counts it as no hue). As text AA on every light surface (4.98:1 on `--surface-2`, 5.00:1 on the wash); white text on it 5.45:1; 3.14:1 against `--ink`; never the only cue beside `--red` (1.32:1), `--ink-3` (1.01:1) or `--ink-2` (1.16:1): a key, a dash, a pattern, a white edge or a label carries the difference; at a lighter strength (opacity, never a second token) only inside one bar whose parts are named in words |
 
 - **The accent is one hue family.** Aqua, teal-700 and mint are the same
   colour at three strengths, for three backgrounds; together they are the
-  one accent.
-- **Amber and red are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and red means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap); teal is what the State pays and dark is what you need. A red figure always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
+  one accent. In a chart, a bar or a figure the accent's hue means one thing, what the State pays (Run 43); a reader's own pot, a projection or a statistic in teal would read as the State's. The reader's own place on a scale (a "You" chip, the picked year, the step that applies) is neutral: ink on `--surface-2`, or a slate mark.
+- **Amber and red are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and red means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap); teal is what the State pays (the State Pension, and only that; the State's top-up into auto-enrolment is money back, amber), dark is what you need, and slate is everything else (Run 43). A red or slate figure or mark always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
 - **No other hues.** A form's error state uses `--red`, the same token. The warnings are black on `--surface-2` with a rule, as they are now.
-- **Text colours on a page:** at most six, the three inks, teal-700, white
-  and mint.
+- **Text colours on a page:** the three inks, teal-700, white and mint; and, for a figure or its label only, red (money missing) or slate (Run 43), never body text.
 - **Dark bands:** at most two on a page besides the footer, never one
   straight after the other.
 - **Contrast:** AA, 4.5:1 for body and meta, 3:1 for text 24px and over;
@@ -152,19 +152,18 @@ two-fifths of a screen, top to bottom.
 table: #9FDDD2, #A7DED4 and #CBEBE4 (three more mints), #0C8175 and
 #0D9488 (two more teals, #0D9488 on the `.hl` heading highlight), #FBF7EF,
 and four ambers and browns for amber's text (#5E4408, #3F2D04, #8C6010,
-#7A5A12), and three reds (#C0392B, #A4291D, #C1502E) before Run 42 made them one. 14 border colours.
+#7A5A12), and three reds (#C0392B, #A4291D, #C1502E) before Run 42 made them one. 14 border colours. Run 43 moved every chart, bar, figure and place marker that was teal but not the State's onto `--slate` or a neutral.
 
 ## 4. One accent per screen
 
 **On any one screen (375 x 812 or 1440 x 900): one filled aqua element at
 most, and no second chromatic colour except amber or red inside a chart.**
 
-- The filled aqua element is the screen's primary action, or one figure
-  meant to be the thing you read first; not both.
+- The filled aqua element is the screen's primary action, or the State Pension's own bar or figure meant to be the thing you read first; not both.
 - The nav's booking button is an outline and does not count (already the
   rule, "von Restorff", in PB-AUDIT).
 - Every other button on that screen is an outline or a text link.
-- A chart's own colours (teal, amber, red) do not count as the screen's accent,
+- A chart's own colours (teal, amber, red; slate is a neutral) do not count as the screen's accent,
   but a screen with a chart has no other decoration in colour: no tinted
   icon squares, no coloured chips, no aqua highlight in a heading beside
   it.

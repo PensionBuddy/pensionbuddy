@@ -63,7 +63,7 @@ SIX = list(bd.PAGES)            # the six calculators, browser-diff's own order
 TOUCHED = ['index.html', 'starter.html', 'director.html', 'glossary.html', 'booking.html', 'thank-you.html',
            'pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
            'state-pension-reality-check.html', 'pension-fees-calculator.html', 'standard-fund-threshold.html']
-ROOT_PROPS = ['--red', '--amber', '--amber-soft', '--aqua', '--teal', '--teal-50', '--teal-100', '--teal-700',
+ROOT_PROPS = ['--red', '--slate', '--amber', '--amber-soft', '--aqua', '--teal', '--teal-50', '--teal-100', '--teal-700',
               '--teal-900', '--mint', '--ink', '--ink-2', '--ink-3', '--line', '--line-2', '--surface',
               '--surface-2', '--bg', '--terracotta']
 EXTRA_OK = {'rgb(255, 255, 255)', 'rgb(140, 96, 16)', 'rgba(0, 0, 0, 0)', 'none'}
@@ -449,6 +449,7 @@ def self_test(widths):
 
 
 def main():
+    global TOUCHED
     ap = argparse.ArgumentParser()
     ap.add_argument('--pages', help='comma-separated pages (default: every page, the six calculators first)')
     ap.add_argument('--widths', default='375,1440')
@@ -456,7 +457,9 @@ def main():
     ap.add_argument('--new', help='a tree to compare instead of the working tree')
     ap.add_argument('--self-test', action='store_true')
     ap.add_argument('--json', help='write the per-page records here')
+    ap.add_argument('--touched', help="comma-separated pages the change paints at load, for the vacuity rule (default: Run 42's list; Run 43, item 2 passes its own)")
     a = ap.parse_args()
+    if a.touched: TOUCHED = a.touched.split(',')
     widths = [int(x) for x in a.widths.split(',')]
     for w in widths:
         assert w in WIDTHS, 'width %d: only %s' % (w, sorted(WIDTHS))

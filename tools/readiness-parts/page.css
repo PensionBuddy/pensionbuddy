@@ -36,8 +36,8 @@
 .rd-bands{position:relative;display:flex;height:14px;border-radius:99px;overflow:visible}
 .rd-bands i{display:block;height:100%}
 .rd-b-early{width:40%;background:var(--line-2);border-radius:99px 0 0 99px}
-.rd-b-onway{width:35%;background:var(--teal-100)}
-.rd-b-good{width:25%;background:var(--aqua);border-radius:0 99px 99px 0}
+.rd-b-onway{width:35%;background:var(--slate);opacity:.5}
+.rd-b-good{width:25%;background:var(--slate);border-radius:0 99px 99px 0}
 .rd-mark{position:absolute;top:-5px;width:4px;height:24px;margin-left:-2px;border-radius:2px;background:var(--ink)}
 .rd-bl{display:flex;margin-top:8px;font-size:.84rem;color:var(--ink-2)}
 .rd-bl span:nth-child(1){width:40%}

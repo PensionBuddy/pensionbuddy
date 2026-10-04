@@ -45,7 +45,7 @@
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
   /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1374,22 +1374,22 @@ html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
   html.pb-js .pb-tl-stage{display:block;position:sticky;top:120px}
   .pb-tl-card{display:flex;flex-direction:column;gap:6px;padding:26px 28px 22px;border:1px solid var(--line-2);
     border-radius:var(--r-xl);background:var(--surface)}
-  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);
+  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--slate);
     font-variant-numeric:tabular-nums}
   .pb-tl-what{font-size:1rem;font-weight:600;color:var(--ink)}
   .pb-tl-ruler{position:relative;display:block;height:10px;margin-top:14px;border-radius:99px;background:var(--surface-2);
     border:1px solid var(--line)}
-  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--aqua,var(--teal));
+  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--slate);
     transition:width var(--pb-t-fill)}
   .pb-tl-mark{position:absolute;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--surface);
-    border:3px solid var(--teal-700);transition:left var(--pb-t-fill)}
+    border:3px solid var(--slate);transition:left var(--pb-t-fill)}
   .pb-tl-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
   .pb-tl-step{margin:0;padding:10vh 16px 10vh 22px}
   .pb-tl-step:first-child{padding-top:14px}
   .pb-tl-step:last-child{padding-bottom:14px}
   .pb-tl-step::after{top:calc(10vh + 8px)}
   .pb-tl-step:first-child::after{top:22px}
-  .pb-tl-step.pb-on::after{background:var(--teal)}
+  .pb-tl-step.pb-on::after{background:var(--slate);border-color:var(--slate)}
 }
 @media(prefers-reduced-motion:reduce){.pb-tl-fill,.pb-tl-mark{transition:none}}
 .snaps .sec-head{margin-bottom:24px}
@@ -1528,7 +1528,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1634,14 +1634,14 @@ button{font-family:inherit}
 .pb-life-card{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 14px 16px;
   background:var(--surface);color:var(--ink);border:1.5px solid var(--line-2);border-radius:var(--r-lg);cursor:pointer}
 .pb-life-card b{font-size:1rem;font-weight:700}
-.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--slate);font-variant-numeric:tabular-nums}
 .pb-life-d{font-size:.84rem;line-height:1.45;color:var(--ink-2)}
 .pb-life-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .pb-life-split{margin-top:20px}
 .pb-life-st{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--ink)}
 .pb-life-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .pb-life-rows li{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 4.8em;gap:12px;align-items:center;font-size:.92rem;color:var(--ink)}
-.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--aqua);width:var(--w)}
+.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
 .pb-life-rows b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
 .pb-life-note{margin:14px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
 .pb-life .pb-src{margin-top:12px}

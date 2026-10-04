@@ -2381,6 +2381,75 @@ def run():
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
 
+    # ----------------------------------------------------------------- 47
+    # Run 43, Run 42's question 14. Damian: "non-State teal -> neutral slate
+    # (teal = State only)". In a chart, a bar, a key or a figure, teal is what
+    # the State pays and nothing else. These are the rules that drew something
+    # else in teal until Run 43: each must now name no teal, aqua or mint (the
+    # marks and figures take --slate, the tinted cards a neutral; the
+    # reader's own place on a scale, a "You" chip, the picked year, the
+    # step that applies, is neutral too), and the skeleton's tokens must
+    # hold --slate (chrome_drift holds every other page
+    # to the skeleton's tokens).
+    not_state = (
+        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-life-n', '.pb-life-rows i',
+                        '.pb-tl-step.pb-on::after')),
+        ('starter.html', ('.pb-sa-fill', '.pb-lad-you')),
+        ('director.html', ('.pb-stat-n', '.pb-lad-you')),
+        ('glossary.html', ('.pb-risk li', '.pb-risk li:nth-child(n+3)', '.pb-risk li:nth-child(n+5)', '.pb-lad-you')),
+        ('pension-calculator.html', ('.dotk', '.boost-card', '.boost-card .bt', '.pb-lad-you',
+                                     '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
+        ('director-calculator.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt',
+                                      '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
+        ('broker-vs-autoenrolment.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt', '.pb-scale-track::after',
+                                          '#pbScaleAeBar', '#pbScalePpBar', '#pbMyAeBar', '#pbMyPpBar', '.pb-stair-you')),
+        ('pension-fees-calculator.html', ('.fee-chart .fee-l-b', '.fee-key .fee-k-b')),
+        ('my-pensions.html', ('.pt-bars i',)),
+        ('pension-readiness-check.html', ('.rd-b-onway', '.rd-b-good')),
+        ('standard-fund-threshold.html', ('.sft-strip li.sft-on',)),
+        ('state-pension-entitlement.html', ('.yal-you', '.pb-glide-you',
+                                            '.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-bar')),
+    )
+    # a teal token, or one of the teal tokens' own hex values written raw
+    # (and the growth charts' #0B7A6E)
+    teal_var = re.compile(r'var\(--(?:aqua|teal|mint)[\w-]*'
+                          r'|#(?:16C9B0|12B49E|04302A|5EEAD4|0C8175|0A7166|08655A|0A332E|E8F6F3|CBEBE4|0B7A6E)\b', re.I)
+
+    def not_state_faults(srcs):
+        out = []
+        for page, sels in not_state:
+            for sel in sels:
+                # the selector alone, or one of a group (a comma before it)
+                bodies = re.findall(r'(?:^|[},\s])' + re.escape(sel) + r'\{([^}]*)\}', srcs[page], re.M)
+                if not bodies:
+                    out.append('%s: no rule for %s' % (page, sel))
+                elif any(teal_var.search(b) for b in bodies):
+                    out.append('%s: %s is teal' % (page, sel))
+        if '--slate:#586B85' not in (pagebuild.root_tokens(srcs['pension-calculator.html']) or ()):
+            out.append('pension-calculator.html: no --slate token')
+        # the growth charts' CSS finds the script's own line by its colour:
+        # if the script's colour changes, the selector no longer matches
+        for page in ('pension-calculator.html', 'director-calculator.html'):
+            if "stroke:'#0B7A6E'" not in srcs[page] or "{fill:'rgba(11,122,110,0.12)'}" not in srcs[page]:
+                out.append('%s: the growth chart script no longer draws what the slate rules select' % page)
+        return out
+
+    eq('47. teal is what the State pays: no chart, bar, key or figure that is not the State\'s is drawn in teal, aqua or mint (Run 43)',
+       not_state_faults(sources), [])
+    for label, page, find, repl, want in (
+            ('the starter page\'s pot bars put back in aqua', 'starter.html',
+             '.pb-sa-fill{left:0;background:var(--slate)}', '.pb-sa-fill{left:0;background:var(--aqua)}',
+             ['starter.html: .pb-sa-fill is teal']),
+            ('the slate token dropped from the skeleton', 'pension-calculator.html',
+             ' --slate:#586B85;', '', ['pension-calculator.html: no --slate token']),
+            ('the director chart\'s line drawn in another colour by its script', 'director-calculator.html',
+             "stroke:'#0B7A6E'", "stroke:'#0B7A6F'",
+             ['director-calculator.html: the growth chart script no longer draws what the slate rules select'])):
+        mut = dict(sources)
+        mut[page] = sources[page].replace(find, repl, 1)
+        assert mut[page] != sources[page], label
+        eq('47. %s is caught' % label, not_state_faults(mut), want)
+
 
 
 

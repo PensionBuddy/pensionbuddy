@@ -39,7 +39,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -132,7 +132,11 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:8px}
-.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--slate);display:inline-block}
+/* the growth chart (Run 43): the script draws "Your plan" #0B7A6E and its shading
+   rgba(11,122,110,.12); teal is only what the State pays, so both are slate */
+#chart svg path:not([stroke]){fill:var(--slate);opacity:.12}
+#chart svg path[stroke="#0B7A6E"]{stroke:var(--slate)}
 .dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
 .relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
@@ -149,10 +153,10 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .rv-d.you{background:var(--ink-2)}.rv-d.tax{background:var(--amber)}
 @media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-card{background:var(--surface-2);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
 .boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
 .boost-ico svg{width:22px;height:22px}
-.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt{font-size:15px;color:var(--ink);line-height:1.55}
 .boost-card .bt b{font-weight:700}
 
 /* ---- CTA ---- */
@@ -1508,7 +1512,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1649,7 +1653,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--amber)}
 .pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);font-size:12px;font-weight:600}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}

@@ -10,7 +10,7 @@
 .sft-strip li{border:1px solid var(--line);border-radius:var(--r-md);padding:10px 8px;text-align:center;background:var(--surface);min-width:0}
 .sft-strip b{display:block;font-size:.86rem;font-weight:600;color:var(--ink-2)}
 .sft-strip span{display:block;font-size:1rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.sft-strip li.sft-on{border:2px solid var(--ink);background:var(--teal-50)}
+.sft-strip li.sft-on{border:2px solid var(--ink);background:var(--surface-2)}
 .sft-strip li.sft-on b{color:var(--ink)}
 /* not .sft-note: the skeleton already styles that class for the calculators' own threshold note */
 .sft-strip-note{margin:6px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
