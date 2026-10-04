@@ -378,7 +378,7 @@ def main():
             eq('9. %s at %dx%d: the bar is one line, the link and two buttons side by side, 100px or less' % (page, w, h),
                (r['textLines'], r['text'], r['link'], len([x for x in r['buttons'] if x]),
                 len(set(x[1] // 4 for x in r['buttons'] if x)) == 1, r['bar'][3] - r['bar'][1] <= 100),
-               (1, 'May we use a little analytics? Privacy Notice', True, 2, True, True))
+               (1, 'May we use cookies for analytics and ads? Privacy Notice', True, 2, True, True))
             if (w, h) in PHONES:
                 bs = [x for x in r['buttons'] if x]
                 bw = [x[2] - x[0] for x in bs]
