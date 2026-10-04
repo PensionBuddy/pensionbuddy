@@ -44,7 +44,7 @@
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
   /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1436,7 +1436,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1704,11 +1704,15 @@ a.assure:hover{border-color:var(--teal)}
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
    .pb-reviewed: who reviewed a calculator or rules page, and when, at the
-   foot of the page header. .pb-why: the one reason to book, next to a
-   booking call to action whose own block gives none. */
+   foot of the page header. .pb-why: the one reason to book, beside every
+   booking call to action in a page (Run 43: the closing bands and the
+   home page's chat picture too; not the nav, the footer or the booking
+   page itself). */
 body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
 body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
-body .callout p.pb-why{color:rgba(255,255,255,.86)}
+body .callout p.pb-why,body .final p.pb-why{color:rgba(255,255,255,.86)}
+.cta-card p.pb-why{position:relative;margin:-16px 0 0;text-align:center}
+@media(min-width:921px){.cta-card:has(>p.pb-why){grid-template-rows:auto auto;row-gap:10px}.cta-card:has(>p.pb-why)>.buddy-mini,.cta-card:has(>p.pb-why)>.ctext{grid-row:1/span 2}.cta-card:has(>p.pb-why)>.btn{grid-row:1;align-self:end}.cta-card p.pb-why{grid-row:2;grid-column:3;align-self:start;width:0;min-width:100%;margin:0}}
 .hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
 .phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
 .pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
@@ -2215,7 +2219,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=b39f6db7" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>

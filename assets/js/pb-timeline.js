@@ -12,14 +12,41 @@
   Same shape as the starter page's "First payslip to 66" (the step in the
   middle of the screen sets the card). Without IntersectionObserver the card
   stays on the first step.
+
+  Run 43 (INTERACTIVE-PROPOSALS-42 rank 14, adapted): on a narrow screen, where
+  the card is not drawn, a "Your age" slider above the list (in the markup,
+  drawn only with script and only below 921px) picks the relief step that
+  applies at that age (the steps at 18, 30, 40, 50, 55 and 60; never 61, 66 or
+  71, whose figures are not a relief band): that step takes .pb-tl-picked, a
+  colour and nothing else, and the line under the slider repeats its figure
+  and heading (aria-hidden: the slider's spoken value says the same). It needs
+  no IntersectionObserver.
 */
 (function () {
   'use strict';
   var box = document.getElementById('pbTl');
-  if (!box || !('IntersectionObserver' in window)) { return; }
+  if (!box) { return; }
+  var steps = [].slice.call(box.querySelectorAll('.pb-tl-step'));
+  var RELIEF = [18, 30, 40, 50, 55, 60];
+  var pickR = document.getElementById('pbTlAgeS'), pickV = document.getElementById('pbTlAgeSV'), pickOut = document.getElementById('pbTlNow');
+  if (pickR && pickV && pickOut && steps.length) {
+    var pick = function () {
+      var n = +pickR.value, li = steps[0];
+      steps.forEach(function (x) { var a = +x.getAttribute('data-age'); if (RELIEF.indexOf(a) >= 0 && a <= n) { li = x; } });
+      steps.forEach(function (x) { x.classList.toggle('pb-tl-picked', x === li); });
+      var h = li.querySelector('h3'), head = h ? h.textContent : '', fig = li.getAttribute('data-show');
+      pickR.style.setProperty('--fill', ((n - pickR.min) / (pickR.max - pickR.min) * 100).toFixed(2) + '%');
+      pickR.setAttribute('aria-valuetext', n + ': ' + fig + ', ' + head);
+      pickV.textContent = String(n);
+      var b = document.createElement('b'); b.textContent = fig;
+      pickOut.textContent = ''; pickOut.appendChild(b); pickOut.appendChild(document.createTextNode(' ' + head));
+    };
+    pickR.addEventListener('input', pick);
+    pick();
+  }
+  if (!('IntersectionObserver' in window)) { return; }
   var age = document.getElementById('pbTlAge'), what = document.getElementById('pbTlWhat');
   var fill = document.getElementById('pbTlFill'), mark = document.getElementById('pbTlMark');
-  var steps = [].slice.call(box.querySelectorAll('.pb-tl-step'));
   var LO = 18, HI = 75;
   function at(n) { return ((Math.max(LO, Math.min(HI, n)) - LO) / (HI - LO) * 100).toFixed(2) + '%'; }
   function show(li) {

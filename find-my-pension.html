@@ -37,7 +37,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -130,7 +130,11 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:8px}
-.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--slate);display:inline-block}
+/* the growth chart (Run 43): the script draws "Your plan" #0B7A6E and its shading
+   rgba(11,122,110,.12); teal is only what the State pays, so both are slate */
+#chart svg path:not([stroke]){fill:var(--slate);opacity:.12}
+#chart svg path[stroke="#0B7A6E"]{stroke:var(--slate)}
 .dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
 .relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
@@ -147,10 +151,10 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .rv-d.you{background:var(--ink-2)}.rv-d.tax{background:var(--amber)}
 @media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-card{background:var(--surface-2);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
 .boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
 .boost-ico svg{width:22px;height:22px}
-.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt{font-size:15px;color:var(--ink);line-height:1.55}
 .boost-card .bt b{font-weight:700}
 
 /* ---- CTA ---- */
@@ -299,6 +303,18 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
 .email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
+/* AFTER THE RESULT (Run 43, item 5). Under every calculator's results, in this order:
+   what the calculator does not show (.pb-after-not, a caveat), the offer to email the
+   results (.email-cap), then the one booking ask (.pb-after) with its reason. Nothing
+   here moves, fades or is revealed; assets/js/pb-after.js only sets the link's #from=
+   (the booking page's line) and sends the shared form. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:20px 22px}
+.pb-after .pb-after-q{margin:0;font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
+.pb-after .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:1rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+.pb-after .wlink:hover{text-decoration:underline}
+.pb-after .wlink .ico{width:15px;height:15px;flex:none}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
 /* #15: the success tick draws itself once, about 300ms, ease-out, as its
    message appears: going from display:none to shown starts the animation, so
    the draw needs no script. Drawn is the default and the draw runs only where
@@ -1506,7 +1522,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1647,7 +1663,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--amber)}
 .pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);font-size:12px;font-weight:600}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
@@ -1914,11 +1930,15 @@ a.assure:hover{border-color:var(--teal)}
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
    .pb-reviewed: who reviewed a calculator or rules page, and when, at the
-   foot of the page header. .pb-why: the one reason to book, next to a
-   booking call to action whose own block gives none. */
+   foot of the page header. .pb-why: the one reason to book, beside every
+   booking call to action in a page (Run 43: the closing bands and the
+   home page's chat picture too; not the nav, the footer or the booking
+   page itself). */
 body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
 body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
-body .callout p.pb-why{color:rgba(255,255,255,.86)}
+body .callout p.pb-why,body .final p.pb-why{color:rgba(255,255,255,.86)}
+.cta-card p.pb-why{position:relative;margin:-16px 0 0;text-align:center}
+@media(min-width:921px){.cta-card:has(>p.pb-why){grid-template-rows:auto auto;row-gap:10px}.cta-card:has(>p.pb-why)>.buddy-mini,.cta-card:has(>p.pb-why)>.ctext{grid-row:1/span 2}.cta-card:has(>p.pb-why)>.btn{grid-row:1;align-self:end}.cta-card p.pb-why{grid-row:2;grid-column:3;align-self:start;width:0;min-width:100%;margin:0}}
 .hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
 .phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
 .pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
@@ -2475,7 +2495,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <ul class="pf-track" id="pfTrack"></ul>
         <p class="pf-note">Each provider replies in its own time. As the replies come in, Damian will tell you what was found and what it is worth. What you do with it, if anything, is up to you.</p>
         <div class="pf-nav"><button type="button" class="btn btn-ghost" id="pfPrint">Save or print your letter</button><a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
-        <p class="pb-why">Free, 20 minutes, no obligation.</p>
+        <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
       </section>
     </form>
   </div>
@@ -2530,7 +2550,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
+<script src="assets/js/pb-forms.js?v=071cee0a"></script>
 <script src="assets/js/pension-finder.js?v=c175da38"></script>
 <script>
 /* find-my-pension.html, the old pension finder (Run 20 #1).
@@ -2991,7 +3011,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=b39f6db7" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
@@ -3097,8 +3117,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-guess.js?v=988458d5"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-share.js?v=0c417a51"></script>
-<script src="assets/js/pb-report.js?v=572ada0b"></script>
+<script src="assets/js/pb-share.js?v=308731e9"></script>
+<script src="assets/js/pb-after.js?v=07cefa1d"></script>
+<script src="assets/js/pb-report.js?v=c538bc0d"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>

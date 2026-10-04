@@ -98,14 +98,23 @@
       li.appendChild(head); li.appendChild(i);
       bars.appendChild(li);
     });
-    var c = '';
+    var c = '', fig = '';
     if (s.chargesKnown > 0) {
-      c = 'The annual charges you know of come to about ' + euro(s.yearlyCharges) + ' a year at today’s values';
+      fig = euro(s.yearlyCharges);
+      c = 'The annual charges you know of come to about ' + fig + ' a year at today’s values';
       c += s.chargesUnknown ? ', with ' + s.chargesUnknown + (s.chargesUnknown === 1 ? ' charge' : ' charges') + ' not known.' : '.';
     } else if (s.count > 0) {
       c = 'Add an annual charge to see what the charges come to in euro a year.';
     }
-    $('ptCharges').textContent = c;
+    /* Run 43: the euro figure is charges taken from the pot, red by the colour rule
+       (docs/DESIGN-RUBRIC.md section 3); the words around it are unchanged */
+    var out = $('ptCharges'), at = fig ? c.indexOf(fig) : -1;
+    out.textContent = '';
+    if (at >= 0) {
+      var b = document.createElement('b'); b.textContent = fig;
+      out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(b);
+      out.appendChild(document.createTextNode(c.slice(at + fig.length)));
+    } else out.textContent = c;
     if (!spoken) return;
     clearTimeout(srTimer);
     srTimer = setTimeout(function () { $('ptSr').textContent = 'Total ' + euro(s.total) + ' ' + $('ptCount').textContent + ' ' + c; }, 700);

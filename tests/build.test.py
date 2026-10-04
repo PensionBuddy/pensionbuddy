@@ -321,7 +321,7 @@ def run():
         ('a hand-written calculator changed the date', 'director-calculator.html',
          'Last reviewed September 2026', 'Last reviewed October 2026', 'reviewed'),
         ('a page that should not carry it gained it', 'terms.html', '<main', pagebuild.REVIEWED + '<main', 'reviewed'),
-        ('a reason line reworded', 'index.html', 'Free, 20 minutes, no obligation.', 'Free, 30 minutes, no obligation.', 'reason'),
+        ('a reason line reworded', 'index.html', 'Free · 20 minutes · no obligation · reschedule any time.', 'Free · 30 minutes · no obligation · reschedule any time.', 'reason'),
         ('the recipe edited on one page', 'glossary.html', 'body p.pb-why{margin:10px 0 0', 'body p.pb-why{margin:12px 0 0', 'trust-css'),
         ('the recipe missing from one page', 'booking.html', pagebuild.TRUST_OPEN, '/* TRUST-GONE', 'trust-css'),
     ]
@@ -376,8 +376,11 @@ def run():
         for form in parser.forms:
             if form['attrs'].get('data-netlify') == 'true':
                 netlify.setdefault(form['attrs'].get('name'), []).append((name, form))
-    eq('14. the seven lead forms, each on its page', sorted((n, [p for p, _ in v]) for n, v in netlify.items()),
-       sorted((n, [p]) for p, n in LEAD_FORMS.items()))
+    want_forms = {}
+    for p, n in LEAD_FORMS.items():
+        want_forms.setdefault(n, []).append(p)
+    eq('14. the eight lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
+       sorted((n, sorted(ps)) for n, ps in want_forms.items()))
     for form_name, where in sorted(netlify.items()):
         page, form = where[0]
         names = [f[1] for f in form['fields']]
@@ -390,6 +393,9 @@ def run():
         eq('14. %s: an email field' % form_name, 'email' in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
         eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
+    eq('14. calculator-results: the six calculators declare the same fields, in the same order, and no opt-in',
+       sorted(set(tuple(f[1] for f in form['fields']) for _, form in netlify.get('calculator-results', []))),
+       [('form-name', 'results', 'inputs', 'link', 'page', 'bot-field', 'email')])
     finder = read('assets/js/pension-finder.js')
     m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
     eq('14. the finder declares exactly what PBFinder.fields() sends',
@@ -2310,6 +2316,262 @@ def run():
         eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, csizes)), True)
 
 
+    # ----------------------------------------------------------------- 46
+    # Run 43, item 1 (Damian's "yes" to Run 42's question 7): the starter,
+    # tracker and director heroes give before they ask. Each hero keeps its
+    # second button, its two lockups (check 28) and its chat picture's
+    # question and Buddy's answer (its booking link and reason are cut, P1),
+    # and carries no booking link in its copy; the booking button and its
+    # reason (pagebuild.REASON) stand, moved word for word, after the page's
+    # first figures: the starter page's 30, 40 and 50 chart with its
+    # warnings and note, the director page's €1,000 example and relief
+    # ladder with its note; the tracker page gives no figure, so after its
+    # tick list (docs/GIVE-BEFORE-ASK-42.md S1, T1, D1).
+    ARROW = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
+             '<polyline points="12 5 19 12 12 19"/></svg></a>')
+    GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
+        'starter.html': ('Help me get started', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
+                         '  <div class="pb-sa pb-wait" id="pbWait">'),
+        'tracker.html': ('Help me find my pensions', ('id="pbTrace"', 'data-pb-award="ticks"'),
+                         '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
+                         '  <div class="callout pb-bleed pb-dark pb-split">'),
+        'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
+                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
+                          '  <div class="sec-head"><span class="kicker">Sound familiar?</span>'),
+    }
+
+    def moved_block(words):
+        return ('  <div class="hero-cta" style="margin-top:22px">\n      <a class="btn btn-acc" href="booking.html">'
+                + words + ARROW + '\n      ' + pagebuild.REASON + '\n  </div>\n')
+
+    def gives_first(name, src):
+        words, before, follows = GIVE_FIRST[name]
+        h = src.find('<header class="hero aud-hero">')
+        end = src.find('</header>', h)
+        hero = src[h:end]
+        copy = src[h:src.find('\n  <div class="hero-phone">', h)]
+        if h < 0 or end < 0 or 'href="booking.html"' in hero:
+            return 'the hero asks before the page gives'
+        if '<a class="btn btn-ghost"' not in copy:
+            return 'the hero lost its second button'
+        if '<p class="msg buddy">' not in hero:
+            return 'the hero lost its chat picture'
+        block = moved_block(words)
+        if src.count(block) != 1:
+            return 'the moved button and its reason are missing, doubled or reworded'
+        i = src.index(block)
+        if not all(0 <= src.find(b) < i for b in before):
+            return 'the button comes before the first figures'
+        if not src.startswith(follows, i + len(block)):
+            return 'the button is not where it was put'
+        return None
+    eq('46. the starter, tracker and director heroes give before they ask: the button and its reason after the first figures (the tracker: its tick list)',
+       {n: gives_first(n, sources[n]) for n in GIVE_FIRST if gives_first(n, sources[n])}, {})
+    st, dr = sources['starter.html'], sources['director.html']
+    sblock = moved_block('Help me get started')
+    for label, name, mut, want in (
+            ('the button put back in a hero', 'director.html',
+             dr.replace('<a class="btn btn-ghost" href="director-calculator.html">',
+                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="btn btn-ghost" href="director-calculator.html">', 1),
+             'the hero asks before the page gives'),
+            ('the button above the chart', 'starter.html',
+             st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
+             'the button comes before the first figures'),
+            ('its reason reworded', 'starter.html', st.replace(sblock, sblock.replace('20 minutes', '30 minutes'), 1),
+             'the moved button and its reason are missing, doubled or reworded'),
+            ('the chat picture\'s link put back', 'tracker.html',
+             sources['tracker.html'].replace(
+                 'is usually enough to start tracing a pension.</p>\n',
+                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
+             'the hero asks before the page gives')):
+        assert mut != sources[name], label
+        eq('46. %s is caught' % label, gives_first(name, mut), want)
+
+    # ----------------------------------------------------------------- 47
+    # Run 43, Run 42's question 14. Damian: "non-State teal -> neutral slate
+    # (teal = State only)". In a chart, a bar, a key or a figure, teal is what
+    # the State pays and nothing else. These are the rules that drew something
+    # else in teal until Run 43: each must now name no teal, aqua or mint (the
+    # marks and figures take --slate, the tinted cards a neutral; the
+    # reader's own place on a scale, a "You" chip, the picked year, the
+    # step that applies, is neutral too), and the skeleton's tokens must
+    # hold --slate (chrome_drift holds every other page
+    # to the skeleton's tokens).
+    not_state = (
+        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-life-n', '.pb-life-rows i',
+                        '.pb-tl-step.pb-on::after')),
+        ('starter.html', ('.pb-sa-fill', '.pb-lad-you')),
+        ('director.html', ('.pb-stat-n', '.pb-lad-you')),
+        ('glossary.html', ('.pb-risk li', '.pb-risk li:nth-child(n+3)', '.pb-risk li:nth-child(n+5)', '.pb-lad-you')),
+        ('pension-calculator.html', ('.dotk', '.boost-card', '.boost-card .bt', '.pb-lad-you',
+                                     '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
+        ('director-calculator.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt',
+                                      '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
+        ('broker-vs-autoenrolment.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt', '.pb-scale-track::after',
+                                          '#pbScaleAeBar', '#pbScalePpBar', '#pbMyAeBar', '#pbMyPpBar', '.pb-stair-you')),
+        ('pension-fees-calculator.html', ('.fee-chart .fee-l-b', '.fee-key .fee-k-b')),
+        ('my-pensions.html', ('.pt-bars i',)),
+        ('pension-readiness-check.html', ('.rd-b-onway', '.rd-b-good')),
+        ('standard-fund-threshold.html', ('.sft-strip li.sft-on',)),
+        ('state-pension-entitlement.html', ('.yal-you', '.pb-glide-you',
+                                            '.pb-glide-col:has(.pb-glide-you:not([hidden])) .pb-glide-bar')),
+    )
+    # a teal token, or one of the teal tokens' own hex values written raw
+    # (and the growth charts' #0B7A6E)
+    teal_var = re.compile(r'var\(--(?:aqua|teal|mint)[\w-]*'
+                          r'|#(?:16C9B0|12B49E|04302A|5EEAD4|0C8175|0A7166|08655A|0A332E|E8F6F3|CBEBE4|0B7A6E)\b', re.I)
+
+    def not_state_faults(srcs):
+        out = []
+        for page, sels in not_state:
+            for sel in sels:
+                # the selector alone, or one of a group (a comma before it)
+                bodies = re.findall(r'(?:^|[},\s])' + re.escape(sel) + r'\{([^}]*)\}', srcs[page], re.M)
+                if not bodies:
+                    out.append('%s: no rule for %s' % (page, sel))
+                elif any(teal_var.search(b) for b in bodies):
+                    out.append('%s: %s is teal' % (page, sel))
+        if '--slate:#586B85' not in (pagebuild.root_tokens(srcs['pension-calculator.html']) or ()):
+            out.append('pension-calculator.html: no --slate token')
+        # the growth charts' CSS finds the script's own line by its colour:
+        # if the script's colour changes, the selector no longer matches
+        for page in ('pension-calculator.html', 'director-calculator.html'):
+            if "stroke:'#0B7A6E'" not in srcs[page] or "{fill:'rgba(11,122,110,0.12)'}" not in srcs[page]:
+                out.append('%s: the growth chart script no longer draws what the slate rules select' % page)
+        return out
+
+    eq('47. teal is what the State pays: no chart, bar, key or figure that is not the State\'s is drawn in teal, aqua or mint (Run 43)',
+       not_state_faults(sources), [])
+    for label, page, find, repl, want in (
+            ('the starter page\'s pot bars put back in aqua', 'starter.html',
+             '.pb-sa-fill{left:0;background:var(--slate)}', '.pb-sa-fill{left:0;background:var(--aqua)}',
+             ['starter.html: .pb-sa-fill is teal']),
+            ('the slate token dropped from the skeleton', 'pension-calculator.html',
+             ' --slate:#586B85;', '', ['pension-calculator.html: no --slate token']),
+            ('the director chart\'s line drawn in another colour by its script', 'director-calculator.html',
+             "stroke:'#0B7A6E'", "stroke:'#0B7A6F'",
+             ['director-calculator.html: the growth chart script no longer draws what the slate rules select'])):
+        mut = dict(sources)
+        mut[page] = sources[page].replace(find, repl, 1)
+        assert mut[page] != sources[page], label
+        eq('47. %s is caught' % label, not_state_faults(mut), want)
+
+    # ----------------------------------------------------------------- 48
+    # Run 43, item 5d (Damian: "Risk reversal beside every ask"). Every booking
+    # link in a page's own content (the nav, the footer and scripts aside) has
+    # pagebuild.REASON after it, before the next booking link and within 700
+    # characters; the "Next step" card carries the same words in its own span.
+    # Exempt, by name: the booking page itself, where every ask leads, and the
+    # inline "booking page" links in the Privacy Notice, the Terms and the
+    # complaints page (Run 26: not calls to action).
+    REASON_TEXT = re.sub(r'<[^>]+>', '', pagebuild.REASON)
+
+    def asks_without_reason(srcs):
+        out = []
+        for page, text in sorted(srcs.items()):
+            if page == 'booking.html':
+                continue
+            span = pagebuild.nav_span(text)
+            body = text[:span[0]] + text[span[1]:] if span else text
+            if '<footer' in body:
+                body = body[:body.find('<footer')]
+            body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
+            for m in re.finditer(r'<a [^>]*href="booking\.html(?:#[^"]*)?"[^>]*>(.*?)</a>', body, re.S):
+                words = re.sub(r'<[^>]+>', '', m.group(1)).strip()
+                if words == 'booking page' or REASON_TEXT in m.group(1):
+                    continue
+                nxt = body.find('href="booking.html', m.end())
+                seg = body[m.end():min(nxt if nxt >= 0 else len(body), m.end() + 700)]
+                if pagebuild.REASON not in seg:
+                    out.append('%s: "%s"' % (page, words[:40]))
+        return out
+
+    eq('48. every booking link in a page has the reason beside it (Run 43)', asks_without_reason(sources), [])
+    for label, page, mut, want in (
+            ('a band\'s reason removed', 'index.html',
+             sources['index.html'].replace('Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n  ' + pagebuild.REASON,
+                                           'Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>', 1),
+             'index.html: "Book your free call"'),
+            ('a new booking link with no reason', 'glossary.html',
+             sources['glossary.html'].replace('</main>', '<p><a href="booking.html">Talk to Damian</a></p>\n</main>', 1),
+             'glossary.html: "Talk to Damian"')):
+        assert mut != sources[page], label
+        m48 = dict(sources); m48[page] = mut
+        eq('48. %s is caught' % label, want in asks_without_reason(m48), True)
+
+    # ----------------------------------------------------------------- 49
+    # Run 43, items 5a, 5b, 5c and 5e. Each of the nine calculators ends its
+    # results with, in this order: its own "What this doesn't show" line (each
+    # names only what the page's own assumptions say it leaves out, so it is
+    # true for every reader), the offer to email the results (my-pensions: its
+    # "Print or save this list", before the line), then one block: the
+    # question, one booking link and pagebuild.REASON. No other booking link
+    # sits in the results before it (the comparison's #riskCard is exempt only
+    # while it is hidden). booking.html shows its line only for a #from=
+    # naming one of the nine.
+    ARR49 = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
+             '<polyline points="12 5 19 12 12 19"/></svg></a>')
+    AFTER = {
+        'pension-calculator.html': ('pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', 'Talk it through, free', 'id="ecForm"'),
+        'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges, inflation.', 'Talk it through, free', 'id="ecForm"'),
+        'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', 'Talk through what this means for you', 'id="ecForm"'),
+        'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', 'Talk it through, free', 'id="ecForm"'),
+        'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', 'Talk it through, free', 'id="ecForm"'),
+        'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', 'Talk it through, free', 'id="ptPrint"'),
+    }
+    squash = lambda s: re.sub(r'>\s+<', '><', s)
+
+    def after_faults(srcs):
+        f = []
+        for page, (frm, loop, words, offer) in sorted(AFTER.items()):
+            s = squash(srcs[page])
+            line = '<p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: %s</p>' % loop
+            blk = ('<div class="pb-after" id="pbAfter" data-pb-from="%s"><p class="pb-after-q">Want to go through this with Damian?</p>'
+                   '<a class="wlink" href="booking.html">%s%s%s</div>' % (frm, words, ARR49, pagebuild.REASON))
+            if s.count(line) != 1:
+                f.append('%s: what it does not show is missing, doubled or reworded' % page); continue
+            if s.count(blk) != 1:
+                f.append('%s: the ask is missing, doubled or reworded' % page); continue
+            n, o, b = s.index(line), s.find(offer), s.index(blk)
+            order = (0 <= o < n < b) if page == 'my-pensions.html' else (0 <= n < o < b)
+            if not order:
+                f.append('%s: not in order: what it does not show, the email offer, the ask' % page)
+            res = s.find('id="ptSum"') if page == 'my-pensions.html' else s.find('<div class="results">')
+            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a><p class="pb-why">[^<]*</p></div>', '', s[res:b]) if res >= 0 else ''
+            if 'href="booking.html' in seg:
+                f.append('%s: a booking link in the results before the ask' % page)
+        bk = srcs['booking.html']
+        m = re.search(r'from=\(\?:([a-z|-]+)\)', bk)
+        # Damian's words (Run 43, 4 October 2026)
+        said = '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>'
+        if said not in bk or not m or sorted(m.group(1).split('|')) != sorted(v[0] for v in AFTER.values()):
+            f.append('booking.html: the line, or the calculators it answers')
+        return f
+
+    eq('49. every calculator ends its results with what it does not show, the offer to email them, then one booking link with its reason; the booking page answers only those nine',
+       after_faults(sources), [])
+    pc, dc, fc, bk = sources['pension-calculator.html'], sources['director-calculator.html'], sources['pension-fees-calculator.html'], sources['booking.html']
+    blk_raw = re.search(r'    <div class="pb-after" id="pbAfter".*?\n    </div>\n', pc, re.S).group(0)
+    for label, page, mut, want in (
+            ('a loop line reworded', 'pension-fees-calculator.html', fc.replace('your tax relief.</p>', 'your tax position.</p>', 1),
+             'pension-fees-calculator.html: what it does not show is missing, doubled or reworded'),
+            ('the ask above the email offer', 'pension-calculator.html',
+             pc.replace(blk_raw, '', 1).replace('    <div class="email-cap">', blk_raw + '    <div class="email-cap">', 1),
+             'pension-calculator.html: not in order: what it does not show, the email offer, the ask'),
+            ('the cost of waiting asking again', 'director-calculator.html',
+             dc.replace('<div class="wtext" id="waitOut">Move the sliders to see it.</div>',
+                        '<div class="wtext" id="waitOut">Move the sliders to see it.</div><a class="wlink" href="booking.html">Book</a>', 1),
+             'director-calculator.html: a booking link in the results before the ask'),
+            ('a calculator missing from the booking page', 'booking.html', bk.replace('|pia)', ')', 1),
+             'booking.html: the line, or the calculators it answers')):
+        assert mut != sources[page], label
+        m49 = dict(sources); m49[page] = mut
+        eq('49. %s is caught' % label, want in after_faults(m49), True)
+
+
 
 
 # Run 27: every Netlify form on the site, by page. Adding a lead form means
@@ -2322,6 +2584,14 @@ LEAD_FORMS = {
     'starter.html': 'starter-guide',
     'tracker.html': 'tracker-guide',
     'find-my-pension.html': 'pension-finder',
+    # Run 43, item 5e: "Email me my results" on six more calculators, under one
+    # name, with the same fields on each and no opt-in box
+    'broker-vs-autoenrolment.html': 'calculator-results',
+    'pension-fees-calculator.html': 'calculator-results',
+    'state-pension-reality-check.html': 'calculator-results',
+    'state-pension-entitlement.html': 'calculator-results',
+    'standard-fund-threshold.html': 'calculator-results',
+    'pia.html': 'calculator-results',
 }
 
 

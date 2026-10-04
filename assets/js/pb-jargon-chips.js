@@ -10,7 +10,10 @@
   RULES, so the page never sprouts chips nobody asked for
     - only <p> and <li> inside <main>; headings are never scanned
     - never inside a, button, summary, .msg, .note, .hint, .disclosure,
-      .infoadvice, .credline, .pb-b-panel, or an existing chip
+      .infoadvice, .credline, .pb-b-panel, or an existing chip, nor in a
+      block marked .pb-noterms, the opt-out pb-terms.js already honours
+      (Run 43: the starter's auto-enrolment caveat, where "Automatic
+      Enrolment" is part of an authority's name, not the scheme)
     - the bank's SHORT form (the words before any parenthetical) plus a simple
       plural, and the ALIASES below: every abbreviation and its expansion both
       ways, and the everyday phrasings of a few terms; longest pattern first,
@@ -35,7 +38,7 @@
   'use strict';
 
   var CAP = 8;
-  var SKIP = 'a,button,summary,.msg,.note,.hint,.disclosure,.infoadvice,.credline,.pb-b-panel,.pb-chip,.pb-def';
+  var SKIP = 'a,button,summary,.msg,.note,.hint,.disclosure,.infoadvice,.credline,.pb-b-panel,.pb-chip,.pb-def,.pb-noterms';
   var INNER = 'a,button,.pb-chip,.pb-def';
 
   /* glossary anchor -> the bank term that says the same thing. Two entries,

@@ -1,6 +1,8 @@
 /* The booking bar: "Book a call with Damian for free", pinned to the bottom
    of a phone screen on the long content pages, so the booking link stays in
-   reach between the hero's call to action and the closing band's.
+   reach between the opening block (since Runs 42 and 43 the home, starter
+   and directors' pages ask only after their first figures, and tracker after
+   its first give) and the closing band's call to action.
 
    WHERE. index, starter, director, tracker and glossary carry the tag, and
    nothing else does. Never the five calculators (their bottom edge is kept
@@ -83,7 +85,7 @@
   var bar = doc.createElement('div');
   bar.className = 'pb-bookbar';
   bar.innerHTML = '<a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a>'
-    + '<p class="pb-why">Free, 20 minutes, no obligation.</p>'
+    + '<p class="pb-why">Free \u00b7 20 minutes \u00b7 no obligation \u00b7 reschedule any time.</p>'
     + '<button type="button" class="pb-bookbar-x" aria-label="Close">'
     + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
     + '</button>';

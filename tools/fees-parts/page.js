@@ -55,7 +55,13 @@
     svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(0), y2: y(0), 'class': 'fee-grid' }));
     svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(top), y2: y(top), 'class': 'fee-grid' }));
     svg.appendChild(svgEl('text', { x: L, y: T - 8 }, euro(top)));
+    /* Run 43 (INTERACTIVE-PROPOSALS-42 rank 1, adapted): what your plan's charges take, from
+       the no-charge line down to your plan's line, in red; drawn first, under the lines, and
+       the other plan's line keeps a white edge where it crosses it */
+    var back = c.a.yearly.map(function (v, i) { return x(i).toFixed(1) + ',' + y(v).toFixed(1); }).reverse().join(' ');
+    svg.appendChild(svgEl('polygon', { points: line(c.none.yearly) + ' ' + back, 'class': 'fee-gap' }));
     svg.appendChild(svgEl('polyline', { points: line(c.none.yearly), 'class': 'fee-l-none' }));
+    svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b-edge' }));
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b' }));
     svg.appendChild(svgEl('polyline', { points: line(c.a.yearly), 'class': 'fee-l-a' }));
     svg.appendChild(svgEl('text', { x: L, y: H - 6 }, 'Now'));
@@ -65,7 +71,8 @@
     box.appendChild(svg);
     box.setAttribute('aria-label', 'Your pot, year by year, over ' + years(n) + '. At retirement: ' +
       euro(c.a.pot) + ' with your plan’s charges, ' + euro(c.b.pot) + ' with the other plan’s, and ' +
-      euro(c.none.pot) + ' with no charges at all.');
+      euro(c.none.pot) + ' with no charges at all.' +
+      (c.costA >= 0.5 ? ' The red area is what your plan’s charges take: ' + euro(c.costA) + ' by retirement.' : ''));
   }
 
   function sentence(c, n) {

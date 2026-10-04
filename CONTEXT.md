@@ -187,6 +187,10 @@ as a negative gap, and never in red: when the need is met there is nothing red o
 Tax relief, Revenue's contribution, an employer's or the State's top-up: money that comes back or is added to what a person pays in. Drawn in amber on a chart. Not the State Pension itself, which is drawn in teal; what a person needs is drawn in dark.
 _Avoid_: calling the State Pension a top-up, or a top-up the State Pension.
 
+**What the State pays**:
+The State Pension, and only that, is drawn in teal on a chart, a bar or a figure. Everything else on a chart that is not a gap (red), money back (amber) or what a person needs (dark) is drawn in slate, a neutral blue-grey: a person's own pot, a projection, another plan, the costs of a way of life, a statistic. A person's own place on a scale ("You", the year they picked) is marked in neutral ink. Each carries its words beside it.
+_Avoid_: drawing a person's own pot, a projection or their place on a scale in teal, which reads as the State's; calling the State's top-up into auto-enrolment (amber, money back) the State Pension.
+
 ## Naming
 
 **State Pension reality check**:

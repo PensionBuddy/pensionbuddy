@@ -83,6 +83,29 @@ its story are removed (section 7); and the charts' colours have one
 meaning each: red for money missing, amber for money that comes back
 (Appendix B.21). No figure, rate, source, caveat or warning changed.
 
+Updated 4 October 2026 (Run 43, built on a branch; live once merged): on
+the starter, tracker and directors' pages the opening section's booking
+button and its reason now follow what the page gives first (on the
+tracker page, which has no figure, its checklist), and the chat pictures
+there keep their question and answer without a booking link (section 7,
+Appendix B.16); teal now means only what the State pays in a chart, a bar
+or a figure, and everything else that was teal is slate or neutral
+(Appendix B.22); nine lines, cards and buttons that only repeated words on
+the same page are removed (section 7); some figures now respond to the
+reader (Appendix B.23); every booking button and link in a page's content now
+has "Free · 20 minutes · no obligation · reschedule any time." beside it,
+the closing bands included (not the nav button, the footer link, the
+booking page itself or the legal pages' inline links; question 1.24,
+Appendix B.16); under each calculator's
+results there is now a line saying what it does not show, the offer to
+email the results, and one booking link, and the booking page has a line
+for a reader who arrives from one (question 1.24, Appendix B.24); and the
+Privacy Notice's sentence on the calculators is corrected (section 3.3).
+No existing figure, rate, source, caveat or warning was changed; the
+booking links that moved kept their words (section 7, question 1.24).
+Every new line is in question 1.24, section 7 and Appendix B.16 and B.22
+to B.24.
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -340,8 +363,11 @@ auto-enrolment comparison, the charges calculator, the pensions list, both
 State Pension pages, the directors' rules page, the Standard Fund Threshold
 page and the Personal Investment Account page. The held-back finder and
 readiness check do not carry it. Beside booking links whose own paragraph
-gives no reason to book, one line reads "Free, 20 minutes, no obligation.",
-the terms the booking page already states.
+gave no reason to book, one line read "Free, 20 minutes, no obligation.",
+the terms the booking page already states. Since Run 43 (4 October 2026)
+the line is beside every booking button and link in a page and reads
+"Free · 20 minutes · no obligation · reschedule any time." (question
+1.24, Appendix B.16).
 
 Questions for you: (a) whether "Reviewed by" needs to say what the review
 covers (for example, that the figures and rules were checked, not that the
@@ -361,7 +387,7 @@ results" on the pension and director calculators (email, the figures on
 screen, the link to them), the guide requests on the director, starter and
 tracker pages (email), and the old pension finder (held back; question
 1.2). Each records the separate, unticked occasional-emails box as "yes" or
-"no". If a form cannot reach Netlify, it opens a pre-filled email to Damian
+"no" (not the six calculator-results forms since Run 43, below). If a form cannot reach Netlify, it opens a pre-filled email to Damian
 instead, as every form did before; the booking form needs no email, since
 Calendly receives the same details. The Privacy Notice now says so in one
 sentence (section 3.3).
@@ -374,6 +400,11 @@ client, with their consent); (d) for the old pension finder, whether date
 of birth, address and a signed letter may be held by Netlify at all, and
 whether the proposed wording in section 3.1 ("with no one else") must now
 name Netlify.
+
+Run 43 (4 October 2026): the two calculators' button now reads "Email me
+my results", and six more calculators offer "Email me my results" under
+one form name, calculator-results, with no box for occasional emails, so
+eight form names reach Netlify (question 1.24).
 
 1.16 The Website Terms of Use: the liability clause (proposed)
 --------------------------------------------------------------
@@ -810,6 +841,130 @@ Question: are the opening screen, the moves and the three removals
 acceptable as they stand, and should the chat picture stay where it now
 is or go?
 
+Damian's choice (4 October 2026): the chat picture stays under "How a
+call with Damian works", now with the reason line under its link
+(Appendix B.16); the question to you stands. Since Run 43, pressing one
+of the three figures in the opening chart shows where it comes from, in
+one line after the caveat (Appendix B.23).
+
+1.24 Give, then ask: the reason to book, and the calculators' new lines (Run 43)
+-------------------------------------------------------------------------------
+
+What the site does from Run 43 (built on a branch on 4 October 2026, live
+once merged). Damian's brief asked for these, in his words: "Ask at the
+moment of insight: after every calculator result, one line + booking
+link."; "Open loop under each result: "What this doesn't show: your old
+pensions, your tax position, your employer's scheme.""; "Endowed progress
+on booking: "You've seen your number. Last step: 20 minutes with
+Damian.""; "Risk reversal beside every ask: "Free · 20 minutes · no
+obligation · reschedule any time.""; and "Value ladder: "Email me my
+results" offered before the booking ask on each calculator.", with "no
+fake urgency, no pressure, the "no" always visible".
+
+- The reason line. Every booking button and link in a page has this line
+  beside it: "Free · 20 minutes · no obligation · reschedule any time."
+  (Appendix B.16), Damian's words. It replaces "Free, 20 minutes, no
+  obligation." wherever that stood, and is new under the closing band's
+  button on the home, starter, tracker, directors' and jargon buster pages
+  and the eight calculators and tools, under the home page chat picture's
+  link, at the end of the Jargon Battle game and on the saved or printed
+  report. It is not beside the nav's "Book a call with Damian for free"
+  or the footer's "Book a call" (on every page), on the booking page
+  itself (its own line says "Free, with no obligation."), beside the
+  "booking page" links in the Privacy Notice, Terms and complaints text,
+  or inside the email forms' messages.
+  The alternative, not on the site: "Free · 20 minutes · no obligation ·
+  reschedule from your confirmation email.". It is true for every booking
+  whatever the calendar's rules, in the words the booking confirmation page
+  already uses ("Need to change or cancel the time? The links are in your
+  Calendly confirmation email."). "reschedule any time" is true only if
+  the calendar lets every booking be moved right up to its start with no
+  minimum notice, which Damian has still to confirm in Calendly; "any
+  time" could also be read as "at any time you like".
+- Under the results of each of the nine calculators and tools, in this
+  order: a line saying what the page does not show (Appendix B.24); the
+  offer to email the results (on My pensions, "Print or save this list",
+  above the line, instead); then "Want to go through this with Damian?",
+  one booking link and the reason line. Each calculator now has one
+  booking link in its results, after the offer to email them; the closing
+  band follows lower down.
+- The "What this doesn’t show" lines. Damian's sentence is used word for
+  word on the two State Pension pages, where it is true for every reader.
+  On the other seven, each item that would not be true for every reader
+  is swapped for one the page's own assumptions already state, in the
+  same form (Appendix B.24).
+- Moved, words unchanged: on the pension and director calculators, "Talk
+  it through, free" and its reason line, from "The cost of waiting" (the
+  card keeps its title and its figure) to after the offer to email the
+  results; on the auto-enrolment comparison, "Talk through what this means
+  for you" and its reason line, from "In one sentence" to after "Before
+  you rely on these rates" and the offer to email the results.
+- "Email me my results" on six calculators that had no such form (the
+  auto-enrolment comparison, the charges calculator, both State Pension
+  pages, the threshold page and the Personal Investment Account page):
+  "Want these figures emailed to you?", "Damian sends them himself, so
+  they will not arrive straight away.", the field "Your email", the button
+  "Email me my results", the note "We use your email to reply to this
+  request, and for nothing else. See our Privacy Notice. This is
+  information, not advice.", the error "Please enter a valid email
+  address." and the thank-you "Thanks - we've got it. Damian will be in
+  touch personally.". Each sends what the page shows (its results, the
+  figures chosen, the link that opens them again, the page's address) and
+  the email address to Netlify, as the two older forms do (question 1.15),
+  under one name, calculator-results. Netlify stores the request; it sends
+  the reader nothing, so the figures reach the reader only when Damian
+  replies. The new forms carry no box for occasional emails: the Privacy
+  Notice's sentence on those emails is still a placeholder (section 3.2).
+  If the send fails, the reader's email app opens addressed to Damian
+  (Appendix B.24) and the page says "Your email app should have opened
+  with the figures ready to send to Damian." The two older forms' button
+  now reads "Email me my results" (it was "Email my results"); they keep
+  their own words and their box.
+- My pensions has no form: the page says "nothing leaves this page" and
+  "Nothing you type is sent or stored". Its printout keeps the "What this
+  doesn’t show" line and leaves the booking link out.
+- The Privacy Notice's sentence on the calculators is corrected (section
+  3.3).
+- On the booking page, above the heading: "You’ve seen your number. Last
+  step: 20 minutes with Damian." (Damian's words). The page shows it when
+  its address ends "#from=" with the name of one of the nine calculators,
+  and never without JavaScript; anyone else sees the page as before. A
+  calculator's new booking link carries that ending only once the reader
+  has changed one of that calculator's own figures themselves (a figure
+  opened from a shared link does not count), no figure is still behind
+  "Take a guess first", and a result on screen shows a number. The site
+  sends nothing with it; if the reader has accepted analytics, the page
+  address may be recorded by Google Tag Manager, as for any page.
+  The alternative, not on the site: "You’ve seen your figures. Next step:
+  20 minutes with Damian.". "Last step" sits directly above the heading
+  "You've been meaning to sort the pension. Twenty minutes with Damian
+  starts it." and the page's own "a clear sense of your next step", so it
+  contradicts both, and "20 minutes with Damian" comes twice in a row;
+  "your number" sits uneasily with the threshold page ("An illustration of
+  Revenue’s rules, not a calculation of your own tax") and with My
+  pensions (a list, not a number).
+
+Questions for you: (a) the reason line: is "reschedule any time" right
+once Damian confirms that every booking can be moved up to its start, or
+should the site carry "reschedule from your confirmation email"? (b) the
+booking-page line: "You’ve seen your number. Last step: …" as shipped, or
+"You’ve seen your figures. Next step: …"; is it clear, fair and not
+misleading, and is "endowed progress" a gamified element under Guidance
+3.5.7 (section 6.3)? (c) the nine "What this doesn’t show" lines (Appendix
+B.24): each names only what that page's own assumptions say it leaves
+out; acceptable? (d) six more forms send figures to Netlify: is the
+corrected Privacy Notice sentence (section 3.3) right? (e) "Damian sends
+them himself, so they will not arrive straight away." as a commitment?
+(f) the order: the results, what the page does not show, the offer to
+email them, then one booking link with "no obligation" beside it: clear,
+fair, free of pressure? (g) repetition: on the pension, director,
+comparison, charges and threshold pages the closing band follows the new
+link within a screen on a wide screen; the threshold page ends with three
+asks (the link, the band, the "Next step" card); on the comparison the
+link and the band's button say the same words; on a phone, the reason
+line can stand twice on one screen (a page's own and the booking bar's):
+acceptable, or should one go?
+
 2. The Letter of Authority, full wording
 ========================================
 
@@ -944,7 +1099,17 @@ The notice's "Last updated" date is now 25 September 2026. Separately, the
 notice's sentence on the calculators says the figures are not sent to us
 "unless you separately choose to email yourself the results"; the "Email my
 results" forms send them to us, not to the reader, so that sentence may need
-correcting. It is unchanged.
+correcting. It was unchanged until Run 43 (below).
+
+Run 43 (on the site, proposed, 4 October 2026): the sentence on the
+calculators now reads "The pension calculators on this site run entirely
+in your browser. The figures you enter into them are not sent to us or
+stored, unless you ask us to email you the results: then what the
+calculator shows, the figures you chose and your email address reach us
+through a form on this website. “Email them to yourself” opens your own
+email app and sends us nothing." (it read "…unless you separately choose
+to email yourself the results."). The notice's "Last updated" date is now
+4 October 2026.
 
 3.4 Cookies (on the site, proposed)
 -----------------------------------
@@ -1321,7 +1486,8 @@ New calculators and tools
   and "Not read: enter a percentage, like 1 or 0.75.". Footer link "All your
   pensions in one view". On the tracker page: "Know roughly what some are
   worth already? List them in one view, with the total and what the charges
-  come to."
+  come to." (removed in Run 43: it repeated the page's "Related pages"
+  card)
 - On every calculator (all seven): the buttons "Save or print these figures"
   and "Email them to yourself"; the lines "Reveal the illustration first,
   then save it." and "Your email app should have opened. Add your own
@@ -1329,9 +1495,10 @@ New calculators and tools
   this", "What you entered", "The assumptions behind these numbers", "Next
   steps", "Pensionbuddy. Saved on [date].", "Open these figures again:
   [link]" and "Talk them through with Damian in a free 20-minute call:
-  [link]"; in the reader's own email, "[page], saved on [date]" and "What I
-  entered:"; in the calculators' emails to Damian, "Open these figures
-  again: [link]".
+  [link]" (since Run 43 followed by "Free · 20 minutes · no obligation ·
+  reschedule any time."); in the reader's own email, "[page], saved on
+  [date]" and "What I entered:"; in the calculators' emails to Damian,
+  "Open these figures again: [link]".
 
 - The new Personal Investment Account (PIA), next to a pension (pia.html):
   the whole page (Appendix A), including the lines its calculator writes:
@@ -1448,7 +1615,9 @@ Changed wording on existing pages
   the story section's own line (removed from the opening section in Run
   42, question 1.23); the review line on ten pages (question
   1.14); and "Free, 20 minutes, no obligation." beside booking links whose
-  own paragraph gives no reason to book.
+  own paragraph gave no reason to book (since Run 43 "Free · 20 minutes ·
+  no obligation · reschedule any time.", beside every booking link;
+  question 1.24).
 - Privacy Notice, "Booking and third parties": the sentence on Netlify
   (section 3.3).
 - Website Terms of Use, section 5: the clause in question 1.16, in place of
@@ -1534,13 +1703,81 @@ Changed wording on existing pages
 - 404 page (Run 42): the booking link "Book a call with Damian for free"
   and its reason "Free, 20 minutes, no obligation." now follow the search
   box and "Six places to begin." instead of sitting beside "Back to the
-  homepage"; words unchanged.
+  homepage"; words unchanged (the reason's words are Run 43's since 4
+  October 2026, Appendix B.16).
 - Directors' rules page (Run 42): "Book a call with Damian for free to go
   through them." and its reason "Free, 20 minutes, no obligation." now
   follow the list of topics; "Topics to discuss, not advice." stays above
-  the list; words unchanged.
+  the list; words unchanged (the reason's words are Run 43's since 4
+  October 2026, Appendix B.16).
 - Changed in Run 42 without new words: the chart colours, as Appendix
   B.21 records.
+- Starter page (Run 43): "Help me get started" and its reason line now
+  follow the chart "The same monthly amount, started at 30, 40 and 50.",
+  its two warnings and its note, instead of sitting in the opening
+  section; words unchanged. "Try the calculator" stays in the opening
+  section.
+- Tracker page (Run 43): "Help me find my pensions" and its reason line
+  now follow the checklist "Tick these off as you go" (the page gives no
+  figure, so this is its first give); "Start finding mine" in the "Worth
+  knowing" band below keeps its own reason line; words unchanged. "Try
+  the calculator" stays in the opening section.
+- Directors' page (Run 43): "Book a call with Damian for free" and its
+  reason line now follow the €1,000 example ("€1,000 of profit taken as
+  salary is about €477 in your pocket, …") and the ladder "The personal
+  limit: the share of salary that gets tax relief, by age." with its note;
+  "Try the director calculator" stays in the opening section; words
+  unchanged.
+- Starter, tracker and directors' pages (Run 43): the chat picture in the
+  opening section keeps its question and Buddy's answer ("Have I left it
+  too late to start?"; "I don’t have any of the paperwork, is that a
+  problem?"; "How much can my company actually contribute?"); its link
+  "Book a call with Damian for free" and its reason line "Free, 20
+  minutes, no obligation." are removed, so the opening section carries no
+  booking link.
+- Starter page (Run 43): removed under "Already being auto-enrolled?": "My
+  Future Fund is the auto-enrolment scheme. The comparison tool shows both,
+  side by side, for your salary and age." The page's "Related pages" card
+  says it word for word.
+- Tracker page (Run 43): removed under the checklist: "Know roughly what
+  some are worth already? List them in one view, with the total and what
+  the charges come to." The "Related pages" card says it.
+- Directors' page (Run 43): in "The coverage gap" band, removed the button
+  "Try the director calculator" and the sentence "Company funding is not
+  capped by the salary percentages that limit everyone else." The same
+  button stays in the opening section and "Open the director calculator"
+  below; the sentence stands word for word in the relief-limit ladder's
+  note one section above. The band keeps its first sentence, 57% and 68%,
+  and their source.
+- Booking page (Run 43): the card "20 minutes, that's it" / "A short,
+  no-strings chat about your pension." removed; the heading, the line
+  under it ("Twenty minutes with Damian, by phone or video, at a time you
+  choose. Free, with no obligation.") and "The house promise" say it.
+- Booking confirmation page (Run 43): the cards "20 minutes, that’s it" /
+  "A short, no-strings chat about your pension." and "Phone or video" /
+  "Whichever you picked when you booked." removed; the line under the
+  heading and the step "Damian gets in touch" say them.
+- Directors' rules page (Run 43): "The Standard Fund Threshold check shows
+  how much of it your pensions would use in a given year." removed; its
+  "Related pages" card says it; the threshold and €500,000 facts before it
+  stay.
+- Old pension checklist (Run 43): "Once you know what you have, the
+  pension charges calculator shows what its charges could take by
+  retirement." removed; its "Related pages" card says it; "We can do the
+  asking for you: see how we help you find old pensions." and "Or book a
+  free call with Damian." stay.
+- My pensions (Run 43): "What could the charges cost by retirement? The
+  charges calculator." removed; its "Related pages" card says it.
+- Run 43's cuts took out no reason line, FAQ answer, fact, figure, source,
+  caveat or warning.
+- Run 43, Appendix B.22: the colour change, teal for the State alone; no
+  words.
+- Run 43, Appendix B.23: the new words of the interactive figures, the
+  two guides' relief-limit ladders, and the auto-enrolment caveat on the
+  starter page.
+- Run 43, question 1.24 and Appendix B.16 and B.24: the reason line
+  beside every ask, the calculators' new lines and moved links, the six
+  new forms and the booking page's line.
 - The two warnings of question 1.4 are the Regulations' own words and need
   no sign-off as copy.
 
@@ -1871,6 +2108,7 @@ How your pot could grow, three ways
 - With no charges at all
 - With the other plan’s charges
 - With your plan’s charges
+- What your plan’s charges take
 
 Where it goes
 -------------
@@ -1889,6 +2127,17 @@ A lower charge is not the only thing that matters. Some older plans carry
 terms worth more than any charge saved, such as a pension a defined benefit
 scheme promised, and moving a pension can mean giving them up. Charges,
 terms and the funds themselves are weighed together in a review.
+What this doesn’t show: policy, set-up and exit charges, the terms an older
+plan may carry, your tax relief.
+Want these figures emailed to you?
+Damian sends them himself, so they will not arrive straight away.
+Your email
+[Email me my results]
+We use your email to reply to this request, and for nothing else. See our
+Privacy Notice. This is information, not advice.
+Want to go through this with Damian?
+Talk it through, free
+Free · 20 minutes · no obligation · reschedule any time.
 
 Not sure what your old plans charge?
 ------------------------------------
@@ -1897,6 +2146,7 @@ plans rarely spell them out. Damian can find out what yours are and what
 they mean, in a free 20-minute call. If you have lost track of a plan, we
 can help you find it.
 Book a call with Damian for free
+Free · 20 minutes · no obligation · reschedule any time.
 This calculator is information, not advice. It shows what the charges you
 enter would do to a pot, as an illustration. It names no provider and says
 nothing about whether any plan is right for you. Regulated financial advice
@@ -1963,6 +2213,8 @@ Personal Fund Threshold, if you have one, may apply instead.
 
 The threshold, year by year
 ---------------------------
+(A bar, hidden from screen readers:) Your pensions €1,650,000 · The
+threshold for 2026 €2,200,000
 - 2025: €2.0m
 - 2026: €2.2m
 - 2027: €2.4m
@@ -1989,6 +2241,19 @@ How the lump sum is taxed, band by band
 Anything above €500,000 is taxed as income at your marginal rate, usually
 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed
 since 1 January 2025, so it no longer rises with the threshold.
+(A bar, hidden from screen readers:) Tax-free €200,000 · In the 20% band
+€200,000
+What this doesn’t show: what your pensions are worth, your tax position, a
+Personal Fund Threshold you may hold.
+Want these figures emailed to you?
+Damian sends them himself, so they will not arrive straight away.
+Your email
+[Email me my results]
+We use your email to reply to this request, and for nothing else. See our
+Privacy Notice. This is information, not advice.
+Want to go through this with Damian?
+Talk it through, free
+Free · 20 minutes · no obligation · reschedule any time.
 
 Close to the threshold, or over it?
 -----------------------------------
@@ -1997,6 +2262,7 @@ is valued all change the answer, and the tax on getting it wrong is steep.
 Damian works through this with directors and higher earners in a free
 20-minute call.
 Book a call with Damian for free
+Free · 20 minutes · no obligation · reschedule any time.
 This page is information, not advice. It applies Revenue’s published figures
 to the numbers you choose. It does not value your pensions, does not know
 your tax position, and is not a recommendation about when or how to take
@@ -2100,8 +2366,7 @@ The Standard Fund Threshold
 The cap on pension savings that get full tax relief is €2.2 million in 2026
 and rises by €200,000 a year to €2.8 million in 2029, then with earnings.
 The €500,000 limit on retirement lump sums taxed at 20% or less stays where
-it is. The Standard Fund Threshold check shows how much of it your pensions
-would use in a given year.
+it is.
 
 Small self-administered schemes
 -------------------------------
@@ -2140,6 +2405,7 @@ Worth talking through
 ---------------------
 Topics to discuss, not advice. Book a call with Damian for free to go
 through them.
+Free · 20 minutes · no obligation · reschedule any time.
 This page is information, not advice. It summarises published rules as they
 stood on the date above. It is not a recommendation of any structure or
 product, and tax treatment depends on your circumstances. Advice is given in
@@ -2179,8 +2445,12 @@ In one view
 Values are what you entered, as they are today. Nothing here is a
 projection, and nothing here says whether any pension is right for you.
 - Lost track of one? We can help you find it.
-- What could the charges cost by retirement? The charges calculator.
 - Near €2 million altogether? The Standard Fund Threshold check.
+What this doesn’t show: what your pensions could grow to, your tax
+position, the terms each one carries.
+Want to go through this with Damian?
+Talk it through, free
+Free · 20 minutes · no obligation · reschedule any time.
 This is a list, not advice. It adds up what you enter and nothing else.
 Bringing pensions together is not always right: some carry terms worth more
 than the convenience. Advice on what to do with yours is given in a personal
@@ -2247,9 +2517,9 @@ separate decision, best made with advice.
 
 Want help with it?
 ------------------
-We can do the asking for you: see how we help you find old pensions. Once
-you know what you have, the pension charges calculator shows what its
-charges could take by retirement. Or book a free call with Damian.
+We can do the asking for you: see how we help you find old pensions. Or
+book a free call with Damian.
+Free · 20 minutes · no obligation · reschedule any time.
 This checklist is general information, not advice. It does not cover every
 kind of pension, and what applies to you depends on your own schemes.
 
@@ -2318,6 +2588,7 @@ Want to go through it?
 ----------------------
 Damian works through year-end funding with directors all the time. Book a
 free call, or read what changed for directors in 2026 first.
+Free · 20 minutes · no obligation · reschedule any time.
 This checklist is general information, not advice. Tax treatment depends on
 your own circumstances and can change at any Budget. Sources: Revenue
 Pensions Manual, chapters 3, 4, 24 and appendix III; Revenue eBrief 034/26;
@@ -2343,6 +2614,12 @@ The share of your earnings that can get tax relief rises with age: 30% from
 a year. If you are in a pension at work, AVCs (additional voluntary
 contributions) count within the same limit, together with what you already
 pay in.
+Revenue's limit on the contributions that get tax relief, as a share of
+earnings.
+Your age [slider, 50]
+Under 30 15% · 30 to 39 20% · 40 to 49 25% · 50 to 54 30% You · 55 to 59
+35% · 60 and over 40%
+Earnings count up to €115,000.
 The pension calculator shows what a monthly amount could grow to by the time
 you retire, and what tax relief adds.
 
@@ -2396,6 +2673,7 @@ Want to go through it?
 Which of this applies depends on the pensions you have and when you want to
 stop working. Book a free call with Damian, or check how much of the
 Standard Fund Threshold your pensions would use.
+Free · 20 minutes · no obligation · reschedule any time.
 This page is general information, not advice. Sources: Revenue, “Tax relief
 limits on pension contributions”; Revenue Pensions Manual, chapters 9, 21,
 23, 24 and 28; the Pensions Authority, “Early retirement” and “What are my
@@ -2441,6 +2719,12 @@ from 40 to 49, 30% from 50 to 54, 35% from 55 to 59 and 40% from 60 on, on
 earnings up to €115,000 a year across all your pensions. Paying in more than
 the limit is allowed, and relief on the excess can be carried forward to
 later years. You claim it on your tax return, Form 11.
+Revenue's limit on the contributions that get tax relief, as a share of
+net relevant earnings.
+Your age [slider, 40]
+Under 30 15% · 30 to 39 20% · 40 to 49 25% You · 50 to 54 30% · 55 to 59
+35% · 60 and over 40%
+Net relevant earnings count up to €115,000.
 
 The October deadline
 --------------------
@@ -2453,6 +2737,7 @@ See your own numbers
 --------------------
 The pension calculator shows what a monthly amount could grow to and what
 tax relief gives back. Or book a free call with Damian.
+Free · 20 minutes · no obligation · reschedule any time.
 This page is general information, not advice. Sources: gov.ie,
 “Auto-enrolment: your questions answered” and the Department of Social
 Protection’s release of 9 February 2026; Revenue, “Tax relief limits on
@@ -2517,6 +2802,7 @@ Whether moving a UK pension makes sense depends on what it gives you now,
 what a move would cost in tax and charges, and where you expect to live.
 There is no general answer, and this page does not give one. Book a free
 call with Damian to go through yours.
+Free · 20 minutes · no obligation · reschedule any time.
 This page is general information, not advice. Sources: GOV.UK, “Transferring
 your pension: transferring to an overseas pension scheme” and “State Pension
 if you retire abroad”; HMRC, “Reducing tax-free overseas transfers of tax
@@ -2757,6 +3043,17 @@ Left after tax:
   - ETF: €28,235
 Employer money is not in the pension figure. If your employer would pay into
 a pension, that is on top.
+What this doesn’t show: your old pensions, fees and charges, your
+employer’s scheme.
+Want these figures emailed to you?
+Damian sends them himself, so they will not arrive straight away.
+Your email
+[Email me my results]
+We use your email to reply to this request, and for nothing else. See our
+Privacy Notice. This is information, not advice.
+Want to go through this with Damian?
+Talk it through, free
+Free · 20 minutes · no obligation · reschedule any time.
 
 Who it might suit
 -----------------
@@ -2805,6 +3102,7 @@ The answer depends on your employer, your tax, and when you need the money,
 and on figures due on 6 October. Damian can talk it through in a free
 20-minute call. Plain English, no obligation.
 Book a call with Damian for free
+Free · 20 minutes · no obligation · reschedule any time.
 This page is information, not advice. It describes a proposal as at 25
 September 2026 and shows figures you choose, as an illustration. It names no
 provider and says nothing about whether any product is right for you.
@@ -3102,21 +3400,42 @@ reviewed September 2026
 B.16 Booking links: the reason to book
 --------------------------------------
 
-Free, 20 minutes, no obligation.
+Free · 20 minutes · no obligation · reschedule any time.
 
-Beside the booking links in the directors', starter and tracker pages'
-opening sections and in their chat pictures (not the home page's chat
-picture, whose last message already says it; since Run 42 that picture
-sits under "How a call with Damian works"); on the home page, under the
-gap and the way-of-life picker, beside the moved button; the tracker
-page's "Start finding mine"; "The cost of waiting" on the pension and
-director calculators; both links on the auto-enrolment comparison; the
-directors' rules page (after the rules list); the five guides; the 404
-page (after the search box and "Six places to begin"); the held-back
+(Run 43, 4 October 2026, Damian's words; until then "Free, 20 minutes, no
+obligation.", beside booking links whose own paragraph gave no reason to
+book. The alternative, "Free · 20 minutes · no obligation · reschedule
+from your confirmation email.", waits on question 1.24 (a).)
+
+Beside every booking button and link in a page: the starter, tracker and
+directors' pages' buttons, which since Run 43 follow what each page gives
+first (the starter page: the chart "The same monthly amount, started at
+30, 40 and 50.", its warnings and its note; the directors' page: the
+€1,000 example and the personal-limit ladder; the tracker page, which
+gives no figure: "Tick these off as you go"); the home page's button
+under the gap and the way-of-life picker, and its chat picture's link
+under "How a call with Damian works" (since Run 43; Buddy's line above it,
+"Yes, completely, with no obligation afterwards. Twenty minutes to
+understand your situation and answer your questions.", stays); the
+tracker page's "Start finding mine"; every closing band (the home,
+starter, tracker, directors' and jargon buster pages, and the eight
+calculators and tools), under its button (since Run 43); the one booking
+link after the results of each of the nine calculators and tools
+(Appendix B.24); the comparison's "Talk the choice through with Damian"
+(in a card hidden since Run 30); the threshold page's "Next step" card;
+the directors' rules page (after the rules list); the five guides; the
+404 page (after the search box and "Six places to begin"); the held-back
 finder and readiness check; the Ask Buddy panel on every page; the
-booking bar on phones; and the end of the Buddy's Run game. Booking
-links whose own paragraph already says the call is free and twenty
-minutes carry nothing extra.
+booking bar on phones; the end of both games (Jargon Battle's since Run
+43); and the saved or printed report (since Run 43, after "Talk them
+through with Damian in a free 20-minute call: …/booking.html").
+
+Not beside: the nav's "Book a call with Damian for free" and the footer's
+"Book a call", on every page; the booking page itself, where every link
+leads ("Free, with no obligation." is its own line); the "booking page"
+links in the Privacy Notice, Terms and complaints text; and "book a free
+call" inside the email forms' messages. Since Run 43 the chat pictures on
+the starter, tracker and directors' pages carry no booking link.
 
 B.17 Director calculator: under the retirement age slider
 ---------------------------------------------------------
@@ -3268,7 +3587,8 @@ Changed, and why:
 - The readiness check (held back): its "Early days" third of the scale
   (amber tint → grey): not money.
 - The jargon buster's risk rating tiles 5 to 7 (amber tint → dark teal
-  with white digits): not money.
+  with white digits): not money. (Since Run 43, slate with white digits:
+  Appendix B.22.)
 - Every form's error message and the border of a field in error (two
   reds, a brown border and an amber box → the one red): an error.
 - "The house promise" label on the booking and confirmation pages (amber
@@ -3288,6 +3608,202 @@ are re-shot.
 
 Question: is the colour grammar acceptable, red for money missing and
 amber for money back?
+
+B.22 Colour: teal only for what the State pays (Run 43)
+-------------------------------------------------------
+
+No words, figures, caveats or warnings changed. Damian decided on 4
+October 2026 that teal, the site's accent, should mean one thing in a
+chart, a bar or a figure: what the State pays. What else was teal is
+now slate (#586B85, a blue-grey; 5.45:1 against white both ways, so it
+passes as text and under white text) or, where it was a tinted card or
+a marker of the reader's own place, light grey with dark text:
+
+- the starter page's pot bars in its three time charts ("The same monthly
+  amount, started at 30, 40 and 50.", "If you wait." and "Time out."; the
+  red "€… less" parts unchanged);
+- the home page: the way-of-life figures ("€19,200", "€27,600",
+  "€33,600") and the month's category bars, the "through life" card's
+  age, ruler and marker, and the dot on the step in view;
+- the pension calculator's "Your plan" line, its shading and its key
+  ("With an extra €100/month" stays amber), and the "Add just €100 a
+  month…" card;
+- the director calculator's line and shading, and "Into your pension";
+- the auto-enrolment comparison's "Personal pension" and "Your top-up",
+  its two lanes in "Side by side" and "Everything paid in, by 66", the
+  scale's end mark, and its "Your year" label;
+- the charges calculator's "With the other plan’s charges" line and key;
+- the bars on My pensions;
+- the readiness check (held back): "On the way" and "In good shape";
+- the jargon buster's risk rating tiles (5 to 7 slate with white digits,
+  1 and 2 light grey, 3 and 4 a darker grey; Appendix B.21 had 5 to 7
+  dark teal);
+- "57%" and "68%" on the directors' page;
+- the reader's own place: the "You" label on every relief-limit ladder,
+  the picked year on the threshold page's year-by-year strip, and on the
+  State Pension entitlement check the "Your average" label and the "Your
+  year" dot (and its bar's edge).
+
+Not changed: the State Pension's bars and figures (teal), what you need
+(dark), red, amber (the State's top-up into My Future Fund included),
+buttons, links, sliders, the pressed state of a button, and the dark
+results panels. Slate is never the only difference beside red or grey
+text: a key, a dash, a pattern, a white edge or a label always says which
+is which.
+
+Question: teal for the State alone, slate or neutral for everything else:
+acceptable?
+
+B.23 Figures that respond to the reader (Run 43)
+------------------------------------------------
+
+No existing figure, rate, source, caveat or warning changed or moved. New
+words and figures:
+
+- Charges calculator, "How your pot could grow, three ways": the area
+  between the no-charge line and your plan's line is red, and the key
+  gains "What your plan’s charges take". A screen reader hears, after the
+  chart's existing description, "The red area is what your plan’s charges
+  take: €[x] by retirement." (the table's "What they cost you by
+  retirement" figure; not said when your plan has no charges).
+- Threshold page, a bar under "The threshold, year by year" (hidden from
+  screen readers; its figures are the page's own): "Your pensions
+  €[total]"; "The threshold for [year]" or "The threshold for 2030 or
+  later"; "€[threshold]" or "At least €2,800,000"; "€[excess] over" or
+  "Up to €[excess] over". The part over the threshold is hatched slate,
+  not red.
+- Threshold page, a bar after "Anything above €500,000 is taxed as
+  income…" (hidden from screen readers; its figures are the table's):
+  "Tax-free €[x]", "In the 20% band €[y]", "Taxed as income €[z]". An
+  outline, a hatch and a solid slate, not red.
+- Home page, one line shown after the chart's caveat ("These are survey
+  averages…") when a figure in the opening chart is pressed (the three
+  figures become buttons, named "€40,860 What people expect to need",
+  "€25,296 a year short" and "€15,564 What the State Pension pays");
+  "Royal London Ireland, 2026." stays:
+  "€40,860 a year is the survey average for what people expect to need
+  (Royal London Ireland, 2026)."; "€[x] a year is your own figure, set
+  with the slider above."; "€[x] a year is the Pensions Council’s [Modest
+  | Moderate | Comfortable] standard of living [for one person | for a
+  couple], at 2024 prices."; "€15,564 a year is the State Pension
+  (Contributory) at the maximum personal rate: €299.30 a week from
+  January 2026, 52 weekly payments. Rates change, usually at each
+  Budget." (for a couple: "€31,127 a year is two State Pensions
+  (Contributory), each at the maximum personal rate: €299.30 a week from
+  January 2026, 52 weekly payments. Rates change, usually at each
+  Budget."); "€[gap] a year is €[need] less €[State]." The rate and its
+  date are the State Pension pages' own. A reader who picks a Pensions
+  Council card and then lets it go keeps the card's figure on the slider,
+  and the line then says "your own figure, set with the slider above";
+  if that is not acceptable, the neutral words would be "€[x] a year is
+  the figure on the slider above.". Question 1.11 (b) on the €40,860's
+  source line is not changed here.
+- Home page, "What changes, and when.", on a phone only: a "Your age"
+  slider (18 to 75); the line under it repeats the relief step's own
+  figure and heading ("25% From 40"; at 62, "40% From 60"); a screen
+  reader hears "62: 40%, From 60". It never picks the steps at 61, 66 or
+  71. It does not itself say that the percentage is the share of earnings
+  that gets tax relief; the list under it does.
+- Starter and directors' pages, and the two guides "Pensions after 50"
+  and "Pensions when you are self-employed": a "Your age" slider over the
+  relief-limit ladder marks "You" on the reader's row (a screen reader
+  hears, for example, "30, 20%"). The two guides gain the ladder itself
+  (Appendix A.10 and A.11): "Pensions after 50", "Revenue's limit on the
+  contributions that get tax relief, as a share of earnings." and
+  "Earnings count up to €115,000."; "Pensions when you are
+  self-employed", "Revenue's limit on the contributions that get tax
+  relief, as a share of net relevant earnings." and "Net relevant
+  earnings count up to €115,000."; both, the six rows "Under 30 15%", "30
+  to 39 20%", "40 to 49 25%", "50 to 54 30%", "55 to 59 35%" and "60 and
+  over 40%".
+- Starter page, "Already being auto-enrolled?": four buttons, "2026 to
+  2028", "2029 to 2031", "2032 to 2034", "2035 onward" (a screen reader
+  hears "Auto-enrolment rates, by years"), each showing that phase's
+  contributions at the reader's salary, at the rates the page and the
+  comparison already state; and under the rows, always shown, the
+  comparison's reviewed caveat shortened by one clause. The comparison
+  (`broker-vs-autoenrolment.html:2910`) reads "…the later phase rates and
+  years, and the position that the scheme does not currently accept
+  contributions above its set rate."; the starter leaves out the words
+  "and the position that the scheme does not currently accept
+  contributions above its set rate", because its picker says nothing
+  about contributions above the set rate. The starter's words: "Checked
+  against
+  gov.ie on 10 September 2026: the 2026 contribution rates, and that all
+  three contributions stop at €80,000 of salary. Still taken from
+  third-party summaries rather than the primary text: the later phase
+  rates and years. Confirm those against gov.ie or the National Automatic
+  Enrolment Retirement Savings Authority (NAERSA) before relying on them.
+  Rates and rules can change." The page's own sources line still cites
+  the Act for the later rates (Appendix B.4); the two now differ, for you
+  to settle. Question: may the shortened caveat stand, or should the
+  starter carry the comparison's caveat in full?
+- My pensions: no new words; the euro figure in "The annual charges you
+  know of come to about €[x] a year…" is red and bold (charges taken from
+  a pot, Appendix B.21).
+
+Question: are these words acceptable as they stand?
+
+B.24 Under each calculator's results (Run 43)
+---------------------------------------------
+
+On each page, in this order, under the results and before the closing
+band. The booking link is preceded by "Want to go through this with
+Damian?" and followed by "Free · 20 minutes · no obligation · reschedule
+any time.".
+
+- Pension calculator: "What this doesn’t show: product charges,
+  inflation, the tax on your income when you draw it."; the existing
+  "Want these figures emailed to you?" form, its button now "Email me my
+  results"; the link "Talk it through, free" (moved from "The cost of
+  waiting").
+- Director calculator: "What this doesn’t show: your company’s exact
+  funding limit, product charges, inflation."; the existing form, its
+  button now "Email me my results"; "Talk it through, free" (moved from
+  "The cost of waiting").
+- Auto-enrolment comparison, after "Before you rely on these rates":
+  "What this doesn’t show: your old pensions, product charges, your
+  employer’s own scheme."; the new email offer; "Talk through what this
+  means for you" (moved from "In one sentence").
+- Charges calculator, after "The other side": "What this doesn’t show:
+  policy, set-up and exit charges, the terms an older plan may carry,
+  your tax relief."; the new email offer; "Talk it through, free".
+- State Pension reality check: "What this doesn’t show: your old
+  pensions, your tax position, your employer’s scheme."; the new email
+  offer; "Talk it through, free".
+- State Pension entitlement check: the same line; the new email offer;
+  "Talk it through, free".
+- Standard Fund Threshold check, after "Tax on the lump sum": "What this
+  doesn’t show: what your pensions are worth, your tax position, a
+  Personal Fund Threshold you may hold."; the new email offer; "Talk it
+  through, free".
+- Personal Investment Account page, after "Where the tax comes in": "What
+  this doesn’t show: your old pensions, fees and charges, your employer’s
+  scheme."; the new email offer; "Talk it through, free".
+- My pensions, after "Print or save this list" and its notes: "What this
+  doesn’t show: what your pensions could grow to, your tax position, the
+  terms each one carries."; no email offer; "Talk it through, free". The
+  printout keeps the line and leaves out the question, the link and the
+  reason line.
+
+The new email offer, on six pages: "Want these figures emailed to you?";
+"Damian sends them himself, so they will not arrive straight away.";
+"Your email"; "Email me my results"; "Please enter a valid email
+address."; "We use your email to reply to this request, and for nothing
+else. See our Privacy Notice. This is information, not advice."; "Thanks
+- we've got it. Damian will be in touch personally."; if the send fails,
+"Your email app should have opened with the figures ready to send to
+Damian.", and the email that opens, addressed to hello@pensionbuddy.ie
+with the subject "Results request", reads "Please send me my results."
+then "My email:", "Results:", "Figures used:", "Open these figures
+again:" and "From:", each followed by the page's own words and figures.
+
+The booking page, above its heading, only for a reader whose address ends
+"#from=" and one of the nine calculators (question 1.24): "You’ve seen
+your number. Last step: 20 minutes with Damian." The alternative, not on
+the site: "You’ve seen your figures. Next step: 20 minutes with Damian."
+
+Question: question 1.24 (b), (c), (e), (f) and (g).
 
 Appendix C. Drafts not on the site
 ==================================

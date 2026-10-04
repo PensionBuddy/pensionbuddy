@@ -39,7 +39,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -132,7 +132,11 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
 .chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:8px}
-.dotk{width:14px;height:4px;border-radius:2px;background:var(--teal);display:inline-block}
+.dotk{width:14px;height:4px;border-radius:2px;background:var(--slate);display:inline-block}
+/* the growth chart (Run 43): the script draws "Your plan" #0B7A6E and its shading
+   rgba(11,122,110,.12); teal is only what the State pays, so both are slate */
+#chart svg path:not([stroke]){fill:var(--slate);opacity:.12}
+#chart svg path[stroke="#0B7A6E"]{stroke:var(--slate)}
 .dashk{width:18px;border-top:2.5px dashed var(--amber);display:inline-block}
 
 .relief-card{background:var(--amber-soft);border-radius:var(--r-lg);padding:24px 28px}
@@ -149,10 +153,10 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 .rv-d.you{background:var(--ink-2)}.rv-d.tax{background:var(--amber)}
 @media(prefers-reduced-motion:reduce){.rv-you,.rv-tax{transition:none}}
 
-.boost-card{background:var(--teal-50);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
+.boost-card{background:var(--surface-2);border-radius:var(--r-lg);padding:22px 28px;display:flex;gap:18px;align-items:center}
 .boost-ico{width:46px;height:46px;border-radius:13px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--sh-teal)}
 .boost-ico svg{width:22px;height:22px}
-.boost-card .bt{font-size:15px;color:var(--teal-900);line-height:1.55}
+.boost-card .bt{font-size:15px;color:var(--ink);line-height:1.55}
 .boost-card .bt b{font-weight:700}
 
 /* ---- CTA ---- */
@@ -301,6 +305,18 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
 .email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
+/* AFTER THE RESULT (Run 43, item 5). Under every calculator's results, in this order:
+   what the calculator does not show (.pb-after-not, a caveat), the offer to email the
+   results (.email-cap), then the one booking ask (.pb-after) with its reason. Nothing
+   here moves, fades or is revealed; assets/js/pb-after.js only sets the link's #from=
+   (the booking page's line) and sends the shared form. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:20px 22px}
+.pb-after .pb-after-q{margin:0;font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
+.pb-after .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:1rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+.pb-after .wlink:hover{text-decoration:underline}
+.pb-after .wlink .ico{width:15px;height:15px;flex:none}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
 /* #15: the success tick draws itself once, about 300ms, ease-out, as its
    message appears: going from display:none to shown starts the animation, so
    the draw needs no script. Drawn is the default and the draw runs only where
@@ -1508,7 +1524,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1649,7 +1665,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-lad-track{position:relative;display:block;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-lad-track i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--amber)}
 .pb-lad-pct{font-size:13.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-700);font-size:12px;font-weight:600}
+.pb-lad-you{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--ink);font-size:12px;font-weight:600}
 .pb-lad-you[hidden]{display:none}
 .pb-lad-out{margin:12px 0 0;font-size:15px;line-height:1.55;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-lad-note{margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--ink-3)}
@@ -2104,11 +2120,15 @@ main p.ec-note *{font-size:1rem !important}
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
    .pb-reviewed: who reviewed a calculator or rules page, and when, at the
-   foot of the page header. .pb-why: the one reason to book, next to a
-   booking call to action whose own block gives none. */
+   foot of the page header. .pb-why: the one reason to book, beside every
+   booking call to action in a page (Run 43: the closing bands and the
+   home page's chat picture too; not the nav, the footer or the booking
+   page itself). */
 body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
 body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
-body .callout p.pb-why{color:rgba(255,255,255,.86)}
+body .callout p.pb-why,body .final p.pb-why{color:rgba(255,255,255,.86)}
+.cta-card p.pb-why{position:relative;margin:-16px 0 0;text-align:center}
+@media(min-width:921px){.cta-card:has(>p.pb-why){grid-template-rows:auto auto;row-gap:10px}.cta-card:has(>p.pb-why)>.buddy-mini,.cta-card:has(>p.pb-why)>.ctext{grid-row:1/span 2}.cta-card:has(>p.pb-why)>.btn{grid-row:1;align-self:end}.cta-card p.pb-why{grid-row:2;grid-column:3;align-self:start;width:0;min-width:100%;margin:0}}
 .hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
 .phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
 .pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
@@ -2406,7 +2426,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
 .sft-strip li{border:1px solid var(--line);border-radius:var(--r-md);padding:10px 8px;text-align:center;background:var(--surface);min-width:0}
 .sft-strip b{display:block;font-size:.86rem;font-weight:600;color:var(--ink-2)}
 .sft-strip span{display:block;font-size:1rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.sft-strip li.sft-on{border:2px solid var(--ink);background:var(--teal-50)}
+.sft-strip li.sft-on{border:2px solid var(--ink);background:var(--surface-2)}
 .sft-strip li.sft-on b{color:var(--ink)}
 /* not .sft-note: the skeleton already styles that class for the calculators' own threshold note */
 .sft-strip-note{margin:6px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
@@ -2426,6 +2446,45 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   .sft-card{padding:18px 16px}
 }
 #lumpTax{color:var(--red)}
+/* THE LIMIT BAR (Run 43, item 4; docs/INTERACTIVE-PROPOSALS-42.md rank 2). The year's
+   threshold against your pensions, on one scale. Yours in slate (neutral); the part over
+   the threshold hatched, not red: the excess is not money missing (its tax is in "Over the
+   threshold"). The mark is the threshold. No transition: it follows the sliders. */
+.sft-lim{margin:14px 0 18px}
+.sft-lim-track{position:relative;height:14px;border-radius:4px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+.sft-lim-fill,.sft-lim-over{position:absolute;top:0;bottom:0;transition:none}
+.sft-lim-fill{left:0;width:var(--w);background:var(--slate);border-radius:4px 0 0 4px}
+.sft-lim-over{left:var(--from);width:var(--w);background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lim-mark{position:absolute;top:-5px;bottom:-5px;left:var(--at);margin-left:-1px;border-left:2px solid var(--ink)}
+.sft-lim-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lim-k>span{display:block}
+.sft-lim-k>span[hidden]{display:none}
+.sft-lim-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sft-lim-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
+.sft-lim-k-you i{background:var(--slate)}
+.sft-lim-k-thr i{width:0;height:14px;border-radius:0;vertical-align:-2px;border-left:2px solid var(--ink)}
+.sft-lim-k-ov i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lim,.sft-lim *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media(min-width:601px){.sft-lim-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+/* THE LUMP-SUM BAR (Run 43, item 4; docs/INTERACTIVE-PROPOSALS-42.md rank 4, adapted). The
+   lump sum on one bar, split by Revenue's bands: tax-free (an outline), the 20% band (hatched),
+   taxed as income (solid). Slate, every part edged at 5.45:1 against the page, told apart by
+   pattern and a gap, never by strength alone; each named in the key with the table's figure.
+   Not red: only the tax itself is money missing, and that is the table's "Tax at 20%". */
+.sft-lb{margin:16px 0 0}
+.sft-lb-track{display:flex;gap:3px;height:16px;border-radius:4px}
+.sft-lb-track i{display:block;flex-shrink:1;flex-basis:0;min-width:0;height:100%;border-radius:3px;transition:none}
+.sft-lb-track i[hidden]{display:none}
+.sft-lb-free,.sft-lb-k-free i{background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lb-std,.sft-lb-k-std i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
+.sft-lb-inc,.sft-lb-k-inc i{background:var(--slate)}
+.sft-card .sft-lb-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lb-k>span{display:block}
+.sft-lb-k>span[hidden]{display:none}
+.sft-lb-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sft-lb-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
+.sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2541,6 +2600,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div class="chart-card sft-strip-card">
       <h3>The threshold, year by year</h3>
+      <div class="sft-lim" id="sftLim" aria-hidden="true">
+        <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
+        <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
+      </div>
       <ol class="sft-strip" id="sftStrip">
         <li data-y="2025"><b>2025</b><span>€2.0m</span></li>
         <li data-y="2026" class="sft-on"><b>2026</b><span>€2.2m</span></li>
@@ -2570,6 +2633,33 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         </tbody>
       </table>
       <p class="sft-small">Anything above €500,000 is taxed as income at your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025, so it no longer rises with the threshold.</p>
+      <div class="sft-lb" id="sftLb" aria-hidden="true">
+        <div class="sft-lb-track"><i class="sft-lb-free" id="sftLbFree" style="flex-grow:200000"></i><i class="sft-lb-std" id="sftLbStd" style="flex-grow:200000"></i><i class="sft-lb-inc" id="sftLbInc" style="flex-grow:0" hidden></i></div>
+        <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
+      </div>
+    </div>
+    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.</p>
+    <div class="email-cap" id="ecCap">
+      <div class="ec-top">
+        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+        <div class="ect"><b>Want these figures emailed to you?</b><span>Damian sends them himself, so they will not arrive straight away.</span></div>
+      </div>
+      <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="calculator-results"><input type="hidden" name="results"><input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="ec-row">
+          <span class="ffield"><input type="email" id="ecEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
+          <button class="btn btn-primary" style="width:auto" type="submit">Email me my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+        <p class="ec-note" id="ecErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
+        <p class="ec-note">We use your email to reply to this request, and for nothing else. See our <a href="privacy.html">Privacy Notice</a>. This is information, not advice.</p>
+      </form>
+      <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks - we've got it. Damian will be in touch personally.</span></div>
+    </div>
+    <div class="pb-after" id="pbAfter" data-pb-from="standard-fund-threshold">
+      <p class="pb-after-q">Want to go through this with Damian?</p>
+      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
     </div>
   </div>
 </div></div>
@@ -2578,6 +2668,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
   <div class="ctext"><h2 id="help">Close to the threshold, or over it?</h2><p>Timing, the order benefits are taken in, and how a defined benefit pension is valued all change the answer, and the tax on getting it wrong is steep. Damian works through this with directors and higher earners in a free 20-minute call.</p></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
 </div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
@@ -2598,7 +2689,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice. Tax rules can change at any Budget.</li>
   </ul>
 </div></section>
-<div class="wrap"><aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="booking.html"><span class="pb-next-t">Book a call with Damian for free</span><span class="pb-next-d">Free, 20 minutes, no obligation.</span></a></aside></div>
+<div class="wrap"><aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="booking.html"><span class="pb-next-t">Book a call with Damian for free</span><span class="pb-next-d">Free · 20 minutes · no obligation · reschedule any time.</span></a></aside></div>
 <script src="assets/js/pb-guide.js?v=6cc2dca8"></script>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
@@ -2629,7 +2720,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
+<script src="assets/js/pb-forms.js?v=071cee0a"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
 <script>
 /* standard-fund-threshold.html (Run 20 #7).
@@ -2662,6 +2753,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('thrL').textContent = 'The threshold for ' + yearWord(year);
     $('thr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
     $('share').textContent = pc + '%';
+    /* the limit bar (Run 43): the year's threshold against the total, on one scale,
+       the larger of the two; it follows the sliders in the same frame */
+    var top = Math.max(total, u.threshold) || 1, at = function (v) { return (v / top * 100).toFixed(2) + '%'; };
+    $('sftLimFill').style.setProperty('--w', at(Math.min(total, u.threshold)));
+    $('sftLimOver').style.setProperty('--from', at(u.threshold));
+    $('sftLimOver').style.setProperty('--w', at(u.excess));
+    $('sftLimMark').style.setProperty('--at', at(u.threshold));
+    $('sftLimYou').textContent = euro(total);
+    $('sftLimThrL').textContent = 'The threshold for ' + yearWord(year);
+    $('sftLimThr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
+    $('sftLimOvK').hidden = !(u.excess > 0);
+    $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
     var when = year >= 2030 ? 'from 2030' : 'in ' + year;
     var say;
     if (u.excess > 0) {
@@ -2689,6 +2792,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('lumpStd').textContent = euro(l.atStandardRate);
     $('lumpTax').textContent = euro(l.standardTax);
     $('lumpInc').textContent = euro(l.asIncome);
+    /* the lump-sum bar (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 4, adapted): the lump
+       sum on one bar, split by Revenue's bands, each part as wide as its euro (flex-grow), a
+       part with nothing in it not drawn. Slate in three patterns, each named in the key with
+       the table's own figure; not red, since only the 20% of the middle band is tax
+       (#lumpTax). No transition: it follows the slider. */
+    [['sftLbFree', l.taxFree], ['sftLbStd', l.atStandardRate], ['sftLbInc', l.asIncome]].forEach(function (p) {
+      var el = $(p[0]); el.style.flexGrow = String(Math.max(0, Math.round(p[1]))); el.hidden = !(p[1] > 0);
+    });
+    $('sftLbFreeN').textContent = euro(l.taxFree);
+    $('sftLbStdN').textContent = euro(l.atStandardRate);
+    $('sftLbIncN').textContent = euro(l.asIncome);
+    $('sftLbIncK').hidden = !(l.asIncome > 0);
     P.announce('The threshold for ' + yearWord(year) + ' is ' + (u.atLeast ? 'at least ' : '') + euro(u.threshold) + '. ' + say +
       ' Tax at 20% on the lump sum: ' + euro(l.standardTax) + '.');
   }
@@ -2903,7 +3018,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=b39f6db7" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
@@ -3009,8 +3124,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-guess.js?v=988458d5"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-share.js?v=0c417a51"></script>
-<script src="assets/js/pb-report.js?v=572ada0b"></script>
+<script src="assets/js/pb-share.js?v=308731e9"></script>
+<script src="assets/js/pb-after.js?v=07cefa1d"></script>
+<script src="assets/js/pb-report.js?v=c538bc0d"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>

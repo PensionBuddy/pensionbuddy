@@ -45,7 +45,7 @@
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
   /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1374,24 +1374,41 @@ html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
   html.pb-js .pb-tl-stage{display:block;position:sticky;top:120px}
   .pb-tl-card{display:flex;flex-direction:column;gap:6px;padding:26px 28px 22px;border:1px solid var(--line-2);
     border-radius:var(--r-xl);background:var(--surface)}
-  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);
+  .pb-tl-age{font-size:clamp(2.6rem,5vw,4rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--slate);
     font-variant-numeric:tabular-nums}
   .pb-tl-what{font-size:1rem;font-weight:600;color:var(--ink)}
   .pb-tl-ruler{position:relative;display:block;height:10px;margin-top:14px;border-radius:99px;background:var(--surface-2);
     border:1px solid var(--line)}
-  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--aqua,var(--teal));
+  .pb-tl-fill{position:absolute;left:0;top:0;bottom:0;display:block;border-radius:99px;background:var(--slate);
     transition:width var(--pb-t-fill)}
   .pb-tl-mark{position:absolute;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--surface);
-    border:3px solid var(--teal-700);transition:left var(--pb-t-fill)}
+    border:3px solid var(--slate);transition:left var(--pb-t-fill)}
   .pb-tl-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
   .pb-tl-step{margin:0;padding:10vh 16px 10vh 22px}
   .pb-tl-step:first-child{padding-top:14px}
   .pb-tl-step:last-child{padding-bottom:14px}
   .pb-tl-step::after{top:calc(10vh + 8px)}
   .pb-tl-step:first-child::after{top:22px}
-  .pb-tl-step.pb-on::after{background:var(--teal)}
+  .pb-tl-step.pb-on::after{background:var(--slate);border-color:var(--slate)}
 }
 @media(prefers-reduced-motion:reduce){.pb-tl-fill,.pb-tl-mark{transition:none}}
+/* Run 43, item 4 (INTERACTIVE-PROPOSALS-42 rank 14, adapted): below 921px, where the card is
+   not drawn, a slider for the reader's age picks the relief step that applies at that age
+   (Under 30 to From 60; never the ARF's or the State Pension's step, whose figures are not a
+   relief band); the step changes colour only, and the line under the slider repeats its
+   figure and heading. Drawn only with script and only on a narrow screen. Nothing moves. */
+.pb-tl-pick{display:none}
+@media(max-width:920px){
+  html.pb-js .pb-tl-pick{display:block;margin:0 0 18px;max-width:440px}
+  .pb-tl-pick-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .pb-tl-pick-row label{font-size:1rem;font-weight:600;color:var(--ink)}
+  .pb-tl-pick-v{font-size:1.05rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .pb-tl-pick input[type=range]{display:block;width:100%}
+  .pb-tl-now{margin:12px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+  .pb-tl-now b{margin-right:6px;font-weight:700;color:var(--slate);font-variant-numeric:tabular-nums}
+  .pb-tl-step.pb-tl-picked{background:var(--surface-2)}
+  .pb-tl-step.pb-tl-picked::after{background:var(--slate);border-color:var(--slate)}
+}
 .snaps .sec-head{margin-bottom:24px}
 .pstrip-in{animation-duration:70s;padding:26px 0}
 .psnap{flex:0 0 auto;margin:0 13px;padding:8px;background:#fff;
@@ -1528,7 +1545,7 @@ button{font-family:inherit}
 .pb-statrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px 40px;margin:0}
 .pb-stat{border:0;padding:0;background:none;min-width:0}
 .pb-stat-n{display:block;font-family:var(--font);font-variant-numeric:tabular-nums;font-weight:300;
-  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--teal-700)}
+  font-size:clamp(2.7rem,5.6vw,4.6rem);letter-spacing:-.03em;line-height:1;color:var(--slate)}
 .pb-dark .pb-stat-n{color:#fff}
 .pb-stat-l{display:block;margin-top:12px;font-size:1rem;line-height:1.5;color:var(--ink-2);max-width:28ch}
 .pb-dark .pb-stat-l{color:rgba(255,255,255,.8)}
@@ -1634,14 +1651,14 @@ button{font-family:inherit}
 .pb-life-card{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 14px 16px;
   background:var(--surface);color:var(--ink);border:1.5px solid var(--line-2);border-radius:var(--r-lg);cursor:pointer}
 .pb-life-card b{font-size:1rem;font-weight:700}
-.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
+.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--slate);font-variant-numeric:tabular-nums}
 .pb-life-d{font-size:.84rem;line-height:1.45;color:var(--ink-2)}
 .pb-life-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .pb-life-split{margin-top:20px}
 .pb-life-st{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--ink)}
 .pb-life-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
 .pb-life-rows li{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 4.8em;gap:12px;align-items:center;font-size:.92rem;color:var(--ink)}
-.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--aqua);width:var(--w)}
+.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
 .pb-life-rows b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
 .pb-life-note{margin:14px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
 .pb-life .pb-src{margin-top:12px}
@@ -2094,11 +2111,15 @@ a.assure:hover{border-color:var(--teal)}
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
    .pb-reviewed: who reviewed a calculator or rules page, and when, at the
-   foot of the page header. .pb-why: the one reason to book, next to a
-   booking call to action whose own block gives none. */
+   foot of the page header. .pb-why: the one reason to book, beside every
+   booking call to action in a page (Run 43: the closing bands and the
+   home page's chat picture too; not the nav, the footer or the booking
+   page itself). */
 body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
 body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
-body .callout p.pb-why{color:rgba(255,255,255,.86)}
+body .callout p.pb-why,body .final p.pb-why{color:rgba(255,255,255,.86)}
+.cta-card p.pb-why{position:relative;margin:-16px 0 0;text-align:center}
+@media(min-width:921px){.cta-card:has(>p.pb-why){grid-template-rows:auto auto;row-gap:10px}.cta-card:has(>p.pb-why)>.buddy-mini,.cta-card:has(>p.pb-why)>.ctext{grid-row:1/span 2}.cta-card:has(>p.pb-why)>.btn{grid-row:1;align-self:end}.cta-card p.pb-why{grid-row:2;grid-column:3;align-self:start;width:0;min-width:100%;margin:0}}
 .hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
 .phone-chat p.pb-why{margin:-6px 0 0;padding:0 2px;font-size:13px}
 .pb-b-foot p.pb-why{margin:8px 0 0;text-align:center}
@@ -2322,6 +2343,25 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-hero-chart .pb-src{margin-top:14px}
 .pb-hero-chart .pb-gapctl{margin-top:16px;max-width:none}
 .pb-hero-chart .gap-note{margin:16px 0 0}
+/* WHERE EACH FIGURE COMES FROM (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 3). Once the
+   script runs, the chart's three figures are toggle buttons: as they were, with a dotted
+   underline that turns solid while pressed; the focus ring is the figure's own colour. The
+   pressed one's source shows on one line after the caveat "These are survey averages…", so
+   nothing new comes between the figures and the caveat; "Royal London Ireland, 2026." always
+   stays. Nothing moves or fades. Not a caveat class: it is extra, on request. Each button
+   covers its own bar (inset 0), so it has a real box and the whole bar is the target; the
+   figure inside it sits where it did. While empty the line stays in the page at no height,
+   so the live region exists before its first words arrive. */
+.pb-gap-why-b{position:absolute;inset:0;display:block;font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pb-gap-why-b[hidden]{display:none}
+.pb-gap-why-b .pb-gap-n{text-decoration:underline dotted;text-decoration-thickness:2px;text-underline-offset:.14em}
+.pb-gap-why-b[aria-pressed="true"] .pb-gap-n{text-decoration-style:solid}
+.pb-gap-why-b:focus{outline:none}
+.pb-gap-why-b:focus-visible .pb-gap-n{outline:2px solid currentColor;outline-offset:2px;border-radius:4px}
+.pb-gap-why{margin:8px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-3);max-width:80ch}
+.pb-gap-why:empty{margin:0}
+.pb-gap-why-b ~ .pb-gap-sl{pointer-events:none}
+@media print{.pb-gap-why-b .pb-gap-n{text-decoration:none}}
 @media(min-width:921px){
   .pb-gap-big-n{font-size:68px}
 }
@@ -2612,7 +2652,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
     </div>
     <div class="hero-cta">
       <a class="btn btn-primary" href="booking.html">Get my free review <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <p class="pb-why">Free, 20 minutes, no obligation.</p>
+      <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
       <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
   </div>
@@ -2713,7 +2753,10 @@ html.pb-readying [data-pb-wait]{transition:none!important}
      guide), pension age (the starter page). Every figure and sentence is the
      site's own. The list is the component and reads the same without script;
      on a wide screen a card beside it follows the step in the middle of the
-     screen (assets/js/pb-timeline.js), and on a phone it is the list alone.
+     screen (assets/js/pb-timeline.js), and on a phone, with script, a "Your
+     age" slider above the list picks the relief step that applies at that
+     age, a colour only (Run 43, INTERACTIVE-PROPOSALS-42 rank 14; the same
+     script); without script the list is alone.
      Age 75 has no milestone: nothing on the site says what happens at 75
      (STATUS, Run 37, question 1). tests/build.test.py check 36 holds it. -->
 <section class="pb-tl-sec" id="through-life"><div class="wrap">
@@ -2728,6 +2771,11 @@ html.pb-readying [data-pb-wait]{transition:none!important}
       <span class="pb-tl-ruler"><i class="pb-tl-fill" id="pbTlFill" style="width:0%"></i><b class="pb-tl-mark" id="pbTlMark" style="left:0%"></b></span>
       <span class="pb-tl-ends"><span>18</span><span>75</span></span>
     </div></div>
+    <div class="pb-tl-pick" id="pbTlPick">
+      <div class="pb-tl-pick-row"><label for="pbTlAgeS">Your age</label><span class="pb-tl-pick-v" id="pbTlAgeSV">40</span></div>
+      <input type="range" id="pbTlAgeS" min="18" max="75" step="1" value="40" aria-valuetext="40: 25%, From 40" style="--fill:38.60%">
+      <p class="pb-tl-now" id="pbTlNow" aria-hidden="true"><b>25%</b> From 40</p>
+    </div>
     <ol class="pb-tl-steps">
       <li class="pb-tl-step pb-card-link" data-age="18" data-show="15%"><h3><a href="pension-calculator.html">Under 30</a></h3><p>Up to 15% of your earnings can get tax relief, on earnings up to &euro;115,000 a year.</p></li>
       <li class="pb-tl-step pb-card-link" data-age="30" data-show="20%"><h3><a href="pension-calculator.html">From 30</a></h3><p>The share of your earnings that can get tax relief rises with age: 20% from 30 to 39.</p></li>
@@ -2905,6 +2953,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
           <a class="pb-chip-hero" href="director.html" aria-label="Run my own company: pensions for directors">Run my own company</a>
         </div>
         <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>
+        <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
       </div>
     </div>
     <div class="hc-note">Illustration only &middot; the value of investments can fall as well as rise</div>
@@ -2934,6 +2983,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   <h2>Your pension has been sitting there quietly. <span class="pb-soft">Twenty minutes ends that.</span></h2>
   <p>Twenty minutes. Phone or video. Free, with no pressure.</p>
   <a class="btn btn-light" href="booking.html">Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
 </div></div></div>
 
 </main>
@@ -3084,10 +3134,46 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
     gap.setAttribute('aria-label','Two bars. '+(std?'A '+std.label.toLowerCase()+' retirement '+(two?'for a couple':'for one')+' costs ':'You expect to need ')+
       Math.round(need).toLocaleString('en-IE')+' euro a year. '+(two?'Two State Pensions at the maximum pay ':'The State Pension pays ')+
       st.toLocaleString('en-IE')+'. '+(g>0?'The gap is '+Math.round(g).toLocaleString('en-IE')+'.':'That is covered.'));
+    why(false);
   }
   ctl.hidden=false;
   slide();
   r.addEventListener('input',function(){ if(level) choose(null); slide(); paint(); });
+  /* WHERE EACH FIGURE COMES FROM (Run 43). Each figure becomes a toggle button wrapping
+     its own span, so the count-up and paint() keep their references; pressing changes no
+     figure. The line goes after the caveat (.gap-note), never between the figures and it,
+     and is polite only when a press changed it, never while the slider drags. */
+  var need1=+needN.getAttribute('data-pb-count'), pressed=null, whyB=[];
+  var note=gap.parentNode.querySelector('.gap-note'), whyP=document.createElement('p');
+  whyP.className='pb-gap-why'; whyP.id='pbGapWhy'; whyP.setAttribute('aria-live','off'); whyP.setAttribute('aria-atomic','true');
+  if(note||src) (note||src).parentNode.insertBefore(whyP,(note||src).nextSibling);
+  gap.setAttribute('role','group');
+  [['need',needN,needL,'Need'],['short',shN,shL,'Short'],['state',stN,stL,'State']].forEach(function(w,i){
+    var b=document.createElement('button');
+    b.type='button'; b.className='pb-gap-why-b'; b.id='pbGapWhy'+w[3];
+    b.setAttribute('aria-pressed','false'); b.setAttribute('aria-controls','pbGapWhy');
+    w[1].id='pbGapN'+i; w[2].id='pbGapL'+i;
+    b.setAttribute('aria-labelledby',w[1].id+' '+w[2].id);
+    w[1].parentNode.insertBefore(b,w[1]); b.appendChild(w[1]);
+    b.addEventListener('click',function(){ pressed=pressed===w[0]?null:w[0]; why(true); });
+    whyB.push([w[0],b]);
+  });
+  function why(fromPress){
+    if(!whyP||!whyB) return;
+    var need=+r.value, g=need-st, two=household==='couple', std=level&&LS?LS.standard(level,household):null;
+    var wk=SP?'€'+(SP.MAX_WEEKLY_CENTS/100).toFixed(2):'€299.30', t='';
+    whyB.forEach(function(x){ if(x[0]==='short') x[1].hidden=!(g>0); if(x[1].hidden&&pressed===x[0]) pressed=null; });
+    whyB.forEach(function(x){ x[1].setAttribute('aria-pressed',pressed===x[0]?'true':'false'); });
+    if(pressed==='need') t=std?fmt(need)+' a year is the Pensions Council’s '+std.label+' standard of living '+(two?'for a couple':'for one person')+', at 2024 prices.'
+      :need===need1?fmt(need)+' a year is the survey average for what people expect to need (Royal London Ireland, 2026).'
+      :fmt(need)+' a year is your own figure, set with the slider above.';
+    else if(pressed==='state') t=(two?fmt(st)+' a year is two State Pensions (Contributory), each':fmt(st)+' a year is the State Pension (Contributory)')+
+      ' at the maximum personal rate: '+wk+' a week from January 2026, 52 weekly payments. Rates change, usually at each Budget.';
+    else if(pressed==='short') t=fmt(g)+' a year is '+fmt(need)+' less '+fmt(st)+'.';
+    whyP.setAttribute('aria-live',fromPress?'polite':'off');
+    whyP.textContent=t;
+  }
+  why(false);
   if(!life||!LS) return;
 
   var cards=[].slice.call(life.querySelectorAll('.pb-life-card'));
@@ -3205,9 +3291,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
-<script src="assets/js/pb-timeline.js?v=b7fe8de6"></script>
+<script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
-<script src="assets/js/pb-buddy.js?v=b136a304" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=b39f6db7" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
@@ -3217,7 +3303,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
-<script src="assets/js/pb-bookbar.js?v=0b2a330b"></script>
+<script src="assets/js/pb-bookbar.js?v=e5240c5e"></script>
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){

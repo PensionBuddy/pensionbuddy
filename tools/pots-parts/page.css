@@ -37,8 +37,9 @@
 .pt-bars .pt-bl{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
 .pt-bars .pt-bl b{font-weight:600;min-width:0;overflow-wrap:anywhere}
 .pt-bars .pt-bl span{font-variant-numeric:tabular-nums;white-space:nowrap}
-.pt-bars i{display:block;height:10px;border-radius:99px;background:var(--aqua);width:var(--w)}
+.pt-bars i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
 .pt-charges{margin:0 0 14px;font-size:.95rem;line-height:1.55;color:var(--ink)}
+.pt-charges b{font-weight:700;color:var(--red)}
 .pt-actions{margin:0 0 12px}
 .pt-note{margin:0 0 12px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
 .pt-kinds{margin:16px 0 0}
@@ -57,10 +58,11 @@
 }
 /* The printout: the title, then the summary, then the list as entered.
    Only main's direct sections go (the note under the page); the summary is
-   a section too, nested deeper, and must stay. */
+   a section too, nested deeper, and must stay. The ask (.pb-after) goes
+   too: the printout is the reader's own list; the caveat above it stays. */
 @media print{
   body > :not(main){display:none!important}
-  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next{display:none!important}
+  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
   main .phead{padding:0 0 16px!important;margin:0!important}
   .pt-wrap{display:flex;flex-direction:column;gap:18px;padding:0}
   .pt-sum{order:-1;position:static}

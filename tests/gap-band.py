@@ -53,7 +53,7 @@ PROBE = r"""<script>
     var op=1, el=g; while(el&&el.nodeType===1){ op*=parseFloat(getComputedStyle(el).opacity); el=el.parentElement; }
     var texts=ns.map(function(n){return n.textContent;});
     var shown=ns.map(function(n){
-      var b=n.parentElement.getBoundingClientRect(), r=n.getBoundingClientRect();
+      var b=(n.closest('.pb-gap-bar,.pb-gap-short')||n.parentElement).getBoundingClientRect(), r=n.getBoundingClientRect();
       var inView=r.bottom>0&&r.top<innerHeight&&innerHeight>0;
       var inside=b.height>=1&&r.top<b.bottom&&r.bottom>b.top;   /* the bar clips the figure: overflow hidden */
       return op>0.02&&inView&&inside;

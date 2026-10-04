@@ -12,6 +12,20 @@ already giving first, or is held for you with a ready edit (the UNCLEAR rows
 and the edits after the table). No words were changed by a move; each ask
 keeps its reason line, "Free, 20 minutes, no obligation.", byte for byte.
 
+**Run 43 (4 October 2026):** Damian answered question 7 "yes". S1, T1 and
+D1 are applied as written below, and P1 as its cut (the three chat
+pictures keep their question and answer; the link and its reason are
+gone), commit `f9363a7` (STATUS, Run 43, item 1). Question 9's link
+stays, words unchanged (C1 is not applied), and moved after "Email me my
+results" under the results (Run 43, item 5). B1 is not applied
+(question 8, default). Question 13: no band added on my-pensions, and
+question 10: the threshold page's band and card kept (default); item 5
+adds one ask after each result, so my-pensions gains a booking link after
+its list and the threshold page ends with three asks (STATUS, Run 43). At
+main `6af9f77` the starter's hero lines were 2487-2488 and S1's anchor
+2582/2583, one line later than below. Every reason line quoted here now
+reads "Free · 20 minutes · no obligation · reschedule any time.".
+
 Line numbers are this branch's after item 1 (the home page) and after this
 item's two moves (the 404 page and the directors' rules page). Every other
 page's lines are unchanged from main.
@@ -82,6 +96,8 @@ measure the new block's spacing at 375 and 1440 before committing.
 
 ### S1. starter.html: the hero button after the first figures
 
+*Applied in Run 43 (`f9363a7`), now `starter.html:2603-2606`.*
+
 Take these two lines out of the hero's `.hero-cta` (`starter.html:2486-2487`),
 leaving "Try the calculator" there alone:
 
@@ -105,6 +121,8 @@ Build check 28 is unaffected (the phone marker stays where it is).
 
 ### T1. tracker.html: the hero button after the tick list
 
+*Applied in Run 43 (`f9363a7`), now `tracker.html:2332-2335`; both asks kept.*
+
 Take `tracker.html:2278-2279` ("Help me find my pensions" and its reason) out
 of the hero's `.hero-cta`, leaving "Try the calculator", and put them in a
 new `<div class="hero-cta" style="margin-top:22px">` after the `</div>` that
@@ -114,10 +132,14 @@ closes `#pbTrace` (2332), before `</div></section>` (2333).
 its reason (2341-2342) follow seven lines later, so the page would ask twice
 in a row. The alternatives: cut the hero button and its reason outright
 (item 5's T-1), so the band is the page's one ask after the tick list; or
-cut the band's button (T-7), which this run's rules do not allow, since the
-closing band stays; or keep the hero as it is.
+cut the band's button (T-7); or keep the hero as it is. (Corrected in Run
+43: the dark band is the mid-page "Worth knowing" callout, not the closing
+band, so this run's rule on closing bands did not forbid T-7; Run 43 kept
+both asks, the conservative default.)
 
 ### D1. director.html: the hero button after the relief ladder
+
+*Applied in Run 43 (`f9363a7`), now `director.html:2341-2344`.*
 
 Take `director.html:2272-2273` ("Book a call with Damian for free" and its
 reason) out of the hero's `.hero-cta`, leaving "Try the director
@@ -126,6 +148,8 @@ after the `</div>` that closes `.pb-lad` (2327), before `</div></section>`
 (2328).
 
 ### P1. The audience pages' chat pictures
+
+*Run 43: the cut applied on all three pages (`f9363a7`), how "yes" to "And their chat pictures?" was read.*
 
 Three choices, the same on each page: keep the picture as it is (the answer
 already precedes the link); move the link with the hero button (only if S1,
@@ -145,6 +169,8 @@ each of them:
 
 ### C1. broker-vs-autoenrolment.html: "Talk through what this means for you"
 
+*Not applied. Run 43 moved the link, words unchanged, to after "Before you rely on these rates" and the new "Email me my results" (item 5).*
+
 The page is built from parts: edit `tools/compare-parts/main.html`, then
 `python3 tools/pagebuild.py compare`, and the render-diff proof applies
 (a protected page). Either cut lines 71-72:
@@ -159,6 +185,8 @@ or move them to the end of `#pbMyCard`: after the note `<p class="pb-my-note">`
 Mode 1 only, so in Mode 2 the page's one ask is the closing band.
 
 ### B1. The phone booking bar: wait for the first figures
+
+*Not applied in Run 43 (question 8, default).*
 
 One line in `assets/js/pb-bookbar.js` (line 76) and a data attribute per page.
 

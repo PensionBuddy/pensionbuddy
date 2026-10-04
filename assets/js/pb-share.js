@@ -79,7 +79,7 @@
   }
   /* the one definition of what a link to these figures carries, for the
      saved report and the emails (assets/js/pb-report.js, the calculators'
-     "Email my results") */
+     "Email me my results", and assets/js/pb-after.js) */
   window.PBShare = { link: link };
   function fallback(text) {
     var t = document.createElement('textarea');

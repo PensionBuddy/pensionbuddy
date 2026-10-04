@@ -6,7 +6,7 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 
 ---
 
-# Launch status — as at 3 October 2026, after Runs 39, 40 and 41 went live (Run 42)
+# Launch status — as at 4 October 2026, after Run 42's merge (Run 43)
 
 Kept current at the top of this file. The runs below say how each item got
 here.
@@ -29,8 +29,9 @@ here.
 
 `python3 tools/sitemap.py` rewrites the sitemap from the pages themselves
 (held pages out, each lastmod the file's last commit); `verify.py` reports
-any drift as a site row. The seven lead forms post to Netlify Forms, with a
-pre-filled email as the fallback; `hello@pensionbuddy.ie` is a real inbox
+any drift as a site row. The lead forms post to Netlify Forms under eight
+names (since Run 43, `calculator-results` on six calculators, live once
+Run 43 is merged), with a pre-filled email as the fallback; `hello@pensionbuddy.ie` is a real inbox
 and in every footer.
 
 Since Run 35 (29 September 2026) the home page shows the six provider logos
@@ -63,7 +64,13 @@ Since 1 October 2026 (main `31cf29e`) Runs 39 and 40 are live, and since
 rubric, the subtraction audit, verify.py's screen-by-screen shots and
 tools/design-measure.py. Run 42 (the home page opening on the gap, red
 for money missing and amber for money back, booking asks after the give,
-the home cuts) is on `claude/pain-red`, not yet merged.
+the home cuts) was merged to main as `6af9f77` on 4 October 2026 and
+pushed. Run 43 follows it on `claude/give-then-ask`: the starter, tracker
+and director heroes give first, teal for the State alone, cuts that only
+repeated, small interactive figures, the reason to book beside every ask,
+and under each calculator's results what it doesn't show, "Email me my
+results" and one booking link; merged once its docs commit passes the
+gate.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
@@ -82,11 +89,17 @@ and `404.html`. `about.html` does not exist: it was folded into
 1. **Netlify (R27-1).** In the site's Forms settings, turn form detection on
    before the deploy, then set a notification for each form: `booking`,
    `pension-calculator-results`, `director-calculator-results`,
-   `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`.
+   `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`,
+   and since Run 43 `calculator-results`, one name for "Email me my
+   results" on six calculators: set its notification before or on the
+   deploy that carries it, then send one test request from a calculator
+   on the deploy preview and see it arrive under `calculator-results`.
    Without detection every form falls back to email.
 2. **The Privacy Notice's missing sentences.** R20-A2, the optional
    emails: the placeholder is back on `privacy.html` (Run 31), because
-   the tick box is live on every form, so visitors read "[Wording to be
+   the tick box is live on every form but the six `calculator-results`
+   forms (Run 43 leaves it out until pack 3.2 is approved), so visitors
+   read "[Wording to be
    confirmed: ...]" there until compliance approves the sentence (pack
    3.2). R27-GTM, Tag Manager's tools and cookies: a draft (Run 30's
    "Drafts") until you say the tags are live. R20-1b, the finder: off,
@@ -97,7 +110,11 @@ and `404.html`. `about.html` does not exist: it was folded into
    30), not deleted. The six figures, and which fund ranges Gresham can
    arrange; then delete `hidden` on `#riskCard` and `li#riskAssume` in
    `tools/compare-parts/main.html` and run `python3 tools/pagebuild.py
-   compare`.
+   compare`. Since Run 43 that alone fails the build: the card's "Talk
+   the choice through with Damian" would be a booking link in the results
+   before the "Email me my results" block, and build check 49 exempts the
+   card only while it carries `hidden` (`tests/build.test.py:2543`; plan
+   risk 6). Move the link after that block, cut it, or change check 49.
 4. **Compliance.** Send the pack (`docs/COMPLIANCE-PACK.md`, covering email
    drafted in `docs/COMPLIANCE-EMAIL.md`); the three held pages come back
    as it signs each off. Its open questions include 1.14 to 1.18 (the review
@@ -140,10 +157,15 @@ and `404.html`. `about.html` does not exist: it was folded into
    loaded, so they are not in Inter (a one-line CSS fix, `svg text`); and
    the comparison's share row (link, print, email) sits in the first mode
    only, so "On top of auto-enrolment" has none.
-11. **Run 42** (on `claude/pain-red`): 24 numbered questions (22 open;
-   15 and 17 answered in the build) on the home page's new opening, the
-   colours, the moved asks and the lists of cuts; Run 42's "Needs Damian",
-   below.
+11. **Run 42** (merged as `6af9f77`): Damian answered 2, 7, 14 (i), 18
+   and 19 and confirmed 17 on 4 October 2026; every other question took its most
+   conservative option (Run 42, "Decisions, 4 October 2026", below).
+12. **Run 43** (on `claude/give-then-ask`): the Calendly setting behind
+   "reschedule any time"; the Netlify notification for
+   `calculator-results` and replying to each request; how "yes" to
+   question 7's chat pictures was read; my-pensions without an email
+   offer; the asks near the closing bands; the booking page's "Last step";
+   Run 43's "Needs Damian", below.
 
 ## Parked, with a date or a trigger
 
@@ -311,7 +333,923 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
-# Run 42 — 2026-10-03 · The home page opens on the gap; red for pain, amber for money back; give before ask; cuts (on `claude/pain-red`)
+# Run 43 — 2026-10-04 · Give, then ask: the audience heroes, teal for the State alone, cuts that only repeated, the S proposals, and the asks after each result (on `claude/give-then-ask`)
+
+Damian's brief, 4 October 2026: build it with agents on a new branch off
+main, `claude/give-then-ask`; gate each item, merge, push main; record his
+decisions on Run 42's questions in STATUS ("What's changed?" position OK;
+Q2 keep; Q7 yes; Q14 non-State teal to neutral slate, teal for the State
+only; Q18 keep the cut; Q19 accept), take the most conservative option on
+every other open question and list them for him. Five items: (1) Q7: the
+starter, tracker and director heroes put their booking button below the
+first figure; (2) Q14: a slate token, AA contrast, a colours-only
+render-diff; (3) apply every cut in `docs/CUT-LIST-42.md` that only
+removes repetition and list the rest; (4) build the S-effort items of
+`docs/INTERACTIVE-PROPOSALS-42.md`, under the same motion rules; (5) sales
+tactics, compliant (no fake urgency, no pressure, the "no" always
+visible): (a) after every calculator result, one line and a booking link;
+(b) under each result, "What this doesn't show: your old pensions, your
+tax position, your employer's scheme."; (c) on the booking page, "You've
+seen your number. Last step: 20 minutes with Damian."; (d) beside every
+ask, "Free · 20 minutes · no obligation · reschedule any time."; (e)
+"Email me my results" offered before the booking ask on each calculator.
+New copy to the compliance pack; screenshots at 375 and 1440; Lighthouse
+before and after; report the hash. Planned, built and reviewed by Claude
+agents, each commit reviewed before it was made.
+
+| # | Item | State | Commit |
+|---|---|---|---|
+| 1 | The starter, tracker and director heroes give first: the booking button follows the first figure (tracker: its tick list); the three chat pictures lose their booking link (Q7) | done | f9363a7 |
+| 2 | Teal is what the State pays: one slate token for everything else in a chart, a bar or a figure, and neutral marks for the reader's own place on a scale; a colours-only render-diff (Q14) | done | a613784 |
+| 3 | Nine edits that only removed repetition, from `docs/CUT-LIST-42.md`; the rest listed | done | e53afba |
+| 4a | Interactive proposals 7, 2, 4 and 1: my-pensions' charges figure in red; the threshold page's two bars; the charges chart's red area | done | bcdea74 |
+| 4b | Interactive proposals 3 and 14, the home page: the hero figures say where they come from; a "Your age" slider on the phone timeline | done | ad48b21 |
+| 4c | Interactive proposals 6, 15 and 9: "Your age" sliders on four relief ladders (two of them new, on two guides); the starter's auto-enrolment phases, with their caveat | done | b801ad0 |
+| 5a | 5d, part 1: the reason line, in Damian's words, everywhere a reason line stood | done | adc7db4 |
+| 5b | 5d, part 2: the reason line beside every ask that had none (the 13 closing bands, the home chat picture, Jargon Battle, the saved report) | done | 09d4c71 |
+| 5c | 5a, 5b, 5c and 5e: under each calculator's results, what it doesn't show, "Email me my results", one booking link; the booking page's line; the Privacy Notice's calculator sentence | done | d369306 |
+| 6 | This entry, Run 42's decisions, the compliance pack (1.24, B.22 to B.24 and the edits), the three Run 42 lists marked, the sitemap | done | this commit |
+
+Main was `6af9f77` (Run 42's merge) when the branch began and has not
+moved. The merge to main follows this commit's gate.
+
+**Two of Damian's sentences ship as he wrote them, where the plan had
+proposed other words** (the plan's words are recorded as alternatives for
+compliance, pack 1.24 (a) and (b)):
+- the reason line, "Free · 20 minutes · no obligation · reschedule any
+  time." The plan proposed "Free · 20 minutes · no obligation · reschedule
+  from your confirmation email.", the words of the booking confirmation
+  page ("Need to change or cancel the time? The links are in your Calendly
+  confirmation email.", `thank-you.html:2094`). "Any time" is true only if
+  the Calendly event `pensionbuddy-1-1` lets every booking be moved with no
+  minimum notice; nobody has checked that (Needs Damian 1);
+- the booking page's line, "You’ve seen your number. Last step: 20 minutes
+  with Damian." The plan proposed "You’ve seen your figures. Next step: 20
+  minutes with Damian.". The reviewer's note: "Last step" sits directly
+  above the heading "You've been meaning to sort the pension. Twenty
+  minutes with Damian starts it." (`booking.html:2035`) and above the
+  page's own "a clear sense of your next step" (`:2041`), so the line
+  contradicts both, and "20 minutes with Damian" is said twice in a row
+  (Needs Damian 6).
+
+## Item 1, the audience heroes give first (Q7)
+
+- **Moved, words unchanged** (each into a new `<div class="hero-cta"
+  style="margin-top:22px">`, with its arrow and its reason line; the
+  reason's words became Damian's in item 5d):
+  - **starter.html:** "Help me get started" and its reason, from the
+    hero (main `starter.html:2487-2488`) to after the chart "The same
+    monthly amount, started at 30, 40 and 50.", its two warnings and its
+    note "Illustration only · the value of investments can fall as well as
+    rise. …", before "If you wait." (`starter.html:2603-2606`). The hero
+    keeps "Try the calculator".
+  - **tracker.html:** "Help me find my pensions" and its reason, from the
+    hero (main 2278-2279) to after the tick list "Tick these off as you go"
+    (`#pbTrace`) and its badges strip (`tracker.html:2332-2335`). The page
+    gives no figure, so the tick list is its first give (plan 0.3, item
+    2). The "Worth knowing" band's "Start finding mine" follows with its
+    own reason (2344-2345): both kept (question 7's rest, default).
+  - **director.html:** "Book a call with Damian for free" and its reason,
+    from the hero (main 2272-2273) to after the €1,000 example ("€1,000 of
+    profit taken as salary is about €477 in your pocket, …") and the
+    ladder "The personal limit: the share of salary that gets tax relief,
+    by age." with its note (`director.html:2341-2344`). The hero keeps
+    "Try the director calculator".
+- **Cut (P1), how "yes" to "And their chat pictures?" was read:** from
+  each of the three chat pictures, the link "Book a call with Damian for
+  free" and its reason line "Free, 20 minutes, no obligation.". Main
+  lines: starter 2502-2503, tracker 2293-2294, director 2287-2288. Each
+  picture keeps its avatar, the question and Buddy's answer:
+  - starter: "Have I left it too late to start?" / "Almost certainly not.
+    Earlier gives money more time to grow, but starting now beats waiting
+    longer, and tax relief is there at any age." (`starter.html:2522-2523`);
+  - tracker: "I don’t have any of the paperwork, is that a problem?" /
+    "Not at all. Roughly when you worked somewhere, and who for, is usually
+    enough to start tracing a pension." (`tracker.html:2293-2294`);
+  - director: "How much can my company actually contribute?" / "Often a
+    lot more than you’d expect. Company contributions are based on your
+    salary, service and existing funding, not the salary-percentage caps
+    that limit personal contributions." (`director.html:2299-2300`).
+  "Yes" could not mean "keep"; moving the links would have put two
+  identical asks side by side after the first figure; the cut removes
+  asks, so it carries the least compliance risk, and every hero is now
+  ask-free on every phone. Each page has one booking link fewer (after
+  item 1: starter and director 2 in `main`, tracker 3). The home page's chat picture is
+  untouched (question 2). Revert: Needs Damian 3.
+- **First screens, measured in Chrome** (booking links in `main`; the nav
+  button is exempt):
+
+| Page | 375 x 812 | 412 x 915 | 1440 x 900 |
+|---|---|---|---|
+| starter, main → branch | "Help me get started" at y 515 → none | y 515 → none | y 567 → none |
+| tracker, main → branch | "Help me find my pensions" at y 513 → none | y 513 → none | y 565 → none |
+| director, main → branch | "Book a call with Damian for free" at y 673 → none | y 637 → none | y 813 → none |
+
+  Hero heights, 375 / 1440: starter 909 → 762 / 1001 → 908px; tracker 907
+  → 760 / 999 → 906px; director 1128 → 981 / 1308 → 1215px. The moved
+  buttons sit at page y 5407 / 5346 / 4847 (starter, at 375 / 412 /
+  1440), 3356 / 3356 / 2665 (tracker) and 2546 / 2418 / 2273 (director).
+- **The phone bar** (`pb-bookbar.js`, unchanged, question 8) rises earlier
+  because the heroes are shorter: at 375 x 812, starter 1025 → 900px,
+  tracker 1025 → 875, director 1250 → 1100 (412 x 915: the same, director
+  1200 → 1050). It now shares screens with the moved buttons (at 375:
+  starter about 4600-5475, tracker 2550-3425, director 1750-2600), so two
+  booking asks with their reasons can be on one phone screen.
+- **Build check 46** (`tests/build.test.py:2319`): each hero has no booking
+  link and keeps its ghost button and its chat picture's question and
+  answer; the moved block (button, arrow, `pagebuild.REASON`) stands once,
+  after the first figures, directly before the expected next section.
+  Four mutants caught, among them the chat picture's link put back on
+  tracker. Build 436 → 441.
+- The six protected calculators, their part folders and `assets/js`:
+  byte-identical.
+
+## Item 2, teal for the State alone (Q14)
+
+- **The token:** `--slate:#586B85`, a blue-grey (hue 215°, saturation
+  0.20, lightness 0.43; `tools/design-measure.py` counts it as a neutral),
+  after `--red` in the first `:root` of the 19 hand-written pages and both
+  games; the ten built pages take it from the skeleton.
+- **Contrast** (WCAG relative luminance, computed):
+
+| Pair | Ratio |
+|---|---|
+| Slate on white / white on slate | 5.45 / 5.45 |
+| Slate on `--bg` / on `--surface-2` / on the hero wash / on `--amber-soft` | 5.21 / 4.98 / 5.00 / 4.77 |
+| Slate on `--teal-50` | 4.90 against the token #E8F6F3 (the rubric's figure); 5.06 against #E6FBF7, the later `:root` value the entitlement page renders |
+| Slate against `--ink` | 3.14 |
+| Never the only cue: slate against `--red` / `--ink-3` (#5D6C67; 1.08 against the first root's #647270) / `--ink-2` | 1.32 / 1.01 / 1.16 |
+| The neutral chips: ink on `--surface-2`, with a `--line-2` border | 15.65 |
+| The readiness scale's "On the way": slate at .5 on white | about 2.1 (it was about 1.2 in teal-100; named in words) |
+
+  Where slate meets red, ink-3 or ink-2, a key, a dash, a pattern, a white
+  edge or a label carries the difference (the rubric's `--slate` row).
+- **What moved off teal, aqua or mint** (colours only):
+  - home: the way-of-life figures (`.pb-life-n`) and the month's category
+    bars (`.pb-life-rows i`); the "through life" card's age, ruler fill and
+    marker (`.pb-tl-age`, `.pb-tl-fill`, `.pb-tl-mark`); the timeline's
+    active dot, fill and ring;
+  - starter: the pot bars (`.pb-sa-fill`) in the three time charts;
+  - every page's stat figure (`.pb-stat-n`), which shows only on
+    director.html: "57%" and "68%";
+  - pension calculator (and the ten built pages through the skeleton):
+    the key dot of "Your plan", the growth chart's line #0B7A6E and its
+    shading (by two CSS rules over the script-drawn SVG; the script still
+    draws #0B7A6E, build check 47 pins it), and the "Add just €100 a
+    month…" card (light grey, dark text);
+  - director calculator: "Into your pension" (`.vs-pension`, `.vt`,
+    `.amt`) and the same two chart rules;
+  - the comparison: "Personal pension" and "Your top-up" (`.vs-pension`),
+    the two lanes of "Side by side" and of "Everything paid in, by 66",
+    the scale's end mark, and the "Your year" chip;
+  - the charges calculator: the other plan's line and its key;
+  - my-pensions: the bars;
+  - readiness check (held): "On the way" (slate at .5) and "In good shape";
+  - the jargon buster's risk tiles: 1 and 2 light grey, 3 and 4 a darker
+    grey, 5 to 7 slate with white digits;
+  - the reader's own place on a scale, to ink on light grey or a slate
+    mark: the "You" chip on every relief ladder (`.pb-lad-you`); the picked
+    year on the threshold page's strip (`.sft-on`); on the entitlement
+    check, the "Your average" chip (`.yal-you`), the transition glide's
+    "Your year" dot (`.pb-glide-you`, slate, white text) and its bar's
+    edge.
+- **What stayed teal:** the State's: the home gap chart's State bar, the
+  starter's State bar and figure, the reality check's bars and jar, the
+  entitlement check's State marks and the glide's own bars. Amber stays the
+  State's top-up into auto-enrolment. The accent stays: buttons, links,
+  slider tracks and values, eyebrows, the dark band, mint, card hovers
+  (`.pb-tl-step:hover` included), the pressed state of a button.
+- **Colours only, proved** against `BASELINE_REF=f9363a7` (item 1):
+  `tests/render-diff/classify-pain-red.py`, with a new `--touched` option
+  naming the eleven pages the change paints at load (index, starter,
+  director, glossary, the pension and director calculators, the
+  comparison, charges, readiness, threshold, entitlement): PASS at 375 and
+  1440, "every difference is paint, in the site's own colours"; 62
+  page-widths, 282 frames, 17,784 elements, 203 differing in colour, 44
+  distinct (property, old, new). Per width: pension calculator 13,
+  director calculator 5, comparison 20, entitlement 20, director.html 8,
+  glossary 13, starter 13, home 3 at 375 and 6 at 1440, charges 2,
+  readiness 2, threshold 1; every other page 0 (the `:root` token only).
+  New colours: slate rgb(88,107,133), surface-2 rgb(244,245,243), line-2
+  rgb(216,223,220) and ink rgb(11,31,28) only; opacity 1 → 0.12 (the
+  growth-chart shading) and 1 → 0.5 (readiness). The self-test: FAIL
+  text, FAIL geometry, FAIL hidden, PASS colour-only. `browser-diff.py`: 0
+  differing on all six calculators (pension 1,008 cells, director 348,
+  comparison 6,832, reality 198, entitlement 902, PIA 1,248). No script
+  changed. `verify.py`: 0 FAIL, contrast included. my-pensions' bars draw
+  only after input, so a Chrome probe checked them, the home life bars,
+  the timeline and its active dot, both growth charts and the
+  entitlement glide (at load on 2028, and on 2031 after the birth slider
+  moves to 1965).
+- **Build check 47** (`tests/build.test.py:2390`): none of the selectors
+  above may be teal again (a teal, aqua or mint token, or one of their raw
+  hex values; grouped rules caught); the skeleton carries `--slate:#586B85`;
+  the growth-chart scripts still draw #0B7A6E. Three mutants. Build 445.
+- **Docs:** `docs/DESIGN-RUBRIC.md` (three chart colours with one meaning
+  each, the new `--slate` row, the accent rule, "for a figure or its label
+  only"), `CONTEXT.md` ("What the State pays"), `tests/render-diff/README.md`.
+- **Deviations from the plan**, each a fix a reviewer asked for: the
+  entitlement check's "Your average" chip and the glide's "Your year" dot,
+  missed by the plan, are neutral too; the timeline's active dot has a
+  slate ring as well as a slate fill; check 47's matcher is stricter. The
+  classifier's counts are higher than the prototype's (it counts the
+  descendants that inherit a colour).
+- **Gate:** the implementer's last gate did not finish; the reviewer's
+  re-run (`gate43-C2-rev`) and the orchestrator's (`gate43-C2-final`)
+  passed: no new FAIL, no crash.
+
+## Item 3, cuts that only repeated
+
+Nine edits, words removed only; nothing added or reworded; no colour
+changed. Each was checked against the page before it was cut.
+
+1. **S-8, starter.html, "Already being auto-enrolled?":** "My Future Fund
+   is the auto-enrolment scheme. The comparison tool shows both, side by
+   side, for your salary and age." The page's Related pages card
+   "Auto-enrolment comparison" says it word for word
+   (`starter.html:2847`). "Compare the two side by side" stays.
+2. **T-6, tracker.html, under the tick list:** "Know roughly what some are
+   worth already? List them in one view, with the total and what the
+   charges come to." The Related pages card "All your pensions in one
+   view" says it.
+3. **D-9, director.html, "The coverage gap":** the button "Try the
+   director calculator". The hero keeps the same button, and "Open the
+   director calculator" follows two sections later (`director.html:2382`).
+4. **D-8, sentence 2 only, the same band:** "Company funding is not capped
+   by the salary percentages that limit everyone else." It stands word for
+   word in the ladder's note one section above (`director.html:2339`).
+   Sentence 1, the 57% and 68% and their source (Central Statistics
+   Office (CSO), Pension Coverage, Quarter 3 2025) stay.
+5. **B-2, booking.html:** the card "20 minutes, that's it" / "A short,
+   no-strings chat about your pension." The heading, the line under it
+   ("Twenty minutes with Damian, by phone or video, at a time you choose.
+   Free, with no obligation.") and "The house promise" say it. "Phone or
+   video" / "Pick whichever you prefer when you book." stays.
+6. **Y-2 and Y-3, thank-you.html:** the cards "20 minutes, that’s it" / "A
+   short, no-strings chat about your pension." and "Phone or video" /
+   "Whichever you picked when you booked.". The line under the heading
+   ("Twenty minutes with Damian, by phone or video, at the time you chose.
+   Free, with no obligation.") and the step "Damian gets in touch" ("Phone
+   or video, whichever you picked when you booked.") say them.
+7. **R-3, director-pension-rules.html** (`tools/director-rules-parts/`):
+   "The Standard Fund Threshold check shows how much of it your pensions
+   would use in a given year." Its Related pages card says it; the
+   threshold and €500,000 facts before it stay. One focusable link fewer,
+   so floating-chrome's baseline line relabels (59) → (58).
+8. **C-2, old-pension-checklist.html:** "Once you know what you have, the
+   pension charges calculator shows what its charges could take by
+   retirement." Its Related pages card says it. The paragraph now reads
+   "We can do the asking for you: see how we help you find old pensions.
+   Or book a free call with Damian."
+9. **M1, my-pensions.html** (`tools/pots-parts/`): "What could the charges
+   cost by retirement? The charges calculator." Its Related pages card
+   says it.
+
+No fact, figure, source, caveat, warning, consent or privacy line, reason
+line, FAQ answer or JSON-LD left any page. Diff: 10 files, 4 insertions,
+25 deletions. **Not cut, by the conservative rule:** the home FAQ "Is the
+first chat really free?" (D7: its answer holds facts, and SUBTRACTION-AUDIT
+question 6 is open); O-2 (Pensions after 50) and Z-2 (the year-end
+checklist), each of which would leave a bare ask; D-8's first sentence
+(the claim the figures support, said nowhere else). Every other row stays
+listed in `docs/CUT-LIST-42.md` with the reason it was not cut (a reason
+line, a chat picture, an FAQ answer, a guard such as check 31 or 38, a
+caveat, a sentence a script writes, or a rewrite needed); this commit
+marks the list. `tracker.html:333-334`, the two `.pb-trace-more` rules,
+now match nothing (left; harmless).
+
+## Item 4, the S proposals
+
+Built: ranks 1, 2, 3, 4, 6, 7, 9, 14 and 15 (1, 2, 3, 4, 9 and 14
+adapted). Not built: rank 13 (waits for Budget day, 6 October, and
+`docs/PIA-BUDGET-DAY.md`) and rank 16 (question 19 accepted). Every new
+moving part follows the motion rules: a figure changes only because the
+reader moved a control; the markup carries the finished default; no
+transition, reveal or easing on any new part; nothing stored.
+
+**4a (bcdea74): ranks 7, 2, 4 and 1.**
+- **Rank 7, my-pensions:** the euro figure in "The annual charges you know
+  of come to about €[x] a year…" is bold red (charges taken from a pot).
+  No words changed.
+- **Rank 2 (adapted), the threshold page, "The threshold, year by
+  year":** a bar, hidden from screen readers, whose key repeats the page's
+  figures: "Your pensions €1,650,000", "The threshold for 2026
+  €2,200,000" (from 2030: "The threshold for 2030 or later", "At least
+  €2,800,000"), and when over, "€550,000 over" (from 2030: "Up to €200,000
+  over"). Your pensions solid slate; the part over the threshold hatched
+  slate, not red (the excess is not money missing; its tax is in "Over the
+  threshold"); the threshold a 2px ink mark.
+- **Rank 4 (adapted), "Tax on the lump sum":** a bar after the table's
+  qualifier, hidden from screen readers, keyed "Tax-free €200,000", "In
+  the 20% band €200,000" and, above €500,000, "Taxed as income €[x]".
+  Slate in three patterns (an outline, a hatch, solid) with 3px gaps; no
+  red (the table's "Tax at 20%" stays red).
+- **Rank 1 (adapted), the charges chart:** one solid red area between the
+  no-charge line and your plan's line; the other plan's slate line gets a
+  white edge where it crosses the red (slate on red is 1.32:1); the key
+  gains "What your plan’s charges take"; the chart's spoken label gains
+  "The red area is what your plan’s charges take: €58,754 by retirement."
+  when the cost is €0.50 or more. No right-edge labels.
+- **Proof:** the six protected pages byte-identical. New
+  `tests/interactive-43.test.py` (the gap-band pattern: a probe first in
+  `<head>`, a layout-shift observer, POSTed records): 9 scenarios, 167
+  checks, ALL PASS; six hand-run mutants each caught. `pagebuild.py` gains
+  three marker checks (build total unchanged at 445). The chart keeps its
+  height (222.3px at 1440, 170.8px at 500); the lump-sum bar's parts 2:3:5
+  at a €1,000,000 lump; no layout shift from a new part.
+- **Deviations:** the plan's F8 ("under 140px tall at 500") cannot hold
+  (the chart's fixed viewBox gives 170.8px on main too); the test holds
+  the plot (133.9px) and the chart's ratio instead. The layout-shift check
+  counts only shifts before the probe acts (synthetic input does not set
+  `hadRecentInput`); every shift is still recorded.
+
+**4b (ad48b21): ranks 3 and 14, the home page.**
+- **Rank 3 (adapted), the hero chart:** with JavaScript, its three figures
+  become toggle buttons, named "€40,860 What people expect to need",
+  "€25,296 a year short" and "€15,564 What the State Pension pays", each
+  covering its own bar (the whole bar is the tap target, the words "a year
+  short" included); `#pbGap` becomes a labelled group; a dotted underline,
+  solid while pressed. A press writes one line **after** the caveat "These
+  are survey averages…" ("Royal London Ireland, 2026." stays): "€40,860 a
+  year is the survey average for what people expect to need (Royal London
+  Ireland, 2026)."; "€[x] a year is your own figure, set with the slider
+  above."; "€[x] a year is the Pensions Council’s [Modest | Moderate |
+  Comfortable] standard of living [for one person | for a couple], at 2024
+  prices."; "€15,564 a year is the State Pension (Contributory) at the
+  maximum personal rate: €299.30 a week from January 2026, 52 weekly
+  payments. Rates change, usually at each Budget." (a couple: "€31,127 a
+  year is two State Pensions (Contributory), each at the maximum personal
+  rate: …"); "€25,296 a year is €40,860 less €15,564."
+  (`index.html:3167-3172`).
+  The rate comes from `PBStatePension.MAX_WEEKLY_CENTS`, €299.30 as the
+  fallback. A press changes no figure and moves nothing; the line is
+  polite to a screen reader only after a press. Without JavaScript the
+  chart is as it was.
+- **Rank 14 (adapted), "What changes, and when.", below 921px only:** a
+  "Your age" slider (18 to 75, default 40) and a line, "25% From 40",
+  that picks the **relief** step only (18, 30, 40, 50, 55, 60): at 62 it
+  reads "40% From 60", never the ARF's "4%". Its spoken value: "62: 40%,
+  From 60". The picked step turns light grey with a slate dot and ring;
+  no step moves.
+- **Proof:** rects of the figures, bars, gap block, source and caveat
+  identical to bcdea74 at 1440, 500 and 375; only `#through-life` grows
+  (+142.64px at narrow widths). `interactive-43`: 15 scenarios, 278
+  checks; ten mutants caught. `tests/gap-band.py` measures the clipping
+  bar from `closest('.pb-gap-bar,.pb-gap-short')` (the figure now sits in
+  a button); 11 scenarios pass. Floating-chrome's index line relabels
+  (86) → (90): three hero buttons and the slider.
+- **Deviations** (reviewers'): the picked step's ring is slate too; the
+  empty line sits at zero height, so its live region exists before its
+  first words; the buttons cover their bars; the caption "a year short"
+  lets taps through to its button.
+
+**4c (b801ad0): ranks 6, 15 and 9.**
+- **Ranks 6 and 15:** a "Your age" slider over the relief ladders on
+  starter (default 30) and director (48), and two new ladders with sliders
+  on the guides: pensions-over-50 (default 50; caption "Revenue's limit on
+  the contributions that get tax relief, as a share of earnings.", note
+  "Earnings count up to €115,000.", after "Catching up"'s bands paragraph)
+  and self-employed-pensions (default 40; caption "Revenue's limit on the
+  contributions that get tax relief, as a share of net relevant
+  earnings.", note "Net relevant earnings count up to €115,000.", after
+  "Tax relief", before "The October deadline"); six rows each, "Under 30
+  15%" to "60 and over 40%", as on starter. The slider moves the "You"
+  chip; its spoken value reads "30, 20%". The control is drawn only with
+  script.
+- **Rank 9 (adapted), starter, "Already being auto-enrolled?":** four
+  buttons, "2026 to 2028", "2029 to 2031", "2032 to 2034", "2035 onward"
+  (spoken "Auto-enrolment rates, by years"), each showing that phase's
+  contributions at the reader's salary, at the rates the page and the
+  comparison state; and, always shown, the comparison's reviewed caveat
+  shortened by one clause (`starter.html:2736`; the comparison's
+  `broker-vs-autoenrolment.html:2910` goes on "…the later phase rates and
+  years, and the position that the scheme does not currently accept
+  contributions above its set rate."): "Checked against gov.ie on 10 September 2026: the
+  2026 contribution rates, and that all three contributions stop at
+  €80,000 of salary. Still taken from third-party summaries rather than
+  the primary text: the later phase rates and years. Confirm those against
+  gov.ie or the National Automatic Enrolment Retirement Savings Authority
+  (NAERSA) before relying on them. Rates and rules can change." The
+  pressed button uses the control accent (teal-700 on teal-50), not data.
+  The default phase follows the clock.
+- **Proof**, against `BASELINE_REF=ad48b21`: `load.js` the same writes in
+  the same order on all six protected pages; `sequences.js all 400 40` 6 x
+  16,000 events, 0 differing; `browser-diff.py` 0 differing (the new
+  `pb-ladder.js` really loaded on the pension calculator and the
+  comparison). `interactive-43`: 24 scenarios, 404 checks; twelve mutants
+  caught. No row moves when the "You" chip changes row.
+- **Deviations:** an extra rule (`margin:-2px` on the chip, age-only
+  ladders) stops every row below the chip moving 1.45px; the calculators'
+  ladders keep that pre-existing reflow. Inserting the caveat moved the
+  starter's auto-enrolment jargon chip into it, splitting the authority's
+  name; the caveat carries `pb-noterms` and `assets/js/pb-jargon-chips.js`'s
+  SKIP gains `.pb-noterms`, so the chips are where they were.
+
+## Item 5, the asks after each result
+
+**5d, the reason line (adc7db4, 09d4c71).**
+- **Cut:** "Free, 20 minutes, no obligation." **Added, in Damian's
+  words:** "Free · 20 minutes · no obligation · reschedule any time." (a
+  middle dot, U+00B7, a space either side; written `\u00b7` in the three
+  scripts, which stay ASCII). One string, `pagebuild.REASON`
+  (`tools/pagebuild.py:152`).
+- **Swapped where it stood (22 places: 20 in pages and the game, and the two scripts):** the comparison (twice: the
+  results link and the hidden `#riskCard`), the directors' rules, the
+  held finder and readiness check, the threshold page's "Next step" card,
+  the pension and director calculators' "Talk it through, free", home
+  "Get my free review", the three moved audience buttons, tracker's
+  "Start finding mine", the five guides, the 404 page, Buddy's Run, the
+  phone bar and the Ask Buddy panel. Twelve more pages changed only in
+  their scripts' `?v=` stamps.
+- **Added where there was none:** under the button of the 13 closing
+  bands (five dark: home, starter, tracker, director, glossary; eight
+  calculator and tool bands); under the home chat picture's link (Buddy's
+  line above it stays); at the end of Jargon Battle (one new rule in the
+  game's own CSS); on the saved or printed report, after "Talk them
+  through with Damian in a free 20-minute call: …/booking.html". The
+  TRUST CSS recipe stays byte-identical on all 29 root pages
+  (`trust_drift {}`).
+- **Not beside, by name** (plan 0.3 item 8, Run 26's judgement): the nav's
+  "Book a call with Damian for free" and the footer's "Book a call" (site
+  furniture); the booking page itself, where every ask leads ("Free, with
+  no obligation." is its own sub-line); the inline "booking page" links on
+  Privacy, Terms and Complaints; "book a free call" inside the email
+  forms' error and fallback messages.
+- **Where it stands now:** 39 times on 23 root pages, once in each game,
+  and in three scripts (the phone bar, the Ask Buddy panel, the report).
+- **Measured** (Chrome, CSS px): the phone bar 100 → 122px at 375 x 812
+  and 152 → 174px at 320 x 568 (the line wraps to two lines, "time." alone
+  on the second at 375); no sideways scroll. Dark bands +58px at 320 and
+  375, +34px at 1440, the line 10px under the button; calculator bands
+  keep their height at 1440 (pension calculator 265 → 265), +60px at 375
+  and +84px at 320, the line 12px under the button (10 at 1440). Home
+  `#call` picture 43px taller. Jargon Battle's panel scrolls inside the
+  glossary's frame at 1440 and 768; nothing clipped.
+- **Build check 48** (`tests/build.test.py:2459`): every booking link in a
+  root page's own content has `pagebuild.REASON` after it, before the next
+  booking link and within 700 characters; the nav, footer and scripts
+  aside; booking.html and "booking page" links exempt. Two mutants. Build
+  448. The check reads root pages only: the games' and the report's lines
+  have no test of their own.
+- **Proof:** new `tests/render-diff/classify-give-then-ask.py`. `--reason`
+  (`BASELINE_REF=b801ad0`): every differing cell is the old cell with the
+  line swapped, PASS on all six (pension 32 of 1,008 cells over 16 frames,
+  director 12 of 348, comparison 183 of 6,832, reality 6 of 198,
+  entitlement 11 of 902, PIA 16 of 1,248). `--bands`
+  (`BASELINE_REF=adc7db4`): only `#main` differs, in every frame, by the
+  line inserted once after the band's button; PASS on all six. Its
+  self-test judges 11 cases.
+
+**5a, 5b and 5e: under each calculator's results (d369306).** In this
+order, as the last thing in the results column and before the closing
+band: what it doesn't show (`#pbAfterNot`, a caveat, 16px); the offer to
+email the results; then `#pbAfter`: "Want to go through this with
+Damian?", one booking link, and the reason line. It is the only booking
+link in the results.
+
+| Page | "What this doesn’t show: …" | The email offer | The link |
+|---|---|---|---|
+| pension-calculator | "product charges, inflation, the tax on your income when you draw it." | its own form, button now "Email me my results" | "Talk it through, free" (moved from "The cost of waiting") |
+| director-calculator | "your company’s exact funding limit, product charges, inflation." | its own form, button now "Email me my results" | "Talk it through, free" (moved from "The cost of waiting") |
+| broker-vs-autoenrolment, after "Before you rely on these rates" | "your old pensions, product charges, your employer’s own scheme." | new (calculator-results) | "Talk through what this means for you" (moved from "In one sentence") |
+| pension-fees-calculator | "policy, set-up and exit charges, the terms an older plan may carry, your tax relief." | new | "Talk it through, free" |
+| state-pension-reality-check | "your old pensions, your tax position, your employer’s scheme." (Damian's words) | new | "Talk it through, free" |
+| state-pension-entitlement | "your old pensions, your tax position, your employer’s scheme." (Damian's words) | new | "Talk it through, free" |
+| standard-fund-threshold | "what your pensions are worth, your tax position, a Personal Fund Threshold you may hold." | new | "Talk it through, free" |
+| pia | "your old pensions, fees and charges, your employer’s scheme." | new | "Talk it through, free" |
+| my-pensions, after "Print or save this list" | "what your pensions could grow to, your tax position, the terms each one carries." | none (below) | "Talk it through, free" |
+
+- **The loop lines:** Damian's sentence word for word where it is true for
+  every reader, the two State Pension pages. Elsewhere an item that would
+  not be true for every reader is swapped for one the page's own
+  assumptions state, so each page names only what it says it leaves out
+  ("not adjusted for inflation and ignore product charges"; "This tool
+  does not perform that calculation."; "None of these is included"; "does
+  not value your pensions, does not know your tax position"; "Fees and
+  charges are left out of all three"; "Nothing here is a projection"), in
+  Damian's form.
+- **The new email offer, six pages** (one Netlify form name,
+  `calculator-results`, the same fields in the same order: form-name,
+  results, inputs, link, page, bot-field, email): "Want these figures
+  emailed to you?", "Damian sends them himself, so they will not arrive
+  straight away.", the field "Your email", "Email me my results", "Please
+  enter a valid email address.", "We use your email to reply to this
+  request, and for nothing else. See our Privacy Notice. This is
+  information, not advice.", and "Thanks - we've got it. Damian will be in
+  touch personally.". No opt-in box: the Privacy Notice's sentence on the
+  occasional emails is still a placeholder (pack 3.2). Sent through
+  `PBForms`; if Netlify refuses, the reader's email app opens addressed to
+  `hello@pensionbuddy.ie`, subject "Results request", body "Please send me
+  my results." then "My email:", "Results:", "Figures used:", "Open these
+  figures again:" and "From:", and the page says "Your email app should
+  have opened with the figures ready to send to Damian." Netlify stores the
+  request and emails the reader nothing; the figures reach the reader only
+  if Damian sends them (Needs Damian 2). The pension and director forms
+  keep their own names, words and opt-in box; only their button changed
+  ("Email my results" → "Email me my results"). Their failure messages
+  ("…If it didn't, book a free call…") now sit a block above the new ask.
+- **Moved, words unchanged** (5e puts the offer before the ask): "Talk it
+  through, free" and its reason left the pension and director calculators'
+  "The cost of waiting" card (which keeps its title and figure) for after
+  the email form; "Talk through what this means for you" and its reason
+  left the comparison's "In one sentence" for after "Before you rely on
+  these rates" and the new offer.
+- **my-pensions: 5e is not met.** The page says "nothing leaves this page"
+  and "Nothing you type is sent or stored", so it has no form; "Print or
+  save this list" comes before the line and the ask. The printout keeps
+  the line and leaves the ask out (`tools/pots-parts/page.css`, the
+  review's fix).
+- **5c, the booking page** (`booking.html:2033`), above the heading:
+  "You’ve seen your number. Last step: 20 minutes with Damian." (Damian's
+  words). An inline script shows it before the first paint when the
+  address ends `#from=` with one of the nine calculators' names; never
+  without JavaScript; anyone else sees the page as before. The
+  calculators' new link (`assets/js/pb-after.js`) adds `#from=<calculator>`
+  only when (1) the reader has moved one of that calculator's own controls
+  themselves (a trusted input, change or button press inside
+  `[data-pb-calc]`, never the guess card, Save as A, the share row, the
+  email form or the block; one exception, the input the reality check's
+  jar fires within a second of a trusted press on it; a shared link's
+  replayed figures never count), (2) no figure is still behind "Take a
+  guess first", and (3) a result on screen shows a number. The site sends
+  nothing with the fragment; if the reader accepted analytics, Tag Manager
+  may record the page address as for any page.
+- **The Privacy Notice** (`privacy.html:2069`, "Last updated: 4 October
+  2026"): "The figures you enter into them are not sent to us or stored,
+  unless you ask us to email you the results: then what the calculator
+  shows, the figures you chose and your email address reach us through a
+  form on this website. “Email them to yourself” opens your own email app
+  and sends us nothing." It read "…unless you separately choose to email
+  yourself the results.", which pack 3.3 had flagged. On the site,
+  proposed (pack 3.3).
+- **Tests:** build check 14 knows eight form names and holds the six
+  calculator-results forms to one field list (+6); new build check 49
+  (`tests/build.test.py:2502`): each calculator's line, offer and ask, in
+  that order, word for word, and no other booking link in the results
+  before it (`#riskCard` exempt only while hidden); the booking page
+  answers only the nine (5 assertions; build 459). `tests/lead-forms.test.py`
+  gains the six pages (27 jobs; 379 passed, the baseline's two Calendly
+  failures). New `tests/give-then-ask.test.mjs`, G1 to G13 with G3b, G4b
+  and G7b: the parts, the plain link at load, a trusted move, a shared
+  link (and an untrusted event) not counting, the jar, a nil result, the
+  order, the comparison's place, no link left in the waitcards, no-JS,
+  the booking page's line, the mailto fallback, no checkbox, and the
+  my-pensions printout; 118 checks at the final gate. Mutation: dropping
+  the `isTrusted` guard fails G4b, the veil check G3, `aNumber()` G6.
+- **Proof:** `classify-give-then-ask.py`, default mode,
+  `BASELINE_REF=09d4c71`: PASS on all six (pension 32 differing cells in
+  16 frames, all explained; director 12 in 6; comparison 61 in 61;
+  reality 6 in 6; entitlement 11 in 11; PIA 32 in 16); four more runs
+  PASS. `load.js` the same writes; `sequences.js all 400 40` 0 differing.
+- **Measured** (the gap from the block's link to the closing band's
+  button, CSS px):
+
+| Calculator | 375 | 1440 |
+|---|---|---|
+| pension | 839 | 436 |
+| director | 953 | 438 |
+| comparison (the band's button has the same words) | 981 | 478 |
+| charges | 594 | 240 |
+| reality check | 2,168 | 1,128 |
+| entitlement | 3,496 | 1,794 |
+| threshold | 622 | 227 |
+| PIA | 2,390 | 1,009 |
+| my-pensions | no band | no band |
+
+  The plan said the band follows the new link within a screen on every
+  calculator: false on the reality check, the entitlement check and PIA,
+  which have explainers between; true at 1440 on the other five. The
+  threshold page ends with three asks: the block's link, the band (622 /
+  227 below it) and the "Next step" card (2,440 / 1,186 below it). The
+  block is 210px tall at 375 and 161px at 1440; no sideways scroll.
+- **Deviations:** the classifier's MOVED rule carries a count (the
+  comparison's moved words also stand on its band since 5b); and an Ask
+  Buddy set-aside, not in the plan: Ask Buddy's cells are built by a
+  late-started script, so a load frame can catch them on one side only;
+  such cells are set aside only when on one side and only while
+  `assets/js/pb-buddy.js` is byte-identical to the baseline, counted and
+  printed, with three self-test cases. The proof is timing-sensitive
+  (a reviewer's re-runs each failed one load frame on a page this item
+  does not change before passing).
+
+## Booking calls to action after Run 43: which reason each has
+
+| Where | Its reason |
+|---|---|
+| Home "Get my free review" (end of `#life`) | the line |
+| Home chat picture's link, under "How a call with Damian works" | the line, added; Buddy's line above it stays |
+| Home, starter, tracker, directors' and glossary closing bands | the line, added under the button |
+| Starter "Help me get started", tracker "Help me find my pensions", directors' "Book a call with Damian for free" | the line; moved after the first give (item 1) |
+| Starter, tracker and directors' chat pictures | no link since Run 43 (P1) |
+| Tracker "Start finding mine" ("Worth knowing" band) | the line |
+| The nine calculators' one link after their results | the line; pension and director "Talk it through, free" and the comparison's "Talk through what this means for you" moved there |
+| The comparison's "Talk the choice through with Damian" (card hidden since Run 30) | the line |
+| The eight calculator and tool bands | the line, added under the button |
+| The threshold page's "Next step" card | the line's words in its own span |
+| Directors' rules, five guides, 404, held finder and readiness check | the line |
+| Ask Buddy panel, phone booking bar | the line |
+| Buddy's Run, Jargon Battle | the line (Jargon Battle's added) |
+| The saved report | the line, added after "Talk them through with Damian in a free 20-minute call" |
+| Not beside, by name | the nav's "Book a call with Damian for free" and the footer's "Book a call" (site furniture), the booking page itself, "booking page" in the Privacy Notice, Terms and complaints text, "book a free call" inside the email forms' messages |
+
+## The gate, per commit
+
+Each commit ran the full gate (`run-tests.py`, every `tests/*.test.py`,
+`tests/gap-band.py`, every `tests/*.test.mjs`, `tools/verify.py
+--no-shots`), one suite at a time, compared line by line with main
+`6af9f77`'s own run on the same machine before the first commit. Pass: no
+failing line main did not have, no crash; three relabels were expected
+(same check, same page, a new count) and are the only new lines.
+
+| Commit | Result |
+|---|---|
+| f9363a7 | pass. build 441/0, ux4 64/0, boxes 8/0, verify 0 FAIL; no relabel |
+| a613784 | pass (the reviewer's and the orchestrator's runs; see item 2). build 445/0, verify 0 FAIL, its five WARNs main's own |
+| e53afba | pass on the re-run. build 445/0, ux4 64/0; relabel: floating-chrome director-pension-rules (59) → (58). The first run also had ux4's R38-2 time out on index.html, which this commit does not touch; ux4 alone then passed 64/64 three times |
+| bcdea74 | pass. build 445/0, interactive-43 167/0, verify 0 FAIL |
+| ad48b21 | pass. build 445/0, interactive-43 278/0, gap-band 11 scenarios; relabel: floating-chrome index (86) → (90) |
+| b801ad0 | pass. build 445/0, interactive-43 404/0, terms the baseline's three, verify 0 FAIL |
+| adc7db4 | pass. build 445/0, ux4, games, boxes, interactive-43 and verify clean |
+| 09d4c71 | pass. build 448/0, games 168/0, verify 0 FAIL |
+| d369306 | pass, run after the review's fix to the my-pensions printout. build 459/0, lead-forms 379 passed and 2 failed (relabel: its summary, 211 → 379, the six new pages), give-then-ask 118/0, interactive-43 404/0, providers 86/0, search 22/0, ux4 64/0, boxes 8/0, verify 0 FAIL |
+| this commit | docs and the sitemap only; the orchestrator gates it before the merge |
+
+Every commit also ran `stamp-images.py --check`, `site-index.py --check`,
+`seo.py --check`, `check-initialisms.py` and `sync-chrome.py --check`
+(all clean) and a second `pagebuild.py` (the tree byte for byte).
+`sitemap.py --check` reported stale lastmods from C1 on; this commit
+rewrites the sitemap.
+
+**What failed, and why it was the environment's, not the site's** (as in
+Run 42). This machine's headless Chromium cannot play H.264, has no mouse,
+cannot load Calendly and draws the cookie bar a little wider at 320px; ux4
+ran from a copy with WebM videos only. Main printed 34 failing lines in
+five suites: `consent.test.py` 15 (check 9 at 320 x 568 on 14 pages, and
+its summary, 700 passed, 14 failed); `floating-chrome.test.mjs` 5 (check
+2 on booking, the directors' rules and the home page, check 5, and its
+summary, 31 passed, 4 failed); `lead-forms.test.py` 3 (the booking form's
+two "no script error" lines, Calendly, and its summary); `nav.test.py` 7
+(hovering on the home page and the director calculator, and its summary,
+464 passed, 6 failed); `terms.test.mjs` 4 (the directors' rules marking
+check, hovering on the over-50s and threshold pages at 1440, and its
+summary, 45 passed, 3 failed). Every other suite exited 0 on every
+commit.
+
+## Screenshots and Lighthouse
+
+**Screenshots.** Every page at 375 and 1440, taken by `tools/verify.py`
+screen by screen (frames 900px tall, reduced motion forced, the cookie
+choice made). Before: main `6af9f77` (identical in every page to Run
+42's after-set, so that set was reused). After: `claude/give-then-ask`
+at `d369306`, 62 shots; `verify.py` on the after tree: TOTAL FAIL 0 at
+375, 1360 and 1440. The shots are kept outside the repo (`verify-out/`
+is git-ignored). The environment is Run 42's: headless Chromium 141 on
+Linux as root (`--no-sandbox` through a wrapper), `TZ=Europe/Dublin`,
+and a Pillow stand-in for macOS `sips`; the repo's tools are unchanged.
+
+**Lighthouse** 13.5.0, mobile (default throttling), performance and
+accessibility, before (`6af9f77`) and after (`d369306`) interleaved, the
+order alternating, median. Three runs a side; nine a side on the four
+pages whose first three runs moved by three points or more.
+
+| Page | Performance | Accessibility | LCP, s | CLS | TBT, ms |
+|---|---|---|---|---|---|
+| index.html | 87 to 93 | 97 to 97 | 3.15 to 2.93 | 0 to 0 | 157 to 39 |
+| starter.html (9 a side) | 94 to 95 | 96 to 96 | 2.55 to 2.71 | 0.0012 to 0.0012 | 0 to 0 |
+| tracker.html | 94 to 96 | 96 to 96 | 2.93 to 2.48 | 0 to 0 | 0 to 0 |
+| director.html | 95 to 96 | 97 to 97 | 2.85 to 2.56 | 0 to 0 | 0 to 0 |
+| pension-calculator.html (9 a side) | 91 to 91 | 97 to 97 | 3.00 to 3.00 | 0 to 0 | 0 to 0 |
+| director-calculator.html | 91 to 92 | 97 to 97 | 3.00 to 2.85 | 0 to 0 | 0 to 0 |
+| broker-vs-autoenrolment.html (9 a side) | 89 to 89 | 97 to 97 | 3.08 to 3.15 | 0 to 0 | 0 to 0 |
+| pension-fees-calculator.html (9 a side) | 91 to 90 | 97 to 97 | 3.00 to 3.08 | 0 to 0 | 0 to 0 |
+| booking.html | 96 to 96 | 96 to 96 | 2.40 to 2.41 | 0 to 0 | 0 to 0 |
+
+- Accessibility is unchanged on all nine pages; no layout shift added.
+- The home page's 87 to 93 is noise, not a gain: its three before-runs
+  read 83, 87 and 94, its after-runs 92, 93 and 94.
+- On the first three runs the fees calculator read 94 to 88, and the
+  pension calculator and the comparison 91 to 88; nine runs a side put
+  every one within a point. The fees page's LCP is 0.08 s later on the
+  median (its new charges area, email form and after-result block), and
+  starter's 0.16 s; neither is isolated further.
+
+## Found on the way (not changed unless said)
+
+- `director.html` `#pbTwoOut`: without script it reads "…4.35% PRSI (the
+  rate from 1 October 2026)."; once the script runs, "…and 4.35% PRSI."
+  without the date. The same on main.
+- `tools/fees-parts/main.html:112`: "… has a guide to pension fees and
+  charges explains each one." (a word missing; Run 42 found it too).
+- The starter's later auto-enrolment rates are sourced to the Act
+  (sections 54, 55, 61-63) while the comparison's reviewed caveat, now on
+  starter too (shortened by one clause), says they are still from third-party summaries. For
+  compliance.
+- `docs/CUT-LIST-42.md:108` (`T-1`) names only the tracker hero's reason
+  line, "Free, 20 minutes, no obligation.", though its note at line 116
+  calls T-1 an ask; the button above it is in no row. "Neither T-1 nor
+  T-7 cut" in the Decisions table means the button and its line both
+  stay.
+- At 1440 on the directors' page the ladder's caption ("The personal
+  limit: the share of salary that gets tax relief") starts exactly where
+  the benefits grid ends, with no space between (measured in headless
+  Chromium: grid bottom and caption top both 1980px; the plan measured
+  2px before item 4 added the age control).
+- The ladder CSS comment (`starter.html:1844`, `director.html:1679`,
+  `self-employed-pensions.html:2009`, `pensions-over-50.html:2009`) still
+  says the ladders are "on the pension calculator and the comparison
+  page"; it is now incomplete. Kept byte-identical; the new `.pb-lad-ctl`
+  comment says where the control stands.
+- With "2035 onward" picked, the starter's `#aeNote` reads "A year, at the
+  2035 onward rates: …" (the module's own words; unreachable before).
+- The starter's "THE 3 : 3 : 1 SPLIT" script comment still says "at this
+  year's rates"; the new comment under it describes the picker.
+- The pension calculator and the comparison's ladders still move the rows
+  below the "You" chip 1.45px when it changes row (under Chrome's
+  layout-shift threshold, visible).
+- The ladders' age control is shown by CSS when script runs, not by
+  `pb-ladder.js` having run: if that file failed to load, the slider would
+  move and the chip would not.
+- The starter page now has two age sliders ("Your age now" in "If you
+  wait." and the ladder's "Your age") that do not follow each other.
+- Build check 46 matches only a literal `href="booking.html"` in a hero, so
+  a hero link to `booking.html#…` or `./booking.html` would pass; check 48
+  reads root pages only.
+- `tracker.html:333-334`: two `.pb-trace-more` rules match nothing since
+  item 3.
+- ux4's R38-2 ("reduced motion turned on part way") can time out on its
+  200ms wait under load (once, at e53afba).
+- Not updated in this commit, for a later run: `docs/ILLUSTRATIONS.md`
+  (booking now has only "Phone or video" in its top cards; the
+  confirmation page has none); `docs/SUBTRACTION-AUDIT.md` (thank-you row 2
+  done; booking row 2 half done); `docs/PIA-BUDGET-DAY.md` (after Budget
+  day, also check the home hero's State line, "€299.30 a week from
+  January 2026" and its fallback in `index.html`, the starter's
+  auto-enrolment phases and caveat, and the relief steps).
+
+## Needs Damian (Run 43)
+
+1. **Calendly, for "reschedule any time".** The line beside every ask
+   promises it. In Calendly → Event Types → `pensionbuddy-1-1`, check
+   that a booking can be rescheduled from its confirmation email right up
+   to the start, with no minimum notice. If not, the line becomes "Free ·
+   20 minutes · no obligation · reschedule from your confirmation email."
+   (the confirmation page's own words): one string, `pagebuild.REASON`
+   (`tools/pagebuild.py:152`), the literal line in the hand-written pages,
+   the part files and the two games, the threshold page's "Next step"
+   span, and the escaped line in `assets/js/pb-bookbar.js`, `pb-buddy.js`
+   and `pb-report.js` (`grep -rl "reschedule any time"` lists them); then
+   `pagebuild.py`, `stamp-images.py`, and build check 48 and the
+   classifier follow `REASON`.
+2. **"Email me my results" on six more calculators.** Netlify: set a
+   notification for the new form name `calculator-results` before or on
+   the deploy that carries it (Needs Damian 1 at the top). Until then
+   requests sit in Netlify unseen. The six forms share that one name, so
+   Netlify relies on their identical field lists: send one test request
+   from a calculator on the deploy preview and see it arrive under
+   `calculator-results` (plan risk 5). The offer says "Damian sends them
+   himself, so they will not arrive straight away." and, once sent,
+   "Damian will be in touch personally."; Netlify emails the reader
+   nothing. Will you reply to each request yourself? If not, hide the six
+   offers: `hidden` on `#ecCap` in the six part files, then `pagebuild.py`
+   (the ask stays; the share row's "Email them to yourself" still comes
+   before it).
+3. **Question 7's "And their chat pictures?" was read as the cut** (P1):
+   the starter, tracker and directors' pictures keep their question and
+   Buddy's answer and lost their booking link. To put a link back, add
+   these two lines after Buddy's answer in the picture (starter.html,
+   tracker.html, director.html):
+   `<p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>`
+   and `pagebuild.REASON`'s line; build check 46 then needs its tracker
+   mutant and its hero rule changed.
+4. **my-pensions has no email offer** (5e not met): the page promises
+   "nothing leaves this page" and "Nothing you type is sent or stored", and
+   its "Print or save this list" already comes before the ask. Option: an
+   "Email me this list" that opens the reader's own email app, addressed
+   to no one, like "Email them to yourself" elsewhere; it sends the site
+   nothing, but the eyebrow "nothing leaves this page" would need new
+   words.
+5. **The asks after each result, and the band after them.** On the
+   threshold page three asks now end the page (the block's link, the band,
+   the "Next step" card); on the comparison the block's link and the band's
+   button have the same words; on the pension, director, comparison,
+   charges and threshold pages the band follows the block within a screen
+   at 1440. The gaps are in item 5's table. Keep all, or drop one (the
+   threshold page's card, or the comparison's block link)?
+6. **The booking page's line** (your words): "Last step" sits above the
+   heading "…Twenty minutes with Damian starts it." and above "a clear
+   sense of your next step", and says "20 minutes with Damian" just before
+   the heading says "Twenty minutes with Damian"; "your number" is a
+   stretch on the threshold page ("An illustration of Revenue’s rules, not
+   a calculation of your own tax") and on my-pensions (a list). The
+   alternative is "You’ve seen your figures. Next step: 20 minutes with
+   Damian." Both go to compliance (pack 1.24 (b)).
+7. **5a is met once per calculator, after its results,** not after each
+   result. Not built: the design that puts the email offer, the line and
+   the ask straight after the headline result, above the charts (it would
+   ask for an email before the charts give). Not given an ask, by name:
+   the home hero (ask-free since Run 42), the relief widgets (each links to
+   the calculator), the glossary's drawdown and inflation sliders, the
+   audience pages' illustrations (item 1's buttons serve them) and the
+   held readiness check.
+8. **"What this doesn’t show":** your words on the two State Pension
+   pages; on the other seven each names only what that page's assumptions
+   say it leaves out, so it is true for every reader (item 5's table).
+9. **Colour, left for you:** the pension calculator's teal icon square
+   (`.boost-ico`) beside a non-State figure; the teal rings of the home
+   timeline's inactive dots (relief steps, not the State); the starter's
+   pressed phase button (teal-700 on teal-50, the controls' accent);
+   readiness "On the way" at about 2.1:1 (named in words); slate beside red
+   on the starter's bars (1.32:1, the words carry it); the comparison's
+   two lanes now one colour (named beside each).
+10. **The hero's source line** sits after the caveat, so on a phone a
+    press shows only the underline turning solid: at 375 x 812 the line
+    starts 116px below the first screen, and at 1280 x 720 it starts at
+    745px. A reader who picks a Pensions Council card and then lets it go
+    hears "€[x] a year is your own figure, set with the slider above."
+    though the card set it; a neutral alternative is "€[x] a year is the
+    figure on the slider above.". The polite announcement was checked only
+    in headless Chrome, not with a real screen reader. When the need is
+    just above €15,564, the gap figure's focus ring is clipped.
+11. **The phone timeline's line** ("35% From 55") does not say the figure
+    is the share of earnings that gets tax relief (the list below says
+    so); at 75 it repeats "40% From 60".
+12. **Repetition near the asks:** at 375 the home `#call` picture's reason
+    line and the phone bar's identical line are on screen together, about
+    200px apart; the phone bar now shares screens with the three moved
+    audience buttons. The pack asks compliance whether this reads as
+    pressure (1.24 (g)).
+13. **Budget day, 6 October:** the State rate in the hero's line (€299.30,
+    from `PBStatePension`), the auto-enrolment phase rates and caveat, and
+    the relief steps may change; rank 13 waits for it.
+14. **The comparison's fund card, when it comes back** (Needs Damian 3
+    at the top): since Run 43, deleting `hidden` on `#riskCard` fails the
+    build. Its "Talk the choice through with Damian" sits in the results
+    before the "Email me my results" block
+    (`broker-vs-autoenrolment.html:2887` to 2896; `#pbAfter` at 2930),
+    and build check 49 exempts the card only while it is hidden
+    (`tests/build.test.py:2543`; plan risk 6). When you restore it, move
+    that link after the email block, cut it, or change check 49.
+
+Defaults taken without asking: Run 42's questions are in "Decisions, 4
+October 2026" under Run 42; the build's own choices are below.
+
+### Defaults taken in the build (one line each)
+
+1. Questions 1, 3, 4, 5, 6, 20, 21, 22 and 24 are left as they are.
+2. "Yes" to question 7 includes the chat pictures, read as P1's cut: the
+   three audience pictures keep their question and answer and lose their
+   booking link and reason line. The revert is two lines per page
+   (Needs Damian 3).
+3. The tracker keeps both asks: the moved button, then "Start finding
+   mine".
+4. The phone bar's code is unchanged. It rises earlier now that the
+   heroes are shorter, and it is 22px taller with the longer reason line.
+5. The calculators' in-results asks keep their words but move after
+   "Email me my results"; 5a is met once per calculator, after its
+   results, not after each result (Needs Damian 7).
+6. Not given an ask: the relief widgets, the glossary's drawdown and
+   inflation sliders, the home hero, the audience illustrations and the
+   held readiness check.
+7. The threshold page keeps its band and "Next step" card, so it ends
+   with three asks; the distances to the band are measured and listed, not
+   cut (Needs Damian 5).
+8. my-pensions has no email form, because the page says nothing typed
+   leaves it (Needs Damian 4).
+9. The six new email forms carry no opt-in box until pack 3.2's sentence
+   is approved. The pension and director calculators' forms keep theirs.
+10. The reason line: Damian's words shipped ("Free · 20 minutes · no
+    obligation · reschedule any time."); the alternative, "…reschedule
+    from your confirmation email.", is in pack 1.24 (Needs Damian 1).
+11. The booking page line: Damian's words shipped ("You’ve seen your
+    number. Last step: 20 minutes with Damian."); the alternative, "You’ve
+    seen your figures. Next step: 20 minutes with Damian.", is in pack
+    1.24 (Needs Damian 6).
+12. The reason line is not beside the nav button, the footer link, the
+    booking page itself, the legal pages' inline "booking page" links or
+    the forms' messages.
+13. Colour: Run 42's other choices stand. The relief ladders stay amber,
+    "The house promise" stays mint, the PIA rows wait for Budget day, the
+    pictures are re-shot later. The "You" chips, the threshold strip's
+    picked year and the timeline's step are neutral.
+14. Cuts: nine edits that only repeat. The home FAQ (D7), O-2, Z-2, D-8's
+    first sentence and every fact stay, as listed.
+15. The red border on `#sftNote` and `#sftOver` is not made.
+16. Interactive: ranks 1, 2, 3, 4, 9 and 14 are adapted (item 4); rank 9
+    carries the comparison's reviewed caveat shortened by one clause.
+    Rank 13 waits for Budget day; rank 16 is not built (question 19). The
+    M proposals wait.
+17. "What this doesn’t show": Damian's words on the two State Pension
+    pages; on the other seven, only what each page's assumptions leave
+    out (Needs Damian 8).
+18. `#from=` is set only by the reader's own trusted move on the
+    calculator, never by a shared link. The site sends nothing with it
+    (`assets/js/pb-after.js:11-23`).
+19. The Privacy Notice's calculators sentence is changed on the site,
+    pending compliance (pack 3.3).
+
+---
+
+# Run 42 — 2026-10-03 · The home page opens on the gap; red for pain, amber for money back; give before ask; cuts (on `claude/pain-red`, merged to main as `6af9f77` on 4 October 2026)
 
 Damian's brief, 3 October 2026: plan the run, build it with subagents, on
 a new branch off main, `claude/pain-red`; gate each item, merge, push
@@ -339,8 +1277,8 @@ Claude agents, each item reviewed before its commit.
 | 5 | Home cuts (the closing fork, one story line); `docs/CUT-LIST-42.md`, the per-page lists | done (home only; the rest for you) | 37e7048 |
 | 6 | This entry, the compliance pack (1.23, B.21 and the edits), the sitemap | done | this commit |
 
-Main was `84a75cd` (Run 41's merge) when the branch began and has not
-moved. The merge to main is the next step, after this commit's gate.
+Main was `84a75cd` (Run 41's merge) when the branch began and had not
+moved. Merged to main as `6af9f77` on 4 October 2026.
 
 ## Item 1, the home page opens on the gap
 
@@ -927,6 +1865,58 @@ neither asks for a decision.
     (`#lumpTax`, `tools/sft-parts/main.html:55`) are red table figures
     on the same 1440 screen as a chart's aqua. Accept them, or reword
     the rubric to "in a chart, bar or figure", as its section 3 has it?
+
+## Decisions, 4 October 2026
+
+Damian's brief for Run 43 answered questions 2, 7, 14 (i), 18 and 19 and
+confirmed 17. For every other open question it asked for the most
+conservative option, the one with the least change to the live site and
+the least compliance risk, and a list of the choices for him. They are
+below, with what Run 43 did about each. Damian's decisions, word for
+word from the brief:
+
+> "What's changed?" position OK. Q2 keep. Q7 yes. Q14 non-State teal ->
+> neutral slate (teal = State only). Q18 keep cut. Q19 accept.
+
+The Decision column quotes them; how Run 43 read them is in the last
+column. "Default" means the conservative option was taken
+without asking. Damian's choices are not compliance's
+sign-off: pack questions 1.21, 1.23 and B.21 stay open for compliance.
+
+| # | Question | Decision | In Run 43 |
+|---|---|---|---|
+| 1 | The cut hero lede | the cut stands (default) | nothing changed |
+| 2 | The Buddy chat picture in "How a call with Damian works" | **"keep"** (Damian) | kept where it is, caption included; the reason line now stands under its link (item 5d) |
+| 3 | The share picture without the sub-line | as it is (default) | nothing changed |
+| 4 | The gap chart's count-up | left as it is (default) | nothing changed |
+| 5 | The booking ask at the end of `#life` | stays there (default) | stays; its reason line now reads "Free · 20 minutes · no obligation · reschedule any time." (item 5d) |
+| 6 | The way-of-life picker | as it is (default) | nothing changed |
+| 7 | The three audience heroes' booking button, and their chat pictures | **"yes"** (Damian) | item 1: S1 and D1 applied as drafted in `docs/GIVE-BEFORE-ASK-42.md`; T1 after the tick list (the tracker page has no figure), above the "Worth knowing" band's "Start finding mine", both kept (default: neither T-1 nor T-7 cut). "And their chat pictures?" was read as P1's cut: each keeps its question and Buddy's answer and lost its booking link and reason, so no hero asks on any phone. The revert (two lines per page: the link paragraph and its reason line) is in Run 43's "Needs Damian" (3) |
+| 8 | The phone booking bar waiting for the first figures | as it is (default; B1 not applied) | its code unchanged; it rises earlier, because the heroes are shorter (at 375: starter 1025 → 900px, tracker 1025 → 875, director 1250 → 1100), and is 22px taller with the longer reason line |
+| 9 | The comparison's "Talk through what this means for you" | kept, words unchanged (default) | moved by item 5 from "In one sentence" to the one booking link after the results, after "Email me my results" (the brief's 5e) |
+| 10 | The threshold page's two closing asks; the guides' "Next step" cards | kept (default); build check 38 unchanged | item 5 adds the calculator's booking link above them, so the threshold page ends with three asks (measured; Run 43, "Needs Damian" 5) |
+| 11 | "Talk it through, free" in "The cost of waiting" | kept on both calculators, words unchanged (default) | moved by item 5 to after "Email me my results"; the card keeps its title and its figure |
+| 12 | The booking sentence on Privacy, Terms and Complaints | kept (default) | kept; inline links, not beside the reason line (Run 26's judgement) |
+| 13 | No closing band on `my-pensions.html` | none added (default) | item 5 adds one booking link after its result, after "Print or save this list"; the printout leaves it out |
+| 14 (i) | Teal on things that are not what the State pays | **"non-State teal -> neutral slate (teal = State only)"** (Damian) | item 2: `--slate:#586B85`. Teal is what the State pays and nothing else in a chart, a bar, a figure's key or a scale; the reader's own place on a scale (the "You" chips, the picked year, the entitlement check's "Your average" and "Your year", the timeline's step) is neutral too. The accent stays: buttons, links, slider tracks, eyebrows, the dark band |
+| 14 (d) | The risk tiles | slate, with 14 (i) | tiles 1 and 2 light grey, 3 and 4 a darker grey, 5 to 7 slate with white digits |
+| 14 (b) | The relief ladders | amber, with 14 (i) (default) | the bars stay amber; their "You" chips went neutral |
+| 14 (a), (c), (e), (g), (h), (j), (l), (n), (o) | Run 42's other colours | as applied (default) | nothing changed |
+| 14 (f) | "The house promise" | kept, mint label (default) | nothing changed (B-1, Y-1 not cut) |
+| 14 (k) | The PIA table's tax rows | not coloured until the Budget figures are in (default) | nothing changed; rank 13 waits too |
+| 14 (m) | The calculator pictures | re-shot with the next image run (default) | not re-shot; they still show the old colours, Run 43's included |
+| 16 | The cuts | only edits whose words the same page, its Related pages card or its chat picture already says, and which take no fact and no alternative from an ask (default) | item 3 makes nine edits; the home FAQ (D7: it holds facts, and SUBTRACTION-AUDIT question 6 is open), O-2 and Z-2 (each would leave a bare ask) and D-8's first sentence stay; the rest stay listed |
+| 16 | The red left border on `#sftNote` and `#sftOver` | not made (default: red is never a callout's border) | nothing changed |
+| 16 | The interactive proposals and their four questions | build the small ones (the brief's item 4 is the more specific instruction, so 6, 9, 14 and 15 do not wait for the subtraction audit); the medium ones wait, their words to the pack first; no line for proposal 12 (default) | built 1, 2, 3, 4, 6, 7, 9, 14 and 15 (1, 2, 3, 4, 9 and 14 adapted); 13 waits for Budget day; 16 not built (question 19); 5, 8, 10, 11 and 12 wait |
+| 17 | "What’s changed?" after the way-of-life band | **"position OK"** (Damian) | the position stays; nothing changed; SUBTRACTION-AUDIT home row 2 not done |
+| 18 | The closing section | **"keep cut"** (Damian) | the cut stands; nothing changed |
+| 19 | The cookie bar over the hero's slider | **"accept"** (Damian) | the cookie bar over the slider is accepted; proposal 16 not built |
+| 20 | Site search | as it is (default) | nothing changed |
+| 21 | `tools/design-measure.py` | as it is (default) | nothing changed |
+| 22 | `tools/og-images.py` | as it is (default) | nothing changed |
+| 24 | Red table figures beside aqua | accepted; the rubric unchanged (default) | nothing changed |
+
+Questions 15 and 23 asked for no decision.
 
 ---
 
@@ -2838,7 +3828,7 @@ so its `?v=` stamp moved on the five pages that load it. render-diff against
 | The saved report's line (`pb-report.js`) | already: "…in a free 20-minute call" |
 | Not calls to action, left as they are: the nav button ("…for free"), the footer's "Book a call", "booking page" in the privacy notice, terms and complaints text, and "book a free call" inside the email forms' error and thank-you messages | none added |
 
-3 October 2026: Run 42 moved four of these; the table under Run 42 has them as they now stand.
+3 October 2026: Run 42 moved four of these; the table under Run 42 has them as they now stand. 4 October 2026: Run 43 put the line, as "Free · 20 minutes · no obligation · reschedule any time.", beside every booking call to action; the table under Run 43 has them.
 
 ## The scan: every hit (item 4, not changed)
 
