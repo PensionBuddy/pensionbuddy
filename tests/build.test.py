@@ -2450,6 +2450,49 @@ def run():
         assert mut[page] != sources[page], label
         eq('47. %s is caught' % label, not_state_faults(mut), want)
 
+    # ----------------------------------------------------------------- 48
+    # Run 43, item 5d (Damian: "Risk reversal beside every ask"). Every booking
+    # link in a page's own content (the nav, the footer and scripts aside) has
+    # pagebuild.REASON after it, before the next booking link and within 700
+    # characters; the "Next step" card carries the same words in its own span.
+    # Exempt, by name: the booking page itself, where every ask leads, and the
+    # inline "booking page" links in the Privacy Notice, the Terms and the
+    # complaints page (Run 26: not calls to action).
+    REASON_TEXT = re.sub(r'<[^>]+>', '', pagebuild.REASON)
+
+    def asks_without_reason(srcs):
+        out = []
+        for page, text in sorted(srcs.items()):
+            if page == 'booking.html':
+                continue
+            span = pagebuild.nav_span(text)
+            body = text[:span[0]] + text[span[1]:] if span else text
+            if '<footer' in body:
+                body = body[:body.find('<footer')]
+            body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
+            for m in re.finditer(r'<a [^>]*href="booking\.html(?:#[^"]*)?"[^>]*>(.*?)</a>', body, re.S):
+                words = re.sub(r'<[^>]+>', '', m.group(1)).strip()
+                if words == 'booking page' or REASON_TEXT in m.group(1):
+                    continue
+                nxt = body.find('href="booking.html', m.end())
+                seg = body[m.end():min(nxt if nxt >= 0 else len(body), m.end() + 700)]
+                if pagebuild.REASON not in seg:
+                    out.append('%s: "%s"' % (page, words[:40]))
+        return out
+
+    eq('48. every booking link in a page has the reason beside it (Run 43)', asks_without_reason(sources), [])
+    for label, page, mut, want in (
+            ('a band\'s reason removed', 'index.html',
+             sources['index.html'].replace('Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n  ' + pagebuild.REASON,
+                                           'Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>', 1),
+             'index.html: "Book your free call"'),
+            ('a new booking link with no reason', 'glossary.html',
+             sources['glossary.html'].replace('</main>', '<p><a href="booking.html">Talk to Damian</a></p>\n</main>', 1),
+             'glossary.html: "Talk to Damian"')):
+        assert mut != sources[page], label
+        m48 = dict(sources); m48[page] = mut
+        eq('48. %s is caught' % label, want in asks_without_reason(m48), True)
+
 
 
 
