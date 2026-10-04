@@ -18,6 +18,12 @@ section 3.3); the Website Terms of Use have a new clause in place of the
 liability cap (question 1.16); and analytics run through Google Tag Manager,
 loaded only after a visitor accepts (question 1.17, section 3.4).
 
+Updated 4 October 2026: the Meta, TikTok and LinkedIn ad pixels load with
+Google Tag Manager, only after a visitor accepts; the cookie bar now reads
+"May we use cookies for analytics and ads? Privacy Notice", and the
+Privacy Notice's cookies section names the three pixels and their use for
+advertising (question 1.17).
+
 And a last pass, 25 September 2026: every form's success message now
 promises only what happens, since Netlify emails the visitor nothing, and
 hello@pensionbuddy.ie, now a monitored inbox, is in every page's footer
@@ -389,15 +395,25 @@ engagement. The page's "Last updated" date is now 25 September 2026.
 What we need: sign-off of the clause, and whether the terms should state a
 cap at all. None is stated now.
 
-1.17 Analytics: Google Tag Manager, only after consent (proposed)
------------------------------------------------------------------
+1.17 Analytics and ads: Google Tag Manager and the Meta, TikTok and LinkedIn pixels, only after consent (proposed)
+----------------------------------------------------------------------------------------------------------------
 
 What the site does now: the cookie bar every page has carried, unused
 until an analytics service was chosen, now appears on a visitor's
-first page: "May we use a little analytics? Privacy Notice" (the words
-"Privacy Notice" link to its Cookies section), with the buttons "That's fine" and "No
-thanks", side by side and the same width on a phone. (Until 28 September
-2026 it read "We'd like to use a little analytics to see how the site is
+first page: "May we use cookies for analytics and ads? Privacy Notice"
+(the words "Privacy Notice" link to its Cookies section), with the
+buttons "That's fine" and "No thanks", side by side and the same width
+on a phone. Since 4 October 2026 the bar's one consent covers the ad
+pixels too: "That's fine" loads, with Google Tag Manager, the Meta pixel
+(1401467284899608), the TikTok pixel (DB0II6JC77U1PLPL6670) and the
+LinkedIn Insight Tag (10975993), each sending a page view to its
+platform; "No thanks", or no answer, loads none of them, and "No thanks"
+deletes their first-party cookies (_fbp, _fbc, _ttp, li_* and the like).
+The Privacy Notice's cookies section now names the three and says they
+are used to measure our advertising and show our ads, and no longer says
+"We do not use it for advertising". (From 28 September to 4 October 2026
+the bar read "May we use a little analytics? Privacy Notice", which did
+not mention ads. Until 28 September 2026 it read "We'd like to use a little analytics to see how the site is
 used — nothing for ads, never sold. You choose. See our Privacy Notice.";
 it was cut to one line so that on a phone the bar no longer covers the
 hero's regulator and QFA line, Run 33.) For the same reason, on a phone
@@ -425,10 +441,10 @@ the Privacy Notice, says enough for the consent to be informed; (b) for the
 sentence the placeholder in section
 3.4 stood for (off the site since 26 September 2026), which analytics tools
 Tag Manager will run, the cookies they set, how long they
-last, and where Google processes the data; (c) whether the Privacy Notice's
-"We do not use it for advertising" holds for the tools chosen (the bar no
-longer says "nothing for ads, never sold") (for Google Analytics 4, that means Google signals and ads
-personalisation off, and no link to Google Ads); (d) whether the notice's
+last, and where Google processes the data; (c) approval of the ad pixels behind the same consent: whether one
+bar and one "That's fine" for analytics and ads together is specific
+enough, or the two need separate choices, and the pixels' cookies and
+their lifetimes for the notice; (d) whether the notice's
 "Basic, non-identifying information about how the site is used" still
 describes analytics identifiers fairly; (e) whether the two buttons need
 equal weight: "That's fine" is a filled button and "No thanks" an outlined
@@ -1440,9 +1456,11 @@ Changed wording on existing pages
 - Privacy Notice, "Cookies": the section in 3.4, with the button "Change
   your cookie choice".
 - Every page: the cookie bar (question 1.17), shown to visitors since
-  Run 27, "May we use a little analytics? Privacy Notice",
-  with "That's fine" and "No thanks" (one line since Run 33, 28 September
-  2026; it read "We'd like to use a little analytics to see how the site is
+  Run 27, "May we use cookies for analytics and ads? Privacy Notice",
+  with "That's fine" and "No thanks" (since 4 October 2026, when the Meta,
+  TikTok and LinkedIn pixels were added behind it; from 28 September it
+  read "May we use a little analytics? Privacy Notice"; before that it
+  read "We'd like to use a little analytics to see how the site is
   used — nothing for ads, never sold. You choose. See our Privacy
   Notice.").
 - Run 28, every form's success message: "Thanks - we've got it. Damian will

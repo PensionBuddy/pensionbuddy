@@ -1,11 +1,11 @@
-/* The cookie choice, and the one thing it turns on: Google Tag Manager,
-   container GTM-KQCRZDNB (Run 27).
+/* The cookie choice, and what it turns on: Google Tag Manager, container
+   GTM-KQCRZDNB (Run 27), and the Meta, TikTok and LinkedIn pixels.
 
    Every root page loads this file at the foot of <body>, where each page
    used to carry the same consent scaffold inline, dormant behind an
    [ANALYTICS_SCRIPT_URL] placeholder. The bar's markup is that scaffold's,
-   and so are its storage key and its two values. Its words, since Run 33,
-   are one line, "May we use a little analytics? Privacy Notice", so that on
+   and so are its storage key and its two values. Its words, since the ad
+   pixels (4 October 2026), are one line, "May we use cookies for analytics and ads? Privacy Notice", so that on
    a phone the bar is one line and two buttons and leaves the hero's
    regulator and QFA lockup on the first screen (the FIRSTSCREEN block of
    CSS lays it out; docs/COMPLIANCE-PACK.md 1.17 has the wording for
@@ -17,6 +17,12 @@
    "No thanks" is remembered and nothing ever loads; no answer at all shows
    the bar and loads nothing. The snippet's <noscript> iframe is left out on
    purpose: it would load Google for a visitor who cannot answer the bar.
+
+   THE AD PIXELS. Meta (1401467284899608), TikTok (DB0II6JC77U1PLPL6670) and
+   LinkedIn Insight (10975993) are loaded by loadPixels(), the snippets as
+   each issued them, and only with GTM after "That's fine", never in a
+   <head>. Each sends its PageView. Their <noscript> images are left out for
+   the same reason as GTM's iframe.
 
    PBTrack(event, fields, then) is how a page reports something to the
    dataLayer. Before an answer, the event waits in this page's memory, and
@@ -41,7 +47,9 @@
    CHANGING YOUR MIND. An element marked data-pb-consent-reset (the Privacy
    Notice has one) forgets the answer and shows the bar again. "No thanks"
    also deletes any Google Analytics cookies (_ga, _ga_*, _gid, _gat*) an
-   earlier "accepted" left on this site, and if GTM was already running on
+   earlier "accepted" left on this site, and the pixels' own (_fbp, _fbc,
+   _ttp, _tt_*, li_*, lidc, bcookie, UserMatchHistory, AnalyticsSyncHistory)
+   where they are first-party, and if GTM was already running on
    this page, reloads it, since a running script cannot be unloaded.
 
    Classic script; defines window.PBTrack and window.PBConsent. */
@@ -67,6 +75,41 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer',GTM_ID);
     while (queue.length) window.dataLayer.push(queue.shift());
+    loadPixels();
+  }
+
+  /* Meta, TikTok and LinkedIn, as issued, run on consent. */
+  function loadPixels() {
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', '1401467284899608');
+    window.fbq('track', 'PageView');
+
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+      ttq.load('DB0II6JC77U1PLPL6670');
+      ttq.page();
+    }(window, document, 'ttq');
+
+    window._linkedin_partner_id = "10975993";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(window._linkedin_partner_id);
+    (function(l) {
+    if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+    window.lintrk.q=[]}
+    var s = document.getElementsByTagName("script")[0];
+    var b = document.createElement("script");
+    b.type = "text/javascript";b.async = true;
+    b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    s.parentNode.insertBefore(b, s);})(window.lintrk);
   }
 
   function track(name, fields, then) {
@@ -86,7 +129,7 @@
     var parts = location.hostname.split('.');
     document.cookie.split(';').forEach(function (c) {
       var name = c.split('=')[0].trim();
-      if (!/^(_ga|_ga_.+|_gid|_gat.*)$/.test(name)) return;
+      if (!/^(_ga|_ga_.+|_gid|_gat.*|_fbp|_fbc|_ttp|_tt_.+|li_.+|lidc|bcookie|UserMatchHistory|AnalyticsSyncHistory)$/.test(name)) return;
       document.cookie = name + '=; Max-Age=0; path=/';
       for (var i = 0; i < parts.length - 1; i++) {
         document.cookie = name + '=; Max-Age=0; path=/; domain=' + parts.slice(i).join('.');
@@ -117,7 +160,7 @@
   function showBar() {
     if (bar) return bar;
     bar = document.createElement('div'); bar.className = 'pb-consent'; bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Cookie choice');
-    bar.innerHTML = '<p>May we use a little analytics? <a href="privacy.html#cookies">Privacy Notice</a></p><button type="button" class="pb-c-yes">That’s fine</button><button type="button" class="pb-c-no">No thanks</button>';
+    bar.innerHTML = '<p>May we use cookies for analytics and ads? <a href="privacy.html#cookies">Privacy Notice</a></p><button type="button" class="pb-c-yes">That’s fine</button><button type="button" class="pb-c-no">No thanks</button>';
     document.body.appendChild(bar);
     fit(); window.addEventListener('resize', fit);   // measured first, so Ask Buddy moves once
     document.body.classList.add('pb-banner-open');
