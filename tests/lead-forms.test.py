@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""The seven lead forms, submitted for real in headless Chrome (Run 27).
+"""The lead forms, submitted for real in headless Chrome (Run 27; eight form
+   names on thirteen pages since Run 43, item 5e).
 
     python3 tests/lead-forms.test.py
 
@@ -44,6 +45,13 @@ LEAD_FORMS = {
     'starter.html': 'starter-guide',
     'tracker.html': 'tracker-guide',
     'find-my-pension.html': 'pension-finder',
+    # Run 43, item 5e: the shared form, no opt-in box
+    'broker-vs-autoenrolment.html': 'calculator-results',
+    'pension-fees-calculator.html': 'calculator-results',
+    'state-pension-reality-check.html': 'calculator-results',
+    'state-pension-entitlement.html': 'calculator-results',
+    'standard-fund-threshold.html': 'calculator-results',
+    'pia.html': 'calculator-results',
 }
 
 # how the probe fills each page, and where it reads the outcome
@@ -85,7 +93,7 @@ PROBE = r"""<script>
   if(page==='booking.html'){
     set('qName','Test Person'); set('qEmail','test@example.com'); $('pDirector').click();
   }else if($('ecForm')){
-    set('ecEmail','test@example.com'); $('ecOptin').checked=tick;
+    set('ecEmail','test@example.com'); if($('ecOptin')) $('ecOptin').checked=tick;
   }else if($('mForm')){
     set('mEmail','test@example.com'); $('mOptin').checked=tick;
   }else if($('pfForm')){
@@ -206,8 +214,8 @@ def main():
     url = 'http://127.0.0.1:%d/__leads?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,1000',
-                        '--virtual-time-budget=240000', '--dump-dom', url],
-                       capture_output=True, timeout=240)
+                        '--virtual-time-budget=480000', '--dump-dom', url],
+                       capture_output=True, timeout=480)
     dom = p.stdout.decode('utf-8', 'replace')
     m = re.search(r'<pre id="__all">([^<]*)</pre>', dom)
     eq('0. one Chrome launch returned every job', bool(m), True)

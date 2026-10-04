@@ -1954,6 +1954,10 @@ html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out in
 html.pb-readying [data-pb-wait]{transition:none!important}
 @keyframes pbWait{from{opacity:1}to{opacity:.55}}
 /* WAIT:END */
+/* Run 43, item 5: the line for a reader who arrives from a calculator's result
+   (booking.html#from=...); hidden for everyone else, shown before the first paint */
+.pb-from{margin:12px 0 0;font-size:1.05rem;font-weight:600;line-height:1.5;color:var(--ink)}
+.pb-from[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -2026,6 +2030,8 @@ html.pb-readying [data-pb-wait]{transition:none!important}
 
   <div class="lead">
     <span class="eyebrow"><span class="pip"></span>Your free consultation</span>
+    <p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>
+    <script>(function(){if(/(?:^#|&)from=(?:pension-calculator|director-calculator|broker-vs-autoenrolment|pension-fees-calculator|my-pensions|state-pension-reality-check|state-pension-entitlement|standard-fund-threshold|pia)(?:&|$)/.test(location.hash||''))document.getElementById('pbFrom').hidden=false;})();</script>
     <h1>You've been meaning to sort the pension. Twenty minutes with Damian starts it.</h1>
     <p class="sub">Twenty minutes with Damian, by phone or video, at a time you choose. Free, with no obligation.</p>
 
@@ -2137,7 +2143,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
-<script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
+<script src="assets/js/pb-forms.js?v=071cee0a"></script>
 <script>
 /* ---- F4 · routing form gate + deferred Calendly embed ----------------------
    The calendar is hidden until #qualForm is completed. Only three routing

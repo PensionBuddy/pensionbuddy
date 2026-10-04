@@ -20,8 +20,9 @@
    NOTHING REACHES DAMIAN. The email is addressed to no one and sent, if at
    all, by the reader; the report never leaves the browser. So the privacy
    notice's "not sent to us or stored" stays true, and there is no consent
-   to ask for. The calculators' own "Email my results" forms, which do go to
-   Damian, are unchanged.
+   to ask for. The "Email me my results" forms (the two calculators'
+   own, and calculator-results on six more since Run 43), which do go to
+   Damian, are separate.
 
    A guess still veiled stays veiled: while any figure is under the guess
    card's veil, both buttons say so instead of giving it away.

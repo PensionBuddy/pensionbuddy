@@ -376,8 +376,11 @@ def run():
         for form in parser.forms:
             if form['attrs'].get('data-netlify') == 'true':
                 netlify.setdefault(form['attrs'].get('name'), []).append((name, form))
-    eq('14. the seven lead forms, each on its page', sorted((n, [p for p, _ in v]) for n, v in netlify.items()),
-       sorted((n, [p]) for p, n in LEAD_FORMS.items()))
+    want_forms = {}
+    for p, n in LEAD_FORMS.items():
+        want_forms.setdefault(n, []).append(p)
+    eq('14. the eight lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
+       sorted((n, sorted(ps)) for n, ps in want_forms.items()))
     for form_name, where in sorted(netlify.items()):
         page, form = where[0]
         names = [f[1] for f in form['fields']]
@@ -390,6 +393,9 @@ def run():
         eq('14. %s: an email field' % form_name, 'email' in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
         eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
+    eq('14. calculator-results: the six calculators declare the same fields, in the same order, and no opt-in',
+       sorted(set(tuple(f[1] for f in form['fields']) for _, form in netlify.get('calculator-results', []))),
+       [('form-name', 'results', 'inputs', 'link', 'page', 'bot-field', 'email')])
     finder = read('assets/js/pension-finder.js')
     m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
     eq('14. the finder declares exactly what PBFinder.fields() sends',
@@ -2493,6 +2499,78 @@ def run():
         m48 = dict(sources); m48[page] = mut
         eq('48. %s is caught' % label, want in asks_without_reason(m48), True)
 
+    # ----------------------------------------------------------------- 49
+    # Run 43, items 5a, 5b, 5c and 5e. Each of the nine calculators ends its
+    # results with, in this order: its own "What this doesn't show" line (each
+    # names only what the page's own assumptions say it leaves out, so it is
+    # true for every reader), the offer to email the results (my-pensions: its
+    # "Print or save this list", before the line), then one block: the
+    # question, one booking link and pagebuild.REASON. No other booking link
+    # sits in the results before it (the comparison's #riskCard is exempt only
+    # while it is hidden). booking.html shows its line only for a #from=
+    # naming one of the nine.
+    ARR49 = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
+             '<polyline points="12 5 19 12 12 19"/></svg></a>')
+    AFTER = {
+        'pension-calculator.html': ('pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', 'Talk it through, free', 'id="ecForm"'),
+        'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges, inflation.', 'Talk it through, free', 'id="ecForm"'),
+        'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', 'Talk through what this means for you', 'id="ecForm"'),
+        'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', 'Talk it through, free', 'id="ecForm"'),
+        'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', 'Talk it through, free', 'id="ecForm"'),
+        'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
+        'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', 'Talk it through, free', 'id="ptPrint"'),
+    }
+    squash = lambda s: re.sub(r'>\s+<', '><', s)
+
+    def after_faults(srcs):
+        f = []
+        for page, (frm, loop, words, offer) in sorted(AFTER.items()):
+            s = squash(srcs[page])
+            line = '<p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: %s</p>' % loop
+            blk = ('<div class="pb-after" id="pbAfter" data-pb-from="%s"><p class="pb-after-q">Want to go through this with Damian?</p>'
+                   '<a class="wlink" href="booking.html">%s%s%s</div>' % (frm, words, ARR49, pagebuild.REASON))
+            if s.count(line) != 1:
+                f.append('%s: what it does not show is missing, doubled or reworded' % page); continue
+            if s.count(blk) != 1:
+                f.append('%s: the ask is missing, doubled or reworded' % page); continue
+            n, o, b = s.index(line), s.find(offer), s.index(blk)
+            order = (0 <= o < n < b) if page == 'my-pensions.html' else (0 <= n < o < b)
+            if not order:
+                f.append('%s: not in order: what it does not show, the email offer, the ask' % page)
+            res = s.find('id="ptSum"') if page == 'my-pensions.html' else s.find('<div class="results">')
+            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a><p class="pb-why">[^<]*</p></div>', '', s[res:b]) if res >= 0 else ''
+            if 'href="booking.html' in seg:
+                f.append('%s: a booking link in the results before the ask' % page)
+        bk = srcs['booking.html']
+        m = re.search(r'from=\(\?:([a-z|-]+)\)', bk)
+        # Damian's words (Run 43, 4 October 2026)
+        said = '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>'
+        if said not in bk or not m or sorted(m.group(1).split('|')) != sorted(v[0] for v in AFTER.values()):
+            f.append('booking.html: the line, or the calculators it answers')
+        return f
+
+    eq('49. every calculator ends its results with what it does not show, the offer to email them, then one booking link with its reason; the booking page answers only those nine',
+       after_faults(sources), [])
+    pc, dc, fc, bk = sources['pension-calculator.html'], sources['director-calculator.html'], sources['pension-fees-calculator.html'], sources['booking.html']
+    blk_raw = re.search(r'    <div class="pb-after" id="pbAfter".*?\n    </div>\n', pc, re.S).group(0)
+    for label, page, mut, want in (
+            ('a loop line reworded', 'pension-fees-calculator.html', fc.replace('your tax relief.</p>', 'your tax position.</p>', 1),
+             'pension-fees-calculator.html: what it does not show is missing, doubled or reworded'),
+            ('the ask above the email offer', 'pension-calculator.html',
+             pc.replace(blk_raw, '', 1).replace('    <div class="email-cap">', blk_raw + '    <div class="email-cap">', 1),
+             'pension-calculator.html: not in order: what it does not show, the email offer, the ask'),
+            ('the cost of waiting asking again', 'director-calculator.html',
+             dc.replace('<div class="wtext" id="waitOut">Move the sliders to see it.</div>',
+                        '<div class="wtext" id="waitOut">Move the sliders to see it.</div><a class="wlink" href="booking.html">Book</a>', 1),
+             'director-calculator.html: a booking link in the results before the ask'),
+            ('a calculator missing from the booking page', 'booking.html', bk.replace('|pia)', ')', 1),
+             'booking.html: the line, or the calculators it answers')):
+        assert mut != sources[page], label
+        m49 = dict(sources); m49[page] = mut
+        eq('49. %s is caught' % label, want in after_faults(m49), True)
+
 
 
 
@@ -2506,6 +2584,14 @@ LEAD_FORMS = {
     'starter.html': 'starter-guide',
     'tracker.html': 'tracker-guide',
     'find-my-pension.html': 'pension-finder',
+    # Run 43, item 5e: "Email me my results" on six more calculators, under one
+    # name, with the same fields on each and no opt-in box
+    'broker-vs-autoenrolment.html': 'calculator-results',
+    'pension-fees-calculator.html': 'calculator-results',
+    'state-pension-reality-check.html': 'calculator-results',
+    'state-pension-entitlement.html': 'calculator-results',
+    'standard-fund-threshold.html': 'calculator-results',
+    'pia.html': 'calculator-results',
 }
 
 

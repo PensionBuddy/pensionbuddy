@@ -305,6 +305,18 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
 .email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
+/* AFTER THE RESULT (Run 43, item 5). Under every calculator's results, in this order:
+   what the calculator does not show (.pb-after-not, a caveat), the offer to email the
+   results (.email-cap), then the one booking ask (.pb-after) with its reason. Nothing
+   here moves, fades or is revealed; assets/js/pb-after.js only sets the link's #from=
+   (the booking page's line) and sends the shared form. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:20px 22px}
+.pb-after .pb-after-q{margin:0;font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
+.pb-after .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:1rem;font-weight:600;color:var(--teal-700);text-decoration:none}
+.pb-after .wlink:hover{text-decoration:underline}
+.pb-after .wlink .ico{width:15px;height:15px;flex:none}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
 /* #15: the success tick draws itself once, about 300ms, ease-out, as its
    message appears: going from display:none to shown starts the animation, so
    the draw needs no script. Drawn is the default and the draw runs only where
@@ -2626,6 +2638,29 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
       </div>
     </div>
+    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.</p>
+    <div class="email-cap" id="ecCap">
+      <div class="ec-top">
+        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+        <div class="ect"><b>Want these figures emailed to you?</b><span>Damian sends them himself, so they will not arrive straight away.</span></div>
+      </div>
+      <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="calculator-results"><input type="hidden" name="results"><input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="ec-row">
+          <span class="ffield"><input type="email" id="ecEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
+          <button class="btn btn-primary" style="width:auto" type="submit">Email me my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+        </div>
+        <p class="ec-note" id="ecErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
+        <p class="ec-note">We use your email to reply to this request, and for nothing else. See our <a href="privacy.html">Privacy Notice</a>. This is information, not advice.</p>
+      </form>
+      <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks - we've got it. Damian will be in touch personally.</span></div>
+    </div>
+    <div class="pb-after" id="pbAfter" data-pb-from="standard-fund-threshold">
+      <p class="pb-after-q">Want to go through this with Damian?</p>
+      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>
+    </div>
   </div>
 </div></div>
 
@@ -2685,7 +2720,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-forms.js?v=a7f5ffc5"></script>
+<script src="assets/js/pb-forms.js?v=071cee0a"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
 <script>
 /* standard-fund-threshold.html (Run 20 #7).
@@ -3089,8 +3124,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-guess.js?v=988458d5"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-share.js?v=0c417a51"></script>
-<script src="assets/js/pb-report.js?v=9e1105c6"></script>
+<script src="assets/js/pb-share.js?v=308731e9"></script>
+<script src="assets/js/pb-after.js?v=07cefa1d"></script>
+<script src="assets/js/pb-report.js?v=c538bc0d"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>

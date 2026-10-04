@@ -58,10 +58,11 @@
 }
 /* The printout: the title, then the summary, then the list as entered.
    Only main's direct sections go (the note under the page); the summary is
-   a section too, nested deeper, and must stay. */
+   a section too, nested deeper, and must stay. The ask (.pb-after) goes
+   too: the printout is the reader's own list; the caveat above it stays. */
 @media print{
   body > :not(main){display:none!important}
-  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next{display:none!important}
+  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
   main .phead{padding:0 0 16px!important;margin:0!important}
   .pt-wrap{display:flex;flex-direction:column;gap:18px;padding:0}
   .pt-sum{order:-1;position:static}
