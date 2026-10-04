@@ -18,6 +18,10 @@ C4a (INTERACTIVE-PROPOSALS-42 ranks 7, 2, 4 and 1):
   standard-fund-threshold.html the limit bar (S1-S9), the lump-sum bar (L1-L10)
   pension-fees-calculator.html the red area for what your plan's charges take (F1-F9)
 
+C4b (INTERACTIVE-PROPOSALS-42 ranks 3 and 14), index.html:
+  the hero figures, each a toggle that says where it comes from (H1-H14)
+  the phone slider in "What changes, and when." picking the relief step (T1-T8)
+
 Not part of tests/run-tests.py: one Chrome launch per scenario. Exit 0 or 1.
 """
 import http.server
@@ -44,6 +48,7 @@ PAGES = {
     'pots': 'my-pensions.html',
     'sft': 'standard-fund-threshold.html',
     'fees': 'pension-fees-calculator.html',
+    'home': 'index.html',
 }
 
 PROBE = r"""<script>
@@ -206,12 +211,105 @@ PROBE = r"""<script>
     return r;
   }
 
+  /* ---- index.html (ranks 3 and 14) ---- */
+  function rect(el){ if(!el) return null; var b=el.getBoundingClientRect(); return [b.left,b.top,b.width,b.height].map(function(v){ return +v.toFixed(2); }); }
+  function gapRects(){
+    var g=$('pbGap'), out={};
+    [].forEach.call(g.querySelectorAll('.pb-gap-n'),function(n,i){ out['n'+i]=rect(n); });
+    [].forEach.call(g.querySelectorAll('.pb-gap-bar'),function(n,i){ out['bar'+i]=rect(n); });
+    out.short=rect(g.querySelector('.pb-gap-short'));
+    out.src=rect(document.querySelector('.pb-hero-chart .pb-src'));
+    var note=document.querySelector('.pb-hero-chart .gap-note'), ctl=$('pbNeedCtl');
+    out.note=rect(note);
+    /* the slider above the caveat is drawn only with script (main's own behaviour): where it is
+       drawn, the caveat sits its margin below the slider; ctlGap is that, measured */
+    out.ctlGap=ctl&&ctl.getClientRects().length?[+(note.getBoundingClientRect().top-ctl.getBoundingClientRect().bottom).toFixed(2),
+      Math.max(parseFloat(cs(ctl).marginBottom),parseFloat(cs(note).marginTop))]:null;
+    return out;
+  }
+  function named(b){ return b.getAttribute('aria-labelledby').split(' ').map(function(i){ return ($(i).textContent||'').trim(); }).join(' '); }
+  function whyState(){
+    var p=$('pbGapWhy');
+    return {text:p?p.textContent:null,live:p?p.getAttribute('aria-live'):null,display:p?cs(p).display:null,h:p?+p.getBoundingClientRect().height.toFixed(2):null,
+      pressed:['Need','Short','State'].map(function(k){ var b=$('pbGapWhy'+k); return b?b.getAttribute('aria-pressed'):null; }),
+      hidden:['Need','Short','State'].map(function(k){ var b=$('pbGapWhy'+k); return b?b.hidden:null; })};
+  }
+  function figs(){
+    var g=$('pbGap');
+    return {need:$('pbNeed')?$('pbNeed').value:null,
+      n:[].map.call(g.querySelectorAll('.pb-gap-n'),function(n){ return n.textContent; }),
+      h:[].map.call(g.querySelectorAll('.pb-gap-bar,.pb-gap-short'),function(n){ return n.style.getPropertyValue('--h'); }),
+      live:g.classList.contains('pb-gap-live')};
+  }
+  function tl(){
+    var p=$('pbTlPick'), r=$('pbTlAgeS'), on=[].slice.call(document.querySelectorAll('#pbTl .pb-tl-picked'));
+    return {shown:p?p.getClientRects().length>0&&cs(p).display!=='none':null, display:p?cs(p).display:null,
+      value:r?r.value:null, valuetext:r?r.getAttribute('aria-valuetext'):null, fill:r?r.style.getPropertyValue('--fill'):null,
+      v:txt($('pbTlAgeSV')), now:txt($('pbTlNow')), nowHidden:$('pbTlNow')?$('pbTlNow').getAttribute('aria-hidden'):null,
+      picked:on.map(function(li){ return li.getAttribute('data-age'); }),
+      pickedBg:on.length?cs(on[0]).backgroundColor:null, pickedDot:on.length?getComputedStyle(on[0],'::after').backgroundColor:null, pickedRing:on.length?getComputedStyle(on[0],'::after').borderTopColor:null,
+      card:txt($('pbTlAge')), cardWhat:txt($('pbTlWhat'))};
+  }
+  function liRects(){ return [].map.call(document.querySelectorAll('#pbTl .pb-tl-step'),rect); }
+  async function home(){
+    var r={}, g=$('pbGap'), ch=document.querySelector('.pb-hero-chart');
+    r.H1=[g.getAttribute('role'),g.getAttribute('aria-label')];
+    r.H4=gapRects();
+    r.T1=tl(); r.T8=[].map.call(document.querySelectorAll('#pbTl .pb-tl-step'),function(li){ return cs(li).transitionDuration; });
+    r.surface2=tok('--surface-2'); r.slate=tok('--slate');
+    r.H14=[g.querySelectorAll('button').length,!!$('pbGapWhy')];
+    if(nojs) return r;
+    r.H2=[].map.call(g.querySelectorAll('button'),function(b){
+      return [b.id,b.type,b.getAttribute('aria-pressed'),b.getAttribute('aria-controls'),b.querySelectorAll('.pb-gap-n').length,named(b)];
+    });
+    /* each button has its own bar's box, and a tap near the bar's foot lands on it */
+    r.H2b=[].map.call(g.querySelectorAll('button'),function(b){
+      var bb=rect(b), pb=rect(b.parentNode), same=bb.every(function(v,i){ return Math.abs(v-pb[i])<=0.5; });
+      var x=bb[0]+bb[2]-8, y=bb[1]+bb[3]-8, hit=y>0&&y<innerHeight?(function(e){ return !!e&&e.closest('button')===b; })(document.elementFromPoint(x,y)):'offscreen';
+      /* the red block's caption ("a year short") paints over its button: a tap on its words must reach the button too */
+      var sl=b.parentNode.querySelector('.pb-gap-sl'), slHit=true;
+      if(sl){ var sr=rect(sl), sx=sr[0]+sr[2]/2, sy=sr[1]+sr[3]/2;
+        slHit=sy>0&&sy<innerHeight?(function(e){ return !!e&&e.closest('button')===b; })(document.elementFromPoint(sx,sy)):'offscreen'; }
+      return [b.id,same,bb[3]>=44,hit,sl?slHit:'none'];
+    });
+    var p=$('pbGapWhy'), src=document.querySelector('.pb-hero-chart .pb-src');
+    r.H3=[p&&p.previousElementSibling?p.previousElementSibling.tagName.toLowerCase()+'.'+p.previousElementSibling.className:null,
+      !!p&&ch.lastElementChild===p, whyState(), txt(src), src.nextElementSibling?src.nextElementSibling.id:null];
+    var f0=figs();
+    /* H5-H7: need, then State, then State again */
+    var note0=rect(document.querySelector('.pb-hero-chart .gap-note'));
+    $('pbGapWhyNeed').click(); await frames();
+    r.H5=[whyState(),rect(document.querySelector('.pb-hero-chart .gap-note')),note0];
+    $('pbGapWhyState').click(); await frames(); r.H6=whyState();
+    $('pbGapWhyState').click(); await frames(); r.H7=whyState();
+    r.H13=[f0,figs()];
+    $('pbGapWhyShort').click(); await frames(); r.H8=whyState();
+    setv('pbNeed',50000); await frames(); r.H9=whyState();
+    setv('pbNeed',15000); await frames(); r.H10=whyState();
+    setv('pbNeed',50000); await frames(); $('pbGapWhyNeed').click(); await frames(); r.H11=whyState();
+    var modest=document.querySelector('.pb-life-card[data-level="modest"]');
+    if(modest&&window.PBLivingStandards){
+      modest.click(); await frames();
+      r.H12a=[whyState(),window.PBLivingStandards.standard('modest','single').annual];
+      $('pbLifeCouple').click(); await frames(); $('pbGapWhyState').click(); await frames();
+      r.H12b=whyState();
+    }
+    /* the phone slider */
+    var li0=liRects();
+    setv('pbTlAgeS',62); await frames(); r.T2=tl(); r.T2.li=liRects();
+    setv('pbTlAgeS',18); await frames(); r.T3=tl();
+    setv('pbTlAgeS',61); await frames(); r.T4=tl();
+    setv('pbTlAgeS',75); await frames(); r.T5=tl();
+    setv('pbTlAgeS',40); await frames(); r.T1b=[li0,liRects(),tl()];
+    return r;
+  }
+
   document.addEventListener('DOMContentLoaded',function(){
     setTimeout(async function(){
       /* the probe's own input events are not a reader's (hadRecentInput stays false), so
          only the shifts before it starts acting are the page's own */
       var body={id:id,kind:kind,nojs:nojs,width:innerWidth,reduce:matchMedia('(prefers-reduced-motion: reduce)').matches,actAt:Math.round(performance.now())};
-      try{ body.r=await ({pots:pots,sft:sft,fees:fees})[kind](); }catch(e){ body.crash=String(e&&e.stack||e); }
+      try{ body.r=await ({pots:pots,sft:sft,fees:fees,home:home})[kind](); }catch(e){ body.crash=String(e&&e.stack||e); }
       await wait(100);
       body.shifts=shifts; body.errors=errors;
       var x=new XMLHttpRequest(); x.open('POST','/__result?id='+encodeURIComponent(id),false); x.send(JSON.stringify(body));
@@ -272,6 +370,12 @@ SCEN = {
     'fees-1440': ('fees', 1440, False, []),
     'fees-500': ('fees', 500, False, []),
     'fees-nojs-1440': ('fees', 1440, True, []),
+    'home-1440': ('home', 1440, False, []),
+    'home-500': ('home', 500, False, []),
+    'home-reduce-1440': ('home', 1440, False, [REDUCE]),
+    'home-reduce-500': ('home', 500, False, [REDUCE]),
+    'home-nojs-1440': ('home', 1440, True, []),
+    'home-nojs-500': ('home', 500, True, []),
 }
 EXPECTED = list(SCEN)
 
@@ -300,7 +404,7 @@ def run_all():
 run_all()
 
 RED, INK, WHITE, SLATE = 'rgb(164, 41, 29)', 'rgb(11, 31, 28)', 'rgb(255, 255, 255)', 'rgb(88, 107, 133)'
-NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges')
+NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl')
 
 
 def near(a, b, tol):
@@ -439,6 +543,100 @@ def check_fees(sid, r, nojs):
     eq('F5 %s: no charges: the sentence says so' % sid, say.startswith('Over 25 years, with no charges on your plan'), True)
 
 
+# ---------------------------------------------------------------- the home page
+GAP_LABEL = 'Two bars. People expect to need 40,860 euro a year. The State Pension pays 15,564. The gap is 25,296.'
+STATE_TAIL = ' at the maximum personal rate: €299.30 a week from January 2026, 52 weekly payments. Rates change, usually at each Budget.'
+
+
+def fmt(v):
+    return '€{:,}'.format(int(round(v)))
+
+
+def check_home(sid, rep, r, nojs, reduce):
+    width = SCEN[sid][1]
+    if nojs:
+        eq('H14 %s: no JavaScript: role "img", no button, no #pbGapWhy' % sid, [r['H1'][0], r['H14']], ['img', [0, False]])
+        eq('H1 %s: the chart\'s spoken label as the markup gives it' % sid, r['H1'][1], GAP_LABEL)
+        eq('T7 %s: no JavaScript: the slider is not drawn, no step picked' % sid,
+           [r['T1']['shown'], r['T1']['picked']], [False, []])
+        return
+    eq('H1 %s: #pbGap is a group, its spoken label unchanged' % sid, r['H1'], ['group', GAP_LABEL])
+    eq('H2 %s: three toggle buttons, each wrapping its figure, named by figure and label' % sid, r['H2'], [
+        ['pbGapWhyNeed', 'button', 'false', 'pbGapWhy', 1, '€40,860 What people expect to need'],
+        ['pbGapWhyShort', 'button', 'false', 'pbGapWhy', 1, '€25,296 a year short'],
+        ['pbGapWhyState', 'button', 'false', 'pbGapWhy', 1, '€15,564 What the State Pension pays']])
+    eq('H2 %s: each button has its own bar\'s box (at least 44px tall); a tap near the bar\'s foot lands on it' % sid,
+       [x[:3] + [x[3] in (True, 'offscreen')] for x in r['H2b']],
+       [[k, True, True, True] for k in ('pbGapWhyNeed', 'pbGapWhyShort', 'pbGapWhyState')])
+    eq('H2 %s: a tap on the words "a year short" lands on the gap button; the other bars have no caption' % sid,
+       [[x[0], x[4]] for x in r['H2b']],
+       [['pbGapWhyNeed', 'none'], ['pbGapWhyShort', True], ['pbGapWhyState', 'none']])
+    prev, last, w, src, after = r['H3']
+    eq('H3 %s: #pbGapWhy follows the caveat, last in the chart column' % sid, [prev, last], ['p.gap-note', True])
+    eq('H3 %s: at load the line is empty, at no height, in the page, not live' % sid,
+       [w['text'], w['display'], w['h'], w['live']], ['', 'block', 0, 'off'])
+    eq('H3 %s: the source still sits straight above the slider' % sid, [src, after], ['Royal London Ireland, 2026.', 'pbNeedCtl'])
+    w, note1, note0 = r['H5']
+    eq('H5 %s: need pressed: the survey average, polite, drawn' % sid,
+       [w['text'], w['live'], w['h'] > 0, w['pressed']],
+       ['€40,860 a year is the survey average for what people expect to need (Royal London Ireland, 2026).', 'polite', True,
+        ['true', 'false', 'false']])
+    eq('H5 %s: the caveat does not move' % sid, note1, note0)
+    if reduce:
+        if width == 500:
+            check_t1(sid, r)
+        return
+    eq('H6 %s: State pressed' % sid, [r['H6']['text'], r['H6']['pressed']],
+       ['€15,564 a year is the State Pension (Contributory)' + STATE_TAIL, ['false', 'false', 'true']])
+    eq('H7 %s: State pressed again: nothing pressed, the line empty at no height' % sid,
+       [r['H7']['pressed'], r['H7']['h'], r['H7']['text']], [['false'] * 3, 0, ''])
+    f0, f1 = r['H13']
+    eq('H13 %s: pressing changed no figure, no bar, no value, and set no pb-gap-live' % sid,
+       [f1, f1['need'], f1['live']], [f0, '40860', False])
+    eq('H8 %s: the gap pressed' % sid, [r['H8']['text'], r['H8']['pressed']],
+       ['€25,296 a year is €40,860 less €15,564.', ['false', 'true', 'false']])
+    eq('H9 %s: the slider to 50,000, the gap pressed: the line follows, not live' % sid, [r['H9']['text'], r['H9']['live']],
+       ['€34,436 a year is €50,000 less €15,564.', 'off'])
+    eq('H10 %s: the slider to 15,000: no gap button, nothing pressed, the line empty' % sid,
+       [r['H10']['hidden'][1], r['H10']['pressed'], r['H10']['text'], r['H10']['h']], [True, ['false'] * 3, '', 0])
+    eq('H11 %s: need pressed at 50,000: the reader\'s own figure' % sid, r['H11']['text'],
+       '€50,000 a year is your own figure, set with the slider above.')
+    w, modest = r['H12a']
+    eq('H12 %s: Modest card, need pressed' % sid, w['text'],
+       fmt(modest) + ' a year is the Pensions Council’s Modest standard of living for one person, at 2024 prices.')
+    eq('H12 %s: couple, State pressed' % sid, r['H12b']['text'],
+       '€31,127 a year is two State Pensions (Contributory), each' + STATE_TAIL)
+    if width == 500:
+        check_t1(sid, r)
+        t = r['T2']
+        eq('T2 %s: 62 picks From 60, not From 61' % sid,
+           [t['picked'], t['now'], t['valuetext'], t['v'], t['fill']], [['60'], '40% From 60', '62: 40%, From 60', '62', '77.19%'])
+        eq('T3 %s: 18 picks Under 30' % sid, [r['T3']['picked'], r['T3']['now']], [['18'], '15% Under 30'])
+        eq('T4 %s: 61 picks From 60' % sid, [r['T4']['picked'], r['T4']['now']], [['60'], '40% From 60'])
+        eq('T5 %s: 75 picks From 60' % sid, [r['T5']['picked'], r['T5']['now']], [['60'], '40% From 60'])
+        li0, li1, back = r['T1b']
+        eq('T1 %s: no step moves when the slider does (62, then 40)' % sid, [r['T2']['li'], li1], [li0, li0])
+        eq('T1 %s: back at 40, as at load' % sid, back, r['T1'])
+    else:
+        eq('T6 %s: wide: the slider not drawn, the card at "15%%" as on main' % sid,
+           [r['T1']['shown'], r['T1']['card'], r['T1']['cardWhat']], [False, '15%', 'Under 30'])
+    eq('T8 %s: no transition on any step' % sid, sorted(set(r['T8'])), ['0s'])
+
+
+def check_t1(sid, r):
+    t = r['T1']
+    eq('T1 %s: the slider drawn, at 40, From 40 picked alone' % sid,
+       [t['shown'], t['value'], t['picked'], t['now'], t['valuetext'], t['nowHidden']],
+       [True, '40', ['40'], '25% From 40', '40: 25%, From 40', 'true'])
+    eq('T1 %s: the picked step on --surface-2, its dot and ring slate' % sid, [t['pickedBg'], t['pickedDot'], t['pickedRing']], [r['surface2'], r['slate'], r['slate']])
+    bad = [x for x in r_shifts(sid) if any('pbTl' in p or 'pb-tl' in p for p in x.get('sources', []))]
+    eq('T1 %s: no layout shift has a source in the timeline' % sid, bad, [])
+
+
+def r_shifts(sid):
+    return REPORTS[sid].get('shifts', [])
+
+
 for sid in EXPECTED:
     rep = REPORTS.get(sid)
     if not rep:
@@ -453,6 +651,8 @@ for sid in EXPECTED:
         check_pots(sid, r, nojs)
     elif kind == 'sft':
         check_sft(sid, r, nojs, REDUCE in flags)
+    elif kind == 'home':
+        check_home(sid, rep, r, nojs, REDUCE in flags)
     else:
         check_fees(sid, r, nojs)
 
@@ -460,6 +660,22 @@ if 'sft-1440' in REPORTS and 'sft-nojs-1440' in REPORTS:
     a, b = REPORTS['sft-1440'].get('r') or {}, REPORTS['sft-nojs-1440'].get('r') or {}
     eq('S3: the limit bar at load is the markup a reader without JavaScript gets', a.get('S3'), b.get('S3'))
     eq('L7: the lump-sum bar at load is the markup a reader without JavaScript gets', a.get('L7'), b.get('L7'))
+
+for js, ns in (('home-1440', 'home-nojs-1440'), ('home-500', 'home-nojs-500')):
+    if js in REPORTS and ns in REPORTS:
+        a, b = (REPORTS[js].get('r') or {}).get('H4'), (REPORTS[ns].get('r') or {}).get('H4')
+        a, b = a or {}, b or {}
+        far = sorted(k for k in a if k not in ('note', 'ctlGap') and not (a[k] and b.get(k) and all(abs(x - y) <= 0.5 for x, y in zip(a[k], b[k]))))
+        eq('H4 %s: the three figures, the bars, the gap block and the source where a reader without JavaScript has them' % js, far, [])
+        # the plan had the caveat too; but the "What you expect to need" slider between the source and the
+        # caveat is drawn only with script (main's own behaviour, Run 20), so the caveat is lower by it.
+        # What this commit must not do is put anything between them: the caveat keeps its left, width and
+        # height, and sits exactly its own margin under the slider
+        n1, n0, gapm = a.get('note'), b.get('note'), a.get('ctlGap')
+        eq('H4 %s: the caveat keeps its left, width and height' % js,
+           bool(n1 and n0) and all(abs(n1[i] - n0[i]) <= 0.5 for i in (0, 2, 3)), True)
+        eq('H4 %s: and sits its own margin under the slider, nothing between' % js,
+           bool(gapm) and abs(gapm[0] - gapm[1]) <= 0.5, True)
 
 print('records in ' + OUT)
 eq('every scenario reported', sorted(REPORTS), sorted(EXPECTED))
