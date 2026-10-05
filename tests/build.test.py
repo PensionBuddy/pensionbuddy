@@ -2693,6 +2693,45 @@ def run():
 
 
 
+    # ----------------------------------------------------------------- 53
+    # Run 47: the two prescribed warnings (Regs 372 and 392, compliance pack
+    # 1.4) come from one source, pagebuild.WARN. Every page with projected
+    # figures carries exactly its boxes, each the exact two sentences; no
+    # other page carries one; no box sits outside the WARN comments.
+    SENT = ('Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.',
+            'Warning: The value of your investment may go down as well as up.')
+    eq('53. pagebuild.WARN is the two sentences, word for word, each bold, in one pb-warn box',
+       pagebuild.WARN, '<div class="pb-warn"><p><b>%s</b></p><p><b>%s</b></p></div>' % SENT)
+    eq('53. the pages with projected figures, and their boxes',
+       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('pension-calculator.html', 1),
+                                              ('pension-fees-calculator.html', 1), ('pia.html', 1), ('starter.html', 3)])
+    eq('53. every page carries exactly its warnings, word for word, from pagebuild.WARN, and no other page one',
+       findings(pagebuild.warn_drift(sources)), [])
+
+    def sentences(srcs):
+        """pages whose visible box text is not the two exact sentences, or that lack them"""
+        bad = []
+        for page, n in pagebuild.WARN_PAGES.items():
+            got = re.findall(r'<div class="pb-warn"><p><b>([^<]*)</b></p><p><b>([^<]*)</b></p></div>', srcs[page])
+            if len(got) != n or any(g != SENT for g in got):
+                bad.append(page)
+        return sorted(bad)
+    eq('53. and each box reads the exact two sentences', sentences(sources), [])
+    for label, page, mut in (
+            ('a word changed on one page', 'pia.html', sources['pia.html'].replace('may go down as well as up', 'can go down as well as up', 1)),
+            ('a box removed', 'starter.html', sources['starter.html'].replace(pagebuild.WARN_OPEN + pagebuild.WARN + pagebuild.WARN_CLOSE, '', 1)),
+            ('a hand-written box outside the comments', 'director-calculator.html',
+             sources['director-calculator.html'].replace(pagebuild.WARN_OPEN + pagebuild.WARN + pagebuild.WARN_CLOSE, pagebuild.WARN, 1)),
+            ('a box on a page without projected figures', 'glossary.html',
+             sources['glossary.html'].replace('</main>', pagebuild.WARN_OPEN + pagebuild.WARN + pagebuild.WARN_CLOSE + '</main>', 1))):
+        assert mut != sources[page], label
+        m53 = dict(sources); m53[page] = mut
+        eq('53. %s is caught, on that page only' % label, sorted(set(findings(pagebuild.warn_drift(m53)))), [(page, 'warn')])
+    m53 = dict(sources); m53['pia.html'] = sources['pia.html'].replace('may go down as well as up', 'can go down as well as up', 1)
+    eq('53. and the sentence check names it', sentences(m53), ['pia.html'])
+    eq('53. the copy editor still locks every box', "'pb-warn'," in read('tools/edit-server.py'), True)
+
+
 # Run 27: every Netlify form on the site, by page. Adding a lead form means
 # adding it here, and telling Damian its name for the notification settings.
 LEAD_FORMS = {
