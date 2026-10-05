@@ -1,0 +1,10 @@
+{
+  "_about": "The one copy of the prescribed warnings and the regulator line for anything built in code (netlify/lib/emails.js). The pages carry the same words in their HTML; tests/submission-created.test.js holds every page's .pb-warn box and footer line to this file.",
+  "warnings": [
+    "Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.",
+    "Warning: The value of your investment may go down as well as up."
+  ],
+  "regulator": "Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.",
+  "register": "You can check our authorisation on the Central Bank's register at registers.centralbank.ie.",
+  "address": "Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3."
+}

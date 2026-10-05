@@ -103,7 +103,7 @@ PROBE = r"""<script>
     $('ecMore').click();
     set('ecName','Test Person'); set('ecEmail','test@example.com'); $('ecConsent').checked=true;
   }else if($('mForm')){
-    set('mEmail','test@example.com'); $('mOptin').checked=tick;
+    set('mEmail','test@example.com'); $('mConsent').checked=true; $('mOptin').checked=tick;
   }else if($('pfForm')){
     set('pfEmp0Name','Harbour Bank'); set('pfEmp0From','2005'); set('pfEmp0To','2011');
     set('pfName','Test Person'); set('pfDob','1970-04-07'); set('pfAddress','1 Main Street, Dublin');
@@ -257,6 +257,9 @@ def main():
             eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
             if name == 'calculator-results':
                 eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))
+            if name.endswith('-guide'):
+                # the box to email the guide (netlify/functions/submission-created.js sends only on yes)
+                eq('%s: the box ticked' % tag, fields.get('consent'), ['yes'])
             if 'marketing_consent' in fields:
                 eq('%s: the consent as the box was left' % tag, fields['marketing_consent'],
                    ['yes' if mode == 'ok' else 'no'])
