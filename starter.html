@@ -2457,7 +2457,10 @@ html.pb-readying [data-pb-wait]{transition:none!important}
    own. Byte for byte on every page: tools/pagebuild.py SHARED_CSS ('TYPE',
    'type-css'), guarded by chrome_drift. */
 body{font-weight:500;line-height:1.6}
-.btn,button.btn,a.btn{font-weight:600}
+.btn,button.btn,a.btn,.pb-consent .pb-c-yes,.pb-consent .pb-c-no{font-weight:600}
+/* the cookie bar's two buttons the same height (a clear 1px border on
+   "That's fine" to match "No thanks"), so they share one line exactly */
+.pb-consent .pb-c-yes{border:1px solid transparent}
 h1,h2,h3,h4,h5,h6{font-weight:700}
 main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
