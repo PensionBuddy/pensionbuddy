@@ -269,6 +269,51 @@ linked? (e) the booking page without its own form: anything the routing
 form was there for that compliance needs back? (f) the hero's three links
 and the outline buttons: anything to raise?
 
+1.25 (g) Emails sent automatically through Resend (proposed, not on the site)
+------------------------------------------------------------------------------
+
+What changes (branch claude/brave-babbage-ttifmw, not merged): after a form
+is submitted, the site emails the visitor what they asked for, through
+Resend, an email-sending service. It sends only when the visitor ticked the
+box. "Email me this result" gets the result, the figures chosen, a link
+back to the calculator, one booking button and the two prescribed warnings;
+the three guide forms get the guide's link only, and now carry their own
+box, "Yes, email me the guide.", that must be ticked. Nothing is sent for
+the old pension finder. No one is added to a list. The submission is still
+stored in Netlify as before (question 1.15); nothing else is stored by the
+site. The thank-you after "Email me this result" now reads "Thanks,
+[first name]. Because you ticked the box, this result is emailed to you
+automatically." (it read "Damian will email you this result himself, so it
+will not arrive straight away.").
+
+Proposed wording for the Privacy Notice, a new paragraph in "Booking and
+third parties", after the sentence on Netlify. Square brackets are facts to
+confirm before it goes live:
+
+"When you ask us to email you something and tick the box, we use Resend, an
+email-sending service, to send it to you. Resend acts on our behalf, as our
+processor, and uses your details only to send that one email. For a
+calculator result, we pass Resend your name, your email address, what the
+calculator showed, the figures you chose and a link that opens them again.
+For a guide, we pass Resend your email address only. We do not add you to a
+mailing list, and we send you nothing else unless you separately ticked the
+box for occasional emails. Resend keeps a record of each email it sends,
+including its content, for [number] days, and then deletes it. Resend is
+based in [the United States]; your details are transferred there under
+[the European Commission's Standard Contractual Clauses / the EU-US Data
+Privacy Framework]."
+
+What we need: (a) approval of the paragraph; (b) Resend's retention period
+for sent emails and their content, from Resend's data processing agreement
+and account settings, to fill in "[number] days"; (c) the transfer basis,
+from the same agreement; (d) whether the existing sentence "We may also use
+an email tool to send guides and follow-ups." should now name Resend, or be
+replaced by this paragraph; (e) whether "Thanks, [first name]. Because you
+ticked the box, this result is emailed to you automatically." is
+acceptable, and the email text itself (docs/email-shots/*.txt); (f)
+whether the box on the guide forms is needed, or the request alone would
+do (as in (d) above).
+
   2. The Letter of Authority, full wording
   3. The Privacy Notice: sentences to approve
   4. The readiness check: brief

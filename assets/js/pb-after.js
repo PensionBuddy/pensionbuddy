@@ -34,7 +34,8 @@
       the form is used. The form asks for a name, an email and a tick in a
       box that is never ticked for the reader, and sends nothing until all
       three are there. Only then are the words and figures on screen, the
-      inputs, pb-share's link and the page's address read from the page,
+      inputs (each as its label and shown value), pb-share's link and the
+      page's address read from the page,
       and posted with the name, the email and consent=yes to Netlify, under
       "calculator-results", through PBForms (assets/js/pb-forms.js), exactly
       the fields the form declares. Counted as email_result_submit; no
@@ -126,12 +127,30 @@
     });
     return parts.join(' | ').slice(0, 2000);
   }
+  /* each input as its label and the value the page shows beside it (the
+     slider's #<id>V), "Your age now: 40 | Pension saved so far: €50,000",
+     which is how netlify/lib/emails.js lists them in the email */
+  function clean(s) { return String(s).replace(/\|/g, '/').replace(/\s+/g, ' ').trim(); }
+  function labelOf(el) {
+    var set = el.type === 'radio' && el.closest('fieldset'), lg = set && set.querySelector('legend');
+    if (lg) { return text(lg); }
+    var l = el.id && document.querySelector('label[for="' + el.id + '"]');
+    if (l && text(l)) { return text(l); }
+    if (el.type !== 'radio' && el.closest('label') && text(el.closest('label'))) { return text(el.closest('label')); }
+    return el.getAttribute('aria-label') || el.id || el.name;
+  }
+  function valueOf(el) {
+    if (el.type === 'checkbox') { return el.checked ? 'yes' : 'no'; }
+    if (el.type === 'radio') { return text(el.closest('label')) || el.value; }
+    var shown = el.id && document.getElementById(el.id + 'V');
+    return (shown && text(shown)) || el.value;
+  }
   function inputs() {
     return [].slice.call(document.querySelectorAll('[data-pb-calc] input[type=range], [data-pb-calc] input[type=text], ' +
       '[data-pb-calc] input[type=checkbox], [data-pb-calc] input[type=radio]:checked'))
       .filter(function (el) { return (el.id || el.name) && el.id !== 'pbGuessRange' && !el.closest(NOT); })
-      .map(function (el) { return (el.type === 'radio' ? el.name : el.id) + '=' + (el.type === 'checkbox' ? (el.checked ? '1' : '0') : el.value); })
-      .join(', ');
+      .map(function (el) { return clean(labelOf(el)) + ': ' + clean(valueOf(el)); })
+      .join(' | ').slice(0, 2000);
   }
   function say(msgs, bad) {
     err.textContent = msgs.join(' ');
@@ -152,7 +171,7 @@
     var name = nameEl.value.trim(), email = mailEl.value.trim(), msgs = [], bad = [];
     if (!name) { msgs.push('Please enter your name.'); bad.push(nameEl); }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msgs.push('Please enter a valid email address.'); bad.push(mailEl); }
-    if (!box.checked) { msgs.push('Please tick the box, so we may store your details.'); bad.push(box); }
+    if (!box.checked) { msgs.push('Please tick the box if you want this result emailed to you.'); bad.push(box); }
     say(msgs, bad);
     if (bad.length) { bad[0].focus(); return; }
     if (form.getAttribute('aria-busy') === 'true') { return; }
@@ -176,7 +195,7 @@
     window.PBForms.send(form, v).then(function (sent) {
       form.removeAttribute('aria-busy');
       if (sent) {
-        done('Thanks, ' + name.split(/\s+/)[0] + '. Damian will email you this result himself, so it will not arrive straight away.');
+        done('Thanks, ' + name.split(/\s+/)[0] + '. Because you ticked the box, this result is emailed to you automatically.');
       } else { viaEmail(); }
     });
   });

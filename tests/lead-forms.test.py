@@ -103,7 +103,7 @@ PROBE = r"""<script>
     $('ecMore').click();
     set('ecName','Test Person'); set('ecEmail','test@example.com'); $('ecConsent').checked=true;
   }else if($('mForm')){
-    set('mEmail','test@example.com'); $('mOptin').checked=tick;
+    set('mEmail','test@example.com'); $('mConsent').checked=true; $('mOptin').checked=tick;
   }else if($('pfForm')){
     set('pfEmp0Name','Harbour Bank'); set('pfEmp0From','2005'); set('pfEmp0To','2011');
     set('pfName','Test Person'); set('pfDob','1970-04-07'); set('pfAddress','1 Main Street, Dublin');
@@ -208,8 +208,9 @@ class Declared(HTMLParser):
 
 # Run 28: every lead form's success message, word for word (Run 45: "Email
 # me this result" has its own, with the reader's first name)
-SUCCESS = "Thanks - we've got it. Damian will be in touch personally."
-SUCCESS_RESULT = 'Thanks, Test. Damian will email you this result himself, so it will not arrive straight away.'
+SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
+SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
+SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
 
 def main():
     if not os.path.exists(CHROME):
@@ -257,6 +258,9 @@ def main():
             eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
             if name == 'calculator-results':
                 eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))
+            if name.endswith('-guide'):
+                # the box to email the guide (netlify/functions/submission-created.js sends only on yes)
+                eq('%s: the box ticked' % tag, fields.get('consent'), ['yes'])
             if 'marketing_consent' in fields:
                 eq('%s: the consent as the box was left' % tag, fields['marketing_consent'],
                    ['yes' if mode == 'ok' else 'no'])
@@ -271,7 +275,7 @@ def main():
             if mode == 'ok':
                 # Run 28: one success message on every form, promising only
                 # what happens (Netlify emails the visitor nothing)
-                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS) in said and 'email app' not in said, True)
+                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS_FINDER if name == 'pension-finder' else SUCCESS) in said and 'email app' not in said, True)
                 eq('%s: and promises nothing that is not sent' % tag,
                    [w for w in ('on its way', 'on the way', 'if nothing arrives', 'delivery depends') if w in said.lower()], [])
             else:

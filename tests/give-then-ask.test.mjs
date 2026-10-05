@@ -407,13 +407,13 @@ navs.length = 0;
 eq('G12. a trusted press on the send button, the form empty', await click('#ecForm button[type=submit]'), true);
 eq('G12. sends nothing, and says what is missing',
    [await ev(`[document.getElementById('ecErr').hidden, document.getElementById('ecErr').textContent, document.getElementById('ecOk').hidden]`), navs.filter(u => /^mailto:/.test(u)).length],
-   [[false, 'Please enter your name. Please enter a valid email address. Please tick the box, so we may store your details.', true], 0]);
+   [[false, 'Please enter your name. Please enter a valid email address. Please tick the box if you want this result emailed to you.', true], 0]);
 await click('#ecName'); await send('Input.insertText', { text: 'Test Person' });
 await click('#ecEmail'); await send('Input.insertText', { text: 'test@example.com' });
 await click('#ecForm button[type=submit]');
 eq('G12. a name and an email but no tick: still nothing sent',
    [await ev(`document.getElementById('ecErr').textContent`), navs.filter(u => /^mailto:/.test(u)).length],
-   ['Please tick the box, so we may store your details.', 0]);
+   ['Please tick the box if you want this result emailed to you.', 0]);
 eq('G12. a trusted press on the box', await click('#ecConsent'), true);
 await click('#ecForm button[type=submit]');
 await sleep(800);
