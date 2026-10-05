@@ -171,7 +171,7 @@
     var name = nameEl.value.trim(), email = mailEl.value.trim(), msgs = [], bad = [];
     if (!name) { msgs.push('Please enter your name.'); bad.push(nameEl); }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msgs.push('Please enter a valid email address.'); bad.push(mailEl); }
-    if (!box.checked) { msgs.push('Please tick the box, so we may store your details.'); bad.push(box); }
+    if (!box.checked) { msgs.push('Please tick the box if you want this result emailed to you.'); bad.push(box); }
     say(msgs, bad);
     if (bad.length) { bad[0].focus(); return; }
     if (form.getAttribute('aria-busy') === 'true') { return; }
