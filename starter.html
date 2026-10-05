@@ -30,7 +30,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Start a pension", "item": "https://pensionbuddy.ie/starter.html"}]}</script>
 <!-- SEO:END -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Have I left it too late to start?", "acceptedAnswer": {"@type": "Answer", "text": "Almost certainly not. Earlier gives money more time to grow, but starting now beats waiting longer, and tax relief is there at any age."}}, {"@type": "Question", "name": "How much do I need to put in?", "acceptedAnswer": {"@type": "Answer", "text": "There's no single right number. It depends on your income, your goals and what's comfortable."}}, {"@type": "Question", "name": "I've a work pension I've ignored. Where do I start?", "acceptedAnswer": {"@type": "Answer", "text": "That's a great place to start, because there may already be value there and employer contributions you don't want to miss. We'll look at what you've got and explain whether it's set up well for you."}}]}</script>
-<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -54,11 +54,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -2016,40 +2016,19 @@ a.assure:hover{border-color:var(--teal)}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32; served from the site since Run 34). Inter and the
-   footer wordmark's Schibsted Grotesk 800 come from assets/fonts/, not
-   from Google Fonts, so a visit sends nothing to Google before the cookie
-   choice. The same files and character ranges Google's stylesheet served
-   on 28 September 2026 (Inter v20, one variable file per range for every
-   weight the site uses, 300 to 800; Schibsted Grotesk v7), under the SIL
-   Open Font License (assets/fonts/OFL-*.txt). Each page preloads
-   inter-latin.woff2 in its <head>.
-   What the text is set in while Inter is still on
-   its way: Arial, sized per weight to Inter's widths (measured in Chrome
-   on the site's own headings and copy), so the text barely reflows when
-   Inter arrives and nothing below it jumps. With the page fade gone, that
-   reflow was the director hero's 0.12 layout shift. Each face covers only
-   the characters Inter's files cover (the seven ranges below, joined),
-   so a character Inter does not have, such as the offer arrows'
-   U+2192, still goes on to the system font once Inter has loaded, as
-   before. Where Arial is not installed (most Android phones) the face is
-   skipped and the stack goes on to the system font, as before. Byte for byte on every page:
+/* FONTS:BEGIN (Run 32; served from the site since Run 34; Geist since
+   Run 46). Geist and the footer wordmark's Schibsted Grotesk 800 come from
+   assets/fonts/, not from a font service, so a visit sends nothing to a
+   third party before the cookie choice. Geist is one variable file
+   (Vercel's Geist 1.7.2, weights 400 to 800 used), with font-display:swap,
+   under the SIL Open Font License (assets/fonts/OFL-*.txt). Each page
+   preloads geist-variable.woff2 in its <head>. Until it arrives the text
+   is set in the system font. Byte for byte on every page:
    tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
    chrome_drift. */
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek-ext.woff2) format('woff2');unicode-range:U+1F00-1FFF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek.woff2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-vietnamese.woff2) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/geist-variable.woff2) format('woff2')}
 @font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:100 449;size-adjust:105.7%;ascent-override:91.8%;descent-override:22.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:450 549;size-adjust:107.6%;ascent-override:90.1%;descent-override:22.3%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:550 649;size-adjust:101.4%;ascent-override:95.7%;descent-override:23.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:650 749;size-adjust:102.4%;ascent-override:94.7%;descent-override:23.4%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:750 1000;size-adjust:103.7%;ascent-override:93.5%;descent-override:23.1%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 /* FONTS:END */
 /* ============================================================
    FIRST PAYSLIP TO 66 (#pbStory). The one pinned section: a card held
@@ -2469,6 +2448,21 @@ html.pb-readying [data-pb-wait]{transition:none!important}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
 /* CTA:END */
+/* TYPE:BEGIN (Run 46). The type scale's weights, last in every page's
+   stylesheet so it wins over each page's own: body text 500 at a 1.6 line
+   height, buttons 600, headings 700, the page's own heading (h1) 800, and a
+   calculator's figures 700 in tabular figures, so they do not jitter as
+   they change. On a phone the root is 17px (106.25%), so body text set in
+   rem is 17px or more. Colours, sizes elsewhere and layout are each page's
+   own. Byte for byte on every page: tools/pagebuild.py SHARED_CSS ('TYPE',
+   'type-css'), guarded by chrome_drift. */
+body{font-weight:500;line-height:1.6}
+.btn,button.btn,a.btn{font-weight:600}
+h1,h2,h3,h4,h5,h6{font-weight:700}
+main h1{font-weight:800}
+[data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
+@media(max-width:920px){html{font-size:106.25%}}
+/* TYPE:END */
 </style>
 
 <script>

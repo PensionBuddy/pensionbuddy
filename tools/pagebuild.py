@@ -587,11 +587,12 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # 37's item 6, re-applied in Run 39) the long guides' "On this page", its bar
 # and their next step, and (Run 37's item 10, built in Run 39) the bar a
 # waiting figure shows, and (Run 45) give then ask: the block after a
-# calculator's result, the quiet buttons and the phone booking bar.
+# calculator's result, the quiet buttons and the phone booking bar, and
+# (Run 46) the type weights.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
               ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
-              ('WAIT', 'wait-css'), ('CTA', 'cta-css'))
+              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'))
 
 
 def _once(text, marker):

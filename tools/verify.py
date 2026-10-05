@@ -178,11 +178,11 @@ AUDIT_JS = r"""
       /* fonts.check() reports true for families that fall back, so ask the FontFace set directly.
          The family must be Inter exactly: the FONTS block's local 'Inter Fallback' faces (Run 32)
          are loaded wherever Arial is, and would otherwise pass this with no Inter at all. */
-      interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Inter'&&f.status==='loaded'),
-      interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Inter').length,
+      interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Geist'&&f.status==='loaded'),
+      interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Geist').length,
       /* Run 34: Inter is the site's own file (assets/fonts/), and nothing is
          fetched from Google Fonts */
-      ownInter:performance.getEntriesByType('resource').some(e=>/\/assets\/fonts\/inter-[a-z-]+\.woff2$/.test(e.name)),
+      ownInter:performance.getEntriesByType('resource').some(e=>/\/assets\/fonts\/geist-variable\.woff2$/.test(e.name)),
       googleFonts:performance.getEntriesByType('resource').map(e=>e.name).concat($$('link').map(l=>l.href)).filter(u=>/fonts\.(googleapis|gstatic)\.com/.test(u)).slice(0,2),
       linkRequestsDropped:$$('link[rel=stylesheet]').filter(l=>DROPPED.test(l.href)).map(l=>l.href.slice(0,90)),
       h1:first(famOf(document.querySelector('h1'))),
@@ -194,7 +194,7 @@ AUDIT_JS = r"""
          expectations by where they sit, not by face (v4: there is one face),
          rather than the expectations being loosened for every heading. */
       headingCount:hs.length,
-      headingsOffInter:hs.filter(h=>!/Inter/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
+      headingsOffInter:hs.filter(h=>!/Geist/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
       headingWeights:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontWeight))].sort(),
       headingSizes:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontSize))].sort(),
       droppedAtRuntime:[...new Set($$('body *').map(e=>first(famOf(e))).filter(f=>DROPPED.test(f)))].slice(0,4)
@@ -537,7 +537,7 @@ def static_checks(pages):
             'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono', t)}),
             'uppercaseRules': len(re.findall(r'text-transform\s*:\s*uppercase', t)),
             # Run 34: Inter is the site's own file, and nothing is asked of Google Fonts
-            'requestsInter': bool(re.search(r"@font-face\{font-family:'Inter';[^}]*url\((?:\.\./)*assets/fonts/inter-latin\.woff2\)", t))
+            'requestsInter': bool(re.search(r"@font-face\{font-family:'Geist';[^}]*url\((?:\.\./)*assets/fonts/geist-variable\.woff2\)", t))
                              and not re.search(r'fonts\.(?:googleapis|gstatic)\.com', t),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
@@ -583,7 +583,7 @@ def evaluate(page, st, audits):
     # CASE (v4): sentence case everywhere, one face. The rule may not be in the
     # source, and the runtime check below catches it arriving any other way.
     if st.get('uppercaseRules'): F.append(('CASE', '%d text-transform:uppercase rule(s) in source' % st['uppercaseRules']))
-    if not st['requestsInter']: F.append(('F2', 'source does not load Inter from assets/fonts/, or still asks Google Fonts for a font'))
+    if not st['requestsInter']: F.append(('F2', 'source does not load Geist from assets/fonts/, or still asks Google Fonts for a font'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
@@ -623,13 +623,13 @@ def evaluate(page, st, audits):
     fo = a.get('fonts') or {}
     if fo and not fo.get('error'):
         if not fo.get('ownInter') or fo.get('googleFonts'):
-            F.append(('F2', 'Inter not fetched from assets/fonts/, or a font fetched from Google Fonts: %s' % (fo.get('googleFonts') or 'no Inter file')))
-        elif not fo.get('interLoaded'): F.append(('F2', 'Inter requested but did not load'))
+            F.append(('F2', 'Geist not fetched from assets/fonts/, or a font fetched from Google Fonts: %s' % (fo.get('googleFonts') or 'no Geist file')))
+        elif not fo.get('interLoaded'): F.append(('F2', 'Geist requested but did not load'))
         if fo.get('linkRequestsDropped'): F.append(('F2', 'a dropped family is still requested: %s' % fo['linkRequestsDropped'][0]))
-        if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Inter: %s' % fo['headingsOffInter']))
+        if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Geist: %s' % fo['headingsOffInter']))
         if fo.get('droppedAtRuntime'): F.append(('F2', 'a dropped family resolves at runtime: %s' % fo['droppedAtRuntime']))
-        bad_w = [w for w in (fo.get('headingWeights') or []) if str(w) != '800']
-        if bad_w: W.append(('F2', 'headings render at weights other than 800: %s' % bad_w))
+        bad_w = [w for w in (fo.get('headingWeights') or []) if str(w) not in ('700', '800')]  # Run 46: headings 700, h1 800
+        if bad_w: W.append(('F2', 'headings render at weights other than 700 or 800: %s' % bad_w))
         sizes = fo.get('headingSizes') or []
         if len(sizes) > 3: W.append(('F2', '%d distinct heading sizes, the one recipe allows 3: %s' % (len(sizes), sizes)))
     # CASE (v4) at runtime: nothing in caps, nothing tracked out, nothing monospace
