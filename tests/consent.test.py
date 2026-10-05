@@ -18,7 +18,7 @@ What it proves:
      page nothing loads and no bar returns; Google Analytics cookies an
      earlier "accepted" left are deleted
   3. "That's fine": remembered, GTM's script for GTM-KQCRZDNB is added
-     once, and the Meta, TikTok and LinkedIn pixels once each (never before,
+     once, and gtag.js for G-642CXX25S8 once, and the Meta, TikTok and LinkedIn pixels once each (never before,
      never after "No thanks"), and on the next page it loads with no bar
   4. an event sent before the answer waits in memory: accepted, it reaches
      the dataLayer after gtm.js; refused, it is gone; sent after a refusal,
@@ -52,6 +52,7 @@ from harness import eq, report  # noqa: E402
 
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 GTM = 'https://www.googletagmanager.com/gtm.js?id=GTM-KQCRZDNB'
+GA = 'https://www.googletagmanager.com/gtag/js?id=G-642CXX25S8'
 PIXELS = ['https://analytics.tiktok.com/i18n/pixel/events.js', 'https://connect.facebook.net/en_US/fbevents.js',
           'https://snap.licdn.com/li.lms-analytics/insight.min.js']
 
@@ -59,11 +60,14 @@ PROBE = r"""<script>
 (function(){
   var R={errors:[]}, q=new URLSearchParams(location.search), job=q.get('__consent');
   window.addEventListener('error',function(e){ if(e.message) R.errors.push(String(e.message)); },true);
-  function gtm(){ return [].map.call(document.querySelectorAll('script[src*="googletagmanager"]'),function(s){return s.src;}); }
+  function gtm(){ return [].map.call(document.querySelectorAll('script[src*="googletagmanager.com/gtm.js"]'),function(s){return s.src;}); }
+  function ga(){ return [].map.call(document.querySelectorAll('script[src*="googletagmanager.com/gtag/"]'),function(s){return s.src;}); }
+  // gtag() pushes arguments objects, not events: kept apart from the event list
+  function isArgs(e){ return Object.prototype.toString.call(e)==='[object Arguments]'; }
   function state(){
     return {bar:!!document.querySelector('.pb-consent'), open:document.body.classList.contains('pb-banner-open'),
-            gtm:gtm(), px:[].map.call(document.querySelectorAll('script[src*="connect.facebook.net"],script[src*="analytics.tiktok.com"],script[src*="snap.licdn.com"]'),function(s){return s.src.split('?')[0];}),
-            dl:window.dataLayer?window.dataLayer.map(function(e){return e.event||'';}):null,
+            gtm:gtm(), ga:ga(), gtag:window.dataLayer?window.dataLayer.filter(isArgs).map(function(a){return a[0]==='js'?'js':a[0]+':'+a[1];}):null, px:[].map.call(document.querySelectorAll('script[src*="connect.facebook.net"],script[src*="analytics.tiktok.com"],script[src*="snap.licdn.com"]'),function(s){return s.src.split('?')[0];}),
+            dl:window.dataLayer?window.dataLayer.filter(function(e){return !isArgs(e);}).map(function(e){return e.event||'';}):null,
             stored:localStorage.getItem('pb-consent'), track:typeof window.PBTrack,
             // while the bar is up, focus is scrolled clear of it: the class and its height on <html>
             pad:(function(){ var d=document.documentElement, b=document.querySelector('.pb-consent');
@@ -284,6 +288,7 @@ def main():
         eq('1. %s: and keyboard focus is scrolled clear of it (8px over its height)' % page, L['pad'][:2], [True, L['pad'][2]])
         eq('1. %s: and nothing from Google is loaded' % page, (L['gtm'], L['dl']), ([], None))
         eq('1. %s: and no Meta, TikTok or LinkedIn pixel' % page, L['px'], [])
+        eq('1. %s: and no Google Analytics' % page, (L['ga'], L['gtag']), ([], None))
         eq('1. %s: PBTrack is there for the page' % page, L['track'], 'function')
         eq('1. %s: no script error' % page, r['errors'], [])
         src = open(os.path.join(ROOT, page), encoding='utf-8').read()
@@ -296,6 +301,7 @@ def main():
     eq('2. the bar goes, and nothing loads', (r['bar'], r['open'], r['gtm'], r['dl']), (False, False, [], None))
     eq('2. and the room kept for it goes', r['pad'], [False, 'auto', None])
     eq('2. and no pixel loads', r['px'], [])
+    eq('2. and no Google Analytics', (r['ga'], r['gtag']), ([], None))
     rr = R[('index.html', 'no', 'fresh')]
     eq('2. the analytics cookies were there', '_ga=' in rr['cookieBefore'] and '_gid=' in rr['cookieBefore'], True)
     eq('2. and are deleted', ('_ga=' in rr['cookieAfter'], '_gid=' in rr['cookieAfter']), (False, False))
@@ -309,6 +315,7 @@ def main():
     eq('3. GTM-KQCRZDNB is loaded, once', r['gtm'], [GTM])
     eq('3. gtm.js starts the dataLayer', r['dl'], ['gtm.js'])
     eq('3. the LinkedIn, TikTok and Meta pixels load, once each', sorted(r['px']), PIXELS)
+    eq('3. Google Analytics G-642CXX25S8 loads, once, and is configured', (r['ga'], r['gtag']), ([GA], ['js', 'config:G-642CXX25S8']))
     L = R[('starter.html', 'load', 'accepted')]['load']
     eq('3. on the next page: loaded, no bar', (L['bar'], L['gtm'], L['dl']), (False, [GTM], ['gtm.js']))
     # 4

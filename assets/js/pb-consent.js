@@ -1,5 +1,6 @@
 /* The cookie choice, and what it turns on: Google Tag Manager, container
-   GTM-KQCRZDNB (Run 27), and the Meta, TikTok and LinkedIn pixels.
+   GTM-KQCRZDNB (Run 27), Google Analytics 4 (G-642CXX25S8), and the Meta,
+   TikTok and LinkedIn pixels.
 
    Every root page loads this file at the foot of <body>, where each page
    used to carry the same consent scaffold inline, dormant behind an
@@ -17,6 +18,11 @@
    "No thanks" is remembered and nothing ever loads; no answer at all shows
    the bar and loads nothing. The snippet's <noscript> iframe is left out on
    purpose: it would load Google for a visitor who cannot answer the bar.
+
+   GOOGLE ANALYTICS. loadGa() is Google's gtag.js snippet for G-642CXX25S8,
+   as issued, run with GTM after "That's fine". It shares GTM's dataLayer.
+   If the GTM container ever gets its own GA4 tag for this ID, remove one of
+   the two, or every page view counts twice.
 
    THE AD PIXELS. Meta (1401467284899608), TikTok (DB0II6JC77U1PLPL6670) and
    LinkedIn Insight (10975993) are loaded by loadPixels(), the snippets as
@@ -75,7 +81,21 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer',GTM_ID);
     while (queue.length) window.dataLayer.push(queue.shift());
+    loadGa();
     loadPixels();
+  }
+
+  /* Google's gtag.js snippet for GA4, as issued, run on consent. */
+  function loadGa() {
+    var t = document.createElement('script');
+    t.async = true;
+    t.src = 'https://www.googletagmanager.com/gtag/js?id=G-642CXX25S8';
+    document.head.appendChild(t);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-642CXX25S8');
   }
 
   /* Meta, TikTok and LinkedIn, as issued, run on consent. */

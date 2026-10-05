@@ -30,6 +30,10 @@ Google Tag Manager, only after a visitor accepts; the cookie bar now reads
 Privacy Notice's cookies section names the three pixels and their use for
 advertising (question 1.17).
 
+Updated 5 October 2026: Google Analytics 4 (G-642CXX25S8) loads with
+Google Tag Manager, only after a visitor accepts; "No thanks" deletes its
+_ga cookies; the Privacy Notice's cookies section names it (question 1.17).
+
 And a last pass, 25 September 2026: every form's success message now
 promises only what happens, since Netlify emails the visitor nothing, and
 hello@pensionbuddy.ie, now a monitored inbox, is in every page's footer
@@ -446,7 +450,8 @@ pixels too: "That's fine" loads, with Google Tag Manager, the Meta pixel
 LinkedIn Insight Tag (10975993), each sending a page view to its
 platform; "No thanks", or no answer, loads none of them, and "No thanks"
 deletes their first-party cookies (_fbp, _fbc, _ttp, li_* and the like).
-The Privacy Notice's cookies section now names the three and says they
+Since 5 October 2026 "That's fine" also loads Google Analytics 4
+(G-642CXX25S8, Google's gtag.js), and the notice names it. The Privacy Notice's cookies section now names the three and says they
 are used to measure our advertising and show our ads, and no longer says
 "We do not use it for advertising". (From 28 September to 4 October 2026
 the bar read "May we use a little analytics? Privacy Notice", which did
