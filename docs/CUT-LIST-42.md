@@ -33,7 +33,7 @@ bare ask), and D-8's first sentence. Every other row stays a list for you,
 for the reason its row gives. Run 43 also removed the three chat pictures'
 booking links and reason lines (S-2, T-2, D-2: the link and reason only,
 by Damian's "yes" to question 7) and changed every reason line's words to
-"Free · 20 minutes · no obligation · reschedule any time." (the S-1, T-1,
+"Free · 20 minutes · no obligation · easy to reschedule." (the S-1, T-1,
 D-1, R-1, O-3, E-1, U-1, C-3, Z-3 and F-1 rows quote the old words). Line
 numbers below are Run 42's.
 

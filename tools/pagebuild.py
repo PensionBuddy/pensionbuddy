@@ -149,7 +149,7 @@ NOINDEX = '<meta name="robots" content="noindex">'
 # reason it has. trust_drift(), at the end of this file, is the guard.
 REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
-REASON = '<p class="pb-why">Free · 20 minutes · no obligation · reschedule any time.</p>'
+REASON = '<p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>'
 # Run 32: MOTION_HEAD, the script in every page's <head>, is defined after
 # caveat_selector() below, because it carries the caveat list.
 DEADLINE_JS = 'assets/js/pb-deadline.js'

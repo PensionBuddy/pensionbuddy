@@ -18,6 +18,12 @@ section 3.3); the Website Terms of Use have a new clause in place of the
 liability cap (question 1.16); and analytics run through Google Tag Manager,
 loaded only after a visitor accepts (question 1.17, section 3.4).
 
+Updated 5 October 2026 (Run 44): the reason line beside every booking
+link now ends "easy to reschedule" instead of "reschedule any time", on
+every page, in the phone booking bar, in Ask Buddy and on the saved
+report: "Free · 20 minutes · no obligation · easy to reschedule."
+(question 1.24 (a), Appendix B.16).
+
 Updated 4 October 2026: the Meta, TikTok and LinkedIn ad pixels load with
 Google Tag Manager, only after a visitor accepts; the cookie bar now reads
 "May we use cookies for analytics and ads? Privacy Notice", and the
@@ -93,7 +99,7 @@ or a figure, and everything else that was teal is slate or neutral
 (Appendix B.22); nine lines, cards and buttons that only repeated words on
 the same page are removed (section 7); some figures now respond to the
 reader (Appendix B.23); every booking button and link in a page's content now
-has "Free · 20 minutes · no obligation · reschedule any time." beside it,
+has "Free · 20 minutes · no obligation · easy to reschedule." beside it,
 the closing bands included (not the nav button, the footer link, the
 booking page itself or the legal pages' inline links; question 1.24,
 Appendix B.16); under each calculator's
@@ -366,7 +372,7 @@ readiness check do not carry it. Beside booking links whose own paragraph
 gave no reason to book, one line read "Free, 20 minutes, no obligation.",
 the terms the booking page already states. Since Run 43 (4 October 2026)
 the line is beside every booking button and link in a page and reads
-"Free · 20 minutes · no obligation · reschedule any time." (question
+"Free · 20 minutes · no obligation · easy to reschedule." (question
 1.24, Appendix B.16).
 
 Questions for you: (a) whether "Reviewed by" needs to say what the review
@@ -862,7 +868,7 @@ results" offered before the booking ask on each calculator.", with "no
 fake urgency, no pressure, the "no" always visible".
 
 - The reason line. Every booking button and link in a page has this line
-  beside it: "Free · 20 minutes · no obligation · reschedule any time."
+  beside it: "Free · 20 minutes · no obligation · easy to reschedule."
   (Appendix B.16), Damian's words. It replaces "Free, 20 minutes, no
   obligation." wherever that stood, and is new under the closing band's
   button on the home, starter, tracker, directors' and jargon buster pages
@@ -877,10 +883,12 @@ fake urgency, no pressure, the "no" always visible".
   reschedule from your confirmation email.". It is true for every booking
   whatever the calendar's rules, in the words the booking confirmation page
   already uses ("Need to change or cancel the time? The links are in your
-  Calendly confirmation email."). "reschedule any time" is true only if
-  the calendar lets every booking be moved right up to its start with no
-  minimum notice, which Damian has still to confirm in Calendly; "any
-  time" could also be read as "at any time you like".
+  Calendly confirmation email."). Until 5 October 2026 the site said
+  "reschedule any time", which was true only if the calendar let every
+  booking be moved right up to its start with no minimum notice; Damian
+  replaced it with "easy to reschedule" on 5 October 2026 (Run 44), which
+  claims only that moving a booking is simple, as the confirmation
+  email's links make it.
 - Under the results of each of the nine calculators and tools, in this
   order: a line saying what the page does not show (Appendix B.24); the
   offer to email the results (on My pensions, "Print or save this list",
@@ -944,9 +952,10 @@ fake urgency, no pressure, the "no" always visible".
   Revenue’s rules, not a calculation of your own tax") and with My
   pensions (a list, not a number).
 
-Questions for you: (a) the reason line: is "reschedule any time" right
-once Damian confirms that every booking can be moved up to its start, or
-should the site carry "reschedule from your confirmation email"? (b) the
+Questions for you: (a) the reason line: is "easy to reschedule" (since
+5 October 2026; "reschedule any time" before it) clear, fair and not
+misleading, or should the site carry "reschedule from your confirmation
+email"? (b) the
 booking-page line: "You’ve seen your number. Last step: …" as shipped, or
 "You’ve seen your figures. Next step: …"; is it clear, fair and not
 misleading, and is "endowed progress" a gamified element under Guidance
@@ -1496,7 +1505,7 @@ New calculators and tools
   steps", "Pensionbuddy. Saved on [date].", "Open these figures again:
   [link]" and "Talk them through with Damian in a free 20-minute call:
   [link]" (since Run 43 followed by "Free · 20 minutes · no obligation ·
-  reschedule any time."); in the reader's own email, "[page], saved on
+  easy to reschedule."); in the reader's own email, "[page], saved on
   [date]" and "What I entered:"; in the calculators' emails to Damian,
   "Open these figures again: [link]".
 
@@ -1616,7 +1625,7 @@ Changed wording on existing pages
   42, question 1.23); the review line on ten pages (question
   1.14); and "Free, 20 minutes, no obligation." beside booking links whose
   own paragraph gave no reason to book (since Run 43 "Free · 20 minutes ·
-  no obligation · reschedule any time.", beside every booking link;
+  no obligation · easy to reschedule.", beside every booking link;
   question 1.24).
 - Privacy Notice, "Booking and third parties": the sentence on Netlify
   (section 3.3).
@@ -2137,7 +2146,7 @@ We use your email to reply to this request, and for nothing else. See our
 Privacy Notice. This is information, not advice.
 Want to go through this with Damian?
 Talk it through, free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 
 Not sure what your old plans charge?
 ------------------------------------
@@ -2146,7 +2155,7 @@ plans rarely spell them out. Damian can find out what yours are and what
 they mean, in a free 20-minute call. If you have lost track of a plan, we
 can help you find it.
 Book a call with Damian for free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This calculator is information, not advice. It shows what the charges you
 enter would do to a pot, as an illustration. It names no provider and says
 nothing about whether any plan is right for you. Regulated financial advice
@@ -2253,7 +2262,7 @@ We use your email to reply to this request, and for nothing else. See our
 Privacy Notice. This is information, not advice.
 Want to go through this with Damian?
 Talk it through, free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 
 Close to the threshold, or over it?
 -----------------------------------
@@ -2262,7 +2271,7 @@ is valued all change the answer, and the tax on getting it wrong is steep.
 Damian works through this with directors and higher earners in a free
 20-minute call.
 Book a call with Damian for free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is information, not advice. It applies Revenue’s published figures
 to the numbers you choose. It does not value your pensions, does not know
 your tax position, and is not a recommendation about when or how to take
@@ -2405,7 +2414,7 @@ Worth talking through
 ---------------------
 Topics to discuss, not advice. Book a call with Damian for free to go
 through them.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is information, not advice. It summarises published rules as they
 stood on the date above. It is not a recommendation of any structure or
 product, and tax treatment depends on your circumstances. Advice is given in
@@ -2450,7 +2459,7 @@ What this doesn’t show: what your pensions could grow to, your tax
 position, the terms each one carries.
 Want to go through this with Damian?
 Talk it through, free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This is a list, not advice. It adds up what you enter and nothing else.
 Bringing pensions together is not always right: some carry terms worth more
 than the convenience. Advice on what to do with yours is given in a personal
@@ -2519,7 +2528,7 @@ Want help with it?
 ------------------
 We can do the asking for you: see how we help you find old pensions. Or
 book a free call with Damian.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This checklist is general information, not advice. It does not cover every
 kind of pension, and what applies to you depends on your own schemes.
 
@@ -2588,7 +2597,7 @@ Want to go through it?
 ----------------------
 Damian works through year-end funding with directors all the time. Book a
 free call, or read what changed for directors in 2026 first.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This checklist is general information, not advice. Tax treatment depends on
 your own circumstances and can change at any Budget. Sources: Revenue
 Pensions Manual, chapters 3, 4, 24 and appendix III; Revenue eBrief 034/26;
@@ -2673,7 +2682,7 @@ Want to go through it?
 Which of this applies depends on the pensions you have and when you want to
 stop working. Book a free call with Damian, or check how much of the
 Standard Fund Threshold your pensions would use.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is general information, not advice. Sources: Revenue, “Tax relief
 limits on pension contributions”; Revenue Pensions Manual, chapters 9, 21,
 23, 24 and 28; the Pensions Authority, “Early retirement” and “What are my
@@ -2737,7 +2746,7 @@ See your own numbers
 --------------------
 The pension calculator shows what a monthly amount could grow to and what
 tax relief gives back. Or book a free call with Damian.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is general information, not advice. Sources: gov.ie,
 “Auto-enrolment: your questions answered” and the Department of Social
 Protection’s release of 9 February 2026; Revenue, “Tax relief limits on
@@ -2802,7 +2811,7 @@ Whether moving a UK pension makes sense depends on what it gives you now,
 what a move would cost in tax and charges, and where you expect to live.
 There is no general answer, and this page does not give one. Book a free
 call with Damian to go through yours.
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is general information, not advice. Sources: GOV.UK, “Transferring
 your pension: transferring to an overseas pension scheme” and “State Pension
 if you retire abroad”; HMRC, “Reducing tax-free overseas transfers of tax
@@ -3053,7 +3062,7 @@ We use your email to reply to this request, and for nothing else. See our
 Privacy Notice. This is information, not advice.
 Want to go through this with Damian?
 Talk it through, free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 
 Who it might suit
 -----------------
@@ -3102,7 +3111,7 @@ The answer depends on your employer, your tax, and when you need the money,
 and on figures due on 6 October. Damian can talk it through in a free
 20-minute call. Plain English, no obligation.
 Book a call with Damian for free
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 This page is information, not advice. It describes a proposal as at 25
 September 2026 and shows figures you choose, as an illustration. It names no
 provider and says nothing about whether any product is right for you.
@@ -3400,7 +3409,7 @@ reviewed September 2026
 B.16 Booking links: the reason to book
 --------------------------------------
 
-Free · 20 minutes · no obligation · reschedule any time.
+Free · 20 minutes · no obligation · easy to reschedule.
 
 (Run 43, 4 October 2026, Damian's words; until then "Free, 20 minutes, no
 obligation.", beside booking links whose own paragraph gave no reason to
