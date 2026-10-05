@@ -501,6 +501,9 @@ def static_checks(pages):
     # byte for byte, on the pages pagebuild.AFTER names and on no other
     for f, fs in pagebuild.after_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
         drift.setdefault(f, []).extend(fs)
+    # Run 47: the two prescribed warnings, from pagebuild.WARN, on every page with projected figures
+    for f, fs in pagebuild.warn_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
+        drift.setdefault(f, []).extend(fs)
     # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
     # of reach until it is signed off, so no other page may link to it. Signing
     # a page off means removing that meta, which lifts this check by itself.

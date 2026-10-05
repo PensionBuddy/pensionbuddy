@@ -443,6 +443,8 @@ def assemble(page):
     body = with_related(body, page.out)
     # Run 45: the block after the result, from the part's <!-- AFTER --> line (AFTER, below)
     body = with_after(body, page.out)
+    # Run 47: the prescribed warnings, from pagebuild.WARN (below)
+    body = with_warn(body)
     if page.reviewed:
         # the last line of the page header, whatever the part put above it
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
@@ -845,6 +847,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, sources[page], count=1)
             new = with_related(new, page)
             new = with_after(new, page)
+            new = with_warn(new)
             if new != sources[page]:
                 out[page] = new
             continue
@@ -874,6 +877,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
         new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, new, count=1)
         new = with_related(new, page)
         new = with_after(new, page)
+        new = with_warn(new)
         if new != text:
             out[page] = new
     return out
@@ -1004,6 +1008,59 @@ def related_drift(sources):
             out[page] = [('related', 'the related pages are not the table\'s: run tools/sync-chrome.py and tools/pagebuild.py')]
         elif span and text.find(CLOSE_MAIN, span[1]) < 0:
             out[page] = [('related', 'the related pages are outside <main>')]
+    return out
+
+
+# ============================================================================
+# THE PRESCRIBED WARNINGS (Run 47). The two warnings Regulations 372 and 392
+# prescribe, word for word (docs/COMPLIANCE-PACK.md question 1.4 and section
+# 6.1: the Regulations' own words, which need no sign-off as copy), defined
+# here once. Every box on the site is written from WARN between two comments
+# on one line, <!-- WARN:BEGIN --> and <!-- WARN:END -->: by assemble() in
+# the built pages (from their parts) and by tools/sync-chrome.py in the
+# hand-written ones (the pension and director calculators, the starter
+# page). warn_drift() is the guard (verify.py and tests/build.test.py check
+# 53): each page in WARN_PAGES carries exactly that many boxes, each exactly
+# WARN, and no other page carries one. The box keeps class pb-warn, so the
+# copy editor keeps it locked (tools/edit-server.py) and the styling (boxed,
+# bold, directly under the projected figures) is each page's own, as before.
+# ============================================================================
+WARN = ('<div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide '
+        'to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may '
+        'go down as well as up.</b></p></div>')
+WARN_OPEN, WARN_CLOSE = '<!-- WARN:BEGIN (pagebuild.WARN) -->', '<!-- WARN:END -->'
+WARN_PAT = re.compile(re.escape(WARN_OPEN) + r'(.*?)' + re.escape(WARN_CLOSE))
+# every page with projected figures, and how many boxes it shows them under
+WARN_PAGES = {
+    'pension-calculator.html': 1,       # the projected pot
+    'director-calculator.html': 1,      # the projected pot
+    'broker-vs-autoenrolment.html': 2,  # "Everything paid in, by 66", once in each mode
+    'pension-fees-calculator.html': 1,  # the pot with and without the charges
+    'pia.html': 1,                      # the three take-home figures
+    'starter.html': 3,                  # the cost-of-waiting chart and the two growth charts
+}
+
+
+def with_warn(text):
+    """text with every WARN block holding WARN, byte for byte."""
+    return WARN_PAT.sub(lambda m: WARN_OPEN + WARN + WARN_CLOSE, text)
+
+
+def warn_drift(sources):
+    """{page: [('warn', detail)]} where a page's boxes are not WARN's."""
+    out = {}
+    for page, text in sources.items():
+        blocks = WARN_PAT.findall(text)
+        boxes = text.count('class="pb-warn"')
+        fs = []
+        if len(blocks) != WARN_PAGES.get(page, 0):
+            fs.append('%d prescribed-warning block(s), want %d' % (len(blocks), WARN_PAGES.get(page, 0)))
+        if any(b != WARN for b in blocks):
+            fs.append('a warning differs from pagebuild.WARN: run tools/sync-chrome.py and tools/pagebuild.py')
+        if boxes != len(blocks):
+            fs.append('a pb-warn box outside the WARN comments')
+        if fs:
+            out[page] = [('warn', f) for f in fs]
     return out
 
 
