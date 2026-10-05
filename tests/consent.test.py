@@ -27,8 +27,10 @@ What it proves:
      GTM that never answers
   6. the first real touch on a calculator is counted once, with its name;
      a replayed (untrusted) event and a lead form inside it are not
-  7. the booking form's submit is an event; the Privacy Notice's button
-     forgets the answer and brings the bar back
+  7. a press of the booking button after a calculator's result is counted,
+     cta_click then booking_click (Run 45; the booking page's form, whose
+     submit was counted here, is gone); the Privacy Notice's button forgets
+     the answer and brings the bar back
   9. on a phone's first load (320x568, 375x667, 375x812, 412x915, 560x800, and held
      sideways at 667x375 and 915x412), on the 14 pages whose first screen
      carries the regulator and QFA line (the hero's lockup or the page
@@ -99,10 +101,11 @@ PROBE = r"""<script>
     R.events=window.dataLayer.filter(function(e){return e.event==='calculator_first_interaction';});
     return done();
   }
-  if(job==='booking'){
-    document.getElementById('qName').value='Test Person'; document.getElementById('qEmail').value='test@example.com';
-    document.getElementById('pDirector').click(); document.getElementById('qualForm').requestSubmit();
-    later(200,function(){ R.after=state(); done(); }); return;
+  if(job==='cta'){
+    var a=document.querySelector('#pbAfter a');
+    window.addEventListener('click',function(e){ e.preventDefault(); });   // stay on the page
+    a.click();
+    later(200,function(){ R.after=state(); R.href=a.getAttribute('href'); done(); }); return;
   }
   if(job==='overlap'){
     // Ask Buddy moves with a transition, and virtual time runs no frames, so
@@ -247,7 +250,7 @@ def main():
              ['index.html', 'yes', 'fresh'], ['starter.html', 'load', 'accepted'],
              ['index.html', 'queue-yes', 'fresh'], ['index.html', 'queue-no', 'fresh'],
              ['index.html', 'then-off', 'fresh'], ['index.html', 'then-on', 'accepted'],
-             ['booking.html', 'booking', 'accepted'], ['privacy.html', 'reset', 'accepted']]
+             ['pension-calculator.html', 'cta', 'accepted'], ['privacy.html', 'reset', 'accepted']]
     jobs += [[p, 'first', 'accepted'] for p in sorted(CALCS)]
     jobs += [[p, 'overlap', 'fresh', w] for p in ('director.html', 'index.html', 'pension-calculator.html')
              for w in (320, 375, 1200)]
@@ -386,8 +389,9 @@ def main():
                    (r['pbox'][3] <= min(x[1] for x in bs), all(44 <= x[3] - x[1] <= 48 for x in bs), len(bw) == 2 and abs(bw[0] - bw[1]) <= 4),
                    (True, True, True))
     # 7
-    r = R[('booking.html', 'booking', 'accepted')]['after']
-    eq('7. the booking form\'s submit is an event', r['dl'], ['gtm.js', 'booking_form_submit'])
+    r = R[('pension-calculator.html', 'cta', 'accepted')]
+    eq('7. a press of the booking button after a result is counted: cta_click, then booking_click', r['after']['dl'], ['gtm.js', 'cta_click', 'booking_click'])
+    eq('7. and the button carries the four tags', bool(re.match(r'booking\.html\?utm_source=site&utm_medium=cta&utm_campaign=pension-calculator&utm_content=[AB]$', r['href'] or '')), True)
     r = R[('privacy.html', 'reset', 'accepted')]
     eq('7. the Privacy Notice\'s button forgets the answer', r['after']['stored'], None)
     eq('7. and brings the bar back', (r['after']['bar'], r['after']['open']), (True, True))

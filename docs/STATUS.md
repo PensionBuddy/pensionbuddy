@@ -29,10 +29,11 @@ here.
 
 `python3 tools/sitemap.py` rewrites the sitemap from the pages themselves
 (held pages out, each lastmod the file's last commit); `verify.py` reports
-any drift as a site row. The lead forms post to Netlify Forms under eight
-names (since Run 43, `calculator-results` on six calculators, live once
-Run 43 is merged), with a pre-filled email as the fallback; `hello@pensionbuddy.ie` is a real inbox
-and in every footer.
+any drift as a site row. The lead forms post to Netlify Forms under five
+names (since Run 45: `calculator-results`, "Email me this result", on
+every calculator that offers it, and the guide and finder forms; the
+booking page has no form), with a pre-filled email as the fallback;
+`hello@pensionbuddy.ie` is a real inbox and in every footer.
 
 Since Run 35 (29 September 2026) the home page shows the six provider logos
 under its hero ("Providers we hold agencies with", switched on once Damian
@@ -87,13 +88,15 @@ and `404.html`. `about.html` does not exist: it was folded into
 ## Needs Damian
 
 1. **Netlify (R27-1).** In the site's Forms settings, turn form detection on
-   before the deploy, then set a notification for each form: `booking`,
-   `pension-calculator-results`, `director-calculator-results`,
-   `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`,
-   and since Run 43 `calculator-results`, one name for "Email me my
-   results" on six calculators: set its notification before or on the
-   deploy that carries it, then send one test request from a calculator
-   on the deploy preview and see it arrive under `calculator-results`.
+   before the deploy, then set a notification for each form:
+   `calculator-results` ("Email me this result" on nine calculators and
+   tools since Run 45, the pension and director calculators included),
+   `director-guide`, `starter-guide`, `tracker-guide`, `pension-finder`.
+   Since Run 45 `booking`, `pension-calculator-results` and
+   `director-calculator-results` receive nothing (their forms are gone);
+   their old requests stay in Netlify. Send one test request from a
+   calculator on the deploy preview and see it arrive under
+   `calculator-results`, with the name, the email and consent=yes.
    Without detection every form falls back to email.
 2. **The Privacy Notice's missing sentences.** R20-A2, the optional
    emails: the placeholder is back on `privacy.html` (Run 31), because
@@ -166,6 +169,8 @@ and `404.html`. `about.html` does not exist: it was folded into
    question 7's chat pictures was read; my-pensions without an email
    offer; the asks near the closing bands; the booking page's "Last step";
    Run 43's "Needs Damian", below.
+13. **Run 45** (on `claude/clever-fermi-rgdc2a`): give then ask, built to
+   Damian's brief of 5 October 2026; its "Needs Damian", in Run 45 below.
 
 ## Parked, with a date or a trigger
 
@@ -332,6 +337,170 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 45 — 2026-10-05 · Give, then ask: one button after each result, "Email me this result", the calendar first, a bar on every content page, a button test (on `claude/clever-fermi-rgdc2a`)
+
+Damian's brief, 5 October 2026: show each calculator's result with no gate
+and no email; directly under it one booking button, "Book a free
+20-minute call with Damian", with "Free. No obligation. No pressure." under
+it, from one shared component; below it an optional "Email me this
+result" (name and email only, a consent box not ticked in advance, one
+line on what is stored, why and where), sent to the existing lead
+destination, storing no calculator input unless sent; one primary booking
+button per page, the home page keeping its three situations and losing
+any competing button; a phone booking bar, "Book free 20 min call",
+clear of the safe areas, the inputs and the keyboard, hidden while a
+booking section is in view; a 50/50 test of two wordings ("See what this
+means for you - free 20-min call" the second), stored first-party with no
+non-essential storage before consent; tags on every booking link
+(utm_source=site, utm_medium=cta, utm_campaign=<page>,
+utm_content=<variant>); the events calculator_complete, cta_view,
+cta_click, booking_click and email_result_submit, as the cookie choice
+allows; and less effort at booking (embed or deep-link). No questions:
+reasonable choices, listed below.
+
+| # | Item | Where |
+|---|---|---|
+| 1 | One shared block after each result: what it does not show (Run 43's lines, unchanged), the button, its line, "Email me this result". `pagebuild.AFTER` and `after_block()`, written between `<!-- AFTER:BEGIN -->` and `<!-- AFTER:END -->` by `pagebuild.py` (from the part's `<!-- AFTER -->` line) and `sync-chrome.py` (the two hand-written calculators); `after_drift()` the guard (verify.py, build check 49). On the nine calculators and tools and the directors' rules page | `tools/pagebuild.py`, the part files, `pension-calculator.html`, `director-calculator.html` |
+| 2 | "Email me this result": hidden in the markup, shown by `assets/js/pb-after.js`; opens a form under the button (the result never moves); name, email, a box never ticked for the reader, the one line; sends nothing without all three; then the shared Netlify form `calculator-results` (fields: `pagebuild.AFTER_FIELDS`), the mailto fallback as before. The pension and director calculators' own forms (and their `sendResults()`, and their occasional-emails box) are gone | `assets/js/pb-after.js` |
+| 3 | The button test, the tags and the counts: new `assets/js/pb-cta.js` on every root page straight after `pb-consent.js`. Wording A in the markup, B by script; the pick in page memory until "That's fine", then `localStorage['pb-ab-cta']`; `pb-consent.js` deletes the key on "No thanks" or a reset and announces every answer as `pb:consent`. Every `booking.html` link tagged the moment it is pointed at, focused, pressed or opened in a new tab, never at load (no tagged link inside the site for a search engine to read). cta_view, cta_click, booking_click here; calculator_complete and email_result_submit from `pb-after.js`; all through `PBTrack` | `assets/js/pb-cta.js`, `assets/js/pb-consent.js` |
+| 4 | The booking page: the calendar at once, no form in front of it (the three routing fields and the Netlify form `booking` are gone; Calendly asks for the name and email). The heading script keeps the link's tags and takes them off the address (`history.replaceState`), and the calendar gets them, with `utm_term` for the situation; without tags, `utm_source=pensionbuddy&utm_medium=booking-page`. On a phone the calendar card comes straight after the heading (`.lead`, the card, `.lead-more`). `verify.py`'s F4 rewritten to match, and its load-time Calendly rule accepts the B2 fallback where Calendly cannot load (a blank box still fails) | `booking.html`, `tools/verify.py` |
+| 5 | The phone bar: "Book free 20 min call", no reason line; on every page built from the skeleton, the director calculator and the five guides as well as the five content pages; stops on a noindex page; tucks away while a calculator's inputs, the peek bar, any booking link in the page, `#pbAfter`, a closing band or the footer is in view or 80px off, and while a text field has focus; padded by `env(safe-area-inset-*)` on three sides. Its CSS moved from the five pages into the new shared CTA block | `assets/js/pb-bookbar.js`, `SHARED_CSS` CTA |
+| 6 | One primary ask per page: a link drawn as a filled button leads to booking (build check 52). Outlines now: home "Open the calculator" and "See what it’s worth to you" (`btn-quiet-dark`, new), starter "See what I could build" (quiet-dark), "Compare the two side by side" and "See the State Pension reality check" (`btn-ghost`), directors' "Open the director calculator" (quiet-dark), the three "Send me the guide" (ghost). Home: "Try the calculator" beside "Get my free review" cut; the hero gains the three situations, in the chat picture's own words: under the figure and the lockup on a wide screen, after the chart and its caveat on a phone (so the first screen stays as Run 42 measured it: interactive-43's H2 caught the chart under the cookie bar when they sat under the figure) | `index.html`, `starter.html`, `director.html`, `tracker.html` |
+| 7 | Privacy Notice: the calculators sentence (name, the box), "Booking and third parties" (no booking form; Calendly records the page and the wording), Cookies (the new counts, the button test). Last updated 5 October 2026 | `privacy.html` |
+| 8 | Tests: build checks 9 (the CTA block), 14 (five form names, the shared field list, the box unticked, no booking form), 21 (the note after the calendar, no form), 48 (the block's own line), 49 (rewritten for the block), and new 50 (pb-cta.js), 51 (the bar's pages and rules), 52 (one primary ask; the home hero). `give-then-ask.test.mjs` rewritten (G1 to G14, 157 checks); `lead-forms.test.py`, `consent.test.py` check 7, `search.test.mjs` and `floating-chrome.test.mjs` follow | `tests/` |
+| 9 | Compliance pack: question 1.25, Appendix B.25, sections 3.3 and 3.4, the head paragraph | `docs/COMPLIANCE-PACK.md` |
+
+## Where the data from "Email me this result" lands
+
+Netlify → the site → Forms → `calculator-results`: one entry per request,
+with `name`, `email`, `consent` (yes), `results` (the words and figures on
+screen), `inputs` (the figures chosen), `link` (the link that opens those
+figures again) and `page`. Netlify emails nobody unless a notification is
+set for that form (Needs Damian 1). If Netlify refuses the post, or the
+site is not on Netlify, the reader's email app opens addressed to
+`hello@pensionbuddy.ie`, subject "Results request". Nothing is sent or
+stored before the form is sent. No new server-side handler: the
+destination already existed.
+
+## What is counted (Google Tag Manager, after "That's fine" only)
+
+| Event | When | Fields |
+|---|---|---|
+| `calculator_complete` | the first time a result is on screen after the reader's own move (a number, or the directors' rules list), once per page view | `calculator`, `page`, `variant` |
+| `cta_view` | the button after a result, or the phone bar, at least half on screen; once per button per page view | `cta` (after, bookbar), `page`, `variant` |
+| `cta_click` | one of those pressed | `cta`, `page`, `variant` |
+| `booking_click` | any link to booking.html or Calendly pressed, anywhere | `cta` (after, bookbar, nav, footer, buddy, band, hero, calendar, inline), `page`, `variant` |
+| `email_result_submit` | "Email me this result" sent with all three given | `calculator`, `page`, `variant` |
+
+Existing: `calculator_first_interaction`, `calendly_booking`.
+`booking_form_submit` is gone with the form. The GTM container is still
+empty (Parked, "GTM tags"): nothing is measured until tags are published.
+Calendly records each booking's tags, so bookings per page and per wording
+can be read in Calendly without GTM.
+
+## Defaults taken (no questions asked, per the brief)
+
+1. The new line under the button is Damian's "Free. No obligation. No
+   pressure." The reason line "Free · 20 minutes · no obligation · easy to
+   reschedule." (Run 44) stays beside every other booking link, the closing
+   bands included; build check 48 accepts either beside a link.
+2. "One primary booking CTA" read as one primary action, booking, which
+   may repeat (after the result, the closing band, the bar): the
+   principles say to repeat the ask on every page. Other links went quiet.
+3. The button test covers the button after each result only; the bar keeps
+   its own words, "Book free 20 min call". Every booking link carries the
+   visitor's wording in `utm_content`, so bookings can be compared by arm
+   whichever link was used.
+4. Before consent the wording is picked per page view and stored nowhere,
+   so it can change from page to page for a visitor who never answers;
+   their events are never sent anyway.
+5. The tags are on the internal booking.html links, as the brief asked,
+   added when a link is used rather than at load, so search engines never
+   read tagged links inside the site; the booking page strips them (and
+   nothing else) from its address before analytics could read them, so
+   they never overwrite a visit's real source in Google Analytics, and
+   passes them to Calendly.
+6. "Reduce effort at booking": embed, the calendar at once. The routing
+   form, its persona question and the Netlify form `booking` are gone:
+   Calendly already asks for the name and email. Lost: the name and email
+   of someone who fills the form but never picks a time.
+7. The consent box is required: the form sends nothing unticked.
+8. The name is required as well as the email.
+9. Without JavaScript the email link and form stay hidden (they could not
+   carry the figures); the button shows, as plain booking.html.
+10. my-pensions keeps "nothing leaves this page": the button, no form.
+11. The directors' rules page counts as a tool with a result: the block
+    follows its list, with "Email me this result" (the list is sent), and
+    no "doesn't show" line. Its old link (`#drBook`, `#persona=director`)
+    is gone; the booking page now reads the situation from the page name.
+12. The readiness check (held) keeps its own button; the finder (held)
+    and the 404 keep their filled buttons (a form's steps; the way home).
+    Tool buttons that run a tool ("Show what to talk about") stay filled:
+    they are the give, before the ask.
+13. The home page's three situations go into the hero, in the chat
+    picture's own words ("Which of these sounds most like you?", "Just
+    starting out", "Changed jobs a few times", "Run my own company"), so no
+    new words; "Six places to begin" and the chat picture keep theirs. On
+    a phone they follow the chart, not the figure: under the figure they
+    pushed the chart's foot under the cookie bar on a first visit.
+14. The bar's reason line is dropped: "Book free 20 min call" says free
+    and 20 minutes, and the bar is half the height (it now sits on the
+    calculators and guides too).
+15. The guides keep their own closing link and reason line; on a phone
+    the bar gives them a button.
+16. The games load neither pb-cta.js nor the bar: their booking links
+    carry no tags.
+17. Printing hides the block after a result on every calculator (the
+    "doesn't show" line still prints).
+18. The `.email-cap` CSS on the two hand-written calculators and the
+    booking page's `.qual` CSS are left in place, unused; the TRUST
+    block's two `.pb-bookbar p.pb-why` rules likewise (the block must stay
+    byte-identical on every page).
+
+## Needs Damian (Run 45)
+
+1. **Netlify:** the notification for `calculator-results` (top, Needs
+   Damian 1); the pension and director calculators' requests now arrive
+   there too, with a name.
+2. **Calendly:** the tags arrive on each booking (utm_source, utm_medium,
+   utm_campaign, utm_content, utm_term). Check one test booking shows
+   them, and that the event's own questions ask for the name and email
+   only. The redirect to thank-you.html is still the Calendly setting
+   (Parked).
+3. **GTM:** to measure anything, publish tags for the five new events
+   (and `calendly_booking`), each with its fields, and an A/B report on
+   `variant`.
+4. **Compliance:** question 1.25 (a) to (f), sections 3.3 and 3.4.
+5. **How long to run the test:** the brief left it open. Bookings per arm
+   will be small; read Calendly's `utm_content` before deciding anything.
+
+## The gate
+
+Run against main `bb3d372`'s own run on the same machine (headless
+Chromium 141, `TZ=Europe/Dublin`, Pillow installed), one suite at a time.
+Pass: no failing line main did not have.
+
+| Suite | Main | Run 45 |
+|---|---|---|
+| build.test.py | 459/0 | 467/0 |
+| give-then-ask.test.mjs | 118/0 | 157/0 |
+| lead-forms.test.py | 379/2 (booking, Calendly) | 398/0 (no booking form) |
+| consent.test.py | 731/14 | 732/14, the same 14 (check 9 at 320 x 568) |
+| interactive-43, deadline, games, providers, regulator-lines, runner, gap-band, boxes, search, run-tests | pass | pass |
+| nav.test.py | 464/6 | 464/6, the same (no mouse) |
+| floating-chrome.test.mjs | 31/4 | 31/4, the same checks (2 on booking, rules, home; 5) |
+| terms.test.mjs | 45/3 | 45/3, the same (one run caught the home page once; its test now leaves out the button's wording, which changes per view) |
+| ux4.test.mjs | crashes (H.264) | the same |
+| verify.py --no-shots | 0 FAIL | 0 FAIL |
+| stamp, site-index, seo, initialisms, sync --check | clean | clean |
+| sitemap.py --check | stale lastmods | stale lastmods (rewrite after merge) |
+
+Found on the way: `broker-vs-autoenrolment.html` is now 254 KB, over
+verify.py's 250 KB warning (F3), from the CTA block of CSS; a warning, not
+a failure. `interactive-43`'s H2 caught the hero's three situations
+pushing the chart under the cookie bar at 500px; they moved after the
+chart on phones (item 6).
 
 # Run 44 — 2026-10-05 · "Easy to reschedule" (on `claude/easy-reschedule`)
 

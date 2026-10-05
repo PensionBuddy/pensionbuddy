@@ -1997,6 +1997,78 @@ html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out in
 html.pb-readying [data-pb-wait]{transition:none!important}
 @keyframes pbWait{from{opacity:1}to{opacity:.55}}
 /* WAIT:END */
+/* CTA:BEGIN (Run 45, give then ask). Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('CTA', 'cta-css'), copied by
+   tools/sync-chrome.py, guarded by chrome_drift.
+   1. .pb-after, under a calculator's result (pagebuild.after_block): what it
+      does not show, the one booking button and its line, and "Email me this
+      result", a quiet link that opens a two-field form (assets/js/pb-after.js).
+      The button is the page's one filled button; everything after it is
+      quieter. No text under 1rem: the calculators keep a 16px floor.
+   2. .btn-quiet-dark: a link that is not the page's booking ask, on a dark
+      band, drawn as an outline, so the booking button stays the one filled
+      button there (.btn-ghost does the same on a light background).
+   3. .pb-bookbar, the phone booking bar (assets/js/pb-bookbar.js), below
+      921px only: pinned to the bottom edge and padded clear of the screen's
+      rounded corners and home indicator (env(safe-area-inset-*)); tucked
+      away (moved off screen, not hidden) while it would cover a calculator's
+      controls, a booking section, the footer or a keyboard. Slides up in
+      200ms; under reduced motion it simply appears. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{margin:0;padding:20px 22px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface)}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
+.dr-out .pb-after{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
+.pb-after [hidden]{display:none!important}
+.pb-after .btn.pb-after-btn{display:inline-flex;width:auto;max-width:100%;min-height:48px;margin:0;white-space:normal;text-align:center;line-height:1.3}
+.pb-after .pb-after-btn .ico{flex:none;width:16px;height:16px}
+.pb-after p.pb-after-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-after-more{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0;border:0;background:none;font-family:var(--font);font-size:1rem;font-weight:400;color:var(--teal-700);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pb-after .pb-after-more:hover{color:var(--ink)}
+.pb-after .pb-after-more:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring);border-radius:4px}
+.pb-after-mail{margin:6px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.pb-mail-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pb-after p.pb-mail-f{display:flex;flex-direction:column;gap:6px;margin:0;max-width:none}
+.pb-mail-f label{font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-after .pb-mail-f input{width:100%;min-width:0;min-height:48px;margin:0;padding:11px 14px;font-family:var(--font);font-size:1rem;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-2);border-radius:8px;box-shadow:none}
+.pb-after .pb-mail-f input:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pb-after .pb-mail-f input[aria-invalid="true"]{border-color:var(--red)}
+.pb-after .pb-mail-ok{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;font-size:1rem;font-weight:400;line-height:1.5;color:var(--ink);cursor:pointer}
+.pb-after .pb-mail-ok input{flex:none;width:22px;height:22px;min-height:0;margin:1px 0 0;padding:0;accent-color:var(--teal-700)}
+.pb-after .pb-mail-ok input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-after .pb-mail-ok input[aria-invalid="true"]{outline:2px solid var(--red);outline-offset:2px}
+.pb-after p.pb-mail-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-mail-why a{color:var(--teal-700);font-weight:600}
+.pb-after p.pb-mail-err{margin:10px 0 0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--red)}
+.pb-after .btn.pb-mail-send{width:auto;min-height:48px;margin:14px 0 0}
+.pb-after p.pb-mail-done{display:flex;gap:9px;align-items:flex-start;margin:0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--teal-700)}
+.pb-after p.pb-mail-done:focus{outline:none}
+.pb-mail-done .ico{flex:none;width:20px;height:20px;margin-top:2px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){.pb-mail-fields{grid-template-columns:1fr}.pb-after .btn.pb-after-btn{width:100%}}
+@media print{.pb-after{display:none!important}}
+.btn.btn-quiet-dark{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.62);box-shadow:none}
+.btn.btn-quiet-dark:hover{background:rgba(255,255,255,.08);border-color:#fff;color:#fff}
+.btn.btn-quiet-dark:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.55)}
+.pb-bookbar{display:none}
+@media(max-width:920px){
+  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
+    align-items:center;justify-content:center;gap:8px;
+    padding:10px calc(10px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    background:var(--surface);border-top:1px solid var(--line-2);
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-bookbar.pb-bookbar-on{transform:none}
+  .pb-bookbar.pb-bookbar-held{display:none}
+  .pb-bookbar .btn{flex:1 1 auto;width:auto;max-width:480px;min-height:48px;margin:0;padding:12px 16px;
+    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
+  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
+    color:var(--ink-2);cursor:pointer}
+  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
+  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
+}
+@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* CTA:END */
 </style>
 </head>
 <body>
@@ -2054,7 +2126,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
 <main id="main" tabindex="-1">
 <div class="wrap"><div class="legal pb-caveat">
   <h1>Privacy Notice</h1>
-  <p class="updated">Last updated: 4 October 2026</p>
+  <p class="updated">Last updated: 5 October 2026</p>
   <p class="intro">This notice explains what personal information Pensionbuddy collects, why we collect it, and what your rights are. We keep it in plain English, the same as everything else here.</p>
 
   <h2>Who we are</h2>
@@ -2066,7 +2138,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
     <li>Anything you choose to tell us about your situation when you get in touch.</li>
     <li>Basic, non-identifying information about how the site is used, where you have agreed to cookies or analytics.</li>
   </ul>
-  <p>The pension calculators on this site run entirely in your browser. The figures you enter into them are not sent to us or stored, unless you ask us to email you the results: then what the calculator shows, the figures you chose and your email address reach us through a form on this website. &ldquo;Email them to yourself&rdquo; opens your own email app and sends us nothing.</p>
+  <p>The pension calculators on this site run entirely in your browser. The figures you enter into them are not sent to us or stored, unless you ask us to email you the result and tick the box to agree: then your name, your email address, what the calculator shows and the figures you chose reach us through a form on this website, and we use them only to send you that result. &ldquo;Email them to yourself&rdquo; opens your own email app and sends us nothing.</p>
 
   <h2>How we use it</h2>
   <ul>
@@ -2078,7 +2150,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   <p>We will only use your information for the purpose you gave it to us. We do not sell your data to anyone.</p>
 
   <h2>Booking and third parties</h2>
-  <p>We use Calendly to manage call bookings. When you book a time, Calendly collects your name, email and chosen slot on our behalf and handles that information under its own privacy terms. What you send us through a form on this website, such as the booking form or a request for your figures or a guide, is stored by Netlify, our website host, so that it reaches us. We may also use an email tool to send guides and follow-ups. These providers only process your information so that we can provide the service you asked for.</p>
+  <p>We use Calendly to manage call bookings. When you book a time, Calendly collects your name, email and chosen slot on our behalf and handles that information under its own privacy terms. When you book through a link on this site, Calendly also records which page the link was on and which wording of the booking button you saw. What you send us through a form on this website, such as a request for your figures or a guide, is stored by Netlify, our website host, so that it reaches us. We may also use an email tool to send guides and follow-ups. These providers only process your information so that we can provide the service you asked for.</p>
 
   <h2>How long we keep it</h2>
   <p>We keep your information only for as long as we need it for the purpose you gave it, or for as long as we are required to by law and our regulatory obligations, and then we delete it securely.</p>
@@ -2088,7 +2160,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
 
   <h2 id="cookies">Cookies</h2>
   <p>This site aims to use only what is necessary to work. Analytics are not necessary, so we ask first.</p>
-  <p>When you first visit, a bar at the foot of the page asks whether we may use analytics. Only if you choose &ldquo;That&rsquo;s fine&rdquo; do we load Google Tag Manager, a Google service that runs our analytics tools. We use it to see how the site is used: which pages are visited, when a calculator is first used, when the booking form is sent and when a call is booked. With it we load the Meta (Facebook and Instagram), TikTok and LinkedIn pixels. These tell those platforms that you visited this site, so we can measure our advertising there and show our ads to people like you. If you choose &ldquo;No thanks&rdquo;, or make no choice, none of these is ever loaded.</p>
+  <p>When you first visit, a bar at the foot of the page asks whether we may use analytics. Only if you choose &ldquo;That&rsquo;s fine&rdquo; do we load Google Tag Manager, a Google service that runs our analytics tools. We use it to see how the site is used: which pages are visited, when a calculator is first used and when it shows a result, when a booking button is seen or pressed, when a result is asked for by email, and when a call is booked. We also try two wordings of the booking button after a calculator&rsquo;s result, each shown to half of visitors; once you choose &ldquo;That&rsquo;s fine&rdquo;, which one you see is kept in your browser so that it stays the same, and before that, or after &ldquo;No thanks&rdquo;, nothing is kept. With it we load the Meta (Facebook and Instagram), TikTok and LinkedIn pixels. These tell those platforms that you visited this site, so we can measure our advertising there and show our ads to people like you. If you choose &ldquo;No thanks&rdquo;, or make no choice, none of these is ever loaded.</p>
   <p>Your choice is kept in your browser, and you can change it at any time. <button type="button" class="btn btn-ghost pb-consent-reset" data-pb-consent-reset>Change your cookie choice</button></p>
 
   <h2>Contact</h2>
@@ -2195,9 +2267,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=a95d937c"></script>
+<script src="assets/js/pb-consent.js?v=9ab0988f"></script>
+<script src="assets/js/pb-cta.js?v=c3d947a2"></script>
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 

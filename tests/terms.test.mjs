@@ -104,7 +104,9 @@ async function open(page, w, block) {
   await sleep(300);
 }
 
-const MAIN_TEXT = `(function(){var m=document.getElementById('main').cloneNode(true);[].forEach.call(m.querySelectorAll('.pb-term-pop'),function(p){p.remove();});return m.textContent.replace(/\\s+/g,' ');})()`;
+/* the button after a result says one of two wordings, picked per page view
+   before the cookie choice (Run 45, assets/js/pb-cta.js): its words are left out */
+const MAIN_TEXT = `(function(){var m=document.getElementById('main').cloneNode(true);[].forEach.call(m.querySelectorAll('.pb-term-pop'),function(p){p.remove();});[].forEach.call(m.querySelectorAll('.pb-ab-t'),function(t){t.textContent='';});return m.textContent.replace(/\\s+/g,' ');})()`;
 
 const GLOSSARY = (() => { const s = readFileSync(join(ROOT, 'assets/js/pb-glossary.js'), 'utf8'); return JSON.parse(s.slice(s.indexOf('= ') + 2, s.indexOf(';\n'))); })();
 

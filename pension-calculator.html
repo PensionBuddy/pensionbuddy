@@ -305,18 +305,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .ec-ok.show{display:flex}
 .email-cap .ec-ok svg{width:18px;height:18px}
 .email-cap .ec-ok a{text-decoration:underline;text-underline-offset:3px}
-/* AFTER THE RESULT (Run 43, item 5). Under every calculator's results, in this order:
-   what the calculator does not show (.pb-after-not, a caveat), the offer to email the
-   results (.email-cap), then the one booking ask (.pb-after) with its reason. Nothing
-   here moves, fades or is revealed; assets/js/pb-after.js only sets the link's #from=
-   (the booking page's line) and sends the shared form. */
-.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
-.pb-after{border:1px solid var(--line-2);border-radius:8px;background:var(--surface);padding:20px 22px}
-.pb-after .pb-after-q{margin:0;font-size:1rem;line-height:1.5;font-weight:600;color:var(--ink)}
-.pb-after .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:1rem;font-weight:600;color:var(--teal-700);text-decoration:none}
-.pb-after .wlink:hover{text-decoration:underline}
-.pb-after .wlink .ico{width:15px;height:15px;flex:none}
-.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
 /* #15: the success tick draws itself once, about 300ms, ease-out, as its
    message appears: going from display:none to shown starts the animation, so
    the draw needs no script. Drawn is the default and the draw runs only where
@@ -2413,6 +2401,78 @@ html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out in
 html.pb-readying [data-pb-wait]{transition:none!important}
 @keyframes pbWait{from{opacity:1}to{opacity:.55}}
 /* WAIT:END */
+/* CTA:BEGIN (Run 45, give then ask). Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('CTA', 'cta-css'), copied by
+   tools/sync-chrome.py, guarded by chrome_drift.
+   1. .pb-after, under a calculator's result (pagebuild.after_block): what it
+      does not show, the one booking button and its line, and "Email me this
+      result", a quiet link that opens a two-field form (assets/js/pb-after.js).
+      The button is the page's one filled button; everything after it is
+      quieter. No text under 1rem: the calculators keep a 16px floor.
+   2. .btn-quiet-dark: a link that is not the page's booking ask, on a dark
+      band, drawn as an outline, so the booking button stays the one filled
+      button there (.btn-ghost does the same on a light background).
+   3. .pb-bookbar, the phone booking bar (assets/js/pb-bookbar.js), below
+      921px only: pinned to the bottom edge and padded clear of the screen's
+      rounded corners and home indicator (env(safe-area-inset-*)); tucked
+      away (moved off screen, not hidden) while it would cover a calculator's
+      controls, a booking section, the footer or a keyboard. Slides up in
+      200ms; under reduced motion it simply appears. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{margin:0;padding:20px 22px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface)}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
+.dr-out .pb-after{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
+.pb-after [hidden]{display:none!important}
+.pb-after .btn.pb-after-btn{display:inline-flex;width:auto;max-width:100%;min-height:48px;margin:0;white-space:normal;text-align:center;line-height:1.3}
+.pb-after .pb-after-btn .ico{flex:none;width:16px;height:16px}
+.pb-after p.pb-after-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-after-more{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0;border:0;background:none;font-family:var(--font);font-size:1rem;font-weight:400;color:var(--teal-700);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pb-after .pb-after-more:hover{color:var(--ink)}
+.pb-after .pb-after-more:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring);border-radius:4px}
+.pb-after-mail{margin:6px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.pb-mail-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pb-after p.pb-mail-f{display:flex;flex-direction:column;gap:6px;margin:0;max-width:none}
+.pb-mail-f label{font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-after .pb-mail-f input{width:100%;min-width:0;min-height:48px;margin:0;padding:11px 14px;font-family:var(--font);font-size:1rem;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-2);border-radius:8px;box-shadow:none}
+.pb-after .pb-mail-f input:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pb-after .pb-mail-f input[aria-invalid="true"]{border-color:var(--red)}
+.pb-after .pb-mail-ok{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;font-size:1rem;font-weight:400;line-height:1.5;color:var(--ink);cursor:pointer}
+.pb-after .pb-mail-ok input{flex:none;width:22px;height:22px;min-height:0;margin:1px 0 0;padding:0;accent-color:var(--teal-700)}
+.pb-after .pb-mail-ok input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-after .pb-mail-ok input[aria-invalid="true"]{outline:2px solid var(--red);outline-offset:2px}
+.pb-after p.pb-mail-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-mail-why a{color:var(--teal-700);font-weight:600}
+.pb-after p.pb-mail-err{margin:10px 0 0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--red)}
+.pb-after .btn.pb-mail-send{width:auto;min-height:48px;margin:14px 0 0}
+.pb-after p.pb-mail-done{display:flex;gap:9px;align-items:flex-start;margin:0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--teal-700)}
+.pb-after p.pb-mail-done:focus{outline:none}
+.pb-mail-done .ico{flex:none;width:20px;height:20px;margin-top:2px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){.pb-mail-fields{grid-template-columns:1fr}.pb-after .btn.pb-after-btn{width:100%}}
+@media print{.pb-after{display:none!important}}
+.btn.btn-quiet-dark{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.62);box-shadow:none}
+.btn.btn-quiet-dark:hover{background:rgba(255,255,255,.08);border-color:#fff;color:#fff}
+.btn.btn-quiet-dark:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.55)}
+.pb-bookbar{display:none}
+@media(max-width:920px){
+  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
+    align-items:center;justify-content:center;gap:8px;
+    padding:10px calc(10px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    background:var(--surface);border-top:1px solid var(--line-2);
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-bookbar.pb-bookbar-on{transform:none}
+  .pb-bookbar.pb-bookbar-held{display:none}
+  .pb-bookbar .btn{flex:1 1 auto;width:auto;max-width:480px;min-height:48px;margin:0;padding:12px 16px;
+    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
+  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
+    color:var(--ink-2);cursor:pointer}
+  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
+  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
+}
+@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* CTA:END */
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2600,30 +2660,29 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
       <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
     </div>
+    <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: product charges, inflation, the tax on your income when you draw it.</p>
-    <div class="email-cap">
-      <div class="ec-top">
-        <span class="eci"><svg class="ico" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
-        <div class="ect"><b>Want these figures emailed to you?</b><span>And what they'd look like for your actual situation.</span></div>
-      </div>
-      <form id="ecForm" name="pension-calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendResults();return false" novalidate>
-        <input type="hidden" name="form-name" value="pension-calculator-results"><input type="hidden" name="marketing_consent"><input type="hidden" name="pot"><input type="hidden" name="income"><input type="hidden" name="relief"><input type="hidden" name="cost_of_waiting"><input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">
-        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-        <div class="ec-row">
-          <span class="ffield"><input type="email" id="ecEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="ecEmail">Your email</label></span>
-          <button class="btn btn-primary" style="width:auto" type="submit">Email me my results <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-        </div>
-        <label class="pb-optin"><input type="checkbox" id="ecOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
-        <p class="ec-note" id="ecErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
-        <p class="ec-note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>. This is information, not advice.</p>
-      </form>
-      <div class="ec-ok" id="ecOk" role="status" tabindex="-1"><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks - we've got it. Damian will be in touch personally.</span></div>
-    </div>
     <div class="pb-after" id="pbAfter" data-pb-from="pension-calculator">
-      <p class="pb-after-q">Want to go through this with Damian?</p>
-      <a class="wlink" href="booking.html">Talk it through, free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
+      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with Damian</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-after-why">Free. No obligation. No pressure.</p>
+      <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
+      <div class="pb-after-mail" id="ecCap" hidden>
+        <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="calculator-results"><input type="hidden" name="results"><input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">
+          <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <div class="pb-mail-fields">
+            <p class="pb-mail-f"><label for="ecName">Your name</label><input type="text" id="ecName" name="name" autocomplete="name" aria-describedby="ecErr"></p>
+            <p class="pb-mail-f"><label for="ecEmail">Your email</label><input type="email" id="ecEmail" name="email" autocomplete="email" inputmode="email" aria-describedby="ecErr"></p>
+          </div>
+          <label class="pb-mail-ok"><input type="checkbox" id="ecConsent" name="consent" value="yes" aria-describedby="ecWhy"><span>Yes, store my details so Damian can email me this result.</span></label>
+          <p class="pb-mail-why" id="ecWhy">We store your name, email and these figures only to email you this result; they go to Damian through Netlify, our website host. <a href="privacy.html">Privacy Notice</a></p>
+          <p class="pb-mail-err" id="ecErr" role="alert" hidden></p>
+          <button class="btn btn-ghost pb-mail-send" type="submit">Email me this result</button>
+        </form>
+        <p class="pb-mail-done" id="ecOk" role="status" tabindex="-1" hidden><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span id="ecOkText">Thanks. Damian will email you this result himself, so it will not arrive straight away.</span></p>
+      </div>
     </div>
+    <!-- AFTER:END -->
     <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
   </div>
 </div></div>
@@ -2687,7 +2746,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
-<script src="assets/js/pb-forms.js?v=071cee0a"></script>
+<script src="assets/js/pb-forms.js?v=79c2c407"></script>
 <script>
 const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* Formatting, the slider fill, the wiring and the debounced live region are
@@ -2921,77 +2980,6 @@ calc();
 
 /* nav */
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
-
-/* email-results capture (front-end only) */
-function sendResults(){
-  var input=document.getElementById('ecEmail');
-  var e=input.value.trim();
-  var ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-  var err=document.getElementById('ecErr');
-  if(!ok){ err.textContent='Please enter a valid email address.';
-           err.style.display='block'; input.focus(); return; }
-  err.style.display='none';
-
-  /* the figures the visitor is actually looking at */
-  var fig=function(id){var el=document.getElementById(id);return el?el.textContent.trim():'';};
-  var payload={
-    email:e,
-    source:document.title,
-    pot:fig('potOut'), income:fig('incOut'), relief:fig('reliefOut'),
-    costOfWaiting:fig('waitOut'),
-    /* the panel's sliders only. #pbGuessRange is the guess card's own slider,
-       built at runtime by assets/js/pb-guess.js: it is the visitor playing a
-       game with themselves, not an input to any figure on this page, and a
-       lead that carried it would read as one. Excluded by id rather than by
-       scoping to .panel, because the More-options pass moves fields about. */
-    inputs:[].slice.call(document.querySelectorAll('input[type=range]:not(#pbGuessRange)'))
-             .map(function(s){return s.id+'='+s.value;}).join(', '),
-    /* the separate, unticked box under the form: asking for these figures
-       is not consent to anything else, so the two are recorded apart */
-    marketingConsent:!!(document.getElementById('ecOptin')||{}).checked,
-    /* #5: the link that opens these same figures again, pb-share's own */
-    link:(window.PBShare&&window.PBShare.link)?window.PBShare.link():location.href,
-    page:location.href
-  };
-
-  var done=function(msg,isHtml){
-    var t=document.getElementById('ecOkText');
-    if(t&&msg){ if(isHtml)t.innerHTML=msg; else t.textContent=msg; }
-    document.getElementById('ecForm').style.display='none';
-    document.getElementById('ecOk').classList.add('show');
-    document.getElementById('ecOk').focus(); /* #15: land on the confirmation, not the hidden form */
-  };
-  /* Run 27: posted to Netlify Forms ("pension-calculator-results") first, and only a real
-     success says Damian will be in touch. Anything else opens a
-     prefilled email to Damian instead, the route this page always had. */
-  var viaEmail=function(){
-    var body='Please send me my pension figures.%0D%0A%0D%0A'+
-      'My email: '+encodeURIComponent(payload.email)+'%0D%0A'+
-      'Projected pot: '+encodeURIComponent(payload.pot)+'%0D%0A'+
-      'Estimated monthly income: '+encodeURIComponent(payload.income)+'%0D%0A'+
-      'Tax relief: '+encodeURIComponent(payload.relief)+'%0D%0A'+
-      'Figures used: '+encodeURIComponent(payload.inputs)+'%0D%0A'+
-      'Occasional emails: '+(payload.marketingConsent?'yes, please':'no')+'%0D%0A'+
-      'Open these figures again: '+encodeURIComponent(payload.link)+'%0D%0A'+
-      'From: '+encodeURIComponent(payload.page);
-    window.location.href='mailto:'+LEAD_FALLBACK_ADDRESS+
-      '?subject='+encodeURIComponent('Pension figures request')+'&body='+body;
-    /* nothing has been sent by this page, so say so: no "on its way" claim */
-    done('Your email app should have opened with the figures ready to send. If it didn\'t, <a href="booking.html">book a free call</a> and Damian will walk you through them.', true);
-  };
-  var form=document.getElementById('ecForm');
-  if(!window.PBForms){ viaEmail(); return; }
-  if(form.getAttribute('aria-busy')==='true')return;   /* one send per click */
-  form.setAttribute('aria-busy','true');
-  PBForms.send(form,{
-    marketing_consent:payload.marketingConsent, pot:payload.pot, income:payload.income,
-    relief:payload.relief, cost_of_waiting:payload.costOfWaiting, inputs:payload.inputs,
-    link:payload.link, page:payload.page
-  }).then(function(ok){
-    form.removeAttribute('aria-busy');
-    if(ok)done('Thanks - we\'ve got it. Damian will be in touch personally.'); else viaEmail();
-  });
-}
 </script>
 
 <script>
@@ -3201,11 +3189,12 @@ function sendResults(){
 
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=a95d937c"></script>
+<script src="assets/js/pb-consent.js?v=9ab0988f"></script>
+<script src="assets/js/pb-cta.js?v=c3d947a2"></script>
 
 
 <script>
@@ -3304,7 +3293,8 @@ function sendResults(){
 <script src="assets/js/pb-guess.js?v=988458d5"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-after.js?v=07cefa1d"></script>
+<script src="assets/js/pb-after.js?v=3ed90710"></script>
+<script src="assets/js/pb-bookbar.js?v=6175415b"></script>
 <script src="assets/js/pb-report.js?v=f0c6f276"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

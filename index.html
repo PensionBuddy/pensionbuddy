@@ -1486,6 +1486,22 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
   background:var(--surface);color:var(--teal-700);text-decoration:none}
 .pb-chip-hero:hover,.pb-chip-hero:active{background:var(--ink);color:#fff;border-color:var(--ink)}
 .pb-chip-hero:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
+/* Run 45: the same three paths in the hero: the hero gives the figure and
+   asks only which situation is the reader's (no button, no booking link:
+   the booking ask follows the picker in #life) */
+.pb-hero-paths{margin:0}
+/* beside the chart on a wide screen, under the figure and the lockup; on a
+   phone after the chart and its caveat, so the first screen stays as Run 42
+   measured it (the chart and its source clear of the cookie bar) */
+@media(min-width:921px){
+  .pb-hero-gap-grid > .pb-hero-copy{grid-column:1;grid-row:1}
+  .pb-hero-gap-grid > .pb-hero-chart{grid-column:2;grid-row:1 / span 2}
+  .pb-hero-gap-grid > .pb-hero-paths{grid-column:1;grid-row:2}
+}
+.pb-hero-paths .pb-hero-paths-q{margin:0 0 10px;font-size:1rem;font-weight:600;line-height:1.5;color:var(--ink)}
+.pb-hero-paths-list{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.pb-hero-paths-list li{display:flex;margin:0;padding:0}
+.pb-hero-paths .pb-chip-hero{max-width:none;margin:0;padding:10px 16px;font-size:1rem;font-weight:600;border-radius:8px}
 @media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 
 /* ============================================================
@@ -1815,41 +1831,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-reg-yrs{display:block}
 }
 @media(max-width:420px){.pb-reg{margin-top:14px;font-size:.82rem}}
-/* ============================================================
-   MOBILE BOOKING BAR (.pb-bookbar). Built by assets/js/pb-bookbar.js on the
-   five content pages (index, starter, director, tracker, glossary), never on
-   a calculator. Phones and tablets only: from 921px up it is display:none.
-   Pinned to the bottom edge, it shows once the hero has scrolled away and
-   tucks away at the closing band and the footer. Tucked means moved off
-   screen, not hidden, so a keyboard reader can still reach it (the last two
-   tab stops) and focus inside it brings it up. The button is the site's
-   primary button; the close is a 44px target with the site's focus ring.
-   While it shows, html.pb-bookbar-on lifts the Ask Buddy button above it by
-   the bar's measured height, and keeps anything scrolled into view clear of
-   it. Slides up in 200ms; under reduced motion it simply appears. With the
-   cookie choice bar up, or the Ask Buddy panel open, it is display:none, so
-   the panel opens in its own place. Byte-identical on the five pages.
-   ============================================================ */
-.pb-bookbar{display:none}
-@media(max-width:920px){
-  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
-    align-items:center;justify-content:center;gap:8px;
-    padding:10px 10px calc(10px + env(safe-area-inset-bottom, 0px)) 16px;
-    background:var(--surface);border-top:1px solid var(--line-2);
-    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
-  .pb-bookbar.pb-bookbar-on{transform:none}
-  .pb-bookbar.pb-bookbar-held{display:none}
-  .pb-bookbar .btn{flex:1 1 auto;max-width:480px;min-height:48px;padding:12px 16px;
-    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
-  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
-    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
-    color:var(--ink-2);cursor:pointer}
-  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
-  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
-}
-@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
 /* PRODUCT TABS (#pbPtTabs). One tab per tool on the dark product band,
    each swapping the screenshot, the one line under the heading and the
    button, in each tool's own words. Built by script (WAI-ARIA tabs, arrow
@@ -2503,6 +2484,78 @@ html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out in
 html.pb-readying [data-pb-wait]{transition:none!important}
 @keyframes pbWait{from{opacity:1}to{opacity:.55}}
 /* WAIT:END */
+/* CTA:BEGIN (Run 45, give then ask). Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('CTA', 'cta-css'), copied by
+   tools/sync-chrome.py, guarded by chrome_drift.
+   1. .pb-after, under a calculator's result (pagebuild.after_block): what it
+      does not show, the one booking button and its line, and "Email me this
+      result", a quiet link that opens a two-field form (assets/js/pb-after.js).
+      The button is the page's one filled button; everything after it is
+      quieter. No text under 1rem: the calculators keep a 16px floor.
+   2. .btn-quiet-dark: a link that is not the page's booking ask, on a dark
+      band, drawn as an outline, so the booking button stays the one filled
+      button there (.btn-ghost does the same on a light background).
+   3. .pb-bookbar, the phone booking bar (assets/js/pb-bookbar.js), below
+      921px only: pinned to the bottom edge and padded clear of the screen's
+      rounded corners and home indicator (env(safe-area-inset-*)); tucked
+      away (moved off screen, not hidden) while it would cover a calculator's
+      controls, a booking section, the footer or a keyboard. Slides up in
+      200ms; under reduced motion it simply appears. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{margin:0;padding:20px 22px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface)}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
+.dr-out .pb-after{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
+.pb-after [hidden]{display:none!important}
+.pb-after .btn.pb-after-btn{display:inline-flex;width:auto;max-width:100%;min-height:48px;margin:0;white-space:normal;text-align:center;line-height:1.3}
+.pb-after .pb-after-btn .ico{flex:none;width:16px;height:16px}
+.pb-after p.pb-after-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-after-more{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0;border:0;background:none;font-family:var(--font);font-size:1rem;font-weight:400;color:var(--teal-700);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pb-after .pb-after-more:hover{color:var(--ink)}
+.pb-after .pb-after-more:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring);border-radius:4px}
+.pb-after-mail{margin:6px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.pb-mail-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pb-after p.pb-mail-f{display:flex;flex-direction:column;gap:6px;margin:0;max-width:none}
+.pb-mail-f label{font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-after .pb-mail-f input{width:100%;min-width:0;min-height:48px;margin:0;padding:11px 14px;font-family:var(--font);font-size:1rem;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-2);border-radius:8px;box-shadow:none}
+.pb-after .pb-mail-f input:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pb-after .pb-mail-f input[aria-invalid="true"]{border-color:var(--red)}
+.pb-after .pb-mail-ok{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;font-size:1rem;font-weight:400;line-height:1.5;color:var(--ink);cursor:pointer}
+.pb-after .pb-mail-ok input{flex:none;width:22px;height:22px;min-height:0;margin:1px 0 0;padding:0;accent-color:var(--teal-700)}
+.pb-after .pb-mail-ok input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-after .pb-mail-ok input[aria-invalid="true"]{outline:2px solid var(--red);outline-offset:2px}
+.pb-after p.pb-mail-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-mail-why a{color:var(--teal-700);font-weight:600}
+.pb-after p.pb-mail-err{margin:10px 0 0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--red)}
+.pb-after .btn.pb-mail-send{width:auto;min-height:48px;margin:14px 0 0}
+.pb-after p.pb-mail-done{display:flex;gap:9px;align-items:flex-start;margin:0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--teal-700)}
+.pb-after p.pb-mail-done:focus{outline:none}
+.pb-mail-done .ico{flex:none;width:20px;height:20px;margin-top:2px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){.pb-mail-fields{grid-template-columns:1fr}.pb-after .btn.pb-after-btn{width:100%}}
+@media print{.pb-after{display:none!important}}
+.btn.btn-quiet-dark{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.62);box-shadow:none}
+.btn.btn-quiet-dark:hover{background:rgba(255,255,255,.08);border-color:#fff;color:#fff}
+.btn.btn-quiet-dark:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.55)}
+.pb-bookbar{display:none}
+@media(max-width:920px){
+  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
+    align-items:center;justify-content:center;gap:8px;
+    padding:10px calc(10px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    background:var(--surface);border-top:1px solid var(--line-2);
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-bookbar.pb-bookbar-on{transform:none}
+  .pb-bookbar.pb-bookbar-held{display:none}
+  .pb-bookbar .btn{flex:1 1 auto;width:auto;max-width:480px;min-height:48px;margin:0;padding:12px 16px;
+    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
+  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
+    color:var(--ink-2);cursor:pointer}
+  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
+  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
+}
+@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* CTA:END */
 </style>
 </head>
 <body>
@@ -2601,6 +2654,14 @@ html.pb-readying [data-pb-wait]{transition:none!important}
     need depends on your own circumstances, and the value of a pension can fall as well as rise.
    </p>
   </div>
+  <div class="pb-hero-paths">
+    <p class="pb-hero-paths-q" id="pbPathsQ">Which of these sounds most like you?</p>
+    <ul class="pb-hero-paths-list" aria-labelledby="pbPathsQ">
+      <li><a class="pb-chip-hero" href="starter.html" aria-label="Just starting out: starting a pension">Just starting out</a></li>
+      <li><a class="pb-chip-hero" href="tracker.html" aria-label="Changed jobs a few times: finding old pensions">Changed jobs a few times</a></li>
+      <li><a class="pb-chip-hero" href="director.html" aria-label="Run my own company: pensions for directors">Run my own company</a></li>
+    </ul>
+  </div>
 </div></header>
 
 <!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35): assets/js/pb-providers.js fills
@@ -2653,7 +2714,6 @@ html.pb-readying [data-pb-wait]{transition:none!important}
     <div class="hero-cta">
       <a class="btn btn-primary" href="booking.html">Get my free review <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
-      <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
   </div>
 </section>
@@ -2714,7 +2774,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
     <span class="eyebrow"><span class="pip"></span>The free tool</span>
     <h2>You know what goes in. <span class="pb-soft">This shows what comes out.</span></h2>
     <p id="pbPtDesc">Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.</p>
-    <a class="btn btn-primary" id="pbPtBtn" href="pension-calculator.html"><span id="pbPtBtnT">Open the calculator</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-quiet-dark" id="pbPtBtn" href="pension-calculator.html"><span id="pbPtBtnT">Open the calculator</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     <ul class="pb-pt-list" id="pbPtList">
       <li><a href="director-calculator.html">Director calculator</a></li>
       <li><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
@@ -2808,7 +2868,7 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
   <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
 </div>
-        <a class="btn btn-light" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a class="btn btn-quiet-dark" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
       <div class="tk-clock" aria-hidden="true">
         <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
@@ -3295,15 +3355,16 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=a95d937c"></script>
+<script src="assets/js/pb-consent.js?v=9ab0988f"></script>
+<script src="assets/js/pb-cta.js?v=c3d947a2"></script>
 
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
-<script src="assets/js/pb-bookbar.js?v=b0874ace"></script>
+<script src="assets/js/pb-bookbar.js?v=6175415b"></script>
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){

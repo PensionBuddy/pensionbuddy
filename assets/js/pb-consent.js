@@ -43,6 +43,19 @@
                                     replaying its figures is not the reader,
                                     and neither is a lead form inside the
                                     calculator.
+     calculator_complete, cta_view, cta_click, booking_click,
+     email_result_submit            Run 45, give then ask: sent by
+                                    assets/js/pb-cta.js and pb-after.js,
+                                    through PBTrack like every other event;
+                                    pb-cta.js says what each one means.
+
+   THE BUTTON TEST (Run 45). Which of two wordings the booking button after a
+   calculator's result shows is kept in this browser (localStorage
+   'pb-ab-cta', assets/js/pb-cta.js) only after "That's fine". Every answer,
+   and forgetting it, is announced as a 'pb:consent' event on document,
+   detail {answer: 'accepted' | 'rejected' | null}; "No thanks" and
+   forgetting the answer also delete that key here, so it goes even on a
+   page without pb-cta.js.
 
    CHANGING YOUR MIND. An element marked data-pb-consent-reset (the Privacy
    Notice has one) forgets the answer and shows the bar again. "No thanks"
@@ -58,10 +71,16 @@
   var GTM_ID = 'GTM-KQCRZDNB';
   var KEY = 'pb-consent';
   var queue = [], loaded = false, bar = null, started = {};
+  /* first-party keys that live only with "That's fine" (Run 45) */
+  var CONSENTED_KEYS = ['pb-ab-cta'];
 
   function answer() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
   function remember(v) {
     try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {}
+    if (v !== 'accepted') {
+      CONSENTED_KEYS.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+    }
+    try { document.dispatchEvent(new CustomEvent('pb:consent', { detail: { answer: v || null } })); } catch (e) {}
   }
 
   /* Google's Tag Manager snippet for this container, as issued, run on

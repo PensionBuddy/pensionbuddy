@@ -24,6 +24,19 @@ every page, in the phone booking bar, in Ask Buddy and on the saved
 report: "Free · 20 minutes · no obligation · easy to reschedule."
 (question 1.24 (a), Appendix B.16).
 
+Updated again 5 October 2026 (Run 45, give then ask): under each
+calculator's result, one booking button, "Book a free 20-minute call with
+Damian" (or, for half of visitors, "See what this means for you - free
+20-min call"), with "Free. No obligation. No pressure." under it, and a
+small "Email me this result" link that opens a form asking for a name and
+an email and a box to tick; the booking page shows Damian's calendar at
+once, with no form in front of it; a phone booking bar, "Book free 20 min
+call", on the calculators and guides too; the home page's hero carries the
+three "Which of these sounds most like you?" links; booking links carry
+tags that tell Calendly which page and which button wording a booking
+came from; and the Privacy Notice says so (question 1.25, sections 3.3
+and 3.4, Appendix B.25).
+
 Updated 4 October 2026: the Meta, TikTok and LinkedIn ad pixels load with
 Google Tag Manager, only after a visitor accepts; the cookie bar now reads
 "May we use cookies for analytics and ads? Privacy Notice", and the
@@ -144,6 +157,114 @@ Contents
 --------
 
   1. Open questions
+1.25 Give, then ask: one button after each result, "Email me this result", the calendar first (Run 45, proposed)
+--------------------------------------------------------------------------------------------------------------------
+
+What the site does from Run 45 (built on a branch on 5 October 2026, live
+once merged). Damian's brief: show each result with no gate and no email;
+directly under it one booking button, "Book a free 20-minute call with
+Damian", with "Free. No obligation. No pressure." under it; below that an
+optional "Email me this result" (name and email only, a consent box not
+ticked in advance, one line on what is stored, why and where it goes);
+one primary booking button per page; a phone booking bar; a test of two
+button wordings, assigned half and half, with nothing stored before the
+cookie choice; tags on every booking link; and less effort at booking.
+
+- After each result, on the nine calculators and tools and the directors'
+  rules page (Appendix B.25): the page's own "What this doesn’t show"
+  line, unchanged (question 1.24 (c); the directors' page has none, its
+  list says "Topics to discuss, not advice."), then the button and its
+  line. "Want to go through this with Damian?" and the link "Talk it
+  through, free" (or "Talk through what this means for you") with the
+  reason line are gone from that place; the closing band and its reason
+  line stay.
+- The button test. Half of visitors see "Book a free 20-minute call with
+  Damian", half "See what this means for you - free 20-min call", picked
+  at random. Before the cookie choice nothing is stored: the pick lives in
+  the page and can change from page to page. After "That's fine" it is
+  kept in the visitor's browser (first-party local storage, no cookie) so
+  it stays the same; "No thanks" deletes it.
+- "Email me this result": a small link under the button opens the form
+  below it; the result stays where it was. "Your name", "Your email", a box
+  "Yes, store my details so Damian can email me this result." that the
+  visitor must tick, and the line "We store your name, email and these
+  figures only to email you this result; they go to Damian through
+  Netlify, our website host. Privacy Notice". Nothing is sent until all
+  three are given. Then, under the one form name calculator-results, as
+  before (question 1.15): the name, the email, consent=yes, what the page
+  shows, the figures chosen, the link that opens them again and the page's
+  address. The thank-you: "Thanks, [first name]. Damian will email you this
+  result himself, so it will not arrive straight away." Errors: "Please
+  enter your name.", "Please enter a valid email address.", "Please tick
+  the box, so we may store your details." If the send fails, the visitor's
+  email app opens addressed to Damian, as before. Without JavaScript the
+  link and the form are hidden; the button is not.
+- The pension and director calculators' own forms are replaced by the
+  shared one: their "Also send me occasional emails..." box is gone, so
+  no form after a result asks for marketing consent any more (section
+  3.2). The occasional-emails box stays on the three guide forms.
+- My pensions keeps its promise that nothing typed leaves the page: the
+  button, no form.
+- The booking page shows Damian's calendar at once. The three fields that
+  came first (name, email, "Which sounds most like you?") and their form
+  to Netlify, "booking", are gone; Calendly asks for the name and email
+  after a time is picked. The card's heading: "Pick a time that suits.
+  Then just your name and email." and "Damian's calendar is below.
+  Calendly asks only for your name and email, and sends a confirmation
+  straight away." The first step of "What happens" loses "on the right"
+  ("Choose a slot from Damian's calendar. It takes under a minute."). The
+  note "That is the lot. We do not ask what you earn, ... handled in line
+  with our Privacy Notice." is unchanged, now under the calendar.
+- Tags. Every booking link carries utm_source=site, utm_medium=cta,
+  utm_campaign (the page) and utm_content (A or B). The booking page hands
+  them to Calendly, adds utm_term (starter, tracker or director, where the
+  page it came from is about one), and takes them off its own address, so
+  each booking in Calendly records which page and which button wording it
+  came from. No personal data is in a tag.
+- Counted, only after "That's fine" (question 1.17): a calculator showing
+  a result after the visitor's own input, the button after a result seen
+  and pressed, any booking link pressed, and a result asked for by email.
+  No name, email or figure is sent with any of them.
+- The phone booking bar now reads "Book free 20 min call" (it read "Book a
+  call with Damian for free" with the reason line under it) and is on the
+  calculators, the tools and the five guides as well as the home, starter,
+  tracker, directors' and jargon buster pages. It stands aside while a
+  calculator's sliders, a booking section, the footer or the keyboard need
+  the space, and it can be closed.
+- One primary button per page. Buttons that are not a booking ask are
+  drawn as outlines: on the home page "Open the calculator" and "See what
+  it’s worth to you", on the starter page "See what I could build",
+  "Compare the two side by side" and "See the State Pension reality check",
+  on the directors' page "Open the director calculator", and "Send me the
+  guide" on the three guide forms. "Try the calculator" beside the home
+  page's "Get my free review" is gone (the calculator band follows).
+- The home page's hero carries "Which of these sounds most like you?"
+  and the links "Just starting out", "Changed jobs a few times" and "Run
+  my own company" (under the figure and the regulator line on a wide
+  screen, after the chart and its caveat on a phone): the words already in
+  the home page's chat picture, which keeps them. No booking link or
+  button is in the hero.
+- The Privacy Notice (sections 3.3 and 3.4): the calculators sentence
+  names the name and the box; the booking paragraph drops "the booking
+  form" and says Calendly records the page and the button wording; the
+  cookies paragraph names the new counts and the button test.
+
+Questions for you: (a) "Free. No obligation. No pressure." under the
+button after each result, while the reason line ("Free · 20 minutes · no
+obligation · easy to reschedule.") stays beside every other booking link:
+both clear, fair and not misleading, and is two lines acceptable? (b) the
+wording B, "See what this means for you - free 20-min call": acceptable,
+given the site gives information, not advice, and the call is where
+advice may follow? (c) the button test itself: is showing two wordings at
+random, and keeping the pick after "That's fine", acceptable, and is the
+Privacy Notice's sentence on it enough? (d) "Email me this result": is a
+consent box the right footing for a request the visitor makes, or would
+the request alone do (with the box kept as a confirmation)? Is the one
+line on what is stored, why and where enough, with the Privacy Notice
+linked? (e) the booking page without its own form: anything the routing
+form was there for that compliance needs back? (f) the hero's three links
+and the outline buttons: anything to raise?
+
   2. The Letter of Authority, full wording
   3. The Privacy Notice: sentences to approve
   4. The readiness check: brief
@@ -1120,6 +1241,18 @@ email app and sends us nothing." (it read "…unless you separately choose
 to email yourself the results."). The notice's "Last updated" date is now
 4 October 2026.
 
+Run 45 (on the site, proposed, 5 October 2026): the sentence on the
+calculators now reads "…not sent to us or stored, unless you ask us to
+email you the result and tick the box to agree: then your name, your email
+address, what the calculator shows and the figures you chose reach us
+through a form on this website, and we use them only to send you that
+result. …"; in "Booking and third parties", "such as the booking form or a
+request for your figures or a guide" is now "such as a request for your
+figures or a guide" (the booking page has no form), after a new sentence:
+"When you book through a link on this site, Calendly also records which
+page the link was on and which wording of the booking button you saw." The
+notice's "Last updated" date is now 5 October 2026.
+
 3.4 Cookies (on the site, proposed)
 -----------------------------------
 
@@ -1147,6 +1280,16 @@ Your choice is kept in your browser, and you can change it at any time.
 The button brings the bar back. The placeholder at the end of the second
 paragraph was taken off the site on 26 September 2026; the rest is on the
 site as quoted.
+
+Run 45 (on the site, proposed, 5 October 2026): "when a calculator is
+first used, when the booking form is sent and when a call is booked" now
+reads "when a calculator is first used and when it shows a result, when a
+booking button is seen or pressed, when a result is asked for by email,
+and when a call is booked", followed by "We also try two wordings of the
+booking button after a calculator’s result, each shown to half of
+visitors; once you choose “That’s fine”, which one you see is kept in your
+browser so that it stays the same, and before that, or after “No thanks”,
+nothing is kept." (question 1.25 (c)).
 
 4. The readiness check: brief
 =============================
@@ -3813,6 +3956,50 @@ your number. Last step: 20 minutes with Damian." The alternative, not on
 the site: "You’ve seen your figures. Next step: 20 minutes with Damian."
 
 Question: question 1.24 (b), (c), (e), (f) and (g).
+
+B.25 After each result, the booking page, the bar (Run 45)
+---------------------------------------------------------
+
+After each result, on the pension, director, auto-enrolment comparison,
+charges, State Pension reality check, State Pension entitlement check,
+Standard Fund Threshold and Personal Investment Account pages, My pensions
+and the directors' rules page, in this order: the page's "What this
+doesn’t show" line as in B.24 (none on the directors' rules page); the
+button "Book a free 20-minute call with Damian" (for half of visitors "See
+what this means for you - free 20-min call"); "Free. No obligation. No
+pressure."; and, on every page but My pensions, the link "Email me this
+result", which opens:
+
+  Your name
+  Your email
+  [ ] Yes, store my details so Damian can email me this result.
+  We store your name, email and these figures only to email you this
+  result; they go to Damian through Netlify, our website host. Privacy
+  Notice
+  [Email me this result]
+
+Errors: "Please enter your name." "Please enter a valid email address."
+"Please tick the box, so we may store your details." Sent: "Thanks,
+[first name]. Damian will email you this result himself, so it will not
+arrive straight away." Not sent: "Your email app should have opened with
+the figures ready to send to Damian.", and the email that opens,
+addressed to hello@pensionbuddy.ie with the subject "Results request",
+reads "Please send me this result." then "My name:", "My email:",
+"Results:", "Figures used:", "Open these figures again:" and "From:".
+
+The booking page's card: "Pick a time that suits. Then just your name and
+email." "Damian's calendar is below. Calendly asks only for your name and
+email, and sends a confirmation straight away." Its "What happens" first
+step: "Choose a slot from Damian's calendar. It takes under a minute."
+
+The phone booking bar: "Book free 20 min call".
+
+The home page's hero, under the figure and the regulator line on a wide
+screen, after the chart and its caveat on a phone: "Which of these sounds
+most like you?" with "Just starting out", "Changed jobs a few times", "Run
+my own company".
+
+Question: question 1.25.
 
 Appendix C. Drafts not on the site
 ==================================

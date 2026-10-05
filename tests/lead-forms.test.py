@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""The lead forms, submitted for real in headless Chrome (Run 27; eight form
-   names on thirteen pages since Run 43, item 5e).
+"""The lead forms, submitted for real in headless Chrome (Run 27; five form
+   names on thirteen pages since Run 45: "Email me this result" under one name
+   on every calculator that offers it, and no form in front of the booking
+   calendar).
 
     python3 tests/lead-forms.test.py
 
@@ -15,10 +17,11 @@ What it proves, per form:
   2. carrying every field the form declares in its static HTML, and nothing
      else: Netlify keeps only the declared fields, so an undeclared one would
      be silently lost, and a declared one never filled would arrive blank
-  3. the honeypot sent empty, the email as typed, the consent as yes or no
+  3. the honeypot sent empty, the name and email as typed, the consent as
+     yes or no (on "Email me this result", the box the reader must tick: yes)
   4. accepted: the page's existing success state
   5. refused: the page's existing email route ("Your email app should have
-     opened"), or for booking, the calendar all the same
+     opened")
   6. no script error on the page
 and, for assets/js/pb-forms.js itself: a 2xx is true; a 404, a network
 failure and no answer inside TIMEOUT_MS are each false; a field the form does
@@ -38,14 +41,15 @@ from harness import eq, report  # noqa: E402
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
 
 LEAD_FORMS = {
-    'booking.html': 'booking',
-    'pension-calculator.html': 'pension-calculator-results',
-    'director-calculator.html': 'director-calculator-results',
     'director.html': 'director-guide',
     'starter.html': 'starter-guide',
     'tracker.html': 'tracker-guide',
     'find-my-pension.html': 'pension-finder',
-    # Run 43, item 5e: the shared form, no opt-in box
+    # Run 43, item 5e, and Run 45: the shared form (pagebuild.after_block):
+    # name, email and the box to tick, no opt-in box
+    'pension-calculator.html': 'calculator-results',
+    'director-calculator.html': 'calculator-results',
+    'director-pension-rules.html': 'calculator-results',
     'broker-vs-autoenrolment.html': 'calculator-results',
     'pension-fees-calculator.html': 'calculator-results',
     'state-pension-reality-check.html': 'calculator-results',
@@ -90,10 +94,14 @@ PROBE = r"""<script>
     return;
   }
 
-  if(page==='booking.html'){
-    set('qName','Test Person'); set('qEmail','test@example.com'); $('pDirector').click();
-  }else if($('ecForm')){
-    set('ecEmail','test@example.com'); if($('ecOptin')) $('ecOptin').checked=tick;
+  if($('drForm')){
+    /* the directors' rules: a result first, the four answers and the list */
+    ['drExec','drMore','drAge','drBig'].forEach(function(n){document.querySelector('input[name="'+n+'"][value="yes"]').click();});
+    $('drForm').requestSubmit();
+  }
+  if($('ecForm')){
+    $('ecMore').click();
+    set('ecName','Test Person'); set('ecEmail','test@example.com'); $('ecConsent').checked=true;
   }else if($('mForm')){
     set('mEmail','test@example.com'); $('mOptin').checked=tick;
   }else if($('pfForm')){
@@ -108,9 +116,8 @@ PROBE = r"""<script>
   var n=0;
   (function poll(){
     n++;
-    var ok=$('ecOk')||$('mOk');
-    if(page==='booking.html'){ R.done=visible($('calStage')); R.said=text('qualDoneMsg'); }
-    else if(ok){ R.done=ok.classList.contains('show'); R.said=text('ecOkText')||text('mOkText'); }
+    if($('ecOk')){ R.done=!$('ecOk').hidden; R.said=text('ecOkText'); }
+    else if($('mOk')){ R.done=$('mOk').classList.contains('show'); R.said=text('mOkText'); }
     else { R.done=visible($('pfStep4')); R.said=text('pfDone'); }
     if(R.done||n>200){ setTimeout(finish,300); return; }
     setTimeout(poll,25);
@@ -199,8 +206,10 @@ class Declared(HTMLParser):
             self.inside = False
 
 
-# Run 28: every lead form's success message, word for word
+# Run 28: every lead form's success message, word for word (Run 45: "Email
+# me this result" has its own, with the reader's first name)
 SUCCESS = "Thanks - we've got it. Damian will be in touch personally."
+SUCCESS_RESULT = 'Thanks, Test. Damian will email you this result himself, so it will not arrive straight away.'
 
 def main():
     if not os.path.exists(CHROME):
@@ -210,7 +219,7 @@ def main():
     srv = ThreadingHTTPServer(('127.0.0.1', port), Handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
 
-    jobs = [[p, m] for p in LEAD_FORMS for m in ('ok', 'fail')] + [['booking.html', 'unit']]
+    jobs = [[p, m] for p in LEAD_FORMS for m in ('ok', 'fail')] + [['standard-fund-threshold.html', 'unit']]
     url = 'http://127.0.0.1:%d/__leads?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,1000',
@@ -246,6 +255,8 @@ def main():
             eq('%s: form-name' % tag, fields.get('form-name'), [name])
             eq('%s: the honeypot empty' % tag, fields.get('bot-field'), [''])
             eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
+            if name == 'calculator-results':
+                eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))
             if 'marketing_consent' in fields:
                 eq('%s: the consent as the box was left' % tag, fields['marketing_consent'],
                    ['yes' if mode == 'ok' else 'no'])
@@ -257,18 +268,16 @@ def main():
             eq('%s: no script error' % tag, r.get('errors'), [])
             eq('%s: the page moved on' % tag, r.get('done'), True)
             said = r.get('said') or ''
-            if page == 'booking.html':
-                eq('%s: the calendar opens either way' % tag, said.startswith('Thanks, Test.'), True)
-            elif mode == 'ok':
+            if mode == 'ok':
                 # Run 28: one success message on every form, promising only
                 # what happens (Netlify emails the visitor nothing)
-                eq('%s: says it arrived' % tag, SUCCESS in said and 'email app' not in said, True)
+                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS) in said and 'email app' not in said, True)
                 eq('%s: and promises nothing that is not sent' % tag,
                    [w for w in ('on its way', 'on the way', 'if nothing arrives', 'delivery depends') if w in said.lower()], [])
             else:
                 eq('%s: opens the email instead' % tag, 'Your email app should have opened' in said, True)
 
-    u = (results.get(('booking.html', 'unit')) or {}).get('unit') or {}
+    u = (results.get(('standard-fund-threshold.html', 'unit')) or {}).get('unit') or {}
     eq('pb-forms: a 2xx is true', u.get('ok200'), True)
     eq('pb-forms: a 404 is false', u.get('no404'), False)
     eq('pb-forms: a network failure is false', u.get('network'), False)

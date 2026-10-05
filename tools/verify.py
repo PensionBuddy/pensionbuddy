@@ -260,45 +260,19 @@ AUDIT_JS = r"""
   if(cw){R.calendly={dataUrl:cw.getAttribute('data-url'),widgetHeight:Math.round(cw.getBoundingClientRect().height),scriptInjected:!!document.querySelector('script[src*="calendly"]'),cssInjected:!!document.querySelector('link[href*="calendly"]'),fallbackDisplay:getComputedStyle(document.getElementById('calFallback')||cw).display,footTop:!!document.querySelector('.foot-top')}}
 
   // ---- interaction checks last (they mutate the page) ----
-  // F4: the qualifying form must gate the Calendly embed, and reveal it once completed
+  // F4 (Run 45): the calendar first. No form in front of it: the embed and its
+  // widget are there as the page opens, carrying the booking link's tags, and
+  // the B2 fallback still points at the same tagged calendar.
   if(/booking/.test(location.pathname)){
-    const form=document.getElementById('qualForm');
     const embedWrap=document.getElementById('calStage')||document.getElementById('calEmbed');
     const vis=el=>{if(!el)return false;const cs=getComputedStyle(el);return cs.display!=='none'&&cs.visibility!=='hidden'&&el.getBoundingClientRect().height>0};
-    const g={formExists:!!form,embedVisibleBeforeSubmit:vis(embedWrap)};
-    if(form){
-      // the Netlify honeypot (Run 27) is a field for bots, hidden from people: not one of the form's fields
-      const fields=$$('#qualForm input,#qualForm select,#qualForm textarea').filter(i=>i.type!=='hidden'&&i.name!=='bot-field');
-      g.fields=fields.map(i=>i.id||i.name||i.type);
-      g.unlabelled=fields.filter(i=>!(i.labels&&i.labels.length)&&!i.getAttribute('aria-label')&&!i.getAttribute('aria-labelledby')).map(i=>i.id||i.type);
-      g.smallTargets=fields.filter(i=>i.getBoundingClientRect().height<44).map(i=>i.id||i.type);
-      g.hasLiveError=!!form.querySelector('[aria-live]')||!!document.querySelector('#qualErr[aria-live]');
-      // submit empty -> must NOT reveal
-      form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
-      await new Promise(r=>setTimeout(r,250));
-      g.revealsWhenEmpty=vis(embedWrap);
-      // fill and submit properly
-      const set=(el,v)=>{if(!el)return;const p=Object.getPrototypeOf(el);const d=Object.getOwnPropertyDescriptor(p,'value');d&&d.set?d.set.call(el,v):el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));};
-      fields.forEach(f=>{
-        if(f.tagName==='SELECT'){const opt=[...f.options].find(o=>o.value&&o.value!=='');if(opt)set(f,opt.value);}
-        else if(f.type==='radio'){if(/director/i.test(f.value||f.id||''))f.click();}
-        else if(f.type==='email')set(f,'test@example.com');
-        else set(f,'Test Person');
-      });
-      if(!$$('#qualForm input[type=radio]:checked').length){const r0=document.querySelector('#qualForm input[type=radio]');r0&&r0.click();}
-      form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
-      await new Promise(r=>setTimeout(r,900));
-      g.revealsWhenComplete=vis(embedWrap);
-      const w=document.getElementById('calWidget');
-      g.urlAfterSubmit=w?(w.getAttribute('data-url')||'').slice(0,190):null;
-      g.fallbackLinkPresent=!!document.getElementById('calOpenBtn');
-      // the B2/Calendly assertions the load-time block used to make, now made post-reveal
-      g.widgetCreated=!!w;
-      g.scriptInjectedAfter=!!document.querySelector('script[src*="calendly"]');
-      g.cssInjectedAfter=!!document.querySelector('link[href*="calendly"]');
-      g.widgetHeightAfter=w?Math.round(w.getBoundingClientRect().height):0;
-      g.openBtnHref=(document.getElementById('calOpenBtn')||{}).href||null;
-    }
+    const w=document.getElementById('calWidget');
+    const g={gateForm:!!document.querySelector('main form'),embedVisible:vis(embedWrap),widgetCreated:!!w,
+      dataUrl:w?(w.getAttribute('data-url')||'').slice(0,190):null,
+      scriptInjected:!!document.querySelector('script[src*="calendly"]'),cssInjected:!!document.querySelector('link[href*="calendly"]'),
+      widgetHeight:w?Math.round(w.getBoundingClientRect().height):0,
+      fallbackLinkPresent:!!document.getElementById('calOpenBtn'),openBtnHref:(document.getElementById('calOpenBtn')||{}).href||null,
+      fallbackShown:vis(document.getElementById('calFallback'))};
     R.bookingGate=g;
   }
   // deep-link offset (C4): glossary terms + any page's first in-page anchor target
@@ -523,6 +497,10 @@ def static_checks(pages):
     # with an inline delay, animation or zero opacity (pagebuild.caveat_drift)
     for f, fs in pagebuild.caveat_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
         drift.setdefault(f, []).extend(fs)
+    # Run 45: the block after each calculator's result is pagebuild.after_block()'s,
+    # byte for byte, on the pages pagebuild.AFTER names and on no other
+    for f, fs in pagebuild.after_drift({f: t for f, t in src.items() if is_root_page(f)}).items():
+        drift.setdefault(f, []).extend(fs)
     # Held back (Run 21): a page carrying pagebuild.NOINDEX is live but kept out
     # of reach until it is signed off, so no other page may link to it. Signing
     # a page off means removing that meta, which lifts this check by itself.
@@ -626,8 +604,13 @@ def evaluate(page, st, audits):
         if a.get('footerInlineLinks'): F.append(('C7', '@%d %d footer links share a line with their neighbour' % (w, a['footerInlineLinks'])))
         if a.get('calcMaths') and not a['calcMaths']['ok']: F.append(('calc', '@%d maths drift: %s' % (w, a['calcMaths'])))
         if a.get('calendly'):
+            # Run 45: the calendar is there at load. Either it draws (a widget over
+            # 300px tall) or, where Calendly cannot load, the B2 fallback shows
+            # instead; a blank box, neither one, is the failure.
             c = a['calendly']
-            if not (c['scriptInjected'] and c['cssInjected'] and c['fallbackDisplay'] == 'none' and c['widgetHeight'] > 300): F.append(('calendly', '@%d %s' % (w, c)))
+            drawn = c['fallbackDisplay'] == 'none' and c['widgetHeight'] > 300
+            if not (c['scriptInjected'] and c['cssInjected'] and (drawn or c['fallbackDisplay'] != 'none')): F.append(('calendly', '@%d %s' % (w, c)))
+            elif not drawn: W.append(('calendly', '@%d Calendly did not load here; the fallback link shows' % w))
         if page == 'director-calculator.html' and 'sal' in (a.get('rangesInClosedDetails') or []): F.append(('B1', '@%d salary slider hidden inside closed <details>' % w))
         sk = a.get('skipLink') or {}
         # chrome-only: only a root page is expected to carry a skip link at all
@@ -659,26 +642,19 @@ def evaluate(page, st, audits):
     nav = a.get('navHrefs') if root_page else None       # chrome-only: the games have no site nav or footer
     if nav is not None and not any('#story' in (h or '') for h in nav + (a.get('footHrefs') or [])):
         W.append(('F5', 'no link to the story section in nav or footer'))
-    # F4 — the qualifying form must gate the embed
+    # F4 (Run 45) — the calendar first: no form in front of it, the widget there
+    # at load with the booking link's tags, the B2 fallback tagged the same way
     g = a.get('bookingGate')
     if g is not None:
-        if not g.get('formExists'): W.append(('F4', 'no qualifying form ahead of the calendar'))
-        else:
-            if g.get('embedVisibleBeforeSubmit'): F.append(('F4', 'calendar is visible before the form is completed'))
-            if g.get('revealsWhenEmpty'): F.append(('F4', 'empty form submit reveals the calendar'))
-            if not g.get('revealsWhenComplete'): F.append(('F4', 'completed form does not reveal the calendar'))
-            if not g.get('fallbackLinkPresent'): F.append(('F4', 'B2 regression: Calendly fallback link gone'))
-            if g.get('revealsWhenComplete'):
-                if not g.get('widgetCreated'): F.append(('F4', 'reveal happened but no Calendly widget was created'))
-                if not (g.get('scriptInjectedAfter') and g.get('cssInjectedAfter')): F.append(('F4', 'Calendly script/CSS not injected after reveal'))
-                if (g.get('widgetHeightAfter') or 0) < 300: W.append(('F4', 'revealed widget is only %spx tall' % g.get('widgetHeightAfter')))
-                oh = g.get('openBtnHref') or ''
-                if oh and not ('email=' in oh and 'utm_' in oh): W.append(('F4', 'fallback link is not prefilled/tagged like the embed'))
-            if g.get('unlabelled'): F.append(('F4', 'unlabelled field(s): %s' % g['unlabelled']))
-            if g.get('smallTargets'): W.append(('F4', 'field(s) under 44px: %s' % g['smallTargets']))
-            if not g.get('hasLiveError'): W.append(('F4', 'no aria-live error region on the form'))
-            u = g.get('urlAfterSubmit') or ''
-            if u and not ('email=' in u and ('utm_' in u or 'a1=' in u)): W.append(('F4', 'Calendly URL carries no prefill/persona tag: %s' % u[:90]))
+        if g.get('gateForm'): F.append(('F4', 'a form stands in front of the calendar again'))
+        if not g.get('embedVisible'): F.append(('F4', 'the calendar is not on the page at load'))
+        if not g.get('widgetCreated'): F.append(('F4', 'no Calendly widget at load'))
+        if not (g.get('scriptInjected') and g.get('cssInjected')): F.append(('F4', 'Calendly script/CSS not injected at load'))
+        if not g.get('fallbackLinkPresent'): F.append(('F4', 'B2 regression: Calendly fallback link gone'))
+        u, oh = g.get('dataUrl') or '', g.get('openBtnHref') or ''
+        if u and 'utm_' not in u: W.append(('F4', 'Calendly URL carries no tags: %s' % u[:90]))
+        if oh and u and oh[:len(u)] != u: W.append(('F4', 'fallback link is not tagged like the embed'))
+        if g.get('widgetCreated') and not g.get('fallbackShown') and (g.get('widgetHeight') or 0) < 300: W.append(('F4', 'the widget is only %spx tall' % g.get('widgetHeight')))
     # chrome-only: the shared four-column footer belongs to the root pages
     if root_page and a.get('footTop') is False: F.append(('B3', 'page has no .foot-top footer'))
     if a.get('faqIconVariants') and len(a['faqIconVariants']) > 1: W.append(('C5', 'mixed FAQ icons %s' % a['faqIconVariants']))
