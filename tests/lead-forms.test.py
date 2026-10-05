@@ -209,7 +209,7 @@ class Declared(HTMLParser):
 # Run 28: every lead form's success message, word for word (Run 45: "Email
 # me this result" has its own, with the reader's first name)
 SUCCESS = "Thanks - we've got it. Damian will be in touch personally."
-SUCCESS_RESULT = 'Thanks, Test. Damian will email you this result himself, so it will not arrive straight away.'
+SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
 
 def main():
     if not os.path.exists(CHROME):

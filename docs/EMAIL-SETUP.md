@@ -44,11 +44,12 @@ Exact text and screenshots: `docs/email-shots/`. Rebuild them with
 
 ## Before go-live, also
 
-- The calculator page still says "Damian will email you this result himself,
-  so it will not arrive straight away" (`assets/js/pb-after.js`,
-  `tools/pagebuild.py`). Change it once emails are live.
-- Privacy Notice: name Resend as a processor (it receives the name, email and
-  figures to send the email). Compliance to approve.
+- The thank-you now says the result "is emailed to you automatically". Do
+  not merge until `EMAIL_API_KEY` is set and `EMAIL_TEST` is off, or it is
+  untrue.
+- Privacy Notice: the Resend paragraph is drafted in
+  `docs/COMPLIANCE-PACK.md`, question 1.25 (g). Compliance to approve and
+  fill in the bracketed facts, then add it to `privacy.html`.
 - Compliance to approve the email text in `docs/email-shots/*.txt`.
 
 ## Tests

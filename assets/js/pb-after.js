@@ -195,7 +195,7 @@
     window.PBForms.send(form, v).then(function (sent) {
       form.removeAttribute('aria-busy');
       if (sent) {
-        done('Thanks, ' + name.split(/\s+/)[0] + '. Damian will email you this result himself, so it will not arrive straight away.');
+        done('Thanks, ' + name.split(/\s+/)[0] + '. Because you ticked the box, this result is emailed to you automatically.');
       } else { viaEmail(); }
     });
   });

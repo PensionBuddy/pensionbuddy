@@ -1091,8 +1091,8 @@ def after_block(page, indent='    '):
             '      <p class="pb-mail-err" id="ecErr" role="alert" hidden></p>',
             '      <button class="btn btn-ghost pb-mail-send" type="submit">Email me this result</button>',
             '    </form>',
-            '    <p class="pb-mail-done" id="ecOk" role="status" tabindex="-1" hidden>%s<span id="ecOkText">Thanks. Damian will email you '
-            'this result himself, so it will not arrive straight away.</span></p>' % _TICK,
+            '    <p class="pb-mail-done" id="ecOk" role="status" tabindex="-1" hidden>%s<span id="ecOkText">Thanks. Because you ticked the box, '
+            'this result is emailed to you automatically.</span></p>' % _TICK,
             '  </div>',
         ]
     lines += ['</div>', AFTER_CLOSE]
