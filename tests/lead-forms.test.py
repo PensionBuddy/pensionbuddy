@@ -208,7 +208,8 @@ class Declared(HTMLParser):
 
 # Run 28: every lead form's success message, word for word (Run 45: "Email
 # me this result" has its own, with the reader's first name)
-SUCCESS = "Thanks - we've got it. Damian will be in touch personally."
+SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
+SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
 SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
 
 def main():
@@ -274,7 +275,7 @@ def main():
             if mode == 'ok':
                 # Run 28: one success message on every form, promising only
                 # what happens (Netlify emails the visitor nothing)
-                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS) in said and 'email app' not in said, True)
+                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS_FINDER if name == 'pension-finder' else SUCCESS) in said and 'email app' not in said, True)
                 eq('%s: and promises nothing that is not sent' % tag,
                    [w for w in ('on its way', 'on the way', 'if nothing arrives', 'delivery depends') if w in said.lower()], [])
             else:

@@ -2399,15 +2399,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="ffield"><input type="email" id="mEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
         <button class="btn btn-ghost" type="submit">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       </div>
-      <label class="pb-optin"><input type="checkbox" id="mConsent" name="consent" value="yes" aria-describedby="mErr"><span>Yes, email me the guide.</span></label>
+      <label class="pb-optin"><input type="checkbox" id="mConsent" name="consent" value="yes" aria-describedby="mErr"><span>Yes, email me the guide. It is sent to me automatically when I tick this box and send.</span></label>
       <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
-      <p class="note">We use your email to reply to this request, and for nothing else unless you tick the box. See our <a href="privacy.html">Privacy Notice</a>.</p>
+      <p class="note">We use your email only to send you the guide, and for nothing else unless you tick the box for occasional emails. Netlify, our website host, stores it; Resend, our email service, sends the email. See our <a href="privacy.html">Privacy Notice</a>.</p>
       <p class="note" id="mErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
     </form>
     <div class="ok" id="mOk" role="status" tabindex="-1">
       <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
       <h3>Check your inbox.</h3>
-      <p><span id="mOkText">Thanks - we've got it. Damian will be in touch personally.</span></p>
+      <p><span id="mOkText">Thanks - we've got it. The guide is emailed to you automatically.</span></p>
     </div>
   </div>
 </div></div></section>
@@ -2510,7 +2510,7 @@ function sendMagnet(){
   PBForms.send(form,{marketing_consent:payload.marketingConsent, page:payload.page})
     .then(function(ok){
       form.removeAttribute('aria-busy');
-      if(ok)done('Thanks - we\'ve got it. Damian will be in touch personally.'); else viaEmail();
+      if(ok)done('Thanks - we\'ve got it. The guide is emailed to you automatically.'); else viaEmail();
     });
 }
 </script>
