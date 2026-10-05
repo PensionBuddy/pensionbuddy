@@ -24,7 +24,7 @@ adds one ask after each result, so my-pensions gains a booking link after
 its list and the threshold page ends with three asks (STATUS, Run 43). At
 main `6af9f77` the starter's hero lines were 2487-2488 and S1's anchor
 2582/2583, one line later than below. Every reason line quoted here now
-reads "Free · 20 minutes · no obligation · reschedule any time.".
+reads "Free · 20 minutes · no obligation · easy to reschedule.".
 
 Line numbers are this branch's after item 1 (the home page) and after this
 item's two moves (the 404 page and the directors' rules page). Every other

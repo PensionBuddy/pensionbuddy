@@ -7,7 +7,7 @@ tree, over every frame it takes (load, every state, every toggle, every click).
 
 --reason (BASELINE_REF = the commit before item 5d's swap). The reason line
 beside a booking link was "Free, 20 minutes, no obligation." and is now
-"Free · 20 minutes · no obligation · reschedule any time." Every differing
+"Free · 20 minutes · no obligation · easy to reschedule." Every differing
 cell must be the old cell with those words swapped and nothing else changed:
 every property but its text the same, and its text, whitespace removed, equal
 to the old text with every old line replaced by the new one (the old line
@@ -74,7 +74,7 @@ bd = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bd)
 
 OLD = 'Free, 20 minutes, no obligation.'
-NEW = 'Free · 20 minutes · no obligation · reschedule any time.'
+NEW = 'Free · 20 minutes · no obligation · easy to reschedule.'
 
 # --reason: the cells that must differ in every frame, and whether they are
 # the only ones that may (True) or merely among them (False)

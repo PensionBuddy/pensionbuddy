@@ -333,6 +333,26 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 44 — 2026-10-05 · "Easy to reschedule" (on `claude/easy-reschedule`)
+
+Damian's brief: change "reschedule any time" to "easy to reschedule"
+sitewide, update the compliance pack, gate, merge, push main.
+
+- The reason line beside every booking link is now "Free · 20 minutes ·
+  no obligation · easy to reschedule.": `pagebuild.REASON`, every
+  hand-written page, the part files and the built pages, both games, the
+  phone booking bar (`pb-bookbar.js`), Ask Buddy (`pb-buddy.js`), the
+  saved report (`pb-report.js`), and the tests and render-diff classifier
+  that quote it. Scripts restamped by `tools/stamp-images.py`.
+- This settles Run 43's "Needs Damian" 1 (the Calendly setting behind
+  "any time"): "easy to reschedule" claims only that moving a booking is
+  simple, which the confirmation email's links make true.
+- Compliance pack: a dated head paragraph, question 1.24 (a) and its
+  note, and every quotation of the line (Appendix B.16 and the page
+  appendices) updated; Damian's Run 43 brief is still quoted as he wrote
+  it. `docs/CUT-LIST-42.md` and `docs/GIVE-BEFORE-ASK-42.md` follow.
+- Gate: as main's, no new failure (environment lines only, as Run 42).
+
 # Run 43 — 2026-10-04 · Give, then ask: the audience heroes, teal for the State alone, cuts that only repeated, the S proposals, and the asks after each result (on `claude/give-then-ask`)
 
 Damian's brief, 4 October 2026: build it with agents on a new branch off
