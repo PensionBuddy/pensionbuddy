@@ -1025,9 +1025,11 @@ def related_drift(sources):
 # copy editor keeps it locked (tools/edit-server.py) and the styling (boxed,
 # bold, directly under the projected figures) is each page's own, as before.
 # ============================================================================
-WARN = ('<div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide '
-        'to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may '
-        'go down as well as up.</b></p></div>')
+# The words themselves are in shared/compliance-text.json, which the form
+# emails (netlify/lib/emails.js) read too, so the site and the emails share
+# one copy.
+with open(os.path.join(ROOT, 'shared', 'compliance-text.json'), encoding='utf-8') as _f:
+    WARN = '<div class="pb-warn">%s</div>' % ''.join('<p><b>%s</b></p>' % w for w in json.load(_f)['warnings'])
 WARN_OPEN, WARN_CLOSE = '<!-- WARN:BEGIN (pagebuild.WARN) -->', '<!-- WARN:END -->'
 WARN_PAT = re.compile(re.escape(WARN_OPEN) + r'(.*?)' + re.escape(WARN_CLOSE))
 # every page with projected figures, and how many boxes it shows them under
