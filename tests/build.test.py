@@ -210,7 +210,7 @@ def run():
         ('the CLICK block of CSS missing', 'booking.html', 'click-css',
          sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
         ('the FONTS block of CSS changed', 'terms.html', 'fonts-css',
-         after('terms.html', '/* FONTS:BEGIN', 'size-adjust:103.7%', 'size-adjust:110.0%')),
+         after('terms.html', '/* FONTS:BEGIN', 'font-weight:400 800;font-display:swap', 'font-weight:300 800;font-display:swap')),
         ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
          sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
         ('the MOTION block of CSS changed', 'privacy.html', 'motion-css',
@@ -225,6 +225,10 @@ def run():
          after('glossary.html', '/* FIRSTSCREEN:BEGIN', '.pb-hero-copy > .pb-reg-top{display:flex}', '.pb-hero-copy > .pb-reg-top{display:block}')),
         ('the FIRSTSCREEN block of CSS missing', 'booking.html', 'firstscreen-css',
          sources['booking.html'].replace('/* FIRSTSCREEN:END */', '/* FIRSTSCREEN-END */', 1)),
+        ('the CTA block of CSS changed', 'old-pension-checklist.html', 'cta-css',
+         after('old-pension-checklist.html', '/* CTA:BEGIN', '.pb-bookbar.pb-bookbar-on{transform:none}', '.pb-bookbar.pb-bookbar-on{transform:translateY(0)}')),
+        ('the CTA block of CSS missing', 'privacy.html', 'cta-css',
+         sources['privacy.html'].replace('/* CTA:END */', '/* CTA-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -379,7 +383,7 @@ def run():
     want_forms = {}
     for p, n in LEAD_FORMS.items():
         want_forms.setdefault(n, []).append(p)
-    eq('14. the eight lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
+    eq('14. the five lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
        sorted((n, sorted(ps)) for n, ps in want_forms.items()))
     for form_name, where in sorted(netlify.items()):
         page, form = where[0]
@@ -393,9 +397,13 @@ def run():
         eq('14. %s: an email field' % form_name, 'email' in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
         eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
-    eq('14. calculator-results: the six calculators declare the same fields, in the same order, and no opt-in',
+    eq('14. calculator-results: every calculator declares the same fields, in the same order (Run 45: name, email and the box to tick; no opt-in)',
        sorted(set(tuple(f[1] for f in form['fields']) for _, form in netlify.get('calculator-results', []))),
-       [('form-name', 'results', 'inputs', 'link', 'page', 'bot-field', 'email')])
+       [pagebuild.AFTER_FIELDS])
+    eq('14. calculator-results: the box to tick is never ticked in the markup',
+       sorted(set(f for _, form in netlify.get('calculator-results', []) for f in form['fields'] if f[0] == 'checkbox')),
+       [('checkbox', 'consent', 'yes')])
+    eq('14. and no form stands in front of the booking calendar (Run 45)', 'booking' in netlify, False)
     finder = read('assets/js/pension-finder.js')
     m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
     eq('14. the finder declares exactly what PBFinder.fields() sends',
@@ -786,19 +794,22 @@ def run():
         eq('20. %s is caught' % label, sorted(pagebuild.caveat_drift(m)), [page])
 
     # ----------------------------------------------------------------- 21
-    # Run 32, part 1c: booking's not-advice and privacy note is outside the
-    # form, so it stays on screen when the form gives way to the
-    # confirmation and the calendar (the submit handler hides the form).
+    # Run 32, part 1c, and Run 45: booking's not-advice and privacy note is in
+    # the booking card after the calendar, inside nothing that hides, and no
+    # form stands in front of the calendar (the calendar first: one click from
+    # any booking link to a time).
     def note_outside(src):
-        f_open, f_close = src.find('<form id="qualForm"'), src.find('</form>')
-        note, stage = src.find('<p class="qnote">That is the lot.'), src.find('<div id="calStage"')
-        return 0 <= f_open < f_close < note < stage
+        main = src[src.find('<main'):src.find('</main>')]
+        note, stage = main.find('<p class="qnote">That is the lot.'), main.find('<div id="calStage">')
+        return '<form' not in main and 0 <= stage < note
     bk = sources['booking.html']
-    eq('21. booking\'s note sits after the form and before the calendar', note_outside(bk), True)
+    eq('21. booking\'s note sits after the calendar, and no form is in front of it', note_outside(bk), True)
     i = bk.find('<p class="qnote">That is the lot.'); j = bk.find('</p>', i) + 4
     back = bk[:i] + bk[j:]
-    back = back.replace('</form>', bk[i:j] + '\n      </form>', 1)
-    eq('21. the note put back inside the form is caught', note_outside(back), False)
+    back = back.replace('<div id="calStage">', bk[i:j] + '\n    <div id="calStage">', 1)
+    eq('21. the note moved in front of the calendar is caught', note_outside(back), False)
+    gate = bk.replace('<div id="calStage">', '<form id="qualForm"><input name="name"></form>\n    <div id="calStage">', 1)
+    eq('21. a form put back in front of the calendar is caught', note_outside(gate), False)
 
     # ----------------------------------------------------------------- 22
     # Run 32, part 2a: the motion vocabulary's plumbing. The MOTION block's
@@ -1084,8 +1095,8 @@ def run():
     # file in assets/fonts/, each a real woff2 there, with its licence; each
     # page preloads the Latin Inter file once, before its first stylesheet,
     # with crossorigin (a font preload without it is fetched twice).
-    FONT_FILES = ['inter-cyrillic-ext', 'inter-cyrillic', 'inter-greek-ext', 'inter-greek', 'inter-vietnamese',
-                  'inter-latin-ext', 'inter-latin', 'schibsted-grotesk-latin-ext', 'schibsted-grotesk-latin']
+    # Run 46: Geist, one variable file, in place of Inter's seven
+    FONT_FILES = ['geist-variable', 'schibsted-grotesk-latin-ext', 'schibsted-grotesk-latin']
     def fonts(src, prefix=''):
         out = []
         if re.search(r'fonts\.(?:googleapis|gstatic)\.com', src):
@@ -1093,12 +1104,12 @@ def run():
         named = re.findall(r"url\(%sassets/fonts/([a-z-]+)\.woff2\) format\('woff2'\)" % re.escape(prefix), src)
         if sorted(named) != sorted(FONT_FILES):
             out.append('font files named: %s' % sorted(set(named) ^ set(FONT_FILES)))
-        pre = '<link rel="preload" href="%sassets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>' % prefix
+        pre = '<link rel="preload" href="%sassets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>' % prefix
         first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)
         if src.count(pre) != 1 or not first or src.find(pre) > first.start():
             out.append('preload')
         return out
-    eq('29. every page: no request to Google Fonts, its own nine font files, the Latin Inter preloaded',
+    eq('29. every page: no request to Google Fonts, its own three font files, Geist preloaded',
        {n: fonts(t) for n, t in sources.items() if fonts(t)}, {})
     eq('29. and the two games, from one level down',
        {g: fonts(t, '../') for g, t in games.items() if fonts(t, '../')}, {})
@@ -1108,12 +1119,12 @@ def run():
         real[f] = os.path.isfile(path) and open(path, 'rb').read(4) == b'wOF2' and os.path.getsize(path) > 5000
     eq('29. each named file is a woff2 in assets/fonts/', [f for f, ok in real.items() if not ok], [])
     eq('29. with the two licences beside them',
-       [n for n in ('OFL-Inter.txt', 'OFL-SchibstedGrotesk.txt')
+       [n for n in ('OFL-Geist.txt', 'OFL-SchibstedGrotesk.txt')
         if 'SIL Open Font License' not in read('assets/fonts/' + n)], [])
     pc = sources['pension-calculator.html']
     for label, mut, want in (
             ('the Google stylesheet back', pc.replace('</title>', '</title>\n<link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">', 1), 'asks Google Fonts'),
-            ('a font file dropped from the block', pc.replace("url(assets/fonts/inter-latin-ext.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
+            ('a font file dropped from the block', pc.replace("url(assets/fonts/geist-variable.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
             ('the preload without crossorigin', pc.replace('type="font/woff2" crossorigin>', 'type="font/woff2">', 1), 'preload')):
         assert mut != pc, label
         eq('29. %s is caught' % label, any(x.startswith(want) for x in fonts(mut)), True)
@@ -1280,8 +1291,11 @@ def run():
         if not (damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
             f.append('index.html: the strip is not in Damian\'s section')
         bk = srcs['booking.html']
-        if not (bk.find('<div class="lead">') < bk.find('id="pbQualsBook"') < bk.find('<div class="book-card">')):
-            f.append('booking.html: the strip is not in the column beside the form, before its card')
+        # Run 45: the concierge column is two blocks either side of the calendar
+        # card in the markup (the card comes straight after the heading on a
+        # phone); the strip is in the second, beside the calendar on a wide screen
+        if not (bk.find('<div class="book-card">') < bk.find('<div class="lead-more">') < bk.find('id="pbQualsBook"') < bk.find('</main>')):
+            f.append('booking.html: the strip is not in the column beside the calendar')
         skel = srcs['pension-calculator.html']
         c = pagebuild.css_span(skel, 'QUALS')
         block = re.sub(r'/\*.*?\*/', '', skel[c[0]:c[1]], flags=re.S) if c else ''
@@ -2465,6 +2479,9 @@ def run():
     # inline "booking page" links in the Privacy Notice, the Terms and the
     # complaints page (Run 26: not calls to action).
     REASON_TEXT = re.sub(r'<[^>]+>', '', pagebuild.REASON)
+    # Run 45: the block after a calculator's result carries its own line, in
+    # Damian's words, under its button
+    AFTER_LINE = '<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY
 
     def asks_without_reason(srcs):
         out = []
@@ -2482,11 +2499,11 @@ def run():
                     continue
                 nxt = body.find('href="booking.html', m.end())
                 seg = body[m.end():min(nxt if nxt >= 0 else len(body), m.end() + 700)]
-                if pagebuild.REASON not in seg:
+                if pagebuild.REASON not in seg and AFTER_LINE not in seg:
                     out.append('%s: "%s"' % (page, words[:40]))
         return out
 
-    eq('48. every booking link in a page has the reason beside it (Run 43)', asks_without_reason(sources), [])
+    eq('48. every booking link in a page has the reason beside it (Run 43; after a result, the block\'s own line, Run 45)', asks_without_reason(sources), [])
     for label, page, mut, want in (
             ('a band\'s reason removed', 'index.html',
              sources['index.html'].replace('Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n  ' + pagebuild.REASON,
@@ -2500,76 +2517,178 @@ def run():
         eq('48. %s is caught' % label, want in asks_without_reason(m48), True)
 
     # ----------------------------------------------------------------- 49
-    # Run 43, items 5a, 5b, 5c and 5e. Each of the nine calculators ends its
-    # results with, in this order: its own "What this doesn't show" line (each
-    # names only what the page's own assumptions say it leaves out, so it is
-    # true for every reader), the offer to email the results (my-pensions: its
-    # "Print or save this list", before the line), then one block: the
-    # question, one booking link and pagebuild.REASON. No other booking link
-    # sits in the results before it (the comparison's #riskCard is exempt only
-    # while it is hidden). booking.html shows its line only for a #from=
-    # naming one of the nine.
-    ARR49 = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
-             '<polyline points="12 5 19 12 12 19"/></svg></a>')
-    AFTER = {
-        'pension-calculator.html': ('pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', 'Talk it through, free', 'id="ecForm"'),
-        'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges, inflation.', 'Talk it through, free', 'id="ecForm"'),
-        'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', 'Talk through what this means for you', 'id="ecForm"'),
-        'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', 'Talk it through, free', 'id="ecForm"'),
-        'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
-        'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
-        'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', 'Talk it through, free', 'id="ecForm"'),
-        'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', 'Talk it through, free', 'id="ecForm"'),
-        'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', 'Talk it through, free', 'id="ptPrint"'),
-    }
+    # Run 43, rebuilt in Run 45 (give, then ask). Each calculator and tool ends
+    # its result with one shared block, pagebuild.after_block(), byte for byte
+    # on every page that carries it and on no other (after_drift): what it does
+    # not show (each names only what the page's own assumptions say it leaves
+    # out), then the booking button in wording A, "Free. No obligation. No
+    # pressure.", then "Email me this result", hidden until the script shows
+    # it, and its form: name, email, a box never ticked for the reader, and
+    # the line on what is stored, why and where it goes. my-pensions sends
+    # nothing, so it has no form. No other booking link sits in the results
+    # before the block (the comparison's #riskCard is exempt only while it is
+    # hidden). booking.html shows its line only for a #from= naming one of the
+    # nine calculators.
+    eq('49. the block after the result is the shared one, on every page that carries it and on no other',
+       findings(pagebuild.after_drift(sources)), [])
+    eq('49. on the nine calculators and the directors\' rules',
+       sorted(pagebuild.AFTER), sorted(['pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
+                                        'pension-fees-calculator.html', 'state-pension-reality-check.html', 'state-pension-entitlement.html',
+                                        'standard-fund-threshold.html', 'pia.html', 'my-pensions.html', 'director-pension-rules.html']))
     squash = lambda s: re.sub(r'>\s+<', '><', s)
 
     def after_faults(srcs):
         f = []
-        for page, (frm, loop, words, offer) in sorted(AFTER.items()):
-            s = squash(srcs[page])
-            line = '<p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: %s</p>' % loop
-            blk = ('<div class="pb-after" id="pbAfter" data-pb-from="%s"><p class="pb-after-q">Want to go through this with Damian?</p>'
-                   '<a class="wlink" href="booking.html">%s%s%s</div>' % (frm, words, ARR49, pagebuild.REASON))
-            if s.count(line) != 1:
-                f.append('%s: what it does not show is missing, doubled or reworded' % page); continue
-            if s.count(blk) != 1:
-                f.append('%s: the ask is missing, doubled or reworded' % page); continue
-            n, o, b = s.index(line), s.find(offer), s.index(blk)
-            order = (0 <= o < n < b) if page == 'my-pensions.html' else (0 <= n < o < b)
-            if not order:
-                f.append('%s: not in order: what it does not show, the email offer, the ask' % page)
-            res = s.find('id="ptSum"') if page == 'my-pensions.html' else s.find('<div class="results">')
-            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a><p class="pb-why">[^<]*</p></div>', '', s[res:b]) if res >= 0 else ''
-            if 'href="booking.html' in seg:
-                f.append('%s: a booking link in the results before the ask' % page)
+        for page, (calc, not_line, mail) in sorted(pagebuild.AFTER.items()):
+            s = srcs[page]
+            try:
+                span = pagebuild.after_span(s)
+            except ValueError:
+                span = None
+            if not span:
+                f.append('%s: no block after the result' % page); continue
+            blk = s[span[0]:span[1]]
+            n = blk.find('id="pbAfterNot"')
+            b, w = blk.find('data-pb-ab="cta"'), blk.find(pagebuild.AFTER_WORDS)
+            y = blk.find('<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY)
+            if not (0 <= b < w < y) or (not_line and not 0 <= n < b):
+                f.append('%s: not in order: what it does not show, the button and its words, its line' % page)
+            if mail:
+                m, fm = blk.find('id="ecMore"'), blk.find('<form id="ecForm" name="calculator-results"')
+                if not (y < m < fm):
+                    f.append('%s: the email offer is not after the button' % page)
+                if ('aria-controls="ecCap" hidden>Email me this result</button>' not in blk or
+                        '<div class="pb-after-mail" id="ecCap" hidden>' not in blk):
+                    f.append('%s: the email offer is not hidden until the script shows it' % page)
+                if re.search(r'<input[^>]*type="checkbox"[^>]*\schecked', blk):
+                    f.append('%s: the box is ticked for the reader' % page)
+            elif '<form' in blk:
+                f.append('%s: a form on a page that says nothing leaves it' % page)
+            res = {'my-pensions.html': 'id="ptSum"', 'director-pension-rules.html': 'id="drOut"'}.get(page, '<div class="results">')
+            r = s.find(res)
+            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a><p class="pb-why">[^<]*</p></div>', '',
+                         squash(s[r:span[0]])) if r >= 0 else ''
+            if r < 0 or 'href="booking.html' in seg:
+                f.append('%s: a booking link in the results before the block' % page)
         bk = srcs['booking.html']
         m = re.search(r'from=\(\?:([a-z|-]+)\)', bk)
         # Damian's words (Run 43, 4 October 2026)
         said = '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>'
-        if said not in bk or not m or sorted(m.group(1).split('|')) != sorted(v[0] for v in AFTER.values()):
+        nine = sorted(v[0] for v in pagebuild.AFTER.values() if v[0] != 'director-pension-rules')
+        if said not in bk or not m or sorted(m.group(1).split('|')) != nine:
             f.append('booking.html: the line, or the calculators it answers')
         return f
 
-    eq('49. every calculator ends its results with what it does not show, the offer to email them, then one booking link with its reason; the booking page answers only those nine',
+    eq('49. each block: what it does not show, the button, its line, then the email offer hidden until the script shows it, the box unticked; no booking link in the results before it; the booking page answers only the nine',
        after_faults(sources), [])
-    pc, dc, fc, bk = sources['pension-calculator.html'], sources['director-calculator.html'], sources['pension-fees-calculator.html'], sources['booking.html']
-    blk_raw = re.search(r'    <div class="pb-after" id="pbAfter".*?\n    </div>\n', pc, re.S).group(0)
+    dc, bk, fc = sources['director-calculator.html'], sources['booking.html'], sources['pension-fees-calculator.html']
     for label, page, mut, want in (
-            ('a loop line reworded', 'pension-fees-calculator.html', fc.replace('your tax relief.</p>', 'your tax position.</p>', 1),
-             'pension-fees-calculator.html: what it does not show is missing, doubled or reworded'),
-            ('the ask above the email offer', 'pension-calculator.html',
-             pc.replace(blk_raw, '', 1).replace('    <div class="email-cap">', blk_raw + '    <div class="email-cap">', 1),
-             'pension-calculator.html: not in order: what it does not show, the email offer, the ask'),
+            ('the box ticked for the reader', 'pension-fees-calculator.html',
+             fc.replace('id="ecConsent" name="consent" value="yes"', 'id="ecConsent" name="consent" value="yes" checked', 1),
+             'pension-fees-calculator.html: the box is ticked for the reader'),
             ('the cost of waiting asking again', 'director-calculator.html',
              dc.replace('<div class="wtext" id="waitOut">Move the sliders to see it.</div>',
                         '<div class="wtext" id="waitOut">Move the sliders to see it.</div><a class="wlink" href="booking.html">Book</a>', 1),
-             'director-calculator.html: a booking link in the results before the ask'),
+             'director-calculator.html: a booking link in the results before the block'),
             ('a calculator missing from the booking page', 'booking.html', bk.replace('|pia)', ')', 1),
              'booking.html: the line, or the calculators it answers')):
         assert mut != sources[page], label
         m49 = dict(sources); m49[page] = mut
         eq('49. %s is caught' % label, want in after_faults(m49), True)
+    for label, page, mut in (
+            ('the line reworded on one page', 'pia.html', sources['pia.html'].replace(pagebuild.AFTER_WHY, 'Free. No pressure.', 1)),
+            ('the block copied onto a page outside the table', 'glossary.html',
+             sources['glossary.html'].replace('</main>', pagebuild.after_block('pia.html') + '</main>', 1))):
+        assert mut != sources[page], label
+        m49 = dict(sources); m49[page] = mut
+        eq('49. %s is caught, on that page only' % label, sorted(set(findings(pagebuild.after_drift(m49)))), [(page, 'after')])
+
+    # ----------------------------------------------------------------- 50
+    # Run 45: the button test, the booking links' tags and what is counted,
+    # assets/js/pb-cta.js. On every root page, once, straight after
+    # pb-consent.js, whose PBTrack and PBConsent it uses. Its wording A is the
+    # markup's own (pagebuild.AFTER_WORDS) and B Damian's; the pick is kept
+    # (localStorage 'pb-ab-cta') only after "That's fine", and pb-consent.js
+    # deletes the key with any other answer; no cookie is written; the four
+    # tags are the brief's.
+    cta_js, consent_js = read('assets/js/pb-cta.js'), read('assets/js/pb-consent.js')
+
+    def cta_missing(srcs):
+        return sorted(p for p, t in srcs.items()
+                      if t.count('<script src="assets/js/pb-cta.js?v=') != 1 or not re.search(
+                          r'<script src="assets/js/pb-consent\.js\?v=[0-9a-f]+"></script>\n<script src="assets/js/pb-cta\.js\?v=[0-9a-f]+"></script>', t))
+    eq('50. pb-cta.js once on every root page, straight after pb-consent.js', cta_missing(sources), [])
+    m50 = dict(sources)
+    m50['terms.html'] = re.sub(r'<script src="assets/js/pb-cta\.js\?v=[0-9a-f]+"></script>\n', '', sources['terms.html'], count=1)
+    eq('50. a page without it is caught', cta_missing(m50), ['terms.html'])
+    eq('50. wording A is the markup\'s, wording B Damian\'s',
+       ("A: '%s'" % pagebuild.AFTER_WORDS in cta_js, "B: 'See what this means for you - free 20-min call'" in cta_js), (True, True))
+    eq('50. the pick is kept only after "That\'s fine", and deleted with any other answer',
+       ("var KEY = 'pb-ab-cta'" in cta_js, 'if (consented()) write(variant);' in cta_js,
+        "var CONSENTED_KEYS = ['pb-ab-cta']" in consent_js), (True, True, True))
+    eq('50. it writes no cookie', 'document.cookie' in cta_js, False)
+    eq('50. the four tags, as the brief gives them',
+       [t for t in ("'utm_source=site'", "'utm_medium=cta'", "'utm_campaign=' + encodeURIComponent(page)", "'utm_content=' + variant")
+        if t not in cta_js], [])
+    eq('50. the five events, each counted through PBTrack',
+       [e for e in ("'cta_view'", "'cta_click'", "'booking_click'") if e not in cta_js] +
+       [e for e in ("'calculator_complete'", "'email_result_submit'") if e not in read('assets/js/pb-after.js')], [])
+
+    # ----------------------------------------------------------------- 51
+    # Run 45: the phone booking bar, "Book free 20 min call", on the home
+    # page, the audience pages, the glossary, every page built from the
+    # skeleton and the director calculator, and the five guides; never on
+    # booking, the legal pages, the 404, the thank-you page or how we work.
+    # It stops by itself on a page kept out of search (the held pages
+    # inherit its tag from the skeleton).
+    bar_js = read('assets/js/pb-bookbar.js')
+    BAR = sorted(['index.html', 'starter.html', 'tracker.html', 'director.html', 'glossary.html',
+                  'pension-calculator.html', 'director-calculator.html', 'pensions-over-50.html', 'self-employed-pensions.html',
+                  'uk-pensions-in-ireland.html', 'old-pension-checklist.html', 'director-year-end-checklist.html'] +
+                 [q.out for q in pagebuild.PAGES.values()])
+    eq('51. the phone booking bar on the content pages, the calculators and tools and the guides, and nowhere else',
+       sorted(p for p, t in sources.items() if re.search(r'<script src="assets/js/pb-bookbar\.js\?v=[0-9a-f]+"></script>', t)), BAR)
+    eq('51. its words, and no reason line in it (the words carry it)',
+       ('>Book free 20 min call</a>' in bar_js, 'pb-why' in bar_js), (True, False))
+    eq('51. it stops on a page kept out of search', "meta[name=\"robots\"][content*=\"noindex\"]" in bar_js, True)
+    eq('51. it stands aside for a calculator\'s inputs, the block after the result and every booking link in the page',
+       [x for x in ("main a[href^=\"booking.html\"]", '#pbAfter', '.calc-wrap .panel', 'form[data-pb-calc]', "'pb-peek-on'") if x not in bar_js], [])
+
+    # ----------------------------------------------------------------- 52
+    # Run 45: one primary ask per page. A link drawn as a filled button
+    # (btn-primary, btn-acc, btn-light) leads to booking; every other link is
+    # drawn quieter (btn-ghost, btn-quiet-dark or a plain link). Exempt by
+    # name: the 404, whose filled button is the way home, and the two pages
+    # held back. The home page's hero gives the figure and asks only which of
+    # the three situations is the reader's, and its booking ask after the
+    # way-of-life picker stands alone.
+    FILLED = {'btn-primary', 'btn-acc', 'btn-light'}
+
+    def loud_links(srcs):
+        out = []
+        for page, text in sorted(srcs.items()):
+            if page in ('404.html', 'find-my-pension.html', 'pension-readiness-check.html'):
+                continue
+            body = re.sub(r'<script\b.*?</script>', '', text[text.find('<main'):text.find('</main>')], flags=re.S)
+            for m in re.finditer(r'<a\b([^>]*)>', body):
+                cls = (re.search(r'class="([^"]*)"', m.group(1)) or [None, ''])[1].split()
+                href = (re.search(r'href="([^"]*)"', m.group(1)) or [None, ''])[1]
+                if 'btn' in cls and FILLED & set(cls) and not re.match(r'(booking\.html|https://calendly\.com/)', href):
+                    out.append('%s: %s' % (page, href))
+        return out
+    eq('52. every link drawn as a filled button leads to booking', loud_links(sources), [])
+    m52 = dict(sources)
+    m52['starter.html'] = sources['starter.html'].replace('<a class="btn btn-ghost" href="broker-vs-autoenrolment.html">',
+                                                         '<a class="btn btn-primary" href="broker-vs-autoenrolment.html">', 1)
+    assert m52['starter.html'] != sources['starter.html']
+    eq('52. a filled button to another page is caught', loud_links(m52), ['starter.html: broker-vs-autoenrolment.html'])
+    home = sources['index.html']
+    hero = home[home.find('<header class="hero'):home.find('</header>')]
+    eq('52. the home page hero: the three situations, and no button and no booking link',
+       (re.findall(r'<a class="pb-chip-hero" href="([a-z]+)\.html"', hero), 'class="btn' in hero, 'booking.html' in hero),
+       (['starter', 'tracker', 'director'], False, False))
+    life = home[home.find('<section class="pb-gap-more" id="life">'):home.find('</section>', home.find('id="life"'))]
+    eq('52. the booking ask after the way-of-life picker stands alone', re.findall(r'<a class="btn [^"]*" href="([^"]+)"', life), ['booking.html'])
 
 
 
@@ -2577,15 +2696,17 @@ def run():
 # Run 27: every Netlify form on the site, by page. Adding a lead form means
 # adding it here, and telling Damian its name for the notification settings.
 LEAD_FORMS = {
-    'booking.html': 'booking',
-    'pension-calculator.html': 'pension-calculator-results',
-    'director-calculator.html': 'director-calculator-results',
     'director.html': 'director-guide',
     'starter.html': 'starter-guide',
     'tracker.html': 'tracker-guide',
     'find-my-pension.html': 'pension-finder',
-    # Run 43, item 5e: "Email me my results" on six more calculators, under one
-    # name, with the same fields on each and no opt-in box
+    # Run 43, item 5e, and Run 45: "Email me this result" under one name on
+    # every calculator that offers it (pagebuild.after_block), with the same
+    # fields on each; the pension and director calculators' own forms and the
+    # booking page's routing form are gone
+    'pension-calculator.html': 'calculator-results',
+    'director-calculator.html': 'calculator-results',
+    'director-pension-rules.html': 'calculator-results',
     'broker-vs-autoenrolment.html': 'calculator-results',
     'pension-fees-calculator.html': 'calculator-results',
     'state-pension-reality-check.html': 'calculator-results',

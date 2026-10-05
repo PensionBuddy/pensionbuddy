@@ -3,18 +3,14 @@
    Which topics apply is assets/js/director-topics.js, covered by
    tests/director-topics.test.js; this file reads the four answers and lists
    what the module returns. Topics only, never a recommendation. Nothing is
-   sent or stored. */
+   sent or stored unless the reader asks for the list by email ("Email me this
+   result", pagebuild.after_block and assets/js/pb-after.js, Run 45). */
 (function () {
   'use strict';
   var D = window.PBDirectorTopics;
   var form = document.getElementById('drForm');
   if (!D || !form) return;
   var $ = function (id) { return document.getElementById(id); };
-  /* the booking link arrives with "Director" ticked; the fragment is added
-     here rather than written into the markup, where the site's link check
-     would read it as an anchor the booking page lacks (as in run 19, #2) */
-  if ($('drBook')) $('drBook').href = 'booking.html#persona=director';
-
   function answers() {
     var a = {};
     D.QUESTIONS.forEach(function (q) { var c = form.querySelector('input[name="' + q + '"]:checked'); if (c) a[q] = c.value; });

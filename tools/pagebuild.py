@@ -441,6 +441,8 @@ def assemble(page):
     body = read(os.path.join(page.parts_dir, 'main.html')).strip()
     # Run 37: the related pages, last in <main> (RELATED, above)
     body = with_related(body, page.out)
+    # Run 45: the block after the result, from the part's <!-- AFTER --> line (AFTER, below)
+    body = with_after(body, page.out)
     if page.reviewed:
         # the last line of the page header, whatever the part put above it
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
@@ -451,7 +453,9 @@ def assemble(page):
     # whose own <main> has the row loads it there too; every other page gets
     # it at the foot, after the consent script, where it always was.
     if DEADLINE_JS not in body:
-        consent = re.search(r'<script src="assets/js/pb-consent\.js(?:\?v=[0-9a-f]+)?"></script>\n', tail)
+        # (after pb-cta.js, Run 45, which stays straight after pb-consent.js)
+        consent = re.search(r'<script src="assets/js/pb-consent\.js(?:\?v=[0-9a-f]+)?"></script>\n'
+                            r'(?:<script src="assets/js/pb-cta\.js(?:\?v=[0-9a-f]+)?"></script>\n)?', tail)
         assert consent, 'no consent script to put the deadline script after'
         tail = tail[:consent.end()] + '\n<script src="%s"></script>\n' % DEADLINE_JS + tail[consent.end():]
     # Run 34: the search and sharing tags (canonical, Open Graph, Twitter,
@@ -582,11 +586,13 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # pages at the end of a page, (Run 38) media popping in on scroll, and (Run
 # 37's item 6, re-applied in Run 39) the long guides' "On this page", its bar
 # and their next step, and (Run 37's item 10, built in Run 39) the bar a
-# waiting figure shows.
+# waiting figure shows, and (Run 45) give then ask: the block after a
+# calculator's result, the quiet buttons and the phone booking bar, and
+# (Run 46) the type weights.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
               ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
-              ('WAIT', 'wait-css'))
+              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'))
 
 
 def _once(text, marker):
@@ -838,6 +844,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
                 raise ValueError('%s has no single motion script after its viewport meta' % page)
             new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, sources[page], count=1)
             new = with_related(new, page)
+            new = with_after(new, page)
             if new != sources[page]:
                 out[page] = new
             continue
@@ -866,6 +873,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             raise ValueError('%s has no single motion script after its viewport meta' % page)
         new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, new, count=1)
         new = with_related(new, page)
+        new = with_after(new, page)
         if new != text:
             out[page] = new
     return out
@@ -996,6 +1004,161 @@ def related_drift(sources):
             out[page] = [('related', 'the related pages are not the table\'s: run tools/sync-chrome.py and tools/pagebuild.py')]
         elif span and text.find(CLOSE_MAIN, span[1]) < 0:
             out[page] = [('related', 'the related pages are outside <main>')]
+    return out
+
+
+# ============================================================================
+# AFTER THE RESULT (Run 45, give then ask). Under each calculator's result,
+# one shared component, written into the page's markup between two comments
+# so that it is there without JavaScript: by assemble() for the built pages,
+# in place of the <!-- AFTER --> line in their part, and by
+# tools/sync-chrome.py for the two hand-written calculators. after_drift() is
+# the guard (verify.py and tests/build.test.py check 49). Styled by the CTA
+# block of CSS; assets/js/pb-after.js and assets/js/pb-cta.js make it work.
+#
+# In this order: what the page does not show (its own words, a caveat, Run
+# 43); then one block: the booking button, wording A here (pb-cta.js shows
+# half the visitors wording B), and under it AFTER_WHY; then, on a page that
+# sends anything at all, "Email me this result", a small link that opens a
+# form: name, email, a box to tick (never ticked for the reader) and one line
+# saying what is stored, why and where it goes. The result above stays on
+# screen whether or not the form is used, and nothing is sent until it is.
+# Without JavaScript the link and the form stay hidden (a form that cannot
+# carry the figures would be a promise this page cannot keep); the button
+# and its line do not.
+#
+# my-pensions says nothing typed leaves the page, so it has no form. The
+# directors' rules page has no "doesn't show" line: its list already says
+# "Topics to discuss, not advice."
+# ============================================================================
+AFTER = {  # page: (its name for #from= and the events, what it does not show or None, the email offer)
+    'pension-calculator.html': ('pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', True),
+    'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges, inflation.', True),
+    'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', True),
+    'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', True),
+    'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),
+    'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),
+    'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', True),
+    'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', True),
+    'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', False),
+    'director-pension-rules.html': ('director-pension-rules', None, True),
+}
+AFTER_WORDS = 'Book a free 20-minute call with Damian'   # wording A; pb-cta.js holds both
+AFTER_WHY = 'Free. No obligation. No pressure.'
+AFTER_OPEN = '<!-- AFTER:BEGIN'
+AFTER_CLOSE = '<!-- AFTER:END -->'
+AFTER_SLOT = '<!-- AFTER -->'
+_ARROW = ('<svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
+          '<polyline points="12 5 19 12 12 19"/></svg>')
+_TICK = '<svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
+# the fields the shared form declares, in order: Netlify stores only these
+AFTER_FIELDS = ('form-name', 'results', 'inputs', 'link', 'page', 'bot-field', 'name', 'email', 'consent')
+
+
+def after_block(page, indent='    '):
+    """The block for page, each line indented by indent, or '' for a page
+    that carries none."""
+    if page not in AFTER:
+        return ''
+    calc, not_line, mail = AFTER[page]
+    lines = ['<!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->']
+    if not_line:
+        lines.append('<p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: %s</p>' % not_line)
+    lines += [
+        '<div class="pb-after" id="pbAfter" data-pb-from="%s">' % calc,
+        '  <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta">'
+        '<span class="pb-ab-t">%s</span> %s</a>' % (AFTER_WORDS, _ARROW),
+        '  <p class="pb-after-why">%s</p>' % AFTER_WHY,
+    ]
+    if mail:
+        lines += [
+            '  <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>',
+            '  <div class="pb-after-mail" id="ecCap" hidden>',
+            '    <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>',
+            '      <input type="hidden" name="form-name" value="calculator-results"><input type="hidden" name="results">'
+            '<input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">',
+            '      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>',
+            '      <div class="pb-mail-fields">',
+            '        <p class="pb-mail-f"><label for="ecName">Your name</label>'
+            '<input type="text" id="ecName" name="name" autocomplete="name" aria-describedby="ecErr"></p>',
+            '        <p class="pb-mail-f"><label for="ecEmail">Your email</label>'
+            '<input type="email" id="ecEmail" name="email" autocomplete="email" inputmode="email" aria-describedby="ecErr"></p>',
+            '      </div>',
+            '      <label class="pb-mail-ok"><input type="checkbox" id="ecConsent" name="consent" value="yes" aria-describedby="ecWhy">'
+            '<span>Yes, store my details so Damian can email me this result.</span></label>',
+            '      <p class="pb-mail-why" id="ecWhy">We store your name, email and these figures only to email you this result; '
+            'they go to Damian through Netlify, our website host. <a href="privacy.html">Privacy Notice</a></p>',
+            '      <p class="pb-mail-err" id="ecErr" role="alert" hidden></p>',
+            '      <button class="btn btn-ghost pb-mail-send" type="submit">Email me this result</button>',
+            '    </form>',
+            '    <p class="pb-mail-done" id="ecOk" role="status" tabindex="-1" hidden>%s<span id="ecOkText">Thanks. Damian will email you '
+            'this result himself, so it will not arrive straight away.</span></p>' % _TICK,
+            '  </div>',
+        ]
+    lines += ['</div>', AFTER_CLOSE]
+    return ''.join(indent + l + '\n' for l in lines)
+
+
+def after_span(text):
+    """(start, end, indent) of the block, whole lines, None when absent;
+    raises on a broken one."""
+    i, j = text.find(AFTER_OPEN), text.find(AFTER_CLOSE)
+    if i < 0 and j < 0:
+        return None
+    if _once(text, AFTER_OPEN) is None or _once(text, AFTER_CLOSE) is None or j < i:
+        raise ValueError('a broken AFTER block')
+    start = text.rfind('\n', 0, i) + 1
+    end = text.find('\n', j)
+    end = len(text) if end < 0 else end + 1
+    if text[start:i].strip():
+        raise ValueError('the AFTER block does not start a line')
+    return start, end, text[start:i]
+
+
+def with_after(text, page):
+    """text with the page's block in place: rewritten where it is, or in
+    place of the part's <!-- AFTER --> line. A page outside AFTER must carry
+    neither."""
+    span = after_span(text)
+    if page not in AFTER:
+        if span or AFTER_SLOT in text:
+            raise ValueError('%s carries the block after a result but is not in pagebuild.AFTER' % page)
+        return text
+    if span:
+        s, e, ind = span
+        return text[:s] + after_block(page, ind) + text[e:]
+    k = _once(text, AFTER_SLOT)
+    if k is None:
+        raise ValueError('%s has no single %s line for the block after its result' % (page, AFTER_SLOT))
+    s = text.rfind('\n', 0, k) + 1
+    e = text.find('\n', k)
+    e = len(text) if e < 0 else e + 1
+    if text[s:k].strip() or text[k + len(AFTER_SLOT):e].strip():
+        raise ValueError('%s: the %s line holds something else too' % (page, AFTER_SLOT))
+    return text[:s] + after_block(page, text[s:k]) + text[e:]
+
+
+def after_drift(sources):
+    """{page: [('after', detail)]} where a page's block is not the table's."""
+    out = {}
+    for page, text in sources.items():
+        try:
+            span = after_span(text)
+        except ValueError as e:
+            out[page] = [('after', str(e))]
+            continue
+        if page not in AFTER:
+            if span:
+                out[page] = [('after', 'carries the block after a result but is not in pagebuild.AFTER')]
+            continue
+        if not span:
+            out[page] = [('after', 'the block after the result is missing: run tools/sync-chrome.py and tools/pagebuild.py')]
+            continue
+        s, e, ind = span
+        if text[s:e] != after_block(page, ind):
+            out[page] = [('after', 'the block after the result is not after_block()\'s: run tools/sync-chrome.py and tools/pagebuild.py')]
+        elif text.rfind(OPEN_MAIN, 0, s) < 0 or text.find(CLOSE_MAIN, e) < 0:
+            out[page] = [('after', 'the block after the result is outside <main>')]
     return out
 
 

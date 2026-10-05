@@ -27,7 +27,7 @@
 <meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:image:alt" content="The Pensionbuddy paw mark">
 <!-- SEO:END -->
-<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -51,11 +51,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Inter','Inter Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -1663,40 +1663,19 @@ a.assure:hover{border-color:var(--teal)}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32; served from the site since Run 34). Inter and the
-   footer wordmark's Schibsted Grotesk 800 come from assets/fonts/, not
-   from Google Fonts, so a visit sends nothing to Google before the cookie
-   choice. The same files and character ranges Google's stylesheet served
-   on 28 September 2026 (Inter v20, one variable file per range for every
-   weight the site uses, 300 to 800; Schibsted Grotesk v7), under the SIL
-   Open Font License (assets/fonts/OFL-*.txt). Each page preloads
-   inter-latin.woff2 in its <head>.
-   What the text is set in while Inter is still on
-   its way: Arial, sized per weight to Inter's widths (measured in Chrome
-   on the site's own headings and copy), so the text barely reflows when
-   Inter arrives and nothing below it jumps. With the page fade gone, that
-   reflow was the director hero's 0.12 layout shift. Each face covers only
-   the characters Inter's files cover (the seven ranges below, joined),
-   so a character Inter does not have, such as the offer arrows'
-   U+2192, still goes on to the system font once Inter has loaded, as
-   before. Where Arial is not installed (most Android phones) the face is
-   skipped and the stack goes on to the system font, as before. Byte for byte on every page:
+/* FONTS:BEGIN (Run 32; served from the site since Run 34; Geist since
+   Run 46). Geist and the footer wordmark's Schibsted Grotesk 800 come from
+   assets/fonts/, not from a font service, so a visit sends nothing to a
+   third party before the cookie choice. Geist is one variable file
+   (Vercel's Geist 1.7.2, weights 400 to 800 used), with font-display:swap,
+   under the SIL Open Font License (assets/fonts/OFL-*.txt). Each page
+   preloads geist-variable.woff2 in its <head>. Until it arrives the text
+   is set in the system font. Byte for byte on every page:
    tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
    chrome_drift. */
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-cyrillic.woff2) format('woff2');unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek-ext.woff2) format('woff2');unicode-range:U+1F00-1FFF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-greek.woff2) format('woff2');unicode-range:U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-vietnamese.woff2) format('woff2');unicode-range:U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Inter';font-style:normal;font-weight:300 800;font-display:swap;src:url(assets/fonts/inter-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/geist-variable.woff2) format('woff2')}
 @font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:100 449;size-adjust:105.7%;ascent-override:91.8%;descent-override:22.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial'),local('ArialMT');font-weight:450 549;size-adjust:107.6%;ascent-override:90.1%;descent-override:22.3%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:550 649;size-adjust:101.4%;ascent-override:95.7%;descent-override:23.7%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:650 749;size-adjust:102.4%;ascent-override:94.7%;descent-override:23.4%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
-@font-face{font-family:'Inter Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:750 1000;size-adjust:103.7%;ascent-override:93.5%;descent-override:23.1%;line-gap-override:0%;unicode-range:U+0000-02CC,U+02CE-02D7,U+02DA,U+02DC-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-052F,U+1C80-1C8A,U+1D00-1DBF,U+1E00-206F,U+20A0-20C0,U+2113,U+2116,U+2122,U+2191,U+2193,U+2212,U+2215,U+2C60-2C7F,U+2DE0-2DFF,U+A640-A69F,U+A720-A7FF,U+FE2E-FE2F,U+FEFF,U+FFFD}
 /* FONTS:END */
 /* HOW WE WORK (how-we-work.html, Run 20 A1 and #9). The Reg 32 summary of
    what product providers pay us, one block per type of product: a heading
@@ -2009,6 +1988,93 @@ html.pb-motion:not(.pb-ready) [data-pb-wait]{animation:pbWait .9s ease-in-out in
 html.pb-readying [data-pb-wait]{transition:none!important}
 @keyframes pbWait{from{opacity:1}to{opacity:.55}}
 /* WAIT:END */
+/* CTA:BEGIN (Run 45, give then ask). Byte for byte on every page:
+   tools/pagebuild.py SHARED_CSS ('CTA', 'cta-css'), copied by
+   tools/sync-chrome.py, guarded by chrome_drift.
+   1. .pb-after, under a calculator's result (pagebuild.after_block): what it
+      does not show, the one booking button and its line, and "Email me this
+      result", a quiet link that opens a two-field form (assets/js/pb-after.js).
+      The button is the page's one filled button; everything after it is
+      quieter. No text under 1rem: the calculators keep a 16px floor.
+   2. .btn-quiet-dark: a link that is not the page's booking ask, on a dark
+      band, drawn as an outline, so the booking button stays the one filled
+      button there (.btn-ghost does the same on a light background).
+   3. .pb-bookbar, the phone booking bar (assets/js/pb-bookbar.js), below
+      921px only: pinned to the bottom edge and padded clear of the screen's
+      rounded corners and home indicator (env(safe-area-inset-*)); tucked
+      away (moved off screen, not hidden) while it would cover a calculator's
+      controls, a booking section, the footer or a keyboard. Slides up in
+      200ms; under reduced motion it simply appears. */
+.pb-after-not{margin:0;font-size:1rem;line-height:1.6;color:var(--ink-2)}
+.pb-after{margin:0;padding:20px 22px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface)}
+.wrap>.pb-after-not,.wrap>.pb-after{margin:24px 0 0;max-width:640px}
+.dr-out .pb-after{margin:16px 0 0;padding:16px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
+.pb-after [hidden]{display:none!important}
+.pb-after .btn.pb-after-btn{display:inline-flex;width:auto;max-width:100%;min-height:48px;margin:0;white-space:normal;text-align:center;line-height:1.3}
+.pb-after .pb-after-btn .ico{flex:none;width:16px;height:16px}
+.pb-after p.pb-after-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-after-more{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0;border:0;background:none;font-family:var(--font);font-size:1rem;font-weight:400;color:var(--teal-700);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.pb-after .pb-after-more:hover{color:var(--ink)}
+.pb-after .pb-after-more:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring);border-radius:4px}
+.pb-after-mail{margin:6px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}
+.pb-mail-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pb-after p.pb-mail-f{display:flex;flex-direction:column;gap:6px;margin:0;max-width:none}
+.pb-mail-f label{font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-after .pb-mail-f input{width:100%;min-width:0;min-height:48px;margin:0;padding:11px 14px;font-family:var(--font);font-size:1rem;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-2);border-radius:8px;box-shadow:none}
+.pb-after .pb-mail-f input:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pb-after .pb-mail-f input[aria-invalid="true"]{border-color:var(--red)}
+.pb-after .pb-mail-ok{display:flex;gap:10px;align-items:flex-start;margin:14px 0 0;font-size:1rem;font-weight:400;line-height:1.5;color:var(--ink);cursor:pointer}
+.pb-after .pb-mail-ok input{flex:none;width:22px;height:22px;min-height:0;margin:1px 0 0;padding:0;accent-color:var(--teal-700)}
+.pb-after .pb-mail-ok input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-after .pb-mail-ok input[aria-invalid="true"]{outline:2px solid var(--red);outline-offset:2px}
+.pb-after p.pb-mail-why{margin:10px 0 0;max-width:none;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-after .pb-mail-why a{color:var(--teal-700);font-weight:600}
+.pb-after p.pb-mail-err{margin:10px 0 0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--red)}
+.pb-after .btn.pb-mail-send{width:auto;min-height:48px;margin:14px 0 0}
+.pb-after p.pb-mail-done{display:flex;gap:9px;align-items:flex-start;margin:0;max-width:none;font-size:1rem;font-weight:600;line-height:1.5;color:var(--teal-700)}
+.pb-after p.pb-mail-done:focus{outline:none}
+.pb-mail-done .ico{flex:none;width:20px;height:20px;margin-top:2px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:560px){.pb-mail-fields{grid-template-columns:1fr}.pb-after .btn.pb-after-btn{width:100%}}
+@media print{.pb-after{display:none!important}}
+.btn.btn-quiet-dark{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.62);box-shadow:none}
+.btn.btn-quiet-dark:hover{background:rgba(255,255,255,.08);border-color:#fff;color:#fff}
+.btn.btn-quiet-dark:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,255,255,.55)}
+.pb-bookbar{display:none}
+@media(max-width:920px){
+  .pb-bookbar{position:fixed;left:0;right:0;bottom:0;z-index:238;display:flex;
+    align-items:center;justify-content:center;gap:8px;
+    padding:10px calc(10px + env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+    background:var(--surface);border-top:1px solid var(--line-2);
+    transform:translateY(calc(100% + 8px));transition:transform .2s cubic-bezier(.22,.61,.36,1)}
+  .pb-bookbar.pb-bookbar-on{transform:none}
+  .pb-bookbar.pb-bookbar-held{display:none}
+  .pb-bookbar .btn{flex:1 1 auto;width:auto;max-width:480px;min-height:48px;margin:0;padding:12px 16px;
+    font-size:15px;line-height:1.25;white-space:normal;text-align:center}
+  .pb-bookbar-x{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;border:0;border-radius:8px;background:none;
+    color:var(--ink-2);cursor:pointer}
+  .pb-bookbar-x svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .pb-bookbar-x:hover{color:var(--ink);background:var(--surface-2)}
+  .pb-bookbar-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+  html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
+}
+@media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* CTA:END */
+/* TYPE:BEGIN (Run 46). The type scale's weights, last in every page's
+   stylesheet so it wins over each page's own: body text 500 at a 1.6 line
+   height, buttons 600, headings 700, the page's own heading (h1) 800, and a
+   calculator's figures 700 in tabular figures, so they do not jitter as
+   they change. On a phone the root is 17px (106.25%), so body text set in
+   rem is 17px or more. Colours, sizes elsewhere and layout are each page's
+   own. Byte for byte on every page: tools/pagebuild.py SHARED_CSS ('TYPE',
+   'type-css'), guarded by chrome_drift. */
+body{font-weight:500;line-height:1.6}
+.btn,button.btn,a.btn{font-weight:600}
+h1,h2,h3,h4,h5,h6{font-weight:700}
+main h1{font-weight:800}
+[data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
+@media(max-width:920px){html{font-size:106.25%}}
+/* TYPE:END */
 </style>
 </head>
 <body>
@@ -2241,9 +2307,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=2f47be9a" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=455080ed"></script>
+<script src="assets/js/pb-consent.js?v=65afc54f"></script>
+<script src="assets/js/pb-cta.js?v=c3d947a2"></script>
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 

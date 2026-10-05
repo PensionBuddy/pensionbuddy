@@ -19,8 +19,9 @@
 
    What it proves:
      1. at every scroll stop, 80% of a screen apart, on the home page, the
-        pension and director calculators, director, starter and booking at
-        375, and the home page and the pension calculator at 1440: no caveat
+        pension and director calculators (where, since Run 45, the booking bar
+        shows too), director, starter and booking at 375, and the home page
+        and the pension calculator at 1440: no caveat
         (PBMotion.CAVEATS, pagebuild's list) and no form field lies under
         Ask Buddy's button, no caveat under the booking bar, no warning box
         under the results bar; and nothing scrolls sideways
@@ -148,8 +149,8 @@ const PROBE = `(() => {
 /* 1 */
 /* and each layer the page has was on screen at some stop, so no check passes
    because its layer never appeared: [page, width, the layers it must show] */
-const COVER = [['index.html', 375, ['buddy', 'book']], ['pension-calculator.html', 375, ['buddy', 'peek']],
-  ['director-calculator.html', 375, ['buddy', 'peek']], ['director.html', 375, ['buddy', 'book']],
+const COVER = [['index.html', 375, ['buddy', 'book']], ['pension-calculator.html', 375, ['buddy', 'peek', 'book']],
+  ['director-calculator.html', 375, ['buddy', 'peek', 'book']], ['director.html', 375, ['buddy', 'book']],
   ['starter.html', 375, ['buddy', 'book']], ['booking.html', 375, ['buddy']], ['index.html', 1440, ['buddy']],
   ['pension-calculator.html', 1440, ['buddy']]];
 for (const [page, w, layers] of COVER) {

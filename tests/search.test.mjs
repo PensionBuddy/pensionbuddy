@@ -168,7 +168,8 @@ await ev(`document.body.focus()`);
 await key('/', 'Slash', 191, '/'); await sleep(250);
 eq('4. "/" opens it', (await ev(STATE)).open, true);
 await key('Escape', 'Escape', 27); await sleep(150);
-await ev(`document.getElementById('ecEmail').focus()`);
+/* the email field sits in "Email me this result" (Run 45), opened first */
+await ev(`document.getElementById('ecMore').click(); document.getElementById('ecEmail').focus()`);
 await key('/', 'Slash', 191, '/'); await sleep(250);
 eq('4. "/" in a text field types a slash and opens nothing', [(await ev(STATE)).open, await ev(`document.getElementById('ecEmail').value`)], [false, '/']);
 

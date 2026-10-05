@@ -1,23 +1,32 @@
-/* The booking bar: "Book a call with Damian for free", pinned to the bottom
-   of a phone screen on the long content pages, so the booking link stays in
-   reach between the opening block (since Runs 42 and 43 the home, starter
-   and directors' pages ask only after their first figures, and tracker after
-   its first give) and the closing band's call to action.
+/* The booking bar: "Book free 20 min call", pinned to the bottom of a phone
+   screen, so the booking link stays in reach between the page's own asks
+   (Run 45, give then ask: until then it was on five content pages only).
 
-   WHERE. index, starter, director, tracker and glossary carry the tag, and
-   nothing else does. Never the five calculators (their bottom edge is kept
-   for the results peek bar), booking, thank-you, the legal pages, 404 or the
-   games. Below 921px only: the stylesheet keeps it display:none from 921px
-   up, and this file never shows it or lifts Ask Buddy there either.
+   WHERE. Every page that carries the tag: the home page, the starter,
+   tracker and directors' pages, the glossary, the calculators and tools
+   (the skeleton carries it, so every page built from it does), and the
+   five guides. Never booking (every link leads there), the legal pages, the
+   404 or the games, which do not load it, and never a page held back or
+   kept out of search (robots noindex: the finder, the readiness check, the
+   thank-you page), where this file stops at once. Below 921px only: the
+   stylesheet (the CTA block) keeps it display:none from 921px up, and this
+   file never shows it or lifts Ask Buddy there either.
 
-   WHEN. It shows once the page's opening block (header.hero, or glossary's
-   .page-head) has scrolled out of view above, and tucks away again as soon as
-   the closing band (.final-band) or the footer comes up, so it never doubles
-   the closing call to action. That second observer looks 80px below the
-   screen, about the bar's own height, so the bar is gone before the last line
-   above the closing band can slide behind it. On glossary the in-page game
-   stage (#arcStage) is a stop too: a game is never played under the bar. Two
-   IntersectionObservers, no scroll handler.
+   WHEN. It shows once the page's opening block (header.hero, the page
+   header .phead, glossary's .page-head, or a guide's title) has scrolled out
+   of view above, and tucks away again while a booking section is in view or
+   about to be, so it never doubles an ask the reader can already see: any
+   booking link in the page's own content, the block after a calculator's
+   result (#pbAfter), the closing bands (.final-band, .cta-band) and the
+   footer; on glossary the in-page game stage (#arcStage) too, so a game is
+   never played under the bar. On a calculator it also stays away while the
+   inputs (.calc-wrap .panel, the comparison's mode buttons, the tools'
+   forms marked data-pb-calc) are on screen, which is where the results
+   peek bar (assets/js/pb-peek.js) works, so it never covers a control the
+   reader is moving, and never while the peek bar is up (html.pb-peek-on).
+   That observer looks 80px below the screen, about the bar's own height,
+   so the bar is gone before the last line above a stop can slide behind
+   it. IntersectionObservers, no scroll handler.
 
    IT NEVER SITS ON TOP OF ANYTHING THAT IS THE READER'S.
      - The cookie choice bar (.pb-consent, key 'pb-consent'): while it is up
@@ -71,25 +80,28 @@
   var doc = document, html = doc.documentElement, body = doc.body;
   if (!body || !('IntersectionObserver' in window) || !window.matchMedia) return;
 
+  if (doc.querySelector('meta[name="robots"][content*="noindex"]')) return;
   var closed = false;
   try { closed = window.sessionStorage.getItem(KEY) === 'closed'; } catch (e) {}
   if (closed) return;
 
-  var hero = doc.querySelector('main header.hero, main .page-head');
+  var hero = doc.querySelector('main header.hero, main .page-head, main .phead, main .legal h1');
   if (!hero) return;
-  var stops = [].slice.call(doc.querySelectorAll('.final-band, footer, #arcStage'));
+  var stops = [].slice.call(doc.querySelectorAll('main a[href^="booking.html"], #pbAfter, .final-band, .cta-band, footer, #arcStage, ' +
+    '.calc-wrap .panel, .calc-wrap .modebar, form[data-pb-calc]'));
 
   var phone = window.matchMedia('(max-width: 920px)');
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   var bar = doc.createElement('div');
   bar.className = 'pb-bookbar';
-  bar.innerHTML = '<a class="btn btn-primary" href="booking.html">Book a call with Damian for free</a>'
-    + '<p class="pb-why">Free \u00b7 20 minutes \u00b7 no obligation \u00b7 easy to reschedule.</p>'
+  bar.innerHTML = '<a class="btn btn-primary" href="booking.html" data-pb-cta="bookbar">Book free 20 min call</a>'
     + '<button type="button" class="pb-bookbar-x" aria-label="Close">'
     + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
     + '</button>';
   body.appendChild(bar);
+  /* cta_view once it is on screen; its tags come when it is used (assets/js/pb-cta.js) */
+  if (window.PBCta) window.PBCta.watch(bar.firstChild);
 
   var pastHero = false, near = [], typing = false, focusIn = false, shown = false, lastFocus = null;
   var watch = 'MutationObserver' in window ? new MutationObserver(function () { update(); }) : null;
@@ -118,7 +130,7 @@
 
   function update() {
     if (closed) return;
-    var held = consentUp() || buddyOpen();
+    var held = consentUp() || buddyOpen() || html.classList.contains('pb-peek-on');
     bar.classList.toggle('pb-bookbar-held', held);
     var show = !held && phone.matches && (focusIn || (pastHero && !near.length && !typing));
     if (show === shown) return;
@@ -150,6 +162,8 @@
   stops.forEach(function (s) { stopIO.observe(s); });
 
   if (watch) watch.observe(body, { childList: true, attributes: true, attributeFilter: ['class'] });
+  /* the results peek bar comes and goes on <html> (pb-peek-on) */
+  if (watch) watch.observe(html, { attributes: true, attributeFilter: ['class'] });
 
   /* STEPPING DOWN (Run 32, docs/UX-MOTION-AUDIT.md part 3b). While a caveat
      (a warning, a source, "information, not advice", the disclosure:

@@ -1,9 +1,11 @@
 /* Lead forms, sent to Netlify Forms (Run 27).
 
-   Eight form names reach Damian: the booking routing form, "Email me my
-   results" on the pension and director calculators and, under one name
-   (calculator-results, Run 43), on six more, the guide requests on the director,
-   starter and tracker pages, and the old pension finder. Each is a
+   Five form names reach Damian (Run 45): "Email me this result" under one
+   name on every calculator that offers it (calculator-results, the shared
+   block pagebuild.after_block writes; until Run 45 the pension and director
+   calculators had forms of their own, and the booking page a routing form),
+   the guide requests on the director, starter and tracker pages, and the old
+   pension finder. Each is a
    <form name="..." data-netlify="true" netlify-honeypot="bot-field"> in the
    page's static HTML, with a hidden form-name field and a honeypot. Netlify
    reads those forms when the site is deployed and from then on stores what
