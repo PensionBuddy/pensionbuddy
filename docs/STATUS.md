@@ -1599,15 +1599,17 @@ since only the first €200,000 is tax-free.
 
 ## Item 4, red for money missing, amber for money back
 
-> **Superseded, 6 October 2026: the gap is burnt orange.** New token
-> `--gap:#C2410C` after `--red` in the first `:root` of all 31 pages. Every
-> money-missing rule below now reads `var(--gap)`; `--red` (#A4291D) is kept
-> for form errors only. Contrast: 5.18:1 on white, 4.66:1 on the hero wash,
-> white text on it 5.18:1. The director tax bar's lighter parts moved from
-> .82 / .65 to .87 / .74 to keep every part 3:1 on white. Candidates
-> (#C2410C, #A0522D, #D9480F) and before/after shots at 375 and 1440 are in
-> `docs/gap-orange-shots/`. `tests/render-diff/classify-pain-red.py` (with
-> the CTA A/B pinned on both sides): every difference is paint, on six pages.
+> **Superseded, 6 October 2026: the gap is pale yellow again, as before
+> Run 42.** Burnt orange (#C2410C) was tried the same day and rejected by the
+> owner. Token `--gap:#FCEFCF` after `--red` in the first `:root` of all 31
+> pages; dark text on it (ink 14.99:1). Restored as before Run 42: the home
+> block's dark figure and words, the hero figure in ink, the cost of waiting
+> in teal, the director tax bar in three greys, Jargon Battle in terracotta.
+> Rules added after Run 42: the charges chart's area and key swatch use
+> `--gap`; the charges row, the my-pensions charges figure and the threshold
+> tax figure are ink. `--red` (#A4291D) is for form errors only. Trade-off
+> accepted: the gap yellow and amber (money back) share a hue family. Shots
+> in `docs/gap-orange-shots/` (after-* is the yellow).
 
 - **The rule** (`docs/DESIGN-RUBRIC.md` section 3, `CONTEXT.md` "Gap",
   "Covered" and the new "Money back"): in a chart, a bar or a figure, red
