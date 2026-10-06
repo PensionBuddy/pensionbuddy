@@ -941,7 +941,7 @@ CARDS = {
     'my-pensions.html': ('All your pensions in one view', 'List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year.', 'my-pensions.html'),
     'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),
     'director-calculator.html': ('Director calculator', 'See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.', 'director-calculator.html'),
-    'director-pension-rules.html': ('What changed for directors in 2026', 'Here they are in plain English, with four questions to see which of them apply to you.', 'director-pension-rules.html'),
+    'director-pension-rules.html': ('What changed for directors in 2026', 'Three things changed in the last two years. Four questions show which apply to you.', 'director-pension-rules.html'),
     'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
     'state-pension-entitlement.html': ('State Pension entitlement check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
