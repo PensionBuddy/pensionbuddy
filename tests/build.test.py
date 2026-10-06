@@ -1541,8 +1541,8 @@ def run():
     eq('34. jargon definitions: pb-glossary.js is the buster word for word; pb-terms.js late, on the prose pages only; stores nothing, moves nothing',
        terms_faults(sources, gloss, runtime), [])
     for label, target, find, repl, want in (
-            ('a buster entry edited without a rerun', 'gloss', 'A flexible, portable personal pension you own yourself.',
-             'A flexible personal pension you own yourself.', 'not the jargon buster'),
+            ('a buster entry edited without a rerun', 'gloss', 'A flexible personal pension you own, which moves with you between jobs.',
+             'A personal pension you own, which moves with you between jobs.', 'not the jargon buster'),
             ('the definitions on the privacy notice', 'privacy.html', '</body>',
              '<script src="assets/js/pb-glossary.js?v=00000000" type="text/pb-late"></script>\n<script src="assets/js/pb-terms.js?v=00000000" type="text/pb-late"></script>\n</body>', 'wrong pages'),
             ('the definitions dropped from a guide', 'pensions-over-50.html', '<script src="assets/js/pb-terms.js', '<script src="assets/js/pb-termz.js', 'not the two late tags'),
