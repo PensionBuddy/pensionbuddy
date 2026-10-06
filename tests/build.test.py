@@ -2402,8 +2402,8 @@ def run():
              'the moved button and its reason are missing, doubled or reworded'),
             ('the chat picture\'s link put back', 'tracker.html',
              sources['tracker.html'].replace(
-                 'is usually enough to start tracing a pension.</p>\n',
-                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
+                 'When and where you worked is usually enough.</p>\n',
+                 'When and where you worked is usually enough.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
