@@ -374,7 +374,7 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
 }
 
 /* G11: the booking page */
-const H1 = "You've been meaning to sort the pension. Twenty minutes with Damian starts it.";
+const H1 = "Twenty minutes with Damian.";
 for (const [q, hash, shows, term] of [
     ['', '#from=pension-calculator', true, ''], ['', '#from=nope', false, ''], ['', '', false, ''],
     ['', '#persona=director&from=pia', true, 'director'],
