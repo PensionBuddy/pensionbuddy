@@ -338,6 +338,16 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 46 — 2026-10-06 · Copy cut (on `claude/clever-wozniak-dmpzph`, not merged)
+
+Damian's brief: cut site copy hard; keep the warnings, regulator lines,
+figures, sources, calculator labels and logic, consent and privacy text;
+leave copy that is in `docs/COMPLIANCE-PACK.md` and flag it. Result,
+tables of every changed line, the flagged pack lines and the gate:
+`docs/COPY-CUT-2026-10-06.md`. Three commits: the cut; the home page's
+locked story and bios (own commit, so it can be dropped); the Terms of
+Use dashes (own commit). Gate: no failing line `main` does not have.
+
 # Run 45 — 2026-10-05 · Give, then ask: one button after each result, "Email me this result", the calendar first, a bar on every content page, a button test (on `claude/clever-fermi-rgdc2a`)
 
 Damian's brief, 5 October 2026: show each calculator's result with no gate
