@@ -43,8 +43,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* amber: money that comes back or is added; gap (burnt orange): money missing; red: form errors only */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#C2410C; --slate:#586B85;
+  /* amber: money that comes back or is added; gap (pale yellow, as before Run 42): money missing; red: form errors only */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#FCEFCF; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1384,8 +1384,6 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
 .boost-ico{color:var(--aqua-600)}
 .waitcard{border-left-color:var(--aqua)}
-.waitcard:has(#waitOut){border-left-color:var(--gap)}
-#waitOut b{color:var(--gap)}
 .stars svg{fill:var(--aqua)}
 .rv-you,.rv-bar i:first-child{background:var(--aqua)}
 
@@ -2019,14 +2017,13 @@ a.assure:hover{border-color:var(--teal)}
 /* THE 52.35% (52.2% before 1 October 2026) IN THREE PARTS (.pb-cut): what
    comes off each euro taken as salary, 40% income tax, 8% USC and PRSI at the
    dated rate (PRSI, above). Written once at load; the rest of the bar is what
-   reaches the pocket. Tax you would pay, so drawn in the one red at three
-   strengths, 1 / .82 / .65, each named in the key (Run 42). */
+   reaches the pocket. Three greys, each named in the key, as before Run 42. */
 .pb-cut{margin:10px 0 0}
 .pb-cut-bar{display:flex;height:8px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-cut-bar i{display:block;height:100%}
-.pb-cut-it{background:var(--gap)}
-.pb-cut-usc{background:var(--gap);opacity:.87}
-.pb-cut-prsi{background:var(--gap);opacity:.74}
+.pb-cut-it{background:var(--ink)}
+.pb-cut-usc{background:var(--ink-2)}
+.pb-cut-prsi{background:var(--ink-3);opacity:.7}
 .pb-cut-key{display:flex;flex-wrap:wrap;gap:2px 12px;margin:6px 0 0;font-size:12.5px;color:var(--ink-2)}
 .pb-cut-key b{font-weight:600;color:var(--ink-2)}
 .pb-cut-sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
