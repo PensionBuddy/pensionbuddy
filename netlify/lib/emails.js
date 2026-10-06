@@ -26,7 +26,7 @@
 
 var TEXT = require('../../shared/compliance-text.json');
 
-var FROM = 'Pensionbuddy <hello@pensionbuddy.ie>';
+var FROM = 'Damian at Pensionbuddy <hello@pensionbuddy.ie>';
 var REPLY_TO = 'hello@pensionbuddy.ie';
 var SITE = 'https://pensionbuddy.ie';
 var BOOK_WORDS = 'Book a free 20-minute call with us';   // tools/pagebuild.py AFTER_WORDS
@@ -51,7 +51,7 @@ var GUIDES = {
   'tracker-guide': { title: 'The Pensionbuddy guide to finding a lost pension', env: 'GUIDE_URL_TRACKER' }
 };
 
-var MAX = { name: 80, results: 2000, inputs: 2000, item: 300 };
+var MAX = { name: 80, results: 2000, inputs: 2000, summary: 4000, item: 300 };
 
 function str(v, max) {
   var s = v == null ? '' : String(v).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -146,7 +146,7 @@ function shell(o) {
     'font:16px/1.55 Arial,Helvetica,sans-serif;color:' + C.ink + ';">\n' + o.body + '\n</td></tr>\n' +
     '<tr><td class="pb-ink2" style="padding:18px 4px 0;font:13px/1.55 Arial,Helvetica,sans-serif;color:' + C.ink2 + ';">\n' +
     '<p style="margin:0 0 8px;">' + esc(TEXT.regulator) + ' ' + esc(TEXT.register) + '</p>\n' +
-    '<p style="margin:0;">' + esc(o.why) + '</p>\n' +
+    '<p style="margin:0;">' + (o.whyHtml || esc(o.why)) + '</p>\n' +
     '</td></tr>\n</table>\n</td></tr>\n</table>\n</body>\n</html>\n';
 }
 
@@ -175,56 +175,136 @@ function warnings() {
 
 /* --------------------------------------------------------------- emails */
 
+/* "What this means", per calculator: short, plain, and true of every
+   result the calculator can show. No advice, no "you should". */
+var MEANS = {
+  'pension-calculator.html': ['This is an estimate, not a promise.', 'It assumes the same growth every year. Real growth goes up and down, and can fall.'],
+  'director-calculator.html': ['This is an estimate, not a promise.', 'It assumes the same growth every year. Real growth goes up and down, and can fall.',
+                               'How much your company can pay in each year depends on a fuller calculation.'],
+  'broker-vs-autoenrolment.html': ['These are the amounts paid in over one year, not what the pension could grow to.', 'Your own rates may differ.'],
+  'pension-fees-calculator.html': ['The gap between the two plans is what the charges take over the years.', 'It assumes the same growth every year. Real growth goes up and down, and can fall.'],
+  'state-pension-reality-check.html': ['This uses this year’s State Pension rates.', 'The rates can change in each Budget.'],
+  'state-pension-entitlement.html': ['This uses this year’s State Pension rates and the record you entered.', 'The Department of Social Protection makes the final decision.'],
+  'standard-fund-threshold.html': ['The limit is the most your pensions can be worth before extra tax is due.', 'It uses the limits set for each year.'],
+  'pia.html': ['The PIA is a proposal. It is not law yet.', 'It assumes the same growth every year. Real growth goes up and down, and can fall.'],
+  'director-pension-rules.html': ['These are the rules that may apply to you, from your answers.', 'They are topics to talk about, not advice.']
+};
+
+/* the summary assets/js/pb-after.js sends, checked and cut to length; null
+   when it is missing or not the shape expected */
+function summaryOf(raw) {
+  var o;
+  try { o = JSON.parse(String(raw || '').slice(0, MAX.summary)); } catch (e) { return null; }
+  if (!o || typeof o !== 'object' || o.v !== 1) return null;
+  function row(r) {
+    if (!r || typeof r !== 'object') return null;
+    var x = { label: str(r.label, MAX.item), value: str(r.value, MAX.item) };
+    if (r.today) x.today = str(r.today, MAX.item);
+    return x.value ? x : null;
+  }
+  var groups = (Array.isArray(o.groups) ? o.groups : []).slice(0, 6).map(function (g) {
+    return { title: str(g && g.title, 60), rows: (Array.isArray(g && g.rows) ? g.rows : []).slice(0, 20).map(row).filter(Boolean) };
+  }).filter(function (g) { return g.title && g.rows.length; });
+  return {
+    head: row(o.head),
+    more: (Array.isArray(o.more) ? o.more : []).slice(0, 6).map(row).filter(Boolean),
+    groups: groups,
+    notes: (Array.isArray(o.notes) ? o.notes : []).slice(0, 12).map(function (n) { return str(n, MAX.item * 2); }).filter(Boolean)
+  };
+}
+
+/* one sentence under the headline number, in plain words: for a figure
+   in the future, what it would buy today; otherwise what the number is */
+var HEAD = {
+  'broker-vs-autoenrolment.html': 'This is what goes into your pension in one year with auto-enrolment.',
+  'state-pension-reality-check.html': 'This is what the State Pension could pay you each week, at this year\u2019s rates.',
+  'state-pension-entitlement.html': 'This is what the State Pension could pay you each week, at this year\u2019s rates.',
+  'standard-fund-threshold.html': 'This is how much of the tax limit on pensions your pensions would use.'
+};
+function headSentence(h, file) {
+  if (!h) return '';
+  if (h.today) return 'Prices rise over time. So ' + h.value + ' then would buy about what ' + h.today + ' buys today.';
+  return HEAD[file] || 'This is worked out from the figures you entered.';
+}
+
+function cellValue(r) {
+  return '<span style="font-weight:700;">' + esc(r.value) + '</span>' +
+    (r.today ? '<br><span class="pb-ink2" style="font-weight:400;font-size:14px;color:' + C.ink2 + ';">' + esc(r.today) + ' in today&#39;s money</span>' : '');
+}
+
+function figuresTable(groups) {
+  var tr = function (cells) { return '<tr>' + cells + '</tr>'; };
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 6px;border-collapse:collapse;">' +
+    groups.map(function (g) {
+      return tr('<td colspan="2" style="padding:16px 0 6px;font:700 15px/1.3 Arial,Helvetica,sans-serif;">' + esc(g.title) + '</td>') +
+        g.rows.map(function (r) {
+          return tr('<td class="pb-rule" style="padding:8px 12px 8px 0;border-top:1px solid ' + C.line + ';vertical-align:top;">' + esc(r.label) + '</td>' +
+            '<td class="pb-rule" style="padding:8px 0;border-top:1px solid ' + C.line + ';text-align:right;vertical-align:top;">' + cellValue(r) + '</td>');
+        }).join('');
+    }).join('') + '</table>';
+}
+
 function calculatorEmail(d, env) {
   var base = siteBase(env);
   var file = pageFile(d.page);
   var calc = CALCULATORS[file] || 'calculator';
   var back = ownLink(d.link, env) || (CALCULATORS[file] ? base + '/' + file : base + '/');
   var book = base + '/booking.html';
-  var results = resultList(d.results), inputs = inputList(d.inputs);
   var hi = firstName(d.name);
   var why = 'You got this email because you asked for this result on pensionbuddy.ie and ticked the box to let us email it to you.';
-  var subject = 'Your result from the Pensionbuddy ' + calc;
-  var intro = 'Here is the result you asked us to email you from the ' + calc + '.';
+  var calcName = CALCULATORS[file] ? calc.charAt(0).toLowerCase() + calc.slice(1) : 'calculator';
+  if (/^(State|Standard|Personal|Directors)/.test(calc)) calcName = calc;
+  var subject = (hi ? hi + ', your figures' : 'Your figures') + ' from the ' + calcName;
+
+  /* one shape, whatever the page sent: the summary, or the older two lists */
+  var sm = summaryOf(d.summary);
+  var head = sm && sm.head, more = sm ? sm.more : [], groups = sm ? sm.groups : [], notes = sm ? sm.notes : [];
+  if (!sm) {
+    var results = resultList(d.results), inputs = inputList(d.inputs);
+    notes = results;
+    if (inputs.length) groups = [{ title: 'What you entered', rows: inputs.map(function (x) { return { label: x.label, value: x.value }; }) }];
+  }
+  if (more.length) groups = [{ title: 'Your results', rows: more }].concat(groups);
+  var means = (MEANS[file] || ['This is an estimate, not a promise.']).slice(0, 3);
+  var lead = head ? headSentence(head, file) : '';
+  var none = 'The figures were not included in your request. Open the ' + calc + ' again to see them.';
 
   var body = [
     p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
-    p(esc(intro)),
-    h2('Your result'),
-    results.length
-      ? results.map(function (r) { return p(esc(r)); }).join('\n')
-      : p(esc('The result was not included in your request. Open the calculator below to see it again.')),
-    h2('The figures you entered'),
-    inputs.length
-      ? '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px;border-collapse:collapse;">' +
-        inputs.map(function (x) {
-          return '<tr><td class="pb-rule" style="padding:7px 10px 7px 0;border-bottom:1px solid ' + C.line + ';vertical-align:top;">' + esc(x.label) + '</td>' +
-            '<td class="pb-rule" style="padding:7px 0;border-bottom:1px solid ' + C.line + ';text-align:right;vertical-align:top;font-weight:700;white-space:nowrap;">' + esc(x.value) + '</td></tr>';
-        }).join('') + '</table>'
-      : p(esc('No figures were included in your request.')),
-    p('<a class="pb-link" href="' + esc(back) + '" style="color:' + C.teal + ';font-weight:700;">Open the ' + esc(calc) + ' again</a>'),
-    p(esc('If you would like to talk this through, you can book a call.')),
+    head
+      ? '<p class="pb-ink2" style="margin:4px 0 2px;font-size:15px;color:' + C.ink2 + ';">' + esc(head.label) + '</p>' +
+        '<p style="margin:0 0 6px;font:800 34px/1.15 Arial,Helvetica,sans-serif;">' + esc(head.value) + '</p>' +
+        (head.today ? '<p class="pb-ink2" style="margin:0 0 10px;font-size:15px;color:' + C.ink2 + ';">' + esc(head.today) + ' in today&#39;s money</p>' : '') +
+        p(esc(lead))
+      : (notes.length ? notes.map(function (r) { return p(esc(r)); }).join('\n') : p(esc(none))),
+    head && notes.length ? notes.map(function (r) { return p(esc(r)); }).join('\n') : '',
+    groups.length ? h2('Your figures') + figuresTable(groups) : '',
+    h2('What this means'),
+    p(esc(means.join(' '))),
     button(book, BOOK_WORDS),
     warnings()
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
+  var line = function (r) { return r.label + ': ' + r.value + (r.today ? ' (' + r.today + ' in today\'s money)' : ''); };
   var text = [
     hi ? 'Hello ' + hi + ',' : 'Hello,', '',
-    intro, '',
-    'YOUR RESULT',
-    results.length ? results.join('\n') : 'The result was not included in your request. Open the calculator below to see it again.', '',
-    'THE FIGURES YOU ENTERED',
-    inputs.length ? inputs.map(function (x) { return (x.label ? x.label + ': ' : '') + x.value; }).join('\n') : 'No figures were included in your request.', '',
-    'Open the ' + calc + ' again: ' + back, '',
-    'If you would like to talk this through, you can book a call.',
+    head ? head.label + ': ' + head.value + (head.today ? '\n' + head.today + ' in today\'s money' : '') : '',
+    head ? lead : '',
+    notes.length ? notes.join('\n') : (head ? '' : none), '',
+    groups.length ? 'YOUR FIGURES' : '',
+    groups.map(function (g) { return g.title + '\n' + g.rows.map(line).join('\n'); }).join('\n\n'), '',
+    'WHAT THIS MEANS',
+    means.join(' '), '',
     BOOK_WORDS + ': ' + book, '',
     TEXT.warnings.join('\n'), '',
     '--',
     TEXT.regulator + ' ' + TEXT.register,
+    'Open the ' + calc + ' again: ' + back,
     why, ''
-  ].join('\n');
+  ].filter(function (x, i, a) { return x !== '' || (i > 0 && a[i - 1] !== ''); }).join('\n');
 
-  return { subject: subject, html: shell({ title: subject, preheader: intro, body: body, why: why }), text: text };
+  var foot = '<a class="pb-link" href="' + esc(back) + '" style="color:' + C.teal + ';">Open the ' + esc(calc) + ' again</a>. ' + esc(why);
+  return { subject: subject, html: shell({ title: subject, preheader: lead || subject, body: body, whyHtml: foot }), text: text };
 }
 
 function guideEmail(guide, url) {

@@ -1,33 +1,33 @@
 From: Damian at Pensionbuddy <hello@pensionbuddy.ie>
 Reply-To: hello@pensionbuddy.ie
-Subject: Mary, your figures from the pension calculator
+Subject: Mary, your figures from the director calculator
 
 Hello Mary,
 
-Your pension pot when you stop work: €460,066
-€274,926 in today's money
-Prices rise over time. So €460,066 then would buy about what €274,926 buys today.
+Your pension pot when you stop work: €1,511,849
+€1,058,535 in today's money
+Prices rise over time. So €1,511,849 then would buy about what €1,058,535 buys today.
 
 YOUR FIGURES
 Your results
-Income it could pay, each month: €1,534 (€917 in today's money)
+Company tax saved, all years added up: €90,000
 
 You
-Your age now: 40
+Your age now: 48
 Age you stop work: 66
-What you earn in a year: €50,000
+Your salary in a year: €100,000
 
 Your pension
-Saved in your pension so far: €50,000
-You pay in each month: €300
-Your employer pays in each month: €150
+Saved in your pension so far: €150,000
+Your company pays in each year: €40,000
+Share of that money put in your pension: half into the pension
 
 Assumptions
 Growth each year: 5%
 Prices rise each year (inflation): 2%
 
 WHAT THIS MEANS
-This is an estimate, not a promise. It assumes the same growth every year. Real growth goes up and down, and can fall.
+This is an estimate, not a promise. It assumes the same growth every year. Real growth goes up and down, and can fall. How much your company can pay in each year depends on a fuller calculation.
 
 Book a free 20-minute call with us: https://pensionbuddy.ie/booking.html
 
@@ -36,5 +36,5 @@ Warning: The value of your investment may go down as well as up.
 
 --
 Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.
-Open the Pension calculator again: https://pensionbuddy.ie/pension-calculator.html
+Open the Director calculator again: https://pensionbuddy.ie/director-calculator.html
 You got this email because you asked for this result on pensionbuddy.ie and ticked the box to let us email it to you.

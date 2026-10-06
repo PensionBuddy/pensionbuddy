@@ -58,6 +58,11 @@ LEAD_FORMS = {
     'pia.html': 'calculator-results',
 }
 
+# Job 4: the calculators whose headline is a projection, so it is also shown
+# in today's money
+PROJECTED = ('pension-calculator.html', 'director-calculator.html', 'pension-fees-calculator.html', 'pia.html')
+SUMMARIES = {}
+
 # how the probe fills each page, and where it reads the outcome
 PROBE = r"""<script>
 (function(){
@@ -258,6 +263,24 @@ def main():
             eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
             if name == 'calculator-results':
                 eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))
+                # Job 4: the summary the email is laid out from
+                try:
+                    sm = json.loads(fields.get('summary', [''])[0])
+                except ValueError:
+                    sm = {}
+                eq('%s: the summary is ours, for this calculator' % tag, (sm.get('v'), sm.get('calc')), (1, page[:-5]))
+                if page == 'director-pension-rules.html':
+                    eq('%s: the summary carries the list' % tag, bool(sm.get('notes')), True)
+                else:
+                    eq('%s: the summary has a headline figure and grouped rows' % tag,
+                       (bool((sm.get('head') or {}).get('value')), [g['title'] for g in sm.get('groups', [])][:1]), (True, ['You']))
+                if page in PROJECTED:
+                    rows = [r for g in sm.get('groups', []) for r in g['rows']]
+                    eq('%s: the headline in today\'s money' % tag, (sm.get('head') or {}).get('today', '').startswith('\u20ac'), True)
+                    eq('%s: inflation among the assumptions, as a %%' % tag,
+                       [r['value'] for r in rows if r['label'].startswith('Prices rise')], ['2%'])
+                if mode == 'ok' and os.environ.get('PB_SUMMARIES_OUT'):
+                    SUMMARIES[page] = fields.get('summary', [''])[0]
             if name.endswith('-guide'):
                 # the box to email the guide (netlify/functions/submission-created.js sends only on yes)
                 eq('%s: the box ticked' % tag, fields.get('consent'), ['yes'])
@@ -290,6 +313,9 @@ def main():
     has_msg = 'has no hidden field "not_declared"' in (u.get('undeclared') or '')
     eq('pb-forms: an undeclared field is refused', has_msg, True)
     eq('pb-forms: and nothing is posted', u.get('undeclaredPosted'), False)
+    if os.environ.get('PB_SUMMARIES_OUT'):
+        with open(os.environ['PB_SUMMARIES_OUT'], 'w', encoding='utf-8') as f:
+            json.dump(SUMMARIES, f, ensure_ascii=False, indent=1)
     srv.shutdown()
     report()
 

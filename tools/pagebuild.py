@@ -1128,7 +1128,7 @@ _ARROW = ('<svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2=
           '<polyline points="12 5 19 12 12 19"/></svg>')
 _TICK = '<svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
 # the fields the shared form declares, in order: Netlify stores only these
-AFTER_FIELDS = ('form-name', 'results', 'inputs', 'link', 'page', 'bot-field', 'name', 'email', 'consent')
+AFTER_FIELDS = ('form-name', 'results', 'inputs', 'summary', 'link', 'page', 'bot-field', 'name', 'email', 'consent')
 
 
 def after_block(page, indent='    '):
@@ -1152,7 +1152,7 @@ def after_block(page, indent='    '):
             '  <div class="pb-after-mail" id="ecCap" hidden>',
             '    <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>',
             '      <input type="hidden" name="form-name" value="calculator-results"><input type="hidden" name="results">'
-            '<input type="hidden" name="inputs"><input type="hidden" name="link"><input type="hidden" name="page">',
+            '<input type="hidden" name="inputs"><input type="hidden" name="summary"><input type="hidden" name="link"><input type="hidden" name="page">',
             '      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>',
             '      <div class="pb-mail-fields">',
             '        <p class="pb-mail-f"><label for="ecName">Your name</label>'

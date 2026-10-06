@@ -1,33 +1,34 @@
 From: Damian at Pensionbuddy <hello@pensionbuddy.ie>
 Reply-To: hello@pensionbuddy.ie
-Subject: Mary, your figures from the pension calculator
+Subject: Mary, your figures from the pension charges calculator
 
 Hello Mary,
 
-Your pension pot when you stop work: €460,066
-€274,926 in today's money
-Prices rise over time. So €460,066 then would buy about what €274,926 buys today.
+Your plan, when you stop work: €227,710
+€138,796 in today's money
+Prices rise over time. So €227,710 then would buy about what €138,796 buys today.
 
 YOUR FIGURES
 Your results
-Income it could pay, each month: €1,534 (€917 in today's money)
+The other plan, when you stop work: €258,137 (€157,342 in today's money)
 
 You
-Your age now: 40
-Age you stop work: 66
-What you earn in a year: €50,000
+Years until you stop work: 25
 
 Your pension
 Saved in your pension so far: €50,000
-You pay in each month: €300
-Your employer pays in each month: €150
+Paid in each month: €200
+Yearly charge, your plan: 1%
+Charge on each payment, your plan: 5%
+Yearly charge, the other plan: 0.5%
+Charge on each payment, the other plan: 0%
 
 Assumptions
-Growth each year: 5%
+Growth each year, before charges: 5%
 Prices rise each year (inflation): 2%
 
 WHAT THIS MEANS
-This is an estimate, not a promise. It assumes the same growth every year. Real growth goes up and down, and can fall.
+The gap between the two plans is what the charges take over the years. It assumes the same growth every year. Real growth goes up and down, and can fall.
 
 Book a free 20-minute call with us: https://pensionbuddy.ie/booking.html
 
@@ -36,5 +37,5 @@ Warning: The value of your investment may go down as well as up.
 
 --
 Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.
-Open the Pension calculator again: https://pensionbuddy.ie/pension-calculator.html
+Open the Pension charges calculator again: https://pensionbuddy.ie/pension-fees-calculator.html
 You got this email because you asked for this result on pensionbuddy.ie and ticked the box to let us email it to you.

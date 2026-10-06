@@ -86,7 +86,7 @@ eq('11. a guide link that is not https: nothing', E.plan('starter-guide', { emai
 
 group('THE ENVELOPE');
 var m = E.plan('calculator-results', calc(), {}).message;
-eq('12. from', m.from, 'Pensionbuddy <hello@pensionbuddy.ie>');
+eq('12. from', m.from, 'Damian at Pensionbuddy <hello@pensionbuddy.ie>');
 eq('13. reply-to', m.reply_to, 'hello@pensionbuddy.ie');
 eq('14. to the submitter', m.to, ['mary@example.com']);
 eq('15. test mode: only to EMAIL_TEST_TO', E.plan('calculator-results', calc(), { EMAIL_TEST: '1', EMAIL_TEST_TO: 'damian@example.ie' }).message.to, ['damian@example.ie']);
@@ -94,7 +94,8 @@ eq('16. test mode with no EMAIL_TEST_TO: nothing', E.plan('calculator-results', 
 eq('17. EMAIL_TEST not 1: the submitter', E.plan('calculator-results', calc(), { EMAIL_TEST: '0', EMAIL_TEST_TO: 'd@x.ie' }).message.to, ['mary@example.com']);
 
 group('THE CALCULATOR EMAIL');
-eq('18. subject', m.subject, 'Your result from the Pensionbuddy Pension calculator');
+eq('18. subject: personal, no sales words', m.subject, 'Mary, your figures from the pension calculator');
+eq('18. no first name: still plain', E.plan('calculator-results', calc({ name: '' }), {}).message.subject, 'Your figures from the pension calculator');
 [m.html, m.text].forEach(function (body, i) {
   var k = i ? 'text' : 'html';
   has('19. ' + k + ': the result', body, 'At 66 you could have about €412,000');
@@ -127,7 +128,35 @@ eq('32. a long result is cut', E.resultList('x'.repeat(5000))[0].length <= 600, 
 eq('33. inputs, new form', E.inputList('Your age now: 40 | PIA tax rate: not yet announced, try a figure: 20%'),
    [{ label: 'Your age now', value: '40' }, { label: 'PIA tax rate: not yet announced, try a figure', value: '20%' }]);
 eq('33. inputs, old form', E.inputList('age=40, pot=50000'), [{ label: 'age', value: '40' }, { label: 'pot', value: '50000' }]);
-eq('34. a missing result says so', E.plan('calculator-results', calc({ results: '' }), {}).message.text.indexOf('The result was not included') >= 0, true);
+eq('34. a missing result says so', E.plan('calculator-results', calc({ results: '' }), {}).message.text.indexOf('The figures were not included') >= 0, true);
+
+group('THE LAYOUT (Job 4): ONE TEMPLATE, FROM THE SUMMARY THE PAGE SENDS');
+var SUM = { v: 1, calc: 'director-calculator',
+  head: { label: 'Your pension pot when you stop work', value: '€1,511,849', today: '€1,060,915' },
+  more: [{ label: 'Company tax saved, all years added up', value: '€90,000' }],
+  groups: [{ title: 'You', rows: [{ label: 'Your age now', value: '48' }, { label: 'Your salary in a year', value: '€100,000' }] },
+           { title: 'Your pension', rows: [{ label: 'Your company pays in each year', value: '€40,000' }] },
+           { title: 'Assumptions', rows: [{ label: 'Growth each year', value: '5%' }, { label: 'Prices rise each year (inflation)', value: '2%' }] }] };
+var dm = E.plan('calculator-results', calc({ page: 'https://pensionbuddy.ie/director-calculator.html', link: '', summary: JSON.stringify(SUM) }), {}).message;
+/* the html from its card on, past the title and the inbox preview line */
+[dm.html.slice(dm.html.indexOf('class="pb-card')), dm.text].forEach(function (body, i) {
+  var k = i ? 'text' : 'html', q = function (w) { return body.indexOf(i ? w : E.esc(w)); };
+  var order = [q('€1,511,849'), q('Prices rise over time.'), q('Your figures'.toUpperCase()) >= 0 ? q('YOUR FIGURES') : q('Your figures'),
+               q('What this means'.toUpperCase()) >= 0 ? q('WHAT THIS MEANS') : q('What this means'), body.indexOf('booking.html'), q(WARN1), q(TEXT.regulator)];
+  eq('40. ' + k + ': headline, its sentence, your figures, what this means, the button, the warnings, the footer, in that order',
+     order.every(function (x, j) { return x >= 0 && (j === 0 || x > order[j - 1]); }), true);
+  has('41. ' + k + ': the headline in today\'s money', body, i ? "€1,060,915 in today's money" : '€1,060,915 in today&#39;s money');
+  ['You', 'Your pension', 'Assumptions', 'Your results'].forEach(function (h) { has('42. ' + k + ': the heading "' + h + '"', body, h); });
+  has('43. ' + k + ': growth as a %', body, '5%');
+  has('43. ' + k + ': inflation as a %', body, '2%');
+});
+eq('44. html: one label and one value per row, in two columns', (dm.html.match(/<td class="pb-rule"/g) || []).length, 2 * 6);
+eq('45. one booking button', (dm.html.match(/booking\.html/g) || []).length, 1);
+eq('46. no jargon words in the email', ['actuarial', 'drawdown', 'AMC', 'notional', 'reckonable', 'SFT'].filter(function (w) { return dm.text.indexOf(w) >= 0; }), []);
+eq('47. a summary that is not ours falls back to the two lists', E.plan('calculator-results', calc({ summary: '{"v":2}' }), {}).message.text.indexOf('At 66 you could have about €412,000') >= 0, true);
+eq('47. a summary that is not JSON falls back too', E.plan('calculator-results', calc({ summary: '<b>x' }), {}).message.text.indexOf('Pension saved so far') >= 0, true);
+var ev = E.plan('calculator-results', calc({ summary: JSON.stringify({ v: 1, head: { label: '<i>x</i>', value: '<script>' } }) }), {}).message;
+eq('48. the summary is escaped', /<script>|<i>x/.test(ev.html), false);
 
 group('THE GUIDE EMAIL');
 var g = E.plan('director-guide', { email: 'a@b.ie', consent: 'yes', marketing_consent: 'no' }, GUIDE_ENV).message;

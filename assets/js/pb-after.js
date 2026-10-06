@@ -149,6 +149,95 @@
       .map(function (el) { return clean(labelOf(el)) + ': ' + clean(valueOf(el)); })
       .join(' | ').slice(0, 2000);
   }
+  /* THE SUMMARY (Job 4): the same figures, laid out for the email. One
+     record per calculator: the headline result, the other results, and each
+     input under You, Your pension or Assumptions, with a plain label. A
+     projected figure also carries its value in today's money, worked out
+     here with PBAssume (assets/js/pb-assumptions.js): the ECB's 2% a year,
+     over the years to the date the figure is for. netlify/lib/emails.js
+     lays it out; this file only reads what the page shows. */
+  var SUMMARY = {
+    'pension-calculator': { head: 'potOut', more: ['incOut'], years: function () { return num('ret') - num('age'); },
+      projected: ['potOut', 'incOut'],
+      labels: { potOut: 'Your pension pot when you stop work', incOut: 'Income it could pay, each month' },
+      you: { age: 'Your age now', ret: 'Age you stop work', earn: 'What you earn in a year' },
+      pension: { pot: 'Saved in your pension so far', mine: 'You pay in each month', emp: 'Your employer pays in each month' },
+      assume: { growth: 'Growth each year' } },
+    'director-calculator': { head: 'potOut', more: ['taxOut'], years: function () { return num('ret') - num('age'); },
+      projected: ['potOut'],
+      labels: { potOut: 'Your pension pot when you stop work', taxOut: 'Company tax saved, all years added up' },
+      you: { age: 'Your age now', ret: 'Age you stop work', sal: 'Your salary in a year' },
+      pension: { pot: 'Saved in your pension so far', contrib: 'Your company pays in each year', split: 'Share of that money put in your pension' },
+      assume: { risk: 'Risk level', growth: 'Growth each year' } },
+    'broker-vs-autoenrolment': { head: 'aeTotal', more: ['ppTotal'],
+      labels: { aeTotal: 'Paid into your pension in one year, auto-enrolment', ppTotal: 'Paid into your pension in one year, your own pension' },
+      you: { age: 'Your age now', salary: 'Your salary in a year' },
+      pension: { gross: 'You pay into your own pension', match: 'Your employer adds, as a share of salary', extra: 'Extra you save each month', tmatch: 'Share of that extra your employer matches' },
+      assume: { phase: 'Auto-enrolment year' } },
+    'pension-fees-calculator': { head: 'potA', more: ['potB'], years: function () { return num('years'); },
+      projected: ['potA', 'potB'],
+      labels: { potA: 'Your plan, when you stop work', potB: 'The other plan, when you stop work' },
+      you: { years: 'Years until you stop work' },
+      pension: { pot: 'Saved in your pension so far', monthly: 'Paid in each month', amcA: 'Yearly charge, your plan', feeA: 'Charge on each payment, your plan',
+                 amcB: 'Yearly charge, the other plan', feeB: 'Charge on each payment, the other plan' },
+      assume: { growth: 'Growth each year, before charges' } },
+    'state-pension-reality-check': { head: 'spWeekly', more: ['spAnnual'],
+      labels: { spWeekly: 'State Pension, each week', spAnnual: 'State Pension, each year' },
+      you: { age: 'Your age now', contribs: 'Weeks of social insurance (PRSI) counted by 66' } },
+    'state-pension-entitlement': { head: 'spWeekly', more: ['spAnnual'],
+      labels: { spWeekly: 'State Pension, each week', spAnnual: 'State Pension, each year' },
+      you: { birth: 'Year you were born', entry: 'Year you first paid social insurance (PRSI)' },
+      pension: { paid: 'Weeks you paid social insurance', credited: 'Weeks credited to you', homecaring: 'Weeks spent caring at home (HomeCaring)' } },
+    'standard-fund-threshold': { head: 'share', more: ['thr'],
+      labels: { share: 'Share of the limit your pensions would use', thr: 'The limit for that year' },
+      you: { year: 'Year you take your pensions' },
+      pension: { total: 'All your pensions added up', lump: 'Lump sum you take' } },
+    'pia': { head: 'penOut', more: ['piaOut', 'etfOut'], years: function () { return num('years'); },
+      projected: ['penOut', 'piaOut', 'etfOut'],
+      labels: { penOut: 'In a pension, at the end', piaOut: 'In a PIA (proposed), at the end', etfOut: 'In a fund outside a pension, at the end' },
+      you: { age: 'Your age now', salary: 'What you earn in a year' },
+      pension: { amount: 'You put in each month', years: 'Years you put money in' },
+      assume: { growth: 'Growth each year, before tax', piaRate: 'PIA tax rate (not yet set)', piaThreshold: 'PIA tax-free amount (not yet set)' } }
+  };
+  function num(id) { var el = document.getElementById(id); return el ? +el.value : 0; }
+  function euroOf(v) { return '€' + Math.round(v).toLocaleString('en-IE'); }
+  function money(t) { var m = /^€([\d,]+(?:\.\d+)?)$/.exec(t); return m ? +m[1].replace(/,/g, '') : null; }
+  function figure(cfg, id, years) {
+    var el = document.getElementById(id), lab = el && el.parentNode && el.parentNode.querySelector('.rl');
+    if (!el || !shown(el) || !text(el)) { return null; }
+    var row = { label: (cfg.labels && cfg.labels[id]) || text(lab), value: clean(text(el)) };
+    var v = money(row.value);
+    if (years > 0 && v !== null && (cfg.projected || []).indexOf(id) >= 0 && window.PBAssume) {
+      row.today = euroOf(window.PBAssume.today(v, years));
+    }
+    return row;
+  }
+  function rows(map) {
+    return Object.keys(map || {}).map(function (id) {
+      var el = document.getElementById(id);
+      if (!el) { return null; }
+      return { label: map[id], value: clean(valueOf(el)) };
+    }).filter(function (r) { return r && r.value; });
+  }
+  function summary() {
+    var cfg = SUMMARY[calc];
+    if (!cfg) {
+      var list = [].map.call(document.querySelectorAll('[data-pb-result]'), text).filter(Boolean);
+      return JSON.stringify({ v: 1, calc: calc, notes: list.slice(0, 12) }).slice(0, 4000);
+    }
+    var years = cfg.years ? cfg.years() : 0;
+    var out = { v: 1, calc: calc, head: figure(cfg, cfg.head, years), more: [], groups: [] };
+    (cfg.more || []).forEach(function (id) { var r = figure(cfg, id, years); if (r) { out.more.push(r); } });
+    var assume = rows(cfg.assume);
+    if (years > 0 && cfg.projected && window.PBAssume) {
+      out.years = years;
+      assume.push({ label: 'Prices rise each year (inflation)', value: window.PBAssume.inflation.pct });
+    }
+    [['You', rows(cfg.you)], ['Your pension', rows(cfg.pension)], ['Assumptions', assume]].forEach(function (g) {
+      if (g[1].length) { out.groups.push({ title: g[0], rows: g[1] }); }
+    });
+    return JSON.stringify(out).slice(0, 4000);
+  }
   function say(msgs, bad) {
     err.textContent = msgs.join(' ');
     err.hidden = !msgs.length;
@@ -172,7 +261,7 @@
     say(msgs, bad);
     if (bad.length) { bad[0].focus(); return; }
     if (form.getAttribute('aria-busy') === 'true') { return; }
-    var v = { results: results(), inputs: inputs(),
+    var v = { results: results(), inputs: inputs(), summary: summary(),
               link: (window.PBShare && window.PBShare.link) ? window.PBShare.link() : location.href, page: location.href };
     track('email_result_submit', { calculator: calc });
     function viaEmail() {
