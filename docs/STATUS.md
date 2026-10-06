@@ -1599,6 +1599,11 @@ since only the first €200,000 is tax-free.
 
 ## Item 4, red for money missing, amber for money back
 
+> **Final, 6 October 2026: the gap is blush coral, `--gap:#FADCD3`.** Picked
+> by the owner from six pale options (`docs/gap-orange-shots/pale-options.png`).
+> Same rules as the pale yellow below, one token changed; dark text on it
+> (ink 13.24:1, ink-2 4.88:1); a different hue from amber (money back).
+>
 > **Superseded, 6 October 2026: the gap is pale yellow again, as before
 > Run 42.** Burnt orange (#C2410C) was tried the same day and rejected by the
 > owner. Token `--gap:#FCEFCF` after `--red` in the first `:root` of all 31
