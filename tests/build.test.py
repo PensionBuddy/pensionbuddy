@@ -794,22 +794,30 @@ def run():
         eq('20. %s is caught' % label, sorted(pagebuild.caveat_drift(m)), [page])
 
     # ----------------------------------------------------------------- 21
-    # Run 32, part 1c, and Run 45: booking's not-advice and privacy note is in
-    # the booking card after the calendar, inside nothing that hides, and no
-    # form stands in front of the calendar (the calendar first: one click from
-    # any booking link to a time).
-    def note_outside(src):
+    # Run 45, and the stripped booking page: the heading, one line, then the
+    # calendar. No form in front of it, and none of the old reassurance.
+    BOOK_H1, BOOK_LINE = 'Book a call with us', 'Free. 20 minutes. No obligation.'
+    FILLER = ('That is the lot.', 'We do not ask what you earn', 'none of it is needed to book a chat',
+              'this site gives information, not advice', 'The house promise', 'class="timeline"',
+              'class="lead-more"', 'class="qnote"', 'id="pbFrom"')
+    def booking_faults(src):
         main = src[src.find('<main'):src.find('</main>')]
-        note, stage = main.find('<p class="qnote">That is the lot.'), main.find('<div id="calStage">')
-        return '<form' not in main and 0 <= stage < note
+        out = []
+        if '<form' in main:
+            out.append('a form')
+        h1, line, stage = main.find('<h1>%s</h1>' % BOOK_H1), main.find('<p class="sub">%s</p>' % BOOK_LINE), main.find('<div id="calStage">')
+        if not 0 <= h1 < line < stage:
+            out.append('order')
+        if len(re.findall(r'<p\b', main[:stage])) != 1:
+            out.append('more than one line before the calendar')
+        out += [w for w in FILLER if w in main]
+        return out
     bk = sources['booking.html']
-    eq('21. booking\'s note sits after the calendar, and no form is in front of it', note_outside(bk), True)
-    i = bk.find('<p class="qnote">That is the lot.'); j = bk.find('</p>', i) + 4
-    back = bk[:i] + bk[j:]
-    back = back.replace('<div id="calStage">', bk[i:j] + '\n    <div id="calStage">', 1)
-    eq('21. the note moved in front of the calendar is caught', note_outside(back), False)
+    eq('21. booking: the heading, one line, the calendar; no form, no filler', booking_faults(bk), [])
     gate = bk.replace('<div id="calStage">', '<form id="qualForm"><input name="name"></form>\n    <div id="calStage">', 1)
-    eq('21. a form put back in front of the calendar is caught', note_outside(gate), False)
+    eq('21. a form put back in front of the calendar is caught', 'a form' in booking_faults(gate), True)
+    back = bk.replace('<div id="calStage">', '<p class="qnote">That is the lot.</p>\n    <div id="calStage">', 1)
+    eq('21. the old note put back is caught', 'That is the lot.' in booking_faults(back), True)
 
     # ----------------------------------------------------------------- 22
     # Run 32, part 2a: the motion vocabulary's plumbing. The MOTION block's
@@ -1238,8 +1246,8 @@ def run():
     # Run 34's, merged into main in Run 36.)
     QUAL_LABEL = 'Damian&rsquo;s qualifications and memberships'
     QUAL_ITEMS = ['Qualified Financial Adviser (QFA)', 'Life Insurance Association (LIA)']
-    WHERE = {'index.html': ['pbQualsDamian', 'pbQualsFoot'],
-             'booking.html': ['pbQualsBook', 'pbQualsFoot']}
+    # (the stripped booking page keeps only the footer's)
+    WHERE = {'index.html': ['pbQualsDamian', 'pbQualsFoot']}
 
     def quals(src):
         """[(id, label, names, image faults, extra words)] for every strip, in
@@ -1290,12 +1298,6 @@ def run():
         damian = ix.find('<section id="damian"')
         if not (damian < ix.find('id="pbQualsDamian"') < ix.find('<section id="adam"')):
             f.append('index.html: the strip is not in Damian\'s section')
-        bk = srcs['booking.html']
-        # Run 45: the concierge column is two blocks either side of the calendar
-        # card in the markup (the card comes straight after the heading on a
-        # phone); the strip is in the second, beside the calendar on a wide screen
-        if not (bk.find('<div class="book-card">') < bk.find('<div class="lead-more">') < bk.find('id="pbQualsBook"') < bk.find('</main>')):
-            f.append('booking.html: the strip is not in the column beside the calendar')
         skel = srcs['pension-calculator.html']
         c = pagebuild.css_span(skel, 'QUALS')
         block = re.sub(r'/\*.*?\*/', '', skel[c[0]:c[1]], flags=re.S) if c else ''
@@ -1308,8 +1310,8 @@ def run():
     for label, page, find, repl, want in (
             ('the label changed to a claim', 'index.html', 'id="pbQualsDamian">Damian&rsquo;s qualifications and memberships',
              'id="pbQualsDamian">Accredited by', 'the label is'),
-            ('a name dropped from the booking page', 'booking.html',
-             'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
+            ('a name dropped from Damian\'s section', 'index.html',
+             'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
             ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"',
              '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"', 'the items are'),
             ('the story\'s copy put back', 'index.html', 'So they built Pensionbuddy together.</p>\n  </div>',
@@ -1319,15 +1321,15 @@ def run():
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'
              '<p>Pensionbuddy is recommended by the LIA.</p>', 'beyond its label'),
-            ('a logo with empty alt text', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+            ('a logo with empty alt text', 'index.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
              '<li><img src="assets/logos/qfa.svg" alt="">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
-            ('a logo with no alt at all', 'booking.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
+            ('a logo with no alt at all', 'index.html', '<li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>',
              '<li><img src="assets/logos/qfa.svg">Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>\n    </div>', 'without its own'),
             ('the other body\'s logo in an item', 'index.html', 'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li>',
              'aria-labelledby="pbQualsDamian"><li><img src="assets/logos/lia.svg" alt="Life Insurance Association (LIA)">Qualified Financial Adviser (QFA)</li>', 'without its own'),
             ('a label no longer tied to its list', 'index.html', 'id="pbQualsDamian"', 'id="pbQualsDamianX"', 'strips'),
-            ('the strip taken off the booking page', 'booking.html', '<div class="pb-quals">\n      <p class="pb-quals-label" id="pbQualsBook">',
-             '<div class="pb-gone">\n      <p class="pb-quals-label" id="pbQualsBook">', 'strips'),
+            ('the strip put back on the booking page', 'booking.html', '<div class="book-card">',
+             '<div class="pb-quals"><p class="pb-quals-label" id="pbQualsBook">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div>\n  <div class="book-card">', 'strips'),
             ('a strip added to another page\'s main', 'director.html', '</main>',
              '<div class="pb-quals"><p class="pb-quals-label" id="pbQualsX">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsX"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></main>', 'strips'),
             ('motion put in the block', 'pension-calculator.html', '.pb-quals{margin:28px 0 0}', '.pb-quals{margin:28px 0 0;transition:opacity .3s}', 'moves')):
@@ -2527,8 +2529,7 @@ def run():
     # the line on what is stored, why and where it goes. my-pensions sends
     # nothing, so it has no form. No other booking link sits in the results
     # before the block (the comparison's #riskCard is exempt only while it is
-    # hidden). booking.html shows its line only for a #from= naming one of the
-    # nine calculators.
+    # hidden).
     eq('49. the block after the result is the shared one, on every page that carries it and on no other',
        findings(pagebuild.after_drift(sources)), [])
     eq('49. on the nine calculators and the directors\' rules',
@@ -2570,16 +2571,12 @@ def run():
                          squash(s[r:span[0]])) if r >= 0 else ''
             if r < 0 or 'href="booking.html' in seg:
                 f.append('%s: a booking link in the results before the block' % page)
-        bk = srcs['booking.html']
-        m = re.search(r'from=\(\?:([a-z|-]+)\)', bk)
-        # Damian's words (Run 43, 4 October 2026)
-        said = '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>'
-        nine = sorted(v[0] for v in pagebuild.AFTER.values() if v[0] != 'director-pension-rules')
-        if said not in bk or not m or sorted(m.group(1).split('|')) != nine:
-            f.append('booking.html: the line, or the calculators it answers')
+        # the stripped booking page has no "seen your number" line (Job 2)
+        if 'id="pbFrom"' in srcs['booking.html']:
+            f.append('booking.html: the old line is back')
         return f
 
-    eq('49. each block: what it does not show, the button, its line, then the email offer hidden until the script shows it, the box unticked; no booking link in the results before it; the booking page answers only the nine',
+    eq('49. each block: what it does not show, the button, its line, then the email offer hidden until the script shows it, the box unticked; no booking link in the results before it; and no "seen your number" line on the booking page',
        after_faults(sources), [])
     dc, bk, fc = sources['director-calculator.html'], sources['booking.html'], sources['pension-fees-calculator.html']
     for label, page, mut, want in (
@@ -2590,8 +2587,9 @@ def run():
              dc.replace('<div class="wtext" id="waitOut">Move the sliders to see it.</div>',
                         '<div class="wtext" id="waitOut">Move the sliders to see it.</div><a class="wlink" href="booking.html">Book</a>', 1),
              'director-calculator.html: a booking link in the results before the block'),
-            ('a calculator missing from the booking page', 'booking.html', bk.replace('|pia)', ')', 1),
-             'booking.html: the line, or the calculators it answers')):
+            ('the old line put back on the booking page', 'booking.html',
+             bk.replace('<h1>', '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number.</p>\n    <h1>', 1),
+             'booking.html: the old line is back')):
         assert mut != sources[page], label
         m49 = dict(sources); m49[page] = mut
         eq('49. %s is caught' % label, want in after_faults(m49), True)

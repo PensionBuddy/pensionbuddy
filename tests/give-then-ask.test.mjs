@@ -41,8 +41,8 @@
      G9  the waitcards hold no booking link
      G10 without JavaScript: the line and the button (plain booking.html);
          "Email me this result" and its form stay hidden
-     G11 booking.html: its line only for #from= naming a calculator; the
-         calendar at once, with no form before it; the tags taken off the
+     G11 booking.html: "Book a call with us" and one line, no "seen your
+         number" line for any #from=; the calendar at once, with no form before it; the tags taken off the
          address and handed to the calendar, utm_term saying the situation
      G12 "Email me this result": the link opens the form under it and the
          result stays where it was; the form asks for a name, a valid email
@@ -94,8 +94,6 @@ const AFTER = {
   'my-pensions.html': ['my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', false],
   'director-pension-rules.html': ['director-pension-rules', null, true],
 };
-/* Damian's words (Run 43, 4 October 2026) */
-const FROM_LINE = `You${RSQ}ve seen your number. Last step: 20 minutes with Damian.`;
 const tags = (page, v) => `utm_source=site&utm_medium=cta&utm_campaign=${page.replace(/\.html$/, '')}&utm_content=${v}`;
 /* the address without its tags, for the checks about #from= */
 const bare = h => h == null ? h : h.replace(/\?[^#]*/, '');
@@ -374,20 +372,19 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
 }
 
 /* G11: the booking page */
-const H1 = "You've been meaning to sort the pension. Twenty minutes with Damian starts it.";
+const H1 = 'Book a call with us', SUB = 'Free. 20 minutes. No obligation.';
 for (const [q, hash, shows, term] of [
     ['', '#from=pension-calculator', true, ''], ['', '#from=nope', false, ''], ['', '', false, ''],
     ['', '#persona=director&from=pia', true, 'director'],
     ['?utm_source=site&utm_medium=cta&utm_campaign=director-calculator&utm_content=B', '#from=director-calculator', true, 'director']]) {
   await open('booking.html' + q + hash);
   const b = await ev(`(() => { const p = document.getElementById('pbFrom'), w = document.getElementById('calWidget');
-    return { display: p ? getComputedStyle(p).display : null, text: p ? p.textContent : null, h1: document.querySelector('h1').textContent,
+    return { line: !!p, sub: (document.querySelector('.lead .sub') || {}).textContent, h1: document.querySelector('h1').textContent,
              form: !!document.querySelector('main form'), widget: !!w, url: w ? w.getAttribute('data-url') : null,
              open: (document.getElementById('calOpenBtn') || {}).href || null, search: location.search, hash: location.hash }; })()`);
   const label = 'booking.html' + (q ? '?<tags>' : '') + (hash || ' (no hash)');
-  eq(`G11. ${label}: the line ${shows ? 'shows' : 'is display:none'}`,
-     shows ? [b.display !== 'none', b.text] : b.display, shows ? [true, FROM_LINE] : 'none');
-  eq(`G11. ${label}: the h1 unchanged`, b.h1, H1);
+  eq(`G11. ${label}: no "seen your number" line, whatever the hash`, b.line, false);
+  eq(`G11. ${label}: the heading and its one line`, [b.h1, b.sub], [H1, SUB]);
   eq(`G11. ${label}: the calendar at once, with no form before it`, [b.form, b.widget], [false, true]);
   const want = CALENDLY + '?' +
     (q ? 'utm_source=site&utm_medium=cta&utm_campaign=director-calculator&utm_content=B' : 'utm_source=pensionbuddy&utm_medium=booking-page') +

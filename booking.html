@@ -80,20 +80,16 @@ nav.scrolled{border-color:var(--line);background:rgba(245,248,247,.92)}
 .back{display:inline-flex;align-items:center;gap:7px;font-weight:500;font-size:14px;color:var(--ink-2)}.back:hover{color:var(--teal-700)}.back svg{width:16px;height:16px}
 
 /* ---- layout ---- */
-.layout{display:grid;grid-template-columns:.92fr 1.08fr;grid-template-rows:auto 1fr;column-gap:52px;row-gap:0;padding:56px 0 84px;align-items:start}
-/* Run 45: the calendar first. The concierge column is two blocks, the heading
-   (.lead) and what happens next (.lead-more); the calendar card spans both
-   rows beside them, and on a phone it comes straight after the heading, in
-   the markup's own order, so it is on the first screens rather than below
-   the timeline. */
+.layout{display:grid;grid-template-columns:1fr;row-gap:24px;max-width:960px;margin:0 auto;padding:48px 0 84px;align-items:start}
+/* One column: the heading and its one line, then the calendar, so the
+   calendar is on the first screen at every width. */
 .lead{grid-column:1;grid-row:1}
-.lead-more{grid-column:1;grid-row:2}
-.book-card{grid-column:2;grid-row:1 / span 2}
+.book-card{grid-column:1;grid-row:2}
 
 /* ---- concierge column ---- */
 .lead h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-0.035em;margin:16px 0 18px}
 .lead h1 .hl{color:var(--teal-700)}
-.lead .sub{font-size:18px;color:var(--ink-2);margin-bottom:36px;max-width:430px}
+.lead .sub{font-size:18px;color:var(--ink-2);margin-bottom:0;max-width:430px}
 .timeline{position:relative;margin:0 0 32px;padding-left:30px}
 .timeline::before{content:"";position:absolute;left:8px;top:12px;bottom:12px;width:2px;background:var(--line-2);border-radius:2px}
 .tl{position:relative;padding-bottom:26px}
@@ -2115,25 +2111,12 @@ main h1{font-weight:800}
 <div class="wrap"><div class="layout">
 
   <div class="lead">
-    <span class="eyebrow"><span class="pip"></span>Your free consultation</span>
-    <p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number. Last step: 20 minutes with Damian.</p>
-    <script>(function(){if(/(?:^#|&)from=(?:pension-calculator|director-calculator|broker-vs-autoenrolment|pension-fees-calculator|my-pensions|state-pension-reality-check|state-pension-entitlement|standard-fund-threshold|pia)(?:&|$)/.test(location.hash||''))document.getElementById('pbFrom').hidden=false;})();</script>
     <script>/* Run 45: the tags a booking link on this site carries (assets/js/pb-cta.js), kept for the calendar (the script at the foot), then taken off the address, and nothing else with them, before any analytics could read them as a new campaign */(function(){var t={},keep=[],q=location.search.slice(1).split('&');q.forEach(function(p){if(!p)return;var k=p.split('=')[0];if(!/^utm_(source|medium|campaign|content|term)$/.test(k)){keep.push(p);return;}var v='';try{v=decodeURIComponent((p.split('=')[1]||'').replace(/\+/g,' '));}catch(e){return;}if(/^[A-Za-z0-9 _.-]{1,60}$/.test(v))t[k]=v;});window.pbBookTags=t;if(keep.length!==q.filter(Boolean).length&&window.history&&history.replaceState){try{history.replaceState(history.state,'',location.pathname+(keep.length?'?'+keep.join('&'):'')+location.hash);}catch(e){}}})();</script>
-    <h1>You've been meaning to sort the pension. Twenty minutes with Damian starts it.</h1>
-    <p class="sub">Twenty minutes with Damian, by phone or video, at a time you choose. Free, with no obligation.</p>
+    <h1>Book a call with us</h1>
+    <p class="sub">Free. 20 minutes. No obligation.</p>
   </div>
 
   <div class="book-card">
-    <div class="letterhead">
-      <span class="paw"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>
-      <span>Pensionbuddy · Appointments</span>
-    </div>
-
-    <div class="book-head">
-      <h2>Pick a time that suits. <span class="pb-soft">Then just your name and email.</span></h2>
-      <p>Damian's calendar is below. Calendly asks only for your name and email, and sends a confirmation straight away.</p>
-    </div>
-
     <div id="calStage">
     <div class="cal-embed" id="calEmbed"></div>
 
@@ -2143,31 +2126,6 @@ main h1{font-weight:800}
       <p>The live calendar could not load here. You can open it in a new tab instead.</p>
       <a class="btn btn-primary" id="calOpenBtn" href="https://calendly.com/damian-pensionbuddy/pensionbuddy-1-1" target="_blank" rel="noopener">Open the booking calendar <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
-    </div>
-    <p class="qnote">That is the lot. We do not ask what you earn, what your pension is worth, how old you are or who you work for: none of it is needed to book a chat, and this site gives information, not advice. Your name and email go to Calendly with the booking and are handled in line with our <a href="privacy.html">Privacy Notice</a>.</p>
-  </div>
-
-  <div class="lead-more">
-    <div class="timeline">
-      <div class="tl"><div class="tn">First</div><div class="tt">Pick a time that suits</div><div class="td">Choose a slot from Damian's calendar. It takes under a minute.</div></div>
-      <div class="tl"><div class="tn">Then</div><div class="tt">You get a confirmation</div><div class="td">Calendly emails you the details and a reminder before the call.</div></div>
-      <div class="tl"><div class="tn">After</div><div class="tt">Talk it through</div><div class="td">Plain English, your questions answered, and a clear sense of your next step.</div></div>
-    </div>
-
-    <div class="promise">
-      <div class="pt">The house promise</div>
-      <p>No jargon. No pressure. No obligation.</p>
-    </div>
-
-    <div class="assurances">
-      <div class="assure">
-        <span class="ai"><svg class="ico" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
-        <div><div class="at">Phone or video</div><div class="ad">Pick whichever you prefer when you book.</div></div>
-      </div>
-    </div>
-    <div class="pb-quals">
-      <p class="pb-quals-label" id="pbQualsBook">Damian&rsquo;s qualifications and memberships</p>
-      <ul class="pb-quals-list" aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
     </div>
   </div>
 
@@ -2370,7 +2328,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=224902a3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=c3d947a2"></script>
