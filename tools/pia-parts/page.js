@@ -74,6 +74,13 @@
         ? 'At a 0% rate there is no PIA tax at all. Try a rate: none has been announced.'
         : 'At the rate and threshold you chose, not announced figures.';
 
+    /* Job 5: each figure in today's money too (assets/js/pb-today.js) */
+    if (window.PBToday) {
+      PBToday.set('penOut', c.pension.afterTax, n); PBToday.set('etfOut', c.etf.afterTax, n);
+      if (has) { PBToday.set('piaOut', c.pia.afterTax, n); } else if ($('piaOutToday')) { $('piaOutToday').hidden = true; }
+      PBToday.cash(n);
+    }
+
     var say = 'Each costs you ' + euro(c.pension.paidIn) + ' from take-home pay over ' + years(n) + '. The pension gets ' +
       euro(c.pension.relief) + ' of tax relief going in and is taxed on the way out.';
     if (has && c.pia.taxDuring >= 0.5) say += ' The PIA pays ' + euro(c.pia.taxDuring) + ' in yearly tax at the figures you chose.';
@@ -119,6 +126,7 @@
   $('r40').addEventListener('click', function () { setTax(40); });
   $('piaThreshold').addEventListener('input', render);
 
+  if (window.PBToday) { PBToday.card(document.querySelector('.results .pb-warn')); PBToday.onChange(render); }
   P.wireRanges(VALTEXT, render);
   setTax(40);
 })();

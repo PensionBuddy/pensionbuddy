@@ -2606,6 +2606,52 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
+.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-today-v[hidden]{display:none}
+.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
+.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
+.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
+.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
+.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
+#chartKeyToday[hidden]{display:none}
+/* TODAY:END */
+/* JOB5:BEGIN (Job 5: the risk levels, the split, the reveal, the chart key) */
+.pb-risk-bars{display:flex;align-items:flex-end;gap:6px;height:30px;margin:12px 0 4px}
+.pb-risk-bars i{flex:1;background:var(--line-2);border-radius:3px 3px 0 0}
+.pb-risk-bars i.on{background:var(--slate)}
+.pb-risk-ends,.pb-split-ends{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3);margin-top:4px}
+.pb-risk .subnote b{font-weight:600;color:var(--ink)}
+.pb-risk-rule{font-weight:600}
+.pb-split .vs.pb-split-grid{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px;align-items:stretch}
+.pb-split .vs-col{padding:16px 12px;background:var(--surface-2)}
+.pb-split .vs-col .amt{font-size:clamp(20px,2.4vw,26px)}
+.pb-split .vs-split{margin-top:0;padding-top:0;border-top:0}
+.pb-split .vs-split-out{font-size:16px;margin:16px 0 0}
+.pb-steps-wrap{overflow-x:auto;margin-top:10px}
+.pb-steps{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.pb-steps th,.pb-steps td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.pb-steps th{font-size:12.5px;color:var(--ink-3);font-weight:600;white-space:normal}
+.pb-steps th:first-child,.pb-steps td:first-child{text-align:left}
+.pb-steps tr.on td{font-weight:700;background:var(--surface-2)}
+.pb-work ol{margin:10px 0 0;padding-left:20px;font-size:14px;line-height:1.6}
+.pb-steps-note{margin:8px 0 0;font-size:13px;color:var(--ink-3)}
+.max-card .pb-work{background:var(--surface)}
+.pb-wait-f{margin:6px 0 10px}
+.pb-sweep{grid-column:1/-1;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.pb-sweep i{display:block;height:100%;width:100%;background:var(--slate);transform-origin:left;transform:scaleX(1)}
+.pb-sweep i.pb-go{animation:pbSweep .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){.pb-sweep i.pb-go{animation:none}}
+.pb-chart-key{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;font-size:13px;color:var(--ink-2)}
+.pb-chart-key span{display:inline-flex;align-items:center;gap:6px}
+.pb-chart-key span[hidden]{display:none}
+.pb-chart-key i{display:inline-block;width:18px;height:0;border-top:3px solid var(--slate)}
+.pb-chart-key i.pb-k-today{border-top:2.5px dashed #8A97A8}
+.pb-chart-key i.pb-k-cash{border-top:2px dotted #B7791F}
+@media(max-width:380px){.pb-split .vs.pb-split-grid{grid-template-columns:1fr}}
+/* JOB5:END */
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2715,9 +2761,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48"></div>
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Retiring before your scheme&rsquo;s normal retirement age? Revenue&rsquo;s Pensions Manual, Chapter 9.6: &ldquo;Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.&rdquo;</p></div>
     <div class="field"><div class="row"><label for="sal">Your annual salary</label><span class="val" id="salV">€100,000</span></div><input type="range" id="sal" min="30000" max="1000000" step="5000" value="100000"></div>
+    <div class="field pb-risk" id="riskField"><div class="row"><label for="risk">Assumed yearly growth</label><span class="val" id="riskV">Level 4: 5% a year</span></div><input type="range" id="risk" min="1" max="7" step="1" value="4" aria-describedby="riskNote"><div class="pb-risk-bars" id="riskBars" aria-hidden="true"><i style="height:22%"></i><i style="height:35%"></i><i style="height:48%"></i><i style="height:61%" class="on"></i><i style="height:74%"></i><i style="height:87%"></i><i style="height:100%"></i></div><div class="pb-risk-ends" aria-hidden="true"><span>1 lowest risk</span><span>7 highest risk</span></div><p class="subnote" id="riskNote"><b id="riskHolds">About half shares, half bonds. Medium ups and downs.</b> <span id="riskRange">In a typical year: from a 3% fall to a 13% rise.</span></p><p class="subnote pb-risk-rule">Higher level, higher risk. It can rise more, and it can fall more.</p></div>
     <div class="field"><div class="row"><label for="pot">Pension built up so far</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
-    <div class="field"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"><p class="subnote">What the company would pay into your pension annually.</p></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"><p class="subnote">What the company would pay into your pension each year.</p></div>
   </div>
 
   <div class="results">
@@ -2731,58 +2777,73 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         </div>
         <span class="pb-safe-cap">Corporation tax saved</span>
       </div>
-      <p class="pb-say" id="pbSay">With €40,000 a year from the company, from 48 to 66, your pot could reach €1,511,849, and the company could save €90,000 in corporation tax.</p>
+      <div class="pb-sweep" aria-hidden="true"><i id="pbRevealBar"></i></div>
+      <p class="pb-say" id="pbSay">With €40,000 a year from the company from 48 to 66, your pot could reach €1,511,849. That is about €1,058,535 in today&rsquo;s money.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">Pension contributions are deductible for the company, as salary would be. The difference is what reaches you: routed through the pension, far more of the money stays working for your retirement.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>Corporation tax, 12.5% of each year’s contribution <b>€90,000</b></li></ul></details>
+    <details class="pb-work"><summary>How we worked this out</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
 
-    <div class="vs-card">
-      <h3>The same money, two ways</h3>
-      <p class="sub" id="vsSub">Your €40,000 company contribution, taken as salary instead.</p>
-      <div class="vs">
+    <div class="vs-card pb-split" id="splitCard">
+      <h3>Salary or pension: how to split it</h3>
+      <p class="sub" id="vsSub">Your €40,000 from the company, split between salary and your pension.</p>
+      <div class="vs-split">
+        <div class="vs-split-head"><label for="split">Into your pension</label><span class="vs-split-val" id="splitV">50%</span></div>
+        <input type="range" id="split" min="0" max="100" step="10" value="50" aria-valuetext="50% into your pension">
+        <div class="pb-split-ends" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <div class="vs pb-split-grid">
         <div class="vs-col vs-salary">
-          <div class="vt">Taken as salary</div>
-          <div class="amt" id="salaryNet" data-pb-wait>€0</div>
+          <div class="vt">Take home as salary, after tax</div>
+          <div class="amt" id="salaryNet">€9,530</div>
           <div class="lab" id="pbPrsiSalary">lands in your pocket after up to 52.35% in income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI), the rate from 1 October 2026 (52.2% before then)</div>
           <div class="pb-cut"><div class="pb-cut-bar" aria-hidden="true"><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.35%"></i></div>
           <p class="pb-cut-key"><span><i class="pb-cut-sw pb-cut-it"></i>40% income tax</span><span><i class="pb-cut-sw pb-cut-usc"></i>8% USC</span><span><i class="pb-cut-sw pb-cut-prsi"></i><b id="pbCutPrsiN">4.35%</b> PRSI</span></p></div>
         </div>
-        <div class="vsmark">vs</div>
         <div class="vs-col vs-pension">
           <div class="vt">Into your pension</div>
-          <div class="amt" id="pensionFull" data-pb-wait>€0</div>
-          <div class="lab" id="pensionLab">goes to work for your retirement, in full</div>
+          <div class="amt" id="pensionFull">€20,000</div>
+          <div class="lab" id="pensionLab">goes into your pension in full</div>
+        </div>
+        <div class="vs-col pb-split-tax">
+          <div class="vt">Tax saved</div>
+          <div class="amt" id="taxNow">€10,470</div>
+          <div class="lab">income tax, USC and PRSI not paid now on the part in your pension. A pension is taxed when you take it.</div>
+        </div>
+        <div class="vs-col pb-split-co">
+          <div class="vt">Company tax effect</div>
+          <div class="amt" id="ctNow">€5,000</div>
+          <div class="lab">less corporation tax this year, the same at every step: salary and pension payments are both a cost the company can deduct</div>
         </div>
       </div>
-      <div class="vs-split">
-        <div class="vs-split-head"><label for="split">Or split it between the two</label><span class="vs-split-val" id="splitV">half and half</span></div>
-        <input type="range" id="split" min="0" max="100" step="5" value="50" aria-valuetext="half into the pension">
-        <p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€9,530</b> in your pocket. €20,000 into the pension is <b>€20,000</b> for your retirement.</p>
-      </div>
-      <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
+      <p class="vs-split-out" id="splitOut">Put 50% in your pension: you keep <b>€9,530</b> now, your pension gets <b>€20,000</b>.</p>
+      <details class="pb-work pb-split-all"><summary>See every step, 0% to 100%</summary><div class="pb-steps-wrap"><table class="pb-steps" id="splitSteps"><thead><tr><th scope="col">Share in your pension</th><th scope="col">Take home</th><th scope="col">Into your pension</th><th scope="col">Tax saved</th><th scope="col">Company tax</th></tr></thead><tbody><tr><td>0%</td><td>€19,060</td><td>€0</td><td>€0</td><td>€5,000</td></tr><tr><td>10%</td><td>€17,154</td><td>€4,000</td><td>€2,094</td><td>€5,000</td></tr><tr><td>20%</td><td>€15,248</td><td>€8,000</td><td>€4,188</td><td>€5,000</td></tr><tr><td>30%</td><td>€13,342</td><td>€12,000</td><td>€6,282</td><td>€5,000</td></tr><tr><td>40%</td><td>€11,436</td><td>€16,000</td><td>€8,376</td><td>€5,000</td></tr><tr class="on"><td>50%</td><td>€9,530</td><td>€20,000</td><td>€10,470</td><td>€5,000</td></tr><tr><td>60%</td><td>€7,624</td><td>€24,000</td><td>€12,564</td><td>€5,000</td></tr><tr><td>70%</td><td>€5,718</td><td>€28,000</td><td>€14,658</td><td>€5,000</td></tr><tr><td>80%</td><td>€3,812</td><td>€32,000</td><td>€16,752</td><td>€5,000</td></tr><tr><td>90%</td><td>€1,906</td><td>€36,000</td><td>€18,846</td><td>€5,000</td></tr><tr><td>100%</td><td>€0</td><td>€40,000</td><td>€20,940</td><td>€5,000</td></tr></tbody></table></div></details>
+      <details class="pb-work"><summary>How we worked this out</summary><ol id="splitWork"><li>The company pays out €40,000 either way.</li><li>Into your pension: 50% of €40,000 = <b>€20,000</b>. It goes in whole.</li><li>As salary: the other €20,000. Income tax 40%, USC 8% and PRSI 4.35% take 52.35%, so you keep 47.65% = <b>€9,530</b>.</li><li>Tax saved: 52.35% of the €20,000 in your pension = <b>€10,470</b>, not paid now.</li><li>Company tax: salary and pension payments are both costs the company can deduct, so it saves 12.5% of €40,000 = <b>€5,000</b> either way.</li></ol><p class="pb-steps-note">Left out: employer PRSI on salary, the lower tax and USC bands, and tax on the pension when you take it.</p></details>
     </div>
 
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
+      <div class="field pb-wait-f"><div class="row"><label for="waitYears">Start the company payments</label><span class="val" id="waitYearsV">in 1 year</span></div><input type="range" id="waitYears" min="1" max="10" step="1" value="1"></div>
       <div class="wtext" id="waitOut">Move the sliders to see it.</div>
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
       <div id="chart"></div>
+      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span><span><i class="pb-k-cash"></i>The same payments kept as cash, in today&rsquo;s money</span></p>
     </div>
 
     <div class="max-card">
       <div class="mt">Roughly what you could aim for</div>
-      <div class="mbig" id="maxOut">Move the sliders to see your funding target.</div>
-      <div class="mnote">Revenue lets you fund towards a pension of up to two-thirds of salary (with sufficient service). The maximum your company can actually contribute each year is set by an actuarial funding calculation based on your age, salary, service and existing benefits. For older directors it can run well into six figures. A Standard Fund Threshold also caps the total fund that gets full tax relief. Damian will work out your exact figures.</div>
+      <div class="mbig" id="maxOut">A pension of up to about <b>€66,667 a year</b>, two-thirds of your salary.</div>
+      <details class="pb-work"><summary>How we worked this out</summary><ol id="maxWork"><li>Your salary: <b>€100,000</b>.</li><li>Revenue&rsquo;s limit: a pension of up to two-thirds of your salary, if you have enough years with the company.</li><li>€100,000 &times; 2 &divide; 3 = <b>€66,667 a year</b>.</li><li>How much the company can pay in each year to fund that needs an actuary&rsquo;s calculation. It uses your age, your years with the company and the pensions you have already. This page does not do that step.</li></ol></details>
+      <div class="mnote">A Standard Fund Threshold also caps the total fund that gets full tax relief.</div>
     </div>
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: your company&rsquo;s exact funding limit, product charges, inflation.</p>
+    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: your company&rsquo;s exact funding limit, product charges.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="director-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <p class="pb-after-why">Free. No obligation. No pressure.</p>
@@ -2808,13 +2869,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Director funding is where the big wins are.</h2><p>The numbers above are illustrations. Your exact funding limit and tax saving need a proper calculation, and Damian does this for directors all the time. Free 20-minute call, no pitch.</p></div>
-  <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
-</div></div></div>
-
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
@@ -2829,7 +2883,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.</li>
     <li>Pension benefits are taxed when drawn, though up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
     <li>Maximum funding (up to two-thirds of salary) requires sufficient service and an actuarial calculation. This tool does not perform that calculation.</li>
-    <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures here are not adjusted for inflation and ignore product charges.</li>
+    <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Product charges are left out.</li>
+    <li>Growth: each risk level is a mix of shares, bonds and cash that we chose for illustration. It is not a fund. Its rate uses the most a pension projection may assume for each, before charges: shares 6.65%, bonds 3.40%, cash 2.65%, and no more than 6% in all (the Pensions Authority, projection assumptions guidance, version 1.2, from 1 January 2025). The range for a typical year uses the EU&rsquo;s 1 to 7 risk scale for funds (CESR/10-673).</li>
+    <li>Today&rsquo;s money: prices are assumed to rise 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland).</li>
+    <li>The salary and pension split leaves out employer PRSI on salary and the lower income tax and USC bands.</li>
     <li>This tool provides general information, not financial, tax or pension advice. For advice on your circumstances, speak to Damian.</li>
   </ul>
 </div></section>
@@ -2861,6 +2918,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
+<script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
+<script src="assets/js/director-calc.js?v=9a107886"></script>
+<script src="assets/js/pb-today.js?v=067d5550"></script>
 <script src="assets/js/pb-prsi.js?v=fc12215a"></script>
 <script src="assets/js/pb-forms.js?v=79c2c407"></script>
 <script>
@@ -2880,7 +2940,6 @@ const euroK=v=>{return v>=1000?'€'+(Math.round(v/1000)).toLocaleString('en-IE'
    without JavaScript. */
 var PRSI_NOW = PBPrsi.at(new Date());
 var PRSI = PRSI_NOW.rate;
-var TAKE_HOME = 1 - (0.40 + 0.08 + PRSI);
 /* #21: the PRSI part of the three-part bar under "Taken as salary" */
 (function () {
   var f = document.getElementById('pbCutPrsi'), n = document.getElementById('pbCutPrsiN');
@@ -2890,11 +2949,11 @@ var TAKE_HOME = 1 - (0.40 + 0.08 + PRSI);
 })();
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 
-function project(months,startPot,monthly,mRate){
-  const grownPot=startPot*Math.pow(1+mRate,months);
-  const grownContrib=mRate>0?monthly*((Math.pow(1+mRate,months)-1)/mRate):monthly*months;
-  return grownPot+grownContrib;
-}
+/* Job 5: the arithmetic is assets/js/director-calc.js (PBDirector), the rates
+   assets/js/pb-assumptions.js (PBAssume), today's money assets/js/pb-today.js
+   (PBToday). This script reads the sliders and writes what they give. */
+const D=window.PBDirector, A=window.PBAssume;
+const project=D.project;
 
 /* smooth display engine */
 const anims={};let rafId=null;
@@ -2913,10 +2972,12 @@ function step(){
   rafId=active?requestAnimationFrame(step):null;
 }
 
-/* persistent morphing chart (single series) */
+/* persistent morphing chart: the pot, the pot in today's money, and the same
+   payments kept as cash in today's money. Only the pot's line is drawn in the
+   colours the slate rules select (tests/build.test.py check 47). */
 const chart={
   N:48,inited:false,W:620,H:250,padL:6,padR:6,padT:14,padB:30,
-  cur:{v:[],max:1},tgt:{v:[],max:1},els:{},
+  cur:{v:[],t:[],c:[],max:1},tgt:{v:[],t:[],c:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -2928,50 +2989,77 @@ const chart={
     const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.line=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
+    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
+    this.els.cash=mk('path',{class:'pb-ch-cash',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-dasharray':'2 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(v,ageS,ageE){
+  setTarget(v,t,c,ageS,ageE){
     if(!this.inited)this.init();
-    this.tgt.v=v;this.tgt.max=Math.max(...v,1)*1.08;
+    this.tgt.v=v;this.tgt.t=t;this.tgt.c=c;this.tgt.max=Math.max(...v,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),t:t.slice(),c:c.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
     if(!this.inited)return false;
     let active=false;
-    for(let i=0;i<this.tgt.v.length;i++){const d=this.tgt.v[i]-this.cur.v[i];
-      if(Math.abs(d)>Math.max(0.5,Math.abs(this.tgt.v[i])*0.0004)){this.cur.v[i]+=d*f;active=true;}else this.cur.v[i]=this.tgt.v[i];}
+    for(const k of ['v','t','c']){const T=this.tgt[k],C=this.cur[k];
+      for(let i=0;i<T.length;i++){const d=T[i]-C[i];
+        if(Math.abs(d)>Math.max(0.5,Math.abs(T[i])*0.0004)){C[i]+=d*f;active=true;}else C[i]=T[i];}}
     const dm=this.tgt.max-this.cur.max;
     if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
     this.render();return active;
   },
-  render(){
-    const n=this.cur.v.length;if(!n)return;
-    const max=this.cur.max;
+  path(vals){
+    const n=vals.length,max=this.cur.max;
     const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
     const Y=v=>this.padT+(1-v/max)*(this.H-this.padT-this.padB);
-    let d='M '+X(0)+' '+Y(this.cur.v[0]).toFixed(1);
-    for(let i=1;i<n;i++)d+=' L '+X(i).toFixed(1)+' '+Y(this.cur.v[i]).toFixed(1);
+    let d='M '+X(0)+' '+Y(vals[0]).toFixed(1);
+    for(let i=1;i<n;i++)d+=' L '+X(i).toFixed(1)+' '+Y(vals[i]).toFixed(1);
+    return d;
+  },
+  render(){
+    const n=this.cur.v.length;if(!n)return;
+    const d=this.path(this.cur.v);
+    const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
     this.els.line.setAttribute('d',d);
     this.els.area.setAttribute('d',d+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0).toFixed(1)+' '+(this.H-this.padB)+' Z');
-    this.els.mx.textContent=euroK(max);
+    const on=!window.PBToday||PBToday.on();
+    this.els.today.setAttribute('d',on?this.path(this.cur.t):'');
+    this.els.cash.setAttribute('d',this.path(this.cur.c));
+    this.els.mx.textContent=euroK(this.cur.max);
   }
 };
 
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "level 4"), not the raw number.
    Salary, pot and contribution have no wording of their own and take paintSlider's euro fallback. */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%',
-  split:v=>v===0?'all as salary':v===100?'all into the pension':v===50?'half into the pension':v+'% into the pension'};
+const riskWords=v=>{const L=A.level(v);return 'Level '+L.level+': '+A.pct(L.rate)+' a year';};
+const VALTEXT={age:v=>v+' years',ret:v=>v+' years',risk:v=>riskWords(v)+', '+A.level(v).holds,
+  split:v=>v+'% into your pension',waitYears:v=>'in '+v+(+v===1?' year':' years')};
 const paint=el=>paintSlider(el,VALTEXT);
 
-/* the maths (unchanged) */
+/* a typical year, in words: "from a 3% fall to a 13% rise" */
+function rangeWords(L){
+  const lo=Math.round(L.low*100),hi=Math.round(L.high*100);
+  return lo<0?'In a typical year: from a '+(-lo)+'% fall to a '+hi+'% rise.':'In a typical year: from '+lo+'% to '+hi+'% growth.';
+}
+
+/* the short reveal: a bar sweeps under the figures each time they settle on
+   a new answer. It holds no words, and the sentence is never held back. */
+let revealT=null;
+function reveal(){
+  const b=$('pbRevealBar');if(!b||REDUCE)return;
+  clearTimeout(revealT);
+  revealT=setTimeout(()=>{b.classList.remove('pb-go');void b.offsetWidth;b.classList.add('pb-go');},260);
+}
+
 function calc(){
   let age=+$('age').value, ret=+$('ret').value;
-  const sal=+$('sal').value, pot=+$('pot').value, contrib=+$('contrib').value, g=+$('growth').value;
+  const sal=+$('sal').value, pot=+$('pot').value, contrib=+$('contrib').value;
+  const L=A.level(+$('risk').value), g=L.rate;
   /* Run 29: never below 50, the earliest age Revenue allows benefits other
      than on ill health (Pensions Manual 9.1); the slider's own min="50" was
      being replaced by age + 1, which let a 25-year-old retire at 26 */
@@ -2984,79 +3072,100 @@ function calc(){
   $('salV').textContent=euro(sal);
   $('potV').textContent=euro(pot);
   $('contribV').textContent=euro(contrib);
-  $('growthV').textContent=g+'%';
+  $('riskV').textContent=riskWords(L.level);
+  $('riskHolds').textContent=L.holds;
+  $('riskRange').textContent=rangeWords(L);
+  [].forEach.call($('riskBars').children,(b,i)=>b.classList.toggle('on',i===L.level-1));
 
   const yearsToRet=ret-age;
   const months=yearsToRet*12;
-  const mRate=Math.pow(1+g/100,1/12)-1;
+  const mRate=D.monthlyRate(g);
   const monthly=contrib/12;
   const p018=project(months,pot,monthly,mRate);
+  const p018Today=A.today(p018,yearsToRet);
   tween('potOut',p018,euro);
+  if(window.PBToday){PBToday.set('potOut',p018,yearsToRet);PBToday.cash(yearsToRet);}
 
-
-  /* cost of waiting: one year of company contributions not made */
-  if(months>12){
-    const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
-    const gap=Math.max(0,p018-later);
-    $('waitOut').innerHTML='Leave it another twelve months and the fund lands roughly <b>'+euro(gap)+'</b> lower. That is one year of company contributions, and the growth they would have earned.';
+  /* the cost of waiting: the company payments start later, the pot already
+     there still grows. Only the gap is printed, in today's money, so the pot
+     stays a guess for "Take a guess first". */
+  const wy=+$('waitYears').value;
+  $('waitYearsV').textContent=VALTEXT.waitYears(wy);
+  if(contrib>0&&yearsToRet>wy){
+    const w=D.waiting({pot:pot,yearly:contrib,years:yearsToRet,delay:wy,rate:g,today:A.today});
+    $('waitOut').innerHTML='Start the payments '+VALTEXT.waitYears(wy)+' instead of now, and your pot at '+ret+
+      ' could be about <b>'+euro(w.gapToday)+'</b> lower, in today&rsquo;s money. That is the payments not made, and the growth they would have earned.';
+  }else if(contrib>0){
+    $('waitOut').innerHTML='With '+yearsToRet+(yearsToRet===1?' year':' years')+' to go, a wait that long leaves no time for payments.';
   }else{
-    $('waitOut').innerHTML='With less than a year to go, the questions worth asking are about drawdown rather than funding.';
+    $('waitOut').innerHTML='With no company payments, there is nothing to wait for. Move the company payment slider to see it.';
   }
-  const taxSaved=contrib*0.125*yearsToRet;
+  const taxSaved=D.companyTax(contrib,yearsToRet);
   tween('taxOut',taxSaved,euro);
-  /* #4: the two figures above as one sentence. Written from the same final
-     values the tweens are aimed at, never the in-between ones, so it cannot
-     disagree with them once they land. Nothing new is worked out here. The
-     markup carries this sentence at the page's defaults for readers without
+  /* #4: the figures above as plain sentences. Written from the same final
+     values the tweens are aimed at, never the in-between ones. The markup
+     carries this sentence at the page's defaults for readers without
      script, and assets/js/pb-guess.js veils it with the pot it repeats. */
-  /* #29: the workings, from the same values */
   const paidIn=contrib*yearsToRet, grown=p018-pot-paidIn;
   $('pbWork').innerHTML='<li>Paid in by the company, '+euro(contrib)+' a year to '+ret+' <b>'+euro(paidIn)+'</b></li>'+
     '<li>Built up already <b>'+euro(pot)+'</b></li>'+
-    '<li>Growth at '+g+'% a year <b>'+euro(grown)+'</b></li>'+
+    '<li>Growth at '+A.pct(g)+' a year <b>'+euro(grown)+'</b></li>'+
     '<li>Your pot at '+ret+' <b>'+euro(p018)+'</b></li>'+
-    '<li>Corporation tax, 12.5% of each year&rsquo;s contribution <b>'+euro(taxSaved)+'</b></li>';
-  $('pbSay').textContent=contrib>0
-    ?'With '+euro(contrib)+' a year from the company, from '+age+' to '+ret+', your pot could reach '+
-     euro(p018)+', and the company could save '+euro(taxSaved)+' in corporation tax.'
+    '<li>In today&rsquo;s money, prices rising '+A.inflation.pct+' a year for '+yearsToRet+' years <b>'+euro(p018Today)+'</b></li>'+
+    '<li>Company tax: '+euro(contrib)+' &times; 12.5% = '+euro(contrib*D.CT)+' a year, for '+yearsToRet+' years <b>'+euro(taxSaved)+'</b></li>';
+  $('pbSay').innerHTML=contrib>0
+    ?'With '+euro(contrib)+' a year from the company from '+age+' to '+ret+', your pot could reach '+
+     euro(p018)+'. That is about '+euro(p018Today)+' in today&rsquo;s money.'
     :pot>0
-      ?'With no company contribution, from '+age+' to '+ret+', your pot could reach '+euro(p018)+
-       ', and there is no corporation tax to save.'
-      :'With no company contribution and nothing built up so far, there is no pot to grow from '+age+
-       ' to '+ret+', and no corporation tax to save.';
+      ?'With no company payments, from '+age+' to '+ret+', your pot could reach '+euro(p018)+
+       '. That is about '+euro(p018Today)+' in today&rsquo;s money.'
+      :'With no company payments and nothing built up so far, there is no pot to grow from '+age+' to '+ret+'.';
 
-  const salaryNet=contrib*TAKE_HOME;
-  tween('salaryNet',salaryNet,euro);
-  tween('pensionFull',contrib,euro);
-  $('vsSub').textContent='Your €'+contrib.toLocaleString('en-IE')+' company contribution, taken as salary instead.';
+  /* the split: the main control. Every step from 0% to 100% is the same
+     arithmetic (PBDirector.split): the part in the pension goes in whole,
+     the part taken as salary loses income tax, USC and PRSI. No split is
+     recommended and none is marked. */
+  const splitPct=+$('split').value, S=D.split(contrib,splitPct,PRSI);
+  tween('salaryNet',S.takeHome,euro);
+  tween('pensionFull',S.toPension,euro);
+  tween('taxNow',S.taxSaved,euro);
+  tween('ctNow',S.companyTax,euro);
+  $('splitV').textContent=splitPct+'%';
+  $('vsSub').textContent='Your '+euro(contrib)+' from the company, split between salary and your pension.';
+  $('splitOut').innerHTML='Put '+splitPct+'% in your pension: you keep <b>'+euro(S.takeHome)+'</b> now, your pension gets <b>'+euro(S.toPension)+'</b>.';
+  $('splitSteps').tBodies[0].innerHTML=D.steps(contrib,PRSI).map(r=>'<tr'+(r.pct===splitPct?' class="on"':'')+'><td>'+r.pct+'%</td><td>'+
+    euro(r.takeHome)+'</td><td>'+euro(r.toPension)+'</td><td>'+euro(r.taxSaved)+'</td><td>'+euro(r.companyTax)+'</td></tr>').join('');
+  const cut=((D.INCOME_TAX+D.USC+PRSI)*100).toFixed(2).replace(/0$/,''), keep=(D.keepRate(PRSI)*100).toFixed(2).replace(/0$/,'');
+  $('splitWork').innerHTML='<li>The company pays out '+euro(contrib)+' either way.</li>'+
+    '<li>Into your pension: '+splitPct+'% of '+euro(contrib)+' = <b>'+euro(S.toPension)+'</b>. It goes in whole.</li>'+
+    '<li>As salary: the other '+euro(S.asSalary)+'. Income tax 40%, USC 8% and PRSI '+PRSI_NOW.pct+' take '+cut+'%, so you keep '+keep+'% = <b>'+euro(S.takeHome)+'</b>.</li>'+
+    '<li>Tax saved: '+cut+'% of the '+euro(S.toPension)+' in your pension = <b>'+euro(S.taxSaved)+'</b>, not paid now.</li>'+
+    '<li>Company tax: salary and pension payments are both costs the company can deduct, so it saves 12.5% of '+euro(contrib)+' = <b>'+euro(S.companyTax)+'</b> either way.</li>';
 
-  /* The two columns above are the two ends: all of it as salary, all of it
-     into the pension. This is the line between them, at whatever split the
-     reader drags to. It is the same two rates the columns use, 48p in the
-     pocket for salary and the whole euro for the pension, applied to a part
-     rather than the whole, so nothing new is being worked out here. No split
-     is recommended and none is marked: the reader is shown what each one
-     does, which is what the rest of the card does too. */
-  const splitPct=+$('split').value;
-  const toPension=contrib*splitPct/100, asSalary=contrib-toPension;
-  $('splitV').textContent=VALTEXT.split(splitPct);
-  $('splitOut').innerHTML=euro(asSalary)+' as salary is <b>'+euro(asSalary*TAKE_HOME)+
-    '</b> in your pocket. '+euro(toPension)+' into the pension is <b>'+euro(toPension)+
-    '</b> for your retirement.';
+  /* the funding limit, and how it was worked out */
+  const F=D.funding(sal);
+  $('maxOut').innerHTML='A pension of up to about <b>'+euro(F.pension)+' a year</b>, two-thirds of your salary.';
+  $('maxWork').innerHTML='<li>Your salary: <b>'+euro(sal)+'</b>.</li>'+
+    '<li>Revenue&rsquo;s limit: a pension of up to two-thirds of your salary, if you have enough years with the company.</li>'+
+    '<li>'+euro(sal)+' &times; 2 &divide; 3 = <b>'+euro(F.pension)+' a year</b>.</li>'+
+    '<li>How much the company can pay in each year to fund that needs an actuary&rsquo;s calculation. It uses your age, your years with the company and the pensions you have already. This page does not do that step.</li>';
 
-  const maxPension=sal*(2/3);
-  $('maxOut').innerHTML='A pension of up to about <b>'+euro(maxPension)+' a year</b>, two-thirds of your salary.';
-
-  const v=[];
-  for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);v.push(project(m,pot,monthly,mRate));}
-  chart.setTarget(v,age,ret);
-  ['age','ret','sal','pot','contrib','growth','split'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
+  const v=[],t=[],c=[],cm=D.monthlyRate(A.cash.rate);
+  for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);
+    const pv=project(m,pot,monthly,mRate);v.push(pv);t.push(A.today(pv,m/12));
+    c.push(A.today(project(m,pot,monthly,cm),m/12));}
+  chart.setTarget(v,t,c,age,ret);
+  $('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
+  ['age','ret','sal','pot','contrib','risk','split','waitYears'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=p018>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
+  reveal();
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  announce('Projected pot at retirement '+euro(p018)+'. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
+  announce('Projected pot at retirement '+euro(p018)+', about '+euro(p018Today)+' in today’s money. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
+
+if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();});}
 
 wireRanges(VALTEXT,calc);
 calc();
@@ -3271,7 +3380,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=224902a3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3309,7 +3418,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','sal','contrib'];   /* primary controls: ids on THIS page (salary slider is #sal) */
+  var KEEP = ['age','ret','sal','risk','pot','contrib'];   /* primary controls: ids on THIS page (salary slider is #sal) */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 
@@ -3372,11 +3481,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=988458d5"></script>
+<script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-assumptions.js?v=e7a47a69"></script>
-<script src="assets/js/pb-after.js?v=5614c03f"></script>
+<script src="assets/js/pb-after.js?v=325ae755"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

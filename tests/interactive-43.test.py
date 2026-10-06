@@ -588,7 +588,8 @@ def check_fees(sid, r, nojs):
         eq('F4 %s: the spoken label names the red area' % sid,
            label.endswith(' The red area is what your plan’s charges take: €58,754 by retirement.'), True)
         eq('F4 %s: its figure is #costA' % sid, cost, '€58,754')
-    eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [4, 'What your plan’s charges take', GAP])
+    # Job 5: a fifth item follows it, "Your plan in today's money"
+    eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [5, 'What your plan’s charges take', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])
     if SCEN[sid][1] == 500:
         # the plan said "the chart under 140px tall"; at 500 the whole chart is 600:250 of its

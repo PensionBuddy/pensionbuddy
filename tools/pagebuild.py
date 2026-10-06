@@ -1108,8 +1108,8 @@ def warn_drift(sources):
 # "Topics to discuss, not advice."
 # ============================================================================
 AFTER = {  # page: (its name for #from= and the events, what it does not show or None, the email offer)
-    'pension-calculator.html': ('pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', True),
-    'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges, inflation.', True),
+    'pension-calculator.html': ('pension-calculator', 'product charges, the tax on your income when you draw it.', True),
+    'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges.', True),
     'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', True),
     'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', True),
     'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),

@@ -47,7 +47,7 @@
   var calc = after.getAttribute('data-pb-from') || '';
   var link = after.querySelector('a[href^="booking.html"]');
   var root = document.documentElement, moved = false, armed = 0, completed = false;
-  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin';
+  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin, .pb-today';
 
   function track(name, fields) {
     if (window.PBCta) { window.PBCta.track(name, fields); } else if (window.PBTrack) { window.PBTrack(name, fields); }
@@ -168,7 +168,7 @@
       labels: { potOut: 'Your pension pot when you stop work', taxOut: 'Company tax saved, all years added up' },
       you: { age: 'Your age now', ret: 'Age you stop work', sal: 'Your salary in a year' },
       pension: { pot: 'Saved in your pension so far', contrib: 'Your company pays in each year', split: 'Share of that money put in your pension' },
-      assume: { risk: 'Risk level', growth: 'Growth each year' } },
+      assume: { risk: 'Growth each year, at this risk level (1 lowest, 7 highest)' } },
     'broker-vs-autoenrolment': { head: 'aeTotal', more: ['ppTotal'],
       labels: { aeTotal: 'Paid into your pension in one year, auto-enrolment', ppTotal: 'Paid into your pension in one year, your own pension' },
       you: { age: 'Your age now', salary: 'Your salary in a year' },

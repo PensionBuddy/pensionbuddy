@@ -2472,6 +2472,17 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
+.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-today-v[hidden]{display:none}
+.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
+.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
+.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
+.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
+.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
+#chartKeyToday[hidden]{display:none}
+/* TODAY:END */
 </style>
 <script>
 /* pb-guess: blur the headline cells before the first paint on the pages that
@@ -2630,7 +2641,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span></div>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Your plan in today&rsquo;s money</span></div>
       <div id="chart"></div>
     </div>
     <div class="relief-card">
@@ -2660,7 +2671,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: product charges, inflation, the tax on your income when you draw it.</p>
+    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: product charges, the tax on your income when you draw it.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="pension-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <p class="pb-after-why">Free. No obligation. No pressure.</p>
@@ -2706,7 +2717,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
     <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
     <li>Tax relief is shown at the rate you select, on your own contributions only, and is limited to Revenue's age-related percentage of your earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation.</li>
-    <li>Figures are not adjusted for inflation and ignore product charges, which will reduce returns. They are not a guarantee of any outcome.</li>
+    <li>The main figures are not adjusted for inflation. The line under each gives it in today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Product charges are left out, and would reduce returns. None of this is a guarantee of any outcome.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, €15,564 a year for a full entitlement. Check gov.ie for the current rate.</li>
     <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
   </ul>
@@ -2744,6 +2755,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
+<script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
+<script src="assets/js/pb-today.js?v=067d5550"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=79c2c407"></script>
 <script>
@@ -2788,7 +2801,7 @@ function step(){
 /* ---- persistent morphing chart ---- */
 const chart={
   N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
-  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
+  cur:{b:[],u:[],t:[],max:1},tgt:{b:[],u:[],t:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -2801,16 +2814,18 @@ const chart={
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
     this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
+    /* Job 5: the plan in today's money (assets/js/pb-today.js) */
+    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(b,u,ageS,ageE){
+  setTarget(b,u,ageS,ageE,t){
     if(!this.inited)this.init();
-    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
+    this.tgt.b=b;this.tgt.u=u;this.tgt.t=t||[];this.tgt.max=Math.max(...u,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),t:this.tgt.t.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
@@ -2818,7 +2833,7 @@ const chart={
     let active=false;
     const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
       if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
-    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
+    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);L(this.cur.t,this.tgt.t);
     const dm=this.tgt.max-this.cur.max;
     if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
     this.render();return active;
@@ -2834,6 +2849,10 @@ const chart={
     for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
     this.els.base.setAttribute('d',dB);
     this.els.boost.setAttribute('d',dU);
+    let dT='';
+    if(this.cur.t.length===n&&(!window.PBToday||PBToday.on())){dT='M '+X(0)+' '+Y(this.cur.t[0]).toFixed(1);
+      for(let i=1;i<n;i++)dT+=' L '+X(i).toFixed(1)+' '+Y(this.cur.t[i]).toFixed(1);}
+    this.els.today.setAttribute('d',dT);
     this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
     this.els.mx.textContent=euro(max);
   }
@@ -2873,6 +2892,7 @@ function calc(){
 
   tween('potOut',base,euro);
   tween('incOut',base*0.04/12,euro);
+  if(window.PBToday){PBToday.set('potOut',base,ret-age);PBToday.set('incOut',base*0.04/12,ret-age);PBToday.cash(ret-age);}
   /* #4: the two figures above as one sentence. Written from the same final
      values the tweens are aimed at, never the in-between ones, so it cannot
      disagree with them once they land. Nothing new is worked out here. The
@@ -2949,13 +2969,15 @@ function calc(){
   const diffInc=diffPot*0.04/12;
   $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
 
-  const b=[],u=[];
+  const b=[],u=[],t=[];
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
+    t.push(window.PBAssume?PBAssume.today(b[i],m/12):b[i]);
   }
-  chart.setTarget(b,u,age,ret);
+  chart.setTarget(b,u,age,ret,t);
+  if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
   ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=base>SFT, sftNote=$('sftNote');
@@ -2974,6 +2996,7 @@ function calc(){
   var r=$('mine'),v=+m[1];
   if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
 })();
+if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();});}
 wireRanges(VALTEXT,calc);
 calc();
 
@@ -3188,7 +3211,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=224902a3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3289,11 +3312,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=988458d5"></script>
+<script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-assumptions.js?v=e7a47a69"></script>
-<script src="assets/js/pb-after.js?v=5614c03f"></script>
+<script src="assets/js/pb-after.js?v=325ae755"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

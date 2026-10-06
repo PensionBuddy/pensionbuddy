@@ -513,7 +513,8 @@ def run():
         if '<b id="pbCutPrsiN">%s</b> PRSI' % latest['pct'] not in calc:
             out.append(('director-calculator.html', 'key label'))
         split = round(20000 * (1 - (0.40 + 0.08 + latest['rate'])) + 1e-9)
-        if '<p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€{:,}</b> in your pocket.'.format(split) not in calc:
+        # Job 5: the split's sentence, at its default of 50% of €40,000
+        if '<p class="vs-split-out" id="splitOut">Put 50% in your pension: you keep <b>€{:,}</b> now'.format(split) not in calc:
             out.append(('director-calculator.html', 'split line'))
         if not words or '<div class="lab" id="pbPrsiSalary">%s</div>' % words.get('salary') not in calc:
             out.append(('director-calculator.html', 'salary sentence'))
@@ -540,7 +541,7 @@ def run():
     for label, page, find, repl, want in (
             ('the key bar at the old rate', 'director-calculator.html', 'style="width:%s"' % latest['pct'], 'style="width:4.2%"', 'key bar'),
             ('the key label at the old rate', 'director-calculator.html', '<b id="pbCutPrsiN">%s</b>' % latest['pct'], '<b id="pbCutPrsiN">4.2%</b>', 'key label'),
-            ('the split line at the old figure', 'director-calculator.html', 'is <b>€9,530</b> in your pocket', 'is <b>€9,560</b> in your pocket', 'split line'),
+            ('the split line at the old figure', 'director-calculator.html', 'you keep <b>€9,530</b> now', 'you keep <b>€9,560</b> now', 'split line'),
             ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
             ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
             ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script'),

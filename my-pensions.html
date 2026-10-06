@@ -2284,6 +2284,17 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
+.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-today-v[hidden]{display:none}
+.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
+.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
+.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
+.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
+.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
+#chartKeyToday[hidden]{display:none}
+/* TODAY:END */
 
 /* ============================================================
    ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
@@ -2531,6 +2542,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-wordmark" aria-hidden="true">Pensionbuddy</div>
 </div></footer>
 
+<script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
+<script src="assets/js/pb-today.js?v=067d5550"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=79c2c407"></script>
 <script src="assets/js/pots.js?v=a8ee780f"></script>
@@ -2872,7 +2885,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=224902a3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -2975,11 +2988,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=988458d5"></script>
+<script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-assumptions.js?v=e7a47a69"></script>
-<script src="assets/js/pb-after.js?v=5614c03f"></script>
+<script src="assets/js/pb-after.js?v=325ae755"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

@@ -83,8 +83,8 @@ const WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means
 const WHY = 'Free. No obligation. No pressure.';
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {
-  'pension-calculator.html': ['pension-calculator', 'product charges, inflation, the tax on your income when you draw it.', true],
-  'director-calculator.html': ['director-calculator', `your company${RSQ}s exact funding limit, product charges, inflation.`, true],
+  'pension-calculator.html': ['pension-calculator', 'product charges, the tax on your income when you draw it.', true],
+  'director-calculator.html': ['director-calculator', `your company${RSQ}s exact funding limit, product charges.`, true],
   'broker-vs-autoenrolment.html': ['broker-vs-autoenrolment', `your old pensions, product charges, your employer${RSQ}s own scheme.`, true],
   'pension-fees-calculator.html': ['pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', true],
   'state-pension-reality-check.html': ['state-pension-reality-check', `your old pensions, your tax position, your employer${RSQ}s scheme.`, true],

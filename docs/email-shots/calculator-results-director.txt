@@ -20,10 +20,10 @@ Your salary in a year: €100,000
 Your pension
 Saved in your pension so far: €150,000
 Your company pays in each year: €40,000
-Share of that money put in your pension: half into the pension
+Share of that money put in your pension: 50%
 
 Assumptions
-Growth each year: 5%
+Growth each year, at this risk level (1 lowest, 7 highest): Level 4: 5% a year
 Prices rise each year (inflation): 2%
 
 WHAT THIS MEANS

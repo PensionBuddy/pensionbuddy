@@ -271,7 +271,8 @@
 
   function applyVeil() {
     var wanted, i, el;
-    wanted = view.veil() || [];
+    /* Job 5: a figure's "in today's money" line restates it, so it is veiled with it */
+    wanted = (view.veil() || []).concat([].slice.call(document.querySelectorAll('.pb-today-v')));
     for (i = 0; i < wanted.length; i++) {
       el = wanted[i];
       if (!el || !el.classList) { continue; }

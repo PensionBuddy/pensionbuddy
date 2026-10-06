@@ -92,6 +92,10 @@ SUITES = {
     'prsi': (['/assets/js/pb-prsi.js'], '/tests/prsi.test.js', ['PBPrsi'], 23),
     'pia': (['/assets/js/pension-tax-relief.js', '/assets/js/sft.js', '/assets/js/pia.js'],
             '/tests/pia.test.js', ['PBRelief', 'PBSft', 'PBPia'], 44),
+    # Job 5: the shared rates and risk levels, and the director calculator's arithmetic
+    'assumptions': (['/assets/js/pb-assumptions.js'], '/tests/assumptions.test.js', ['PBAssume'], 36),
+    'director-calc': (['/assets/js/pb-assumptions.js', '/assets/js/director-calc.js'],
+                      '/tests/director-calc.test.js', ['PBAssume', 'PBDirector'], 22),
 }
 
 # The jobs that drive a REAL built page, each with the suite it runs with, the
