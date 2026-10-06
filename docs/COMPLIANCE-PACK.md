@@ -129,6 +129,14 @@ booking links that moved kept their words (section 7, question 1.24).
 Every new line is in question 1.24, section 7 and Appendix B.16 and B.22
 to B.24.
 
+Updated 6 October 2026 (Run 46, copy cut): on Damian's instruction the
+site's copy was cut by about a third, including copy quoted in this pack.
+Many quotations below no longer match the site word for word. Unchanged:
+the two prescribed warnings, the Central Bank lines, consent box text and
+privacy notes, every figure, date and source, and calculator labels and
+logic. What changed, page by page: docs/COPY-CUT-2026-10-06.md. The new
+wording has not been reviewed by compliance.
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness

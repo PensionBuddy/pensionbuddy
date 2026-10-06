@@ -150,8 +150,8 @@ A figure that is a guaranteed lower bound rather than an estimate. Anything
 this site shows that leaves out a rule which can only raise the figure is a
 floor, and the page says which rule. Dropped for the State Pension reality
 check on 2026-09-20 (Damian's decision, docs/STATUS.md run 16): nothing beside
-its result names the rule any more, though the explainer and the assumptions
-below the tool still do. The entitlement check's own floor statement beside its
+its result names the rule any more, though the list below the tool still does
+(since 6 October 2026 the explainer is merged into it). The entitlement check's own floor statement beside its
 Method 2 figure went the same day (V4-5), so neither page names the rule beside
 a result; each still lists what it leaves out in the assumptions below the
 tool. The figures are still floors; the module still decides which

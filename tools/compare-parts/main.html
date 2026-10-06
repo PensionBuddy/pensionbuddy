@@ -2,7 +2,7 @@
 <div class="phead"><div class="wrap">
   <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
   <h1>Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p>Auto-enrolment against a personal pension, for your own salary and age. Or both together, if you want to save more. It shows you the numbers. It does not pick for you.</p>
+  <p>Auto-enrolment against a personal pension, or both, for your salary and age. It does not pick for you.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
@@ -31,19 +31,19 @@
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="70" value="35" data-pb-ticks="relief-age"></div>
-    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Auto-enrolment works on salary up to €80,000. Above that it takes nothing.</p></div>
-    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV" data-pb-wait>€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at the same cost to you as auto-enrolment, and goes back to that if you change your salary or age. Move it to what you would actually pay.</p></div>
+    <div class="field"><div class="row"><label for="salary">Your gross salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Auto-enrolment takes nothing on salary above €80,000.</p></div>
+    <div class="field" data-mode="1"><div class="row"><label for="gross">Your personal pension contribution</label><span class="val" id="grossV" data-pb-wait>€0</span></div><input type="range" id="gross" min="0" max="50000" step="250" value="0"><p class="subnote">Starts at your auto-enrolment cost. It resets if you change salary or age.</p></div>
     <div class="field" data-mode="1">
       <label class="tog"><input type="checkbox" id="matchOn"><span>Would your employer pay into a personal pension too?</span></label>
       <div class="togbody" data-for="matchOn" hidden>
-        <div class="row"><label for="match">How much, as a share of your salary</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">Only what your employer has actually agreed to.</p>
+        <div class="row"><label for="match">How much, as a share of your salary</label><span class="val" id="matchV">0%</span></div><input type="range" id="match" min="0" max="15" step="0.5" value="0"><p class="subnote">Only what your employer has agreed to.</p>
       </div>
     </div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">From your own pocket, on top of auto-enrolment. It goes through a personal pension, because My Future Fund only takes its set rate.</p></div>
+    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you want to save each month</label><span class="val" id="extraV">€0</span></div><input type="range" id="extra" min="0" max="2000" step="5" value="0"><p class="subnote">Paid into a personal pension. My Future Fund only takes its set rate.</p></div>
     <div class="field" data-mode="2" hidden>
       <label class="tog"><input type="checkbox" id="tmatchOn"><span>Would your employer match what you add on?</span></label>
       <div class="togbody" data-for="tmatchOn" hidden>
-        <div class="row"><label for="tmatch">How much of your top-up they would match</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A share of the top-up itself, not of your salary.</p>
+        <div class="row"><label for="tmatch">How much of your top-up they would match</label><span class="val" id="tmatchV">0%</span></div><input type="range" id="tmatch" min="0" max="100" step="5" value="0"><p class="subnote">A share of the top-up, not of your salary.</p>
       </div>
     </div>
     <div class="field">
@@ -77,7 +77,7 @@
         <div><div class="rl">Into your pension, auto-enrolment</div><div class="big" id="aeTotal" data-pb-wait>€0</div></div>
         <div><div class="rl">Into your pension, personal pension</div><div class="big" id="ppTotal" data-pb-wait>€0</div></div>
         <div class="divline"></div>
-        <div class="foot">One year, at your salary and age. An illustration only.</div>
+        <div class="foot">One year, at your salary and age. Illustration only.</div>
       </div>
 
       <div class="pb-scale-card" id="pbScaleCard" aria-hidden="true">
@@ -101,7 +101,7 @@
           <span class="pb-my-fig" id="pbMyPp" data-pb-wait>€0</span>
         </div>
         <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-        <p class="pb-my-note">Illustration only &middot; the value of investments can fall as well as rise. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age; salary, your own contribution and any employer match are held where you set them. Figures ignore charges and inflation.</p>
+        <p class="pb-my-note">Illustration only. Auto-enrolment&rsquo;s rates phase up and the relief limit rises with age. Salary, your contribution and any employer match stay as you set them. No charges or inflation.</p>
       </div>
 
       <div class="chart-card" id="capCard" hidden>
@@ -113,8 +113,8 @@
       </div>
 
       <div class="vs-card">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year.</div>
+        <h3>What it costs you</h3>
+        <div class="sub">Your cost this year.</div>
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment</div>
@@ -161,7 +161,7 @@
         <div><div class="rl">Into your pension, combined</div><div class="big" id="cTotal" data-pb-wait>€0</div></div>
         <div><div class="rl">Of which your top-up adds</div><div class="big" id="cTopUp">€0</div></div>
         <div class="divline"></div>
-        <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. An illustration only.</div>
+        <div class="foot">Auto-enrolment plus your top-up. One year, at your salary and age. Illustration only.</div>
       </div>
 
       <!-- Run 32: the same warning as the first mode's, so it shows in both
@@ -169,8 +169,8 @@
       <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
 
       <div class="vs-card">
-        <h3>What it actually costs you</h3>
-        <div class="sub">Out of your own pocket this year, in two parts.</div>
+        <h3>What it costs you</h3>
+        <div class="sub">Your cost this year, in two parts.</div>
         <div class="vs">
           <div class="vs-col vs-salary">
             <div class="vt">Auto-enrolment minimum</div>
@@ -227,7 +227,7 @@
 
     <div class="chart-card">
       <h3>Before you rely on these rates</h3>
-      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at €80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and years, and the position that the scheme does not currently accept contributions above its set rate. Confirm those against gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA) before relying on them. Rates and rules can change.</p>
+      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 rates, and that all three contributions stop at €80,000 of salary. From third-party summaries: the later rates and years, and that the scheme does not currently take more than its set rate. Confirm those with gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA). Rates and rules can change.</p>
     </div>
     <!-- AFTER -->
     <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
@@ -236,7 +236,7 @@
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2><p>Which path suits you depends on things a calculator cannot see: your employer, your circumstances, and what you want retirement to look like. Damian will talk it through in a free 20-minute chat. Plain English, no obligation.</p></div>
+  <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2></div>
   <a class="btn btn-primary" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -244,15 +244,15 @@
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation, and it does not say which path is right for you. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+    <p><b>This calculator is information, not advice.</b> Figures are illustrations, not a guarantee.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
   <h3>The assumptions behind these numbers</h3>
   <ul>
-    <li>All figures are contributions for a single year at the salary you entered. They are not projections of a retirement fund, and they ignore investment growth, product charges and inflation. The value of investments can fall as well as rise.</li>
-    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3, rising in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee to 3 employer to 1 State. The 2026 rates are confirmed at gov.ie; the later steps are from summaries of the scheme. The phase slider starts on the current year&rsquo;s phase.
+    <li>All figures are one year of contributions at your salary, not a retirement fund projection. They ignore investment growth, product charges and inflation.</li>
+    <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3. They rise in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee, 3 employer, 1 State. The phase slider starts on this year&rsquo;s phase.
     <ol class="pb-stair">
       <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span></li>
       <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span></li>
@@ -260,17 +260,15 @@
       <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>Your year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span></li>
     </ol>
     <p class="pb-stair-key"><span><i class="pb-stair-sw pb-stair-ee"></i>You</span><span><i class="pb-stair-sw pb-stair-er"></i>Your employer</span><span><i class="pb-stair-sw pb-stair-st"></i>The State</span></p></li>
-    <li>All three auto-enrolment contributions, yours, your employer&rsquo;s and the State&rsquo;s, are calculated on salary up to €80,000, which gov.ie confirms. Payroll stops the deduction after the pay period in which that threshold is crossed, so a little can be paid on earnings above it in that period; this annual illustration ignores that.</li>
-    <li>Auto-enrolment contributions are deducted from net, after-tax pay and attract no marginal income tax relief. The employer match and the State top-up are the benefit on that layer.</li>
-    <li>My Future Fund does not currently accept contributions above its set rate, which is why Mode 2 routes anything extra through a personal pension. That position is current as of September 2026, comes from third-party summaries rather than the legislation itself, and should be confirmed against gov.ie or NAERSA. If that changes, so does the premise of Mode 2.</li>
-    <li>A personal pension or Personal Retirement Savings Account (PRSA) gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% on the part of a contribution that sits above your standard rate cut-off point and at 20% on the rest, because a contribution comes off the top of your taxable income. It is limited to Revenue&rsquo;s age-related percentage of earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation. A contribution above that limit still reaches your pension, it just gets no relief. Pay-Related Social Insurance (PRSI) and the Universal Social Charge (USC) are not modelled. In Mode 2 the top-up is treated as its own contribution, independent of the auto-enrolment layer.</li>
-    <li>The standard rate cut-off points are the 2026 figures from Revenue: €44,000 single, €53,000 married or in a civil partnership with one income, and up to €88,000 with two incomes. The €88,000 is a maximum, reached only where the lower earner has at least €35,000 of income of their own; a couple with one income is €53,000 whatever they earn. These change most years.</li>
-    <li>Money above the cap is your own contribution rate applied to the part of your salary above €80,000. Auto-enrolment never takes it, so it stays in your take-home pay. The figure for what a personal pension could turn it into uses the same relief as everything else on this page. It is an illustration of where that money could go, not a suggestion to leave or reduce auto-enrolment.</li>
-    <li>A personal pension carries no automatic employer or State contribution. In Mode 1 the employer figure is a percentage of salary; in Mode 2 it is a percentage of the top-up itself. Both are zero unless you set them, and only apply if your employer separately agrees to contribute.</li>
-    <li>Eligibility for auto-enrolment, and whether you can stay in or opt out, depends on your age, earnings and whether you are already in a workplace scheme. This tool does not check eligibility.</li>
+    <li>Payroll stops the deduction after the pay period in which salary passes €80,000. So a little can be paid above it. This yearly illustration ignores that.</li>
+    <li>My Future Fund takes nothing above its set rate, as of September 2026. If that changes, so does Mode 2.</li>
+    <li>A personal pension or Personal Retirement Savings Account (PRSA) gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% above your standard rate cut-off point, and 20% below it. Relief is limited to Revenue&rsquo;s age-related share of earnings: 15% under 30, up to 40% at 60 and over, on earnings up to €115,000. Above that limit a contribution still goes in, with no relief. Pay-Related Social Insurance (PRSI) and the Universal Social Charge (USC) are not modelled. In Mode 2 the top-up is a separate contribution.</li>
+    <li>Standard rate cut-off points are Revenue&rsquo;s 2026 figures. Single: €44,000. Married or civil partners, one income: €53,000, whatever they earn. Two incomes: up to €88,000, only where the lower earner has at least €35,000 of their own. These change most years.</li>
+    <li>Money above the cap is your own rate on salary above €80,000. Auto-enrolment never takes it. The personal pension figure uses this page&rsquo;s relief. It is not a suggestion to leave or reduce auto-enrolment.</li>
+    <li>A personal pension has no automatic employer or State contribution. Employer figures are zero unless you set them, and apply only if your employer agrees.</li>
+    <li>Eligibility and opting out depend on your age, earnings and any workplace scheme. This tool does not check them.</li>
     <li id="riskAssume" hidden>The three risk illustrations use the 1 to 7 Summary Risk Indicator that European Union (EU) rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
-    <li>Fund choice on a personal pension or PRSA is wider than My Future Fund&rsquo;s, but it is still a set menu from the provider. This page does not claim access to any particular asset class.</li>
-    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice.</li>
+    <li>A personal pension or PRSA has wider fund choice than My Future Fund, from the provider&rsquo;s set menu. This page claims access to no particular asset class.</li>
   </ul>
 </div></section>
 <script src="assets/js/pb-ladder.js"></script>

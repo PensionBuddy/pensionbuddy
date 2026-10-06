@@ -2692,9 +2692,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The director calculator · two minutes</span>
-  <h1>How much could your <span class="hl">company</span> put into your pension?</h1>
-  <p>As a director you can fund your pension straight from the company, often far beyond personal limits, and every contribution is an allowable expense for the company.</p>
+  <span class="eyebrow"><span class="pip"></span>Director calculator · two minutes</span>
+  <h1>What your <span class="hl">company</span> could pay into your pension.</h1>
+  <p>Your company can fund your pension, often far beyond personal limits. Contributions are an allowable company expense.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2713,11 +2713,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <h2>Your details</h2>
     <p class="hint">Estimates are fine. Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Retiring before your scheme&rsquo;s normal retirement age? Revenue&rsquo;s Pensions Manual, Chapter 9.6: &ldquo;Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.&rdquo;</p></div>
+    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Early retirement. Revenue&rsquo;s Pensions Manual, Chapter 9.6: &ldquo;Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.&rdquo;</p></div>
     <div class="field"><div class="row"><label for="sal">Your annual salary</label><span class="val" id="salV">€100,000</span></div><input type="range" id="sal" min="30000" max="1000000" step="5000" value="100000"></div>
     <div class="field"><div class="row"><label for="pot">Pension built up so far</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
-    <div class="field"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"><p class="subnote">What the company would pay into your pension annually.</p></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <div class="field"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Returns can be negative.</p></div>
   </div>
 
   <div class="results">
@@ -2734,11 +2734,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="pb-say" id="pbSay">With €40,000 a year from the company, from 48 to 66, your pot could reach €1,511,849, and the company could save €90,000 in corporation tax.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
-      <div class="foot">Pension contributions are deductible for the company, as salary would be. The difference is what reaches you: routed through the pension, far more of the money stays working for your retirement.</div>
+      <div class="foot">Salary would be deductible for the company too.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>Corporation tax, 12.5% of each year’s contribution <b>€90,000</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
+    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a>. That is the cap on funds with full tax relief. Anything above it is taxed on drawdown. The real ceiling is lower.</p>
 
     <div class="vs-card">
       <h3>The same money, two ways</h3>
@@ -2763,7 +2763,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <input type="range" id="split" min="0" max="100" step="5" value="50" aria-valuetext="half into the pension">
         <p class="vs-split-out" id="splitOut">€20,000 as salary is <b>€9,530</b> in your pocket. €20,000 into the pension is <b>€20,000</b> for your retirement.</p>
       </div>
-      <p class="sub vs-note">Both routes are an allowable expense for the company, so the corporation tax position is the same either way. The comparison is about how much of the money reaches you.</p>
+      <p class="sub vs-note">Corporation tax is the same either way. The difference is what reaches you.</p>
     </div>
 
     <div class="waitcard">
@@ -2778,7 +2778,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="max-card">
       <div class="mt">Roughly what you could aim for</div>
       <div class="mbig" id="maxOut">Move the sliders to see your funding target.</div>
-      <div class="mnote">Revenue lets you fund towards a pension of up to two-thirds of salary (with sufficient service). The maximum your company can actually contribute each year is set by an actuarial funding calculation based on your age, salary, service and existing benefits. For older directors it can run well into six figures. A Standard Fund Threshold also caps the total fund that gets full tax relief. Damian will work out your exact figures.</div>
+      <div class="mnote">Revenue allows funding towards a pension of up to two-thirds of salary. Sufficient service is needed. An actuarial calculation sets the yearly maximum. It uses your age, salary, service and existing benefits. For older directors it can run well into six figures. The Standard Fund Threshold also caps the fund with full tax relief.</div>
     </div>
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
@@ -2810,7 +2810,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Director funding is where the big wins are.</h2><p>The numbers above are illustrations. Your exact funding limit and tax saving need a proper calculation, and Damian does this for directors all the time. Free 20-minute call, no pitch.</p></div>
+  <div class="ctext"><h2>Your exact limit and tax saving need a proper calculation.</h2></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2818,26 +2818,25 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It shows simplified illustrations from the figures you choose, not a personal recommendation. Maximum funding needs an actuarial calculation. Regulated financial advice is given in a personal consultation with Damian.</p>
+    <p><b>This calculator is information, not advice.</b></p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <h3>Assumptions</h3>
   <ul>
-    <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is shown at the 12.5% trading rate, and assumes the contribution is wholly and exclusively for the business and within Revenue funding limits.</li>
+    <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is at the 12.5% trading rate. Each contribution is assumed wholly and exclusively for the business, within Revenue funding limits.</li>
     <li id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.</li>
-    <li>Pension benefits are taxed when drawn, though up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
-    <li>Maximum funding (up to two-thirds of salary) requires sufficient service and an actuarial calculation. This tool does not perform that calculation.</li>
-    <li>A Standard Fund Threshold caps the total fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures here are not adjusted for inflation and ignore product charges.</li>
-    <li>This tool provides general information, not financial, tax or pension advice. For advice on your circumstances, speak to Damian.</li>
+    <li>Benefits are taxed when drawn. Up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
+    <li>Maximum funding (up to two-thirds of salary) needs sufficient service and an actuarial calculation. This tool does not do that calculation.</li>
+    <li>A Standard Fund Threshold caps the fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures ignore inflation and product charges.</li>
   </ul>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Here they are in plain English, with four questions to see which of them apply to you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Three things changed in the last two years. Four questions show which apply to you.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="director-year-end-checklist.html"><span class="pb-related-t">Year-end pension checklist</span><span class="pb-related-d">Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="standard-fund-threshold.html"><span class="pb-related-t">The Standard Fund Threshold</span><span class="pb-related-d">The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.</span></a></li>
   </ul>
@@ -3271,9 +3270,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bd897c5d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=1414d1ad" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=c3d947a2"></script>

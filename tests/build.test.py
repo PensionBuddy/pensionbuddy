@@ -475,8 +475,8 @@ def run():
              'a director with 20% or more of the company', True),
             ('the glossary\'s "more than 20%"', 'director-calculator.html', TEST,
              'a director who owned or controlled more than 20% of the voting rights', True),
-            ('a 20% that is not about directors', 'pensions-over-50.html', 'Early access is a trade, not a bonus.',
-             'Early access is a trade, not a bonus. Tax at 20% is the standard rate.', False)):
+            ('a 20% that is not about directors', 'pensions-over-50.html', 'The tax-free amount can be lower too.',
+             'The tax-free amount can be lower too. Tax at 20% is the standard rate.', False)):
         m = dict(docs); m[page] = m[page].replace(find, repl, 1)
         eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
            [n for n, _ in off_wording(m)], [page] if flagged else [])
@@ -787,7 +787,7 @@ def run():
              '<div class="legal reveal">'),
             ('a legal notice revealed whole', 'terms.html', '<div class="legal pb-caveat">',
              '<div class="legal pb-caveat reveal">'),
-            ('the hero caveat in a revealed phone', 'index.html', '<div class="hero-phone"', '<div class="hero-phone reveal"')):
+            ('the product caveat revealed', 'index.html', '<figcaption class="pb-product-cap">', '<figcaption class="pb-product-cap reveal">')):
         m = dict(sources)
         assert find in m[page], (label, find)
         m[page] = m[page].replace(find, repl, 1)
@@ -1216,7 +1216,7 @@ def run():
     eq('30. and every page in the sitemap is a page', [n for n in INDEX if n not in everything], [])
     st = sources['starter.html']
     ix = sources['index.html']
-    q = "We'll look at what you've got and explain whether it's set up well for you."
+    q = "We'll look at whether it's set up well."
     for label, name, src, want in (
             ('a title of 60 characters', 'terms.html', sources['terms.html'].replace('<title>Terms of Business, Pensionbuddy</title>',
                                                                                     '<title>' + 'T' * 60 + '</title>', 1), 'title 60'),
@@ -1371,7 +1371,7 @@ def run():
         if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
             return ['the section is not straight after "What\'s changed?" and before the calculator band']
         box = m.group(1)
-        if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
+        if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
         # (Run 38: the picture sits in .pb-learn-media with the video over it;
         # check 43 holds the video and its button)
@@ -1541,8 +1541,8 @@ def run():
     eq('34. jargon definitions: pb-glossary.js is the buster word for word; pb-terms.js late, on the prose pages only; stores nothing, moves nothing',
        terms_faults(sources, gloss, runtime), [])
     for label, target, find, repl, want in (
-            ('a buster entry edited without a rerun', 'gloss', 'A flexible, portable personal pension you own yourself.',
-             'A flexible personal pension you own yourself.', 'not the jargon buster'),
+            ('a buster entry edited without a rerun', 'gloss', 'A flexible personal pension you own, which moves with you between jobs.',
+             'A personal pension you own, which moves with you between jobs.', 'not the jargon buster'),
             ('the definitions on the privacy notice', 'privacy.html', '</body>',
              '<script src="assets/js/pb-glossary.js?v=00000000" type="text/pb-late"></script>\n<script src="assets/js/pb-terms.js?v=00000000" type="text/pb-late"></script>\n</body>', 'wrong pages'),
             ('the definitions dropped from a guide', 'pensions-over-50.html', '<script src="assets/js/pb-terms.js', '<script src="assets/js/pb-termz.js', 'not the two late tags'),
@@ -1640,11 +1640,11 @@ def run():
     # and the mark move, never for a reader who asks for less motion.
     def timeline_faults(ix, srcs, js):
         f = []
-        aud = ix.find('<section id="audience">')
+        aud = ix.find('<section id="calc" ')
         dl = ix.find('<section class="tickband" id="deadline">')
         m = re.search(r'<section class="pb-tl-sec" id="through-life"><div class="wrap">(.*?)</div></section>', ix, re.S)
         if not m or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
-            return ['the section is not straight after "Six places to begin" and before the deadline']
+            return ['the section is not straight after the calculator band and before the deadline']
         box = m.group(1)
         if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
             f.append('the kicker or the heading')
@@ -1681,7 +1681,7 @@ def run():
     import html
     tl_js = read('assets/js/pb-timeline.js')
     ix = sources['index.html']
-    eq('36. "Your pension through life": after the six places, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
+    eq('36. "Your pension through life": after the calculator band, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
        timeline_faults(ix, sources, tl_js), [])
     for label, target, find, repl, want in (
             ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
@@ -1922,6 +1922,13 @@ def run():
     # count, the list), drawn only with JavaScript, which it needs; and the
     # home page's "Six places to begin", the same six places, names and lines
     # word for word, in the same order. The page stays noindex.
+    NF_SIX = [('tracker.html', 'Track down old pensions', 'Find pensions from old jobs, and what they are worth.'),
+              ('starter.html', 'Start a pension', 'For a first pension. It&rsquo;s never too late to begin.'),
+              ('director.html', 'Company directors', 'Your company can fund your pension beyond personal limits.'),
+              ('pension-calculator.html', 'Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.'),
+              ('state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension leaves you to find.'),
+              ('broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.')]
+
     def nf_faults(nf, ix):
         f = []
         if '<img src="assets/img/buddy-avatar.jpg' not in nf or 'alt="Buddy, the Pensionbuddy dog"' not in nf:
@@ -1931,10 +1938,10 @@ def run():
                      '<ul class="pb-search-list" id="pbSearchInList"></ul>', 'html:not(.pb-js) .pb-nf-search{display:none}'):
             if want not in nf:
                 f.append('the search box: %s' % want[:40])
-        home = re.findall(r'<li><a class="pb-offer-item" href="([^"]+)"><span class="pb-offer-name">([^<]+)</span><span class="pb-offer-desc">([^<]+)</span></a></li>', ix)
+        home = NF_SIX
         here = re.findall(r'<li><a href="([^"]+)"><b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six">'):])
         if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
-            f.append('not the home page\'s six places to begin')
+            f.append('not the six places to begin')
         if pagebuild.NOINDEX not in nf:
             f.append('the 404 is indexable')
         if len(re.findall(r'<script src="assets/js/pb-search\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', nf)) != 1:
@@ -1942,7 +1949,7 @@ def run():
         return f
 
     nf, ix = sources['404.html'], sources['index.html']
-    eq('40. the 404: Buddy, the search box drawn with JavaScript, and the home page\'s six places to begin word for word; still noindex',
+    eq('40. the 404: Buddy, the search box drawn with JavaScript, and its six places to begin word for word; still noindex',
        nf_faults(nf, ix), [])
     for label, find, repl, want in (
             ('a place missing', '<li><a href="director.html"><b>Company directors</b>', '<li><a href="director.html"><b>Directors</b>', 'six places'),
@@ -2270,9 +2277,9 @@ def run():
     # ""), and any video put in one later follows the game cards' rules
     # (muted, inline, not preloaded, aria-hidden, its poster the slot's
     # picture, pb-video.js to play and pause it).
-    CALL_STEPS = [('You reach out', 'A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.'),
-                  ('We talk it through', 'Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.'),
-                  ('You decide', "You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.")]
+    CALL_STEPS = [('You reach out', 'A short message or call, so Damian comes prepared. No forms.'),
+                  ('We talk it through', 'Twenty minutes, by phone or video.'),
+                  ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
 
     def call_faults(ix, sizes):
         f = []
@@ -2281,7 +2288,7 @@ def run():
             return ['no "How a call with Damian works" section']
         body = sec.group(1)
         if '<span class="kicker">How a call with Damian works</span>' not in body or \
-                '<h2>Most people brace for a sales pitch. <span class="pb-soft">This is a chat.</span></h2>' not in body:
+                '<h2>Three steps.</h2>' not in body:
             f.append('the label or the heading')
         steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body, re.S)
         if [(h, p) for _, _, h, p in steps] != CALL_STEPS:
@@ -2317,7 +2324,7 @@ def run():
     eq('45. "How a call with Damian works": the section\'s own three steps, word for word, each with a 16:9 slot showing the placeholder poster (sized, lazy, no words)',
        call_faults(cix, csizes), [])
     for label, find, repl, want in (
-            ('a step reworded', "If we're not the right fit, we'll say so.", "If we're not the right fit, we'll tell you.", 'not the words'),
+            ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the words'),
             ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2',
              'alt="" loading="lazy"></picture></div><div class="sx">2', 'step 2'),
             ('a slot that speaks', 'data-pb-call-video="call-step-3" aria-hidden="true"', 'data-pb-call-video="call-step-3"', 'step 3'),
@@ -2350,8 +2357,7 @@ def run():
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
-                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
-                          '  <div class="sec-head"><span class="kicker">Sound familiar?</span>'),
+                          '</div></section>\n\n<section class="coverband pb-bleed pb-wash">'),
     }
 
     def moved_block(words):
@@ -2395,8 +2401,8 @@ def run():
              'the moved button and its reason are missing, doubled or reworded'),
             ('the chat picture\'s link put back', 'tracker.html',
              sources['tracker.html'].replace(
-                 'is usually enough to start tracing a pension.</p>\n',
-                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
+                 'When and where you worked is usually enough.</p>\n',
+                 'When and where you worked is usually enough.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
