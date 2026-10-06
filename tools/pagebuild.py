@@ -900,7 +900,8 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 #
 # Every word on a card is already on the site. CARDS says where: a title is
 # the page's name in the nav, or in the home page's "Six places to begin"
-# where it is one of them; a line is the one beside it there, or the first
+# where it is one of them (since 6 October 2026, the 404's six places, which
+# the home page no longer carries); a line is the one beside it there, or the first
 # sentence of the page's own description, or, where that sentence carries an
 # initialism a page might not have spelled out, a sentence from the page's
 # own introduction. Check 39 finds each line on its page, word for word.
@@ -931,11 +932,11 @@ RELATED = {
 }
 # page: (title, line, where the line is written, word for word)
 CARDS = {
-    'pension-calculator.html': ('Pension calculator', 'Enter a few numbers. See the projection and the tax relief Revenue adds. Two minutes, no sign-up.', 'index.html'),
-    'starter.html': ('Start a pension', 'No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.', 'index.html'),
-    'tracker.html': ('Track down old pensions', 'Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.', 'index.html'),
-    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', 'index.html'),
-    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.', 'index.html'),
+    'pension-calculator.html': ('Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.', '404.html'),
+    'starter.html': ('Start a pension', 'For a first pension. It&rsquo;s never too late to begin.', '404.html'),
+    'tracker.html': ('Track down old pensions', 'Find pensions from old jobs, and what they are worth.', '404.html'),
+    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', '404.html'),
+    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.', '404.html'),
     'old-pension-checklist.html': ('The old pension hunt: a checklist', 'Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.', 'old-pension-checklist.html'),
     'my-pensions.html': ('All your pensions in one view', 'List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year.', 'my-pensions.html'),
     'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),

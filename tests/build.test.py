@@ -1922,6 +1922,13 @@ def run():
     # count, the list), drawn only with JavaScript, which it needs; and the
     # home page's "Six places to begin", the same six places, names and lines
     # word for word, in the same order. The page stays noindex.
+    NF_SIX = [('tracker.html', 'Track down old pensions', 'Find pensions from old jobs, and what they are worth.'),
+              ('starter.html', 'Start a pension', 'For a first pension. It&rsquo;s never too late to begin.'),
+              ('director.html', 'Company directors', 'Your company can fund your pension beyond personal limits.'),
+              ('pension-calculator.html', 'Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.'),
+              ('state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension leaves you to find.'),
+              ('broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.')]
+
     def nf_faults(nf, ix):
         f = []
         if '<img src="assets/img/buddy-avatar.jpg' not in nf or 'alt="Buddy, the Pensionbuddy dog"' not in nf:
@@ -1931,10 +1938,10 @@ def run():
                      '<ul class="pb-search-list" id="pbSearchInList"></ul>', 'html:not(.pb-js) .pb-nf-search{display:none}'):
             if want not in nf:
                 f.append('the search box: %s' % want[:40])
-        home = re.findall(r'<li><a class="pb-offer-item" href="([^"]+)"><span class="pb-offer-name">([^<]+)</span><span class="pb-offer-desc">([^<]+)</span></a></li>', ix)
+        home = NF_SIX
         here = re.findall(r'<li><a href="([^"]+)"><b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six">'):])
         if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
-            f.append('not the home page\'s six places to begin')
+            f.append('not the six places to begin')
         if pagebuild.NOINDEX not in nf:
             f.append('the 404 is indexable')
         if len(re.findall(r'<script src="assets/js/pb-search\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', nf)) != 1:
@@ -1942,7 +1949,7 @@ def run():
         return f
 
     nf, ix = sources['404.html'], sources['index.html']
-    eq('40. the 404: Buddy, the search box drawn with JavaScript, and the home page\'s six places to begin word for word; still noindex',
+    eq('40. the 404: Buddy, the search box drawn with JavaScript, and its six places to begin word for word; still noindex',
        nf_faults(nf, ix), [])
     for label, find, repl, want in (
             ('a place missing', '<li><a href="director.html"><b>Company directors</b>', '<li><a href="director.html"><b>Directors</b>', 'six places'),
