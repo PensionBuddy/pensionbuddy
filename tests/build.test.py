@@ -1312,9 +1312,9 @@ def run():
              'aria-labelledby="pbQualsBook"><li>Qualified Financial Adviser (QFA)</li>', 'aria-labelledby="pbQualsBook">', 'the items are'),
             ('a body added', 'index.html', '<li>Life Insurance Association (LIA)</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"',
              '<li>Life Insurance Association (LIA)</li><li>Brokers Ireland</li></ul>\n    </div>\n  </div>\n</div></section>\n\n<section id="adam"', 'the items are'),
-            ('the story\'s copy put back', 'index.html', 'So they built Pensionbuddy together.</p>\n  </div>\n</div></section>',
+            ('the story\'s copy put back', 'index.html', 'So they built Pensionbuddy together.</p>\n  </div>',
              'So they built Pensionbuddy together.</p>\n<div class="pb-quals"><p class="pb-quals-label" id="pbQualsStory">Damian&rsquo;s qualifications and memberships</p>'
-             '<ul class="pb-quals-list" aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div>\n  </div>\n</div></section>', 'strips'),
+             '<ul class="pb-quals-list" aria-labelledby="pbQualsStory"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div>\n  </div>', 'strips'),
             ('an endorsement line added', 'index.html',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>',
              'aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>'

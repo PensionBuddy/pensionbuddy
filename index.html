@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
+  /* amber: money that comes back or is added; gap (burnt orange): money missing; red: form errors only */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#C2410C; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1611,7 +1611,7 @@ button{font-family:inherit}
 .pb-gap-bar{bottom:0}
 .pb-gap-need .pb-gap-bar{background:var(--ink)}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
-.pb-gap-short{bottom:var(--from);background:var(--red);transition-delay:.12s}
+.pb-gap-short{bottom:var(--from);background:var(--gap);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
 .pb-gap.pb-still .pb-gap-bar,.pb-gap.pb-still .pb-gap-short{transition:none}
 @media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
@@ -1873,6 +1873,36 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* DAMIAN'S PHOTOS (October 2026). Two headshots in his section, shown in
+   turn: the first is the section's own <picture>, the second sits over it
+   in .pb-port-alt and fades in and out as a whole, so no listed image is
+   ever left faded on its own (POP's test reads each image's opacity). It
+   turns every 6s while on screen; hover or focus holds it, the pause
+   button or any arrow or dot stops it, and a reader who asks for less
+   motion gets the arrows and dots only. Without JS: the first photo, no
+   buttons. The two desk shots sit under "Our story". */
+.pb-port-alt{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity var(--pb-t-state)}
+.about-port.pb-port-2 .pb-port-alt{opacity:1}
+.pb-port-alt img{width:100%;height:100%;object-fit:cover;display:block}
+.pb-port-nav{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:4px;
+  background:rgba(255,255,255,.95);border-radius:8px;box-shadow:0 1px 3px rgba(11,31,28,.18)}
+.pb-port-nav[hidden],.pb-port-nav [hidden]{display:none}
+.pb-port-nav button{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;
+  border-radius:6px;background:none;color:var(--ink);cursor:pointer}
+.pb-port-nav button:hover{background:var(--surface-2)}
+.pb-port-nav button:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
+.pb-port-nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pb-port-nav .pb-i-play{fill:currentColor}
+.pb-port-nav .pb-i-play,.pb-port-paused .pb-i-pause{display:none}
+.pb-port-paused .pb-i-play{display:block}
+.pb-port-nav .pb-port-dot{width:24px}
+.pb-port-dot::before{content:"";width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink-3);box-sizing:border-box}
+.pb-port-dot[aria-current="true"]::before{background:var(--teal-700);border-color:var(--teal-700)}
+@media(prefers-reduced-motion:reduce){.pb-port-alt{transition:none}}
+.pb-story-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:-8px}
+.pb-story-shots figure{margin:0;aspect-ratio:3/2;overflow:hidden;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2)}
+.pb-story-shots img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:700px){.pb-story-shots{grid-template-columns:1fr;gap:12px}}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2297,7 +2327,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-hero-gap .pb-hero-copy > .pb-reg:not(.pb-reg-top){margin-top:28px}
 .pb-gap-big{margin:22px 0 0;font-family:var(--font);font-size:20px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.06;letter-spacing:-.03em;text-wrap:balance}
 .pb-gap-big-n{font-weight:300;font-size:34px;white-space:nowrap}
-.pb-gap-big-n{color:var(--red)}
+.pb-gap-big-n{color:var(--gap)}
 .pb-gap-big-w{display:inline-block;font-size:20px;font-weight:400;line-height:1.24;letter-spacing:0;color:var(--ink-2)}
 .pb-hero-chart .pb-gap{max-width:none}
 .pb-hero-chart .pb-src{margin-top:14px}
@@ -2885,12 +2915,24 @@ main h1{font-weight:800}
     <p>Pensionbuddy started as a father-son conversation. Damian has 30 years' experience advising people on pensions. He kept seeing the same thing. People ignored their pension, or thought about it only when auto-enrolment came in.</p>
     <p>Adam, a new Trinity graduate, saw the same gap from the other side. So they built Pensionbuddy together.</p>
   </div>
+  <div class="pb-story-shots">
+    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-screen.webp?v=04aef3f5"><img src="assets/img/damian-at-desk-screen.jpg?v=675b5c57" width="1200" height="800" alt="Damian at his desk with Pensionbuddy&rsquo;s State Pension entitlement page on screen" loading="lazy" decoding="async"></picture></figure>
+    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-notes.webp?v=7e0a733b"><img src="assets/img/damian-at-desk-notes.jpg?v=b3c11604" width="1200" height="800" alt="Damian at his desk going through paperwork, pen in hand" loading="lazy" decoding="async"></picture></figure>
+  </div>
 </div></section>
 
 <section id="damian" style="padding-top:56px"><div class="wrap about-grid">
   <div class="about-port">
-    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=cb50b8e2"><img src="assets/img/damian-condon-portrait.jpg?v=dbe5acaf" width="620" height="775" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management" loading="lazy" decoding="async"></picture>
+    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=fb5e0053"><img src="assets/img/damian-condon-portrait.jpg?v=9c3cfb4a" width="800" height="1000" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management" loading="lazy" decoding="async"></picture>
+    <div class="pb-port-alt" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/damian-condon-portrait-cap.webp?v=ea3c6d06"><img src="assets/img/damian-condon-portrait-cap.jpg?v=2529a26d" width="800" height="1000" alt="Damian Condon wearing a Pensionbuddy cap" loading="lazy" decoding="async"></picture></div>
     <span class="badge">B.A., Q.F.A.</span>
+    <div class="pb-port-nav" role="group" aria-label="Photos of Damian" hidden>
+      <button type="button" data-pb-port="prev" aria-label="Previous photo"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button type="button" class="pb-port-dot" data-pb-port="0" aria-label="Photo 1 of 2" aria-current="true"></button>
+      <button type="button" class="pb-port-dot" data-pb-port="1" aria-label="Photo 2 of 2"></button>
+      <button type="button" data-pb-port="next" aria-label="Next photo"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button type="button" data-pb-port="pause" aria-label="Pause the photos"><svg class="pb-i-pause" viewBox="0 0 24 24"><line x1="9" y1="6" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/></svg><svg class="pb-i-play" viewBox="0 0 24 24"><polygon points="8 5 19 12 8 19"/></svg></button>
+    </div>
   </div>
   <div class="about">
     <span class="kicker">Founder and CEO, QFA</span>
@@ -3347,6 +3389,55 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
+<script>
+/* Damian's photos: the two headshots in his section, in turn (see the
+   DAMIAN'S PHOTOS styles). Turns only while on screen, the tab is showing
+   and motion is allowed; hover or focus holds it; the pause button, or
+   any arrow or dot, stops it until the reader presses play. */
+(function(){
+  var port=document.querySelector('#damian .about-port'),nav=port&&port.querySelector('.pb-port-nav');
+  if(!port||!nav)return;
+  var root=document.documentElement,alt=port.querySelector('.pb-port-alt'),main=port.querySelector('img');
+  var dots=[].slice.call(nav.querySelectorAll('.pb-port-dot')),pause=nav.querySelector('[data-pb-port="pause"]');
+  var EVERY=6000,at=0,timer=null,seen=!('IntersectionObserver' in window),held=false,stopped=false;
+  function show(i){
+    at=(i+2)%2;
+    port.classList.toggle('pb-port-2',at===1);
+    alt.setAttribute('aria-hidden',at===1?'false':'true');
+    if(at===1)main.setAttribute('aria-hidden','true');else main.removeAttribute('aria-hidden');
+    dots.forEach(function(d,n){if(n===at)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current');});
+  }
+  function sync(){
+    var motion=root.classList.contains('pb-motion');
+    pause.hidden=!motion;
+    var run=motion&&seen&&!held&&!stopped&&!document.hidden;
+    if(run&&!timer)timer=setInterval(function(){show(at+1);},EVERY);
+    else if(!run&&timer){clearInterval(timer);timer=null;}
+  }
+  function stop(v){
+    stopped=v;
+    nav.classList.toggle('pb-port-paused',v);
+    pause.setAttribute('aria-label',v?'Play the photos':'Pause the photos');
+    sync();
+  }
+  nav.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    var k=b.getAttribute('data-pb-port');
+    if(k==='pause'){stop(!stopped);return;}
+    show(k==='prev'?at-1:k==='next'?at+1:+k);
+    stop(true);
+  });
+  port.addEventListener('mouseenter',function(){held=true;sync();});
+  port.addEventListener('mouseleave',function(){held=port.contains(document.activeElement);sync();});
+  port.addEventListener('focusin',function(){held=true;sync();});
+  port.addEventListener('focusout',function(e){held=port.contains(e.relatedTarget)||port.matches(':hover');sync();});
+  document.addEventListener('visibilitychange',sync);
+  document.addEventListener('pb:motion',sync);
+  if(!seen)new IntersectionObserver(function(es){seen=es[es.length-1].isIntersecting;sync();},{threshold:.5}).observe(port);
+  nav.hidden=false;
+  sync();
+})();
+</script>
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=fc3f8c6a" type="text/pb-late" data-first-answer="short"></script>

@@ -463,7 +463,7 @@ def run_all():
 
 run_all()
 
-RED, INK, WHITE, SLATE = 'rgb(164, 41, 29)', 'rgb(11, 31, 28)', 'rgb(255, 255, 255)', 'rgb(88, 107, 133)'
+GAP, INK, WHITE, SLATE = 'rgb(194, 65, 12)', 'rgb(11, 31, 28)', 'rgb(255, 255, 255)', 'rgb(88, 107, 133)'
 NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl|pb-lad|ladAge|aePh|pb-ae-ph')
 
 
@@ -490,7 +490,7 @@ def check_pots(sid, r, nojs):
     eq('P2 %s: the charges sentence, word for word' % sid, r['P2'],
        'The annual charges you know of come to about €400 a year at today’s values.')
     eq('P3 %s: one <b>, the euro figure' % sid, r['P3'], [1, '€400'])
-    eq('P4 %s: the figure is red, weight 700' % sid, r['P4'], [RED, '700'])
+    eq('P4 %s: the figure is burnt orange, weight 700' % sid, r['P4'], [GAP, '700'])
     eq('P5 %s: a second pension, its charge not known' % sid, r['P5'],
        'The annual charges you know of come to about €400 a year at today’s values, with 1 charge not known.')
     eq('P6 %s: no charge known: the prompt, no <b>' % sid, r['P6'],
@@ -580,7 +580,7 @@ def check_fees(sid, r, nojs):
     if nojs:
         eq('F9 %s: no JavaScript, #feeChart is empty' % sid, r['F9'], '')
         return
-    eq('F1 %s: one red area, before every line' % sid, r['F1'], [1, True, RED])
+    eq('F1 %s: one burnt-orange area, before every line' % sid, r['F1'], [1, True, GAP])
     eq('F2 %s: its points: the no-charge line, then your plan\'s reversed' % sid, r['F2'], True)
     eq('F3 %s: the white edge right before the other plan\'s line, same points' % sid, r['F3'], [True, True, WHITE, '7.5px'])
     if SCEN[sid][1] == 1440:
@@ -588,7 +588,7 @@ def check_fees(sid, r, nojs):
         eq('F4 %s: the spoken label names the red area' % sid,
            label.endswith(' The red area is what your plan’s charges take: €58,754 by retirement.'), True)
         eq('F4 %s: its figure is #costA' % sid, cost, '€58,754')
-    eq('F6 %s: the key\'s fourth item, a red swatch' % sid, r['F6'], [4, 'What your plan’s charges take', RED])
+    eq('F6 %s: the key\'s fourth item, a burnt-orange swatch' % sid, r['F6'], [4, 'What your plan’s charges take', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])
     if SCEN[sid][1] == 500:
         # the plan said "the chart under 140px tall"; at 500 the whole chart is 600:250 of its

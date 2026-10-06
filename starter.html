@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
+  /* amber: money that comes back or is added; gap (burnt orange): money missing; red: form errors only */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#C2410C; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1585,7 +1585,7 @@ button{font-family:inherit}
 .pb-lsb-top{border-radius:10px 10px 0 0}
 .pb-lsb-teal{bottom:0;height:var(--h);background:var(--aqua)}
 .pb-lsb-amber{bottom:var(--from);height:calc(var(--h) - var(--from));
-  background:var(--red);transition-delay:calc(var(--pb-d-4) + var(--pb-beat-gap))}
+  background:var(--gap);transition-delay:calc(var(--pb-d-4) + var(--pb-beat-gap))}
 /* arming is instant, growing is animated: the script adds .pb-armed after the
    markup has already painted at full height, so an animated collapse would
    show the reader the finished chart and then take it away */
@@ -1632,7 +1632,7 @@ button{font-family:inherit}
   background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-sa-fill,.pb-sa-gap{position:absolute;top:0;bottom:0;display:block}
 .pb-sa-fill{left:0;background:var(--slate)}
-.pb-sa-gap{background:var(--red)}
+.pb-sa-gap{background:var(--gap)}
 .pb-sa-fig{font-size:1.05rem;font-weight:600;color:var(--ink);
   font-variant-numeric:tabular-nums;text-align:right}
 .pb-sa-less{font-size:.86rem;color:var(--ink-2);font-variant-numeric:tabular-nums;text-align:right}
