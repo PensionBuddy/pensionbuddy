@@ -1,0 +1,4 @@
+{
+  "_about": "Switches for parts of the site that are built but turned off. Change a value, then run python3 tools/flags.py. tests/flags.test.py holds the pages to this file.",
+  "guide_forms": false
+}
