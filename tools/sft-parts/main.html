@@ -1,33 +1,32 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The free tool · for larger pensions</span>
-  <h1>The Standard Fund Threshold, <span class="hl">and how much of it you would use.</span></h1>
-  <p>Revenue caps the pension savings that get full tax relief. The cap is rising every year to 2029, so when you take your benefits changes how much room you have. See where you stand, and what a lump sum would be taxed.</p>
-  <p class="sft-asat">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
+  <h1>The <span class="hl">Standard Fund Threshold</span></h1>
+  <p>Revenue caps the pension savings that get full tax relief.</p>
+  <p class="sft-asat">Rules as at 24 September 2026. Budget 2027, on 6 October 2026, could change them.</p>
 </div></div>
-<div class="wrap"><div class="pb-toc" role="navigation" aria-labelledby="pbTocH"><p class="pb-toc-h" id="pbTocH">On this page</p><ol class="pb-toc-list"><li><a href="#details">Your details</a></li><li><a href="#help">Close to the threshold, or over it?</a></li><li><a href="#rules">The rules behind these numbers</a></li></ol></div></div>
+<div class="wrap"><div class="pb-toc" role="navigation" aria-labelledby="pbTocH"><p class="pb-toc-h" id="pbTocH">On this page</p><ol class="pb-toc-list"><li><a href="#help">Near or over the threshold</a></li><li><a href="#rules">The rules</a></li></ol></div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="standard-fund-threshold">
   <div class="panel">
     <h2 id="details">Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="total">All your pensions, when you take them</label><span class="val" id="totalV">€1,650,000</span></div><input type="range" id="total" min="0" max="4000000" step="25000" value="1650000"><p class="subnote">Every pension you have, added up. A defined benefit pension is given a capital value using Revenue&rsquo;s factors, which Damian can work out with you.</p></div>
+    <p class="hint">Slide, or tap a value to type it.</p>
+    <div class="field"><div class="row"><label for="total">All your pensions, when you take them</label><span class="val" id="totalV">€1,650,000</span></div><input type="range" id="total" min="0" max="4000000" step="25000" value="1650000"><p class="subnote">Defined benefit pensions are valued with Revenue&rsquo;s factors.</p></div>
     <div class="field"><div class="row"><label for="year">The year you take them</label><span class="val" id="yearV">2026</span></div><input type="range" id="year" min="2026" max="2030" step="1" value="2026"></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="lump">The lump sum you take</label><span class="val" id="lumpV">€400,000</span></div><input type="range" id="lump" min="0" max="1000000" step="5000" value="400000"><p class="subnote">Usually up to 25% of a fund, within limits. The bands below apply to all your retirement lump sums together, over your lifetime.</p></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="lump">The lump sum you take</label><span class="val" id="lumpV">€400,000</span></div><input type="range" id="lump" min="0" max="1000000" step="5000" value="400000"><p class="subnote">Usually up to 25% of a fund, within limits. The bands are lifetime limits.</p></div>
   </div>
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero">
       <div><div class="rl" id="thrL">The threshold for 2026</div><div class="big" id="thr">€2,200,000</div></div>
-      <div><div class="rl">The share you would use</div><div class="big" id="share">75%</div></div>
+      <div><div class="rl">Share used</div><div class="big" id="share">75%</div></div>
       <p class="pb-say" id="pbSay">€1,650,000 taken in 2026 uses 75% of that year&rsquo;s threshold, leaving €550,000 of headroom.</p>
       <div class="divline"></div>
-      <div class="foot">An illustration of Revenue&rsquo;s rules, not a calculation of your own tax. A Personal Fund Threshold, if you have one, may apply instead.</div>
+      <div class="foot">Revenue&rsquo;s rules, not your tax. A Personal Fund Threshold, if held, may apply instead.</div>
     </div>
 
     <div class="chart-card sft-strip-card">
-      <h3>The threshold, year by year</h3>
+      <h3>Year by year</h3>
       <div class="sft-lim" id="sftLim" aria-hidden="true">
         <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
         <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
@@ -40,27 +39,26 @@
         <li data-y="2029"><b>2029</b><span>€2.8m</span></li>
         <li data-y="2030"><b>2030 on</b><span>At least €2.8m</span></li>
       </ol>
-      <p class="sft-strip-note">Set by Finance Act 2024. From 2030 it rises each year with average earnings, as the Central Statistics Office (CSO) measures them, and cannot fall.</p>
     </div>
 
     <div class="sft-card" id="sftOver" hidden>
       <h3>Over the threshold</h3>
       <p id="sftOverText"></p>
-      <p class="sft-small">What is left of the excess stays in the pension and is taxed again as income when it is drawn. The Department of Finance&rsquo;s independent examination of the threshold (2024) put the combined rate at up to 68.8%, or 71.2% with Pay-Related Social Insurance (PRSI).</p>
+      <p class="sft-small">Income tax on the rest takes the combined rate up to 68.8%, or 71.2% with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
     </div>
 
     <div class="sft-card">
-      <h3>Tax on the lump sum</h3>
+      <h3>Lump sum tax</h3>
       <table class="sft-t">
-        <caption class="tk-sr">How the lump sum is taxed, band by band</caption>
+        <caption class="tk-sr">Lump sum bands</caption>
         <tbody>
-          <tr><th scope="row">The first €200,000, tax-free</th><td id="lumpFree">€200,000</td></tr>
-          <tr><th scope="row">The next €300,000, at 20%</th><td id="lumpStd">€200,000</td></tr>
+          <tr><th scope="row">First €200,000, tax-free</th><td id="lumpFree">€200,000</td></tr>
+          <tr><th scope="row">Next €300,000, at 20%</th><td id="lumpStd">€200,000</td></tr>
           <tr><th scope="row">Tax at 20%</th><td id="lumpTax">€40,000</td></tr>
-          <tr><th scope="row">Above €500,000, taxed as income</th><td id="lumpInc">€0</td></tr>
+          <tr><th scope="row">Above €500,000, as income</th><td id="lumpInc">€0</td></tr>
         </tbody>
       </table>
-      <p class="sft-small">Anything above €500,000 is taxed as income at your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025, so it no longer rises with the threshold.</p>
+      <p class="sft-small">Above €500,000: your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025 (Revenue Pensions Manual, chapter 27).</p>
       <div class="sft-lb" id="sftLb" aria-hidden="true">
         <div class="sft-lb-track"><i class="sft-lb-free" id="sftLbFree" style="flex-grow:200000"></i><i class="sft-lb-std" id="sftLbStd" style="flex-grow:200000"></i><i class="sft-lb-inc" id="sftLbInc" style="flex-grow:0" hidden></i></div>
         <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
@@ -72,7 +70,7 @@
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2 id="help">Close to the threshold, or over it?</h2><p>Timing, the order benefits are taken in, and how a defined benefit pension is valued all change the answer, and the tax on getting it wrong is steep. Damian works through this with directors and higher earners in a free 20-minute call.</p></div>
+  <div class="ctext"><h2 id="help">Near or over the threshold</h2></div>
   <a class="btn btn-primary" href="booking.html">Book a call with Damian for free <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -80,19 +78,17 @@
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> It applies Revenue&rsquo;s published figures to the numbers you choose. It does not value your pensions, does not know your tax position, and is not a recommendation about when or how to take your benefits. Advice on that is given in a personal consultation with Damian.</p>
+    <p><b>This page is information, not advice.</b></p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3 id="rules">The rules behind these numbers</h3>
+  <h3 id="rules">The rules</h3>
   <ul>
-    <li>The Standard Fund Threshold is €2.2 million for 2026, €2.4 million for 2027, €2.6 million for 2028 and €2.8 million for 2029 (Finance Act 2024, section 13). It was €2 million from 2014 to 2025. From 2030 it follows average weekly earnings as the CSO measures them, and it can never fall, so a year from 2030 on is shown here at €2.8 million, the least it can be.</li>
-    <li>The threshold is measured each time you take a benefit, against everything you have taken since 7 December 2005. This page treats all your pensions as taken in one year.</li>
-    <li>Any excess is taxed at 40% when the benefit is taken, as chargeable excess tax, with no reliefs set against it. Tax paid at 20% on a lump sum, up to €60,000, can be set against it. See <a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue&rsquo;s page on chargeable excess tax</a>.</li>
-    <li>Retirement lump sums: the first €200,000 is tax-free over your lifetime, the next €300,000 is taxed at 20%, and the rest is taxed as income at your marginal rate, with USC (Revenue Pensions Manual, chapter 27).</li>
-    <li>A Personal Fund Threshold, granted to people whose pensions were already above the threshold when it was cut, may apply instead of the figures here.</li>
-    <li>Figures are illustrations, not a guarantee of any outcome, and not personalised advice. Tax rules can change at any Budget.</li>
+    <li>Finance Act 2024, section 13, sets the threshold. It was €2 million from 2014 to 2025. From 2030 it tracks Central Statistics Office average weekly earnings and cannot fall.</li>
+    <li>Each benefit is tested against all taken since 7 December 2005. Here, all are taken in one year.</li>
+    <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it.</li>
+    <li>Figures are illustrations, not a guarantee.</li>
   </ul>
 </div></section>
 <div class="wrap"><aside class="pb-next" aria-labelledby="pbNextH"><p class="pb-next-k" id="pbNextH">Next step</p><a class="pb-next-card pb-card-link" href="booking.html"><span class="pb-next-t">Book a call with Damian for free</span><span class="pb-next-d">Free · 20 minutes · no obligation · easy to reschedule.</span></a></aside></div>
