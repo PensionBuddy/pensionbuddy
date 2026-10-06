@@ -39,7 +39,7 @@
   --ink:#0B1F1C; --ink-2:#54635F; --ink-3:#647270;
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#C2410C; --slate:#586B85;
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#FADCD3; --slate:#586B85;
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
   --sh-sm:none;
@@ -116,13 +116,13 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
 /* ---- results ---- */
 .results{display:flex;flex-direction:column;gap:18px;min-width:0}
-.res-hero{background:var(--teal-900);color:#fff;border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
+.res-hero{background:var(--teal-50);color:var(--ink);border:1px solid var(--teal-100);border-radius:var(--r-xl);padding:30px 32px;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px;position:relative;overflow:hidden;box-shadow:var(--sh-lg)}
 .res-hero::before{content:"";position:absolute;inset:0;pointer-events:none}
 .res-hero>div{position:relative;min-width:0}
-.res-hero .rl{font-size:13.5px;font-weight:500;color:#9FDDD2;margin-bottom:8px}
-.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:#fff;font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
-.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(255,255,255,.16)}
-.res-hero .foot{grid-column:1/-1;font-size:13px;color:#9FDDD2;line-height:1.6}
+.res-hero .rl{font-size:13.5px;font-weight:500;color:var(--ink-2);margin-bottom:8px}
+.res-hero .big{font-weight:800;font-size:clamp(28px,3.4vw,42px);letter-spacing:-0.04em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;font-family:var(--font);font-weight:600;overflow-wrap:break-word}
+.res-hero .divline{grid-column:1/-1;height:1px;background:rgba(11,31,28,.12)}
+.res-hero .foot{grid-column:1/-1;font-size:13px;color:var(--ink-2);line-height:1.6}
 /* #4: the headline figures as one plain sentence, written from the same final
    values as the figures above. White on --teal-900, inherited from .res-hero. */
 .res-hero .pb-sp-top{margin-top:-6px;font-size:14px;color:inherit;opacity:.92}
@@ -419,7 +419,7 @@ input[type=range]::-webkit-slider-thumb{transition:transform .16s cubic-bezier(.
 .about-port::before{pointer-events:none}
 .about-port .pl{color:#9FB3AE}
 /* 3) Calculator showcase preview + booking promise: neutral deep-ink (supporting{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
-.promise{background:linear-gradient(160deg,var(--ink-800),var(--ink-900))}
+.promise{background:var(--teal-50)}
 .promise::before{pointer-events:none}
 /* keep the FINAL CTA and calculator RESULT panels in true teal, these are the earned moments */
 /* soften callout bands slightly: deep-ink base with a teal glow rather than full teal-900 */
@@ -766,7 +766,7 @@ a.btn{font-weight:600}
 
 /* Base rule `h1,h2,h3,h4{color:var(--ink)}` beats inherited white,so headings
    sitting on the dark photo overlay rendered ink-on-ink (1:1,invisible). */
-.cap h1,.cap h2,.cap h3,.cap h4,.cap p,.final h1,.final h2,.final h3,.callout h1,.callout h2,.callout h3{color:#fff}
+.cap h1,.cap h2,.cap h3,.cap h4,.cap p,.callout h1,.callout h2,.callout h3{color:#fff}
 
 /* `.relief-card .rt` is (0,2,0) and outranked the pass-7 fix at (0,1,0) */
 .relief-card .rt,.boost-card .rt,.panel .rt,.rt{color:#8C6010}
@@ -1188,10 +1188,11 @@ input[type=range]::-moz-range-thumb{background:var(--teal-bright);border-color:#
 /* mint is for accents ON the dark panels only. .hc-flabel sits inside the
    hero card,which is white - it was pulled in here by mistake and dropped to
    1.52:1. It stays on the AA-safe ink tone. */
-.final .eyebrow,.callout .eyebrow,.tick .eyebrow,.res-hero .eyebrow{color:var(--teal-mint)}
+.callout .eyebrow,.tick .eyebrow{color:var(--teal-mint)}
+.final .eyebrow,.res-hero .eyebrow{color:var(--teal-700)}
 .hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
 .tick .tk-n{color:#fff}
-.res-hero .rbar i:last-child{background:var(--teal-mint)}
+.res-hero .rbar i:last-child{background:var(--teal)}
 .final .paw-bg,.callout .paw-bg{opacity:.09}
 
 /* text and filled buttons stay on the AA-safe bright teal */
@@ -1224,7 +1225,8 @@ a.btn.btn-primary,a.btn.btn-acc,button.btn-primary{color:var(--aqua-ink)}
 .btn-primary:hover .ico,.btn-acc:hover .ico{stroke:var(--aqua-ink)}
 
 /* on the dark bands the light button keeps white, but its arrow warms up */
-.final .btn-light,.callout .btn-light,.tick .btn-light{background:#fff;color:var(--teal-900)}
+.callout .btn-light,.tick .btn-light{background:#fff;color:var(--teal-900)}
+.final .btn-light{background:var(--aqua);color:var(--aqua-ink)}
 
 /* --- graphics: let the colour actually sing --- */
 .hc-bars i:last-child{background:var(--aqua)}
@@ -1243,8 +1245,6 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .eyebrow .pip{background:var(--aqua);opacity:1;height:2px;width:16px}
 .boost-ico{color:var(--aqua-600)}
 .waitcard{border-left-color:var(--aqua)}
-.waitcard:has(#waitOut){border-left-color:var(--gap)}
-#waitOut b{color:var(--gap)}
 .stars svg{fill:var(--aqua)}
 .rv-you,.rv-bar i:first-child{background:var(--ink-2)}
 
@@ -1253,9 +1253,10 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .deadline{background:var(--teal-50);border-color:var(--teal-100)}
 
 /* --- accents on the dark panels: proper bright mint --- */
-.final .eyebrow,.callout .eyebrow,.tick .eyebrow,.res-hero .eyebrow{color:var(--mint)}
-.res-hero .rbar i:last-child{background:var(--mint)}
-.res-hero .rbar i{background:rgba(255,255,255,.10)}
+.callout .eyebrow,.tick .eyebrow{color:var(--mint)}
+.final .eyebrow,.res-hero .eyebrow{color:var(--teal-700)}
+.res-hero .rbar i:last-child{background:var(--teal)}
+.res-hero .rbar i{background:rgba(11,31,28,.08)}
 .hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
 
 /* --- softer shapes: square corners read formal --- */
@@ -2093,7 +2094,8 @@ main p.ec-note *{font-size:1rem !important}
    page itself). */
 body p.pb-reviewed,body .phead p.pb-reviewed{margin:14px 0 0;max-width:none;font-size:16px;line-height:1.5;color:var(--ink-2)}
 body p.pb-why{margin:10px 0 0;max-width:none;font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
-body .callout p.pb-why,body .final p.pb-why{color:rgba(255,255,255,.86)}
+body .callout p.pb-why{color:rgba(255,255,255,.86)}
+body .final p.pb-why{color:var(--ink-2)}
 .cta-card p.pb-why{position:relative;margin:-16px 0 0;text-align:center}
 @media(min-width:921px){.cta-card:has(>p.pb-why){grid-template-rows:auto auto;row-gap:10px}.cta-card:has(>p.pb-why)>.buddy-mini,.cta-card:has(>p.pb-why)>.ctext{grid-row:1/span 2}.cta-card:has(>p.pb-why)>.btn{grid-row:1;align-self:end}.cta-card p.pb-why{grid-row:2;grid-column:3;align-self:start;width:0;min-width:100%;margin:0}}
 .hero-cta p.pb-why{flex:1 0 100%;order:3;margin:0}
@@ -2523,7 +2525,7 @@ main h1{font-weight:800}
 
 .res-hero .pia-hl,.res-hero .pia-three{grid-column:1/-1}
 .res-hero .pia-hl{margin-bottom:0}
-.res-hero .pia-note{color:#9FDDD2}
+.res-hero .pia-note{color:var(--ink-2)}
 .pia-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .pia-three .big{font-size:clamp(26px,2.6vw,34px);overflow-wrap:anywhere}
 .pia-note{margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}

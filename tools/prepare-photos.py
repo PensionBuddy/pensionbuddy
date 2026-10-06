@@ -56,8 +56,9 @@ STRIP_Q = 72
 # needs no cropping in the browser. 'box' squares a source that is not already
 # 4:5; None means the source is close enough to resize straight.
 PORTRAITS = [
-    {'source': 'Headshot.JPG', 'slug': 'adam-condon-portrait',
-     'box': None, 'size': (620, 775), 'quality': 84},
+    # Adam's studio headshot, red jumper (October 2026): 960x1200, 4:5 as shot.
+    {'source': 'Adam-Headshot-Red.jpg', 'slug': 'adam-condon-portrait',
+     'box': None, 'size': (800, 1000), 'quality': 84},
     # Damian's two studio headshots (October 2026), shown in turn in his
     # section: 115 (arms crossed) first, 321 (the Pensionbuddy cap) second.
     # Both are 1333x2000; each box is 1332x1665, 4:5, set so the eyes sit at

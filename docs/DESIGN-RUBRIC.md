@@ -116,7 +116,7 @@ two-fifths of a screen, top to bottom.
 
 ## 3. Colour
 
-**Neutrals carry the page. One accent. Three chart colours with one meaning each: burnt orange (`--gap`) is money missing, amber is money coming back, teal is what the State pays; everything else in a chart is slate, a neutral.**
+**Neutrals carry the page. One accent. Three chart colours with one meaning each: blush coral (`--gap`) is money missing, amber is money coming back, teal is what the State pays; everything else in a chart is slate, a neutral.**
 
 | Token | Value | The only things it is for |
 |---|---|---|
@@ -132,18 +132,26 @@ two-fifths of a screen, top to bottom.
 | `--teal-900` | #0A332E | the dark band's surface (a surface, not an accent) |
 | `--mint` | #5EEAD4 | small accent text on the dark band (eyebrows) |
 | `--amber` | #F4B740 | in a chart or bar: money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up). Nowhere else |
-| `--gap` | #C2410C | burnt orange. In a chart, bar or figure: money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot). White text on it 5.18:1; as text AA on every light surface (5.18:1 on white, 4.96:1 on `--bg`, 4.73:1 on `--surface-2`, 4.66:1 on the wash); never on a dark band; at a lighter strength (opacity, never a second token) only inside one bar whose parts are named in a key, every part 3:1 or better against the page (the director bar: 1 / .87 / .74) |
+| `--gap` | #FADCD3 | blush coral, chosen 6 October 2026 by the owner from six pale options (`docs/gap-orange-shots/pale-options.png`) after burnt orange and the old pale yellow. A fill only (blocks, chart areas, key swatches), with dark text on it: `--ink` 13.24:1, `--ink-2` 4.88:1; never white text and never a text colour. Gap figures are `--ink`. The cost of waiting is teal, the director tax bar three greys, Jargon Battle terracotta, all as before Run 42. A different hue from amber (money back), so the two no longer share a family |
 | `--red` | #A4291D | a form's error state, and nothing else. White text on it 7.21:1; as text 6.49:1 on the wash |
 | `--slate` | #586B85 | in a chart, bar, line, key or figure: everything that is not the State's, not money missing, not money back and not what you need (your own pot, a projection, the other plan, a way of life's costs, a statistic, a scale), as decided in Run 43. A neutral blue-grey (saturation 0.20; `tools/design-measure.py` counts it as no hue). As text AA on every light surface (4.98:1 on `--surface-2`, 5.00:1 on the wash); white text on it 5.45:1; 3.14:1 against `--ink`; never the only cue beside `--red` (1.32:1), `--ink-3` (1.01:1) or `--ink-2` (1.16:1): a key, a dash, a pattern, a white edge or a label carries the difference; at a lighter strength (opacity, never a second token) only inside one bar whose parts are named in words |
 
 - **The accent is one hue family.** Aqua, teal-700 and mint are the same
   colour at three strengths, for three backgrounds; together they are the
   one accent. In a chart, a bar or a figure the accent's hue means one thing, what the State pays (Run 43); a reader's own pot, a projection or a statistic in teal would read as the State's. The reader's own place on a scale (a "You" chip, the picked year, the step that applies) is neutral: ink on `--surface-2`, or a slate mark.
-- **Amber and burnt orange are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and burnt orange (`--gap`) means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap; the red of Run 42 became burnt orange, #C2410C, in October 2026); teal is what the State pays (the State Pension, and only that; the State's top-up into auto-enrolment is money back, amber), dark is what you need, and slate is everything else (Run 43). An orange or slate figure or mark always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
+- **Amber and the gap coral are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and blush coral (`--gap`) means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap; the red of Run 42 became blush coral, #FADCD3, on 6 October 2026); teal is what the State pays (the State Pension, and only that; the State's top-up into auto-enrolment is money back, amber), dark is what you need, and slate is everything else (Run 43). A gap or slate mark always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
 - **No other hues.** A form's error state uses `--red`, and only a form's error state does. The warnings are black on `--surface-2` with a rule, as they are now.
-- **Text colours on a page:** the three inks, teal-700, white and mint; and, for a figure or its label only, burnt orange (money missing) or slate (Run 43), never body text.
+- **Text colours on a page:** the three inks, teal-700, white and mint; and, for a figure or its label only, slate (Run 43); gap figures are ink, never body text.
 - **Dark bands:** at most two on a page besides the footer, never one
   straight after the other.
+- **Mist teal, not dark (6 October 2026):** the calculator result card
+  (`.res-hero`), the closing "book a call" band (`.final`), the visitor's chat
+  bubble (`.msg.them`) and the booking "house promise" card (`.promise`) are
+  `--teal-50` with a `--teal-100` border and ink text (labels `--ink-2`,
+  eyebrows `--teal-700`); the closing band's button is the aqua primary.
+  Still dark on purpose: the homepage deadline band (`.tick`), the
+  `.callout` bands, the cookie bar and the footer. Mock-ups in
+  `docs/pale-mockups/`.
 - **Contrast:** AA, 4.5:1 for body and meta, 3:1 for text 24px and over;
   aqua is never text on a light background.
 - `--ink-3` is defined twice in every stylesheet (#647270, then #5D6C67
