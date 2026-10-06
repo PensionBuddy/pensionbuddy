@@ -1530,6 +1530,21 @@ button{font-family:inherit}
 .pb-split-media{margin:0}
 .pb-split-media img{display:block;width:100%;max-width:100%;height:auto;border-radius:12px;
   border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px rgba(0,0,0,.4)}
+/* MIST TEAL (6 October 2026): the "see your own numbers" band is pale like
+   the result card it shows. Scoped .callout.pb-dark to outrank both the
+   .callout and the .pb-dark rules; the deadline band (.tick) stays dark. */
+.callout.pb-dark{background:var(--teal-50);color:var(--ink);border-block:1px solid var(--teal-100)}
+.callout.pb-dark h2,.callout.pb-dark h3{color:var(--ink)}
+.callout.pb-dark p,.callout.pb-dark p.pb-why,.callout.pb-dark .pb-split-cap,.callout.pb-dark .pb-src,.callout.pb-dark .pb-stat-l{color:var(--ink-2)}
+.callout.pb-dark .pb-plain,.callout.pb-dark .pb-stat-n,.callout.pb-dark .pb-rw,.callout.pb-dark .pb-rw-out{color:var(--ink)}
+.callout.pb-dark .eyebrow,.callout.pb-dark .pb-rw-link{color:var(--teal-700)}
+.callout.pb-dark .btn-light{background:var(--aqua);color:var(--aqua-ink)}
+.callout.pb-dark .btn.btn-quiet-dark{color:var(--ink);border-color:rgba(11,31,28,.4)}
+.callout.pb-dark .btn.btn-quiet-dark:hover{background:rgba(11,31,28,.05);border-color:var(--ink);color:var(--ink)}
+.callout.pb-dark .btn.btn-quiet-dark:focus-visible{box-shadow:0 0 0 3px var(--ring)}
+.callout.pb-dark .pb-split-media img{border-color:var(--teal-100);box-shadow:0 1px 2px rgba(11,31,28,.06),0 24px 60px -28px rgba(11,31,28,.35)}
+.callout.pb-dark .pb-ann-under{opacity:0}
+.callout.pb-dark .pb-ann-l{box-shadow:0 1px 3px rgba(11,31,28,.18)}
 /* (Run 39) width:100% keeps the photograph's box before it loads: a grid
    item centred by auto margins shrinks to its contents, and until the
    image arrived that was only its caption (161px tall, then 523px) */
