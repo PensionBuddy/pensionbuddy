@@ -8,11 +8,8 @@
    anything, "Email me this result". This file does three things and writes
    nothing else.
 
-   1. THE BUTTON'S ADDRESS. booking.html says "You've seen your number. Last
-      step: 20 minutes with Damian." only when its address carries #from=
-      and one of the nine calculators. The button gets that fragment only
-      while all three hold, so the line is true for whoever sees it: the
-      reader has changed one of this calculator's own controls on this visit
+   1. THE BUTTON'S ADDRESS. The button carries #from= and one of the nine
+      calculators only while all three hold: the reader has changed one of this calculator's own controls on this visit
       (a trusted input, change or button press inside [data-pb-calc]; or a
       trusted press on a drawn control, such as the reality check's jar,
       followed by the input it sets; never a shared link replaying its

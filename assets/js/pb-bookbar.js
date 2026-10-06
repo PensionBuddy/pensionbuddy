@@ -1,4 +1,4 @@
-/* The booking bar: "Book free 20 min call", pinned to the bottom of a phone
+/* The booking bar: "Book a free 20-minute call with us", pinned to the bottom of a phone
    screen, so the booking link stays in reach between the page's own asks
    (Run 45, give then ask: until then it was on five content pages only).
 
@@ -39,7 +39,7 @@
        goes. While the Ask Buddy panel is open (the button's aria-expanded is
        "true") the bar is held away like it is for the cookie bar: the lift
        drops, so the panel opens exactly where it always did, with its own
-       "Book a call with Damian for free" button, and the bar comes back when
+       "Book a free 20-minute call with us" button, and the bar comes back when
        the panel closes. A MutationObserver on the button sees it open and
        close.
      - A text field: while one has focus the bar tucks away, so on a phone it
@@ -95,7 +95,7 @@
 
   var bar = doc.createElement('div');
   bar.className = 'pb-bookbar';
-  bar.innerHTML = '<a class="btn btn-primary" href="booking.html" data-pb-cta="bookbar">Book free 20 min call</a>'
+  bar.innerHTML = '<a class="btn btn-primary" href="booking.html" data-pb-cta="bookbar">Book a free 20-minute call with us</a>'
     + '<button type="button" class="pb-bookbar-x" aria-label="Close">'
     + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
     + '</button>';

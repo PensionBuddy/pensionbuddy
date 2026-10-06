@@ -18,7 +18,7 @@
      G1  on each calculator and tool with a result: its "What this doesn't
          show" line, word for word, where it has one, and one block: one
          booking button, in the wording pb-cta.js picked for this visit
-         (A "Book a free 20-minute call with Damian" or B "See what this
+         (A "Book a free 20-minute call with us" or B "See what this
          means for you - free 20-min call"), and "Free. No obligation. No
          pressure." under it
      G2  at load the button is plain booking.html, as in the markup (no tag
@@ -79,7 +79,7 @@ const eq = (label, got, want) => {
 
 
 const RSQ = '’';
-const WORDS = { A: 'Book a free 20-minute call with Damian', B: 'See what this means for you - free 20-min call' };
+const WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means for you - free 20-min call' };
 const WHY = 'Free. No obligation. No pressure.';
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {

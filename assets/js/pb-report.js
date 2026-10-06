@@ -131,7 +131,7 @@
     }
     r.appendChild(el('h2', 'Next steps'));
     r.appendChild(el('p', 'Open these figures again: ' + link()));
-    r.appendChild(el('p', 'Talk them through with Damian in a free 20-minute call: ' + location.origin + '/booking.html'));
+    r.appendChild(el('p', 'Book a free 20-minute call with us: ' + location.origin + '/booking.html'));
     r.appendChild(el('p', 'Free \u00b7 20 minutes \u00b7 no obligation \u00b7 easy to reschedule.'));
     disclosure().forEach(function (t) { r.appendChild(el('p', t, 'pb-r-small')); });
     return r;

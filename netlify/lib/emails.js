@@ -29,7 +29,7 @@ var TEXT = require('../../shared/compliance-text.json');
 var FROM = 'Pensionbuddy <hello@pensionbuddy.ie>';
 var REPLY_TO = 'hello@pensionbuddy.ie';
 var SITE = 'https://pensionbuddy.ie';
-var BOOK_WORDS = 'Book a free 20-minute call with Damian';   // tools/pagebuild.py AFTER_WORDS
+var BOOK_WORDS = 'Book a free 20-minute call with us';   // tools/pagebuild.py AFTER_WORDS
 
 // page file -> the calculator's name, as the footer's Tools list names it
 var CALCULATORS = {

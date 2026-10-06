@@ -7,7 +7,7 @@
    1. THE BUTTON TEST. The booking button after a calculator's result
       (pagebuild.after_block, marked data-pb-ab="cta") reads one of two
       wordings, half the visitors each:
-        A  "Book a free 20-minute call with Damian"   (in the markup)
+        A  "Book a free 20-minute call with us"   (in the markup)
         B  "See what this means for you - free 20-min call"
       Which one a visitor sees is picked at random. Nothing is stored
       before the cookie choice: until "That's fine" the pick lives in this
@@ -58,7 +58,7 @@
 (function () {
   'use strict';
   var KEY = 'pb-ab-cta';
-  var WORDS = { A: 'Book a free 20-minute call with Damian', B: 'See what this means for you - free 20-min call' };
+  var WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means for you - free 20-min call' };
   var UTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
   var doc = document;
 

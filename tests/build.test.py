@@ -2351,7 +2351,7 @@ def run():
         'tracker.html': ('Help me find my pensions', ('id="pbTrace"', 'data-pb-award="ticks"'),
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
-        'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
+        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
                           '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                           '  <div class="sec-head"><span class="kicker">Sound familiar?</span>'),
     }
@@ -2398,7 +2398,7 @@ def run():
             ('the chat picture\'s link put back', 'tracker.html',
              sources['tracker.html'].replace(
                  'is usually enough to start tracing a pension.</p>\n',
-                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a call with Damian for free</a></p>\n', 1),
+                 'is usually enough to start tracing a pension.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
@@ -2633,7 +2633,7 @@ def run():
        [e for e in ("'calculator_complete'", "'email_result_submit'") if e not in read('assets/js/pb-after.js')], [])
 
     # ----------------------------------------------------------------- 51
-    # Run 45: the phone booking bar, "Book free 20 min call", on the home
+    # Run 45: the phone booking bar, "Book a free 20-minute call with us", on the home
     # page, the audience pages, the glossary, every page built from the
     # skeleton and the director calculator, and the five guides; never on
     # booking, the legal pages, the 404, the thank-you page or how we work.
@@ -2647,7 +2647,7 @@ def run():
     eq('51. the phone booking bar on the content pages, the calculators and tools and the guides, and nowhere else',
        sorted(p for p, t in sources.items() if re.search(r'<script src="assets/js/pb-bookbar\.js\?v=[0-9a-f]+"></script>', t)), BAR)
     eq('51. its words, and no reason line in it (the words carry it)',
-       ('>Book free 20 min call</a>' in bar_js, 'pb-why' in bar_js), (True, False))
+       ('>Book a free 20-minute call with us</a>' in bar_js, 'pb-why' in bar_js), (True, False))
     eq('51. it stops on a page kept out of search', "meta[name=\"robots\"][content*=\"noindex\"]" in bar_js, True)
     eq('51. it stands aside for a calculator\'s inputs, the block after the result and every booking link in the page',
        [x for x in ("main a[href^=\"booking.html\"]", '#pbAfter', '.calc-wrap .panel', 'form[data-pb-calc]', "'pb-peek-on'") if x not in bar_js], [])
