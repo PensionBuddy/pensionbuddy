@@ -445,6 +445,7 @@ def assemble(page):
     body = with_after(body, page.out)
     # Run 47: the prescribed warnings, from pagebuild.WARN (below)
     body = with_warn(body)
+    body = with_calendly(body)
     if page.reviewed:
         # the last line of the page header, whatever the part put above it
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
@@ -848,6 +849,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             new = with_related(new, page)
             new = with_after(new, page)
             new = with_warn(new)
+            new = with_calendly(new)
             if new != sources[page]:
                 out[page] = new
             continue
@@ -878,6 +880,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
         new = with_related(new, page)
         new = with_after(new, page)
         new = with_warn(new)
+        new = with_calendly(new)
         if new != text:
             out[page] = new
     return out
@@ -1030,6 +1033,20 @@ def related_drift(sources):
 # one copy.
 with open(os.path.join(ROOT, 'shared', 'compliance-text.json'), encoding='utf-8') as _f:
     WARN = '<div class="pb-warn">%s</div>' % ''.join('<p><b>%s</b></p>' % w for w in json.load(_f)['warnings'])
+# Damian's booking calendar (Calendly event link), defined once in
+# shared/site-links.json. with_calendly() writes it over any Calendly event
+# link in a page (not the widget's assets.calendly.com files); booking.html's
+# script adds the utm_* tags to it at run time.
+with open(os.path.join(ROOT, 'shared', 'site-links.json'), encoding='utf-8') as _f:
+    CALENDLY = json.load(_f)['calendly']
+CALENDLY_PAT = re.compile(r'https://calendly\.com/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+')
+
+
+def with_calendly(text):
+    """text with every Calendly event link set to CALENDLY"""
+    return CALENDLY_PAT.sub(CALENDLY, text)
+
+
 WARN_OPEN, WARN_CLOSE = '<!-- WARN:BEGIN (pagebuild.WARN) -->', '<!-- WARN:END -->'
 WARN_PAT = re.compile(re.escape(WARN_OPEN) + r'(.*?)' + re.escape(WARN_CLOSE))
 # every page with projected figures, and how many boxes it shows them under

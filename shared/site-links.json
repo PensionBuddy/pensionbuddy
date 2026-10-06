@@ -1,0 +1,4 @@
+{
+  "_about": "The one copy of outside links the site, its scripts and its tests use. tools/pagebuild.py writes calendly into every page (with_calendly); tests/give-then-ask.test.mjs and tests/links.test.js read it from here.",
+  "calendly": "https://calendly.com/damian-pensionbuddy/pensionbuddy-1-1"
+}

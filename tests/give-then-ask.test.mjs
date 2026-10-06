@@ -65,6 +65,8 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(process.argv[2] || join(HERE, '..'));
+// Damian's calendar, from the one shared copy
+const CALENDLY = JSON.parse(readFileSync(join(ROOT, 'shared', 'site-links.json'), 'utf8')).calendly;
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let passed = 0, failed = 0;
@@ -387,7 +389,7 @@ for (const [q, hash, shows, term] of [
      shows ? [b.display !== 'none', b.text] : b.display, shows ? [true, FROM_LINE] : 'none');
   eq(`G11. ${label}: the h1 unchanged`, b.h1, H1);
   eq(`G11. ${label}: the calendar at once, with no form before it`, [b.form, b.widget], [false, true]);
-  const want = 'https://calendly.com/damian-greshamwealth/pensionbuddy-1-1?' +
+  const want = CALENDLY + '?' +
     (q ? 'utm_source=site&utm_medium=cta&utm_campaign=director-calculator&utm_content=B' : 'utm_source=pensionbuddy&utm_medium=booking-page') +
     (term ? '&utm_term=' + term : '');
   eq(`G11. ${label}: the calendar, and its fallback link, carry the tags`, [b.url, b.open], [want, want]);
