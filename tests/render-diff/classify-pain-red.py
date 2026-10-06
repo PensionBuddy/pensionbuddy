@@ -63,7 +63,7 @@ SIX = list(bd.PAGES)            # the six calculators, browser-diff's own order
 TOUCHED = ['index.html', 'starter.html', 'director.html', 'glossary.html', 'booking.html', 'thank-you.html',
            'pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
            'state-pension-reality-check.html', 'pension-fees-calculator.html', 'standard-fund-threshold.html']
-ROOT_PROPS = ['--red', '--slate', '--amber', '--amber-soft', '--aqua', '--teal', '--teal-50', '--teal-100', '--teal-700',
+ROOT_PROPS = ['--red', '--gap', '--slate', '--amber', '--amber-soft', '--aqua', '--teal', '--teal-50', '--teal-100', '--teal-700',
               '--teal-900', '--mint', '--ink', '--ink-2', '--ink-3', '--line', '--line-2', '--surface',
               '--surface-2', '--bg', '--terracotta']
 EXTRA_OK = {'rgb(255, 255, 255)', 'rgb(140, 96, 16)', 'rgba(0, 0, 0, 0)', 'none'}
