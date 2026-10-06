@@ -338,15 +338,19 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
-# Run 46 — 2026-10-06 · Copy cut (on `claude/clever-wozniak-dmpzph`, not merged)
+# Run 46 — 2026-10-06 · Copy cut (on `claude/clever-wozniak-dmpzph`, merged to main)
 
-Damian's brief: cut site copy hard; keep the warnings, regulator lines,
-figures, sources, calculator labels and logic, consent and privacy text;
-leave copy that is in `docs/COMPLIANCE-PACK.md` and flag it. Result,
-tables of every changed line, the flagged pack lines and the gate:
-`docs/COPY-CUT-2026-10-06.md`. Three commits: the cut; the home page's
-locked story and bios (own commit, so it can be dropped); the Terms of
-Use dashes (own commit). Gate: no failing line `main` does not have.
+Damian's order, in two rounds. First a cut that left the compliance pack's
+copy alone; then, the same day, "ignore the pack freeze, cut every page
+hard, at least 40%". Kept word for word: the prescribed warnings, the
+Central Bank lines, consent and privacy text, figures, dates and sources,
+calculator labels and logic. 27,171 words to 18,879 (31%) across the
+changed pages; 8 pages reached 40%. Sections that repeated others are gone
+(the home page's six places and call chat picture, the audience pages'
+pain cards, the reality check's explainer). One commit per page. Gate: no
+failing line live main does not have. Everything, with the reasons some
+pages are under 40%: `docs/COPY-CUT-2026-10-06.md`. The pack carries a
+note that its quotations are stale.
 
 # Run 45 — 2026-10-05 · Give, then ask: one button after each result, "Email me this result", the calendar first, a bar on every content page, a button test (on `claude/clever-fermi-rgdc2a`)
 
