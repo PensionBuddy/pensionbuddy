@@ -787,7 +787,7 @@ def run():
              '<div class="legal reveal">'),
             ('a legal notice revealed whole', 'terms.html', '<div class="legal pb-caveat">',
              '<div class="legal pb-caveat reveal">'),
-            ('the hero caveat in a revealed phone', 'index.html', '<div class="hero-phone"', '<div class="hero-phone reveal"')):
+            ('the product caveat revealed', 'index.html', '<figcaption class="pb-product-cap">', '<figcaption class="pb-product-cap reveal">')):
         m = dict(sources)
         assert find in m[page], (label, find)
         m[page] = m[page].replace(find, repl, 1)
@@ -1371,7 +1371,7 @@ def run():
         if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
             return ['the section is not straight after "What\'s changed?" and before the calculator band']
         box = m.group(1)
-        if '<h2>Just here to learn? <span class="pb-soft">Play the jargon buster.</span></h2>' not in box:
+        if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
         # (Run 38: the picture sits in .pb-learn-media with the video over it;
         # check 43 holds the video and its button)
@@ -1640,11 +1640,11 @@ def run():
     # and the mark move, never for a reader who asks for less motion.
     def timeline_faults(ix, srcs, js):
         f = []
-        aud = ix.find('<section id="audience">')
+        aud = ix.find('<section id="calc" ')
         dl = ix.find('<section class="tickband" id="deadline">')
         m = re.search(r'<section class="pb-tl-sec" id="through-life"><div class="wrap">(.*?)</div></section>', ix, re.S)
         if not m or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
-            return ['the section is not straight after "Six places to begin" and before the deadline']
+            return ['the section is not straight after the calculator band and before the deadline']
         box = m.group(1)
         if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
             f.append('the kicker or the heading')
@@ -1681,7 +1681,7 @@ def run():
     import html
     tl_js = read('assets/js/pb-timeline.js')
     ix = sources['index.html']
-    eq('36. "Your pension through life": after the six places, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
+    eq('36. "Your pension through life": after the calculator band, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
        timeline_faults(ix, sources, tl_js), [])
     for label, target, find, repl, want in (
             ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
@@ -2278,8 +2278,8 @@ def run():
     # (muted, inline, not preloaded, aria-hidden, its poster the slot's
     # picture, pb-video.js to play and pause it).
     CALL_STEPS = [('You reach out', 'A short message or call, so Damian comes prepared. No forms.'),
-                  ('We talk it through', 'Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.'),
-                  ('You decide', "You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.")]
+                  ('We talk it through', 'Twenty minutes, by phone or video.'),
+                  ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
 
     def call_faults(ix, sizes):
         f = []
@@ -2288,7 +2288,7 @@ def run():
             return ['no "How a call with Damian works" section']
         body = sec.group(1)
         if '<span class="kicker">How a call with Damian works</span>' not in body or \
-                '<h2>Most people brace for a sales pitch. <span class="pb-soft">This is a chat.</span></h2>' not in body:
+                '<h2>Three steps.</h2>' not in body:
             f.append('the label or the heading')
         steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body, re.S)
         if [(h, p) for _, _, h, p in steps] != CALL_STEPS:
@@ -2324,7 +2324,7 @@ def run():
     eq('45. "How a call with Damian works": the section\'s own three steps, word for word, each with a 16:9 slot showing the placeholder poster (sized, lazy, no words)',
        call_faults(cix, csizes), [])
     for label, find, repl, want in (
-            ('a step reworded', "If we're not the right fit, we'll say so.", "If we're not the right fit, we'll tell you.", 'not the words'),
+            ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the words'),
             ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2',
              'alt="" loading="lazy"></picture></div><div class="sx">2', 'step 2'),
             ('a slot that speaks', 'data-pb-call-video="call-step-3" aria-hidden="true"', 'data-pb-call-video="call-step-3"', 'step 3'),
