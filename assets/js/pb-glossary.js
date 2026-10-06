@@ -7,7 +7,7 @@ window.PBGlossary = [
  {
   "id": "pension",
   "name": "Pension",
-  "def": "A long-term savings pot for your retirement. You pay in while you work. It is invested so it can grow. You draw on it once you stop working. The government encourages it with tax relief.",
+  "def": "A long-term, invested savings pot for retirement.",
   "tip": false,
   "pats": [
    [
@@ -19,7 +19,7 @@ window.PBGlossary = [
  {
   "id": "tax-relief",
   "name": "Tax relief",
-  "def": "Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every \u20ac100 you put in, around \u20ac40 can come back to you as relief. So it costs you about \u20ac60. Relief is subject to Revenue's age-related limits.",
+  "def": "Tax you do not pay on pension contributions, within Revenue\u2019s age-related limits. At the higher rate, \u20ac100 in can cost about \u20ac60, with around \u20ac40 back.",
   "tip": true,
   "pats": [
    [
@@ -31,7 +31,7 @@ window.PBGlossary = [
  {
   "id": "avc",
   "name": "Additional Voluntary Contribution (AVC)",
-  "def": "Extra payments you can make into a workplace pension, on top of the standard contributions. They usually qualify for tax relief too.",
+  "def": "Extra payments into a workplace pension, usually with tax relief.",
   "tip": true,
   "pats": [
    [
@@ -47,7 +47,7 @@ window.PBGlossary = [
  {
   "id": "arf",
   "name": "Approved Retirement Fund (ARF)",
-  "def": "One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It can grow, but it can also fall. It can run out if you draw too much.",
+  "def": "Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.",
   "tip": true,
   "pats": [
    [
@@ -63,7 +63,7 @@ window.PBGlossary = [
  {
   "id": "annuity",
   "name": "Annuity",
-  "def": "Another option at retirement. You use your pension pot to buy a guaranteed income for life from an insurer. It gives certainty, but once bought it usually can't be changed.",
+  "def": "A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.",
   "tip": true,
   "pats": [
    [
@@ -75,7 +75,7 @@ window.PBGlossary = [
  {
   "id": "drawdown",
   "name": "Drawdown",
-  "def": "Taking money out of your pension once you've retired. The 4% figure in our calculator illustrates drawing 4% of your pot a year. It is not a recommendation.",
+  "def": "Taking money from your pension in retirement. Our calculator\u2019s 4% a year is an illustration, not a recommendation.",
   "tip": true,
   "pats": [
    [
@@ -87,7 +87,7 @@ window.PBGlossary = [
  {
   "id": "defined-contribution",
   "name": "Defined Contribution",
-  "def": "The most common type of pension today. What you end up with depends on how much was paid in and how the investments performed. The pot is yours, but the final value isn't guaranteed.",
+  "def": "A pension whose value depends on what was paid in and how the investments did. It is not guaranteed.",
   "tip": true,
   "pats": [
    [
@@ -99,7 +99,7 @@ window.PBGlossary = [
  {
   "id": "defined-benefit",
   "name": "Defined Benefit",
-  "def": "An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable.",
+  "def": "An older workplace pension promising a set income, usually based on salary and years of service. These can be valuable.",
   "tip": true,
   "pats": [
    [
@@ -111,7 +111,7 @@ window.PBGlossary = [
  {
   "id": "lump-sum",
   "name": "Lump sum",
-  "def": "At retirement you can usually take part of your pension as a tax-free lump sum, within limits set by Revenue. The rest provides your retirement income.",
+  "def": "Tax-free cash you can usually take at retirement, within Revenue\u2019s limits.",
   "tip": true,
   "pats": [
    [
@@ -123,7 +123,7 @@ window.PBGlossary = [
  {
   "id": "fund-investment-growth",
   "name": "Fund / investment growth",
-  "def": "Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed. Returns can be negative in some years.",
+  "def": "The rise in your pension\u2019s funds over time. It is never guaranteed. Some years can be negative.",
   "tip": true,
   "pats": [
    [
@@ -147,7 +147,7 @@ window.PBGlossary = [
  {
   "id": "risk-rating",
   "name": "Risk rating",
-  "def": "A number from 1, the lowest, to 7, the highest, printed on a fund\u2019s key information document. It measures how much the fund\u2019s value has swung up and down and, on the newer documents, the chance that the company behind it cannot pay. A higher number means bigger swings, both ways. It does not mean a better or a worse fund.",
+  "def": "A number from 1, the lowest, to 7, the highest, on a fund\u2019s key information document. Higher means bigger swings in value, not a better or worse fund.",
   "tip": true,
   "pats": [
    [
@@ -159,7 +159,7 @@ window.PBGlossary = [
  {
   "id": "state-pension",
   "name": "State Pension",
-  "def": "The pension paid by the government to people who've enough Pay-Related Social Insurance (PRSI) contributions. It may be payable on top of your own pension. For most people it isn't enough on its own for the retirement they'd like.",
+  "def": "A government pension for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.",
   "tip": true,
   "pats": [
    [
@@ -171,7 +171,7 @@ window.PBGlossary = [
  {
   "id": "prsa",
   "name": "Personal Retirement Savings Account (PRSA)",
-  "def": "A flexible, portable personal pension you own yourself. Useful if you don't have a workplace scheme, or want a pension that moves with you between jobs.",
+  "def": "A flexible personal pension you own, which moves with you between jobs.",
   "tip": true,
   "pats": [
    [
@@ -187,7 +187,7 @@ window.PBGlossary = [
  {
   "id": "consolidation",
   "name": "Consolidation",
-  "def": "Bringing several old pensions together into one plan, so they're easier to manage. It often makes sense, but not always. Some older pensions carry guarantees worth keeping.",
+  "def": "Bringing old pensions into one plan. Some older ones carry guarantees worth keeping.",
   "tip": true,
   "pats": [
    [
@@ -199,7 +199,7 @@ window.PBGlossary = [
  {
   "id": "personal-retirement-bond",
   "name": "Personal Retirement Bond",
-  "def": "A policy in your own name that holds the value of a pension from a job you have left, bought by that scheme\u2019s trustees. When and how you can take it follows the rules of the scheme it came from. It cannot be moved into a PRSA, and a PRSA cannot be moved into it. Before moving any old pension, it is worth knowing what the move would give up: a defined benefit scheme\u2019s promised pension, for one, becomes a transfer value.",
+  "def": "A policy in your name holding a pension from a job you left, bought by that scheme\u2019s trustees. It follows that scheme\u2019s rules, and cannot move to or from a PRSA.",
   "tip": true,
   "pats": [
    [
@@ -211,7 +211,7 @@ window.PBGlossary = [
  {
   "id": "pension-adjustment-order",
   "name": "Pension adjustment order",
-  "def": "An order a court can make on a judicial separation, a divorce, or the end of a civil partnership or of a relationship between qualified cohabitants, giving part of one person\u2019s pension to the other, or for a dependent child. Only a court can share a pension out: a separation agreement cannot. The court can instead leave the pensions as they are and take their value into account in other orders. A share given this way can be moved into a pension in the other person\u2019s own name, on request. It needs a solicitor, and specialist advice on what the pension is worth.",
+  "def": "A court order giving part of a pension to a former partner, or for a dependent child. It follows a judicial separation, a divorce, or the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
   "tip": true,
   "pats": [
    [
@@ -223,7 +223,7 @@ window.PBGlossary = [
  {
   "id": "employer-contribution",
   "name": "Employer contribution",
-  "def": "Money your employer pays into your pension on your behalf. It's effectively part of your pay. Not joining a scheme that offers it usually means missing that money.",
+  "def": "Money your employer pays into your pension, effectively part of your pay.",
   "tip": true,
   "pats": [
    [
@@ -235,7 +235,7 @@ window.PBGlossary = [
  {
   "id": "corporation-tax-relief",
   "name": "Corporation tax relief",
-  "def": "For company directors, pension contributions made by the company can usually be offset against its profits. This reduces its corporation tax bill.",
+  "def": "Company pension contributions for a director usually count against company profits, cutting corporation tax.",
   "tip": true,
   "pats": [
    [
@@ -247,7 +247,7 @@ window.PBGlossary = [
  {
   "id": "standard-fund-threshold",
   "name": "Standard Fund Threshold",
-  "def": "Revenue\u2019s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029: the Standard Fund Threshold check shows each year\u2019s figure and how much of it your pensions would use.",
+  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its legislated rise from 2026 to 2029.",
   "tip": true,
   "pats": [
    [
@@ -259,7 +259,7 @@ window.PBGlossary = [
  {
   "id": "pia",
   "name": "Personal Investment Account (PIA)",
-  "def": "A proposed account for investing in listed shares, bonds, funds and exchange-traded funds, called the Investment Account in official documents and the Savings and Investment Account (SIA) in the media. It is not a pension: there is no tax relief going in and no lock-in. Instead of today\u2019s exit tax, deemed disposal and Capital Gains Tax, a flat tax is charged each year on the account\u2019s average value above a tax-free threshold, even in a year it falls. Proposed, as at 25 September 2026, and not yet law: the threshold, the rate and the annual limit are due on 6 October 2026. See it next to a pension.",
+  "def": "A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, and a flat tax each year on its value above a tax-free threshold, even in a year it falls. Not yet law as at 25 September 2026; details are due on 6 October 2026. See it next to a pension.",
   "tip": true,
   "pats": [
    [
@@ -275,7 +275,7 @@ window.PBGlossary = [
  {
   "id": "qfa",
   "name": "Qualified Financial Adviser (QFA)",
-  "def": "A professional qualification for financial advisers in Ireland. It means the adviser has met the standard required to give regulated financial advice.",
+  "def": "An Irish qualification showing a financial adviser meets the standard to give regulated advice.",
   "tip": true,
   "pats": [
    [
