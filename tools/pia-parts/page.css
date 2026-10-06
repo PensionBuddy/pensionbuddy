@@ -50,7 +50,7 @@
 
 .res-hero .pia-hl,.res-hero .pia-three{grid-column:1/-1}
 .res-hero .pia-hl{margin-bottom:0}
-.res-hero .pia-note{color:#9FDDD2}
+.res-hero .pia-note{color:var(--ink-2)}
 .pia-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .pia-three .big{font-size:clamp(26px,2.6vw,34px);overflow-wrap:anywhere}
 .pia-note{margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}

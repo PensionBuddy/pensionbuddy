@@ -144,6 +144,14 @@ two-fifths of a screen, top to bottom.
 - **Text colours on a page:** the three inks, teal-700, white and mint; and, for a figure or its label only, slate (Run 43); gap figures are ink, never body text.
 - **Dark bands:** at most two on a page besides the footer, never one
   straight after the other.
+- **Mist teal, not dark (6 October 2026):** the calculator result card
+  (`.res-hero`), the closing "book a call" band (`.final`), the visitor's chat
+  bubble (`.msg.them`) and the booking "house promise" card (`.promise`) are
+  `--teal-50` with a `--teal-100` border and ink text (labels `--ink-2`,
+  eyebrows `--teal-700`); the closing band's button is the aqua primary.
+  Still dark on purpose: the homepage deadline band (`.tick`), the
+  `.callout` bands, the cookie bar and the footer. Mock-ups in
+  `docs/pale-mockups/`.
 - **Contrast:** AA, 4.5:1 for body and meta, 3:1 for text 24px and over;
   aqua is never text on a light background.
 - `--ink-3` is defined twice in every stylesheet (#647270, then #5D6C67
