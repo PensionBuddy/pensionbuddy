@@ -2270,7 +2270,7 @@ def run():
     # ""), and any video put in one later follows the game cards' rules
     # (muted, inline, not preloaded, aria-hidden, its poster the slot's
     # picture, pb-video.js to play and pause it).
-    CALL_STEPS = [('You reach out', 'A quick message or call, just enough for Damian to come prepared. No forms to wrestle with.'),
+    CALL_STEPS = [('You reach out', 'A short message or call, so Damian comes prepared. No forms.'),
                   ('We talk it through', 'Twenty relaxed minutes, phone or video. Your questions answered, nothing assumed.'),
                   ('You decide', "You'll leave with a clear picture and a sensible next step. If we're not the right fit, we'll say so.")]
 
@@ -2351,7 +2351,7 @@ def run():
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
                           '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
-                          '  <div class="sec-head"><span class="kicker">Sound familiar?</span>'),
+                          '  <div class="sec-head"><span class="kicker">Where you are</span>'),
     }
 
     def moved_block(words):

@@ -415,7 +415,7 @@ asserts that the other way round, on every driven state).
 ## S10. Resolved
 
 1. **Explainer copy** received 2026-09-10 and placed verbatim as its own
-   section, "How your State Pension is actually worked out", between the
+   section, "How your State Pension is worked out" (shortened 6 October 2026), between the
    calculator and the CTA. It carries the MyWelfare.ie pointer.
 2. **Age** is display only, one "You have X years until 66" line.
 3. **52 weeks**, matching the €15,564 on the home page.

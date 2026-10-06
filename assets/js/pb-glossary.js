@@ -7,7 +7,7 @@ window.PBGlossary = [
  {
   "id": "pension",
   "name": "Pension",
-  "def": "A long-term savings pot for your retirement. You pay in while you're working, it's invested so it can grow, and you draw on it once you stop working. The government encourages it with tax relief.",
+  "def": "A long-term savings pot for your retirement. You pay in while you work. It is invested so it can grow. You draw on it once you stop working. The government encourages it with tax relief.",
   "tip": false,
   "pats": [
    [
@@ -19,7 +19,7 @@ window.PBGlossary = [
  {
   "id": "tax-relief",
   "name": "Tax relief",
-  "def": "Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every \u20ac100 you put in, around \u20ac40 can come back to you as relief, so it really costs you about \u20ac60. Relief is subject to Revenue's age-related limits.",
+  "def": "Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every \u20ac100 you put in, around \u20ac40 can come back to you as relief. So it costs you about \u20ac60. Relief is subject to Revenue's age-related limits.",
   "tip": true,
   "pats": [
    [
@@ -31,7 +31,7 @@ window.PBGlossary = [
  {
   "id": "avc",
   "name": "Additional Voluntary Contribution (AVC)",
-  "def": "Extra payments you can make into a workplace pension, on top of the standard contributions, to build your pot faster. They usually qualify for tax relief too.",
+  "def": "Extra payments you can make into a workplace pension, on top of the standard contributions. They usually qualify for tax relief too.",
   "tip": true,
   "pats": [
    [
@@ -47,7 +47,7 @@ window.PBGlossary = [
  {
   "id": "arf",
   "name": "Approved Retirement Fund (ARF)",
-  "def": "One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It stays invested, so it can grow, but it can also fall, and it can run out if you draw too much.",
+  "def": "One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It can grow, but it can also fall. It can run out if you draw too much.",
   "tip": true,
   "pats": [
    [
@@ -75,7 +75,7 @@ window.PBGlossary = [
  {
   "id": "drawdown",
   "name": "Drawdown",
-  "def": "Taking money out of your pension once you've retired. The 4% figure you'll see in our calculator is a simple illustration of drawing 4% of your pot a year, not a recommendation.",
+  "def": "Taking money out of your pension once you've retired. The 4% figure in our calculator illustrates drawing 4% of your pot a year. It is not a recommendation.",
   "tip": true,
   "pats": [
    [
@@ -99,7 +99,7 @@ window.PBGlossary = [
  {
   "id": "defined-benefit",
   "name": "Defined Benefit",
-  "def": "An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable, which is why it's worth checking before moving one.",
+  "def": "An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable.",
   "tip": true,
   "pats": [
    [
@@ -123,7 +123,7 @@ window.PBGlossary = [
  {
   "id": "fund-investment-growth",
   "name": "Fund / investment growth",
-  "def": "Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed, and returns can be negative in some years, which is why long-term thinking matters.",
+  "def": "Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed. Returns can be negative in some years.",
   "tip": true,
   "pats": [
    [
@@ -159,7 +159,7 @@ window.PBGlossary = [
  {
   "id": "state-pension",
   "name": "State Pension",
-  "def": "The pension paid by the government to people who've enough Pay-Related Social Insurance (PRSI) contributions. It may be payable on top of your own pension, but for most people it isn't enough on its own to fund the retirement they'd like.",
+  "def": "The pension paid by the government to people who've enough Pay-Related Social Insurance (PRSI) contributions. It may be payable on top of your own pension. For most people it isn't enough on its own for the retirement they'd like.",
   "tip": true,
   "pats": [
    [
@@ -187,7 +187,7 @@ window.PBGlossary = [
  {
   "id": "consolidation",
   "name": "Consolidation",
-  "def": "Bringing several old pensions together into one plan so they're easier to manage. It often makes sense, but not always, since some older pensions carry guarantees worth keeping. Worth checking each one.",
+  "def": "Bringing several old pensions together into one plan, so they're easier to manage. It often makes sense, but not always. Some older pensions carry guarantees worth keeping.",
   "tip": true,
   "pats": [
    [
@@ -223,7 +223,7 @@ window.PBGlossary = [
  {
   "id": "employer-contribution",
   "name": "Employer contribution",
-  "def": "Money your employer pays into your pension on your behalf. It's effectively part of your pay, so not joining a scheme that offers it usually means leaving money on the table.",
+  "def": "Money your employer pays into your pension on your behalf. It's effectively part of your pay. Not joining a scheme that offers it usually means missing that money.",
   "tip": true,
   "pats": [
    [
@@ -235,7 +235,7 @@ window.PBGlossary = [
  {
   "id": "corporation-tax-relief",
   "name": "Corporation tax relief",
-  "def": "For company directors, pension contributions made by the company can usually be offset against its profits, reducing its corporation tax bill, while building your retirement fund. One of the reasons director pensions are powerful.",
+  "def": "For company directors, pension contributions made by the company can usually be offset against its profits. This reduces its corporation tax bill.",
   "tip": true,
   "pats": [
    [

@@ -931,7 +931,7 @@ RELATED = {
 }
 # page: (title, line, where the line is written, word for word)
 CARDS = {
-    'pension-calculator.html': ('Pension calculator', 'Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.', 'index.html'),
+    'pension-calculator.html': ('Pension calculator', 'Enter a few numbers. See the projection and the tax relief Revenue adds. Two minutes, no sign-up.', 'index.html'),
     'starter.html': ('Start a pension', 'No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.', 'index.html'),
     'tracker.html': ('Track down old pensions', 'Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.', 'index.html'),
     'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', 'index.html'),
@@ -947,7 +947,7 @@ CARDS = {
     'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50: how much of what you pay in gets tax relief, when some pensions can be taken, and the choice of what to do with a pension when you take it.', 'pensions-over-50.html'),
     'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
     'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
-    'glossary.html': ('Pension jargon buster', 'Pensions come with a lot of acronyms. Here&rsquo;s what the common ones actually mean, in normal words.', 'glossary.html'),
+    'glossary.html': ('Pension jargon buster', 'The common pension terms and acronyms, in plain words.', 'glossary.html'),
     'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
     'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),
     'complaints.html': ('Complaints', 'How to make a complaint to Pensionbuddy and your right to the Financial Services and Pensions Ombudsman.', 'complaints.html'),
