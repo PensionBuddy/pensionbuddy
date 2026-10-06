@@ -2357,8 +2357,7 @@ def run():
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         'director.html': ('Book a call with Damian for free', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
-                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
-                          '  <div class="sec-head"><span class="kicker">Where you are</span>'),
+                          '</div></section>\n\n<section class="coverband pb-bleed pb-wash">'),
     }
 
     def moved_block(words):
