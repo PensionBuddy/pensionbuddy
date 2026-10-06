@@ -475,8 +475,8 @@ def run():
              'a director with 20% or more of the company', True),
             ('the glossary\'s "more than 20%"', 'director-calculator.html', TEST,
              'a director who owned or controlled more than 20% of the voting rights', True),
-            ('a 20% that is not about directors', 'pensions-over-50.html', 'Early access is a trade, not a bonus.',
-             'Early access is a trade, not a bonus. Tax at 20% is the standard rate.', False)):
+            ('a 20% that is not about directors', 'pensions-over-50.html', 'The tax-free amount can be lower too.',
+             'The tax-free amount can be lower too. Tax at 20% is the standard rate.', False)):
         m = dict(docs); m[page] = m[page].replace(find, repl, 1)
         eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
            [n for n, _ in off_wording(m)], [page] if flagged else [])

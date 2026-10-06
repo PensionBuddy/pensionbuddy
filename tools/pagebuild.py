@@ -945,7 +945,7 @@ CARDS = {
     'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
     'state-pension-entitlement.html': ('State Pension entitlement check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
-    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50: how much of what you pay in gets tax relief, when some pensions can be taken, and the choice of what to do with a pension when you take it.', 'pensions-over-50.html'),
+    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
     'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
     'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
     'glossary.html': ('Pension jargon buster', 'The common pension terms and acronyms, in plain words.', 'glossary.html'),
