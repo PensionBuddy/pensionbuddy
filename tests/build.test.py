@@ -1216,7 +1216,7 @@ def run():
     eq('30. and every page in the sitemap is a page', [n for n in INDEX if n not in everything], [])
     st = sources['starter.html']
     ix = sources['index.html']
-    q = "We'll look at what you've got and explain whether it's set up well for you."
+    q = "We'll look at whether it's set up well."
     for label, name, src, want in (
             ('a title of 60 characters', 'terms.html', sources['terms.html'].replace('<title>Terms of Business, Pensionbuddy</title>',
                                                                                     '<title>' + 'T' * 60 + '</title>', 1), 'title 60'),
