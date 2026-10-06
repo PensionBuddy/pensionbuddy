@@ -1389,7 +1389,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .arc-card:hover{border-color:var(--teal);background:var(--teal-50)}
 .arc-card:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
 .arc-card[aria-current="true"]{border-color:var(--teal);background:var(--teal-50)}
-.arc-tile{display:flex;align-items:flex-end;justify-content:center;background:var(--teal-900);border-bottom:1px solid var(--line-2)}
+.arc-tile{display:flex;align-items:flex-end;justify-content:center;background:var(--teal-50);border-bottom:1px solid var(--line-2)}
 .arc-cv{display:block;width:256px;height:128px;max-width:100%;image-rendering:pixelated}
 .arc-body{display:flex;flex-direction:column;padding:22px 24px 18px}
 .arc-card h3{letter-spacing:-.005em;margin-bottom:8px}
@@ -2262,7 +2262,7 @@ main h1{font-weight:800}
 <div class="page-head"><div class="wrap">
   <span class="eyebrow"><span class="pip"></span>Plain English, always</span>
   <h1 class="legal" style="padding:0;margin:14px 0 12px;max-width:none">The pension jargon buster.</h1>
-  <p style="font-size:18px;color:var(--ink-2);max-width:620px">Pensions come with a lot of acronyms. Here&rsquo;s what the common ones actually mean, in normal words.</p>
+  <p style="font-size:18px;color:var(--ink-2);max-width:620px">Pension terms in plain words.</p>
 </div></div>
 
 <section class="arcade" id="games"><div class="wrap">
@@ -2331,8 +2331,8 @@ main h1{font-weight:800}
     </ul>
   </div>
   <div class="gloss">
-    <div class="gterm" id="pension"><h2>Pension</h2><p>A long-term savings pot for your retirement. You pay in while you're working, it's invested so it can grow, and you draw on it once you stop working. The government encourages it with tax relief.</p></div>
-    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Money the government effectively adds to your pension by reducing the tax you pay. If you're a higher-rate taxpayer, for every €100 you put in, around €40 can come back to you as relief, so it really costs you about €60. Relief is subject to Revenue's age-related limits.</p>
+    <div class="gterm" id="pension"><h2>Pension</h2><p>A long-term, invested savings pot for retirement.</p></div>
+    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Tax you do not pay on pension contributions, within Revenue&rsquo;s age-related limits. At the higher rate, €100 in can cost about €60, with around €40 back.</p>
 <div class="pb-rw">
   <div class="pb-rw-row"><label for="rwAmt1">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
   <input type="range" id="rwAmt1" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
@@ -2340,7 +2340,7 @@ main h1{font-weight:800}
   <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
 </div>
   <div class="pb-lad">
-    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
+    <p class="pb-lad-cap">Relief limit by age, as a share of earnings.</p>
     <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
     <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
     <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
@@ -2350,19 +2350,19 @@ main h1{font-weight:800}
     <p class="pb-lad-note">Earnings count up to €115,000.</p>
   </div>
 </div>
-    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments you can make into a workplace pension, on top of the standard contributions, to build your pot faster. They usually qualify for tax relief too.</p></div>
-    <div class="gterm" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>One option at retirement. Instead of buying a guaranteed income, you keep your pot invested and draw money from it over time. It stays invested, so it can grow, but it can also fall, and it can run out if you draw too much.</p></div>
-    <div class="gterm" id="annuity"><h2>Annuity</h2><p>Another option at retirement. You use your pension pot to buy a guaranteed income for life from an insurer. It gives certainty, but once bought it usually can't be changed.</p></div>
-    <div class="gterm" id="drawdown"><h2>Drawdown</h2><p>Taking money out of your pension once you've retired. The 4% figure you'll see in our calculator is a simple illustration of drawing 4% of your pot a year, not a recommendation.</p>
+    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments into a workplace pension, usually with tax relief.</p></div>
+    <div class="gterm" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.</p></div>
+    <div class="gterm" id="annuity"><h2>Annuity</h2><p>A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.</p></div>
+    <div class="gterm" id="drawdown"><h2>Drawdown</h2><p>Taking money from your pension in retirement. Our calculator&rsquo;s 4% a year is an illustration, not a recommendation.</p>
 <div class="pb-dd" id="pbDd">
   <div class="pb-dd-row"><label for="pbDdPot">A pot of</label><span class="pb-dd-v" id="pbDdPotV">€50,000</span></div>
   <input type="range" id="pbDdPot" min="5000" max="1500000" step="5000" value="50000" aria-valuetext="€50,000" hidden>
   <p class="pb-dd-out">Drawing 4% a year from it is about <b id="pbDdOut">€167</b> a month.</p>
 </div></div>
-    <div class="gterm" id="defined-contribution"><h2>Defined Contribution<span class="abbr">DC</span></h2><p>The most common type of pension today. What you end up with depends on how much was paid in and how the investments performed. The pot is yours, but the final value isn't guaranteed.</p></div>
-    <div class="gterm" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older type of workplace pension that promises a set income in retirement, usually based on your salary and years of service. These can be valuable, which is why it's worth checking before moving one.</p></div>
-    <div class="gterm" id="lump-sum"><h2>Lump sum</h2><p>At retirement you can usually take part of your pension as a tax-free lump sum, within limits set by Revenue. The rest provides your retirement income.</p></div>
-    <div class="gterm" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>Your pension is invested in funds, which can rise and fall in value. Growth is the increase over time. It's never guaranteed, and returns can be negative in some years, which is why long-term thinking matters.</p></div>
+    <div class="gterm" id="defined-contribution"><h2>Defined Contribution<span class="abbr">DC</span></h2><p>A pension whose value depends on what was paid in and how the investments did. It is not guaranteed.</p></div>
+    <div class="gterm" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older workplace pension promising a set income, usually based on salary and years of service. These can be valuable.</p></div>
+    <div class="gterm" id="lump-sum"><h2>Lump sum</h2><p>Tax-free cash you can usually take at retirement, within Revenue&rsquo;s limits.</p></div>
+    <div class="gterm" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>The rise in your pension&rsquo;s funds over time. It is never guaranteed. Some years can be negative.</p></div>
     <div class="gterm" id="inflation"><h2>Inflation</h2><p>The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today&rsquo;s. The European Central Bank aims for inflation of 2% a year over the medium term.</p>
 <div class="pb-infl" id="pbInfl">
   <div class="pb-dd-row"><label for="pbInflYrs">Years from now</label><span class="pb-dd-v" id="pbInflYrsV">30 years</span></div>
@@ -2371,32 +2371,31 @@ main h1{font-weight:800}
   <input type="range" id="pbInflRate" min="1" max="5" step="0.5" value="2" aria-valuetext="2% a year" hidden>
   <p class="pb-dd-out" id="pbInflOut">At 2% a year, what &euro;1,000 buys today would cost about <b>&euro;1,811</b> in 30 years. The other way round, &euro;1,000 then buys what <b>&euro;552</b> buys today.</p>
 </div></div>
-    <div class="gterm" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest, printed on a fund&rsquo;s key information document. It measures how much the fund&rsquo;s value has swung up and down and, on the newer documents, the chance that the company behind it cannot pay. A higher number means bigger swings, both ways. It does not mean a better or a worse fund.</p>
+    <div class="gterm" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest, on a fund&rsquo;s key information document. Higher means bigger swings in value, not a better or worse fund.</p>
 <ol class="pb-risk" aria-hidden="true"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li></ol>
-<p>Two funds with the same number are not always alike. The older scale for investment funds and the newer one use different bands, so a 4 on one is not a 4 on the other; the newer one also depends on how long the fund is meant to be held; ratings are worked out again as markets move; and some pension products are outside the newer rules altogether, so a provider&rsquo;s own scale may work differently again. Compare like with like, and ask what a number is based on.</p></div>
-    <div class="gterm" id="state-pension"><h2>State Pension</h2><p>The pension paid by the government to people who've enough Pay-Related Social Insurance (PRSI) contributions. It may be payable on top of your own pension, but for most people it isn't enough on its own to fund the retirement they'd like.</p></div>
-    <div class="gterm" id="prsa"><h2>PRSA<span class="abbr">Personal Retirement Savings Account</span></h2><p>A flexible, portable personal pension you own yourself. Useful if you don't have a workplace scheme, or want a pension that moves with you between jobs.</p></div>
-    <div class="gterm" id="consolidation"><h2>Consolidation</h2><p>Bringing several old pensions together into one plan so they're easier to manage. It often makes sense, but not always, since some older pensions carry guarantees worth keeping. Worth checking each one.</p></div>
-    <div class="gterm" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your own name that holds the value of a pension from a job you have left, bought by that scheme&rsquo;s trustees. When and how you can take it follows the rules of the scheme it came from. It cannot be moved into a PRSA, and a PRSA cannot be moved into it. Before moving any old pension, it is worth knowing what the move would give up: a defined benefit scheme&rsquo;s promised pension, for one, becomes a transfer value.</p></div>
-    <div class="gterm" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>An order a court can make on a judicial separation, a divorce, or the end of a civil partnership or of a relationship between qualified cohabitants, giving part of one person&rsquo;s pension to the other, or for a dependent child. Only a court can share a pension out: a separation agreement cannot. The court can instead leave the pensions as they are and take their value into account in other orders. A share given this way can be moved into a pension in the other person&rsquo;s own name, on request. It needs a solicitor, and specialist advice on what the pension is worth.</p></div>
-    <div class="gterm" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension on your behalf. It's effectively part of your pay, so not joining a scheme that offers it usually means leaving money on the table.</p></div>
-    <div class="gterm" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>For company directors, pension contributions made by the company can usually be offset against its profits, reducing its corporation tax bill, while building your retirement fund. One of the reasons director pensions are powerful.</p></div>
-    <div class="gterm" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that can benefit from full tax relief. Anything above it is taxed when it is drawn down, so it sets a practical ceiling on how much is worth funding. The threshold was legislated to rise in steps from 2026 to 2029: the <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows each year&rsquo;s figure and how much of it your pensions would use.</p></div>
-    <div class="gterm" id="pia"><h2>PIA<span class="abbr">Personal Investment Account</span></h2><p>A proposed account for investing in listed shares, bonds, funds and exchange-traded funds, called the Investment Account in official documents and the Savings and Investment Account (SIA) in the media. It is not a pension: there is no tax relief going in and no lock-in. Instead of today&rsquo;s exit tax, deemed disposal and Capital Gains Tax, a flat tax is charged each year on the account&rsquo;s average value above a tax-free threshold, even in a year it falls. Proposed, as at 25 September 2026, and not yet law: the threshold, the rate and the annual limit are due on 6 October 2026. <a href="pia.html">See it next to a pension</a>.</p></div>
-    <div class="gterm" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>A professional qualification for financial advisers in Ireland. It means the adviser has met the standard required to give regulated financial advice.</p></div>
+<p>Scales differ, so a 4 on one is not a 4 on another. Ratings change as markets move.</p></div>
+    <div class="gterm" id="state-pension"><h2>State Pension</h2><p>A government pension for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.</p></div>
+    <div class="gterm" id="prsa"><h2>PRSA<span class="abbr">Personal Retirement Savings Account</span></h2><p>A flexible personal pension you own, which moves with you between jobs.</p></div>
+    <div class="gterm" id="consolidation"><h2>Consolidation</h2><p>Bringing old pensions into one plan. Some older ones carry guarantees worth keeping.</p></div>
+    <div class="gterm" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your name holding a pension from a job you left, bought by that scheme&rsquo;s trustees. It follows that scheme&rsquo;s rules, and cannot move to or from a PRSA.</p></div>
+    <div class="gterm" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>A court order giving part of a pension to a former partner, or for a dependent child. It follows a judicial separation, a divorce, or the end of a civil partnership or qualified cohabitants&rsquo; relationship. A separation agreement cannot do this.</p></div>
+    <div class="gterm" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension, effectively part of your pay.</p></div>
+    <div class="gterm" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>Company pension contributions for a director usually count against company profits, cutting corporation tax.</p></div>
+    <div class="gterm" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that gets full tax relief. Anything above it is taxed when drawn down. The <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows its legislated rise from 2026 to 2029.</p></div>
+    <div class="gterm" id="pia"><h2>PIA<span class="abbr">Personal Investment Account</span></h2><p>A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, and a flat tax each year on its value above a tax-free threshold, even in a year it falls. Not yet law as at 25 September 2026; details are due on 6 October 2026. <a href="pia.html">See it next to a pension</a>.</p></div>
+    <div class="gterm" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>An Irish qualification showing a financial adviser meets the standard to give regulated advice.</p></div>
   </div>
   </div>
   <div class="infoadvice" style="margin-top:8px">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> These explanations are general and won't fit everyone's situation. For advice on what's right for you, have a free chat with Damian.</p>
+    <p><b>This page is information, not advice.</b></p>
   </div>
 </div></section>
 
 <div class="final-band"><div class="wrap"><div class="final">
   <div class="paw-bg"><svg fill='#fff' viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>Still unsure about a term?</span>
+  <span class="eyebrow"><span class="pip"></span>Questions</span>
   <h2>Ask a real person.</h2>
-  <p>If something still doesn't make sense, that's exactly what the free chat is for. No question is too basic.</p>
   <a class="btn btn-light" href="booking.html">Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2404,9 +2403,9 @@ main h1{font-weight:800}
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-t">Pension calculator</span><span class="pb-related-d">Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="starter.html"><span class="pb-related-t">Start a pension</span><span class="pb-related-d">No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="pensions-over-50.html"><span class="pb-related-t">Pensions after 50</span><span class="pb-related-d">Three things change as you pass 50: how much of what you pay in gets tax relief, when some pensions can be taken, and the choice of what to do with a pension when you take it.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-t">Pension calculator</span><span class="pb-related-d">Your projection, with Revenue&rsquo;s tax relief.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="starter.html"><span class="pb-related-t">Start a pension</span><span class="pb-related-d">For a first pension. It&rsquo;s never too late to begin.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pensions-over-50.html"><span class="pb-related-t">Pensions after 50</span><span class="pb-related-d">Three things change as you pass 50.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -2566,7 +2565,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

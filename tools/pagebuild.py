@@ -900,7 +900,8 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 #
 # Every word on a card is already on the site. CARDS says where: a title is
 # the page's name in the nav, or in the home page's "Six places to begin"
-# where it is one of them; a line is the one beside it there, or the first
+# where it is one of them (since 6 October 2026, the 404's six places, which
+# the home page no longer carries); a line is the one beside it there, or the first
 # sentence of the page's own description, or, where that sentence carries an
 # initialism a page might not have spelled out, a sentence from the page's
 # own introduction. Check 39 finds each line on its page, word for word.
@@ -931,23 +932,23 @@ RELATED = {
 }
 # page: (title, line, where the line is written, word for word)
 CARDS = {
-    'pension-calculator.html': ('Pension calculator', 'Pop in a few numbers and watch the projection build, including how much Revenue adds back through tax relief. Two minutes, no sign-up.', 'index.html'),
-    'starter.html': ('Start a pension', 'No pension yet, or one you&rsquo;ve never looked at? We&rsquo;ll make starting simple, and it&rsquo;s never too late to begin.', 'index.html'),
-    'tracker.html': ('Track down old pensions', 'Changed jobs a few times and lost the thread? We&rsquo;ll find what you&rsquo;ve built up and tell you what it&rsquo;s worth.', 'index.html'),
-    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', 'index.html'),
-    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.', 'index.html'),
+    'pension-calculator.html': ('Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.', '404.html'),
+    'starter.html': ('Start a pension', 'For a first pension. It&rsquo;s never too late to begin.', '404.html'),
+    'tracker.html': ('Track down old pensions', 'Find pensions from old jobs, and what they are worth.', '404.html'),
+    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', '404.html'),
+    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.', '404.html'),
     'old-pension-checklist.html': ('The old pension hunt: a checklist', 'Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.', 'old-pension-checklist.html'),
     'my-pensions.html': ('All your pensions in one view', 'List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year.', 'my-pensions.html'),
     'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),
     'director-calculator.html': ('Director calculator', 'See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.', 'director-calculator.html'),
-    'director-pension-rules.html': ('What changed for directors in 2026', 'Here they are in plain English, with four questions to see which of them apply to you.', 'director-pension-rules.html'),
+    'director-pension-rules.html': ('What changed for directors in 2026', 'Three things changed in the last two years. Four questions show which apply to you.', 'director-pension-rules.html'),
     'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
     'state-pension-entitlement.html': ('State Pension entitlement check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
-    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50: how much of what you pay in gets tax relief, when some pensions can be taken, and the choice of what to do with a pension when you take it.', 'pensions-over-50.html'),
+    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
     'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
     'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
-    'glossary.html': ('Pension jargon buster', 'Pensions come with a lot of acronyms. Here&rsquo;s what the common ones actually mean, in normal words.', 'glossary.html'),
+    'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.', 'glossary.html'),
     'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
     'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),
     'complaints.html': ('Complaints', 'How to make a complaint to Pensionbuddy and your right to the Financial Services and Pensions Ombudsman.', 'complaints.html'),

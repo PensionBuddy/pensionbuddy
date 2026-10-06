@@ -1445,8 +1445,8 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-val{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:16px;
   font-weight:600;color:var(--ink)}
 .pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
-  border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
-.pb-guess-btn:hover{background:var(--teal-700)}
+  border-radius:var(--r-sm);background:var(--teal-50);color:var(--teal-700);box-shadow:inset 0 0 0 1.5px var(--teal);font:600 15px var(--font);cursor:pointer}
+.pb-guess-btn:hover{background:var(--teal-100)}
 .pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
 .pb-guess-out:empty{display:none}
 .pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
@@ -2437,9 +2437,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>A 60-second check · six questions, no sign-up</span>
-  <h1>How ready is your pension? <span class="hl">Six questions to find out.</span></h1>
-  <p>One question about your situation, then five about what you know and what you have done. You get a score out of 100, and a next step for every point you did not get. Nothing you answer leaves this page.</p>
+  <span class="eyebrow"><span class="pip"></span>60 seconds · six questions · no sign-up</span>
+  <h1>How ready is your pension? <span class="hl">A score out of 100.</span></h1>
+  <p>Nothing you answer leaves this page.</p>
 </div></div>
 
 <div class="wrap"><div class="rd-wrap">
@@ -2466,7 +2466,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="rd-zone" id="rdZone"></p>
     <h3>What moves your score</h3>
     <ol class="rd-moves" id="rdMoves"></ol>
-    <p class="rd-none" id="rdNone" hidden>Nothing to add: you gave the best answer to every question. Things change, so it is worth a look again next year.</p>
+    <p class="rd-none" id="rdNone" hidden>Every answer scored full points.</p>
     <div class="rd-nav"><button type="button" class="rd-again" id="rdAgain">Change my answers</button><a class="btn btn-primary" id="rdBook" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
     <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
   </section>
@@ -2475,16 +2475,16 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This check is information only.</b> It is not a suitability assessment and not advice: it adds up your answers and does not look at your finances. Nothing you answer is sent anywhere or stored. If you book a call, the booking page only knows which of the three situations you picked.</p>
+    <p><b>This check is information only.</b> It is not a suitability assessment and not advice. It does not look at your finances. Nothing you answer is sent anywhere or stored. The booking page learns only the situation you picked.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
   <h2>How the score works</h2>
   <ul>
-    <li>Each of the five questions after the first is worth up to 20 points: 20 for the best answer, 10 for a partial one, and 0 otherwise. The first question only chooses which five you are asked.</li>
-    <li>Only things you can find out or do are scored. Paying in on your own scores the same as paying in with an employer, and being self-employed scores the same as knowing what an employer would add.</li>
-    <li>0 to 39 is early days, 40 to 74 is on the way, and 75 to 100 is in good shape. The score is a checklist added up, not a measure of how much you have saved.</li>
+    <li>Questions after the first score 20, 10 or 0 points each.</li>
+    <li>Only what you can find out or do is scored. Paying in alone scores full points. So does being self-employed.</li>
+    <li>0 to 39 is early days, 40 to 74 on the way, 75 to 100 in good shape. The score is a checklist added up, not a measure of how much you have saved.</li>
   </ul>
 </div></section>
 </main>
@@ -2809,9 +2809,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

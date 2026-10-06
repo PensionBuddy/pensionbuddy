@@ -1447,8 +1447,8 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .pb-guess-val{font-family:var(--font);font-variant-numeric:tabular-nums;font-size:16px;
   font-weight:600;color:var(--ink)}
 .pb-guess-btn{display:block;width:100%;margin-top:16px;padding:13px 18px;border:none;
-  border-radius:var(--r-sm);background:var(--teal-900);color:#fff;font:600 15px var(--font);cursor:pointer}
-.pb-guess-btn:hover{background:var(--teal-700)}
+  border-radius:var(--r-sm);background:var(--teal-50);color:var(--teal-700);box-shadow:inset 0 0 0 1.5px var(--teal);font:600 15px var(--font);cursor:pointer}
+.pb-guess-btn:hover{background:var(--teal-100)}
 .pb-guess-out{margin-top:14px;font-size:14px;line-height:1.55;color:var(--ink)}
 .pb-guess-out:empty{display:none}
 .pb-preveil #potOut,.pb-preveil #incOut,.pb-preveil #spWeekly,.pb-preveil #spAnnual,.pb-preveil #aeTotal,.pb-preveil #ppTotal,.pb-preveil #cTotal,.pb-preveil #cTopUp,.pb-preveil #leadOut,.pb-preveil #pbSay,.pb-preveil #pbSpTop{filter:blur(13px)}
@@ -2570,9 +2570,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
-  <h1>A pension pot is just a number. This shows what it <span class="hl">pays</span> you a month.</h1>
-  <p>Move the sliders and watch your projection build, including how much Revenue adds back. Rough numbers are fine.</p>
+  <span class="eyebrow"><span class="pip"></span>Free · two minutes · no sign-up</span>
+  <h1>What your pension <span class="hl">pays</span> you a month.</h1>
+  <p>Rough numbers are fine.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2594,13 +2594,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
     <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
     <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets how much of your contribution qualifies for tax relief: Revenue allows an age-related percentage of earnings, with earnings capped at €115,000.</p></div>
+    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets your relief limit: an age-related share of earnings up to €115,000.</p></div>
     <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
-    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary year to year and can be negative.</p></div>
+    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Returns can be negative.</p></div>
     <div class="field" style="margin-bottom:0">
       <div class="row"><label>Your income tax rate</label></div>
       <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
-      <p class="subnote">Used to show the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
+      <p class="subnote">For the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
     </div>
   </div>
 
@@ -2612,7 +2612,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="pb-say pb-sp-top" id="pbSpTop">Add the State Pension (Contributory) at the maximum rate from 66, and it comes to about €2,831 a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
-      <div class="foot">An illustration only. Your real options at retirement each work differently, and the State Pension may be payable on top.</div>
+      <div class="foot">An illustration only. Retirement options differ. The State Pension may be paid on top.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <!-- Run 37, item 5: Save as A. A copy of what the calculator shows, set
@@ -2621,7 +2621,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="pb-ab" id="pbAb">
       <div class="pb-ab-bar">
         <button type="button" class="pb-ab-save" id="pbAbSave">Save as A</button>
-        <p class="pb-ab-hint">Keep these figures as A, then move the sliders to see A beside them. Nothing is stored.</p>
+        <p class="pb-ab-hint">Save as A, then move the sliders to compare. Nothing is stored.</p>
       </div>
       <p class="pb-ab-said" id="pbAbSaid" role="status"></p>
       <div class="pb-ab-box" id="pbAbBox" hidden>
@@ -2634,7 +2634,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
+    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a>. That is the cap on funds with full tax relief. Anything above it is taxed on drawdown. The real ceiling is lower.</p>
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
       <div class="wtext" id="waitOut">Move the sliders to see it.</div>
@@ -2655,7 +2655,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="chart-card">
       <h3>Your relief limit</h3>
     <div class="pb-lad" data-pb-age="age" data-pb-earn="earn">
-    <p class="pb-lad-cap">Revenue's limit on the contributions that get tax relief, as a share of earnings.</p>
+    <p class="pb-lad-cap">Revenue's limit, as a share of earnings.</p>
       <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
       <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
       <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
@@ -2699,7 +2699,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>These are just illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2><p>A free 20-minute chat. No obligation afterwards.</p></div>
+  <div class="ctext"><h2>These are illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2></div>
   <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2707,19 +2707,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It produces illustrations to help you think, based on the figures and assumptions you choose. It isn't a personal recommendation. Regulated financial advice is given in a personal consultation with Damian, where we take the time to understand your situation first.</p>
+    <p><b>This calculator is information, not advice.</b></p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <h3>Assumptions</h3>
   <ul>
-    <li>Growth is assumed at the constant rate you choose. Investments rise and fall, so real returns will differ and can be negative in some years.</li>
-    <li>The monthly income figure assumes you draw down 4% of your fund each year. It is an illustration, not a recommended strategy.</li>
-    <li>Tax relief is shown at the rate you select, on your own contributions only, and is limited to Revenue's age-related percentage of your earnings (15% under 30, rising in steps to 40% at 60 and over), with earnings capped at €115,000 for the calculation.</li>
-    <li>The main figures are not adjusted for inflation. The line under each gives it in today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Product charges are left out, and would reduce returns. None of this is a guarantee of any outcome.</li>
-    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be payable on top, €15,564 a year for a full entitlement. Check gov.ie for the current rate.</li>
-    <li>This tool provides general information, not financial advice. For advice on your circumstances, speak to Damian.</li>
+    <li>Growth is constant, at the rate you choose. Real returns will differ and can be negative.</li>
+    <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
+    <li>Tax relief is at your chosen rate, on your own contributions only. The limit is 15% of earnings under 30. It rises in steps to 40% at 60 and over. Earnings are capped at €115,000.</li>
+    <li>The main figures ignore inflation. The line under each gives today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Figures ignore product charges, which will reduce returns. Nothing is guaranteed.</li>
+    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year. Check gov.ie for the current rate.</li>
   </ul>
 </div></section>
 
@@ -2733,7 +2732,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <ul class="pb-related-list">
     <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-t">Pension charges calculator</span><span class="pb-related-d">What an annual management charge and a charge on each payment take out of a pension pot by retirement.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="state-pension-reality-check.html"><span class="pb-related-t">State Pension reality check</span><span class="pb-related-d">What the State Pension leaves you to find.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="broker-vs-autoenrolment.html"><span class="pb-related-t">Auto-enrolment comparison</span><span class="pb-related-d">My Future Fund is the auto-enrolment scheme. The comparison tool shows both, side by side, for your salary and age.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="broker-vs-autoenrolment.html"><span class="pb-related-t">Auto-enrolment comparison</span><span class="pb-related-d">My Future Fund and a personal pension, side by side.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3211,9 +3210,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

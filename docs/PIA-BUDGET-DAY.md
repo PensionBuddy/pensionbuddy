@@ -6,6 +6,16 @@ leaves blank. This is the list of what to change and where each lives. Line
 numbers are as at the commit that added this file; search for the quoted
 text if they have moved.
 
+6 October 2026, copy cut (Run 46): `tools/pia-parts/main.html` is shorter, so
+the line numbers below are stale. The quoted words still stand except these:
+the assumption on the annual limit now reads "No annual limit is applied: none
+is announced."; the one on the average reads "How the average will be measured
+is not yet published."; the page head no longer says "Accounts are to open
+during 2027" (only "Still to come" does, as "during 2027"); "What's
+confirmed, and what's coming on 6 October" is now "Confirmed, and still to
+come"; "How the same money is taxed today, outside the account" is now "Tax
+today, outside the account".
+
 Rules while doing it: use the figures only as the Department of Finance or
 Revenue publish them, cite each one, and keep the word "proposed" until the
 Finance Act is passed. After editing any file under `tools/pia-parts/`, run

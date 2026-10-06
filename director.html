@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="Pensionbuddy. For company directors: Your profit is sitting in the company account. It could be building your pension and cutting the tax bill.">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Pensions for company directors", "item": "https://pensionbuddy.ie/director.html"}]}</script>
 <!-- SEO:END -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much can my company actually contribute?", "acceptedAnswer": {"@type": "Answer", "text": "Often a lot more than you'd expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions. The right figure is specific to you, and the free chat works it out."}}, {"@type": "Question", "name": "Is this really more tax-efficient than taking salary?", "acceptedAnswer": {"@type": "Answer", "text": "For money you don't need to live on, very often yes. Salary is taxed three ways: income tax, USC and PRSI. A company pension payment is normally a business expense instead, and the money goes into your fund."}}, {"@type": "Question", "name": "I already have old pensions from previous roles. Does that matter?", "acceptedAnswer": {"@type": "Answer", "text": "It can, and it's worth bringing them into the picture. Existing pensions affect how much room you have to fund, and some old plans are worth keeping as they are. We'll look at everything together."}}, {"@type": "Question", "name": "What does the first chat involve?", "acceptedAnswer": {"@type": "Answer", "text": "Twenty minutes, phone or video, free and with no obligation. We'll talk through your company, your goals and your options in plain English."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much can my company contribute?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on your salary, service and existing funding. The salary-percentage caps do not apply."}}, {"@type": "Question", "name": "Is this more tax-efficient than taking salary?", "acceptedAnswer": {"@type": "Answer", "text": "For money you don't need to live on, often yes. A company pension payment is normally a business expense."}}, {"@type": "Question", "name": "Do my old pensions matter?", "acceptedAnswer": {"@type": "Answer", "text": "They can. Existing pensions affect how much room you have to fund. Some old plans are worth keeping as they are."}}, {"@type": "Question", "name": "What does the first chat involve?", "acceptedAnswer": {"@type": "Answer", "text": "Twenty minutes by phone or video, about your company, goals and options."}}]}</script>
 <link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
@@ -1530,6 +1530,21 @@ button{font-family:inherit}
 .pb-split-media{margin:0}
 .pb-split-media img{display:block;width:100%;max-width:100%;height:auto;border-radius:12px;
   border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px rgba(0,0,0,.4)}
+/* MIST TEAL (6 October 2026): the "see your own numbers" band is pale like
+   the result card it shows. Scoped .callout.pb-dark to outrank both the
+   .callout and the .pb-dark rules; the deadline band (.tick) stays dark. */
+.callout.pb-dark{background:var(--teal-50);color:var(--ink);border-block:1px solid var(--teal-100)}
+.callout.pb-dark h2,.callout.pb-dark h3{color:var(--ink)}
+.callout.pb-dark p,.callout.pb-dark p.pb-why,.callout.pb-dark .pb-split-cap,.callout.pb-dark .pb-src,.callout.pb-dark .pb-stat-l{color:var(--ink-2)}
+.callout.pb-dark .pb-plain,.callout.pb-dark .pb-stat-n,.callout.pb-dark .pb-rw,.callout.pb-dark .pb-rw-out{color:var(--ink)}
+.callout.pb-dark .eyebrow,.callout.pb-dark .pb-rw-link{color:var(--teal-700)}
+.callout.pb-dark .btn-light{background:var(--aqua);color:var(--aqua-ink)}
+.callout.pb-dark .btn.btn-quiet-dark{color:var(--ink);border-color:rgba(11,31,28,.4)}
+.callout.pb-dark .btn.btn-quiet-dark:hover{background:rgba(11,31,28,.05);border-color:var(--ink);color:var(--ink)}
+.callout.pb-dark .btn.btn-quiet-dark:focus-visible{box-shadow:0 0 0 3px var(--ring)}
+.callout.pb-dark .pb-split-media img{border-color:var(--teal-100);box-shadow:0 1px 2px rgba(11,31,28,.06),0 24px 60px -28px rgba(11,31,28,.35)}
+.callout.pb-dark .pb-ann-under{opacity:0}
+.callout.pb-dark .pb-ann-l{box-shadow:0 1px 3px rgba(11,31,28,.18)}
 /* (Run 39) width:100% keeps the photograph's box before it loads: a grid
    item centred by auto margins shrinks to its contents, and until the
    image arrived that was only its caption (161px tall, then 523px) */
@@ -2321,7 +2336,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
     </div>
     <h1>Your profit is sitting in the company account. It could be building your pension and <span class="hl">cutting the tax bill</span>.</h1>
-    <p class="lede">If you run your own company, you have funding options most people never get. Your business can contribute far beyond personal limits, and those contributions can reduce its <a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">corporation tax</a>.</p>
     <div class="hero-cta">
       <a class="btn btn-ghost" href="director-calculator.html">Try the director calculator</a>
     </div>
@@ -2334,8 +2348,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="phone">
       <div class="phone-bar"><span class="phone-av"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></span>Buddy<span class="phone-role">Chief Pension Dog</span></div>
       <div class="phone-chat">
-        <p class="msg them">How much can my company actually contribute?</p>
-        <p class="msg buddy">Often a lot more than you&rsquo;d expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions.</p>
+        <p class="msg them">How much can my company contribute?</p>
+        <p class="msg buddy">It depends on your salary, service and existing funding.</p>
       </div>
     </div>
   </div>
@@ -2343,30 +2357,30 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></header>
 
 <section><div class="wrap">
-  <div class="sec-head"><span class="kicker">Why it's different</span><h2>Four things only a director gets.</h2></div>
+  <div class="sec-head"><h2>Four things only a director gets.</h2></div>
   <div class="benefits">
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
-      <div><h3>Fund well beyond personal limits</h3><p>Personal pension contributions are capped as a percentage of salary. Company contributions to a director's pension can be far larger, letting you build a serious fund faster.</p></div>
+      <div><h3>Fund beyond personal limits</h3><p>Personal contributions are capped as a share of salary. Company contributions can be far larger.</p></div>
     </div>
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-      <div><h3>Cut your corporation tax</h3><p>Money your company puts into your pension normally counts as a business expense, so it can cut the company&rsquo;s tax bill while the money works for your future rather than the tax bill.</p></div>
+      <div><h3>Cut your corporation tax</h3><p>Company payments into your pension are normally a business expense.</p></div>
     </div>
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"/></svg></span>
-      <div><h3>Salary versus pension, compared</h3><p>Take it as salary and it is taxed three ways: income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI). Put it into a pension instead and far more of it stays yours.</p>
+      <div><h3>Salary versus pension, compared</h3><p>Salary is taxed three ways: income tax, the Universal Social Charge (USC) and Pay-Related Social Insurance (PRSI).</p>
         <div class="pb-two" id="pbTwo"><div class="pb-two-seg" role="group" aria-label="€1,000 of profit"><button type="button" aria-pressed="true" data-pb-way="salary">As salary</button><button type="button" aria-pressed="false" data-pb-way="pension">Into your pension</button></div>
         <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026).</p></div></div>
     </div>
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><path d="M3 3v18h18M7 14l4-4 4 4 5-6"/></svg></span>
-      <div><h3>Use the funding headroom you've built</h3><p>Years of trading often create room to make large one-off contributions based on your salary and service.</p></div>
+      <div><h3>Use the funding headroom you've built</h3><p>Years of trading often create room for large one-off contributions.</p></div>
     </div>
   </div>
 
   <div class="pb-lad" data-pb-age="ladAge">
-    <p class="pb-lad-cap">The personal limit: the share of salary that gets tax relief, by age.</p>
+    <p class="pb-lad-cap">Personal limit: the share of salary that gets tax relief, by age.</p>
     <div class="pb-lad-ctl"><div class="pb-lad-ctl-row"><label for="ladAge">Your age</label><span class="pb-lad-ctl-v" id="ladAgeV">48</span></div><input type="range" id="ladAge" min="18" max="70" step="1" value="48" aria-valuetext="48, 25%" style="--fill:57.69%"></div>
     <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
     <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
@@ -2374,20 +2388,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
     <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
     <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-note">Earnings count up to €115,000. Company funding is not capped by the salary percentages that limit everyone else.</p>
+    <p class="pb-lad-note">Earnings count up to €115,000. Company funding is not capped by these salary percentages.</p>
   </div>
   <div class="hero-cta" style="margin-top:22px">
       <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><span class="kicker">Sound familiar?</span><h2>If any of this is you, it's worth a chat.</h2></div>
-  <div class="pains">
-    <div class="pain"><div class="pl">Profit sitting still</div><h3>Cash building in the company</h3><p>The business is doing well and profit is accumulating, but it's just sitting there rather than working for your retirement.</p></div>
-    <div class="pain"><div class="pl">Paying more tax than needed</div><h3>Taking it all as salary</h3><p>You're drawing profit as income and feeling the full weight of income tax, USC and PRSI on money you don't immediately need.</p></div>
-    <div class="pain"><div class="pl">No clear plan</div><h3>Pension on the long finger</h3><p>You've meant to sort a proper pension for years, but running the business always came first. It's not too late to make it count.</p></div>
   </div>
 </div></section>
 
@@ -2396,9 +2401,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="cover pb-coverrow">
       <div class="cv-copy">
         <div class="eyebrow"><i class="pip"></i>The coverage gap</div>
-        <h3>Running the company usually comes first. The pension comes last.</h3>
-        <p>Directors and the self-employed are the least likely group to have retirement
-        provision behind them, and the ones with the most room to fix it.</p>
+        <h3>The company comes first. The pension comes last.</h3>
+        <p>Directors and the self-employed are the least likely to have a pension.</p>
       </div>
       <div class="pb-statwrap">
         <div class="pb-statrow">
@@ -2414,45 +2418,39 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding-top:0"><div class="wrap">
   <div class="callout pb-bleed pb-dark pb-split">
     <div class="pb-split-copy">
-    <span class="eyebrow"><span class="pip"></span>See your own numbers</span>
-    <h2>You don't know the number. <span class="pb-soft">Two minutes with the calculator and you do.</span></h2>
-    <p>The director calculator shows the pot you could build, the income it could provide, and the corporation tax your company could save. Two minutes, no sign-up.</p>
+    <h2>See your own numbers.</h2>
+    <p>Pot, income and tax saving. Two minutes, no sign-up.</p>
     <a class="btn btn-quiet-dark" href="director-calculator.html">Open the director calculator <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
     <figure class="pb-split-media">
-      <picture><source type="image/webp" srcset="assets/img/product-director-calculator.webp?v=5a1e6a97"><img src="assets/img/product-director-calculator.jpg?v=9c034823" width="2184" height="3149" alt="The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension." loading="lazy"></picture>
+      <picture><source type="image/webp" srcset="assets/img/product-director-calculator.webp?v=a8febbd4"><img src="assets/img/product-director-calculator.jpg?v=68e57384" width="2184" height="2968" alt="The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension." loading="lazy"></picture>
       <figcaption class="pb-split-cap">Example figures.</figcaption>
     </figure>
   </div>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><span class="kicker">The rules for 2026</span><h2>What changed, and how close you are to the cap.</h2></div>
+  <div class="sec-head"><h2>The rules for 2026.</h2></div>
   <div class="benefits">
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
-      <div><h3><a href="director-pension-rules.html">Directors&rsquo; pensions in 2026</a></h3><p>Executive pensions set up before April 2021, a company&rsquo;s payments into a Personal Retirement Savings Account (PRSA), the October window and small self-administered schemes, dated and sourced, with four questions to see which of it applies to you.</p></div>
+      <div><h3><a href="director-pension-rules.html">Directors&rsquo; pensions in 2026</a></h3><p>Executive pensions set up before April 2021, company payments into a Personal Retirement Savings Account (PRSA), the October window and small self-administered schemes.</p></div>
     </div>
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="20"/><polyline points="4 16 9 11 13 14 20 6"/></svg></span>
-      <div><h3><a href="standard-fund-threshold.html">The Standard Fund Threshold check</a></h3><p>The threshold rises every year to 2029. See how much of it your pensions would use in the year you take them, and how a retirement lump sum is taxed.</p></div>
-    </div>
-    <div class="benefit">
-      <span class="bi"><svg class="ico" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-      <div><h3><a href="director-year-end-checklist.html">The year-end checklist</a></h3><p>Nine things to check before your company&rsquo;s year end and the October deadline, on one page you can print for your accountant.</p></div>
+      <div><h3><a href="standard-fund-threshold.html">The Standard Fund Threshold check</a></h3><p>The threshold rises every year to 2029. How much your pensions would use, and how a lump sum is taxed.</p></div>
     </div>
     <div class="benefit">
       <span class="bi"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span>
-      <div><h3><a href="pia.html">The new Personal Investment Account (PIA)</a></h3><p>Proposed, as at 25 September 2026, and not yet law: an account for investing from your own take-home pay, with no tax relief going in and a flat yearly tax. See it next to a pension, which your company can pay into.</p></div>
+      <div><h3><a href="pia.html">The new Personal Investment Account (PIA)</a></h3><p>Proposed, as at 25 September 2026, and not yet law. Paid from take-home pay: no tax relief going in, and a flat yearly tax.</p></div>
     </div>
   </div>
 </div></section>
 
 <section class="pb-bleed pb-wash pb-magnetband" data-flag="guide_forms" hidden><div class="wrap"><div class="magnet">
   <div class="mtext">
-    <span class="eyebrow acc"><span class="pip"></span>Free director guide</span>
-    <h2>Company pension funding is not obvious. <span class="pb-soft">This is the plain-English version.</span></h2>
-    <p>A short, plain-English guide to how company directors can fund a pension through their business and cut their corporation tax. We'll email it to you.</p>
+    <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
+    <h2>Company pension funding, in plain English.</h2>
   </div>
   <div>
     <form class="magnet-form" id="mForm" name="director-guide" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendMagnet();return false" novalidate>
@@ -2476,27 +2474,25 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></div></section>
 
 <section style="padding-top:56px"><div class="wrap faq-grid">
-  <div class="sec-head" style="margin-bottom:0"><span class="kicker">Good to know</span><h2>Questions, answered.</h2></div>
+  <div class="sec-head" style="margin-bottom:0"><h2>Questions, answered.</h2></div>
   <div class="faq-list">
-    <details><summary>How much can my company actually contribute?<span class="pm">+</span></summary><p>Often a lot more than you'd expect. Company contributions are based on your salary, service and existing funding, not the salary-percentage caps that limit personal contributions. The right figure is specific to you, and the free chat works it out.</p></details>
-    <details><summary>Is this really more tax-efficient than taking salary?<span class="pm">+</span></summary><p>For money you don't need to live on, very often yes. Salary is taxed three ways: income tax, USC and PRSI. A company pension payment is normally a business expense instead, and the money goes into your fund.</p></details>
-    <details><summary>I already have old pensions from previous roles. Does that matter?<span class="pm">+</span></summary><p>It can, and it's worth bringing them into the picture. Existing pensions affect how much room you have to fund, and some old plans are worth keeping as they are. We'll look at everything together.</p></details>
-    <details><summary>What does the first chat involve?<span class="pm">+</span></summary><p>Twenty minutes, phone or video, free and with no obligation. We'll talk through your company, your goals and your options in plain English.</p></details>
+    <details><summary>How much can my company contribute?<span class="pm">+</span></summary><p>It depends on your salary, service and existing funding. The salary-percentage caps do not apply.</p></details>
+    <details><summary>Is this more tax-efficient than taking salary?<span class="pm">+</span></summary><p>For money you don't need to live on, often yes. A company pension payment is normally a business expense.</p></details>
+    <details><summary>Do my old pensions matter?<span class="pm">+</span></summary><p>They can. Existing pensions affect how much room you have to fund. Some old plans are worth keeping as they are.</p></details>
+    <details><summary>What does the first chat involve?<span class="pm">+</span></summary><p>Twenty minutes by phone or video, about your company, goals and options.</p></details>
   </div>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Pension and tax rules depend on your circumstances and can change. The calculators are illustrations only. Regulated financial advice is given in a personal consultation with Damian.</p>
+    <p><b>This page is information, not advice.</b></p>
   </div>
 </div></section>
 
 <div class="final-band"><div class="wrap"><div class="final pb-bleed">
   <div class="paw-bg"><svg fill="#fff" viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>Make your profit work harder</span>
   <h2>Profit can go to Revenue.<br><span class="pb-soft">Or it can go to your pension.</span></h2>
-  <p>Twenty minutes with Damian to see what your business could do for your retirement. Free, no obligation.</p>
   <a class="btn btn-light" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2505,7 +2501,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
     <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-t">Director calculator</span><span class="pb-related-d">See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Here they are in plain English, with four questions to see which of them apply to you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Three things changed in the last two years. Four questions show which apply to you.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="director-year-end-checklist.html"><span class="pb-related-t">Year-end pension checklist</span><span class="pb-related-d">Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.</span></a></li>
   </ul>
 </div></section>
@@ -2652,9 +2648,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=15720ed7" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=7c9ede3c" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

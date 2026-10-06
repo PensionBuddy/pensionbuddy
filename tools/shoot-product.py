@@ -190,7 +190,11 @@ HIDE = ('nav,footer,.announce,.skip,.phead,.deadline,#deadlineBand,.assume,secti
         '.chart-card:has(.pb-lad),.pb-work,.pb-share,.pb-peek,'
         # run 25: the reason to book under a booking link, a line about the
         # call rather than the tool
-        '.pb-why'
+        '.pb-why,'
+        # 6 October 2026: later additions under the result, a page's own
+        # tools rather than the picture of the result: Save as A (Run 37),
+        # the "what this doesn't show" line and the booking/email box
+        '.pb-ab,.pb-after-not,.pb-after,.pb-bookbar'
         '{display:none!important}')
 SETTLE = ('html{scroll-behavior:auto}'
           '.reveal,.js-reveal .reveal{opacity:1!important;transform:none!important}'
@@ -296,7 +300,10 @@ def shoot(name, port):
         # the frame the game was played to was never reached: shooting it
         # anyway would put a picture on the home page its alt text misdescribes
         raise SystemExit('%s: the game never reached the frame it is played to: %s' % (name, json.dumps(info)))
-    height = int(box['y'] + box['h'] + 24)
+    # +240, not +24: headless Chrome on Linux draws a viewport shorter than
+    # --window-size, which cut the bottom of the crop; the crop is by the box,
+    # so the spare height never reaches the picture
+    height = int(box['y'] + box['h'] + 240)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, 'shot.png')
         chrome(['--window-size=%d,%d' % (WIDTH, height), '--force-device-scale-factor=%d' % SCALE,

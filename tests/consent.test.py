@@ -139,7 +139,12 @@ PROBE = r"""<script>
       later(50,function(){
         R.exists=!!document.getElementById('pbBuddyBtn'); R.open=buddy();
         document.querySelector('.pb-c-no').click();
-        later(50,function(){ R.after=buddy(); done(); });
+        // read it once its own hold has passed: it comes back only after the
+        // corner has been clear for 600ms and a second after its last move
+        // (assets/js/pb-buddy.js, giveWay), so an early read can catch it
+        // still aside for a caveat that has since moved (the home page's
+        // shorter hero caveat at 1200px, 6 October 2026)
+        later(1700,function(){ R.after=buddy(); done(); });
       });
     })(0);
     return;
