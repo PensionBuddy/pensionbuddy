@@ -21,7 +21,9 @@ except ImportError:  # pragma: no cover
     sys.exit('Pillow is required: python3 -m pip install --user pillow')
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = '/Users/adamjamescondon/PensionBuddy Photos'
+# PB_PHOTOS points it at another folder; a source not in the folder is skipped,
+# so one new photo can be added without every other original to hand.
+SRC = os.environ.get('PB_PHOTOS', '/Users/adamjamescondon/PensionBuddy Photos')
 OUT = os.path.join(ROOT, 'assets', 'img')
 
 # source file -> (slug, alt text). Alt is specific per photo, as asked.
@@ -54,12 +56,22 @@ STRIP_Q = 72
 # needs no cropping in the browser. 'box' squares a source that is not already
 # 4:5; None means the source is close enough to resize straight.
 PORTRAITS = [
-    {'source': 'Headshot.JPG', 'slug': 'adam-condon-portrait',
-     'box': None, 'size': (620, 775), 'quality': 84},
-    # 1246x1571 is 0.793, a shade taller than 4:5, so 14 rows come off the
-    # bottom of the shirt rather than out of the headroom.
-    {'source': 'Damian-Headshot-BW.jpg', 'slug': 'damian-condon-portrait',
-     'box': (0, 0, 1246, 1557), 'size': (620, 775), 'quality': 84},
+    # Adam's studio headshot, red jumper (October 2026): 960x1200, 4:5 as shot.
+    {'source': 'Adam-Headshot-Red.jpg', 'slug': 'adam-condon-portrait',
+     'box': None, 'size': (800, 1000), 'quality': 84},
+    # Damian's two studio headshots (October 2026), shown in turn in his
+    # section: 115 (arms crossed) first, 321 (the Pensionbuddy cap) second.
+    # Both are 1333x2000; each box is 1332x1665, 4:5, set so the eyes sit at
+    # the same height in both and the swap does not jump.
+    {'source': 'Damian-Headshot-115.jpg', 'slug': 'damian-condon-portrait',
+     'box': (0, 50, 1332, 1715), 'size': (800, 1000), 'quality': 84},
+    {'source': 'Damian-Headshot-321.jpg', 'slug': 'damian-condon-portrait-cap',
+     'box': (0, 124, 1332, 1789), 'size': (800, 1000), 'quality': 84},
+    # The two shots of Damian at his desk under "Our story", 3:2 as shot.
+    {'source': 'Damian-Desk-Screen.jpg', 'slug': 'damian-at-desk-screen',
+     'box': None, 'size': (1200, 800), 'quality': 80},
+    {'source': 'Damian-Desk-Notes.jpg', 'slug': 'damian-at-desk-notes',
+     'box': None, 'size': (1200, 800), 'quality': 80},
 ]
 
 # Images that arrived as a JPEG only, with no phone-screenshot chrome to strip
@@ -128,6 +140,9 @@ def main():
     total_w = total_j = 0
     print('%-30s %-11s %-16s %9s %9s' % ('source', 'band', 'slug', 'jpg', 'webp'))
     for name, slug, _alt in PHOTOS:
+        if not os.path.isfile(os.path.join(SRC, name)):
+            print('%-30s source missing, skipped' % name)
+            continue
         im = Image.open(os.path.join(SRC, name)).convert('RGB')
         top, bot = photo_band(im)
         crop = load_cropped(name)
@@ -162,6 +177,9 @@ def main():
                   % (os.path.basename(webp), wb, name, im.width, im.height))
 
     for h in PORTRAITS:
+        if not os.path.isfile(os.path.join(SRC, h['source'])):
+            print('portrait %-24s source missing, skipped' % h['slug'])
+            continue
         im = Image.open(os.path.join(SRC, h['source'])).convert('RGB')
         if h.get('box'):
             im = im.crop(h['box'])
