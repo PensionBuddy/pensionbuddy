@@ -177,18 +177,18 @@ tax would come on top.
 
 **Gap**:
 The difference between a living standard and an annual pension, stated as a
-year and a month. On a chart a gap, a shortfall, a loss or the cost of waiting is drawn in red, with its figure and the words beside it; it is never shown by colour alone.
+year and a month. On a chart a gap, a shortfall, a loss or the cost of waiting is drawn in burnt orange, with its figure and the words beside it; it is never shown by colour alone.
 
 **Covered**:
 The state where a pension meets or exceeds a standard. Shown as covered, never
-as a negative gap, and never in red: when the need is met there is nothing red on the chart.
+as a negative gap, and never in burnt orange: when the need is met there is nothing orange on the chart.
 
 **Money back**:
 Tax relief, Revenue's contribution, an employer's or the State's top-up: money that comes back or is added to what a person pays in. Drawn in amber on a chart. Not the State Pension itself, which is drawn in teal; what a person needs is drawn in dark.
 _Avoid_: calling the State Pension a top-up, or a top-up the State Pension.
 
 **What the State pays**:
-The State Pension, and only that, is drawn in teal on a chart, a bar or a figure. Everything else on a chart that is not a gap (red), money back (amber) or what a person needs (dark) is drawn in slate, a neutral blue-grey: a person's own pot, a projection, another plan, the costs of a way of life, a statistic. A person's own place on a scale ("You", the year they picked) is marked in neutral ink. Each carries its words beside it.
+The State Pension, and only that, is drawn in teal on a chart, a bar or a figure. Everything else on a chart that is not a gap (burnt orange), money back (amber) or what a person needs (dark) is drawn in slate, a neutral blue-grey: a person's own pot, a projection, another plan, the costs of a way of life, a statistic. A person's own place on a scale ("You", the year they picked) is marked in neutral ink. Each carries its words beside it.
 _Avoid_: drawing a person's own pot, a projection or their place on a scale in teal, which reads as the State's; calling the State's top-up into auto-enrolment (amber, money back) the State Pension.
 
 ## Naming

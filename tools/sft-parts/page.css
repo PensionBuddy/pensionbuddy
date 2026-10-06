@@ -29,7 +29,7 @@
   .sft-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
   .sft-card{padding:18px 16px}
 }
-#lumpTax{color:var(--red)}
+#lumpTax{color:var(--gap)}
 /* THE LIMIT BAR (Run 43, item 4; docs/INTERACTIVE-PROPOSALS-42.md rank 2). The year's
    threshold against your pensions, on one scale. Yours in slate (neutral); the part over
    the threshold hatched, not red: the excess is not money missing (its tax is in "Over the

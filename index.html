@@ -44,8 +44,8 @@
   /* teal accent system */
   --teal:#0C8175; --teal-600:#0A7166; --teal-700:#08655A; --teal-900:#0A332E;
   --teal-50:#E8F6F3; --teal-100:#CBEBE4;
-  /* amber: money that comes back or is added; red: money missing (Run 42) */
-  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --slate:#586B85;
+  /* amber: money that comes back or is added; gap (burnt orange): money missing; red: form errors only */
+  --amber:#F4B740; --amber-soft:#FCEFCF; --red:#A4291D; --gap:#C2410C; --slate:#586B85;
   /* lines + shadows */
   --line:#E7EBE9; --line-2:#D8DFDC;
   --ring:rgb(14,143,128);
@@ -1611,7 +1611,7 @@ button{font-family:inherit}
 .pb-gap-bar{bottom:0}
 .pb-gap-need .pb-gap-bar{background:var(--ink)}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
-.pb-gap-short{bottom:var(--from);background:var(--red);transition-delay:.12s}
+.pb-gap-short{bottom:var(--from);background:var(--gap);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
 .pb-gap.pb-still .pb-gap-bar,.pb-gap.pb-still .pb-gap-short{transition:none}
 @media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
@@ -2297,7 +2297,7 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-hero-gap .pb-hero-copy > .pb-reg:not(.pb-reg-top){margin-top:28px}
 .pb-gap-big{margin:22px 0 0;font-family:var(--font);font-size:20px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.06;letter-spacing:-.03em;text-wrap:balance}
 .pb-gap-big-n{font-weight:300;font-size:34px;white-space:nowrap}
-.pb-gap-big-n{color:var(--red)}
+.pb-gap-big-n{color:var(--gap)}
 .pb-gap-big-w{display:inline-block;font-size:20px;font-weight:400;line-height:1.24;letter-spacing:0;color:var(--ink-2)}
 .pb-hero-chart .pb-gap{max-width:none}
 .pb-hero-chart .pb-src{margin-top:14px}
