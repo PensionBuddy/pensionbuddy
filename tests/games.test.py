@@ -529,6 +529,53 @@ __boot(function () {
   R.stomp = { falling: sb.vy > 0, stomped: stomped, lives: after.lives,
               points: after.score - stompScore, bounced: after.buddy.vy < 0 };
 
+  /* ---- a big crab: one jump never clears it, a double jump can ---- */
+  function clearsBig(dist, score, dbl) {
+    B.setRng(FIX);
+    B.start();
+    if (score) { B._setScore(score); }
+    var l = B.spawnLabel('bad', 'Probe big', 'big');
+    l.x = B.buddyHit().x + dist;
+    B.jump();
+    var used = false, guard = 0;
+    while (guard < 1400) {
+      if (dbl && !used && B.state().buddy.vy >= -40) { used = B.jump(); }
+      B.tick(1 / 120);
+      if (B.state().lives < 3) { return false; }
+      if (l.x + l.w < 0) { return true; }
+      guard += 1;
+    }
+    return false;
+  }
+  var bigOne = 0, bigTwoSlow = 0, bigTwoFast = 0, bigLabel = null;
+  for (d = 20; d <= 500; d += 5) {
+    if (clearsBig(d, 0, false) || clearsBig(d, 6000, false)) { bigOne += 1; }
+    if (clearsBig(d, 0, true)) { bigTwoSlow += 1; }
+    if (clearsBig(d, 6000, true)) { bigTwoFast += 1; }
+  }
+  B.setRng(FIX); B.start();
+  bigLabel = B.spawnLabel('bad', 'Probe big look', 'big');
+  var bigHit = B.labelHit(bigLabel), smallLabel = B.spawnLabel('bad', 'Probe small look', false);
+  R.big = { one: bigOne, twoSlow: bigTwoSlow, twoFast: bigTwoFast, big: bigLabel.big,
+            hitTop: bigHit.y, hitBottom: bigHit.y + bigHit.h, smallTop: B.labelHit(smallLabel).y };
+
+  /* ---- big crabs come only once the score is up ---- */
+  function bigsSeen(score) {
+    var frames = 0, below = 0, k, st, seedB = 4242;
+    B.setRng(function () { seedB = (seedB * 16807) % 2147483647; return seedB / 2147483647; });
+    B.start(); B._setScore(score);
+    for (k = 0; k < 120 * 40; k++) {
+      if (B.state().phase === 'paused') { B.resume(); }
+      if (B.state().phase === 'over') { B.start(); B._setScore(score); }
+      B.tick(1 / 120);
+      st = B.state();
+      if (st.labels.some(function (x) { return x.big; })) { frames += 1; if (st.score < B.config.BIG_FROM) { below += 1; } }
+    }
+    return { frames: frames, below: below };
+  }
+  var e0 = bigsSeen(0);
+  R.bigSpawn = { early: e0.below, later: bigsSeen(200).frames };
+
   /* ---- angels move about, crabs scuttle ---- */
   fresh();
   var ang = B.spawnLabel('good', 'Probe angel', true), ys = [], xs = [];
@@ -732,6 +779,18 @@ def check_buddys_run(data):
     eq('11. a stomp costs no life', st['lives'], 3)
     eq('11. a stomp is worth five', st['points'], 5)
     eq('11. and bounces Buddy back up', st['bounced'], True)
+
+    bg = data['big']
+    eq('11. a big crab is spawned as big', bg['big'], True)
+    ok('11. it stands taller than a small one (hit box top %d against %d)' % (bg['hitTop'], bg['smallTop']),
+       bg['hitTop'] < bg['smallTop'] - 60)
+    eq('11. and it reaches the sand', bg['hitBottom'], 300)
+    eq('11. no single jump clears a big crab, at the slowest or the capped speed', bg['one'], 0)
+    ok('11. a double jump clears it at the slowest speed (%d of 97 distances)' % bg['twoSlow'], bg['twoSlow'] > 0)
+    ok('11. and at the capped speed (%d of 97 distances)' % bg['twoFast'], bg['twoFast'] > 0)
+    bsp = data['bigSpawn']
+    eq('11. no big crabs before the score reaches %d' % data['config']['BIG_FROM'], bsp['early'], 0)
+    ok('11. big crabs do come later (on screen in %d of 4800 frames)' % bsp['later'], bsp['later'] > 0)
 
     mv = data['move']
     ok('11. a floating angel bobs up and down (%.1f px in a second)' % mv['ySpan'], mv['ySpan'] > 10)
