@@ -216,7 +216,9 @@ def main():
         eq('1. %s: its logo is an SVG or a WebP in %s/, and there' % (name, LOGOS),
            (os.path.dirname(logo), os.path.splitext(logo)[1] in ('.svg', '.webp'), os.path.isfile(os.path.join(ROOT, logo))),
            (LOGOS, True, True))
-        eq('1. %s: drawn at a height set by eye, 20 to 48px, inside the 60px strip' % name, 20 <= int(drawn) <= 48, True)
+        # up to 56px since 7 October 2026: New Ireland's round seal at 56 so its name
+        # reads; still inside the 60px row, and 49px inside the 52px row on a phone
+        eq('1. %s: drawn at a height set by eye, 20 to 56px, inside the 60px strip' % name, 20 <= int(drawn) <= 56, True)
         size = file_size(logo) if os.path.isfile(os.path.join(ROOT, logo)) else None
         eq('1. %s: the width and height in the list are the file\'s own' % name,
            size and (round(size[0], 2), round(size[1], 2)), (round(float(w), 2), round(float(h), 2)))
