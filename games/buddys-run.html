@@ -207,9 +207,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
         <p class="tagline">Catch the good bits, jump the excuses.</p>
         <p class="lede">Buddy's off down Dollymount Strand.</p>
         <ul class="how">
-          <li><span class="b" aria-hidden="true">&gt;</span><span>Catch the winged good bits. Jump or stomp the excuse crabs.</span></li>
-          <li><span class="b" aria-hidden="true">&gt;</span><span>Space or the Up arrow to jump. Press again in the air to double jump.</span></li>
-          <li><span class="b" aria-hidden="true">&gt;</span><span>Tap anywhere to jump. Tap again in the air to double jump.</span></li>
+          <li><span class="b" aria-hidden="true">&gt;</span><span>Catch the good bits with wings. Jump the excuse crabs.</span></li>
+          <li><span class="b" aria-hidden="true">&gt;</span><span><strong>Double jump:</strong> jump again in mid air. Big crabs need it.</span></li>
+          <li><span class="b" aria-hidden="true">&gt;</span><span><strong>Bounce</strong> on a crab's head to squash it for bonus points.</span></li>
+          <li><span class="b" aria-hidden="true">&gt;</span><span>Space, the Up arrow or a tap to jump.</span></li>
           <li class="opt"><span class="b" aria-hidden="true">&gt;</span><span>Three lives. It speeds up as you go.</span></li>
         </ul>
         <button class="btn btn-teal" id="startBtn" type="button">Let Buddy go</button>
@@ -327,7 +328,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   var JUMP_MIN_V = 530;          /* tapped jump, apex about 140 */
   var DOUBLE_V = 400;            /* the second jump, from the top of the first, adds about 80 */
   var STOMP_V = 420;             /* the bounce off a stomped crab */
-  var STOMP_GRACE = 16;          /* paws this far into a crab's top still count as a stomp */
+  var STOMP_GRACE = 4;           /* paws were above a crab's top, give or take this, a step ago */
   var COYOTE = 0.08;
   var BUFFER = 0.12;
   var INVULN = 1.2;
@@ -343,6 +344,13 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   var HIGH_TOP = 40;             /* a high angel's top edge: only a double jump reaches it */
   var GROUND_HOP = 40;           /* a low angel hops this high, still in reach of a standing Buddy */
   var CORE_MIN = 70, CORE_MAX = 120;  /* the part of a bad pill that actually stings */
+  /* A big crab stands on long legs with its claws up: from its claw tips to
+     the sand it is too tall for one jump to clear, at any speed, so Buddy
+     has to double jump over it or onto its head. One jump tops out with
+     Buddy's paws at 143; its claw tips are at 136. */
+  var BIG_H = 64, BIG_LEGS = 64, BIG_CLAWS = 36, BIG_FS = 28, BIG_MAX_W = 340;
+  var BIG_CORE = 130;
+  var BIG_FROM = 30;             /* no big crabs until the score reaches this */
 
   var BEST_KEY = 'pb.buddysRun.best';
 
@@ -410,6 +418,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     pending: null,
     pendingGap: 0,
     lastKind: 'good',
+    lastBig: false,
     events: []
   };
 
@@ -420,6 +429,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   }
   function labelHit(l) {
     if (l.kind === 'good') { return { x: l.x, y: l.y, w: l.w, h: l.h }; }
+    if (l.big) {
+      var bw = Math.min(l.w, BIG_CORE);
+      return { x: l.x + (l.w - bw) / 2, y: l.y - BIG_CLAWS, w: bw, h: GROUND - (l.y - BIG_CLAWS) };
+    }
     var cw = Math.max(CORE_MIN, Math.min(CORE_MAX, l.w * 0.55));
     if (cw > l.w) { cw = l.w; }
     return { x: l.x + (l.w - cw) / 2, y: l.y, w: cw, h: l.h };
@@ -440,18 +453,19 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   function measureLabel(l) {
     var m = measurer();
-    var fs = PILL_FS, tw = 0, total = 0;
+    var maxW = l.big ? BIG_MAX_W : PILL_MAX_W;
+    var fs = l.big ? BIG_FS : PILL_FS, tw = 0, total = 0;
     while (true) {
       m.font = pillFont(fs);
       tw = m.measureText(l.text).width;
       total = 14 + 18 + 8 + tw + 14;
-      if (total <= PILL_MAX_W || fs <= PILL_FS_MIN) { break; }
+      if (total <= maxW || fs <= PILL_FS_MIN) { break; }
       fs -= 1;
     }
     l.fs = fs;
     l.tw = tw;
-    l.w = Math.min(PILL_MAX_W, Math.round(total));
-    l.h = PILL_H;
+    l.w = Math.min(maxW, Math.round(total + (l.big ? 24 : 0)));
+    l.h = l.big ? BIG_H : PILL_H;
   }
   function remeasureAll() {
     for (var i = 0; i < S.labels.length; i++) { measureLabel(S.labels[i]); }
@@ -465,14 +479,17 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       text: String(text),
       floating: !!floating,
       high: (floating === 'high'),
+      big: (kind === 'bad' && floating === 'big'),
       x: W + 8,
       y: 0, w: 0, h: PILL_H, fs: PILL_FS, tw: 0,
       t: 0, phase: rng() * Math.PI * 2,
       squashed: false,
       spent: false
     };
+    if (l.big) { l.floating = false; }
     measureLabel(l);
     if (l.high) { l.baseY = HIGH_TOP; }
+    else if (l.big) { l.baseY = GROUND - BIG_LEGS - l.h; }
     else if (l.floating) {
       /* bobs 22 px either way about a line kept clear of a standing Buddy's ears */
       l.baseY = GROUND - FLOAT_LIFT - l.h - 24;
@@ -500,6 +517,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       l.x -= (S.speed - 60 * (0.5 - 0.5 * Math.cos(l.t * 1.7 + l.phase))) * h;
     } else if (l.squashed) {
       l.x -= S.speed * h;
+    } else if (l.big) {
+      /* a big crab lumbers, 12 px either way: never quick enough to let one jump clear it */
+      l.x -= (S.speed + 12 * 2 * Math.cos(l.t * 2 + l.phase)) * h;
     } else {
       /* scuttle: about 30 px either way, twice as quick as the swoop */
       l.x -= (S.speed + 30 * 3.4 * Math.cos(l.t * 3.4 + l.phase)) * h;
@@ -520,10 +540,14 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       var r = rng();
       /* about a third bob at jump height, a fifth fly up where only a double jump reaches */
       floating = (r < 0.35) ? true : (r < 0.55 ? 'high' : false);
+    } else if (S.score >= BIG_FROM && rng() < 0.3) {
+      floating = 'big';
     }
     var secs = 0.85 + rng() * 0.5;
     if (S.lastKind === 'bad' && kind === 'bad') { secs = Math.max(secs, 1.35); }
     else if (S.lastKind === 'bad' || kind === 'bad') { secs = Math.max(secs, 1.0); }
+    /* room to land a double jump before, and after, a big crab */
+    if (floating === 'big' || S.lastBig) { secs = Math.max(secs, 1.7); }
     S.pending = { kind: kind, text: text, floating: floating };
     S.pendingGap = Math.max(150, S.speed * secs);
   }
@@ -539,6 +563,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     if (rightMost + S.pendingGap <= W) {
       spawnLabel(S.pending.kind, S.pending.text, S.pending.floating);
       S.lastKind = S.pending.kind;
+      S.lastBig = (S.pending.floating === 'big');
       S.pending = null;
     }
   }
@@ -603,10 +628,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   function stomp(l) {
     l.spent = true;
     l.squashed = true;
-    S.score += 5;
+    var pts = l.big ? 15 : 5;
+    S.score += pts;
     S.buddy.vy = -STOMP_V;
     S.buddy.airJumps = 1;
-    S.pops.push({ x: l.x + l.w / 2, y: l.y + 6, life: 0.9, t: 0, text: '+5' });
+    S.pops.push({ x: l.x + l.w / 2, y: l.y + 6, life: 0.9, t: 0, text: '+' + pts });
     note('stomp');
   }
 
@@ -642,6 +668,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
     /* vertical */
     var b = S.buddy;
+    var wasBottom = b.y + HIT_DY + HIT_H;
     if (!b.onGround) {
       b.vy += GRAVITY * h;
       if (!S.held && b.vy < -JUMP_MIN_V) { b.vy = -JUMP_MIN_V; }
@@ -677,8 +704,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       if (l.kind === 'good') {
         collect(l);
         S.labels.splice(i, 1);
-      } else if (b.vy > 0 && hb.y + hb.h <= l.y + STOMP_GRACE) {
-        /* coming down on top of a crab squashes it */
+      } else if (b.vy > 0 && wasBottom <= labelHit(l).y + STOMP_GRACE) {
+        /* coming down on top of a crab squashes it: Buddy was above it a step ago */
         stomp(l);
       } else if (S.invuln <= 0) {
         l.spent = true;
@@ -730,7 +757,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     S.newBest = false;
     S.buddy.y = BUDDY_TOP; S.buddy.vy = 0; S.buddy.onGround = true; S.buddy.anim = 0; S.buddy.airJumps = 1;
     S.held = false; S.buffer = 0; S.coyote = COYOTE;
-    S.pending = null; S.pendingGap = 0; S.lastKind = 'good';
+    S.pending = null; S.pendingGap = 0; S.lastKind = 'good'; S.lastBig = false;
     acc = 0;
     note('reset');
   }
@@ -751,7 +778,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     for (i = 0; i < S.labels.length; i++) {
       l = S.labels[i];
       out.push({ kind: l.kind, text: l.text, x: l.x, y: l.y, w: l.w, h: l.h, floating: l.floating,
-                 high: l.high, squashed: l.squashed });
+                 high: l.high, big: l.big, squashed: l.squashed });
     }
     return {
       phase: S.phase,
@@ -1027,11 +1054,14 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
      its words. */
   function drawAngelBits(l, x, y, w) {
     var P = window.PBSprites;
-    var beat = [0, 1, 2, 1][Math.floor((l.t * 12 + l.phase * 2) % 4)];
-    var wing = P.props.wing[beat];
-    var ww = P.props.wing.w * 3, wh = P.props.wing.h * 3;
-    ctx.drawImage(P.bake(wing, 3, false), x + 26 - ww, y - wh);
-    ctx.drawImage(P.bake(wing, 3, true), x + w - 26, y - wh);
+    /* a browser can hold an older buddy-sprites.js with no wings in it */
+    if (P.props.wing) {
+      var beat = [0, 1, 2, 1][Math.floor((l.t * 12 + l.phase * 2) % 4)];
+      var wing = P.props.wing[beat];
+      var ww = P.props.wing.w * 3, wh = P.props.wing.h * 3;
+      ctx.drawImage(P.bake(wing, 3, false), x + 26 - ww, y - wh);
+      ctx.drawImage(P.bake(wing, 3, true), x + w - 26, y - wh);
+    }
     /* a gold halo over the middle */
     var mx = x + Math.round(w / 2);
     ctx.fillStyle = '#B57F12';
@@ -1055,22 +1085,57 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     ctx.fillRect(foot, y, 4, GROUND - y);
   }
 
+  /* A big crab's leg: from the hip in the shell out to a knee beside it,
+     then down to a foot on the sand, in 6 px blocks. */
+  function bigLeg(hx, hy, side, j, k) {
+    var kx = hx + side * (40 + j * 12), ky = hy - 14 + Math.round(k * 5);
+    var fx = hx + side * (52 + j * 20), fy = GROUND - 4;
+    var segs = [[hx, hy, kx, ky], [kx, ky, fx, fy]];
+    for (var q = 0; q < 2; q++) {
+      var sx = segs[q][0], sy = segs[q][1], ex = segs[q][2], ey = segs[q][3];
+      var n = Math.max(1, Math.ceil(Math.max(Math.abs(ex - sx), Math.abs(ey - sy)) / 4));
+      for (var u = 0; u <= n; u++) {
+        var px = Math.round(sx + (ex - sx) * u / n), py = Math.round(sy + (ey - sy) * u / n);
+        ctx.fillStyle = '#0B1F1C';
+        ctx.fillRect(px - 4, py - 4, 8, 8);
+      }
+      for (u = 0; u <= n; u++) {
+        px = Math.round(sx + (ex - sx) * u / n); py = Math.round(sy + (ey - sy) * u / n);
+        ctx.fillStyle = '#E0623B';
+        ctx.fillRect(px - 3, py - 3, 6, 6);
+      }
+    }
+  }
+
   /* Crabs: claws up, snapping, legs out to the side, eyes on stalks. */
   function drawCrabBits(l, x, y, w) {
     var P = window.PBSprites;
     var k = 0.5 + 0.5 * Math.sin(l.t * 7 + l.phase);
     var k2 = 1 - k;
-    for (var i = 0; i < 3; i++) {
-      var ly = y + 9 + i * 9;
-      if (ly + 4 > GROUND) { continue; }
-      drawLeg(x + 2, ly, -1, (i % 2) ? k : k2);
-      drawLeg(x + w - 2, ly, 1, (i % 2) ? k2 : k);
+    if (l.big) {
+      /* long jointed legs, splayed out from under the shell to the sand */
+      for (var j = 0; j < 3; j++) {
+        var kk = (j % 2) ? k : k2;
+        var hy = y + l.h - 10 - j * 8;
+        bigLeg(x + 14 + j * 10, hy, -1, j, kk);
+        bigLeg(x + w - 14 - j * 10, hy, 1, j, kk);
+      }
+    } else {
+      for (var i = 0; i < 3; i++) {
+        var ly = y + 9 + i * 9;
+        if (ly + 4 > GROUND) { continue; }
+        drawLeg(x + 2, ly, -1, (i % 2) ? k : k2);
+        drawLeg(x + w - 2, ly, 1, (i % 2) ? k2 : k);
+      }
     }
-    var snap = Math.floor((l.t * 5 + l.phase) % 2);
-    var claw = P.props.claw[snap];
-    var cw = P.props.claw.w * 3, ch = P.props.claw.h * 3;
-    ctx.drawImage(P.bake(claw, 3, false), x + 4, y + 4 - ch);
-    ctx.drawImage(P.bake(claw, 3, true), x + w - 4 - cw, y + 4 - ch);
+    if (P.props.claw) {
+      var snap = Math.floor((l.t * 5 + l.phase) % 2);
+      var claw = P.props.claw[snap];
+      var cs = l.big ? 4 : 3;
+      var cw = P.props.claw.w * cs, ch = P.props.claw.h * cs;
+      ctx.drawImage(P.bake(claw, cs, false), x + 4, y + 4 - ch);
+      ctx.drawImage(P.bake(claw, cs, true), x + w - 4 - cw, y + 4 - ch);
+    }
     /* eyes on stalks */
     var mx = x + Math.round(w / 2);
     ctx.fillStyle = '#0B1F1C';
@@ -1463,7 +1528,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     setRng: setRng,
     config: {
       W: W, H: H, GROUND: GROUND, GRAVITY: GRAVITY, JUMP_V: JUMP_V,
-      JUMP_MIN_V: JUMP_MIN_V, DOUBLE_V: DOUBLE_V, STOMP_V: STOMP_V,
+      JUMP_MIN_V: JUMP_MIN_V, DOUBLE_V: DOUBLE_V, STOMP_V: STOMP_V, BIG_FROM: BIG_FROM,
       SPEED_MIN: SPEED_MIN, SPEED_MAX: SPEED_MAX,
       PILL_H: PILL_H, CORE_MIN: CORE_MIN, CORE_MAX: CORE_MAX
     },

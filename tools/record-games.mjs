@@ -23,10 +23,13 @@
    hardware VP9 decoder refused one of the VP9 clips that software decoded
    without a fault, and VP8 is only ever decoded in software), and
    tools/video-mux.js writes them into an MP4 and a WebM, each under 1.5 MB,
-   in assets/video/. No other software is needed.
+   in assets/video/. No other software is needed, except where Chrome has no
+   H.264 encoder (Chromium on Linux): there the MP4 is made from the same
+   frames by ffmpeg's libx264, if it is installed.
 
-   Buddy's Run's clip starts after a run-up and must keep all three lives
-   and show the Poolbeg stacks on the far shore; Jargon Battle's answers two
+   Buddy's Run's clip starts after a run-up and must keep all three lives,
+   show the Poolbeg stacks on the far shore, a double jump, a big crab and
+   a stomp; Jargon Battle's answers two
    questions right, from the second to the fourth, the question its still
    shows. Buddy's Run's own pause control ("P to pause" and its Pause
    button) is hidden in the clip (Run 39, Damian's call): beside the card's
@@ -79,21 +82,36 @@ const GAMES = {
         xs.forEach(function(v){ if(s===null||v>q+2){ if(s!==null)runs.push([s,q]); s=v; } q=v; });
         if(s!==null)runs.push([s,q]);
         return runs.filter(function(r){return r[0]>2&&r[1]<637&&r[1]-r[0]>=5;}).length>=2; };
-      window.__pilot=function(){ var st=__B.state(), hb=__B.buddyHit();
-        var threat=st.labels.some(function(l){ var gap=l.x-(hb.x+hb.w); return l.kind==='bad'&&!l.spent&&gap>0&&gap<st.speed*0.068+10; });
-        if(threat&&st.buddy.onGround){ __B.jump(); __held=true; }
-        if(__held&&st.buddy.onGround&&st.buddy.vy===0&&!threat){ __B.releaseJump(); __held=false; } };
+      /* jump a small crab close up; double jump over (or onto) a big one; jump
+         for an angel at jump height and double jump for a high one, when no
+         crab is near */
+      window.__pilot=function(){ var st=__B.state(), hb=__B.buddyHit(), bd=st.buddy;
+        function gap(l){ return l.x-(hb.x+hb.w); }
+        var threat=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&!l.big&&g>0&&g<st.speed*0.068+10; });
+        var big=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&l.big&&g>-l.w&&g<st.speed*0.75; });
+        var badSoon=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&g>-l.w&&g<st.speed*1.3; });
+        var mid=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.floating===true&&g>0&&g<st.speed*0.3; });
+        var high=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.high&&g>-l.w/2&&g<st.speed*0.6; });
+        if(bd.onGround&&(threat||big||(!badSoon&&(mid||high)))){ __B.jump(); __held=true; }
+        if(!bd.onGround&&bd.airJumps>0&&bd.vy>=-40&&(big||high)){ __B.jump(); }
+        if(__held&&bd.onGround&&bd.vy===0&&!threat&&!big){ __B.releaseJump(); __held=false; } };
       window.__frame=function(){ for(var i=0;i<4;i++){ __pilot(); __step(1000/120); } var s=__B.state();
-        return {phase:s.phase,lives:s.lives,score:s.score,stacks:__stacks()}; };
-      /* the run-up: the stills are taken after 900 steps, this starts at 600 */
-      for(var n=0;n<150;n++){ __frame(); }
+        return {phase:s.phase,lives:s.lives,score:s.score,stacks:__stacks(),air:s.buddy.airJumps,
+          big:s.labels.some(function(l){return l.big;}),squashed:s.labels.some(function(l){return l.squashed;})}; };
+      /* the run-up, 2,240 steps: the clip then shows a double jump for a high
+         angel, a big crab coming in, a double jump onto it and the stomp,
+         and the still is taken inside it */
+      for(var n=0;n<560;n++){ __frame(); }
       if(document.activeElement&&document.activeElement.blur){ document.activeElement.blur(); }
       JSON.stringify(__B.state().phase)`,
     check: frames => {
       const lost = frames.some(f => f.lives !== 3 || f.phase !== 'running');
       const stacks = frames.filter(f => f.stacks).length / frames.length;
       return lost ? 'a life was lost, or the run stopped, during the clip'
-        : stacks < 0.5 ? 'the Poolbeg stacks are in only ' + Math.round(stacks * 100) + '% of the frames' : '';
+        : stacks < 0.5 ? 'the Poolbeg stacks are in only ' + Math.round(stacks * 100) + '% of the frames'
+        : !frames.some(f => f.air === 0) ? 'the clip shows no double jump'
+        : !frames.some(f => f.big) ? 'the clip shows no big crab'
+        : !frames.some(f => f.squashed) ? 'the clip shows no stomp' : '';
     },
   },
   'jargon-battle': {
@@ -156,7 +174,9 @@ const ORIGIN = 'http://127.0.0.1:' + server.address().port;
 const prof = mkdtempSync(join(tmpdir(), 'pb-rec-'));
 const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=0', '--user-data-dir=' + prof, '--no-first-run',
   '--no-default-browser-check', '--hide-scrollbars', '--mute-audio', '--disable-extensions', '--force-color-profile=srgb',
-  '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1', 'about:blank'], { stdio: 'ignore' });
+  '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1',
+  /* Chrome refuses its sandbox to root (a container) */
+  ...(process.getuid && process.getuid() === 0 ? ['--no-sandbox'] : []), 'about:blank'], { stdio: 'ignore' });
 const cleanup = () => { try { chrome.kill('SIGKILL'); } catch {} try { rmSync(prof, { recursive: true, force: true }); } catch {} server.close(); };
 process.on('exit', cleanup);
 let port;
@@ -203,6 +223,21 @@ const FLASH = `(function(){
   window.__worst=function(fr,per){var o={whole:most(turns(fr.map(function(f){return f.whole;})),per),cell:0},c;
     for(c=0;c<18;c++){o.cell=Math.max(o.cell,most(turns(fr.map(function(f){return f.cells[c];})),per));}return o;};
 })()`;
+
+function hasFfmpeg() {
+  try { return execFileSync('ffmpeg', ['-hide_banner', '-encoders'], { stdio: 'pipe' }).toString().includes('libx264'); } catch { return false; }
+}
+function ffmpegMp4(file, n) {
+  const dir = mkdtempSync(join(tmpdir(), 'pb-frames-'));
+  try {
+    for (let i = 0; i < n; i++) writeFileSync(join(dir, String(i).padStart(4, '0') + '.png'), frames[i]);
+    execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-framerate', String(FPS), '-i', join(dir, '%04d.png'),
+      '-vf', 'scale=' + VW + ':' + VH, '-c:v', 'libx264', '-profile:v', 'baseline', '-level', '3.1', '-pix_fmt', 'yuv420p',
+      '-b:v', String(BPS), '-maxrate', String(Math.round(BPS * 1.5)), '-bufsize', String(BPS * 2), '-g', '60', '-r', String(FPS),
+      '-movflags', '+faststart', '-an', file], { stdio: 'pipe' });
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  return { bytes: statSync(file).size, codec: 'libx264 baseline (ffmpeg)', frames: n };
+}
 
 let failed = false;
 const outDir = join(ROOT, 'assets', 'video');
@@ -260,8 +295,15 @@ for (const [name, g] of Object.entries(GAMES)) {
         :PBMux.webm(chunks,{width:${VW},height:${VH},fps:${FPS},codec:'V_VP8'});
       var s='',k;for(k=0;k<file.length;k+=0x8000){s+=String.fromCharCode.apply(null,file.subarray(k,k+0x8000));}
       return {frames:chunks.length,keys:chunks.filter(function(c){return c.key;}).length,b64:btoa(s)};})()`, true);
-    if (res.error) { out[ext] = res.error; failed = true; continue; }
     const file = join(outDir, name + '.' + ext);
+    if (res.error && ext === 'mp4' && /^unsupported/.test(res.error) && hasFfmpeg()) {
+      /* Chromium without H.264 (Linux, Playwright's build): the same frames
+         through ffmpeg's libx264, baseline, every frame 1/30 s, no B-frames */
+      out[ext] = ffmpegMp4(file, n);
+      if (out[ext].bytes >= MAX_BYTES) { failed = true; out[ext].tooBigOrShort = true; }
+      continue;
+    }
+    if (res.error) { out[ext] = res.error; failed = true; continue; }
     const bytes = Buffer.from(res.b64, 'base64');
     writeFileSync(file, bytes);
     out[ext] = { bytes: bytes.length, codec, frames: res.frames, keyframes: res.keys };

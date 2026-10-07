@@ -42,9 +42,9 @@ arcade shows (their embedded mode), so the frame is 1200x675, the arcade's
 16:9. A game has to be mid-game, so each shot has a `prepare` script, run
 in the page once its fonts have loaded, that plays it through the game's
 own API and buttons with a fixed random seed, so every run draws the same
-frame: Buddy's Run is played by a simple autopilot (jump when an excuse is
-close) until Buddy is at the top of a jump over an excuse, with all three
-lives, a score on the board and the two Poolbeg stacks on the far shore
+frame: Buddy's Run is played by a simple autopilot (jump a crab when it is
+close, double jump a big one, jump for the angels) until Buddy is coming
+down from a double jump onto a big crab, with all three lives, a score on the board and the two Poolbeg stacks on the far shore
 (found by their red, #C1502E, in the canvas); Jargon Battle answers three
 terms, two right and one wrong, and stops on the fourth question. If a game
 never reaches its frame (after a change to the game, say), the shot fails
@@ -131,22 +131,32 @@ PREPARE = {
     return runs.filter(function(r){return r[0]>2&&r[1]<W-3&&r[1]-r[0]>=5;}).length>=2;
   }
   var held=false, n, st, hb, over;
+  /* the clip's autopilot (tools/record-games.mjs): jump a small crab close
+     up; double jump over (or onto) a big one; jump for an angel at jump
+     height and double jump for a high one, when no crab is near */
+  function pilot(){ var st=B.state(), hb=B.buddyHit(), bd=st.buddy;
+    function gap(l){ return l.x-(hb.x+hb.w); }
+    var threat=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&!l.big&&g>0&&g<st.speed*0.068+10; });
+    var big=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&l.big&&g>-l.w&&g<st.speed*0.75; });
+    var badSoon=st.labels.some(function(l){ var g=gap(l); return l.kind==='bad'&&!l.spent&&g>-l.w&&g<st.speed*1.3; });
+    var mid=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.floating===true&&g>0&&g<st.speed*0.3; });
+    var high=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.high&&g>-l.w/2&&g<st.speed*0.6; });
+    if(bd.onGround&&(threat||big||(!badSoon&&(mid||high)))){ B.jump(); held=true; }
+    if(!bd.onGround&&bd.airJumps>0&&bd.vy>=-40&&(big||high)){ B.jump(); }
+    if(held&&bd.onGround&&bd.vy===0&&!threat&&!big){ B.releaseJump(); held=false; } }
   for(n=0;n<9000;n++){
     st=B.state(); if(st.phase==='paused'){ B.resume(); st=B.state(); }
     if(st.phase!=='running') break;
-    hb=B.buddyHit();
-    var threat=st.labels.some(function(l){ var gap=l.x-(hb.x+hb.w);
-      return l.kind==='bad' && !l.spent && gap>0 && gap<st.speed*0.068+10; });
-    if(threat&&st.buddy.onGround){ B.jump(); held=true; }
-    if(held&&st.buddy.onGround&&st.buddy.vy===0&&!threat){ B.releaseJump(); held=false; }
+    pilot();
     B.tick(1/120);
-    if(n<900) continue;
-    /* the frame: at the top of a jump, over an excuse that is whole on
-       screen, all three lives, a score on the board, and the stacks there */
+    if(n<2240) continue;
+    /* the frame: falling from a double jump onto a big crab that is whole
+       on screen, all three lives, a score on the board, and the stacks there */
     st=B.state(); hb=B.buddyHit();
     over=st.labels.some(function(l){ var cx=hb.x+hb.w/2;
-      return l.kind==='bad' && l.x>8 && l.x+l.w<W-8 && l.x<cx && l.x+l.w>cx; });
-    if(over&&!st.buddy.onGround&&st.buddy.vy>=0&&st.lives===3&&st.score>=30&&stacks()){ var found=true; break; }
+      return l.kind==='bad' && l.big && !l.spent && l.x>8 && l.x+l.w<W-8 && l.x<cx && l.x+l.w>cx; });
+    /* low enough to clear the scoreboard, still above the claws */
+    if(over&&!st.buddy.onGround&&st.buddy.airJumps===0&&st.buddy.vy>=0&&st.buddy.y>=46&&st.buddy.y<=58&&st.lives===3&&st.score>=30&&stacks()){ var found=true; break; }
   }
   B.releaseJump();
   document.getElementById('pauseBtn').click();
