@@ -2483,7 +2483,7 @@ main h1{font-weight:800}
 .pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
 .pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
 .pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
+.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2px dotted #B7791F;background:none}
 #chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 </style>
@@ -2644,7 +2644,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Your plan in today&rsquo;s money</span></div>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Left in a bank, in today&rsquo;s money</span></div>
       <div id="chart"></div>
     </div>
     <div class="relief-card">
@@ -2816,8 +2816,9 @@ const chart={
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
     this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    /* Job 5: the plan in today's money (assets/js/pb-today.js) */
-    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
+    /* Job 5: the same payments kept in a bank, in today's money (assets/js/pb-today.js):
+       what not investing does to what the money buys */
+    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-dasharray':'2 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
@@ -2971,12 +2972,12 @@ function calc(){
   const diffInc=diffPot*0.04/12;
   $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
 
-  const b=[],u=[],t=[];
+  const b=[],u=[],t=[],cRate=window.PBAssume?Math.pow(1+PBAssume.cash.rate,1/12)-1:0;
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
-    t.push(window.PBAssume?PBAssume.today(b[i],m/12):b[i]);
+    if(window.PBAssume)t.push(PBAssume.today(project(m,pot,monthly,cRate),m/12));
   }
   chart.setTarget(b,u,age,ret,t);
   if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
