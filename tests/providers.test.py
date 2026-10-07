@@ -18,9 +18,8 @@ What it proves:
      its name as alt text and its space kept (width and height set); the
      loop's copies hidden from screen readers, with empty alt text; each
      logo drawn at its own `size`, set by eye (Run 36), seven-eighths of it
-     on a phone; grey (grayscale(1)) until
-     the pointer is on it, then its own colours (the rule is in the
-     stylesheet it injects); every logo file loads; the strip faded at both
+     on a phone; in its own colours all the time (since 7 October 2026;
+     grey until hovered before), with no filter and no fade; every logo file loads; the strip faded at both
      edges and moving; Pause stops it and Play starts it again, the
      button's name always holding the word shown on it (WCAG 2.5.3), with no
      aria-pressed; hovering pauses it; nothing runs past the window
@@ -103,7 +102,7 @@ PROBE = r"""<script>
       pb.click(); R.paused=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
       pb.click(); R.played=[getComputedStyle(track).animationPlayState,pb.getAttribute('aria-label'),pb.textContent,pb.hasAttribute('aria-pressed')];
       R.hoverRule=rule(/\.pb-prov-strip:hover \.pb-prov-track/,function(st){return st.animationPlayState==='paused';});
-      R.colourRule=rule(/^\.pb-prov-item:hover img$/,function(st){return st.filter==='none'&&st.opacity==='1';});
+      R.colourRule=imgs.every(function(i){var c=getComputedStyle(i);return c.filter==='none'&&c.opacity==='1';});
       R.sw2=document.documentElement.scrollWidth;
       done();
     });
@@ -217,7 +216,9 @@ def main():
         eq('1. %s: its logo is an SVG or a WebP in %s/, and there' % (name, LOGOS),
            (os.path.dirname(logo), os.path.splitext(logo)[1] in ('.svg', '.webp'), os.path.isfile(os.path.join(ROOT, logo))),
            (LOGOS, True, True))
-        eq('1. %s: drawn at a height set by eye, 20 to 48px, inside the 60px strip' % name, 20 <= int(drawn) <= 48, True)
+        # up to 56px since 7 October 2026: New Ireland's round seal at 56 so its name
+        # reads; still inside the 60px row, and 49px inside the 52px row on a phone
+        eq('1. %s: drawn at a height set by eye, 20 to 56px, inside the 60px strip' % name, 20 <= int(drawn) <= 56, True)
         size = file_size(logo) if os.path.isfile(os.path.join(ROOT, logo)) else None
         eq('1. %s: the width and height in the list are the file\'s own' % name,
            size and (round(size[0], 2), round(size[1], 2)), (round(float(w), 2), round(float(h), 2)))
@@ -240,8 +241,8 @@ def main():
         eq('2. on at %dpx: each logo at the height set for it (seven-eighths on a phone), its copies the same' % w,
            (all(abs(d - int(e[4]) * (1 if w > 600 else .875)) < 0.3 for d, e in zip(r['drawn'], ENTRIES)),
             len(r['drawn']) == len(ENTRIES), r['cloneDrawn']), (True, True, True))
-        eq('2. on at %dpx: grey until the pointer is on one' % w, r['filters'], ['grayscale(1)'])
-        eq('2. on at %dpx: under the pointer, its own colours' % w, r['colourRule'], True)
+        eq('2. on at %dpx: every logo in its own colours, no filter' % w, r['filters'], ['none'])
+        eq('2. on at %dpx: and no fade' % w, r['colourRule'], True)
         eq('2. on at %dpx: faded at both edges' % w, 'linear-gradient' in r['mask'], True)
         eq('2. on at %dpx: moving, in a loop that never ends' % w, (r['anim'], r['moved'], r['loop']),
            (['pbProv', 'running'], True, [True, 'Infinity']))
@@ -262,7 +263,7 @@ def main():
         eq('3. reduced motion at %dpx: a still row, wrapped' % w, (r['anim'][0], r['loop'], r['wrap']), ('none', None, 'wrap'))
         eq('3. reduced motion at %dpx: the providers once, no copies shown' % w, (r['spoken'], r['shownClones']), (NAMES, 0))
         eq('3. reduced motion at %dpx: no fades, no Pause button' % w, (r['mask'], r['pauseShown']), ('none', False))
-        eq('3. reduced motion at %dpx: still grey' % w, r['filters'], ['grayscale(1)'])
+        eq('3. reduced motion at %dpx: still in colour' % w, r['filters'], ['none'])
         eq('3. reduced motion at %dpx: nothing past the window' % w, r['sw'] <= w, True)
     eq('3. reduced motion at 1440px: one row', M[('on', 1440)]['rows'], 1)
     # 4
@@ -293,9 +294,9 @@ def main():
     eq('6. without JavaScript: no other item and no other image in the row',
        (row.count('<li'), row.count('<img'), len(re.findall(r'<img src="assets/logos/', row))),
        (len(ENTRIES), len(ENTRIES), len(ENTRIES)))
-    eq('6. without JavaScript: grey, and its own colours under the pointer',
-       ('.pb-prov-ns-list img{display:block;width:auto;height:calc(var(--pb-logo-h,32) * 1px);filter:grayscale(1);opacity:.72}' in home,
-        '.pb-prov-ns-list li:hover img{filter:none;opacity:1}' in home), (True, True))
+    eq('6. without JavaScript: in its own colours, no filter',
+       ('.pb-prov-ns-list img{display:block;width:auto;height:calc(var(--pb-logo-h,32) * 1px)}' in home,
+        'grayscale' in home), (True, False))
     srv.shutdown()
     report()
 

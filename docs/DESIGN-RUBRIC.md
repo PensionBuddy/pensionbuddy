@@ -153,10 +153,12 @@ two-fifths of a screen, top to bottom.
   numbers" band (`.callout.pb-dark`, starter, tracker, director), the
   "Reveal the illustration" button (`.pb-guess-btn`, teal text, teal edge),
   the tracker's "One picture of what you have" box and the glossary's
-  risk-rating tile. Still dark on purpose: the homepage deadline band
-  (`.tick`, urgency), the homepage "what you need" bar (dark is what you
-  need) and the cookie bar (it must be seen). Mock-ups and before/after
-  shots in `docs/pale-mockups/`.
+  risk-rating tile; and (7 October 2026, the owner's call) the homepage
+  deadline band (`.tick`, its countdown boxes white on the mist). Still
+  dark on purpose: the homepage "what you need" bar (soft grey was tried on
+  7 October 2026 and taken back: dark is what you need) and the cookie bar
+  (it must be seen). Mock-ups and
+  before/after shots in `docs/pale-mockups/`.
 - **Contrast:** AA, 4.5:1 for body and meta, 3:1 for text 24px and over;
   aqua is never text on a light background.
 - `--ink-3` is defined twice in every stylesheet (#647270, then #5D6C67
