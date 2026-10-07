@@ -5,8 +5,9 @@
    SWITCHED ON 29 September 2026. Damian confirmed that day that written
    permission is held for every provider logo used here (docs/STATUS.md,
    Run 35). The logos are the providers' own artwork, trimmed to one height
-   by tools/logos.py into assets/logos/; nothing is redrawn or recoloured
-   except by the greyscale filter below.
+   by tools/logos.py into assets/logos/; nothing is redrawn or recoloured.
+   Shown in their own colours all the time since 7 October 2026 (they were
+   grey until hovered).
 
    STILL TO DO (docs/STATUS.md, Run 35): when how-we-work.html is released,
    the list below must name exactly the agencies that page names (its list
@@ -46,7 +47,7 @@
     { name: 'Zurich', logo: 'assets/logos/zurich.webp', w: 145, h: 34, size: 30 },
     { name: 'Irish Life', logo: 'assets/logos/irish-life.svg', w: 86.8, h: 40, size: 29 },
     { name: 'Aviva', logo: 'assets/logos/aviva.svg', w: 223.21, h: 40, size: 23 },
-    { name: 'New Ireland', logo: 'assets/logos/new-ireland.webp', w: 119, h: 120, size: 44 },
+    { name: 'New Ireland', logo: 'assets/logos/new-ireland.webp', w: 119, h: 120, size: 56 },
     { name: 'Royal London', logo: 'assets/logos/royal-london.svg', w: 179.72, h: 40, size: 34 },
     { name: 'Standard Life', logo: 'assets/logos/standard-life.svg', w: 193.98, h: 40, size: 27 }
   ];
@@ -81,11 +82,9 @@
     '  padding:0 22px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);',
     '  font-size:16px;font-weight:600;color:var(--ink-2);white-space:nowrap}',
     /* a logo: no box, each at its own height (--pb-logo-h, set from `size`),
-       grey until the pointer is on it */
+       in its own colours */
     '.pb-prov-box.pb-prov-logo{min-width:0;padding:0 16px;border:0;background:none}',
-    '.pb-prov-box img{display:block;height:calc(var(--pb-logo-h,32) * 1px);width:auto;max-width:none;filter:grayscale(1);opacity:.72;',
-    '  transition:filter var(--pb-t-swap),opacity var(--pb-t-swap)}',
-    '.pb-prov-item:hover img{filter:none;opacity:1}',
+    '.pb-prov-box img{display:block;height:calc(var(--pb-logo-h,32) * 1px);width:auto;max-width:none}',
     '@keyframes pbProv{from{transform:translateX(0)}to{transform:translateX(-' + (100 / copies) + '%)}}',
     '@media(max-width:600px){.pb-prov-box{min-width:124px;height:52px;padding:0 16px;font-size:15px}',
     '  .pb-prov-box img{height:calc(var(--pb-logo-h,32) * .875px)}',
