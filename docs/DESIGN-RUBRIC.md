@@ -139,7 +139,7 @@ two-fifths of a screen, top to bottom.
 - **The accent is one hue family.** Aqua, teal-700 and mint are the same
   colour at three strengths, for three backgrounds; together they are the
   one accent. In a chart, a bar or a figure the accent's hue means one thing, what the State pays (Run 43); a reader's own pot, a projection or a statistic in teal would read as the State's. The reader's own place on a scale (a "You" chip, the picked year, the step that applies) is neutral: ink on `--surface-2`, or a slate mark.
-- **Amber and the gap coral are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and blush coral (`--gap`) means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap; the red of Run 42 became blush coral, #FADCD3, on 6 October 2026); teal is what the State pays (the State Pension, and only that; the State's top-up into auto-enrolment is money back, amber), dark is what you need, and slate is everything else (Run 43). A gap or slate mark always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
+- **Amber and the gap coral are data.** Inside a chart, a bar or a figure's key, amber means money that comes back or is added (tax relief, Revenue's contribution, an employer's or the State's top-up) and blush coral (`--gap`) means money missing (a gap, a shortfall, a loss, the cost of waiting, tax you would pay, charges taken from the pot), as decided in Run 42 (superseding Run 32's amber = gap; the red of Run 42 became blush coral, #FADCD3, on 6 October 2026); teal is what the State pays (the State Pension, and only that; the State's top-up into auto-enrolment is money back, amber), what you need is soft grey (`--line-2`, dark until 7 October 2026), and slate is everything else (Run 43). A gap or slate mark always has its label in words beside it; colour is never the only signal. Neither is ever a badge, a highlight, a callout's border or an icon.
 - **No other hues.** A form's error state uses `--red`, and only a form's error state does. The warnings are black on `--surface-2` with a rule, as they are now.
 - **Text colours on a page:** the three inks, teal-700, white and mint; and, for a figure or its label only, slate (Run 43); gap figures are ink, never body text.
 - **Dark bands:** at most two on a page besides the footer, never one
@@ -153,10 +153,11 @@ two-fifths of a screen, top to bottom.
   numbers" band (`.callout.pb-dark`, starter, tracker, director), the
   "Reveal the illustration" button (`.pb-guess-btn`, teal text, teal edge),
   the tracker's "One picture of what you have" box and the glossary's
-  risk-rating tile. Still dark on purpose: the homepage deadline band
-  (`.tick`, urgency), the homepage "what you need" bar (dark is what you
-  need) and the cookie bar (it must be seen). Mock-ups and before/after
-  shots in `docs/pale-mockups/`.
+  risk-rating tile; and (7 October 2026, the owner's call) the homepage
+  deadline band (`.tick`, its countdown boxes white on the mist) and the
+  homepage "what you need" bar, now soft grey `--line-2` with ink figures.
+  Still dark on purpose: the cookie bar (it must be seen). Mock-ups and
+  before/after shots in `docs/pale-mockups/`.
 - **Contrast:** AA, 4.5:1 for body and meta, 3:1 for text 24px and over;
   aqua is never text on a light background.
 - `--ink-3` is defined twice in every stylesheet (#647270, then #5D6C67

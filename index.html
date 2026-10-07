@@ -1612,7 +1612,7 @@ button{font-family:inherit}
 .pb-gap-bar,.pb-gap-short{position:absolute;left:0;right:0;height:var(--h);overflow:hidden;
   border-radius:14px 14px 0 0;transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
 .pb-gap-bar{bottom:0}
-.pb-gap-need .pb-gap-bar{background:var(--ink)}
+.pb-gap-need .pb-gap-bar{background:var(--line-2)}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
 .pb-gap-short{bottom:var(--from);background:var(--gap);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
@@ -1620,7 +1620,7 @@ button{font-family:inherit}
 @media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
 .pb-gap-n{position:absolute;left:20px;top:18px;font-family:var(--font);font-variant-numeric:tabular-nums;
   font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
-.pb-gap-need .pb-gap-n{color:#fff}
+.pb-gap-need .pb-gap-n{color:var(--ink)}
 .pb-gap-state .pb-gap-bar .pb-gap-n{color:var(--aqua-ink)}
 .pb-gap-short .pb-gap-n{color:var(--ink)}
 .pb-gap-sl{position:absolute;left:20px;top:calc(18px + clamp(1.9rem,4.2vw,3.1rem) + 8px);
@@ -1865,6 +1865,18 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 #calc .pb-product-shot:hover{box-shadow:0 1px 2px rgba(11,31,28,.06),0 30px 70px -28px rgba(11,31,28,.42)}
 #calc .pb-ann-under{opacity:0}
 #calc .pb-ann-l{box-shadow:0 1px 3px rgba(11,31,28,.18)}
+/* MIST TEAL (7 October 2026): the deadline band (.tick) is pale too; the
+   countdown keeps its three boxes, white on the mist. Scoped .tickband .tick
+   to outrank the shared .tick rules. */
+.tickband .tick{background:var(--teal-50);color:var(--ink);border-block:1px solid var(--teal-100)}
+.tickband .tick h2,.tickband .tick .pb-rw,.tickband .tick .pb-rw-out,.tickband .tick .tk-n{color:var(--ink)}
+.tickband .tick p,.tickband .tick .tk-who,.tickband .tick .tk-l{color:var(--ink-2)}
+.tickband .tick .eyebrow,.tickband .tick .pb-rw-link{color:var(--teal-700)}
+.tickband .tick .tk-unit{background:var(--surface);border-color:var(--teal-100)}
+.tickband .tick .btn-light{background:var(--aqua);color:var(--aqua-ink)}
+.tickband .tick .btn.btn-quiet-dark{color:var(--ink);border-color:rgba(11,31,28,.4)}
+.tickband .tick .btn.btn-quiet-dark:hover{background:rgba(11,31,28,.05);border-color:var(--ink);color:var(--ink)}
+.tickband .tick .btn.btn-quiet-dark:focus-visible{box-shadow:0 0 0 3px var(--ring)}
 .pb-pt-tabs [role=tab]:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
 /* ANNOTATED SHOT (.pb-ann). Two labelled arrows over the pension
    calculator's photograph: a slider, and the figures that follow it. The
