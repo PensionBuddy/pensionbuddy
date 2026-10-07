@@ -1368,8 +1368,9 @@ def run():
         f = []
         # one comment at most between the two, and never a span across others
         # (Run 37: with a comment earlier on the page, `<!--.*?-->` reached
-        # from there to this one)
-        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
+        # from there to this one); since 7 October 2026 the provider logos
+        # (their comment, mount and still row) may sit between, and nothing else
+        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*<div data-pb-providers hidden></div>\s*<noscript><div class="pb-prov-ns">(?:(?!</noscript>).)*</div></noscript>\s*)?(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
         gap = ix.find('<section class="pb-changed" id="changed" aria-labelledby="pbChangedH">')
         if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
             return ['the section is not straight after "What\'s changed?" and before the calculator band']
@@ -1435,8 +1436,8 @@ def run():
 
     # ----------------------------------------------------------------- 33
     # Run 37, item 1: "What's changed?" on the home page. Since Run 42 it sits
-    # straight after the way-of-life band (#life), which follows the provider
-    # logos under the hero, and before the games. Six plain links, one per change in
+    # straight after the way-of-life band (#life), which follows the hero, and
+    # before the provider logos and the games (logos moved 7 October 2026). Six plain links, one per change in
     # a life, each to the live page that already covers it; each link's name
     # starts with its visible words and then names the page as the nav does
     # (WCAG 2.5.3). Nothing runs and nothing is stored: no script mentions

@@ -1612,7 +1612,7 @@ button{font-family:inherit}
 .pb-gap-bar,.pb-gap-short{position:absolute;left:0;right:0;height:var(--h);overflow:hidden;
   border-radius:14px 14px 0 0;transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
 .pb-gap-bar{bottom:0}
-.pb-gap-need .pb-gap-bar{background:var(--line-2)}
+.pb-gap-need .pb-gap-bar{background:var(--ink)}
 .pb-gap-state .pb-gap-bar{background:var(--aqua)}
 .pb-gap-short{bottom:var(--from);background:var(--gap);transition-delay:.12s}
 .pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
@@ -1620,7 +1620,7 @@ button{font-family:inherit}
 @media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
 .pb-gap-n{position:absolute;left:20px;top:18px;font-family:var(--font);font-variant-numeric:tabular-nums;
   font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
-.pb-gap-need .pb-gap-n{color:var(--ink)}
+.pb-gap-need .pb-gap-n{color:#fff}
 .pb-gap-state .pb-gap-bar .pb-gap-n{color:var(--aqua-ink)}
 .pb-gap-short .pb-gap-n{color:var(--ink)}
 .pb-gap-sl{position:absolute;left:20px;top:calc(18px + clamp(1.9rem,4.2vw,3.1rem) + 8px);
@@ -2723,24 +2723,7 @@ main h1{font-weight:800}
   </div>
 </div></header>
 
-<!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35): assets/js/pb-providers.js fills
-     this; the <noscript> row after it is the same list, still, for a reader without JavaScript
-     (tests/providers.test.py holds the two together). The list must match the agencies on
-     how-we-work.html when that page is released. -->
-<div data-pb-providers hidden></div>
-<noscript><div class="pb-prov-ns">
-  <p class="pb-prov-ns-label" id="pbProvNsLabel">Providers we hold agencies with</p>
-  <ul class="pb-prov-ns-list" aria-labelledby="pbProvNsLabel">
-    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34" style="--pb-logo-h:30"></li>
-    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40" style="--pb-logo-h:29"></li>
-    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40" style="--pb-logo-h:23"></li>
-    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120" style="--pb-logo-h:44"></li>
-    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40" style="--pb-logo-h:34"></li>
-    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40" style="--pb-logo-h:27"></li>
-  </ul>
-</div></noscript>
-
-<!-- THE GAP, CONTINUED (Run 42, item 1). After the provider logos: the survey's other
+<!-- THE GAP, CONTINUED (Run 42, item 1). Straight under the hero: the survey's other
      figure, the way-of-life picker that sets the hero's slider, then the booking ask the
      hero no longer carries. tests/build.test.py check 33 holds "What's changed?" after it. -->
 <section class="pb-gap-more" id="life">
@@ -2792,6 +2775,24 @@ main h1{font-weight:800}
     <li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html" aria-label="Moved from the UK: A UK pension, and living in Ireland">Moved from the UK</a></li>
   </ul>
 </div></section>
+
+<!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35); under "What's changed?"
+     since 7 October 2026: assets/js/pb-providers.js fills
+     this; the <noscript> row after it is the same list, still, for a reader without JavaScript
+     (tests/providers.test.py holds the two together). The list must match the agencies on
+     how-we-work.html when that page is released. -->
+<div data-pb-providers hidden></div>
+<noscript><div class="pb-prov-ns">
+  <p class="pb-prov-ns-label" id="pbProvNsLabel">Providers we hold agencies with</p>
+  <ul class="pb-prov-ns-list" aria-labelledby="pbProvNsLabel">
+    <li><img src="assets/logos/zurich.webp" alt="Zurich" width="145" height="34" style="--pb-logo-h:30"></li>
+    <li><img src="assets/logos/irish-life.svg" alt="Irish Life" width="87" height="40" style="--pb-logo-h:29"></li>
+    <li><img src="assets/logos/aviva.svg" alt="Aviva" width="223" height="40" style="--pb-logo-h:23"></li>
+    <li><img src="assets/logos/new-ireland.webp" alt="New Ireland" width="119" height="120" style="--pb-logo-h:44"></li>
+    <li><img src="assets/logos/royal-london.svg" alt="Royal London" width="180" height="40" style="--pb-logo-h:34"></li>
+    <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40" style="--pb-logo-h:27"></li>
+  </ul>
+</div></noscript>
 
 <!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
      (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
