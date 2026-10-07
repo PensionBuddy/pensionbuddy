@@ -1069,9 +1069,9 @@ def run():
     def lockups(src):
         # the hero's container, its two copies, where each sits, and whether they say the same
         i = src.find('<div class="pb-hero-copy">') if '<div class="pb-hero-copy">' in src else src.find('<div class="hero-copy pb-hero-copy">')
-        # the box ends at the nearer of the phone and the chart column (Run 42:
-        # the home hero ends on its chart; its phone now sits in #call, far below)
-        ends = [e for e in (src.find('\n  <div class="hero-phone">', i), src.find('\n  <div class="pb-hero-chart">', i)) if e >= 0]
+        # the box ends at the nearer of the chart column and the hero's end (Run 42:
+        # the home hero ends on its chart; the chat pictures are gone from the rest)
+        ends = [e for e in (src.find('\n  <div class="pb-hero-chart">', i), src.find('\n</div></header>', i)) if e >= 0]
         end = min(ends) if ends else -1
         if i < 0 or end < 0:
             return 'no .pb-hero-copy container'
@@ -2343,9 +2343,8 @@ def run():
     # ----------------------------------------------------------------- 46
     # Run 43, item 1 (Damian's "yes" to Run 42's question 7): the starter,
     # tracker and director heroes give before they ask. Each hero keeps its
-    # second button, its two lockups (check 28) and its chat picture's
-    # question and Buddy's answer (its booking link and reason are cut, P1),
-    # and carries no booking link in its copy; the booking button and its
+    # second button and its two lockups (check 28), and carries no booking
+    # link (the chat pictures were cut in October 2026); the booking button and its
     # reason (pagebuild.REASON) stand, moved word for word, after the page's
     # first figures: the starter page's 30, 40 and 50 chart with its
     # warnings and note, the director page's €1,000 example and relief
@@ -2372,13 +2371,10 @@ def run():
         h = src.find('<header class="hero aud-hero">')
         end = src.find('</header>', h)
         hero = src[h:end]
-        copy = src[h:src.find('\n  <div class="hero-phone">', h)]
         if h < 0 or end < 0 or 'href="booking.html"' in hero:
             return 'the hero asks before the page gives'
-        if '<a class="btn btn-ghost"' not in copy:
+        if '<a class="btn btn-ghost"' not in hero:
             return 'the hero lost its second button'
-        if '<p class="msg buddy">' not in hero:
-            return 'the hero lost its chat picture'
         block = moved_block(words)
         if src.count(block) != 1:
             return 'the moved button and its reason are missing, doubled or reworded'
@@ -2402,10 +2398,10 @@ def run():
              'the button comes before the first figures'),
             ('its reason reworded', 'starter.html', st.replace(sblock, sblock.replace('20 minutes', '30 minutes'), 1),
              'the moved button and its reason are missing, doubled or reworded'),
-            ('the chat picture\'s link put back', 'tracker.html',
+            ('a booking link put under the lede', 'tracker.html',
              sources['tracker.html'].replace(
-                 'When and where you worked is usually enough.</p>\n',
-                 'When and where you worked is usually enough.</p>\n        <p class="pb-phone-link"><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
+                 'have pension money somewhere.</p>\n',
+                 'have pension money somewhere.</p>\n    <p><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
