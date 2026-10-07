@@ -2975,18 +2975,18 @@ function calc(){
   $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
 
   /* the bank line: what you would have without the pension. Only your own
-     take-home cost goes in (no tax relief, no employer money), it earns the
+     take-home cost goes in (no tax relief, no employer money, not the pot you
+     have now, which is in a pension already), it earns the
      bank rate, and it is shown in today's money */
   const b=[],u=[],t=[],cRate=window.PBAssume?Math.pow(1+PBAssume.cash.rate,1/12)-1:0;
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
-    if(window.PBAssume)t.push(PBAssume.today(project(m,pot,costMonthly,cRate),m/12));
+    if(window.PBAssume)t.push(PBAssume.today(project(m,0,costMonthly,cRate),m/12));
   }
   if($('chartBankNote')&&window.PBAssume){
-    $('chartBankNote').textContent='Bank line: your own '+euro(costMonthly)+' a month after tax, with no tax relief and no employer money'+
-      (pot>0?', plus the '+euro(pot)+' you have now':'')+'. It earns '+PBAssume.cash.pct+' a year and prices rise '+PBAssume.inflation.pct+
+    $('chartBankNote').textContent='Bank line: your own '+euro(costMonthly)+' a month after tax, with no tax relief and no employer money, starting from nothing. It earns '+PBAssume.cash.pct+' a year and prices rise '+PBAssume.inflation.pct+
       ' a year, so it is shown in today\u2019s money. Your plan line is not adjusted for inflation.';
     $('chartBankNote').hidden=!(!window.PBToday||PBToday.on());
   }
