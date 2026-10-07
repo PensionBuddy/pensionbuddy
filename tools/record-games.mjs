@@ -28,7 +28,7 @@
    frames by ffmpeg's libx264, if it is installed.
 
    Buddy's Run's clip starts after a run-up and must keep all three lives,
-   show the Poolbeg stacks on the far shore, a double jump, a big crab and
+   show the Poolbeg stacks on the far shore, a double jump, the lighthouse and
    a stomp; Jargon Battle's answers two
    questions right, from the second to the fourth, the question its still
    shows. Buddy's Run's own pause control ("P to pause" and its Pause
@@ -82,7 +82,7 @@ const GAMES = {
         xs.forEach(function(v){ if(s===null||v>q+2){ if(s!==null)runs.push([s,q]); s=v; } q=v; });
         if(s!==null)runs.push([s,q]);
         return runs.filter(function(r){return r[0]>2&&r[1]<637&&r[1]-r[0]>=5;}).length>=2; };
-      /* jump a small crab close up; double jump over (or onto) a big one; jump
+      /* jump a crab close up; double jump over (or onto) the lighthouse; jump
          for an angel at jump height and double jump for a high one, when no
          crab is near */
       window.__pilot=function(){ var st=__B.state(), hb=__B.buddyHit(), bd=st.buddy;
@@ -93,13 +93,14 @@ const GAMES = {
         var mid=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.floating===true&&g>0&&g<st.speed*0.3; });
         var high=st.labels.some(function(l){ var g=gap(l); return l.kind==='good'&&l.high&&g>-l.w/2&&g<st.speed*0.6; });
         if(bd.onGround&&(threat||big||(!badSoon&&(mid||high)))){ __B.jump(); __held=true; }
-        if(!bd.onGround&&bd.airJumps>0&&bd.vy>=-40&&(big||high)){ __B.jump(); }
+        /* the lighthouse: double jump on the way up, so the arc stays on screen */
+        if(!bd.onGround&&bd.airJumps>0&&((big&&bd.vy>=-250)||(high&&bd.vy>=-40))){ __B.jump(); }
         if(__held&&bd.onGround&&bd.vy===0&&!threat&&!big){ __B.releaseJump(); __held=false; } };
       window.__frame=function(){ for(var i=0;i<4;i++){ __pilot(); __step(1000/120); } var s=__B.state();
         return {phase:s.phase,lives:s.lives,score:s.score,stacks:__stacks(),air:s.buddy.airJumps,
           big:s.labels.some(function(l){return l.big;}),squashed:s.labels.some(function(l){return l.squashed;})}; };
       /* the run-up, 2,240 steps: the clip then shows a double jump for a high
-         angel, a big crab coming in, a double jump onto it and the stomp,
+         angel, the lighthouse coming up, a double jump onto it and its lamp lit,
          and the still is taken inside it */
       for(var n=0;n<560;n++){ __frame(); }
       if(document.activeElement&&document.activeElement.blur){ document.activeElement.blur(); }
@@ -110,7 +111,7 @@ const GAMES = {
       return lost ? 'a life was lost, or the run stopped, during the clip'
         : stacks < 0.5 ? 'the Poolbeg stacks are in only ' + Math.round(stacks * 100) + '% of the frames'
         : !frames.some(f => f.air === 0) ? 'the clip shows no double jump'
-        : !frames.some(f => f.big) ? 'the clip shows no big crab'
+        : !frames.some(f => f.big) ? 'the clip shows no lighthouse'
         : !frames.some(f => f.squashed) ? 'the clip shows no stomp' : '';
     },
   },

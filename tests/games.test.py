@@ -529,7 +529,7 @@ __boot(function () {
   R.stomp = { falling: sb.vy > 0, stomped: stomped, lives: after.lives,
               points: after.score - stompScore, bounced: after.buddy.vy < 0 };
 
-  /* ---- a big crab: one jump never clears it, a double jump can ---- */
+  /* ---- the lighthouse: one jump never clears it, a double jump can ---- */
   function clearsBig(dist, score, dbl) {
     B.setRng(FIX);
     B.start();
@@ -556,10 +556,20 @@ __boot(function () {
   B.setRng(FIX); B.start();
   bigLabel = B.spawnLabel('bad', 'Probe big look', 'big');
   var bigHit = B.labelHit(bigLabel), smallLabel = B.spawnLabel('bad', 'Probe small look', false);
+  /* every excuse fits on the tower: two lines at most, each inside the
+     tower's narrowest part with room to spare, and no tower too wide */
+  var fit = [];
+  B.LABELS.bad.forEach(function (t) {
+    var lh = B.spawnLabel('bad', t, 'big'), inner = lh.w - 2 * B.config.LH_TAPER - 28;
+    if (!lh.lines || lh.lines.length > 2 || lh.tw > inner + 0.5 || lh.w > B.config.LH_MAX_W) {
+      fit.push([t, lh.lines, Math.round(lh.tw), lh.w]);
+    }
+  });
+  R.towerFit = fit;
   R.big = { one: bigOne, twoSlow: bigTwoSlow, twoFast: bigTwoFast, big: bigLabel.big,
             hitTop: bigHit.y, hitBottom: bigHit.y + bigHit.h, smallTop: B.labelHit(smallLabel).y };
 
-  /* ---- big crabs come only once the score is up ---- */
+  /* ---- the lighthouse comes only once the score is up ---- */
   function bigsSeen(score) {
     var frames = 0, below = 0, k, st, seedB = 4242;
     B.setRng(function () { seedB = (seedB * 16807) % 2147483647; return seedB / 2147483647; });
@@ -781,16 +791,17 @@ def check_buddys_run(data):
     eq('11. and bounces Buddy back up', st['bounced'], True)
 
     bg = data['big']
-    eq('11. a big crab is spawned as big', bg['big'], True)
-    ok('11. it stands taller than a small one (hit box top %d against %d)' % (bg['hitTop'], bg['smallTop']),
+    eq('11. the lighthouse is spawned as big', bg['big'], True)
+    ok('11. it stands taller than a crab (hit box top %d against %d)' % (bg['hitTop'], bg['smallTop']),
        bg['hitTop'] < bg['smallTop'] - 60)
     eq('11. and it reaches the sand', bg['hitBottom'], 300)
-    eq('11. no single jump clears a big crab, at the slowest or the capped speed', bg['one'], 0)
+    eq('11. no single jump clears the lighthouse, at the slowest or the capped speed', bg['one'], 0)
     ok('11. a double jump clears it at the slowest speed (%d of 97 distances)' % bg['twoSlow'], bg['twoSlow'] > 0)
     ok('11. and at the capped speed (%d of 97 distances)' % bg['twoFast'], bg['twoFast'] > 0)
+    eq('11. every excuse fits inside the lighthouse, in two lines at most', data['towerFit'], [])
     bsp = data['bigSpawn']
-    eq('11. no big crabs before the score reaches %d' % data['config']['BIG_FROM'], bsp['early'], 0)
-    ok('11. big crabs do come later (on screen in %d of 4800 frames)' % bsp['later'], bsp['later'] > 0)
+    eq('11. no lighthouse before the score reaches %d' % data['config']['BIG_FROM'], bsp['early'], 0)
+    ok('11. the lighthouse does come later (on screen in %d of 4800 frames)' % bsp['later'], bsp['later'] > 0)
 
     mv = data['move']
     ok('11. a floating angel bobs up and down (%.1f px in a second)' % mv['ySpan'], mv['ySpan'] > 10)
