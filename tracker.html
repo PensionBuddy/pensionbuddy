@@ -1665,45 +1665,71 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 /* ============================================================
-   MESS TO ORDER (#pbMess). Ramp's move, on the tracker page: five pieces
-   of old paperwork, scattered, settle into one pile under a single card
-   as the section comes into view. Words only: no figure, date or provider
-   name on any of them. The markup is the settled state (no script, reduced
-   motion and screenshots all get it); the script scatters them first and
-   lets them settle once, on real frames. Decorative, aria-hidden: the
-   three steps under it carry the meaning.
+   MESS TO ORDER (#pbMess). On the tracker page: five pieces of old
+   paperwork (an envelope, a statement, a P60, a booklet, a sticky note),
+   scattered, gathered into one pile under a single card. Words only: no
+   figure, date or provider name on any of them. The markup is the settled
+   state (no script, reduced motion and screenshots all get it). With motion
+   on, the script ties the gathering to the scroll: each piece lifts, moves
+   and lands in turn, one after another, as the section rises up the screen,
+   and the card comes last. Scrolling back up undoes it. Decorative,
+   aria-hidden: the three steps under it carry the meaning.
    ============================================================ */
-.pb-mess{position:relative;height:250px;max-width:720px;margin:0 auto 34px;overflow:hidden}
-.pb-mess-p,.pb-mess-sum{position:absolute;left:50%;top:50%;display:block;border-radius:10px;transition:transform var(--pb-t-fill)}
-.pb-mess-p{width:150px;height:96px;margin:-48px 0 0 -75px;padding:12px 14px;background:#fff;border:1px solid var(--line-2);
-  box-shadow:0 6px 18px rgba(11,31,28,.08);font-size:13px;font-weight:600;line-height:1.3;color:var(--ink)}
-.pb-mess-p::after{content:"";position:absolute;left:14px;right:28px;bottom:14px;height:30px;
-  background:repeating-linear-gradient(to bottom,var(--line) 0 3px,transparent 3px 10px)}
-.pb-mess-p:nth-child(1){transform:translate(-14px,-10px) rotate(-3deg)}
-.pb-mess-p:nth-child(2){transform:translate(12px,-6px) rotate(2deg)}
-.pb-mess-p:nth-child(3){transform:translate(-8px,6px) rotate(-1deg)}
-.pb-mess-p:nth-child(4){transform:translate(10px,10px) rotate(3deg)}
-.pb-mess-p:nth-child(5){transform:translate(0,0) rotate(0)}
-.pb-mess-sum{z-index:2;width:230px;margin:-30px 0 0 -115px;padding:16px 18px;background:var(--teal-50);color:var(--ink);border:1px solid var(--teal-100);font-size:15px;font-weight:700;line-height:1.3;
+.pb-mess{position:relative;height:320px;max-width:720px;margin:0 auto 34px;overflow:hidden}
+.pb-mess-p,.pb-mess-sum{position:absolute;left:50%;top:50%;display:block;will-change:transform}
+.pb-mess-p{--lift:0;box-sizing:border-box;width:128px;height:164px;margin:-100px 0 0 -64px;padding:12px 12px 0;
+  background:linear-gradient(180deg,#fff,#FAFAF8);border:1px solid rgba(11,31,28,.10);border-radius:3px;
+  box-shadow:0 1px 1px rgba(11,31,28,.06),0 calc(2px + 18px*var(--lift)) calc(6px + 30px*var(--lift)) rgba(11,31,28,calc(.10 + .08*var(--lift)));
+  font-size:11.5px;font-weight:700;line-height:1.25;color:var(--ink)}
+.pb-mess-p b{display:block;font-weight:700}
+/* ruled lines: the body of each sheet */
+.pb-mess-p::after{content:"";position:absolute;left:12px;right:22px;bottom:16px;height:62px;
+  background:repeating-linear-gradient(to bottom,rgba(11,31,28,.10) 0 2px,transparent 2px 10px)}
+/* statement: a grey letterhead band and a short table */
+.pb-p-stmt{padding-top:30px}
+.pb-p-stmt::before{content:"";position:absolute;left:0;right:0;top:0;height:20px;background:#E9ECEA;border-radius:3px 3px 0 0}
+.pb-p-stmt::after{right:12px;height:44px;bottom:22px;
+  background:linear-gradient(90deg,transparent 58%,rgba(11,31,28,.10) 58% 60%,transparent 60%),
+             repeating-linear-gradient(to bottom,rgba(11,31,28,.12) 0 1px,transparent 1px 11px)}
+/* P60: a pale form with boxes */
+.pb-p-p60{background:#F1F4F0;font-size:15px;letter-spacing:.02em}
+.pb-p-p60::after{left:10px;right:10px;height:84px;bottom:12px;
+  background:repeating-linear-gradient(90deg,rgba(11,31,28,.14) 0 1px,transparent 1px 27px),
+             repeating-linear-gradient(to bottom,rgba(11,31,28,.14) 0 1px,transparent 1px 21px);
+  border-right:1px solid rgba(11,31,28,.14);border-bottom:1px solid rgba(11,31,28,.14)}
+/* envelope: landscape, manila, a flap and a stamp */
+.pb-p-env{width:176px;height:110px;margin:-72px 0 0 -88px;padding:62px 0 0 46px;background:#EADFC6;border-color:rgba(90,70,30,.18)}
+.pb-p-env::before{content:"";position:absolute;left:0;right:0;top:0;height:44px;
+  background:linear-gradient(to bottom right,transparent 49%,rgba(90,70,30,.16) 50%,transparent 51%),
+             linear-gradient(to bottom left,transparent 49%,rgba(90,70,30,.16) 50%,transparent 51%)}
+.pb-p-env::after{left:auto;right:12px;top:10px;bottom:auto;width:22px;height:26px;
+  background:repeating-linear-gradient(45deg,rgba(90,70,30,.22) 0 2px,transparent 2px 4px);outline:1px dashed rgba(90,70,30,.35)}
+/* booklet: a dark cover with pages showing at the edge */
+.pb-p-book{width:120px;height:158px;margin:-96px 0 0 -60px;padding:18px 14px 0;background:#33433F;color:#fff;border-color:#2A3835;border-radius:2px 5px 5px 2px;
+  box-shadow:2px 2px 0 -1px #fff,3px 3px 0 -1px var(--line-2),4px 4px 0 -1px #fff,5px 5px 0 -1px var(--line-2),
+             0 calc(2px + 18px*var(--lift)) calc(6px + 30px*var(--lift)) rgba(11,31,28,calc(.14 + .08*var(--lift)))}
+.pb-p-book::after{left:14px;right:auto;width:28px;height:3px;top:58px;bottom:auto;background:rgba(255,255,255,.55)}
+/* sticky note: square, yellow, written by hand */
+.pb-p-note{width:104px;height:96px;margin:-120px 0 0 -2px;padding:14px 12px 0;background:#F8EDA6;border:0;border-radius:1px;
+  font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive;font-weight:400;font-size:13px;line-height:1.3;color:#3A3A2A}
+.pb-p-note::after{display:none}
+/* the settled pile */
+.pb-p-env{transform:translate(-10px,52px) rotate(-5deg)}
+.pb-p-stmt{transform:translate(-84px,-4px) rotate(-8deg)}
+.pb-p-p60{transform:translate(80px,-2px) rotate(6deg)}
+.pb-p-book{transform:translate(6px,30px) rotate(-1deg)}
+.pb-p-note{transform:translate(44px,64px) rotate(7deg)}
+.pb-mess-sum{z-index:2;top:auto;bottom:22px;width:230px;margin:0 0 0 -115px;padding:16px 18px;border-radius:10px;
+  background:var(--teal-50);color:var(--ink);border:1px solid var(--teal-100);font-size:15px;font-weight:700;line-height:1.3;
   display:flex;align-items:center;gap:10px;box-shadow:0 14px 34px rgba(11,31,28,.22)}
 .pb-mess-sum svg{flex:none;width:20px;height:20px;fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-/* Run 34 (part 15a of docs/UX-MOTION-AUDIT.md, in part): the summary card's
-   words are there from the first frame (it no longer fades and grows in);
-   only the paperwork gathers, on transform, over --pb-t-fill. */
-.pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(1){transform:translate(-230px,-70px) rotate(-12deg)}
-.pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(2){transform:translate(210px,-78px) rotate(9deg)}
-.pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(3){transform:translate(-150px,72px) rotate(7deg)}
-.pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(4){transform:translate(170px,66px) rotate(-8deg)}
-.pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(5){transform:translate(0,-92px) rotate(4deg)}
 @media(max-width:600px){
-  .pb-mess{height:230px}
-  .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(1){transform:translate(-90px,-64px) rotate(-12deg)}
-  .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(2){transform:translate(88px,-70px) rotate(9deg)}
-  .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(3){transform:translate(-84px,62px) rotate(7deg)}
-  .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(4){transform:translate(86px,58px) rotate(-8deg)}
-  .pb-mess.pb-armed:not(.pb-go) .pb-mess-p:nth-child(5){transform:translate(0,-86px) rotate(4deg)}
+  .pb-mess{height:300px}
+  .pb-mess-p{width:112px;height:144px;margin:-92px 0 0 -56px}
+  .pb-p-env{width:156px;height:98px;margin:-66px 0 0 -78px;padding:54px 0 0 40px}
+  .pb-p-book{width:106px;height:140px;margin:-88px 0 0 -53px}
+  .pb-p-note{width:94px;height:86px;margin:-110px 0 0 -4px}
 }
-@media(prefers-reduced-motion:reduce){.pb-mess-p{transition:none}}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2339,26 +2365,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
       </div>
   </div>
-  <div class="hero-phone">
-    <div class="phone">
-      <div class="phone-bar"><span class="phone-av"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog"></picture></span>Buddy<span class="phone-role">Chief Pension Dog</span></div>
-      <div class="phone-chat">
-        <p class="msg them">I have no paperwork. Is that a problem?</p>
-        <p class="msg buddy">No. When and where you worked is usually enough.</p>
-      </div>
-    </div>
-  </div>
 
 </div></header>
 
 <section><div class="wrap">
   <div class="sec-head ctr"><h2>How it works.</h2></div>
   <div class="pb-mess" id="pbMess" aria-hidden="true">
-    <span class="pb-mess-p">Old statement</span>
-    <span class="pb-mess-p">P60</span>
-    <span class="pb-mess-p">Envelope</span>
-    <span class="pb-mess-p">Which provider?</span>
-    <span class="pb-mess-p">Pension booklet</span>
+    <span class="pb-mess-p pb-p-env"><b>Envelope</b></span>
+    <span class="pb-mess-p pb-p-stmt"><b>Old statement</b></span>
+    <span class="pb-mess-p pb-p-p60"><b>P60</b></span>
+    <span class="pb-mess-p pb-p-book"><b>Pension booklet</b></span>
+    <span class="pb-mess-p pb-p-note"><b>Which provider?</b></span>
     <span class="pb-mess-sum"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>One picture</span>
   </div>
   <div class="steps">
@@ -2630,25 +2647,61 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script>
-/* mess to order: scatter the paperwork, then let it settle once, when the
-   section arrives. Reduced motion, no observer, or already in view when the
-   page loads: the settled markup stays. Arrival is the motion system's:
-   fully on screen, or 300ms after any of it first shows (Run 34, part 15a). */
+/* mess to order, tied to the scroll. Progress runs from 0, when the pile's
+   top is near the bottom of the screen, to 1, when its middle reaches the
+   screen's middle. Each piece has its own slice of that run, in
+   turn: it lifts (grows a little, its shadow spreads), travels and lands on
+   the pile. The card comes in over the last slice. The shown progress eases
+   toward the scrolled one each frame, so a wheel's jumps read as a smooth
+   move. Reduced motion, no rAF, or motion turned off: the settled markup
+   stays, untouched. */
 (function(){
   var m=document.getElementById('pbMess');
-  if(!m||!('IntersectionObserver' in window)||!window.PBMotion||!PBMotion.on()) return;
-  var r=m.getBoundingClientRect();
-  if(r.bottom>0&&r.top<innerHeight) return;
-  m.classList.add('pb-armed');
-  var done=false, t=0, io;
-  function go(){ if(done) return; done=true; clearTimeout(t); io.disconnect(); m.classList.add('pb-go'); }
-  io=new IntersectionObserver(function(es){
-    var e=es[es.length-1];
-    if(e.intersectionRatio>=0.99) go();
-    else if(e.isIntersecting&&!t) t=setTimeout(go,300);
-  },{threshold:[0,1]});
-  io.observe(m);
-  document.addEventListener('pb:motion',function(ev){ if(ev.detail&&!ev.detail.motion) go(); });
+  if(!m||!window.requestAnimationFrame||!window.PBMotion||!PBMotion.on()) return;
+  var ps=[].slice.call(m.querySelectorAll('.pb-mess-p')), sum=m.querySelector('.pb-mess-sum');
+  /* [x, y, deg] scattered on the desk, then settled in the pile (the CSS's own) */
+  var WIDE=[[-250,44,-16],[-200,-34,13],[230,-30,-9],[250,40,11],[-30,-44,-18]],
+      NARROW=[[-104,48,-16],[-100,-30,13],[104,-28,-9],[104,40,11],[-20,-44,-18]],
+      PILE=[[-10,52,-5],[-84,-4,-8],[80,-2,6],[6,30,-1],[44,64,7]];
+  var mq=window.matchMedia?matchMedia('(max-width:600px)'):null;
+  var shown=-1, want=0, raf=0, live=true;
+  function clamp(v){ return v<0?0:v>1?1:v; }
+  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+  function target(){
+    var r=m.getBoundingClientRect(), vh=innerHeight;
+    var from=vh*.92, to=vh*.5-r.height/2;
+    return clamp((from-r.top)/(from-to));
+  }
+  function paint(p){
+    var from=(mq&&mq.matches)?NARROW:WIDE, n=ps.length, slice=.34, step=(.82-slice)/(n-1);
+    for(var i=0;i<n;i++){
+      var t=clamp((p-i*step)/slice), e=ease(t), a=from[i], b=PILE[i], lift=Math.sin(Math.PI*t);
+      var x=a[0]+(b[0]-a[0])*e, y=a[1]+(b[1]-a[1])*e-lift*10, d=a[2]+(b[2]-a[2])*e, s=1+.07*lift;
+      ps[i].style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+d.toFixed(2)+'deg) scale('+s.toFixed(3)+')';
+      ps[i].style.setProperty('--lift',lift.toFixed(3));
+    }
+    var c=ease(clamp((p-.8)/.2));
+    sum.style.opacity=c.toFixed(3);
+    sum.style.transform='translateY('+((1-c)*18).toFixed(1)+'px) scale('+(.94+.06*c).toFixed(3)+')';
+  }
+  function frame(){
+    raf=0; if(!live) return;
+    var d=want-shown;
+    shown=Math.abs(d)<.002?want:shown+d*.14;
+    paint(shown);
+    if(shown!==want) raf=requestAnimationFrame(frame);
+  }
+  function kick(){ if(!live) return; want=target(); if(!raf) raf=requestAnimationFrame(frame); }
+  function stop(){
+    live=false; if(raf) cancelAnimationFrame(raf);
+    removeEventListener('scroll',kick); removeEventListener('resize',kick);
+    ps.forEach(function(el){ el.style.transform=''; el.style.removeProperty('--lift'); });
+    sum.style.opacity=''; sum.style.transform='';
+  }
+  want=shown=target(); paint(shown);
+  addEventListener('scroll',kick,{passive:true});
+  addEventListener('resize',kick);
+  document.addEventListener('pb:motion',function(ev){ if(ev.detail&&!ev.detail.motion) stop(); });
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
