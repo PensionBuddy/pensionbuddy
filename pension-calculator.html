@@ -2484,7 +2484,8 @@ main h1{font-weight:800}
 .pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
 .pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
 .chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2px dotted #B7791F;background:none}
-#chartKeyToday[hidden]{display:none}
+#chartKeyToday[hidden],#chartBankNote[hidden]{display:none}
+#chartBankNote{margin:10px 0 0;color:#5B6B67;line-height:1.5}
 /* TODAY:END */
 </style>
 <script>
@@ -2644,8 +2645,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Left in a bank, in today&rsquo;s money</span></div>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Your own money in a bank, in today&rsquo;s money</span></div>
       <div id="chart"></div>
+      <p class="chart-note" id="chartBankNote"></p>
     </div>
     <div class="relief-card">
       <div class="rt">What Revenue adds</div>
@@ -2972,12 +2974,21 @@ function calc(){
   const diffInc=diffPot*0.04/12;
   $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
 
+  /* the bank line: what you would have without the pension. Only your own
+     take-home cost goes in (no tax relief, no employer money), it earns the
+     bank rate, and it is shown in today's money */
   const b=[],u=[],t=[],cRate=window.PBAssume?Math.pow(1+PBAssume.cash.rate,1/12)-1:0;
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
-    if(window.PBAssume)t.push(PBAssume.today(project(m,pot,monthly,cRate),m/12));
+    if(window.PBAssume)t.push(PBAssume.today(project(m,pot,costMonthly,cRate),m/12));
+  }
+  if($('chartBankNote')&&window.PBAssume){
+    $('chartBankNote').textContent='Bank line: your own '+euro(costMonthly)+' a month after tax, with no tax relief and no employer money'+
+      (pot>0?', plus the '+euro(pot)+' you have now':'')+'. It earns '+PBAssume.cash.pct+' a year and prices rise '+PBAssume.inflation.pct+
+      ' a year, so it is shown in today\u2019s money. Your plan line is not adjusted for inflation.';
+    $('chartBankNote').hidden=!(!window.PBToday||PBToday.on());
   }
   chart.setTarget(b,u,age,ret,t);
   if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
@@ -2999,7 +3010,7 @@ function calc(){
   var r=$('mine'),v=+m[1];
   if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
 })();
-if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();});}
+if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();if($('chartBankNote'))$('chartBankNote').hidden=!PBToday.on();});}
 wireRanges(VALTEXT,calc);
 calc();
 
