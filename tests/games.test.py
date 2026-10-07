@@ -20,8 +20,8 @@ on the page runs, because a throw inside a listener or an animation frame never
 reaches the caller and a broken game would otherwise look clean.
 
 Buddy's Run: the label and fact copy, the speed curve, the collision predicate,
-scoring, lives, invulnerability, game over, the persisted best, the no-double-
-jump rule, that a jump actually clears an obstacle at both the slowest and the
+scoring, lives, invulnerability, game over, the persisted best, the one double
+jump rule, the stomp, that angels and crabs move, that a jump actually clears an obstacle at both the slowest and the
 fastest world speed, and that pause() really stops the simulation.
 
 Jargon Battle: the question bank's shape and copy, that shuffle is a pure,
@@ -493,15 +493,55 @@ __boot(function () {
              stateBest: idle.best, idlePhase: idle.phase,
              idleLabels: idle.labels.length, idleScore: idle.score, idleLives: idle.lives };
 
-  /* ---- no double jump ---- */
+  /* ---- one double jump, and no third ---- */
   fresh();
   var j1 = B.jump();
-  tickN(30);
+  tickN(45);
   var pre = B.state().buddy;
   var j2 = B.jump();
+  var mid = B.state().buddy;
+  tickN(10);
+  var pre3 = B.state().buddy;
+  var j3 = B.jump();
   var post = B.state().buddy;
-  R.dbl = { j1: j1, j2: j2, onGround: pre.onGround, vyPre: pre.vy, vyPost: post.vy,
-            yPre: pre.y, yPost: post.y };
+  var land = 0;
+  while (!B.state().buddy.onGround && land < 1200) { B.tick(1 / 120); land += 1; }
+  var landed = B.state().buddy;
+  R.dbl = { j1: j1, j2: j2, j3: j3, onGround: pre.onGround, vyPre: pre.vy, vyMid: mid.vy,
+            vyPre3: pre3.vy, vyPost: post.vy, airAfterLand: landed.airJumps };
+
+  /* ---- coming down on a crab stomps it ---- */
+  /* the crab is put where Buddy will come down, about 0.45 s later */
+  fresh();
+  B.jump();
+  tickN(80);
+  var sb = B.state().buddy, sx = B.buddyHit().x;
+  var crab = B.spawnLabel('bad', 'Probe crab', false);
+  crab.x = sx + 27 + B.speedFor(0) * 0.45 - crab.w / 2;
+  var stompScore = 0, stomped = false;
+  for (i = 0; i < 240; i++) {
+    stompScore = B.state().score;
+    B.tick(1 / 120);
+    var cs0 = find('Probe crab');
+    if (cs0 && cs0.squashed) { stomped = true; break; }
+  }
+  var after = B.state();
+  R.stomp = { falling: sb.vy > 0, stomped: stomped, lives: after.lives,
+              points: after.score - stompScore, bounced: after.buddy.vy < 0 };
+
+  /* ---- angels move about, crabs scuttle ---- */
+  fresh();
+  var ang = B.spawnLabel('good', 'Probe angel', true), ys = [], xs = [];
+  ang.x = 600;
+  var cr = B.spawnLabel('bad', 'Probe scuttle', false);
+  cr.x = 900;
+  for (i = 0; i < 120; i++) {
+    B.tick(1 / 120);
+    ys.push(ang.y);
+    xs.push(cr.x - (900 - B.speedFor(0) * (i + 1) / 120));
+  }
+  R.move = { ySpan: Math.max.apply(null, ys) - Math.min.apply(null, ys),
+             xSpan: Math.max.apply(null, xs) - Math.min.apply(null, xs) };
 
   /* ---- a held jump clears a bad label, slow and at the cap ---- */
   function clears(dist, score) {
@@ -679,8 +719,23 @@ def check_buddys_run(data):
     d = data['dbl']
     eq('11. the first jump leaves the ground', d['j1'], True)
     eq('11. Buddy is airborne a quarter second later', d['onGround'], False)
-    eq('11. a second jump in mid air does nothing', d['j2'], False)
-    eq('11. and does not change his upward speed', d['vyPost'], d['vyPre'])
+    eq('11. a second jump in mid air is a double jump', d['j2'], True)
+    ok('11. and sends him up again (%.0f to %.0f)' % (d['vyPre'], d['vyMid']),
+       d['vyMid'] <= -data['config']['DOUBLE_V'] + 1e-9)
+    eq('11. a third jump in mid air does nothing', d['j3'], False)
+    eq('11. and does not change his upward speed', d['vyPost'], d['vyPre3'])
+    eq('11. landing gives the double jump back', d['airAfterLand'], 1)
+
+    st = data['stomp']
+    eq('11. the stomp probe was falling onto the crab', st['falling'], True)
+    eq('11. landing on a crab squashes it', st['stomped'], True)
+    eq('11. a stomp costs no life', st['lives'], 3)
+    eq('11. a stomp is worth five', st['points'], 5)
+    eq('11. and bounces Buddy back up', st['bounced'], True)
+
+    mv = data['move']
+    ok('11. a floating angel bobs up and down (%.1f px in a second)' % mv['ySpan'], mv['ySpan'] > 10)
+    ok('11. a crab scuttles against the scroll (%.1f px in a second)' % mv['xSpan'], mv['xSpan'] > 10)
     eq('12. jump() is inert on the idle screen', data['idleJump'], False)
     eq('12. and leaves the phase alone', data['idlePhase'], 'idle')
 

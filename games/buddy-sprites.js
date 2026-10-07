@@ -15,7 +15,7 @@
     PBSprites.palette              char -> CSS colour ('.' is null/transparent)
     PBSprites.buddy   { w, h, run[6], jump[3], hurt[1], idle[2], attack[2], happy[2] }
     PBSprites.blob    { w, h, idle[2], hurt[1], attack[2], faint[1] }
-    PBSprites.props   { paw, heart, paper }   each a frames array, with .w/.h on it
+    PBSprites.props   { paw, heart, paper, wing, claw }   each a frames array, with .w/.h on it
     PBSprites.draw(ctx, frame, x, y, scale, flip)   fillRect per pixel
     PBSprites.bake(frame, scale, flip)             cached offscreen canvas
   Games read frame counts with anim.length.
@@ -45,7 +45,10 @@
     'y': '#FCEFCF',   // amber soft
     'r': '#C1502E',   // terracotta
     'q': '#0C8175',   // jewel teal
-    'Q': '#16C9B0'    // aqua
+    'Q': '#16C9B0',   // aqua
+    'g': '#D5E6E2',   // feather shade
+    'R': '#E0623B',   // crab red
+    'D': '#8E2F17'    // crab shade
   };
 
   var buddy = {
@@ -805,7 +808,76 @@
       ]
     ]
   };
+  /* Buddy's Run: an angel's left wing, root at the bottom right, in three
+     beats (up, level, down); flip it for the right wing. And a crab's left
+     claw, open and shut, its arm at the bottom; flip it for the right. */
+  props.wing = [
+    [
+      "q...............",
+      "qq..............",
+      "qWq.............",
+      "qWWqq...........",
+      ".qWWWqq.........",
+      ".qgWWWWqqq......",
+      "..qgWWWWWWqq....",
+      "...qggWWWWWWqqq.",
+      "....qqgggWWWWWWq",
+      ".......qqqqqqqqq"
+    ],
+    [
+      "................",
+      "................",
+      "................",
+      "..qqqqq.........",
+      ".qWWWWWqqqq.....",
+      "qWWWWWWWWWWqqq..",
+      ".qgWWWWWWWWWWWq.",
+      "..qggWWWWWWWWWWq",
+      "...qqgggWWWWWWWq",
+      "......qqqqqqqqq."
+    ],
+    [
+      "................",
+      "................",
+      "................",
+      "................",
+      "......qqqqqqqqq.",
+      "...qqqWWWWWWWWWq",
+      ".qqWWWWWWWWWWWWq",
+      "qWWWWWWWWWgggqq.",
+      "qWWWWWgggqq.....",
+      ".qqqqq.........."
+    ]
+  ];
+  props.claw = [
+    [
+      "KKK...KKK.",
+      "KRRK.KRRK.",
+      "KRRK.KRRK.",
+      "KRRRKRRRK.",
+      ".KRRRRRDK.",
+      ".KRRRRRDK.",
+      "..KRRRDK..",
+      "...KDDK...",
+      "...KDDK...",
+      "...KDDK..."
+    ],
+    [
+      "..KKKKK...",
+      ".KRRRRRK..",
+      "KRRRKRRRK.",
+      "KRRKKKRDK.",
+      ".KRRRRRDK.",
+      ".KRRRRRDK.",
+      "..KRRRDK..",
+      "...KDDK...",
+      "...KDDK...",
+      "...KDDK..."
+    ]
+  ];
   props.paw.w = 9; props.paw.h = 9;
+  props.wing.w = 16; props.wing.h = 10;
+  props.claw.w = 10; props.claw.h = 10;
   props.heart.w = 9; props.heart.h = 8;
   props.paper.w = 8; props.paper.h = 8;
 
