@@ -188,7 +188,7 @@ Tax relief, Revenue's contribution, an employer's or the State's top-up: money t
 _Avoid_: calling the State Pension a top-up, or a top-up the State Pension.
 
 **What the State pays**:
-The State Pension, and only that, is drawn in teal on a chart, a bar or a figure. Everything else on a chart that is not a gap (blush coral), money back (amber) or what a person needs (dark) is drawn in slate, a neutral blue-grey: a person's own pot, a projection, another plan, the costs of a way of life, a statistic. A person's own place on a scale ("You", the year they picked) is marked in neutral ink. Each carries its words beside it.
+The State Pension, and only that, is drawn in teal on a chart, a bar or a figure. Everything else on a chart that is not a gap (blush coral), money back (amber) or what a person needs (soft grey) is drawn in slate, a neutral blue-grey: a person's own pot, a projection, another plan, the costs of a way of life, a statistic. A person's own place on a scale ("You", the year they picked) is marked in neutral ink. Each carries its words beside it.
 _Avoid_: drawing a person's own pot, a projection or their place on a scale in teal, which reads as the State's; calling the State's top-up into auto-enrolment (amber, money back) the State Pension.
 
 ## Naming
