@@ -27,6 +27,12 @@
    purpose: a browser may refuse to open an email app long after the click
    that asked for it.
 
+   THE HONEYPOT. Every form carries a hidden "bot-field" that a person never
+   sees. If it has anything in it, a bot filled the form: send() posts
+   nothing and resolves true, so the bot sees a success and no email app
+   opens. Netlify (netlify-honeypot) and netlify/lib/emails.js reject a
+   filled one too, for a bot that posts without this script.
+
    Locally, or anywhere that is not Netlify, the POST is refused and every
    form takes its email route, exactly as before.
 
@@ -50,8 +56,14 @@
     return new URLSearchParams(new FormData(form)).toString();
   }
 
+  function bot(form) {
+    var hp = form.elements['bot-field'];
+    return !!(hp && String(hp.value).trim());
+  }
+
   function send(form, values) {
     set(form, values);
+    if (bot(form)) { return Promise.resolve(true); }
     var data = body(form);
     return new Promise(function (resolve) {
       var settled = false, ctrl = window.AbortController ? new AbortController() : null;
@@ -68,5 +80,5 @@
     });
   }
 
-  window.PBForms = { send: send, body: body, TIMEOUT_MS: TIMEOUT_MS };
+  window.PBForms = { send: send, body: body, bot: bot, TIMEOUT_MS: TIMEOUT_MS };
 })();

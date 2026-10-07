@@ -94,7 +94,10 @@ PROBE = r"""<script>
       try{ PBForms.send(form,{not_declared:'x'}); out.undeclared='no throw'; }
       catch(e){ out.undeclared=String(e.message); }
       out.undeclaredPosted=posted;
-      window.fetch=real; R.unit=out; finish();
+      /* a filled honeypot: nothing posted, and a quiet success */
+      var hp=form.elements['bot-field']; posted=false; hp.value='http://spam.example';
+      return PBForms.send(form).then(function(v){ out.botOk=v; out.botPosted=posted; hp.value='';
+        window.fetch=real; R.unit=out; finish(); });
     });
     return;
   }
@@ -313,6 +316,14 @@ def main():
     has_msg = 'has no hidden field "not_declared"' in (u.get('undeclared') or '')
     eq('pb-forms: an undeclared field is refused', has_msg, True)
     eq('pb-forms: and nothing is posted', u.get('undeclaredPosted'), False)
+    eq('pb-forms: a filled honeypot posts nothing', u.get('botPosted'), False)
+    eq('pb-forms: and the bot is told it worked', u.get('botOk'), True)
+    # every form that sends anything carries the honeypot, declared to Netlify
+    for page in sorted(set(LEAD_FORMS)):
+        src = open(os.path.join(ROOT, page), encoding='utf-8').read()
+        for m in re.finditer(r'<form\b[^>]*data-netlify="true"[^>]*>(.*?)</form>', src, re.S):
+            eq('%s: its Netlify form declares the honeypot and carries the field' % page,
+               ('netlify-honeypot="bot-field"' in m.group(0), 'name="bot-field"' in m.group(1)), (True, True))
     if os.environ.get('PB_SUMMARIES_OUT'):
         with open(os.environ['PB_SUMMARIES_OUT'], 'w', encoding='utf-8') as f:
             json.dump(SUMMARIES, f, ensure_ascii=False, indent=1)
