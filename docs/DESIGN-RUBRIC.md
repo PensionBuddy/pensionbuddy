@@ -77,9 +77,8 @@ every page. No rule here moves, shrinks or cuts any of them.
   calculator's `<main>` (Run 21).
 - **Case:** sentence case, never tracked, never capitals for effect;
   `verify.py`'s CASE guard already fails a page that does it.
-- **One face (8 Oct 2026):** Space Grotesk sets every word, the wordmark
-  included; there is no second face. Its weights run 300 to 700, so an 800
-  in the stylesheets renders at 700.
+- **One face (8 Oct 2026):** Figtree sets every word, the wordmark
+  included; there is no second face. Its weights run 300 to 900.
 - **Two-tone headings** (the second sentence in `--ink-2`) count as one
   heading, not two sizes, and are the way to give a heading two beats
   instead of a second size or a colour.

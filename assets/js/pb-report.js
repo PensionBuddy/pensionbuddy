@@ -100,7 +100,7 @@
   /* ---- the printed report -------------------------------------------- */
   var CSS = '@media screen{.pb-report{display:none}}' +
     '@media print{body>*:not(.pb-report){display:none!important}' +
-    '.pb-report{display:block;color:#000;background:#fff;font:11pt/1.5 "Space Grotesk",system-ui,sans-serif;padding:0}' +
+    '.pb-report{display:block;color:#000;background:#fff;font:11pt/1.5 "Figtree",system-ui,sans-serif;padding:0}' +
     '.pb-report h1{font-size:18pt;margin:0 0 2pt}.pb-report h2{font-size:12.5pt;margin:14pt 0 4pt}' +
     '.pb-report p{margin:0 0 6pt}.pb-report dl{display:grid;grid-template-columns:auto auto;justify-content:start;gap:2pt 18pt;margin:0}' +
     '.pb-report dt{font-weight:600}.pb-report dd{margin:0}.pb-report ul{margin:0;padding-left:14pt}' +

@@ -76,16 +76,16 @@ def words(page, eyebrow):
 def card_html(eyebrow, h1):
     fonts = ''.join(
         "@font-face{font-family:'%s';font-weight:%s;src:url(/assets/fonts/%s.woff2) format('woff2')}" % f
-        for f in (('Space Grotesk', '300 700', 'space-grotesk-latin'),
-                  ('Space Grotesk', '300 700', 'space-grotesk-latin-ext')))
+        for f in (('Figtree', '300 900', 'figtree-latin'),
+                  ('Figtree', '300 900', 'figtree-latin-ext')))
     return """<!DOCTYPE html><html lang="en-IE"><head><meta charset="utf-8"><style>%s
 html,body{margin:0;width:%dpx;height:%dpx;background:#0B1F1C;overflow:hidden}
-body{font-family:'Space Grotesk',sans-serif;color:#fff;display:flex;flex-direction:column;justify-content:space-between;
+body{font-family:'Figtree',sans-serif;color:#fff;display:flex;flex-direction:column;justify-content:space-between;
   box-sizing:border-box;padding:64px 80px 58px}
 .lock{display:flex;align-items:center;gap:17px}
 .mark{width:64px;height:64px;border-radius:17px;background:#14CBB1;display:flex;align-items:center;justify-content:center}
 .mark svg{width:37px;height:37px;fill:#0F1F1C}
-.word{font-family:'Space Grotesk',sans-serif;font-weight:800;font-size:41px;letter-spacing:-.035em;line-height:1}
+.word{font-family:'Figtree',sans-serif;font-weight:800;font-size:41px;letter-spacing:-.035em;line-height:1}
 .eb{font-size:28px;font-weight:600;color:#14CBB1;margin:0 0 18px}
 h1{margin:0;font-weight:800;letter-spacing:-.025em;line-height:1.06;font-size:68px;max-width:1040px}
 h1 .hl{color:#14CBB1}

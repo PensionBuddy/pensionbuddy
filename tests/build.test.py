@@ -212,7 +212,7 @@ def run():
         ('the CLICK block of CSS missing', 'booking.html', 'click-css',
          sources['booking.html'].replace('/* CLICK:END */', '/* CLICK-END */', 1)),
         ('the FONTS block of CSS changed', 'terms.html', 'fonts-css',
-         after('terms.html', '/* FONTS:BEGIN', 'font-weight:300 700;font-display:swap', 'font-weight:400 700;font-display:swap')),
+         after('terms.html', '/* FONTS:BEGIN', 'font-weight:300 900;font-display:swap', 'font-weight:400 900;font-display:swap')),
         ('the FONTS block of CSS missing', 'glossary.html', 'fonts-css',
          sources['glossary.html'].replace('/* FONTS:END */', '/* FONTS-END */', 1)),
         ('the MOTION block of CSS changed', 'privacy.html', 'motion-css',
@@ -1107,8 +1107,9 @@ def run():
     # page preloads the Latin Inter file once, before its first stylesheet,
     # with crossorigin (a font preload without it is fetched twice).
     # Run 46: Geist, one variable file, in place of Inter's seven; 8 Oct
-    # 2026: Space Grotesk, two files split by unicode-range, for every word
-    FONT_FILES = ['space-grotesk-latin-ext', 'space-grotesk-latin']
+    # 2026: Space Grotesk, then the same day Figtree, two files split by
+    # unicode-range, for every word
+    FONT_FILES = ['figtree-latin-ext', 'figtree-latin']
     def fonts(src, prefix=''):
         out = []
         if re.search(r'fonts\.(?:googleapis|gstatic)\.com', src):
@@ -1116,12 +1117,12 @@ def run():
         named = re.findall(r"url\(%sassets/fonts/([a-z-]+)\.woff2\) format\('woff2'\)" % re.escape(prefix), src)
         if sorted(named) != sorted(FONT_FILES):
             out.append('font files named: %s' % sorted(set(named) ^ set(FONT_FILES)))
-        pre = '<link rel="preload" href="%sassets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>' % prefix
+        pre = '<link rel="preload" href="%sassets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>' % prefix
         first = re.search(r'<link\b[^>]*\brel="stylesheet"|<style\b', src)
         if src.count(pre) != 1 or not first or src.find(pre) > first.start():
             out.append('preload')
         return out
-    eq('29. every page: no request to Google Fonts, its own two font files, Space Grotesk preloaded',
+    eq('29. every page: no request to Google Fonts, its own two font files, Figtree preloaded',
        {n: fonts(t) for n, t in sources.items() if fonts(t)}, {})
     eq('29. and the two games, from one level down',
        {g: fonts(t, '../') for g, t in games.items() if fonts(t, '../')}, {})
@@ -1131,12 +1132,12 @@ def run():
         real[f] = os.path.isfile(path) and open(path, 'rb').read(4) == b'wOF2' and os.path.getsize(path) > 5000
     eq('29. each named file is a woff2 in assets/fonts/', [f for f, ok in real.items() if not ok], [])
     eq('29. with the licence beside them',
-       [n for n in ('OFL-SpaceGrotesk.txt',)
+       [n for n in ('OFL-Figtree.txt',)
         if 'SIL Open Font License' not in read('assets/fonts/' + n)], [])
     pc = sources['pension-calculator.html']
     for label, mut, want in (
             ('the Google stylesheet back', pc.replace('</title>', '</title>\n<link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">', 1), 'asks Google Fonts'),
-            ('a font file dropped from the block', pc.replace("url(assets/fonts/space-grotesk-latin.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
+            ('a font file dropped from the block', pc.replace("url(assets/fonts/figtree-latin.woff2) format('woff2')", "url(x.woff2) format('woff2')", 1), 'font files named'),
             ('the preload without crossorigin', pc.replace('type="font/woff2" crossorigin>', 'type="font/woff2">', 1), 'preload')):
         assert mut != pc, label
         eq('29. %s is caught' % label, any(x.startswith(want) for x in fonts(mut)), True)

@@ -172,16 +172,16 @@ AUDIT_JS = r"""
     await Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,8000)})]);
     const famOf=el=>el?getComputedStyle(el).fontFamily:'';
     const first=s=>String(s).split(',')[0].replace(/['"]/g,'').trim();
-    const DROPPED=/Fraunces|Hanken|Bricolage|Sora|Plex|Geist|Schibsted/i;
+    const DROPPED=/Fraunces|Hanken|Bricolage|Sora|Plex|Geist|Schibsted|Space Grotesk/i;
     const hs=$$('h1,h2,h3,h4');
     R.fonts={
       /* fonts.check() reports true for families that fall back, so ask the FontFace set directly.
-         The family must be Space Grotesk exactly (8 Oct 2026; Inter, then Geist, before it). */
-      interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Space Grotesk'&&f.status==='loaded'),
-      interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Space Grotesk').length,
+         The family must be Figtree exactly (8 Oct 2026; Inter, Geist and Space Grotesk before it). */
+      interLoaded:[...document.fonts].some(f=>f.family.replace(/["']/g,'')==='Figtree'&&f.status==='loaded'),
+      interFaces:[...document.fonts].filter(f=>f.family.replace(/["']/g,'')==='Figtree').length,
       /* Run 34: the face is the site's own file (assets/fonts/), and nothing is
          fetched from Google Fonts */
-      ownInter:performance.getEntriesByType('resource').some(e=>/\/assets\/fonts\/space-grotesk-latin\.woff2$/.test(e.name)),
+      ownInter:performance.getEntriesByType('resource').some(e=>/\/assets\/fonts\/figtree-latin\.woff2$/.test(e.name)),
       googleFonts:performance.getEntriesByType('resource').map(e=>e.name).concat($$('link').map(l=>l.href)).filter(u=>/fonts\.(googleapis|gstatic)\.com/.test(u)).slice(0,2),
       linkRequestsDropped:$$('link[rel=stylesheet]').filter(l=>DROPPED.test(l.href)).map(l=>l.href.slice(0,90)),
       h1:first(famOf(document.querySelector('h1'))),
@@ -193,7 +193,7 @@ AUDIT_JS = r"""
          expectations by where they sit, not by face (v4: there is one face),
          rather than the expectations being loosened for every heading. */
       headingCount:hs.length,
-      headingsOffInter:hs.filter(h=>!/Space Grotesk/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
+      headingsOffInter:hs.filter(h=>!/Figtree/i.test(famOf(h))).map(h=>h.tagName+':'+first(famOf(h))).slice(0,4),
       headingWeights:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontWeight))].sort(),
       headingSizes:[...new Set(hs.filter(h=>!h.closest('.foot-col')).map(h=>getComputedStyle(h).fontSize))].sort(),
       droppedAtRuntime:[...new Set($$('body *').map(e=>first(famOf(e))).filter(f=>DROPPED.test(f)))].slice(0,4)
@@ -536,10 +536,10 @@ def static_checks(pages):
             'sourcePlaceholders': [p for p in SRC_PLACEHOLDERS if re.search(p, t)],
             'mainInSource': bool(re.search(r'<main\b', t)),
             'skipInSource': bool(re.search(r'<a[^>]+class="skip"', t)),
-            'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono|Geist|Schibsted Grotesk', t)}),
+            'droppedFamilies': sorted({m for m in re.findall(r'Fraunces|Hanken Grotesk|Bricolage Grotesque|Sora|IBM Plex Mono|Geist|Schibsted Grotesk|Space Grotesk', t)}),
             'uppercaseRules': len(re.findall(r'text-transform\s*:\s*uppercase', t)),
             # Run 34: the face is the site's own file, and nothing is asked of Google Fonts
-            'requestsInter': bool(re.search(r"@font-face\{font-family:'Space Grotesk';[^}]*url\((?:\.\./)*assets/fonts/space-grotesk-latin\.woff2\)", t))
+            'requestsInter': bool(re.search(r"@font-face\{font-family:'Figtree';[^}]*url\((?:\.\./)*assets/fonts/figtree-latin\.woff2\)", t))
                              and not re.search(r'fonts\.(?:googleapis|gstatic)\.com', t),
             'base64Images': len(re.findall(r'data:image/[a-z]+;base64,', t)),
             'editorLeak': sorted(set(re.findall(r'data-pbe[a-z-]*|pbe-(?:bar|css|js|data|pop)|edit-server\.py|edit-mode/editor', t))),
@@ -585,7 +585,7 @@ def evaluate(page, st, audits):
     # CASE (v4): sentence case everywhere, one face. The rule may not be in the
     # source, and the runtime check below catches it arriving any other way.
     if st.get('uppercaseRules'): F.append(('CASE', '%d text-transform:uppercase rule(s) in source' % st['uppercaseRules']))
-    if not st['requestsInter']: F.append(('F2', 'source does not load Space Grotesk from assets/fonts/, or still asks Google Fonts for a font'))
+    if not st['requestsInter']: F.append(('F2', 'source does not load Figtree from assets/fonts/, or still asks Google Fonts for a font'))
     if st['bytes'] > 250_000: W.append(('F3', '%dKB source, %d base64 images' % (st['bytes'] // 1024, st['base64Images'])))
     for w, a in audits.items():
         if 'auditError' in a: F.append(('tool', 'audit failed @%d: %s' % (w, a['auditError'][:120]))); continue
@@ -625,10 +625,10 @@ def evaluate(page, st, audits):
     fo = a.get('fonts') or {}
     if fo and not fo.get('error'):
         if not fo.get('ownInter') or fo.get('googleFonts'):
-            F.append(('F2', 'Space Grotesk not fetched from assets/fonts/, or a font fetched from Google Fonts: %s' % (fo.get('googleFonts') or 'no Space Grotesk file')))
-        elif not fo.get('interLoaded'): F.append(('F2', 'Space Grotesk requested but did not load'))
+            F.append(('F2', 'Figtree not fetched from assets/fonts/, or a font fetched from Google Fonts: %s' % (fo.get('googleFonts') or 'no Figtree file')))
+        elif not fo.get('interLoaded'): F.append(('F2', 'Figtree requested but did not load'))
         if fo.get('linkRequestsDropped'): F.append(('F2', 'a dropped family is still requested: %s' % fo['linkRequestsDropped'][0]))
-        if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Space Grotesk: %s' % fo['headingsOffInter']))
+        if fo.get('headingsOffInter'): F.append(('F2', 'headings not on Figtree: %s' % fo['headingsOffInter']))
         if fo.get('droppedAtRuntime'): F.append(('F2', 'a dropped family resolves at runtime: %s' % fo['droppedAtRuntime']))
         bad_w = [w for w in (fo.get('headingWeights') or []) if str(w) not in ('700', '800')]  # Run 46: headings 700, h1 800
         if bad_w: W.append(('F2', 'headings render at weights other than 700 or 800: %s' % bad_w))
