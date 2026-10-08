@@ -338,6 +338,48 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 48 — 2026-10-08 · Live fixes: rules date, the threshold, how a call works, one booking wording, one regulator line, Cookies (on `claude/live-fixes-1008`)
+
+Damian's seven fixes of 8 October 2026, one commit each, off live main
+`a1f7122`.
+
+| # | Fix | Where |
+|---|---|---|
+| 1 | Every "Rules as at 24 September 2026 / Budget 2027 could change them" line reads "Rules as at 8 October 2026." until Damian gives the Budget 2027 changes; the UK guide's "Either country's Budget can change them" too, and the four guides' search descriptions ("as at September 2026") | home, threshold, directors' rules, four guides; their parts; `pagebuild.py` checks; build check 36 |
+| 2 | Standard Fund Threshold: "€2.2 million in 2026, and €2.4 million from 1 January 2027" wherever it is described in words (the threshold page's opening line, the jargon buster, the directors' rules paragraph and question, the year-end checklist, the "all your pensions" pointer, both calculators' notes). The over-50 guide's €2 million is the ARF 6% rule, unchanged | |
+| 3, 4 | "How a call works.": the three placeholder pictures gone (files and CSS); step 1 "Pick a time that suits you." ("No forms." gone); the kicker and "Three steps." replaced by the heading. The comment over the section says where Run 39's video slots are | `index.html`; build check 45 rewritten |
+| 5 | Every booking button reads "Book a free 20-minute call with us" (nine wordings replaced, listed in the commit). One filled booking button per page: the home page keeps the one after the way-of-life picker, its closing band ("Talk it through with Damian.") goes and its second ask is an outline under "Questions before you call."; the director, starter and tracker closing bands and the tracker's "Forgotten pensions" band go quiet. **Run 45's button test ends** (its second wording broke the one wording): everyone is variant A, nothing stored, the old key deleted on load | build check 52 holds both rules, nav, bar and Ask Buddy included; checks 46, 48, 50; give-then-ask G13, G14 |
+| 6 | The home page loses the grey announce bar ("Regulated by the Central Bank of Ireland · Free first consultation"); the hero's lockup, with the register link and the QFA, is the one regulator line at the top | `chrome_drift` wants no bar on the home page; check 9 mutant |
+| 7 | A Cookies section in the Privacy Notice (`privacy.html#cookies`): what the site keeps always, each analytics and advertising cookie set only after "That's fine" with what it does and how long it lasts as each vendor's own page states it (read 8 October 2026), the Calendly calendar's own cookies, and how to change the choice. "Cookies" in every footer. "No thanks" now also deletes `ttcsid*`, `ttclid` and `_dc_gtm_*` | `privacy.html`, skeleton foot-top, `pb-consent.js` |
+
+Left as they were, by judgement: the footer's "Book a call" (a link in a
+list, not a button); the guides' "Talk it through" section headings over
+their booking links; links inside sentences ("book a free 20-minute call
+with us", the legal pages' "booking page"); the 404's filled "way home".
+
+## Needs Damian (Run 48)
+
+1. **Budget 2027.** Give the changes; then the rules lines move again.
+   Already stale since 6 October: the year-end checklist's "Watch Budget
+   2027 on 6 October 2026", the PIA page's "to be announced on 6 October
+   2026, in Budget 2027", and the source notes in `assets/js/pia.js` and
+   `assets/js/sft.js`.
+2. **The same doubled regulator line** is on the director, starter and
+   tracker pages (grey bar plus the hero lockup on a phone). Fix 6 was
+   asked for the home page only; the same change is one line each.
+3. **Calendly loads before the cookie choice** on the booking page and,
+   by Calendly's own help page, "uses cookies even if the banner is
+   hidden"; Calendly suggests waiting for consent. The Cookies section says
+   Calendly sets its own cookies there. Compliance question.
+4. **LinkedIn's Insight Tag terms** say the tag "should not be installed"
+   on pages offering financial services to consumers
+   (linkedin.com/help/lms/answer/a489169). For Damian or counsel.
+5. **The compliance pack** quotes the old booking wordings and the button
+   test (1.25); it is stale on both.
+6. **Not from this run:** `tools/check-initialisms.py` fails on four
+   calculators for "ECB" in the "today's money" text (live main, commit
+   `e642782`).
+
 # Run 46 — 2026-10-06 · Copy cut (on `claude/clever-wozniak-dmpzph`, merged to main)
 
 Damian's order, in two rounds. First a cut that left the compliance pack's

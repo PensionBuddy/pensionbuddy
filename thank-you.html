@@ -2008,6 +2008,13 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* Since 8 October 2026 every booking button reads "Book a free 20-minute
+   call with us", too long for .btn's single line on a narrow phone at the
+   hero sizes (6px past a 375px screen on the home page): there a booking
+   button wraps, centred, instead. */
+@media(max-width:480px){
+  a.btn[href^="booking.html"]{white-space:normal;text-align:center;line-height:1.25}
+}
 /* CTA:END */
 /* TYPE:BEGIN (Run 46). The type scale's weights, last in every page's
    stylesheet so it wins over each page's own: body text 500 at a 1.6 line
