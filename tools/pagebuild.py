@@ -818,8 +818,15 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
             'tokens': root_tokens(text),
         }
         for key in want:
-            if got[key] != want[key]:
-                add(page, key.split(':')[0], '%s differs from the skeleton' % key)
+            wanted = want[key]
+            # The home page has no announce bar (Damian, 8 October 2026: one
+            # regulator line at the top of the home page). Its hero's lockup,
+            # with the register link and the QFA, is the one it keeps.
+            if page == HOME and key == 'banner: announce':
+                wanted = None
+            if got[key] != wanted:
+                add(page, key.split(':')[0], '%s differs from the skeleton' % key
+                    if wanted is not None else '%s is not wanted on the home page' % key)
     return out
 
 

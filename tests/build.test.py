@@ -201,6 +201,8 @@ def run():
          sources['glossary.html'].replace('--teal:#0C8175', '--teal:#0C8176', 1)),
         ('the announce bar changed', 'tracker.html', 'banner',
          sources['tracker.html'].replace('<b>Free</b> first consultation', 'Free first consultation', 1)),
+        ('the announce bar back on the home page', 'index.html', 'banner',
+         sources['index.html'].replace('<a class="skip"', '<div class="announce"><span>Regulated by the Central Bank of Ireland</span></div>\n<a class="skip"', 1)),
         ('the NAV block of CSS changed', 'pensions-over-50.html', 'nav-css',
          after('pensions-over-50.html', '/* NAV:BEGIN', 'font-size:17px;font-weight:600', 'font-size:15px;font-weight:600')),
         ('the NAV block of CSS missing', 'uk-pensions-in-ireland.html', 'nav-css',
