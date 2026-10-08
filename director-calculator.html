@@ -2729,28 +2729,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Director calculator · two minutes</span>
   <h1>What your <span class="hl">company</span> could pay into your pension.</h1>
   <p>Your company can fund your pension, often far beyond personal limits. Contributions are an allowable company expense.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="director-calculator">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"><b>18 November 2026</b>, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online through the Revenue Online Service, it is 31 October 2026. After that, 2025&rsquo;s allowance is gone for good.</span>
-    </div>
-<!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
-     not at the foot of the page: filled at the foot, the row grew from nothing
-     after the first paint and pushed the calculator down (0.04 layout shift).
-     The row's markup is the date sentence a reader without JavaScript gets
-     (PBDeadline.statics()); the script puts the count in its place. -->
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
     <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Estimates are fine. Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Early retirement. Revenue&rsquo;s Pensions Manual, Chapter 9.6: &ldquo;Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.&rdquo;</p></div>
+    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Retiring early? Generally, a director with at least 20% interest in a company must first cut all links with it, shares included (Revenue).</p></div>
     <div class="field"><div class="row"><label for="sal">Your annual salary</label><span class="val" id="salV">€100,000</span></div><input type="range" id="sal" min="30000" max="1000000" step="5000" value="100000"></div>
     <div class="field pb-risk" id="riskField"><div class="row"><label for="risk">Assumed yearly growth</label><span class="val" id="riskV">Level 4: 5% a year</span></div><input type="range" id="risk" min="1" max="7" step="1" value="4" aria-describedby="riskNote"><div class="pb-risk-bars" id="riskBars" aria-hidden="true"><i style="height:22%"></i><i style="height:35%"></i><i style="height:48%"></i><i style="height:61%" class="on"></i><i style="height:74%"></i><i style="height:87%"></i><i style="height:100%"></i></div><div class="pb-risk-ends" aria-hidden="true"><span>1 lowest risk</span><span>7 highest risk</span></div><p class="subnote" id="riskNote"><b id="riskHolds">About half shares, half bonds. Medium ups and downs.</b> <span id="riskRange">In a typical year: from a 3% fall to a 13% rise.</span></p><p class="subnote pb-risk-rule">Higher level, higher risk. It can rise more, and it can fall more.</p></div>
     <div class="field"><div class="row"><label for="pot">Pension built up so far</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
@@ -3369,7 +3359,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=ba8b985d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

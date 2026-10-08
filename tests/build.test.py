@@ -1723,7 +1723,7 @@ def run():
     # scroll one to one).
     GUIDES = {'pensions-over-50.html': 'pension-calculator.html', 'self-employed-pensions.html': 'pension-calculator.html',
               'uk-pensions-in-ireland.html': 'tracker.html', 'director-pension-rules.html': 'director-calculator.html',
-              'standard-fund-threshold.html': 'booking.html', 'pia.html': 'pension-calculator.html'}
+              'pia.html': 'pension-calculator.html'}
 
     def heading_text(s, hid):
         m = re.search(r'<(h2|h3)\b[^>]*\bid="%s"[^>]*>(.*?)</\1>' % re.escape(hid), s, re.S)
@@ -1796,7 +1796,7 @@ def run():
     for label, target, find, repl, want in (
             ('a listed section the page does not have', 'pensions-over-50.html', '<li><a href="#early">', '<li><a href="#earlier">', 'not a section'),
             ('a list word that is not the heading', 'uk-pensions-in-ireland.html', '<li><a href="#tax">How Ireland taxes it</a></li>', '<li><a href="#tax">Tax</a></li>', 'heading\'s words'),
-            ('a next step to a held page', 'standard-fund-threshold.html', 'class="pb-next-card pb-card-link" href="booking.html"', 'class="pb-next-card pb-card-link" href="how-we-work.html"', 'not a live page'),
+            ('a next step to a held page', 'pensions-over-50.html', 'class="pb-next-card pb-card-link" href="pension-calculator.html"', 'class="pb-next-card pb-card-link" href="how-we-work.html"', 'not a live page'),
             ('a list on a page that is not a guide', 'privacy.html', '</main>', '<div class="pb-toc" role="navigation" aria-labelledby="pbTocH"></div></main>', 'not one of the six'),
             ('a bar that scrolls', 'js', 'function later() {', 'function later() { window.scrollBy(0, 1);', 'scrolls'),
             ('a line that eases', 'css', '.pb-tocbar-prog{position:absolute;', '.pb-tocbar-prog{transition:transform .3s;position:absolute;', 'eases')):

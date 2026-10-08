@@ -177,3 +177,11 @@
 .pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
 .pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* 8 October 2026: the breakdowns open on a tap */
+.pb-bd>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pb-bd>summary::-webkit-details-marker{display:none}
+.pb-bd>summary h3{margin:0}
+.pb-bd>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-bd[open]>summary{margin-bottom:12px}
+.pb-bd[open]>summary::after{content:"\2212"}
+.pb-bd>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}

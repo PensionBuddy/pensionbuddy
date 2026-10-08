@@ -2675,6 +2675,14 @@ main h1{font-weight:800}
 .pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
 .pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+/* 8 October 2026: the breakdowns open on a tap */
+.pb-bd>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pb-bd>summary::-webkit-details-marker{display:none}
+.pb-bd>summary h3{margin:0}
+.pb-bd>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-bd[open]>summary{margin-bottom:12px}
+.pb-bd[open]>summary::after{content:"\2212"}
+.pb-bd>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
 </style>
 
 <script>
@@ -2743,22 +2751,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
   <h1>Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
   <p>Auto-enrolment against a personal pension, or both, for your salary and age. It does not pick for you.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"><b>18 November 2026</b>, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online through the Revenue Online Service, it is 31 October 2026. After that, 2025&rsquo;s allowance is gone for good.</span>
-    </div>
-<!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
-     not at the foot of the page: filled at the foot, the row grew from nothing
-     after the first paint and pushed the calculator down (0.04 layout shift).
-     The row's markup is the date sentence a reader without JavaScript gets
-     (PBDeadline.statics()); the script puts the count in its place. -->
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 
     <div class="modebar">
@@ -2875,14 +2873,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="vs-note subnote" id="vsNote"></p>
       </div>
 
-      <div class="chart-card">
-        <h3>Personal pension, broken down</h3>
+      <details class="chart-card pb-bd">
+        <summary><h3>Personal pension, broken down</h3></summary>
         <div class="bd"><span class="bl">You pay in</span><span class="bv" id="ppGross" data-pb-wait>€0</span></div>
         <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="ppReliefCap"></span></span><span class="bv" id="ppRelief" data-pb-wait>€0</span></div>
         <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="ppEmployerCap"></span></span><span class="bv" id="ppEmployer">€0</span></div>
         <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="ppTotal2" data-pb-wait>€0</span></div>
         <p class="subnote" id="ppReliefNote"></p>
-      </div>
+      </details>
       <div class="chart-card">
         <h3>Your relief limit</h3>
       <div class="pb-lad" data-pb-age="age" data-pb-earn="salary">
@@ -2931,15 +2929,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="vs-note subnote" id="cNote"></p>
       </div>
 
-      <div class="chart-card">
-        <h3>Your top-up, broken down</h3>
+      <details class="chart-card pb-bd">
+        <summary><h3>Your top-up, broken down</h3></summary>
         <div class="bd"><span class="bl">You pay in</span><span class="bv" id="cPaid">€0</span></div>
         <div class="bd"><span class="bl">Tax relief from Revenue <span class="capnote" id="cReliefCap"></span></span><span class="bv" id="cRelief">€0</span></div>
         <div class="bd"><span class="bl">Goes into your pension</span><span class="bv" id="cGross">€0</span></div>
         <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="cMatchCap"></span></span><span class="bv" id="cMatch">€0</span></div>
         <div class="bd tot"><span class="bl">Total from the top-up</span><span class="bv" id="cTopUp2">€0</span></div>
         <p class="subnote" id="cReliefNote"></p>
-      </div>
+      </details>
     </div>
 
     <!-- ============ SHARED: funds and risk, for the personal pension side ============ -->
@@ -2959,18 +2957,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
 
     <!-- ============ SHARED: the auto-enrolment layer is the same in both modes ============ -->
-    <div class="chart-card">
-      <h3>Auto-enrolment, broken down</h3>
+    <details class="chart-card pb-bd">
+      <summary><h3>Auto-enrolment, broken down</h3></summary>
       <div class="bd"><span class="bl">You pay in</span><span class="bv" id="aeEmployee" data-pb-wait>€0</span></div>
       <div class="bd"><span class="bl">Your employer adds <span class="capnote" id="aeEmployerCap"></span></span><span class="bv" id="aeEmployer" data-pb-wait>€0</span></div>
       <div class="bd"><span class="bl">The State adds <span class="capnote" id="aeStateCap"></span></span><span class="bv" id="aeState" data-pb-wait>€0</span></div>
       <div class="bd tot"><span class="bl">Total into your pension</span><span class="bv" id="aeTotal2" data-pb-wait>€0</span></div>
       <p class="subnote" id="aeRatesNote"></p>
-    </div>
+    </details>
 
     <div class="chart-card">
-      <h3>Before you rely on these rates</h3>
-      <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 rates, and that all three contributions stop at €80,000 of salary. From third-party summaries: the later rates and years, and that the scheme does not currently take more than its set rate. Confirm those with gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA). Rates and rules can change.</p>
+      <h3>About these rates</h3>
+      <p class="srcwarn">Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="broker-vs-autoenrolment">
@@ -2996,11 +2994,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>A calculator can see your salary. <span class="pb-soft">It cannot see your employer.</span></h2></div>
-  <a class="btn btn-ghost" href="booking.html">Talk through what this means for you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
@@ -3711,7 +3704,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=ba8b985d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
