@@ -2558,19 +2558,6 @@ main h1{font-weight:800}
 .sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
 </style>
-<script>
-/* pb-guess: blur the headline cells before the first paint on the pages that
-   carry a guess card, so the answer is never seen sharp while
-   assets/js/pb-guess.js is still on its way. That file takes the class off in
-   the same task that puts its own veil up; if it never arrives, the class
-   comes off by itself after four seconds. With scripts off this never runs. */
-(function () {
-  var p = String(location.pathname || '').split('/').pop();
-  if (!/^(pension-calculator|director-calculator|state-pension-reality-check|state-pension-entitlement|broker-vs-autoenrolment)\.html$/.test(p)) { return; }
-  document.documentElement.classList.add('pb-preveil');
-  setTimeout(function () { document.documentElement.classList.remove('pb-preveil'); }, 4000);
-}());
-</script>
 
 <script>
 /* ------------------------------------------------------------------
@@ -3186,13 +3173,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-share.js?v=308731e9"></script>
 <script src="assets/js/pb-after.js?v=abdccdaf"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
-<script src="assets/js/pb-report.js?v=d6aa85a3"></script>
-<script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>
 </html>

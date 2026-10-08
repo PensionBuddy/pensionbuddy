@@ -2487,19 +2487,6 @@ main h1{font-weight:800}
 #chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 </style>
-<script>
-/* pb-guess: blur the headline cells before the first paint on the pages that
-   carry a guess card, so the answer is never seen sharp while
-   assets/js/pb-guess.js is still on its way. That file takes the class off in
-   the same task that puts its own veil up; if it never arrives, the class
-   comes off by itself after four seconds. With scripts off this never runs. */
-(function () {
-  var p = String(location.pathname || '').split('/').pop();
-  if (!/^(pension-calculator|director-calculator|state-pension-reality-check|state-pension-entitlement|broker-vs-autoenrolment)\.html$/.test(p)) { return; }
-  document.documentElement.classList.add('pb-preveil');
-  setTimeout(function () { document.documentElement.classList.remove('pb-preveil'); }, 4000);
-}());
-</script>
 
 <script>
 /* ------------------------------------------------------------------
@@ -2613,24 +2600,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">An illustration only. Retirement options differ. The State Pension may be paid on top.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <!-- Run 37, item 5: Save as A. A copy of what the calculator shows, set
-         beside what it shows now; assets/js/pb-scenario.js reads the page and
-         writes only this block. Not stored. Drawn only with JavaScript. -->
-    <div class="pb-ab" id="pbAb">
-      <div class="pb-ab-bar">
-        <button type="button" class="pb-ab-save" id="pbAbSave">Save as A</button>
-        <p class="pb-ab-hint">Save as A, then move the sliders to compare. Nothing is stored.</p>
-      </div>
-      <p class="pb-ab-said" id="pbAbSaid" role="status"></p>
-      <div class="pb-ab-box" id="pbAbBox" hidden>
-        <table class="pb-ab-table">
-          <caption>A beside your figures now</caption>
-          <thead><tr><td></td><th scope="col">A</th><th scope="col">Now</th></tr></thead>
-          <tbody id="pbAbRows"></tbody>
-        </table>
-        <button type="button" class="pb-ab-clear" id="pbAbClear">Clear A</button>
-      </div>
-    </div>
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a>. That is the cap on funds with full tax relief. Anything above it is taxed on drawdown. The real ceiling is lower.</p>
     <div class="waitcard">
@@ -2690,7 +2659,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
     <!-- AFTER:END -->
-    <div class="pb-badges" data-pb-badges="strip" data-pb-award="slider"></div>
   </div>
 </div></div>
 
@@ -2721,7 +2689,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
-<script src="assets/js/pb-scenario.js?v=4cfd31c3"></script>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
@@ -3307,13 +3274,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-share.js?v=308731e9"></script>
 <script src="assets/js/pb-after.js?v=abdccdaf"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
-<script src="assets/js/pb-report.js?v=d6aa85a3"></script>
-<script src="assets/js/pb-badges.js?v=c455100f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>
 </html>

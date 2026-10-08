@@ -314,21 +314,7 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
      h, 'booking.html?' + tags(page, p.variant) + '#from=' + from);
 }
 
-/* G3b: the guess card on its own is not a move of the calculator */
-await open('pension-calculator.html');
-await ev(`document.getElementById('pbGuessRange').focus({ preventScroll: true })`);
-await key('ArrowRight', 39);
-eq('G3b. pension-calculator.html: the guess slider and Reveal, nothing else: Reveal pressed', await click('#pbGuessGo'), true);
-eq('G3b. pension-calculator.html: no #from=', bare(await hrefOnFocus()), 'booking.html');
-
-/* G4: a shared link replays its figures with untrusted events */
-await open('pension-calculator.html#pb=1&age=50&ret=66');
-eq('G4. a shared link: its figures arrived', await ev(`[document.getElementById('age').value, document.getElementById('ret').value]`), ['50', '66']);
-if (await veiled()) await click('#pbGuessGo');
-eq('G4. a shared link, no reader action: no #from=', bare(await hrefOnFocus()), 'booking.html');
-await ev(`document.getElementById('pot').focus({ preventScroll: true })`);
-await key('ArrowRight', 39);
-eq('G4. then one trusted key on #pot: the button says where they came from', bare(await hrefOnFocus()), 'booking.html#from=pension-calculator');
+/* G3b and G4 (the guess card, a shared link) went with those parts on 8 October 2026 */
 
 /* G4b: a script's event is not the reader's move either */
 await open('pension-calculator.html');

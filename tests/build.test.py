@@ -1704,69 +1704,13 @@ def run():
         eq('36. %s is caught' % label, any(want in x for x in timeline_faults(mix, sources, mjs)), True)
 
     # ----------------------------------------------------------------- 37
-    # Run 37, item 5: Save as A, on the pension calculator only. The block
-    # sits after the prescribed warnings, drawn only with JavaScript; the
-    # table starts hidden and empty. assets/js/pb-scenario.js copies what the
-    # page shows and never computes: no arithmetic on a figure, no storage,
-    # nothing in the address, no write to anything the calculator owns (its
-    # figures, its sliders, its sentence); the page script itself is the same
-    # as before (render-diff proves its writes). The pages built on the
-    # skeleton carry the rules, never the block or the script.
-    def ab_faults(skel, built, js):
-        f = []
-        i = skel.find('<div class="pb-warn">')
-        j = skel.find('<div class="pb-ab" id="pbAb">')
-        k = skel.find('<details class="pb-work">')
-        if not (0 <= i < j < k):
-            f.append('the block is not after the warnings and before the workings')
-        for want in ('<button type="button" class="pb-ab-save" id="pbAbSave">Save as A</button>',
-                     '<p class="pb-ab-said" id="pbAbSaid" role="status"></p>',
-                     '<div class="pb-ab-box" id="pbAbBox" hidden>',
-                     '<tbody id="pbAbRows"></tbody>',
-                     'html:not(.pb-js) .pb-ab{display:none}'):
-            if want not in skel:
-                f.append('missing: %s' % want[:40])
-        main = skel[skel.find('<main'):skel.find('</main>')]
-        if main.count('<script src="assets/js/pb-scenario.js') != 1:
-            f.append('the script is not in the calculator\'s own <main>, once')
-        for name, s in built.items():
-            if 'id="pbAb"' in s or 'pb-scenario.js' in s:
-                f.append('%s carries the block or the script' % name)
-        code = re.sub(r'/\*.*?\*/', '', js, flags=re.S)
-        if re.search(r'localStorage|sessionStorage|document\.cookie|indexedDB|fetch\(|XMLHttpRequest|sendBeacon|pushState|replaceState|location\.hash\s*=', code):
-            f.append('pb-scenario.js stores, sends or writes the address')
-        if re.search(r'\.value\s*=|dispatchEvent|\.click\(\)', code):
-            f.append('pb-scenario.js moves the calculator')
-        if re.search(r'(potOut|incOut|pbSay|srSummary)[^;\n]*(textContent|innerHTML|innerText)\s*=', code):
-            f.append('pb-scenario.js writes a figure the calculator owns')
-        if re.search(r'parseFloat|parseInt|Number\(|Math\.', code):
-            f.append('pb-scenario.js does arithmetic')
-        return f
-
-    skel = sources['pension-calculator.html']
-    built_srcs = dict((p.out, sources[p.out]) for p in pagebuild.PAGES.values())
-    ab_js = read('assets/js/pb-scenario.js')
-    eq('37. Save as A: on the pension calculator only, after the warnings, drawn with JavaScript; a copy of what the page shows, never a calculation; stores nothing',
-       ab_faults(skel, built_srcs, ab_js), [])
-    for label, target, find, repl, want in (
-            ('a figure worked out', 'js', "if (v && v.id) { out.push({ k: v.id, label: text(l), value: text(v), fig: true }); }",
-             "if (v && v.id) { out.push({ k: v.id, label: text(l), value: text(v) + Math.round(1), fig: true }); }", 'arithmetic'),
-            ('A kept for next time', 'js', "        a = snap;", "        a = snap; localStorage.setItem('pb-a', JSON.stringify(snap));", 'stores'),
-            ('the block above the warnings', 'skel', None, None, 'after the warnings'),
-            ('the calculator moved by the copy', 'js', "      a = null;", "      a = null; save.click();", 'moves the calculator')):
-        s, j2 = skel, ab_js
-        if target == 'js':
-            j2 = ab_js.replace(find, repl, 1)
-            assert j2 != ab_js, label
-        else:
-            b0 = skel.find('    <!-- Run 37, item 5: Save as A.')
-            b1 = skel.find('    <details class="pb-work">')
-            block = skel[b0:b1]
-            rest = skel[:b0] + skel[b1:]
-            w = rest.find('<div class="pb-warn">')
-            s = rest[:w] + block + rest[w:]
-            assert s != skel, label
-        eq('37. %s is caught' % label, any(want in x for x in ab_faults(s, built_srcs, j2)), True)
+    # Save as A (Run 37, item 5) was cut on 8 October 2026, with the guess
+    # card, the share row and the paw prints: fewer things on each page.
+    eq('37. Save as A, the guess card, the share row and the paw prints are gone',
+       sorted(n for n, t in sources.items() if any(x in t for x in (
+           'id="pbAbSave"', '<script src="assets/js/pb-guess.js', '<script src="assets/js/pb-share.js',
+           '<script src="assets/js/pb-report.js', '<script src="assets/js/pb-scenario.js',
+           '<script src="assets/js/pb-badges.js', 'data-pb-badges="strip"', "classList.add('pb-preveil')"))), [])
 
     # ----------------------------------------------------------------- 38
     # Run 37, item 6: the six long guides. Each carries one "On this page"
@@ -2356,7 +2300,7 @@ def run():
     GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
         'starter.html': ('Help me get started', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
                          '  <div class="pb-sa pb-wait" id="pbWait">'),
-        'tracker.html': ('Help me find my pensions', ('id="pbTrace"', 'data-pb-award="ticks"'),
+        'tracker.html': ('Help me find my pensions', ('id="pbTrace"',),
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
