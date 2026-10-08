@@ -2273,72 +2273,51 @@ def run():
         eq('44. %s is caught' % label, any(want in x for x in pop_faults(srcs, j2, c2)), True)
 
     # ----------------------------------------------------------------- 45
-    # Run 39: "How a call with Damian works", the home page's three steps
-    # with a slot over each for Damian's own short video. The steps are the
-    # words the section already had, unchanged, under its heading; each slot
-    # keeps a 16:9 box (so nothing moves when a video arrives), shows the
-    # placeholder poster until then (sized, lazy, no words: aria-hidden, alt
-    # ""), and any video put in one later follows the game cards' rules
-    # (muted, inline, not preloaded, aria-hidden, its poster the slot's
-    # picture, pb-video.js to play and pause it).
-    CALL_STEPS = [('You reach out', 'A short message or call, so Damian comes prepared. No forms.'),
+    # Run 39's three steps on the home page, as Damian set them on 8 October
+    # 2026: the heading "How a call works.", step 1 "Pick a time that suits
+    # you." (no "No forms."), the other two steps' words unchanged, and no
+    # picture over any step (Run 39's placeholder posters are gone, files and
+    # all; the comment over the section says how to bring the video slots
+    # back).
+    CALL_STEPS = [('You reach out', 'Pick a time that suits you.'),
                   ('We talk it through', 'Twenty minutes, by phone or video.'),
                   ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
 
-    def call_faults(ix, sizes):
+    def call_faults(ix, placeholders):
         f = []
         sec = re.search(r'<section class="expect" id="call">(.*?)</section>', ix, re.S)
         if not sec:
-            return ['no "How a call with Damian works" section']
+            return ['no "How a call works" section']
         body = sec.group(1)
-        if '<span class="kicker">How a call with Damian works</span>' not in body or \
-                '<h2>Three steps.</h2>' not in body:
-            f.append('the label or the heading')
-        steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body, re.S)
-        if [(h, p) for _, _, h, p in steps] != CALL_STEPS:
-            f.append('the steps are not the words the section already had: %s' % [(h, p[:20]) for _, _, h, p in steps])
-        for slot, n, _, _ in steps:
-            m = re.fullmatch(r'<div class="pb-call-slot" data-pb-call-video="call-step-%s" aria-hidden="true"><picture>'
-                             r'<source type="image/webp" srcset="assets/img/call-video-placeholder\.webp\?v=[0-9a-f]+">'
-                             r'<img src="assets/img/call-video-placeholder\.jpg\?v=[0-9a-f]+" width="1280" height="720" alt="" loading="lazy"></picture>'
-                             r'(<video [^>]*>.*?</video>\s*<button [^>]*>.*?</button>)?</div>' % n, slot, re.S)
-            if not m:
-                f.append('step %s: its slot is not the placeholder poster in a 16:9 box' % n)
-                continue
-            if m.group(1):
-                v = re.match(r'<video ([^>]*)>', m.group(1)).group(1)
-                for want in (' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video',
-                             'data-poster="assets/img/call-video-placeholder.webp'):
-                    if want not in ' ' + v:
-                        f.append('step %s: its video is not %s' % (n, want.strip()))
-        if '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;' not in ix:
-            f.append('the slots do not keep a 16:9 box')
-        for ext in ('jpg', 'webp'):
-            size = sizes.get(ext)
-            if size is None or size > 60 * 1024:
-                f.append('the placeholder .%s is missing or over 60 KB (%s)' % (ext, size))
+        if re.findall(r'<h2>(.*?)</h2>', body) != ['How a call works.'] or 'kicker' in body:
+            f.append('the heading')
+        steps = re.findall(r'<div class="step"><div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body)
+        if [(h, p) for _, h, p in steps] != CALL_STEPS or [n for n, _, _ in steps] != ['1', '2', '3'] \
+                or body.count('<div class="step">') != 3:
+            f.append('the steps are not the three set on 8 October 2026: %s' % [(h, p[:20]) for _, h, p in steps])
+        if 'No forms' in body:
+            f.append('"No forms." is back')
+        if re.search(r'<(?:img|picture|video|source)\b', body) or 'class="pb-call-slot"' in ix or '.step .pb-call-slot' in ix or 'call-video-placeholder.' in ix:
+            f.append('a picture over the steps')
+        if placeholders:
+            f.append('the placeholder files are back: %s' % placeholders)
         return f
 
-    csizes = {}
-    for ext in ('jpg', 'webp'):
-        pth = os.path.join(ROOT, 'assets', 'img', 'call-video-placeholder.' + ext)
-        if os.path.exists(pth):
-            csizes[ext] = os.path.getsize(pth)
+    cph = [e for e in ('jpg', 'webp') if os.path.exists(os.path.join(ROOT, 'assets', 'img', 'call-video-placeholder.' + e))]
     cix = sources['index.html']
-    eq('45. "How a call with Damian works": the section\'s own three steps, word for word, each with a 16:9 slot showing the placeholder poster (sized, lazy, no words)',
-       call_faults(cix, csizes), [])
+    eq('45. "How a call works.": three steps, step 1 "Pick a time that suits you.", no pictures',
+       call_faults(cix, cph), [])
     for label, find, repl, want in (
-            ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the words'),
-            ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2',
-             'alt="" loading="lazy"></picture></div><div class="sx">2', 'step 2'),
-            ('a slot that speaks', 'data-pb-call-video="call-step-3" aria-hidden="true"', 'data-pb-call-video="call-step-3"', 'step 3'),
-            ('a slot that does not keep its box', '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;',
-             '.step .pb-call-slot{display:block;margin:0 0 18px;', '16:9'),
-            ('a video with sound', '</picture></div><div class="sx">1',
-             '</picture><video class="pb-learn-vid" loop playsinline preload="none" aria-hidden="true" data-poster="assets/img/call-video-placeholder.webp" data-pb-video></video> <button type="button">x</button></div><div class="sx">1', 'muted')):
+            ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the three'),
+            ('"No forms." back', '<p>Pick a time that suits you.</p>', '<p>Pick a time that suits you. No forms.</p>', 'No forms'),
+            ('the old heading back', '<h2>How a call works.</h2>', '<h2>Three steps.</h2>', 'the heading'),
+            ('a placeholder back', '<div class="step"><div class="sx">2</div>',
+             '<div class="step"><div class="pb-call-slot" aria-hidden="true"><picture><img src="assets/img/call-video-placeholder.jpg" alt=""></picture></div><div class="sx">2</div>',
+             'a picture')):
         assert find in cix, label
         mix = cix.replace(find, repl, 1)
-        eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, csizes)), True)
+        eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, [])), True)
+    eq('45. the placeholder files back is caught', any('files are back' in x for x in call_faults(cix, ['jpg'])), True)
 
 
     # ----------------------------------------------------------------- 46
