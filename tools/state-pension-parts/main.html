@@ -2,7 +2,7 @@
 <div class="phead"><div class="wrap">
   <span class="eyebrow"><span class="pip"></span>The free tool · no sign-up</span>
   <h1>If the State Pension is <span class="hl">all you have</span>.</h1>
-  <p>The State Pension (Contributory) beside what retirement in Ireland costs.</p>
+  <p>What it pays, against what retirement costs.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-reality-check">
@@ -13,13 +13,13 @@
     <div class="field">
       <div class="row"><label for="contribs">Reckonable Pay-Related Social Insurance (PRSI) contributions by 66</label><span class="val" id="contribsV">2,080</span></div>
       <input type="range" id="contribs" min="0" max="2080" step="52" value="2080">
-      <p class="subnote"><b>Paid</b>, plus <b>credited</b> while unemployed or ill, plus <b>HomeCaring Periods</b>, time caring for a child or someone who needed care. 2,080 is a full record, forty years. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+      <p class="subnote"><b>Paid</b>, <b>credited</b> (while unemployed or ill) and <b>HomeCaring Periods</b> (time spent caring). 2,080 is forty years, a full record. Yours is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
     </div>
 
     <div class="field" style="margin-bottom:0">
       <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
       <input type="range" id="age" min="18" max="66" value="40">
-      <p class="subnote" id="ageNote">Used for this line only. It does not change the pension figure, and this page does not project investment growth.</p>
+      <p class="subnote" id="ageNote">You have <b>26 years</b> until 66.</p>
     </div>
   </div>
 
@@ -84,7 +84,7 @@
         </div>
       </div>
       <p class="pb-jar-cap" id="pbJarCap"></p>
-      <p class="pb-jar-lead">Each dot is a year of reckonable contributions.</p>
+      <p class="pb-jar-lead">Each dot is a year.</p>
     </div>
 
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
@@ -93,9 +93,9 @@
       <div class="res-hero">
         <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€299.30</div></div>
         <div><div class="rl">State Pension, a year</div><div class="big" id="spAnnual">€15,564</div></div>
-        <p class="pb-say" id="pbSay">On 2,080 reckonable contributions, 40 years, this shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard of living.</p>
+        <p class="pb-say" id="pbSay">40 years of contributions gives €299.30 a week, €15,564 a year. That covers 81% of a modest standard of living.</p>
         <div class="divline"></div>
-        <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions.</div>
+        <div class="foot" id="spFoot">The maximum rate, for a full record.</div>
       </div>
 
     </div>
@@ -104,13 +104,13 @@
       <div class="res-hero">
         <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
         <div class="divline"></div>
-        <div class="foot" id="spNoneFoot">Below 520 contributions, ten years, this tool shows no State Pension (Contributory). Qualifying needs 520 paid contributions; credits and HomeCaring Periods do not count toward that minimum.</div>
+        <div class="foot" id="spNoneFoot">You need 520 paid contributions, ten years, to qualify.</div>
       </div>
     </div>
 
     <div class="vs-card">
       <h3>Against what retirement costs</h3>
-      <p class="sub">Single-person living standards from the Pensions Council. <span id="lsIntro">The bar shows how much of each one the State Pension covers.</span></p>
+      <p class="sub">The Pensions Council&rsquo;s living standards, for one person. <span id="lsIntro">Each bar is the share the State Pension covers.</span></p>
 
       <div class="lstd" id="lsRows">
         <div class="lsrow" data-std="modest">
@@ -139,7 +139,7 @@
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>A second pension closes the gap.</h2><p>How much you need depends on when you start. Damian will go through your numbers.</p></div>
+  <div class="ctext"><h2>A second pension closes the gap.</h2></div>
   <a class="btn btn-ghost" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -152,15 +152,13 @@
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>How the figure is worked out</h3>
+  <h3>How it is worked out</h3>
   <ul>
-    <li>A full record of 2,080 gets the maximum personal rate, €299.30 a week from January 2026. Between 520 and 2,080 the rate is pro rata.</li>
-    <li>Credited contributions count up to 520. This tool does not check how your total is made up.</li>
-    <li>The qualifying minimum is 520 paid contributions, ten years. Credited contributions and HomeCaring Periods do not count toward it. The means-tested State Pension (Non-Contributory) may apply instead. This tool does not calculate it.</li>
-    <li>Until 2034 the Department of Social Protection pays the higher of two calculations. Method 1 is the Total Contributions Approach alone. Method 2 combines it with the Yearly Average method. This tool shows Method 1 only. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> does both.</li>
-    <li>So a figure below the maximum is a <b>floor</b>. You may be paid more, and the gap may be smaller. At 2,080 the figure is exact.</li>
-    <li>The rate shown is the personal rate at 66. It excludes increases for a qualified adult or child, and the higher rate from 80. Rates change, usually at each Budget. A year is 52 weekly payments.</li>
-    <li>The living standards are for a <b>single person</b>. They are annual spending in 2024 prices, not adjusted for inflation since. Couple figures are not shown. Both sides move over time, and not together.</li>
+    <li>A full record, 2,080, gets the maximum personal rate: €299.30 a week from January 2026. From 520 to 2,080 it is pro rata.</li>
+    <li>To qualify you need 520 paid contributions. Credited contributions (counted up to 520) and HomeCaring Periods do not count toward it. The tool does not check your mix. The means-tested State Pension (Non-Contributory) is not calculated.</li>
+    <li>Until 2034 the Department of Social Protection pays the higher of two methods. This tool uses one, the Total Contributions Approach, so below the maximum the figure is a <b>floor</b>: you may get more. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> does both.</li>
+    <li>The personal rate at 66, without increases for a qualified adult or child, or at 80. A year is 52 weekly payments.</li>
+    <li>Living standards are for a <b>single person</b>, in 2024 prices.</li>
   </ul>
 </div></section>
 </main>

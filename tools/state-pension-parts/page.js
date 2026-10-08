@@ -32,8 +32,8 @@ const VALTEXT = {
    matter in the headline figures, so the two are formatted differently on
    purpose. */
 function gapWords(g) {
-  if (g.covered) return 'The State Pension covers this in full.';
-  return 'You would need <b>' + euro(g.gapAnnual) + ' a year</b> on top, about <b>' +
+  if (g.covered) return 'Covered in full.';
+  return 'You would need <b>' + euro(g.gapAnnual) + ' a year</b> more, about <b>' +
          euro(g.gapMonthly) + ' a month</b>.';
 }
 
@@ -48,8 +48,8 @@ function render() {
 
   const toGo = SP.yearsUntilPensionAge(age);
   $('ageNote').innerHTML = toGo > 0
-    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66. Used for this line only: it does not change the pension figure, and this page does not project investment growth.'
-    : 'You are at or past 66. This line does not change the pension figure, and this page does not project investment growth.';
+    ? 'You have <b>' + toGo + (toGo === 1 ? ' year' : ' years') + '</b> until 66.'
+    : 'You are 66 or over.';
 
   $('spHas').hidden = !res.eligible;
   $('spNone').hidden = res.eligible;
@@ -63,24 +63,23 @@ function render() {
 
     const pctOfMax = Math.round(res.fraction * 100);
     $('spFoot').innerHTML = res.fraction === 1
-      ? 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.'
-      : num(contribs) + ' contributions is ' + years + (years === 1 ? ' year' : ' years') +
-        ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax +
-        '% of the maximum.';
+      ? 'The maximum rate, for a full record.'
+      : years + (years === 1 ? ' year' : ' years') +
+        ', <b>' + pctOfMax + '%</b> of a full record, so ' + pctOfMax +
+        '% of the maximum rate.';
 
   } else {
     annualCents = 0;
-    $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
-      (years === 1 ? ' year' : ' years') + '. Below 520, ten years, this tool shows no State Pension (Contributory): <b>' +
-      num(res.shortBy) + ' more</b> would bring the total to 520. Qualifying itself needs 520 paid contributions.';
+    $('spNoneFoot').innerHTML = years + (years === 1 ? ' year' : ' years') + '. You need <b>' +
+      num(res.shortBy) + ' more</b> to reach 520, and all 520 must be paid contributions.';
   }
 
   /* Bars are drawn against each standard's own total, so the fill reads as
      "how much of this standard the State Pension covers" rather than as a
      comparison between the three standards. */
   $('lsIntro').textContent = res.eligible
-    ? 'The bar shows how much of each one the State Pension covers.'
-    : 'With no Contributory entitlement, none of these is covered by it.';
+    ? 'Each bar is the share the State Pension covers.'
+    : 'With no entitlement, it covers none of these.';
 
   let modestCover = null;   /* #4: the modest row's share, as its bar prints it */
   SP.gaps(annualCents).forEach(g => {
@@ -91,8 +90,8 @@ function render() {
     bar.style.width = (covered * 100) + '%';
     row.querySelector('.lsbar').setAttribute('aria-hidden', 'true');
     row.querySelector('.lsgap').innerHTML = res.eligible
-      ? 'The State Pension covers <b>' + Math.round(covered * 100) + '%</b>. ' + gapWords(g)
-      : 'You would need <b>' + euro(g.target) + ' a year</b> from somewhere else.';
+      ? 'It covers <b>' + Math.round(covered * 100) + '%</b>. ' + gapWords(g)
+      : 'You would need all <b>' + euro(g.target) + ' a year</b> from elsewhere.';
     row.classList.toggle('is-covered', g.covered && res.eligible);
   });
 
@@ -103,9 +102,8 @@ function render() {
      of that panel and #spNone speaks alone, the same way #spWeekly keeps its
      last value while hidden. The markup carries it at the page's default. */
   if (res.eligible) {
-    $('pbSay').textContent = 'On ' + num(contribs) + ' reckonable contributions, ' + years +
-      ' years, this shows ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) +
-      ' a year, which covers ' + modestCover + '% of a modest standard of living.';
+    $('pbSay').textContent = years + ' years of contributions gives ' + euro2(res.weekly) + ' a week, ' +
+      euro(res.annual) + ' a year. That covers ' + modestCover + '% of a modest standard of living.';
   }
 
   /* One spoken summary rather than eight, so a screen reader gets the point
@@ -116,8 +114,8 @@ function render() {
       ' a year. Against a modest standard of living that is ' + euro(g[0].gapAnnual) +
       ' a year short, moderate ' + euro(g[1].gapAnnual) + ' short, comfortable ' +
       euro(g[2].gapAnnual) + ' short.'
-    : 'With ' + num(contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
-      num(res.shortBy) + ' more contributions would bring the total to 520. Qualifying needs 520 paid contributions.';
+    : 'With ' + num(contribs) + ' reckonable contributions there is no State Pension (Contributory). ' +
+      num(res.shortBy) + ' more would reach 520, and all 520 must be paid contributions.';
 }
 
 wireRanges(VALTEXT, render);

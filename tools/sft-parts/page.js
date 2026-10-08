@@ -46,7 +46,7 @@
       say = euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + (u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold') + '.';
     } else {
       say = euro(total) + ' taken ' + when + ' uses ' + pc + '% of ' + (u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold') +
-        ', leaving ' + euro(u.headroom) + ' of headroom.';
+        ', leaving ' + euro(u.headroom) + ' spare.';
     }
     $('pbSay').textContent = say;
     [].forEach.call($('sftStrip').children, function (li) {
@@ -59,9 +59,9 @@
          excess, and the tax on it, can only be said to be at most this */
       $('sftOverText').textContent = u.atLeast
         ? 'Chargeable excess tax at 40% on up to ' + euro(u.excess) + ' over would be at most ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.'
+          '. Up to ' + euro(S.CREDIT_MAX) + ' of lump sum tax can be set against it.'
         : 'Chargeable excess tax at 40% on the ' + euro(u.excess) + ' over is ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.';
+          '. Up to ' + euro(S.CREDIT_MAX) + ' of lump sum tax can be set against it.';
     }
     $('lumpFree').textContent = euro(l.taxFree);
     $('lumpStd').textContent = euro(l.atStandardRate);

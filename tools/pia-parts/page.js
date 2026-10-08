@@ -69,10 +69,10 @@
     var has = c.pia !== null;
     $('piaOut').textContent = has ? euro(c.pia.afterTax) : NONE;
     $('piaNote').textContent = !has
-      ? 'Type a threshold to see this. Neither the threshold nor the rate has been announced: try any figure.'
+      ? 'Type a threshold to see this. Try any figure.'
       : o.piaRate === 0
-        ? 'At a 0% rate there is no PIA tax at all. Try a rate: none has been announced.'
-        : 'At the rate and threshold you chose, not announced figures.';
+        ? 'At 0% there is no PIA tax. Try a rate.'
+        : 'At your figures, not announced ones.';
 
     /* Job 5: each figure in today's money too (assets/js/pb-today.js) */
     if (window.PBToday) {

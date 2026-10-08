@@ -16,6 +16,14 @@ confirmed, and what's coming on 6 October" is now "Confirmed, and still to
 come"; "How the same money is taxed today, outside the account" is now "Tax
 today, outside the account".
 
+8 October 2026, second cut: the "What it is" and "Who it might suit"
+sections and the "Pension, PIA or both" booking band are gone (the names
+moved into the page head), so skip them in section 6. "The law itself: it
+is a proposal" now reads "The law: not yet passed."; the comparison table's
+PIA "Tax while it grows" cell now reads "Yearly, even in a falling year.
+Rate and threshold not yet announced"; `piaNote` now reads "Type a threshold
+to see this. Try any figure."
+
 Rules while doing it: use the figures only as the Department of Finance or
 Revenue publish them, cite each one, and keep the word "proposed" until the
 Finance Act is passed. After editing any file under `tools/pia-parts/`, run

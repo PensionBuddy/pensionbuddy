@@ -51,7 +51,7 @@ const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contributio
 const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
 const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 
-const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.';
+const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If you first paid between 1 January and 5 April, tick the box.';
 /* #27, Damian's S11 item 4: the last contribution year that ran April to April */
 const APRIL_LAST = 2001;
 
@@ -144,8 +144,8 @@ function render() {
   // the shared module by name, so 'after' cannot be confused with 'before':
   // the two want opposite wording and the reader only ever sees one of them.
   $('birthNote').innerHTML = SP.transition(drawdown) === 'after'
-    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
-    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
+    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies.'
+    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts.';
 
   // The transition glide: mark the column for the reader's drawdown year, or
   // the last one ("2034 on") once the transition is over.
@@ -174,8 +174,8 @@ function render() {
 
   if (res.state === 'no-entitlement') {
     show('spNone');
-    $('spNoneFoot').innerHTML = 'The State Pension (Contributory) needs 520 paid contributions, ten years. ' +
-      'Credits and HomeCaring Periods do not count toward that minimum, however many there are. With ' +
+    $('spNoneFoot').innerHTML = 'You need 520 paid contributions, ten years. ' +
+      'Credited contributions and HomeCaring Periods do not count toward it. With ' +
       num(res.paid) + ' paid you would need <b>' + num(res.paidShortBy) + ' more</b> to qualify.';
     sr = 'With ' + num(res.paid) + ' paid contributions there is no State Pension (Contributory) entitlement. ' +
       num(res.paidShortBy) + ' more paid contributions would be needed to qualify. Credits and HomeCaring Periods do not count toward the minimum.';
@@ -209,7 +209,7 @@ function render() {
        and by how much, and this only measures the two figures the rows show. */
     const scale = c => (Math.max(0, Math.min(c, SP.MAX_WEEKLY_CENTS)) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
     $('m1Fill').style.width = scale(tca.weeklyCents);
-    $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
+    $('mScale').textContent = 'Bars run to the maximum personal rate, ' +
       euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
     if (hasBoth(res) && ya.band) hereIdx = LADDER_MINS.indexOf(ya.band.min);
 
@@ -270,7 +270,7 @@ function render() {
 
     if (hasM2) {
       $('m2Fill').style.width = scale(m2.weeklyCents);
-      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
+      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department pays the higher.';
       const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';
       $('m2Detail').innerHTML = 'A yearly average of <b>' + ya.average + '</b> over <b>' + ya.years + '</b> years, ' +
@@ -279,16 +279,14 @@ function render() {
         m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Total Contributions Approach rate.';
 
       if (basis === 'method2') {
-        $('mClose').innerHTML = 'The Department pays the higher. That is <b>' + euro2(award.weekly) + '</b>, <b>' +
+        $('mClose').innerHTML = 'The Department pays the higher, <b>' + euro2(award.weekly) + '</b>. That is <b>' +
           euro2(award.gain) + ' a week</b> more than the Total Contributions Approach alone.';
       } else if (basis === 'tie') {
-        $('mClose').innerHTML = 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.';
+        $('mClose').innerHTML = 'Both give the same figure. A full record already gets the maximum.';
       } else if (res.homeCaring > 0) {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.';
+        $('mClose').innerHTML = 'The Total Contributions Approach is higher, so it is paid. Your HomeCaring Periods count only under it.';
       } else {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. A yearly average of ' +
-          ya.average + ' over ' + ya.years + ' years falls in the ' + band +
-          ' band, and the blend of that band\'s rate with the TCA rate comes to less.';
+        $('mClose').innerHTML = 'The Total Contributions Approach is higher, so it is paid.';
       }
 
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ' +
@@ -300,8 +298,8 @@ function render() {
     } else {
       $('bothSub').textContent = 'Only one calculation applies to these details.';
       $('mWhy').textContent = m2.reason === 'after-transition'
-        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
-        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
+        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies.'
+        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, left out here, could lift it above 10.';
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) +
         ' a year. Only the Total Contributions Approach applies.';
     }

@@ -2714,7 +2714,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="phead"><div class="wrap">
   <span class="eyebrow"><span class="pip"></span>The free tool · no sign-up</span>
   <h1>What the State Pension would <span class="hl">pay</span> you.</h1>
-  <p>Both of the Department of Social Protection's calculations, and which one is paid.</p>
+  <p>Worked out the two ways the Department of Social Protection does.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2726,32 +2726,32 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field">
       <div class="row"><label for="birth">Year you were born</label><span class="val" id="birthV">1962</span></div>
       <input type="range" id="birth" min="1960" max="2008" step="1" value="1962">
-      <p class="subnote" id="birthNote">You reach 66 in <b>2028</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.</p>
+      <p class="subnote" id="birthNote">You reach 66 in <b>2028</b>, the year this page assumes your pension starts.</p>
     </div>
 
     <div class="field">
       <div class="row"><label for="entry">Contribution year you first paid Pay-Related Social Insurance (PRSI)</label><span class="val" id="entryV">1985</span></div>
       <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
-      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.</p>
+      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If you first paid between 1 January and 5 April, tick the box.</p>
       <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first payment was between 1 January and 5 April</span></label>
     </div>
 
     <div class="field">
       <div class="row"><label for="paid">Paid contributions to the end of the year before you turn 66</label><span class="val" id="paidV">1,560</span></div>
       <input type="range" id="paid" min="0" max="2600" step="52" value="1560">
-      <p class="subnote" id="paidNote">Full-rate, from your own earnings. 52 is a year. The qualifying minimum is 520, ten years. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+      <p class="subnote" id="paidNote">Full-rate, from your own earnings. 52 is a year. You need 520 to qualify. Yours is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
     </div>
 
     <div class="field">
       <div class="row"><label for="credited">Credited contributions to the same date</label><span class="val" id="creditedV">260</span></div>
       <input type="range" id="credited" min="0" max="1040" step="52" value="260">
-      <p class="subnote">Awarded without earnings, for example while unemployed or ill. Up to 520 count under the Total Contributions Approach (TCA), all under Yearly Average.</p>
+      <p class="subnote">Given while unemployed or ill. Up to 520 count under the Total Contributions Approach (TCA), all under Yearly Average.</p>
     </div>
 
     <div class="field" style="margin-bottom:0">
       <div class="row"><label for="homecaring">HomeCaring Periods</label><span class="val" id="homecaringV">0</span></div>
       <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
-      <p class="subnote">Caring for a child or someone who needed care. TCA only: up to 1,040, and 1,040 with credited contributions.</p>
+      <p class="subnote">Time caring for a child or someone who needs care. TCA only, up to 1,040 including credited contributions.</p>
     </div>
   </div>
 
@@ -2768,7 +2768,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
       <div class="bothcard">
         <h3>Both calculations</h3>
-        <p class="sub" id="bothSub">Until the end of 2033 the Department works the rate out both ways and pays the higher.</p>
+        <p class="sub" id="bothSub">Until the end of 2033 the Department pays the higher.</p>
 
         <div class="mrow" id="m1Row">
           <div class="mhead"><span class="mname">Method 1, Total Contributions Approach</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
@@ -2793,8 +2793,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           </div>
         </div>
 
-        <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
-        <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
+        <p class="mbar-scale" id="mScale">Bars run to the maximum personal rate, €299.30 a week.</p>
+        <p class="mclose" id="mClose">The Department pays the higher, <b>€280.86</b>. That is <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
         <p class="mclose" id="mWhy" hidden></p>
       </div>
 
@@ -2804,7 +2804,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="res-hero">
         <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
         <div class="divline"></div>
-        <div class="foot" id="spNoneFoot">The State Pension (Contributory) needs 520 paid contributions, ten years. Credits and HomeCaring Periods do not count toward that minimum, however many there are.</div>
+        <div class="foot" id="spNoneFoot">You need 520 paid contributions, ten years. Credited contributions and HomeCaring Periods do not count toward it.</div>
       </div>
     </div>
 
@@ -2816,7 +2816,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
     </div>
 
-    <p class="srcnote">Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. The Department's own web pages on the calculation methods still showed 2025 rates when this was checked, which is why the booklet is cited. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</p>
+    <p class="srcnote">Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</p>
     <p class="pb-jump">Jump to <a href="#pbHow">how it works</a> or <a href="#pbAssume">the assumptions</a>.</p>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: your old pensions, your tax position, your employer&rsquo;s scheme.</p>
@@ -2846,11 +2846,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></div>
 
 <section class="assume" id="pbHow" style="padding-bottom:0"><div class="wrap">
-  <h3>How the two calculations work</h3>
+  <h3>How the two methods work</h3>
   <div class="expl">
-    <p><b>Method 1, the Total Contributions Approach (TCA)</b>, adds paid, credited and HomeCaring Periods. A full record, 2,080 or forty years, gets the maximum personal rate: €299.30 a week from January 2026. Less is pro rata.</p>
-    <p><b>The Yearly Average method</b> divides paid and credited contributions, at most 52 a year, by the years from your first PRSI year to the year before you turn 66. The result, rounded half up to a whole number, sets the band.</p>
-    <p class="yal-cap">The rate bands, and what each step up adds.</p>
+    <p><b>Method 1, the Total Contributions Approach (TCA)</b>, adds up paid, credited and HomeCaring Periods. A full record, 2,080, gets the maximum personal rate: €299.30 a week from January 2026. Less is pro rata.</p>
+    <p><b>The Yearly Average method</b> divides paid and credited contributions by the years from your first PRSI year to the year before you turn 66. Rounded to a whole number, that sets the band.</p>
+    <p class="yal-cap">The bands, and what each step adds.</p>
     <div class="yal">
       <div class="yal-row">
         <span class="yal-range">48 or over<span class="yal-you" id="yal0You" hidden></span></span>
@@ -2889,8 +2889,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="yal-gain">€119.60 more</span>
       </div>
     </div>
-    <p class="yal-note">Below 10 the Yearly Average method gives nothing.</p>
-    <p><b>Method 2</b> adds a share of the Yearly Average rate to a share of the TCA rate. The Yearly Average share falls ten points a year. The start year fixes it for good. From 2034 only the TCA applies.</p>
+    <p class="yal-note">Below 10 it gives nothing.</p>
+    <p><b>Method 2</b> mixes the two rates. The Yearly Average share falls ten points a year, fixed by the year your pension starts. From 2034 only the TCA applies.</p>
     <p class="yal-cap">Method 2's Yearly Average share, by start year.</p>
     <ol class="pb-glide">
       <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2025" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:90%"></i></span><span class="pb-glide-pct">90%</span><span class="pb-glide-yr">2025</span></li>
@@ -2909,7 +2909,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Next: what sits on top of it.</h2></div>
+  <div class="ctext"><h2>Plan what sits on top of it.</h2></div>
   <a class="btn btn-ghost" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2924,18 +2924,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume" id="pbAssume"><div class="wrap">
   <h3>The assumptions</h3>
   <ul>
-    <li>Below the qualifying minimum there is no entitlement under either method. Credited contributions and HomeCaring Periods never count toward it. The means-tested State Pension (Non-Contributory) is not calculated.</li>
-    <li>This page assumes the pension starts at 66. Starting at 67 to 70 changes the mix and rate, and is not modelled. Band rates at those ages are not published for 2026.</li>
-    <li>The <b>Homemaker's Scheme</b> and the <b>Alternative Yearly Average</b> are left out. Each can only raise Method 2, so Method 2 is a floor on the details entered. The first drops up to twenty whole caring years from 1994 on, with no credited contributions, from the years divided by. The second counts from 1979, used only when it reaches 48.</li>
-    <li><b>Voluntary contributions</b> and <b>Long-Term Carer's Contributions</b> are left out. Both count toward the 520, so could only raise a figure or bring someone over the minimum.</li>
-    <li>Contributions in the year you turn 66 are left out. So the TCA figure is a floor, by a few weeks' contributions at most.</li>
-    <li>Mixed-rate, European Union (EU) and pro-rata records are not covered. They can give less, or nothing, and are outside the floor statement.</li>
-    <li>The pension needs a first PRSI payment before 56. This page does not check that, and would still show a figure.</li>
-    <li>Entering the calendar year of a first payment from 1 January to 5 April, up to 2001, without ticking the April box, divides by one year too few. The figure may then be too high.</li>
-    <li>This page rounds Method 2 half up to the cent. No published rule covers it. At most that moves a figure half a cent a week.</li>
-    <li>Rates and rules change, usually at each Budget. A year is 52 weekly payments.</li>
-    <li>The personal rate at 66 excludes increases for a qualified adult or child, and the higher rate from 80.</li>
-    <li>Pensions that started before 2025 are not covered.</li>
+    <li>The pension starts at 66, in 2025 or later.</li>
+    <li>Left out, though each could only raise a figure: the <b>Homemaker's Scheme</b>, the <b>Alternative Yearly Average</b>, <b>voluntary contributions</b>, <b>Long-Term Carer's Contributions</b> and contributions in the year you turn 66. So the figures are a floor.</li>
+    <li>Not covered: the means-tested State Pension (Non-Contributory), and mixed-rate, European Union or pro-rata records, which can give less or nothing.</li>
+    <li>You must first pay PRSI before 56. This page does not check that.</li>
+    <li>The personal rate at 66, without increases for a qualified adult or child, or at 80. A year is 52 weekly payments.</li>
   </ul>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
@@ -3026,7 +3019,7 @@ const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contributio
 const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
 const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 
-const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.';
+const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If you first paid between 1 January and 5 April, tick the box.';
 /* #27, Damian's S11 item 4: the last contribution year that ran April to April */
 const APRIL_LAST = 2001;
 
@@ -3119,8 +3112,8 @@ function render() {
   // the shared module by name, so 'after' cannot be confused with 'before':
   // the two want opposite wording and the reader only ever sees one of them.
   $('birthNote').innerHTML = SP.transition(drawdown) === 'after'
-    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
-    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
+    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies.'
+    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts.';
 
   // The transition glide: mark the column for the reader's drawdown year, or
   // the last one ("2034 on") once the transition is over.
@@ -3149,8 +3142,8 @@ function render() {
 
   if (res.state === 'no-entitlement') {
     show('spNone');
-    $('spNoneFoot').innerHTML = 'The State Pension (Contributory) needs 520 paid contributions, ten years. ' +
-      'Credits and HomeCaring Periods do not count toward that minimum, however many there are. With ' +
+    $('spNoneFoot').innerHTML = 'You need 520 paid contributions, ten years. ' +
+      'Credited contributions and HomeCaring Periods do not count toward it. With ' +
       num(res.paid) + ' paid you would need <b>' + num(res.paidShortBy) + ' more</b> to qualify.';
     sr = 'With ' + num(res.paid) + ' paid contributions there is no State Pension (Contributory) entitlement. ' +
       num(res.paidShortBy) + ' more paid contributions would be needed to qualify. Credits and HomeCaring Periods do not count toward the minimum.';
@@ -3184,7 +3177,7 @@ function render() {
        and by how much, and this only measures the two figures the rows show. */
     const scale = c => (Math.max(0, Math.min(c, SP.MAX_WEEKLY_CENTS)) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
     $('m1Fill').style.width = scale(tca.weeklyCents);
-    $('mScale').textContent = 'Both bars are on the same scale. The maximum personal rate is ' +
+    $('mScale').textContent = 'Bars run to the maximum personal rate, ' +
       euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.';
     if (hasBoth(res) && ya.band) hereIdx = LADDER_MINS.indexOf(ya.band.min);
 
@@ -3245,7 +3238,7 @@ function render() {
 
     if (hasM2) {
       $('m2Fill').style.width = scale(m2.weeklyCents);
-      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
+      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department pays the higher.';
       const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';
       $('m2Detail').innerHTML = 'A yearly average of <b>' + ya.average + '</b> over <b>' + ya.years + '</b> years, ' +
@@ -3254,16 +3247,14 @@ function render() {
         m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Total Contributions Approach rate.';
 
       if (basis === 'method2') {
-        $('mClose').innerHTML = 'The Department pays the higher. That is <b>' + euro2(award.weekly) + '</b>, <b>' +
+        $('mClose').innerHTML = 'The Department pays the higher, <b>' + euro2(award.weekly) + '</b>. That is <b>' +
           euro2(award.gain) + ' a week</b> more than the Total Contributions Approach alone.';
       } else if (basis === 'tie') {
-        $('mClose').innerHTML = 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.';
+        $('mClose').innerHTML = 'Both give the same figure. A full record already gets the maximum.';
       } else if (res.homeCaring > 0) {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.';
+        $('mClose').innerHTML = 'The Total Contributions Approach is higher, so it is paid. Your HomeCaring Periods count only under it.';
       } else {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. A yearly average of ' +
-          ya.average + ' over ' + ya.years + ' years falls in the ' + band +
-          ' band, and the blend of that band\'s rate with the TCA rate comes to less.';
+        $('mClose').innerHTML = 'The Total Contributions Approach is higher, so it is paid.';
       }
 
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ' +
@@ -3275,8 +3266,8 @@ function render() {
     } else {
       $('bothSub').textContent = 'Only one calculation applies to these details.';
       $('mWhy').textContent = m2.reason === 'after-transition'
-        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
-        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
+        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies.'
+        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, left out here, could lift it above 10.';
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) +
         ' a year. Only the Total Contributions Approach applies.';
     }
@@ -3524,9 +3515,9 @@ render();
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=e040ec1d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

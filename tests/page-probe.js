@@ -159,7 +159,7 @@
 
       var toGo = SP.yearsUntilPensionAge(row.age);
       if (row.atAge) {
-        t.has(label + ': ageNote says at or past 66', text('ageNote'), 'You are at or past 66.');
+        t.has(label + ': ageNote says at or past 66', text('ageNote'), 'You are 66 or over.');
       } else {
         t.has(label + ': ageNote counts the years to 66', text('ageNote'), 'You have ' + toGo + ' years until 66.');
       }
@@ -172,11 +172,11 @@
         t.eq(label + ': weekly is the module figure', text('spWeekly'), euro2(res.weekly));
         t.eq(label + ': annual is the module figure', text('spAnnual'), euro(res.annual));
         if (res.fraction === 1) {
-          t.has(label + ': spFoot names the full record', text('spFoot'), 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.');
+          t.has(label + ': spFoot names the full record', text('spFoot'), 'The maximum rate, for a full record.');
         } else {
           var pctOfMax = Math.round(res.fraction * 100);
-          t.has(label + ': spFoot carries the count', text('spFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
-          t.has(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so the rate is ' + pctOfMax + '% of the maximum');
+          t.has(label + ': spFoot carries the count', text('spFoot'), years + ' years, ');
+          t.has(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so ' + pctOfMax + '% of the maximum rate');
         }
         // exact, floor or rate is still the module's decision and the spec rows
         // still carry it; the page stopped wording it on 2026-09-20 (the
@@ -185,7 +185,7 @@
         var status = SP.floorStatus(res, row.age, YEAR);
         if (row.status) t.eq(label + ': the module status is the one the spec expects', status, row.status);
 
-        t.has(label + ': lsIntro', text('lsIntro'), 'The bar shows how much of each one the State Pension covers.');
+        t.has(label + ': lsIntro', text('lsIntro'), 'Each bar is the share the State Pension covers.');
         var gaps = SP.gaps(res.annualCents);
         gaps.forEach(function (g) {
           var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
@@ -211,8 +211,8 @@
         // modest row's share, so it is held to the module like they are
         var modest = gaps.filter(function (g) { return g.standard === 'modest'; })[0];
         t.eq(label + ': pbSay is the result in one sentence', text('pbSay'),
-             'On ' + num(row.contribs) + ' reckonable contributions, ' + years + ' years, this shows ' +
-             euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year, which covers ' +
+             years + ' years of contributions gives ' +
+             euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year. That covers ' +
              Math.round(Math.max(0, Math.min(1, res.annualCents / modest.targetCents)) * 100) +
              '% of a modest standard of living.');
         var sr = text('srSummary');
@@ -221,10 +221,10 @@
               'modest standard of living that is ' + euro(gaps[0].gapAnnual) + ' a year short, moderate ' +
               euro(gaps[1].gapAnnual) + ' short, comfortable ' + euro(gaps[2].gapAnnual) + ' short.');
       } else {
-        t.has(label + ': spNoneFoot carries the count', text('spNoneFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
-        t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), num(res.shortBy) + ' more would bring the total to 520');
-        if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), row.shortBy + ' more would bring');
-        t.has(label + ': lsIntro says nothing is covered', text('lsIntro'), 'With no Contributory entitlement, none of these is covered by it.');
+        t.has(label + ': spNoneFoot carries the count', text('spNoneFoot'), years + ' years. ');
+        t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), 'You need ' + num(res.shortBy) + ' more to reach 520');
+        if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), row.shortBy + ' more to reach');
+        t.has(label + ': lsIntro says nothing is covered', text('lsIntro'), 'With no entitlement, it covers none of these.');
         // #4: below the minimum the one-sentence result must not be seen
         // beside "No entitlement"; it goes with the eligible panel it sits in
         t.eq(label + ': pbSay is out of sight with the eligible panel',
@@ -233,11 +233,11 @@
           var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
           t.eq(label + ': ' + g.standard + ' bar is empty', rowEl.querySelector('.lsbar i').style.width, '0%');
           t.has(label + ': ' + g.standard + ' gap is the whole target', rowEl.querySelector('.lsgap').textContent,
-                'You would need ' + euro(g.target) + ' a year from somewhere else.');
+                'You would need all ' + euro(g.target) + ' a year from elsewhere.');
         });
         t.has(label + ': srSummary says there is no entitlement', text('srSummary'),
-              'With ' + num(row.contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
-              num(res.shortBy) + ' more contributions would bring the total to 520. Qualifying needs 520 paid contributions.');
+              'With ' + num(row.contribs) + ' reckonable contributions there is no State Pension (Contributory). ' +
+              num(res.shortBy) + ' more would reach 520, and all 520 must be paid contributions.');
       }
     });
 
@@ -533,7 +533,7 @@
         }
       });
       t.has(label + ': the scale is named as the maximum personal rate', text('mScale'),
-            'The maximum personal rate is ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
+            'the maximum personal rate, ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
       t.eq(label + ': the closing sentence shows with it', !$('mClose').hidden, hasM2);
       t.eq(label + ': the reason shows instead when there is none', !$('mWhy').hidden, !hasM2);
       if (row.after) t.eq(label + ': the spec expects no Method 2, after the transition', m2.reason, 'after-transition');
@@ -541,7 +541,7 @@
 
       if (hasM2) {
         t.has(label + ': bothSub names the last year of both calculations', text('bothSub'),
-              'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.');
+              'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department pays the higher.');
         t.eq(label + ': Method 2 is the module\'s', text('m2Rate'), euro2(m2.weekly) + ' a week');
         var d = text('m2Detail');
         t.has(label + ': m2Detail carries the average over the years', d,
@@ -554,15 +554,15 @@
         var close = text('mClose');
         if (award.basis === 'method2') {
           t.has(label + ': mClose names the gain', close,
-                'The Department pays the higher. That is ' + euro2(award.weekly) + ', ' + euro2(award.gain) + ' a week more than the Total Contributions Approach alone.');
+                'The Department pays the higher, ' + euro2(award.weekly) + '. That is ' + euro2(award.gain) + ' a week more than the Total Contributions Approach alone.');
           if (row.gain) t.has(label + ': the spec gain', close, row.gain + ' a week more');
         } else if (award.basis === 'tie') {
-          t.has(label + ': mClose says both give the same figure', close, 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.');
+          t.has(label + ': mClose says both give the same figure', close, 'Both give the same figure. A full record already gets the maximum.');
         } else if (res.homeCaring > 0) {
-          t.has(label + ': mClose explains HomeCaring under TCA only', close, 'That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.');
+          t.has(label + ': mClose explains HomeCaring under TCA only', close, 'The Total Contributions Approach is higher, so it is paid. Your HomeCaring Periods count only under it.');
         } else {
-          t.has(label + ': mClose explains the lower blend', close,
-                'A yearly average of ' + ya.average + ' over ' + ya.years + ' years falls in the ' + bandLabel(ya.band) + ' band, and the blend of that band\'s rate with the TCA rate comes to less.');
+          t.has(label + ': mClose says the TCA is the higher and paid', close,
+                'The Total Contributions Approach is higher, so it is paid.');
         }
         var sr = text('srSummary');
         t.has(label + ': srSummary carries the award', sr, 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ');
@@ -574,7 +574,7 @@
         t.has(label + ': bothSub says one calculation applies', text('bothSub'), 'Only one calculation applies to these details.');
         t.has(label + ': mWhy gives the reason', text('mWhy'),
               m2.reason === 'after-transition'
-                ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
+                ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies.'
                 : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing');
         t.has(label + ': srSummary says only the TCA applies', text('srSummary'),
               'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year. Only the Total Contributions Approach applies.');
