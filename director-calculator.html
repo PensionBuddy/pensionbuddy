@@ -2614,8 +2614,6 @@ main h1{font-weight:800}
 .pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
 .pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
 .pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 /* JOB5:BEGIN (Job 5: the risk levels, the split, the reveal, the chart key) */
 .pb-risk-bars{display:flex;align-items:flex-end;gap:6px;height:30px;margin:12px 0 4px}
@@ -2648,8 +2646,6 @@ main h1{font-weight:800}
 .pb-chart-key span{display:inline-flex;align-items:center;gap:6px}
 .pb-chart-key span[hidden]{display:none}
 .pb-chart-key i{display:inline-block;width:18px;height:0;border-top:3px solid var(--slate)}
-.pb-chart-key i.pb-k-today{border-top:2.5px dashed #8A97A8}
-.pb-chart-key i.pb-k-cash{border-top:2px dotted #B7791F}
 @media(max-width:380px){.pb-split .vs.pb-split-grid{grid-template-columns:1fr}}
 /* JOB5:END */
 </style>
@@ -2832,7 +2828,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="chart-card">
       <h3>How your pot could grow</h3>
       <div id="chart"></div>
-      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span><span><i class="pb-k-cash"></i>The same payments kept as cash, in today&rsquo;s money</span></p>
+      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span></p>
     </div>
 
     <div class="max-card">
@@ -2920,6 +2916,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/director-calc.js?v=9a107886"></script>
 <script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-bank.js?v=ea789e26"></script>
 <script src="assets/js/pb-prsi.js?v=fc12215a"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script>
@@ -2971,12 +2968,12 @@ function step(){
   rafId=active?requestAnimationFrame(step):null;
 }
 
-/* persistent morphing chart: the pot, the pot in today's money, and the same
-   payments kept as cash in today's money. Only the pot's line is drawn in the
-   colours the slate rules select (tests/build.test.py check 47). */
+/* persistent morphing chart: the pot. The bank against the pot, in today's
+   money, is the card under it (assets/js/pb-bank.js). The pot's line is drawn
+   in the colours the slate rules select (tests/build.test.py check 47). */
 const chart={
   N:48,inited:false,W:620,H:250,padL:6,padR:6,padT:14,padB:30,
-  cur:{v:[],t:[],c:[],max:1},tgt:{v:[],t:[],c:[],max:1},els:{},
+  cur:{v:[],max:1},tgt:{v:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -2988,24 +2985,22 @@ const chart={
     const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.line=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
-    this.els.cash=mk('path',{class:'pb-ch-cash',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-dasharray':'2 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(v,t,c,ageS,ageE){
+  setTarget(v,ageS,ageE){
     if(!this.inited)this.init();
-    this.tgt.v=v;this.tgt.t=t;this.tgt.c=c;this.tgt.max=Math.max(...v,1)*1.08;
+    this.tgt.v=v;this.tgt.max=Math.max(...v,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),t:t.slice(),c:c.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
     if(!this.inited)return false;
     let active=false;
-    for(const k of ['v','t','c']){const T=this.tgt[k],C=this.cur[k];
+    for(const k of ['v']){const T=this.tgt[k],C=this.cur[k];
       for(let i=0;i<T.length;i++){const d=T[i]-C[i];
         if(Math.abs(d)>Math.max(0.5,Math.abs(T[i])*0.0004)){C[i]+=d*f;active=true;}else C[i]=T[i];}}
     const dm=this.tgt.max-this.cur.max;
@@ -3026,9 +3021,6 @@ const chart={
     const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
     this.els.line.setAttribute('d',d);
     this.els.area.setAttribute('d',d+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0).toFixed(1)+' '+(this.H-this.padB)+' Z');
-    const on=!window.PBToday||PBToday.on();
-    this.els.today.setAttribute('d',on?this.path(this.cur.t):'');
-    this.els.cash.setAttribute('d',this.path(this.cur.c));
     this.els.mx.textContent=euroK(this.cur.max);
   }
 };
@@ -3149,12 +3141,18 @@ function calc(){
     '<li>'+euro(sal)+' &times; 2 &divide; 3 = <b>'+euro(F.pension)+' a year</b>.</li>'+
     '<li>How much the company can pay in each year to fund that needs an actuary&rsquo;s calculation. It uses your age, your years with the company and the pensions you have already. This page does not do that step.</li>';
 
-  const v=[],t=[],c=[],cm=D.monthlyRate(A.cash.rate);
-  for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);
-    const pv=project(m,pot,monthly,mRate);v.push(pv);t.push(A.today(pv,m/12));
-    c.push(A.today(project(m,pot,monthly,cm),m/12));}
-  chart.setTarget(v,t,c,age,ret);
-  $('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
+  const v=[];
+  for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);v.push(project(m,pot,monthly,mRate));}
+  chart.setTarget(v,age,ret);
+  /* the bank card (assets/js/pb-bank.js): the company payment taken as
+     salary and kept in a bank, against the same payment in your pension */
+  if(window.PBBank){
+    const own=contrib*D.keepRate(PRSI), plan=[];
+    for(let i=0;i<=yearsToRet;i++)plan.push(project(i*12,pot,monthly,mRate));
+    PBBank.set({years:yearsToRet,startAge:age,pot:pot,ownYearly:own,plan:plan,
+      ownWords:'Your own money: the '+euro(contrib)+' a year taken as salary instead, '+euro(own)+' after income tax, USC and PRSI'+(pot>0?', plus the '+euro(pot)+' you have now':'')+'.',
+      planWords:'Your pension gets the whole '+euro(contrib)+' a year, with no income tax, USC or PRSI now, and growth of '+A.pct(g)+' a year.'});
+  }
   ['age','ret','sal','pot','contrib','risk','split','waitYears'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=p018>SFT, sftNote=$('sftNote');
@@ -3164,7 +3162,8 @@ function calc(){
   announce('Projected pot at retirement '+euro(p018)+', about '+euro(p018Today)+' in today’s money. Corporation tax relief '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
-if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();});}
+if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));}
+if(window.PBBank)PBBank.mount($('pbToday')||document.querySelector('.chart-card'));
 
 wireRanges(VALTEXT,calc);
 calc();
@@ -3483,7 +3482,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-after.js?v=325ae755"></script>
+<script src="assets/js/pb-after.js?v=5e64b9d1"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

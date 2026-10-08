@@ -2483,23 +2483,6 @@ main h1{font-weight:800}
 .pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
 .pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
 .pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-bank{display:inline-block;width:18px;height:0;border-top:2px solid #B7791F;background:none}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2px dotted #B7791F;background:none}
-#chartKeyToday[hidden],#chartKeyLost[hidden]{display:none}
-.chart-legend i.pb-k-lost{display:inline-block;width:14px;height:10px;border-radius:3px;background:rgba(164,41,29,0.22)}
-.bank-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 28px}
-.bank-card[hidden]{display:none}
-.bank-card .rt{font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
-.bank-card .rbig{font-size:19px;color:var(--ink);line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.bank-card .rbig b{font-weight:700}
-.bk-rows{margin-top:18px;display:grid;gap:10px}
-.bk-row{display:grid;grid-template-columns:84px 1fr auto;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
-.bk-row b{font-variant-numeric:tabular-nums;color:var(--ink);min-width:74px;text-align:right}
-.bk-track{height:13px;border-radius:99px;background:rgba(11,31,28,.06);overflow:hidden;display:block}
-.bk-track i{display:block;height:100%;border-radius:99px}
-.bk-bank{background:var(--red)}.bk-in{background:#8A97A8}.bk-plan{background:var(--teal)}
-.bk-note{margin:14px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
-#chartBankNote{margin:10px 0 0;color:#5B6B67;line-height:1.5}
 /* TODAY:END */
 </style>
 <script>
@@ -2659,19 +2642,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span><i class="pb-k-bank"></i>Your own money in a bank</span><span id="chartKeyToday"><i class="pb-k-today"></i>What that buys in today&rsquo;s money</span><span id="chartKeyLost"><i class="pb-k-lost"></i>Lost to rising prices</span></div>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span></div>
       <div id="chart"></div>
-      <p class="chart-note" id="chartBankNote"></p>
-    </div>
-    <div class="bank-card" id="bankCard" hidden>
-      <div class="rt">In a bank or invested?</div>
-      <div class="rbig" id="bankOut"></div>
-      <div class="bk-rows" aria-hidden="true">
-        <div class="bk-row"><span class="bk-l">In a bank</span><span class="bk-track"><i class="bk-bank" id="bkBank"></i></span><b id="bkBankV"></b></div>
-        <div class="bk-row"><span class="bk-l">You put in</span><span class="bk-track"><i class="bk-in" id="bkIn"></i></span><b id="bkInV"></b></div>
-        <div class="bk-row"><span class="bk-l">Invested</span><span class="bk-track"><i class="bk-plan" id="bkPlan"></i></span><b id="bkPlanV"></b></div>
-      </div>
-      <p class="bk-note" id="bankNote"></p>
     </div>
     <div class="relief-card">
       <div class="rt">What Revenue adds</div>
@@ -2785,6 +2757,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-bank.js?v=ea789e26"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script>
@@ -2829,7 +2802,7 @@ function step(){
 /* ---- persistent morphing chart ---- */
 const chart={
   N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
-  cur:{b:[],u:[],k:[],t:[],max:1},tgt:{b:[],u:[],k:[],t:[],max:1},els:{},
+  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -2842,22 +2815,16 @@ const chart={
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
     this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    /* the buying power rising prices take from the bank money */
-    this.els.lost=mk('path',{class:'pb-ch-lost',fill:'rgba(164,41,29,0.22)',stroke:'none'});
-    /* your own take-home cost kept in a bank instead, in euro */
-    this.els.bank=mk('path',{class:'pb-ch-bank',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-linecap':'round','stroke-linejoin':'round'});
-    /* Job 5: what that bank money buys, in today's money (assets/js/pb-today.js) */
-    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-dasharray':'2 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(b,u,ageS,ageE,t,k){
+  setTarget(b,u,ageS,ageE){
     if(!this.inited)this.init();
-    this.tgt.b=b;this.tgt.u=u;this.tgt.t=t||[];this.tgt.k=k||[];this.tgt.max=Math.max(...u,1)*1.08;
+    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),k:this.tgt.k.slice(),t:this.tgt.t.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
@@ -2865,7 +2832,7 @@ const chart={
     let active=false;
     const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
       if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
-    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);L(this.cur.k,this.tgt.k);L(this.cur.t,this.tgt.t);
+    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
     const dm=this.tgt.max-this.cur.max;
     if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
     this.render();return active;
@@ -2881,17 +2848,6 @@ const chart={
     for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
     this.els.base.setAttribute('d',dB);
     this.els.boost.setAttribute('d',dU);
-    let dT='';
-    if(this.cur.t.length===n&&(!window.PBToday||PBToday.on())){dT='M '+X(0)+' '+Y(this.cur.t[0]).toFixed(1);
-      for(let i=1;i<n;i++)dT+=' L '+X(i).toFixed(1)+' '+Y(this.cur.t[i]).toFixed(1);}
-    this.els.today.setAttribute('d',dT);
-    let dK='';
-    if(this.cur.k.length===n){dK='M '+X(0)+' '+Y(this.cur.k[0]).toFixed(1);
-      for(let i=1;i<n;i++)dK+=' L '+X(i).toFixed(1)+' '+Y(this.cur.k[i]).toFixed(1);}
-    this.els.bank.setAttribute('d',dK);
-    let dL='';
-    if(dK&&dT){dL=dK;for(let i=n-1;i>=0;i--)dL+=' L '+X(i).toFixed(1)+' '+Y(this.cur.t[i]).toFixed(1);dL+=' Z';}
-    this.els.lost.setAttribute('d',dL);
     this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
     this.els.mx.textContent=euro(max);
   }
@@ -2902,11 +2858,6 @@ const chart={
    The four money sliders have no wording of their own and take paintSlider's euro fallback. */
 const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
 const paint=el=>paintSlider(el,VALTEXT);
-
-/* the note under the chart: the dotted line's sentence only while it is drawn */
-function bankNote(){
-  if($('chartBankNote')&&chart.bankNote)$('chartBankNote').textContent=chart.bankNote+(!window.PBToday||PBToday.on()?chart.todayNote:'');
-}
 
 /* ---- the maths (unchanged) ---- */
 function calc(){
@@ -3013,40 +2964,22 @@ function calc(){
   const diffInc=diffPot*0.04/12;
   $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
 
-  /* the bank lines: what you would have without the pension. Only your own
-     take-home cost goes in (no tax relief, no employer money), on top of the
-     same starting pot as the plan, and it earns the bank rate.
-     k is that in euro, like the plan; t is what it buys in today's money */
-  const b=[],u=[],k=[],t=[],cRate=window.PBAssume?Math.pow(1+PBAssume.cash.rate,1/12)-1:0;
+  const b=[],u=[];
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
-    k.push(project(m,pot,costMonthly,cRate));
-    if(window.PBAssume)t.push(PBAssume.today(k[i],m/12));
   }
-  if($('chartBankNote')&&window.PBAssume){
-    chart.bankNote='Bank line: your own '+euro(costMonthly)+' a month after tax, with no tax relief and no employer money'+(pot>0?', plus the same '+euro(pot)+' you start with':'')+'. It earns '+PBAssume.cash.pct+' a year.';
-    chart.todayNote=' With prices rising '+PBAssume.inflation.pct+' a year, the dotted line shows what that money buys in today\u2019s money. The red area is what rising prices take.';
-    bankNote();
-    /* the bank card: your own money in a bank against the same money in
-       your plan, both in today's money, on one scale */
-    const putIn=pot+costMonthly*months, buys=t[t.length-1], lost=Math.max(0,putIn-buys), yrs=Math.round(months/12);
-    const planToday=PBAssume.today(base,months/12), top=Math.max(planToday,putIn,1);
-    if($('bankCard')&&putIn>0&&yrs>0){
-      $('bankCard').hidden=false;
-      $('bankOut').innerHTML='Leave your own money in a bank for '+yrs+(yrs===1?' year':' years')+' and at '+ret+' it buys only what <b>'+euro(buys)+'</b> buys today. '+
-        'That is <b>'+euro(lost)+' less</b> than you put in. Invested in your plan, it could buy what <b>'+euro(planToday)+'</b> buys today.';
-      $('bkBank').style.width=(buys/top*100)+'%';$('bkIn').style.width=(putIn/top*100)+'%';$('bkPlan').style.width=(planToday/top*100)+'%';
-      $('bkBankV').textContent=euro(buys);$('bkInV').textContent=euro(putIn);$('bkPlanV').textContent=euro(planToday);
-      $('bankNote').textContent='All in today\u2019s money. The bank pays '+PBAssume.cash.pct+' a year and prices rise '+PBAssume.inflation.pct+
-        ' a year, so the money buys less each year. Prices can rise faster: in 2022 they rose 7.8% (CSO). Your plan adds tax relief, your employer\u2019s money and growth of '+g+
-        '% a year. Growth is not guaranteed and investments can fall as well as rise.';
-    }else if($('bankCard')){$('bankCard').hidden=true;}
+  /* the bank card (assets/js/pb-bank.js): your own take-home cost in a
+     bank against your plan, year by year */
+  if(window.PBBank){
+    const yrs=Math.round(months/12), plan=[];
+    for(let i=0;i<=yrs;i++)plan.push(project(Math.min(i*12,months),pot,monthly,mRate));
+    PBBank.set({years:yrs,startAge:age,pot:pot,ownYearly:costMonthly*12,plan:plan,
+      ownWords:'Your own money: '+euro(costMonthly)+' a month after tax relief, with no employer money'+(pot>0?', plus the '+euro(pot)+' you have now':'')+'.',
+      planWords:'Your plan adds tax relief, your employer\u2019s money and growth of '+g+'% a year.'});
   }
-  chart.setTarget(b,u,age,ret,t,k);
-  if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
-  if($('chartKeyLost'))$('chartKeyLost').hidden=!(!window.PBToday||PBToday.on());
+  chart.setTarget(b,u,age,ret);
   ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=base>SFT, sftNote=$('sftNote');
@@ -3065,7 +2998,8 @@ function calc(){
   var r=$('mine'),v=+m[1];
   if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
 })();
-if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();$('chartKeyLost').hidden=!PBToday.on();bankNote();});}
+if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));}
+if(window.PBBank)PBBank.mount($('pbToday')||document.querySelector('.chart-card'));
 wireRanges(VALTEXT,calc);
 calc();
 
@@ -3384,7 +3318,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-after.js?v=325ae755"></script>
+<script src="assets/js/pb-after.js?v=5e64b9d1"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

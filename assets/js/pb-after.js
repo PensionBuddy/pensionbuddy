@@ -47,7 +47,7 @@
   var calc = after.getAttribute('data-pb-from') || '';
   var link = after.querySelector('a[href^="booking.html"]');
   var root = document.documentElement, moved = false, armed = 0, completed = false;
-  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin, .pb-today';
+  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin, .pb-today, .pb-bank';
 
   function track(name, fields) {
     if (window.PBCta) { window.PBCta.track(name, fields); } else if (window.PBTrack) { window.PBTrack(name, fields); }

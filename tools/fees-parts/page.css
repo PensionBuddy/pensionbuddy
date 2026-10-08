@@ -45,6 +45,4 @@
   .fee-t th,.fee-t td{padding:8px 4px}
 }
 /* Job 5: your plan in today's money */
-.fee-chart .fee-l-today{fill:none;stroke:#8A97A8;stroke-width:2.5;stroke-dasharray:7 5;stroke-linecap:round}
-.fee-key .fee-k-today{border-top:2.5px dashed #8A97A8;background:none;height:0}
 .fee-key li[hidden]{display:none}

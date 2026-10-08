@@ -2483,8 +2483,6 @@ main h1{font-weight:800}
 .pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
 .pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
 .pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 
 /* ============================================================
@@ -2534,8 +2532,6 @@ main h1{font-weight:800}
   .fee-t th,.fee-t td{padding:8px 4px}
 }
 /* Job 5: your plan in today's money */
-.fee-chart .fee-l-today{fill:none;stroke:#8A97A8;stroke-width:2.5;stroke-dasharray:7 5;stroke-linecap:round}
-.fee-key .fee-k-today{border-top:2.5px dashed #8A97A8;background:none;height:0}
 .fee-key li[hidden]{display:none}
 </style>
 <script>
@@ -2667,7 +2663,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li><i class="fee-k-b"></i>The other plan&rsquo;s charges</li>
         <li><i class="fee-k-a"></i>Your plan&rsquo;s charges</li>
         <li><i class="fee-k-gap"></i>What your plan&rsquo;s charges take</li>
-        <li id="feeKeyToday"><i class="fee-k-today"></i>Your plan in today&rsquo;s money</li>
       </ul>
     </div>
 
@@ -2769,6 +2764,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-bank.js?v=ea789e26"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script src="assets/js/pension-fees.js?v=8ac63932"></script>
@@ -2839,10 +2835,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b-edge' }));
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b' }));
     svg.appendChild(svgEl('polyline', { points: line(c.a.yearly), 'class': 'fee-l-a' }));
-    /* Job 5: your plan in today's money (assets/js/pb-today.js), when the switch is on */
-    if (window.PBAssume && (!window.PBToday || PBToday.on())) {
-      svg.appendChild(svgEl('polyline', { points: line(c.a.yearly.map(function (v, i) { return PBAssume.today(v, i); })), 'class': 'fee-l-today' }));
-    }
     svg.appendChild(svgEl('text', { x: L, y: H - 6 }, 'Now'));
     svg.appendChild(svgEl('text', { x: W - R, y: H - 6, 'text-anchor': 'end' }, 'In ' + years(n)));
     var box = $('feeChart');
@@ -2884,12 +2876,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('costB').textContent = euro(c.costB);
     $('nonePot').textContent = euro(c.none.pot);
     if (window.PBToday) { PBToday.set('potA', c.a.pot, n); PBToday.set('potB', c.b.pot, n); PBToday.cash(n); }
-    if ($('feeKeyToday')) $('feeKeyToday').hidden = !(!window.PBToday || PBToday.on());
+    /* the bank card (assets/js/pb-bank.js): the same payments kept in a
+       bank, against your plan after its charges */
+    if (window.PBBank) {
+      PBBank.set({ years: n, pot: o.pot, ownYearly: o.monthly * 12, plan: c.a.yearly,
+        ownWords: 'Your own money: the same ' + euro(o.monthly) + ' a month' + (o.pot > 0 ? ', plus the ' + euro(o.pot) + ' you have now' : '') + ', kept in a bank.',
+        planWords: 'Invested is your plan after its charges, with growth of ' + pc(o.growth * 100) + ' a year before charges. Tax relief and any employer money are not counted here.' });
+    }
     chart(c, n);
     P.announce('Your plan at retirement ' + euro(c.a.pot) + '. The other plan ' + euro(c.b.pot) + '. ' + say);
   }
 
-  if (window.PBToday) { PBToday.card(document.querySelector('.chart-card')); PBToday.onChange(render); }
+  if (window.PBToday) { PBToday.card(document.querySelector('.chart-card')); }
+  if (window.PBBank) PBBank.mount($('pbToday') || document.querySelector('.chart-card'));
   P.wireRanges(VALTEXT, render);
   render();
 })();
@@ -3208,7 +3207,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-after.js?v=325ae755"></script>
+<script src="assets/js/pb-after.js?v=5e64b9d1"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

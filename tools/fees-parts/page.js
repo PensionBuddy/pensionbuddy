@@ -64,10 +64,6 @@
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b-edge' }));
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b' }));
     svg.appendChild(svgEl('polyline', { points: line(c.a.yearly), 'class': 'fee-l-a' }));
-    /* Job 5: your plan in today's money (assets/js/pb-today.js), when the switch is on */
-    if (window.PBAssume && (!window.PBToday || PBToday.on())) {
-      svg.appendChild(svgEl('polyline', { points: line(c.a.yearly.map(function (v, i) { return PBAssume.today(v, i); })), 'class': 'fee-l-today' }));
-    }
     svg.appendChild(svgEl('text', { x: L, y: H - 6 }, 'Now'));
     svg.appendChild(svgEl('text', { x: W - R, y: H - 6, 'text-anchor': 'end' }, 'In ' + years(n)));
     var box = $('feeChart');
@@ -109,12 +105,19 @@
     $('costB').textContent = euro(c.costB);
     $('nonePot').textContent = euro(c.none.pot);
     if (window.PBToday) { PBToday.set('potA', c.a.pot, n); PBToday.set('potB', c.b.pot, n); PBToday.cash(n); }
-    if ($('feeKeyToday')) $('feeKeyToday').hidden = !(!window.PBToday || PBToday.on());
+    /* the bank card (assets/js/pb-bank.js): the same payments kept in a
+       bank, against your plan after its charges */
+    if (window.PBBank) {
+      PBBank.set({ years: n, pot: o.pot, ownYearly: o.monthly * 12, plan: c.a.yearly,
+        ownWords: 'Your own money: the same ' + euro(o.monthly) + ' a month' + (o.pot > 0 ? ', plus the ' + euro(o.pot) + ' you have now' : '') + ', kept in a bank.',
+        planWords: 'Invested is your plan after its charges, with growth of ' + pc(o.growth * 100) + ' a year before charges. Tax relief and any employer money are not counted here.' });
+    }
     chart(c, n);
     P.announce('Your plan at retirement ' + euro(c.a.pot) + '. The other plan ' + euro(c.b.pot) + '. ' + say);
   }
 
-  if (window.PBToday) { PBToday.card(document.querySelector('.chart-card')); PBToday.onChange(render); }
+  if (window.PBToday) { PBToday.card(document.querySelector('.chart-card')); }
+  if (window.PBBank) PBBank.mount($('pbToday') || document.querySelector('.chart-card'));
   P.wireRanges(VALTEXT, render);
   render();
 })();
