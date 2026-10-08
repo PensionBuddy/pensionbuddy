@@ -202,11 +202,13 @@ and `404.html`. `about.html` does not exist: it was folded into
   "Redirect to an external site" → `https://pensionbuddy.ie/thank-you.html`.
   Until then the booking page's own listener is the only route to the
   thank-you page.
-- **GTM tags (R27-3).** Container `GTM-KQCRZDNB` loads only after "That's
-  fine", but it was empty on 25 September 2026 (version 1, no tags), so
-  nothing is measured until tags (for example Google Analytics 4, with
-  triggers on `booking_form_submit`, `calendly_booking` and
-  `calculator_first_interaction`) are added and published. The games load no consent script, by
+- **GTM tags (R27-3, settled in Run 49).** Container `GTM-WX8BZHFN` (from
+  8 October 2026) loads only after "That's fine" and was empty that day.
+  GA4 does not need it: `pb-consent.js` loads GA4 itself and sends every
+  `PBTrack` event to it. The container must never get a Google tag or a
+  GA4 tag for `G-642CXX25S8`, nor a Meta, TikTok or LinkedIn base tag
+  (each would count twice); it is for anything new, such as a Google Ads
+  conversion on `booking_click`. The games load no consent script, by
   choice.
 - **Revenue's online date for 2027.** When Revenue publishes the 2027 Pay
   and File date for the Revenue Online Service (usually in the spring), add
@@ -338,6 +340,50 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 49 — 2026-10-08 · GA4 and Tag Manager: one load each, the events reach GA4 (on `claude/ga4-gtm`)
+
+Damian's brief: put GTM-WX8BZHFN in the consent-gated Tag Manager setup,
+no second GA4 load, nothing before consent, one clean setup, and the five
+Run 45 events (`calculator_complete`, `cta_view`, `cta_click`,
+`booking_click`, `email_result_submit`) in GA4.
+
+- **Found.** GA4 `G-642CXX25S8` is loaded once, directly, by `loadGa()` in
+  `assets/js/pb-consent.js`, after "That's fine" (since 5 October). The
+  container ID was not empty: it was `GTM-KQCRZDNB` (Run 27). Both
+  containers, fetched from Google on 8 October, are version 1 with no tags.
+  The brief's `G-XXXXXXXXXX` is a placeholder; the live ID is the one in
+  the code. Every `PBTrack` event went to the dataLayer only, and with no
+  GA4 tag in the container none reached GA4: with Google's real gtm.js and
+  gtag.js in headless Chrome, GA4's hits were `page_view` and
+  `user_engagement` and nothing else.
+- **Chosen: GA4 stays direct; Tag Manager carries no Google Analytics.**
+  It is already collecting, so there is no gap and no data to migrate, and
+  the five events need no tags, triggers or variables built by hand. Moving
+  GA4 into Tag Manager would mean a Google tag, six event tags, a trigger
+  and up to four variables, and a window of double counting or none while
+  the direct code and the container are switched over. The ad pixels stay
+  direct too, for the same reason.
+- **Changed.** `GTM_ID` is `GTM-WX8BZHFN`. `send()` gives each event once to
+  the dataLayer (for Tag Manager) and once to GA4 (`gtag('event', name,
+  fields)`); events waiting for the answer go out after GA4's config.
+  `then` waits for both (at most 1.6 s). Pages restamped (`?v=`).
+- **Proved.** `tests/consent.test.py`: 4 new checks (an early event reaches
+  GA4 once, after the config, with its fields; a refusal sends nothing to
+  GA4; `cta_click` and `booking_click` reach GA4 once each with `page`,
+  `variant` and `cta`). Same 14 failures as `origin/main` (the bar wraps
+  to two lines at 320x568), plus its flaky check 8. Real tags, every hit
+  to Google answered locally: one `page_view` per page, and
+  `calculator_complete`, `cta_view`, `cta_click`, `booking_click`,
+  `email_result_submit` and `calendly_booking` once each, with their
+  fields; a `booking_click` sent just before the page navigates away still
+  arrives. `build.test.py` 477/0, `give-then-ask.test.mjs` 157/0,
+  `nav`, `deadline`, `providers` all pass.
+- **Needs Damian:** GA4 key events (`booking_click`,
+  `email_result_submit`, and `calendly_booking`, the booking itself) and
+  custom dimensions (`calculator`, `cta`, `variant`, `page`): the steps are
+  in this run's reply. Compliance pack updated (8 October note).
+
+---
 # Run 48 — 2026-10-08 · Live fixes: rules date, the threshold, how a call works, one booking wording, one regulator line, Cookies (on `claude/live-fixes-1008`)
 
 Damian's seven fixes of 8 October 2026, one commit each, off live main

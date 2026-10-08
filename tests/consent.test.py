@@ -17,18 +17,20 @@ What it proves:
   2. "No thanks": remembered, the bar goes, nothing loads, and on the next
      page nothing loads and no bar returns; Google Analytics cookies an
      earlier "accepted" left are deleted
-  3. "That's fine": remembered, GTM's script for GTM-KQCRZDNB is added
+  3. "That's fine": remembered, GTM's script for GTM-WX8BZHFN is added
      once, and gtag.js for G-642CXX25S8 once, and the Meta, TikTok and LinkedIn pixels once each (never before,
      never after "No thanks"), and on the next page it loads with no bar
   4. an event sent before the answer waits in memory: accepted, it reaches
-     the dataLayer after gtm.js; refused, it is gone; sent after a refusal,
+     the dataLayer after gtm.js, and GA4 once, as a gtag 'event' with the
+     same fields, after the config; refused, it is gone; sent after a refusal,
      it is never kept, so changing to yes later on the page sends neither
   5. PBTrack's `then` runs at once without GTM, and within ~1.6 s with a
      GTM that never answers
   6. the first real touch on a calculator is counted once, with its name;
      a replayed (untrusted) event and a lead form inside it are not
   7. a press of the booking button after a calculator's result is counted,
-     cta_click then booking_click (Run 45; the booking page's form, whose
+     cta_click then booking_click, once each in the dataLayer and once each
+     to GA4 (gtag 'event', with {page, variant, cta}) (Run 45; the booking page's form, whose
      submit was counted here, is gone); the Privacy Notice's button forgets
      the answer and brings the bar back
   9. on a phone's first load (320x568, 375x667, 375x812, 412x915, 560x800, and held
@@ -53,7 +55,7 @@ sys.path.insert(0, os.path.join(ROOT, 'tests'))
 from harness import eq, report  # noqa: E402
 
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
-GTM = 'https://www.googletagmanager.com/gtm.js?id=GTM-KQCRZDNB'
+GTM = 'https://www.googletagmanager.com/gtm.js?id=GTM-WX8BZHFN'
 GA = 'https://www.googletagmanager.com/gtag/js?id=G-642CXX25S8'
 PIXELS = ['https://analytics.tiktok.com/i18n/pixel/events.js', 'https://connect.facebook.net/en_US/fbevents.js',
           'https://snap.licdn.com/li.lms-analytics/insight.min.js']
@@ -66,6 +68,9 @@ PROBE = r"""<script>
   function ga(){ return [].map.call(document.querySelectorAll('script[src*="googletagmanager.com/gtag/"]'),function(s){return s.src;}); }
   // gtag() pushes arguments objects, not events: kept apart from the event list
   function isArgs(e){ return Object.prototype.toString.call(e)==='[object Arguments]'; }
+  // what went to GA4 as events: [name, fields] (no callbacks)
+  function gaEvents(){ return (window.dataLayer||[]).filter(isArgs).filter(function(a){return a[0]==='event';})
+    .map(function(a){ var f={},k; for(k in a[2]||{}) if(typeof a[2][k]!=='function') f[k]=a[2][k]; return [a[1],f]; }); }
   function state(){
     return {bar:!!document.querySelector('.pb-consent'), open:document.body.classList.contains('pb-banner-open'),
             gtm:gtm(), ga:ga(), gtag:window.dataLayer?window.dataLayer.filter(isArgs).map(function(a){return a[0]==='js'?'js':a[0]+':'+a[1];}):null, px:[].map.call(document.querySelectorAll('script[src*="connect.facebook.net"],script[src*="analytics.tiktok.com"],script[src*="snap.licdn.com"]'),function(s){return s.src.split('?')[0];}),
@@ -85,7 +90,7 @@ PROBE = r"""<script>
     document.querySelector('.pb-c-no').click(); R.after=state(); R.cookieAfter=document.cookie; return done(); }
   if(job==='yes'){ document.querySelector('.pb-c-yes').click(); R.after=state(); return done(); }
   if(job==='queue-yes'){ PBTrack('early',{n:1}); R.before=state(); document.querySelector('.pb-c-yes').click();
-    R.after=state(); R.early=window.dataLayer.filter(function(e){return e.event==='early';}); return done(); }
+    R.after=state(); R.early=window.dataLayer.filter(function(e){return e.event==='early';}); R.gaEarly=gaEvents(); return done(); }
   if(job==='queue-no'){ PBTrack('early'); document.querySelector('.pb-c-no').click(); R.after=state();
     PBTrack('late'); R.late=state();
     var b=document.createElement('button'); b.setAttribute('data-pb-consent-reset',''); document.body.appendChild(b);
@@ -109,7 +114,7 @@ PROBE = r"""<script>
     var a=document.querySelector('#pbAfter a');
     window.addEventListener('click',function(e){ e.preventDefault(); });   // stay on the page
     a.click();
-    later(200,function(){ R.after=state(); R.href=a.getAttribute('href'); done(); }); return;
+    later(200,function(){ R.after=state(); R.ga=gaEvents(); R.href=a.getAttribute('href'); done(); }); return;
   }
   if(job==='overlap'){
     // Ask Buddy moves with a transition, and virtual time runs no frames, so
@@ -320,7 +325,7 @@ def main():
     eq('3. "That\'s fine" is remembered', r['stored'], 'accepted')
     eq('3. the bar goes', (r['bar'], r['open']), (False, False))
     eq('3. and the room kept for it goes', r['pad'], [False, 'auto', None])
-    eq('3. GTM-KQCRZDNB is loaded, once', r['gtm'], [GTM])
+    eq('3. GTM-WX8BZHFN is loaded, once', r['gtm'], [GTM])
     eq('3. gtm.js starts the dataLayer', r['dl'], ['gtm.js'])
     eq('3. the LinkedIn, TikTok and Meta pixels load, once each', sorted(r['px']), PIXELS)
     eq('3. Google Analytics G-642CXX25S8 loads, once, and is configured', (r['ga'], r['gtag']), ([GA], ['js', 'config:G-642CXX25S8']))
@@ -331,10 +336,12 @@ def main():
     eq('4. before the answer, the event waits and nothing loads', (r['before']['gtm'], r['before']['dl']), ([], None))
     eq('4. accepted: it follows gtm.js into the dataLayer', r['after']['dl'], ['gtm.js', 'early'])
     eq('4. with its fields', r['early'], [{'event': 'early', 'n': 1}])
+    eq('4. and to GA4 once, after the config, with the same fields', (r['after']['gtag'], r['gaEarly']),
+       (['js', 'config:G-642CXX25S8', 'event:early'], [['early', {'n': 1}]]))
     r = R[('index.html', 'queue-no', 'fresh')]
     eq('4. refused: it is gone, and nothing loads', (r['after']['gtm'], r['after']['dl']), ([], None))
     eq('4. and an event after refusing is not kept either', (r['late']['gtm'], r['late']['dl']), ([], None))
-    eq('4. so a later yes on the same page sends neither', r['changed']['dl'], ['gtm.js'])
+    eq('4. so a later yes on the same page sends neither', (r['changed']['dl'], r['changed']['gtag']), (['gtm.js'], ['js', 'config:G-642CXX25S8']))
     # 5
     eq('5. without GTM, then runs at once', R[('index.html', 'then-off', 'fresh')]['thenAtOnce'], True)
     ms = (R[('index.html', 'then-on', 'accepted')] or {}).get('thenMs')
@@ -403,6 +410,9 @@ def main():
     # 7
     r = R[('pension-calculator.html', 'cta', 'accepted')]
     eq('7. a press of the booking button after a result is counted: cta_click, then booking_click', r['after']['dl'], ['gtm.js', 'cta_click', 'booking_click'])
+    eq('7. and to GA4, once each, with the page, the wording and where the button is', [[n, sorted(f)] for n, f in r['ga']],
+       [['cta_click', ['cta', 'page', 'variant']], ['booking_click', ['cta', 'page', 'variant']]])
+    eq('7. the same fields as the dataLayer', [f['page'] for n, f in r['ga']], ['pension-calculator', 'pension-calculator'])
     eq('7. and the button carries the four tags', bool(re.match(r'booking\.html\?utm_source=site&utm_medium=cta&utm_campaign=pension-calculator&utm_content=[AB]$', r['href'] or '')), True)
     r = R[('privacy.html', 'reset', 'accepted')]
     eq('7. the Privacy Notice\'s button forgets the answer', r['after']['stored'], None)

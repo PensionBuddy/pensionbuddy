@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="The Pensionbuddy paw mark">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Terms of Business", "item": "https://pensionbuddy.ie/terms.html"}]}</script>
 <!-- SEO:END -->
-<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -53,11 +53,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -1478,7 +1478,7 @@ button{font-family:inherit}
    left exactly as they are: this rule paints the logo and nothing else. */
 .logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
   gap:calc(var(--pb-logo-h) * 0.269);
-  font-family:'Schibsted Grotesk',var(--font);
+  font-family:'Space Grotesk',var(--font);
   font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
   letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
 .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
@@ -1516,7 +1516,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
-.pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
+.pb-wordmark{margin:40px 0 -6px;font-family:'Space Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
@@ -1668,19 +1668,20 @@ a.assure:hover{border-color:var(--teal)}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32; served from the site since Run 34; Geist since
-   Run 46). Geist and the footer wordmark's Schibsted Grotesk 800 come from
-   assets/fonts/, not from a font service, so a visit sends nothing to a
-   third party before the cookie choice. Geist is one variable file
-   (Vercel's Geist 1.7.2, weights 400 to 800 used), with font-display:swap,
-   under the SIL Open Font License (assets/fonts/OFL-*.txt). Each page
-   preloads geist-variable.woff2 in its <head>. Until it arrives the text
-   is set in the system font. Byte for byte on every page:
+/* FONTS:BEGIN (Run 32; served from the site since Run 34; Space Grotesk
+   for every word, wordmark included, since 8 Oct 2026). Space Grotesk
+   comes from assets/fonts/, not from a
+   font service, so a visit sends nothing to a third party before the
+   cookie choice. It is one variable face (weights 300 to 700; an 800 asked
+   for renders at 700) in two files split by unicode-range, Latin and Latin
+   Extended, from Fontsource 5.2.8, with font-display:swap, under the SIL
+   Open Font License (assets/fonts/OFL-SpaceGrotesk.txt). Each page preloads
+   space-grotesk-latin.woff2 in its <head>. Until it arrives the text is set
+   in the system font. Byte for byte on every page:
    tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
    chrome_drift. */
-@font-face{font-family:'Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/geist-variable.woff2) format('woff2')}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/space-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/space-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* FONTS:END */
 /* TRUST:BEGIN (Run 26). Two shared components, each one string in
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
@@ -2303,7 +2304,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=26ec3184" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=20ab6534"></script>
+<script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
