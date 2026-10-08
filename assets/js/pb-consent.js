@@ -61,19 +61,20 @@
                                     through PBTrack like every other event;
                                     pb-cta.js says what each one means.
 
-   THE BUTTON TEST (Run 45). Which of two wordings the booking button after a
-   calculator's result shows is kept in this browser (localStorage
-   'pb-ab-cta', assets/js/pb-cta.js) only after "That's fine". Every answer,
-   and forgetting it, is announced as a 'pb:consent' event on document,
-   detail {answer: 'accepted' | 'rejected' | null}; "No thanks" and
-   forgetting the answer also delete that key here, so it goes even on a
-   page without pb-cta.js.
+   THE BUTTON TEST (Run 45) HAS ENDED (8 October 2026). While it ran, which
+   of two wordings the booking button after a calculator's result showed
+   was kept in this browser (localStorage 'pb-ab-cta') only after "That's
+   fine". Nothing writes the key now; pb-cta.js deletes it on load, and "No
+   thanks" or forgetting the answer still deletes it here, on any page.
+   Every answer, and forgetting it, is announced as a 'pb:consent' event on
+   document, detail {answer: 'accepted' | 'rejected' | null}.
 
    CHANGING YOUR MIND. An element marked data-pb-consent-reset (the Privacy
    Notice has one) forgets the answer and shows the bar again. "No thanks"
    also deletes any Google Analytics cookies (_ga, _ga_*, _gid, _gat*) an
-   earlier "accepted" left on this site, and the pixels' own (_fbp, _fbc,
-   _ttp, _tt_*, li_*, lidc, bcookie, UserMatchHistory, AnalyticsSyncHistory)
+   earlier "accepted" left on this site (and _dc_gtm_*), and the pixels' own
+   (_fbp, _fbc, _ttp, _tt_*, ttcsid*, ttclid, li_*, lidc, bcookie,
+   UserMatchHistory, AnalyticsSyncHistory)
    where they are first-party, and if GTM was already running on
    this page, reloads it, since a running script cannot be unloaded.
 
@@ -83,7 +84,7 @@
   var GTM_ID = 'GTM-WX8BZHFN';
   var KEY = 'pb-consent';
   var queue = [], loaded = false, bar = null, started = {};
-  /* first-party keys that live only with "That's fine" (Run 45) */
+  /* first-party keys that lived only with "That's fine" (Run 45's ended button test): deleted with any other answer */
   var CONSENTED_KEYS = ['pb-ab-cta'];
 
   function answer() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
@@ -188,7 +189,7 @@
     var parts = location.hostname.split('.');
     document.cookie.split(';').forEach(function (c) {
       var name = c.split('=')[0].trim();
-      if (!/^(_ga|_ga_.+|_gid|_gat.*|_fbp|_fbc|_ttp|_tt_.+|li_.+|lidc|bcookie|UserMatchHistory|AnalyticsSyncHistory)$/.test(name)) return;
+      if (!/^(_ga|_ga_.+|_gid|_gat.*|_dc_gtm_.+|_fbp|_fbc|_ttp|_tt_.+|ttcsid.*|ttclid|li_.+|lidc|bcookie|UserMatchHistory|AnalyticsSyncHistory)$/.test(name)) return;
       document.cookie = name + '=; Max-Age=0; path=/';
       for (var i = 0; i < parts.length - 1; i++) {
         document.cookie = name + '=; Max-Age=0; path=/; domain=' + parts.slice(i).join('.');

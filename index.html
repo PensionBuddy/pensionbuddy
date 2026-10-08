@@ -170,11 +170,6 @@ section{padding:88px 0}
 .step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .step p{color:var(--ink-2);font-size:15px}
-/* Run 39: a 16:9 slot over each step of "How a call with Damian works",
-   for Damian's own videos; until they are filmed, a placeholder poster. The
-   box is kept by its ratio, so nothing moves when a video takes its place. */
-.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--teal-50)}
-.step .pb-call-slot img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---- calculator showcase ---- */
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
@@ -210,6 +205,7 @@ section{padding:88px 0}
 /* ---- faq ---- */
 .faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
 .faq-list{display:flex;flex-direction:column;gap:12px}
+.faq-ask{margin-top:12px}
 details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
 details[open]{box-shadow:var(--sh-md);border-color:transparent}
 summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
@@ -1455,7 +1451,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
    site does not already say. It closes on a plain link to the booking
    page rather than on a turn about what Buddy will not do.
    Since Run 42 the home hero is the gap (HERO = THE GAP, below) and
-   this phone sits under "How a call with Damian works" (#call).
+   this phone sits under "How a call works" (#call).
    ============================================================ */
 
 .hero-phone{margin:44px auto 0;max-width:340px}
@@ -2597,6 +2593,13 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* Since 8 October 2026 every booking button reads "Book a free 20-minute
+   call with us", too long for .btn's single line on a narrow phone at the
+   hero sizes (6px past a 375px screen on the home page): there a booking
+   button wraps, centred, instead. */
+@media(max-width:480px){
+  a.btn[href^="booking.html"]{white-space:normal;text-align:center;line-height:1.25}
+}
 /* CTA:END */
 /* TYPE:BEGIN (Run 46). The type scale's weights, last in every page's
    stylesheet so it wins over each page's own: body text 500 at a 1.6 line
@@ -2620,8 +2623,6 @@ main h1{font-weight:800}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-
-<div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
@@ -2754,7 +2755,7 @@ main h1{font-weight:800}
       <p class="pb-src">Standards of living: Pensions Council, Irish Retirement Living Standards, researched by KPMG, 2024 prices.</p>
     </div>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="booking.html">Get my free review <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
     </div>
   </div>
@@ -2891,7 +2892,7 @@ main h1{font-weight:800}
       <li class="pb-tl-step pb-card-link" data-age="71" data-show="5%"><h3><a href="pensions-over-50.html#after">From 71</a></h3><p>The ARF is taxed on at least 5% a year.</p></li>
     </ol>
   </div>
-  <p class="pb-src">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>
+  <p class="pb-src">Rules as at 8 October 2026.</p>
 </div></section>
 
 <section class="tickband" id="deadline">
@@ -3031,24 +3032,21 @@ main h1{font-weight:800}
   </div>
 </div></section>
 
-<!-- Run 39: "How a call with Damian works". The three steps are the words
-     this section already had; over each is a 16:9 slot for Damian's own
-     short video, which he is filming, and until then a placeholder poster
-     (assets/img/call-video-placeholder). To put a video in: save it as
-     assets/video/call-step-N.mp4 (H.264) and .webm, then give its slot the
-     game cards' markup (a <video data-pb-video ...> over the picture, its
-     data-poster the slot's picture, and the pause button); pb-video.js then
-     fetches it near the viewport, plays it muted and pauses it off screen.
-     tests/build.test.py check 45 holds the words and the slots. -->
+<!-- "How a call works" (Run 39's three steps). Damian, 8 October 2026: the
+     placeholder pictures over the steps are gone, step 1 says "Pick a time
+     that suits you." and the heading is "How a call works." When his own
+     short videos are ready, Run 39's 16:9 slots can come back over the steps
+     (git show a1f7122:index.html, the "pb-call-slot" markup and CSS, and
+     build check 45 at that commit). tests/build.test.py check 45 holds the
+     heading, the words and no pictures. -->
 <section class="expect" id="call"><div class="wrap">
   <div class="sec-head ctr">
-    <span class="kicker">How a call with Damian works</span>
-    <h2>Three steps.</h2>
+    <h2>How a call works.</h2>
   </div>
   <div class="steps">
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-1" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">1</div><h3>You reach out</h3><p>A short message or call, so Damian comes prepared. No forms.</p></div>
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-2" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-3" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
+    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>Pick a time that suits you.</p></div>
+    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
+    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
   </div>
 </div></section>
 
@@ -3065,23 +3063,21 @@ main h1{font-weight:800}
     <details><summary>What does it cost if I become a client?<span class="pm">+</span></summary><p>It depends on what you need. You know before you commit. We are paid by fee, commission or a mix.</p></details>
     <details><summary>Do I need to know anything before we talk?<span class="pm">+</span></summary><p>No. Bring what you remember. Doing the digging is our job.</p></details>
     <details><summary>Is my information kept private?<span class="pm">+</span></summary><p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p></details>
+    <!-- the page's second booking ask, quiet (one filled button per page: the one
+         after the way-of-life picker); Damian, 8 October 2026 -->
+    <div class="faq-ask">
+      <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
+    </div>
   </div>
 </div></section>
-
-<div class="final-band"><div class="wrap"><div class="final pb-bleed">
-  <div class="paw-bg"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <h2>Talk it through with Damian.</h2>
-  <a class="btn btn-light" href="booking.html">Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
-</div></div></div>
-
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
     <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension entitlement check</a><a href="my-pensions.html">All your pensions in one view</a><a href="pia.html">Personal Investment Account (PIA)</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>
+    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="privacy.html#cookies">Cookies</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
@@ -3433,12 +3429,12 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=26ec3184" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=701f28b4" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=f971d795"></script>
-<script src="assets/js/pb-cta.js?v=e30763b6"></script>
+<script src="assets/js/pb-consent.js?v=b381cfcc"></script>
+<script src="assets/js/pb-cta.js?v=03610d23"></script>
 
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
