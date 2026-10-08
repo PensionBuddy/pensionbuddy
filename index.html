@@ -2618,6 +2618,46 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* WELCOME:BEGIN (8 October 2026, Damian's brief). The band above the hero:
+   "Welcome to Pensionbuddy", alive (assets/js/pb-welcome.js). The markup is
+   the finished picture; with motion on, an inline script arms it before the
+   first paint (.pb-w-armed hides what the intro brings in) and the script
+   runs the intro, the springs and the paws. If the script never comes, the
+   picture shows itself after 2.5 s anyway. */
+.pb-welcome{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;min-height:calc(100svh - 72px);background:radial-gradient(62% 58% at 50% 44%,#DDF7F1 0%,rgba(230,251,247,0) 72%),var(--bg)}
+.pb-w-fx{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.pb-w-in{width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 0 104px}
+.pb-w-mark{width:clamp(78px,8.4vw,112px);aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;filter:drop-shadow(0 18px 28px rgba(20,203,177,.32))}
+.pb-w-mark svg{display:block;width:100%;height:100%}
+.pb-w-toe{transform-box:fill-box;transform-origin:50% 70%}
+.pb-w-title{margin:38px 0 0;font-family:var(--font-display);line-height:1;color:var(--ink)}
+.pb-w-l1{display:block;font-size:clamp(26px,3.3vw,46px);font-weight:600;color:var(--ink-2);letter-spacing:-.01em}
+.pb-w-word{display:inline-block}
+.pb-w-l2{display:inline-block;margin-top:.1em;font-size:clamp(46px,12vw,176px);font-weight:800;letter-spacing:-.045em;white-space:nowrap;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.pb-w-ch{display:inline-block;transform-origin:50% 80%}
+.pb-w-line{display:block;height:clamp(7px,.85vw,13px);margin:.14em .02em 0;border-radius:99px;background:#14CBB1;transform-origin:0 50%}
+.pb-w-sub{margin:28px 0 0;font-size:clamp(18px,1.7vw,23px);color:var(--ink-2)}
+.pb-w-go{margin-top:30px;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:13px 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:17px;text-decoration:none;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s}
+.pb-w-go:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
+.pb-w-go svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pb-motion .pb-w-go svg{animation:pbWNudge 1.8s ease-in-out infinite}
+@keyframes pbWNudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.pb-w-hint{position:absolute;left:0;right:0;bottom:22px;margin:0;text-align:center;font-size:16px;color:var(--ink-2);opacity:0;transition:opacity .5s;pointer-events:none}
+.pb-w-hint.pb-w-on{opacity:1}
+.pb-w-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* armed: what the intro brings in starts hidden (the script draws it in) */
+.pb-w-armed .pb-w-ch,.pb-w-armed .pb-w-word{opacity:0}
+.pb-w-armed .pb-w-toe{transform:scale(0)}
+.pb-w-armed .pb-w-line{transform:scaleX(0)}
+.pb-w-armed .pb-w-sub,.pb-w-armed .pb-w-go{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.pb-w-armed .pb-w-go{transition-delay:.12s}
+.pb-w-armed.pb-w-shown .pb-w-sub,.pb-w-armed.pb-w-shown .pb-w-go{opacity:1;transform:none}
+.pb-w-armed:not(.pb-w-run) .pb-w-ch,.pb-w-armed:not(.pb-w-run) .pb-w-word,.pb-w-armed:not(.pb-w-run) .pb-w-sub,.pb-w-armed:not(.pb-w-run) .pb-w-go{animation:pbWSafe 0s 2.5s forwards}
+.pb-w-armed:not(.pb-w-run) .pb-w-toe,.pb-w-armed:not(.pb-w-run) .pb-w-line{animation:pbWSafeT 0s 2.5s forwards}
+@keyframes pbWSafe{to{opacity:1;transform:none}}
+@keyframes pbWSafeT{to{transform:none}}
+@media(max-width:560px){.pb-w-in{padding:40px 0 120px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
+/* WELCOME:END */
 </style>
 </head>
 <body>
@@ -2668,6 +2708,22 @@ main h1{font-weight:800}
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
+
+<!-- WELCOME (8 October 2026, Damian's brief): the first screen, before the hero.
+     "Welcome to Pensionbuddy", alive: assets/js/pb-welcome.js runs the intro, the
+     springy letters, the paw and the paw prints; the CSS block WELCOME styles it. -->
+<section class="pb-welcome" id="welcome" aria-labelledby="pbWelcomeT">
+  <canvas class="pb-w-fx" aria-hidden="true"></canvas>
+  <div class="wrap pb-w-in">
+    <div class="pb-w-mark" aria-hidden="true"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
+    <p class="pb-w-title" id="pbWelcomeT"><span class="pb-w-sr">Welcome to Pensionbuddy</span><span class="pb-w-l1" aria-hidden="true"><span class="pb-w-word">Welcome</span> <span class="pb-w-word">to</span></span><span class="pb-w-l2" aria-hidden="true"><span class="pb-w-ch">P</span><span class="pb-w-ch">e</span><span class="pb-w-ch">n</span><span class="pb-w-ch">s</span><span class="pb-w-ch">i</span><span class="pb-w-ch">o</span><span class="pb-w-ch">n</span><span class="pb-w-ch">b</span><span class="pb-w-ch">u</span><span class="pb-w-ch">d</span><span class="pb-w-ch">d</span><span class="pb-w-ch">y</span><span class="pb-w-line"></span></span></p>
+    <p class="pb-w-sub">Pensions, in plain English.</p>
+    <a class="pb-w-go" href="#gap">Start here <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
+    <p class="pb-w-hint" aria-hidden="true"></p>
+  </div>
+</section>
+<script>(function(){var s=document.getElementById('welcome');if(s&&document.documentElement.classList.contains('pb-motion'))s.classList.add('pb-w-armed');})();</script>
+<script src="assets/js/pb-welcome.js?v=054270da"></script>
 
 <header class="hero pb-hero-gap pb-wash" id="gap"><div class="wrap pb-hero-gap-grid">
   <div class="hero-copy pb-hero-copy">
