@@ -340,15 +340,15 @@ PAGES = {
         out='my-pensions.html',
         parts='pots-parts',
         title='All your pensions in one view, Pensionbuddy',
-        desc=('List the pensions you have and see the total, how it is split, and what the annual '
-              'charges come to in euro a year. Nothing you type leaves the page.'),
+        desc=('Add each pension and see your total, how it is split and what the fees cost you '
+              'each year.'),
         modules=['assets/js/pots.js'],
         keep=[],
         nav='my-pensions.html',
         reviewed=True,
         checks=(('id="ptForm"', 'the list'),
                 ('id="ptPrint"', 'print or save'),
-                ('Nothing you type is sent or stored', 'said on the page')),
+                ('id="ptDonut"', 'the ring')),
     ),
     # Run 23. The proposed Personal Investment Account: a dated guide and the
     # same take-home cost in a pension, the PIA and an ETF. The PIA's rate and
@@ -914,7 +914,7 @@ RELATED = {
     'director-calculator.html': ('director-pension-rules.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
     'broker-vs-autoenrolment.html': ('pension-calculator.html', 'starter.html', 'self-employed-pensions.html'),
     'pension-fees-calculator.html': ('my-pensions.html', 'old-pension-checklist.html', 'pension-calculator.html'),
-    'my-pensions.html': ('pension-fees-calculator.html', 'old-pension-checklist.html', 'standard-fund-threshold.html'),
+    'my-pensions.html': ('pension-calculator.html', 'tracker.html'),
     'standard-fund-threshold.html': ('director-pension-rules.html', 'pensions-over-50.html', 'director-calculator.html'),
     'state-pension-reality-check.html': ('state-pension-entitlement.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
     'state-pension-entitlement.html': ('state-pension-reality-check.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
@@ -938,7 +938,7 @@ CARDS = {
     'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', '404.html'),
     'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.', '404.html'),
     'old-pension-checklist.html': ('The old pension hunt: a checklist', 'Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.', 'old-pension-checklist.html'),
-    'my-pensions.html': ('All your pensions in one view', 'List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year.', 'my-pensions.html'),
+    'my-pensions.html': ('All your pensions in one view', 'Add each pension and see your total, how it is split and what the fees cost you each year.', 'my-pensions.html'),
     'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),
     'director-calculator.html': ('Director calculator', 'See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.', 'director-calculator.html'),
     'director-pension-rules.html': ('What changed for directors in 2026', 'Three things changed in the last two years. Four questions show which apply to you.', 'director-pension-rules.html'),
@@ -1104,9 +1104,10 @@ def warn_drift(sources):
 # carry the figures would be a promise this page cannot keep); the button
 # and its line do not.
 #
-# my-pensions says nothing typed leaves the page, so it has no form. The
-# directors' rules page has no "doesn't show" line: its list already says
-# "Topics to discuss, not advice."
+# my-pensions sends nothing typed, so it has no form, and (since 8 October
+# 2026) no "doesn't show" line: it is a list of today's values, not a
+# projection. The directors' rules page has none either: its list already
+# says "Topics to discuss, not advice."
 # ============================================================================
 AFTER = {  # page: (its name for #from= and the events, what it does not show or None, the email offer)
     'pension-calculator.html': ('pension-calculator', 'product charges, the tax on your income when you draw it.', True),
@@ -1117,11 +1118,13 @@ AFTER = {  # page: (its name for #from= and the events, what it does not show or
     'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),
     'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', True),
     'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', True),
-    'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', False),
+    'my-pensions.html': ('my-pensions', None, False),
     'director-pension-rules.html': ('director-pension-rules', None, True),
 }
 AFTER_WORDS = 'Book a free 20-minute call with us'   # wording A; pb-cta.js holds both
-AFTER_WHY = 'Free. No obligation. No pressure.'
+# The line under the button, cut on 8 October 2026 (the owner: the button
+# already says free, and the line was words in the way). '' writes none.
+AFTER_WHY = ''
 AFTER_OPEN = '<!-- AFTER:BEGIN'
 AFTER_CLOSE = '<!-- AFTER:END -->'
 AFTER_SLOT = '<!-- AFTER -->'
@@ -1145,8 +1148,9 @@ def after_block(page, indent='    '):
         '<div class="pb-after" id="pbAfter" data-pb-from="%s">' % calc,
         '  <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta">'
         '<span class="pb-ab-t">%s</span> %s</a>' % (AFTER_WORDS, _ARROW),
-        '  <p class="pb-after-why">%s</p>' % AFTER_WHY,
     ]
+    if AFTER_WHY:
+        lines.append('  <p class="pb-after-why">%s</p>' % AFTER_WHY)
     if mail:
         lines += [
             '  <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>',

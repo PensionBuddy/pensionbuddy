@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>All your pensions in one view, Pensionbuddy</title>
-<meta name="description" content="List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year. Nothing you type leaves the page.">
+<meta name="description" content="Add each pension and see your total, how it is split and what the fees cost you each year.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
@@ -17,14 +17,14 @@
 <meta property="og:locale" content="en_IE">
 <meta property="og:url" content="https://pensionbuddy.ie/my-pensions.html">
 <meta property="og:title" content="All your pensions in one view, Pensionbuddy">
-<meta property="og:description" content="List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year. Nothing you type leaves the page.">
+<meta property="og:description" content="Add each pension and see your total, how it is split and what the fees cost you each year.">
 <meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:image:alt" content="The Pensionbuddy paw mark">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="All your pensions in one view, Pensionbuddy">
-<meta name="twitter:description" content="List the pensions you have and see the total, how it is split, and what the annual charges come to in euro a year. Nothing you type leaves the page.">
+<meta name="twitter:description" content="Add each pension and see your total, how it is split and what the fees cost you each year.">
 <meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og-mark-512.png">
 <meta name="twitter:image:alt" content="The Pensionbuddy paw mark">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "All your pensions in one view", "item": "https://pensionbuddy.ie/my-pensions.html"}]}</script>
@@ -2301,8 +2301,9 @@ main h1{font-weight:800}
 
 /* ============================================================
    ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
-   reader fills in and a summary that follows it as they type: the
-   total, each pot's share as a bar, and the annual charges in euro.
+   reader fills in and a summary that follows it as they type: a ring
+   split by pension with the total in its middle, a key, and the
+   yearly fees in euro.
    Nothing is stored; the print button keeps a copy.
    ============================================================ */
 .pt-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start;padding:8px 0 24px}
@@ -2329,24 +2330,37 @@ main h1{font-weight:800}
 .pt-add:focus-visible,.pt-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 .pt-print{border-style:solid;width:auto}
 .pt-sum{position:sticky;top:96px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:24px}
-.pt-sum h2{font-size:21px;letter-spacing:-0.02em;margin:0 0 10px}
-.pt-total{margin:0 0 16px;color:var(--ink)}
-.pt-total-n{display:block;font-size:2.6rem;font-weight:300;line-height:1.1;font-variant-numeric:tabular-nums}
-.pt-total-l{font-size:.95rem;color:var(--ink-2)}
-.pt-bars{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px}
-.pt-bars li{font-size:.92rem;color:var(--ink)}
-.pt-bars .pt-bl{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
-.pt-bars .pt-bl b{font-weight:600;min-width:0;overflow-wrap:anywhere}
-.pt-bars .pt-bl span{font-variant-numeric:tabular-nums;white-space:nowrap}
-.pt-bars i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
-.pt-charges{margin:0 0 14px;font-size:.95rem;line-height:1.55;color:var(--ink)}
-.pt-charges b{font-weight:700;color:var(--ink)}
+/* the ring: each pension a slate arc at its own strength, white gaps
+   between; the total sits in the middle and counts up (page.js) */
+.pt-ring{position:relative;width:min(100%,280px);aspect-ratio:1;margin:0 auto 18px}
+.pt-donut{display:block;width:100%;height:100%}
+.pt-track{fill:none;stroke:var(--surface-2);stroke-width:16}
+.pt-seg{fill:none;stroke:var(--slate);stroke-opacity:var(--o,1);stroke-width:16;transition:stroke-width var(--pb-d-2) var(--pb-ease-out)}
+.pt-seg.pt-on{stroke-width:22}
+.pt-total{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink)}
+.pt-total-l{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.pt-total-n{font-size:2.2rem;font-weight:600;line-height:1.15;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.pt-total-c{font-size:.86rem;color:var(--ink-2);max-width:11em}
+.pt-key{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:2px}
+.pt-key li{display:grid;grid-template-columns:14px minmax(0,1fr) auto 3.2em;align-items:center;gap:10px;font-size:.95rem;color:var(--ink);
+  padding:7px 8px;border-radius:var(--r-md)}
+.pt-key li.pt-on{background:var(--surface-2)}
+.pt-key i{width:14px;height:14px;border-radius:4px;background:var(--slate);opacity:var(--o,1)}
+.pt-key b{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.pt-key span{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pt-key em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink-2);text-align:right}
+.pt-charges{margin:0 0 16px;font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pt-charges:empty{display:none}
+/* fees: money taken from the pot, the coral fill with ink on it */
+.pt-charges.pt-fee{background:var(--gap);color:var(--ink);border-radius:var(--r-lg);padding:12px 14px}
+.pt-charges b{font-weight:700;color:var(--ink);font-size:1.15rem}
 .pt-actions{margin:0 0 12px}
-.pt-note{margin:0 0 12px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
-.pt-kinds{margin:16px 0 0}
-.pt-next{margin:0;padding-left:18px}
-.pt-next li{font-size:.92rem;line-height:1.55;color:var(--ink);margin:0 0 6px}
+.pt-next{margin:0;font-size:.95rem}
 .pt-next a{color:var(--teal-700);font-weight:600}
+.pt-next a::after{content:" \2192"}
+.pt-empty .pt-actions,.pt-empty .pt-key{display:none}
+/* each row's dot matches its arc and its swatch in the key */
+.pt-dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--slate);opacity:var(--o,1);margin-right:8px;vertical-align:-1px}
 @media(max-width:920px){
   .pt-wrap{grid-template-columns:1fr}
   .pt-sum{position:static}
@@ -2363,7 +2377,8 @@ main h1{font-weight:800}
    too: the printout is the reader's own list; the caveat above it stays. */
 @media print{
   body > :not(main){display:none!important}
-  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
+  main > section,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
+  .pt-seg,.pt-key i,.pt-dot{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   main .phead{padding:0 0 16px!important;margin:0!important}
   .pt-wrap{display:flex;flex-direction:column;gap:18px;padding:0}
   .pt-sum{order:-1;position:static}
@@ -2463,50 +2478,45 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Free · nothing leaves this page</span>
   <h1>All your pensions, <span class="hl">in one view.</span></h1>
-  <p>List what you have, from statements or from memory. See the total, how it is split, and what the annual charges come to in euro. Nothing you type is sent or stored: print or save the list if you want to keep it.</p>
+  <p>Add each pension. See your total.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="pt-wrap">
   <form class="panel pt-panel" id="ptForm" novalidate data-pb-calc="my-pensions">
     <h2>Your pensions</h2>
-    <p class="hint">PRSA: Personal Retirement Savings Account. AVCs: additional voluntary contributions, paid on top of a pension from a job.</p>
     <div id="ptRows">
       <fieldset class="pt-row">
-        <legend>Pension 1</legend>
+        <legend><span class="pt-dot" aria-hidden="true"></span>Pension 1</legend>
         <div class="pt-grid">
-          <div class="pt-field pt-wide"><label for="ptName0">Name or provider</label><input id="ptName0" type="text"></div>
-          <div class="pt-field"><label for="ptKind0">Kind</label><select id="ptKind0"><option value="workplace">A pension from a job</option><option value="prsa">A PRSA</option><option value="personal">A personal pension</option><option value="prb">A Personal Retirement Bond</option><option value="avc">AVCs</option><option value="other">Something else</option></select></div>
-          <div class="pt-field"><label for="ptValue0">Value now, in euro</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
-          <div class="pt-field"><label for="ptAmc0">Annual charge, % <span class="pt-opt">(optional)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
+          <div class="pt-field pt-wide"><label for="ptName0">Who is it with?</label><input id="ptName0" type="text" placeholder="e.g. Irish Life, or an old job"></div>
+          <div class="pt-field"><label for="ptKind0">Type</label><select id="ptKind0"><option value="workplace">From a job</option><option value="prsa">PRSA</option><option value="personal">Personal pension</option><option value="prb">Bond from an old job (PRB)</option><option value="avc">Top-up (AVCs)</option><option value="other">Not sure</option></select></div>
+          <div class="pt-field"><label for="ptValue0">Worth now, €</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
+          <div class="pt-field"><label for="ptAmc0">Yearly fee, % <span class="pt-opt">(if you know)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
         </div>
       </fieldset>
     </div>
-    <button type="button" class="pt-add" id="ptAdd">Add another pension</button>
+    <button type="button" class="pt-add" id="ptAdd"><span aria-hidden="true">+</span> Add another pension</button>
   </form>
 
   <section class="pt-sum" id="ptSum" aria-labelledby="ptSumH">
-    <h2 id="ptSumH">In one view</h2>
-    <p class="pt-total"><span class="pt-total-n" id="ptTotal">€0</span> <span class="pt-total-l" id="ptCount">No pensions listed yet.</span></p>
-    <ul class="pt-bars" id="ptBars"></ul>
+    <h2 id="ptSumH" class="tk-sr">Your total</h2>
+    <div class="pt-ring">
+      <svg class="pt-donut" id="ptDonut" viewBox="0 0 120 120" aria-hidden="true"><circle class="pt-track" cx="60" cy="60" r="48"/><g id="ptSegs" transform="rotate(-90 60 60)"></g></svg>
+      <p class="pt-total"><span class="pt-total-l">Your total</span><span class="pt-total-n" id="ptTotal">€0</span><span class="pt-total-c" id="ptCount">Add a pension to start</span></p>
+    </div>
+    <ul class="pt-key" id="ptKey"></ul>
     <p class="pt-charges" id="ptCharges"></p>
     <p class="pt-sr tk-sr" id="ptSr" aria-live="polite" aria-atomic="true"></p>
-    <p class="pt-actions"><button type="button" class="pt-add pt-print" id="ptPrint">Print or save this list</button></p>
-    <p class="pt-note">Today&rsquo;s values, as you entered them. Not a projection, and not a view on any pension.</p>
-    <ul class="pt-next">
-      <li><a href="tracker.html">We can help find a lost pension</a>.</li>
-      <li>For totals near €2 million: <a href="standard-fund-threshold.html">the Standard Fund Threshold check</a>.</li>
-    </ul>
+    <p class="pt-actions"><button type="button" class="pt-add pt-print" id="ptPrint">Print or save</button></p>
+    <p class="pt-next"><a href="tracker.html">Lost track of one? We can find it</a></p>
   </section>
 </div></div>
 <div class="wrap">
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: what your pensions could grow to, your tax position, the terms each one carries.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="my-pensions">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      <p class="pb-after-why">Free. No obligation. No pressure.</p>
     </div>
     <!-- AFTER:END -->
 </div>
@@ -2514,16 +2524,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This is a list, not advice.</b> Combining pensions is not always right. Some carry terms worth more than the convenience.</p>
+    <p><b>This is a list, not advice.</b> Combining pensions is not always right.</p>
   </div>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-t">Pension charges calculator</span><span class="pb-related-d">What an annual management charge and a charge on each payment take out of a pension pot by retirement.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="old-pension-checklist.html"><span class="pb-related-t">The old pension hunt: a checklist</span><span class="pb-related-d">Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="standard-fund-threshold.html"><span class="pb-related-t">The Standard Fund Threshold</span><span class="pb-related-d">The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-t">Pension calculator</span><span class="pb-related-d">Your projection, with Revenue&rsquo;s tax relief.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="tracker.html"><span class="pb-related-t">Track down old pensions</span><span class="pb-related-d">Find pensions from old jobs, and what they are worth.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -2549,9 +2558,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-today.js?v=067d5550"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
-<script src="assets/js/pots.js?v=a8ee780f"></script>
+<script src="assets/js/pots.js?v=485de9f1"></script>
 <script>
-/* my-pensions.html, all your pensions in one view (Run 20 #12).
+/* my-pensions.html, all your pensions in one view (Run 20 #12; made a
+   picture first on 8 October 2026: a ring split by pension, the total
+   counting up in its middle, a key, and the fees in a coral tile).
 
    The sums are assets/js/pots.js, covered by tests/pots.test.js. This file
    keeps the rows (add, remove, renumber), reads them as the reader types,
@@ -2570,7 +2581,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
   function renumber() {
     rows().forEach(function (r, i) {
-      r.querySelector('legend').textContent = 'Pension ' + (i + 1);
+      var lg = r.querySelector('legend');
+      lg.lastChild.nodeValue = 'Pension ' + (i + 1);
+      lg.querySelector('.pt-dot').style.setProperty('--o', shade(i));
       FIELDS.forEach(function (f) {
         var el = r.querySelector('[id^="pt' + f + '"]'), lab = el && r.querySelector('label[for="' + el.id + '"]');
         if (!el) return;
@@ -2629,6 +2642,62 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   }
   function unread(x) { return x !== x; }
 
+  /* One hue, the reader's own money (slate, docs/DESIGN-RUBRIC.md section 3),
+     at a different strength for each pension; the white gaps in the ring and
+     the name beside each swatch carry the difference, never the shade alone. */
+  var SHADES = [1, 0.72, 0.5, 0.34, 0.22];
+  function shade(i) { return SHADES[i % SHADES.length]; }
+  var NS = 'http://www.w3.org/2000/svg', R = 48, C = 2 * Math.PI * R;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var shown = 0, raf = 0;
+
+  // The total counts to its new figure; under reduced motion it is simply there
+  function count(to) {
+    var el = $('ptTotal'), from = shown, t0 = 0;
+    cancelAnimationFrame(raf);
+    shown = to;
+    if (reduce || from === to) { el.textContent = euro(to); return; }
+    raf = requestAnimationFrame(function step(t) {
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = euro(Math.round(from + (to - from) * e));
+      if (k < 1) raf = requestAnimationFrame(step);
+    });
+  }
+
+  // Each kept pension's row number, in order: summarise() keeps the rows with a value
+  function keptRows() {
+    var out = [];
+    rows().forEach(function (r, i) { var v = Pots.amount($('ptValue' + i).value); if (v === v && v > 0) out.push(i); });
+    return out.slice(0, Pots.MAX);
+  }
+
+  function ring(s) {
+    var g = $('ptSegs'), at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0;
+    g.textContent = '';
+    s.rows.forEach(function (r, k) {
+      var len = r.share * C, c = document.createElementNS(NS, 'circle');
+      c.setAttribute('class', 'pt-seg');
+      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
+      c.setAttribute('stroke-dasharray', Math.max(0, len - gap).toFixed(2) + ' ' + C.toFixed(2));
+      c.setAttribute('stroke-dashoffset', (-at).toFixed(2));
+      c.style.setProperty('--o', shade(idx[k]));
+      c.setAttribute('data-row', idx[k]);
+      g.appendChild(c);
+      at += len;
+    });
+    return idx;
+  }
+
+  // The row being filled in is lit in the ring and the key
+  function light(i) {
+    [].forEach.call(document.querySelectorAll('#ptSegs .pt-seg, #ptKey li'), function (el) {
+      el.classList.toggle('pt-on', el.getAttribute('data-row') === String(i));
+    });
+  }
+  list.addEventListener('focusin', function (e) { var r = e.target.closest('.pt-row'); light(r ? rows().indexOf(r) : -1); });
+  list.addEventListener('focusout', function () { light(-1); });
+
   function label(kind) { var k = Pots.KINDS.filter(function (x) { return x[0] === kind; })[0]; return k ? k[1] : ''; }
 
   function paint(spoken) {
@@ -2637,32 +2706,32 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       flag($('ptValue' + i), unread(Pots.amount($('ptValue' + i).value)), 'Not counted: enter an amount in euro, like 40,000.');
       flag($('ptAmc' + i), unread(Pots.rate($('ptAmc' + i).value)), 'Not read: enter a percentage, like 1 or 0.75.');
     });
-    $('ptTotal').textContent = euro(s.total);
-    $('ptCount').textContent = s.count === 0 ? 'No pensions listed yet.'
-      : 'across ' + s.count + (s.count === 1 ? ' pension.' : ' pensions.');
-    var bars = $('ptBars'); bars.textContent = '';
-    s.rows.forEach(function (r) {
-      var li = document.createElement('li');
-      var head = document.createElement('div'); head.className = 'pt-bl';
+    count(s.total);
+    $('ptCount').textContent = s.count === 0 ? 'Add a pension to start'
+      : 'across ' + s.count + (s.count === 1 ? ' pension' : ' pensions');
+    $('ptSum').classList.toggle('pt-empty', s.count === 0);
+    var idx = ring(s), key = $('ptKey'); key.textContent = '';
+    s.rows.forEach(function (r, k) {
+      var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);
+      var sw = document.createElement('i'); sw.setAttribute('aria-hidden', 'true'); sw.style.setProperty('--o', shade(idx[k]));
       var b = document.createElement('b'); b.textContent = r.name || label(r.kind);
-      var v = document.createElement('span'); v.textContent = euro(r.value) + ', ' + Math.round(r.share * 100) + '%';
-      head.appendChild(b); head.appendChild(v);
-      var i = document.createElement('i'); i.style.setProperty('--w', (r.share * 100).toFixed(2) + '%'); i.setAttribute('aria-hidden', 'true');
-      li.appendChild(head); li.appendChild(i);
-      bars.appendChild(li);
+      var v = document.createElement('span'); v.textContent = euro(r.value);
+      var pc = document.createElement('em'); pc.textContent = Math.round(r.share * 100) + '%';
+      li.appendChild(sw); li.appendChild(b); li.appendChild(v); li.appendChild(pc);
+      key.appendChild(li);
     });
     var c = '', fig = '';
     if (s.chargesKnown > 0) {
       fig = euro(s.yearlyCharges);
-      c = 'The annual charges you know of come to about ' + fig + ' a year at today’s values';
-      c += s.chargesUnknown ? ', with ' + s.chargesUnknown + (s.chargesUnknown === 1 ? ' charge' : ' charges') + ' not known.' : '.';
+      c = 'Fees take about ' + fig + ' a year';
+      c += s.chargesUnknown ? ' (' + s.chargesUnknown + (s.chargesUnknown === 1 ? ' fee' : ' fees') + ' not known).' : '.';
     } else if (s.count > 0) {
-      c = 'Add an annual charge to see what the charges come to in euro a year.';
+      c = 'Add a yearly fee to see what fees cost you.';
     }
-    /* Run 43: the euro figure is charges taken from the pot, red by the colour rule
-       (docs/DESIGN-RUBRIC.md section 3); the words around it are unchanged */
+    // the euro figure is charges taken from the pot: the coral tile (docs/DESIGN-RUBRIC.md section 3)
     var out = $('ptCharges'), at = fig ? c.indexOf(fig) : -1;
     out.textContent = '';
+    out.classList.toggle('pt-fee', at >= 0);
     if (at >= 0) {
       var b = document.createElement('b'); b.textContent = fig;
       out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(b);
@@ -2670,7 +2739,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     } else out.textContent = c;
     if (!spoken) return;
     clearTimeout(srTimer);
-    srTimer = setTimeout(function () { $('ptSr').textContent = 'Total ' + euro(s.total) + ' ' + $('ptCount').textContent + ' ' + c; }, 700);
+    srTimer = setTimeout(function () { $('ptSr').textContent = 'Total ' + euro(s.total) + ' ' + $('ptCount').textContent + '. ' + c; }, 700);
   }
 
   form.addEventListener('input', function () { paint(true); });
@@ -2888,7 +2957,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=6da62730" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -2994,7 +3063,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-guess.js?v=b2c1ec46"></script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-share.js?v=308731e9"></script>
-<script src="assets/js/pb-after.js?v=325ae755"></script>
+<script src="assets/js/pb-after.js?v=abdccdaf"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-report.js?v=c6e2d09e"></script>
 <script src="assets/js/pb-badges.js?v=c455100f"></script>

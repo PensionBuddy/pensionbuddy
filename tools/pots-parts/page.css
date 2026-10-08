@@ -1,7 +1,8 @@
 /* ============================================================
    ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
-   reader fills in and a summary that follows it as they type: the
-   total, each pot's share as a bar, and the annual charges in euro.
+   reader fills in and a summary that follows it as they type: a ring
+   split by pension with the total in its middle, a key, and the
+   yearly fees in euro.
    Nothing is stored; the print button keeps a copy.
    ============================================================ */
 .pt-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start;padding:8px 0 24px}
@@ -28,24 +29,37 @@
 .pt-add:focus-visible,.pt-x:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
 .pt-print{border-style:solid;width:auto}
 .pt-sum{position:sticky;top:96px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:24px}
-.pt-sum h2{font-size:21px;letter-spacing:-0.02em;margin:0 0 10px}
-.pt-total{margin:0 0 16px;color:var(--ink)}
-.pt-total-n{display:block;font-size:2.6rem;font-weight:300;line-height:1.1;font-variant-numeric:tabular-nums}
-.pt-total-l{font-size:.95rem;color:var(--ink-2)}
-.pt-bars{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px}
-.pt-bars li{font-size:.92rem;color:var(--ink)}
-.pt-bars .pt-bl{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px}
-.pt-bars .pt-bl b{font-weight:600;min-width:0;overflow-wrap:anywhere}
-.pt-bars .pt-bl span{font-variant-numeric:tabular-nums;white-space:nowrap}
-.pt-bars i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
-.pt-charges{margin:0 0 14px;font-size:.95rem;line-height:1.55;color:var(--ink)}
-.pt-charges b{font-weight:700;color:var(--ink)}
+/* the ring: each pension a slate arc at its own strength, white gaps
+   between; the total sits in the middle and counts up (page.js) */
+.pt-ring{position:relative;width:min(100%,280px);aspect-ratio:1;margin:0 auto 18px}
+.pt-donut{display:block;width:100%;height:100%}
+.pt-track{fill:none;stroke:var(--surface-2);stroke-width:16}
+.pt-seg{fill:none;stroke:var(--slate);stroke-opacity:var(--o,1);stroke-width:16;transition:stroke-width var(--pb-d-2) var(--pb-ease-out)}
+.pt-seg.pt-on{stroke-width:22}
+.pt-total{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ink)}
+.pt-total-l{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.pt-total-n{font-size:2.2rem;font-weight:600;line-height:1.15;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.pt-total-c{font-size:.86rem;color:var(--ink-2);max-width:11em}
+.pt-key{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:2px}
+.pt-key li{display:grid;grid-template-columns:14px minmax(0,1fr) auto 3.2em;align-items:center;gap:10px;font-size:.95rem;color:var(--ink);
+  padding:7px 8px;border-radius:var(--r-md)}
+.pt-key li.pt-on{background:var(--surface-2)}
+.pt-key i{width:14px;height:14px;border-radius:4px;background:var(--slate);opacity:var(--o,1)}
+.pt-key b{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.pt-key span{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pt-key em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--ink-2);text-align:right}
+.pt-charges{margin:0 0 16px;font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pt-charges:empty{display:none}
+/* fees: money taken from the pot, the coral fill with ink on it */
+.pt-charges.pt-fee{background:var(--gap);color:var(--ink);border-radius:var(--r-lg);padding:12px 14px}
+.pt-charges b{font-weight:700;color:var(--ink);font-size:1.15rem}
 .pt-actions{margin:0 0 12px}
-.pt-note{margin:0 0 12px;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
-.pt-kinds{margin:16px 0 0}
-.pt-next{margin:0;padding-left:18px}
-.pt-next li{font-size:.92rem;line-height:1.55;color:var(--ink);margin:0 0 6px}
+.pt-next{margin:0;font-size:.95rem}
 .pt-next a{color:var(--teal-700);font-weight:600}
+.pt-next a::after{content:" \2192"}
+.pt-empty .pt-actions,.pt-empty .pt-key{display:none}
+/* each row's dot matches its arc and its swatch in the key */
+.pt-dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--slate);opacity:var(--o,1);margin-right:8px;vertical-align:-1px}
 @media(max-width:920px){
   .pt-wrap{grid-template-columns:1fr}
   .pt-sum{position:static}
@@ -62,7 +76,8 @@
    too: the printout is the reader's own list; the caveat above it stays. */
 @media print{
   body > :not(main){display:none!important}
-  main > section,main .phead .eyebrow,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
+  main > section,main .phead p,.pt-add,.pt-x,.pt-actions,.pt-next,.pb-after{display:none!important}
+  .pt-seg,.pt-key i,.pt-dot{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   main .phead{padding:0 0 16px!important;margin:0!important}
   .pt-wrap{display:flex;flex-direction:column;gap:18px;padding:0}
   .pt-sum{order:-1;position:static}

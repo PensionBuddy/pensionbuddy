@@ -488,15 +488,15 @@ def check_pots(sid, r, nojs):
         return
     eq('P1 %s: at load #ptCharges is empty' % sid, r['P1'], '')
     eq('P2 %s: the charges sentence, word for word' % sid, r['P2'],
-       'The annual charges you know of come to about €400 a year at today’s values.')
+       'Fees take about €400 a year.')
     eq('P3 %s: one <b>, the euro figure' % sid, r['P3'], [1, '€400'])
     eq('P4 %s: the figure is dark ink, weight 700' % sid, r['P4'], [INK, '700'])
     eq('P5 %s: a second pension, its charge not known' % sid, r['P5'],
-       'The annual charges you know of come to about €400 a year at today’s values, with 1 charge not known.')
+       'Fees take about €400 a year (1 fee not known).')
     eq('P6 %s: no charge known: the prompt, no <b>' % sid, r['P6'],
-       ['Add an annual charge to see what the charges come to in euro a year.', 0])
+       ['Add a yearly fee to see what fees cost you.', 0])
     eq('P7 %s: the spoken summary carries the same words' % sid, r['P7'],
-       'Total €50,000 across 2 pensions. Add an annual charge to see what the charges come to in euro a year.')
+       'Total €50,000 across 2 pensions. Add a yearly fee to see what fees cost you.')
 
 
 # ---------------------------------------------------------------- the threshold

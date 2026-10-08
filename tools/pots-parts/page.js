@@ -1,4 +1,6 @@
-/* my-pensions.html, all your pensions in one view (Run 20 #12).
+/* my-pensions.html, all your pensions in one view (Run 20 #12; made a
+   picture first on 8 October 2026: a ring split by pension, the total
+   counting up in its middle, a key, and the fees in a coral tile).
 
    The sums are assets/js/pots.js, covered by tests/pots.test.js. This file
    keeps the rows (add, remove, renumber), reads them as the reader types,
@@ -17,7 +19,9 @@
 
   function renumber() {
     rows().forEach(function (r, i) {
-      r.querySelector('legend').textContent = 'Pension ' + (i + 1);
+      var lg = r.querySelector('legend');
+      lg.lastChild.nodeValue = 'Pension ' + (i + 1);
+      lg.querySelector('.pt-dot').style.setProperty('--o', shade(i));
       FIELDS.forEach(function (f) {
         var el = r.querySelector('[id^="pt' + f + '"]'), lab = el && r.querySelector('label[for="' + el.id + '"]');
         if (!el) return;
@@ -76,6 +80,62 @@
   }
   function unread(x) { return x !== x; }
 
+  /* One hue, the reader's own money (slate, docs/DESIGN-RUBRIC.md section 3),
+     at a different strength for each pension; the white gaps in the ring and
+     the name beside each swatch carry the difference, never the shade alone. */
+  var SHADES = [1, 0.72, 0.5, 0.34, 0.22];
+  function shade(i) { return SHADES[i % SHADES.length]; }
+  var NS = 'http://www.w3.org/2000/svg', R = 48, C = 2 * Math.PI * R;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var shown = 0, raf = 0;
+
+  // The total counts to its new figure; under reduced motion it is simply there
+  function count(to) {
+    var el = $('ptTotal'), from = shown, t0 = 0;
+    cancelAnimationFrame(raf);
+    shown = to;
+    if (reduce || from === to) { el.textContent = euro(to); return; }
+    raf = requestAnimationFrame(function step(t) {
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = euro(Math.round(from + (to - from) * e));
+      if (k < 1) raf = requestAnimationFrame(step);
+    });
+  }
+
+  // Each kept pension's row number, in order: summarise() keeps the rows with a value
+  function keptRows() {
+    var out = [];
+    rows().forEach(function (r, i) { var v = Pots.amount($('ptValue' + i).value); if (v === v && v > 0) out.push(i); });
+    return out.slice(0, Pots.MAX);
+  }
+
+  function ring(s) {
+    var g = $('ptSegs'), at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0;
+    g.textContent = '';
+    s.rows.forEach(function (r, k) {
+      var len = r.share * C, c = document.createElementNS(NS, 'circle');
+      c.setAttribute('class', 'pt-seg');
+      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
+      c.setAttribute('stroke-dasharray', Math.max(0, len - gap).toFixed(2) + ' ' + C.toFixed(2));
+      c.setAttribute('stroke-dashoffset', (-at).toFixed(2));
+      c.style.setProperty('--o', shade(idx[k]));
+      c.setAttribute('data-row', idx[k]);
+      g.appendChild(c);
+      at += len;
+    });
+    return idx;
+  }
+
+  // The row being filled in is lit in the ring and the key
+  function light(i) {
+    [].forEach.call(document.querySelectorAll('#ptSegs .pt-seg, #ptKey li'), function (el) {
+      el.classList.toggle('pt-on', el.getAttribute('data-row') === String(i));
+    });
+  }
+  list.addEventListener('focusin', function (e) { var r = e.target.closest('.pt-row'); light(r ? rows().indexOf(r) : -1); });
+  list.addEventListener('focusout', function () { light(-1); });
+
   function label(kind) { var k = Pots.KINDS.filter(function (x) { return x[0] === kind; })[0]; return k ? k[1] : ''; }
 
   function paint(spoken) {
@@ -84,32 +144,32 @@
       flag($('ptValue' + i), unread(Pots.amount($('ptValue' + i).value)), 'Not counted: enter an amount in euro, like 40,000.');
       flag($('ptAmc' + i), unread(Pots.rate($('ptAmc' + i).value)), 'Not read: enter a percentage, like 1 or 0.75.');
     });
-    $('ptTotal').textContent = euro(s.total);
-    $('ptCount').textContent = s.count === 0 ? 'No pensions listed yet.'
-      : 'across ' + s.count + (s.count === 1 ? ' pension.' : ' pensions.');
-    var bars = $('ptBars'); bars.textContent = '';
-    s.rows.forEach(function (r) {
-      var li = document.createElement('li');
-      var head = document.createElement('div'); head.className = 'pt-bl';
+    count(s.total);
+    $('ptCount').textContent = s.count === 0 ? 'Add a pension to start'
+      : 'across ' + s.count + (s.count === 1 ? ' pension' : ' pensions');
+    $('ptSum').classList.toggle('pt-empty', s.count === 0);
+    var idx = ring(s), key = $('ptKey'); key.textContent = '';
+    s.rows.forEach(function (r, k) {
+      var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);
+      var sw = document.createElement('i'); sw.setAttribute('aria-hidden', 'true'); sw.style.setProperty('--o', shade(idx[k]));
       var b = document.createElement('b'); b.textContent = r.name || label(r.kind);
-      var v = document.createElement('span'); v.textContent = euro(r.value) + ', ' + Math.round(r.share * 100) + '%';
-      head.appendChild(b); head.appendChild(v);
-      var i = document.createElement('i'); i.style.setProperty('--w', (r.share * 100).toFixed(2) + '%'); i.setAttribute('aria-hidden', 'true');
-      li.appendChild(head); li.appendChild(i);
-      bars.appendChild(li);
+      var v = document.createElement('span'); v.textContent = euro(r.value);
+      var pc = document.createElement('em'); pc.textContent = Math.round(r.share * 100) + '%';
+      li.appendChild(sw); li.appendChild(b); li.appendChild(v); li.appendChild(pc);
+      key.appendChild(li);
     });
     var c = '', fig = '';
     if (s.chargesKnown > 0) {
       fig = euro(s.yearlyCharges);
-      c = 'The annual charges you know of come to about ' + fig + ' a year at today’s values';
-      c += s.chargesUnknown ? ', with ' + s.chargesUnknown + (s.chargesUnknown === 1 ? ' charge' : ' charges') + ' not known.' : '.';
+      c = 'Fees take about ' + fig + ' a year';
+      c += s.chargesUnknown ? ' (' + s.chargesUnknown + (s.chargesUnknown === 1 ? ' fee' : ' fees') + ' not known).' : '.';
     } else if (s.count > 0) {
-      c = 'Add an annual charge to see what the charges come to in euro a year.';
+      c = 'Add a yearly fee to see what fees cost you.';
     }
-    /* Run 43: the euro figure is charges taken from the pot, red by the colour rule
-       (docs/DESIGN-RUBRIC.md section 3); the words around it are unchanged */
+    // the euro figure is charges taken from the pot: the coral tile (docs/DESIGN-RUBRIC.md section 3)
     var out = $('ptCharges'), at = fig ? c.indexOf(fig) : -1;
     out.textContent = '';
+    out.classList.toggle('pt-fee', at >= 0);
     if (at >= 0) {
       var b = document.createElement('b'); b.textContent = fig;
       out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(b);
@@ -117,7 +177,7 @@
     } else out.textContent = c;
     if (!spoken) return;
     clearTimeout(srTimer);
-    srTimer = setTimeout(function () { $('ptSr').textContent = 'Total ' + euro(s.total) + ' ' + $('ptCount').textContent + ' ' + c; }, 700);
+    srTimer = setTimeout(function () { $('ptSr').textContent = 'Total ' + euro(s.total) + ' ' + $('ptCount').textContent + '. ' + c; }, 700);
   }
 
   form.addEventListener('input', function () { paint(true); });

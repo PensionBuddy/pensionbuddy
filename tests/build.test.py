@@ -2430,7 +2430,7 @@ def run():
         ('broker-vs-autoenrolment.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt', '.pb-scale-track::after',
                                           '#pbScaleAeBar', '#pbScalePpBar', '#pbMyAeBar', '#pbMyPpBar', '.pb-stair-you')),
         ('pension-fees-calculator.html', ('.fee-chart .fee-l-b', '.fee-key .fee-k-b')),
-        ('my-pensions.html', ('.pt-bars i',)),
+        ('my-pensions.html', ('.pt-seg', '.pt-key i', '.pt-dot')),
         ('pension-readiness-check.html', ('.rd-b-onway', '.rd-b-good')),
         ('standard-fund-threshold.html', ('.sft-strip li.sft-on',)),
         ('state-pension-entitlement.html', ('.yal-you', '.pb-glide-you',
@@ -2485,9 +2485,10 @@ def run():
     # inline "booking page" links in the Privacy Notice, the Terms and the
     # complaints page (Run 26: not calls to action).
     REASON_TEXT = re.sub(r'<[^>]+>', '', pagebuild.REASON)
-    # Run 45: the block after a calculator's result carries its own line, in
-    # Damian's words, under its button
-    AFTER_LINE = '<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY
+    # Run 45: the block after a calculator's result carried its own line
+    # under its button. Cut on 8 October 2026 (Damian: the button already
+    # says free); the block's button is exempt, its words are the reason.
+    AFTER_LINE = '<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY if pagebuild.AFTER_WHY else None
 
     def asks_without_reason(srcs):
         out = []
@@ -2503,9 +2504,11 @@ def run():
                 words = re.sub(r'<[^>]+>', '', m.group(1)).strip()
                 if words == 'booking page' or REASON_TEXT in m.group(1):
                     continue
+                if AFTER_LINE is None and 'data-pb-cta="after"' in m.group(0):
+                    continue
                 nxt = body.find('href="booking.html', m.end())
                 seg = body[m.end():min(nxt if nxt >= 0 else len(body), m.end() + 700)]
-                if pagebuild.REASON not in seg and AFTER_LINE not in seg:
+                if pagebuild.REASON not in seg and (AFTER_LINE is None or AFTER_LINE not in seg):
                     out.append('%s: "%s"' % (page, words[:40]))
         return out
 
@@ -2527,8 +2530,8 @@ def run():
     # its result with one shared block, pagebuild.after_block(), byte for byte
     # on every page that carries it and on no other (after_drift): what it does
     # not show (each names only what the page's own assumptions say it leaves
-    # out), then the booking button in wording A, "Free. No obligation. No
-    # pressure.", then "Email me this result", hidden until the script shows
+    # out), then the booking button in wording A (its line under it, "Free.
+    # No obligation. No pressure.", cut on 8 October 2026), then "Email me this result", hidden until the script shows
     # it, and its form: name, email, a box never ticked for the reader, and
     # the line on what is stored, why and where it goes. my-pensions sends
     # nothing, so it has no form. No other booking link sits in the results
@@ -2555,8 +2558,8 @@ def run():
             blk = s[span[0]:span[1]]
             n = blk.find('id="pbAfterNot"')
             b, w = blk.find('data-pb-ab="cta"'), blk.find(pagebuild.AFTER_WORDS)
-            y = blk.find('<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY)
-            if not (0 <= b < w < y) or (not_line and not 0 <= n < b):
+            y = blk.find('<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY) if pagebuild.AFTER_WHY else w
+            if not (0 <= b < w <= y) or (not_line and not 0 <= n < b):
                 f.append('%s: not in order: what it does not show, the button and its words, its line' % page)
             if mail:
                 m, fm = blk.find('id="ecMore"'), blk.find('<form id="ecForm" name="calculator-results"')
@@ -2598,7 +2601,8 @@ def run():
         m49 = dict(sources); m49[page] = mut
         eq('49. %s is caught' % label, want in after_faults(m49), True)
     for label, page, mut in (
-            ('the line reworded on one page', 'pia.html', sources['pia.html'].replace(pagebuild.AFTER_WHY, 'Free. No pressure.', 1)),
+            ('the button reworded on one page', 'pia.html', sources['pia.html'].replace(
+                '<span class="pb-ab-t">%s</span>' % pagebuild.AFTER_WORDS, '<span class="pb-ab-t">Book a call</span>', 1)),
             ('the block copied onto a page outside the table', 'glossary.html',
              sources['glossary.html'].replace('</main>', pagebuild.after_block('pia.html') + '</main>', 1))):
         assert mut != sources[page], label

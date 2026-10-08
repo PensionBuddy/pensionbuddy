@@ -29,12 +29,12 @@
   'use strict';
 
   var KINDS = [
-    ['workplace', 'A pension from a job'],
-    ['prsa', 'A PRSA'],
-    ['personal', 'A personal pension'],
-    ['prb', 'A Personal Retirement Bond'],
-    ['avc', 'AVCs'],
-    ['other', 'Something else']
+    ['workplace', 'From a job'],
+    ['prsa', 'PRSA'],
+    ['personal', 'Personal pension'],
+    ['prb', 'Bond from an old job (PRB)'],
+    ['avc', 'Top-up (AVCs)'],
+    ['other', 'Not sure']
   ];
   var MAX = 10;
 

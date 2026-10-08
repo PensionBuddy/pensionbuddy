@@ -19,8 +19,8 @@
          show" line, word for word, where it has one, and one block: one
          booking button, in the wording pb-cta.js picked for this visit
          (A "Book a free 20-minute call with us" or B "See what this
-         means for you - free 20-min call"), and "Free. No obligation. No
-         pressure." under it
+         means for you - free 20-min call"), and nothing under it (its
+         line, "Free. No obligation. No pressure.", cut on 8 October 2026)
      G2  at load the button is plain booking.html, as in the markup (no tag
          inside the site for a search engine to read); pointed at, it carries
          the four tags (utm_source=site, utm_medium=cta, utm_campaign=<page>,
@@ -80,7 +80,7 @@ const eq = (label, got, want) => {
 
 const RSQ = '’';
 const WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means for you - free 20-min call' };
-const WHY = 'Free. No obligation. No pressure.';
+const WHY = [];   // the line under the button, cut on 8 October 2026
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {
   'pension-calculator.html': ['pension-calculator', 'product charges, the tax on your income when you draw it.', true],
@@ -91,7 +91,7 @@ const AFTER = {
   'state-pension-entitlement.html': ['state-pension-entitlement', `your old pensions, your tax position, your employer${RSQ}s scheme.`, true],
   'standard-fund-threshold.html': ['standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', true],
   'pia.html': ['pia', `your old pensions, fees and charges, your employer${RSQ}s scheme.`, true],
-  'my-pensions.html': ['my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', false],
+  'my-pensions.html': ['my-pensions', null, false],
   'director-pension-rules.html': ['director-pension-rules', null, true],
 };
 const tags = (page, v) => `utm_source=site&utm_medium=cta&utm_campaign=${page.replace(/\.html$/, '')}&utm_content=${v}`;
@@ -263,9 +263,9 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
   const p = await ev(PARTS);
   if (loop) eq(`G1. ${page}: one line, "What this doesn${RSQ}t show: ${loop.slice(0, 30)}...", a caveat`,
                [p.nots, p.notText, p.notCaveat], [1, `What this doesn${RSQ}t show: ${loop}`, true]);
-  else eq(`G1. ${page}: no "doesn${RSQ}t show" line (its list says it is topics, not advice)`, p.nots, 0);
+  else eq(`G1. ${page}: no "doesn${RSQ}t show" line (a list, not a projection)`, p.nots, 0);
   eq(`G1. ${page}: one block, one booking button in this visit's wording (${p.variant}), its line`,
-     [p.blocks, p.from, p.links, p.ab, p.words, p.why, p.reason], [1, from, 1, 'cta', WORDS[p.variant] || '?', [WHY], 0]);
+     [p.blocks, p.from, p.links, p.ab, p.words, p.why, p.reason], [1, from, 1, 'cta', WORDS[p.variant] || '?', WHY, 0]);
   if (page !== 'director-pension-rules.html') {
     eq(`G2. ${page}: at load the button is plain booking.html`, p.href, 'booking.html');
     eq(`G2. ${page}: pointed at, it carries the four tags, and no #from=`, await hrefOnPoint(), 'booking.html?' + tags(page, p.variant));
@@ -274,10 +274,9 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
     eq(`G7. ${page}: no form, and no "Email me this result"`, [p.form, p.more], [false, null]);
     const RM = [{ name: 'prefers-reduced-motion', value: 'reduce' }];
     await send('Emulation.setEmulatedMedia', { media: 'print', features: RM });
-    const printed = await ev(`[getComputedStyle(document.getElementById('pbAfterNot')).display !== 'none',
-      getComputedStyle(document.getElementById('pbAfter')).display]`);
+    const printed = await ev(`getComputedStyle(document.getElementById('pbAfter')).display`);
     await send('Emulation.setEmulatedMedia', { media: '', features: RM });
-    eq(`G7. ${page}: printed, the line stays and the block is left out`, printed, [true, 'none']);
+    eq(`G7. ${page}: printed, the block is left out`, printed, 'none');
   } else {
     eq(`G7. ${page}: the line, the button, then "Email me this result", shown by the script`, [p.order, p.more], [true, ['Email me this result', false, true]]);
   }
@@ -366,7 +365,7 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
   const p = await ev(PARTS);
   eq(`G10. ${page} without JavaScript: the line`, [p.nots, p.notText], [1, `What this doesn${RSQ}t show: ${loop}`]);
   eq(`G10. ${page} without JavaScript: the button, wording A, plain booking.html, and its line`,
-     [p.blocks, p.from, p.links, p.words, p.href, p.why], [1, from, 1, WORDS.A, 'booking.html', [WHY]]);
+     [p.blocks, p.from, p.links, p.words, p.href, p.why], [1, from, 1, WORDS.A, 'booking.html', WHY]);
   eq(`G10. ${page} without JavaScript: "Email me this result" and its form stay hidden`,
      [p.more && p.more[2], await ev(`getComputedStyle(document.getElementById('ecCap')).display`)], [false, 'none']);
 }

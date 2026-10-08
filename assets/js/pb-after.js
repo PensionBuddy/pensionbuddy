@@ -3,9 +3,8 @@
    Under each calculator's result, one shared block that tools/pagebuild.py
    after_block() writes into the page, so it is the same everywhere and is
    there without JavaScript: what the calculator does not show (a caveat),
-   then #pbAfter: the booking button (assets/js/pb-cta.js picks its wording),
-   "Free. No obligation. No pressure." and, on every page that sends
-   anything, "Email me this result". This file does three things and writes
+   then #pbAfter: the booking button (assets/js/pb-cta.js picks its wording)
+   and, on every page that sends anything, "Email me this result". This file does three things and writes
    nothing else.
 
    1. THE BUTTON'S ADDRESS. The button carries #from= and one of the nine

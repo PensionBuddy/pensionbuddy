@@ -1,40 +1,37 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Free · nothing leaves this page</span>
   <h1>All your pensions, <span class="hl">in one view.</span></h1>
-  <p>List what you have, from statements or from memory. See the total, how it is split, and what the annual charges come to in euro. Nothing you type is sent or stored: print or save the list if you want to keep it.</p>
+  <p>Add each pension. See your total.</p>
 </div></div>
 
 <div class="wrap"><div class="pt-wrap">
   <form class="panel pt-panel" id="ptForm" novalidate data-pb-calc="my-pensions">
     <h2>Your pensions</h2>
-    <p class="hint">PRSA: Personal Retirement Savings Account. AVCs: additional voluntary contributions, paid on top of a pension from a job.</p>
     <div id="ptRows">
       <fieldset class="pt-row">
-        <legend>Pension 1</legend>
+        <legend><span class="pt-dot" aria-hidden="true"></span>Pension 1</legend>
         <div class="pt-grid">
-          <div class="pt-field pt-wide"><label for="ptName0">Name or provider</label><input id="ptName0" type="text"></div>
-          <div class="pt-field"><label for="ptKind0">Kind</label><select id="ptKind0"><option value="workplace">A pension from a job</option><option value="prsa">A PRSA</option><option value="personal">A personal pension</option><option value="prb">A Personal Retirement Bond</option><option value="avc">AVCs</option><option value="other">Something else</option></select></div>
-          <div class="pt-field"><label for="ptValue0">Value now, in euro</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
-          <div class="pt-field"><label for="ptAmc0">Annual charge, % <span class="pt-opt">(optional)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
+          <div class="pt-field pt-wide"><label for="ptName0">Who is it with?</label><input id="ptName0" type="text" placeholder="e.g. Irish Life, or an old job"></div>
+          <div class="pt-field"><label for="ptKind0">Type</label><select id="ptKind0"><option value="workplace">From a job</option><option value="prsa">PRSA</option><option value="personal">Personal pension</option><option value="prb">Bond from an old job (PRB)</option><option value="avc">Top-up (AVCs)</option><option value="other">Not sure</option></select></div>
+          <div class="pt-field"><label for="ptValue0">Worth now, €</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
+          <div class="pt-field"><label for="ptAmc0">Yearly fee, % <span class="pt-opt">(if you know)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
         </div>
       </fieldset>
     </div>
-    <button type="button" class="pt-add" id="ptAdd">Add another pension</button>
+    <button type="button" class="pt-add" id="ptAdd"><span aria-hidden="true">+</span> Add another pension</button>
   </form>
 
   <section class="pt-sum" id="ptSum" aria-labelledby="ptSumH">
-    <h2 id="ptSumH">In one view</h2>
-    <p class="pt-total"><span class="pt-total-n" id="ptTotal">€0</span> <span class="pt-total-l" id="ptCount">No pensions listed yet.</span></p>
-    <ul class="pt-bars" id="ptBars"></ul>
+    <h2 id="ptSumH" class="tk-sr">Your total</h2>
+    <div class="pt-ring">
+      <svg class="pt-donut" id="ptDonut" viewBox="0 0 120 120" aria-hidden="true"><circle class="pt-track" cx="60" cy="60" r="48"/><g id="ptSegs" transform="rotate(-90 60 60)"></g></svg>
+      <p class="pt-total"><span class="pt-total-l">Your total</span><span class="pt-total-n" id="ptTotal">€0</span><span class="pt-total-c" id="ptCount">Add a pension to start</span></p>
+    </div>
+    <ul class="pt-key" id="ptKey"></ul>
     <p class="pt-charges" id="ptCharges"></p>
     <p class="pt-sr tk-sr" id="ptSr" aria-live="polite" aria-atomic="true"></p>
-    <p class="pt-actions"><button type="button" class="pt-add pt-print" id="ptPrint">Print or save this list</button></p>
-    <p class="pt-note">Today&rsquo;s values, as you entered them. Not a projection, and not a view on any pension.</p>
-    <ul class="pt-next">
-      <li><a href="tracker.html">We can help find a lost pension</a>.</li>
-      <li>For totals near €2 million: <a href="standard-fund-threshold.html">the Standard Fund Threshold check</a>.</li>
-    </ul>
+    <p class="pt-actions"><button type="button" class="pt-add pt-print" id="ptPrint">Print or save</button></p>
+    <p class="pt-next"><a href="tracker.html">Lost track of one? We can find it</a></p>
   </section>
 </div></div>
 <div class="wrap">
@@ -44,7 +41,7 @@
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This is a list, not advice.</b> Combining pensions is not always right. Some carry terms worth more than the convenience.</p>
+    <p><b>This is a list, not advice.</b> Combining pensions is not always right.</p>
   </div>
 </div></section>
 </main>
