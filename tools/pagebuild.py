@@ -342,7 +342,7 @@ PAGES = {
         title='All your pensions in one view, Pensionbuddy',
         desc=('Add each pension and see your total, how it is split and what the fees cost you '
               'each year.'),
-        modules=['assets/js/pots.js'],
+        modules=['assets/js/pots.js', 'assets/js/pb-pots-motion.js'],
         keep=[],
         nav='my-pensions.html',
         reviewed=True,

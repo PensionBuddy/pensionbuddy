@@ -2502,6 +2502,43 @@ main h1{font-weight:800}
 .chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
 #chartKeyToday[hidden]{display:none}
 /* TODAY:END */
+/* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
+   line, the waiting handle, the pot's bounce and milestones
+   (assets/js/pb-calc-motion.js adds every element and class here, and
+   :root.pb-calc-alive, so the pages built on this one as a skeleton carry
+   these rules but never match them). */
+:root.pb-calc-alive #chart{cursor:crosshair;touch-action:pan-y}
+:root.pb-calc-alive .pb-scrub{transition:opacity .2s}
+:root.pb-calc-alive .pb-scrub-tip{position:absolute;z-index:5;display:flex;flex-direction:column;gap:2px;padding:9px 12px;border-radius:12px;background:#0B1F1C;color:#fff;font-size:14px;line-height:1.35;white-space:nowrap;box-shadow:0 10px 24px rgba(11,31,28,.25);pointer-events:none;font-variant-numeric:tabular-nums}
+:root.pb-calc-alive .pb-scrub-tip[hidden]{display:none}
+:root.pb-calc-alive .pb-scrub-tip b{font-weight:700}
+:root.pb-calc-alive .pb-scrub-tip i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%}
+:root.pb-calc-alive .pb-k-b{background:#0B7A6E;box-shadow:0 0 0 2px #fff}:root.pb-calc-alive .pb-k-u{background:#F4B740}
+:root.pb-calc-alive .pb-wait{margin-top:16px;padding-top:14px;border-top:1px solid rgba(11,31,28,.1)}
+:root.pb-calc-alive .pb-wait[hidden]{display:none}
+:root.pb-calc-alive .pb-wait-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
+:root.pb-calc-alive .pb-wait-row label{font-size:.98rem;font-weight:600}
+:root.pb-calc-alive .pb-wait-v{font-weight:700;font-variant-numeric:tabular-nums}
+:root.pb-calc-alive .pb-wait input[type=range]{display:block;width:100%}
+:root.pb-calc-alive .pb-wait-bars{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+:root.pb-calc-alive .pb-wait-bar{display:grid;grid-template-columns:7.2em minmax(0,1fr) auto;align-items:center;gap:10px;font-size:14px}
+:root.pb-calc-alive .pb-wait-l{color:var(--ink-2)}
+:root.pb-calc-alive .pb-wait-bar b{min-width:6.2em;text-align:right;font-variant-numeric:tabular-nums}
+:root.pb-calc-alive .pb-wait-track{position:relative;height:14px;overflow:hidden;border-radius:99px;background:rgba(11,31,28,.07)}
+:root.pb-calc-alive .pb-wait-now,:root.pb-calc-alive .pb-wait-late{position:absolute;left:0;top:0;bottom:0;background:#0B7A6E}
+:root.pb-calc-alive .pb-wait-now{width:100%;border-radius:99px}
+:root.pb-calc-alive .pb-wait-late{border-radius:99px 0 0 99px}
+:root.pb-calc-alive .pb-wait-gap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,#F2B8A8 0 6px,#FADCD3 6px 12px)}
+:root.pb-calc-alive .pb-wait-out{margin:12px 0 0;font-size:1rem}
+:root.pb-calc-alive .pb-wait-tick .pb-wait-gap{animation:pbGapFlash .5s}
+@keyframes pbGapFlash{0%{filter:brightness(1.2) saturate(1.6)}100%{filter:none}}
+:root.pb-calc-alive #potOut.pb-pot-bump{animation:pbBump .45s cubic-bezier(.3,1.6,.5,1);transform-origin:0 70%}
+@keyframes pbBump{35%{transform:scale(1.06)}100%{transform:none}}
+:root.pb-calc-alive .pb-mile{position:absolute;left:0;top:-8px;padding:5px 11px;border-radius:999px;background:#F4B740;color:#3A2A00;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;animation:pbMile 2.2s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes pbMile{0%{transform:translateY(10px) scale(.6);opacity:0}15%{transform:translateY(-14px) scale(1.08);opacity:1}70%{transform:translateY(-22px);opacity:1}100%{transform:translateY(-40px);opacity:0}}
+.pb-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
+:root.pb-calc-alive.pb-motion .rv-you,:root.pb-calc-alive.pb-motion .rv-tax{transition:width .7s cubic-bezier(.34,1.56,.64,1)}
+/* MOTION-4 CALCULATOR:END */
 </style>
 
 <script>
@@ -3277,6 +3314,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-after.js?v=257e33b2"></script>
+<script src="assets/js/pb-calc-motion.js?v=800fed53"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>

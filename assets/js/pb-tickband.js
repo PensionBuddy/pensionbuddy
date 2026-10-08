@@ -5,8 +5,8 @@
 
    The widget (.pb-rw, assets/js/pb-relief-widget.js) says what putting in an
    amount could cost after tax relief at the higher and standard rates. The
-   jar draws the same arithmetic: the amount in coins, yours (teal) poured in
-   first, Revenue's (amber) landing on top. The key under it names the split
+   jar draws the same arithmetic: the amount in coins, yours (grey-green) poured
+   in first, Revenue's (amber) landing on top. The key under it names the split
    in euro, from the same two rates the widget uses, so the €100 example
    reads "You pay €60, Revenue adds €40" at the higher rate, the widget's
    "about €60".
@@ -35,7 +35,9 @@
   function motion() { return root.classList.contains('pb-motion'); }
   function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
 
-  var YOU = ['#14CBB1', '#0B8F7D'], REV = ['#F4B740', '#C98A12'];
+  /* the site's colours for this split (the calculator's "You really pay" and
+     "Revenue adds"): ink-2 for yours, amber for Revenue's; teal is the State's */
+  var YOU = ['#54635F', '#3E4A47'], REV = ['#F4B740', '#C98A12'];
   var W = 0, H = 0, dpr = 1, R = 15, J = null, coins = [], idx = 0, raf = 0, last = 0, calm = 0, seen = false, queue = [];
 
   function size() {

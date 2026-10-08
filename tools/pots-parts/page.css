@@ -101,3 +101,13 @@
    transition. */
 .pt-row.pt-new{animation:ptRise var(--pb-d-2) var(--pb-ease-out)}
 @keyframes ptRise{from{transform:translateY(var(--pb-nudge))}to{transform:none}}
+/* MOTION-4 POTS:BEGIN (8 October 2026, Damian's brief): each pension a pot
+   round the ring (assets/js/pb-pots-motion.js adds every element and class here). */
+.pt-orbit{position:relative;margin:-14px -24px 4px;padding:100px 24px 104px;touch-action:pan-y}
+.pt-orbit .pt-ring{margin:0 auto}
+.pt-orbit-cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pt-orbit-hot{cursor:grab}
+.pt-orbit-drag{cursor:grabbing}
+@media(max-width:600px){.pt-orbit{padding:76px 16px 80px;margin:-14px -16px 4px}.pt-orbit .pt-ring{width:min(100%,230px)}}
+@media print{.pt-orbit-cv{display:none}.pt-orbit{padding:0;margin:0}}
+/* MOTION-4 POTS:END */
