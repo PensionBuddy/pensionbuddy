@@ -1,8 +1,7 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The free tool · no sign-up</span>
   <h1>What the State Pension would <span class="hl">pay</span> you.</h1>
-  <p>Both of the Department of Social Protection's calculations, and which one is paid.</p>
+  <p>Your weekly State Pension, from your PRSI record.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-entitlement">
@@ -13,32 +12,32 @@
     <div class="field">
       <div class="row"><label for="birth">Year you were born</label><span class="val" id="birthV">1962</span></div>
       <input type="range" id="birth" min="1960" max="2008" step="1" value="1962">
-      <p class="subnote" id="birthNote">You reach 66 in <b>2028</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.</p>
+      <p class="subnote" id="birthNote">You reach 66 in <b>2028</b>.</p>
     </div>
 
     <div class="field">
-      <div class="row"><label for="entry">Contribution year you first paid Pay-Related Social Insurance (PRSI)</label><span class="val" id="entryV">1985</span></div>
+      <div class="row"><label for="entry">Year you first paid PRSI</label><span class="val" id="entryV">1985</span></div>
       <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
-      <p class="subnote" id="entryNote">Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.</p>
-      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first payment was between 1 January and 5 April</span></label>
+      <p class="subnote" id="entryNote" hidden></p>
+      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first PRSI payment was between 1 January and 5 April (years up to 2001)</span></label>
     </div>
 
     <div class="field">
-      <div class="row"><label for="paid">Paid contributions to the end of the year before you turn 66</label><span class="val" id="paidV">1,560</span></div>
+      <div class="row"><label for="paid">Weeks of PRSI you paid</label><span class="val" id="paidV">1,560</span></div>
       <input type="range" id="paid" min="0" max="2600" step="52" value="1560">
-      <p class="subnote" id="paidNote">Full-rate, from your own earnings. 52 is a year. The qualifying minimum is 520, ten years. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+      <p class="subnote" id="paidNote">Up to the year before you turn 66. 52 weeks is a year; you need 520. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
     </div>
 
     <div class="field">
-      <div class="row"><label for="credited">Credited contributions to the same date</label><span class="val" id="creditedV">260</span></div>
+      <div class="row"><label for="credited">Credited weeks</label><span class="val" id="creditedV">260</span></div>
       <input type="range" id="credited" min="0" max="1040" step="52" value="260">
-      <p class="subnote">Awarded without earnings, for example while unemployed or ill. Up to 520 count under the Total Contributions Approach (TCA), all under Yearly Average.</p>
+      <p class="subnote">Weeks you were out of work or ill.</p>
     </div>
 
     <div class="field" style="margin-bottom:0">
-      <div class="row"><label for="homecaring">HomeCaring Periods</label><span class="val" id="homecaringV">0</span></div>
+      <div class="row"><label for="homecaring">Weeks caring at home</label><span class="val" id="homecaringV">0</span></div>
       <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
-      <p class="subnote">Caring for a child or someone who needed care. TCA only: up to 1,040, and 1,040 with credited contributions.</p>
+      <p class="subnote">Caring for a child or someone who needed care.</p>
     </div>
   </div>
 
@@ -47,19 +46,18 @@
 
     <div id="spHas">
       <div class="res-hero">
-        <div><div class="rl">State Pension (Contributory), a week</div><div class="big" id="spWeekly">€280.86</div></div>
-        <div><div class="rl">State Pension (Contributory), a year</div><div class="big" id="spAnnual">€14,605</div></div>
+        <div><div class="rl">Your State Pension, a week</div><div class="big" id="spWeekly">€280.86</div></div>
+        <div><div class="rl">A year</div><div class="big" id="spAnnual">€14,605</div></div>
         <div class="divline"></div>
         <div class="foot" id="spFoot">Worked out under the Yearly Average blend, for a pension starting in 2028.</div>
       </div>
 
       <div class="bothcard">
-        <h3>Both calculations</h3>
+        <h3>Two ways to work it out</h3>
         <p class="sub" id="bothSub">Until the end of 2033 the Department works the rate out both ways and pays the higher.</p>
 
         <div class="mrow" id="m1Row">
-          <div class="mhead"><span class="mname">Method 1, Total Contributions Approach</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
-          <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
+          <div class="mhead"><span class="mname">Method 1: your total weeks</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
           <div class="mbar" aria-hidden="true">
             <div class="mbar-track"><i class="mbar-fill" id="m1Fill" style="width:87.5008%"></i><i class="mbar-gap" id="m1Gap" style="left:87.5008%;width:6.3381%"></i></div>
             <span class="mbar-lab" id="m1Lab" style="left:90.6699%">€18.97</span>
@@ -72,17 +70,20 @@
         </div>
 
         <div class="mrow" id="m2Row">
-          <div class="mhead"><span class="mname">Method 2, the Yearly Average blend</span><span class="mrate" id="m2Rate">€280.86 a week</span></div>
-          <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
+          <div class="mhead"><span class="mname">Method 2: your yearly average</span><span class="mrate" id="m2Rate">€280.86 a week</span></div>
           <div class="mbar" aria-hidden="true">
             <div class="mbar-track"><i class="mbar-fill" id="m2Fill" style="width:93.8390%"></i><i class="mbar-gap" id="m2Gap" hidden></i></div>
             <span class="mbar-lab" id="m2Lab" style="left:93.8390%">Paid</span>
           </div>
         </div>
 
-        <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
         <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
         <p class="mclose" id="mWhy" hidden></p>
+        <details class="pb-fold pb-fold-in"><summary>Show the working</summary>
+          <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
+          <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
+        <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
+        </details>
       </div>
 
     </div>
@@ -103,14 +104,12 @@
       </div>
     </div>
 
-    <p class="srcnote">Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. The Department's own web pages on the calculation methods still showed 2025 rates when this was checked, which is why the booklet is cited. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</p>
-    <p class="pb-jump">Jump to <a href="#pbHow">how it works</a> or <a href="#pbAssume">the assumptions</a>.</p>
     <!-- AFTER -->
   </div>
 </div></div>
 
 <section class="assume" id="pbHow" style="padding-bottom:0"><div class="wrap">
-  <h3>How the two calculations work</h3>
+  <details class="pb-fold"><summary>How the two methods work</summary>
   <div class="expl">
     <p><b>Method 1, the Total Contributions Approach (TCA)</b>, adds paid, credited and HomeCaring Periods. A full record, 2,080 or forty years, gets the maximum personal rate: €299.30 a week from January 2026. Less is pro rata.</p>
     <p><b>The Yearly Average method</b> divides paid and credited contributions, at most 52 a year, by the years from your first PRSI year to the year before you turn 66. The result, rounded half up to a whole number, sets the band.</p>
@@ -169,24 +168,20 @@
       <li class="pb-glide-col"><span class="pb-glide-you" id="pbGlideY2034" hidden><span class="pb-vh">Your year: </span></span><span class="pb-glide-bar" aria-hidden="true"><i style="height:0%"></i></span><span class="pb-glide-pct">0%</span><span class="pb-glide-yr">2034 on</span></li>
     </ol>
   </div>
+  </details>
 </div></section>
-
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Next: what sits on top of it.</h2></div>
-  <a class="btn btn-ghost" href="booking.html">Talk through your own figures <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Figures are illustrations, not a guarantee. Only the Department's own calculation counts.</p>
+    <p><b>This page is information, not advice.</b> Only the Department's own calculation counts.</p>
   </div>
 </div></section>
 
 <section class="assume" id="pbAssume"><div class="wrap">
-  <h3>The assumptions</h3>
+  <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
+    <li>Not included: your old pensions, your tax position, your employer&rsquo;s scheme.</li>
     <li>Below the qualifying minimum there is no entitlement under either method. Credited contributions and HomeCaring Periods never count toward it. The means-tested State Pension (Non-Contributory) is not calculated.</li>
     <li>This page assumes the pension starts at 66. Starting at 67 to 70 changes the mix and rate, and is not modelled. Band rates at those ages are not published for 2026.</li>
     <li>The <b>Homemaker's Scheme</b> and the <b>Alternative Yearly Average</b> are left out. Each can only raise Method 2, so Method 2 is a floor on the details entered. The first drops up to twenty whole caring years from 1994 on, with no credited contributions, from the years divided by. The second counts from 1979, used only when it reaches 48.</li>
@@ -199,6 +194,8 @@
     <li>Rates and rules change, usually at each Budget. A year is 52 weekly payments.</li>
     <li>The personal rate at 66 excludes increases for a qualified adult or child, and the higher rate from 80.</li>
     <li>Pensions that started before 2025 are not covered.</li>
+    <li>Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. The Department's own web pages on the calculation methods still showed 2025 rates when this was checked, which is why the booklet is cited. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</li>
   </ul>
+  </details>
 </div></section>
 </main>

@@ -173,6 +173,15 @@ picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep th
 
 /* ---- assumptions ---- */
 .assume{padding:72px 0 24px}
+/* 8 October 2026: the assumptions fold away under one line */
+.pb-fold{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:0 18px}
+.pb-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;font-size:16px;font-weight:700;color:var(--ink)}
+.pb-fold>summary::-webkit-details-marker{display:none}
+.pb-fold>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-fold[open]>summary::after{content:"\2212"}
+.pb-fold>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
+.pb-fold>ul{padding:4px 0 18px}
+.pb-fold>summary h3{font:inherit;margin:0;letter-spacing:inherit}
 .assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
 .assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
 .assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
@@ -2964,7 +2973,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="srcwarn">Checked against gov.ie on 10 September 2026: the 2026 rates, and that all three contributions stop at €80,000 of salary. From third-party summaries: the later rates and years, and that the scheme does not currently take more than its set rate. Confirm those with gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA). Rates and rules can change.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: your old pensions, product charges, your employer&rsquo;s own scheme.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="broker-vs-autoenrolment">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
@@ -3002,8 +3010,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
+    <li>Not included: your old pensions, product charges, your employer&rsquo;s own scheme.</li>
     <li>All figures are one year of contributions at your salary, not a retirement fund projection. They ignore investment growth, product charges and inflation.</li>
     <li>Auto-enrolment rates are 1.5% employee, 1.5% employer and 0.5% State in years 1 to 3. They rise in three-year steps to 6%, 6% and 2% from year 10. The ratio is always 3 employee, 3 employer, 1 State. The phase slider starts on this year&rsquo;s phase.
     <ol class="pb-stair">
@@ -3023,6 +3032,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li id="riskAssume" hidden>The three risk illustrations use the 1 to 7 Summary Risk Indicator that European Union (EU) rules require on every fund&rsquo;s Key Information Document. The return figures are long-term annual assumptions for illustration, chosen to sit inside the 1% to 8% range the site&rsquo;s other calculators use and with the medium level at their 5% default, so no two pages imply different growth. The &ldquo;bad year&rdquo; figures are rough indications of a fall, not a limit: a fund can lose more. All six figures are placeholders awaiting confirmation against the fund ranges Gresham can actually arrange.</li>
     <li>A personal pension or PRSA has wider fund choice than My Future Fund, from the provider&rsquo;s set menu. This page claims access to no particular asset class.</li>
   </ul>
+  </details>
 </div></section>
 <script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
@@ -3054,7 +3064,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
@@ -3701,7 +3711,7 @@ setMode(location.hash === '#combined' ? 2 : 1);
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=7a32a123" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

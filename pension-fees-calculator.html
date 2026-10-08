@@ -173,6 +173,15 @@ picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep th
 
 /* ---- assumptions ---- */
 .assume{padding:72px 0 24px}
+/* 8 October 2026: the assumptions fold away under one line */
+.pb-fold{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:0 18px}
+.pb-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;font-size:16px;font-weight:700;color:var(--ink)}
+.pb-fold>summary::-webkit-details-marker{display:none}
+.pb-fold>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-fold[open]>summary::after{content:"\2212"}
+.pb-fold>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
+.pb-fold>ul{padding:4px 0 18px}
+.pb-fold>summary h3{font:inherit;margin:0;letter-spacing:inherit}
 .assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
 .assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
 .assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
@@ -2672,7 +2681,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p>Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: policy, set-up and exit charges, the terms an older plan may carry, your tax relief.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="pension-fees-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
@@ -2710,14 +2718,16 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
+    <li>Not included: policy, set-up and exit charges, the terms an older plan may carry, your tax relief.</li>
     <li>Each month the pot grows at your yearly rate, before charges. Then a twelfth of the annual management charge comes out. Then the payment goes in, less the charge on payments.</li>
     <li>Your plan&rsquo;s defaults, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
     <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
     <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target). Figures ignore tax relief. Relief changes what a payment costs you, not what the charges take.</li>
     <li>Growth is steady and the same for both plans. Real returns also differ between funds.</li>
   </ul>
+  </details>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
@@ -2748,7 +2758,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script src="assets/js/pension-fees.js?v=8ac63932"></script>
@@ -3082,7 +3092,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=7a32a123" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

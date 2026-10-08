@@ -83,14 +83,14 @@ const WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means
 const WHY = [];   // the line under the button, cut on 8 October 2026
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {
-  'pension-calculator.html': ['pension-calculator', 'product charges, the tax on your income when you draw it.', true],
-  'director-calculator.html': ['director-calculator', `your company${RSQ}s exact funding limit, product charges.`, true],
-  'broker-vs-autoenrolment.html': ['broker-vs-autoenrolment', `your old pensions, product charges, your employer${RSQ}s own scheme.`, true],
-  'pension-fees-calculator.html': ['pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', true],
-  'state-pension-reality-check.html': ['state-pension-reality-check', `your old pensions, your tax position, your employer${RSQ}s scheme.`, true],
-  'state-pension-entitlement.html': ['state-pension-entitlement', `your old pensions, your tax position, your employer${RSQ}s scheme.`, true],
-  'standard-fund-threshold.html': ['standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', true],
-  'pia.html': ['pia', `your old pensions, fees and charges, your employer${RSQ}s scheme.`, true],
+  'pension-calculator.html': ['pension-calculator', null, true],
+  'director-calculator.html': ['director-calculator', null, true],
+  'broker-vs-autoenrolment.html': ['broker-vs-autoenrolment', null, true],
+  'pension-fees-calculator.html': ['pension-fees-calculator', null, true],
+  'state-pension-reality-check.html': ['state-pension-reality-check', null, true],
+  'state-pension-entitlement.html': ['state-pension-entitlement', null, true],
+  'standard-fund-threshold.html': ['standard-fund-threshold', null, true],
+  'pia.html': ['pia', null, true],
   'my-pensions.html': ['my-pensions', null, false],
   'director-pension-rules.html': ['director-pension-rules', null, true],
 };
@@ -263,7 +263,7 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
   const p = await ev(PARTS);
   if (loop) eq(`G1. ${page}: one line, "What this doesn${RSQ}t show: ${loop.slice(0, 30)}...", a caveat`,
                [p.nots, p.notText, p.notCaveat], [1, `What this doesn${RSQ}t show: ${loop}`, true]);
-  else eq(`G1. ${page}: no "doesn${RSQ}t show" line (a list, not a projection)`, p.nots, 0);
+  else eq(`G1. ${page}: no "doesn${RSQ}t show" line (since 8 October 2026 it sits in the folded assumptions)`, p.nots, 0);
   eq(`G1. ${page}: one block, one booking button in this visit's wording (${p.variant}), its line`,
      [p.blocks, p.from, p.links, p.ab, p.words, p.why, p.reason], [1, from, 1, 'cta', WORDS[p.variant] || '?', WHY, 0]);
   if (page !== 'director-pension-rules.html') {
@@ -281,8 +281,6 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
     eq(`G7. ${page}: the line, the button, then "Email me this result", shown by the script`, [p.order, p.more], [true, ['Email me this result', false, true]]);
   }
   eq(`G7. ${page}: no other booking link in the results`, p.stray, []);
-  if (page === 'broker-vs-autoenrolment.html')
-    eq(`G8. ${page}: the line follows the card holding "Before you rely on these rates"`, p.prevCaveat, true);
   if (['pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html'].includes(page))
     eq(`G9. ${page}: its waitcard holds no booking link`, [p.waitcards > 0, p.waitLinks], [true, 0]);
   if (page === 'director-pension-rules.html') continue;
@@ -349,7 +347,7 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
   const [from, loop] = AFTER[page];
   await open(page + '?nojs');
   const p = await ev(PARTS);
-  eq(`G10. ${page} without JavaScript: the line`, [p.nots, p.notText], [1, `What this doesn${RSQ}t show: ${loop}`]);
+  eq(`G10. ${page} without JavaScript: no "doesn${RSQ}t show" line`, p.nots, 0);
   eq(`G10. ${page} without JavaScript: the button, wording A, plain booking.html, and its line`,
      [p.blocks, p.from, p.links, p.words, p.href, p.why], [1, from, 1, WORDS.A, 'booking.html', WHY]);
   eq(`G10. ${page} without JavaScript: "Email me this result" and its form stay hidden`,

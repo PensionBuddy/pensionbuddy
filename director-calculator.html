@@ -479,6 +479,15 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .cta-card p{color:var(--ink-2);font-size:15px;max-width:520px}
 .cta-card .btn{position:relative}
 .assume{padding:72px 0 24px}
+/* 8 October 2026: the assumptions fold away under one line */
+.pb-fold{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:0 18px}
+.pb-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;font-size:16px;font-weight:700;color:var(--ink)}
+.pb-fold>summary::-webkit-details-marker{display:none}
+.pb-fold>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-fold[open]>summary::after{content:"\2212"}
+.pb-fold>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
+.pb-fold>ul{padding:4px 0 18px}
+.pb-fold>summary h3{font:inherit;margin:0;letter-spacing:inherit}
 .assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
 .assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
 .assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
@@ -2825,7 +2834,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: your company&rsquo;s exact funding limit, product charges.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="director-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
@@ -2857,8 +2865,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>Assumptions</h3>
+  <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
+    <li>Not included: your company&rsquo;s exact funding limit, product charges.</li>
     <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is at the 12.5% trading rate. Each contribution is assumed wholly and exclusively for the business, within Revenue funding limits.</li>
     <li id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.</li>
     <li>Benefits are taxed when drawn. Up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
@@ -2868,6 +2877,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Today&rsquo;s money: prices rise 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland).</li>
     <li>The salary and pension split leaves out employer PRSI on salary and the lower income tax and USC bands.</li>
   </ul>
+  </details>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
@@ -2899,7 +2909,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/director-calc.js?v=9a107886"></script>
-<script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/pb-prsi.js?v=fc12215a"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script>
@@ -3359,7 +3369,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=7a32a123" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

@@ -137,3 +137,7 @@
 /* two rows of five on a phone (Run 21): ten 16px labels do not fit one row */
 @media(max-width:560px){.pb-glide{grid-template-columns:repeat(5,minmax(0,1fr));row-gap:14px}}
 .pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* 8 October 2026: the working folds away inside the card */
+.pb-fold-in{margin-top:14px;padding:0 14px;background:var(--surface-2)}
+.pb-fold-in>summary{min-height:44px;font-size:15px}
+.pb-fold-in .mdetail,.pb-fold-in .mbar-scale{margin:0 0 10px}

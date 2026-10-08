@@ -173,6 +173,15 @@ picture{display:contents} /* F3: the extracted avatar sits in <picture>; keep th
 
 /* ---- assumptions ---- */
 .assume{padding:72px 0 24px}
+/* 8 October 2026: the assumptions fold away under one line */
+.pb-fold{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);padding:0 18px}
+.pb-fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;font-size:16px;font-weight:700;color:var(--ink)}
+.pb-fold>summary::-webkit-details-marker{display:none}
+.pb-fold>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
+.pb-fold[open]>summary::after{content:"\2212"}
+.pb-fold>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
+.pb-fold>ul{padding:4px 0 18px}
+.pb-fold>summary h3{font:inherit;margin:0;letter-spacing:inherit}
 .assume h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:20px}
 .assume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:16px 34px}
 .assume li{font-size:14px;color:var(--ink-2);padding-left:26px;position:relative;line-height:1.65}
@@ -2555,22 +2564,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Free · two minutes · no sign-up</span>
   <h1>What your pension <span class="hl">pays</span> you a month.</h1>
   <p>Rough numbers are fine.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pension-calculator">
-  <div class="deadline" id="deadlineBand">
-      <span class="dl-tag">Tax deadline</span>
-      <span class="dl-text" id="deadlineText"><b>18 November 2026</b>, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. If you do not pay and file online through the Revenue Online Service, it is 31 October 2026. After that, 2025&rsquo;s allowance is gone for good.</span>
-    </div>
-<!-- Run 32: pb-deadline.js loads here, straight after the row it fills, and
-     not at the foot of the page: filled at the foot, the row grew from nothing
-     after the first paint and pushed the calculator down (0.04 layout shift).
-     The row's markup is the date sentence a reader without JavaScript gets
-     (PBDeadline.statics()); the script puts the count in its place. -->
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
     <div class="panel">
     <h2>Your details</h2>
@@ -2638,7 +2637,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
-    <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: product charges, the tax on your income when you draw it.</p>
     <div class="pb-after" id="pbAfter" data-pb-from="pension-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
@@ -2662,12 +2660,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>These are illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2></div>
-  <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
-
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
@@ -2676,14 +2668,16 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>Assumptions</h3>
+  <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
+    <li>Not included: product charges, the tax on your income when you draw it.</li>
     <li>Growth is constant, at the rate you choose. Real returns will differ and can be negative.</li>
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
     <li>Tax relief is at your chosen rate, on your own contributions only. The limit is 15% of earnings under 30. It rises in steps to 40% at 60 and over. Earnings are capped at €115,000.</li>
     <li>The main figures ignore inflation. The line under each gives today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Figures ignore product charges, which will reduce returns. Nothing is guaranteed.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year. Check gov.ie for the current rate.</li>
   </ul>
+  </details>
 </div></section>
 
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
@@ -2718,7 +2712,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=067d5550"></script>
+<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script>
@@ -3173,7 +3167,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=7a32a123" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=dc8ee7c4" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

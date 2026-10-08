@@ -1110,14 +1110,14 @@ def warn_drift(sources):
 # says "Topics to discuss, not advice."
 # ============================================================================
 AFTER = {  # page: (its name for #from= and the events, what it does not show or None, the email offer)
-    'pension-calculator.html': ('pension-calculator', 'product charges, the tax on your income when you draw it.', True),
-    'director-calculator.html': ('director-calculator', 'your company&rsquo;s exact funding limit, product charges.', True),
-    'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', 'your old pensions, product charges, your employer&rsquo;s own scheme.', True),
-    'pension-fees-calculator.html': ('pension-fees-calculator', 'policy, set-up and exit charges, the terms an older plan may carry, your tax relief.', True),
-    'state-pension-reality-check.html': ('state-pension-reality-check', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),
-    'state-pension-entitlement.html': ('state-pension-entitlement', 'your old pensions, your tax position, your employer&rsquo;s scheme.', True),
-    'standard-fund-threshold.html': ('standard-fund-threshold', 'what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.', True),
-    'pia.html': ('pia', 'your old pensions, fees and charges, your employer&rsquo;s scheme.', True),
+    'pension-calculator.html': ('pension-calculator', None, True),
+    'director-calculator.html': ('director-calculator', None, True),
+    'broker-vs-autoenrolment.html': ('broker-vs-autoenrolment', None, True),
+    'pension-fees-calculator.html': ('pension-fees-calculator', None, True),
+    'state-pension-reality-check.html': ('state-pension-reality-check', None, True),
+    'state-pension-entitlement.html': ('state-pension-entitlement', None, True),
+    'standard-fund-threshold.html': ('standard-fund-threshold', None, True),
+    'pia.html': ('pia', None, True),
     'my-pensions.html': ('my-pensions', None, False),
     'director-pension-rules.html': ('director-pension-rules', None, True),
 }

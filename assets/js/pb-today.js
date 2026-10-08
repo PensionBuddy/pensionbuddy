@@ -34,8 +34,7 @@
     box.id = 'pbToday';
     box.innerHTML =
       '<label class="pb-today-sw"><input type="checkbox" id="pbTodayOn" checked> <span>Show in today’s money</span></label>' +
-      '<p class="pb-today-note">The ECB aims for inflation of about ' + A.inflation.pct + ' a year. ' +
-      'Money that grows slower than prices buys less over time.</p>' +
+      '<p class="pb-today-note">Prices rise about ' + A.inflation.pct + ' a year, so future money buys less.</p>' +
       '<p class="pb-today-cash" id="pbTodayCash"></p>';
     after.parentNode.insertBefore(box, after.nextSibling);
     sw = doc.getElementById('pbTodayOn');
@@ -71,9 +70,8 @@
     if (!el) { return; }
     var y = Math.max(1, Math.round(years));
     var kept = 10000 * Math.pow(1 + A.cash.rate, y);
-    el.textContent = 'For comparison: money in a bank account you can take out at any time earned about ' + A.cash.pct +
-      ' a year in ' + A.cash.month + ' (Central Bank of Ireland). With prices rising ' + A.inflation.pct + ' a year, €10,000 kept there for ' +
-      y + (y === 1 ? ' year' : ' years') + ' would buy about what ' + euro(A.today(kept, y)) + ' buys today.';
+    el.textContent = '€10,000 left in a bank account for ' + y + (y === 1 ? ' year' : ' years') +
+      ' would buy what ' + euro(A.today(kept, y)) + ' buys today.';
   }
 
   window.PBToday = { card: card, set: set, cash: cash, on: on, onChange: function (f) { fns.push(f); } };

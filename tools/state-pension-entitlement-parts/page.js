@@ -51,7 +51,6 @@ const ENTRY_AFTER_BIRTH_MIN = 16;                  // the earliest a contributio
 const ENTRY_AFTER_BIRTH_MAX = PENSION_AGE - 1;     // the last year before 66
 const ENTRY_DEFAULT_AFTER_BIRTH = 23;
 
-const APRIL_RULE = 'Before 2002 the contribution year ran from April to April. If your first payment was between 1 January and 5 April of a year up to 2001, tick the box below and the page counts from the year before.';
 /* #27, Damian's S11 item 4: the last contribution year that ran April to April */
 const APRIL_LAST = 2001;
 
@@ -144,8 +143,8 @@ function render() {
   // the shared module by name, so 'after' cannot be confused with 'before':
   // the two want opposite wording and the reader only ever sees one of them.
   $('birthNote').innerHTML = SP.transition(drawdown) === 'after'
-    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>, after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies. This page assumes you take your pension at 66.'
-    : 'You reach 66 in <b>' + yr(drawdown) + '</b>, the year this page assumes your pension starts. That year sets the mix of the two calculations.';
+    ? 'You reach 66 in <b>' + yr(drawdown) + '</b>. By then only Method 1 applies.'
+    : 'You reach 66 in <b>' + yr(drawdown) + '</b>.';
 
   // The transition glide: mark the column for the reader's drawdown year, or
   // the last one ("2034 on") once the transition is over.
@@ -154,9 +153,12 @@ function render() {
     $('pbGlideY' + y).hidden = y !== glideYear;
   }
 
-  $('entryNote').innerHTML = (entryMoved
-    ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year. '
-    : '') + APRIL_RULE;
+  // 8 October 2026: the April rule is the tick box's own label; the note
+  // speaks only when the year was moved
+  $('entryNote').innerHTML = entryMoved
+    ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year.'
+    : '';
+  $('entryNote').hidden = !entryMoved;
 
   // A first payment between 1 January and 5 April of a year up to 2001 fell
   // in the contribution year that began the April before: the module gets

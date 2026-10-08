@@ -403,12 +403,12 @@
       // the birth note turns on the transition window
       if (SP.transition(drawdown) === 'after') {
         t.has(label + ': birthNote says the transition has ended', text('birthNote'),
-              'You reach 66 in ' + yr(drawdown) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + ', so only the Total Contributions Approach applies.');
+              'You reach 66 in ' + yr(drawdown) + '. By then only Method 1 applies.');
       } else {
         t.has(label + ': birthNote names the drawdown year', text('birthNote'),
-              'You reach 66 in ' + yr(drawdown) + ', the year this page assumes your pension starts.');
+              'You reach 66 in ' + yr(drawdown) + '.');
       }
-      t.has(label + ': entryNote carries the April rule', text('entryNote'), 'Before 2002 the contribution year ran from April to April.');
+      t.eq(label + ': entryNote is hidden unless the year was moved', $('entryNote').hidden, true);
       t.eq(label + ': entryNote reports no clamp when entry was set last', text('entryNote').indexOf('Moved to'), -1);
 
       // C. exactly one panel
