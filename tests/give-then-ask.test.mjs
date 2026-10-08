@@ -418,7 +418,7 @@ await click('#ecForm button[type=submit]');
 await sleep(800);
 const said = await ev(`[document.getElementById('ecOkText').textContent, document.getElementById('ecOk').hidden,
   getComputedStyle(document.getElementById('ecForm')).display]`);
-eq('G12. its post refused, it says the email app should have opened', said, ['Your email app should have opened with the figures ready to send to Damian.', false, 'none']);
+eq('G12. its post refused, it says the email app should have opened', said, ['Your email app should have opened with the figures ready to send to us.', false, 'none']);
 const mail = navs.find(u => /^mailto:/.test(u)) || '';
 function safeDecode(s) { try { return decodeURIComponent(s); } catch (e) { return s; } }
 eq('G12. a pre-filled email to Damian, with the reader\'s name and address, the figures and the link',

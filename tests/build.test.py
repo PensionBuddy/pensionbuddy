@@ -475,8 +475,8 @@ def run():
              'a director with 20% or more of the company', True),
             ('the glossary\'s "more than 20%"', 'director-calculator.html', TEST,
              'a director who owned or controlled more than 20% of the voting rights', True),
-            ('a 20% that is not about directors', 'pensions-over-50.html', 'The tax-free amount can be lower too.',
-             'The tax-free amount can be lower too. Tax at 20% is the standard rate.', False)):
+            ('a 20% that is not about directors', 'pensions-over-50.html', 'The tax-free lump sum can be lower too.',
+             'The tax-free lump sum can be lower too. Tax at 20% is the standard rate.', False)):
         m = dict(docs); m[page] = m[page].replace(find, repl, 1)
         eq('16. %s is %s' % (label, 'flagged' if flagged else 'left alone'),
            [n for n, _ in off_wording(m)], [page] if flagged else [])
@@ -1545,8 +1545,8 @@ def run():
     eq('34. jargon definitions: pb-glossary.js is the buster word for word; pb-terms.js late, on the prose pages only; stores nothing, moves nothing',
        terms_faults(sources, gloss, runtime), [])
     for label, target, find, repl, want in (
-            ('a buster entry edited without a rerun', 'gloss', 'A flexible personal pension you own, which moves with you between jobs.',
-             'A personal pension you own, which moves with you between jobs.', 'not the jargon buster'),
+            ('a buster entry edited without a rerun', 'gloss', 'A personal pension you own. It moves with you between jobs.',
+             'A personal pension you own. It moves with you between your jobs.', 'not the jargon buster'),
             ('the definitions on the privacy notice', 'privacy.html', '</body>',
              '<script src="assets/js/pb-glossary.js?v=00000000" type="text/pb-late"></script>\n<script src="assets/js/pb-terms.js?v=00000000" type="text/pb-late"></script>\n</body>', 'wrong pages'),
             ('the definitions dropped from a guide', 'pensions-over-50.html', '<script src="assets/js/pb-terms.js', '<script src="assets/js/pb-termz.js', 'not the two late tags'),
@@ -1944,7 +1944,7 @@ def run():
                 f.append('the search box: %s' % want[:40])
         home = NF_SIX
         here = re.findall(r'<li><a href="([^"]+)"><b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six">'):])
-        if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
+        if '<h2 class="pb-nf-h">Start here.</h2>' not in nf or len(home) != 6 or here[:6] != home:
             f.append('not the six places to begin')
         if pagebuild.NOINDEX not in nf:
             f.append('the 404 is indexable')
@@ -2273,15 +2273,16 @@ def run():
         eq('44. %s is caught' % label, any(want in x for x in pop_faults(srcs, j2, c2)), True)
 
     # ----------------------------------------------------------------- 45
-    # Run 39: "How a call with Damian works", the home page's three steps
-    # with a slot over each for Damian's own short video. The steps are the
-    # words the section already had, unchanged, under its heading; each slot
-    # keeps a 16:9 box (so nothing moves when a video arrives), shows the
-    # placeholder poster until then (sized, lazy, no words: aria-hidden, alt
-    # ""), and any video put in one later follows the game cards' rules
-    # (muted, inline, not preloaded, aria-hidden, its poster the slot's
-    # picture, pb-video.js to play and pause it).
-    CALL_STEPS = [('You reach out', 'A short message or call, so Damian comes prepared. No forms.'),
+    # "How a call works", the home page's three steps, each with a short
+    # clip over it (8 October 2026: tools/record-steps.mjs, stand-ins until
+    # Damian films his own). Each slot keeps a 16:9 box (so nothing moves
+    # when the clip arrives); its poster is the clip's own still (sized,
+    # lazy, no words: aria-hidden, alt ""), and the clip follows the game
+    # cards' rules (muted, looping, inline, not preloaded, aria-hidden, its
+    # poster the slot's picture, a pause button with a name, pb-video.js to
+    # play and pause it). The slot itself is not aria-hidden: its button
+    # must stay reachable.
+    CALL_STEPS = [('You reach out', 'Book a free 20-minute call. We come prepared.'),
                   ('We talk it through', 'Twenty minutes, by phone or video.'),
                   ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
 
@@ -2289,53 +2290,59 @@ def run():
         f = []
         sec = re.search(r'<section class="expect" id="call">(.*?)</section>', ix, re.S)
         if not sec:
-            return ['no "How a call with Damian works" section']
+            return ['no "How a call works" section']
         body = sec.group(1)
-        if '<span class="kicker">How a call with Damian works</span>' not in body or \
+        if '<span class="kicker">How a call works</span>' not in body or \
                 '<h2>Three steps.</h2>' not in body:
             f.append('the label or the heading')
         steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body, re.S)
         if [(h, p) for _, _, h, p in steps] != CALL_STEPS:
-            f.append('the steps are not the words the section already had: %s' % [(h, p[:20]) for _, _, h, p in steps])
+            f.append('the steps are not the words the section has: %s' % [(h, p[:20]) for _, _, h, p in steps])
         for slot, n, _, _ in steps:
-            m = re.fullmatch(r'<div class="pb-call-slot" data-pb-call-video="call-step-%s" aria-hidden="true"><picture>'
-                             r'<source type="image/webp" srcset="assets/img/call-video-placeholder\.webp\?v=[0-9a-f]+">'
-                             r'<img src="assets/img/call-video-placeholder\.jpg\?v=[0-9a-f]+" width="1280" height="720" alt="" loading="lazy"></picture>'
-                             r'(<video [^>]*>.*?</video>\s*<button [^>]*>.*?</button>)?</div>' % n, slot, re.S)
+            m = re.fullmatch(r'<div class="pb-call-slot" data-pb-call-video="call-step-%s"><picture aria-hidden="true">'
+                             r'<source type="image/webp" srcset="assets/img/call-step-%s\.webp\?v=[0-9a-f]+">'
+                             r'<img src="assets/img/call-step-%s\.jpg\?v=[0-9a-f]+" width="1280" height="720" alt="" loading="lazy"></picture>'
+                             r'(<video [^>]*>.*?</video>)\s*(<button [^>]*>.*?</button>)</div>' % (n, n, n), slot, re.S)
             if not m:
-                f.append('step %s: its slot is not the placeholder poster in a 16:9 box' % n)
+                f.append('step %s: its slot is not the clip\'s still, its clip and its button in a 16:9 box' % n)
                 continue
-            if m.group(1):
-                v = re.match(r'<video ([^>]*)>', m.group(1)).group(1)
-                for want in (' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video',
-                             'data-poster="assets/img/call-video-placeholder.webp'):
-                    if want not in ' ' + v:
-                        f.append('step %s: its video is not %s' % (n, want.strip()))
-        if '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;' not in ix:
+            v = re.match(r'<video ([^>]*)>', m.group(1)).group(1)
+            for want in (' muted', ' loop', ' playsinline', 'preload="none"', 'aria-hidden="true"', 'data-pb-video',
+                         'data-poster="assets/img/call-step-%s.webp' % n):
+                if want not in ' ' + v:
+                    f.append('step %s: its video is not %s' % (n, want.strip()))
+            for src in ('assets/video/call-step-%s.mp4' % n, 'assets/video/call-step-%s.webm' % n):
+                if src not in m.group(1):
+                    f.append('step %s: its video has no %s' % (n, src))
+            if 'aria-label="Play video: ' not in m.group(2) or 'data-pb-video-btn' not in m.group(2):
+                f.append('step %s: its button has no name' % n)
+        if '.step .pb-call-slot{display:block;position:relative;margin:0 0 18px;aspect-ratio:16/9;' not in ix:
             f.append('the slots do not keep a 16:9 box')
-        for ext in ('jpg', 'webp'):
-            size = sizes.get(ext)
-            if size is None or size > 60 * 1024:
-                f.append('the placeholder .%s is missing or over 60 KB (%s)' % (ext, size))
+        for name, size in sorted(sizes.items()):
+            if size is None or size > 1536 * 1024:
+                f.append('%s is missing or over its size (%s)' % (name, size))
         return f
 
     csizes = {}
-    for ext in ('jpg', 'webp'):
-        pth = os.path.join(ROOT, 'assets', 'img', 'call-video-placeholder.' + ext)
-        if os.path.exists(pth):
-            csizes[ext] = os.path.getsize(pth)
+    for n in '123':
+        for rel, cap in (('assets/img/call-step-%s.jpg', 90), ('assets/img/call-step-%s.webp', 90),
+                         ('assets/video/call-step-%s.mp4', 1536), ('assets/video/call-step-%s.webm', 1536)):
+            pth = os.path.join(ROOT, rel % n)
+            csizes[rel % n] = os.path.getsize(pth) if os.path.exists(pth) else None
+            if csizes[rel % n] is not None and csizes[rel % n] > cap * 1024:
+                csizes[rel % n] = None
     cix = sources['index.html']
-    eq('45. "How a call with Damian works": the section\'s own three steps, word for word, each with a 16:9 slot showing the placeholder poster (sized, lazy, no words)',
+    eq('45. "How a call works": the section\'s own three steps, word for word, each with its clip, its still and a named pause button in a 16:9 box',
        call_faults(cix, csizes), [])
     for label, find, repl, want in (
             ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the words'),
-            ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2',
-             'alt="" loading="lazy"></picture></div><div class="sx">2', 'step 2'),
-            ('a slot that speaks', 'data-pb-call-video="call-step-3" aria-hidden="true"', 'data-pb-call-video="call-step-3"', 'step 3'),
-            ('a slot that does not keep its box', '.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;',
-             '.step .pb-call-slot{display:block;margin:0 0 18px;', '16:9'),
-            ('a video with sound', '</picture></div><div class="sx">1',
-             '</picture><video class="pb-learn-vid" loop playsinline preload="none" aria-hidden="true" data-poster="assets/img/call-video-placeholder.webp" data-pb-video></video> <button type="button">x</button></div><div class="sx">1', 'muted')):
+            ('a slot without its size', 'width="1280" height="720" alt="" loading="lazy"></picture><video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-2',
+             'alt="" loading="lazy"></picture><video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-2', 'step 2'),
+            ('a still that speaks', 'data-pb-call-video="call-step-3"><picture aria-hidden="true">', 'data-pb-call-video="call-step-3"><picture>', 'step 3'),
+            ('a slot that does not keep its box', '.step .pb-call-slot{display:block;position:relative;margin:0 0 18px;aspect-ratio:16/9;',
+             '.step .pb-call-slot{display:block;position:relative;margin:0 0 18px;', '16:9'),
+            ('a video with sound', '<video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-1',
+             '<video class="pb-learn-vid" loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-1', 'muted')):
         assert find in cix, label
         mix = cix.replace(find, repl, 1)
         eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, csizes)), True)

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>(function(){var r=document.documentElement,q=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;r.classList.add('pb-js');function ok(){return !(q&&q.matches)&&'IntersectionObserver' in window;}if(ok())r.classList.add('pb-motion');function sync(){var on=ok();r.classList.toggle('pb-motion',on);if(!on)r.classList.remove('pb-smooth');try{document.dispatchEvent(new CustomEvent('pb:motion',{detail:{motion:on}}));}catch(e){}}if(q){if(q.addEventListener)q.addEventListener('change',sync);else if(q.addListener)q.addListener(sync);}addEventListener('load',function(){setTimeout(function(){if(!(q&&q.matches))r.classList.add('pb-smooth');},0);});var late=0;function go(){if(late)return;late=1;[].forEach.call(document.querySelectorAll('script[type="text/pb-late"]'),function(o){var n=document.createElement('script');[].forEach.call(o.attributes,function(a){if(a.name!=='type')n.setAttribute(a.name,a.value);});o.parentNode.replaceChild(n,o);});}document.addEventListener('DOMContentLoaded',function(){r.classList.add('pb-ready','pb-readying');setTimeout(function(){r.classList.remove('pb-readying');},100);if(window.requestAnimationFrame)requestAnimationFrame(function(){setTimeout(go,0);});setTimeout(go,200);});window.PBMotion={on:function(){return r.classList.contains('pb-motion');},CAVEATS:".pb-caveat,.announce,.pb-reg,.pb-reviewed,.pb-warn,.infoadvice,.assume,.disclosure,.pb-src,.srcnote,.gap-note,.hc-note,.qnote,.sft-note,.pb-product-cap,.tk-who,.pb-life-note,.pb-sa-note,.pb-lad-note,.pb-my-note,.pia-note,.dr-src,.pt-note,.ec-note,.pia-asat,.sft-asat,.dr-asat,.res-hero .foot:not([data-pb-calc=\"state-pension-reality-check\"] #spFoot),.legal .updated,.legal .ck-note,.legal .callbox,.max-card .mnote,#mScale,#mWhy,#m1Cap"};})();</script>
 <title>Pensionbuddy: Your pension, finally explained</title>
-<meta name="description" content="Pensions made friendly. Understand and grow your pension over a relaxed, jargon-free chat. Regulated by the Central Bank of Ireland.">
+<meta name="description" content="Pensions made friendly. Your pension in plain English, and a free call to talk it through. Regulated by the Central Bank of Ireland.">
 <link rel="icon" type="image/svg+xml" href="assets/brand/pensionbuddy-mark.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/favicon-192.png">
@@ -17,14 +17,14 @@
 <meta property="og:locale" content="en_IE">
 <meta property="og:url" content="https://pensionbuddy.ie/">
 <meta property="og:title" content="Pensionbuddy: Your pension, finally explained">
-<meta property="og:description" content="Pensions made friendly. Understand and grow your pension over a relaxed, jargon-free chat. Regulated by the Central Bank of Ireland.">
+<meta property="og:description" content="Pensions made friendly. Your pension in plain English, and a free call to talk it through. Regulated by the Central Bank of Ireland.">
 <meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og/og-home.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Pensionbuddy. Pensions, in plain English: People know roughly what they’ll need.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Pensionbuddy: Your pension, finally explained">
-<meta name="twitter:description" content="Pensions made friendly. Understand and grow your pension over a relaxed, jargon-free chat. Regulated by the Central Bank of Ireland.">
+<meta name="twitter:description" content="Pensions made friendly. Your pension in plain English, and a free call to talk it through. Regulated by the Central Bank of Ireland.">
 <meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og/og-home.png">
 <meta name="twitter:image:alt" content="Pensionbuddy. Pensions, in plain English: People know roughly what they’ll need.">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FinancialService", "name": "Pensionbuddy", "legalName": "Damian Condon T/A Gresham Wealth Management", "description": "Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.", "url": "https://pensionbuddy.ie/", "logo": "https://pensionbuddy.ie/assets/brand/og-mark-512.png", "image": "https://pensionbuddy.ie/assets/brand/og/og-home.png", "email": "hello@pensionbuddy.ie", "address": {"@type": "PostalAddress", "streetAddress": "Bushfield House, Philipsburgh Avenue", "addressLocality": "Fairview", "addressRegion": "Dublin 3", "addressCountry": "IE"}, "areaServed": "IE", "founder": {"@type": "Person", "name": "Damian Condon", "honorificSuffix": "QFA"}}</script>
@@ -173,7 +173,7 @@ section{padding:88px 0}
 /* Run 39: a 16:9 slot over each step of "How a call with Damian works",
    for Damian's own videos; until they are filmed, a placeholder poster. The
    box is kept by its ratio, so nothing moves when a video takes its place. */
-.step .pb-call-slot{display:block;margin:0 0 18px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--teal-50)}
+.step .pb-call-slot{display:block;position:relative;margin:0 0 18px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--teal-50)}
 .step .pb-call-slot img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---- calculator showcase ---- */
@@ -2831,7 +2831,7 @@ main h1{font-weight:800}
 <section id="calc" class="pb-bleed pb-dark pb-product"><div class="wrap calc-grid">
   <div class="calc-copy">
     <h2>What your payments could build.</h2>
-    <p id="pbPtDesc">See your projection and Revenue&rsquo;s tax relief. Two minutes, no sign-up.</p>
+    <p id="pbPtDesc">Your projection, with Revenue&rsquo;s tax relief. No sign-up.</p>
     <a class="btn btn-quiet-dark" id="pbPtBtn" href="pension-calculator.html"><span id="pbPtBtnT">Open the calculator</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     <ul class="pb-pt-list" id="pbPtList">
       <li><a href="director-calculator.html">Director calculator</a></li>
@@ -2981,7 +2981,7 @@ main h1{font-weight:800}
   <div class="about">
     <span class="kicker">Chief Napping Officer</span>
     <h2>Buddy</h2>
-    <p class="bio">Buddy is a boxer, and Pensionbuddy is named after him. He is the mascot. The paw print in the logo is his.</p>
+    <p class="bio">Pensionbuddy is named after Buddy, a boxer. The paw print in the logo is his.</p>
   </div>
 </div></section>
 
@@ -3026,28 +3026,27 @@ main h1{font-weight:800}
 <section style="padding-top:0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Advice is given in a personal consultation with Damian.</p>
+    <p><b>This page is information, not advice.</b> Advice is given in a personal consultation with us.</p>
   </div>
 </div></section>
 
-<!-- Run 39: "How a call with Damian works". The three steps are the words
-     this section already had; over each is a 16:9 slot for Damian's own
-     short video, which he is filming, and until then a placeholder poster
-     (assets/img/call-video-placeholder). To put a video in: save it as
-     assets/video/call-step-N.mp4 (H.264) and .webm, then give its slot the
-     game cards' markup (a <video data-pb-video ...> over the picture, its
-     data-poster the slot's picture, and the pause button); pb-video.js then
-     fetches it near the viewport, plays it muted and pauses it off screen.
-     tests/build.test.py check 45 holds the words and the slots. -->
+<!-- "How a call works": three steps, a short clip over each (8 October
+     2026). The clips are stand-ins made by tools/record-steps.mjs until
+     Damian films his own: to swap one, save it as
+     assets/video/call-step-N.mp4 (H.264) and .webm and replace its still,
+     assets/img/call-step-N.jpg and .webp; the markup does not change.
+     pb-video.js fetches each clip near the viewport, plays it muted and
+     pauses it off screen. tests/build.test.py check 45 holds the words and
+     the slots. -->
 <section class="expect" id="call"><div class="wrap">
   <div class="sec-head ctr">
-    <span class="kicker">How a call with Damian works</span>
+    <span class="kicker">How a call works</span>
     <h2>Three steps.</h2>
   </div>
   <div class="steps">
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-1" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">1</div><h3>You reach out</h3><p>A short message or call, so Damian comes prepared. No forms.</p></div>
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-2" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
-    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-3" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/call-video-placeholder.webp?v=b4698dc3"><img src="assets/img/call-video-placeholder.jpg?v=d2ab7517" width="1280" height="720" alt="" loading="lazy"></picture></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-1"><picture aria-hidden="true"><source type="image/webp" srcset="assets/img/call-step-1.webp?v=fd959ecc"><img src="assets/img/call-step-1.jpg?v=1be30c6c" width="1280" height="720" alt="" loading="lazy"></picture><video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-1.webp?v=fd959ecc" width="1280" height="720" data-pb-video><source src="assets/video/call-step-1.mp4" type="video/mp4"><source src="assets/video/call-step-1.webm" type="video/webm"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="You reach out" data-state="paused" aria-label="Play video: You reach out"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">1</div><h3>You reach out</h3><p>Book a free 20-minute call. We come prepared.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-2"><picture aria-hidden="true"><source type="image/webp" srcset="assets/img/call-step-2.webp?v=c0aade27"><img src="assets/img/call-step-2.jpg?v=5168ca32" width="1280" height="720" alt="" loading="lazy"></picture><video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-2.webp?v=c0aade27" width="1280" height="720" data-pb-video><source src="assets/video/call-step-2.mp4" type="video/mp4"><source src="assets/video/call-step-2.webm" type="video/webm"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="We talk it through" data-state="paused" aria-label="Play video: We talk it through"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
+    <div class="step"><div class="pb-call-slot" data-pb-call-video="call-step-3"><picture aria-hidden="true"><source type="image/webp" srcset="assets/img/call-step-3.webp?v=fc681f00"><img src="assets/img/call-step-3.jpg?v=74d8f4a2" width="1280" height="720" alt="" loading="lazy"></picture><video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/call-step-3.webp?v=fc681f00" width="1280" height="720" data-pb-video><source src="assets/video/call-step-3.mp4" type="video/mp4"><source src="assets/video/call-step-3.webm" type="video/webm"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="You decide" data-state="paused" aria-label="Play video: You decide"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
   </div>
 </div></section>
 
@@ -3069,7 +3068,7 @@ main h1{font-weight:800}
 
 <div class="final-band"><div class="wrap"><div class="final pb-bleed">
   <div class="paw-bg"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <h2>Talk it through with Damian.</h2>
+  <h2>Talk it through with us.</h2>
   <a class="btn btn-light" href="booking.html">Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -3432,9 +3431,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=e040ec1d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>
@@ -3445,7 +3444,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){
-  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "See your projection and Revenue’s tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2554, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=dcc455c3", "webp": "assets/img/product-pension-calculator.webp?v=34cb6d10"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "See the pot you could build, the income it could pay and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 2968, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=68e57384", "webp": "assets/img/product-director-calculator.webp?v=a8febbd4"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund and a personal pension, side by side.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2302, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=085f7eb4", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=bdaef8a4"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2067, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=8dd5a850", "webp": "assets/img/product-state-pension-reality-check.webp?v=ec001d0f"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2582, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=6acb788f", "webp": "assets/img/product-state-pension-entitlement.webp?v=878ef0e1"}];
+  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "Your projection, with Revenue’s tax relief. No sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2554, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=dcc455c3", "webp": "assets/img/product-pension-calculator.webp?v=34cb6d10"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "Your pot, its income and the corporation tax your company saves. No sign-up.", "img": "product-director-calculator", "w": 2184, "h": 2968, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=68e57384", "webp": "assets/img/product-director-calculator.webp?v=a8febbd4"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund and a personal pension, side by side.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2302, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=085f7eb4", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=bdaef8a4"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2067, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=8dd5a850", "webp": "assets/img/product-state-pension-reality-check.webp?v=ec001d0f"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would pay you.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2582, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=6acb788f", "webp": "assets/img/product-state-pension-entitlement.webp?v=878ef0e1"}];
   var copy=document.querySelector('#calc .calc-copy'), desc=document.getElementById('pbPtDesc'), btn=document.getElementById('pbPtBtn'),
       btnT=document.getElementById('pbPtBtnT'), fig=document.getElementById('pbPtFig'), shot=document.getElementById('pbPtShot'), list=document.getElementById('pbPtList');
   if(!copy||!desc||!btn||!btnT||!fig||!shot||!list) return;

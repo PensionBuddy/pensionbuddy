@@ -328,8 +328,8 @@ if (has('index.html', 'data-pb-video')) {
      pictures (<img loading="lazy">, the same files a poster would name) are
      fetched with the page by design; what must not be there yet is a video
      file or a poster on a video */
-  const posters = () => ev(`[].filter.call(document.querySelectorAll('video[data-pb-video]'),function(v){return v.hasAttribute('poster');}).length`);
-  const V = `(function(){return [].map.call(document.querySelectorAll('video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
+  const posters = () => ev(`[].filter.call(document.querySelectorAll('.pb-learn-media video[data-pb-video]'),function(v){return v.hasAttribute('poster');}).length`);
+  const V = `(function(){return [].map.call(document.querySelectorAll('.pb-learn-media video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
     return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none',
       poster:!!v.poster&&v.poster===v.parentNode.querySelector('picture img').currentSrc};});})()`;
   await open('index.html', 1440);
@@ -349,12 +349,12 @@ if (has('index.html', 'data-pb-video')) {
      [held.paused, held.btn, away[1].paused, back[0].paused, back[1].paused, back[0].btn],
      [true, 'Play video', true, true, false, 'Play video']);
   /* the flash check on the decoded video, frame by frame, as the games' probe */
-  const flash = await ev(`(async function(){
+  const flashOf = files => ev(`(async function(FILES){
     function lin(c){c/=255;return c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);}
     function turns(s){var e=s[0],dir=0,at=[],i,v;for(i=1;i<s.length;i++){v=s[i];if(dir>=0&&v<=e-0.1){at.push(i);dir=-1;e=v;}else if(dir<=0&&v>=e+0.1){at.push(i);dir=1;e=v;}else if((dir>0&&v>e)||(dir<0&&v<e)){e=v;}}return at;}
     function most(at,per){var b=0,i,j;for(i=0;i<at.length;i++){for(j=i;j<at.length&&at[j]-at[i]<per;j++){}b=Math.max(b,j-i);}return b;}
     var out=[];
-    for (var src of ['assets/video/buddys-run.mp4','assets/video/buddys-run.webm','assets/video/jargon-battle.mp4','assets/video/jargon-battle.webm']){
+    for (var src of FILES){
       var v=document.createElement('video');v.muted=true;v.src=src;v.preload='auto';
       await new Promise(function(r){v.addEventListener('loadeddata',r,{once:true});});
       var c=document.createElement('canvas');c.width=320;c.height=180;var cx=c.getContext('2d',{willReadFrequently:true}),fr=[],last=-1;
@@ -362,15 +362,24 @@ if (has('index.html', 'data-pb-video')) {
           var d=cx.getImageData(0,0,320,180).data,G=[],n=[],k,x,y,L,all=0,cnt=0;for(k=0;k<18;k++){G.push(0);n.push(0);}
           for(y=0;y<180;y+=2){for(x=0;x<320;x+=2){k=(y*320+x)*4;L=0.2126*lin(d[k])+0.7152*lin(d[k+1])+0.0722*lin(d[k+2]);var gi=Math.min(2,Math.floor(y/180*3))*6+Math.min(5,Math.floor(x/320*6));G[gi]+=L;n[gi]++;all+=L;cnt++;}}
           for(k=0;k<18;k++){G[k]/=n[k];}fr.push({t:md.mediaTime,whole:all/cnt,cells:G});}
-        if(v.ended||md.mediaTime>7.9){res();}else{v.requestVideoFrameCallback(cb);}}
+        if(v.ended||md.mediaTime>v.duration-0.1){res();}else{v.requestVideoFrameCallback(cb);}}
         v.requestVideoFrameCallback(cb);v.addEventListener('ended',res,{once:true});v.play();});
       var per=30,worst=most(turns(fr.map(function(f){return f.whole;})),per),cell=0;
       for(var ci=0;ci<18;ci++){cell=Math.max(cell,most(turns(fr.map(function(f){return f.cells[ci];})),per));}
       out.push({src:src,frames:fr.length,duration:v.duration,whole:worst,cell:cell});}
-    return out;})()`, true);
+    return out;})(${JSON.stringify(files)})`, true);
+  const flash = await flashOf(['assets/video/buddys-run.mp4','assets/video/buddys-run.webm','assets/video/jargon-battle.mp4','assets/video/jargon-battle.webm']);
   eq('R38-1. each file plays 6 to 10 seconds, and nothing in it flashes more than three times a second (at most 6 changes a second, frame by frame)',
      flash.map(f => [f.duration >= 6 && f.duration <= 10, f.frames >= 150, f.whole <= 6 && f.cell <= 6]), flash.map(() => [true, true, true]));
   if (!flash.every(f => f.whole <= 6 && f.cell <= 6 && f.frames >= 150)) console.log('         ', JSON.stringify(flash));
+  /* the step clips (8 October 2026, tools/record-steps.mjs) on the home page
+     and the tracker: the same flash rule, and each 4 to 13 seconds */
+  const steps = ['call-step-1','call-step-2','call-step-3','track-step-1','track-step-2','track-step-3']
+    .flatMap(n => ['assets/video/' + n + '.mp4', 'assets/video/' + n + '.webm']);
+  const sflash = await flashOf(steps);
+  eq('8 Oct. each step clip plays 4 to 13 seconds, and nothing in it flashes more than three times a second',
+     sflash.map(f => [f.src, f.duration >= 4 && f.duration <= 13, f.whole <= 6 && f.cell <= 6]), steps.map(src => [src, true, true]));
+  if (!sflash.every(f => f.whole <= 6 && f.cell <= 6)) console.log('         ', JSON.stringify(sflash));
   await open('index.html', 1440, { reduce: true });
   await at('#learn', 0.2); await sleep(2000);
   const still = await ev(`[].map.call(document.querySelectorAll('.pb-learn-media'),function(m){var p=m.querySelector('picture img').getBoundingClientRect();return [getComputedStyle(m.querySelector('video')).display,getComputedStyle(m.querySelector('button')).display,p.width>0,m.querySelector('video').getAttribute('poster')];})`);

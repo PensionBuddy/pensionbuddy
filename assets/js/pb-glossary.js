@@ -7,7 +7,7 @@ window.PBGlossary = [
  {
   "id": "pension",
   "name": "Pension",
-  "def": "A long-term, invested savings pot for retirement.",
+  "def": "Money saved and invested for retirement.",
   "tip": false,
   "pats": [
    [
@@ -19,7 +19,7 @@ window.PBGlossary = [
  {
   "id": "tax-relief",
   "name": "Tax relief",
-  "def": "Tax you do not pay on pension contributions, within Revenue\u2019s age-related limits. At the higher rate, \u20ac100 in can cost about \u20ac60, with around \u20ac40 back.",
+  "def": "Tax back on what you pay into a pension, up to a limit. At the higher rate, \u20ac100 in costs you about \u20ac60.",
   "tip": true,
   "pats": [
    [
@@ -31,7 +31,7 @@ window.PBGlossary = [
  {
   "id": "avc",
   "name": "Additional Voluntary Contribution (AVC)",
-  "def": "Extra payments into a workplace pension, usually with tax relief.",
+  "def": "Extra you pay into a pension at work, usually with tax relief.",
   "tip": true,
   "pats": [
    [
@@ -47,7 +47,7 @@ window.PBGlossary = [
  {
   "id": "arf",
   "name": "Approved Retirement Fund (ARF)",
-  "def": "Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.",
+  "def": "At retirement your pot stays invested and you draw from it. It can grow, fall or run out.",
   "tip": true,
   "pats": [
    [
@@ -63,7 +63,7 @@ window.PBGlossary = [
  {
   "id": "annuity",
   "name": "Annuity",
-  "def": "A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.",
+  "def": "A guaranteed income for life, bought from an insurer with your pot.",
   "tip": true,
   "pats": [
    [
@@ -87,7 +87,7 @@ window.PBGlossary = [
  {
   "id": "defined-contribution",
   "name": "Defined Contribution",
-  "def": "A pension whose value depends on what was paid in and how the investments did. It is not guaranteed.",
+  "def": "A pension worth what went in and how the investments did. Not guaranteed.",
   "tip": true,
   "pats": [
    [
@@ -99,7 +99,7 @@ window.PBGlossary = [
  {
   "id": "defined-benefit",
   "name": "Defined Benefit",
-  "def": "An older workplace pension promising a set income, usually based on salary and years of service. These can be valuable.",
+  "def": "An older workplace pension that promises a set income, based on pay and years worked. Often valuable.",
   "tip": true,
   "pats": [
    [
@@ -111,7 +111,7 @@ window.PBGlossary = [
  {
   "id": "lump-sum",
   "name": "Lump sum",
-  "def": "Tax-free cash you can usually take at retirement, within Revenue\u2019s limits.",
+  "def": "Cash you can usually take tax-free at retirement, up to a limit.",
   "tip": true,
   "pats": [
    [
@@ -123,7 +123,7 @@ window.PBGlossary = [
  {
   "id": "fund-investment-growth",
   "name": "Fund / investment growth",
-  "def": "The rise in your pension\u2019s funds over time. It is never guaranteed. Some years can be negative.",
+  "def": "How your pension\u2019s investments grow. Never guaranteed, and some years they fall.",
   "tip": true,
   "pats": [
    [
@@ -135,7 +135,7 @@ window.PBGlossary = [
  {
   "id": "inflation",
   "name": "Inflation",
-  "def": "The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today\u2019s. The European Central Bank aims for inflation of 2% a year over the medium term.",
+  "def": "Prices rising, so a euro buys less later. Figures on this site are in future euro. The European Central Bank aims for 2% a year over the medium term.",
   "tip": true,
   "pats": [
    [
@@ -147,7 +147,7 @@ window.PBGlossary = [
  {
   "id": "risk-rating",
   "name": "Risk rating",
-  "def": "A number from 1, the lowest, to 7, the highest, on a fund\u2019s key information document. Higher means bigger swings in value, not a better or worse fund.",
+  "def": "A number from 1 (lowest) to 7 (highest) on a fund\u2019s key information document. Higher means bigger swings, not a better fund.",
   "tip": true,
   "pats": [
    [
@@ -159,7 +159,7 @@ window.PBGlossary = [
  {
   "id": "state-pension",
   "name": "State Pension",
-  "def": "A government pension for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.",
+  "def": "A government pension if you paid enough Pay-Related Social Insurance (PRSI). Most people need more.",
   "tip": true,
   "pats": [
    [
@@ -171,7 +171,7 @@ window.PBGlossary = [
  {
   "id": "prsa",
   "name": "Personal Retirement Savings Account (PRSA)",
-  "def": "A flexible personal pension you own, which moves with you between jobs.",
+  "def": "A personal pension you own. It moves with you between jobs.",
   "tip": true,
   "pats": [
    [
@@ -199,7 +199,7 @@ window.PBGlossary = [
  {
   "id": "personal-retirement-bond",
   "name": "Personal Retirement Bond",
-  "def": "A policy in your name holding a pension from a job you left, bought by that scheme\u2019s trustees. It follows that scheme\u2019s rules, and cannot move to or from a PRSA.",
+  "def": "A policy in your name holding a pension from a job you left. It follows that scheme\u2019s rules and cannot move to or from a PRSA.",
   "tip": true,
   "pats": [
    [
@@ -211,7 +211,7 @@ window.PBGlossary = [
  {
   "id": "pension-adjustment-order",
   "name": "Pension adjustment order",
-  "def": "A court order giving part of a pension to a former partner, or for a dependent child. It follows a judicial separation, a divorce, or the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
+  "def": "A court order giving part of a pension to a former partner or a dependent child, after a judicial separation, divorce, or the end of a civil partnership or qualified cohabitation. A separation agreement cannot do this.",
   "tip": true,
   "pats": [
    [
@@ -223,7 +223,7 @@ window.PBGlossary = [
  {
   "id": "employer-contribution",
   "name": "Employer contribution",
-  "def": "Money your employer pays into your pension, effectively part of your pay.",
+  "def": "Money your employer pays into your pension. In effect, part of your pay.",
   "tip": true,
   "pats": [
    [
@@ -235,7 +235,7 @@ window.PBGlossary = [
  {
   "id": "corporation-tax-relief",
   "name": "Corporation tax relief",
-  "def": "Company pension contributions for a director usually count against company profits, cutting corporation tax.",
+  "def": "A company\u2019s pension payments for a director usually cut its corporation tax.",
   "tip": true,
   "pats": [
    [
@@ -247,7 +247,7 @@ window.PBGlossary = [
  {
   "id": "standard-fund-threshold",
   "name": "Standard Fund Threshold",
-  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its legislated rise from 2026 to 2029.",
+  "def": "Revenue\u2019s cap on pension savings that get full tax relief. Anything above it is taxed when you draw it. See its rise from 2026 to 2029.",
   "tip": true,
   "pats": [
    [
@@ -259,7 +259,7 @@ window.PBGlossary = [
  {
   "id": "pia",
   "name": "Personal Investment Account (PIA)",
-  "def": "A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, and a flat tax each year on its value above a tax-free threshold, even in a year it falls. Not yet law as at 25 September 2026; details are due on 6 October 2026. See it next to a pension.",
+  "def": "A planned account for shares, bonds and funds, also called the Savings and Investment Account (SIA). Not a pension. No tax relief, and a flat tax each year on its value above a tax-free amount, even when it falls. Not yet law as at 25 September 2026. Details are due on 6 October 2026. See it next to a pension.",
   "tip": true,
   "pats": [
    [
@@ -275,7 +275,7 @@ window.PBGlossary = [
  {
   "id": "qfa",
   "name": "Qualified Financial Adviser (QFA)",
-  "def": "An Irish qualification showing a financial adviser meets the standard to give regulated advice.",
+  "def": "An Irish qualification showing an adviser meets the standard for regulated advice.",
   "tip": true,
   "pats": [
    [

@@ -274,7 +274,7 @@
         'From: ' + encodeURIComponent(v.page);
       window.location.href = 'mailto:' + (window.LEAD_FALLBACK_ADDRESS || 'hello@pensionbuddy.ie') +
         '?subject=' + encodeURIComponent('Results request') + '&body=' + body;
-      done('Your email app should have opened with the figures ready to send to Damian.');
+      done('Your email app should have opened with the figures ready to send to us.');
     }
     if (!window.PBForms) { viaEmail(); return; }
     form.setAttribute('aria-busy', 'true');
