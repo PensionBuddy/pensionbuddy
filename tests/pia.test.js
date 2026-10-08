@@ -30,7 +30,7 @@
   }
 
   group('1  the rules the module carries, and the ones it must not');
-  eq('1. ETF exit tax 38%', P.ETF_EXIT_TAX, 0.38);
+  eq('1. ETF exit tax 35% (from 1 January 2027)', P.ETF_EXIT_TAX, 0.35);
   eq('1. deemed disposal every 8 years', P.DEEMED_YEARS, 8);
   eq('1. lump sum a quarter of the pot', P.LUMP_SHARE, 0.25);
   eq('1. a pension normally from 60', P.PENSION_ACCESS_AGE, 60);
@@ -86,11 +86,11 @@
   eq('4. at 0% growth there is no tax', e0.taxDuring + e0.taxOut, 0);
   eq('4. and EUR 10,800 back', e0.afterTax, 10800);
   var e1 = P.etf(base({ path: [0.1] }));
-  eq('4. one year: 38% of the gain on the way out', e1.taxOut, 0.38 * (e1.value - 1200));
+  eq('4. one year: 35% of the gain on the way out', e1.taxOut, 0.35 * (e1.value - 1200));
   eq('4. no deemed disposal inside 8 years', P.etf(base({ path: steady(0.06, 8) })).taxDuring, 0);
   var e9 = P.etf(base({ path: steady(0.06, 9) }));
   eq('4. year 9: the first 12 purchases reach their eighth anniversary', e9.taxDuring,
-     12 * 0.38 * 100 * (Math.pow(1.06, 8) - 1));
+     12 * 0.35 * 100 * (Math.pow(1.06, 8) - 1));
   var eFall = P.etf(base({ path: steady(0.06, 8).concat([-0.5]) }));
   yes('4. a fall after a deemed disposal gives some of that tax back', eFall.taxOut < 0);
   yes('4. never more than was paid', -eFall.taxOut <= eFall.taxDuring + 1e-9);

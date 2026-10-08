@@ -196,7 +196,7 @@
       labels: { penOut: 'In a pension, at the end', piaOut: 'In a PIA (proposed), at the end', etfOut: 'In a fund outside a pension, at the end' },
       you: { age: 'Your age now', salary: 'What you earn in a year' },
       pension: { amount: 'You put in each month', years: 'Years you put money in' },
-      assume: { growth: 'Growth each year, before tax', piaRate: 'PIA tax rate (not yet set)', piaThreshold: 'PIA tax-free amount (not yet set)' } }
+      assume: { growth: 'Growth each year, before tax', piaRate: 'PIA tax rate', piaThreshold: 'PIA tax-free amount' } }
   };
   function num(id) { var el = document.getElementById(id); return el ? +el.value : 0; }
   function euroOf(v) { return '€' + Math.round(v).toLocaleString('en-IE'); }

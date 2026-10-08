@@ -63,3 +63,6 @@
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
+
+/* Budget 2027: the next year's rate, beside this year's */
+.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}

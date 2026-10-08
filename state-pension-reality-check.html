@@ -2561,6 +2561,9 @@ main h1{font-weight:800}
 .assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
 .assume .expl p:last-child{margin-bottom:0}
 .assume .expl b{color:var(--ink);font-weight:600}
+
+/* Budget 2027: the next year's rate, beside this year's */
+.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}
 </style>
 
 <script>
@@ -2724,6 +2727,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div><div class="rl">State Pension, a year</div><div class="big" id="spAnnual">€15,564</div></div>
         <p class="pb-say" id="pbSay">On 2,080 reckonable contributions, 40 years, this shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard of living.</p>
         <div class="divline"></div>
+        <p class="pb-sp27">2026 rates. Budget 2027 raises the maximum to &euro;309.30 a week, &euro;16,084 a year, from January 2027.</p>
         <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions.</div>
       </div>
 
@@ -2797,7 +2801,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
     <li>Not included: your old pensions, your tax position, your employer&rsquo;s scheme.</li>
-    <li>A full record of 2,080 gets the maximum personal rate, €299.30 a week from January 2026. Between 520 and 2,080 the rate is pro rata.</li>
+    <li>A full record of 2,080 gets the maximum personal rate, €299.30 a week from January 2026, and €309.30 from January 2027 (Budget 2027). Between 520 and 2,080 the rate is pro rata.</li>
     <li>Credited contributions count up to 520. This tool does not check how your total is made up.</li>
     <li>The qualifying minimum is 520 paid contributions, ten years. Credited contributions and HomeCaring Periods do not count toward it. The means-tested State Pension (Non-Contributory) may apply instead. This tool does not calculate it.</li>
     <li>Until 2034 the Department of Social Protection pays the higher of two calculations. Method 1 is the Total Contributions Approach alone. Method 2 combines it with the Yearly Average method. This tool shows Method 1 only. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> does both.</li>
@@ -3321,9 +3325,9 @@ initJar();
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=ba8b985d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=0e5819ab" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=7c68f871" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>
@@ -3425,7 +3429,7 @@ initJar();
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=abdccdaf"></script>
+<script src="assets/js/pb-after.js?v=257e33b2"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 </body>

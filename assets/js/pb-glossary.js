@@ -259,7 +259,7 @@ window.PBGlossary = [
  {
   "id": "pia",
   "name": "Personal Investment Account (PIA)",
-  "def": "A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, and a flat tax each year on its value above a tax-free threshold, even in a year it falls. Not yet law as at 25 September 2026; details are due on 6 October 2026. See it next to a pension.",
+  "def": "A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, up to \u20ac12,000 a year in, and 1% a year on its value above \u20ac50,000, even in a year it falls. Announced in Budget 2027 to open on 1 July 2027; not yet law as at 8 October 2026. See it next to a pension.",
   "tip": true,
   "pats": [
    [

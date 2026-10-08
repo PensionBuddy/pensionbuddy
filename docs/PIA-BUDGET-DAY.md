@@ -1,5 +1,17 @@
 # PIA: what to update on Budget day, 6 October 2026
 
+**Done on 8 October 2026.** Budget 2027 (Tax Policy Changes, 6 October 2026):
+1% a year on the average daily value above EUR 50,000; up to EUR 12,000 a
+year in; opens 1 July 2027; one account each, Irish residents 18+ with a
+PPSN; still a proposal until the Finance (No. 2) Bill 2026 passes. Exit tax
+38% to 35% from 1 January 2027; CGT 33% to 31% from 7 October 2026; DIRT
+and deemed disposal unchanged. The page starts its inputs at 1% and EUR
+50,000, its monthly slider stops at EUR 1,000 (the yearly limit), and
+`assets/js/pia.js` uses 35%. Figures were read from search extracts of the
+gov.ie documents (the session could not open gov.ie): check them against
+the Tax Policy Changes PDF. When the Bill passes, drop "proposed" and
+"not yet law" (section 6 below).
+
 `pia.html` describes the Personal Investment Account as a proposal, as at
 25 September 2026. Budget 2027 is expected to announce the figures the page
 leaves blank. This is the list of what to change and where each lives. Line

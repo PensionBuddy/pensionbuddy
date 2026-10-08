@@ -141,3 +141,6 @@
 .pb-fold-in{margin-top:14px;padding:0 14px;background:var(--surface-2)}
 .pb-fold-in>summary{min-height:44px;font-size:15px}
 .pb-fold-in .mdetail,.pb-fold-in .mbar-scale{margin:0 0 10px}
+
+/* Budget 2027: the next year's rate, beside this year's */
+.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}

@@ -17,7 +17,7 @@ which is better, and the page frames every persona as "it depends on".
 |---|---|
 | The PIA: no relief in; a flat yearly tax on the average value above a tax-free threshold, due in a falling year too; no deemed disposal, exit tax or CGT inside; provider pays; no lock-in | Department of Finance, Roadmap for the Taxation of Retail Investment, 31 August 2026. **Proposed, not yet law** |
 | The PIA's rate, threshold and annual limit | not announced: due 6 October 2026. **The module holds none of them.** The rate and threshold are the reader's inputs; no limit is applied |
-| ETF: 38% exit tax, deemed disposal every eight years | Revenue |
+| ETF: 35% exit tax from 1 January 2027 (Budget 2027; 38% before), deemed disposal every eight years | Revenue, Budget 2027 |
 | Pension tax relief | `assets/js/pension-tax-relief.js`, `grossForNetCost` (flat marginal rate, age-related limit, €115,000 earnings cap) |
 | Pension lump sum bands | `assets/js/sft.js`, `lumpSum` (first €200,000 tax-free, next €300,000 at 20%, the rest as income) |
 | A quarter as a lump sum; a pension normally from 60 | the site's own copy (director-calculator.html, standard-fund-threshold.html; pensions-over-50.html) |
@@ -61,11 +61,11 @@ illustration's assumption: the valuation method has not been published.
 
 **ETF outside a wrapper.** Each month's purchase is a lot with a base (its
 cost). On every eighth anniversary of a lot (month `bought + 96k`), if its
-value is above its base, 38% of the difference is paid by selling part of the
+value is above its base, 35% of the difference is paid by selling part of the
 lot and the base becomes what is left. A lot at or below its base pays
-nothing and keeps its base. At the end every lot is sold: 38% of any gain
+nothing and keeps its base. At the end every lot is sold: 35% of any gain
 over its base; a lot below its base gets back tax it paid on earlier deemed
-disposals, at most 38% of the shortfall and never more than it paid. An
+disposals, at most 35% of the shortfall and never more than it paid. An
 accumulating fund: no distributions.
 
 ## P4. Output
@@ -93,4 +93,4 @@ drawing a pension over years rather than all at the end.
   EUR 1.50.
 - ETF, EUR 100 a month at 6% for nine years: the first twelve lots reach
   their eighth anniversary in year nine, each grown exactly 96 months, so
-  deemed-disposal tax is `12 x 0.38 x 100 x (1.06^8 - 1)`.
+  deemed-disposal tax is `12 x 0.35 x 100 x (1.06^8 - 1)`.

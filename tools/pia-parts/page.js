@@ -7,10 +7,10 @@
    back: three figures, the scenario table, the tax table and one spoken
    summary.
 
-   NO PIA FIGURE IS A DEFAULT. The rate starts at 0% and the threshold field
-   starts empty, and until the reader types a threshold the PIA shows a
-   prompt, not a number. Budget 2027 (6 October 2026) announces both:
-   docs/PIA-BUDGET-DAY.md.
+   THE PIA'S FIGURES start at Budget 2027's (6 October 2026): 1% a year above
+   EUR 50,000. The reader can change both; a cleared threshold shows a
+   prompt, not a number. Still a proposal until the Finance (No. 2) Bill 2026
+   passes: docs/PIA-BUDGET-DAY.md.
 
    TONE: the figures do the work. No product is called better, and the page
    says where each figure leaves things out. */
@@ -28,7 +28,7 @@
     amount: function (v) { return euro(v) + ' a month'; },
     years: function (v) { return years(v); },
     growth: function (v) { return pc(v) + ' a year'; },
-    piaRate: function (v) { return pc(v) + ' a year, a figure you are trying, not an announced rate'; },
+    piaRate: function (v) { return pc(v) + ' a year' + (+v === 1 ? ', the Budget 2027 rate' : ', a figure you are trying'); },
     age: function (v) { return v + ' years old'; },
     salary: function (v) { return euro(v) + ' a year'; }
   };
@@ -68,11 +68,12 @@
 
     var has = c.pia !== null;
     $('piaOut').textContent = has ? euro(c.pia.afterTax) : NONE;
+    var budget = o.piaRate === 0.01 && o.piaThreshold === 50000;
     $('piaNote').textContent = !has
-      ? 'Type a threshold to see this. Neither the threshold nor the rate has been announced: try any figure.'
-      : o.piaRate === 0
-        ? 'At a 0% rate there is no PIA tax at all. Try a rate: none has been announced.'
-        : 'At the rate and threshold you chose, not announced figures.';
+      ? 'Type a tax-free amount to see this. Budget 2027 set it at €50,000.'
+      : budget
+        ? 'At the Budget 2027 figures: 1% above €50,000.'
+        : 'At the rate and tax-free amount you chose. Budget 2027: 1% above €50,000.';
 
     /* Job 5: each figure in today's money too (assets/js/pb-today.js) */
     if (window.PBToday) {

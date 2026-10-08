@@ -1654,7 +1654,7 @@ def run():
             f.append('the kicker or the heading')
         if '<div class="pb-tl-stage" aria-hidden="true">' not in box:
             f.append('the card is not aria-hidden')
-        if '<p class="pb-src">Rules as at 24 September 2026. Budget 2027 is on 6 October 2026 and could change them.</p>' not in box:
+        if '<p class="pb-src">Rules checked against Budget 2027 (6 October 2026) on 8 October 2026.</p>' not in box:
             f.append('the rules\' date is missing')
         steps = re.findall(r'<li class="pb-tl-step pb-card-link" data-age="(\d+)" data-show="([^"]+)"><h3><a href="([^"#]+)(?:#([a-z-]+))?">([^<]+)</a></h3><p>(.*?)</p></li>', box)
         if len(steps) < 8 or len(steps) != box.count('<li'):

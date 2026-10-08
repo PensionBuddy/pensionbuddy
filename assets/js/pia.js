@@ -3,23 +3,25 @@
    any wrapper (pia.html).
 
    ------------------------------------------------------------------------
-   SOURCES, as at 25 September 2026. Re-check on 6 October 2026 (Budget 2027):
-   docs/PIA-BUDGET-DAY.md lists every line to change.
+   SOURCES, as at 8 October 2026, after Budget 2027 (6 October 2026).
+   docs/PIA-BUDGET-DAY.md lists every line that carries a PIA figure.
 
-     PIA            Department of Finance, Roadmap for the Taxation of Retail
-                    Investment, 31 August 2026. PROPOSED, NOT YET LAW. No tax
-                    relief going in; a flat annual tax on the account's
-                    average value above a tax-free threshold, due even in a
-                    year the account falls; no deemed disposal, exit tax or
-                    Capital Gains Tax inside; the provider pays the tax.
-                    The threshold, the rate and the annual limit are to be
-                    announced on 6 October 2026. NOTHING HERE HOLDS A FIGURE
-                    FOR ANY OF THEM: the rate and the threshold are the
-                    reader's own inputs, and no limit is applied.
-     ETF            38% exit tax on the gain from 1 January 2026, and a deemed
-                    disposal on each eighth anniversary of a purchase: Revenue,
-                    Tax and Duty Manual Part 27-01A-02, Investment
-                    Undertakings (updated January 2026).
+     PIA            Budget 2027, Tax Policy Changes (6 October 2026), and the
+                    Roadmap for the Taxation of Retail Investment (31 August
+                    2026). PROPOSED, NOT YET LAW until the Finance (No. 2)
+                    Bill 2026 passes. No tax relief going in; 1% a year on
+                    the average daily value above EUR 50,000, due even in a
+                    year the account falls; at most EUR 12,000 a year in;
+                    no deemed disposal, exit tax or CGT inside; the provider
+                    pays the tax. The rate and threshold stay the page's
+                    inputs (it starts them at the Budget figures); the page
+                    keeps the payments under the limit (its slider stops at
+                    EUR 1,000 a month).
+     ETF            35% exit tax on the gain from 1 January 2027 (Budget 2027;
+                    38% before), and a deemed disposal on each eighth
+                    anniversary of a purchase: Revenue, Tax and Duty Manual
+                    Part 27-01A-02, Investment Undertakings. Every figure
+                    here is in the future, so 35% applies throughout.
      Pension        tax relief from assets/js/pension-tax-relief.js (PBRelief),
                     the lump sum's bands from assets/js/sft.js (PBSft). Nothing
                     about pensions is restated here.
@@ -41,7 +43,7 @@
   'use strict';
   if (!PBRelief || !PBSft) throw new Error('pia.js needs pension-tax-relief.js and sft.js loaded first');
 
-  var ETF_EXIT_TAX = 0.38;        // Revenue: funds and ETFs
+  var ETF_EXIT_TAX = 0.35;        // funds and ETFs, from 1 January 2027 (Budget 2027)
   var DEEMED_YEARS = 8;           // Revenue: deemed disposal every eighth anniversary
   var LUMP_SHARE = 0.25;          // the site's own: "up to 25% of the fund", director-calculator.html, standard-fund-threshold.html
   var PENSION_ACCESS_AGE = 60;    // the site's own: "normally taken from 60", pensions-over-50.html
@@ -97,9 +99,9 @@
   /* ---- the PIA -----------------------------------------------------------
      Each year's tax is the reader's rate on the average of the twelve
      month-end values above the reader's threshold, taken from the account at
-     the year end. How the average will really be measured is not yet
-     published: this is the illustration's assumption, and the spec says so.
-     No annual limit is applied, because none has been announced. */
+     the year end. The real tax uses the average of daily values (Budget
+     2027); twelve month-end values stand in for them here, and the spec says
+     so. The EUR 12,000 yearly limit is kept by the page, not here. */
   function pia(o) {
     if (o.threshold == null || !(o.threshold >= 0) || !(o.rate >= 0)) return null;
     var v = 0, tax = 0, lossYearTax = 0, lossYears = 0, taxedLossYears = 0, yearly = [0], taxes = [];
@@ -130,11 +132,11 @@
 
   /* ---- the ETF outside a wrapper -----------------------------------------
      Every month's purchase is its own lot. On each eighth anniversary of a
-     lot, 38% of its gain since its base is due, paid by selling part of the
+     lot, 35% of its gain since its base is due, paid by selling part of the
      lot, and the base becomes what is left. A lot below its base pays
-     nothing and keeps its base. At the end everything is sold: 38% of each
+     nothing and keeps its base. At the end everything is sold: 35% of each
      lot's gain over its base; a lot below its base gets back tax it paid on
-     earlier deemed disposals, up to 38% of the shortfall, as the credit for
+     earlier deemed disposals, up to 35% of the shortfall, as the credit for
      deemed-disposal tax works. Accumulating fund: no dividends paid out. */
   function etf(o) {
     var lots = [], dd = 0, yearly = [0], month = 0;
