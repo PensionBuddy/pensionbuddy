@@ -2658,6 +2658,43 @@ main h1{font-weight:800}
 @keyframes pbWSafeT{to{transform:none}}
 @media(max-width:560px){.pb-w-in{padding:40px 0 120px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
 /* WELCOME:END */
+/* MOTION-3:BEGIN (8 October 2026, Damian's brief). Three pieces of motion:
+   the hero gap chart's drag handle (assets/js/pb-gap-grab.js), the relief
+   jar beside Revenue's deadline and the countdown's flipping digits
+   (assets/js/pb-tickband.js). */
+.pb-gap-grab{position:absolute;left:50%;bottom:100%;z-index:3;display:inline-flex;align-items:center;gap:6px;height:38px;margin:0;padding:0 15px 0 11px;border:0;border-radius:999px;background:#fff;color:var(--ink);font:700 15px/1 var(--font);box-shadow:0 8px 20px rgba(11,31,28,.24),0 0 0 1px rgba(11,31,28,.08);cursor:ns-resize;touch-action:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translate(-50%,30%) scale(0);transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .25s,padding .3s}
+.pb-gap-grab svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pb-gap-grab:focus-visible{outline:3px solid #14CBB1;outline-offset:3px}
+.pb-gap-grab.pb-gap-grab-on{opacity:1;transform:translate(-50%,30%) scale(1)}
+.pb-motion .pb-gap-grab.pb-gap-grab-on:not(.pb-gap-grab-used){animation:pbGrabBob 1.5s ease-in-out .7s infinite}
+@keyframes pbGrabBob{0%,100%{transform:translate(-50%,30%) scale(1)}50%{transform:translate(-50%,calc(30% - 9px)) scale(1.04)}}
+.pb-gap-grab-used{padding:0 11px}
+.pb-gap-grab-used .pb-gap-grab-t{display:none}
+.pb-gap-dragging .pb-gap-grab{transform:translate(-50%,30%) scale(1.14);box-shadow:0 12px 28px rgba(11,31,28,.3),0 0 0 4px rgba(20,203,177,.45)}
+.pb-gap-need .pb-gap-bar{cursor:ns-resize}
+.pb-gap-dragging,.pb-gap-dragging *{user-select:none;-webkit-user-select:none;cursor:ns-resize}
+#pbNeedOut .pb-gap-big-n{display:inline-block;transform-origin:0 80%}
+.pb-gap.pb-gap-has-grab{margin-top:24px}
+.tk-side{display:flex;flex-direction:column;align-items:flex-end;gap:22px}
+.tk-unit{perspective:420px}
+.tk-n.pb-flip{animation:pbFlip .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbFlip{0%{transform:rotateX(-95deg);opacity:.15}55%{transform:rotateX(14deg);opacity:1}100%{transform:none}}
+.pb-jar{display:flex;flex-direction:column;align-items:center;gap:12px;width:min(320px,100%)}
+.pb-jar[hidden]{display:none}
+.pb-jar-cv{display:block;width:100%;height:auto;aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pb-jar-shake{animation:pbJarShake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes pbJarShake{10%,90%{transform:translateX(-2px) rotate(-1deg)}20%,80%{transform:translateX(4px) rotate(1.5deg)}30%,50%,70%{transform:translateX(-7px) rotate(-2.5deg)}40%,60%{transform:translateX(7px) rotate(2.5deg)}}
+.pb-jar-rates{display:inline-flex;border:1px solid var(--teal-100);border-radius:999px;padding:3px;background:var(--surface)}
+.pb-jar-rates button{min-height:40px;padding:8px 16px;border:0;border-radius:999px;background:transparent;color:var(--ink-2);font:600 15px/1 var(--font);cursor:pointer;transition:background .2s,color .2s}
+.pb-jar-rates button[aria-pressed=true]{background:var(--ink);color:#fff}
+.pb-jar-key{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin:0;font-size:16px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-jar-key b{color:var(--ink);font-weight:700}
+.pb-jar-key i{display:inline-block;width:12px;height:12px;margin-right:7px;border-radius:50%;vertical-align:-1px}
+.pb-jar-you i{background:#14CBB1}
+.pb-jar-rev i{background:#F4B740}
+@media(max-width:920px){.tk-side{align-items:stretch}.pb-jar{align-self:center}}
+@media(prefers-reduced-motion:reduce){.pb-jar-shake,.tk-n.pb-flip{animation:none}}
+/* MOTION-3:END */
 </style>
 </head>
 <body>
@@ -2961,10 +2998,20 @@ main h1{font-weight:800}
 </div>
         <a class="btn btn-quiet-dark" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
-      <div class="tk-clock" aria-hidden="true">
-        <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
-        <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
-        <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
+      <div class="tk-side">
+        <div class="tk-clock" aria-hidden="true">
+          <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
+        </div>
+        <div class="pb-jar" id="pbJar" hidden>
+          <canvas class="pb-jar-cv" width="300" height="300" aria-hidden="true"></canvas>
+          <div class="pb-jar-rates" role="group" aria-label="Which rate of tax">
+            <button type="button" data-rate="0.4" aria-pressed="true">Higher rate</button>
+            <button type="button" data-rate="0.2" aria-pressed="false">Standard rate</button>
+          </div>
+          <p class="pb-jar-key"><span class="pb-jar-you"><i aria-hidden="true"></i>You pay <b>€60</b></span><span class="pb-jar-rev"><i aria-hidden="true"></i>Revenue adds <b>€40</b></span></p>
+        </div>
       </div>
       <p class="tk-sr" id="tkSr"></p>
     </div>
@@ -3533,5 +3580,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-providers.js?v=d29ad6be"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
+<script src="assets/js/pb-gap-grab.js?v=7d04161b"></script>
+<script src="assets/js/pb-tickband.js?v=e21e8ab7"></script>
 </body>
 </html>
