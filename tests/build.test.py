@@ -325,7 +325,7 @@ def run():
         ('a hand-written calculator changed the date', 'director-calculator.html',
          'Last reviewed September 2026', 'Last reviewed October 2026', 'reviewed'),
         ('a page that should not carry it gained it', 'terms.html', '<main', pagebuild.REVIEWED + '<main', 'reviewed'),
-        ('a reason line reworded', 'index.html', 'Free · 20 minutes · no obligation · easy to reschedule.', 'Free · 30 minutes · no obligation · easy to reschedule.', 'reason'),
+        ('a reason line put back', 'index.html', '</main>', '<p class="pb-why">Free · 20 minutes.</p></main>', 'reason'),
         ('the recipe edited on one page', 'glossary.html', 'body p.pb-why{margin:10px 0 0', 'body p.pb-why{margin:12px 0 0', 'trust-css'),
         ('the recipe missing from one page', 'booking.html', pagebuild.TRUST_OPEN, '/* TRUST-GONE', 'trust-css'),
     ]
@@ -797,7 +797,7 @@ def run():
     # ----------------------------------------------------------------- 21
     # Run 45, and the stripped booking page: the heading, one line, then the
     # calendar. No form in front of it, and none of the old reassurance.
-    BOOK_H1, BOOK_LINE = 'Book a call with us', 'Free. 20 minutes. No obligation.'
+    BOOK_H1, BOOK_LINE = 'Book a call with us', 'Free. 20 minutes.'
     FILLER = ('That is the lot.', 'We do not ask what you earn', 'none of it is needed to book a chat',
               'this site gives information, not advice', 'The house promise', 'class="timeline"',
               'class="lead-more"', 'class="qnote"', 'id="pbFrom"')
@@ -2345,8 +2345,8 @@ def run():
     # Run 43, item 1 (Damian's "yes" to Run 42's question 7): the starter,
     # tracker and director heroes give before they ask. Each hero keeps its
     # second button and its two lockups (check 28), and carries no booking
-    # link (the chat pictures were cut in October 2026); the booking button and its
-    # reason (pagebuild.REASON) stand, moved word for word, after the page's
+    # link (the chat pictures were cut in October 2026); the booking button
+    # (its reason line cut on 8 October 2026) stands, moved word for word, after the page's
     # first figures: the starter page's 30, 40 and 50 chart with its
     # warnings and note, the director page's €1,000 example and relief
     # ladder with its note; the tracker page gives no figure, so after its
@@ -2365,7 +2365,7 @@ def run():
 
     def moved_block(words):
         return ('  <div class="hero-cta" style="margin-top:22px">\n      <a class="btn btn-acc" href="booking.html">'
-                + words + ARROW + '\n      ' + pagebuild.REASON + '\n  </div>\n')
+                + words + ARROW + '\n  </div>\n')
 
     def gives_first(name, src):
         words, before, follows = GIVE_FIRST[name]
@@ -2397,7 +2397,7 @@ def run():
             ('the button above the chart', 'starter.html',
              st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
              'the button comes before the first figures'),
-            ('its reason reworded', 'starter.html', st.replace(sblock, sblock.replace('20 minutes', '30 minutes'), 1),
+            ('its words reworded', 'starter.html', st.replace(sblock, sblock.replace('Help me get started', 'Get started'), 1),
              'the moved button and its reason are missing, doubled or reworded'),
             ('a booking link put under the lede', 'tracker.html',
              sources['tracker.html'].replace(
@@ -2477,53 +2477,9 @@ def run():
         eq('47. %s is caught' % label, not_state_faults(mut), want)
 
     # ----------------------------------------------------------------- 48
-    # Run 43, item 5d (Damian: "Risk reversal beside every ask"). Every booking
-    # link in a page's own content (the nav, the footer and scripts aside) has
-    # pagebuild.REASON after it, before the next booking link and within 700
-    # characters; the "Next step" card carries the same words in its own span.
-    # Exempt, by name: the booking page itself, where every ask leads, and the
-    # inline "booking page" links in the Privacy Notice, the Terms and the
-    # complaints page (Run 26: not calls to action).
-    REASON_TEXT = re.sub(r'<[^>]+>', '', pagebuild.REASON)
-    # Run 45: the block after a calculator's result carried its own line
-    # under its button. Cut on 8 October 2026 (Damian: the button already
-    # says free); the block's button is exempt, its words are the reason.
-    AFTER_LINE = '<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY if pagebuild.AFTER_WHY else None
-
-    def asks_without_reason(srcs):
-        out = []
-        for page, text in sorted(srcs.items()):
-            if page == 'booking.html':
-                continue
-            span = pagebuild.nav_span(text)
-            body = text[:span[0]] + text[span[1]:] if span else text
-            if '<footer' in body:
-                body = body[:body.find('<footer')]
-            body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
-            for m in re.finditer(r'<a [^>]*href="booking\.html(?:#[^"]*)?"[^>]*>(.*?)</a>', body, re.S):
-                words = re.sub(r'<[^>]+>', '', m.group(1)).strip()
-                if words == 'booking page' or REASON_TEXT in m.group(1):
-                    continue
-                if AFTER_LINE is None and 'data-pb-cta="after"' in m.group(0):
-                    continue
-                nxt = body.find('href="booking.html', m.end())
-                seg = body[m.end():min(nxt if nxt >= 0 else len(body), m.end() + 700)]
-                if pagebuild.REASON not in seg and (AFTER_LINE is None or AFTER_LINE not in seg):
-                    out.append('%s: "%s"' % (page, words[:40]))
-        return out
-
-    eq('48. every booking link in a page has the reason beside it (Run 43; after a result, the block\'s own line, Run 45)', asks_without_reason(sources), [])
-    for label, page, mut, want in (
-            ('a band\'s reason removed', 'index.html',
-             sources['index.html'].replace('Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n  ' + pagebuild.REASON,
-                                           'Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>', 1),
-             'index.html: "Book your free call"'),
-            ('a new booking link with no reason', 'glossary.html',
-             sources['glossary.html'].replace('</main>', '<p><a href="booking.html">Talk to Damian</a></p>\n</main>', 1),
-             'glossary.html: "Talk to Damian"')):
-        assert mut != sources[page], label
-        m48 = dict(sources); m48[page] = mut
-        eq('48. %s is caught' % label, want in asks_without_reason(m48), True)
+    # Run 43, item 5d (a reason beside every booking link) was dropped on
+    # 8 October 2026: Damian cut the reason line from the whole site. The
+    # TRUST guard (check 12) keeps a .pb-why line from coming back.
 
     # ----------------------------------------------------------------- 49
     # Run 43, rebuilt in Run 45 (give, then ask). Each calculator and tool ends
@@ -2574,7 +2530,7 @@ def run():
                 f.append('%s: a form on a page that says nothing leaves it' % page)
             res = {'my-pensions.html': 'id="ptSum"', 'director-pension-rules.html': 'id="drOut"'}.get(page, '<div class="results">')
             r = s.find(res)
-            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a><p class="pb-why">[^<]*</p></div>', '',
+            seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a>(?:<p class="pb-why">[^<]*</p>)?</div>', '',
                          squash(s[r:span[0]])) if r >= 0 else ''
             if r < 0 or 'href="booking.html' in seg:
                 f.append('%s: a booking link in the results before the block' % page)

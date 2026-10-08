@@ -148,6 +148,15 @@
     $('ptCount').textContent = s.count === 0 ? 'Add a pension to start'
       : 'across ' + s.count + (s.count === 1 ? ' pension' : ' pensions');
     $('ptSum').classList.toggle('pt-empty', s.count === 0);
+    // on a phone the ring is below the form: a small total and split stay in view while typing
+    $('ptMini').hidden = s.count === 0;
+    $('ptMiniN').textContent = euro(s.total);
+    var mb = $('ptMiniBar'), kr = keptRows(); mb.textContent = '';
+    s.rows.forEach(function (r, k) {
+      var seg = document.createElement('i');
+      seg.style.flexGrow = r.share; seg.style.setProperty('--o', shade(kr[k]));
+      mb.appendChild(seg);
+    });
     var idx = ring(s), key = $('ptKey'); key.textContent = '';
     s.rows.forEach(function (r, k) {
       var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);

@@ -371,7 +371,7 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
 }
 
 /* G11: the booking page */
-const H1 = 'Book a call with us', SUB = 'Free. 20 minutes. No obligation.';
+const H1 = 'Book a call with us', SUB = 'Free. 20 minutes.';
 for (const [q, hash, shows, term] of [
     ['', '#from=pension-calculator', true, ''], ['', '#from=nope', false, ''], ['', '', false, ''],
     ['', '#persona=director&from=pia', true, 'director'],

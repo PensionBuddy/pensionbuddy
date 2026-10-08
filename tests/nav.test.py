@@ -220,11 +220,11 @@ def main():
         eq('1. %s: one nav, the row, not past the window' % page,
            (r['navs'], r['drawer'], r['right'] <= r['w'], r['sw'] <= r['w']), (1, False, True, True))
         eq('1. %s: items at 17px, weight 600' % page, r['font'], ['17px', '600'])
-        eq('1. %s: four dropdowns, named' % page, [d['name'] for d in r['dd']],
-           ['Directors', 'Tools', 'State Pension', 'Guides'])
+        eq('1. %s: three dropdowns, named' % page, [d['name'] for d in r['dd']],
+           ['Directors', 'Tools', 'Guides'])
         eq('1. %s: each a collapsed type="button" controlling the list after it, closed' % page,
            [(d['type'], d['exp'], d['next'], d['list'], d['links'] > 0, d['open'], d['js']) for d in r['dd']],
-           [('button', 'false', True, 'UL', True, False, True)] * 4)
+           [('button', 'false', True, 'UL', True, False, True)] * 3)
         eq('1. %s: no control in the nav is filled' % page, r['filled'], [])
         eq('1. %s: the booking button is an aqua outline' % page, r['booking'],
            ['rgba(0, 0, 0, 0)', 'solid', True, 'rgb(22, 201, 176)'])
@@ -257,7 +257,7 @@ def main():
         eq('3. %s: a second click closes it' % page, r['click2'], ['false', False])
         eq('3. %s: opening one closes another' % page, r['other'], ['false', 'true', False, True])
         eq('3. %s: ArrowDown opens and moves to the first link' % page, r['down1'], ['true', 'pension-calculator.html'])
-        eq('3. %s: and on to the next' % page, r['down2'], 'pension-fees-calculator.html')
+        eq('3. %s: and on to the next' % page, r['down2'], 'my-pensions.html')
         eq('3. %s: ArrowUp walks back to the button' % page, r['up'], 'navTools')
         eq('3. %s: Escape closes, focus back on the button' % page, r['esc'], ['false', False, 'navTools'])
         eq('3. %s: Tab leaving the panel closes it' % page, r['tabOut'], ['false', False])

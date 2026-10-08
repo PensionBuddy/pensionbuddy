@@ -60,9 +60,19 @@
 .pt-empty .pt-actions,.pt-empty .pt-key{display:none}
 /* each row's dot matches its arc and its swatch in the key */
 .pt-dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--slate);opacity:var(--o,1);margin-right:8px;vertical-align:-1px}
+/* the phone's running total: sticky under the nav while the ring is out of view */
+.pt-mini{display:none}
 @media(max-width:920px){
   .pt-wrap{grid-template-columns:1fr}
   .pt-sum{position:static}
+  .pt-mini:not([hidden]){display:flex;align-items:center;gap:10px;position:sticky;top:72px;z-index:5;margin:0 0 14px;padding:10px 12px;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:0 4px 12px rgba(11,31,28,.06);
+    transition:top var(--pb-d-3) var(--pb-ease-out)}
+  nav.nav-hidden ~ main .pt-mini{top:8px}
+  .pt-mini-l{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+  .pt-mini b{font-size:1.15rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .pt-mini-bar{flex:1;display:flex;gap:2px;height:10px;min-width:40px}
+  .pt-mini-bar i{display:block;flex-basis:0;min-width:3px;border-radius:3px;background:var(--slate);opacity:var(--o,1)}
 }
 @media(max-width:480px){
   .pt-grid{grid-template-columns:1fr}

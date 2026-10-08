@@ -144,12 +144,13 @@ NOINDEX = '<meta name="robots" content="noindex">'
 # foot of the page header on every calculator, the State Pension pages, the
 # director rules, the SFT and the PIA page: assemble() puts it into each
 # record with reviewed=True, and the two hand-written calculators carry it by
-# hand. REASON sits next to a booking call to action whose own block gives no
-# reason to book; docs/STATUS.md, Run 26, lists every call to action and which
-# reason it has. trust_drift(), at the end of this file, is the guard.
+# hand. REASON, the "Free · 20 minutes · no obligation" line that sat beside
+# every booking call to action, was cut from the whole site on 8 October 2026
+# (Damian: the buttons already say free; the line was words in the way).
+# trust_drift(), at the end of this file, keeps it from coming back.
 REVIEWED = ('<p class="pb-reviewed">Reviewed by Damian Condon, '
             'Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>')
-REASON = '<p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>'
+REASON = ''   # cut, see above: no page carries a .pb-why line
 # Run 32: MOTION_HEAD, the script in every page's <head>, is defined after
 # caveat_selector() below, because it carries the caveat list.
 DEADLINE_JS = 'assets/js/pb-deadline.js'
@@ -245,8 +246,7 @@ PAGES = {
         parts='finder-parts',
         title='Find an old pension, Pensionbuddy',
         desc=('Lost track of a pension from an old job? Tell us where you worked, sign a letter '
-              'that lets us ask the providers, and we do the chasing. Nothing is moved, and '
-              'there is no obligation.'),
+              'that lets us ask the providers, and we do the chasing. Nothing is moved.'),
         modules=['assets/js/pension-finder.js'],
         keep=[],
         nav=None,
@@ -944,7 +944,7 @@ CARDS = {
     'director-pension-rules.html': ('What changed for directors in 2026', 'Three things changed in the last two years. Four questions show which apply to you.', 'director-pension-rules.html'),
     'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
-    'state-pension-entitlement.html': ('State Pension entitlement check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
+    'state-pension-entitlement.html': ('State Pension check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
     'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
     'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
     'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
@@ -1245,8 +1245,8 @@ def after_drift(sources):
 
 # ============================================================================
 # THE TRUST COMPONENTS (Run 26). The review line on exactly the pages that
-# should carry it and on no other; every .pb-reviewed and .pb-why written as
-# the one string at the top of this file; and the TRUST block of CSS on every
+# should carry it and on no other; every .pb-reviewed written as the one
+# string at the top of this file, and no .pb-why at all; and the TRUST block of CSS on every
 # page, byte for byte the skeleton's. Like chrome_drift(), it never raises:
 # {page: [(kind, detail)]}, and a clean tree is {}.
 # ============================================================================
@@ -1273,8 +1273,8 @@ def trust_drift(sources, skeleton=os.path.basename(SKELETON)):
             fs.append(('reviewed', 'the review line appears %d time(s), %s' % (n, 'want 1' if name in carry else 'want none')))
         if text.count('class="pb-reviewed') != n:
             fs.append(('reviewed', 'a review line is not pagebuild.REVIEWED'))
-        if text.count('class="pb-why"') != text.count(REASON):
-            fs.append(('reason', 'a reason line is not pagebuild.REASON'))
+        if 'class="pb-why"' in text:
+            fs.append(('reason', 'a reason line is back (cut on 8 October 2026)'))
         if fs:
             out[name] = fs
     return out
