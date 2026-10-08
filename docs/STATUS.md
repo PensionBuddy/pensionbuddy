@@ -417,6 +417,29 @@ list, not a button); the guides' "Talk it through" section headings over
 their booking links; links inside sentences ("book a free 20-minute call
 with us", the legal pages' "booking page"); the 404's filled "way home".
 
+## The gate (Run 48)
+
+On the branch merged with live main `e00b349` (Space Grotesk, Run 49),
+one suite at a time, headless Chrome, `TZ=Europe/Dublin`; anything failing
+was run again on live main itself. Pass: no failing line live main does
+not have.
+
+| Suite | Run 48 | Live main `e00b349` |
+|---|---|---|
+| build.test.py | 484/0 | |
+| run-tests.py, give-then-ask (156), lead-forms (471), interactive-43 (404), deadline (360), games (187), providers (86), regulator-lines and --caveats (31 each), runner (95), gap-band, search (22), nav (470), terms (48), flags, site-links, links, submission-created (170) | all pass | |
+| floating-chrome.test.mjs | 37/0 (check 2b new) | 37/0 with the new test |
+| consent.test.py | 766/14 | the same 14 (check 9 at 320 x 568) |
+| boxes.test.mjs | 5/3 | the same 3 |
+| ux4.test.mjs | 61/3 | the same 3 |
+| verify.py --no-shots | 13 FAIL | the same 13 (calculators' "today's money" under 16px; the tracker's P60 letter-spacing) |
+| check-initialisms.py | ECB on four calculators | the same |
+| sitemap.py --check | stale lastmods, then rewritten here (`tools/sitemap.py`) | stale |
+| stamp, site-index, seo, sync --check | clean | |
+
+Screenshots of the home page at 375 and 1440, whole page and each changed
+part: `verify-out/shots/run48/` (not committed).
+
 ## Needs Damian (Run 48)
 
 1. **Budget 2027.** Give the changes; then the rules lines move again.
