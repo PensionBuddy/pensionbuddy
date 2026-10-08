@@ -17,7 +17,7 @@ Bright teal is a surface/graphic colour, not a text colour. Keep existing
 
 | File | Use |
 | --- | --- |
-| `pensionbuddy-lockup-horizontal.svg` | Header, email signature, docs. 582 × 104 (the wordmark's ink ends at x≈581.3). |
+| `pensionbuddy-lockup-horizontal.svg` | Header, email signature, docs. 562 × 104 (the wordmark's ink ends at x≈560.6 in Space Grotesk). |
 | `pensionbuddy-lockup-horizontal-reversed.svg` | Same, for deep-ink / photo grounds. |
 | `pensionbuddy-lockup-horizontal-mono.svg` | One colour via `currentColor` — print, embroidery, stamps. |
 | `pensionbuddy-mark.svg` | Square mark, 180 × 180. Favicon, social avatar, app icon. |
@@ -26,7 +26,7 @@ Bright teal is a surface/graphic colour, not a text colour. Keep existing
 | `PensionbuddyLogo.jsx` | React: `PensionbuddyLockup`, `PensionbuddyMark`, `PensionbuddyPaw`. |
 | `lockup.html` | Framework-free HTML + CSS version of the lockup. |
 
-The two lockup SVGs use live `<text>`, so they need Schibsted Grotesk 800 loaded.
+The two lockup SVGs use live `<text>`, so they need Space Grotesk 700 loaded.
 On a page that doesn't load the font, use `PensionbuddyLogo.jsx` or `lockup.html`
 (both inherit the page's font stack) rather than the SVG.
 
@@ -58,6 +58,6 @@ Clear space: `0.25 H` on all sides. Minimum lockup height 28px on screen,
 ## Don't
 
 - Don't put the bright-teal mark on a teal or amber ground.
-- Don't re-space or re-weight the wordmark; it is Schibsted Grotesk 800 at `-0.035em`.
+- Don't re-space or re-weight the wordmark; it is Space Grotesk (800 asked, 700 rendered) at `-0.035em`.
 - Don't add a drop shadow, outline, or gradient to the mark.
 - Don't use the full lockup below 28px — the wordmark closes up.

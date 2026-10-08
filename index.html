@@ -30,7 +30,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FinancialService", "name": "Pensionbuddy", "legalName": "Damian Condon T/A Gresham Wealth Management", "description": "Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.", "url": "https://pensionbuddy.ie/", "logo": "https://pensionbuddy.ie/assets/brand/og-mark-512.png", "image": "https://pensionbuddy.ie/assets/brand/og/og-home.png", "email": "hello@pensionbuddy.ie", "address": {"@type": "PostalAddress", "streetAddress": "Bushfield House, Philipsburgh Avenue", "addressLocality": "Fairview", "addressRegion": "Dublin 3", "addressCountry": "IE"}, "areaServed": "IE", "founder": {"@type": "Person", "name": "Damian Condon", "honorificSuffix": "QFA"}}</script>
 <!-- SEO:END -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What will I walk away with?", "acceptedAnswer": {"@type": "Answer", "text": "What you have, what it may be worth at 66, and what is worth doing. Written down."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on what you need. You know before you commit. We are paid by fee, commission or a mix."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "No. Bring what you remember. Doing the digging is our job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
-<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -54,11 +54,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -1771,7 +1771,7 @@ button{font-family:inherit}
    left exactly as they are: this rule paints the logo and nothing else. */
 .logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
   gap:calc(var(--pb-logo-h) * 0.269);
-  font-family:'Schibsted Grotesk',var(--font);
+  font-family:'Space Grotesk',var(--font);
   font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
   letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
 .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
@@ -1903,7 +1903,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
-.pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
+.pb-wordmark{margin:40px 0 -6px;font-family:'Space Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 /* DAMIAN'S PHOTOS (October 2026). Two headshots in his section, shown in
    turn: the first is the section's own <picture>, the second sits over it
@@ -2085,19 +2085,20 @@ a.assure:hover{border-color:var(--teal)}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32; served from the site since Run 34; Geist since
-   Run 46). Geist and the footer wordmark's Schibsted Grotesk 800 come from
-   assets/fonts/, not from a font service, so a visit sends nothing to a
-   third party before the cookie choice. Geist is one variable file
-   (Vercel's Geist 1.7.2, weights 400 to 800 used), with font-display:swap,
-   under the SIL Open Font License (assets/fonts/OFL-*.txt). Each page
-   preloads geist-variable.woff2 in its <head>. Until it arrives the text
-   is set in the system font. Byte for byte on every page:
+/* FONTS:BEGIN (Run 32; served from the site since Run 34; Space Grotesk
+   for every word, wordmark included, since 8 Oct 2026). Space Grotesk
+   comes from assets/fonts/, not from a
+   font service, so a visit sends nothing to a third party before the
+   cookie choice. It is one variable face (weights 300 to 700; an 800 asked
+   for renders at 700) in two files split by unicode-range, Latin and Latin
+   Extended, from Fontsource 5.2.8, with font-display:swap, under the SIL
+   Open Font License (assets/fonts/OFL-SpaceGrotesk.txt). Each page preloads
+   space-grotesk-latin.woff2 in its <head>. Until it arrives the text is set
+   in the system font. Byte for byte on every page:
    tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
    chrome_drift. */
-@font-face{font-family:'Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/geist-variable.woff2) format('woff2')}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/space-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/space-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* FONTS:END */
 /* COLOUR FADE INTO AND OUT OF THE DARK BAND (#calc). Mercury fades the
    page between its bands; here the dark product band fades in from the pale
@@ -2803,8 +2804,8 @@ main h1{font-weight:800}
   <ul class="pb-learn-grid">
     <li><div class="pb-learn-card pb-card-link">
       <div class="pb-learn-media">
-        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=703fbcb0"><img src="assets/img/product-buddys-run.jpg?v=9f60f07f" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer comes down from a double jump onto Poolbeg Lighthouse, with the excuse &ldquo;I&rsquo;m only 25&rdquo; on its tower, on Dollymount Strand, with the Poolbeg stacks behind him. Score 80, three lives."></picture>
-        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=703fbcb0" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
+        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=ddf0de9f"><img src="assets/img/product-buddys-run.jpg?v=71496507" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer comes down from a double jump onto Poolbeg Lighthouse, with the excuse &ldquo;I&rsquo;m only 25&rdquo; on its tower, on Dollymount Strand, with the Poolbeg stacks behind him. Score 80, three lives."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=ddf0de9f" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
         <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Buddy&rsquo;s Run" data-state="paused" aria-label="Play video: Buddy&rsquo;s Run"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
       </div>
       <div class="pb-learn-body">
@@ -2815,8 +2816,8 @@ main h1{font-weight:800}
     </div></li>
     <li><div class="pb-learn-card pb-card-link">
       <div class="pb-learn-media">
-        <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=f9a78730"><img src="assets/img/product-jargon-battle.jpg?v=ee5acf90" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
-        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-jargon-battle.webp?v=f9a78730" width="1280" height="720" data-pb-video><source src="assets/video/jargon-battle.mp4" type="video/mp4"><source src="assets/video/jargon-battle.webm" type="video/webm"></video>
+        <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=7e6e5233"><img src="assets/img/product-jargon-battle.jpg?v=a77559c8" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-jargon-battle.webp?v=7e6e5233" width="1280" height="720" data-pb-video><source src="assets/video/jargon-battle.mp4" type="video/mp4"><source src="assets/video/jargon-battle.webm" type="video/webm"></video>
         <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Jargon Battle" data-state="paused" aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
       </div>
       <div class="pb-learn-body">
@@ -2842,7 +2843,7 @@ main h1{font-weight:800}
   </div>
   <figure class="pb-product-fig" id="pbPtFig">
     <a class="pb-product-shot" id="pbPtShot" href="pension-calculator.html" aria-label="Open the calculator">
-      <picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=34cb6d10"><img src="assets/img/product-pension-calculator.jpg?v=dcc455c3" width="2184" height="2554" loading="lazy" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief."></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadI" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 484 Q470 484 425 420" class="pb-ann-under"/><path d="M560 484 Q470 484 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-under"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/></svg><span class="pb-ann-l" style="left:26.1%;top:53.8%;transform:translateY(-50%)">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:50.6%;transform:translateY(-50%)">The figures follow</span></span>
+      <picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=4999dad9"><img src="assets/img/product-pension-calculator.jpg?v=18b862cb" width="2184" height="3149" loading="lazy" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief."></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadI" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 484 Q470 484 425 420" class="pb-ann-under"/><path d="M560 484 Q470 484 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-under"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/></svg><span class="pb-ann-l" style="left:26.1%;top:53.8%;transform:translateY(-50%)">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:50.6%;transform:translateY(-50%)">The figures follow</span></span>
     </a>
     <figcaption class="pb-product-cap">Illustration only. Investments can fall as well as rise.</figcaption>
   </figure>
@@ -3445,7 +3446,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script>
 /* product tabs: one per tool, swapping the band's screenshot, line and button */
 (function(){
-  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "See your projection and Revenue’s tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2554, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=dcc455c3", "webp": "assets/img/product-pension-calculator.webp?v=34cb6d10"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "See the pot you could build, the income it could pay and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 2968, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=68e57384", "webp": "assets/img/product-director-calculator.webp?v=a8febbd4"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund and a personal pension, side by side.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2302, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=085f7eb4", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=bdaef8a4"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2067, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=8dd5a850", "webp": "assets/img/product-state-pension-reality-check.webp?v=ec001d0f"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2582, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=6acb788f", "webp": "assets/img/product-state-pension-entitlement.webp?v=878ef0e1"}];
+  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "See your projection and Revenue’s tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2554, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=18b862cb", "webp": "assets/img/product-pension-calculator.webp?v=4999dad9"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "See the pot you could build, the income it could pay and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 2968, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=23b71aee", "webp": "assets/img/product-director-calculator.webp?v=0d18a429"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund and a personal pension, side by side.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2302, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=88fe9076", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=42bbecea"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2067, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=b036f7ca", "webp": "assets/img/product-state-pension-reality-check.webp?v=59a3f235"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2582, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=dbd8faf5", "webp": "assets/img/product-state-pension-entitlement.webp?v=d63b4cde"}];
   var copy=document.querySelector('#calc .calc-copy'), desc=document.getElementById('pbPtDesc'), btn=document.getElementById('pbPtBtn'),
       btnT=document.getElementById('pbPtBtnT'), fig=document.getElementById('pbPtFig'), shot=document.getElementById('pbPtShot'), list=document.getElementById('pbPtList');
   if(!copy||!desc||!btn||!btnT||!fig||!shot||!list) return;
