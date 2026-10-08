@@ -2487,16 +2487,18 @@ main h1{font-weight:800}
 .chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2px dotted #B7791F;background:none}
 #chartKeyToday[hidden],#chartKeyLost[hidden]{display:none}
 .chart-legend i.pb-k-lost{display:inline-block;width:14px;height:10px;border-radius:3px;background:rgba(164,41,29,0.22)}
-.bank-card{background:var(--gap);border-radius:var(--r-lg);padding:24px 28px}
+.bank-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 28px}
 .bank-card[hidden]{display:none}
-.bank-card .rt{font-size:13px;font-weight:700;color:var(--red);margin-bottom:9px}
-.bank-card .rbig{font-size:19px;color:#5A1A12;line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.bank-card .rbig b{font-weight:700;color:#3D0F09}
-.bank-viz{margin-top:18px}
-.bank-viz .rv-bar{background:rgba(164,41,29,.16)}
-.bk-buys{background:var(--ink-2)}.bk-lost{background:var(--red)}
-.bank-viz .rv-keys{color:#5A1A12}
-.rv-d.bk-b{background:var(--ink-2)}.rv-d.bk-l{background:var(--red)}
+.bank-card .rt{font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px}
+.bank-card .rbig{font-size:19px;color:var(--ink);line-height:1.5;font-weight:500;letter-spacing:-0.01em}
+.bank-card .rbig b{font-weight:700}
+.bk-rows{margin-top:18px;display:grid;gap:10px}
+.bk-row{display:grid;grid-template-columns:84px 1fr auto;align-items:center;gap:10px;font-size:14px;color:var(--ink-2)}
+.bk-row b{font-variant-numeric:tabular-nums;color:var(--ink);min-width:74px;text-align:right}
+.bk-track{height:13px;border-radius:99px;background:rgba(11,31,28,.06);overflow:hidden;display:block}
+.bk-track i{display:block;height:100%;border-radius:99px}
+.bk-bank{background:var(--red)}.bk-in{background:#8A97A8}.bk-plan{background:var(--teal)}
+.bk-note{margin:14px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
 #chartBankNote{margin:10px 0 0;color:#5B6B67;line-height:1.5}
 /* TODAY:END */
 </style>
@@ -2662,12 +2664,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="chart-note" id="chartBankNote"></p>
     </div>
     <div class="bank-card" id="bankCard" hidden>
-      <div class="rt">If the money sits in a bank</div>
+      <div class="rt">In a bank or invested?</div>
       <div class="rbig" id="bankOut"></div>
-      <div class="bank-viz" aria-hidden="true">
-        <div class="rv-bar"><div class="bk-buys" id="bkBuys"></div><div class="bk-lost" id="bkLost"></div></div>
-        <div class="rv-keys"><span><i class="rv-d bk-b"></i>What it buys <b id="bkBuysV"></b></span><span><i class="rv-d bk-l"></i>Buying power lost <b id="bkLostV"></b></span></div>
+      <div class="bk-rows" aria-hidden="true">
+        <div class="bk-row"><span class="bk-l">In a bank</span><span class="bk-track"><i class="bk-bank" id="bkBank"></i></span><b id="bkBankV"></b></div>
+        <div class="bk-row"><span class="bk-l">You put in</span><span class="bk-track"><i class="bk-in" id="bkIn"></i></span><b id="bkInV"></b></div>
+        <div class="bk-row"><span class="bk-l">Invested</span><span class="bk-track"><i class="bk-plan" id="bkPlan"></i></span><b id="bkPlanV"></b></div>
       </div>
+      <p class="bk-note" id="bankNote"></p>
     </div>
     <div class="relief-card">
       <div class="rt">What Revenue adds</div>
@@ -3025,14 +3029,19 @@ function calc(){
     chart.bankNote='Bank line: your own '+euro(costMonthly)+' a month after tax, with no tax relief and no employer money'+(pot>0?', plus the same '+euro(pot)+' you start with':'')+'. It earns '+PBAssume.cash.pct+' a year.';
     chart.todayNote=' With prices rising '+PBAssume.inflation.pct+' a year, the dotted line shows what that money buys in today\u2019s money. The red area is what rising prices take.';
     bankNote();
-    /* the bank card: what went in, what it buys at the end, and the difference */
+    /* the bank card: your own money in a bank against the same money in
+       your plan, both in today's money, on one scale */
     const putIn=pot+costMonthly*months, buys=t[t.length-1], lost=Math.max(0,putIn-buys), yrs=Math.round(months/12);
+    const planToday=PBAssume.today(base,months/12), top=Math.max(planToday,putIn,1);
     if($('bankCard')&&putIn>0&&yrs>0){
       $('bankCard').hidden=false;
-      $('bankOut').innerHTML='Keep the same money in a bank for '+yrs+(yrs===1?' year':' years')+' instead. You put in <b>'+euro(putIn)+'</b>. At '+ret+
-        ' it buys only what <b>'+euro(buys)+'</b> buys today. It has lost <b>'+euro(lost)+'</b> of buying power.';
-      $('bkBuys').style.width=(buys/putIn*100)+'%';$('bkLost').style.width=(lost/putIn*100)+'%';
-      $('bkBuysV').textContent=euro(buys);$('bkLostV').textContent=euro(lost);
+      $('bankOut').innerHTML='Leave your own money in a bank for '+yrs+(yrs===1?' year':' years')+' and at '+ret+' it buys only what <b>'+euro(buys)+'</b> buys today. '+
+        'That is <b>'+euro(lost)+' less</b> than you put in. Invested in your plan, it could buy what <b>'+euro(planToday)+'</b> buys today.';
+      $('bkBank').style.width=(buys/top*100)+'%';$('bkIn').style.width=(putIn/top*100)+'%';$('bkPlan').style.width=(planToday/top*100)+'%';
+      $('bkBankV').textContent=euro(buys);$('bkInV').textContent=euro(putIn);$('bkPlanV').textContent=euro(planToday);
+      $('bankNote').textContent='All in today\u2019s money. The bank pays '+PBAssume.cash.pct+' a year and prices rise '+PBAssume.inflation.pct+
+        ' a year, so the money buys less each year. Prices can rise faster: in 2022 they rose 7.8% (CSO). Your plan adds tax relief, your employer\u2019s money and growth of '+g+
+        '% a year. Growth is not guaranteed and investments can fall as well as rise.';
     }else if($('bankCard')){$('bankCard').hidden=true;}
   }
   chart.setTarget(b,u,age,ret,t,k);
