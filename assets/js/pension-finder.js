@@ -113,7 +113,7 @@
         if (t && year(t, thisYear) == null) add('pfEmp' + i + 'To', 'The end year for ' + str(e.name) + ' should be a year from ' + EARLIEST_YEAR + ' to ' + thisYear + '.');
         if (year(f, thisYear) && year(t, thisYear) && year(f, thisYear) > year(t, thisYear)) add('pfEmp' + i + 'To', 'The end year for ' + str(e.name) + ' is before its start year.');
       });
-      if (raw.filter(function (e) { return str(e && e.name); }).length > MAX_EMPLOYERS) add('pfEmpAdd', 'Up to ' + MAX_EMPLOYERS + ' employers here. Damian can take the rest on a call.');
+      if (raw.filter(function (e) { return str(e && e.name); }).length > MAX_EMPLOYERS) add('pfEmpAdd', 'Up to ' + MAX_EMPLOYERS + ' employers here. We can take the rest on a call.');
     }
     if (step === 'who') {
       if (!str(d.fullName)) add('pfName', 'Your full name, as it is now.');

@@ -119,7 +119,7 @@ function reliefAt(split) {
 
 /* ---- mode tabs ---- */
 const MODE_NOTE = {
-  1: 'Same money out of your pocket. Auto-enrolment, or a personal pension instead?',
+  1: 'The same money from your pocket, in one or the other.',
   2: 'Auto-enrolment as it is, plus extra saving through a personal pension.'
 };
 
@@ -383,7 +383,7 @@ function renderScale() {
   if (sub) {
     const y = +$('phase').value;
     sub.textContent = 'One year of contributions each, at year ' + y + (y >= 10 ? '+' : '') +
-      ' of the phase-in, on the same scale. The longer bar reaches the end of the scale.';
+      ' of the phase-in.';
   }
   const ae = pbScaleValue('aeTotal');
   const pp = pbScaleValue('ppTotal');

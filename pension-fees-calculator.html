@@ -2623,9 +2623,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>The free tool · two minutes, no sign-up</span>
+  <span class="eyebrow"><span class="pip"></span>Free · no sign-up</span>
   <h1>What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
-  <p>Your plan&rsquo;s charges next to another plan&rsquo;s. Yours are on your annual statement.</p>
+  <p>Your charges are on your annual statement.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2638,14 +2638,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="years">Years until you retire</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
 
     <p class="fee-grp">Your plan&rsquo;s charges</p>
-    <div class="field"><div class="row"><label for="amcA">Annual management charge<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">A yearly share of the fund. Older plans may call it a fund management charge.</p></div>
-    <div class="field"><div class="row"><label for="feeA">Charge on each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">Or an allocation rate: 95% allocated means a 5% charge.</p></div>
+    <div class="field"><div class="row"><label for="amcA">Annual management charge<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">A yearly share of the fund. Also called a fund management charge.</p></div>
+    <div class="field"><div class="row"><label for="feeA">Charge on each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">95% allocated means a 5% charge.</p></div>
 
     <p class="fee-grp">For comparison: another plan&rsquo;s charges</p>
     <div class="field"><div class="row"><label for="amcB">Annual management charge<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
     <div class="field"><div class="row"><label for="feeB">Charge on each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
 
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth, before charges</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth, before charges</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">Real returns vary and can be negative.</p></div>
   </div>
 
   <div class="results">
@@ -2655,7 +2655,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div><div class="rl">The other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
       <div class="divline"></div>
-      <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms. The growth assumed may not happen.</div>
+      <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
 
@@ -2682,12 +2682,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">What they cost you by retirement</th><td id="costA">€58,754</td><td id="costB">€28,327</td></tr>
         </tbody>
       </table>
-      <p class="fee-note">Every euro a charge takes stops growing. So the last line is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
+      <p class="fee-note">Every euro a charge takes stops growing. The last line is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
     </div>
 
     <div class="fee-side">
-      <h3>The other side</h3>
-      <p>Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
+      <h3>Before you move</h3>
+      <p>Some older plans have terms worth more than any charge saved, such as a promised defined benefit pension.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <p class="pb-after-not pb-caveat" id="pbAfterNot">What this doesn&rsquo;t show: policy, set-up and exit charges, the terms an older plan may carry, your tax relief.</p>
@@ -2717,7 +2717,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Older plans rarely spell out their charges.</h2><p>Damian can find out what yours are. If you have lost track of a plan, <a href="tracker.html">we can help you find it</a>.</p></div>
+  <div class="ctext"><h2>Older plans rarely spell out their charges.</h2><p>We can find out yours.</p></div>
   <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2725,18 +2725,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This calculator is information, not advice.</b> It names no provider. Figures are illustrations, not a guarantee.</p>
+    <p><b>This calculator is information, not advice.</b> It names no provider.</p>
   </div>
 </div></section>
 
 <section class="assume"><div class="wrap">
-  <h3>The assumptions behind these numbers</h3>
+  <h3>Assumptions</h3>
   <ul>
-    <li>Each month the pot grows at your yearly rate, before charges. Then a twelfth of the annual management charge comes out. Then the payment goes in, less the charge on payments.</li>
-    <li>Your plan&rsquo;s defaults, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
-    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
-    <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target). Figures ignore tax relief. Relief changes what a payment costs you, not what the charges take.</li>
-    <li>Growth is steady and the same for both plans. Real returns also differ between funds.</li>
+    <li>Each month the pot grows, a twelfth of the annual charge comes out, then the payment goes in, less its charge.</li>
+    <li>Your plan&rsquo;s defaults, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more.</li>
+    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
+    <li>Payments stay level. The main figures ignore inflation. The line under each shows today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target). Tax relief is left out.</li>
+    <li>Growth is steady and the same for both plans.</li>
   </ul>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
@@ -3102,9 +3102,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=e040ec1d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

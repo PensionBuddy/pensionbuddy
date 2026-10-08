@@ -2738,9 +2738,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Director calculator · two minutes</span>
+  <span class="eyebrow"><span class="pip"></span>For company directors</span>
   <h1>What your <span class="hl">company</span> could pay into your pension.</h1>
-  <p>Your company can fund your pension, often far beyond personal limits. Contributions are an allowable company expense.</p>
+  <p>Often far more than you could pay in yourself. The company can deduct it.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2757,11 +2757,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
     <div class="panel">
     <h2>Your details</h2>
-    <p class="hint">Estimates are fine. Slide, or tap a value to type any amount.</p>
+    <p class="hint">Slide, or tap a value to type any amount.</p>
     <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48"></div>
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Early retirement. Revenue&rsquo;s Pensions Manual, Chapter 9.6: &ldquo;Generally, where a director with at least 20% interest in a company takes early retirement benefits, the director must sever all links with the business, including the disposal of all shares in the company.&rdquo;</p></div>
     <div class="field"><div class="row"><label for="sal">Your annual salary</label><span class="val" id="salV">€100,000</span></div><input type="range" id="sal" min="30000" max="1000000" step="5000" value="100000"></div>
-    <div class="field pb-risk" id="riskField"><div class="row"><label for="risk">Assumed yearly growth</label><span class="val" id="riskV">Level 4: 5% a year</span></div><input type="range" id="risk" min="1" max="7" step="1" value="4" aria-describedby="riskNote"><div class="pb-risk-bars" id="riskBars" aria-hidden="true"><i style="height:22%"></i><i style="height:35%"></i><i style="height:48%"></i><i style="height:61%" class="on"></i><i style="height:74%"></i><i style="height:87%"></i><i style="height:100%"></i></div><div class="pb-risk-ends" aria-hidden="true"><span>1 lowest risk</span><span>7 highest risk</span></div><p class="subnote" id="riskNote"><b id="riskHolds">About half shares, half bonds. Medium ups and downs.</b> <span id="riskRange">In a typical year: from a 3% fall to a 13% rise.</span></p><p class="subnote pb-risk-rule">Higher level, higher risk. It can rise more, and it can fall more.</p></div>
+    <div class="field pb-risk" id="riskField"><div class="row"><label for="risk">Assumed yearly growth</label><span class="val" id="riskV">Level 4: 5% a year</span></div><input type="range" id="risk" min="1" max="7" step="1" value="4" aria-describedby="riskNote"><div class="pb-risk-bars" id="riskBars" aria-hidden="true"><i style="height:22%"></i><i style="height:35%"></i><i style="height:48%"></i><i style="height:61%" class="on"></i><i style="height:74%"></i><i style="height:87%"></i><i style="height:100%"></i></div><div class="pb-risk-ends" aria-hidden="true"><span>1 lowest risk</span><span>7 highest risk</span></div><p class="subnote" id="riskNote"><b id="riskHolds">About half shares, half bonds. Medium ups and downs.</b> <span id="riskRange">In a typical year: from a 3% fall to a 13% rise.</span></p><p class="subnote pb-risk-rule">Higher level, higher risk: it can rise and fall more.</p></div>
     <div class="field"><div class="row"><label for="pot">Pension built up so far</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
     <div class="field" style="margin-bottom:0"><div class="row"><label for="contrib">Company contribution / year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"></div>
   </div>
@@ -2785,7 +2785,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <details class="pb-work"><summary>How we worked this out</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
+    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> , the cap on pension funds with full tax relief. Anything above it is taxed on drawdown. We can work out your exact figures.</p>
 
     <div class="vs-card pb-split" id="splitCard">
       <h3>Salary or pension: how to split it</h3>
@@ -2811,12 +2811,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="vs-col pb-split-tax">
           <div class="vt">Tax saved</div>
           <div class="amt" id="taxNow">€10,470</div>
-          <div class="lab">income tax, USC and PRSI not paid now on the part in your pension. A pension is taxed when you take it.</div>
+          <div class="lab">income tax, USC and PRSI not paid now. A pension is taxed when you take it.</div>
         </div>
         <div class="vs-col pb-split-co">
           <div class="vt">Company tax effect</div>
           <div class="amt" id="ctNow">€5,000</div>
-          <div class="lab">less corporation tax this year, the same at every step: salary and pension payments are both a cost the company can deduct</div>
+          <div class="lab">less corporation tax this year, the same at every step</div>
         </div>
       </div>
       <p class="vs-split-out" id="splitOut">Put 50% in your pension: you keep <b>€9,530</b> now, your pension gets <b>€20,000</b>.</p>
@@ -2838,7 +2838,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="max-card">
       <div class="mt">Roughly what you could aim for</div>
       <div class="mbig" id="maxOut">A pension of up to about <b>€66,667 a year</b>, two-thirds of your salary.</div>
-      <details class="pb-work"><summary>How we worked this out</summary><ol id="maxWork"><li>Your salary: <b>€100,000</b>.</li><li>Revenue&rsquo;s limit: a pension of up to two-thirds of your salary, if you have enough years with the company.</li><li>€100,000 &times; 2 &divide; 3 = <b>€66,667 a year</b>.</li><li>How much the company can pay in each year to fund that needs an actuary&rsquo;s calculation. It uses your age, your years with the company and the pensions you have already. This page does not do that step.</li></ol></details>
+      <details class="pb-work"><summary>How we worked this out</summary><ol id="maxWork"><li>Your salary: <b>€100,000</b>.</li><li>Revenue&rsquo;s limit: a pension of up to two-thirds of your salary, if you have enough years with the company.</li><li>€100,000 &times; 2 &divide; 3 = <b>€66,667 a year</b>.</li><li>What the company can pay in each year to fund that needs an actuary. It depends on your age, your years with the company and the pensions you have. This page does not do that step.</li></ol></details>
       <div class="mnote">A Standard Fund Threshold also caps the total fund that gets full tax relief.</div>
     </div>
 
@@ -2882,11 +2882,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li><a class="gref" href="glossary.html#corporation-tax-relief" title="See this in the jargon buster">Corporation tax relief</a> is at the 12.5% trading rate. Each contribution is assumed wholly and exclusively for the business, within Revenue funding limits.</li>
     <li id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35% on additional income from 1 October 2026 (40% income tax, 8% USC, 4.35% PRSI), and 52.2% before then, with PRSI at 4.2%. Your rate may differ.</li>
     <li>Benefits are taxed when drawn. Up to 25% of the fund may usually be taken as a tax-free <a class="gref" href="glossary.html#lump-sum" title="See this in the jargon buster">lump sum</a>, within limits.</li>
-    <li>Maximum funding (up to two-thirds of salary) needs sufficient service and an actuarial calculation. This tool does not do that calculation.</li>
     <li>A Standard Fund Threshold caps the fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>. Figures ignore product charges.</li>
-    <li>Growth: each risk level is a mix of shares, bonds and cash we chose for illustration. It is not a fund. Its rate uses the most a pension projection may assume for each, before charges: shares 6.65%, bonds 3.40%, cash 2.65%, and 6% in all (the Pensions Authority, projection assumptions guidance, version 1.2, from 1 January 2025). The typical-year range uses the EU&rsquo;s 1 to 7 risk scale for funds (CESR/10-673).</li>
+    <li>Growth: each risk level is a mix of shares, bonds and cash we chose for illustration, not a fund. Its rate uses the most a pension projection may assume for each, before charges: shares 6.65%, bonds 3.40%, cash 2.65%, and 6% in all (the Pensions Authority, projection assumptions guidance, version 1.2, from 1 January 2025). The typical-year range uses the EU&rsquo;s 1 to 7 risk scale for funds (CESR/10-673).</li>
     <li>Today&rsquo;s money: prices rise 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland).</li>
-    <li>The salary and pension split leaves out employer PRSI on salary and the lower income tax and USC bands.</li>
   </ul>
 </div></section>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
@@ -3093,11 +3091,11 @@ function calc(){
   if(contrib>0&&yearsToRet>wy){
     const w=D.waiting({pot:pot,yearly:contrib,years:yearsToRet,delay:wy,rate:g,today:A.today});
     $('waitOut').innerHTML='Start the payments '+VALTEXT.waitYears(wy)+' instead of now, and your pot at '+ret+
-      ' could be about <b>'+euro(w.gapToday)+'</b> lower, in today&rsquo;s money. That is the payments not made, and the growth they would have earned.';
+      ' could be about <b>'+euro(w.gapToday)+'</b> lower, in today&rsquo;s money: the missed payments and their growth.';
   }else if(contrib>0){
     $('waitOut').innerHTML='With '+yearsToRet+(yearsToRet===1?' year':' years')+' to go, a wait that long leaves no time for payments.';
   }else{
-    $('waitOut').innerHTML='With no company payments, there is nothing to wait for. Move the company payment slider to see it.';
+    $('waitOut').innerHTML='Set a company payment to see this.';
   }
   const taxSaved=D.companyTax(contrib,yearsToRet);
   tween('taxOut',taxSaved,euro);
@@ -3147,7 +3145,7 @@ function calc(){
   $('maxWork').innerHTML='<li>Your salary: <b>'+euro(sal)+'</b>.</li>'+
     '<li>Revenue&rsquo;s limit: a pension of up to two-thirds of your salary, if you have enough years with the company.</li>'+
     '<li>'+euro(sal)+' &times; 2 &divide; 3 = <b>'+euro(F.pension)+' a year</b>.</li>'+
-    '<li>How much the company can pay in each year to fund that needs an actuary&rsquo;s calculation. It uses your age, your years with the company and the pensions you have already. This page does not do that step.</li>';
+    '<li>What the company can pay in each year to fund that needs an actuary. It depends on your age, your years with the company and the pensions you have. This page does not do that step.</li>';
 
   const v=[],t=[],c=[],cm=D.monthlyRate(A.cash.rate);
   for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);
@@ -3379,9 +3377,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=6734f54f" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

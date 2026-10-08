@@ -2553,7 +2553,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="pf-letter" id="pfLetter"></div>
         <div class="pf-field"><label for="pfSigned">Type your full name to sign</label><input id="pfSigned" type="text" autocomplete="off"></div>
         <div class="pf-sig">
-          <p class="pf-sig-l" id="pfSigL">You can also sign with a finger or a mouse <span class="pf-opt">(optional)</span></p>
+          <p class="pf-sig-l" id="pfSigL">Or draw your signature <span class="pf-opt">(optional)</span></p>
           <canvas id="pfPad" role="img" aria-label="Signature box. Your typed name is your signature; drawing here is optional."></canvas>
           <button type="button" class="pf-clear" id="pfPadClear">Clear the drawn signature</button>
         </div>
@@ -2565,8 +2565,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <h2 id="pfH4" tabindex="-1">What happens next</h2>
         <p class="pf-done" id="pfDone"></p>
         <ul class="pf-track" id="pfTrack"></ul>
-        <p class="pf-note">Providers reply in their own time. Damian tells you what was found and its value.</p>
-        <div class="pf-nav"><button type="button" class="btn btn-ghost" id="pfPrint">Save or print your letter</button><a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
+        <p class="pf-note">Providers reply in their own time. We tell you what we find and what it is worth.</p>
+        <div class="pf-nav"><button type="button" class="btn btn-ghost" id="pfPrint">Save or print your letter</button><a class="btn btn-primary" href="booking.html">Book a free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a></div>
         <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
       </section>
     </form>
@@ -2576,9 +2576,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <h3 class="pf-side-h">What to expect</h3>
     <ul>
       <li><b>Free to start.</b></li>
-      <li><b>We cannot promise to find every pension.</b> Old records are not always complete.</li>
-      <li>You can withdraw the letter at any time, in writing, and we stop asking.</li>
-      <li><b>Your details are used for the search.</b> Nothing else, unless you ask for more.</li>
+      <li><b>We cannot promise to find every pension.</b> Old records have gaps.</li>
+      <li>You can withdraw the letter in writing at any time.</li>
     </ul>
   </aside>
 </div></div>
@@ -2588,10 +2587,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume"><div class="wrap">
   <h3>Good to know</h3>
   <ul>
-    <li>Moving a pension is a later decision, made with advice. A transfer can give up terms you cannot get back, such as a defined benefit pension.</li>
-    <li>The State Pension is not covered. Your record is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. The <a href="state-pension-entitlement.html">State Pension entitlement check</a> works through it.</li>
-    <li>For UK schemes, the UK government&rsquo;s <a href="https://www.gov.uk/find-pension-contact-details" rel="noopener">Pension Tracing Service</a> finds contact details, free.</li>
-    <li>See also the <a href="old-pension-checklist.html">old pension hunt checklist</a> and <a href="pension-fees-calculator.html">pension charges calculator</a>.</li>
+    <li>Moving a pension is a later decision, made with advice. A transfer can give up terms you cannot get back.</li>
+    <li>The State Pension is not covered. Your record is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</li>
+    <li>For UK schemes, the UK government&rsquo;s free <a href="https://www.gov.uk/find-pension-contact-details" rel="noopener">Pension Tracing Service</a> finds contact details.</li>
   </ul>
 </div></section>
 
@@ -2623,7 +2621,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-today.js?v=067d5550"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
-<script src="assets/js/pension-finder.js?v=c175da38"></script>
+<script src="assets/js/pension-finder.js?v=738bd01c"></script>
 <script>
 /* find-my-pension.html, the old pension finder (Run 20 #1).
 
@@ -2861,14 +2859,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     if (!show(F.problems('sign', d, today))) return;
     function viaEmail() {
       window.location.href = F.mailto(d, today, LEAD_FALLBACK_ADDRESS);
-      finish('Your email app should have opened with your details ready to send to Damian. Nothing has been sent until you press send there. Please attach your signed letter: choose "Save or print your letter" below, then save it as a PDF.');
+      finish('Your email app should have opened with your details ready to send to us. Nothing is sent until you press send. Please attach your signed letter: choose "Save or print your letter" below and save it as a PDF.');
     }
     if (!window.PBForms) { viaEmail(); return; }
     if (form.getAttribute('aria-busy') === 'true') return;   // one send per click
     form.setAttribute('aria-busy', 'true');
     PBForms.send(form, F.fields(d, today, location.href)).then(function (ok) {
       form.removeAttribute('aria-busy');
-      if (ok) finish('Thanks - we\'ve got it. Damian will be in touch personally.');
+      if (ok) finish('Thanks, we have it. We will be in touch.');
       else viaEmail();
     });
   });
@@ -3085,9 +3083,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=e040ec1d" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

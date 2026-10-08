@@ -234,14 +234,14 @@
     if (!show(F.problems('sign', d, today))) return;
     function viaEmail() {
       window.location.href = F.mailto(d, today, LEAD_FALLBACK_ADDRESS);
-      finish('Your email app should have opened with your details ready to send to Damian. Nothing has been sent until you press send there. Please attach your signed letter: choose "Save or print your letter" below, then save it as a PDF.');
+      finish('Your email app should have opened with your details ready to send to us. Nothing is sent until you press send. Please attach your signed letter: choose "Save or print your letter" below and save it as a PDF.');
     }
     if (!window.PBForms) { viaEmail(); return; }
     if (form.getAttribute('aria-busy') === 'true') return;   // one send per click
     form.setAttribute('aria-busy', 'true');
     PBForms.send(form, F.fields(d, today, location.href)).then(function (ok) {
       form.removeAttribute('aria-busy');
-      if (ok) finish('Thanks - we\'ve got it. Damian will be in touch personally.');
+      if (ok) finish('Thanks, we have it. We will be in touch.');
       else viaEmail();
     });
   });

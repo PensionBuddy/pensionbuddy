@@ -217,7 +217,7 @@ class Declared(HTMLParser):
 # Run 28: every lead form's success message, word for word (Run 45: "Email
 # me this result" has its own, with the reader's first name)
 SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
-SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
+SUCCESS_FINDER = "Thanks, we have it. We will be in touch."
 SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
 
 def main():

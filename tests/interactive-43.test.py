@@ -494,9 +494,9 @@ def check_pots(sid, r, nojs):
     eq('P5 %s: a second pension, its charge not known' % sid, r['P5'],
        'The annual charges you know of come to about €400 a year at today’s values, with 1 charge not known.')
     eq('P6 %s: no charge known: the prompt, no <b>' % sid, r['P6'],
-       ['Add an annual charge to see what the charges come to in euro a year.', 0])
+       ['Add an annual charge to see what it costs each year.', 0])
     eq('P7 %s: the spoken summary carries the same words' % sid, r['P7'],
-       'Total €50,000 across 2 pensions. Add an annual charge to see what the charges come to in euro a year.')
+       'Total €50,000 across 2 pensions. Add an annual charge to see what it costs each year.')
 
 
 # ---------------------------------------------------------------- the threshold
@@ -706,8 +706,8 @@ LAD = {
                 'Net relevant earnings count up to €115,000.'),
 }
 BANDS = {
-    'over50': 'The share of your earnings that can get tax relief rises with age: 30% from 50 to 54',
-    'selfemp': 'What you pay in gets income tax relief up to a share of your net relevant earnings',
+    'over50': 'Tax relief covers more of your earnings as you get older: 30% from 50 to 54',
+    'selfemp': 'What you pay in gets tax relief, up to a share of your profits (net relevant earnings)',
 }
 PCT = ['15%', '20%', '25%', '30%', '35%', '40%']
 FROMS = ['0', '30', '40', '50', '55', '60']

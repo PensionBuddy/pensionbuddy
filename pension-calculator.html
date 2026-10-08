@@ -2573,7 +2573,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Free · two minutes · no sign-up</span>
+  <span class="eyebrow"><span class="pip"></span>Free · no sign-up</span>
   <h1>What your pension <span class="hl">pays</span> you a month.</h1>
   <p>Rough numbers are fine.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
@@ -2597,9 +2597,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
     <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
     <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets your relief limit: an age-related share of earnings up to €115,000.</p></div>
+    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets your tax relief limit.</p></div>
     <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
-    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Returns can be negative.</p></div>
+    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average.</p></div>
     <div class="field" style="margin-bottom:0">
       <div class="row"><label>Your income tax rate</label></div>
       <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
@@ -2615,7 +2615,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="pb-say pb-sp-top" id="pbSpTop">Add the State Pension (Contributory) at the maximum rate from 66, and it comes to about €2,831 a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
-      <div class="foot">An illustration only. Retirement options differ. The State Pension may be paid on top.</div>
+      <div class="foot">An illustration only.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <!-- Run 37, item 5: Save as A. A copy of what the calculator shows, set
@@ -2702,7 +2702,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <div class="cta-band"><div class="wrap"><div class="cta-card">
   <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>These are illustrations. <span class="pb-soft">Damian builds the real ones.</span></h2></div>
+  <div class="ctext"><h2>These are illustrations. <span class="pb-soft">We build the real ones.</span></h2></div>
   <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   <p class="pb-why">Free · 20 minutes · no obligation · easy to reschedule.</p>
 </div></div></div>
@@ -2719,9 +2719,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <ul>
     <li>Growth is constant, at the rate you choose. Real returns will differ and can be negative.</li>
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
-    <li>Tax relief is at your chosen rate, on your own contributions only. The limit is 15% of earnings under 30. It rises in steps to 40% at 60 and over. Earnings are capped at €115,000.</li>
-    <li>The main figures ignore inflation. The line under each gives today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Figures ignore product charges, which will reduce returns. Nothing is guaranteed.</li>
-    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year. Check gov.ie for the current rate.</li>
+    <li>Tax relief is at your chosen rate, on your own contributions only, up to the limit shown above.</li>
+    <li>The main figures ignore inflation. The line under each gives today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Figures ignore product charges, which reduce returns.</li>
+    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top, at up to €15,564 a year. Check gov.ie for the current rate.</li>
   </ul>
 </div></section>
 
@@ -2929,9 +2929,9 @@ function calc(){
   if(months>12){
     const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
     const gap=Math.max(0,base-later);
-    $('waitOut').innerHTML='Put this off for twelve months and you retire with roughly <b>'+euro(gap)+'</b> less. That gap is the contributions you never made, plus the growth they never earned.';
+    $('waitOut').innerHTML='Wait a year and you retire with about <b>'+euro(gap)+'</b> less: a year of payments, and the growth they would have earned.';
   }else{
-    $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
+    $('waitOut').innerHTML='With less than a year to go, what matters now is how you draw the pot down.';
   }
   /* tax relief (B4/B5): only the part of the personal contribution inside
      Revenue's age-related limit gets relief.
@@ -2946,11 +2946,11 @@ function calc(){
   const costMonthly=mine-reliefMonthly;
   if(mine>0){
     const capNote=annualMine>relievableAnnual
-      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes into your pension, but without relief this year.</span>'
+      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes in, without relief.</span>'
       :'';
     $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+capNote;
   }else{
-    $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
+    $('reliefOut').innerHTML='Add a personal contribution to see your tax relief.';
   }
   /* relief visualizer: presentation only, driven by the same costMonthly/reliefMonthly values */
   if(mine>0){
@@ -2969,7 +2969,7 @@ function calc(){
 
   const diffPot=boost-base;
   const diffInc=diffPot*0.04/12;
-  $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
+  $('boostOut').innerHTML='Add <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more: roughly '+euro(diffInc)+' a month in retirement.';
 
   const b=[],u=[],t=[];
   for(let i=0;i<chart.N;i++){
@@ -3213,9 +3213,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=2b3a1d40" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=8732d7d3" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=6734f54f" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=cfba0bf6" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=b3800eb2" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=65afc54f"></script>
 <script src="assets/js/pb-cta.js?v=e30763b6"></script>

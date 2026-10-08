@@ -137,6 +137,52 @@ privacy notes, every figure, date and source, and calculator labels and
 logic. What changed, page by page: docs/COPY-CUT-2026-10-06.md. The new
 wording has not been reviewed by compliance.
 
+Updated 8 October 2026 (second copy cut, the legal pages): on Damian's
+instruction the Privacy Notice, the Terms of Business (with the Website
+Terms of Use) and the complaints page are about a fifth shorter, in
+plainer words. No fact, right, obligation, disclosure, name, address,
+contact detail, timeframe or regulator reference was removed. Unchanged
+word for word: the "Who we are" sentences of the Privacy Notice and the
+Terms of Business (section 5 finding on Reg 71), the occasional-emails
+placeholder (section 3.2), the sentence "A full summary of fees and any
+commission arrangements is available on request." (question 1.1), the
+clause in question 1.16, the first paragraph of the Website Terms of
+Use's section 5, "The value of investments may fall as well as rise.",
+the warranty sentence in section 3 of the Website Terms of Use, the
+Ombudsman's address box, "normally within five business days", the
+cookie choice button, and every "Last updated" date (the dates were
+left as they stood, since nothing of substance changed; whether to move
+them to 8 October 2026 is for you). What else changed:
+- Privacy Notice: the opening line is gone; the calculators sentence,
+  the "Booking and third parties" paragraph and the cookies section are
+  reworded (section 3.3 and 3.4 give the new text); "How long we keep
+  it", "Your rights" and the contact lines are shorter.
+- Terms of Business: the opening line is gone; "Information versus
+  advice" is merged into "Our services", which now reads "We give
+  financial advice, mainly on pensions and retirement planning, to
+  individuals and company directors. We give it only in a personal
+  consultation, after a fact-finding conversation about your
+  circumstances. The information, guides and calculators on this website
+  are general information only, not a personal recommendation (see the
+  Website Terms of Use below)."; "How we are paid" now reads "Before you
+  commit to anything, we will tell you clearly how we are paid: a fee
+  agreed with you, commission from a product provider, or both, depending
+  on what you need. We will set out your basis in writing before any work
+  begins. A full summary of fees and any commission arrangements is
+  available on request."; "Compensation" drops "relevant" ("the statutory
+  compensation arrangements that apply to regulated firms in Ireland").
+- Website Terms of Use: section 1 points to "Who we are" for the
+  registered office instead of repeating it; section 2 drops its last
+  sentence (regulated advice only in a consultation, under the Terms of
+  Business), which "Our services" and section 5's clause already say;
+  sections 3, 4, 6, 7, 8 and 9 and the second and fourth paragraphs of
+  section 5 are reworded, with the same exclusions, carve-outs and
+  governing law. Section numbers are unchanged.
+- Complaints: the opening line is shorter; the registered office address
+  is given once, under Contact, and "How to make a complaint" points to
+  it; the closing "We will acknowledge your complaint and respond as
+  quickly as we can." is gone, as the steps above it already say so.
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -607,6 +653,14 @@ The paragraphs either side are unchanged: liability that cannot be excluded
 is not excluded, no liability is accepted for use of or reliance on the
 site, and the section does not limit any duty owed under a regulated advice
 engagement. The page's "Last updated" date is now 25 September 2026.
+(8 October 2026: the clause is unchanged; the paragraph before it now
+ends "...this website or anything on it, including indirect or
+consequential loss and loss of profit, savings, opportunity or data,
+whether in contract, tort (including negligence), breach of statutory
+duty or otherwise.", and the one after it reads "This section covers
+only your use of this free website. It does not limit any duty we owe
+you under a regulated advice engagement, which our Terms of Business and
+the rules of the Central Bank of Ireland govern.")
 What we need: sign-off of the clause, and whether the terms should state a
 cap at all. None is stated now.
 
@@ -1311,6 +1365,23 @@ figures or a guide" (the booking page has no form), after a new sentence:
 page the link was on and which wording of the booking button you saw." The
 notice's "Last updated" date is now 5 October 2026.
 
+8 October 2026 (copy cut, on the site, proposed): the calculators
+paragraph now reads "The pension calculators run entirely in your
+browser. The figures you enter are not sent to us or stored, unless you
+ask us to email you the result and tick the box to agree. Then we receive your
+name, email address, what the calculator shows and the figures you
+chose, and use them only to send you that result. “Email them to
+yourself” opens your own email app and sends us nothing." "Booking and
+third parties" now reads "We use Calendly for bookings. It collects your
+name, email and chosen time on our behalf, under its own privacy terms,
+and records which page of this site your booking link was on and which
+wording of the booking button you saw. Forms you send on this website,
+such as a request for your figures or a guide, are stored by Netlify,
+our website host, so that they reach us. We may also use an email tool
+to send guides and follow-ups. These providers use your information only
+to provide the service you asked for." The "Last updated" date is
+unchanged.
+
 3.4 Cookies (on the site, proposed)
 -----------------------------------
 
@@ -1348,6 +1419,33 @@ booking button after a calculator’s result, each shown to half of
 visitors; once you choose “That’s fine”, which one you see is kept in your
 browser so that it stays the same, and before that, or after “No thanks”,
 nothing is kept." (question 1.25 (c)).
+
+8 October 2026 (copy cut, on the site, proposed): the section now reads
+
+"This site aims to use only what it needs to work. Analytics are not
+needed, so we ask first. On your first visit, a bar at the foot of the
+page asks. Only if you choose “That’s fine” do we load:
+
+- Google Tag Manager, a Google service that runs our analytics tools. It
+  shows us which pages are visited, and when a calculator is first used
+  or shows a result, a booking button is seen or pressed, a result is
+  asked for by email, or a call is booked.
+- Google Analytics, which sets cookies to count visits and how the site
+  is used.
+- The Meta (Facebook and Instagram), TikTok and LinkedIn pixels. They
+  tell those platforms you visited this site, so we can measure our
+  advertising there and show our ads to people like you.
+
+If you choose “No thanks”, or make no choice, none of these is ever
+loaded.
+
+We also test two wordings of the booking button after a calculator’s
+result, each shown to half of visitors. Only after “That’s fine” does
+your browser keep which one you saw, so it stays the same. Before that,
+or after “No thanks”, nothing is kept.
+
+Your choice is kept in your browser. You can change it at any time.
+[Change your cookie choice]"
 
 4. The readiness check: brief
 =============================
