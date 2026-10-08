@@ -1,6 +1,7 @@
 /* The cookie choice, and what it turns on: Google Tag Manager, container
-   GTM-KQCRZDNB (Run 27), Google Analytics 4 (G-642CXX25S8), and the Meta,
-   TikTok and LinkedIn pixels.
+   GTM-WX8BZHFN (8 October 2026; GTM-KQCRZDNB from Run 27 until then),
+   Google Analytics 4 (G-642CXX25S8), and the Meta, TikTok and LinkedIn
+   pixels.
 
    Every root page loads this file at the foot of <body>, where each page
    used to carry the same consent scaffold inline, dormant behind an
@@ -21,22 +22,27 @@
 
    GOOGLE ANALYTICS. loadGa() is Google's gtag.js snippet for G-642CXX25S8,
    as issued, run with GTM after "That's fine". It shares GTM's dataLayer.
-   If the GTM container ever gets its own GA4 tag for this ID, remove one of
-   the two, or every page view counts twice.
+   GA4 lives here, not in Tag Manager (8 October 2026): this file sends the
+   page view (the config) and every PBTrack event (gtag 'event', the same
+   name and fields), so Tag Manager needs no Google Analytics tag at all.
+   Give the container a Google tag or a GA4 event tag for this ID and every
+   page view, or every event, counts twice.
 
    THE AD PIXELS. Meta (1401467284899608), TikTok (DB0II6JC77U1PLPL6670) and
    LinkedIn Insight (10975993) are loaded by loadPixels(), the snippets as
    each issued them, and only with GTM after "That's fine", never in a
    <head>. Each sends its PageView. Their <noscript> images are left out for
-   the same reason as GTM's iframe.
+   the same reason as GTM's iframe. Like GA4, none of the three belongs in
+   the Tag Manager container too: a second base tag counts twice.
 
-   PBTrack(event, fields, then) is how a page reports something to the
-   dataLayer. Before an answer, the event waits in this page's memory, and
-   reaches Google only if the visitor accepts while still on the page; "No
-   thanks" empties the queue. After "accepted" it goes straight to the
-   dataLayer. `then`, if given, runs once GTM has handled the event (at most
-   1.5 seconds), or at once when GTM is not running, so a page can move on
-   afterwards without losing the event. The events:
+   PBTrack(event, fields, then) is how a page reports something: to the
+   dataLayer, for Tag Manager, and to GA4 through gtag, once each. Before an
+   answer, the event waits in this page's memory, and reaches Google only if
+   the visitor accepts while still on the page; "No thanks" empties the
+   queue. After "accepted" it goes straight out. `then`, if given, runs once
+   both GTM and GA4 have handled the event (at most 1.6 seconds), or at once
+   when they are not running, so a page can move on afterwards without
+   losing the event. The events:
 
      booking_form_submit            booking.html, a valid routing form sent
      calendly_booking               booking.html, Calendly's event_scheduled
@@ -74,7 +80,7 @@
    Classic script; defines window.PBTrack and window.PBConsent. */
 (function () {
   'use strict';
-  var GTM_ID = 'GTM-KQCRZDNB';
+  var GTM_ID = 'GTM-WX8BZHFN';
   var KEY = 'pb-consent';
   var queue = [], loaded = false, bar = null, started = {};
   /* first-party keys that live only with "That's fine" (Run 45) */
@@ -99,8 +105,8 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer',GTM_ID);
-    while (queue.length) window.dataLayer.push(queue.shift());
     loadGa();
+    while (queue.length) send(queue.shift());
     loadPixels();
   }
 
@@ -151,13 +157,27 @@
     s.parentNode.insertBefore(b, s);})(window.lintrk);
   }
 
+  /* One event, once to each: the dataLayer object for Tag Manager, and a
+     gtag 'event' with the same name and fields for GA4. `answered`, if
+     given, is called by each of the two when it has handled it. */
+  function send(e, answered) {
+    var p = {}, k;
+    for (k in e) if (k !== 'event') p[k] = e[k];
+    if (answered) {
+      e.eventCallback = answered; e.eventTimeout = 1500;
+      p.event_callback = answered; p.event_timeout = 1500;
+    }
+    window.dataLayer.push(e);
+    window.gtag('event', e.event, p);
+  }
+
   function track(name, fields, then) {
-    var e = { event: name }, k, done = false;
+    var e = { event: name }, k, done = false, waiting = 2;
     for (k in fields || {}) e[k] = fields[k];
     function next() { if (!done) { done = true; if (then) then(); } }
     if (loaded) {
-      if (then) { e.eventCallback = next; e.eventTimeout = 1500; setTimeout(next, 1600); }
-      window.dataLayer.push(e);
+      if (then) setTimeout(next, 1600);
+      send(e, then ? function () { if (--waiting === 0) next(); } : null);
       return;
     }
     if (answer() !== 'rejected') queue.push(e);
