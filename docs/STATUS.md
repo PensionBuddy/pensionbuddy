@@ -402,6 +402,15 @@ Found on the way and fixed: with the one wording, the home page's booking
 button at its hero size ran 6px past a 375px screen (`.btn` never wraps;
 caught by `nav.test.py` and `providers.test.py`). Under 481px a booking
 button now wraps, centred: one rule in the shared CTA block of CSS.
+That wrap moved the home page's product tabs to where Ask Buddy rides over
+the booking bar, and `floating-chrome.test.mjs` check 2 failed: its tab walk
+focused the second tab by script while it had `tabindex="-1"` (a roving
+tabindex), so Ask Buddy, which steps aside only for controls in the tab
+order, stayed. A keyboard reaches that tab with ArrowRight, which gives it
+`tabindex="0"` first. The walk now takes the tab order only, and new check
+2b presses ArrowRight through the tabs with the row level with Ask Buddy;
+2b fails when Ask Buddy ignores focus (mutation tried) and passes on live
+main too.
 
 Left as they were, by judgement: the footer's "Book a call" (a link in a
 list, not a button); the guides' "Talk it through" section headings over
