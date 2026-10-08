@@ -314,7 +314,7 @@ PAGES = {
         reviewed=True,
         nav='standard-fund-threshold.html',
         checks=(('id="sftStrip"', 'the year-by-year strip'),
-                ('Rules checked against Budget 2027 (6 October 2026) on 8 October 2026', 'the date the rules were checked'),
+                ('Rules as at 8 October 2026', 'the date the rules were checked'),
                 ('Finance Act 2024', 'the statute cited'),
                 ('id="sftLim"', 'the limit bar'),
                 ('id="sftLb"', 'the lump-sum bar')),
@@ -331,7 +331,7 @@ PAGES = {
         nav='director-pension-rules.html',
         reviewed=True,
         checks=(('id="drForm"', 'the four questions'),
-                ('Rules checked against Budget 2027 (6 October 2026) on 8 October 2026', 'the date the rules were checked'),
+                ('Rules as at 8 October 2026', 'the date the rules were checked'),
                 ('Topics to discuss, not advice', 'the list says what it is')),
     ),
     # Run 20 #12. A list the reader fills in and a summary that follows it,
@@ -818,8 +818,15 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
             'tokens': root_tokens(text),
         }
         for key in want:
-            if got[key] != want[key]:
-                add(page, key.split(':')[0], '%s differs from the skeleton' % key)
+            wanted = want[key]
+            # The home page has no announce bar (Damian, 8 October 2026: one
+            # regulator line at the top of the home page). Its hero's lockup,
+            # with the register link and the QFA, is the one it keeps.
+            if page == HOME and key == 'banner: announce':
+                wanted = None
+            if got[key] != wanted:
+                add(page, key.split(':')[0], '%s differs from the skeleton' % key
+                    if wanted is not None else '%s is not wanted on the home page' % key)
     return out
 
 
@@ -1121,7 +1128,7 @@ AFTER = {  # page: (its name for #from= and the events, what it does not show or
     'my-pensions.html': ('my-pensions', None, False),
     'director-pension-rules.html': ('director-pension-rules', None, True),
 }
-AFTER_WORDS = 'Book a free 20-minute call with us'   # wording A; pb-cta.js holds both
+AFTER_WORDS = 'Book a free 20-minute call with us'   # the one wording (the button test ended 8 October 2026)
 # The line under the button, cut on 8 October 2026 (the owner: the button
 # already says free, and the line was words in the way). '' writes none.
 AFTER_WHY = ''

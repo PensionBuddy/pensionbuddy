@@ -292,8 +292,7 @@ def main():
     # 3
     for page in CALCS:
         r = R[(page, NOW)]
-        eq('3. %s: the row counts to 18 November, with 31 October beside it' % page, r['row'],
-           LEFT + ' ' + REV + ' After that, 2025’s allowance is gone for good.')
+        eq('3. %s: no deadline row on the calculator (cut on 8 October 2026; the nav chip counts)' % page, r['row'], None)
     # 4
     r = R[('index.html', OCT16)]
     eq('4. the day after the old cut-off changes nothing', (r['chip'], r['head'], r['eyebrow'], r['rev']),
@@ -303,7 +302,7 @@ def main():
     eq('4. on 1 November: still counting to 18 November', (r['chip'], r['band']), ('17d 23h 59m', '17'))
     eq('4. and 31 October is marked passed', (r['rev'], r['sr']), (REV_PASSED, left + ' ' + REV_PASSED))
     r = R[('director-calculator.html', NOV)]
-    eq('4. in the row too', r['row'], left + ' ' + REV_PASSED + ' After that, 2025’s allowance is gone for good.')
+    eq('4. the calculators carry no deadline row (cut on 8 October 2026)', r['row'], None)
     r = R[('index.html', LAST)]
     eq('4. an hour before 18 November ends', (r['chip'], r['band'], r['bandHM'], r['head']), ('0d 00h 59m', '0', ['00', '59'], HEAD))
     r = R[('index.html', DAY1)]
@@ -313,12 +312,8 @@ def main():
     eq('4. a second after it, the next tax year', (r['chip'], r['band'], r['year']), ('346d 23h 59m', '346', '2026'))  # both ends in GMT: the clocks go back on 31 October 2027
     eq('4. with no online date for 2027, the count is to 31 October',
        (r['head'], r['rev'], r['sr']), ('Revenue’s deadline is 31 October.', REV_NEXT, left + ' ' + REV_NEXT))
-    r = R[('pension-calculator.html', ROLL)]
-    eq('4. the row moves on too', r['row'], left + ' ' + REV_NEXT + ' After that, 2026’s allowance is gone for good.')
     r = R[('index.html', ROLL2)]
     eq('4. a second after 31 October 2027, on to 2028 and the 2027 tax year', (r['chip'], r['year']), ('365d 23h 59m', '2027'))  # and on 29 October 2028
-    r = R[('broker-vs-autoenrolment.html', ROLL2)]
-    eq('4. and the row', r['row'].endswith('2027’s allowance is gone for good.'), True)
     # 5
     js = open(os.path.join(ROOT, 'assets', 'js', 'pb-deadline.js'), encoding='utf-8').read()
     code = re.sub(r'(?s)/\*.*?\*/', '', js)
@@ -372,8 +367,8 @@ def main():
         m = re.search(r'<span class="dl-text" id="deadlineText">(.*?)</span>', src, re.S)
         return re.sub(r'\s+', ' ', html.unescape(m.group(1))).strip() if m else None
     for page in CALCS:
-        eq('6. %s: the row carries today\'s date sentence' % page,
-           row_markup(open(os.path.join(ROOT, page), encoding='utf-8').read()), S['row'])
+        eq('6. %s: no deadline row in the markup' % page,
+           row_markup(open(os.path.join(ROOT, page), encoding='utf-8').read()), None)
     for page in pages:
         r = R.get((page, NOW))
         if r:
@@ -395,9 +390,6 @@ def main():
                    r['clock'], False)
             eq('6. %s at %dpx without JavaScript: the nav still fits its row' % (page, w), r['overrun'] <= 0, True)
             eq('6. %s at %dpx without JavaScript: the chip\'s name says the date' % (page, w), r['name'], S['chipName'])
-            if page in CALCS:
-                eq('6. %s at %dpx without JavaScript: the row shows the date sentence, not nothing' % (page, w),
-                   (r['rowShown'], re.sub(r'\s+', ' ', r['row'] or '').strip()), (True, plain))
     srv.shutdown()
     report()
 

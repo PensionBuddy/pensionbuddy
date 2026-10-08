@@ -202,11 +202,13 @@ and `404.html`. `about.html` does not exist: it was folded into
   "Redirect to an external site" → `https://pensionbuddy.ie/thank-you.html`.
   Until then the booking page's own listener is the only route to the
   thank-you page.
-- **GTM tags (R27-3).** Container `GTM-KQCRZDNB` loads only after "That's
-  fine", but it was empty on 25 September 2026 (version 1, no tags), so
-  nothing is measured until tags (for example Google Analytics 4, with
-  triggers on `booking_form_submit`, `calendly_booking` and
-  `calculator_first_interaction`) are added and published. The games load no consent script, by
+- **GTM tags (R27-3, settled in Run 49).** Container `GTM-WX8BZHFN` (from
+  8 October 2026) loads only after "That's fine" and was empty that day.
+  GA4 does not need it: `pb-consent.js` loads GA4 itself and sends every
+  `PBTrack` event to it. The container must never get a Google tag or a
+  GA4 tag for `G-642CXX25S8`, nor a Meta, TikTok or LinkedIn base tag
+  (each would count twice); it is for anything new, such as a Google Ads
+  conversion on `booking_click`. The games load no consent script, by
   choice.
 - **Revenue's online date for 2027.** When Revenue publishes the 2027 Pay
   and File date for the Revenue Online Service (usually in the spring), add
@@ -337,6 +339,129 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 (re-shot, merged `6e556ec`).
 
 ---
+
+# Run 49 — 2026-10-08 · GA4 and Tag Manager: one load each, the events reach GA4 (on `claude/ga4-gtm`)
+
+Damian's brief: put GTM-WX8BZHFN in the consent-gated Tag Manager setup,
+no second GA4 load, nothing before consent, one clean setup, and the five
+Run 45 events (`calculator_complete`, `cta_view`, `cta_click`,
+`booking_click`, `email_result_submit`) in GA4.
+
+- **Found.** GA4 `G-642CXX25S8` is loaded once, directly, by `loadGa()` in
+  `assets/js/pb-consent.js`, after "That's fine" (since 5 October). The
+  container ID was not empty: it was `GTM-KQCRZDNB` (Run 27). Both
+  containers, fetched from Google on 8 October, are version 1 with no tags.
+  The brief's `G-XXXXXXXXXX` is a placeholder; the live ID is the one in
+  the code. Every `PBTrack` event went to the dataLayer only, and with no
+  GA4 tag in the container none reached GA4: with Google's real gtm.js and
+  gtag.js in headless Chrome, GA4's hits were `page_view` and
+  `user_engagement` and nothing else.
+- **Chosen: GA4 stays direct; Tag Manager carries no Google Analytics.**
+  It is already collecting, so there is no gap and no data to migrate, and
+  the five events need no tags, triggers or variables built by hand. Moving
+  GA4 into Tag Manager would mean a Google tag, six event tags, a trigger
+  and up to four variables, and a window of double counting or none while
+  the direct code and the container are switched over. The ad pixels stay
+  direct too, for the same reason.
+- **Changed.** `GTM_ID` is `GTM-WX8BZHFN`. `send()` gives each event once to
+  the dataLayer (for Tag Manager) and once to GA4 (`gtag('event', name,
+  fields)`); events waiting for the answer go out after GA4's config.
+  `then` waits for both (at most 1.6 s). Pages restamped (`?v=`).
+- **Proved.** `tests/consent.test.py`: 4 new checks (an early event reaches
+  GA4 once, after the config, with its fields; a refusal sends nothing to
+  GA4; `cta_click` and `booking_click` reach GA4 once each with `page`,
+  `variant` and `cta`). Same 14 failures as `origin/main` (the bar wraps
+  to two lines at 320x568), plus its flaky check 8. Real tags, every hit
+  to Google answered locally: one `page_view` per page, and
+  `calculator_complete`, `cta_view`, `cta_click`, `booking_click`,
+  `email_result_submit` and `calendly_booking` once each, with their
+  fields; a `booking_click` sent just before the page navigates away still
+  arrives. `build.test.py` 477/0, `give-then-ask.test.mjs` 157/0,
+  `nav`, `deadline`, `providers` all pass.
+- **Needs Damian:** GA4 key events (`booking_click`,
+  `email_result_submit`, and `calendly_booking`, the booking itself) and
+  custom dimensions (`calculator`, `cta`, `variant`, `page`): the steps are
+  in this run's reply. Compliance pack updated (8 October note).
+
+---
+# Run 48 — 2026-10-08 · Live fixes: rules date, the threshold, how a call works, one booking wording, one regulator line, Cookies (on `claude/live-fixes-1008`)
+
+Damian's seven fixes of 8 October 2026, one commit each, off live main
+`a1f7122`.
+
+| # | Fix | Where |
+|---|---|---|
+| 1 | Every "Rules as at 24 September 2026 / Budget 2027 could change them" line reads "Rules as at 8 October 2026." until Damian gives the Budget 2027 changes; the UK guide's "Either country's Budget can change them" too, and the four guides' search descriptions ("as at September 2026") | home, threshold, directors' rules, four guides; their parts; `pagebuild.py` checks; build check 36 |
+| 2 | Standard Fund Threshold: "€2.2 million in 2026, and €2.4 million from 1 January 2027" wherever it is described in words (the threshold page's opening line, the jargon buster, the directors' rules paragraph and question, the year-end checklist, the "all your pensions" pointer, both calculators' notes). The over-50 guide's €2 million is the ARF 6% rule, unchanged | |
+| 3, 4 | "How a call works.": the three placeholder pictures gone (files and CSS); step 1 "Pick a time that suits you." ("No forms." gone); the kicker and "Three steps." replaced by the heading. The comment over the section says where Run 39's video slots are | `index.html`; build check 45 rewritten |
+| 5 | Every booking button reads "Book a free 20-minute call with us" (nine wordings replaced, listed in the commit). One filled booking button per page: the home page keeps the one after the way-of-life picker, its closing band ("Talk it through with Damian.") goes and its second ask is an outline under "Questions before you call."; the director, starter and tracker closing bands and the tracker's "Forgotten pensions" band go quiet. **Run 45's button test ends** (its second wording broke the one wording): everyone is variant A, nothing stored, the old key deleted on load | build check 52 holds both rules, nav, bar and Ask Buddy included; checks 46, 48, 50; give-then-ask G13, G14 |
+| 6 | The home page loses the grey announce bar ("Regulated by the Central Bank of Ireland · Free first consultation"); the hero's lockup, with the register link and the QFA, is the one regulator line at the top | `chrome_drift` wants no bar on the home page; check 9 mutant |
+| 7 | A Cookies section in the Privacy Notice (`privacy.html#cookies`): what the site keeps always, each analytics and advertising cookie set only after "That's fine" with what it does and how long it lasts as each vendor's own page states it (read 8 October 2026), the Calendly calendar's own cookies, and how to change the choice. "Cookies" in every footer. "No thanks" now also deletes `ttcsid*`, `ttclid` and `_dc_gtm_*` | `privacy.html`, skeleton foot-top, `pb-consent.js` |
+
+Found on the way and fixed: with the one wording, the home page's booking
+button at its hero size ran 6px past a 375px screen (`.btn` never wraps;
+caught by `nav.test.py` and `providers.test.py`). Under 481px a booking
+button now wraps, centred: one rule in the shared CTA block of CSS.
+That wrap moved the home page's product tabs to where Ask Buddy rides over
+the booking bar, and `floating-chrome.test.mjs` check 2 failed: its tab walk
+focused the second tab by script while it had `tabindex="-1"` (a roving
+tabindex), so Ask Buddy, which steps aside only for controls in the tab
+order, stayed. A keyboard reaches that tab with ArrowRight, which gives it
+`tabindex="0"` first. The walk now takes the tab order only, and new check
+2b presses ArrowRight through the tabs with the row level with Ask Buddy;
+2b fails when Ask Buddy ignores focus (mutation tried) and passes on live
+main too.
+
+Left as they were, by judgement: the footer's "Book a call" (a link in a
+list, not a button); the guides' "Talk it through" section headings over
+their booking links; links inside sentences ("book a free 20-minute call
+with us", the legal pages' "booking page"); the 404's filled "way home".
+
+## The gate (Run 48)
+
+On the branch merged with live main `e00b349` (Space Grotesk, Run 49),
+one suite at a time, headless Chrome, `TZ=Europe/Dublin`; anything failing
+was run again on live main itself. Pass: no failing line live main does
+not have.
+
+| Suite | Run 48 | Live main `e00b349` |
+|---|---|---|
+| build.test.py | 484/0 | |
+| run-tests.py, give-then-ask (156), lead-forms (471), interactive-43 (404), deadline (360), games (187), providers (86), regulator-lines and --caveats (31 each), runner (95), gap-band, search (22), nav (470), terms (48), flags, site-links, links, submission-created (170) | all pass | |
+| floating-chrome.test.mjs | 37/0 (check 2b new) | 37/0 with the new test |
+| consent.test.py | 766/14 | the same 14 (check 9 at 320 x 568) |
+| boxes.test.mjs | 5/3 | the same 3 |
+| ux4.test.mjs | 61/3 | the same 3 |
+| verify.py --no-shots | 13 FAIL | the same 13 (calculators' "today's money" under 16px; the tracker's P60 letter-spacing) |
+| check-initialisms.py | ECB on four calculators | the same |
+| sitemap.py --check | stale lastmods, then rewritten here (`tools/sitemap.py`) | stale |
+| stamp, site-index, seo, sync --check | clean | |
+
+Screenshots of the home page at 375 and 1440, whole page and each changed
+part: `verify-out/shots/run48/` (not committed).
+
+## Needs Damian (Run 48)
+
+1. **Budget 2027.** Give the changes; then the rules lines move again.
+   Already stale since 6 October: the year-end checklist's "Watch Budget
+   2027 on 6 October 2026", the PIA page's "to be announced on 6 October
+   2026, in Budget 2027", and the source notes in `assets/js/pia.js` and
+   `assets/js/sft.js`.
+2. **The same doubled regulator line** is on the director, starter and
+   tracker pages (grey bar plus the hero lockup on a phone). Fix 6 was
+   asked for the home page only; the same change is one line each.
+3. **Calendly loads before the cookie choice** on the booking page and,
+   by Calendly's own help page, "uses cookies even if the banner is
+   hidden"; Calendly suggests waiting for consent. The Cookies section says
+   Calendly sets its own cookies there. Compliance question.
+4. **LinkedIn's Insight Tag terms** say the tag "should not be installed"
+   on pages offering financial services to consumers
+   (linkedin.com/help/lms/answer/a489169). For Damian or counsel.
+5. **The compliance pack** quotes the old booking wordings and the button
+   test (1.25); it is stale on both.
+6. **Not from this run:** `tools/check-initialisms.py` fails on four
+   calculators for "ECB" in the "today's money" text (live main, commit
+   `e642782`).
 
 # Run 46 — 2026-10-06 · Copy cut (on `claude/clever-wozniak-dmpzph`, merged to main)
 

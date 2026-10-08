@@ -37,6 +37,15 @@ tags that tell Calendly which page and which button wording a booking
 came from; and the Privacy Notice says so (question 1.25, sections 3.3
 and 3.4, Appendix B.25).
 
+Updated 8 October 2026: the Tag Manager container is now GTM-WX8BZHFN
+(it was GTM-KQCRZDNB), still loaded only after "That's fine". Google
+Analytics 4 (G-642CXX25S8) now also receives the site's events, which
+until now reached Tag Manager only: a calculator result shown, a booking
+button seen or pressed, any booking link pressed, "Email me this result"
+sent, a call booked in Calendly, and the first use of each calculator;
+with each, only the page, the calculator's name, which button and which
+button wording, never a name, an email or a figure (question 1.17).
+
 Updated 4 October 2026: the Meta, TikTok and LinkedIn ad pixels load with
 Google Tag Manager, only after a visitor accepts; the cookie bar now reads
 "May we use cookies for analytics and ads? Privacy Notice", and the

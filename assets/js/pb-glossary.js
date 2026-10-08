@@ -247,7 +247,7 @@ window.PBGlossary = [
  {
   "id": "standard-fund-threshold",
   "name": "Standard Fund Threshold",
-  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its legislated rise from 2026 to 2029.",
+  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief: \u20ac2.2 million in 2026, and \u20ac2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its legislated rise from 2026 to 2029.",
   "tip": true,
   "pats": [
    [

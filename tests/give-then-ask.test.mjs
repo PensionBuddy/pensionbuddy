@@ -48,10 +48,10 @@
          result stays where it was; the form asks for a name, a valid email
          and the box, never ticked for the reader, and sends nothing without
          them; its post refused, a pre-filled email to Damian, and it says so
-     G13 the button test: before "That's fine" nothing is stored and the
-         button says the visit's wording; after it the pick is kept in
-         localStorage 'pb-ab-cta' and is the same on the next page; "No
-         thanks" deletes it
+     G13 one wording (the button test ended 8 October 2026): every visit is
+         'A' and the button says "Book a free 20-minute call with us",
+         before and after "That's fine"; nothing is stored, and a
+         'pb-ab-cta' key the test left behind is deleted on load
      G14 what is counted, after "That's fine": calculator_complete once,
          cta_view, cta_click and booking_click, email_result_submit, each
          with the page and the wording, and no name or email in any event
@@ -79,7 +79,7 @@ const eq = (label, got, want) => {
 
 
 const RSQ = '’';
-const WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means for you - free 20-min call' };
+const WORDS = { A: 'Book a free 20-minute call with us' };
 const WHY = [];   // the line under the button, cut on 8 October 2026
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {
@@ -411,32 +411,31 @@ eq('G12. a pre-filled email to Damian, with the reader\'s name and address, the 
 const resultAfter = await ev(`(() => { const r = document.querySelector('.results .res-hero'); const b = r.getBoundingClientRect(); return [r.textContent.replace(/\s+/g, ' ').trim(), Math.round(b.top + scrollY)]; })()`);
 eq('G12. the result stayed where it was, as it was', resultAfter, resultBefore);
 
-/* G13: the button test and the cookie choice */
-await open('pension-fees-calculator.html');
-const v0 = await variant();
-eq('G13. before "That\'s fine": nothing stored, and the button says this visit\'s wording',
-   [await ev(`localStorage.getItem('pb-ab-cta')`), ['A', 'B'].includes(v0), await ev(`document.querySelector('#pbAfter .pb-ab-t').textContent`)],
-   [null, true, WORDS[v0]]);
-let seen = new Set();
-for (let i = 0; i < 12 && seen.size < 2; i++) { await open('pia.html'); seen.add(await variant()); }
-eq('G13. before an answer, both wordings come up across visits (each half the time)', [...seen].sort(), ['A', 'B']);
+/* G13: one wording, nothing stored (the button test ended 8 October 2026) */
 await answer(null);
-await ev(`localStorage.removeItem('pb-consent'); localStorage.removeItem('pb-ab-cta')`);
-await open('pia.html');
-const v1 = await variant();
-eq('G13. no answer yet: nothing stored', await ev(`localStorage.getItem('pb-ab-cta')`), null);
+await ev(`localStorage.removeItem('pb-consent'); localStorage.setItem('pb-ab-cta', 'B')`);
+await open('pension-fees-calculator.html');
+eq('G13. before an answer: wording A, the one wording, and the key the test left behind deleted',
+   [await variant(), await ev(`document.querySelector('#pbAfter .pb-ab-t').textContent`), await ev(`localStorage.getItem('pb-ab-cta')`)],
+   ['A', WORDS.A, null]);
+let seen = new Set();
+for (let i = 0; i < 6; i++) { await open('pia.html'); seen.add(await variant()); }
+eq('G13. the same wording on every visit', [...seen], ['A']);
 await ev(`document.querySelector('.pb-consent .pb-c-yes').click()`);
-eq('G13. "That\'s fine": the pick of this visit is kept', await ev(`localStorage.getItem('pb-ab-cta')`), v1);
+eq('G13. "That\'s fine" stores no pick', await ev(`localStorage.getItem('pb-ab-cta')`), null);
 await answer('accepted');
 for (const page of ['state-pension-entitlement.html', 'director-calculator.html']) {
   await open(page);
-  eq(`G13. after "That's fine", the same wording on ${page}`, [await variant(), await ev(`document.querySelector('#pbAfter .pb-ab-t').textContent`)], [v1, WORDS[v1]]);
+  eq(`G13. after "That's fine", wording A on ${page}, nothing stored`,
+     [await variant(), await ev(`document.querySelector('#pbAfter .pb-ab-t').textContent`), await ev(`localStorage.getItem('pb-ab-cta')`)],
+     ['A', WORDS.A, null]);
 }
 await open('privacy.html');
+await ev(`localStorage.setItem('pb-ab-cta', 'B')`);
 await ev(`document.querySelector('[data-pb-consent-reset]').click()`);
 /* read in the same task as the press: with Tag Manager already running, "No
    thanks" reloads the page, and this test's own start-up script answers again */
-eq('G13. "No thanks" deletes the kept pick',
+eq('G13. "No thanks" still deletes an old key, on a page without the button',
    await ev(`(() => { document.querySelector('.pb-consent .pb-c-no').click(); return [localStorage.getItem('pb-consent'), localStorage.getItem('pb-ab-cta')]; })()`),
    ['rejected', null]);
 await sleep(500);
@@ -445,7 +444,6 @@ await sleep(500);
    host but this server resolves to nothing, so GTM's script fails to load,
    and dataLayer is read as the page wrote it) */
 await answer('accepted');
-await ev(`localStorage.setItem('pb-ab-cta', 'B')`);
 await open('pension-calculator.html');
 const events = () => ev(`(window.dataLayer || []).filter(e => e && e.event && !/^gtm/.test(e.event)).map(e => JSON.stringify(e))`);
 eq('G14. nothing counted at load but the page itself', (await events()).filter(e => /calculator_complete|cta_|booking_click|email_result/.test(e)), []);
@@ -458,19 +456,19 @@ await key('ArrowRight', 39);
 await sleep(200);
 const complete = (await events()).filter(e => /calculator_complete/.test(e));
 eq('G14. calculator_complete once, with the calculator, the page and the wording', complete,
-   [JSON.stringify({ event: 'calculator_complete', page: 'pension-calculator', variant: 'B', calculator: 'pension-calculator' })]);
+   [JSON.stringify({ event: 'calculator_complete', page: 'pension-calculator', variant: 'A', calculator: 'pension-calculator' })]);
 await ev(`document.getElementById('pbAfter').scrollIntoView({ block: 'center', behavior: 'instant' })`);
 await sleep(500);
 eq('G14. cta_view once the button is on screen', (await events()).filter(e => /cta_view/.test(e)),
-   [JSON.stringify({ event: 'cta_view', page: 'pension-calculator', variant: 'B', cta: 'after' })]);
+   [JSON.stringify({ event: 'cta_view', page: 'pension-calculator', variant: 'A', cta: 'after' })]);
 await ev(`window.addEventListener('click', function (e) { if (e.target.closest('a')) e.preventDefault(); })`);
 await click('#pbAfter .pb-after-btn');
 eq('G14. cta_click and booking_click on a press of the button', (await events()).filter(e => /cta_click|booking_click/.test(e)),
-   [JSON.stringify({ event: 'cta_click', page: 'pension-calculator', variant: 'B', cta: 'after' }),
-    JSON.stringify({ event: 'booking_click', page: 'pension-calculator', variant: 'B', cta: 'after' })]);
+   [JSON.stringify({ event: 'cta_click', page: 'pension-calculator', variant: 'A', cta: 'after' }),
+    JSON.stringify({ event: 'booking_click', page: 'pension-calculator', variant: 'A', cta: 'after' })]);
 await click('nav a.nav-cta, nav a[href^="booking.html"]');
 eq('G14. booking_click alone for the nav\'s booking link', (await events()).filter(e => /cta_click|booking_click/.test(e)).slice(2),
-   [JSON.stringify({ event: 'booking_click', page: 'pension-calculator', variant: 'B', cta: 'nav' })]);
+   [JSON.stringify({ event: 'booking_click', page: 'pension-calculator', variant: 'A', cta: 'nav' })]);
 await ev(`window.fetch = function () { return Promise.reject(new TypeError('refused for the test')); }`);
 await click('#ecMore');
 await click('#ecName'); await send('Input.insertText', { text: 'Test Person' });
@@ -480,7 +478,7 @@ await click('#ecForm button[type=submit]');
 await sleep(500);
 const all = await events();
 eq('G14. email_result_submit on a complete form', all.filter(e => /email_result_submit/.test(e)),
-   [JSON.stringify({ event: 'email_result_submit', page: 'pension-calculator', variant: 'B', calculator: 'pension-calculator' })]);
+   [JSON.stringify({ event: 'email_result_submit', page: 'pension-calculator', variant: 'A', calculator: 'pension-calculator' })]);
 eq('G14. no name or email in any event', all.filter(e => /Test Person|test@example/.test(e)), []);
 await answer('rejected');
 

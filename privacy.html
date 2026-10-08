@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="The Pensionbuddy paw mark">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Privacy Notice", "item": "https://pensionbuddy.ie/privacy.html"}]}</script>
 <!-- SEO:END -->
-<link rel="preload" href="assets/fonts/geist-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
    PENSIONBUDDY, SHARED DESIGN SYSTEM  (identical on every page)
@@ -53,11 +53,11 @@
   --sh-lg:0 1px 2px rgba(11,31,28,.04);
   --sh-teal:none;
   /* type */
-  --font:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
   /* rhythm */
   --r-sm:6px; --r-md:8px; --r-lg:10px; --r-xl:12px; --r-pill:999px;
   --maxw:1140px;
-  --font-display:'Geist',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --font-display:'Figtree',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -363,6 +363,20 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .legal ul{list-style:none;margin:0 0 16px;padding:0}
 .legal li{font-size:15.5px;color:var(--ink-2);padding-left:24px;position:relative;line-height:1.7;margin-bottom:8px}
 .legal li::before{content:"";position:absolute;left:2px;top:10px;width:7px;height:7px;border-radius:2px;background:var(--teal);transform:rotate(45deg)}
+/* the Cookies tables (Damian, 8 October 2026) */
+.pb-ck-wrap{overflow-x:auto;margin:0 0 16px}
+.pb-ck{width:100%;border-collapse:collapse;font-size:15px;line-height:1.55;color:var(--ink-2)}
+.pb-ck th,.pb-ck td{text-align:left;vertical-align:top;padding:10px 12px 10px 0;border-bottom:1px solid var(--line)}
+.pb-ck thead th{font-weight:700;color:var(--ink);border-bottom:1.5px solid var(--line-2)}
+.pb-ck tbody th{font-weight:600;color:var(--ink);overflow-wrap:anywhere;min-width:7.5em}
+@media(max-width:640px){
+  .pb-ck thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .pb-ck,.pb-ck tbody,.pb-ck tr,.pb-ck th,.pb-ck td{display:block;width:auto}
+  .pb-ck tr{padding:12px 0;border-bottom:1px solid var(--line)}
+  .pb-ck th,.pb-ck td{border:0;padding:2px 0}
+  .pb-ck tbody th{min-width:0;margin-bottom:2px}
+  .pb-ck td[data-k]::before{content:attr(data-k) ": ";font-weight:600;color:var(--ink)}
+}
 .legal a{color:var(--teal-700);font-weight:600}
 .legal .callbox{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 26px;margin:20px 0}
 .legal .callbox p{margin-bottom:0}
@@ -1478,7 +1492,7 @@ button{font-family:inherit}
    left exactly as they are: this rule paints the logo and nothing else. */
 .logo{--pb-logo-h:34px;--pb-teal:#14CBB1;--pb-ink:#0F1F1C;
   gap:calc(var(--pb-logo-h) * 0.269);
-  font-family:'Schibsted Grotesk',var(--font);
+  font-family:'Figtree',var(--font);
   font-size:calc(var(--pb-logo-h) * 0.635);font-weight:800;
   letter-spacing:-0.035em;line-height:1;color:var(--pb-ink)}
 .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h);
@@ -1516,7 +1530,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* FOOTER WORDMARK (.pb-wordmark). Klarna's close: the name set full width
    at the foot of the page, in the logo's own face. Decorative: aria-hidden,
    and ink at 7% (translucent, so no reader is asked to read it). */
-.pb-wordmark{margin:40px 0 -6px;font-family:'Schibsted Grotesk',var(--font);font-weight:800;letter-spacing:-0.035em;
+.pb-wordmark{margin:40px 0 -6px;font-family:'Figtree',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
@@ -1668,19 +1682,19 @@ a.assure:hover{border-color:var(--teal)}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
 /* CLICK:END */
-/* FONTS:BEGIN (Run 32; served from the site since Run 34; Geist since
-   Run 46). Geist and the footer wordmark's Schibsted Grotesk 800 come from
+/* FONTS:BEGIN (Run 32; served from the site since Run 34; Figtree for
+   every word, wordmark included, since 8 Oct 2026). Figtree comes from
    assets/fonts/, not from a font service, so a visit sends nothing to a
-   third party before the cookie choice. Geist is one variable file
-   (Vercel's Geist 1.7.2, weights 400 to 800 used), with font-display:swap,
-   under the SIL Open Font License (assets/fonts/OFL-*.txt). Each page
-   preloads geist-variable.woff2 in its <head>. Until it arrives the text
-   is set in the system font. Byte for byte on every page:
-   tools/pagebuild.py SHARED_CSS ('FONTS', 'fonts-css'), guarded by
-   chrome_drift. */
-@font-face{font-family:'Geist';font-style:normal;font-weight:400 800;font-display:swap;src:url(assets/fonts/geist-variable.woff2) format('woff2')}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
-@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/schibsted-grotesk-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+   third party before the cookie choice. It is one variable face (weights
+   300 to 900, so the 800 headings render at 800) in two files split by
+   unicode-range, Latin and Latin Extended, from Fontsource 5.3.0, with
+   font-display:swap, under the SIL Open Font License
+   (assets/fonts/OFL-Figtree.txt). Each page preloads figtree-latin.woff2
+   in its <head>. Until it arrives the text is set in the system font.
+   Byte for byte on every page: tools/pagebuild.py SHARED_CSS ('FONTS',
+   'fonts-css'), guarded by chrome_drift. */
+@font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* FONTS:END */
 /* TRUST:BEGIN (Run 26). Two shared components, each one string in
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
@@ -2051,6 +2065,13 @@ html.pb-readying [data-pb-wait]{transition:none!important}
   html.pb-bookbar-on{scroll-padding-bottom:calc(var(--pb-bookbar-h, 68px) + 8px)}
 }
 @media(prefers-reduced-motion:reduce){.pb-bookbar{transition:none}}
+/* Since 8 October 2026 every booking button reads "Book a free 20-minute
+   call with us", too long for .btn's single line on a narrow phone at the
+   hero sizes (6px past a 375px screen on the home page): there a booking
+   button wraps, centred, instead. */
+@media(max-width:480px){
+  a.btn[href^="booking.html"]{white-space:normal;text-align:center;line-height:1.25}
+}
 /* CTA:END */
 /* TYPE:BEGIN (Run 46). The type scale's weights, last in every page's
    stylesheet so it wins over each page's own: body text 500 at a 1.6 line
@@ -2122,7 +2143,7 @@ main h1{font-weight:800}
 <main id="main" tabindex="-1">
 <div class="wrap"><div class="legal pb-caveat">
   <h1>Privacy Notice</h1>
-  <p class="updated">Last updated: 5 October 2026</p>
+  <p class="updated">Last updated: 8 October 2026</p>
   <p class="intro">This notice explains what personal information Pensionbuddy collects, why we collect it, and what your rights are. We keep it in plain English, the same as everything else here.</p>
 
   <h2>Who we are</h2>
@@ -2146,7 +2167,7 @@ main h1{font-weight:800}
   <p>We will only use your information for the purpose you gave it to us. We do not sell your data to anyone.</p>
 
   <h2>Booking and third parties</h2>
-  <p>We use Calendly to manage call bookings. When you book a time, Calendly collects your name, email and chosen slot on our behalf and handles that information under its own privacy terms. When you book through a link on this site, Calendly also records which page the link was on and which wording of the booking button you saw. What you send us through a form on this website, such as a request for your figures or a guide, is stored by Netlify, our website host, so that it reaches us. We may also use an email tool to send guides and follow-ups. These providers only process your information so that we can provide the service you asked for.</p>
+  <p>We use Calendly to manage call bookings. When you book a time, Calendly collects your name, email and chosen slot on our behalf and handles that information under its own privacy terms. When you book through a link on this site, Calendly also records which page the link was on. What you send us through a form on this website, such as a request for your figures or a guide, is stored by Netlify, our website host, so that it reaches us. We may also use an email tool to send guides and follow-ups. These providers only process your information so that we can provide the service you asked for.</p>
 
   <h2>How long we keep it</h2>
   <p>We keep your information only for as long as we need it for the purpose you gave it, or for as long as we are required to by law and our regulatory obligations, and then we delete it securely.</p>
@@ -2155,9 +2176,47 @@ main h1{font-weight:800}
   <p>Under data-protection law you have the right to ask for a copy of the information we hold about you, to have it corrected if it is wrong, to ask us to delete it, and to object to or restrict how we use it. To exercise any of these rights, contact us using the details in the Contact section below. You also have the right to complain to the Data Protection Commission at dataprotection.ie.</p>
 
   <h2 id="cookies">Cookies</h2>
-  <p>This site aims to use only what is necessary to work. Analytics are not necessary, so we ask first.</p>
-  <p>When you first visit, a bar at the foot of the page asks whether we may use analytics. Only if you choose &ldquo;That&rsquo;s fine&rdquo; do we load Google Tag Manager, a Google service that runs our analytics tools. We use it to see how the site is used: which pages are visited, when a calculator is first used and when it shows a result, when a booking button is seen or pressed, when a result is asked for by email, and when a call is booked. We also try two wordings of the booking button after a calculator&rsquo;s result, each shown to half of visitors; once you choose &ldquo;That&rsquo;s fine&rdquo;, which one you see is kept in your browser so that it stays the same, and before that, or after &ldquo;No thanks&rdquo;, nothing is kept. With it we load Google Analytics, which sets cookies to count visits and how the site is used. We also load the Meta (Facebook and Instagram), TikTok and LinkedIn pixels. These tell those platforms that you visited this site, so we can measure our advertising there and show our ads to people like you. If you choose &ldquo;No thanks&rdquo;, or make no choice, none of these is ever loaded.</p>
-  <p>Your choice is kept in your browser, and you can change it at any time. <button type="button" class="btn btn-ghost pb-consent-reset" data-pb-consent-reset>Change your cookie choice</button></p>
+  <p>Cookies are small files a website keeps in your browser. This site keeps only what it needs to work unless you say yes to more.</p>
+  <p>When you first visit, a bar at the foot of the page asks &ldquo;May we use cookies for analytics and ads?&rdquo; Until you choose &ldquo;That&rsquo;s fine&rdquo;, none of the analytics or advertising tools below is loaded and none of their cookies is set. &ldquo;No thanks&rdquo;, or no answer, keeps it that way.</p>
+
+  <h3>Always on: what the site needs to work</h3>
+  <p>These are small notes kept in your own browser, not cookies. None of them is sent to us or to anyone else, and none is used to follow you.</p>
+  <div class="pb-ck-wrap"><table class="pb-ck">
+    <caption class="tk-sr">What the site keeps in your browser</caption>
+    <thead><tr><th scope="col">Name</th><th scope="col">What it does</th><th scope="col">How long</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">pb-consent</th><td data-k="What it does">Remembers your answer to the cookie bar, so it does not ask again.</td><td data-k="How long">Until you change your choice or clear this site&rsquo;s data</td></tr>
+      <tr><th scope="row">pb-bookbar</th><td data-k="What it does">Remembers that you closed the booking bar at the foot of a phone screen.</td><td data-k="How long">Until you close the tab</td></tr>
+      <tr><th scope="row">pb.badges</th><td data-k="What it does">Remembers the paw-print badges you have earned and the boxes you ticked on the old-pension self-check.</td><td data-k="How long">Until you clear this site&rsquo;s data</td></tr>
+      <tr><th scope="row">pb.buddysRun.best, pb.jargonBattle.best</th><td data-k="What it does">Remember your best score in each game.</td><td data-k="How long">Until you clear this site&rsquo;s data</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Only after &ldquo;That&rsquo;s fine&rdquo;: analytics and advertising</h3>
+  <p>With your yes we load Google Tag Manager (a Google service for adding tools like these to a website), Google Analytics, and the Meta (Facebook and Instagram), TikTok and LinkedIn pixels. We use them to see how the site is used: which pages are visited, when a calculator is first used and when it shows a result, when a booking button is seen or pressed, when a result is asked for by email, and when a call is booked. The pixels also tell those platforms that you visited this site, so we can measure our advertising there and show our ads to people like you.</p>
+  <p>These are the cookies they set on this site, in each company&rsquo;s own words where it gives them:</p>
+  <div class="pb-ck-wrap"><table class="pb-ck">
+    <caption class="tk-sr">Analytics and advertising cookies, set only after &ldquo;That&rsquo;s fine&rdquo;</caption>
+    <thead><tr><th scope="col">Cookie</th><th scope="col">Set by</th><th scope="col">What it does</th><th scope="col">How long</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">_ga</th><td data-k="Set by">Google Analytics</td><td data-k="What it does">Tells one visitor apart from another.</td><td data-k="How long">2 years</td></tr>
+      <tr><th scope="row">_ga_ followed by letters and numbers</th><td data-k="Set by">Google Analytics</td><td data-k="What it does">Keeps track of your current visit.</td><td data-k="How long">2 years</td></tr>
+      <tr><th scope="row">_fbp</th><td data-k="Set by">Meta</td><td data-k="What it does">Identifies your browser, so Meta can measure our ads and how the site is used.</td><td data-k="How long">90 days</td></tr>
+      <tr><th scope="row">_fbc</th><td data-k="Set by">Meta</td><td data-k="What it does">Remembers which of our ads you clicked, when you arrive from one on Facebook or Instagram.</td><td data-k="How long">90 days</td></tr>
+      <tr><th scope="row">_ttp, ttcsid, ttclid</th><td data-k="Set by">TikTok</td><td data-k="What it does">Measure and improve the performance of our ads on TikTok.</td><td data-k="How long">13 months from last use</td></tr>
+      <tr><th scope="row">li_fat_id</th><td data-k="Set by">LinkedIn</td><td data-k="What it does">Links a visit to a LinkedIn member, to measure and target our ads on LinkedIn.</td><td data-k="How long">30 days</td></tr>
+      <tr><th scope="row">li_giant</th><td data-k="Set by">LinkedIn</td><td data-k="What it does">Links a visit to a group of LinkedIn members, to measure our ads on LinkedIn.</td><td data-k="How long">7 days</td></tr>
+    </tbody>
+  </table></div>
+  <p>Your browser may delete them sooner. Meta, TikTok and LinkedIn also use cookies of their own on their own websites&rsquo; addresses (LinkedIn&rsquo;s bcookie, lidc and UserMatchHistory, for example); those are covered by each company&rsquo;s own cookie policy.</p>
+
+  <h3>On the booking page</h3>
+  <p>The booking calendar is Calendly&rsquo;s own page, shown inside ours. Calendly sets its own cookies there, under its own privacy notice, and may ask for your cookie choice itself, inside the calendar.</p>
+
+  <h3 id="cookie-choice">Changing your choice</h3>
+  <p>You can change your mind at any time. Press the button below and the bar comes back, for you to choose &ldquo;That&rsquo;s fine&rdquo; or &ldquo;No thanks&rdquo;. If you choose &ldquo;No thanks&rdquo; after saying yes, we delete the analytics and advertising cookies listed above from this site and, if their tools are running on the page, reload it so they stop.</p>
+  <p><button type="button" class="btn btn-ghost pb-consent-reset" data-pb-consent-reset>Change your cookie choice</button></p>
+  <p>You can also block or delete cookies in your browser&rsquo;s settings. Clearing this site&rsquo;s data there removes your answer too, so the bar asks again on your next visit.</p>
 
   <h2>Contact</h2>
   <p>If you have any question about your information or this notice, you can reach the data controller directly:</p>
@@ -2179,7 +2238,7 @@ main h1{font-weight:800}
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a><a href="director.html">Company directors</a><a href="pensions-over-50.html">Over 50</a><a href="self-employed-pensions.html">Self-employed</a><a href="uk-pensions-in-ireland.html">Worked in the UK</a></div>
     <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html">Pension calculator</a><a href="director-calculator.html">Director calculator</a><a href="pension-fees-calculator.html">Pension charges calculator</a><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a><a href="state-pension-reality-check.html">State Pension reality check</a><a href="state-pension-entitlement.html">State Pension check</a><a href="my-pensions.html">All your pensions in one view</a><a href="pia.html">Personal Investment Account (PIA)</a><a href="glossary.html">Pension jargon buster</a></div>
-    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>
+    <div class="foot-col"><h2>Company</h2><a href="index.html#story">About</a><a href="booking.html">Book a call</a><a href="privacy.html">Privacy Notice</a><a href="privacy.html#cookies">Cookies</a><a href="terms.html">Terms of Business</a><a href="complaints.html">Complaints</a><a href="mailto:hello@pensionbuddy.ie">hello@pensionbuddy.ie</a></div>
   </div>
   <div class="disclosure">
     <p>Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3. You can check our authorisation on the Central Bank's register at registers.centralbank.ie.</p>
@@ -2263,10 +2322,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=0e5819ab" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=300a3ade" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-consent.js?v=65afc54f"></script>
-<script src="assets/js/pb-cta.js?v=e30763b6"></script>
+<script src="assets/js/pb-consent.js?v=b381cfcc"></script>
+<script src="assets/js/pb-cta.js?v=03610d23"></script>
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
 

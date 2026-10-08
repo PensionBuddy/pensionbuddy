@@ -27,7 +27,8 @@
         under the results bar; and nothing scrolls sideways
      2. focusing every control in order (the tab walk), on the director
         rules, booking and the home page at 375: none lies under the button
-        or a bar
+        or a bar; 2b, the home page's product tabs moved through with
+        ArrowRight, as a keyboard reaches them
      3. a click on page text, which focuses <main tabindex="-1">, does not
         send Ask Buddy away while nothing lies under it
      4. focus in the booking bar while it has stepped down for a caveat
@@ -179,8 +180,11 @@ const WALK = `(async () => {
   const CH = '.pb-bookbar,.pb-peek,.pb-consent,#pbBuddyPanel,#pbBuddyBtn';
   const shown = e => { if (!e) return null; const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility !== 'visible') return null;
     const r = e.getBoundingClientRect(); return r.width && r.height && r.bottom > 0 && r.top < innerHeight ? r : null; };
+  /* the tab order only: a control with tabindex -1 (the home page's product
+     tabs but the chosen one, a roving tabindex) is reached by an arrow key,
+     which gives it tabindex 0 before it takes focus; check 2b drives that */
   const all = [...document.querySelectorAll('a[href],button,input:not([type=hidden]),select,textarea,summary,[tabindex]:not([tabindex="-1"])')]
-    .filter(e => !e.closest(CH) && !e.disabled && e.getClientRects().length && getComputedStyle(e).visibility === 'visible');
+    .filter(e => !e.closest(CH) && !e.disabled && e.tabIndex >= 0 && e.getClientRects().length && getComputedStyle(e).visibility === 'visible');
   const bad = []; let n = 0;
   for (const el of all) {
     el.focus({ focusVisible: true });
@@ -202,6 +206,44 @@ for (const page of ['director-pension-rules.html', 'booking.html', 'index.html']
   const r = await ev(WALK, true);
   eq(`2. ${page} at 375px: no control, focused in order (${r.n}), lies under the floating chrome`, r.bad, []);
 }
+
+/* 2b: the product tabs on the home page at 375, the way a keyboard moves
+   through them: the chosen tab focused, then ArrowRight to each of the
+   others, each checked where it lands. Since 8 October 2026 (the one
+   booking wording, Run 48) the second tab can land just where Ask Buddy
+   rides above the booking bar, so Buddy must step aside for it. */
+await open('index.html', 375);
+/* the tab row brought level with Ask Buddy (twice: the booking bar, and
+   Buddy riding over it, settle after a scroll), so the second tab, under
+   Buddy's right-hand place, is where a stuck Buddy would cover it */
+const LEVEL = `(() => {
+  const t = document.getElementById('pbPtTab1').getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+  window.scrollBy(0, Math.round((t.top + t.bottom) / 2 - (b.top + b.bottom) / 2)); return 1; })()`;
+await ev(`document.getElementById('pbPtTab0').scrollIntoView({ block: 'center' })`);
+for (let i = 0; i < 3; i++) { await sleep(400); await ev(LEVEL); }
+await sleep(1500);
+const levelled = await ev(`(() => { const t = document.getElementById('pbPtTab1').getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+  return t.left < b.right && t.right > b.left && t.top < b.bottom && t.bottom > b.top; })()`);
+eq('2b. the second product tab sits under Ask Buddy\'s place before the keyboard reaches it (the case under test)', levelled, true);
+await ev(`document.getElementById('pbPtTab0').focus({ focusVisible: true, preventScroll: true })`);
+await sleep(200);
+const UNDER = `(() => {
+  const a = document.activeElement, b = document.getElementById('pbBuddyBtn');
+  const cs = getComputedStyle(b), r = a.getBoundingClientRect(), L = b.getBoundingClientRect();
+  const on = cs.display !== 'none' && cs.visibility === 'visible' && L.width && L.bottom > 0 && L.top < innerHeight && L.left < innerWidth;
+  const w = Math.min(r.right, L.right) - Math.max(r.left, L.left), h = Math.min(r.bottom, L.bottom) - Math.max(r.top, L.top);
+  return [a.id, on && w > 1 && h > 1];
+})()`;
+const tabsUnder = [];
+const tabCount = await ev(`document.querySelectorAll('#pbPtTabs [role=tab], .pb-pt-tabs [role=tab]').length`);
+for (let i = 1; i < tabCount; i++) {
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
+  await sleep(150);
+  tabsUnder.push(await ev(UNDER));
+}
+eq('2b. index.html at 375px: the product tabs, reached by ArrowRight, each focused and none under Ask Buddy',
+   tabsUnder, Array.from({ length: tabCount - 1 }, (_, i) => ['pbPtTab' + (i + 1), false]));
 
 /* 3 and 4, on the home page at 375 */
 await open('index.html', 375);

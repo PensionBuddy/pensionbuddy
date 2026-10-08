@@ -1,29 +1,24 @@
-/* Give, then ask: the booking links, the button test and what is counted
-   (Run 45).
+/* Give, then ask: the booking links, their one wording and what is counted
+   (Run 45; the button test ended 8 October 2026).
 
    Every root page loads this file straight after assets/js/pb-consent.js,
    whose PBTrack and PBConsent it uses. It does four things.
 
-   1. THE BUTTON TEST. The booking button after a calculator's result
-      (pagebuild.after_block, marked data-pb-ab="cta") reads one of two
-      wordings, half the visitors each:
-        A  "Book a free 20-minute call with us"   (in the markup)
-        B  "See what this means for you - free 20-min call"
-      Which one a visitor sees is picked at random. Nothing is stored
-      before the cookie choice: until "That's fine" the pick lives in this
-      page's memory only, so it can differ from page to page. After "That's
-      fine" (on this page or an earlier one) it is kept in this browser,
-      first-party, as localStorage 'pb-ab-cta' = 'A' or 'B', and stays the
-      same on every page. "No thanks", or forgetting the answer, deletes
-      the key (pb-consent.js does it too, so it goes on any page). No
-      cookie is ever written here.
+   1. ONE WORDING. Every booking button reads "Book a free 20-minute call
+      with us", in the markup (Damian, 8 October 2026). Run 45's button
+      test, which showed half the visitors "See what this means for you -
+      free 20-min call" after a calculator's result, has ended: every
+      visitor is variant 'A', nothing is picked and nothing is stored. A
+      'pb-ab-cta' key the test left in a browser is deleted on load (and
+      pb-consent.js still deletes it with "No thanks"). No cookie is ever
+      written here.
 
    2. THE BOOKING LINKS. Every link to booking.html carries
       utm_source=site, utm_medium=cta, utm_campaign=<this page> and
-      utm_content=<A or B>, so the booking page can hand them to Calendly
-      and each booking records the page it came from and the wording the
-      visitor saw. <this page> is the file name without .html, "home" for
-      the home page. A link is tagged the moment it is pointed at, focused,
+      utm_content=A (the one wording since the test ended; bookings made
+      during it carry A or B), so the booking page can hand them to
+      Calendly and each booking records the page it came from. <this page>
+      is the file name without .html, "home" for the home page. A link is tagged the moment it is pointed at, focused,
       pressed or opened in a new tab (pointerdown, mouseover, focusin,
       click, auxclick, contextmenu, all in the capture phase), never before:
       so a reader's click always carries the tags, links built later (the
@@ -57,26 +52,13 @@
    Classic script, every lookup guarded. */
 (function () {
   'use strict';
-  var KEY = 'pb-ab-cta';
-  var WORDS = { A: 'Book a free 20-minute call with us', B: 'See what this means for you - free 20-min call' };
+  var KEY = 'pb-ab-cta';   /* Run 45's button test, ended: only ever deleted now */
+  var WORDS = { A: 'Book a free 20-minute call with us' };
   var UTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
   var doc = document;
 
-  function consented() {
-    try { return !!(window.PBConsent && window.PBConsent.answer() === 'accepted'); } catch (e) { return false; }
-  }
-  function read() { try { return window.localStorage.getItem(KEY); } catch (e) { return null; } }
-  function write(v) { try { window.localStorage.setItem(KEY, v); } catch (e) {} }
-  function drop() { try { window.localStorage.removeItem(KEY); } catch (e) {} }
-
-  var variant = consented() ? read() : null;
-  if (variant !== 'A' && variant !== 'B') {
-    variant = Math.random() < 0.5 ? 'A' : 'B';
-    if (consented()) write(variant);
-  }
-  doc.addEventListener('pb:consent', function (e) {
-    if (e.detail && e.detail.answer === 'accepted') write(variant); else drop();
-  });
+  var variant = 'A';
+  try { window.localStorage.removeItem(KEY); } catch (e) {}
 
   var file = (location.pathname.split('/').pop() || '').replace(/\.html?$/, '');
   var page = (!file || file === 'index') ? 'home' : file;
@@ -125,13 +107,6 @@
     if (a.closest('#calFallback')) return 'calendar';
     return 'inline';
   }
-
-  /* the wording this visitor sees */
-  [].forEach.call(doc.querySelectorAll('[data-pb-ab="cta"]'), function (el) {
-    var t = el.querySelector('.pb-ab-t');
-    if (t) t.textContent = WORDS[variant];
-    el.setAttribute('data-pb-variant', variant);
-  });
 
   /* the links: whenever one is about to be used */
   ['pointerdown', 'focusin', 'mouseover', 'auxclick', 'contextmenu'].forEach(function (type) {

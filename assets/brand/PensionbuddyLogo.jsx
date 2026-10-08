@@ -1,5 +1,5 @@
 // Pensionbuddy logo — mark + horizontal lockup.
-// Requires 'Schibsted Grotesk' (400/500/700/800) to be loaded by the host page.
+// Requires 'Figtree' (300 to 900) to be loaded by the host page.
 
 const TEAL = '#14CBB1';        // brand teal (bright)
 const TEAL_DEEP = '#0A5C52';   // deep teal, for teal-on-white text contexts
@@ -47,7 +47,7 @@ export function PensionbuddyLockup({ height = 40, tone = 'default', ...rest }) {
       <PensionbuddyMark size={height} background={reversed ? '#fff' : TEAL} paw={reversed ? INK : '#fff'} />
       <span
         style={{
-          fontFamily: "'Schibsted Grotesk', system-ui, sans-serif",
+          fontFamily: "'Figtree', system-ui, sans-serif",
           fontSize: height * 0.635,
           fontWeight: 800,
           letterSpacing: '-0.035em',
