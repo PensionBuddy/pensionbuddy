@@ -66,8 +66,9 @@
    CHANGING YOUR MIND. An element marked data-pb-consent-reset (the Privacy
    Notice has one) forgets the answer and shows the bar again. "No thanks"
    also deletes any Google Analytics cookies (_ga, _ga_*, _gid, _gat*) an
-   earlier "accepted" left on this site, and the pixels' own (_fbp, _fbc,
-   _ttp, _tt_*, li_*, lidc, bcookie, UserMatchHistory, AnalyticsSyncHistory)
+   earlier "accepted" left on this site (and _dc_gtm_*), and the pixels' own
+   (_fbp, _fbc, _ttp, _tt_*, ttcsid*, ttclid, li_*, lidc, bcookie,
+   UserMatchHistory, AnalyticsSyncHistory)
    where they are first-party, and if GTM was already running on
    this page, reloads it, since a running script cannot be unloaded.
 
@@ -168,7 +169,7 @@
     var parts = location.hostname.split('.');
     document.cookie.split(';').forEach(function (c) {
       var name = c.split('=')[0].trim();
-      if (!/^(_ga|_ga_.+|_gid|_gat.*|_fbp|_fbc|_ttp|_tt_.+|li_.+|lidc|bcookie|UserMatchHistory|AnalyticsSyncHistory)$/.test(name)) return;
+      if (!/^(_ga|_ga_.+|_gid|_gat.*|_dc_gtm_.+|_fbp|_fbc|_ttp|_tt_.+|ttcsid.*|ttclid|li_.+|lidc|bcookie|UserMatchHistory|AnalyticsSyncHistory)$/.test(name)) return;
       document.cookie = name + '=; Max-Age=0; path=/';
       for (var i = 0; i < parts.length - 1; i++) {
         document.cookie = name + '=; Max-Age=0; path=/; domain=' + parts.slice(i).join('.');
