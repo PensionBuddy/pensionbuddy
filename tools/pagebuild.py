@@ -1120,7 +1120,7 @@ AFTER = {  # page: (its name for #from= and the events, what it does not show or
     'my-pensions.html': ('my-pensions', 'what your pensions could grow to, your tax position, the terms each one carries.', False),
     'director-pension-rules.html': ('director-pension-rules', None, True),
 }
-AFTER_WORDS = 'Book a free 20-minute call with us'   # wording A; pb-cta.js holds both
+AFTER_WORDS = 'Book a free 20-minute call with us'   # the one wording (the button test ended 8 October 2026)
 AFTER_WHY = 'Free. No obligation. No pressure.'
 AFTER_OPEN = '<!-- AFTER:BEGIN'
 AFTER_CLOSE = '<!-- AFTER:END -->'

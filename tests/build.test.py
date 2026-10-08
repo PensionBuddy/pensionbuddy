@@ -2333,9 +2333,9 @@ def run():
     ARROW = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
              '<polyline points="12 5 19 12 12 19"/></svg></a>')
     GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
-        'starter.html': ('Help me get started', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
+        'starter.html': ('Book a free 20-minute call with us', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
                          '  <div class="pb-sa pb-wait" id="pbWait">'),
-        'tracker.html': ('Help me find my pensions', ('id="pbTrace"', 'data-pb-award="ticks"'),
+        'tracker.html': ('Book a free 20-minute call with us', ('id="pbTrace"', 'data-pb-award="ticks"'),
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
@@ -2367,7 +2367,7 @@ def run():
     eq('46. the starter, tracker and director heroes give before they ask: the button and its reason after the first figures (the tracker: its tick list)',
        {n: gives_first(n, sources[n]) for n in GIVE_FIRST if gives_first(n, sources[n])}, {})
     st, dr = sources['starter.html'], sources['director.html']
-    sblock = moved_block('Help me get started')
+    sblock = moved_block('Book a free 20-minute call with us')
     for label, name, mut, want in (
             ('the button put back in a hero', 'director.html',
              dr.replace('<a class="btn btn-ghost" href="director-calculator.html">',
@@ -2490,10 +2490,10 @@ def run():
 
     eq('48. every booking link in a page has the reason beside it (Run 43; after a result, the block\'s own line, Run 45)', asks_without_reason(sources), [])
     for label, page, mut, want in (
-            ('a band\'s reason removed', 'index.html',
-             sources['index.html'].replace('Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n  ' + pagebuild.REASON,
-                                           'Book your free call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>', 1),
-             'index.html: "Book your free call"'),
+            ('the second ask\'s reason removed', 'index.html',
+             sources['index.html'].replace('<a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>\n      ' + pagebuild.REASON,
+                                           '<a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>', 1),
+             'index.html: "Book a free 20-minute call with us"'),
             ('a new booking link with no reason', 'glossary.html',
              sources['glossary.html'].replace('</main>', '<p><a href="booking.html">Talk to Damian</a></p>\n</main>', 1),
              'glossary.html: "Talk to Damian"')):
@@ -2602,11 +2602,15 @@ def run():
     m50 = dict(sources)
     m50['terms.html'] = re.sub(r'<script src="assets/js/pb-cta\.js\?v=[0-9a-f]+"></script>\n', '', sources['terms.html'], count=1)
     eq('50. a page without it is caught', cta_missing(m50), ['terms.html'])
-    eq('50. wording A is the markup\'s, wording B Damian\'s',
-       ("A: '%s'" % pagebuild.AFTER_WORDS in cta_js, "B: 'See what this means for you - free 20-min call'" in cta_js), (True, True))
-    eq('50. the pick is kept only after "That\'s fine", and deleted with any other answer',
-       ("var KEY = 'pb-ab-cta'" in cta_js, 'if (consented()) write(variant);' in cta_js,
-        "var CONSENTED_KEYS = ['pb-ab-cta']" in consent_js), (True, True, True))
+    # the button test ended on 8 October 2026 (Damian: every booking button
+    # says "Book a free 20-minute call with us"): one wording, the markup's,
+    # every visitor 'A', nothing stored, and the test's old key deleted
+    eq('50. one wording, the markup\'s; no second wording; every visitor A',
+       ("WORDS = { A: '%s' }" % pagebuild.AFTER_WORDS in cta_js, "B: '" in cta_js, "var variant = 'A';" in cta_js,
+        'Math.random' in cta_js), (True, False, True, False))
+    eq('50. nothing stored: the test\'s old key deleted on load, and with any answer but "That\'s fine"',
+       ('setItem' in cta_js, "localStorage.removeItem(KEY)" in cta_js, "var CONSENTED_KEYS = ['pb-ab-cta']" in consent_js),
+       (False, True, True))
     eq('50. it writes no cookie', 'document.cookie' in cta_js, False)
     eq('50. the four tags, as the brief gives them',
        [t for t in ("'utm_source=site'", "'utm_medium=cta'", "'utm_campaign=' + encodeURIComponent(page)", "'utm_content=' + variant")
@@ -2670,6 +2674,62 @@ def run():
        (['starter', 'tracker', 'director'], False, False))
     life = home[home.find('<section class="pb-gap-more" id="life">'):home.find('</section>', home.find('id="life"'))]
     eq('52. the booking ask after the way-of-life picker stands alone', re.findall(r'<a class="btn [^"]*" href="([^"]+)"', life), ['booking.html'])
+
+    # Damian, 8 October 2026: "One primary CTA per page; others secondary",
+    # and every booking button reads "Book a free 20-minute call with us".
+    # In a page's <main> (a game's <body>) at most one booking link is drawn
+    # as a filled button; the nav's is an outline on every page (PB-AUDIT),
+    # the phone bar only shows while no booking link is on screen, and the
+    # 404's one filled button is the way home. Every booking link drawn as a
+    # button, the nav's included, says the one wording; links inside a
+    # sentence and the footer's "Book a call" are not buttons.
+    STD_ASK = 'Book a free 20-minute call with us'
+    FILLED_ASK = FILLED | {'btn-pine', 'cta'}
+
+    def booking_buttons(text):
+        out = []
+        for m in re.finditer(r'<a\b([^>]*)>(.*?)</a>', re.sub(r'<script\b.*?</script>', '', text, flags=re.S), re.S):
+            cls = (re.search(r'class="([^"]*)"', m.group(1)) or [None, ''])[1].split()
+            href = (re.search(r'href="([^"]*)"', m.group(1)) or [None, ''])[1]
+            if 'btn' in cls and re.match(r'(booking\.html|https://calendly\.com/)', href):
+                out.append((m.start(), cls, ' '.join(re.sub(r'<[^>]+>', ' ', m.group(2)).split())))
+        return out
+
+    def ask_faults(srcs):
+        out = []
+        for page, text in sorted(srcs.items()):
+            a, b = text.find('<main'), text.find('</main>')
+            body = text[a:b] if a >= 0 and b > a else text[text.find('<body'):]
+            filled = [w for _, cls, w in booking_buttons(body) if FILLED_ASK & set(cls)]
+            if len(filled) > 1:
+                out.append('%s: %d filled booking buttons' % (page, len(filled)))
+            for _, cls, w in booking_buttons(text):
+                if w != STD_ASK:
+                    out.append('%s: "%s"' % (page, w[:40]))
+        return out
+    games = {g: read(g) for g in ('games/buddys-run.html', 'games/jargon-battle.html')}
+    asks = dict(sources); asks.update(games)
+    eq('52. one filled booking button per page at most, and every booking button says "%s"' % STD_ASK, ask_faults(asks), [])
+    eq('52. the pages that ask have their one filled booking button',
+       sorted(p for p, t in sources.items()
+              if [1 for _, cls, _ in booking_buttons(t[t.find('<main'):t.find('</main>')]) if FILLED_ASK & set(cls)]),
+       sorted(['booking.html', 'broker-vs-autoenrolment.html', 'director-calculator.html', 'director-pension-rules.html',
+               'director.html', 'find-my-pension.html', 'glossary.html', 'index.html', 'my-pensions.html',
+               'pension-calculator.html', 'pension-fees-calculator.html', 'pension-readiness-check.html', 'pia.html',
+               'standard-fund-threshold.html', 'starter.html', 'state-pension-entitlement.html',
+               'state-pension-reality-check.html', 'tracker.html']))
+    eq('52. the phone bar and the Ask Buddy panel say it too',
+       ['>%s</a>' % STD_ASK in read(j) for j in ('assets/js/pb-bookbar.js', 'assets/js/pb-buddy.js')], [True, True])
+    for label, page, find, repl, want in (
+            ('a second filled booking button', 'index.html', '<a class="btn btn-ghost" href="booking.html">' + STD_ASK,
+             '<a class="btn btn-light" href="booking.html">' + STD_ASK, 'index.html: 2 filled'),
+            ('an old wording back', 'starter.html', '<a class="btn btn-acc" href="booking.html">' + STD_ASK,
+             '<a class="btn btn-acc" href="booking.html">Help me get started', 'starter.html: "Help me get started"'),
+            ('the nav\'s button reworded', 'terms.html', '<a class="btn btn-primary" href="booking.html">' + STD_ASK,
+             '<a class="btn btn-primary" href="booking.html">Book a call', 'terms.html: "Book a call"')):
+        assert find in asks[page], label
+        m52b = dict(asks); m52b[page] = asks[page].replace(find, repl, 1)
+        eq('52. %s is caught' % label, any(x.startswith(want) for x in ask_faults(m52b)), True)
 
 
 
