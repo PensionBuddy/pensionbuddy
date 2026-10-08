@@ -30,7 +30,7 @@
 
   var KINDS = [
     ['workplace', 'From a job'],
-    ['prsa', 'PRSA'],
+    ['prsa', 'PRSA (Personal Retirement Savings Account)'],
     ['personal', 'Personal pension'],
     ['prb', 'Bond from an old job (PRB)'],
     ['avc', 'Top-up (AVCs)'],

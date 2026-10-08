@@ -721,10 +721,7 @@ def fill_of(age):
     return '%.2f%%' % ((age - 18) / (70 - 18) * 100)
 
 
-AE_NOTE = ('Checked against gov.ie on 10 September 2026: the 2026 contribution rates, and that all three contributions stop at '
-           '€80,000 of salary. Still taken from third-party summaries rather than the primary text: the later phase rates and '
-           'years. Confirm those against gov.ie or the National Automatic Enrolment Retirement Savings Authority (NAERSA) '
-           'before relying on them. Rates and rules can change.')
+AE_NOTE = 'Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them.'
 AE_LABELS = ['2026 to 2028', '2029 to 2031', '2032 to 2034', '2035 onward']
 AE_RATES = [(0.015, 0.005), (0.03, 0.01), (0.045, 0.015), (0.06, 0.02)]
 
