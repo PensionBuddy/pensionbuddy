@@ -398,6 +398,11 @@ Damian's seven fixes of 8 October 2026, one commit each, off live main
 | 6 | The home page loses the grey announce bar ("Regulated by the Central Bank of Ireland · Free first consultation"); the hero's lockup, with the register link and the QFA, is the one regulator line at the top | `chrome_drift` wants no bar on the home page; check 9 mutant |
 | 7 | A Cookies section in the Privacy Notice (`privacy.html#cookies`): what the site keeps always, each analytics and advertising cookie set only after "That's fine" with what it does and how long it lasts as each vendor's own page states it (read 8 October 2026), the Calendly calendar's own cookies, and how to change the choice. "Cookies" in every footer. "No thanks" now also deletes `ttcsid*`, `ttclid` and `_dc_gtm_*` | `privacy.html`, skeleton foot-top, `pb-consent.js` |
 
+Found on the way and fixed: with the one wording, the home page's booking
+button at its hero size ran 6px past a 375px screen (`.btn` never wraps;
+caught by `nav.test.py` and `providers.test.py`). Under 481px a booking
+button now wraps, centred: one rule in the shared CTA block of CSS.
+
 Left as they were, by judgement: the footer's "Book a call" (a link in a
 list, not a button); the guides' "Talk it through" section headings over
 their booking links; links inside sentences ("book a free 20-minute call
