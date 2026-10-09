@@ -2658,6 +2658,102 @@ main h1{font-weight:800}
 @keyframes pbWSafeT{to{transform:none}}
 @media(max-width:560px){.pb-w-in{padding:40px 0 120px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
 /* WELCOME:END */
+/* MOTION-3:BEGIN (8 October 2026, Damian's brief). Three pieces of motion:
+   the hero gap chart's drag handle (assets/js/pb-gap-grab.js), the relief
+   jar beside Revenue's deadline and the countdown's flipping digits
+   (assets/js/pb-tickband.js). */
+.pb-gap-grab{position:absolute;left:50%;bottom:100%;z-index:3;display:inline-flex;align-items:center;gap:6px;height:38px;margin:0;padding:0 15px 0 11px;border:0;border-radius:999px;background:#fff;color:var(--ink);font:700 15px/1 var(--font);box-shadow:0 8px 20px rgba(11,31,28,.24),0 0 0 1px rgba(11,31,28,.08);cursor:ns-resize;touch-action:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translate(-50%,30%) scale(0);transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .25s,padding .3s}
+.pb-gap-grab svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pb-gap-grab:focus-visible{outline:3px solid #14CBB1;outline-offset:3px}
+.pb-gap-grab.pb-gap-grab-on{opacity:1;transform:translate(-50%,30%) scale(1)}
+.pb-motion .pb-gap-grab.pb-gap-grab-on:not(.pb-gap-grab-used){animation:pbGrabBob 1.5s ease-in-out .7s infinite}
+@keyframes pbGrabBob{0%,100%{transform:translate(-50%,30%) scale(1)}50%{transform:translate(-50%,calc(30% - 9px)) scale(1.04)}}
+.pb-gap-grab-used{padding:0 11px}
+.pb-gap-grab-used .pb-gap-grab-t{display:none}
+.pb-gap-dragging .pb-gap-grab{transform:translate(-50%,30%) scale(1.14);box-shadow:0 12px 28px rgba(11,31,28,.3),0 0 0 4px rgba(20,203,177,.45)}
+.pb-gap-need .pb-gap-bar{cursor:ns-resize}
+.pb-gap-dragging,.pb-gap-dragging *{user-select:none;-webkit-user-select:none;cursor:ns-resize}
+#pbNeedOut .pb-gap-big-n{display:inline-block;transform-origin:0 80%}
+.pb-gap.pb-gap-has-grab{margin-top:24px}
+.tk-side{display:flex;flex-direction:column;align-items:flex-end;gap:22px}
+.tk-unit{perspective:420px}
+.tk-n.pb-flip{animation:pbFlip .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbFlip{0%{transform:rotateX(-95deg);opacity:.15}55%{transform:rotateX(14deg);opacity:1}100%{transform:none}}
+.pb-jar{display:flex;flex-direction:column;align-items:center;gap:12px;width:min(320px,100%)}
+.pb-jar[hidden]{display:none}
+.pb-jar-cv{display:block;width:100%;height:auto;aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pb-jar-shake{animation:pbJarShake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes pbJarShake{10%,90%{transform:translateX(-2px) rotate(-1deg)}20%,80%{transform:translateX(4px) rotate(1.5deg)}30%,50%,70%{transform:translateX(-7px) rotate(-2.5deg)}40%,60%{transform:translateX(7px) rotate(2.5deg)}}
+.pb-jar-rates{display:inline-flex;border:1px solid var(--teal-100);border-radius:999px;padding:3px;background:var(--surface)}
+.pb-jar-rates button{min-height:40px;padding:8px 16px;border:0;border-radius:999px;background:transparent;color:var(--ink-2);font:600 15px/1 var(--font);cursor:pointer;transition:background .2s,color .2s}
+.pb-jar-rates button[aria-pressed=true]{background:var(--ink);color:#fff}
+.pb-jar-key{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin:0;font-size:16px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-jar-key b{color:var(--ink);font-weight:700}
+.pb-jar-key i{display:inline-block;width:12px;height:12px;margin-right:7px;border-radius:50%;vertical-align:-1px}
+.pb-jar-you i{background:var(--ink-2)}
+.pb-jar-rev i{background:#F4B740}
+@media(max-width:920px){.tk-side{align-items:stretch}.pb-jar{align-self:center}}
+@media(prefers-reduced-motion:reduce){.pb-jar-shake,.tk-n.pb-flip{animation:none}}
+/* MOTION-3:END */
+/* MOTION-4 TIMELINE:BEGIN (8 October 2026, Damian's brief): "Your pension
+   through life", alive (assets/js/pb-tl-motion.js adds every class here). */
+.pb-tl-track{display:block;width:100%;height:108px;margin-top:12px;cursor:grab;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+.pb-tl-track.pb-tl-dragging{cursor:grabbing}
+.pb-tl-alive .pb-tl-ruler,.pb-tl-alive .pb-tl-ends{display:none}
+.pb-tl-alive .pb-tl-step{will-change:opacity,transform}
+.pb-tl-pick.pb-tl-alive .pb-tl-track{height:104px;margin:0 0 6px}
+.pb-roll{display:inline-block;animation:pbRoll .5s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes pbRoll{from{transform:translateY(60%);opacity:0}to{transform:none;opacity:1}}
+.pb-tl-step.pb-tl-ping::after{animation:pbTlPing .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbTlPing{0%{transform:scale(1)}40%{transform:scale(1.9);box-shadow:0 0 0 8px rgba(20,203,177,.22)}100%{transform:scale(1)}}
+/* MOTION-4 TIMELINE:END */
+/* MOTION-6:BEGIN (9 October 2026, Damian's brief: go all out). The way-of-
+   life cards (assets/js/pb-life-motion.js) and "How a call works"
+   (assets/js/pb-call-motion.js); the scripts add every element and class
+   here, only with motion on. */
+.pb-lc{position:relative;overflow:hidden;will-change:transform;transition:box-shadow .3s,border-color .3s}
+.pb-lc:hover{box-shadow:0 22px 44px rgba(11,31,28,.14)}
+.pb-lc-art{display:block;width:100%;height:150px;margin:-2px 0 8px;flex:0 0 auto}
+.pb-lc-sheen{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(88,107,133,.13),rgba(88,107,133,0) 65%);opacity:0;transition:opacity .3s;pointer-events:none}
+.pb-lc:hover .pb-lc-sheen{opacity:1}
+.pb-lc[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink),0 18px 40px rgba(11,31,28,.16)}
+.pb-lc.pb-lc-press{animation:pbLcPress .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbLcPress{0%{transform:perspective(800px) scale(.95)}100%{transform:perspective(800px) scale(1)}}
+.pb-lc.pb-lc-flip{animation:pbLcFlip .7s cubic-bezier(.45,0,.25,1)}
+@keyframes pbLcFlip{0%{transform:perspective(800px) rotateY(0)}50%{transform:perspective(800px) rotateY(90deg)}100%{transform:perspective(800px) rotateY(0)}}
+.pb-lc-old{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:14px 14px 16px;background:var(--surface);pointer-events:none;animation:pbLcOld .7s linear forwards}
+@keyframes pbLcOld{0%,49%{opacity:1}50%,100%{opacity:0}}
+.pb-gap-need .pb-gap-bar{transform-origin:50% 100%}
+#pbGap.pb-lc-hit .pb-gap-need .pb-gap-bar{animation:pbLcHit .7s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbLcHit{30%{filter:brightness(1.7);transform:scaleY(1.04)}100%{filter:none;transform:none}}
+.pb-lc-fly{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
+.pb-lr{animation:pbLrIn .55s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes pbLrIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+.pb-lr i{animation:pbLrBar .9s cubic-bezier(.3,1.25,.5,1) both}
+@keyframes pbLrBar{from{width:0}to{width:var(--w)}}
+@media(max-width:600px){.pb-lc-art{height:130px}}
+.pb-cs{position:relative}
+.pb-cs-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+.pb-cs-track{fill:none;stroke:#D8DFDC;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.pb-cs-ink{fill:none;stroke:#0B1F1C;stroke-width:3.5;stroke-linecap:round}
+.pb-cs .step{z-index:1}
+.pb-cs-walker{position:absolute;left:0;top:0;z-index:3;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:#14CBB1;box-shadow:0 8px 18px rgba(20,203,177,.4);opacity:0;transition:opacity .3s;pointer-events:none}
+.pb-cs-walker.pb-on{opacity:1}
+.pb-cs-walker svg{width:22px;height:22px}
+.pb-cs-film{display:block;width:100%;height:140px;margin:0 0 8px}
+.pb-cs-step{cursor:pointer;opacity:.25;transform:perspective(900px) translateY(30px) rotateX(22deg);transition:opacity .6s,transform .8s cubic-bezier(.3,1.4,.5,1)}
+.pb-cs-step.pb-cs-on{opacity:1;transform:none}
+.pb-cs-step.pb-cs-on:hover{transform:translateY(-4px)}
+.pb-cs-step .sx{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0 0 14px;border-radius:12px;background:#EEF2F1;color:#0B1F1C;font-size:16px!important;font-weight:800;transition:background-color .3s,color .3s}
+.pb-cs-step.pb-cs-on .sx{background:#0B1F1C;color:#fff;animation:pbCsNum .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbCsNum{0%{transform:scale(.6)}50%{transform:scale(1.35)}100%{transform:none}}
+.pb-cs-step.pb-cs-on .sx::after{content:"";position:absolute;inset:-6px;border:2px solid #0B1F1C;border-radius:12px;animation:pbCsRing .9s ease-out forwards}
+@keyframes pbCsRing{from{opacity:.6;transform:scale(.8)}to{opacity:0;transform:scale(1.8)}}
+.pb-cs-step.pb-cs-pop{animation:pbCsPop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbCsPop{40%{transform:scale(1.04)}100%{transform:none}}
+@media(max-width:920px){.pb-cs .step{padding-left:40px}.pb-cs-walker{width:28px;height:28px;border-radius:8px}.pb-cs-walker svg{width:18px;height:18px}}
+@media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film,.pb-lc-art{display:none}}
+/* MOTION-6:END */
 </style>
 </head>
 <body>
@@ -2961,10 +3057,20 @@ main h1{font-weight:800}
 </div>
         <a class="btn btn-quiet-dark" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       </div>
-      <div class="tk-clock" aria-hidden="true">
-        <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
-        <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
-        <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
+      <div class="tk-side">
+        <div class="tk-clock" aria-hidden="true">
+          <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
+        </div>
+        <div class="pb-jar" id="pbJar" hidden>
+          <canvas class="pb-jar-cv" width="300" height="300" aria-hidden="true"></canvas>
+          <div class="pb-jar-rates" role="group" aria-label="Which rate of tax">
+            <button type="button" data-rate="0.4" aria-pressed="true">Higher rate</button>
+            <button type="button" data-rate="0.2" aria-pressed="false">Standard rate</button>
+          </div>
+          <p class="pb-jar-key"><span class="pb-jar-you"><i aria-hidden="true"></i>You pay <b>€60</b></span><span class="pb-jar-rev"><i aria-hidden="true"></i>Revenue adds <b>€40</b></span></p>
+        </div>
       </div>
       <p class="tk-sr" id="tkSr"></p>
     </div>
@@ -3475,6 +3581,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 })();
 </script>
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
+<script src="assets/js/pb-tl-motion.js?v=5a0eb56f"></script>
+<script src="assets/js/pb-life-motion.js?v=dc01bd9c"></script>
+<script src="assets/js/pb-call-motion.js?v=bce36f1f"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
@@ -3533,5 +3642,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-providers.js?v=d29ad6be"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
+<script src="assets/js/pb-gap-grab.js?v=7d04161b"></script>
+<script src="assets/js/pb-tickband.js?v=8820d919"></script>
 </body>
 </html>
