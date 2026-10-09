@@ -55,3 +55,26 @@
   .rd-nav{flex-direction:column-reverse;align-items:stretch}
   .rd-nav .btn{width:100%}
 }
+/* MOTION-7:BEGIN (9 October 2026, Damian's brief): the check, alive
+   (assets/js/pb-rd-motion.js adds every element and class here, only with
+   motion on; the page's own bar shows without it). */
+.pb-rd .rd-q.pb-rd-in{animation:pbRdIn .6s cubic-bezier(.2,1.2,.3,1) both}
+@keyframes pbRdIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.pb-rd .rd-opt{transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.pb-rd .rd-opt:hover{transform:translateX(4px)}
+.pb-rd .rd-opt.pb-rd-pick{animation:pbRdPick .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pbRdPick{35%{transform:scale(1.03)}100%{transform:none}}
+.pb-rd-tally{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 16px}
+.pb-rd-tally i{flex:1 1 0;min-width:18px;height:8px;border-radius:99px;background:var(--line-2);transition:background-color .3s}
+.pb-rd-tally i.pb-on{background:#0B1F1C;animation:pbRdSeg .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pbRdSeg{40%{transform:scaleY(1.9)}100%{transform:none}}
+.pb-rd-tally span{flex:0 0 100%;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-rd-dial{display:block;width:100%;max-width:440px;height:240px;margin:4px auto 0}
+.pb-rd-has-dial .rd-scale{display:none}
+.pb-rd-has-dial .rd-score{text-align:center;margin-top:-6px}
+.pb-rd-has-dial .rd-n{font-size:4.4rem;font-weight:800;letter-spacing:-.03em}
+.pb-rd-has-dial .rd-zone{transition:opacity .5s,transform .7s cubic-bezier(.2,1.2,.3,1)}
+.pb-rd-has-dial:not(.pb-rd-landed) .rd-zone{opacity:0;transform:translateY(14px)}
+.pb-rd-has-dial:not(.pb-rd-landed) #rdMoves li{opacity:0}
+.pb-rd-has-dial.pb-rd-landed #rdMoves li{animation:pbRdIn .6s cubic-bezier(.2,1.2,.3,1) both}
+/* MOTION-7:END */

@@ -1802,6 +1802,33 @@ body .final p.pb-why{color:var(--ink-2)}
   html{scroll-behavior:auto}
 }
 /* MOTION:END */
+/* CHECKS:BEGIN (9 October 2026, Damian's brief): the checklist, alive
+   (assets/js/pb-ck-motion.js adds every element and class here, only with
+   motion on; the checkboxes stay real checkboxes). */
+.pb-ck .ck-list label{position:relative}
+.pb-ck .ck-list input{position:absolute;left:0;top:2px;z-index:1;width:26px;height:26px;margin:0;opacity:0;cursor:pointer}
+.pb-ck-box{flex:0 0 auto;display:inline-flex;width:26px;height:26px;margin-top:1px}
+.pb-ck-box svg{width:26px;height:26px;overflow:visible}
+.pb-ck-box rect{fill:#fff;stroke:#9AA6A3;stroke-width:2;transition:fill .25s,stroke .25s}
+.pb-ck-box path{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .35s cubic-bezier(.3,1.2,.5,1) .06s}
+.pb-ck .ck-list label:hover .pb-ck-box rect{stroke:#0B1F1C}
+.pb-ck .ck-list input:checked + .pb-ck-box{animation:pbCkPop .5s cubic-bezier(.3,1.7,.5,1)}
+.pb-ck .ck-list input:checked + .pb-ck-box rect{fill:#0B1F1C;stroke:#0B1F1C}
+.pb-ck .ck-list input:checked + .pb-ck-box path{stroke-dashoffset:0}
+@keyframes pbCkPop{30%{transform:scale(1.25) rotate(-6deg)}100%{transform:none}}
+.pb-ck .ck-list input:focus-visible + .pb-ck-box{outline:2px solid var(--teal-700);outline-offset:3px;border-radius:9px}
+.pb-ck .ck-list input:checked ~ span{color:var(--ink-2)}
+.pb-ck .ck-list span b{background:linear-gradient(#E3E8EE,#E3E8EE) 0 88%/0 .4em no-repeat;transition:background-size .5s cubic-bezier(.2,.8,.2,1)}
+.pb-ck .ck-list input:checked ~ span b{background-size:100% .4em}
+.pb-ck-trail{position:sticky;top:10px;z-index:4;margin:16px 0 26px;padding:6px 14px 10px;border:1px solid var(--line-2);border-radius:16px;background:rgba(250,250,249,.95);box-shadow:0 10px 24px -16px rgba(11,31,28,.3);transition:border-color .3s,box-shadow .3s}
+.pb-ck-cv{display:block;width:100%;height:58px}
+.pb-ck-count{margin:0;font-size:15px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-ck-count b{display:inline-block;color:var(--ink);font-size:17px}
+.pb-ck-trail.pb-ck-bump .pb-ck-count b{animation:pbCkBump .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pbCkBump{40%{transform:scale(1.45)}100%{transform:none}}
+.pb-ck-trail.pb-ck-all{border-color:#0B1F1C;box-shadow:0 0 0 3px rgba(11,31,28,.12),0 14px 28px -14px rgba(11,31,28,.4)}
+@media print{.pb-ck-trail,.pb-ck-box{display:none}.pb-ck .ck-list input{position:static;opacity:1}}
+/* CHECKS:END */
 /* ALIVE:BEGIN (9 October 2026, Damian's brief: every page, alive). One layer
    on every page, byte for byte the skeleton's: tools/pagebuild.py SHARED_CSS
    ('ALIVE', 'alive-css'), copied by tools/sync-chrome.py. assets/js/pb-alive.js
@@ -2373,6 +2400,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 /* the print button: the browser's own dialog, which can also save a PDF */
 (function(){var b=document.getElementById('ckPrint');if(b)b.addEventListener('click',function(){window.print();});})();
 </script>
-<script src="assets/js/pb-alive.js?v=a89375d1"></script>
+<script src="assets/js/pb-ck-motion.js?v=ed330ee3"></script>
+<script src="assets/js/pb-alive.js?v=ac6cfce5"></script>
 </body>
 </html>

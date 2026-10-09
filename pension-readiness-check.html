@@ -2378,7 +2378,7 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-scrub-tip[hidden]{display:none}
 :root.pb-calc-alive .pb-scrub-tip b{font-weight:700}
 :root.pb-calc-alive .pb-scrub-tip i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%}
-:root.pb-calc-alive .pb-k-b{background:#0B7A6E;box-shadow:0 0 0 2px #fff}:root.pb-calc-alive .pb-k-u{background:#F4B740}
+:root.pb-calc-alive .pb-k-b{background:#8A97A8;box-shadow:0 0 0 2px #fff}:root.pb-calc-alive .pb-k-u{background:#F4B740}
 :root.pb-calc-alive .pb-wait{margin-top:16px;padding-top:14px;border-top:1px solid rgba(11,31,28,.1)}
 :root.pb-calc-alive .pb-wait[hidden]{display:none}
 :root.pb-calc-alive .pb-wait-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
@@ -2390,7 +2390,7 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-wait-l{color:var(--ink-2)}
 :root.pb-calc-alive .pb-wait-bar b{min-width:6.2em;text-align:right;font-variant-numeric:tabular-nums}
 :root.pb-calc-alive .pb-wait-track{position:relative;height:14px;overflow:hidden;border-radius:99px;background:rgba(11,31,28,.07)}
-:root.pb-calc-alive .pb-wait-now,:root.pb-calc-alive .pb-wait-late{position:absolute;left:0;top:0;bottom:0;background:#0B7A6E}
+:root.pb-calc-alive .pb-wait-now,:root.pb-calc-alive .pb-wait-late{position:absolute;left:0;top:0;bottom:0;background:var(--slate)}
 :root.pb-calc-alive .pb-wait-now{width:100%;border-radius:99px}
 :root.pb-calc-alive .pb-wait-late{border-radius:99px 0 0 99px}
 :root.pb-calc-alive .pb-wait-gap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,#F2B8A8 0 6px,#FADCD3 6px 12px)}
@@ -2462,6 +2462,29 @@ main h1{font-weight:800}
   .rd-nav{flex-direction:column-reverse;align-items:stretch}
   .rd-nav .btn{width:100%}
 }
+/* MOTION-7:BEGIN (9 October 2026, Damian's brief): the check, alive
+   (assets/js/pb-rd-motion.js adds every element and class here, only with
+   motion on; the page's own bar shows without it). */
+.pb-rd .rd-q.pb-rd-in{animation:pbRdIn .6s cubic-bezier(.2,1.2,.3,1) both}
+@keyframes pbRdIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.pb-rd .rd-opt{transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.pb-rd .rd-opt:hover{transform:translateX(4px)}
+.pb-rd .rd-opt.pb-rd-pick{animation:pbRdPick .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pbRdPick{35%{transform:scale(1.03)}100%{transform:none}}
+.pb-rd-tally{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 16px}
+.pb-rd-tally i{flex:1 1 0;min-width:18px;height:8px;border-radius:99px;background:var(--line-2);transition:background-color .3s}
+.pb-rd-tally i.pb-on{background:#0B1F1C;animation:pbRdSeg .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pbRdSeg{40%{transform:scaleY(1.9)}100%{transform:none}}
+.pb-rd-tally span{flex:0 0 100%;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-rd-dial{display:block;width:100%;max-width:440px;height:240px;margin:4px auto 0}
+.pb-rd-has-dial .rd-scale{display:none}
+.pb-rd-has-dial .rd-score{text-align:center;margin-top:-6px}
+.pb-rd-has-dial .rd-n{font-size:4.4rem;font-weight:800;letter-spacing:-.03em}
+.pb-rd-has-dial .rd-zone{transition:opacity .5s,transform .7s cubic-bezier(.2,1.2,.3,1)}
+.pb-rd-has-dial:not(.pb-rd-landed) .rd-zone{opacity:0;transform:translateY(14px)}
+.pb-rd-has-dial:not(.pb-rd-landed) #rdMoves li{opacity:0}
+.pb-rd-has-dial.pb-rd-landed #rdMoves li{animation:pbRdIn .6s cubic-bezier(.2,1.2,.3,1) both}
+/* MOTION-7:END */
 </style>
 
 <script>
@@ -2601,6 +2624,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script src="assets/js/readiness.js?v=07c2f71c"></script>
+<script src="assets/js/pb-rd-motion.js?v=e8d88cc9"></script>
 <script>
 /* pension-readiness-check.html, the 60-second readiness check (Run 20 #4).
 
@@ -3005,9 +3029,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-after.js?v=257e33b2"></script>
-<script src="assets/js/pb-calc-motion.js?v=800fed53"></script>
+<script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-alive.js?v=a89375d1"></script>
+<script src="assets/js/pb-alive.js?v=ac6cfce5"></script>
 </body>
 </html>

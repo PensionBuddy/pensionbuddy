@@ -292,7 +292,7 @@ PAGES = {
         desc=('Six questions about what you know and what you have done, a score out of 100, '
               'and a next step for every point you did not get. Information only; nothing you '
               'answer leaves the page.'),
-        modules=['assets/js/readiness.js'],
+        modules=['assets/js/readiness.js', 'assets/js/pb-rd-motion.js'],
         keep=[],
         nav=None,
         # Run 21: held back until compliance has the brief on the score; to

@@ -50,7 +50,7 @@
     vline = document.createElementNS(NS, 'line'); vline.setAttribute('y1', G.padT); vline.setAttribute('y2', G.H - G.padB);
     vline.setAttribute('stroke', '#0B1F1C'); vline.setAttribute('stroke-width', '1.5'); vline.setAttribute('stroke-dasharray', '3 4');
     dotU = document.createElementNS(NS, 'circle'); dotU.setAttribute('r', 6); dotU.setAttribute('fill', '#F4B740'); dotU.setAttribute('stroke', '#fff'); dotU.setAttribute('stroke-width', 2.5);
-    dotB = document.createElementNS(NS, 'circle'); dotB.setAttribute('r', 7); dotB.setAttribute('fill', '#0B7A6E'); dotB.setAttribute('stroke', '#fff'); dotB.setAttribute('stroke-width', 2.5);
+    dotB = document.createElementNS(NS, 'circle'); dotB.setAttribute('r', 7); dotB.setAttribute('fill', '#586B85');   /* the plan's line is slate on the page (Run 43): the dot matches it */ dotB.setAttribute('stroke', '#fff'); dotB.setAttribute('stroke-width', 2.5);
     g.appendChild(vline); g.appendChild(dotU); g.appendChild(dotB); svg.appendChild(g);
     return true;
   }
@@ -165,7 +165,7 @@
     for (var i = 0; i < 36; i++) {
       var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.6, v = 500 + Math.random() * 600;
       bits.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: 6 + Math.random() * 6, ph: Math.random() * 6, age: 0, life: 1.6 + Math.random() * 0.8,
-        c: ['#F4B740', '#14CBB1', '#0B7A6E', '#7FE3D3'][i % 4] });
+        c: ['#F4B740', '#586B85', '#0B1F1C', '#8A97A8'][i % 4] });
     }
     if (!praf) { plast = performance.now() / 1000; praf = requestAnimationFrame(pstep); }
   }

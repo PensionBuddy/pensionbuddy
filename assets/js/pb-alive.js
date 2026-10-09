@@ -78,6 +78,16 @@
     }
   }
 
+  /* a confetti of paws and coins from (x, y), for the pages' own pieces of motion */
+  function confetti(x, y, n, speed) {
+    for (var i = 0; i < n; i++) {
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.8, v = (speed || 700) * (0.45 + Math.random() * 0.7);
+      spawn({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: 900, a: Math.random() * 6, va: (Math.random() - 0.5) * 10, size: 14 + Math.random() * 14, col: COLS[i % COLS.length], alpha: 0.95, age: 0, life: 1.4 + Math.random() * 0.8 });
+    }
+  }
+  /* the pages' own scripts load before this one and reach for these at the moment they need them */
+  window.PBAlive = { puff: puff, confetti: confetti, paw: paw };
+
   /* ------------------------------------------------- words out of a mask -- */
   /* the words of a heading, each in a mask it rises out of; a full stop
      after a highlight keeps to its line, as on the audience heroes */
