@@ -226,7 +226,7 @@
      rises: your pension, growing. Then it takes coins again. Coins that miss
      and lie on the floor fade after a few seconds. */
   var V = null, auto = 0, autoN = 0, holding = 0, held = null, lastLaunch = -9;
-  var JS = { level: 0, v: 0, want: 0, full: 0, melt: 0, nope: -9, bubbles: [] };
+  var JS = { level: 0, v: 0, want: 0, full: 0, melt: 0, nope: -9, bubbles: [], lid: 0, lidV: 0 };
   function jarBox() { var J = V.jar; return { l: J.x - J.w / 2, r: J.x + J.w / 2, top: J.base - J.h, floor: J.base - JS.level }; }
   function inJar(c) { var b = jarBox(); return c.x > b.l && c.x < b.r && c.y > b.top - c.r * 0.3; }
   function capacity() {
@@ -241,6 +241,9 @@
       var ax = wide ? copyBox.l / 2 : W * 0.06 + vw / 2, jx = wide ? copyBox.r + (W - copyBox.r) / 2 : W - W * 0.06 - vw / 2;
       V = { acct: { x: ax, w: vw, h: vh * 0.8, base: base }, jar: { x: jx, w: vw, h: vh, base: base } };
       R = clamp(vw / 9, 10, 15);
+      var A0 = V.acct, g = hero.querySelector('.pb-scene-grip') || hero.appendChild(document.createElement('span'));
+      g.className = 'pb-scene-grip'; g.setAttribute('aria-hidden', 'true');
+      g.style.left = (A0.x - A0.w / 2 - 10) + 'px'; g.style.top = (A0.base - A0.h - R * 4) + 'px'; g.style.width = (A0.w + 20) + 'px'; g.style.height = (A0.h + R * 4) + 'px';
       auto = 1; autoN = 0; JS.level = JS.want = JS.v = 0; JS.full = JS.melt = 0;
     },
     launch: function () {
@@ -258,6 +261,8 @@
       var A = V.acct, b = jarBox();
       step(dt, function (c) {
         if (c.melt) { return; }
+        /* a shut lid: a coin coming down on it bounces off */
+        if (JS.lid > 0.6 && c.vy > 0 && c.x > b.l - 6 && c.x < b.r + 6 && c.y > b.top - 14 - c.r && c.y < b.top - 4) { c.y = b.top - 14 - c.r; c.vy = -Math.abs(c.vy) * 0.5; c.vx += (c.x < V.jar.x ? -1 : 1) * 120; }
         /* the jar's walls, and its floor: the top of its level */
         if (c.y > b.top - c.r && c.x > b.l && c.x < b.r) {
           if (c.x < b.l + c.r) { c.x = b.l + c.r; c.vx = Math.abs(c.vx) * 0.3; }
@@ -277,7 +282,7 @@
       /* full by count, or by a resting coin at the rim, whichever comes first */
       var brim = inside.some(function (c) { return c.vy === 0 && c.y - c.r < b.top + 4; });
       if (!JS.full && (inside.length >= capacity() || brim)) {
-        JS.full = now; holding = 0; auto = 0;
+        JS.full = now; auto = 0;   /* a finger still holding keeps pouring once the jar has grown */
         /* coins still in the air when it fills vanish in a puff, rather than land on a full jar */
         coins.forEach(function (c) { if (!c.gone && now >= c.born && !inJar(c) && c.vy !== 0) { c.gone = now; burstAt(c.x, c.y, 5); } });
       }
@@ -297,6 +302,7 @@
       });
       if (JS.melt && !coins.some(function (c) { return c.melt && !c.gone; })) { JS.full = 0; JS.melt = 0; }
       JS.v += (90 * (JS.want - JS.level) - 12 * JS.v) * dt; JS.level += JS.v * dt;
+      JS.lidV += (240 * ((JS.full ? 1 : 0) - JS.lid) - 16 * JS.lidV) * dt; JS.lid += JS.lidV * dt;
     },
     draw: function () {
       var A = V.acct, J = V.jar, b = jarBox();
@@ -338,9 +344,16 @@
       cx.beginPath(); cx.moveTo(l - 8, top); cx.lineTo(l + J.w + 8, top); cx.lineWidth = 6; cx.lineCap = 'round'; cx.strokeStyle = 'rgba(11,31,28,.3)'; cx.stroke();
       cx.globalAlpha = 0.45; cx.strokeStyle = '#fff'; cx.lineWidth = 5; cx.beginPath(); cx.moveTo(l + 10, top + 14); cx.lineTo(l + 10, J.base - 20); cx.stroke();
       cx.restore();
+      /* the lid: it drops on with a bounce when the jar is full, and lifts off when it has grown */
+      if (JS.lid > 0.01) {
+        var ly = top - 10 - (1 - Math.min(1, JS.lid)) * 46, la = clamp(JS.lid * 1.4, 0, 1);
+        cx.save(); cx.globalAlpha = la; cx.shadowColor = 'rgba(11,31,28,.22)'; cx.shadowBlur = 10; cx.shadowOffsetY = 3;
+        rr(l - 10, ly, J.w + 20, 12, 6); cx.fillStyle = '#586B85'; cx.fill(); cx.shadowColor = 'transparent';
+        rr(J.x - 14, ly - 8, 28, 9, 4); cx.fillStyle = '#3E4A5C'; cx.fill(); cx.restore();
+      }
       if (JS.full) {
         var pk = clamp((now - JS.full) / 0.25, 0, 1), sc = 0.6 + 0.4 * pk + Math.sin(pk * Math.PI) * 0.25;
-        cx.save(); cx.translate(J.x, top - 18); cx.scale(sc, sc); label(JS.melt ? 'Growing' : 'Full', 0, 0, '#0B1F1C', 16, 800); cx.restore();
+        cx.save(); cx.translate(J.x, top - 30); cx.scale(sc, sc); label(JS.melt ? 'Growing' : 'Full', 0, 0, '#0B1F1C', 16, 800); cx.restore();
       }
       label('Your pension', J.x, J.base + 24, '#54635F', 14, 700);
       if (held) { coin(held.x, held.y, R, YOU, 0, 1, 1); }
@@ -401,8 +414,11 @@
 
   /* ------------------------------------------------------------- loop -- */
   var raf = 0, last = 0, onScreen = true;
+  var frames = 0, ready = false;
   function frame(ms) {
-    raf = 0; now = ms / 1000;
+    raf = 0; now = ms / 1000; frames++;
+    /* nothing moves before the scene is laid out (fonts in, the jar placed) */
+    if (!ready) { return; }
     var dt = clamp(now - last, 0, 1 / 30); last = now;
     for (var k = 0; k < 3; k++) { S.step(dt / 3); }
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
@@ -412,8 +428,21 @@
   function wake() { if (!raf && onScreen) { last = performance.now() / 1000; raf = requestAnimationFrame(frame); } }
   if ('IntersectionObserver' in window) { new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; if (onScreen) { wake(); } }).observe(hero); }
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { wake(); } });
+  /* a frozen tab (a phone puts one away) resumes without a visibility change: wake on every way back */
+  ['pageshow', 'resume', 'focus'].forEach(function (t) { (t === 'resume' ? document : window).addEventListener(t, function () { last = performance.now() / 1000; wake(); }); });
   var rt = 0;
   window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { var oW = W; size(); if (kind !== 'starter') { coins = []; S.init(); } else { coins.forEach(function (c) { c.x *= W / (oW || W); }); } }, 150); });
-  function go() { size(); now = performance.now() / 1000; S.init(); wake(); }
+  function go() { size(); now = performance.now() / 1000; S.init(); ready = true; wake(); }
+  /* for tests only (a test sets window.__pbTest before the page runs): the state, read-only */
+  if (window.__pbTest) {
+    window.__pbScene = function () {
+      var live = coins.filter(function (c) { return !c.gone; }), J = V && jarBox && kind === 'director' ? jarBox() : null;
+      return { kind: kind, frames: frames, coins: live.length, W: W, H: H, onScreen: onScreen, hidden: document.hidden,
+        jar: J ? { top: J.top, floor: J.floor, l: J.l, r: J.r, cap: capacity(), full: !!JS.full, melt: !!JS.melt, level: JS.level, lid: JS.lid,
+          inside: live.filter(function (c) { return inJar(c) && !c.melt; }).length,
+          restingAboveRim: live.filter(function (c) { return inJar(c) && c.vy === 0 && c.y - c.r < J.top - 2; }).length } : null,
+        nan: live.some(function (c) { return !(isFinite(c.x) && isFinite(c.y)); }) };
+    };
+  }
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(go); } else { go(); }
 }());
