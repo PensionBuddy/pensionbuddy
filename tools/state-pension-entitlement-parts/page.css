@@ -144,3 +144,15 @@
 
 /* Budget 2027: the next year's rate, beside this year's */
 .pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}
+/* MOTION-5:BEGIN (9 October 2026, Damian's brief): the page alive
+   (assets/js/pb-sp-motion.js sets :root.pb-sp-alive and every class here,
+   only with motion on). */
+:root.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .45s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes pbSpRoll{from{transform:translateY(55%);opacity:0}to{transform:none;opacity:1}}
+.pb-sp-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
+:root.pb-sp-alive .mbar-fill,:root.pb-sp-alive .mbar-gap,:root.pb-sp-alive .mbar-lab,:root.pb-sp-alive .pb-rec-track i{transition:width .7s cubic-bezier(.34,1.56,.64,1),left .7s cubic-bezier(.34,1.56,.64,1)}
+:root.pb-sp-alive .mrow{margin-left:-12px;margin-right:-12px;padding:10px 12px;border-radius:14px;transition:box-shadow .4s,background-color .4s}
+:root.pb-sp-alive .mrow.pb-sp-win{background-color:rgba(230,251,247,.7);box-shadow:0 0 0 2px rgba(22,201,176,.55),0 10px 26px rgba(22,201,176,.16)}
+:root.pb-sp-alive .mrow.pb-sp-swap{animation:pbSpSwap .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pbSpSwap{40%{transform:scale(1.03)}100%{transform:none}}
+/* MOTION-5:END */

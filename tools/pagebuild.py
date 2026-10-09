@@ -202,7 +202,7 @@ PAGES = {
         title='The State Pension reality check, Pensionbuddy',
         desc=('What the State Pension actually pays, next to what retirement in Ireland '
               'costs according to the Pensions Council. An illustration, not advice.'),
-        modules=['assets/js/state-pension.js'],
+        modules=['assets/js/state-pension.js', 'assets/js/pb-sp-motion.js'],
         # both controls are primary, so nothing folds into "More options"
         keep=['contribs', 'age'],
         floor16=True,
@@ -220,7 +220,7 @@ PAGES = {
         desc='What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid. An illustration, not advice.',
         # order matters: the entitlement module throws if state-pension.js is
         # not already on the page
-        modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js'],
+        modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js', 'assets/js/pb-sp-motion.js'],
         # all five controls are primary, so nothing folds into "More options"
         keep=['birth', 'entry', 'paid', 'credited', 'homecaring'],
         floor16=True,

@@ -2294,6 +2294,23 @@ main h1{font-weight:800}
 .pb-trace h3{margin-bottom:8px}
 .pb-trace .pb-tick{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
 .pb-trace .pb-tick input{width:24px;height:24px;flex:0 0 auto;margin-top:0;accent-color:var(--teal)}
+/* SCENE:BEGIN (9 October 2026, Damian's brief): the hero's scene, behind
+   the headline (assets/js/pb-hero-scene.js adds the canvas and every class
+   here, only with motion on). */
+.aud-hero.pb-scene{position:relative;isolation:isolate;padding-bottom:250px;min-height:min(88svh,920px);touch-action:pan-y}
+.pb-scene-cv{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.aud-hero.pb-scene > .wrap{position:relative;z-index:1}
+.pb-scene-tracker{cursor:crosshair}
+.pb-scene-starter,.pb-scene-director{cursor:pointer}
+.pb-scene .pb-word{display:inline-block;animation:pbWordIn .75s cubic-bezier(.3,1.45,.5,1) both}
+@keyframes pbWordIn{from{opacity:0;transform:translateY(.55em) rotate(4deg)}to{opacity:1;transform:none}}
+.pb-scene h1 .hl{white-space:nowrap;background:linear-gradient(#7FE3D3,#7FE3D3) 0 94%/0 .18em no-repeat;transition:background-size .8s cubic-bezier(.2,.8,.2,1)}
+.pb-scene h1.pb-words-done .hl{background-size:100% .18em}
+.pb-scene-hint{position:absolute;left:50%;top:auto;bottom:calc(250px - 58px);z-index:1;margin:0;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.85);color:var(--ink-2);font-size:15px;white-space:nowrap;transform:translate(-50%,8px);opacity:0;transition:opacity .5s,transform .5s;pointer-events:none}
+.pb-scene-hint.pb-on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:600px){.aud-hero.pb-scene{padding-bottom:270px}.pb-scene-hint{bottom:calc(270px - 58px);font-size:14px;white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center}}
+@media print{.pb-scene-cv,.pb-scene-hint{display:none}}
+/* SCENE:END */
 </style>
 
 <script>
@@ -2355,7 +2372,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
 </div></nav>
 <main id="main" tabindex="-1">
-<header class="hero aud-hero"><div class="wrap hero-grid">
+<header class="hero aud-hero"><div class="wrap hero-grid" data-pb-scene="tracker">
   <div class="pb-hero-copy">
     <span class="eyebrow acc"><span class="pip"></span>For pension trackers</span>
     <div class="pb-reg pb-reg-top">
@@ -2707,5 +2724,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-hero-scene.js?v=bd6493b2"></script>
 </body>
 </html>

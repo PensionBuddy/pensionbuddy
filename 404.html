@@ -2109,6 +2109,19 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* LOST:BEGIN (9 October 2026, Damian's brief): a lost paw (assets/js/pb-404.js
+   adds the canvas and every class here, only with motion on). */
+.pb-lost{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+:root.pb-lost-hot,:root.pb-lost-hot *{cursor:grab}
+:root.pb-lost-carry,:root.pb-lost-carry *{cursor:grabbing;user-select:none;-webkit-user-select:none}
+.pb-nf a.btn{transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s}
+.pb-nf a.btn.pb-lost-near{transform:scale(1.08);box-shadow:0 0 0 5px rgba(20,203,177,.35)}
+.pb-nf a.btn.pb-lost-home{animation:pbHomeHop .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbHomeHop{30%{transform:scale(1.16) rotate(-2deg)}60%{transform:scale(.96)}100%{transform:none}}
+.pb-lost-said{margin:4px 0 0;font-size:16px;color:var(--ink-2);opacity:0;transform:translateY(6px);transition:opacity .5s,transform .5s}
+.pb-lost-said.pb-on{opacity:1;transform:none}
+@media print{.pb-lost{display:none}}
+/* LOST:END */
 </style>
 </head>
 <body>
@@ -2305,5 +2318,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-404.js?v=a3fc3e86"></script>
 </body>
 </html>
