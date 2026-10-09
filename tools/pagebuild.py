@@ -188,7 +188,7 @@ PAGES = {
         page_js='compare-page.js',
         title='Auto-enrolment or a broker pension, Pensionbuddy',
         desc='Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension through a broker. An illustration, not advice.',
-        modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js'],
+        modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js', 'assets/js/pb-cmp-motion.js'],
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
@@ -272,7 +272,7 @@ PAGES = {
         parts='fees-parts',
         title='What your pension charges cost, Pensionbuddy',
         desc='What an annual management charge and a charge on each payment take out of a pension pot by retirement. An illustration, not advice.',
-        modules=['assets/js/pension-fees.js'],
+        modules=['assets/js/pension-fees.js', 'assets/js/pb-fee-motion.js'],
         keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
         floor16=True,
         reviewed=True,
@@ -308,7 +308,7 @@ PAGES = {
         parts='sft-parts',
         title='The Standard Fund Threshold, Pensionbuddy',
         desc='The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed. An illustration, not advice.',
-        modules=['assets/js/sft.js'],
+        modules=['assets/js/sft.js', 'assets/js/pb-sft-motion.js'],
         keep=['total', 'year', 'lump'],
         floor16=True,
         reviewed=True,

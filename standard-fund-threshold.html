@@ -2665,6 +2665,16 @@ main h1{font-weight:800}
 .sft-lb-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
 .sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+
+/* MOTION-7 (9 October 2026): the skyline of glasses in "Year by year", drawn
+   by assets/js/pb-sft-motion.js; with motion off none of this is in the
+   page. The canvas leaves a finger free to scroll; its knob takes the drag. */
+.pb-sft-stage{position:relative;margin:8px 0 6px}
+.pb-sft-cv{display:block;width:100%;height:250px;touch-action:pan-y;cursor:ns-resize}
+.pb-sft-grip{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;touch-action:none;cursor:ns-resize}
+.pb-sft-hint{margin:8px 0 0;font-size:16px;color:var(--ink-2);text-align:center;transition:opacity .4s}
+.pb-sft-hint.pb-off{opacity:0}
+@media(max-width:560px){.pb-sft-cv{height:240px}}
 </style>
 
 <script>
@@ -2874,6 +2884,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=6f5a79f3"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
+<script src="assets/js/pb-sft-motion.js?v=91f36a22"></script>
 <script>
 /* standard-fund-threshold.html (Run 20 #7).
 

@@ -2723,6 +2723,24 @@ main h1{font-weight:800}
 .pb-chart-key i.pb-k-cash{border-top:2px dotted #B7791F}
 @media(max-width:380px){.pb-split .vs.pb-split-grid{grid-template-columns:1fr}}
 /* JOB5:END */
+/* SPLIT-MOTION:BEGIN (9 October 2026, Damian's brief): the split as a
+   machine, drawn by assets/js/pb-split-motion.js; with motion off none of
+   this is in the page. The key under the jars carries every figure as
+   text, at 16px. */
+.pb-sp-stage{margin:18px 0 4px}
+.pb-sp-cv{display:block;width:100%;height:340px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.pb-sp-key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px;text-align:center}
+.pb-sp-k{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:16px;line-height:1.35;color:var(--ink-2)}
+.pb-sp-n{display:inline-flex;align-items:baseline;gap:7px}
+.pb-sp-n i{flex:0 0 auto;width:11px;height:11px;border-radius:50%}
+.pb-sp-k>b{font-size:20px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-sp-saved{font-size:16px;color:var(--ink-2)}
+.pb-sp-saved b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.pb-sp-saved i{display:inline-block;width:16px;border-top:2px dashed #B07A12;margin-right:6px;vertical-align:middle}
+.pb-sp-hint{margin:12px 0 0;font-size:16px;color:var(--ink-2);text-align:center;transition:opacity .4s}
+.pb-sp-hint.pb-off{opacity:0}
+@media(max-width:560px){.pb-sp-cv{height:310px}.pb-sp-k>b{font-size:18px}}
+/* SPLIT-MOTION:END */
 </style>
 
 <script>
@@ -3526,6 +3544,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-after.js?v=257e33b2"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-split-motion.js?v=3909258a"></script>
 <script src="assets/js/pb-alive.js?v=ac6cfce5"></script>
 </body>
 </html>
