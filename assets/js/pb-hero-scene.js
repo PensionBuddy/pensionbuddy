@@ -75,12 +75,17 @@
   /* ------------------------------------------------------ the drawings -- */
   var YOU = ['#54635F', '#3E4A47'], REV = ['#F4B740', '#C98A12'];
   function coin(x, y, r, col, a, sx, alpha) {
+    /* a shrinking coin never asks for a negative radius (a canvas throws, and the frame stops) */
+    if (!(r > 1)) { return; }
     cx.save(); cx.globalAlpha = alpha === undefined ? 1 : alpha; cx.translate(x, y); cx.rotate(a || 0); cx.scale(sx === undefined ? 1 : sx, 1);
     cx.beginPath(); cx.arc(0, 0, r, 0, Math.PI * 2); cx.fillStyle = col[1]; cx.fill();
-    cx.beginPath(); cx.arc(0, -1.5, r - 2, 0, Math.PI * 2); cx.fillStyle = col[0]; cx.fill();
-    cx.beginPath(); cx.arc(0, -1.5, r - 5.5, 0, Math.PI * 2); cx.lineWidth = 1.5; cx.strokeStyle = 'rgba(255,255,255,.5)'; cx.stroke();
-    cx.fillStyle = '#fff'; cx.font = '700 ' + Math.round(r * 1.05) + 'px Figtree, system-ui, sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-    cx.fillText('€', 0, -0.5); cx.restore();
+    cx.beginPath(); cx.arc(0, -1.5, Math.max(0, r - 2), 0, Math.PI * 2); cx.fillStyle = col[0]; cx.fill();
+    if (r > 7) {
+      cx.beginPath(); cx.arc(0, -1.5, r - 5.5, 0, Math.PI * 2); cx.lineWidth = 1.5; cx.strokeStyle = 'rgba(255,255,255,.5)'; cx.stroke();
+      cx.fillStyle = '#fff'; cx.font = '700 ' + Math.round(r * 1.05) + 'px Figtree, system-ui, sans-serif'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+      cx.fillText('€', 0, -0.5);
+    }
+    cx.restore();
   }
   function rr(x, y, w, h, r) { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); }
   function label(t, x, y, col, size, weight) {
@@ -214,64 +219,129 @@
   };
 
   /* ============================================================== director */
-  var V = null, auto = 0, holding = 0, held = null, lastLaunch = -9;
+  /* The jar knows when it is full (Damian, 9 October 2026: coins kept
+     arriving in a full jar and the pile jittered). Its capacity is what fits
+     above its level; when it is full it refuses more coins (the account
+     shakes its head), says so, and melts the coins into its level, which
+     rises: your pension, growing. Then it takes coins again. Coins that miss
+     and lie on the floor fade after a few seconds. */
+  var V = null, auto = 0, autoN = 0, holding = 0, held = null, lastLaunch = -9;
+  var JS = { level: 0, v: 0, want: 0, full: 0, melt: 0, nope: -9, bubbles: [] };
+  function jarBox() { var J = V.jar; return { l: J.x - J.w / 2, r: J.x + J.w / 2, top: J.base - J.h, floor: J.base - JS.level }; }
+  function inJar(c) { var b = jarBox(); return c.x > b.l && c.x < b.r && c.y > b.top - c.r * 0.3; }
+  function capacity() {
+    var b = jarBox(), cols = Math.max(1, Math.floor((b.r - b.l - 4) / (2 * R))), rows = Math.max(1, Math.floor((b.floor - b.top - R * 0.6) / (R * 1.72)));
+    return Math.max(4, cols * rows - 1);
+  }
   var director = {
     init: function () {
       var wide = copyBox && (copyBox.l > 230), vw = wide ? clamp(copyBox.l * 0.5, 110, 170) : clamp(W * 0.26, 92, 150), vh = vw * 1.05;
-      var base = wide ? Math.min(H - 60, copyBox.t + (copyBox.b - copyBox.t) * 0.72) : H - 62;
+      /* on a narrow screen, high enough to clear the floating Ask Buddy button at the foot of the screen */
+      var base = wide ? Math.min(H - 60, copyBox.t + (copyBox.b - copyBox.t) * 0.72) : H - 118;
       var ax = wide ? copyBox.l / 2 : W * 0.06 + vw / 2, jx = wide ? copyBox.r + (W - copyBox.r) / 2 : W - W * 0.06 - vw / 2;
       V = { acct: { x: ax, w: vw, h: vh * 0.8, base: base }, jar: { x: jx, w: vw, h: vh, base: base } };
       R = clamp(vw / 9, 10, 15);
-      auto = 1;
+      auto = 1; autoN = 0; JS.level = JS.want = JS.v = 0; JS.full = JS.melt = 0;
     },
-    launch: function (sx, sy) {
+    launch: function () {
+      if (JS.full) { JS.nope = now; return false; }
       var A = V.acct, J = V.jar;
-      var x0 = sx !== undefined ? sx : A.x + (Math.random() - 0.5) * A.w * 0.5, y0 = sy !== undefined ? sy : A.base - A.h - 8;
+      var x0 = A.x + (Math.random() - 0.5) * A.w * 0.5, y0 = A.base - A.h - 8;
       var tx = J.x + (Math.random() - 0.5) * J.w * 0.3, ty = J.base - J.h - 10, T = 0.85 + Math.random() * 0.15, g = 1500;
       coins.push({ x: x0, y: y0, vx: (tx - x0) / T, vy: (ty - y0 - 0.5 * g * T * T) / T, a: 0, va: 8, r: R, col: YOU, born: now, gone: 0 });
-      if (coins.filter(function (c) { return !c.gone; }).length > 60) { coins.filter(function (c) { return !c.gone; })[0].gone = now; }
-      lastLaunch = now;
+      lastLaunch = now; return true;
     },
-    tap: function (x, y) { auto = 0; this.launch(); },
+    tap: function () { auto = 0; this.launch(); },
     step: function (dt) {
-      if (auto && now - lastLaunch > 1.1 && coins.length < 8) { this.launch(); }
+      if (auto && autoN < 8 && now - lastLaunch > 1.1) { if (this.launch()) { autoN++; } }
       if (holding && now - lastLaunch > 0.09) { this.launch(); }
-      var J = V.jar, A = V.acct;
+      var A = V.acct, b = jarBox();
       step(dt, function (c) {
-        /* the jar's walls and floor */
-        var l = J.x - J.w / 2, r = J.x + J.w / 2, top = J.base - J.h;
-        if (c.y > top - c.r && c.x > l - c.r && c.x < r + c.r) {
-          var inside = c.x > l && c.x < r;
-          if (inside) {
-            if (c.x < l + c.r) { c.x = l + c.r; c.vx = Math.abs(c.vx) * 0.3; }
-            if (c.x > r - c.r) { c.x = r - c.r; c.vx = -Math.abs(c.vx) * 0.3; }
-            if (c.y > J.base - c.r) { c.y = J.base - c.r; c.vy = -Math.abs(c.vy) * 0.25; c.vx *= 0.85; }
-          }
+        if (c.melt) { return; }
+        /* the jar's walls, and its floor: the top of its level */
+        if (c.y > b.top - c.r && c.x > b.l && c.x < b.r) {
+          if (c.x < b.l + c.r) { c.x = b.l + c.r; c.vx = Math.abs(c.vx) * 0.3; }
+          if (c.x > b.r - c.r) { c.x = b.r - c.r; c.vx = -Math.abs(c.vx) * 0.3; }
+          if (c.y > b.floor - c.r) { c.y = b.floor - c.r; c.vy = Math.abs(c.vy) < 30 ? 0 : -Math.abs(c.vy) * 0.25; c.vx *= 0.8; }
         }
         floorWalls(c);
+        if (c.y >= H - 10 - c.r - 0.5 && Math.abs(c.vy) < 30) { c.vy = 0; }
         /* the account's box: coins thrown back land on it */
         var al = A.x - A.w / 2, ar = A.x + A.w / 2, at = A.base - A.h;
         if (c.x > al && c.x < ar && c.y > at - c.r && c.y < at + 10 && c.vy > 0) { c.y = at - c.r; c.vy = -Math.abs(c.vy) * 0.3; }
+        /* quiet coins rest, so a full pile stands still */
+        if (Math.abs(c.vx) < 6 && Math.abs(c.vy) < 6) { c.vx = 0; c.vy = 0; c.va = 0; }
       });
+      var inside = coins.filter(function (c) { return !c.gone && !c.melt && now >= c.born && inJar(c); });
+      /* full: no more coins, then they melt into the level */
+      /* full by count, or by a resting coin at the rim, whichever comes first */
+      var brim = inside.some(function (c) { return c.vy === 0 && c.y - c.r < b.top + 4; });
+      if (!JS.full && (inside.length >= capacity() || brim)) {
+        JS.full = now; holding = 0; auto = 0;
+        /* coins still in the air when it fills vanish in a puff, rather than land on a full jar */
+        coins.forEach(function (c) { if (!c.gone && now >= c.born && !inJar(c) && c.vy !== 0) { c.gone = now; burstAt(c.x, c.y, 5); } });
+      }
+      if (JS.full && !JS.melt && now - JS.full > 0.9) {
+        JS.melt = now;
+        inside.sort(function (p, q) { return p.y - q.y; }).forEach(function (c, k) { c.melt = now + k * 0.035; c.mx = c.x; c.my = c.y; });
+        JS.want = Math.min(V.jar.h * 0.6, JS.level + V.jar.h * 0.13);
+      }
+      coins.forEach(function (c) {
+        if (c.melt && !c.gone && now >= c.melt) {
+          /* each coin sinks into the level as it goes */
+          var k = clamp((now - c.melt) / 0.35, 0, 1); c.y = c.my + (b.floor - c.my) * k * k; c.x = c.mx + (V.jar.x - c.mx) * k * 0.3;
+          if (k >= 1) { c.gone = now; JS.bubbles.push({ x: c.x, y: b.floor, born: now }); }
+        }
+        /* a coin that missed, lying on the floor, fades */
+        if (!c.gone && !c.melt && !inJar(c) && c.vy === 0 && c.y >= H - 10 - c.r - 1) { c.rest = c.rest || now; if (now - c.rest > 2.5) { c.gone = now; } } else if (!c.melt) { c.rest = 0; }
+      });
+      if (JS.melt && !coins.some(function (c) { return c.melt && !c.gone; })) { JS.full = 0; JS.melt = 0; }
+      JS.v += (90 * (JS.want - JS.level) - 12 * JS.v) * dt; JS.level += JS.v * dt;
     },
     draw: function () {
-      var A = V.acct, J = V.jar;
-      /* the company account: a box with a pile of coins on it */
-      var al = A.x - A.w / 2, at = A.base - A.h;
+      var A = V.acct, J = V.jar, b = jarBox();
+      /* the company account: a box with a pile of coins on it; it shakes its head at a full jar */
+      var shake = now - JS.nope < 0.4 ? Math.sin((now - JS.nope) * 60) * 5 * (1 - (now - JS.nope) / 0.4) : 0;
+      var al = A.x - A.w / 2 + shake, at = A.base - A.h;
       rr(al, at, A.w, A.h, 14); cx.fillStyle = '#fff'; cx.fill(); cx.lineWidth = 3; cx.strokeStyle = 'rgba(11,31,28,.22)'; cx.stroke();
       rr(al + A.w * 0.3, at + A.h * 0.38, A.w * 0.4, 8, 4); cx.fillStyle = 'rgba(11,31,28,.18)'; cx.fill();
       for (var i = 0; i < 9; i++) { var row = Math.floor(i / 4), col = i % 4; coin(al + A.w * (0.2 + col * 0.2) + row * A.w * 0.1, at - R * 0.8 - row * R * 1.5, R, YOU, 0, 1, 1); }
       label('Company account', A.x, A.base + 24, '#54635F', 14, 700);
+      /* the level: your pension, a slate tide with a moving surface and rising bubbles */
+      if (JS.level > 1) {
+        var lv = b.floor;
+        cx.save(); cx.beginPath(); cx.moveTo(b.l + 2, J.base - 16);
+        for (var x = b.l + 2; x <= b.r - 2; x += 4) { cx.lineTo(x, lv + Math.sin(x * 0.09 + now * 3.2) * 2.5 + Math.sin(x * 0.05 - now * 2) * 1.5); }
+        cx.lineTo(b.r - 2, J.base - 16); cx.quadraticCurveTo(b.r - 2, J.base - 2, b.r - 16, J.base - 2); cx.lineTo(b.l + 16, J.base - 2); cx.quadraticCurveTo(b.l + 2, J.base - 2, b.l + 2, J.base - 16);
+        var g = cx.createLinearGradient(0, lv, 0, J.base); g.addColorStop(0, '#8A97A8'); g.addColorStop(1, '#586B85');
+        cx.fillStyle = g; cx.fill(); cx.restore();
+        JS.bubbles = JS.bubbles.filter(function (q) {
+          var a = now - q.born; if (a > 1.2) { return false; }
+          cx.save(); cx.globalAlpha = 0.7 * (1 - a / 1.2); cx.strokeStyle = '#fff'; cx.lineWidth = 1.5; cx.beginPath();
+          cx.arc(q.x + Math.sin(a * 9 + q.x) * 3, q.y + a * Math.min(40, JS.level * 0.6), 2 + a * 3, 0, Math.PI * 2); cx.stroke(); cx.restore(); return true;
+        });
+      }
       /* coins in flight and in the jar */
-      coins.forEach(function (c) { var f = c.gone ? 1 - (now - c.gone) / 0.4 : 1; if (f > 0) { coin(c.x, c.y, c.r, c.col, c.a, 1, f); } });
-      coins = coins.filter(function (c) { return !c.gone || now - c.gone < 0.4; });
-      /* the pension: a glass jar, over the coins */
-      var l = J.x - J.w / 2, top = J.base - J.h;
-      cx.save(); cx.beginPath(); cx.moveTo(l, top); cx.lineTo(l, J.base - 18); cx.quadraticCurveTo(l, J.base, l + 18, J.base); cx.lineTo(l + J.w - 18, J.base); cx.quadraticCurveTo(l + J.w, J.base, l + J.w, J.base - 18); cx.lineTo(l + J.w, top);
-      cx.lineWidth = 3; cx.strokeStyle = 'rgba(11,31,28,.25)'; cx.stroke();
+      coins.forEach(function (c) {
+        if (now < c.born) { return; }
+        var f = c.gone ? 1 - (now - c.gone) / 0.35 : 1, sk = c.melt && now >= c.melt ? 1 - clamp((now - c.melt) / 0.35, 0, 1) * 0.6 : 1;
+        if (f > 0) { coin(c.x, c.y, c.r * sk, c.col, c.a, 1, f); }
+      });
+      coins = coins.filter(function (c) { return !c.gone || now - c.gone < 0.35; });
+      /* the pension: a glass jar, over the coins, glowing when full */
+      var l = b.l, top = b.top, glow = JS.full ? 0.5 + 0.5 * Math.sin((now - JS.full) * 10) : 0;
+      cx.save();
+      if (glow) { cx.shadowColor = 'rgba(88,107,133,' + (0.6 * glow).toFixed(2) + ')'; cx.shadowBlur = 22; }
+      cx.beginPath(); cx.moveTo(l, top); cx.lineTo(l, J.base - 18); cx.quadraticCurveTo(l, J.base, l + 18, J.base); cx.lineTo(l + J.w - 18, J.base); cx.quadraticCurveTo(l + J.w, J.base, l + J.w, J.base - 18); cx.lineTo(l + J.w, top);
+      cx.lineWidth = 3; cx.strokeStyle = JS.full ? 'rgba(88,107,133,.9)' : 'rgba(11,31,28,.25)'; cx.stroke();
+      cx.shadowColor = 'transparent';
       cx.beginPath(); cx.moveTo(l - 8, top); cx.lineTo(l + J.w + 8, top); cx.lineWidth = 6; cx.lineCap = 'round'; cx.strokeStyle = 'rgba(11,31,28,.3)'; cx.stroke();
       cx.globalAlpha = 0.45; cx.strokeStyle = '#fff'; cx.lineWidth = 5; cx.beginPath(); cx.moveTo(l + 10, top + 14); cx.lineTo(l + 10, J.base - 20); cx.stroke();
       cx.restore();
+      if (JS.full) {
+        var pk = clamp((now - JS.full) / 0.25, 0, 1), sc = 0.6 + 0.4 * pk + Math.sin(pk * Math.PI) * 0.25;
+        cx.save(); cx.translate(J.x, top - 18); cx.scale(sc, sc); label(JS.melt ? 'Growing' : 'Full', 0, 0, '#0B1F1C', 16, 800); cx.restore();
+      }
       label('Your pension', J.x, J.base + 24, '#54635F', 14, 700);
       if (held) { coin(held.x, held.y, R, YOU, 0, 1, 1); }
     }
@@ -321,7 +391,9 @@
   function release(e) {
     holding = 0;
     if (held && (!e || e.pointerId === held.id)) {
-      coins.push({ x: held.x, y: held.y, vx: clamp(held.vx, -2200, 2200), vy: clamp(held.vy, -2200, 2200), a: 0, va: 6, r: R, col: YOU, born: now, gone: 0 });
+      if (JS.full) { JS.nope = now; } else {
+        coins.push({ x: held.x, y: held.y, vx: clamp(held.vx, -2200, 2200), vy: clamp(held.vy, -2200, 2200), a: 0, va: 6, r: R, col: YOU, born: now, gone: 0 });
+      }
       held = null; wake();
     }
   }
