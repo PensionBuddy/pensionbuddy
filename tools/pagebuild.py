@@ -595,7 +595,7 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
               ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
-              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'))
+              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'), ('ALIVE', 'alive-css'))
 
 
 def _once(text, marker):
