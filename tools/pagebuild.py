@@ -188,7 +188,7 @@ PAGES = {
         page_js='compare-page.js',
         title='Auto-enrolment or a broker pension, Pensionbuddy',
         desc='Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension through a broker. An illustration, not advice.',
-        modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js'],
+        modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js', 'assets/js/pb-cmp-motion.js'],
         # every range here is a primary control for one mode or the other; only
         # the tax-rate segment folds into "More options", as on the other calculators
         keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
@@ -247,7 +247,7 @@ PAGES = {
         title='Find an old pension, Pensionbuddy',
         desc=('Lost track of a pension from an old job? Tell us where you worked, sign a letter '
               'that lets us ask the providers, and we do the chasing. Nothing is moved.'),
-        modules=['assets/js/pension-finder.js'],
+        modules=['assets/js/pension-finder.js', 'assets/js/pb-pf-motion.js'],
         keep=[],
         nav=None,
         # Run 21: held back until compliance signs off the letter; to re-link,
@@ -272,7 +272,7 @@ PAGES = {
         parts='fees-parts',
         title='What your pension charges cost, Pensionbuddy',
         desc='What an annual management charge and a charge on each payment take out of a pension pot by retirement. An illustration, not advice.',
-        modules=['assets/js/pension-fees.js'],
+        modules=['assets/js/pension-fees.js', 'assets/js/pb-fee-motion.js'],
         keep=['pot', 'monthly', 'years', 'amcA', 'feeA', 'amcB', 'feeB'],
         floor16=True,
         reviewed=True,
@@ -292,7 +292,7 @@ PAGES = {
         desc=('Six questions about what you know and what you have done, a score out of 100, '
               'and a next step for every point you did not get. Information only; nothing you '
               'answer leaves the page.'),
-        modules=['assets/js/readiness.js'],
+        modules=['assets/js/readiness.js', 'assets/js/pb-rd-motion.js'],
         keep=[],
         nav=None,
         # Run 21: held back until compliance has the brief on the score; to
@@ -308,7 +308,7 @@ PAGES = {
         parts='sft-parts',
         title='The Standard Fund Threshold, Pensionbuddy',
         desc='The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed. An illustration, not advice.',
-        modules=['assets/js/sft.js'],
+        modules=['assets/js/sft.js', 'assets/js/pb-sft-motion.js'],
         keep=['total', 'year', 'lump'],
         floor16=True,
         reviewed=True,
@@ -326,7 +326,7 @@ PAGES = {
         parts='director-rules-parts',
         title="Directors' pensions in 2026: what changed, Pensionbuddy",
         desc="What changed for company directors: executive pensions set up before April 2021, and a company's payments into a PRSA. Information, not advice.",
-        modules=['assets/js/director-topics.js'],
+        modules=['assets/js/director-topics.js', 'assets/js/pb-dr-motion.js', 'assets/js/pb-guide-scene.js'],
         keep=[],
         nav='director-pension-rules.html',
         reviewed=True,
@@ -360,7 +360,7 @@ PAGES = {
         parts='pia-parts',
         title='The new Personal Investment Account (PIA), Pensionbuddy',
         desc='The new Investment Account from Budget 2027: 1% a year above €50,000, from 1 July 2027. Not yet law. Next to a pension and an ETF.',
-        modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
+        modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js', 'assets/js/pb-pia-motion.js'],
         keep=['amount', 'years', 'growth', 'piaRate'],
         floor16=True,
         reviewed=True,
@@ -595,7 +595,7 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
               ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
-              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'))
+              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'), ('ALIVE', 'alive-css'))
 
 
 def _once(text, marker):

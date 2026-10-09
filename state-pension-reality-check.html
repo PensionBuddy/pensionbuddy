@@ -2194,6 +2194,61 @@ body .final p.pb-why{color:var(--ink-2)}
   html{scroll-behavior:auto}
 }
 /* MOTION:END */
+/* ALIVE:BEGIN (9 October 2026, Damian's brief: every page, alive). One layer
+   on every page, byte for byte the skeleton's: tools/pagebuild.py SHARED_CSS
+   ('ALIVE', 'alive-css'), copied by tools/sync-chrome.py. assets/js/pb-alive.js
+   adds every class here, and only with motion on; the caveats keep the
+   MOTION block's stillness, which outranks all of this. */
+:root.pb-motion :is(.phead > .wrap,.page-head > .wrap,.lead) > h1:not(.pb-al-split):not(.pb-al-on){animation:pbAlHold 1.2s linear both}
+@keyframes pbAlHold{0%,99%{opacity:0}100%{opacity:1}}
+.pb-al-m{display:inline-block;overflow:hidden;vertical-align:top;padding:.08em .03em .16em;margin:-.08em -.03em -.16em}
+.pb-al-w{display:inline-block;transform:translateY(115%) rotate(5deg);transform-origin:0 100%}
+.pb-al-split.pb-al-on .pb-al-w{animation:pbAlWord .9s cubic-bezier(.2,1.15,.3,1) both;animation-delay:calc(var(--i) * 55ms)}
+@keyframes pbAlWord{from{transform:translateY(115%) rotate(5deg)}to{transform:none}}
+.pb-al-split .hl{white-space:nowrap;background:linear-gradient(#7FE3D3,#7FE3D3) 0 92%/0 .16em no-repeat;transition:background-size .8s cubic-bezier(.2,.8,.2,1)}
+.pb-al-split.pb-al-swept .hl{background-size:100% .16em}
+.pb-al-eye{opacity:0;transform:translateX(-16px)}
+.pb-al-eye.pb-al-on{opacity:1;transform:none;transition:opacity .5s,transform .8s cubic-bezier(.2,1.25,.3,1)}
+:root.pb-motion .eyebrow .pip{animation:pbAlPip 2.6s ease-out 3}
+@keyframes pbAlPip{0%{box-shadow:0 0 0 0 rgba(20,203,177,.45)}70%,100%{box-shadow:0 0 0 7px rgba(20,203,177,0)}}
+.pb-al-rise{opacity:0;transform:translateY(48px) scale(.96)}
+.pb-al-rise.pb-al-3d:not(.pb-al-on){transform:perspective(900px) translateY(48px) rotateX(12deg) scale(.96)}
+.pb-al-rise.pb-al-on{opacity:1;transform:none;transition:opacity .6s ease var(--al-d,0ms),transform 1s cubic-bezier(.2,1.15,.3,1) var(--al-d,0ms)}
+.pb-al-btn{position:relative;overflow:hidden;isolation:isolate}
+.pb-al-shine{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.42) 48%,transparent 66%);transform:translateX(-120%)}
+.btn-ghost .pb-al-shine,.pt-add .pb-al-shine,.ck-print .pb-al-shine,.seg button .pb-al-shine{background:linear-gradient(105deg,transparent 30%,rgba(20,203,177,.16) 48%,transparent 66%)}
+.pb-al-btn:hover .pb-al-shine{transform:translateX(120%);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.pb-al-ripple{position:absolute;z-index:-1;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);pointer-events:none;animation:pbAlRipple .65s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes pbAlRipple{to{transform:scale(1);opacity:0}}
+.pb-al-tilt{position:relative;will-change:transform;transition:box-shadow .3s}
+.pb-al-tilt:hover{box-shadow:0 24px 46px -20px rgba(11,31,28,.3)}
+.pb-al-glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;background:radial-gradient(260px circle at var(--al-gx,50%) var(--al-gy,0%),rgba(20,203,177,.13),rgba(20,203,177,0) 62%)}
+.pb-al-tilt:hover .pb-al-glare{opacity:1}
+.pb-al-q > summary .pm{display:inline-block;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.pb-al-q[open] > summary .pm{transform:rotate(45deg)}
+.pb-al-q.pb-al-opening > :not(summary){animation:pbAlAns .55s cubic-bezier(.2,1,.3,1) both}
+@keyframes pbAlAns{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.pb-al-head{position:relative;isolation:isolate}
+.pb-al-headfx{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+.pb-al-logo .logo-mark{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.pb-al-logo:hover .logo-mark{transform:rotate(-8deg) scale(1.07)}
+.pb-al-logo:hover .logo-mark svg ellipse,.pb-al-tap .logo-mark svg ellipse{animation:pbAlToe .55s cubic-bezier(.3,1.6,.5,1)}
+.pb-al-logo:hover .logo-mark svg ellipse:nth-of-type(1),.pb-al-tap .logo-mark svg ellipse:nth-of-type(1){animation-delay:.06s}
+.pb-al-logo:hover .logo-mark svg ellipse:nth-of-type(2),.pb-al-tap .logo-mark svg ellipse:nth-of-type(2){animation-delay:.12s}
+.pb-al-logo:hover .logo-mark svg ellipse:nth-of-type(4),.pb-al-tap .logo-mark svg ellipse:nth-of-type(4){animation-delay:.18s}
+@keyframes pbAlToe{40%{translate:0 -4px}100%{translate:0 0}}
+.pb-al-foot{position:relative}
+.pb-al-footfx{position:absolute;left:0;right:0;top:-26px;width:100%;height:52px;pointer-events:none}
+.pb-al-read{position:fixed;left:0;right:0;top:0;z-index:60;height:3px;pointer-events:none;opacity:0;transition:opacity .3s}
+.pb-al-read.pb-on{opacity:1}
+.pb-al-read i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#7FE3D3,#14CBB1)}
+.pb-al-read i::after,.pb-al-rider{content:"";position:absolute;width:22px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 104 104'%3E%3Crect width='104' height='104' rx='28' fill='%2314CBB1'/%3E%3Cg transform='translate(22 22) scale(.9375)' fill='%23fff'%3E%3Cellipse cx='23.2' cy='17.6' rx='6.1' ry='8.3' transform='rotate(-9 23.2 17.6)'/%3E%3Cellipse cx='40.8' cy='17.6' rx='6.1' ry='8.3' transform='rotate(9 40.8 17.6)'/%3E%3Cellipse cx='9.8' cy='28.6' rx='5.5' ry='7.4' transform='rotate(-31 9.8 28.6)'/%3E%3Cellipse cx='54.2' cy='28.6' rx='5.5' ry='7.4' transform='rotate(31 54.2 28.6)'/%3E%3Cpath d='M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 3px 6px rgba(20,203,177,.45))}
+.pb-al-read i::after{right:-11px;top:-9px}
+.pb-al-rider{bottom:-11px;margin-left:-11px;opacity:0;transition:opacity .3s;pointer-events:none}
+.pb-al-rider.pb-on{opacity:1}
+.pb-al-fx{position:fixed;inset:0;z-index:85;width:100%;height:100%;pointer-events:none}
+@media print{.pb-al-fx,.pb-al-headfx,.pb-al-footfx,.pb-al-read,.pb-al-rider{display:none}}
+/* ALIVE:END */
 /* BUDDY:BEGIN (Run 32, part 3b of docs/UX-MOTION-AUDIT.md). Floating chrome
    gives way. Ask Buddy (assets/js/pb-buddy.js) moves only by the translate
    property, from --pb-b-x and --pb-b-y that the script writes, and never by
@@ -2513,7 +2568,7 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-scrub-tip[hidden]{display:none}
 :root.pb-calc-alive .pb-scrub-tip b{font-weight:700}
 :root.pb-calc-alive .pb-scrub-tip i{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%}
-:root.pb-calc-alive .pb-k-b{background:#0B7A6E;box-shadow:0 0 0 2px #fff}:root.pb-calc-alive .pb-k-u{background:#F4B740}
+:root.pb-calc-alive .pb-k-b{background:#8A97A8;box-shadow:0 0 0 2px #fff}:root.pb-calc-alive .pb-k-u{background:#F4B740}
 :root.pb-calc-alive .pb-wait{margin-top:16px;padding-top:14px;border-top:1px solid rgba(11,31,28,.1)}
 :root.pb-calc-alive .pb-wait[hidden]{display:none}
 :root.pb-calc-alive .pb-wait-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
@@ -2525,7 +2580,7 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-wait-l{color:var(--ink-2)}
 :root.pb-calc-alive .pb-wait-bar b{min-width:6.2em;text-align:right;font-variant-numeric:tabular-nums}
 :root.pb-calc-alive .pb-wait-track{position:relative;height:14px;overflow:hidden;border-radius:99px;background:rgba(11,31,28,.07)}
-:root.pb-calc-alive .pb-wait-now,:root.pb-calc-alive .pb-wait-late{position:absolute;left:0;top:0;bottom:0;background:#0B7A6E}
+:root.pb-calc-alive .pb-wait-now,:root.pb-calc-alive .pb-wait-late{position:absolute;left:0;top:0;bottom:0;background:var(--slate)}
 :root.pb-calc-alive .pb-wait-now{width:100%;border-radius:99px}
 :root.pb-calc-alive .pb-wait-late{border-radius:99px 0 0 99px}
 :root.pb-calc-alive .pb-wait-gap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,#F2B8A8 0 6px,#FADCD3 6px 12px)}
@@ -3495,8 +3550,9 @@ initJar();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
 <script src="assets/js/pb-after.js?v=257e33b2"></script>
-<script src="assets/js/pb-calc-motion.js?v=800fed53"></script>
+<script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=9603deff"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 </body>
 </html>
