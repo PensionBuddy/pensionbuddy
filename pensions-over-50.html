@@ -2169,6 +2169,15 @@ html.pb-js .pb-lad-ctl{display:block}
 .pb-lad-ctl input[type=range]{display:block;width:100%}
 html:not(.pb-js) .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{display:none}
 .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{margin-top:-2px;margin-bottom:-2px}
+/* GUIDESCENE:BEGIN (9 October 2026, Damian's brief): the guide's own
+   scene, drawn by assets/js/pb-guide-scene.js; with motion off none of this
+   is in the page. */
+.pb-gs{margin:18px 0 22px;padding:10px 12px 8px;border-radius:18px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.pb-gs-cv{display:block;width:100%;height:210px;cursor:pointer;touch-action:pan-y}
+.pb-gs .pb-gs-hint{margin:4px 0 2px;max-width:none;font-size:16px;line-height:1.4;color:var(--ink-2);text-align:center;transition:opacity .4s}
+.pb-gs .pb-gs-hint.pb-off{opacity:0}
+@media(max-width:560px){.pb-gs-cv{height:190px}}
+/* GUIDESCENE:END */
 </style>
 </head>
 <body>
@@ -2396,6 +2405,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
+<script src="assets/js/pb-guide-scene.js?v=12de3c1b"></script>
 <script src="assets/js/pb-alive.js?v=ac6cfce5"></script>
 </body>
 </html>

@@ -2266,6 +2266,18 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
+/* GLOSSARY-MOTION:BEGIN (9 October 2026, Damian's brief): the jargon
+   buster, alive, by assets/js/pb-gl-motion.js. Every rule waits on a class
+   that script adds, so with motion off none of this applies. */
+.pb-gl-w{position:relative;background:linear-gradient(#7FE3D3,#7FE3D3) 0 92%/0 .14em no-repeat;transition:background-size .7s cubic-bezier(.2,.8,.2,1),background-position .7s cubic-bezier(.6,0,.4,1)}
+.pb-gl-w.pb-gl-on{color:transparent}
+.pb-gl-x{position:absolute;left:0;top:0;white-space:nowrap;color:var(--ink);font-variant-ligatures:none}
+.pb-gl-w.pb-gl-busted{background-size:100% .14em}
+.pb-gl-w.pb-gl-out{background-position:100% 92%;background-size:0 .14em}
+.pb-gl-cv{display:block;width:100%;margin:10px 0 4px}
+.pb-gl-infl{height:190px}
+.pb-gl-dd{height:170px}
+/* GLOSSARY-MOTION:END */
 </style>
 </head>
 <body>
@@ -2744,6 +2756,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
+<script src="assets/js/pb-gl-motion.js?v=d547f9f5"></script>
 <script src="assets/js/pb-alive.js?v=ac6cfce5"></script>
 </body>
 </html>
