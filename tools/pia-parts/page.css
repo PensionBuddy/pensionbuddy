@@ -99,3 +99,15 @@
   .pia-stwrap{margin:0 -12px;padding:0 12px}
   .pia-st th,.pia-st td{padding-left:2px;padding-right:2px}
 }
+
+/* MOTION-7 (9 October 2026): "Where the tax comes in", played in three tubes
+   by assets/js/pb-pia-motion.js; with motion off none of this is in the
+   page. The row playing is lit in the table, which carries every figure. */
+.pb-pia-stage{margin:0 0 8px}
+.pb-pia-cv{display:block;width:100%;height:300px;cursor:pointer}
+.pb-pia-bar{margin:6px 0 8px;text-align:center}
+.pb-pia-play{font:inherit;font-size:16px;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-2);border-radius:99px;padding:8px 18px;cursor:pointer}
+.pb-pia-t tbody tr{cursor:pointer}
+.pb-pia-t tr th,.pb-pia-t tr td{transition:background-color .3s,color .3s}
+.pb-pia-t tr.pb-pia-now th,.pb-pia-t tr.pb-pia-now td{background:var(--surface-2);color:var(--ink);font-weight:700}
+@media(max-width:560px){.pb-pia-cv{height:280px}}

@@ -247,7 +247,7 @@ PAGES = {
         title='Find an old pension, Pensionbuddy',
         desc=('Lost track of a pension from an old job? Tell us where you worked, sign a letter '
               'that lets us ask the providers, and we do the chasing. Nothing is moved.'),
-        modules=['assets/js/pension-finder.js'],
+        modules=['assets/js/pension-finder.js', 'assets/js/pb-pf-motion.js'],
         keep=[],
         nav=None,
         # Run 21: held back until compliance signs off the letter; to re-link,
@@ -360,7 +360,7 @@ PAGES = {
         parts='pia-parts',
         title='The new Personal Investment Account (PIA), Pensionbuddy',
         desc='The new Investment Account from Budget 2027: 1% a year above €50,000, from 1 July 2027. Not yet law. Next to a pension and an ETF.',
-        modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js'],
+        modules=['assets/js/pension-tax-relief.js', 'assets/js/sft.js', 'assets/js/pia.js', 'assets/js/pb-pia-motion.js'],
         keep=['amount', 'years', 'growth', 'piaRate'],
         floor16=True,
         reviewed=True,
