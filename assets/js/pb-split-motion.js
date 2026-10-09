@@ -50,7 +50,8 @@
     var rows = table.tBodies[0] ? table.tBodies[0].rows : [], on = null, zero = null;
     for (var i = 0; i < rows.length; i++) { if (rows[i].classList.contains('on')) { on = rows[i]; } if (/^0%/.test(rows[i].cells[0].textContent.trim())) { zero = rows[i]; } }
     var pay = num(text('contribV'));
-    if (!on || !pay) { return null; }
+    if (!pay) { return { pay: 0, home: 0, pen: 0, tax: 0, tax0: 0, cut: 0 }; }
+    if (!on) { return null; }
     var home = num(on.cells[1].textContent), pen = num(on.cells[2].textContent), home0 = zero ? num(zero.cells[1].textContent) : home;
     var tax = Math.max(0, pay - home - pen), sal = pay - pen;
     return { pay: pay, home: home, pen: pen, tax: tax, tax0: Math.max(0, pay - home0), cut: sal > 0 ? clamp(tax / sal, 0, 1) : 0 };
@@ -79,7 +80,7 @@
     raf = 0; var now = ms / 1000, dt = clamp(now - last, 0, 1 / 30); last = now;
     if (!W) { size(); }
     S = settled() || S;
-    figs.forEach(function (f) { var t = text(f.getAttribute('data-id')); if (f.textContent !== t) { f.textContent = t; } });
+    copy();
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
     if (W > 120 && H > 160 && S) { draw(now, dt); }
     if (onScreen && !document.hidden) { raf = requestAnimationFrame(frame); }
@@ -95,7 +96,7 @@
       cx.strokeStyle = share > 0 ? 'rgba(11,31,28,.10)' : 'rgba(11,31,28,.04)'; cx.lineWidth = 2; cx.setLineDash([3, 7]); cx.stroke(); cx.setLineDash([]);
     });
     /* the jars: tax, take home, pension, on one scale; full is the company's whole payment */
-    var want = [S.tax / S.pay, S.home / S.pay, S.pen / S.pay], fill = [AMBER, INK, SLATE];
+    var whole = Math.max(1, S.pay), want = [S.tax / whole, S.home / whole, S.pen / whole], fill = [AMBER, INK, SLATE];
     for (var i = 0; i < 3; i++) {
       var L = lv[i]; L.v += (110 * (want[i] - L.h) - 14 * L.v) * dt; L.h += L.v * dt;
       var l = c[i] - jw / 2, y = g.bot - g.jh * clamp(L.h, 0, 1.03);
@@ -106,7 +107,7 @@
       cx.lineTo(l + jw, g.bot); cx.closePath(); cx.fillStyle = fill[i]; cx.fill();
       if (i === 0) {
         /* where tax would sit with nothing in the pension: the gap under it is tax saved */
-        var y0 = g.bot - g.jh * clamp(S.tax0 / S.pay, 0, 1);
+        var y0 = g.bot - g.jh * clamp(S.tax0 / whole, 0, 1);
         if (S.tax0 - S.tax > 1) { cx.fillStyle = 'rgba(244,183,64,.16)'; cx.fillRect(l, y0, jw, Math.max(0, y - y0)); }
         cx.setLineDash([5, 5]); cx.strokeStyle = '#B07A12'; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(l, y0); cx.lineTo(l + jw, y0); cx.stroke(); cx.setLineDash([]);
       }
@@ -209,6 +210,9 @@
   }
   cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
   slider.addEventListener('input', function () { burst = performance.now() / 1000 + 0.5; });
+  /* the key carries its figures from the start, so it never grows as it comes into view */
+  function copy() { figs.forEach(function (f) { var t = text(f.getAttribute('data-id')); if (f.textContent !== t) { f.textContent = t; } }); }
+  copy(); document.addEventListener('DOMContentLoaded', copy); document.addEventListener('input', copy); document.addEventListener('change', copy);
   new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; if (onScreen) { W = 0; burst = performance.now() / 1000 + 1; wake(); } }).observe(cv);
   document.addEventListener('visibilitychange', wake);
   window.addEventListener('pageshow', wake); window.addEventListener('focus', wake); document.addEventListener('resume', wake);

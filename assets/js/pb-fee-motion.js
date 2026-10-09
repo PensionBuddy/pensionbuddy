@@ -125,6 +125,9 @@
   function free() { jars.forEach(function (j) { j.held = false; }); }
   cv.addEventListener('pointerup', free); cv.addEventListener('pointercancel', free); cv.addEventListener('lostpointercapture', free);
   cv.addEventListener('pointermove', function (e) { cv.style.cursor = which(e) ? 'pointer' : ''; });
+  /* the key carries its figures from the start, so it never grows as it comes into view */
+  function fill() { jars.forEach(key); }
+  fill(); document.addEventListener('DOMContentLoaded', fill); document.addEventListener('input', fill); document.addEventListener('change', fill);
   new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; if (onScreen) { W = 0; wake(); } }).observe(cv);
   document.addEventListener('visibilitychange', wake);
   window.addEventListener('pageshow', wake); window.addEventListener('focus', wake); document.addEventListener('resume', wake);

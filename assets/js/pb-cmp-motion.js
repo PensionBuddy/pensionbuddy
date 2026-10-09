@@ -161,6 +161,9 @@
     el.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') { hl = null; } });
     el.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') { hl = hl === k ? null : k; wake(); } });
   });
+  /* the key carries its figures from the start, so it never grows as it comes into view */
+  function fill() { read(performance.now() / 1000); }
+  fill(); document.addEventListener('DOMContentLoaded', fill); document.addEventListener('input', fill); document.addEventListener('change', fill);
   new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; if (onScreen) { W = 0; shower = performance.now() / 1000 + 1.4; wake(); } }).observe(cv);
   document.addEventListener('visibilitychange', wake);
   window.addEventListener('pageshow', wake); window.addEventListener('focus', wake); document.addEventListener('resume', wake);

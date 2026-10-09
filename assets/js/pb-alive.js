@@ -161,16 +161,49 @@
   /* ------------------------------------------------------------ blocks -- */
   var BLOCKS = '.pb-related-card,main details,.benefit,.cover,.bothcard,.step:not(.pb-cs-step),.callout,.final,.cta-card,.chart-card,' +
     '.vs-card,.pb-nf-six > li,.pb-offer-item,.arc-card,.tmember,.pb-story-shots figure,.pb-after,.pb-quals,.gterm,.ck-item,.ck li,.dline,.benefits > *,.aud-cards > *';
+  /* A transform makes a block the offset parent of everything in it (in
+     Chrome), so while a block rose its words measured a border's width away
+     from where they measure after (tests/ux4.test.mjs R38-2 reads every
+     heading, paragraph and list item's offsets as the page scrolls). So a
+     block that rises is made positioned for good before it moves, and its
+     words measure the same before, during and after. Only when nothing
+     absolutely placed in it hangs from an ancestor outside it (a box under
+     a pixel, screen-reader text, does not count), and nothing in it is
+     fixed or hidden and placed: such a block does not rise at all. */
+  function steady(b) {
+    if (getComputedStyle(b).position !== 'static') { return true; }
+    /* never into a closed question beyond its summary: Chrome keeps that
+       content locked, and measuring it there leaves it measurable later */
+    var tw = document.createTreeWalker(b, NodeFilter.SHOW_ELEMENT, { acceptNode: function (x) {
+      var d = x.parentElement && x.parentElement.closest('details');
+      return d && !d.open && b.contains(d) && x.parentElement === d && x.tagName !== 'SUMMARY' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+    } }), n;
+    while ((n = tw.nextNode())) {
+      var pos = getComputedStyle(n).position;
+      if (pos === 'fixed') { return false; }
+      if (pos !== 'absolute') { continue; }
+      if (!n.getClientRects().length) { return false; }
+      var r = n.getBoundingClientRect();
+      if (r.width <= 1 || r.height <= 1) { continue; }
+      if (!n.offsetParent || !b.contains(n.offsetParent)) { return false; }
+    }
+    b.style.position = 'relative'; return true;
+  }
   var seen = [];
   [].forEach.call(document.querySelectorAll(BLOCKS), function (b) {
     if (!main.contains(b) && !b.closest('main')) { return; }
     if (seen.indexOf(b) >= 0 || isCaveat(b) || holdsCaveat(b) || !visible(b) || !below(b)) { return; }
-    if (b.closest('.pb-lc,.pb-cs,.pb-tl,[data-pb-pop],.pb-al-skip') || b.hasAttribute('data-pb-pop')) { return; }
+    if (b.closest('.pb-lc,.pb-cs,.pb-tl,[data-pb-pop],.pb-al-skip') || b.hasAttribute('data-pb-pop') || !steady(b)) { return; }
     seen.push(b);
     /* the order among its own siblings sets its beat */
     var sib = [].filter.call(b.parentNode.children, function (x) { return seen.indexOf(x) >= 0; });
     b.style.setProperty('--al-d', (Math.min(sib.length - 1, 6) * 70) + 'ms');
-    b.classList.add('pb-al-rise'); if (b.getBoundingClientRect().width < Math.min(640, innerWidth * 0.7) && !b.matches('.pb-bleed,.callout,.final')) { b.classList.add('pb-al-3d'); } io.observe(b);
+    /* the tilt in depth only for a narrow block of words: through a perspective
+       a chart's lines and bars skew (a bar of no width measures one), while a
+       flat rise only scales them, every proportion kept */
+    b.classList.add('pb-al-rise');
+    if (b.getBoundingClientRect().width < Math.min(640, innerWidth * 0.7) && !b.matches('.pb-bleed,.callout,.final,.chart-card') && !b.querySelector('svg:not(.ico),canvas,[class*="-track"]')) { b.classList.add('pb-al-3d'); }
+    io.observe(b);
   });
 
   /* ----------------------------------------------------------- buttons -- */
