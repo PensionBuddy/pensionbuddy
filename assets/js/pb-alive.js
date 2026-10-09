@@ -147,6 +147,16 @@
     var n = split(h); sweepLater(h, n);
     if (below(h)) { io.observe(h); } else { requestAnimationFrame(function () { go(h); }); }
   });
+  /* a highlight is kept whole so a full stop never wraps alone; one longer
+     than its heading's line may wrap, or it would push the page sideways */
+  function fitHl() {
+    [].forEach.call(document.querySelectorAll('.pb-al-split .hl'), function (hl) {
+      hl.style.whiteSpace = ''; var h = hl.closest('h1,h2');
+      if (h && hl.getBoundingClientRect().width > h.clientWidth + 1) { hl.style.whiteSpace = 'normal'; }
+    });
+  }
+  fitHl(); window.addEventListener('resize', fitHl);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fitHl); }
   /* the section headings, as they come into view */
   [].forEach.call(main.querySelectorAll('h2'), function (h) {
     if (isCaveat(h) || !visible(h) || h.closest('.panel,.pb-tocbar,form,.tk-sr,.pb-cs,.pb-life,.pb-al-skip') || !below(h)) { return; }
