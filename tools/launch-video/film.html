@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<title>Pensionbuddy launch film</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{margin:0;background:#0B1F1C}
+  canvas{display:block;max-width:100vw;max-height:100vh;margin:auto}
+</style>
+</head>
+<body>
+<canvas id="out"></canvas>
+<script type="module">
+/* Pensionbuddy's launch film. Every frame is a pure function of time:
+   FILM.frame(i) renders frame i of the timeline in timeline.mjs, at any
+   moment, in any order. Motion is closed-form damped springs evaluated at
+   the time since their cue, never state carried between frames.
+
+   ?fmt=16x9 (1920x1080) or ?fmt=9x16 (1080x1920): one timeline, two
+   layouts, every size in units of the short side (U = 1% of 1080 px) and
+   placed inside each format's safe area.
+
+   Motion blur: a frame is the average of four subframes across half a
+   frame's time (a 180-degree shutter). Shapes move with the subframe's
+   clock T; text, counters and the camera use the frame's clock TS, so they
+   are drawn identically in every subframe and stay sharp. A shot is picked
+   by TS, so a cut never blends two shots. */
+import * as TL from './timeline.mjs';
+const { b, cueT, COPY, BEAT } = TL;
+
+const Q = new URLSearchParams(location.search);
+const FMT = Q.get('fmt') === '9x16' ? '9x16' : '16x9';
+const PORT = FMT === '9x16';
+const W = PORT ? 1080 : 1920, H = PORT ? 1920 : 1080;
+const U = Math.min(W, H) / 100;
+/* safe areas: 16:9 keeps 120 px at the sides and 90 at top and bottom; 9:16
+   keeps clear of Reels/TikTok's top bar (250), caption and buttons
+   (bottom 440) and the side rail (120 each side) */
+const S = PORT ? { x: 120, y: 250, w: 840, h: 1230 } : { x: 120, y: 90, w: 1680, h: 900 };
+const GUIDES = Q.has('guides');
+
+const C = {
+  bg: '#FAFAF9', ink: '#0B1F1C', ink2: '#54635F', line: '#E7EBE9',
+  teal: '#14CBB1', aqua: '#16C9B0', tealDeep: '#0A5C52', tealDeep2: '#0B7A6E', mint: '#7FE3D3',
+  amber: '#F4B740', amberSoft: '#FCEFCF', gap: '#FADCD3', gapInk: '#A4291D', gapLine: '#EBA997',
+  slate: '#586B85', white: '#FFFFFF', onDark: '#D3E6E1', onDark2: '#A6BDB7', cta: '#0A5C52',
+};
+
+const out = document.getElementById('out');
+out.width = W; out.height = H;
+const octx = out.getContext('2d');
+const sub = document.createElement('canvas'); sub.width = W; sub.height = H;
+const g = sub.getContext('2d');
+
+/* ---------------------------------------------------------------- assets */
+const IMG = {};
+async function load() {
+  for (const [file, range] of [['figtree-latin.woff2', 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD'],
+    ['figtree-latin-ext.woff2', 'U+0100-02BA, U+1E00-1E9F, U+20A0-20AB, U+20AD-20C0']]) {
+    const f = new FontFace('Figtree', `url(/assets/fonts/${file})`, { weight: '300 900', unicodeRange: range });
+    await f.load(); document.fonts.add(f);
+  }
+  const want = { damian: '/assets/img/damian-condon-portrait.jpg', buddy: '/assets/img/buddy-beach.jpg', page: '/__work/calc-page.png' };
+  await Promise.all(Object.entries(want).map(async ([k, src]) => { const im = new Image(); im.src = src; await im.decode(); IMG[k] = im; }));
+  IMG.shots = await (await fetch('/__work/calc-shots.json')).json();
+  await document.fonts.ready;
+}
+
+/* --------------------------------------------------------------- springs */
+const clamp = (x, a = 0, z = 1) => Math.min(z, Math.max(a, x));
+const lerp = (a, z, k) => a + (z - a) * k;
+/* the closed-form step response of a damped spring, t seconds after t0 */
+function sp(t, t0, w = 20, z = 0.6) {
+  const u = t - t0;
+  if (u <= 0) return 0;
+  if (z >= 1) return 1 - (1 + w * u) * Math.exp(-w * u);
+  const wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * u) * (Math.cos(wd * u) + (z * w / wd) * Math.sin(wd * u));
+}
+/* how long a spring takes to first reach its target: started this early,
+   an element *lands* on its cue */
+function lead(w, z) { if (z >= 1) return 4 / w; const wd = w * Math.sqrt(1 - z * z); return (Math.PI - Math.atan(wd / (z * w))) / wd; }
+const land = (t, at, w = 22, z = 0.5) => sp(t, at - lead(w, z), w, z);
+/* a line of text arriving: on a cut it is already three-quarters in on the
+   cut's first frame, so no beat lands on an empty screen */
+function ent(ts, t0, dist, pre = 0.12) {
+  return { a: clamp((ts - t0 + pre) / 0.16), dy: (1 - sp(ts, t0 - pre, 18, 0.78)) * dist };
+}
+function ext(ts, t1, d = 0.12) { const k = clamp((ts - t1) / d); return { a: 1 - k, dy: -k * k * 24 }; }
+/* a deterministic hash for the jargon's random letters */
+function hash(a, c) { let h = (a * 374761393 + c * 668265263) | 0; h = (h ^ (h >>> 13)) * 1274126177 | 0; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+
+/* ------------------------------------------------------------------ text */
+let SEEN = [];
+function seen(id, str, ok, small, transient) { SEEN.push({ id, str, ok: !!ok, small: !!small, transient: !!transient }); }
+const F = (wt, px) => `${wt} ${px}px Figtree`;
+const WRAP = new Map();
+function greedy(words, maxW) {
+  const lines = []; let cur = '';
+  for (const w of words) { const t = cur ? cur + ' ' + w : w; if (cur && g.measureText(t).width > maxW) { lines.push(cur); cur = w; } else cur = t; }
+  if (cur) lines.push(cur);
+  return lines;
+}
+/* wrap, then balance: the narrowest width that keeps the same number of lines */
+function wrap(str, f, maxW, ls) {
+  const key = f + '|' + maxW + '|' + ls + '|' + str;
+  if (WRAP.has(key)) return WRAP.get(key);
+  g.save(); g.font = f; g.letterSpacing = ls + 'px';
+  const words = str.split(' ');
+  let lines = greedy(words, maxW);
+  if (lines.length > 1) {
+    let lo = maxW * 0.4, hi = maxW;
+    for (let i = 0; i < 14; i++) { const mid = (lo + hi) / 2; if (greedy(words, mid).length > lines.length) lo = mid; else hi = mid; }
+    lines = greedy(words, hi + 1);
+  }
+  g.restore();
+  WRAP.set(key, lines);
+  return lines;
+}
+/* a block of text; y is the top of its first line. o.hi colours one
+   substring; o.a and o.dy come from ent()/ext(). Returns its height. */
+function para(id, str, x, y, o) {
+  const px = o.px, f = F(o.wt || 700, px), ls = (o.ls ?? -0.015) * px;
+  const lines = wrap(str, f, o.maxW || 1e5, ls);
+  const lh = (o.lh || 1.12) * px, a = o.a ?? 1, dy = o.dy ?? 0;
+  let maxw = 0;
+  g.save(); g.font = f; g.letterSpacing = ls + 'px'; g.textBaseline = 'alphabetic';
+  g.globalAlpha *= clamp(a);
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i], lw = g.measureText(ln).width; maxw = Math.max(maxw, lw);
+    let lx = o.align === 'center' ? x - lw / 2 : o.align === 'right' ? x - lw : x;
+    const by = y + dy + i * lh + px * 0.8;
+    const hit = o.hi ? ln.indexOf(o.hi.text) : -1;
+    if (hit >= 0 && a > 0) {
+      const pre = ln.slice(0, hit), mid = o.hi.text, post = ln.slice(hit + mid.length);
+      g.fillStyle = o.color; g.fillText(pre, lx, by); lx += g.measureText(pre).width;
+      g.fillStyle = o.hi.color; g.fillText(mid, lx, by); lx += g.measureText(mid).width;
+      g.fillStyle = o.color; g.fillText(post, lx, by);
+    } else if (a > 0) { g.fillStyle = o.color; g.fillText(ln, lx, by); }
+  }
+  g.restore();
+  if (o.track !== false && a > 0) seen(id, str, a >= 0.98 && Math.abs(dy) <= 0.05 * px, o.small);
+  return { h: lines.length * lh, w: maxw, n: lines.length };
+}
+function measure(str, wt, px, ls = -0.015) { g.save(); g.font = F(wt, px); g.letterSpacing = ls * px + 'px'; const w = g.measureText(str).width; g.restore(); return w; }
+function textH(str, wt, px, maxW, lh = 1.12, ls = -0.015) { return wrap(str, F(wt, px), maxW, ls * px).length * lh * px; }
+const eur = n => '€' + Math.round(n).toLocaleString('en-IE');
+
+/* ----------------------------------------------------------------- shapes */
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function ground(kind) {
+  g.save();
+  if (kind === 'dark') {
+    g.fillStyle = C.ink; g.fillRect(0, 0, W, H);
+    const gr = g.createRadialGradient(W * 0.5, H * 0.42, 0, W * 0.5, H * 0.42, Math.max(W, H) * 0.75);
+    gr.addColorStop(0, 'rgba(20,203,177,0.10)'); gr.addColorStop(1, 'rgba(20,203,177,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  } else {
+    g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+    const gr = g.createRadialGradient(W * 0.3, H * 0.2, 0, W * 0.3, H * 0.2, Math.max(W, H) * 0.9);
+    gr.addColorStop(0, 'rgba(255,255,255,0.9)'); gr.addColorStop(1, 'rgba(231,235,233,0.35)');
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  }
+  g.restore();
+}
+const PAD = new Path2D('M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z');
+const TOES = [[23.2, 17.6, 6.1, 8.3, -9], [40.8, 17.6, 6.1, 8.3, 9], [9.8, 28.6, 5.5, 7.4, -31], [54.2, 28.6, 5.5, 7.4, 31]];
+const TOE_ORDER = [2, 0, 1, 3];   // left, top-left, top-right, right: an arc
+/* the mark, as assets/brand/pensionbuddy-mark: a 104 box, rx 28, the paw
+   at translate(22 22) scale(0.9375). st: sq (square scale), pad, toes[4] */
+function mark(cx, cy, size, st) {
+  const k = size / 104;
+  g.save(); g.translate(cx, cy); g.scale(st.sq, st.sq);
+  g.fillStyle = C.teal; rr(-52 * k, -52 * k, 104 * k, 104 * k, 28 * k); g.fill();
+  g.translate(-30 * k, -30 * k); g.scale(0.9375 * k, 0.9375 * k);
+  g.fillStyle = '#FFFFFF';
+  if (st.pad > 0.001) { g.save(); g.translate(32, 43); g.scale(st.pad, st.pad); g.translate(-32, -43); g.fill(PAD); g.restore(); }
+  TOES.forEach(([x, y, rx, ry, r], i) => {
+    const s = st.toes[i]; if (s <= 0.001) return;
+    g.save(); g.translate(x, y + (st.toeDy ? st.toeDy[i] : 0)); g.rotate(r * Math.PI / 180); g.scale(s, s);
+    g.beginPath(); g.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2); g.fill(); g.restore();
+  });
+  g.restore();
+}
+/* the wordmark, letter by letter: Figtree 800, -0.035em, as the lockup SVG */
+function wordmark(id, x, base, HL, color, letter) {
+  const px = 66 / 104 * HL, ls = -0.035 * px, word = COPY.wordmark;
+  g.save(); g.font = F(800, px); g.letterSpacing = ls + 'px'; g.fillStyle = color; g.textBaseline = 'alphabetic';
+  let allOk = true, any = false;
+  for (let i = 0; i < word.length; i++) {
+    const st = letter(i); if (st.a <= 0) { allOk = false; continue; }
+    any = true;
+    const x0 = x + g.measureText(word.slice(0, i)).width, cw = g.measureText(word[i]).width;
+    g.save(); g.globalAlpha = clamp(st.a); g.translate(x0 + cw / 2, base + st.dy); g.scale(st.s, st.s);
+    g.fillText(word[i], -cw / 2, 0); g.restore();
+    if (st.a < 0.98 || Math.abs(st.dy) > 0.05 * px || Math.abs(st.s - 1) > 0.04) allOk = false;
+  }
+  const w = g.measureText(word).width;
+  g.restore();
+  if (any) seen(id, word, allOk);
+  return w;
+}
+const LOCK = { w: 545 / 104, textX: 132 / 104, base: 74 / 104 };
+
+/* ------------------------------------------------------------- the shots */
+const shots = {};
+/* the type scale: a social video is read on a phone, so nothing small */
+const T = PORT
+  ? { h1: 8.8 * U, sub: 5.0 * U, body: 4.8 * U, small: 3.0 * U, label: 3.0 * U, value: 3.6 * U }
+  : { h1: 8.4 * U, sub: 4.6 * U, body: 4.4 * U, small: 2.6 * U, label: 2.8 * U, value: 3.4 * U };
+const H1 = (id, str, x, y, maxW, e, extra) => para(id, str, x, y, { px: T.h1, wt: 800, color: C.ink, maxW, a: e.a, dy: e.dy, lh: 1.05, ls: -0.028, ...extra });
+const SMALL = (id, str, x, y, maxW, a, color, align) => para(id, str, x, y, { px: T.small, wt: 500, color: color || C.ink2, maxW, a, lh: 1.35, ls: 0, small: true, align });
+const smallH = (str, maxW) => textH(str, 500, T.small, maxW, 1.35, 0);
+
+/* 1. intro, dark: the mark springs in, a toe a beat, the wordmark letter
+   by letter (riding with the mark as it glides into the lockup), the
+   underline, the line */
+shots.intro = (t, ts) => {
+  const HL = PORT ? 14.6 * U : 17 * U, LW = LOCK.w * HL;
+  const cx = W / 2, cy = PORT ? S.y + S.h * 0.47 : H / 2 + 2 * U;
+  const glide = sp(ts, cueT('glide'), 10, 0.8);
+  const size = lerp(2.0 * HL, HL, glide);
+  const left = cx - LW / 2;
+  const mx = lerp(cx, left + HL / 2, glide), my = lerp(cy, cy - 0.45 * HL, glide);
+  const gr = g.createRadialGradient(mx, my, 0, mx, my, size * 2.6);
+  gr.addColorStop(0, 'rgba(20,203,177,0.20)'); gr.addColorStop(1, 'rgba(20,203,177,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  const toes = [0, 0, 0, 0], toeDy = [0, 0, 0, 0];
+  TOE_ORDER.forEach((ti, k) => { const s = land(t, cueT('toe' + (k + 1)), 24, 0.42); toes[ti] = Math.max(0, s); toeDy[ti] = -(1 - clamp(s)) * 10; });
+  /* started a touch before the first frame, so frame 0 already shows it */
+  mark(mx, my, size, { sq: Math.max(0, sp(t, -0.10, 16, 0.5)), pad: Math.max(0, sp(t, -0.06, 18, 0.5)), toes, toeDy });
+  /* the wordmark sits where the lockup puts it, relative to the moving mark */
+  const base = my + (LOCK.base - 0.5) * HL, wx = mx + size / 2 + (LOCK.textX - 1) * HL;
+  const ww = wordmark('wordmark', wx, base, HL, C.white, i => {
+    const at = cueT('letter' + i), s = land(ts, at, 26, 0.5);
+    return { a: clamp((ts - at + lead(26, 0.5)) / 0.08), dy: (1 - s) * 0.42 * HL, s: 0.6 + 0.4 * s };
+  });
+  const u = sp(t, cueT('underline'), 11, 0.85);
+  if (u > 0.002) { g.fillStyle = C.teal; rr(wx, base + 0.17 * HL, ww * clamp(u, 0, 1.05), 0.06 * HL, 0.03 * HL); g.fill(); }
+  const e = ent(ts, cueT('tagline'), 2 * U, 0);
+  para('tagline', COPY.tagline, cx, my + HL / 2 + 0.55 * HL, { px: PORT ? 6.0 * U : 5.4 * U, wt: 600, color: C.onDark, align: 'center', a: e.a, dy: e.dy, ls: -0.01 });
+};
+
+/* 2. the gap, light: the State Pension against what retirement costs.
+   16:9 has horizontal bars, 9:16 columns. */
+function gapLayout() {
+  const maxW = PORT ? S.w : 0.62 * S.w;
+  const headH = Math.max(textH(COPY.gapH1, 800, T.h1, maxW, 1.05, -0.028), textH(COPY.gapH2, 800, T.h1, maxW, 1.05, -0.028));
+  const srcMax = PORT ? S.w : 0.62 * S.w, srcY = S.y + S.h - smallH(COPY.gapSource, srcMax);
+  if (PORT) {
+    const head = { x: S.x, y: S.y, maxW };
+    const yb = srcY - 9.5 * U, top = S.y + headH + 11 * U;
+    return { head, srcY, srcMax, yb, hc: yb - top, gx: S.x + 228, ax: S.x + 240, cw: 170, bx: S.x + 240 + 170 + 60, tx: S.x + 240 + 170 + 60 + 170 + 20 };
+  }
+  const head = { x: S.x, y: S.y + 0.02 * S.h, maxW };
+  const kx = S.w * 0.95 / 36000;
+  const r1 = head.y + headH + 10 * U, bh = 12 * U;
+  return { head, srcY, srcMax, x: v => S.x + v * kx, r1, r2: r1 + bh + 8.6 * U, bh };
+}
+function gapState(t, ts) {
+  const steps = TL.LEVELS.map((l, k) => ({ ...l, at: cueT('gap.cost' + k) }));
+  const lvl = tt => steps.reduce((acc, s, k) => acc + (s.cost - (k ? steps[k - 1].cost : 0)) * sp(tt, s.at - 0.08, 14, 0.62), 0);
+  const k = steps.reduce((acc, s, i) => (ts >= s.at - 0.08 ? i : acc), 0);
+  const x = sp(ts, steps[k].at - 0.08, 14, 0.62);
+  /* a counter reads its exact figure from the moment its spring first
+     reaches it (the undershoot after that is under 1%) */
+  const settled = x >= 0.99, cost = lvl(t), costS = lvl(ts);
+  return { steps, cost, costS, k, settled, gapV: settled ? steps[k].cost - TL.STATE_PENSION : costS - TL.STATE_PENSION };
+}
+shots.gap = (t, ts) => {
+  const L = gapLayout(), t0 = b(8), tH2 = cueT('gap.h2');
+  if (ts < tH2 + 0.13) { const e = ent(ts, t0, 3 * U), x = ext(ts, tH2); H1('gapH1', COPY.gapH1, L.head.x, L.head.y, L.head.maxW, { a: e.a * x.a, dy: e.dy + x.dy }, { hi: { text: '€15,564', color: C.tealDeep } }); }
+  if (ts >= tH2 + 0.1) H1('gapH2', COPY.gapH2, L.head.x, L.head.y, L.head.maxW, ent(ts, tH2 + 0.22, 3 * U));
+  const ea = ent(ts, t0, 0, 0.12).a;
+  SMALL('gapSource', COPY.gapSource, S.x, L.srcY, L.srcMax, ea);
+  const st = gapState(t, ts), costIn = ent(ts, cueT('gap.cost0'), 0, 0.12).a;
+  const tp = sp(t, cueT('gap.teal') - 0.12, 13, 0.62), tpS = sp(ts, cueT('gap.teal') - 0.12, 13, 0.62);
+  const spV = tpS >= 0.99 ? TL.STATE_PENSION : TL.STATE_PENSION * Math.min(1, tpS);
+  const gapA = clamp((ts - cueT('gap.cost0')) / 0.15);
+  const gapStr = eur(st.gapV) + ' a year short';
+  const fpx = PORT ? 5.2 * U : 6.0 * U, wpx = PORT ? 3.1 * U : 3.6 * U;
+  if (!PORT) {
+    const x = L.x, r1 = L.r1, r2 = L.r2, bh = L.bh;
+    para('colState', COPY.colState, S.x, r1 - T.label * 1.45, { px: T.label, wt: 700, color: C.ink2, a: ea, ls: 0 });
+    if (costIn > 0) para('colCost', COPY.colCost, S.x, r2 - T.label * 1.45, { px: T.label, wt: 700, color: C.ink2, a: costIn, ls: 0 });
+    g.save(); g.globalAlpha = ea * 0.25; g.fillStyle = C.ink; g.fillRect(S.x - 3, r1 - 10, 3, r2 + bh - r1 + 20); g.restore();
+    const wTeal = (x(TL.STATE_PENSION) - S.x) * tp;
+    if (wTeal > 0.5) { g.fillStyle = C.teal; rr(S.x, r1, wTeal, bh, [0, 12, 12, 0]); g.fill(); }
+    if (tpS > 0.3) para('statePensionValue', eur(spV), S.x + (x(TL.STATE_PENSION) - S.x) * tpS - 2.2 * U, r1 + bh / 2 - T.value * 0.62, { px: PORT ? T.value : 4.0 * U, wt: 800, color: C.ink, align: 'right', a: clamp((tpS - 0.3) / 0.4), track: tpS >= 0.99, ls: -0.01 });
+    if (st.cost > 1) {
+      const xc = x(st.cost);
+      g.fillStyle = C.ink; rr(S.x, r2, xc - S.x, bh, [0, 12, 12, 0]); g.fill();
+      if (st.cost > TL.STATE_PENSION && tp > 0.9) {
+        const x1 = x(TL.STATE_PENSION);
+        g.fillStyle = C.gap; rr(x1, r1, xc - x1, bh, [0, 12, 12, 0]); g.fill();
+        g.save(); g.strokeStyle = C.gapLine; g.lineWidth = 2.5; g.setLineDash([8, 7]); rr(x1, r1 + 1, xc - x1 - 1, bh - 2, [0, 12, 12, 0]); g.stroke(); g.restore();
+      }
+      g.save(); g.strokeStyle = 'rgba(11,31,28,0.5)'; g.lineWidth = 2.5; g.setLineDash([7, 7]);
+      g.beginPath(); g.moveTo(xc, r1 - 14); g.lineTo(xc, r2 + bh + 14); g.stroke(); g.restore();
+    }
+    st.steps.forEach((s, k) => {
+      const e = ent(ts, s.at, 0, 0.06); if (e.a <= 0) return;
+      const xx = x(s.cost), dy = (1 - sp(ts, s.at - 0.06, 18, 0.8)) * 24;
+      g.save(); g.globalAlpha = e.a; g.fillStyle = C.ink; g.fillRect(xx - 1.5, r2 + bh + 4, 3, 16); g.restore();
+      para('lvlName' + k, s.name, xx, r2 + bh + 2.6 * U + dy, { px: T.label, wt: 600, color: C.ink2, a: e.a, ls: 0, align: 'center' });
+      para('lvlCost' + k, eur(s.cost), xx, r2 + bh + 2.6 * U + T.label * 1.2 + dy, { px: T.value, wt: 800, color: C.ink, a: e.a, ls: -0.01, align: 'center' });
+    });
+    if (st.costS > TL.STATE_PENSION + 50) {
+      /* the gap's figure and words, above it: never colour alone */
+      const xm = (x(TL.STATE_PENSION) + x(st.costS)) / 2;
+      const wf = measure(eur(st.gapV), 800, fpx, -0.015), sp1 = 0.32 * wpx, ws = measure('a year short', 700, wpx, 0);
+      const xl = Math.min(S.x + S.w - wf - sp1 - ws, Math.max(S.x + 9 * U * 3, xm - (wf + sp1 + ws) / 2));
+      const yl = r1 - fpx * 1.12;
+      para('gapFig', eur(st.gapV), xl, yl, { px: fpx, wt: 800, color: C.gapInk, a: gapA, track: false, ls: -0.015 });
+      para('gapWords', 'a year short', xl + wf + sp1, yl + (fpx - wpx) * 0.8, { px: wpx, wt: 700, color: C.gapInk, a: gapA, track: false, ls: 0 });
+      seen('gapLabel', gapStr, gapA >= 0.98 && st.settled, false, !st.settled || st.k < st.steps.length - 1);
+    }
+    return;
+  }
+  /* 9:16: columns */
+  const y = v => L.yb - v / 36000 * L.hc;
+  g.save(); g.globalAlpha = ea; g.fillStyle = 'rgba(11,31,28,0.22)'; g.fillRect(L.ax - 24, L.yb, L.bx + L.cw + 24 - (L.ax - 24), 3); g.restore();
+  para('colState', COPY.colState, L.ax + L.cw / 2, L.yb + 1.4 * U, { px: T.label * 0.92, wt: 700, color: C.ink2, align: 'center', a: ea, ls: 0 });
+  if (costIn > 0) para('colCost', COPY.colCost, L.bx + L.cw / 2, L.yb + 1.4 * U, { px: T.label * 0.92, wt: 700, color: C.ink2, align: 'center', a: costIn, ls: 0 });
+  const hTeal = TL.STATE_PENSION / 36000 * L.hc * tp;
+  if (hTeal > 0.5) { g.fillStyle = C.teal; rr(L.ax, L.yb - hTeal, L.cw, hTeal, [12, 12, 0, 0]); g.fill(); }
+  if (tpS > 0.3) para('statePensionValue', eur(spV), L.ax + L.cw / 2, L.yb - TL.STATE_PENSION / 36000 * L.hc * tpS + 1.6 * U, { px: T.value, wt: 800, color: C.ink, align: 'center', a: clamp((tpS - 0.3) / 0.4), track: tpS >= 0.99, ls: -0.01 });
+  if (st.cost > 1) {
+    g.fillStyle = C.ink; rr(L.bx, y(st.cost), L.cw, L.yb - y(st.cost), [12, 12, 0, 0]); g.fill();
+    if (st.cost > TL.STATE_PENSION && tp > 0.9) {
+      const y1 = y(TL.STATE_PENSION), y2 = y(st.cost);
+      g.fillStyle = C.gap; rr(L.ax, y2, L.cw, y1 - y2, [12, 12, 0, 0]); g.fill();
+      g.save(); g.strokeStyle = C.gapLine; g.lineWidth = 2.5; g.setLineDash([8, 7]); rr(L.ax + 1, y2 + 1, L.cw - 2, y1 - y2 - 1, [12, 12, 0, 0]); g.stroke(); g.restore();
+    }
+    g.save(); g.strokeStyle = 'rgba(11,31,28,0.5)'; g.lineWidth = 2.5; g.setLineDash([7, 7]);
+    g.beginPath(); g.moveTo(L.ax - 14, y(st.cost)); g.lineTo(L.bx + L.cw + 14, y(st.cost)); g.stroke(); g.restore();
+  }
+  st.steps.forEach((s, k) => {
+    const e = ent(ts, s.at, 0, 0.06); if (e.a <= 0) return;
+    const yy = y(s.cost), dx = (1 - sp(ts, s.at - 0.06, 18, 0.8)) * 30;
+    g.save(); g.globalAlpha = e.a; g.fillStyle = C.ink; g.fillRect(L.bx + L.cw + 4, yy - 1.5, 14, 3); g.restore();
+    para('lvlName' + k, s.name, L.tx + dx, yy - T.label * 1.08, { px: T.label * 0.92, wt: 600, color: C.ink2, a: e.a, ls: 0 });
+    para('lvlCost' + k, eur(s.cost), L.tx + dx, yy + 0.08 * T.value, { px: T.value, wt: 800, color: C.ink, a: e.a, ls: -0.01 });
+  });
+  if (st.costS > TL.STATE_PENSION + 50) {
+    const ymid = (y(TL.STATE_PENSION) + y(st.costS)) / 2;
+    para('gapFig', eur(st.gapV), L.gx, ymid - (fpx + wpx) / 2, { px: fpx, wt: 800, color: C.gapInk, align: 'right', a: gapA, track: false, ls: -0.015 });
+    para('gapWords', 'a year short', L.gx, ymid - (fpx + wpx) / 2 + fpx * 1.04, { px: wpx, wt: 700, color: C.gapInk, align: 'right', a: gapA, track: false, ls: 0 });
+    seen('gapLabel', gapStr, gapA >= 0.98 && st.settled, false, !st.settled || st.k < st.steps.length - 1);
+  }
+};
+
+/* 3. the calculator, dark: the real page, its parts lifting out */
+function calcLayout() {
+  const R = IMG.shots.rects;
+  if (PORT) {
+    const head = { x: S.x, y: S.y, maxW: S.w };
+    const hh = textH(COPY.calcH, 800, T.h1, S.w, 1.05, -0.028);
+    const smallY = S.y + S.h - smallH(COPY.calcSmall, S.w);
+    const card = { x: 60, y: S.y + hh + T.sub * 1.3 + 5 * U, w: 960, bar: 36 };
+    card.h = smallY - 3.5 * U - card.y; card.ps = card.w / 1200;
+    const bottom = smallY - 3.5 * U;
+    return { head, smallY, smallMax: S.w, card, R, targets: {
+      panel: { s: 1.15, cx: W / 2, y: card.y + 20 },
+      results: { s: 1.42, cx: W / 2, y: card.y - 10 },
+      results2: { s: 1.18, cx: W / 2, y: card.y - 20 },
+      chart: { s: 1.16, cx: W / 2, y: bottom - R.chart.h * 1.16 },
+    } };
+  }
+  const head = { x: S.x, y: S.y + 0.10 * S.h, maxW: 0.40 * S.w };
+  const smallMax = 0.36 * S.w, smallY = S.y + S.h - smallH(COPY.calcSmall, smallMax);
+  const card = { x: S.x + 0.445 * S.w, y: S.y - 10, w: S.w - 0.445 * S.w, bar: 40 };
+  card.h = H + 40 - card.y; card.ps = card.w / 1200;
+  return { head, smallY, smallMax, card, R, targets: {
+    panel: { s: 1.0, cx: card.x + 310, y: S.y + 50 },
+    results: { s: 1.32, x1: S.x + S.w, y: S.y },
+    results2: { s: 1.32, x1: S.x + S.w, y: S.y },
+    chart: { s: 1.06, x0: card.x + 10, y: S.y + S.h - R.chart.h * 1.06 },
+  } };
+}
+shots.calc = (t, ts) => {
+  const L = calcLayout(), R = L.R, cd = L.card, t0 = b(20);
+  const hh = H1('calcH', COPY.calcH, L.head.x, L.head.y, L.head.maxW, ent(ts, t0, 3 * U), { color: C.white });
+  const e2 = ent(ts, cueT('calc.sub'), 2 * U);
+  para('calcSub', COPY.calcSub, L.head.x, L.head.y + hh.h + 1.6 * U, { px: T.sub, wt: 600, color: C.mint, maxW: L.head.maxW, a: e2.a, dy: e2.dy, ls: -0.01 });
+  SMALL('calcSmall', COPY.calcSmall, S.x, L.smallY, L.smallMax, ent(ts, t0, 0).a, C.onDark2);
+  /* the page lands with the cut, and scrolls to its chart before the chart lifts */
+  const pin = sp(t, t0 - 0.12, 12, 0.8);
+  const scrollTo = R.chart.y + R.chart.h + 30 - (cd.h - cd.bar) / cd.ps;
+  const scroll = Math.max(0, scrollTo) * sp(t, cueT('calc.scroll') - 0.05, 9, 0.9);
+  const cy = cd.y + (1 - pin) * 120;
+  g.save(); g.globalAlpha = clamp(pin * 2);
+  g.save(); g.shadowColor = 'rgba(0,0,0,0.45)'; g.shadowBlur = 50; g.shadowOffsetY = 20; g.fillStyle = C.bg; rr(cd.x, cy, cd.w, cd.h, 18); g.fill(); g.restore();
+  g.save(); rr(cd.x, cy, cd.w, cd.h, 18); g.clip();
+  g.fillStyle = '#E9EEEC'; g.fillRect(cd.x, cy, cd.w, cd.bar);
+  ['#F0A39A', '#F4CE7A', '#9ADBC9'].forEach((c, i) => { g.fillStyle = c; g.beginPath(); g.arc(cd.x + 22 + i * 20, cy + cd.bar / 2, 6, 0, Math.PI * 2); g.fill(); });
+  const img = IMG.page, k = IMG.shots.scale, viewH = (cd.h - cd.bar) / cd.ps;
+  const sy = scroll, sh = Math.min(viewH, IMG.shots.clip.h - sy);
+  g.drawImage(img, 0, sy * k, 1200 * k, sh * k, cd.x, cy + cd.bar, cd.w, sh * cd.ps);
+  const p2 = sp(t, cueT('calc.lift2') - 0.1, 11, 0.72);
+  const lifts = [['panel', 'calc.lift0', 'calc.lift1'], ['results', 'calc.lift1', null], ['chart', 'calc.lift2', null]].map(([name, on, off]) => {
+    const up = sp(t, cueT(on) - 0.1, 11, 0.72) - (off ? sp(t, cueT(off) - 0.1, 11, 0.85) : 0);
+    const r = name === 'panel' ? R.sliders : name === 'results' ? (R.resultsTop || R.results) : R[name];
+    const slot = { x: cd.x + r.x * cd.ps, y: cy + cd.bar + (r.y - scroll) * cd.ps, w: r.w * cd.ps, h: r.h * cd.ps };
+    return { name, up, r, slot };
+  });
+  /* lifted parts leave a soft hollow where they were */
+  lifts.forEach(l => { if (l.up > 0.01) { g.fillStyle = `rgba(11,31,28,${0.10 * clamp(l.up)})`; rr(l.slot.x, l.slot.y, l.slot.w, l.slot.h, 14 * cd.ps); g.fill(); } });
+  const dim = Math.max(...lifts.map(l => clamp(l.up)));
+  if (dim > 0) { g.fillStyle = `rgba(11,31,28,${0.6 * dim})`; g.fillRect(cd.x, cy, cd.w, cd.h); }
+  g.restore(); g.restore();
+  for (const l of lifts) {
+    if (l.up <= 0.002) continue;
+    let tg = L.targets[l.name];
+    if (l.name === 'results') { const a = L.targets.results, z = L.targets.results2; tg = { s: lerp(a.s, z.s, p2), cx: a.cx !== undefined ? lerp(a.cx, z.cx, p2) : undefined, x1: a.x1, y: lerp(a.y, z.y, p2) }; }
+    const r = l.r, tw = r.w * tg.s, th = r.h * tg.s;
+    const tx = tg.x1 !== undefined ? tg.x1 - tw : tg.x0 !== undefined ? tg.x0 : tg.cx - tw / 2;
+    const p = l.up;
+    const x = lerp(l.slot.x, tx, p), y = lerp(l.slot.y, tg.y, p), w = lerp(l.slot.w, tw, p), h = lerp(l.slot.h, th, p);
+    const rad = 16 * (w / r.w);
+    g.save(); g.shadowColor = `rgba(0,0,0,${0.55 * clamp(p)})`; g.shadowBlur = 60 * clamp(p); g.shadowOffsetY = 26 * clamp(p);
+    g.fillStyle = '#FFFFFF'; rr(x, y, w, h, rad); g.fill(); g.restore();
+    g.save(); rr(x, y, w, h, rad); g.clip();
+    g.drawImage(img, r.x * k, r.y * k, r.w * k, r.h * k, x, y, w, h);
+    g.restore();
+  }
+};
+
+/* 4. tax relief, light: coins into a jar on the beat */
+function taxLayout() {
+  if (PORT) {
+    const smallY = S.y + S.h - smallH(COPY.taxSmall, S.w);
+    const D = 26 * U, jx = S.x + 0.24 * S.w;
+    return { head: { x: S.x, y: S.y, maxW: S.w }, smallY, smallMax: S.w, D, jx, jb: smallY - 6 * U, lx: jx + D / 2 + 25 + 60, lmax: S.x + S.w - (jx + D / 2 + 25 + 60), extra: 210 };
+  }
+  const smallMax = 0.42 * S.w, smallY = S.y + S.h - smallH(COPY.taxSmall, smallMax);
+  const D = 25 * U, jx = S.x + 0.585 * S.w;
+  return { head: { x: S.x, y: S.y + 0.14 * S.h, maxW: 0.43 * S.w }, smallY, smallMax, D, jx, jb: S.y + 0.97 * S.h, lx: jx + D / 2 + 25 + 70, lmax: S.x + S.w - (jx + D / 2 + 25 + 70), extra: 170 };
+}
+function coin(x, yTop, D, kind, tilt) {
+  const rx = D / 2, ry = D * 0.17, th = D * 0.2;
+  const col = kind === 'amber'
+    ? { side: '#C98A12', side2: '#E7A834', face: '#F4B740', rim: '#FFD889', sym: '#B97F0F' }
+    : { side: '#050F0D', side2: '#1B332F', face: '#1A3632', rim: '#36605A', sym: '#5E8981' };
+  g.save(); g.translate(x, yTop); g.rotate(tilt || 0);
+  const gr = g.createLinearGradient(-rx, 0, rx, 0);
+  gr.addColorStop(0, col.side); gr.addColorStop(0.45, col.side2); gr.addColorStop(1, col.side);
+  g.fillStyle = gr;
+  g.beginPath(); g.moveTo(-rx, 0); g.lineTo(-rx, th); g.ellipse(0, th, rx, ry, 0, Math.PI, 0, true); g.lineTo(rx, 0); g.closePath(); g.fill();
+  g.save(); g.globalAlpha = 0.25; g.strokeStyle = kind === 'amber' ? '#8F600A' : '#000'; g.lineWidth = 2;
+  for (let i = -8; i <= 8; i++) { const xx = rx * Math.sin(i / 8 * Math.PI / 2); const yy = ry * Math.cos(i / 8 * Math.PI / 2); g.beginPath(); g.moveTo(xx, yy * 0.2 + 2); g.lineTo(xx, th + yy - 2); g.stroke(); }
+  g.restore();
+  g.strokeStyle = kind === 'amber' ? 'rgba(120,70,0,0.55)' : 'rgba(0,0,0,0.6)'; g.lineWidth = 3;
+  g.beginPath(); g.ellipse(0, th, rx, ry, 0, 0.04, Math.PI - 0.04); g.stroke();
+  g.strokeStyle = kind === 'amber' ? 'rgba(255,226,150,0.8)' : 'rgba(90,140,130,0.55)'; g.lineWidth = 2;
+  g.beginPath(); g.ellipse(0, 0, rx, ry, 0, 0.04, Math.PI - 0.04); g.stroke();
+  g.fillStyle = col.face; g.beginPath(); g.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2); g.fill();
+  g.strokeStyle = col.rim; g.lineWidth = 3; g.beginPath(); g.ellipse(0, 0, rx * 0.8, ry * 0.8, 0, 0, Math.PI * 2); g.stroke();
+  g.save(); g.scale(1, ry / rx); g.fillStyle = col.sym; g.font = F(800, D * 0.5); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('€', 0, D * 0.03); g.restore();
+  g.restore();
+}
+shots.tax = (t, ts) => {
+  const L = taxLayout(), t0 = b(29), D = L.D, th = D * 0.2, ry = D * 0.17;
+  const h1 = H1('taxH1', COPY.taxH1, L.head.x, L.head.y, L.head.maxW, ent(ts, t0, 3 * U));
+  H1('taxH2', COPY.taxH2, L.head.x, L.head.y + h1.h + 0.15 * T.h1, L.head.maxW, ent(ts, cueT('tax.h2'), 3 * U), { color: C.ink2, hi: { text: '€60', color: C.ink } });
+  SMALL('taxSmall', COPY.taxSmall, S.x, L.smallY, L.smallMax, ent(ts, t0, 0).a);
+  /* the jar */
+  const jw = D + 50, jh = 5 * th + 2 * ry + L.extra, jx = L.jx, jb = L.jb, jt = jb - jh, jry = jw * 0.17;
+  const jin = sp(t, t0 - 0.1, 13, 0.7);
+  g.save(); g.globalAlpha = clamp(jin * 2); g.translate(0, (1 - jin) * 80);
+  g.fillStyle = 'rgba(11,31,28,0.045)'; g.beginPath(); g.moveTo(jx - jw / 2, jt); g.lineTo(jx - jw / 2, jb - jry); g.ellipse(jx, jb - jry, jw / 2, jry, 0, Math.PI, 0, true); g.lineTo(jx + jw / 2, jt); g.ellipse(jx, jt, jw / 2, jry * 0.6, 0, 0, Math.PI, true); g.fill();
+  g.strokeStyle = 'rgba(11,31,28,0.10)'; g.lineWidth = 3; g.beginPath(); g.ellipse(jx, jt, jw / 2, jry * 0.6, 0, Math.PI, 0); g.stroke();
+  /* the coins fall under gravity and land on their cue */
+  const base = jb - jry - 4;
+  for (let k = 0; k < 5; k++) {
+    const at = cueT('tax.c' + k), kind = k < 3 ? 'ink' : 'amber';
+    const rest = base - th - k * th, fall = PORT ? 0.3 : 0.42, from = PORT ? jt - 0.55 * D : -D - 40;
+    if (t < at - fall) continue;
+    let yy;
+    if (t < at) { const u = (at - t) / fall; yy = rest - (rest - from) * u * u; }
+    else { const u = t - at; yy = rest - th * 0.55 * Math.exp(-u / 0.07) * Math.abs(Math.sin(u * Math.PI / 0.11)); }
+    const tilt = t < at ? 0.10 * ((at - t) / fall) * (k % 2 ? -1 : 1) : 0;
+    g.save(); g.globalAlpha = PORT ? clamp((t - (at - fall)) / 0.08) : 1; coin(jx, yy, D, kind, tilt); g.restore();
+  }
+  /* the glass in front */
+  g.strokeStyle = 'rgba(11,31,28,0.28)'; g.lineWidth = 4;
+  g.beginPath(); g.moveTo(jx - jw / 2, jt); g.lineTo(jx - jw / 2, jb - jry); g.ellipse(jx, jb - jry, jw / 2, jry, 0, Math.PI, 0, true); g.lineTo(jx + jw / 2, jt); g.stroke();
+  g.beginPath(); g.ellipse(jx, jt, jw / 2, jry * 0.6, 0, 0, Math.PI); g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,0.75)'; g.lineWidth = 8; g.beginPath(); g.moveTo(jx - jw / 2 + 20, jt + 34); g.lineTo(jx - jw / 2 + 20, jb - jry - 34); g.stroke();
+  g.restore();
+  /* the labels, with brackets on the stack */
+  const lpx = T.body, lx = L.lx;
+  const groups = [{ id: 'taxYou', str: COPY.taxYou, at: cueT('tax.you'), k0: 0, k1: 2, sw: C.ink }, { id: 'taxRev', str: COPY.taxRev, at: cueT('tax.rev'), k0: 3, k1: 4, sw: C.amber }];
+  for (const gr of groups) {
+    const e = ent(ts, gr.at, 0, 0.06); if (e.a <= 0) continue;
+    const yTop = base - th - gr.k1 * th - ry, yBot = base - gr.k0 * th + ry * 0.2;
+    const ym = (yTop + yBot) / 2, dx = (1 - sp(ts, gr.at - 0.06, 18, 0.8)) * 30;
+    g.save(); g.globalAlpha = e.a; g.strokeStyle = gr.sw === C.amber ? '#C98A12' : C.ink; g.lineWidth = 3.5;
+    const bx = jx + jw / 2 + 18;
+    g.beginPath(); g.moveTo(bx, yTop + 6); g.lineTo(bx + 12, yTop + 6); g.lineTo(bx + 12, yBot - 6); g.lineTo(bx, yBot - 6); g.moveTo(bx + 12, ym); g.lineTo(bx + 34, ym); g.stroke(); g.restore();
+    const lines = wrap(gr.str, F(800, lpx), L.lmax - 36, -0.01 * lpx);
+    const bh = lines.length * lpx * 1.1, tw = Math.max(...lines.map(s => measure(s, 800, lpx, -0.01)));
+    if (gr.sw === C.amber) { g.save(); g.globalAlpha = e.a; g.fillStyle = C.amberSoft; rr(lx + dx - 18, ym - bh / 2 - 14, tw + 36, bh + 28, 16); g.fill(); g.restore(); }
+    para(gr.id, gr.str, lx + dx, ym - bh / 2 - 0.02 * lpx, { px: lpx, wt: 800, color: C.ink, maxW: L.lmax - 36, a: e.a, lh: 1.1, ls: -0.01 });
+  }
+};
+
+/* 5. jargon buster, dark: the term decodes, its meaning lands under it */
+const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+shots.jargon = (t, ts) => {
+  const t0 = b(36), kpx = PORT ? 3.2 * U : 3.0 * U;
+  const tpx = 15 * U, dpx = PORT ? 4.8 * U : 4.4 * U, pad = 4.6 * U;
+  const cw = PORT ? S.w : (S.w - 6 * U) / 2;
+  const hDef = i => textH(COPY.terms[i].def, 500, dpx, cw - 2 * pad, 1.3, 0);
+  const ch = Math.max(hDef(0), hDef(1)) + tpx * 0.95 + 2.4 * U + 2 * pad;
+  const total = PORT ? kpx * 2.2 + 2 * ch + 4 * U : kpx * 2.6 + ch;
+  const y0 = S.y + (S.h - total) / 2 - (PORT ? 0 : 2 * U);
+  const ek = ent(ts, t0, 0);
+  para('jargonKicker', COPY.jargonKicker.toUpperCase(), S.x, y0, { px: kpx, wt: 800, color: C.mint, a: ek.a, ls: 0.14, track: false });
+  seen('jargonKicker', COPY.jargonKicker, ek.a >= 0.98);
+  COPY.terms.forEach((tm, i) => {
+    const at = cueT('term' + i), dAt = cueT('def' + i);
+    const x = PORT ? S.x : S.x + i * (cw + 6 * U);
+    const y = y0 + kpx * (PORT ? 2.2 : 2.6) + (PORT ? i * (ch + 4 * U) : 0);
+    const cin = sp(t, at - 0.1, 13, 0.75); if (cin <= 0.001) return;
+    g.save(); g.globalAlpha = clamp(cin * 2); g.translate(0, (1 - cin) * 50);
+    g.fillStyle = 'rgba(255,255,255,0.05)'; rr(x, y, cw, ch, 24); g.fill();
+    g.strokeStyle = 'rgba(127,227,211,0.30)'; g.lineWidth = 2; rr(x + 1, y + 1, cw - 2, ch - 2, 24); g.stroke();
+    g.restore();
+    const cinS = sp(ts, at - 0.1, 13, 0.75), oy = (1 - cinS) * 50;
+    /* each letter keeps its own slot, scrambles, then locks on a sixteenth */
+    const n = tm.term.length, len = TL.CUES.find(c => c.id === 'term' + i).len;
+    g.save(); g.font = F(800, tpx); g.letterSpacing = (-0.01 * tpx) + 'px'; g.textBaseline = 'alphabetic';
+    let lockedAll = true;
+    for (let j = 0; j < n; j++) {
+      const x0 = x + pad + g.measureText(tm.term.slice(0, j)).width, cwj = g.measureText(tm.term[j]).width;
+      const lockAt = at + b(len) * (j + 1) / n, locked = ts >= lockAt;
+      if (!locked) lockedAll = false;
+      const ch2 = locked ? tm.term[j] : ABC[Math.floor(hash(i * 31 + j, Math.floor(ts * 30)) * 26)];
+      const pop = locked ? 1 + 0.12 * Math.exp(-(ts - lockAt) / 0.05) : 1;
+      const w2 = g.measureText(ch2).width;
+      g.save(); g.globalAlpha = clamp(cinS * 2) * (locked ? 1 : 0.55); g.fillStyle = locked ? C.white : C.mint;
+      g.translate(x0 + cwj / 2, y + pad + tpx * 0.76 + oy); g.scale(pop, pop); g.fillText(ch2, -w2 / 2, 0); g.restore();
+    }
+    g.restore();
+    seen('term' + i, tm.term, lockedAll && cinS > 0.98 && ts > at + b(len) + 0.1);
+    const e = ent(ts, dAt, 2 * U, 0.06);
+    para('def' + i, tm.def, x + pad, y + pad + tpx * 0.95 + 2.4 * U + oy, { px: dpx, wt: 500, color: C.onDark, maxW: cw - 2 * pad, a: e.a, dy: e.dy, lh: 1.3, ls: 0 });
+  });
+};
+
+/* 6. people, light: two real photos, dropped in on the beat */
+function photoCard(img, x, y, w, h, rot, p) {
+  g.save(); g.globalAlpha = clamp(p * 3);
+  g.translate(x + w / 2, y + h / 2 - (1 - p) * 160); g.rotate((rot + (1 - p) * 9) * Math.PI / 180);
+  const m = 12;
+  g.save(); g.shadowColor = 'rgba(11,31,28,0.22)'; g.shadowBlur = 36; g.shadowOffsetY = 14; g.fillStyle = '#FFFFFF'; rr(-w / 2 - m, -h / 2 - m, w + 2 * m, h + 2 * m, 18); g.fill(); g.restore();
+  g.save(); rr(-w / 2, -h / 2, w, h, 10); g.clip(); g.drawImage(img, -w / 2, -h / 2, w, h); g.restore();
+  g.restore();
+}
+function peopleLayout() {
+  if (PORT) { const w = 372, h = w * 1.25, gap = 40; return { w, h, xa: S.x + 14, xb: S.x + S.w - w - 26, ya: S.y + 10, yb: S.y + 10 + h + 54, npx: 4.6 * U, rpx: 3.3 * U, capW: S.w - w - gap - 26, zig: gap }; }
+  const h = 0.58 * S.h, w = h / 1.25; return { w, h, xa: W / 2 - 130 - w, xb: W / 2 + 130, ya: S.y + 0.0 * S.h, yb: S.y + 0.0 * S.h, npx: 5.0 * U, rpx: 3.4 * U, capW: w + 230 };
+}
+shots.people = (t, ts) => {
+  const L = peopleLayout();
+  const cards = [
+    { img: IMG.damian, x: L.xa, rot: -2.0, at: cueT('people.in'), name: ['damianName', COPY.damianName], lines: [['damianRole', COPY.damianRole], ['damianYears', COPY.damianYears]] },
+    { img: IMG.buddy, x: L.xb, rot: 2.2, at: cueT('people.buddy'), name: ['buddyName', COPY.buddyName], lines: [['buddyRole', COPY.buddyRole]] },
+  ];
+  cards.forEach((c, i) => {
+    const p = land(t, c.at, 13, 0.55);
+    if (p <= 0.001 && t < c.at) return;
+    const py = i ? L.yb : L.ya;
+    photoCard(c.img, c.x, py, L.w, L.h, c.rot, p);
+    const e = ent(ts, c.at, 2 * U, 0.04);
+    /* the caption: under the photo (16:9), or beside it, zig-zag (9:16) */
+    const capH = L.npx * 1.12 + 0.4 * U + c.lines.reduce((a, [, s]) => a + textH(s, 600, L.rpx, L.capW, 1.2, 0) + 0.2 * U, 0);
+    let cx = c.x, yy = py + L.h + 4.4 * U, align = 'left';
+    if (PORT) { yy = py + (L.h - capH) / 2; if (i) { cx = c.x - L.zig; align = 'right'; } else cx = c.x + L.w + L.zig; }
+    const r = para(c.name[0], c.name[1], cx, yy, { px: L.npx, wt: 800, color: C.ink, maxW: L.capW, a: e.a, dy: e.dy, ls: -0.02, align });
+    yy += r.h + 0.4 * U;
+    for (const [id, s] of c.lines) { const q = para(id, s, cx, yy, { px: L.rpx, wt: 600, color: C.ink2, maxW: L.capW, a: e.a, dy: e.dy, lh: 1.2, ls: 0, align }); yy += q.h + 0.2 * U; }
+  });
+};
+
+/* 7. the end card, light: the lockup, the address, the call to action */
+shots.end = (t, ts) => {
+  const t0 = b(50);
+  const HL = PORT ? 14.6 * U : 18 * U, LW = LOCK.w * HL;
+  const cy = PORT ? S.y + 0.33 * S.h : S.y + 0.27 * S.h;
+  const left = W / 2 - LW / 2, top = cy - HL / 2;
+  const toes = [0, 0, 0, 0];
+  TOE_ORDER.forEach((ti, k) => {
+    const at = t0 + b((k + 1) / 4), wink = cueT('end.wink') + b(k / 4);
+    const s = land(t, at, 26, 0.45), u = t - wink;
+    toes[ti] = Math.max(0, s) * (u > 0 ? 1 + 0.32 * Math.exp(-u / 0.09) * Math.sin(u * Math.PI / 0.09) : 1);
+  });
+  mark(left + HL / 2, cy, HL, { sq: Math.max(0, land(t, t0, 16, 0.5)), pad: Math.max(0, land(t, t0 + 0.04, 18, 0.5)), toes });
+  wordmark('endWordmark', left + LOCK.textX * HL, top + LOCK.base * HL, HL, C.ink, i => {
+    const at = t0 + b(i / 16), s = land(ts, at, 26, 0.5);
+    return { a: clamp((ts - at + lead(26, 0.5)) / 0.08), dy: (1 - s) * 0.4 * HL, s: 0.6 + 0.4 * s };
+  });
+  const upx = PORT ? 7.0 * U : 6.6 * U;
+  const e1 = ent(ts, cueT('end.url'), 2 * U);
+  const yU = top + HL + 0.55 * HL;
+  para('url', COPY.url, W / 2, yU, { px: upx, wt: 800, color: C.ink, align: 'center', a: e1.a, dy: e1.dy, ls: -0.02 });
+  /* the button, as the site's: deep teal, white type */
+  const cpx = PORT ? 5.2 * U : 4.6 * U, cw = measure(COPY.cta, 800, cpx, -0.01) + 2.4 * cpx, chh = 2.25 * cpx;
+  const pc = sp(t, cueT('end.cta') - 0.1, 14, 0.6), pcS = sp(ts, cueT('end.cta') - 0.1, 14, 0.6);
+  const yC = yU + upx * 1.15 + 4.5 * U;
+  if (pc > 0.001) {
+    g.save(); g.globalAlpha = clamp(pc * 3); g.translate(W / 2, yC + chh / 2); g.scale(0.85 + 0.15 * pc, 0.85 + 0.15 * pc);
+    g.shadowColor = 'rgba(10,92,82,0.35)'; g.shadowBlur = 30; g.shadowOffsetY = 12;
+    g.fillStyle = C.cta; rr(-cw / 2, -chh / 2, cw, chh, chh / 2); g.fill(); g.restore();
+  }
+  if (pcS > 0.001) {
+    g.save(); g.translate(W / 2, yC + chh / 2); const sc = 0.85 + 0.15 * pcS; g.scale(sc, sc);
+    para('cta', COPY.cta, 0, -cpx * 0.62, { px: cpx, wt: 800, color: C.white, align: 'center', a: clamp(pcS * 3), ls: -0.01, track: false });
+    g.restore();
+    seen('cta', COPY.cta, pcS > 0.97 && pcS < 1.03);
+  }
+};
+
+/* the regulatory line: from the people shot to the last frame, in one place */
+function footer(ts) {
+  const t0 = cueT('reg');
+  if (ts < t0) return;
+  const maxW = PORT ? S.w : 0.74 * S.w;
+  SMALL('reg', COPY.reg, W / 2, S.y + S.h - smallH(COPY.reg, maxW), maxW, ent(ts, t0, 0, 0.12).a, C.ink2, 'center');
+}
+
+/* ----------------------------------------------------------------- frame */
+function scene(t, ts) {
+  const shot = TL.shotAt(ts);
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.shadowColor = 'transparent';
+  ground(shot.ground);
+  /* the camera settles in on each cut (on the sharp clock, so it never smears type) */
+  const t0 = b(shot.from), push = shot.from === 0 ? 0.03 * clamp((ts - b(4)) / b(4)) : 0.03 * (1 - sp(ts, t0, 11, 0.95));
+  g.save();
+  g.translate(W / 2, H / 2); g.scale(1 + push, 1 + push); g.translate(-W / 2, -H / 2);
+  shots[shot.id](t, ts);
+  g.restore();
+  footer(ts);
+  if (GUIDES) { g.save(); g.strokeStyle = 'rgba(255,0,128,0.8)'; g.lineWidth = 2; g.setLineDash([10, 8]); g.strokeRect(S.x, S.y, S.w, S.h); g.restore(); }
+}
+
+const OFFS = [-0.1875, -0.0625, 0.0625, 0.1875];   // four subframes over half a frame
+function frameAt(ts, subframes = 4) {
+  SEEN = [];
+  if (subframes <= 1) { scene(ts, ts); octx.globalAlpha = 1; octx.drawImage(sub, 0, 0); return; }
+  for (let k = 0; k < subframes; k++) {
+    const t = ts + OFFS[k] / TL.FPS;
+    if (k > 0) SEEN = [];
+    scene(t, ts);
+    octx.globalAlpha = 1 / (k + 1);   // a running average
+    octx.drawImage(sub, 0, 0);
+  }
+  octx.globalAlpha = 1;
+}
+/* luminance of the frame, for the flash check: the whole and a 6x3 grid */
+const lc = document.createElement('canvas'); lc.width = 96; lc.height = 54; const lctx = lc.getContext('2d', { willReadFrequently: true });
+function lum() {
+  lctx.drawImage(out, 0, 0, 96, 54);
+  const d = lctx.getImageData(0, 0, 96, 54).data, G = new Array(18).fill(0), n = new Array(18).fill(0);
+  const lin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  let all = 0;
+  for (let y = 0; y < 54; y++) for (let x = 0; x < 96; x++) {
+    const k = (y * 96 + x) * 4, L = 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]);
+    const gi = Math.min(2, Math.floor(y / 18)) * 6 + Math.min(5, Math.floor(x / 16)); G[gi] += L; n[gi]++; all += L;
+  }
+  return { whole: all / (96 * 54), cells: G.map((v, i) => v / n[i]) };
+}
+
+window.FILM = {
+  W, H, FMT, FPS: TL.FPS, FRAMES: TL.FRAMES, DURATION: TL.DURATION,
+  ready: load().then(() => true),
+  /* frame i, motion-blurred; returns a JPEG data URL and the frame's luminance */
+  frame(i, q = 0.95) { frameAt(i / TL.FPS, 4); return { url: out.toDataURL('image/jpeg', q), lum: lum() }; },
+  /* a still at time t, with or without blur */
+  still(t, blur = true) { frameAt(t, blur ? 4 : 1); return out.toDataURL('image/png'); },
+  /* the text drawn in the last frame, and whether each line was fully readable */
+  step(t) { frameAt(t, 1); return SEEN; },
+  /* a contact sheet: stills at the given times, in a grid */
+  sheet(times, cols, tw, title, blur = true) {
+    const th = Math.round(tw * H / W), lab = 34, pad = 14, rows = Math.ceil(times.length / cols);
+    const c = document.createElement('canvas'); c.width = cols * (tw + pad) + pad; c.height = rows * (th + lab + pad) + pad + 50;
+    const x = c.getContext('2d'); x.fillStyle = '#222'; x.fillRect(0, 0, c.width, c.height);
+    x.fillStyle = '#fff'; x.font = '700 26px Figtree'; x.fillText(title, pad, 36);
+    times.forEach((t, i) => {
+      frameAt(t, blur ? 4 : 1);
+      const cx = pad + (i % cols) * (tw + pad), cy = 50 + pad + Math.floor(i / cols) * (th + lab + pad);
+      x.drawImage(out, cx, cy, tw, th);
+      x.fillStyle = '#ddd'; x.font = '600 22px Figtree';
+      const sh = TL.shotAt(t);
+      x.fillText(`${t.toFixed(2)}s  b${(t / BEAT).toFixed(2)}  ${sh.id}`, cx + 4, cy + th + 24);
+    });
+    return c.toDataURL('image/png');
+  },
+};
+</script>
+</body>
+</html>
