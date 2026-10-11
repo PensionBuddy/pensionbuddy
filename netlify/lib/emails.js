@@ -3,7 +3,8 @@
    (tests/submission-created.test.js) exactly as it runs on Netlify.
 
    ONE RULE ABOVE THE REST: nothing is sent unless the submitter ticked the
-   box (consent=yes). Then, per form:
+   box (consent=yes), or the form itself is a request for a reply (REPLY
+   below: sending it asks Damian to write back). Then, per form:
      calculator-results   the result and the figures they used, a link back
                           to the calculator, one booking button, the two
                           prescribed warnings word for word
@@ -11,6 +12,11 @@
      starter-guide,
      tracker-guide        the guide's link and nothing else; no link set in
                           the environment, no email
+     enquiry,
+     pension-trace        a copy of what they sent and the day Damian
+                          replies by; and, through alert(), the same to
+                          Damian with the sender as the reply-to, so a
+                          lead never waits on a Netlify setting
      anything else        nothing (pension-finder, and the old booking and
                           *-calculator-results forms, whose requests stay in
                           Netlify)
@@ -51,7 +57,14 @@ var GUIDES = {
   'tracker-guide': { title: 'The Pensionbuddy guide to finding a lost pension', env: 'GUIDE_URL_TRACKER' }
 };
 
-var MAX = { name: 80, results: 2000, inputs: 2000, summary: 4000, item: 300 };
+// the forms that ask Damian to reply: assets/js/pb-ask.js, assets/js/pb-jobs.js
+var REPLY = {
+  'enquiry': { what: 'question', sender: 'Your question' },
+  'pension-trace': { what: 'list of old jobs', sender: 'Your old jobs' }
+};
+var ALERT_FROM = 'Pensionbuddy website <hello@pensionbuddy.ie>';
+
+var MAX = { name: 80, results: 2000, inputs: 2000, summary: 4000, item: 300, message: 1500 };
 
 function str(v, max) {
   var s = v == null ? '' : String(v).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -321,19 +334,127 @@ function guideEmail(guide, url) {
   return { subject: subject, html: shell({ title: subject, preheader: intro, body: body, why: why }), text: text };
 }
 
+/* ------------------------------------------------------- reply forms */
+
+/* "Tuesday 13 October", as assets/js/pb-forms.js replyBy writes it; anything
+   else is not repeated back */
+function replyDay(raw) {
+  var s = str(raw, 40);
+  return /^(Monday|Tuesday|Wednesday|Thursday|Friday) ([1-9]|[12]\d|3[01]) (January|February|March|April|May|June|July|August|September|October|November|December)$/.test(s) ? s : '';
+}
+
+/* one item per line or per " | ", each cut to length */
+function lines(raw, max, n) {
+  return String(raw == null ? '' : raw).slice(0, max).split(/\r?\n| \| /).map(function (x) { return str(x, MAX.item); })
+    .filter(Boolean).slice(0, n || 20);
+}
+
+/* label, value rows of what was sent, in the order a reader thinks of them */
+function sentRows(form, d) {
+  var rows = [];
+  function add(label, value) { if (value) rows.push({ label: label, value: value }); }
+  if (form === 'enquiry') {
+    add('Topic', str(d.topic, 60));
+    lines(d.details, 600, 6).forEach(function (x) {
+      var k = x.indexOf(': ');
+      if (k > 0) add(x.slice(0, k), x.slice(k + 2)); else add('Detail', x);
+    });
+    add('Question', str(d.message, MAX.message));
+  } else {
+    lines(d.jobs, 3000, 20).forEach(function (x, i) { add('Job ' + (i + 1), x); });
+    add('Other name at those jobs', str(d.other_names, MAX.name));
+  }
+  add('Name', str(d.name, MAX.name));
+  add('Email', validEmail(str(d.email)) ? str(d.email) : '');
+  add('Phone', str(d.phone, 30));
+  if (form === 'enquiry') add('Best way to reply', /^phone$/i.test(str(d.contact_by)) ? 'A phone call' : 'Email');
+  return rows;
+}
+
+function rowsTable(rows) {
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 14px;border-collapse:collapse;">' +
+    rows.map(function (r) {
+      return '<tr><td class="pb-rule pb-ink2" style="padding:8px 12px 8px 0;border-top:1px solid ' + C.line + ';vertical-align:top;color:' + C.ink2 + ';width:36%;">' + esc(r.label) + '</td>' +
+        '<td class="pb-rule" style="padding:8px 0;border-top:1px solid ' + C.line + ';vertical-align:top;font-weight:700;">' + esc(r.value) + '</td></tr>';
+    }).join('') + '</table>';
+}
+
+function rowsText(rows) { return rows.map(function (r) { return r.label + ': ' + r.value; }).join('\n'); }
+
+/* to the sender: what they sent, and when Damian replies */
+function copyEmail(form, d, env) {
+  var base = siteBase(env), r = REPLY[form], hi = firstName(d.name), day = replyDay(d.reply_by);
+  var phone = form === 'enquiry' && /^phone$/i.test(str(d.contact_by));
+  var when = day ? 'by ' + day : 'within one working day';
+  var subject = (hi ? hi + ', ' : '') + 'Damian has your ' + r.what;
+  var promise = phone ? 'Damian will phone you ' + when + '.' : 'Damian will reply by email ' + when + '.';
+  var why = 'You got this email because you sent your ' + r.what + ' to Damian on pensionbuddy.ie.';
+  var rows = sentRows(form, d).filter(function (x) { return x.label !== 'Email'; });
+  var body = [
+    p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
+    p(esc('Thanks for your ' + r.what + '. ' + promise + ' Damian reads every one himself.')),
+    h2('What you sent'),
+    rowsTable(rows),
+    p(esc('Want to talk sooner?')),
+    button(base + '/booking.html', BOOK_WORDS)
+  ].join('\n');
+  var text = [hi ? 'Hello ' + hi + ',' : 'Hello,', '',
+    'Thanks for your ' + r.what + '. ' + promise + ' Damian reads every one himself.', '',
+    'WHAT YOU SENT', rowsText(rows), '',
+    'Want to talk sooner? ' + BOOK_WORDS + ': ' + base + '/booking.html', '',
+    '--', TEXT.regulator + ' ' + TEXT.register, why, ''].join('\n');
+  return { subject: subject, html: shell({ title: subject, preheader: promise, body: body, why: why }), text: text };
+}
+
+/* to Damian: the lead itself; replying answers the sender */
+function alertEmail(form, d, env) {
+  var who = str(d.name, MAX.name) || str(d.email) || 'someone';
+  var day = replyDay(d.reply_by);
+  var subject = form === 'enquiry'
+    ? 'New question: ' + (str(d.topic, 60) || 'no topic') + ', from ' + who
+    : 'New trace request: ' + lines(d.jobs, 3000, 20).length + ' old job' + (lines(d.jobs, 3000, 20).length === 1 ? '' : 's') + ', from ' + who;
+  var page = ownLink(d.page, env) || '';
+  var lead = (day ? 'The site told them you reply by ' + day + '.' : 'The site told them you reply within one working day.') +
+    (validEmail(str(d.email)) ? ' Reply to this email to answer them.' : '');
+  var rows = sentRows(form, d);
+  var body = [p(esc(lead)), rowsTable(rows), page ? p('Sent from <a class="pb-link" href="' + esc(page) + '" style="color:' + C.teal + ';">' + esc(page) + '</a>', 'font-size:14px;') : ''].join('\n');
+  var text = [lead, '', rowsText(rows), '', page ? 'Sent from ' + page : '', ''].join('\n');
+  return { subject: subject, html: shell({ title: subject, preheader: lead, body: body, why: 'Sent by the ' + form + ' form on pensionbuddy.ie.' }), text: text };
+}
+
+/* What Damian is sent for one submission: only for the REPLY forms. Sent to
+   LEAD_TO when that is set to an address, else to hello@pensionbuddy.ie.
+   Returns { send: true, message } or { send: false, reason }. */
+function alert(form, data, env) {
+  var d = data || {}, e = env || {};
+  if (!REPLY[form]) return { send: false, reason: 'no alert for form "' + form + '"' };
+  if (str(d['bot-field'])) return { send: false, reason: 'honeypot filled' };
+  var to = validEmail(str(e.LEAD_TO)) ? str(e.LEAD_TO) : REPLY_TO;
+  if (str(e.EMAIL_TEST) === '1') {
+    to = str(e.EMAIL_TEST_TO);
+    if (!validEmail(to)) return { send: false, reason: 'EMAIL_TEST=1 but EMAIL_TEST_TO is not a valid address' };
+  }
+  var built = alertEmail(form, d, e);
+  var message = { from: ALERT_FROM, to: [to], subject: built.subject, html: built.html, text: built.text };
+  if (validEmail(str(d.email))) message.reply_to = str(d.email);
+  return { send: true, message: message };
+}
+
 /* What to send for one submission, or why nothing is sent.
    form: the Netlify form name; data: its fields; env: process.env.
    Returns { send: true, message } or { send: false, reason }. */
 function plan(form, data, env) {
   var d = data || {}, e = env || {};
   if (str(d['bot-field'])) return { send: false, reason: 'honeypot filled' };
-  if (str(d.consent).toLowerCase() !== 'yes') return { send: false, reason: 'consent box not ticked' };
+  if (!REPLY[form] && str(d.consent).toLowerCase() !== 'yes') return { send: false, reason: 'consent box not ticked' };
   var email = str(d.email);
   if (!validEmail(email)) return { send: false, reason: 'no valid email address' };
 
   var built;
   if (form === 'calculator-results') {
     built = calculatorEmail(d, e);
+  } else if (REPLY[form]) {
+    built = copyEmail(form, d, e);
   } else if (GUIDES[form]) {
     // set by Damian in Netlify, not by the submitter, so any https address will do
     var url = str(e[GUIDES[form].env]);
@@ -355,6 +476,6 @@ function plan(form, data, env) {
 }
 
 module.exports = {
-  plan: plan, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
-  FROM: FROM, REPLY_TO: REPLY_TO, CALCULATORS: CALCULATORS, GUIDES: GUIDES, TEXT: TEXT
+  plan: plan, alert: alert, replyDay: replyDay, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
+  FROM: FROM, REPLY_TO: REPLY_TO, CALCULATORS: CALCULATORS, GUIDES: GUIDES, REPLY: REPLY, TEXT: TEXT
 };

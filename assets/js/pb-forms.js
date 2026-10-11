@@ -36,7 +36,8 @@
    Locally, or anywhere that is not Netlify, the POST is refused and every
    form takes its email route, exactly as before.
 
-   Classic script; defines window.PBForms and nothing else. */
+   Classic script; defines window.PBForms and nothing else. Since the
+   enquiry and old-jobs forms it also says when Damian replies (replyBy). */
 (function () {
   'use strict';
   var TIMEOUT_MS = 4000;
@@ -80,5 +81,29 @@
     });
   }
 
-  window.PBForms = { send: send, body: body, bot: bot, TIMEOUT_MS: TIMEOUT_MS };
+  /* The day Damian promises a reply by, for the forms that ask for one
+     (assets/js/pb-ask.js, assets/js/pb-jobs.js): REPLY_DAYS working days
+     after today, skipping weekends and the Irish public holidays below.
+     A year past the list only loses the holidays, never the weekends.
+     "Tuesday 13 October". netlify/lib/emails.js accepts only this shape. */
+  var REPLY_DAYS = 1;
+  var HOLIDAYS = ['2026-10-26', '2026-12-25', '2026-12-28',
+                  '2027-01-01', '2027-02-01', '2027-03-17', '2027-03-29', '2027-05-03',
+                  '2027-06-07', '2027-08-02', '2027-10-25', '2027-12-27', '2027-12-28'];
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December'];
+
+  function replyBy(now) {
+    var t = now || new Date(), d = new Date(t.getFullYear(), t.getMonth(), t.getDate()), n = REPLY_DAYS;
+    function two(x) { return (x < 10 ? '0' : '') + x; }
+    while (n > 0) {
+      d.setDate(d.getDate() + 1);
+      var key = d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate());
+      if (d.getDay() !== 0 && d.getDay() !== 6 && HOLIDAYS.indexOf(key) < 0) n--;
+    }
+    return DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()];
+  }
+
+  window.PBForms = { send: send, body: body, bot: bot, replyBy: replyBy, TIMEOUT_MS: TIMEOUT_MS };
 })();

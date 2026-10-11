@@ -2,13 +2,16 @@
    "submission-created" is the file name; nothing else wires it up).
 
    It emails the submitter what they asked for, through Resend, when
-   netlify/lib/emails.js says to. It never throws and always answers 200:
+   netlify/lib/emails.js says to; for the forms that ask Damian to reply
+   (enquiry, pension-trace) it also emails Damian the lead (emails.alert),
+   so a lead reaches him whether or not a Netlify notification is set. It never throws and always answers 200:
    the submission is already stored in Netlify Forms whatever happens here,
    and this function stores nothing of its own. A failure is logged, with
    the form name and submission id but never the address or the figures.
 
    Environment: EMAIL_API_KEY (Resend), and optionally EMAIL_TEST=1 with
-   EMAIL_TEST_TO, GUIDE_URL_DIRECTOR, GUIDE_URL_STARTER, GUIDE_URL_TRACKER.
+   EMAIL_TEST_TO, GUIDE_URL_DIRECTOR, GUIDE_URL_STARTER, GUIDE_URL_TRACKER,
+   and LEAD_TO (where the lead alerts go; hello@pensionbuddy.ie if unset).
    docs/EMAIL-SETUP.md. */
 'use strict';
 
@@ -49,22 +52,35 @@ async function handler(event, context, deps) {
     var payload = JSON.parse((event && event.body) || '{}').payload || {};
     form = String(payload.form_name || '');
     id = String(payload.id || '');
-    var p = emails.plan(form, payload.data || {}, env);
-    if (!p.send) {
+    var data = payload.data || {};
+    var p = emails.plan(form, data, env);
+    var a = emails.alert(form, data, env);
+    /* the alert to Damian first: of the two, it is the one that must arrive */
+    var out = [];
+    if (a.send) out.push({ message: a.message, key: id ? id + '-alert' : '', what: 'alert to Damian' });
+    if (p.send) out.push({ message: p.message, key: id, what: '' });
+    if (!out.length) {
       log('info', 'nothing sent: ' + p.reason, { form: form, id: id });
       return { statusCode: 200, body: 'not sent' };
     }
+    if (!p.send) log('info', 'no email to the sender: ' + p.reason, { form: form, id: id });
     var key = env.EMAIL_API_KEY;
     if (!key) {
       log('error', 'nothing sent: EMAIL_API_KEY is not set', { form: form, id: id });
       return { statusCode: 200, body: 'not sent' };
     }
-    var r = await send(p.message, key, id, fetchImpl);
-    if (r.ok) {
-      log('info', 'sent' + (String(env.EMAIL_TEST) === '1' ? ' (test mode, to EMAIL_TEST_TO)' : ''), { form: form, id: id });
-      return { statusCode: 200, body: 'sent' };
+    var any = false;
+    for (var i = 0; i < out.length; i++) {
+      var r = await send(out[i].message, key, out[i].key, fetchImpl);
+      var tag = out[i].what ? ' (' + out[i].what + ')' : '';
+      if (r.ok) {
+        any = true;
+        log('info', 'sent' + tag + (String(env.EMAIL_TEST) === '1' ? ' (test mode, to EMAIL_TEST_TO)' : ''), { form: form, id: id });
+      } else {
+        log('error', 'send failed' + tag + ': ' + r.error, { form: form, id: id });
+      }
     }
-    log('error', 'send failed: ' + r.error, { form: form, id: id });
+    if (any) return { statusCode: 200, body: 'sent' };
   } catch (e) {
     log('error', 'failed: ' + String(e && e.stack || e), { form: form, id: id });
   }

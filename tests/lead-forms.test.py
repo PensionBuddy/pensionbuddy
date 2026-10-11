@@ -27,7 +27,10 @@ and, for assets/js/pb-forms.js itself: a 2xx is true; a 404, a network
 failure and no answer inside TIMEOUT_MS are each false; a field the form does
 not declare is refused before anything is posted.
 
-The form names and pages are tests/build.test.py's LEAD_FORMS.
+The form names and pages are tests/build.test.py's LEAD_FORMS and
+REPLY_FORMS. A page can carry two forms (the tracker page: the guide and the
+old jobs timeline), so each job names its form, and the probe, the declared
+fields and the recorded POST are all that form's.
 """
 import base64, html, json, os, re, socket, subprocess, sys, threading
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -58,6 +61,13 @@ LEAD_FORMS = {
     'pia.html': 'calculator-results',
 }
 
+# the forms that ask Damian to reply (tools/lead-blocks.py), by form name
+REPLY_FORMS = {
+    'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
+    'pension-trace': ['tracker.html'],
+}
+JOBS = sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps)
+
 # Job 4: the calculators whose headline is a projection, so it is also shown
 # in today's money
 PROJECTED = ('pension-calculator.html', 'director-calculator.html', 'pension-fees-calculator.html', 'pia.html')
@@ -67,8 +77,12 @@ SUMMARIES = {}
 PROBE = r"""<script>
 (function(){
   var R={errors:[]};
-  window.addEventListener('error',function(e){R.errors.push(String(e.message||e));},true);
-  var q=new URLSearchParams(location.search), mode=q.get('__lead'), tick=mode==='ok';
+  window.addEventListener('error',function(e){
+    /* an off-site file that cannot load here (the booking calendar's) is not this page's error */
+    var t=e.target,u=t&&t!==window&&(t.src||t.href);
+    if(u&&String(u).indexOf(location.origin)!==0)return;
+    R.errors.push(String(e.message||e));},true);
+  var q=new URLSearchParams(location.search), mode=q.get('__lead'), tick=mode==='ok', fname=q.get('__form');
   function $(id){return document.getElementById(id);}
   function set(id,v){var el=$(id);el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));}
   function finish(){
@@ -83,6 +97,8 @@ PROBE = r"""<script>
   if(mode==='unit'){
     /* pb-forms.js on its own, against stubbed fetches */
     var form=document.querySelector('form[data-netlify="true"]'), real=window.fetch, out={};
+    /* the day Damian replies by: weekends and Irish public holidays skipped */
+    out.replyBy=[PBForms.replyBy(new Date(2026,9,10,9)),PBForms.replyBy(new Date(2026,9,23,15)),PBForms.replyBy(new Date(2026,11,24,12))];
     function run(stub){ window.fetch=stub; return PBForms.send(form); }
     run(function(){return Promise.resolve({ok:true});}).then(function(v){out.ok200=v;
       return run(function(){return Promise.resolve({ok:false,status:404});});}).then(function(v){out.no404=v;
@@ -102,12 +118,23 @@ PROBE = r"""<script>
     return;
   }
 
-  if($('drForm')){
+  if(fname==='enquiry'){
+    $('askForm').querySelector('input[name="topic"][value="Check my pension"]').click();
+    $('askForm').querySelector('.pb-ask-step.on .pb-ask-next').click();
+    [].forEach.call($('askForm').querySelectorAll('.pb-ask-chips'),function(g){g.children[1].click();});
+    $('askForm').querySelector('.pb-ask-step.on .pb-ask-next').click();
+    set('askMsg','Are the charges fair?'); set('askName','Test Person'); set('askEmail','test@example.com');
+  }else if(fname==='pension-trace'){
+    set('pbjEmp','Harbour Bank'); set('pbjFrom','2005'); set('pbjTo','2011'); $('pbjAddBtn').click();
+    set('pbjName','Test Person'); set('pbjEmail','test@example.com');
+  }else if($('drForm')){
     /* the directors' rules: a result first, the four answers and the list */
     ['drExec','drMore','drAge','drBig'].forEach(function(n){document.querySelector('input[name="'+n+'"][value="yes"]').click();});
     $('drForm').requestSubmit();
   }
-  if($('ecForm')){
+  if(fname==='enquiry'||fname==='pension-trace'){
+    /* filled above */
+  }else if($('ecForm')){
     $('ecMore').click();
     set('ecName','Test Person'); set('ecEmail','test@example.com'); $('ecConsent').checked=true;
   }else if($('mForm')){
@@ -118,13 +145,15 @@ PROBE = r"""<script>
     set('pfEmail','test@example.com'); set('pfSigned','Test Person'); $('pfConfirm').checked=true;
     $('pfOptin').checked=tick;
   }
-  var form=document.querySelector('form[data-netlify="true"]');
+  var form=document.querySelector('form[name="'+fname+'"]');
   R.form=form?form.getAttribute('name'):null;
   form.requestSubmit();
   var n=0;
   (function poll(){
     n++;
-    if($('ecOk')){ R.done=!$('ecOk').hidden; R.said=text('ecOkText'); }
+    if(fname==='enquiry'){ R.done=!$('askOk').hidden; R.said=text('askOkText'); }
+    else if(fname==='pension-trace'){ R.done=!$('pbjOk').hidden; R.said=text('pbjOkText'); }
+    else if($('ecOk')){ R.done=!$('ecOk').hidden; R.said=text('ecOkText'); }
     else if($('mOk')){ R.done=$('mOk').classList.contains('show'); R.said=text('mOkText'); }
     else { R.done=visible($('pfStep4')); R.said=text('pfDone'); }
     if(R.done||n>200){ setTimeout(finish,300); return; }
@@ -156,10 +185,10 @@ class Handler(SimpleHTTPRequestHandler):
                     'function next(){var j=JOBS.shift();if(!j){var p=document.createElement("pre");p.id="__all";'
                     'p.textContent=JSON.stringify(OUT);document.body.appendChild(p);return;}'
                     'var f=document.createElement("iframe");f.style.cssText="width:1200px;height:900px";'
-                    'f.src="/"+j[0]+"?__lead="+j[1];document.body.appendChild(f);var n=0;'
+                    'f.src="/"+j[0]+"?__lead="+j[1]+"&__form="+j[2];document.body.appendChild(f);var n=0;'
                     '(function poll(){n++;var p=null;try{p=f.contentDocument.getElementById("__lead");}catch(e){}'
-                    'if(p){OUT.push([j[0],j[1],p.textContent]);f.remove();next();return;}'
-                    'if(n>1200){OUT.push([j[0],j[1],null]);f.remove();next();return;}setTimeout(poll,25);})();}'
+                    'if(p){OUT.push([j[0],j[1],j[2],p.textContent]);f.remove();next();return;}'
+                    'if(n>1200){OUT.push([j[0],j[1],j[2],null]);f.remove();next();return;}setTimeout(poll,25);})();}'
                     'next();</script></body>') % json.dumps(jobs)
             return self._send(body.encode('utf-8'))
         path = u.path.lstrip('/')
@@ -173,10 +202,11 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self):
         n = int(self.headers.get('Content-Length') or 0)
         body = self.rfile.read(n).decode('utf-8')
-        ref = parse_qs(urlparse(self.headers.get('Referer') or '').query).get('__lead', [''])[0]
+        rq = parse_qs(urlparse(self.headers.get('Referer') or '').query)
+        ref, fname = rq.get('__lead', [''])[0], rq.get('__form', [''])[0]
         page = urlparse(self.headers.get('Referer') or '').path.lstrip('/')
         with Recorder.lock:
-            Recorder.posts.append({'page': page, 'mode': ref, 'path': self.path,
+            Recorder.posts.append({'page': page, 'mode': ref, 'form': fname, 'path': self.path,
                                    'type': self.headers.get('Content-Type'), 'body': body})
         status = 200 if ref == 'ok' else 500
         b = b'<!doctype html><title>stand-in</title>'
@@ -196,14 +226,14 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 class Declared(HTMLParser):
-    """The names the page's Netlify form declares in its static HTML."""
-    def __init__(self):
+    """The names one Netlify form on the page declares in its static HTML."""
+    def __init__(self, want):
         super().__init__()
-        self.names, self.inside, self.form = [], False, None
+        self.want, self.names, self.inside, self.form = want, [], False, None
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
-        if tag == 'form' and a.get('data-netlify') == 'true':
+        if tag == 'form' and a.get('data-netlify') == 'true' and a.get('name') == self.want:
             self.inside, self.form = True, a.get('name')
         elif self.inside and tag in ('input', 'textarea', 'select') and a.get('name'):
             if a['name'] not in self.names:
@@ -219,6 +249,8 @@ class Declared(HTMLParser):
 SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
 SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
 SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
+SUCCESS_REPLY = {'enquiry': re.compile(r'^Thanks, Test\. Damian will reply by email by [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+\.$'),
+                 'pension-trace': re.compile(r'^Thanks, Test\. Damian will email you by [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+\.$')}
 
 def main():
     if not os.path.exists(CHROME):
@@ -228,7 +260,7 @@ def main():
     srv = ThreadingHTTPServer(('127.0.0.1', port), Handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
 
-    jobs = [[p, m] for p in LEAD_FORMS for m in ('ok', 'fail')] + [['standard-fund-threshold.html', 'unit']]
+    jobs = [[p, m, n] for p, n in JOBS for m in ('ok', 'fail')] + [['standard-fund-threshold.html', 'unit', 'calculator-results']]
     url = 'http://127.0.0.1:%d/__leads?jobs=%s' % (port, json.dumps(jobs).replace(' ', ''))
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
                         '--disable-extensions', '--mute-audio', '--window-size=1280,1000',
@@ -240,19 +272,19 @@ def main():
     if not m:
         report(); return
     results = {}
-    for page, mode, b64 in json.loads(html.unescape(m.group(1))):
-        results[(page, mode)] = json.loads(base64.b64decode(b64).decode('utf-8')) if b64 else None
+    for page, mode, fname, b64 in json.loads(html.unescape(m.group(1))):
+        results[(page, mode, fname)] = json.loads(base64.b64decode(b64).decode('utf-8')) if b64 else None
 
-    for page, name in LEAD_FORMS.items():
-        d = Declared(); d.feed(open(os.path.join(ROOT, page), encoding='utf-8').read())
+    for page, name in JOBS:
+        d = Declared(name); d.feed(open(os.path.join(ROOT, page), encoding='utf-8').read())
         eq('%s: the static form is "%s"' % (page, name), d.form, name)
         for mode in ('ok', 'fail'):
-            r = results.get((page, mode))
-            tag = '%s [%s]' % (name, 'accepted' if mode == 'ok' else 'refused')
+            r = results.get((page, mode, name))
+            tag = '%s on %s [%s]' % (name, page, 'accepted' if mode == 'ok' else 'refused')
             eq('%s: the probe reported' % tag, r is not None, True)
             if r is None:
                 continue
-            posts = [x for x in Recorder.posts if x['page'] == page and x['mode'] == mode]
+            posts = [x for x in Recorder.posts if x['page'] == page and x['mode'] == mode and x['form'] == name]
             eq('%s: exactly one POST' % tag, len(posts), 1)
             if not posts:
                 continue
@@ -284,6 +316,16 @@ def main():
                        [r['value'] for r in rows if r['label'].startswith('Prices rise')], ['2%'])
                 if mode == 'ok' and os.environ.get('PB_SUMMARIES_OUT'):
                     SUMMARIES[page] = fields.get('summary', [''])[0]
+            if name == 'enquiry':
+                eq('%s: the topic, the taps, the question, the name and the way to reply' % tag,
+                   [fields.get(k, [''])[0] for k in ('topic', 'details', 'message', 'name', 'contact_by')],
+                   ['Check my pension', 'Provider: Zurich | Roughly in it: \u20ac25,000 to \u20ac100,000', 'Are the charges fair?', 'Test Person', 'Email'])
+            if name == 'pension-trace':
+                eq('%s: the jobs, how many, and the name' % tag,
+                   [fields.get(k, [''])[0] for k in ('jobs', 'jobs_count', 'name')], ['Harbour Bank, 2005 to 2011', '1', 'Test Person'])
+            if name in REPLY_FORMS:
+                eq('%s: the day Damian replies by, in the one shape' % tag,
+                   bool(re.match(r'^(Monday|Tuesday|Wednesday|Thursday|Friday) \d{1,2} [A-Z][a-z]+$', fields.get('reply_by', [''])[0])), True)
             if name.endswith('-guide'):
                 # the box to email the guide (netlify/functions/submission-created.js sends only on yes)
                 eq('%s: the box ticked' % tag, fields.get('consent'), ['yes'])
@@ -293,7 +335,7 @@ def main():
             if 'page' in fields:
                 eq('%s: the page it came from' % tag, fields['page'][0].split('?')[0].endswith('/' + page), True)
             blank = sorted(k for k, v in fields.items() if v == [''] and k not in
-                           ('bot-field', 'other_names', 'phone', 'signature_drawn'))
+                           ('bot-field', 'other_names', 'phone', 'signature_drawn', 'message'))
             eq('%s: nothing else blank' % tag, blank, [])
             eq('%s: no script error' % tag, r.get('errors'), [])
             eq('%s: the page moved on' % tag, r.get('done'), True)
@@ -301,13 +343,18 @@ def main():
             if mode == 'ok':
                 # Run 28: one success message on every form, promising only
                 # what happens (Netlify emails the visitor nothing)
-                eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS_FINDER if name == 'pension-finder' else SUCCESS) in said and 'email app' not in said, True)
+                if name in SUCCESS_REPLY:
+                    eq('%s: says it arrived, and when Damian replies' % tag, bool(SUCCESS_REPLY[name].match(said)), True)
+                else:
+                    eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS_FINDER if name == 'pension-finder' else SUCCESS) in said and 'email app' not in said, True)
                 eq('%s: and promises nothing that is not sent' % tag,
                    [w for w in ('on its way', 'on the way', 'if nothing arrives', 'delivery depends') if w in said.lower()], [])
             else:
                 eq('%s: opens the email instead' % tag, 'Your email app should have opened' in said, True)
 
-    u = (results.get(('standard-fund-threshold.html', 'unit')) or {}).get('unit') or {}
+    u = (results.get(('standard-fund-threshold.html', 'unit', 'calculator-results')) or {}).get('unit') or {}
+    eq('pb-forms: the day Damian replies by skips weekends and public holidays', u.get('replyBy'),
+       ['Monday 12 October', 'Tuesday 27 October', 'Tuesday 29 December'])
     eq('pb-forms: a 2xx is true', u.get('ok200'), True)
     eq('pb-forms: a 404 is false', u.get('no404'), False)
     eq('pb-forms: a network failure is false', u.get('network'), False)
@@ -319,7 +366,7 @@ def main():
     eq('pb-forms: a filled honeypot posts nothing', u.get('botPosted'), False)
     eq('pb-forms: and the bot is told it worked', u.get('botOk'), True)
     # every form that sends anything carries the honeypot, declared to Netlify
-    for page in sorted(set(LEAD_FORMS)):
+    for page in sorted(set(p for p, _ in JOBS)):
         src = open(os.path.join(ROOT, page), encoding='utf-8').read()
         for m in re.finditer(r'<form\b[^>]*data-netlify="true"[^>]*>(.*?)</form>', src, re.S):
             eq('%s: its Netlify form declares the honeypot and carries the field' % page,

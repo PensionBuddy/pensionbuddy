@@ -363,7 +363,9 @@ for (const [q, hash, shows, term] of [
   await open('booking.html' + q + hash);
   const b = await ev(`(() => { const p = document.getElementById('pbFrom'), w = document.getElementById('calWidget');
     return { line: !!p, sub: (document.querySelector('.lead .sub') || {}).textContent, h1: document.querySelector('h1').textContent,
-             form: !!document.querySelector('main form'), widget: !!w, url: w ? w.getAttribute('data-url') : null,
+             /* the enquiry form ("Rather email than call?") comes after the calendar, never before it */
+             form: !!w && [].some.call(document.querySelectorAll('main form'), f => !!(f.compareDocumentPosition(w) & Node.DOCUMENT_POSITION_FOLLOWING)),
+             widget: !!w, url: w ? w.getAttribute('data-url') : null,
              open: (document.getElementById('calOpenBtn') || {}).href || null, search: location.search, hash: location.hash }; })()`);
   const label = 'booking.html' + (q ? '?<tags>' : '') + (hash || ' (no hash)');
   eq(`G11. ${label}: no "seen your number" line, whatever the hash`, b.line, false);

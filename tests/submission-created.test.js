@@ -166,6 +166,47 @@ eq('37. one link in the body, the guide', (g.html.match(/<a /g) || []).length, 1
 eq('38. no booking button, no warnings', [g.html.indexOf('booking.html') < 0, g.html.indexOf(WARN1) < 0], [true, true]);
 has('39. why they got it', g.text, 'You got this email because you asked for this guide');
 
+group('THE REPLY FORMS: ENQUIRY AND PENSION-TRACE');
+function ask(over) {
+  var d = { 'form-name': 'enquiry', 'bot-field': '', topic: 'Check my pension', details: 'Provider: Zurich | Roughly in it: €25,000 to €100,000',
+            message: 'Are the charges fair?', name: 'Mary', email: 'mary@example.com', contact_by: 'Email', phone: '',
+            page: 'https://pensionbuddy.ie/index.html', reply_by: 'Tuesday 13 October' };
+  Object.keys(over || {}).forEach(function (k) { d[k] = over[k]; });
+  return d;
+}
+function trace(over) {
+  var d = { 'form-name': 'pension-trace', 'bot-field': '', jobs: 'Harbour Bank, 1998 to 2004, Irish Life | Quay Foods, 2005 to 2006',
+            jobs_count: '2', name: 'Mary Byrne', other_names: 'Mary Kelly', email: 'mary@example.com', phone: '087 123 4567',
+            page: 'https://pensionbuddy.ie/tracker.html', reply_by: 'Monday 12 October' };
+  Object.keys(over || {}).forEach(function (k) { d[k] = over[k]; });
+  return d;
+}
+var aq = E.plan('enquiry', ask(), {}), tq = E.plan('pension-trace', trace(), {});
+eq('52. enquiry: a copy to the sender, with no box to tick', [aq.send, aq.message && aq.message.to], [true, ['mary@example.com']]);
+eq('52. pension-trace: a copy to the sender', [tq.send, tq.message && tq.message.to], [true, ['mary@example.com']]);
+eq('53. subjects', [aq.message.subject, tq.message.subject], ['Mary, Damian has your question', 'Mary, Damian has your list of old jobs']);
+has('54. enquiry copy: the day Damian replies', aq.message.text, 'Damian will reply by email by Tuesday 13 October.');
+has('54. enquiry copy: a phone call when asked for one', E.plan('enquiry', ask({ contact_by: 'Phone', phone: '087 1' }), {}).message.text, 'Damian will phone you by Tuesday 13 October.');
+has('54. a day not in our shape is not repeated', E.plan('enquiry', ask({ reply_by: '<b>tomorrow</b>' }), {}).message.text, 'within one working day');
+has('55. enquiry copy: what they sent', aq.message.text, 'Provider: Zurich');
+has('55. and the question', aq.message.text, 'Question: Are the charges fair?');
+has('55. pension-trace copy: each job', tq.message.text, 'Job 2: Quay Foods, 2005 to 2006');
+eq('56. honeypot filled: no copy and no alert', [E.plan('enquiry', ask({ 'bot-field': 'x' }), {}).send, E.alert('enquiry', ask({ 'bot-field': 'x' }), {}).send], [false, false]);
+eq('56. a bad address: no copy', E.plan('enquiry', ask({ email: 'nope' }), {}).send, false);
+var al = E.alert('enquiry', ask(), {}), tl = E.alert('pension-trace', trace(), {});
+eq('57. the alert goes to hello@, from the website', [al.message.to, al.message.from], [['hello@pensionbuddy.ie'], 'Pensionbuddy website <hello@pensionbuddy.ie>']);
+eq('57. replying answers the sender', al.message.reply_to, 'mary@example.com');
+eq('57. LEAD_TO moves it', E.alert('enquiry', ask(), { LEAD_TO: 'damian@greshamwealth.ie' }).message.to, ['damian@greshamwealth.ie']);
+eq('57. test mode: EMAIL_TEST_TO', E.alert('enquiry', ask(), { EMAIL_TEST: '1', EMAIL_TEST_TO: 't@x.ie' }).message.to, ['t@x.ie']);
+eq('58. alert subjects', [al.message.subject, tl.message.subject], ['New question: Check my pension, from Mary', 'New trace request: 2 old jobs, from Mary Byrne']);
+has('58. the alert carries the phone', tl.message.text, 'Phone: 087 123 4567');
+has('58. and the other name', tl.message.text, 'Other name at those jobs: Mary Kelly');
+eq('58. an alert with no valid address still goes, with no reply-to', [E.alert('enquiry', ask({ email: 'x' }), {}).send, 'reply_to' in E.alert('enquiry', ask({ email: 'x' }), {}).message], [true, false]);
+eq('59. no alert for the other forms', ['calculator-results', 'director-guide', 'pension-finder'].map(function (f) { return E.alert(f, calc(), {}).send; }), [false, false, false]);
+var ae = E.plan('enquiry', ask({ message: '<script>x</script>', name: '<b>Eve</b>' }), {}).message;
+eq('60. what they typed is escaped', /<script>x|<b>Eve/.test(ae.html + E.alert('enquiry', ask({ message: '<script>x</script>' }), {}).message.html), false);
+eq('60. a day is our shape or nothing', [E.replyDay('Monday 12 October'), E.replyDay('Sunday 11 October'), E.replyDay('Monday 32 October')], ['Monday 12 October', '', '']);
+
 group('THE FUNCTION: NEVER THROWS, ALWAYS 200, LOGS NO ADDRESS');
 var logs = [];
 var origLog = console.log, origErr = console.error;
@@ -220,4 +261,18 @@ function event(form, data) { return { body: JSON.stringify({ payload: { id: 'sub
   r = await F._handler(undefined, {}, { env: {}, fetch: okFetch });
   loud();
   eq('51. no event at all: 200', r.statusCode, 200);
+
+  calls = [];
+  quiet();
+  r = await F._handler(event('enquiry', ask()), {}, { env: { EMAIL_API_KEY: 'k' }, fetch: okFetch });
+  loud();
+  eq('61. enquiry: two calls, the alert to Damian first', calls.map(function (c) { return JSON.parse(c.opts.body).to[0]; }), ['hello@pensionbuddy.ie', 'mary@example.com']);
+  eq('61. each idempotent on its own key', calls.map(function (c) { return c.opts.headers['Idempotency-Key']; }), ['submission-sub123-alert', 'submission-sub123']);
+  eq('61. no address in the log', logs.join(' ').indexOf('mary@example.com'), -1);
+
+  calls = [];
+  quiet();
+  r = await F._handler(event('pension-trace', trace({ email: 'bad' })), {}, { env: { EMAIL_API_KEY: 'k' }, fetch: okFetch });
+  loud();
+  eq('62. no valid address: the alert still goes, no copy', [r.body, calls.length], ['sent', 1]);
 })();
