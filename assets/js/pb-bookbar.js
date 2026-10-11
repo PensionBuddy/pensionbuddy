@@ -89,7 +89,7 @@
   var hero = doc.querySelector('main header.hero, main .page-head, main .phead, main .legal h1');
   if (!hero) return;
   var stops = [].slice.call(doc.querySelectorAll('main a[href^="booking.html"], #pbAfter, .final-band, .cta-band, footer, #arcStage, ' +
-    '.calc-wrap .panel, .calc-wrap .modebar, form[data-pb-calc], #calc .pb-c2-card, #inflation .pb-b2-ctl'));
+    '.calc-wrap .panel, .calc-wrap .modebar, form[data-pb-calc], #calc .pb-c2-card, #inflation .pb-i2-ctl, #inflation .pb-i2-stage'));
 
   var phone = window.matchMedia('(max-width: 920px)');
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)');

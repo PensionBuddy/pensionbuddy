@@ -340,6 +340,49 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 51 — 2026-10-11 · The home page, round 2: cut, coins, light teal (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief after Run 50: Hemingway, "here's the gap, clear as day";
+take Buddy's run out of the welcome; the jar and the egg basket were not
+good enough; the pot must be real coins, as alive as the welcome; light
+grey and teal, not the old green; the calculator at the bare minimum, one
+more line if needed; then a plain inflation point: €1,000 buys less, a
+pension keeps up. The launch video waits for later.
+
+- **Welcome.** As before, without the scene under it. `pb-w-scene.js`
+  stays in the repo; no page loads it.
+- **The gap** (`assets/js/pb-home-gap.js`, rewritten). "Is the State
+  Pension enough?" "No." "€3,636 a year short." "€303 a month. €72,720 over
+  20 years." Then "Can you close it?" and "Where the money goes". Gone:
+  "Three questions, no sign up, everything in today's money" and the
+  explaining lines. The bars are now one tower of 28 coins: teal for the
+  State Pension, coral for the gap. Changing the life drops, flips or
+  knocks coins off; drag to lean it, flick it, tap it and the coins hop.
+- **The calculator** (`assets/js/pb-home-calc.js`, rewritten). "Can you
+  close the gap?" A glass pot with real coin physics (yours silver,
+  Revenue's gold, your employer's blue): pour in, stir with a finger,
+  grab and shake. A line marks the pot that covers the life; "Close my
+  gap" fills to it and the pot cheers. One line added: "Your employer
+  puts in" (default €0). The two warnings and the assumptions line stay,
+  small, under it.
+- **Inflation** (`assets/js/pb-home-infl.js`, new; `pb-home-basket.js`
+  removed). "€1,000 buys less every year." Two coin stacks, cash and
+  pension; drag the years. Cash shrinks to what it buys (2% prices), the
+  pension grows (5%, before charges). "Cash can't keep up with prices. A
+  pension can."
+- **Shared coins** (`assets/js/pb-coins.js`, new): sprite-cached coins,
+  face and edge, and the dust, sparks and paw prints.
+- **Look.** Light grey and white, teal buttons, white pills on a grey
+  track; coral only for "No." and the gap.
+- **Tests.** `build.test.py` 484/0 (checks 32, 33 and 47 follow the new
+  sections). `regulator-lines` 31/0 and `--caveats` 31/0. Checked in
+  Chromium at 1440 and 390 px, with motion off and with no JavaScript.
+- **Needs Damian:** the two warnings under the calculator. He said
+  "forget the compliance rules"; they are the Central Bank's prescribed
+  warnings for a projection, so they stay until he says otherwise.
+
+---
+
 # Run 50 — 2026-10-11 · The home page, simpler and alive; a Home link; a launch video (on `claude/optimistic-keller-kfqggu`)
 
 Damian's brief (11 October 2026): "make it as simple as possible", "remind

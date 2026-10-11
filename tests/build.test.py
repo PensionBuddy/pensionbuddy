@@ -1380,12 +1380,12 @@ def run():
     def learn_faults(ix):
         f = []
         # since 11 October 2026 (Damian's brief) the games follow the home
-        # page's inflation baskets (#inflation), with at most one comment
+        # page's inflation stacks (#inflation), with at most one comment
         # between, never a span across others (Run 37)
         m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        infl = ix.find('<section class="pb-b2" id="inflation"')
+        infl = ix.find('<section class="pb-i2" id="inflation"')
         if not m or infl < 0 or ix.rfind('<section', 0, m.start() + len('</section>') + 1) != infl or ix.find('<section', infl + 1) != ix.find('<section class="pb-learn"'):
-            return ['the section is not straight after the inflation baskets']
+            return ['the section is not straight after the inflation stacks']
         box = m.group(1)
         if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
@@ -1452,9 +1452,9 @@ def run():
     # (the page's one hero), the providers we hold agencies with, the
     # calculator, the inflation baskets, then the games; "What's changed?",
     # the way-of-life band and the three situations under the hero are gone.
-    ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2 pb-wash" id="gap">',
+    ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
-             '<section class="pb-b2" id="inflation"', '<section class="pb-learn" id="learn">',
+             '<section class="pb-i2" id="inflation"', '<section class="pb-learn" id="learn">',
              '<section class="pb-tl-sec" id="through-life">', '<section class="tickband" id="deadline">', '<section id="story">']
 
     def order_faults(ix):
@@ -1470,7 +1470,7 @@ def run():
     eq('33. the home page: welcome, the gap, the providers, the calculator, inflation, then the games',
        order_faults(sources['index.html']), [])
     ix = sources['index.html']
-    c0, c1 = ix.find('<!-- THE CALCULATOR'), ix.find('<!-- INFLATION, IN ONE PICTURE')
+    c0, c1 = ix.find('<!-- THE CALCULATOR'), ix.find('<!-- INFLATION (11 October 2026')
     b1 = ix.find('<!-- JUST HERE TO LEARN?')
     swapped = ix[:c0] + ix[c1:b1] + ix[c0:c1] + ix[b1:]
     for label, mut, want in (
@@ -2316,7 +2316,7 @@ def run():
     # hold --slate (chrome_drift holds every other page
     # to the skeleton's tokens).
     not_state = (
-        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-g2-rows i', '.pb-c2-you', '.pb-c2-k-you i',
+        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-g2-rows i', '.pb-c2-k-you i', '.pb-c2-l-you i',
                         '.pb-tl-step.pb-on::after')),
         ('starter.html', ('.pb-sa-fill', '.pb-lad-you')),
         ('director.html', ('.pb-stat-n', '.pb-lad-you')),

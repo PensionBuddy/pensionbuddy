@@ -21,12 +21,12 @@
 <meta property="og:image" content="https://pensionbuddy.ie/assets/brand/og/og-home.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Pensionbuddy. Pensions, in plain English: People know roughly what they’ll need.">
+<meta property="og:image:alt" content="Pensionbuddy. Pensions, in plain English: Is the State Pension enough?">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Pensionbuddy: Your pension, finally explained">
 <meta name="twitter:description" content="Pensions made friendly. Understand and grow your pension over a relaxed, jargon-free chat. Regulated by the Central Bank of Ireland.">
 <meta name="twitter:image" content="https://pensionbuddy.ie/assets/brand/og/og-home.png">
-<meta name="twitter:image:alt" content="Pensionbuddy. Pensions, in plain English: People know roughly what they’ll need.">
+<meta name="twitter:image:alt" content="Pensionbuddy. Pensions, in plain English: Is the State Pension enough?">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FinancialService", "name": "Pensionbuddy", "legalName": "Damian Condon T/A Gresham Wealth Management", "description": "Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.", "url": "https://pensionbuddy.ie/", "logo": "https://pensionbuddy.ie/assets/brand/og-mark-512.png", "image": "https://pensionbuddy.ie/assets/brand/og/og-home.png", "email": "hello@pensionbuddy.ie", "address": {"@type": "PostalAddress", "streetAddress": "Bushfield House, Philipsburgh Avenue", "addressLocality": "Fairview", "addressRegion": "Dublin 3", "addressCountry": "IE"}, "areaServed": "IE", "founder": {"@type": "Person", "name": "Damian Condon", "honorificSuffix": "QFA"}}</script>
 <!-- SEO:END -->
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What will I walk away with?", "acceptedAnswer": {"@type": "Answer", "text": "What you have, what it may be worth at 66, and what is worth doing. Written down."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on what you need. You know before you commit. We are paid by fee, commission or a mix."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "No. Bring what you remember. Doing the digging is our job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
@@ -1879,17 +1879,6 @@ a.assure:hover{border-color:var(--teal)}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* FONTS:END */
-/* COLOUR FADE INTO AND OUT OF THE CALCULATOR'S BAND (#calc). Mercury fades
-   the page between its bands; here the calculator's mint band (since 11
-   October 2026; the dark product band before it) fades in from above and
-   back out to the page below, inside its own padding (no text there),
-   rather than cutting hard. The seams are static: the fade is in the page,
-   not in the timing. */
-#calc{position:relative}
-#calc::before,#calc::after{content:"";position:absolute;left:0;right:0;height:72px;pointer-events:none}
-#calc::before{top:0;background:linear-gradient(to bottom,#EEF8F5,rgba(238,248,245,0))}
-#calc::after{bottom:0;background:linear-gradient(to top,var(--bg),rgba(250,250,249,0))}
-@media(max-width:600px){#calc::before,#calc::after{height:44px}}
 /* ============================================================
    RELIEF WIDGET (.pb-rw). One amount in, one sentence out: what a
    contribution could cost after tax relief at the two rates. Built by
@@ -2492,25 +2481,17 @@ main h1{font-weight:800}
 @media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film{display:none}}
 /* MOTION-6:END */
 /* HOME-V2:BEGIN (11 October 2026, Damian's brief: one clear path down the home page,
-   the gap, the calculator, inflation, each alive). Scripts: assets/js/pb-home-kit.js,
-   pb-home-gap.js, pb-home-calc.js, pb-home-basket.js and pb-w-scene.js. */
-/* the welcome's picture, where the tagline was */
-.pb-w-scene{width:min(640px,92vw);height:128px;margin:26px auto 0}
-.pb-w-scene canvas{display:block;width:100%;height:100%;cursor:pointer;touch-action:manipulation}
-.pb-w-armed .pb-w-scene{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
-.pb-w-armed.pb-w-shown .pb-w-scene{opacity:1;transform:none}
-.pb-w-armed:not(.pb-w-run) .pb-w-scene{animation:pbWSafe 0s 2.5s forwards}
-html:not(.pb-js) .pb-w-scene{display:none}
-@media(max-width:560px){.pb-w-scene{height:104px;margin-top:20px}}
-
-/* the segmented pills: one pill behind the pressed answer, springing between them */
-.pb-seg{position:relative;display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:#fff;border:1.5px solid var(--line-2,#D8DFDC);box-shadow:0 1px 2px rgba(11,31,28,.04)}
-.pb-seg button{position:relative;z-index:1;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:color .25s;-webkit-tap-highlight-color:transparent}
-.pb-seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
-.pb-seg.pb-seg-live button[aria-pressed="true"]{background:transparent}
+   the gap, the calculator, inflation; light, teal and light grey; as alive as the welcome).
+   Scripts: assets/js/pb-home-kit.js, pb-coins.js, pb-home-gap.js, pb-home-calc.js and
+   pb-home-infl.js. */
+/* the segmented pills: a white pill on a light grey track, springing between answers */
+.pb-seg{position:relative;display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:#EDF1F0;box-shadow:inset 0 1px 2px rgba(11,31,28,.06)}
+.pb-seg button{position:relative;z-index:1;min-height:44px;padding:0 17px;border:0;border-radius:999px;background:transparent;font:inherit;font-weight:700;font-size:15px;color:#5D6C67;cursor:pointer;white-space:nowrap;transition:color .25s;-webkit-tap-highlight-color:transparent}
+.pb-seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(11,31,28,.12)}
+.pb-seg.pb-seg-live button[aria-pressed="true"]{background:transparent;box-shadow:none}
 .pb-seg button:focus-visible{outline:3px solid #14CBB1;outline-offset:1px}
 .pb-seg button:hover:not([aria-pressed="true"]){color:var(--ink)}
-.pb-seg-ind{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:var(--ink);box-shadow:0 6px 16px rgba(11,31,28,.22);transition:transform .55s cubic-bezier(.3,1.35,.45,1),width .55s cubic-bezier(.3,1.35,.45,1)}
+.pb-seg-ind{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:#fff;box-shadow:0 2px 8px rgba(11,31,28,.12),0 0 0 1px rgba(11,31,28,.04);transition:transform .55s cubic-bezier(.3,1.35,.45,1),width .55s cubic-bezier(.3,1.35,.45,1)}
 .pb-seg-ind.pb-seg-pop{animation:pbSegPop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pbSegPop{40%{scale:1.06 .9}100%{scale:1}}
 .pb-seg-sm{padding:3px}
@@ -2526,187 +2507,190 @@ html:not(.pb-js) .pb-w-scene{display:none}
 .pb-odo-s span{display:block;height:1.08em;line-height:1.08}
 .pb-odo-x{display:inline-block;line-height:1.08;height:1.08em}
 
+/* the teal button, the page's way on (never a booking) */
+.pb-g2-go,.pb-c2-close{display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 26px;border:0;border-radius:999px;background:#14CBB1;color:#04302A;font:inherit;font-weight:800;font-size:16.5px;text-decoration:none;cursor:pointer;box-shadow:0 12px 28px rgba(20,203,177,.32);transition:transform .2s,box-shadow .2s,background .2s}
+.pb-g2-go:hover,.pb-c2-close:hover{transform:translateY(-2px);background:#2BD6BE;box-shadow:0 16px 34px rgba(20,203,177,.4)}
+.pb-g2-go:focus-visible,.pb-c2-close:focus-visible{outline:3px solid #0B7A6E;outline-offset:3px}
+.pb-g2-go svg,.pb-g2-more svg,.pb-c2-close svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pb-motion .pb-g2-go svg{animation:pbWNudge 1.8s ease-in-out infinite}
+
 /* ---------------------------------------------------------------- THE GAP */
-.pb-g2{padding:72px 0 64px}
-.pb-g2-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px 64px;align-items:center}
-.pb-g2 h1{margin:0;font-size:clamp(38px,5vw,64px);line-height:1.02;letter-spacing:-.04em}
-.pb-g2 .pb-sub{margin:14px 0 0;font-size:clamp(18px,1.6vw,21px);color:var(--ink-2)}
+.pb-g2{padding:76px 0 60px;background:radial-gradient(55% 70% at 78% 45%,#E4F8F4 0%,rgba(228,248,244,0) 70%),var(--bg)}
+.pb-g2-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px 56px;align-items:center}
+.pb-g2 h1{margin:0;font-size:clamp(40px,5.2vw,68px);line-height:1;letter-spacing:-.045em}
 .pb-g2-pick{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 0}
 .pb-g2-pick[hidden]{display:none}
-.pb-g2-what{margin:16px 0 0;font-size:17px;color:var(--ink-2);min-height:1.6em}
-.pb-g2-what b{color:var(--ink)}
-.pb-g2-big{margin:18px 0 0;font-family:var(--font);line-height:1;letter-spacing:-.035em;color:var(--ink);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
-.pb-g2-big-n{font-size:clamp(52px,7.4vw,96px);font-weight:300;font-variant-numeric:tabular-nums}
-.pb-g2-big-w{font-size:clamp(20px,2vw,26px);font-weight:500;letter-spacing:-.01em;color:#A4291D}
-.pb-g2-is-covered .pb-g2-big-n{color:#0B7A6E;font-weight:400}
-.pb-g2-month{margin:14px 0 0;font-size:17px;color:var(--ink-2);max-width:34em}
-.pb-g2-month b{color:var(--ink)}
-.pb-g2-thud{animation:pbG2Thud .5s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pbG2Thud{0%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}100%{transform:none}}
-.pb-g2-yay{animation:pbG2Yay .6s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pbG2Yay{40%{transform:scale(1.06)}100%{transform:none}}
-.pb-g2-acts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin:28px 0 0}
-.pb-g2-go{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s}
-.pb-g2-go:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
-.pb-g2-go svg,.pb-g2-more svg,.pb-c2-close svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-.pb-motion .pb-g2-go svg{animation:pbWNudge 1.8s ease-in-out infinite}
-.pb-g2-more{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:none;font:inherit;font-weight:700;font-size:16px;color:var(--teal-700,#08655A);cursor:pointer;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.pb-g2-pick .pb-seg button{padding:0 15px}
+.pb-g2-what{margin:14px 0 0;font-size:17px;font-weight:600;color:var(--ink-2)}
+.pb-g2-ans{margin:22px 0 0}
+.pb-g2-no{margin:0;font-size:clamp(68px,9vw,118px);font-weight:800;line-height:.9;letter-spacing:-.05em;color:#D4573D;transform-origin:30% 70%}
+.pb-g2-is-covered .pb-g2-no{color:#0FA88F}
+.pb-g2-big{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;line-height:1.05;letter-spacing:-.03em;color:var(--ink)}
+.pb-g2-big-n{font-size:clamp(32px,3.4vw,44px);font-weight:700;font-variant-numeric:tabular-nums}
+.pb-g2-big-n .pb-odo-c,.pb-g2-big-n .pb-odo-x{margin-right:-.03em}
+.pb-g2-big-w{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.01em;color:var(--ink-2)}
+.pb-g2-month{margin:8px 0 0;font-size:17px;color:var(--ink-2)}
+.pb-motion .pb-g2-stamp .pb-g2-no{animation:pbG2Stamp .55s cubic-bezier(.3,1.5,.45,1) both}
+@keyframes pbG2Stamp{0%{transform:scale(1.9) rotate(-10deg);opacity:0}55%{transform:scale(.92) rotate(-2deg);opacity:1}100%{transform:none}}
+.pb-motion .pb-g2-stamp .pb-g2-big{animation:pbG2Shake .5s .18s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes pbG2Shake{10%,90%{transform:translateX(-1px)}20%,80%{transform:translateX(3px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+.pb-motion .pb-g2-yay .pb-g2-no{animation:pbG2Yay .7s cubic-bezier(.3,1.7,.5,1) both}
+@keyframes pbG2Yay{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12);opacity:1}100%{transform:none}}
+.pb-g2-acts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin:28px 0 0}
+.pb-g2-more{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:none;font:inherit;font-weight:700;font-size:16px;color:#0B7A6E;cursor:pointer;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
 .pb-g2-more[hidden]{display:none}
 .pb-g2-more svg{transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
 .pb-g2-more[aria-expanded="true"] svg{transform:rotate(180deg)}
-/* the two bars */
+/* the tower */
 .pb-g2-chartwrap{min-width:0}
-.pb-g2-chart{display:grid;grid-template-columns:1fr 1fr;gap:18px;--gh:380px}
-.pb-g2-col{min-width:0}
-.pb-g2-stage{position:relative;height:var(--gh)}
-.pb-g2-bar{position:absolute;left:0;right:0;bottom:0;height:var(--h);z-index:1;border-radius:20px;overflow:hidden}
-.pb-g2-need .pb-g2-bar{background:linear-gradient(180deg,#1B2E2A,#0B1F1C);color:#fff;box-shadow:0 18px 34px rgba(11,31,28,.18)}
-.pb-g2-state .pb-g2-bar{background:linear-gradient(180deg,#2BD6BE,#14CBB1);color:#04302A;box-shadow:0 18px 34px rgba(20,203,177,.22)}
-.pb-g2-n{position:absolute;top:16px;left:18px;right:12px;font-size:clamp(22px,2.5vw,34px);font-weight:600;letter-spacing:-.03em;line-height:1.08}
-.pb-g2-gapblk{position:absolute;left:0;right:0;bottom:calc(var(--from) - 20px);height:calc(var(--h) + 20px);z-index:0;border-radius:20px 20px 0 0;background:repeating-linear-gradient(-45deg,#FADCD3 0 12px,#F6CFC4 12px 24px);background-size:34px 34px;box-shadow:inset 0 0 0 2px rgba(164,41,29,.14)}
-.pb-motion .pb-g2-gapblk{animation:pbG2Drift 2.4s linear infinite}
-@keyframes pbG2Drift{to{background-position:34px 0}}
-.pb-g2-gapblk.pb-g2-wob{animation:pbG2Wob .6s cubic-bezier(.3,1.6,.5,1),pbG2Drift 2.4s linear infinite}
-@keyframes pbG2Wob{30%{transform:scaleX(1.05)}60%{transform:scaleX(.98)}100%{transform:none}}
-.pb-g2-gn{position:absolute;left:0;right:0;bottom:calc(100% + 8px);font-size:16px;font-weight:600;color:#A4291D;line-height:1.1;white-space:nowrap}
-.pb-g2-gn b{display:block;font-size:clamp(24px,2.6vw,34px);font-weight:700;letter-spacing:-.03em}
-.pb-g2-covered .pb-g2-gapblk{background:none;box-shadow:none;animation:none}
-.pb-g2-covered .pb-g2-gn{color:#0B7A6E}
-.pb-g2-l{display:block;margin-top:12px;font-size:15px;line-height:1.35;color:var(--ink-2)}
-.pb-g2-chartwrap .pb-src{margin:16px 0 0}
+.pb-g2-chart{position:relative;height:460px}
+.pb-g2-cv{display:none;width:100%;height:100%;touch-action:pan-y;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pb-g2-live .pb-g2-cv{display:block}
+.pb-g2-key{margin:0;display:grid;gap:10px}
+.pb-g2-k dt{font-size:14px;font-weight:600;color:var(--ink-2)}
+.pb-g2-k dd{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-g2-k-st dd{color:#0B7A6E}
+.pb-g2-k-gap dd{color:#D4573D}
+.pb-g2-is-covered .pb-g2-k-gap dd{color:#0B7A6E}
+.pb-g2:not(.pb-g2-is-covered) .pb-g2-k-gap dt::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;background:#F2B2A1}
+.pb-g2-k-st dt::before{content:"";display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;background:#2DCDB6}
+.pb-g2-live .pb-g2-key{position:absolute;inset:0;display:block;pointer-events:none}
+.pb-g2-live .pb-g2-k{position:absolute;left:0;top:0;transform:translate(var(--x,0),calc(var(--y,0px) - 50%));white-space:nowrap}
+.pb-g2-chartwrap .pb-src{margin:8px 0 0;font-size:13px}
+html:not(.pb-js) .pb-g2-chart{height:auto}
 /* where the money goes */
-.pb-g2-split{margin:36px 0 0;padding:26px 28px;border-radius:22px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 10px 30px rgba(11,31,28,.06)}
+.pb-g2-split{margin:34px 0 0;padding:24px 28px;border-radius:22px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 10px 30px rgba(11,31,28,.06)}
 .pb-g2-split[hidden]{display:none}
 .pb-g2-split-h{margin:0 0 14px;font-size:18px;color:var(--ink-2)}
 .pb-g2-split-h b{color:var(--ink)}
 .pb-g2-rows{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 40px}
 .pb-g2-rows li{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;align-items:center;gap:12px;font-size:15px}
-.pb-g2-rows i{display:block;height:10px;border-radius:99px;background:var(--slate,#586B85);width:var(--w);transform-origin:0 50%}
+.pb-g2-rows i{display:block;height:10px;border-radius:99px;background:linear-gradient(90deg,#9AA7A4,#C9D2D0);width:var(--w);transform-origin:0 50%}
 .pb-g2-rows b{font-variant-numeric:tabular-nums}
-.pb-g2-split .pb-src{margin:16px 0 0}
 .pb-motion .pb-g2-pour li{animation:pbG2Row .55s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i) * 55ms)}
 .pb-motion .pb-g2-pour li i{animation:pbG2Grow .8s cubic-bezier(.2,.9,.3,1.15) both;animation-delay:calc(var(--i) * 55ms + 120ms)}
 @keyframes pbG2Row{from{opacity:0;transform:translateY(10px)}}
 @keyframes pbG2Grow{from{transform:scaleX(0)}}
 @media(max-width:920px){
-  .pb-g2{padding:36px 0 44px}
-  .pb-g2-grid{grid-template-columns:1fr;gap:28px}
-  .pb-g2-chart{--gh:260px;gap:12px}
-  .pb-g2-n{top:12px;left:14px}
+  .pb-g2{padding:34px 0 40px;background:radial-gradient(90% 40% at 50% 55%,#E4F8F4 0%,rgba(228,248,244,0) 70%),var(--bg)}
+  .pb-g2-copy{display:contents}
+  .pb-g2-grid{grid-template-columns:1fr;gap:0}
+  .pb-g2-grid > *,.pb-g2-copy > *{order:9}
+  .pb-g2-chartwrap{display:contents}
+  .pb-g2 h1{order:1}.pb-g2-pick{order:2;margin-top:22px}.pb-g2-what{order:3}.pb-g2-chart{order:4;margin-top:10px}.pb-g2-ans{order:5;margin-top:14px}.pb-g2-acts{order:6}.pb-g2-chartwrap .pb-src{order:7;margin-top:22px}
+  .pb-g2-chart{height:330px}
   .pb-g2-rows{grid-template-columns:1fr}
   .pb-g2-split{padding:20px}
+  .pb-g2-k dd{font-size:20px}
+  .pb-g2-k dt{font-size:13px}
 }
 @media(max-width:420px){
   .pb-g2-pick{gap:8px}
   .pb-g2-pick .pb-seg button{padding:0 12px;font-size:14px}
-  .pb-g2-chart{--gh:230px}
-  .pb-g2-gn{font-size:14px}
+  .pb-g2-chart{height:300px}
 }
 
 /* --------------------------------------------------------- THE CALCULATOR */
-.pb-c2{padding:84px 0;background:linear-gradient(180deg,#EAF7F3 0%,#F4FAF8 100%)}
-.pb-c2-head{margin-bottom:32px}
-.pb-c2-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.10);overflow:hidden;overflow:clip}
-.pb-c2-stage{padding:28px 30px 30px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;background:radial-gradient(80% 70% at 30% 30%,#F0FBF8 0%,#fff 70%)}
-.pb-c2-jarbox{position:relative;height:300px}
-.pb-c2-jar{display:block;width:100%;height:100%}
-html:not(.pb-js) .pb-c2-jarbox{display:none}
-.pb-c2-k{margin:0;font-size:15px;font-weight:600;color:var(--ink-2)}
-.pb-c2-big{margin:2px 0 0;font-size:clamp(48px,5.4vw,72px);font-weight:300;letter-spacing:-.04em;line-height:1;color:var(--ink)}
-.pb-c2-big::after{content:" a month";font-size:20px;font-weight:500;letter-spacing:0;color:var(--ink-2)}
-.pb-c2-bar{position:relative;height:22px;margin:16px 0 0;border-radius:99px;background:#EEF2F1;--sp:0%;--you:0%;--gap:0%;--need:0%}
-.pb-c2-bar i{position:absolute;top:0;bottom:0;display:block;border-radius:99px}
-.pb-c2-sp{left:0;width:var(--sp);background:#14CBB1;z-index:2}
-.pb-c2-you{left:calc(var(--sp) - 11px);width:calc(var(--you) + 11px);background:#586B85;z-index:1}
-.pb-c2-gap{left:calc(var(--sp) + var(--you) - 11px);width:calc(var(--gap) + 11px);background:repeating-linear-gradient(-45deg,#FADCD3 0 8px,#F6CFC4 8px 16px);z-index:0}
-.pb-c2-need{position:absolute;top:-8px;bottom:-8px;left:var(--need);width:3px;margin-left:-1.5px;border-radius:2px;background:#0B1F1C;z-index:3}
-.pb-c2-need span{position:absolute;bottom:calc(100% + 4px);right:0;white-space:nowrap;font-size:12.5px;font-weight:700;color:var(--ink)}
-.pb-c2-ok .pb-c2-need{background:#0B7A6E}
-.pb-c2-ok .pb-c2-need span{color:#0B7A6E}
-.pb-c2-bar{margin-top:34px}
-.pb-c2-parts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:14.5px;color:var(--ink-2)}
+.pb-c2{padding:84px 0;background:#F3F5F4}
+.pb-c2 .pb-c2-h{margin:0 0 26px;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
+.pb-c2-card{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.08);overflow:hidden;overflow:clip}
+.pb-c2-stage{padding:22px 28px 28px;display:grid;gap:6px;background:radial-gradient(70% 60% at 50% 32%,#E6F9F5 0%,rgba(230,249,245,0) 70%),#fff}
+.pb-c2-potbox{position:relative;height:350px}
+.pb-c2-pot{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab;-webkit-tap-highlight-color:transparent}
+.pb-c2-pot.pb-grabbing{cursor:grabbing}
+.pb-c2-hint{position:absolute;left:0;right:0;bottom:2px;margin:0;text-align:center;font-size:13px;font-weight:600;color:var(--ink-2);opacity:0;transition:opacity .5s;pointer-events:none}
+.pb-c2-hint.pb-on{opacity:1}
+.pb-c2-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin:0;font-size:13px;color:var(--ink-2)}
+.pb-c2-legend span{display:inline-flex;align-items:center;gap:6px}
+.pb-c2-legend span[hidden]{display:none}
+.pb-c2-legend i{width:11px;height:11px;border-radius:50%}
+.pb-c2-l-you i{background:radial-gradient(circle at 35% 35%,#fff,#B4BFBC)}
+.pb-c2-l-rev i{background:radial-gradient(circle at 35% 35%,#FFF6D6,#D99B1D)}
+.pb-c2-l-emp i{background:radial-gradient(circle at 35% 35%,#fff,#93AFD6)}
+html:not(.pb-js) .pb-c2-potbox,html:not(.pb-js) .pb-c2-legend{display:none}
+.pb-c2-res{margin-top:10px}
+.pb-c2-k{margin:0;font-size:15px;font-weight:700;color:var(--ink-2)}
+.pb-c2 .pb-c2-big{margin:2px 0 0;font-size:clamp(50px,5.6vw,74px);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--ink)}
+.pb-c2-big .pb-odo-c,.pb-c2-big .pb-odo-x{margin-right:-.035em}
+.pb-c2-big::after{content:"a month";margin-left:.35em;font-size:20px;font-weight:600;letter-spacing:0;color:var(--ink-2)}
+.pb-c2-parts{display:flex;flex-wrap:wrap;gap:4px 16px;margin:12px 0 0;font-size:15px;color:var(--ink-2)}
 .pb-c2-parts span{display:inline-flex;align-items:center;gap:7px}
-.pb-c2-parts i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.pb-c2-parts i{display:inline-block;width:10px;height:10px;border-radius:50%}
 .pb-c2-parts b{color:var(--ink);font-variant-numeric:tabular-nums}
-.pb-c2-k-sp i{background:#14CBB1}
-.pb-c2-k-you i{background:#586B85}
-.pb-c2-k-gap i{background:#FADCD3;box-shadow:inset 0 0 0 1.5px rgba(164,41,29,.35)}
-.pb-c2-verdict{margin:16px 0 0;font-size:17px;line-height:1.5;color:var(--ink-2)}
-.pb-c2-verdict b{color:var(--ink)}
-.pb-c2-verdict .pb-c2-no{color:#A4291D}
-.pb-c2-verdict .pb-c2-yes{color:#0B7A6E}
-.pb-c2-close{display:inline-flex;align-items:center;gap:10px;margin:14px 0 0;min-height:52px;padding:0 24px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s;justify-self:start}
-.pb-c2-close:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
+.pb-c2-k-sp i{background:#2DCDB6}
+.pb-c2-k-you i{background:#B4BFBC}
+.pb-c2 .pb-c2-verdict{margin:14px 0 0;font-size:20px;font-weight:700;line-height:1.35;color:var(--ink)}
+.pb-c2-verdict .pb-c2-no{color:#D4573D}
+.pb-c2-verdict .pb-c2-yes{color:#0FA88F}
+.pb-c2-close{margin:16px 0 0;justify-self:start}
 .pb-c2-close[hidden]{display:none}
-.pb-c2-close:focus-visible{outline:3px solid #14CBB1;outline-offset:3px}
+.pb-c2-close[data-act="close"] .pb-c2-i-up,.pb-c2-close[data-act="up"] .pb-c2-i-close{display:none}
 .pb-motion .pb-c2-close:not([hidden]){animation:pbC2Breathe 2.6s ease-in-out infinite}
-@keyframes pbC2Breathe{50%{box-shadow:0 10px 24px rgba(11,31,28,.18),0 0 0 8px rgba(20,203,177,.18)}}
-.pb-c2-panel{padding:30px 30px 32px;border-left:1px solid var(--line,#E7EBE9);background:#FBFCFB;display:flex;flex-direction:column;gap:26px}
+@keyframes pbC2Breathe{50%{box-shadow:0 12px 28px rgba(20,203,177,.32),0 0 0 9px rgba(20,203,177,.16)}}
+.pb-c2-panel{padding:28px 30px 30px;border-left:1px solid var(--line,#E7EBE9);background:#FBFCFC;display:flex;flex-direction:column;gap:24px}
 .pb-c2-panel[hidden]{display:none}
 .pb-c2-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .pb-c2-row label{font-size:16px;font-weight:700;color:var(--ink)}
-.pb-c2-v{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
-.pb-c2-f input[type=range]{display:block;width:100%;margin:6px 0 0}
-.pb-c2-taxrow,.pb-b2-raterow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:14px 0 0}
-.pb-c2-taxl{font-size:14.5px;font-weight:600;color:var(--ink-2)}
-.pb-c2-relief{margin:12px 0 0;font-size:15px;line-height:1.5;color:var(--ink-2)}
-.pb-c2-relief .pb-c2-you-t{color:var(--ink)}
+.pb-c2-v{font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-c2-f input[type=range],.pb-i2-ctl input[type=range]{display:block;width:100%;margin:6px 0 0}
+.pb-c2-taxrow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.pb-c2-taxl{font-size:15px;font-weight:700;color:var(--ink)}
+.pb-c2-relief{margin:10px 0 0;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.pb-c2-relief b{color:var(--ink)}
 .pb-c2-relief .pb-c2-rev-t{color:#7A5200;background:#FCEFCF;padding:1px 7px;border-radius:6px}
-.pb-c2-aim{display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px dashed var(--line-2,#D8DFDC)}
+.pb-c2-aim{display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px solid var(--line,#E7EBE9)}
 .pb-c2-aims{display:flex;flex-wrap:wrap;gap:8px}
-.pb-c2 .pb-warn{margin:22px 0 0}
-.pb-c2-note{margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--ink-3);max-width:80ch}
-.pb-c2-more{margin:16px 0 0;font-size:16px;color:var(--ink-2)}
-.pb-c2-more a{color:var(--teal-700,#08655A);font-weight:700}
-html:not(.pb-js) .pb-c2-panel{display:none}
+.pb-c2-mini{display:none}
+.pb-c2-fine{margin:22px 0 0;max-width:80ch}
+.pb-c2 .pb-warn{margin:0;font-size:13px}
+.pb-c2 .pb-warn p{margin:0}
+.pb-c2-note{margin:10px 0 0;font-size:13px;line-height:1.55;color:var(--ink-3)}
+.pb-c2-note a{color:#0B7A6E;font-weight:700}
+html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
 @media(max-width:920px){
-  .pb-c2{padding:56px 0}
+  .pb-c2{padding:52px 0}
   .pb-c2-card{grid-template-columns:1fr;border-radius:22px}
-  .pb-c2-stage{padding:18px 18px 22px}
-  .pb-c2-jarbox{height:230px}
-  .pb-c2-panel{border-left:0;border-top:1px solid var(--line,#E7EBE9);padding:22px 18px 24px;gap:22px}
+  .pb-c2-stage{padding:14px 16px 22px}
+  .pb-c2-potbox{height:280px}
+  .pb-c2-panel{border-left:0;border-top:1px solid var(--line,#E7EBE9);padding:20px 16px 24px;gap:22px}
   .pb-c2-big::after{font-size:17px}
+  .pb-c2-mini{display:flex;align-items:baseline;gap:8px;position:sticky;top:82px;z-index:5;margin:-4px 0 0;padding:10px 16px;border-radius:999px;background:#fff;color:var(--ink-2);font-size:14px;box-shadow:0 10px 26px rgba(11,31,28,.16),0 0 0 1px rgba(11,31,28,.05)}
+  .pb-c2-mini b{font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .pb-c2-mini span{margin-left:auto;font-weight:800;color:#D4573D}
+  .pb-c2-is-ok .pb-c2-mini span{color:#0FA88F}
 }
 
-/* ---------------------------------------------------------- THE BASKETS */
-.pb-b2{padding:84px 0}
-.pb-b2-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px 56px;align-items:center}
-.pb-b2-copy h2{margin-top:12px}
-.pb-b2-copy > p{font-size:18px;color:var(--ink-2);margin:12px 0 0}
-.pb-b2 .pb-b2-out{margin:22px 0 0;font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.02em;color:var(--ink);font-weight:500}
-.pb-b2-out b{font-weight:800;color:#A4291D}
-.pb-b2 .pb-b2-sub{margin:10px 0 0;font-size:16px}
-.pb-b2-sub b{color:var(--ink)}
-.pb-b2-ctl{margin:24px 0 0;max-width:460px}
-.pb-b2-ctl[hidden]{display:none}
-.pb-b2-ctl input[type=range]{display:block;width:100%;margin:6px 0 0}
-.pb-b2-link{display:inline-flex;align-items:center;gap:8px;margin:22px 0 0;font-weight:700;color:var(--teal-700,#08655A)}
-.pb-b2-link .ico{width:18px;height:18px}
-.pb-b2-stage{position:relative;height:340px;border-radius:26px;background:radial-gradient(70% 80% at 50% 100%,#FFF4E2 0%,#FAFAF9 70%);border:1px solid var(--line,#E7EBE9)}
-.pb-b2-cv{display:block;width:100%;height:100%;cursor:pointer;touch-action:manipulation}
-html:not(.pb-js) .pb-b2-stage{display:none}
+/* ------------------------------------------------------------- INFLATION */
+.pb-i2{padding:84px 0}
+.pb-i2-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:36px 56px;align-items:center}
+.pb-i2 h2{margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
+.pb-i2-out{margin:22px 0 0;font-size:clamp(21px,2.1vw,26px);line-height:1.3;letter-spacing:-.015em;color:var(--ink);font-weight:500}
+.pb-i2-out b{font-weight:800;font-variant-numeric:tabular-nums}
+.pb-i2-cash b{color:#D4573D}
+.pb-i2-pen b{color:#B07A12}
+.pb-i2 .pb-i2-why{margin:20px 0 0;font-size:19px;font-weight:700;color:var(--ink)}
+.pb-i2-ctl{margin:24px 0 0;max-width:460px}
+.pb-i2-ctl[hidden]{display:none}
+.pb-i2-note{margin:14px 0 0;font-size:13px;color:var(--ink-3)}
+.pb-i2-stage{position:relative;height:420px;border-radius:28px;background:radial-gradient(60% 55% at 70% 80%,#FFF4DA 0%,rgba(255,244,218,0) 70%),radial-gradient(60% 55% at 25% 80%,#EEF2F1 0%,rgba(238,242,241,0) 70%),#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 18px 44px rgba(11,31,28,.06);overflow:hidden}
+.pb-i2-cv{display:block;width:100%;height:100%;touch-action:pan-y;cursor:ew-resize;-webkit-tap-highlight-color:transparent}
+.pb-i2-tag{position:absolute;left:0;top:0;transform:translate(calc(var(--x,0px) - 50%),calc(var(--y,0px) - 100%));display:flex;flex-direction:column;align-items:center;pointer-events:none;white-space:nowrap}
+.pb-i2-tag b{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pb-i2-tag i{font-style:normal;font-size:14px;font-weight:700;color:var(--ink-2)}
+.pb-i2-tag-cash b{color:#D4573D}
+.pb-i2-tag-pen b{color:#B07A12}
+.pb-i2-hint{position:absolute;left:0;right:0;top:14px;margin:0;text-align:center;font-size:13px;font-weight:600;color:var(--ink-2);opacity:0;transition:opacity .5s;pointer-events:none}
+.pb-i2-hint.pb-on{opacity:1}
+html:not(.pb-js) .pb-i2-stage{display:none}
 @media(max-width:920px){
-  .pb-b2{padding:56px 0}
-  .pb-b2-grid{grid-template-columns:1fr}
-  .pb-b2-stage{height:270px;order:-1}
+  .pb-i2{padding:52px 0}
+  .pb-i2-grid{grid-template-columns:1fr}
+  .pb-i2-stage{height:320px;order:2}
+  .pb-i2-tag b{font-size:21px}
+  .pb-i2-tag i{font-size:13px}
 }
-@media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}.pb-g2-gapblk{animation:none!important}}
-@media print{.pb-w-scene,.pb-c2-jarbox,.pb-b2-stage{display:none}}
-.pb-c2-mini{display:none}
-.pb-g2-big-n .pb-odo-c,.pb-g2-big-n .pb-odo-x,.pb-c2-big .pb-odo-c,.pb-c2-big .pb-odo-x{margin-right:-.045em}
-.pb-c2-big::after{margin-left:.3em}
-.pb-g2-pick .pb-seg button{padding:0 15px}
-@media(max-width:920px){
-  .pb-g2-copy{display:contents}
-  .pb-g2-grid{gap:0}
-  .pb-g2-grid > *, .pb-g2-copy > *{order:9}
-  .pb-g2 h1{order:1}.pb-g2 .pb-sub{order:2}.pb-g2-pick{order:3}.pb-g2-what{order:4}.pb-g2-chartwrap{order:5;margin-top:26px}.pb-g2-big{order:6;margin-top:22px}.pb-g2-month{order:7}.pb-g2-acts{order:8}
-  .pb-c2-mini{display:flex;align-items:baseline;gap:8px;position:sticky;top:82px;z-index:5;margin:-6px 0 0;padding:10px 16px;border-radius:999px;background:var(--ink);color:#C9D4D1;font-size:14px;box-shadow:0 10px 24px rgba(11,31,28,.25)}
-  .pb-c2-mini b{font-size:20px;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-  .pb-c2-mini span{margin-left:auto;font-weight:700;color:#FADCD3}
-  .pb-c2-is-ok .pb-c2-mini span{color:#7FE3D3}
-}
-.pb-c2-close[data-act="close"] .pb-c2-i-up,.pb-c2-close[data-act="up"] .pb-c2-i-close{display:none}
+@media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}}
+@media print{.pb-c2-potbox,.pb-i2-stage,.pb-g2-cv{display:none}}
 #damian .pb-reg{margin:6px 0 18px;align-items:flex-start;text-align:left}
 /* HOME-V2:END */
 </style>
@@ -2769,7 +2753,6 @@ html:not(.pb-js) .pb-b2-stage{display:none}
   <div class="wrap pb-w-in">
     <div class="pb-w-mark" aria-hidden="true"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
     <p class="pb-w-title" id="pbWelcomeT"><span class="pb-w-sr">Welcome to Pensionbuddy</span><span class="pb-w-l1" aria-hidden="true"><span class="pb-w-word">Welcome</span> <span class="pb-w-word">to</span></span><span class="pb-w-l2" aria-hidden="true"><span class="pb-w-ch">P</span><span class="pb-w-ch">e</span><span class="pb-w-ch">n</span><span class="pb-w-ch">s</span><span class="pb-w-ch">i</span><span class="pb-w-ch">o</span><span class="pb-w-ch">n</span><span class="pb-w-ch">b</span><span class="pb-w-ch">u</span><span class="pb-w-ch">d</span><span class="pb-w-ch">d</span><span class="pb-w-ch">y</span><span class="pb-w-line"></span></span></p>
-    <div class="pb-w-scene" aria-hidden="true"><canvas></canvas></div>
     <a class="pb-w-go" href="#gap">Start here <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
     <p class="pb-w-hint" aria-hidden="true"></p>
   </div>
@@ -2777,15 +2760,14 @@ html:not(.pb-js) .pb-b2-stage{display:none}
 <script>(function(){var s=document.getElementById('welcome');if(s&&document.documentElement.classList.contains('pb-motion'))s.classList.add('pb-w-armed');})();</script>
 <script src="assets/js/pb-welcome.js?v=054270da"></script>
 
-<!-- THE GAP (11 October 2026, Damian's brief: "make it clear: here's the bare minimum, here's
-     the State Pension, here's the gap; fewer options"). Three ways of life and Single or Couple,
-     side by side; two bars; the gap in blush coral with its figure above it. The markup is the
-     finished picture for Modest, one person; assets/js/pb-home-gap.js makes it answer. -->
-<header class="hero pb-g2 pb-wash" id="gap"><div class="wrap">
+<!-- THE GAP (11 October 2026, Damian's brief: "Hemingway; here's the gap, clear as day; as
+     interactive as the welcome"). One question, one answer, one tower of coins: the whole tower is
+     what the life costs a year, the teal coins what the State Pension pays, the coral coins the gap.
+     assets/js/pb-home-gap.js builds and moves it; the markup is the answer for Modest, one person. -->
+<header class="hero pb-g2" id="gap"><div class="wrap">
   <div class="pb-g2-grid">
     <div class="pb-g2-copy">
-      <h1>People know roughly what they&rsquo;ll need.</h1>
-      <p class="pb-sub">Far fewer know what they&rsquo;re on track for.</p>
+      <h1>Is the State Pension enough?</h1>
       <div class="pb-g2-pick" id="pbG2Pick" hidden>
         <div class="pb-seg pb-g2-lv" role="group" aria-label="Way of life">
           <button type="button" data-level="modest" aria-pressed="true">Modest</button>
@@ -2797,20 +2779,27 @@ html:not(.pb-js) .pb-b2-stage{display:none}
           <button type="button" data-hh="couple" aria-pressed="false">Couple</button>
         </div>
       </div>
-      <p class="pb-g2-what" id="pbG2What"><b>Modest</b> is the bare minimum to get by.</p>
-      <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
-      <p class="pb-g2-month" id="pbG2Month">That is <b>&euro;303 a month</b>. Over a 20-year retirement, <b>&euro;72,720</b>.</p>
+      <p class="pb-g2-what" id="pbG2What">The bare minimum.</p>
+      <div class="pb-g2-ans" id="pbG2Ans" aria-live="polite">
+        <p class="pb-g2-no" id="pbG2No">No.</p>
+        <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
+        <p class="pb-g2-month" id="pbG2Month">&euro;303 a month. &euro;72,720 over 20 years.</p>
+      </div>
       <div class="pb-g2-acts">
-        <a class="pb-g2-go" href="#calc">Can you close it? Try the calculator <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
+        <a class="pb-g2-go" href="#calc">Can you close it? <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
         <button type="button" class="pb-g2-more" id="pbG2More" aria-expanded="false" aria-controls="pbG2Split" hidden>Where the money goes <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
     </div>
     <div class="pb-g2-chartwrap">
-      <div class="pb-g2-chart" id="pbG2Chart" role="img" aria-label="Two bars. A modest retirement for one person costs 19,200 euro a year. The State Pension pays 15,564. The gap is 3,636 a year.">
-        <div class="pb-g2-col pb-g2-need"><div class="pb-g2-stage"><div class="pb-g2-bar" style="--h:54.95%"><span class="pb-g2-n">&euro;19,200</span></div></div><span class="pb-g2-l">A modest life for one costs</span></div>
-        <div class="pb-g2-col pb-g2-state"><div class="pb-g2-stage"><div class="pb-g2-gapblk" style="--h:10.41%;--from:44.54%"><span class="pb-g2-gn"><b>&euro;3,636</b> short</span></div><div class="pb-g2-bar" style="--h:44.54%"><span class="pb-g2-n">&euro;15,564</span></div></div><span class="pb-g2-l">The State Pension pays</span></div>
+      <div class="pb-g2-chart" id="pbG2Chart" role="img" aria-label="A modest life for one costs 19,200 euro a year. The State Pension pays 15,564. The gap is 3,636 a year.">
+        <canvas class="pb-g2-cv" aria-hidden="true"></canvas>
+        <dl class="pb-g2-key" aria-hidden="true">
+          <div class="pb-g2-k pb-g2-k-need" id="pbG2KNeed"><dt>A modest life</dt><dd>&euro;19,200</dd></div>
+          <div class="pb-g2-k pb-g2-k-gap" id="pbG2KGap"><dt>The gap</dt><dd>&euro;3,636</dd></div>
+          <div class="pb-g2-k pb-g2-k-st" id="pbG2KSt"><dt>State Pension</dt><dd>&euro;15,564</dd></div>
+        </dl>
       </div>
-      <p class="pb-src">A year, at 2024 prices: Pensions Council, Irish Retirement Living Standards (researched by KPMG). The State Pension (Contributory) at the maximum personal rate, 2026.</p>
+      <p class="pb-src">A year, at 2024 prices. Pensions Council; State Pension maximum rate, 2026.</p>
     </div>
   </div>
   <div class="pb-g2-split" id="pbG2Split" hidden></div>
@@ -2834,39 +2823,35 @@ html:not(.pb-js) .pb-b2-stage{display:none}
   </ul>
 </div></noscript>
 
-<!-- THE CALCULATOR (11 October 2026, Damian's brief: "a really interactive pension calculator
-     right below, that people can use straight away; as simple as possible"). Three questions and
-     the tax rate; one answer, in today's money, from 66, against the way of life picked above.
-     assets/js/pb-home-calc.js runs it, with the pension calculator's own sums; the markup is the
-     answer at its starting values (35, €10,000 saved, €100 a month, Modest, one person). -->
+<!-- THE CALCULATOR (11 October 2026, Damian's brief: "a pot and coins, as interactive as the welcome;
+     bare minimum"). Four sliders and the tax rate; one answer, a month at 66, against the way of life
+     picked above. assets/js/pb-home-calc.js runs the sums (the pension calculator's own) and the pot.
+     The markup is the answer at its starting values: 35, €10,000 saved, €100 a month, no employer,
+     Modest, one person. -->
 <section class="pb-c2" id="calc" aria-labelledby="pbC2H"><div class="wrap">
-  <div class="sec-head pb-c2-head">
-    <span class="kicker">Pension calculator</span>
-    <h2 id="pbC2H">Can you close the gap?</h2>
-    <p>Three questions. No sign-up. Everything in today&rsquo;s money.</p>
-  </div>
+  <h2 class="pb-c2-h" id="pbC2H">Can you close the gap?</h2>
   <div class="pb-c2-card pb-al-skip">
     <div class="pb-c2-stage">
-      <div class="pb-c2-jarbox"><canvas class="pb-c2-jar" aria-hidden="true"></canvas></div>
+      <div class="pb-c2-potbox"><canvas class="pb-c2-pot" aria-hidden="true"></canvas><p class="pb-c2-hint" aria-hidden="true">Stir the coins. Grab the pot and shake it.</p></div>
+      <p class="pb-c2-legend" aria-hidden="true"><span class="pb-c2-l-you"><i></i>You</span><span class="pb-c2-l-rev" id="pbC2LRev"><i></i>Revenue</span><span class="pb-c2-l-emp" id="pbC2LEmp" hidden><i></i>Your employer</span></p>
       <div class="pb-c2-res">
-        <p class="pb-c2-k">From 66, in today&rsquo;s money</p>
+        <p class="pb-c2-k">At 66</p>
         <p class="pb-c2-big"><span id="pbC2Total">&euro;1,536</span></p>
-        <div class="pb-c2-bar" id="pbC2Bar" aria-hidden="true" style="--sp:76.47%;--you:14.09%;--gap:3.77%;--need:94.34%"><i class="pb-c2-sp"></i><i class="pb-c2-you"></i><i class="pb-c2-gap"></i><b class="pb-c2-need"><span>Modest life &euro;1,600</span></b></div>
-        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;239</b></span><span class="pb-c2-k-gap"><i aria-hidden="true"></i>Short <b>&euro;64</b></span></p>
-        <p class="pb-c2-verdict" id="pbC2Verdict"><b class="pb-c2-no">&euro;64 a month short</b> of a modest life. About <b>&euro;150 a month</b> going in would cover it.</p>
-        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close" hidden><span>Close my gap</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
+        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;239</b></span></p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-no">&euro;64 a month short.</span></p>
+        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close"><span>Close my gap</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
         <p class="tk-sr" id="pbC2Sr" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
     <div class="pb-c2-panel" id="pbC2Live" hidden>
       <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;1,536</b> a month <span id="pbC2MiniV">&euro;64 short</span></p>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Age">Your age</label><span class="pb-c2-v" id="pbC2AgeV">35</span></div><input type="range" id="pbC2Age" min="18" max="65" step="1" value="35"></div>
-      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">In pensions already</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
-      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">Going in each month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
-        <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="pbC2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-c2-tax" role="group" aria-labelledby="pbC2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
-        <p class="pb-c2-relief" id="pbC2Relief">Costs you about <b class="pb-c2-you-t">&euro;60</b> a month. <b class="pb-c2-rev-t">Revenue adds &euro;40</b> in tax relief.</p>
-      </div>
-      <div class="pb-c2-f pb-c2-aim"><span class="pb-c2-taxl" id="pbC2AimL">Aiming for</span>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">Saved so far</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">You put in a month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
+        <p class="pb-c2-relief" id="pbC2Relief">Costs you <b>&euro;60</b>. <b class="pb-c2-rev-t">Revenue adds &euro;40</b>.</p></div>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Emp">Your employer puts in</label><span class="pb-c2-v" id="pbC2EmpV">&euro;0</span></div><input type="range" id="pbC2Emp" min="0" max="1000" step="10" value="0"></div>
+      <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="pbC2TaxL">Tax rate</span><div class="pb-seg pb-seg-sm pb-c2-tax" role="group" aria-labelledby="pbC2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
+      <div class="pb-c2-aim"><span class="pb-c2-taxl" id="pbC2AimL">Aiming for</span>
         <div class="pb-c2-aims">
           <div class="pb-seg pb-seg-sm pb-c2-lv" role="group" aria-labelledby="pbC2AimL"><button type="button" data-level="modest" aria-pressed="true">Modest</button><button type="button" data-level="moderate" aria-pressed="false">Moderate</button><button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button></div>
           <div class="pb-seg pb-seg-sm pb-c2-hh" role="group" aria-label="Who it is for"><button type="button" data-hh="single" aria-pressed="true">Single</button><button type="button" data-hh="couple" aria-pressed="false">Couple</button></div>
@@ -2874,29 +2859,33 @@ html:not(.pb-js) .pb-b2-stage{display:none}
       </div>
     </div>
   </div>
-  <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-  <p class="gap-note pb-c2-note">An illustration, not advice. It assumes growth of 5% a year before charges, prices rising 2% a year (the European Central Bank&rsquo;s target), the same amount going in every month until 66, and 4% of the pot taken as income each year. The State Pension is at today&rsquo;s maximum rate. Tax relief is within Revenue&rsquo;s age-related limits.</p>
-  <p class="pb-c2-more">Want the detail? <a href="pension-calculator.html">Open the full pension calculator</a>, or try the <a href="director-calculator.html">director calculator</a>, the <a href="broker-vs-autoenrolment.html">auto-enrolment comparison</a> or the <a href="state-pension-entitlement.html">State Pension check</a>.</p>
+  <div class="pb-c2-fine">
+    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+    <p class="gap-note pb-c2-note">In today&rsquo;s money. 5% growth a year, 2% inflation, retiring at 66, 4% of the pot a year as income. <a href="pension-calculator.html">The full calculator</a></p>
+  </div>
 </div></section>
 
-<!-- INFLATION, IN ONE PICTURE (11 October 2026, Damian's brief: the jargon buster's egg basket,
-     just below the calculator). The same sum as glossary.html's inflation widget;
-     assets/js/pb-home-basket.js draws the baskets and moves the shopping. -->
-<section class="pb-b2" id="inflation" aria-labelledby="pbB2H"><div class="wrap pb-b2-grid">
-  <div class="pb-b2-copy">
-    <span class="kicker">Why today&rsquo;s money</span>
-    <h2 id="pbB2H">&euro;1,000 buys less every year.</h2>
-    <p>Prices rise. So the calculator above shows every figure in today&rsquo;s money.</p>
-    <p class="pb-b2-out" id="pbB2Out">In <span id="pbB2YrsV">30</span> <span id="pbB2YrsW">years</span>, &euro;1,000 buys what <b id="pbB2Buy">&euro;552</b> buys today.</p>
-    <p class="pb-b2-sub">What costs &euro;1,000 now would cost about <b id="pbB2Cost">&euro;1,811</b>, with prices rising <span id="pbB2RateW">2%</span> a year.</p>
-    <div class="pb-b2-ctl" id="pbB2Ctl" hidden>
-      <div class="pb-c2-row"><label for="pbB2Yrs">Years from now</label></div>
-      <input type="range" id="pbB2Yrs" min="1" max="45" step="1" value="30">
-      <div class="pb-b2-raterow"><span class="pb-c2-taxl" id="pbB2RateL">Prices rising a year</span><div class="pb-seg pb-seg-sm pb-b2-rate" role="group" aria-labelledby="pbB2RateL"><button type="button" data-rate="2" aria-pressed="true">2%</button><button type="button" data-rate="3" aria-pressed="false">3%</button><button type="button" data-rate="4" aria-pressed="false">4%</button></div></div>
+<!-- INFLATION (11 October 2026, Damian's brief: "€1,000 buys less every year; then why a pension").
+     Two stacks of coins, each €1,000 today: cash crumbles, a pension grows. assets/js/pb-home-infl.js;
+     the same sum as glossary.html's inflation widget, at 2%, with the calculator's 5% for the pension. -->
+<section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="wrap pb-i2-grid">
+  <div class="pb-i2-copy">
+    <h2 id="pbI2H">&euro;1,000 buys less every year.</h2>
+    <p class="pb-i2-out pb-i2-cash">In <span id="pbI2Y">30 years</span>, &euro;1,000 in cash buys what <b id="pbI2Cash">&euro;552</b> buys today.</p>
+    <p class="pb-i2-out pb-i2-pen">In a pension, it could buy what <b id="pbI2Pen">&euro;2,386</b> buys today.</p>
+    <p class="pb-i2-why">Cash can&rsquo;t keep up with prices. A pension can.</p>
+    <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
+      <div class="pb-c2-row"><label for="pbI2Yrs">Years</label><span class="pb-c2-v" id="pbI2YrsV">30</span></div>
+      <input type="range" id="pbI2Yrs" min="0" max="40" step="1" value="30">
     </div>
-    <a class="pb-b2-link" href="glossary.html#inflation">More plain English in the jargon buster <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <p class="pb-i2-note">Prices up 2% a year. Pension growth 5% a year, before charges. Not guaranteed.</p>
   </div>
-  <div class="pb-b2-stage"><canvas class="pb-b2-cv" aria-hidden="true"></canvas></div>
+  <div class="pb-i2-stage">
+    <canvas class="pb-i2-cv" aria-hidden="true"></canvas>
+    <span class="pb-i2-tag pb-i2-tag-cash" id="pbI2TCash" aria-hidden="true"><b>&euro;552</b><i>Cash</i></span>
+    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;2,386</b><i>In a pension</i></span>
+    <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years. Tap a stack.</p>
+  </div>
 </div></section>
 
 <!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
@@ -3190,11 +3179,10 @@ html:not(.pb-js) .pb-b2-stage{display:none}
 <script src="assets/js/living-standards.js?v=97a698fc"></script>
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-home-kit.js?v=08342f2e"></script>
-<script src="assets/js/pb-home-gap.js?v=3a64d771"></script>
-<script src="assets/js/pb-home-calc.js?v=13113602"></script>
-<script src="assets/js/pb-home-basket.js?v=4336d6b2"></script>
-<script src="games/buddy-sprites.js"></script>
-<script src="assets/js/pb-w-scene.js?v=27f5dcfb"></script>
+<script src="assets/js/pb-coins.js?v=185abca6"></script>
+<script src="assets/js/pb-home-gap.js?v=14cf354c"></script>
+<script src="assets/js/pb-home-calc.js?v=0b955d39"></script>
+<script src="assets/js/pb-home-infl.js?v=8d3a915d"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');
@@ -3346,7 +3334,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=a315e6ad" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=548769f1" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3355,7 +3343,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
-<script src="assets/js/pb-bookbar.js?v=6d8b7491"></script>
+<script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-providers.js?v=d29ad6be"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>

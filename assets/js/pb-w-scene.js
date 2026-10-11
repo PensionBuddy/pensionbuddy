@@ -1,5 +1,8 @@
-/* The welcome band's picture (11 October 2026, Damian's brief: "get rid of
-   'Pensions, in plain English'; just have a motion design image").
+/* Buddy's run to 66: a picture once under the welcome band's name (11
+   October 2026), taken off the home page the same day at Damian's word
+   ("get rid of the dog for now; we can maybe put it back somewhere else").
+   No page loads it now. It needs games/buddy-sprites.js before it, and a
+   <div class="pb-w-scene" aria-hidden="true"><canvas></canvas></div>.
 
    Buddy's run to 66. A road from 25 to 66 with the ages on it, and a jar at
    the end. Buddy (the games' own pixel Buddy, games/buddy-sprites.js) runs
