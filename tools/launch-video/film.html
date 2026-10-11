@@ -358,7 +358,7 @@ function calcLayout() {
     const head = { x: S.x, y: S.y, maxW: S.w };
     const hh = textH(COPY.calcH, 800, T.h1, S.w, 1.05, -0.028);
     const smallY = S.y + S.h - smallH(COPY.calcSmall, S.w);
-    const card = { x: 60, y: S.y + hh + T.sub * 1.3 + 5 * U, w: 960, bar: 36 };
+    const card = { x: S.x, y: S.y + hh + T.sub * 1.3 + 5 * U, w: S.w, bar: 34 };
     card.h = smallY - 3.5 * U - card.y; card.ps = card.w / 1200;
     const bottom = smallY - 3.5 * U;
     return { head, smallY, smallMax: S.w, card, R, targets: {
