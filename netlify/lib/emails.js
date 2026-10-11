@@ -12,11 +12,12 @@
      starter-guide,
      tracker-guide        the guide's link and nothing else; no link set in
                           the environment, no email
-     enquiry,
-     pension-trace        a copy of what they sent and the day we
-                          reply by; and, through alert(), the same to
+     enquiry, pension-trace, fee-check, year-end-reminder, job-change
+                          a copy of what they sent and the day we
+                          reply by (job-change: with first steps); and, through alert(), the same to
                           Damian with the sender as the reply-to, so a
                           lead never waits on a Netlify setting
+     callback             the alert only: it asks for no email
      anything else        nothing (pension-finder, and the old booking and
                           *-calculator-results forms, whose requests stay in
                           Netlify)
@@ -57,11 +58,32 @@ var GUIDES = {
   'tracker-guide': { title: 'The Pensionbuddy guide to finding a lost pension', env: 'GUIDE_URL_TRACKER' }
 };
 
-// the forms that ask Damian to reply: assets/js/pb-ask.js, assets/js/pb-jobs.js
+// the forms that ask us to reply: assets/js/pb-ask.js (and pb-askresult.js),
+// pb-jobs.js, pb-fee.js, pb-yearend.js, pb-move.js, pb-callback.js
 var REPLY = {
-  'enquiry': { what: 'question', sender: 'Your question' },
-  'pension-trace': { what: 'list of old jobs', sender: 'Your old jobs' }
+  'enquiry': { what: 'question' },
+  'pension-trace': { what: 'list of old jobs' },
+  'fee-check': { what: 'fee check' },
+  'year-end-reminder': { what: 'year-end reminder' },
+  'job-change': { what: 'note' },
+  'callback': { what: 'call request' }
 };
+var FEES = require('../../assets/js/pension-fees.js');
+var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var DAY = 864e5;
+// the moment "now" means; tests/submission-created.test.js pins it
+var clock = { now: function () { return new Date(); } };
+
+/* first steps for "Changing jobs?" (job-change), by what was picked */
+var FIRST = {
+  'Leaving a job': ['Ask for the pension scheme\u2019s name and your member number before you go.',
+                    'Keep your leaving statement. It shows what your pension is worth.',
+                    'You do not have to decide anything on your last day.'],
+  'Starting a job': ['Ask if there is a pension scheme, and what the employer pays in.',
+                     'Join as early as you can.',
+                     'Tell us about pensions from old jobs, so none gets lost.']
+};
+
 var ALERT_FROM = 'Pensionbuddy website <hello@pensionbuddy.ie>';
 
 var MAX = { name: 80, results: 2000, inputs: 2000, summary: 4000, item: 300, message: 1500 };
@@ -350,19 +372,56 @@ function lines(raw, max, n) {
 }
 
 /* label, value rows of what was sent, in the order a reader thinks of them */
+/* the company's next year end (the last day of the month picked, this year
+   or next) and the reminder six weeks before it; a reminder already past
+   means close, and today. UTC dates, like assets/js/pb-yearend.js's. */
+function yearEnd(month, now) {
+  var m = MONTHS.indexOf(str(month));
+  if (m < 0) return null;
+  var t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  var end = new Date(Date.UTC(t.getUTCFullYear(), m + 1, 0));
+  if (end < t) end = new Date(Date.UTC(t.getUTCFullYear() + 1, m + 1, 0));
+  var rem = new Date(end.getTime() - 42 * DAY), close = rem <= t;
+  return { end: end, rem: close ? t : rem, close: close, days: Math.round((end - t) / DAY) };
+}
+function longDate(d) { return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+
+function euroOf(n) { return '\u20ac' + Math.round(n).toLocaleString('en-IE'); }
+
+/* the fee check's figures, checked, and what the fee costs by 66 worked out
+   again here with the page's maths; null when they are not figures */
+function feeFigures(d) {
+  var pot = parseFloat(d.pot), fee = parseFloat(d.fee), age = parseInt(d.age, 10);
+  if (!(pot >= 0 && pot <= 1e8 && fee >= 0 && fee <= 10 && age >= 16 && age <= 80)) return null;
+  var years = Math.max(1, 66 - age);
+  var r = FEES.compare({ pot: pot, monthly: 0, years: years, growth: 0.05, a: { amc: fee / 100, contribution: 0 }, b: { amc: 0, contribution: 0 } });
+  return { pot: pot, fee: fee, age: age, cost: r.costA };
+}
+
 function sentRows(form, d) {
   var rows = [];
   function add(label, value) { if (value) rows.push({ label: label, value: value }); }
   if (form === 'enquiry') {
     add('Topic', str(d.topic, 60));
-    lines(d.details, 600, 6).forEach(function (x) {
+    lines(d.details, 2000, 20).forEach(function (x) {
       var k = x.indexOf(': ');
       if (k > 0) add(x.slice(0, k), x.slice(k + 2)); else add('Detail', x);
     });
     add('Question', str(d.message, MAX.message));
-  } else {
+  } else if (form === 'pension-trace') {
     lines(d.jobs, 3000, 20).forEach(function (x, i) { add('Job ' + (i + 1), x); });
     add('Previous surname', str(d.other_names, MAX.name));
+  } else if (form === 'fee-check') {
+    var f = feeFigures(d);
+    if (f) { add('Pension', euroOf(f.pot)); add('Yearly fee', f.fee.toFixed(2) + '%'); add('Age', String(f.age)); add('Fees by 66', euroOf(f.cost)); }
+  } else if (form === 'year-end-reminder') {
+    var y = yearEnd(d.year_end, clock.now());
+    if (y) { add('Company year end', longDate(y.end)); add('Reminder', y.close ? 'As soon as possible' : longDate(y.rem)); }
+  } else if (form === 'job-change') {
+    add('Changing jobs', str(d.change, 30));
+    add('When', str(d.when, 20));
+  } else if (form === 'callback') {
+    add('Best time', str(d.time, 20));
   }
   add('Name', str(d.name, MAX.name));
   add('Email', validEmail(str(d.email)) ? str(d.email) : '');
@@ -382,44 +441,92 @@ function rowsTable(rows) {
 function rowsText(rows) { return rows.map(function (r) { return r.label + ': ' + r.value; }).join('\n'); }
 
 /* to the sender: what they sent, and when we reply */
-function copyEmail(form, d, env) {
-  var base = siteBase(env), r = REPLY[form], hi = firstName(d.name), day = replyDay(d.reply_by);
+/* what the sender is told: the subject and the one-line promise */
+function promiseOf(form, d) {
+  var hi = firstName(d.name), day = replyDay(d.reply_by), when = day ? 'by ' + day : 'within one working day';
+  if (form === 'year-end-reminder') {
+    var y = yearEnd(d.year_end, clock.now());
+    return { subject: 'Your year-end reminder is set',
+             line: !y ? 'We\u2019ll remind you before your year end.' : y.close ? 'Year end is close. We\u2019ll email you ' + when + '.' : 'We\u2019ll remind you on ' + longDate(y.rem) + '.' };
+  }
+  if (form === 'job-change') return { subject: 'Changing jobs: first steps', line: 'We\u2019ll email you ' + when + '.' };
   var phone = form === 'enquiry' && /^phone$/i.test(str(d.contact_by));
-  var when = day ? 'by ' + day : 'within one working day';
-  var subject = (hi ? hi + ', we' : 'We') + ' have your ' + r.what;
-  var promise = phone ? 'We\u2019ll call you ' + when + '.' : 'We\u2019ll reply ' + when + '.';
+  return { subject: (hi ? hi + ', we' : 'We') + ' have your ' + REPLY[form].what,
+           line: phone ? 'We\u2019ll call you ' + when + '.' : 'We\u2019ll reply ' + when + '.' };
+}
+
+/* to the sender: what they sent, and when we reply */
+function copyEmail(form, d, env) {
+  var base = siteBase(env), r = REPLY[form], hi = firstName(d.name), said = promiseOf(form, d);
+  var subject = said.subject, promise = said.line;
   var why = 'You got this email because you sent your ' + r.what + ' on pensionbuddy.ie.';
   var rows = sentRows(form, d).filter(function (x) { return x.label !== 'Email'; });
+  var first = form === 'job-change' ? FIRST[str(d.change, 30)] || [] : [];
   var body = [
     p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
     p(esc('Thanks. ' + promise)),
+    first.length ? h2('First steps') + first.map(function (x) { return p(esc(x)); }).join('') : '',
     h2('What you sent'),
     rowsTable(rows),
     p(esc('Want to talk sooner?')),
     button(base + '/booking.html', BOOK_WORDS)
-  ].join('\n');
+  ].filter(Boolean).join('\n');
   var text = [hi ? 'Hello ' + hi + ',' : 'Hello,', '',
     'Thanks. ' + promise, '',
+    first.length ? 'FIRST STEPS\n' + first.join('\n') + '\n' : '',
     'WHAT YOU SENT', rowsText(rows), '',
     'Want to talk sooner? ' + BOOK_WORDS + ': ' + base + '/booking.html', '',
-    '--', TEXT.regulator + ' ' + TEXT.register, why, ''].join('\n');
+    '--', TEXT.regulator + ' ' + TEXT.register, why, ''].filter(function (x, i, a) { return x !== '' || a[i - 1] !== ''; }).join('\n');
   return { subject: subject, html: shell({ title: subject, preheader: promise, body: body, why: why }), text: text };
 }
 
-/* to Damian: the lead itself; replying answers the sender */
+/* the year-end reminder as a calendar file, for us */
+function icsFor(d, y) {
+  function d8(x) { return x.toISOString().slice(0, 10).replace(/-/g, ''); }
+  function line(t) { return t.replace(/[\\;,]/g, function (c) { return '\\' + c; }); }
+  var who = validEmail(str(d.email)) ? str(d.email) : 'the director';
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Pensionbuddy//Year end//EN', 'BEGIN:VEVENT',
+    'UID:year-end-' + d8(y.end) + '-' + Date.now() + '@pensionbuddy.ie', 'DTSTAMP:' + d8(clock.now()) + 'T000000Z',
+    'DTSTART;VALUE=DATE:' + d8(y.rem), 'DTEND;VALUE=DATE:' + d8(new Date(y.rem.getTime() + DAY)),
+    'SUMMARY:' + line('Year-end reminder: ' + who), 'DESCRIPTION:' + line('Company year end ' + longDate(y.end) + '. Email ' + who + '.'),
+    'END:VEVENT', 'END:VCALENDAR', ''].join('\r\n');
+}
+
+/* to us: the lead itself; replying answers the sender */
 function alertEmail(form, d, env) {
   var who = str(d.name, MAX.name) || str(d.email) || 'someone';
-  var day = replyDay(d.reply_by);
-  var subject = form === 'enquiry'
-    ? 'New question: ' + (str(d.topic, 60) || 'no topic') + ', from ' + who
-    : 'New trace request: ' + lines(d.jobs, 3000, 20).length + ' old job' + (lines(d.jobs, 3000, 20).length === 1 ? '' : 's') + ', from ' + who;
+  var day = replyDay(d.reply_by), by = day ? 'by ' + day : 'within one working day';
+  var subject, lead = 'The site told them we reply ' + by + '.';
+  if (form === 'enquiry') subject = 'New question: ' + (str(d.topic, 60) || 'no topic') + ', from ' + who;
+  else if (form === 'pension-trace') {
+    var n = lines(d.jobs, 3000, 20).length;
+    subject = 'New trace request: ' + n + ' old job' + (n === 1 ? '' : 's') + ', from ' + who;
+  } else if (form === 'fee-check') {
+    var f = feeFigures(d);
+    subject = 'Fee check: ' + (f ? euroOf(f.pot) + ' at ' + f.fee.toFixed(2) + '%' : 'figures missing') + ', from ' + who;
+  } else if (form === 'year-end-reminder') {
+    var y = yearEnd(d.year_end, clock.now());
+    subject = !y ? 'Year-end reminder: no month, from ' + who
+      : y.close ? 'Year end in ' + y.days + ' days: ' + who : 'Year-end reminder on ' + longDate(y.rem) + ': ' + who;
+    lead = !y ? 'No month came with it.' : y.close ? 'Year end is ' + longDate(y.end) + '. The site told them we email ' + by + '.'
+      : 'The site told them we remind them on ' + longDate(y.rem) + '. The calendar file is attached.';
+  } else if (form === 'job-change') subject = 'Changing jobs: ' + (str(d.change, 30) || 'not picked') + (str(d.when) ? ', ' + str(d.when, 20).toLowerCase() : '') + ', from ' + who;
+  else if (form === 'callback') {
+    var time = /afternoon/i.test(str(d.time)) ? 'afternoon' : 'morning';
+    subject = 'Call back: ' + who + ', ' + (str(d.phone, 30) || 'no number') + ', ' + time;
+    lead = 'The site told them we call ' + (day || 'within one working day') + ', in the ' + time + '.';
+  }
+  if (validEmail(str(d.email))) lead += ' Reply to this email to answer them.';
   var page = ownLink(d.page, env) || '';
-  var lead = (day ? 'The site told them you reply by ' + day + '.' : 'The site told them you reply within one working day.') +
-    (validEmail(str(d.email)) ? ' Reply to this email to answer them.' : '');
   var rows = sentRows(form, d);
   var body = [p(esc(lead)), rowsTable(rows), page ? p('Sent from <a class="pb-link" href="' + esc(page) + '" style="color:' + C.teal + ';">' + esc(page) + '</a>', 'font-size:14px;') : ''].join('\n');
   var text = [lead, '', rowsText(rows), '', page ? 'Sent from ' + page : '', ''].join('\n');
-  return { subject: subject, html: shell({ title: subject, preheader: lead, body: body, why: 'Sent by the ' + form + ' form on pensionbuddy.ie.' }), text: text };
+  var out = { subject: subject, html: shell({ title: subject, preheader: lead, body: body, why: 'Sent by the ' + form + ' form on pensionbuddy.ie.' }), text: text };
+  if (form === 'year-end-reminder') {
+    var ye = yearEnd(d.year_end, clock.now());
+    if (ye && !ye.close) out.attachments = [{ filename: 'year-end-reminder.ics', content: Buffer.from(icsFor(d, ye)).toString('base64') }];
+  }
+  return out;
 }
 
 /* What Damian is sent for one submission: only for the REPLY forms. Sent to
@@ -436,6 +543,7 @@ function alert(form, data, env) {
   }
   var built = alertEmail(form, d, e);
   var message = { from: ALERT_FROM, to: [to], subject: built.subject, html: built.html, text: built.text };
+  if (built.attachments) message.attachments = built.attachments;
   if (validEmail(str(d.email))) message.reply_to = str(d.email);
   return { send: true, message: message };
 }
@@ -476,6 +584,6 @@ function plan(form, data, env) {
 }
 
 module.exports = {
-  plan: plan, alert: alert, replyDay: replyDay, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
+  plan: plan, alert: alert, replyDay: replyDay, yearEnd: yearEnd, clock: clock, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
   FROM: FROM, REPLY_TO: REPLY_TO, CALCULATORS: CALCULATORS, GUIDES: GUIDES, REPLY: REPLY, TEXT: TEXT
 };

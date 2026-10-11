@@ -21,8 +21,16 @@ html:not(.pb-js) .pbj-add,html:not(.pb-js) .pbj-tl,html:not(.pb-js) .pbj-stats{d
 .pbj-addbtn svg{transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
 .pbj-addbtn:hover svg{transform:rotate(90deg)}
 .pbj-addbtn.is-done{background:var(--teal-700)}
-.pbj-add-more{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:13px;color:var(--ink-3)}
-.pbj-hint b{color:var(--ink-2)}
+.pbj-add-more{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px;font-size:13px;color:var(--ink-3)}
+.pbj-to{position:relative}
+.pbj-now{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:1;height:30px;padding:0 11px;border:1.5px solid var(--line-2,#D8DFDC);border-radius:var(--r-pill);background:#fff;font:700 12.5px/1 var(--font);color:var(--ink-2);cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.pbj-now:hover{border-color:var(--teal);color:var(--teal-700)}
+.pbj-now:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pbj-now[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+:root.pb-motion .pbj-now[aria-pressed="true"]{animation:pbjNowPop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pbjNowPop{40%{transform:translateY(-50%) scale(1.12)}}
+.pbj-to input{padding-right:64px !important}
+html:not(.pb-js) .pbj-now{display:none}
 .pbj-provbtn{background:none;border:0;padding:6px 0;font:500 13px/1.3 var(--font);color:var(--ink-3);cursor:pointer}
 .pbj-provbtn span{font-weight:700;color:var(--teal-700)}
 .pbj-prov{display:grid;grid-template-rows:0fr;overflow:hidden}

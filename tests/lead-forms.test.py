@@ -65,8 +65,15 @@ LEAD_FORMS = {
 REPLY_FORMS = {
     'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
     'pension-trace': ['tracker.html'],
+    'fee-check': ['index.html'],
+    'year-end-reminder': ['director.html'],
+    'job-change': ['tracker.html'],
+    'callback': ['booking.html'],
 }
-JOBS = sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps)
+# "Ask us about this" under a result: its script builds the form, which
+# posts as enquiry with the fields the enquiry form declares on index.html
+ASK_RESULT = ('pension-calculator.html', 'ask-result')
+JOBS = (sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps) + [ASK_RESULT])
 
 # Job 4: the calculators whose headline is a projection, so it is also shown
 # in today's money
@@ -118,7 +125,19 @@ PROBE = r"""<script>
     return;
   }
 
-  if(fname==='enquiry'){
+  var OKS={'fee-check':'pbfOk','year-end-reminder':'pbyOk','job-change':'pbmOk','callback':'pbcOk','ask-result':'pbrOk'};
+  if(fname==='fee-check'){
+    $('pbfCheck').click(); set('pbfEmail','test@example.com');
+  }else if(fname==='year-end-reminder'){
+    $('pbyForm').querySelector('input[name="year_end"][value="March"]').click(); set('pbyEmail','test@example.com');
+  }else if(fname==='job-change'){
+    $('pbmForm').querySelector('input[name="change"][value="Leaving a job"]').click();
+    $('pbmForm').querySelector('input[name="when"][value="This month"]').click(); set('pbmEmail','test@example.com');
+  }else if(fname==='callback'){
+    set('pbcName','Test Person'); set('pbcPhone','087 123 4567');
+  }else if(fname==='ask-result'){
+    document.querySelector('.pbr-btn').click(); set('pbrMsg','What does this mean?'); set('pbrEmail','test@example.com');
+  }else if(fname==='enquiry'){
     $('askForm').querySelector('input[name="topic"][value="Check my pension"]').click();
     $('askForm').querySelector('.pb-ask-step.on .pb-ask-next').click();
     [].forEach.call($('askForm').querySelectorAll('.pb-ask-chips'),function(g){g.children[1].click();});
@@ -132,7 +151,7 @@ PROBE = r"""<script>
     ['drExec','drMore','drAge','drBig'].forEach(function(n){document.querySelector('input[name="'+n+'"][value="yes"]').click();});
     $('drForm').requestSubmit();
   }
-  if(fname==='enquiry'||fname==='pension-trace'){
+  if(fname==='enquiry'||fname==='pension-trace'||OKS[fname]){
     /* filled above */
   }else if($('ecForm')){
     $('ecMore').click();
@@ -145,13 +164,14 @@ PROBE = r"""<script>
     set('pfEmail','test@example.com'); set('pfSigned','Test Person'); $('pfConfirm').checked=true;
     $('pfOptin').checked=tick;
   }
-  var form=document.querySelector('form[name="'+fname+'"]');
+  var form=fname==='ask-result'?$('pbrForm'):document.querySelector('form[name="'+fname+'"]');
   R.form=form?form.getAttribute('name'):null;
   form.requestSubmit();
   var n=0;
   (function poll(){
     n++;
-    if(fname==='enquiry'){ R.done=!$('askOk').hidden; R.said=text('askOkText'); }
+    if(OKS[fname]){ var ok=$(OKS[fname]); R.done=!ok.hidden; var t=ok.querySelector('[data-ok-text]')||$('pbrOkText'); R.said=t?t.textContent.trim():''; }
+    else if(fname==='enquiry'){ R.done=!$('askOk').hidden; R.said=text('askOkText'); }
     else if(fname==='pension-trace'){ R.done=!$('pbjOk').hidden; R.said=text('pbjOkText'); }
     else if($('ecOk')){ R.done=!$('ecOk').hidden; R.said=text('ecOkText'); }
     else if($('mOk')){ R.done=$('mOk').classList.contains('show'); R.said=text('mOkText'); }
@@ -249,8 +269,14 @@ class Declared(HTMLParser):
 SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
 SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
 SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
-REPLIED = re.compile('^Thanks, Test\\. We\u2019ll reply by [A-Z][a-z]+day \\d{1,2} [A-Z][a-z]+\\.$')
-SUCCESS_REPLY = {'enquiry': REPLIED, 'pension-trace': REPLIED}
+DAY = '[A-Z][a-z]+day \\d{1,2} [A-Z][a-z]+'
+REPLIED = re.compile('^Thanks, Test\\. We\u2019ll reply by ' + DAY + '\\.$')
+SUCCESS_REPLY = {'enquiry': REPLIED, 'pension-trace': REPLIED,
+                 'fee-check': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
+                 'ask-result': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
+                 'year-end-reminder': re.compile('^(We\u2019ll remind you on \\d{1,2} [A-Z][a-z]+ \\d{4}|Year end is close\\. We\u2019ll email you by ' + DAY + ')\\.$'),
+                 'job-change': re.compile('^We\u2019ll email you by ' + DAY + '\\.$'),
+                 'callback': re.compile('^We\u2019ll call ' + DAY + ', in the morning\\.$')}
 
 def main():
     if not os.path.exists(CHROME):
@@ -276,8 +302,9 @@ def main():
         results[(page, mode, fname)] = json.loads(base64.b64decode(b64).decode('utf-8')) if b64 else None
 
     for page, name in JOBS:
-        d = Declared(name); d.feed(open(os.path.join(ROOT, page), encoding='utf-8').read())
-        eq('%s: the static form is "%s"' % (page, name), d.form, name)
+        posted = 'enquiry' if name == 'ask-result' else name
+        d = Declared(posted); d.feed(open(os.path.join(ROOT, 'index.html' if name == 'ask-result' else page), encoding='utf-8').read())
+        eq('%s: the static form is "%s"' % (page, name), d.form, posted)
         for mode in ('ok', 'fail'):
             r = results.get((page, mode, name))
             tag = '%s on %s [%s]' % (name, page, 'accepted' if mode == 'ok' else 'refused')
@@ -293,9 +320,24 @@ def main():
             eq('%s: to "/", urlencoded' % tag, (x['path'], x['type']), ('/', 'application/x-www-form-urlencoded'))
             eq('%s: every declared field, and nothing else' % tag, sorted(fields), sorted(d.names))
             eq('%s: each field once' % tag, [k for k, v in fields.items() if len(v) != 1], [])
-            eq('%s: form-name' % tag, fields.get('form-name'), [name])
+            eq('%s: form-name' % tag, fields.get('form-name'), [posted])
             eq('%s: the honeypot empty' % tag, fields.get('bot-field'), [''])
-            eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
+            if name != 'callback':
+                eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
+            got = lambda *ks: [fields.get(k, [''])[0] for k in ks]
+            if name == 'fee-check':
+                eq('%s: the three figures, and what the fee costs' % tag, got('pot', 'fee', 'age', 'cost'), ['100000', '1', '40', '\u20ac81,765'])
+            if name == 'year-end-reminder':
+                eq('%s: the month, and the reminder day' % tag,
+                   (got('year_end')[0], bool(re.match(r'^(\d{1,2} [A-Z][a-z]+ \d{4}|As soon as possible)$', got('remind_on')[0]))), ('March', True))
+            if name == 'job-change':
+                eq('%s: leaving, and when' % tag, got('change', 'when'), ['Leaving a job', 'This month'])
+            if name == 'callback':
+                eq('%s: the name, the number and the time' % tag, got('name', 'phone', 'time'), ['Test Person', '087 123 4567', 'Morning'])
+            if name == 'ask-result':
+                eq('%s: about a result, its rows, the question' % tag,
+                   (got('topic')[0], got('details')[0].startswith('Calculator: '), ' | Your age' in got('details')[0], got('message', 'contact_by')),
+                   ('About a result', True, True, ['What does this mean?', 'Email']))
             if name == 'calculator-results':
                 eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))
                 # Job 4: the summary the email is laid out from
@@ -323,7 +365,7 @@ def main():
             if name == 'pension-trace':
                 eq('%s: the jobs, how many, and the name' % tag,
                    [fields.get(k, [''])[0] for k in ('jobs', 'jobs_count', 'name')], ['Harbour Bank, 2005 to 2011', '1', 'Test Person'])
-            if name in REPLY_FORMS:
+            if name in REPLY_FORMS or name == 'ask-result':
                 eq('%s: the day we reply by, in the one shape' % tag,
                    bool(re.match(r'^(Monday|Tuesday|Wednesday|Thursday|Friday) \d{1,2} [A-Z][a-z]+$', fields.get('reply_by', [''])[0])), True)
             if name.endswith('-guide'):
@@ -335,7 +377,8 @@ def main():
             if 'page' in fields:
                 eq('%s: the page it came from' % tag, fields['page'][0].split('?')[0].endswith('/' + page), True)
             blank = sorted(k for k, v in fields.items() if v == [''] and k not in
-                           ('bot-field', 'other_names', 'phone', 'signature_drawn', 'message'))
+                           ('bot-field', 'other_names', 'phone', 'signature_drawn', 'message') +
+                           (('name',) if name == 'ask-result' else ()))
             eq('%s: nothing else blank' % tag, blank, [])
             eq('%s: no script error' % tag, r.get('errors'), [])
             eq('%s: the page moved on' % tag, r.get('done'), True)

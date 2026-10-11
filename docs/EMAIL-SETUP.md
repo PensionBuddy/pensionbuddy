@@ -12,6 +12,11 @@ Netlify Forms whatever happens. Nothing else is stored.
 | `director-guide`, `starter-guide`, `tracker-guide` | box "Yes, email me the guide." ticked, and the guide's link set | the guide link only |
 | `enquiry` (home, starter, directors', booking pages) | always: the note asks for a reply | to the sender: a copy of what they sent and the day Damian replies by. To Damian (`LEAD_TO`, else hello@): the lead, reply-to set to the sender |
 | `pension-trace` (tracker page, the old jobs timeline) | always | the same two emails, with the list of jobs |
+| `enquiry` with topic "About a result" ("Ask us about this" under every calculator's result) | always | the same two, with the result and the inputs |
+| `fee-check` (home page) | always | the same two, with the figures; the cost is worked out again in the function |
+| `year-end-reminder` (directors' page) | always | the same two; ours carries the reminder as a calendar file (`.ics`) to add in one click |
+| `job-change` (tracker page) | always | the same two; the sender's carries three first steps for leaving or starting |
+| `callback` (booking page) | always | ours only: it asks for a phone number, not an email |
 | `pension-finder` | never | none |
 | `booking`, `pension-calculator-results`, `director-calculator-results` | never (forms removed in Run 45) | none |
 

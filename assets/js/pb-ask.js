@@ -165,7 +165,14 @@
     measureHow();
     draw();
   }
+  var slid;
   how.addEventListener('change', function () {
+    if (motion()) {   /* the pill slides; at rest the picked label carries the teal */
+      how.classList.add('is-sliding');
+      void how.offsetWidth;   // the pill drawn where it was, so it slides from there
+      clearTimeout(slid);
+      slid = setTimeout(function () { how.classList.remove('is-sliding'); }, 420);
+    }
     syncHow();
     if (form.elements.contact_by.value === 'Phone') setTimeout(function () { phoneEl.focus({ preventScroll: true }); }, motion() ? 200 : 0);
   });

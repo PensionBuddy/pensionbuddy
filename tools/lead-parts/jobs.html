@@ -14,11 +14,10 @@
         <div class="pbj-add-row">
           <span class="ffield pbj-emp"><input id="pbjEmp" type="text" autocomplete="organization" maxlength="80" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjEmp">Employer</label></span>
           <span class="ffield pbj-yr"><input id="pbjFrom" type="text" inputmode="numeric" maxlength="4" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjFrom">From</label></span>
-          <span class="ffield pbj-yr"><input id="pbjTo" type="text" maxlength="4" placeholder=" " aria-describedby="pbjErr pbjToHint"><label class="flabel" for="pbjTo">To</label></span>
+          <span class="ffield pbj-yr pbj-to"><input id="pbjTo" type="text" maxlength="4" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjTo">To</label><button type="button" class="pbj-now" id="pbjNow" aria-pressed="false">Now</button></span>
           <button type="button" class="btn btn-primary pbj-addbtn" id="pbjAddBtn"><span>Add</span><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
         </div>
         <div class="pbj-add-more">
-          <span class="pbj-hint" id="pbjToHint">Still there? Type <b>now</b>.</span>
           <button type="button" class="pbj-provbtn" id="pbjProvBtn" aria-expanded="false" aria-controls="pbjProvBox"><span>+ Pension company</span></button>
         </div>
         <div class="pbj-prov" id="pbjProvBox"><span class="ffield"><input id="pbjProv" type="text" maxlength="80" placeholder=" "><label class="flabel" for="pbjProv">Pension company (optional)</label></span></div>

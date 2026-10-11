@@ -2575,9 +2575,8 @@ main h1{font-weight:800}
 .pb-ask-card{display:grid;grid-template-columns:.82fr 1.18fr;gap:48px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:44px;position:relative;overflow:hidden}
 .pb-ask-card::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 80% at 0 0,var(--teal-50),transparent 62%);pointer-events:none}
 .pb-ask-intro,.pb-ask-body{position:relative;min-width:0}
-.pb-ask h2{margin:0 0 10px}
+.pb-ask h2{margin:0 0 24px}
 .pb-ask h2 .hl{color:var(--teal-700)}
-.pb-ask-lede{font-size:16.5px;color:var(--ink-2);max-width:380px;margin:0 0 24px}
 .pb-ask-opt{font-weight:500;color:var(--ink-3);font-size:.85em}
 
 /* progress */
@@ -2671,8 +2670,8 @@ main h1{font-weight:800}
 .pb-ask-how label:focus-within{outline:2px solid var(--teal-700);outline-offset:1px}
 .pb-ask-how label.is-on{color:#fff;background:var(--teal)}
 .pb-ask-how-pill{display:none}
-.pb-js .pb-ask-how.is-measured label.is-on{background:transparent}
-.pb-js .pb-ask-how.is-measured .pb-ask-how-pill{display:block;position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:var(--w,0);transform:translateX(var(--x,0));border-radius:var(--r-pill);background:var(--teal)}
+.pb-js .pb-ask-how.is-sliding label.is-on{background:transparent}
+.pb-js .pb-ask-how.is-sliding .pb-ask-how-pill{display:block;position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:var(--w,0);transform:translateX(var(--x,0));border-radius:var(--r-pill);background:var(--teal)}
 :root.pb-motion .pb-ask-how-pill{transition:transform .4s cubic-bezier(.34,1.3,.64,1),width .4s cubic-bezier(.34,1.3,.64,1)}
 .pb-ask-phone{display:grid;grid-template-rows:1fr;margin-top:12px}
 .pb-ask-phone > .ffield{min-height:0}
@@ -3105,7 +3104,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="pb-ask-card">
   <div class="pb-ask-intro">
     <h2 id="askH">Ask us. <span class="hl">We reply by email.</span></h2>
-    <p class="pb-ask-lede">No call unless you ask for one.</p>
     <ol class="pb-ask-prog" aria-hidden="true"><li class="on">Topic</li><li>Details</li><li>Send</li></ol>
     <div class="pb-ask-draft" aria-hidden="true">
       <div class="pb-ask-draft-top"><i></i><i></i><i></i><span>To: Pensionbuddy</span></div>
@@ -3330,7 +3328,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=4b181c50" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=b222d2bd" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3605,6 +3603,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 <script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-ask.js?v=4c7d2e76"></script>
+<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
 </body>
 </html>

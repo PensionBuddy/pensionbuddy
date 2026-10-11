@@ -1,0 +1,74 @@
+/* KIT (tools/lead-parts/kit.css; tools/lead-blocks.py writes it into each
+   page with a reply tool): the card, fields, chips, reveal and sent state
+   the fee check, year-end reminder, changing jobs and call-back share.
+   Motion only under html.pb-motion; assets/js/pb-kit.js drives the parts. */
+.pbk{padding:64px 0}
+.pbk-card{position:relative;max-width:980px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:40px;overflow:hidden;isolation:isolate}
+.pbk-card::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(55% 75% at 100% 0,var(--teal-50),transparent 62%);pointer-events:none}
+.pbk h2{margin:0 0 26px}
+.pbk h2 .hl{color:var(--teal-700)}
+.pbk .ffield input{width:100%;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.pbk .ffield input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--teal-50)}
+.pbk .ffield.is-ok::after{content:"";position:absolute;right:15px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;background:var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat}
+.pbk .ffield.is-ok input{padding-right:46px !important}
+:root.pb-motion .pbk .ffield.is-ok::after{animation:pbkPop .35s cubic-bezier(.34,1.56,.64,1)}
+.pbk-send{display:flex;gap:10px;align-items:stretch}
+.pbk-send .ffield{flex:1}
+.pbk-send .btn{white-space:nowrap}
+
+/* chips: radios drawn as pills */
+.pbk-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pbk-chip{position:relative;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:var(--r-pill);background:var(--surface-2);border:1.5px solid transparent;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.pbk-chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pbk-chip:hover{border-color:var(--teal);color:var(--ink)}
+.pbk-chip:focus-within{outline:2px solid var(--teal-700);outline-offset:2px}
+.pbk-chip:has(input:checked){background:var(--teal);color:#fff}
+:root.pb-motion .pbk-chip:has(input:checked){animation:pbkPop2 .35s cubic-bezier(.34,1.56,.64,1)}
+
+/* a block that opens: rows 0fr to 1fr, so it pushes the page down smoothly */
+.pbk-fold{display:grid;grid-template-rows:0fr;opacity:0}
+.pbk-fold > *{min-height:0;overflow:hidden;margin:0 -6px;padding:0 6px}
+.pbk-fold.on,html:not(.pb-js) .pbk-fold{grid-template-rows:1fr;opacity:1}
+.pbk-fold.on > *{overflow:visible}
+:root.pb-motion .pbk-fold{transition:grid-template-rows .55s cubic-bezier(.22,.61,.36,1),opacity .4s ease}
+:root.pb-motion .pbk-fold.on > *{animation:pbkClip .55s steps(1,end)}
+@keyframes pbkClip{from{overflow:hidden}}
+
+.pbk-err{color:var(--red);font-size:13.5px;font-weight:600;margin:10px 0 0}
+.pbk-err:empty{display:none}
+.pbk-note{font-size:12px;color:var(--ink-3);line-height:1.5;margin:12px 0 0}
+.pbk-note a{color:var(--teal-700);font-weight:600}
+.pbk .btn[aria-disabled="true"]{opacity:.75;cursor:progress}
+:root.pb-motion .pbk .btn.is-sending svg{animation:pbkNudge .6s ease-in-out infinite}
+:root.pb-motion .pbk .is-bad{animation:pbkShake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes pbkShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes pbkNudge{50%{transform:translateX(4px)}}
+@keyframes pbkPop{from{transform:scale(0)}}
+@keyframes pbkPop2{40%{transform:scale(1.08)}}
+@keyframes pbkIn{from{opacity:0;transform:translateY(8px)}}
+
+/* sent */
+.pbk-ok{position:relative}
+.pbk-ok:focus{outline:none}
+.pbk-ok-ic{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff}
+.pbk-ok-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pbk-ok-ic .pbk-tick{stroke-dasharray:24 24}
+.pbk-ok h3{margin:16px 0 6px}
+.pbk-ok p{font-size:16px;color:var(--ink-2);margin:0}
+.pbk-ok-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:14px}
+.pbk-again{font:600 14.5px/1 var(--font);color:var(--ink-2);background:none;border:0;padding:12px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.pbk-again:hover{color:var(--teal-700)}
+.pbk-burst{position:absolute;left:28px;top:28px;width:0;height:0}
+.pbk-burst i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--teal);opacity:0}
+:root.pb-motion .pbk-ok.show .pbk-ok-ic{animation:pbkPop .5s cubic-bezier(.34,1.56,.64,1) both}
+:root.pb-motion .pbk-ok.show .pbk-tick{animation:pbkDraw .4s cubic-bezier(.22,.61,.36,1) .22s backwards}
+:root.pb-motion .pbk-ok.show h3,:root.pb-motion .pbk-ok.show p,:root.pb-motion .pbk-ok.show .pbk-ok-row{animation:pbkIn .45s cubic-bezier(.22,.61,.36,1) .15s both}
+:root.pb-motion .pbk-ok.show .pbk-burst i{animation:pbkBurst .8s cubic-bezier(.22,.61,.36,1) .1s forwards}
+@keyframes pbkDraw{from{stroke-dashoffset:-23}}
+@keyframes pbkBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(.4)}}
+
+@media(max-width:720px){
+  .pbk{padding:44px 0}
+  .pbk-card{padding:26px 18px}
+  .pbk-send{flex-direction:column}
+}

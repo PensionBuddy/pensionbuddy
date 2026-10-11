@@ -84,6 +84,7 @@
     err.textContent = '';
     jobs.push({ id: ++seq, name: n.slice(0, 80), from: f, to: t, now: isNow, prov: prov.value.trim().slice(0, 80) });
     emp.value = from.value = to.value = prov.value = '';
+    nowOn(false);
     render(seq);
     save();
     var label = addBtn.querySelector('span');
@@ -99,6 +100,17 @@
   });
   /* a four-digit start year moves on to the end year */
   from.addEventListener('input', function () { if (year(from.value) != null && !to.value) to.focus(); });
+
+  /* "Now": the job is the current one */
+  var nowBtn = $('pbjNow');
+  function nowOn(on) { nowBtn.setAttribute('aria-pressed', String(on)); }
+  nowBtn.addEventListener('click', function () {
+    var on = nowBtn.getAttribute('aria-pressed') !== 'true';
+    to.value = on ? 'Now' : '';
+    nowOn(on);
+    if (on) addBtn.focus(); else to.focus();
+  });
+  to.addEventListener('input', function () { nowOn(/^now$/i.test(to.value.trim())); });
 
   provBox.querySelector('.ffield').inert = true;
   provBtn.addEventListener('click', function () {
@@ -341,6 +353,7 @@
     form.reset();
     [].forEach.call(form.querySelectorAll('.ffield.is-ok'), function (f) { f.classList.remove('is-ok'); });
     tl.classList.remove('is-scan');
+    nowOn(false);
     rows.textContent = '';
     render();
     save();

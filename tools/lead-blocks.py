@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
-"""Write the two reply forms into the pages that carry them.
+"""Write the reply forms and tools into the pages that carry them.
 
     python3 tools/lead-blocks.py            # write the pages
     python3 tools/lead-blocks.py --check    # report, change nothing, exit 1 if stale
 
-    ask    "Ask us. We reply by email." (Netlify form "enquiry"):
-           the home, starter, directors' and booking pages
-    jobs   the old jobs timeline (Netlify form "pension-trace"): tracker.html
+    ask        "Ask us. We reply by email." (Netlify form "enquiry"):
+               the home, starter, directors' and booking pages
+    jobs       the old jobs timeline ("pension-trace"): tracker.html
+    fee        the fee check ("fee-check"): index.html
+    yearend    the year-end reminder ("year-end-reminder"): director.html
+    move       changing jobs ("job-change"): tracker.html
+    callback   call me back ("callback"): booking.html
+    askresult  "Ask us about this" under each calculator's result (posts
+               as "enquiry"): script only
+    kit        the CSS the four small tools share
 
 Each block has its markup and CSS in tools/lead-parts/<name>.html and
 <name>.css, and one script of its own. On a page the markup sits between
@@ -27,11 +34,29 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARTS = os.path.join(ROOT, 'tools', 'lead-parts')
 
+# In the order they are written. 'parts' says which of tools/lead-parts/<name>.html
+# and .css the block has; 'js' the scripts, in load order, a page must carry.
+FORMS = 'assets/js/pb-forms.js'
+KIT = 'assets/js/pb-kit.js'
 BLOCKS = {
-    'ask': {'pages': ['index.html', 'starter.html', 'director.html', 'booking.html'],
-            'js': ['assets/js/pb-forms.js', 'assets/js/pb-ask.js']},
-    'jobs': {'pages': ['tracker.html'],
-             'js': ['assets/js/pb-forms.js', 'assets/js/pb-jobs.js']},
+    'kit': {'pages': ['index.html', 'director.html', 'tracker.html', 'booking.html'], 'parts': ['css'],
+            'js': [FORMS, KIT]},
+    'ask': {'pages': ['index.html', 'starter.html', 'director.html', 'booking.html'], 'parts': ['css', 'html'],
+            'js': [FORMS, 'assets/js/pb-ask.js']},
+    'jobs': {'pages': ['tracker.html'], 'parts': ['css', 'html'],
+             'js': [FORMS, 'assets/js/pb-jobs.js']},
+    'fee': {'pages': ['index.html'], 'parts': ['css', 'html'],
+            'js': [FORMS, 'assets/js/pension-fees.js', KIT, 'assets/js/pb-fee.js']},
+    'yearend': {'pages': ['director.html'], 'parts': ['css', 'html'],
+                'js': [FORMS, KIT, 'assets/js/pb-yearend.js']},
+    'move': {'pages': ['tracker.html'], 'parts': ['css', 'html'],
+             'js': [FORMS, KIT, 'assets/js/pb-move.js']},
+    'callback': {'pages': ['booking.html'], 'parts': ['css', 'html'],
+                 'js': [FORMS, KIT, 'assets/js/pb-callback.js']},
+    # "Ask us about this" under a calculator's result: script only, its CSS
+    # inside it. The skeleton carries the tags into every page built from it.
+    'askresult': {'pages': ['pension-calculator.html', 'director-calculator.html'], 'parts': [],
+                  'js': [FORMS, KIT, 'assets/js/pb-askresult.js']},
 }
 
 # where the markup goes on a page that does not carry it yet: (text, before or after)
@@ -41,6 +66,10 @@ ANCHORS = {
     ('ask', 'director.html'): ('<div class="final-band">', 'before'),
     ('ask', 'booking.html'): ('\n</main>', 'before'),
     ('jobs', 'tracker.html'): ('</div></header>\n', 'after'),
+    ('fee', 'index.html'): ('<!-- LEAD:ask:BEGIN', 'before'),
+    ('yearend', 'director.html'): ('<!-- LEAD:ask:BEGIN', 'before'),
+    ('move', 'tracker.html'): ('<section style="padding-top:56px"><div class="wrap faq-grid">', 'before'),
+    ('callback', 'booking.html'): ('<!-- LEAD:ask:BEGIN', 'before'),
 }
 
 
@@ -80,12 +109,14 @@ def build(page, text):
         if page not in b['pages']:
             continue
         label = '%s (%s)' % (page, name)
-        css = '/* LEAD:%s:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/%s.css) */' % (name, name)
-        text = put(text, css, '/* LEAD:%s:END */' % name, part(name, '.css'),
-                   '</style>', 'before', label)
-        html = '<!-- LEAD:%s:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/%s.html) -->' % (name, name)
-        anchor, where = ANCHORS[(name, page)]
-        text = put(text, html, '<!-- LEAD:%s:END -->' % name, part(name, '.html'), anchor, where, label)
+        if 'css' in b['parts']:
+            css = '/* LEAD:%s:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/%s.css) */' % (name, name)
+            text = put(text, css, '/* LEAD:%s:END */' % name, part(name, '.css'),
+                       '</style>', 'before', label)
+        if 'html' in b['parts']:
+            html = '<!-- LEAD:%s:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/%s.html) -->' % (name, name)
+            anchor, where = ANCHORS[(name, page)]
+            text = put(text, html, '<!-- LEAD:%s:END -->' % name, part(name, '.html'), anchor, where, label)
         text = scripts(text, b['js'], label)
     return text
 

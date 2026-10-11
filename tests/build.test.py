@@ -398,7 +398,8 @@ def run():
            [f for f in form['fields'] if f[1] == 'form-name'], [('hidden', 'form-name', form_name)])
         eq('14. %s: one honeypot field, not hidden by type' % form_name,
            [f[0] for f in form['fields'] if f[1] == 'bot-field'], ['input'])
-        eq('14. %s: an email field' % form_name, 'email' in names, True)
+        # the call-back asks for a phone number instead
+        eq('14. %s: an email field' % form_name, ('phone' if form_name == 'callback' else 'email') in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
         eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
     eq('14. calculator-results: every calculator declares the same fields, in the same order (Run 45: name, email and the box to tick; no opt-in)',
@@ -2715,12 +2716,16 @@ LEAD_FORMS = {
     'pia.html': 'calculator-results',
 }
 
-# The two forms that ask Damian to reply (tools/lead-blocks.py), on pages that
-# may carry another form too, so by form name: the enquiry on four pages,
-# the old jobs timeline on the tracker page.
+# The forms that ask us to reply (tools/lead-blocks.py), on pages that may
+# carry another form too, so by form name. "Ask us about this" under each
+# calculator's result posts as enquiry from a form its script builds.
 REPLY_FORMS = {
     'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
     'pension-trace': ['tracker.html'],
+    'fee-check': ['index.html'],
+    'year-end-reminder': ['director.html'],
+    'job-change': ['tracker.html'],
+    'callback': ['booking.html'],
 }
 
 
