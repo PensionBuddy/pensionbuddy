@@ -7,8 +7,10 @@
      Cash      €1,000 that buys less every year: 1,000 / 1.02^n in today's
                money (the ECB's 2% target). A faint outline keeps the €1,000
                it was, so the loss is a hole you can see.
-     Pension   the same €1,000 growing at 5% a year before charges (the
-               calculator's own rate): 1,000 x 1.05^n / 1.02^n.
+     Pension   the same €1,000 growing at 6% a year before charges, the
+               most the Pensions Authority lets a projection assume
+               (PBAssume.assets.cap, as the calculator above): 1,000 x
+               1.06^n / 1.02^n.
      Relief    beside it, dim: what the government adds in tax relief on that
                €1,000, grown the same way. At 40% the government adds €40 for
                every €60 you put in (2/3 of yours), at 20% €20 for every €80
@@ -29,7 +31,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var yrs = $('pbI2Yrs'), cv = sec.querySelector('.pb-i2-cv');
   if (!yrs) { return; }
-  var fmt = K.fmt, INF = 0.02, GROW = 0.05, PER = 100, BASE = 1000 / PER, MAXY = +yrs.max;
+  var PA = window.PBAssume, fmt = K.fmt, INF = 0.02, GROW = (PA && PA.assets && PA.assets.cap) || 0.06, PER = 100, BASE = 1000 / PER;
   var rCash = new K.Roll($('pbI2Cash')), rPen = new K.Roll($('pbI2Pen'));
   var tags = { cash: $('pbI2TCash'), pen: $('pbI2TPen'), gov: $('pbI2TGov') }, rT = {};
   Object.keys(tags).forEach(function (k) { if (tags[k]) { rT[k] = new K.Roll(tags[k].querySelector('b')); } });
@@ -57,11 +59,16 @@
   var S = { cash: Stack('silver', 1), pen: Stack('silver', 1), gov: Stack('gold', 0.5) };
   var ORDER = ['cash', 'gov', 'pen'];
   var ptr = { in: false, x: 0, y: 0, down: false, sx: 0, y0: 0, scrub: false };
-  var MAXN = penOf(MAXY) / PER;
+  /* coins are sized so the pension's stack fits at 30 years; past that the
+     view eases back, like a camera stepping away, so 40 years still fits */
+  var FIT = Math.ceil(penOf(30) / PER);
+  function zoom() { return Math.min(1, FIT / Math.max(FIT, S.pen.n.x)); }
+  function pivot(k) { return k === 'cash' ? S.cash.x : S.pen.x; }
+  function shown(k) { var z = zoom(), px = pivot(k); return S[k].x === px ? px : px + (S[k].x - px) * z; }
   function size() {
     var b = cv.getBoundingClientRect(); W = b.width; H = b.height; dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    var base = H - 44, w = Math.max(40, Math.min(104, W * 0.17, (base - 104) / (0.105 * MAXN + 0.3)));
+    var base = H - 44, w = Math.max(40, Math.min(104, W * 0.17, (base - 128) / (0.105 * FIT + 0.3)));
     var h = C.sliceH(Math.round(w));
     g = { w: Math.round(w), e: h.e, ry: h.ry, base: base };
     S.cash.x = W * 0.21; S.pen.x = W * 0.56; S.gov.x = S.pen.x + g.w * 1.14;
@@ -107,19 +114,21 @@
     if (K.motion() && onScreen && !document.hidden && (calm < 0.6 || ptr.in)) { raf = requestAnimationFrame(frame); }
   }
   function stepCoins(dt) {
-    var moving = false;
+    var moving = false, z = zoom();
     ORDER.forEach(function (k) {
-      var s = S[k], L = s.lean, lt = 0;
+      var s = S[k], L = s.lean, lt = 0, px = pivot(k);
+      /* the pointer in the stack's own frame, before the view eases back */
+      var qx = px + (ptr.x - px) / z, qy = g.base + (ptr.y - g.base) / z;
       /* the stack leans away from the pointer */
-      if (ptr.in && !ptr.scrub) { var dx = s.x - ptr.x, near = Math.max(0, 1 - Math.abs(dx) / (g.w * 2.2)); lt = (dx > 0 ? 1 : -1) * near * 9; }
+      if (ptr.in && !ptr.scrub) { var dx = s.x - qx, near = Math.max(0, 1 - Math.abs(dx) / (g.w * 2.2)); lt = (dx > 0 ? 1 : -1) * near * 9; }
       L.v += (110 * (lt - L.x) - 10 * L.v) * dt; L.x += L.v * dt;
       if (Math.abs(L.v) > 0.4 || Math.abs(lt - L.x) > 0.2) { moving = true; }
       s.coins.forEach(function (c, i) {
         /* the riffle: coins near the pointer's height step aside, the nearer the further */
         var to = 0;
         if (ptr.in && !ptr.scrub) {
-          var dy = slot(i) - ptr.y, fx = Math.max(0, 1 - Math.abs(ptr.x - s.x) / (g.w * 1.3));
-          if (fx > 0) { to = (s.x >= ptr.x ? 1 : -1) * 11 * fx * Math.exp(-dy * dy / (2 * Math.pow(g.e * 2.4, 2))); }
+          var dy = slot(i) - qy, fx = Math.max(0, 1 - Math.abs(qx - s.x) / (g.w * 1.3));
+          if (fx > 0) { to = (s.x >= qx ? 1 : -1) * 11 * fx * Math.exp(-dy * dy / (2 * Math.pow(g.e * 2.4, 2))); }
         }
         c.vo += (300 * (to - c.o) - 17 * c.vo) * dt; c.o += c.vo * dt;
         if (Math.abs(c.vo) > 0.5 || Math.abs(to - c.o) > 0.2) { moving = true; }
@@ -136,10 +145,12 @@
   }
   function draw() {
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
-    floor(S.cash.x, 1); floor(S.pen.x + g.w * 0.57, 1.75);
-    ghost();
+    var z = zoom();
     ORDER.forEach(function (k) {
-      var s = S[k], n = s.coins.length, frac = s.n.x - Math.floor(s.n.x - 0.001);
+      var s = S[k], n = s.coins.length, frac = s.n.x - Math.floor(s.n.x - 0.001), px = pivot(k);
+      cx.save(); cx.translate(px, g.base); cx.scale(z, z); cx.translate(-px, -g.base);
+      if (k === 'cash') { floor(S.cash.x, 1); ghost(); }
+      if (k === 'gov') { floor(S.pen.x + g.w * 0.57, 1.75); }
       s.coins.forEach(function (c, i) {
         var top = i === n - 1, part = top && frac < 0.999 ? frac : 1, h = (i + 1) / Math.max(BASE, n);
         var x = s.x + jit(i, k.length) + c.o + s.lean.x * Math.pow(h, 1.4), y = slot(i) + c.y + c.hop;
@@ -147,6 +158,7 @@
         var a = s.alpha * (part < 1 ? 0.12 + 0.88 * part : 1) * (0.4 + 0.6 * c.pop);
         C.slice(cx, x, y, w, s.kind, a, top && c.landed);
       });
+      cx.restore();
     });
     cx.fillStyle = 'rgba(84,99,95,.85)'; cx.font = '600 12px Figtree, system-ui, sans-serif'; cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
     cx.fillText('One coin = €100 of today’s shopping', 18, H - 14);
@@ -174,11 +186,15 @@
   /* the figures sit over their stacks; the pension's keeps clear of the relief's */
   function place() {
     if (!tags.cash) { return; }
-    function topOf(s) { return slot(Math.max(0, Math.ceil(s.n.x - 0.001) - 1)) - g.ry - 10; }
-    var yc = slot(BASE - 1) - g.ry - 12, yg = Math.max(60, topOf(S.gov)), yp = Math.max(56, topOf(S.pen));
+    var z = zoom();
+    function Zy(y) { return g.base + (y - g.base) * z; }
+    function topOf(s) { return Zy(slot(Math.max(0, Math.ceil(s.n.x - 0.001) - 1)) - g.ry) - 10; }
+    var yc = Zy(slot(BASE - 1) - g.ry) - 12, yg = Math.max(84, topOf(S.gov)), yp = Math.max(80, topOf(S.pen));
+    /* the relief's figure keeps clear of the pension's coins and of the edge */
+    var gw = tags.gov.offsetWidth, xg = Math.min(W - gw / 2 - 8, Math.max(shown('gov') + 6, S.pen.x + g.w / 2 * z + gw / 2 + 6));
     /* side by side when they fit, else the pension's rises clear of the relief's */
-    if (S.pen.x + tags.pen.offsetWidth / 2 + 8 > S.gov.x + 6 - tags.gov.offsetWidth / 2) { yp = Math.max(56, Math.min(yp, yg - 52)); }
-    [['cash', S.cash.x, yc], ['pen', S.pen.x, yp], ['gov', S.gov.x + 6, yg]].forEach(function (t) {
+    if (S.pen.x + tags.pen.offsetWidth / 2 + 8 > xg - gw / 2) { yp = Math.max(80, Math.min(yp, yg - 52)); }
+    [['cash', S.cash.x, yc], ['pen', S.pen.x, yp], ['gov', xg, yg]].forEach(function (t) {
       tags[t[0]].style.setProperty('--x', t[1].toFixed(1) + 'px'); tags[t[0]].style.setProperty('--y', t[2].toFixed(1) + 'px');
     });
   }
@@ -222,7 +238,7 @@
       if (!ptr.scrub && K.motion() && g) {
         /* a tap: a wave up the stack it was nearest */
         var p = local(e), best = null;
-        ORDER.forEach(function (k) { var d = Math.abs(p.x - S[k].x); if (!best || d < best.d) { best = { k: k, d: d }; } });
+        ORDER.forEach(function (k) { var d = Math.abs(p.x - shown(k)); if (!best || d < best.d) { best = { k: k, d: d }; } });
         S[best.k].coins.forEach(function (c, i) { setTimeout(function () { c.vh = -(200 + i * 4); kick(); }, i * 26); });
         touch();
       }

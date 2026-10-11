@@ -2697,6 +2697,8 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
 .pb-i2-ctl{margin:26px 0 0;max-width:460px}
 .pb-i2-taxrow{margin:16px 0 0}
 .pb-nw{white-space:nowrap}
+.pb-past{margin:8px 0 0;font-size:13px;line-height:1.45;color:var(--ink)}
+.pb-i2 .pb-past{order:8}
 .pb-i2-ctl[hidden]{display:none}
 .pb-i2-note{margin:14px 0 0;font-size:13px;color:var(--ink-3)}
 .pb-i2-stage{position:relative;height:470px;border-radius:28px;background:radial-gradient(70% 50% at 50% 100%,#F1F4F3 0%,rgba(241,244,243,0) 75%),#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.07);overflow:hidden}
@@ -2878,15 +2880,15 @@ html:not(.pb-js) .pb-i2-stage{display:none}
       <p class="pb-c2-legend" aria-hidden="true"><span class="pb-c2-l-you"><i></i>You</span><span class="pb-c2-l-rev" id="pbC2LRev"><i></i>Revenue</span><span class="pb-c2-l-emp" id="pbC2LEmp" hidden><i></i>Your employer</span></p>
       <div class="pb-c2-res">
         <p class="pb-c2-k">At 66</p>
-        <p class="pb-c2-big"><span id="pbC2Total">&euro;1,536</span></p>
-        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;239</b></span></p>
-        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-no">&euro;64 a month short.</span></p>
+        <p class="pb-c2-big"><span id="pbC2Total">&euro;1,595</span></p>
+        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;298</b></span></p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-no">&euro;5 a month short.</span></p>
         <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close"><span>Close my gap</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
         <p class="tk-sr" id="pbC2Sr" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
     <div class="pb-c2-panel" id="pbC2Live" hidden>
-      <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;1,536</b> a month <span id="pbC2MiniV">&euro;64 short</span></p>
+      <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;1,595</b> a month <span id="pbC2MiniV">&euro;5 short</span></p>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Age">Your age</label><span class="pb-c2-v" id="pbC2AgeV">35</span></div><input type="range" id="pbC2Age" min="18" max="65" step="1" value="35"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">Saved so far</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">You put in a month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
@@ -2904,7 +2906,8 @@ html:not(.pb-js) .pb-i2-stage{display:none}
   </div>
   <div class="pb-c2-fine">
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note pb-c2-note">In today&rsquo;s money. 5% growth a year, 2% inflation, retiring at 66, 4% of the pot a year as income. <a href="pension-calculator.html">The full calculator</a></p>
+    <p class="gap-note pb-c2-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, retiring at 66, 4% of the pot a year as income. <a href="pension-calculator.html">The full calculator</a></p>
+    <p class="pb-past"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
   </div>
 </div></section>
 
@@ -2912,12 +2915,12 @@ html:not(.pb-js) .pb-i2-stage{display:none}
      government adds to it"). Three stacks of €100 coins: cash, which buys less each year; the same
      €1,000 in a pension, which grows; and, dim beside it, what the government adds in tax relief.
      assets/js/pb-home-infl.js. The same sum as glossary.html's inflation widget, at 2%, with the
-     calculator's 5% for the pension; the relief at 20% or 40%, shared with the calculator. -->
+     calculator's 6% for the pension; the relief at 20% or 40%, shared with the calculator. -->
 <section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="wrap pb-i2-grid">
   <div class="pb-i2-copy">
     <h2 id="pbI2H">&euro;1,000 buys less every year.</h2>
     <p class="pb-i2-out pb-i2-cash">In <span id="pbI2Y">30 years</span>, &euro;1,000 in cash will be worth <span class="pb-nw"><b id="pbI2Cash">&euro;552</b>.</span></p>
-    <p class="pb-i2-out pb-i2-pen">In a pension, it could be worth <span class="pb-nw"><b id="pbI2Pen">&euro;2,386</b>.</span></p>
+    <p class="pb-i2-out pb-i2-pen">In a pension, it could be worth <span class="pb-nw"><b id="pbI2Pen">&euro;3,171</b>.</span></p>
     <p class="pb-i2-why">Cash can&rsquo;t keep up with prices. A pension can.</p>
     <p class="pb-i2-gov">And for every <b id="pbI2Put">&euro;60</b> you put in, the government <span class="pb-nw">adds <b id="pbI2Add">&euro;40</b>.</span></p>
     <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
@@ -2925,13 +2928,14 @@ html:not(.pb-js) .pb-i2-stage{display:none}
       <input type="range" id="pbI2Yrs" min="1" max="40" step="1" value="30">
       <div class="pb-c2-taxrow pb-i2-taxrow"><span class="pb-c2-taxl" id="pbI2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-i2-tax" role="group" aria-labelledby="pbI2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
     </div>
-    <p class="pb-i2-note">Worth means what it buys at today&rsquo;s prices. Prices up 2% a year. A pension grows 5% a year before charges. Not guaranteed.</p>
+    <p class="pb-i2-note">Worth means what it buys at today&rsquo;s prices. Prices up 2% a year. A pension grows 6% a year before charges, the most a pension projection may assume. Historically, shares have often done better. Not guaranteed.</p>
+    <p class="pb-past"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
   </div>
   <div class="pb-i2-stage">
     <canvas class="pb-i2-cv" aria-hidden="true"></canvas>
     <span class="pb-i2-tag pb-i2-tag-cash" id="pbI2TCash" aria-hidden="true"><b>&euro;552</b><i>Cash</i></span>
-    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;2,386</b><i>Pension</i></span>
-    <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;1,591</b><i>Government</i></span>
+    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;3,171</b><i>Pension</i></span>
+    <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;2,114</b><i>Government</i></span>
     <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
   </div>
 </div></section>
@@ -3229,8 +3233,8 @@ html:not(.pb-js) .pb-i2-stage{display:none}
 <script src="assets/js/pb-home-kit.js?v=0c885de1"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-home-gap.js?v=532e2b32"></script>
-<script src="assets/js/pb-home-calc.js?v=d618d936"></script>
-<script src="assets/js/pb-home-infl.js?v=fd79f220"></script>
+<script src="assets/js/pb-home-calc.js?v=5b0c6175"></script>
+<script src="assets/js/pb-home-infl.js?v=721dba51"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');

@@ -8,9 +8,12 @@
    your monthly amount to what covers it.
 
    The sums are the pension calculator's own (pension-calculator.html):
-   monthly compounding at 5% a year, 4% of the pot a year as income, all in
-   today's money at the ECB's 2% (assets/js/pb-assumptions.js), level
-   contributions, retirement at 66.
+   monthly compounding, 4% of the pot a year as income, all in today's
+   money at the ECB's 2% (assets/js/pb-assumptions.js), level
+   contributions, retirement at 66. Growth (Damian, 11 October 2026: "use
+   six percent"): 6% a year before charges, the most the Pensions
+   Authority lets a projection assume (PBAssume.assets.cap); the full
+   calculator's own default is its Level 4, 5%.
 
    THE POT. A glass pot of coins: the pot you would have at 66. Silver coins
    are yours, gold are Revenue's (the tax relief), blue are your employer's,
@@ -32,13 +35,13 @@
   var age = $('pbC2Age'), pot = $('pbC2Pot'), mine = $('pbC2Mine'), emp = $('pbC2Emp');
   if (!age || !pot || !mine) { return; }
   var fmt = K.fmt;
-  var G5 = 0.05, DRAW = 0.04, AT = (SP && SP.PENSION_AGE) || 66;
+  var PA = window.PBAssume, GROW = (PA && PA.assets && PA.assets.cap) || 0.06, DRAW = 0.04, AT = (SP && SP.PENSION_AGE) || 66;
   var INF = (window.PBAssume && window.PBAssume.inflation && window.PBAssume.inflation.rate) || 0.02;
   var ONE = SP ? SP.MAX_WEEKLY_CENTS * SP.WEEKS_PER_YEAR / 100 : 15563.6;
   var tax = 0.4;
 
   /* ----------------------------------------------------------- the sums -- */
-  function mr() { return Math.pow(1 + G5, 1 / 12) - 1; }
+  function mr() { return Math.pow(1 + GROW, 1 / 12) - 1; }
   function project(a, p, m, e) {
     var n = Math.max(1, AT - a), months = n * 12, r = mr(), g = Math.pow(1 + r, months), A = (g - 1) / r;
     var fv = p * g + (m + e) * A, defl = Math.pow(1 + INF, n);

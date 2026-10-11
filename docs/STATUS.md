@@ -340,6 +340,29 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 53 — 2026-10-11 · The home page grows at 6% (on `claude/optimistic-keller-kfqggu`)
+
+Damian: "use six percent, and say historically it could be higher, still
+legally in line."
+
+- **The home page's calculator and inflation section** now grow a pension
+  at 6% a year before charges, read from `PBAssume.assets.cap`: the most
+  the Pensions Authority's guidance lets a projection assume. The notes
+  say so, add "Historically, shares have often done better", and, because
+  that is a statement about past performance, carry the Code's warning
+  under each note: "Warning: Past performance is not a reliable guide to
+  future performance."
+- **Knock-on:** the calculator's opening example (35, €10,000 saved, €100
+  a month) is now €5 a month short of Modest, not €64. In the inflation
+  section €1,000 in a pension is worth €3,171 after 30 years (was €2,386);
+  the stacks are sized for 30 years and the view eases back past that.
+- **Not changed:** the full calculator and the other tools keep their risk
+  levels (Level 4, 5%, by default). **Needs Damian:** whether they follow.
+- **Tests.** `build.test.py` 484/0, `run-tests.py` all pass,
+  `interactive-43` 340/0, `regulator-lines` 31/0 and `--caveats` 31/0.
+
+---
+
 # Run 52 — 2026-10-11 · Home page round 3: a fourth level, real coins, the government's share, the nav to the left (on `claude/optimistic-keller-kfqggu`)
 
 Damian's notes on Run 51: a level above Comfortable; the coins looked
