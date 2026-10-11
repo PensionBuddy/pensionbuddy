@@ -1,7 +1,7 @@
 /* The home page's motion kit (11 October 2026, Damian's brief: one clear
    path, gap -> calculator -> inflation, and go all out on the motion).
 
-   Shared by assets/js/pb-home-gap.js, pb-home-calc.js and pb-home-basket.js.
+   Shared by assets/js/pb-home-gap.js, pb-home-calc.js and pb-home-infl.js.
    Nothing here works out a figure.
 
      PBKit.fmt(v)             '€3,636'
@@ -13,9 +13,20 @@
                               for screen readers, the digits are a picture
      PBKit.seg(group, fn)     a row of aria-pressed buttons with one pill
                               behind the pressed one that springs between them
-     PBKit.aim                { level, hh }: the way of life the reader picked,
-                              shared by the gap and the calculator
-     PBKit.setAim(lv, hh, by) changes it and tells the page ('pb:aim') */
+     PBKit.aim                { level, hh, own }: the way of life the reader
+                              picked, shared by the gap and the calculator;
+                              own is the reader's own figure a year, one for
+                              each household, used when level is 'own'
+     PBKit.setAim(lv, hh, by) changes it and tells the page ('pb:aim')
+     PBKit.setOwn(v, by)      sets the own figure for the current household
+     PBKit.life(lv, hh)       { level, label, annual, monthly, own, phrase }:
+                              a Pensions Council standard, or the own figure.
+                              The Council has three standards; "Your own" is
+                              the fourth, for readers who aim above
+                              Comfortable, and it is their figure, not ours
+     PBKit.tax                { rate }: 0.2 or 0.4, the relief rate, shared by
+                              the calculator and the inflation section
+     PBKit.setTax(r, by)      changes it and tells the page ('pb:tax') */
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -92,7 +103,9 @@
       var on = btns.filter(function (b) { return b.getAttribute('aria-pressed') === 'true'; })[0];
       if (!on || !on.offsetWidth) { return; }
       if (quiet) { ind.style.transition = 'none'; }
-      ind.style.width = on.offsetWidth + 'px'; ind.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+      /* x and y, so a row that wraps onto two lines still works */
+      ind.style.top = '0'; ind.style.bottom = 'auto'; ind.style.height = on.offsetHeight + 'px';
+      ind.style.width = on.offsetWidth + 'px'; ind.style.transform = 'translate(' + on.offsetLeft + 'px,' + on.offsetTop + 'px)';
       if (quiet) { void ind.offsetWidth; ind.style.transition = ''; }
     }
     function press(b, quiet) {
@@ -108,12 +121,38 @@
   }
 
   /* ------------------------------------------------- the reader's aim -- */
-  var aim = { level: 'modest', hh: 'single' };
+  /* the own figure starts a little above Comfortable (€33,600 for one,
+     €43,200 for two) and the reader moves it: €20,000 to €100,000 a year */
+  var OWN = { min: 20000, max: 100000, step: 1000 };
+  var aim = { level: 'modest', hh: 'single', own: { single: 40000, couple: 55000 } };
+  function tell(by) {
+    try { document.dispatchEvent(new CustomEvent('pb:aim', { detail: { level: aim.level, hh: aim.hh, by: by } })); } catch (e) { /* old browser: each part keeps its own */ }
+  }
   function setAim(level, hh, by) {
     if (level === aim.level && hh === aim.hh) { return; }
-    aim.level = level; aim.hh = hh;
-    try { document.dispatchEvent(new CustomEvent('pb:aim', { detail: { level: level, hh: hh, by: by } })); } catch (e) { /* old browser: each part keeps its own */ }
+    aim.level = level; aim.hh = hh; tell(by);
+  }
+  function setOwn(v, by) {
+    v = Math.max(OWN.min, Math.min(OWN.max, Math.round(v / OWN.step) * OWN.step));
+    if (v === aim.own[aim.hh]) { return; }
+    aim.own[aim.hh] = v; tell(by);
+  }
+  function life(level, hh) {
+    var two = hh === 'couple';
+    if (level === 'own') {
+      var a = aim.own[hh] || aim.own.single;
+      return { level: 'own', label: 'Your own', annual: a, monthly: a / 12, own: true, phrase: 'your own figure' + (two ? ' for two' : '') };
+    }
+    var s = window.PBLivingStandards.standard(level, hh);
+    return { level: level, label: s.label, annual: s.annual, monthly: s.monthly, own: false, s: s, phrase: 'a ' + s.label.toLowerCase() + ' life' + (two ? ' for two' : '') };
   }
 
-  window.PBKit = { fmt: fmt, motion: motion, Spring: Spring, Roll: Roll, seg: seg, aim: aim, setAim: setAim };
+  var tax = { rate: 0.4 };
+  function setTax(r, by) {
+    if (r === tax.rate) { return; }
+    tax.rate = r;
+    try { document.dispatchEvent(new CustomEvent('pb:tax', { detail: { rate: r, by: by } })); } catch (e) { /* each part keeps its own */ }
+  }
+
+  window.PBKit = { fmt: fmt, motion: motion, Spring: Spring, Roll: Roll, seg: seg, aim: aim, setAim: setAim, setOwn: setOwn, life: life, OWN: OWN, tax: tax, setTax: setTax };
 }());

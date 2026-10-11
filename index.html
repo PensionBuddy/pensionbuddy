@@ -1830,6 +1830,19 @@ html.pb-js #navSearch{display:inline-flex}
 @media(max-width:1300px){
   #navSearch{width:48px;height:48px;margin:0 0 0 auto;border-radius:6px}
 }
+/* Run 52 (11 October 2026, Damian: "a bit bigger, move it to the left"):
+   beside the links, the items sit next to the logo at 18px; the booking
+   button, the deadline chip and the search keep to the right. Measured in
+   Chrome: the row fits from 1301px with room to spare, the chip from 1440px. */
+@media(min-width:1301px){
+  #nav .nav-in{justify-content:flex-start}
+  #navLinks{flex:1 1 auto;margin-left:22px}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{font-size:18px;padding-left:7px;padding-right:7px}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{left:7px;right:7px}
+  #navLinks .btn{margin-left:auto}
+  #navTick{order:3;margin-left:10px}
+  #navSearch{order:4}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -2518,9 +2531,13 @@ main h1{font-weight:800}
 .pb-g2{padding:76px 0 60px;background:radial-gradient(55% 70% at 78% 45%,#E4F8F4 0%,rgba(228,248,244,0) 70%),var(--bg)}
 .pb-g2-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px 56px;align-items:center}
 .pb-g2 h1{margin:0;font-size:clamp(40px,5.2vw,68px);line-height:1;letter-spacing:-.045em}
-.pb-g2-pick{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 0}
+.pb-g2-pick{display:flex;flex-wrap:wrap;gap:12px;margin:34px 0 0}
 .pb-g2-pick[hidden]{display:none}
-.pb-g2-pick .pb-seg button{padding:0 15px}
+.pb-g2-pick .pb-seg{padding:5px}
+.pb-g2-pick .pb-seg button{min-height:54px;padding:0 21px;font-size:17.5px}
+.pb-g2-own{margin:18px 0 0;max-width:470px}
+.pb-g2-own[hidden],.pb-c2-own[hidden]{display:none}
+.pb-g2-own input[type=range]{display:block;width:100%;margin:6px 0 0}
 .pb-g2-what{margin:14px 0 0;font-size:17px;font-weight:600;color:var(--ink-2)}
 .pb-g2-ans{margin:22px 0 0}
 .pb-g2-no{margin:0;font-size:clamp(68px,9vw,118px);font-weight:800;line-height:.9;letter-spacing:-.05em;color:#D4573D;transform-origin:30% 70%}
@@ -2543,7 +2560,7 @@ main h1{font-weight:800}
 .pb-g2-more[aria-expanded="true"] svg{transform:rotate(180deg)}
 /* the tower */
 .pb-g2-chartwrap{min-width:0}
-.pb-g2-chart{position:relative;height:460px}
+.pb-g2-chart{position:relative;height:520px}
 .pb-g2-cv{display:none;width:100%;height:100%;touch-action:pan-y;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .pb-g2-live .pb-g2-cv{display:block}
 .pb-g2-key{margin:0;display:grid;gap:10px}
@@ -2577,16 +2594,22 @@ html:not(.pb-js) .pb-g2-chart{height:auto}
   .pb-g2-grid{grid-template-columns:1fr;gap:0}
   .pb-g2-grid > *,.pb-g2-copy > *{order:9}
   .pb-g2-chartwrap{display:contents}
-  .pb-g2 h1{order:1}.pb-g2-pick{order:2;margin-top:22px}.pb-g2-what{order:3}.pb-g2-chart{order:4;margin-top:10px}.pb-g2-ans{order:5;margin-top:14px}.pb-g2-acts{order:6}.pb-g2-chartwrap .pb-src{order:7;margin-top:22px}
+  .pb-g2 h1{order:1}.pb-g2-pick{order:2;margin-top:22px}.pb-g2-what,.pb-g2-own{order:3}.pb-g2-chart{order:4;margin-top:10px}.pb-g2-ans{order:5;margin-top:14px}.pb-g2-acts{order:6}.pb-g2-chartwrap .pb-src{order:7;margin-top:22px}
   .pb-g2-chart{height:330px}
   .pb-g2-rows{grid-template-columns:1fr}
   .pb-g2-split{padding:20px}
   .pb-g2-k dd{font-size:20px}
   .pb-g2-k dt{font-size:13px}
 }
+@media(max-width:560px){
+  /* on a phone the choices are a grid of big buttons, two to a row */
+  .pb-g2-pick{gap:10px}
+  .pb-g2-pick .pb-seg,.pb-c2-aims .pb-seg{display:grid;grid-template-columns:1fr 1fr;width:100%;border-radius:26px}
+  .pb-g2-pick .pb-seg button{min-height:52px;padding:0 8px;font-size:16.5px}
+  .pb-c2-aims .pb-seg{border-radius:22px}
+  .pb-c2-aims .pb-seg button{padding:0 8px}
+}
 @media(max-width:420px){
-  .pb-g2-pick{gap:8px}
-  .pb-g2-pick .pb-seg button{padding:0 12px;font-size:14px}
   .pb-g2-chart{height:300px}
 }
 
@@ -2667,27 +2690,41 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
 .pb-i2-out{margin:22px 0 0;font-size:clamp(21px,2.1vw,26px);line-height:1.3;letter-spacing:-.015em;color:var(--ink);font-weight:500}
 .pb-i2-out b{font-weight:800;font-variant-numeric:tabular-nums}
 .pb-i2-cash b{color:#D4573D}
-.pb-i2-pen b{color:#B07A12}
+.pb-i2-pen b{color:#0B7A6E}
 .pb-i2 .pb-i2-why{margin:20px 0 0;font-size:19px;font-weight:700;color:var(--ink)}
-.pb-i2-ctl{margin:24px 0 0;max-width:460px}
+.pb-i2 .pb-i2-gov{margin:10px 0 0;font-size:19px;font-weight:500;line-height:1.4;color:var(--ink)}
+.pb-i2-gov b{padding:1px 6px;border-radius:7px;background:#FBF1D6;color:#7A5410;font-weight:800;font-variant-numeric:tabular-nums}
+.pb-i2-ctl{margin:26px 0 0;max-width:460px}
+.pb-i2-taxrow{margin:16px 0 0}
+.pb-nw{white-space:nowrap}
 .pb-i2-ctl[hidden]{display:none}
 .pb-i2-note{margin:14px 0 0;font-size:13px;color:var(--ink-3)}
-.pb-i2-stage{position:relative;height:420px;border-radius:28px;background:radial-gradient(60% 55% at 70% 80%,#FFF4DA 0%,rgba(255,244,218,0) 70%),radial-gradient(60% 55% at 25% 80%,#EEF2F1 0%,rgba(238,242,241,0) 70%),#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 18px 44px rgba(11,31,28,.06);overflow:hidden}
+.pb-i2-stage{position:relative;height:470px;border-radius:28px;background:radial-gradient(70% 50% at 50% 100%,#F1F4F3 0%,rgba(241,244,243,0) 75%),#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.07);overflow:hidden}
 .pb-i2-cv{display:block;width:100%;height:100%;touch-action:pan-y;cursor:ew-resize;-webkit-tap-highlight-color:transparent}
 .pb-i2-tag{position:absolute;left:0;top:0;transform:translate(calc(var(--x,0px) - 50%),calc(var(--y,0px) - 100%));display:flex;flex-direction:column;align-items:center;pointer-events:none;white-space:nowrap}
 .pb-i2-tag b{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .pb-i2-tag i{font-style:normal;font-size:14px;font-weight:700;color:var(--ink-2)}
 .pb-i2-tag-cash b{color:#D4573D}
-.pb-i2-tag-pen b{color:#B07A12}
+.pb-i2-tag-pen b{color:#0B7A6E}
+.pb-i2-tag-gov b{font-size:19px;color:#9A7020}
+.pb-i2-tag-gov i{font-size:12.5px;color:#9A7020;opacity:.85}
 .pb-i2-hint{position:absolute;left:0;right:0;top:14px;margin:0;text-align:center;font-size:13px;font-weight:600;color:var(--ink-2);opacity:0;transition:opacity .5s;pointer-events:none}
 .pb-i2-hint.pb-on{opacity:1}
 html:not(.pb-js) .pb-i2-stage{display:none}
 @media(max-width:920px){
   .pb-i2{padding:52px 0}
   .pb-i2-grid{grid-template-columns:1fr}
-  .pb-i2-stage{height:320px;order:2}
+  /* on a phone the picture comes straight after the words, the controls under it */
+  .pb-i2-copy{display:contents}
+  .pb-i2-grid{gap:0}
+  .pb-i2 h2{order:1}.pb-i2-out{order:2}.pb-i2-why{order:3}.pb-i2-gov{order:4}
+  .pb-i2-stage{height:360px;order:5;margin-top:24px}
+  .pb-i2-ctl{order:6}.pb-i2-note{order:7}
   .pb-i2-tag b{font-size:21px}
   .pb-i2-tag i{font-size:13px}
+  .pb-i2-tag-gov b{font-size:16px}
+  .pb-i2-tag-gov i{font-size:11.5px}
+  .pb-i2 .pb-i2-gov{font-size:17.5px}
 }
 @media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}}
 @media print{.pb-c2-potbox,.pb-i2-stage,.pb-g2-cv{display:none}}
@@ -2773,6 +2810,7 @@ html:not(.pb-js) .pb-i2-stage{display:none}
           <button type="button" data-level="modest" aria-pressed="true">Modest</button>
           <button type="button" data-level="moderate" aria-pressed="false">Moderate</button>
           <button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button>
+          <button type="button" data-level="own" aria-pressed="false">Your own</button>
         </div>
         <div class="pb-seg pb-g2-hh" role="group" aria-label="Who it is for">
           <button type="button" data-hh="single" aria-pressed="true">Single</button>
@@ -2780,6 +2818,10 @@ html:not(.pb-js) .pb-i2-stage{display:none}
         </div>
       </div>
       <p class="pb-g2-what" id="pbG2What">The bare minimum.</p>
+      <div class="pb-g2-own" id="pbG2Own" hidden>
+        <div class="pb-c2-row"><label for="pbG2OwnR">Your figure</label><span class="pb-c2-v" id="pbG2OwnV">&euro;40,000 a year</span></div>
+        <input type="range" id="pbG2OwnR" min="20000" max="100000" step="1000" value="40000">
+      </div>
       <div class="pb-g2-ans" id="pbG2Ans" aria-live="polite">
         <p class="pb-g2-no" id="pbG2No">No.</p>
         <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
@@ -2853,9 +2895,10 @@ html:not(.pb-js) .pb-i2-stage{display:none}
       <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="pbC2TaxL">Tax rate</span><div class="pb-seg pb-seg-sm pb-c2-tax" role="group" aria-labelledby="pbC2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
       <div class="pb-c2-aim"><span class="pb-c2-taxl" id="pbC2AimL">Aiming for</span>
         <div class="pb-c2-aims">
-          <div class="pb-seg pb-seg-sm pb-c2-lv" role="group" aria-labelledby="pbC2AimL"><button type="button" data-level="modest" aria-pressed="true">Modest</button><button type="button" data-level="moderate" aria-pressed="false">Moderate</button><button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button></div>
+          <div class="pb-seg pb-seg-sm pb-c2-lv" role="group" aria-labelledby="pbC2AimL"><button type="button" data-level="modest" aria-pressed="true">Modest</button><button type="button" data-level="moderate" aria-pressed="false">Moderate</button><button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button><button type="button" data-level="own" aria-pressed="false">Your own</button></div>
           <div class="pb-seg pb-seg-sm pb-c2-hh" role="group" aria-label="Who it is for"><button type="button" data-hh="single" aria-pressed="true">Single</button><button type="button" data-hh="couple" aria-pressed="false">Couple</button></div>
         </div>
+        <div class="pb-c2-f pb-c2-own" id="pbC2Own" hidden><div class="pb-c2-row"><label for="pbC2OwnR">Your figure</label><span class="pb-c2-v" id="pbC2OwnV">&euro;40,000 a year</span></div><input type="range" id="pbC2OwnR" min="20000" max="100000" step="1000" value="40000"></div>
       </div>
     </div>
   </div>
@@ -2865,26 +2908,31 @@ html:not(.pb-js) .pb-i2-stage{display:none}
   </div>
 </div></section>
 
-<!-- INFLATION (11 October 2026, Damian's brief: "€1,000 buys less every year; then why a pension").
-     Two stacks of coins, each €1,000 today: cash crumbles, a pension grows. assets/js/pb-home-infl.js;
-     the same sum as glossary.html's inflation widget, at 2%, with the calculator's 5% for the pension. -->
+<!-- INFLATION (11 October 2026, Damian's brief: "€1,000 buys less every year; why a pension; the
+     government adds to it"). Three stacks of €100 coins: cash, which buys less each year; the same
+     €1,000 in a pension, which grows; and, dim beside it, what the government adds in tax relief.
+     assets/js/pb-home-infl.js. The same sum as glossary.html's inflation widget, at 2%, with the
+     calculator's 5% for the pension; the relief at 20% or 40%, shared with the calculator. -->
 <section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="wrap pb-i2-grid">
   <div class="pb-i2-copy">
     <h2 id="pbI2H">&euro;1,000 buys less every year.</h2>
-    <p class="pb-i2-out pb-i2-cash">In <span id="pbI2Y">30 years</span>, &euro;1,000 in cash buys what <b id="pbI2Cash">&euro;552</b> buys today.</p>
-    <p class="pb-i2-out pb-i2-pen">In a pension, it could buy what <b id="pbI2Pen">&euro;2,386</b> buys today.</p>
+    <p class="pb-i2-out pb-i2-cash">In <span id="pbI2Y">30 years</span>, &euro;1,000 in cash will be worth <span class="pb-nw"><b id="pbI2Cash">&euro;552</b>.</span></p>
+    <p class="pb-i2-out pb-i2-pen">In a pension, it could be worth <span class="pb-nw"><b id="pbI2Pen">&euro;2,386</b>.</span></p>
     <p class="pb-i2-why">Cash can&rsquo;t keep up with prices. A pension can.</p>
+    <p class="pb-i2-gov">And for every <b id="pbI2Put">&euro;60</b> you put in, the government <span class="pb-nw">adds <b id="pbI2Add">&euro;40</b>.</span></p>
     <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
       <div class="pb-c2-row"><label for="pbI2Yrs">Years</label><span class="pb-c2-v" id="pbI2YrsV">30</span></div>
-      <input type="range" id="pbI2Yrs" min="0" max="40" step="1" value="30">
+      <input type="range" id="pbI2Yrs" min="1" max="40" step="1" value="30">
+      <div class="pb-c2-taxrow pb-i2-taxrow"><span class="pb-c2-taxl" id="pbI2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-i2-tax" role="group" aria-labelledby="pbI2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
     </div>
-    <p class="pb-i2-note">Prices up 2% a year. Pension growth 5% a year, before charges. Not guaranteed.</p>
+    <p class="pb-i2-note">Worth means what it buys at today&rsquo;s prices. Prices up 2% a year. A pension grows 5% a year before charges. Not guaranteed.</p>
   </div>
   <div class="pb-i2-stage">
     <canvas class="pb-i2-cv" aria-hidden="true"></canvas>
     <span class="pb-i2-tag pb-i2-tag-cash" id="pbI2TCash" aria-hidden="true"><b>&euro;552</b><i>Cash</i></span>
-    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;2,386</b><i>In a pension</i></span>
-    <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years. Tap a stack.</p>
+    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;2,386</b><i>Pension</i></span>
+    <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;1,591</b><i>Government</i></span>
+    <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
   </div>
 </div></section>
 
@@ -3178,11 +3226,11 @@ html:not(.pb-js) .pb-i2-stage{display:none}
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 <script src="assets/js/living-standards.js?v=97a698fc"></script>
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-home-kit.js?v=08342f2e"></script>
-<script src="assets/js/pb-coins.js?v=185abca6"></script>
-<script src="assets/js/pb-home-gap.js?v=14cf354c"></script>
-<script src="assets/js/pb-home-calc.js?v=0b955d39"></script>
-<script src="assets/js/pb-home-infl.js?v=8d3a915d"></script>
+<script src="assets/js/pb-home-kit.js?v=0c885de1"></script>
+<script src="assets/js/pb-coins.js?v=d4dca700"></script>
+<script src="assets/js/pb-home-gap.js?v=532e2b32"></script>
+<script src="assets/js/pb-home-calc.js?v=d618d936"></script>
+<script src="assets/js/pb-home-infl.js?v=fd79f220"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');

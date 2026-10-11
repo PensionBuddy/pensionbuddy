@@ -1,18 +1,27 @@
 /* Inflation (#inflation), 11 October 2026, Damian's brief: "€1,000 buys less
-   every year. Then why a pension: it can grow faster than prices. Clear as
-   day. Go all out on the motion."
+   every year. Then why a pension: it keeps its value while it grows. And for
+   every €60 you put in, the government adds €40: show that, a little dim,
+   beside it. Clear as day; as fluid as the welcome."
 
-   Two stacks of coins, each worth €1,000 today; one coin is €100 of today's
-   shopping. Cash: prices rise 2% a year (the ECB's target), so after n years
-   it buys what 1,000 / 1.02^n buys today. In a pension: 5% a year before
-   charges (the calculator's own rate), so 1,000 x 1.05^n / 1.02^n in today's
-   money. Not guaranteed; the note says so.
+   Three stacks of coins; one coin is €100 of today's shopping.
+     Cash      €1,000 that buys less every year: 1,000 / 1.02^n in today's
+               money (the ECB's 2% target). A faint outline keeps the €1,000
+               it was, so the loss is a hole you can see.
+     Pension   the same €1,000 growing at 5% a year before charges (the
+               calculator's own rate): 1,000 x 1.05^n / 1.02^n.
+     Relief    beside it, dim: what the government adds in tax relief on that
+               €1,000, grown the same way. At 40% the government adds €40 for
+               every €60 you put in (2/3 of yours), at 20% €20 for every €80
+               (1/4). The rate is shared with the calculator (PBKit.tax).
+   Not guaranteed; the note says so.
 
-   Motion: the first time it is seen the years run from 0 to 30 by
-   themselves: the cash crumbles to dust coin by coin while pension coins
-   drop onto their stacks. Then the reader runs time: the slider, or a drag
-   across the picture. The stacks sway, lean away from the pointer, and a tap
-   sends a wave up them. With motion off it is drawn once per change. */
+   Motion: the first time it is seen the three stacks build, then the years
+   run from 1 to 30 by themselves: cash coins fade into the outline while
+   pension and relief coins drop onto their stacks and settle. Then the
+   reader runs time: the slider, or a drag across the picture. Every coin is
+   a spring: the stacks part around the pointer like a riffled deck and lean
+   away from it; a tap sends a wave up a stack. A part coin on top shows as a
+   part (its opacity). With motion off it is drawn once per change. */
 (function () {
   'use strict';
   var sec = document.getElementById('inflation'), K = window.PBKit, C = window.PBCoins;
@@ -20,54 +29,58 @@
   var $ = function (id) { return document.getElementById(id); };
   var yrs = $('pbI2Yrs'), cv = sec.querySelector('.pb-i2-cv');
   if (!yrs) { return; }
-  var fmt = K.fmt, INF = 0.02, GROW = 0.05, PER = 100, BASE = 1000 / PER;
+  var fmt = K.fmt, INF = 0.02, GROW = 0.05, PER = 100, BASE = 1000 / PER, MAXY = +yrs.max;
   var rCash = new K.Roll($('pbI2Cash')), rPen = new K.Roll($('pbI2Pen'));
-  var tCash = $('pbI2TCash'), tPen = $('pbI2TPen'), rTC = tCash ? new K.Roll(tCash.querySelector('b')) : null, rTP = tPen ? new K.Roll(tPen.querySelector('b')) : null;
+  var tags = { cash: $('pbI2TCash'), pen: $('pbI2TPen'), gov: $('pbI2TGov') }, rT = {};
+  Object.keys(tags).forEach(function (k) { if (tags[k]) { rT[k] = new K.Roll(tags[k].querySelector('b')); } });
   var hint = sec.querySelector('.pb-i2-hint');
+  function rate() { return K.tax ? K.tax.rate : 0.4; }
 
   function cashOf(n) { return 1000 / Math.pow(1 + INF, n); }
   function penOf(n) { return 1000 * Math.pow((1 + GROW) / (1 + INF), n); }
+  function govOf(n) { var r = rate(); return penOf(n) * r / (1 - r); }
   function words() {
-    var n = +yrs.value;
+    var n = +yrs.value, r = rate();
     yrs.style.setProperty('--fill', ((n - yrs.min) / (yrs.max - yrs.min) * 100) + '%');
     yrs.setAttribute('aria-valuetext', n + (n === 1 ? ' year' : ' years'));
     $('pbI2YrsV').textContent = n;
     $('pbI2Y').textContent = n === 1 ? '1 year' : n + ' years';
     rCash.set(fmt(cashOf(n))); rPen.set(fmt(penOf(n)));
-    if (rTC) { rTC.set(fmt(cashOf(n))); rTP.set(fmt(penOf(n))); }
+    $('pbI2Put').textContent = fmt(100 * (1 - r)); $('pbI2Add').textContent = fmt(100 * r);
+    if (rT.cash) { rT.cash.set(fmt(cashOf(n))); rT.pen.set(fmt(penOf(n))); rT.gov.set('+' + fmt(govOf(n))); }
   }
 
   /* --------------------------------------------------------- the stacks -- */
   var cx = cv && cv.getContext ? cv.getContext('2d') : null;
-  var W = 0, H = 0, dpr = 1, g = null, fx = C ? new C.FX() : null;
-  var cash = [], pen = [], gone = [];
-  var show = { cash: new K.Spring(BASE, 26, 10), pen: new K.Spring(BASE, 26, 10), yr: new K.Spring(+yrs.value, 40, 12) };
-  var lean = [{ x: 0, v: 0 }, { x: 0, v: 0 }], ptr = { in: false, x: 0, y: 0, down: false, sx: 0, sy0: 0, scrub: false };
-  var PCOL = 16;   /* pension coins per column: past this a second column starts */
+  var W = 0, H = 0, dpr = 1, g = null;
+  function Stack(kind, alpha) { return { kind: kind, alpha: alpha, coins: [], n: new K.Spring(BASE, 24, 9.5), lean: { x: 0, v: 0 }, x: 0 }; }
+  var S = { cash: Stack('silver', 1), pen: Stack('silver', 1), gov: Stack('gold', 0.5) };
+  var ORDER = ['cash', 'gov', 'pen'];
+  var ptr = { in: false, x: 0, y: 0, down: false, sx: 0, y0: 0, scrub: false };
+  var MAXN = penOf(MAXY) / PER;
   function size() {
     var b = cv.getBoundingClientRect(); W = b.width; H = b.height; dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    var room = H - 132, w = Math.max(44, Math.min(118, W * 0.2, room / (PCOL * 0.105 + 0.3)));
+    var base = H - 44, w = Math.max(40, Math.min(104, W * 0.17, (base - 104) / (0.105 * MAXN + 0.3)));
     var h = C.sliceH(Math.round(w));
-    g = { w: Math.round(w), e: h.e, ry: h.ry, base: H - 34, cashX: W * 0.26, penX: W * 0.62, gap: Math.round(w) * 1.08 };
+    g = { w: Math.round(w), e: h.e, ry: h.ry, base: base };
+    S.cash.x = W * 0.21; S.pen.x = W * 0.56; S.gov.x = S.pen.x + g.w * 1.14;
   }
   function slot(i) { return g.base - g.ry - g.e - i * g.e; }
-  function penPos(i) { var col = Math.floor(i / PCOL), k = i % PCOL; return { x: g.penX + col * g.gap, y: slot(k), col: col, k: k }; }
-  function mkCoin(drop) { return { y: drop ? -(H * 0.6 + Math.random() * 40) : 0, vy: 0, landed: !drop, hop: 0, vh: 0, sq: 0 }; }
-
-  /* bring the coins to the shown values: whole coins, and a part coin on top */
+  /* each coin's own small offset, so a stack is a stack and not a cylinder */
+  function jit(i, k) { var v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return (v - Math.floor(v) - 0.5) * 1.6; }
+  /* 'drop': falls in from above; 'pop': grows in where it is; 'still': simply there */
+  function mkCoin(mode, i) {
+    return { y: mode === 'drop' ? -(g.base + 60 + i * 3) : 0, vy: 0, landed: mode !== 'drop', hop: 0, vh: 0, sq: 0, o: 0, vo: 0, pop: mode === 'pop' ? 0 : 1 };
+  }
+  /* whole coins for the shown value, the part coin on top */
   function syncCoins() {
-    var nc = Math.ceil(show.cash.x - 0.001), np = Math.ceil(show.pen.x - 0.001), motion = K.motion() && seen;
-    while (cash.length > nc) {
-      var c = cash.pop();
-      if (motion && fx) { var y = slot(cash.length); fx.dust(g.cashX, y, 16, 'silver'); fx.dust(g.cashX - g.w * 0.3, y + 4, 6, 'silver'); fx.dust(g.cashX + g.w * 0.3, y + 4, 6, 'silver'); }
-    }
-    while (cash.length < nc) { var n = mkCoin(false); n.pop = motion ? 1 : 0; cash.push(n); }
-    while (pen.length > np) {
-      var o = pen.pop(), p = penPos(pen.length);
-      if (motion) { gone.push({ x: p.x, y: p.y + o.y, vx: (Math.random() - 0.5) * 200, vy: -200 - Math.random() * 150, a: 0, va: (Math.random() - 0.5) * 8, age: 0 }); }
-    }
-    while (pen.length < np) { pen.push(mkCoin(motion)); }
+    var motion = K.motion() && seen;
+    ORDER.forEach(function (k) {
+      var s = S[k], want = Math.max(0, Math.ceil(s.n.x - 0.001));
+      while (s.coins.length > want) { s.coins.pop(); }
+      while (s.coins.length < want) { s.coins.push(mkCoin(!motion ? 'still' : k === 'cash' ? 'pop' : 'drop', s.coins.length)); }
+    });
   }
 
   /* ---------------------------------------------------------- the frame -- */
@@ -80,98 +93,110 @@
     if (W < 160 || H < 160) { return; }
     var moving = false;
     if (intro) {
-      var k = Math.min(1, (now - intro.t0) / intro.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      var k = Math.max(0, Math.min(1, (now - intro.t0) / intro.dur)), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
       var y = Math.round(intro.from + (intro.to - intro.from) * e);
       if (+yrs.value !== y) { yrs.value = y; words(); target(); }
-      if (k >= 1) { intro = null; if (hint) { setTimeout(function () { if (!touched) { hint.classList.add('pb-on'); } }, 400); } }
+      if (k >= 1) { intro = null; if (hint) { setTimeout(function () { if (!touched) { hint.classList.add('pb-on'); } }, 500); } }
       moving = true;
     }
-    if (K.motion()) {
-      for (var s in show) { show[s].step(dt); if (!show[s].done()) { moving = true; } }
-    } else { for (var s2 in show) { show[s2].x = show[s2].t; } }
+    for (var s in S) { S[s].n.step(dt); if (!S[s].n.done()) { moving = true; } }
     syncCoins();
-    if (K.motion()) { if (stepCoins(now, dt)) { moving = true; } }
-    if (fx) { fx.step(dt); if (fx.busy()) { moving = true; } }
-    draw(now);
+    if (K.motion() && stepCoins(dt)) { moving = true; }
+    draw();
     calm = moving ? 0 : calm + dt;
     if (K.motion() && onScreen && !document.hidden && (calm < 0.6 || ptr.in)) { raf = requestAnimationFrame(frame); }
   }
-  function stepCoins(now, dt) {
+  function stepCoins(dt) {
     var moving = false;
-    [[cash, g.cashX, 0], [pen, g.penX + (pen.length > PCOL ? g.gap / 2 : 0), 1]].forEach(function (s) {
-      var arr = s[0], L = lean[s[2]], lt = 0;
-      if (ptr.in && !ptr.scrub) { var dx = s[1] - ptr.x, near = Math.max(0, 1 - Math.abs(dx) / (g.w * 2)); lt = (dx > 0 ? 1 : -1) * near * 16; }
-      L.v += (90 * (lt - L.x) - 9 * L.v) * dt; L.x += L.v * dt;
-      if (Math.abs(L.v) > 0.5) { moving = true; }
-      arr.forEach(function (c, i) {
-        if (!c.landed) {
-          c.vy += 2400 * dt; c.y += c.vy * dt; moving = true;
-          if (c.y >= 0) { c.y = 0; if (c.vy > 240) { c.vy = -c.vy * 0.24; c.sq = 1; } else { c.vy = 0; c.landed = true; } if (fx && !c.rang) { c.rang = true; var p = penPos(i); fx.ring(p.x, p.y + g.ry * 0.3, 'rgba(244,183,64,.85)', g.w * 0.45); } }
+    ORDER.forEach(function (k) {
+      var s = S[k], L = s.lean, lt = 0;
+      /* the stack leans away from the pointer */
+      if (ptr.in && !ptr.scrub) { var dx = s.x - ptr.x, near = Math.max(0, 1 - Math.abs(dx) / (g.w * 2.2)); lt = (dx > 0 ? 1 : -1) * near * 9; }
+      L.v += (110 * (lt - L.x) - 10 * L.v) * dt; L.x += L.v * dt;
+      if (Math.abs(L.v) > 0.4 || Math.abs(lt - L.x) > 0.2) { moving = true; }
+      s.coins.forEach(function (c, i) {
+        /* the riffle: coins near the pointer's height step aside, the nearer the further */
+        var to = 0;
+        if (ptr.in && !ptr.scrub) {
+          var dy = slot(i) - ptr.y, fx = Math.max(0, 1 - Math.abs(ptr.x - s.x) / (g.w * 1.3));
+          if (fx > 0) { to = (s.x >= ptr.x ? 1 : -1) * 11 * fx * Math.exp(-dy * dy / (2 * Math.pow(g.e * 2.4, 2))); }
         }
-        if (c.vh || c.hop) { c.vh += 2400 * dt; c.hop += c.vh * dt; if (c.hop > 0) { c.hop = 0; c.vh = Math.abs(c.vh) > 100 ? -c.vh * 0.2 : 0; } moving = true; }
-        if (c.sq) { c.sq = Math.max(0, c.sq - dt * 5); moving = true; }
-        if (c.pop) { c.pop = Math.max(0, c.pop - dt * 4); moving = true; }
+        c.vo += (300 * (to - c.o) - 17 * c.vo) * dt; c.o += c.vo * dt;
+        if (Math.abs(c.vo) > 0.5 || Math.abs(to - c.o) > 0.2) { moving = true; }
+        if (!c.landed) {
+          c.vy += 2600 * dt; c.y += c.vy * dt; moving = true;
+          if (c.y >= 0) { c.y = 0; if (c.vy > 260) { c.vy = -c.vy * 0.2; c.sq = 1; } else { c.vy = 0; c.landed = true; } }
+        }
+        if (c.vh || c.hop) { c.vh += 2600 * dt; c.hop += c.vh * dt; if (c.hop > 0) { c.hop = 0; c.vh = Math.abs(c.vh) > 100 ? -c.vh * 0.18 : 0; } moving = true; }
+        if (c.sq) { c.sq = Math.max(0, c.sq - dt * 6); moving = true; }
+        if (c.pop < 1) { c.pop = Math.min(1, c.pop + dt * 5); moving = true; }
       });
     });
-    gone = gone.filter(function (o) { o.age += dt; o.vy += 1600 * dt; o.x += o.vx * dt; o.y += o.vy * dt; o.a += o.va * dt; return o.age < 0.9; });
-    if (gone.length) { moving = true; }
     return moving;
   }
-  function draw(now) {
+  function draw() {
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
-    /* the years, large and faint, behind everything */
-    var yv = Math.round(show.yr.x);
-    cx.save(); cx.globalAlpha = 0.07; cx.fillStyle = '#0B1F1C'; cx.font = '800 ' + Math.round(H * 0.42) + 'px Figtree, system-ui, sans-serif';
-    cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText(String(yv), W / 2, H * 0.38); cx.restore();
-    /* floors */
-    floor(g.cashX); floor(g.penX + (pen.length > PCOL ? g.gap / 2 : 0), pen.length > PCOL ? 1.6 : 1);
-    /* cash: whole coins, the top one crumbling as it goes */
-    var fc = show.cash.x - Math.floor(show.cash.x - 0.001);
-    cash.forEach(function (c, i) {
-      var top = i === cash.length - 1, part = top && fc < 0.999 ? fc : 1, h = (i + 1) / Math.max(1, cash.length);
-      var x = g.cashX + lean[0].x * Math.pow(h, 1.5) + Math.sin(now * 1.3 + i * 0.3) * 0.6 * h, y = slot(i) + c.hop;
-      var w = g.w * (part < 1 ? 0.55 + 0.45 * part : 1) * (1 + (c.pop || 0) * 0.1);
-      C.slice(cx, x, y, w, 'silver', part < 1 ? 0.35 + 0.65 * part : 1, top);
-      if (part < 1 && K.motion() && fx && Math.abs(show.cash.v) > 0.02 && Math.random() < 0.5) { fx.dust(x + (Math.random() - 0.5) * w * 0.8, y + 2, 1, 'silver'); }
+    floor(S.cash.x, 1); floor(S.pen.x + g.w * 0.57, 1.75);
+    ghost();
+    ORDER.forEach(function (k) {
+      var s = S[k], n = s.coins.length, frac = s.n.x - Math.floor(s.n.x - 0.001);
+      s.coins.forEach(function (c, i) {
+        var top = i === n - 1, part = top && frac < 0.999 ? frac : 1, h = (i + 1) / Math.max(BASE, n);
+        var x = s.x + jit(i, k.length) + c.o + s.lean.x * Math.pow(h, 1.4), y = slot(i) + c.y + c.hop;
+        var w = g.w * (1 + c.sq * 0.06) * (0.92 + 0.08 * c.pop);
+        var a = s.alpha * (part < 1 ? 0.12 + 0.88 * part : 1) * (0.4 + 0.6 * c.pop);
+        C.slice(cx, x, y, w, s.kind, a, top && c.landed);
+      });
     });
-    /* the pension: coins land on one stack, then a second */
-    var fp = show.pen.x - Math.floor(show.pen.x - 0.001);
-    pen.forEach(function (c, i) {
-      var p = penPos(i), top = i === pen.length - 1, part = top && fp < 0.999 ? fp : 1, colN = Math.min(PCOL, pen.length - p.col * PCOL), h = (p.k + 1) / Math.max(1, colN);
-      var x = p.x + lean[1].x * Math.pow(h, 1.5) + Math.sin(now * 1.2 + i * 0.27) * 0.6 * h, y = p.y + c.y + c.hop;
-      var w = g.w * (part < 1 ? 0.6 + 0.4 * part : 1) * (1 + (c.sq || 0) * 0.07);
-      C.slice(cx, x, y, w, 'gold', part < 1 ? 0.45 + 0.55 * part : 1, (top || p.k === PCOL - 1) && c.landed);
-    });
-    gone.forEach(function (o) { var k = o.age / 0.9; cx.save(); cx.translate(o.x, o.y); cx.rotate(o.a); C.slice(cx, 0, 0, g.w, 'gold', 1 - k); cx.restore(); });
-    if (fx) { fx.draw(cx); }
-    /* one coin is */
     cx.fillStyle = 'rgba(84,99,95,.85)'; cx.font = '600 12px Figtree, system-ui, sans-serif'; cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
-    cx.fillText('One coin = €100 of today’s shopping', 16, H - 10);
+    cx.fillText('One coin = €100 of today’s shopping', 18, H - 14);
     place();
   }
-  function floor(x, k) {
-    var s = cx.createRadialGradient(x, g.base + 2, 2, x, g.base + 2, g.w * 0.85 * (k || 1));
-    s.addColorStop(0, 'rgba(11,31,28,.15)'); s.addColorStop(1, 'rgba(11,31,28,0)');
-    cx.fillStyle = s; cx.beginPath(); cx.ellipse(x, g.base + 2, g.w * 0.85 * (k || 1), g.ry * 0.85, 0, 0, Math.PI * 2); cx.fill();
+  /* the €1,000 the cash was: a faint outline of ten coins */
+  function ghost() {
+    var x = S.cash.x, rx = g.w / 2 + 1, ry = g.ry + 1, top = slot(BASE - 1), bot = g.base - g.ry;
+    var n = S.cash.coins.length, solid = n ? slot(n - 1) : g.base;
+    cx.save();
+    /* only above the coins that are left: the outline is the part that went */
+    cx.beginPath(); cx.rect(0, 0, W, solid); cx.clip();
+    cx.beginPath(); cx.ellipse(x, top, rx, ry, 0, Math.PI, 0); cx.lineTo(x + rx, bot); cx.ellipse(x, bot, rx, ry, 0, 0, Math.PI); cx.closePath();
+    cx.fillStyle = 'rgba(84,99,95,.045)'; cx.fill();
+    cx.setLineDash([4, 5]); cx.lineWidth = 1.4; cx.strokeStyle = 'rgba(84,99,95,.38)'; cx.stroke();
+    cx.beginPath(); cx.ellipse(x, top, rx, ry, 0, 0, Math.PI); cx.stroke();
+    cx.restore();
   }
+  function floor(x, k) {
+    var rw = g.w * 0.8 * k, y = g.base + 3, s = cx.createRadialGradient(x, y, 2, x, y, rw);
+    s.addColorStop(0, 'rgba(11,31,28,.16)'); s.addColorStop(1, 'rgba(11,31,28,0)');
+    cx.save(); cx.translate(x, y); cx.scale(1, g.ry * 0.9 / rw); cx.translate(-x, -y);
+    cx.fillStyle = s; cx.beginPath(); cx.arc(x, y, rw, 0, Math.PI * 2); cx.fill(); cx.restore();
+  }
+  /* the figures sit over their stacks; the pension's keeps clear of the relief's */
   function place() {
-    if (!tCash) { return; }
-    var cTop = slot(Math.max(0, cash.length - 1)) - g.ry - 10, pN = Math.min(PCOL, pen.length), pTop = slot(Math.max(0, pN - 1)) - g.ry - 10;
-    tCash.style.setProperty('--x', g.cashX.toFixed(1) + 'px'); tCash.style.setProperty('--y', Math.max(56, cTop).toFixed(1) + 'px');
-    var px = g.penX + (pen.length > PCOL ? g.gap / 2 : 0);
-    tPen.style.setProperty('--x', px.toFixed(1) + 'px'); tPen.style.setProperty('--y', Math.max(56, pTop).toFixed(1) + 'px');
+    if (!tags.cash) { return; }
+    function topOf(s) { return slot(Math.max(0, Math.ceil(s.n.x - 0.001) - 1)) - g.ry - 10; }
+    var yc = slot(BASE - 1) - g.ry - 12, yg = Math.max(60, topOf(S.gov)), yp = Math.max(56, topOf(S.pen));
+    /* side by side when they fit, else the pension's rises clear of the relief's */
+    if (S.pen.x + tags.pen.offsetWidth / 2 + 8 > S.gov.x + 6 - tags.gov.offsetWidth / 2) { yp = Math.max(56, Math.min(yp, yg - 52)); }
+    [['cash', S.cash.x, yc], ['pen', S.pen.x, yp], ['gov', S.gov.x + 6, yg]].forEach(function (t) {
+      tags[t[0]].style.setProperty('--x', t[1].toFixed(1) + 'px'); tags[t[0]].style.setProperty('--y', t[2].toFixed(1) + 'px');
+    });
   }
 
   /* ----------------------------------------------------- the reader's time -- */
   function target() {
     var n = +yrs.value;
-    show.cash.t = cashOf(n) / PER; show.pen.t = penOf(n) / PER; show.yr.t = n;
-    if (!K.motion() || !seen) { show.cash.x = show.cash.t; show.pen.x = show.pen.t; show.yr.x = n; }
+    S.cash.n.t = cashOf(n) / PER; S.pen.n.t = penOf(n) / PER; S.gov.n.t = govOf(n) / PER;
+    if (!K.motion() || !seen) { for (var s in S) { S[s].n.x = S[s].n.t; } }
     kick();
   }
   var touched = false;
   function touch() { touched = true; intro = null; if (hint) { hint.classList.remove('pb-on'); } }
   yrs.addEventListener('input', function () { touch(); words(); target(); });
+  var taxSeg = sec.querySelector('.pb-i2-tax'), taxS = null;
+  function pressTax(quiet) { if (taxS) { taxS.press(function (b) { return +b.getAttribute('data-rate') / 100 === rate(); }, quiet); } }
+  if (taxSeg) { taxS = K.seg(taxSeg, function (b) { if (K.setTax) { K.setTax(+b.getAttribute('data-rate') / 100, 'infl'); } touch(); words(); target(); }); }
+  document.addEventListener('pb:tax', function (e) { if ((e.detail || {}).by !== 'infl') { pressTax(true); words(); target(); } });
   function local(e) { var b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
   if (cx) {
     cv.addEventListener('pointermove', function (e) {
@@ -196,15 +221,12 @@
       ptr.down = false;
       if (!ptr.scrub && K.motion() && g) {
         /* a tap: a wave up the stack it was nearest */
-        var p = local(e), isPen = Math.abs(p.x - g.penX) < Math.abs(p.x - g.cashX), arr = isPen ? pen : cash;
-        arr.forEach(function (c, i) { setTimeout(function () { c.vh = -(220 + Math.random() * 60); kick(); }, (isPen ? i % PCOL : i) * 24); });
-        if (fx) {
-          var top = isPen ? penPos(Math.max(0, Math.min(PCOL, pen.length) - 1)) : { x: g.cashX, y: slot(Math.max(0, cash.length - 1)) };
-          if (isPen) { fx.spark(top.x, top.y - g.ry, 12, ['#F4B740', '#FFE08A', '#14CBB1', '#FFFFFF']); } else { fx.dust(top.x, top.y, 14, 'silver'); }
-        }
+        var p = local(e), best = null;
+        ORDER.forEach(function (k) { var d = Math.abs(p.x - S[k].x); if (!best || d < best.d) { best = { k: k, d: d }; } });
+        S[best.k].coins.forEach(function (c, i) { setTimeout(function () { c.vh = -(200 + i * 4); kick(); }, i * 26); });
         touch();
       }
-      ptr.scrub = false; kick();
+      ptr.scrub = false; ptr.in = e.pointerType === 'mouse'; kick();
     };
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   }
@@ -215,6 +237,7 @@
   document.addEventListener('visibilitychange', kick);
   document.addEventListener('pb:motion', kick);
   $('pbI2Ctl').hidden = false;
+  pressTax(true);
   words(); target();
   if (!cx || !C) { return; }
   sec.classList.add('pb-i2-on');
@@ -224,10 +247,16 @@
       if (onScreen && !seen) {
         seen = true;
         if (K.motion()) {
-          /* the first look: time runs from today to the slider's year */
-          var to = +yrs.value; yrs.value = 0; words(); show.cash.x = show.cash.t = BASE; show.pen.x = show.pen.t = BASE; show.yr.x = 0;
-          cash = []; pen = []; syncCoins();
-          intro = { t0: performance.now() / 1000 + 0.5, dur: 2.6, from: 0, to: to };
+          /* the first look: the stacks build, then time runs from next year to the slider's year */
+          var to = +yrs.value, from = +yrs.min; yrs.value = from; words();
+          S.cash.n.x = S.cash.n.t = cashOf(from) / PER; S.pen.n.x = S.pen.n.t = penOf(from) / PER; S.gov.n.x = S.gov.n.t = govOf(from) / PER;
+          if (!g) { size(); }
+          ['cash', 'pen', 'gov'].forEach(function (k, j) {
+            S[k].coins = [];
+            var want = Math.ceil(S[k].n.x - 0.001);
+            for (var i = 0; i < want; i++) { var c = mkCoin('drop', i); c.y -= i * 22 + j * 120; S[k].coins.push(c); }
+          });
+          intro = { t0: performance.now() / 1000 + 0.9, dur: 2.8, from: from, to: to };
         }
       }
       if (onScreen) { kick(); }

@@ -12,7 +12,7 @@ tap alike, which is what a <button> turns all three into.
 
 What it proves:
   1. every root page at 1440px: one nav; the row does not run past the
-     window; 17px items at weight 600; four dropdown buttons, each
+     window; 18px items at weight 600 (17px until Run 52); dropdown buttons, each
      type="button", collapsed, controlling the list that follows it, every
      panel closed; no control in the nav filled, the booking button an
      aqua outline (R29-3, Run 30);
@@ -219,7 +219,7 @@ def main():
             continue
         eq('1. %s: one nav, the row, not past the window' % page,
            (r['navs'], r['drawer'], r['right'] <= r['w'], r['sw'] <= r['w']), (1, False, True, True))
-        eq('1. %s: items at 17px, weight 600' % page, r['font'], ['17px', '600'])
+        eq('1. %s: items at 18px, weight 600' % page, r['font'], ['18px', '600'])
         eq('1. %s: three dropdowns, named' % page, [d['name'] for d in r['dd']],
            ['Directors', 'Tools', 'Guides'])
         eq('1. %s: each a collapsed type="button" controlling the list after it, closed' % page,

@@ -340,6 +340,46 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 52 — 2026-10-11 · Home page round 3: a fourth level, real coins, the government's share, the nav to the left (on `claude/optimistic-keller-kfqggu`)
+
+Damian's notes on Run 51: a level above Comfortable; the coins looked
+cartoony; "In 30 years, €1,000 buys what... buys what?"; show that the
+government adds €40 for every €60, dim, beside the pension; the menu at
+the top bigger and to the left; as fluid as the welcome.
+
+- **"Your own", the fourth level** (gap and calculator). The Pensions
+  Council has three standards and none above Comfortable, so the fourth is
+  the reader's own figure a year (a slider, €20,000 to €100,000; starts at
+  €40,000 for one, €55,000 for two), not a figure we made up. Shared by
+  both sections (`PBKit.aim.own`, `PBKit.life()`). Past 28 coins the
+  tower eases back to fit. "Aim higher" goes on to "Your own" after
+  Comfortable. "Where the money goes" hides for it (no categories).
+- **The options at the top**: bigger (54px pills, 17.5px); on a phone a
+  grid of big buttons, two to a row. The tower is bigger and further left.
+- **The coins** (`assets/js/pb-coins.js`): metal, not paint. A raised rim,
+  a sunk face, twelve struck dots, an embossed €, a soft shine; the edge
+  milled, its ridges closer at the sides; shade where coins touch. Every
+  section uses them.
+- **Inflation** (`assets/js/pb-home-infl.js`, rewritten). "In 30 years,
+  €1,000 in cash will be worth €552." "In a pension, it could be worth
+  €2,386." "And for every €60 you put in, the government adds €40." Three
+  stacks: cash (a dashed outline keeps the €1,000 it was), pension, and
+  the government's relief beside it, dim gold. Your tax rate, 20% or 40%,
+  shared with the calculator (`PBKit.tax`). No more big year number or
+  dust. The stacks part around the pointer like a riffled deck, lean
+  away, take a tap. On a phone the picture comes before the controls.
+- **The nav** (skeleton NAV block, every page): beside the links the
+  items sit next to the logo at 18px; the booking button, the deadline
+  chip and the search stay right. Fits from 1301px.
+- **Tests.** `build.test.py` 484/0. `nav` now expects 18px; it fails only
+  the 6 hover checks the previous commit fails here. `run-tests.py` 636/0,
+  `interactive-43` 340/0, `regulator-lines` 31/0 and `--caveats` 31/0,
+  `boxes`, `search`, `give-then-ask` all pass. `floating-chrome`,
+  `consent`, `deadline`, `terms` and `ux4` fail exactly what the previous
+  commit fails in this container, no more.
+
+---
+
 # Run 51 — 2026-10-11 · The home page, round 2: cut, coins, light teal (on `claude/optimistic-keller-kfqggu`)
 
 Damian's brief after Run 50: Hemingway, "here's the gap, clear as day";

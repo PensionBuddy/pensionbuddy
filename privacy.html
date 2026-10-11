@@ -1647,6 +1647,19 @@ html.pb-js #navSearch{display:inline-flex}
 @media(max-width:1300px){
   #navSearch{width:48px;height:48px;margin:0 0 0 auto;border-radius:6px}
 }
+/* Run 52 (11 October 2026, Damian: "a bit bigger, move it to the left"):
+   beside the links, the items sit next to the logo at 18px; the booking
+   button, the deadline chip and the search keep to the right. Measured in
+   Chrome: the row fits from 1301px with room to spare, the chip from 1440px. */
+@media(min-width:1301px){
+  #nav .nav-in{justify-content:flex-start}
+  #navLinks{flex:1 1 auto;margin-left:22px}
+  #navLinks > a.lnk,#navLinks .nav-dd-btn{font-size:18px;padding-left:7px;padding-right:7px}
+  #navLinks > a.lnk::after,#navLinks .nav-dd-btn::after{left:7px;right:7px}
+  #navLinks .btn{margin-left:auto}
+  #navTick{order:3;margin-left:10px}
+  #navSearch{order:4}
+}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and

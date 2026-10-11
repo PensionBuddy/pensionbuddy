@@ -60,11 +60,11 @@
   var S = {}, srT = 0;
   function calc(fromUser) {
     var a = +age.value, p = +pot.value, m = +mine.value, e = emp ? +emp.value : 0, aim = K.aim;
-    var pr = project(a, p, m, e), st = statePerMonth(aim.hh), std = LS.standard(aim.level, aim.hh);
+    var pr = project(a, p, m, e), st = statePerMonth(aim.hh), std = K.life(aim.level, aim.hh);
     var need = std.monthly, total = st + pr.month, short = need - total;
     var targetPot = Math.max(0, need - st) * 12 / DRAW;
     var was = S.covered;
-    S = { a: a, p: p, m: m, e: e, pr: pr, st: st, need: need, total: total, short: short, covered: short <= 0.5, targetPot: targetPot, label: std.label, two: aim.hh === 'couple' };
+    S = { a: a, p: p, m: m, e: e, pr: pr, st: st, need: need, total: total, short: short, covered: short <= 0.5, targetPot: targetPot, label: std.label, own: std.own, two: aim.hh === 'couple' };
 
     [age, pot, mine, emp].forEach(function (r) { if (r) { fill(r); r.setAttribute('aria-valuetext', VT[r.id](+r.value)); } });
     $('pbC2AgeV').textContent = a; $('pbC2PotV').textContent = fmt(p); $('pbC2MineV').textContent = fmt(m);
@@ -76,13 +76,13 @@
     rTotal.set(fmt(total));
     $('pbC2Parts').innerHTML = '<span class="pb-c2-k-sp"><i aria-hidden="true"></i>' + (S.two ? 'Two State Pensions ' : 'State Pension ') + '<b>' + fmt(st) + '</b></span>' +
       '<span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>' + fmt(pr.month) + '</b></span>';
-    var life = 'a ' + std.label.toLowerCase() + ' life' + (S.two ? ' for two' : '');
+    var life = std.phrase;
     var v = $('pbC2Verdict'), close = $('pbC2Close');
-    var up = aim.level === 'modest' ? 'moderate' : aim.level === 'moderate' ? 'comfortable' : null;
+    var up = higher();
     if (S.covered) {
       v.innerHTML = '<span class="pb-c2-yes">Covered.</span> ' + fmt(-short) + ' a month to spare.';
       close.hidden = !up; close.setAttribute('data-act', 'up');
-      if (up) { close.querySelector('span').textContent = 'Aim higher: ' + LS.LABELS[up]; }
+      if (up) { close.querySelector('span').textContent = 'Aim higher: ' + K.life(up, aim.hh).label; }
     } else {
       v.innerHTML = '<span class="pb-c2-no">' + fmt(short) + ' a month short.</span>';
       close.hidden = false; close.setAttribute('data-act', 'close');
@@ -93,8 +93,27 @@
     $('pbC2MiniV').textContent = S.covered ? 'Covered' : fmt(short) + ' short';
     var said = 'At ' + AT + ', in today’s money: about ' + fmt(total) + ' a month. ' + (S.covered ? 'That covers ' + life + '.' : fmt(short) + ' a month short of ' + life + '.');
     clearTimeout(srT); srT = setTimeout(function () { $('pbC2Sr').textContent = said; }, fromUser ? 700 : 0);
+    ownRow();
     potSync(fromUser, was === false && S.covered);
   }
+  /* the next way of life up: Modest, Moderate, Comfortable, then your own figure if it is higher */
+  function higher() {
+    var a = K.aim, i = ['modest', 'moderate', 'comfortable'].indexOf(a.level);
+    if (i >= 0 && i < 2) { return ['moderate', 'comfortable'][i]; }
+    if (a.level === 'comfortable' && K.life('own', a.hh).annual > K.life('comfortable', a.hh).annual) { return 'own'; }
+    return null;
+  }
+  /* your own figure: a slider under "Aiming for", shown only with "Your own" */
+  var own = $('pbC2Own'), ownR = $('pbC2OwnR'), ownV = $('pbC2OwnV');
+  function ownRow() {
+    if (!own) { return; }
+    var v = K.aim.own[K.aim.hh];
+    own.hidden = K.aim.level !== 'own';
+    if (+ownR.value !== v) { ownR.value = v; }
+    fill(ownR); ownV.textContent = fmt(v) + ' a year';
+    ownR.setAttribute('aria-valuetext', fmt(v) + ' a year' + (K.aim.hh === 'couple' ? ' for two' : ''));
+  }
+  if (ownR) { ownR.addEventListener('input', function () { K.setOwn(+ownR.value, 'calc-own'); }); }
 
   /* ============================================================ THE POT == */
   var cv = sec.querySelector('.pb-c2-pot'), cx = cv && cv.getContext ? cv.getContext('2d') : null;
@@ -364,7 +383,7 @@
       text('Your pot', 19, 21, sm, 700, '#54635F'); text(val, 19, 40, big, 800, '#0B1F1C');
     }
     if (S.targetPot > 0) {
-      var right = toWorld(g.cx + halfW(g.line) + g.t, g.line), msg1 = covered ? '✓ Enough' : 'Enough for', msg2 = (covered ? 'for a ' : 'a ') + S.label.toLowerCase() + ' life';
+      var right = toWorld(g.cx + halfW(g.line) + g.t, g.line), msg1 = covered ? '✓ Enough' : 'Enough for', msg2 = S.own ? (covered ? 'for your figure' : 'your figure') : (covered ? 'for a ' : 'a ') + S.label.toLowerCase() + ' life';
       var fl = line.flash, col = covered ? '#0B7A6E' : '#0B1F1C';
       if (g.wide) {
         cx.font = '800 ' + sm + 'px Figtree, system-ui, sans-serif';
@@ -459,7 +478,16 @@
   /* ------------------------------------------------------ the controls -- */
   [age, pot, mine, emp].forEach(function (r) { if (r) { r.addEventListener('input', function () { calc(true); }); } });
   var taxSeg = sec.querySelector('.pb-c2-tax');
-  if (taxSeg) { K.seg(taxSeg, function (b) { tax = +b.getAttribute('data-rate') / 100; calc(true); }); }
+  var taxS = null;
+  if (taxSeg) { taxS = K.seg(taxSeg, function (b) { tax = +b.getAttribute('data-rate') / 100; if (K.setTax) { K.setTax(tax, 'calc'); } calc(true); }); }
+  /* the inflation section's rate is the same rate */
+  document.addEventListener('pb:tax', function (e) {
+    var d = e.detail || {};
+    if (d.by === 'calc') { return; }
+    tax = d.rate;
+    if (taxS) { taxS.press(function (b) { return +b.getAttribute('data-rate') / 100 === d.rate; }, true); }
+    calc('aim');
+  });
   var lvSeg = sec.querySelector('.pb-c2-lv'), hhSeg = sec.querySelector('.pb-c2-hh'), lv = null, hh = null;
   if (lvSeg) { lv = K.seg(lvSeg, function (b) { K.setAim(b.getAttribute('data-level'), K.aim.hh, 'calc'); }); }
   if (hhSeg) { hh = K.seg(hhSeg, function (b) { K.setAim(K.aim.level, b.getAttribute('data-hh'), 'calc'); }); }
@@ -467,11 +495,11 @@
     var d = e.detail || {};
     if (lv) { lv.press(function (b) { return b.getAttribute('data-level') === d.level; }, d.by === 'calc'); }
     if (hh) { hh.press(function (b) { return b.getAttribute('data-hh') === d.hh; }, d.by === 'calc'); }
-    calc(d.by === 'calc' || d.by === 'button' ? true : 'aim');
+    calc(d.by === 'calc' || d.by === 'button' || d.by === 'calc-own' ? true : 'aim');
   });
   var tw = 0;
   $('pbC2Close').addEventListener('click', function () {
-    if (this.getAttribute('data-act') === 'up') { K.setAim(K.aim.level === 'modest' ? 'moderate' : 'comfortable', K.aim.hh, 'button'); return; }
+    if (this.getAttribute('data-act') === 'up') { var up = higher(); if (up) { K.setAim(up, K.aim.hh, 'button'); } return; }
     var step = +mine.step || 10, want = Math.min(+mine.max, Math.ceil(needed(S.a, S.p, S.e, S.need - S.st) / step) * step);
     var from = +mine.value, t0 = performance.now(), dur = K.motion() ? 1200 : 0;
     cancelAnimationFrame(tw);

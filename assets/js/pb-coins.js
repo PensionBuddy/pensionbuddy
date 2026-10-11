@@ -4,7 +4,8 @@
    effects layer: dust, sparkles, rings and the paw print.
 
      PBCoins.face(cx, x, y, r, kind, angle, alpha, flipX)
-         a coin seen face on: rim, face, ring, an embossed €, a highlight
+         a coin seen face on: a raised rim, a sunk field, twelve struck dots,
+         an embossed €, a soft shine
      PBCoins.slice(cx, x, y, w, kind, alpha, top)
          a coin seen from the side, for a stack: its edge (milled) and its
          face; (x, y) is the middle of the face; top draws the € on it
@@ -21,13 +22,18 @@
    stamps are made again once the site's font has loaded (the €). */
 (function () {
   'use strict';
+  /* metal, not paint: each kind is a light, a middle and a shade of one
+     metal, and seven stops across a coin's milled edge (a cylinder catching
+     the light from the upper left). tint is the shade, for lines, with the
+     alpha left open. */
   var KINDS = {
-    silver: { rim: ['#D2DAD8', '#7F8D8A'], face: ['#FFFFFF', '#E1E7E5', '#B4BFBC'], ring: 'rgba(84,99,95,.30)', glyph: '#8C9996', edge: ['#7A8885', '#EEF2F1', '#BCC6C3', '#6E7B78'] },
-    gold: { rim: ['#FFD36E', '#B27A10'], face: ['#FFF6D6', '#F8CA5A', '#D99B1D'], ring: 'rgba(150,95,0,.32)', glyph: '#B07A12', edge: ['#A46C0A', '#FFE08A', '#E7AE33', '#93600A'] },
-    blue: { rim: ['#C7D9F2', '#5F80AA'], face: ['#FFFFFF', '#CFDDF2', '#93AFD6'], ring: 'rgba(60,90,135,.30)', glyph: '#6584AE', edge: ['#5A7AA3', '#E4EDFA', '#A9C0E2', '#4E6C94'] },
-    teal: { rim: ['#5BEBD5', '#0E9E8A'], face: ['#E9FFFB', '#6AE9D6', '#17BCA5'], ring: 'rgba(8,101,90,.32)', glyph: '#0B7A6E', edge: ['#0C8A79', '#8CF3E3', '#2DCDB6', '#097C6D'] },
-    coral: { rim: ['#FFD0C4', '#D27A63'], face: ['#FFF6F3', '#FBD3C8', '#EDA693'], ring: 'rgba(170,70,45,.28)', glyph: '#C55E44', edge: ['#C46D57', '#FFE3DB', '#F2B2A1', '#B4604B'] }
+    silver: { hi: '#FBFCFC', mid: '#D8DFDE', lo: '#9EAAA7', edge: ['#5E6B68', '#A5B0AD', '#EEF2F1', '#B9C3C0', '#E1E7E6', '#8C9895', '#55615E'], tint: 'rgba(62,78,74,' },
+    gold: { hi: '#FFF3CF', mid: '#E9C978', lo: '#B68B37', edge: ['#6C4C14', '#B08431', '#F5DC98', '#CFA44B', '#ECCD86', '#9E7326', '#614410'], tint: 'rgba(104,74,18,' },
+    blue: { hi: '#F5F8FD', mid: '#C8D6EE', lo: '#8BA3C9', edge: ['#4B6187', '#8EA4C9', '#E8EFFA', '#ADBFDE', '#DAE4F5', '#7B91B7', '#43587C'], tint: 'rgba(48,68,108,' },
+    teal: { hi: '#E7FBF7', mid: '#86DFCF', lo: '#2EA792', edge: ['#0E6257', '#39AE9A', '#B4F0E5', '#5AC7B4', '#9CE8DA', '#289583', '#0C584E'], tint: 'rgba(6,86,76,' },
+    coral: { hi: '#FFF1EC', mid: '#F3BBAB', lo: '#D58873', edge: ['#954F3B', '#D38A75', '#FFE1D8', '#E7A792', '#FAD2C6', '#C57964', '#854533'], tint: 'rgba(146,68,48,' }
   };
+  var TAU = Math.PI * 2;
   var DPR = function () { return Math.min(window.devicePixelRatio || 1, 2); };
   var cache = {};
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { cache = {}; }); }
@@ -40,24 +46,45 @@
     c.cw = w; c.ch = h; cache[key] = c; return c;
   }
 
-  /* ------------------------------------------------------- face on -- */
-  function paintFace(x, r, k) {
-    x.translate(r + 2, r + 2);
-    var g = x.createLinearGradient(-r, -r, r, r); g.addColorStop(0, k.rim[0]); g.addColorStop(1, k.rim[1]);
-    x.beginPath(); x.arc(0, 0, r, 0, Math.PI * 2); x.fillStyle = g; x.fill();
-    var f = x.createRadialGradient(-r * 0.35, -r * 0.42, r * 0.08, 0, 0, r * 0.92);
-    f.addColorStop(0, k.face[0]); f.addColorStop(0.55, k.face[1]); f.addColorStop(1, k.face[2]);
-    x.beginPath(); x.arc(0, 0, r * 0.83, 0, Math.PI * 2); x.fillStyle = f; x.fill();
-    x.lineWidth = Math.max(1, r * 0.07); x.strokeStyle = k.ring; x.beginPath(); x.arc(0.4, 0.5, r * 0.66, 0, Math.PI * 2); x.stroke();
-    x.strokeStyle = 'rgba(255,255,255,.6)'; x.beginPath(); x.arc(-0.4, -0.5, r * 0.66, Math.PI * 0.9, Math.PI * 1.6); x.stroke();
-    if (r >= 6) {
-      x.font = '800 ' + (r * 1.02).toFixed(1) + 'px Figtree, system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-      x.fillStyle = 'rgba(255,255,255,.75)'; x.fillText('€', -0.7, -0.2);
-      x.fillStyle = k.glyph; x.fillText('€', 0.4, 0.7);
+  /* ------------------------------------------------------- the face -- */
+  /* a coin's face at the origin, radius r: a raised rim, a sunk field, its
+     inner wall dark where it faces away from the light, twelve struck dots,
+     an embossed €, and a soft shine over the upper left */
+  function drawFace(x, r, k, glyph, dots) {
+    var g = x.createLinearGradient(-r * 0.6, -r, r * 0.6, r);
+    g.addColorStop(0, k.hi); g.addColorStop(0.5, k.mid); g.addColorStop(1, k.lo);
+    x.beginPath(); x.arc(0, 0, r, 0, TAU); x.fillStyle = g; x.fill();
+    var fr = r * 0.8, f = x.createLinearGradient(-fr * 0.6, -fr, fr * 0.6, fr);
+    f.addColorStop(0, k.mid); f.addColorStop(0.55, k.hi); f.addColorStop(1, k.mid);
+    x.beginPath(); x.arc(0, 0, fr, 0, TAU); x.fillStyle = f; x.fill();
+    x.lineWidth = Math.max(0.7, r * 0.05);
+    x.strokeStyle = k.tint + '.32)'; x.beginPath(); x.arc(0, 0, fr, Math.PI * 0.8, Math.PI * 1.75); x.stroke();
+    x.lineWidth = Math.max(0.6, r * 0.035); x.strokeStyle = 'rgba(255,255,255,.55)'; x.beginPath(); x.arc(0, 0, fr, -Math.PI * 0.15, Math.PI * 0.65); x.stroke();
+    var s = Math.max(0.5, r / 16);
+    if (dots) {
+      var rr = fr * 0.8, d = Math.max(0.55, r * 0.034);
+      for (var i = 0; i < 12; i++) {
+        var a = i * TAU / 12 - Math.PI / 2, px = Math.cos(a) * rr, py = Math.sin(a) * rr;
+        x.fillStyle = 'rgba(255,255,255,.75)'; x.beginPath(); x.arc(px - 0.45 * s, py - 0.45 * s, d, 0, TAU); x.fill();
+        x.fillStyle = k.tint + '.34)'; x.beginPath(); x.arc(px + 0.45 * s, py + 0.45 * s, d, 0, TAU); x.fill();
+        x.fillStyle = k.mid; x.beginPath(); x.arc(px, py, d, 0, TAU); x.fill();
+      }
     }
-    x.lineCap = 'round'; x.lineWidth = Math.max(1, r * 0.1); x.strokeStyle = 'rgba(255,255,255,.8)';
-    x.beginPath(); x.arc(0, 0, r * 0.9, Math.PI * 1.08, Math.PI * 1.42); x.stroke();
+    if (glyph) {
+      x.font = '700 ' + (fr * (dots ? 0.98 : 1.1)).toFixed(1) + 'px Figtree, system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillStyle = k.tint + '.38)'; x.fillText('€', 0.7 * s, 0.9 * s);
+      x.fillStyle = 'rgba(255,255,255,.9)'; x.fillText('€', -0.55 * s, -0.65 * s);
+      x.fillStyle = k.mid; x.fillText('€', 0, 0);
+    }
+    x.lineWidth = Math.max(0.6, r * 0.03); x.strokeStyle = k.tint + '.4)';
+    x.beginPath(); x.arc(0, 0, r - x.lineWidth / 2, 0, TAU); x.stroke();
+    var gl = x.createRadialGradient(-r * 0.42, -r * 0.55, 0, -r * 0.42, -r * 0.55, r * 1.15);
+    gl.addColorStop(0, 'rgba(255,255,255,.5)'); gl.addColorStop(0.45, 'rgba(255,255,255,.1)'); gl.addColorStop(1, 'rgba(255,255,255,0)');
+    x.beginPath(); x.arc(0, 0, r, 0, TAU); x.fillStyle = gl; x.fill();
   }
+
+  /* ------------------------------------------------------- face on -- */
+  function paintFace(x, r, k) { x.translate(r + 2, r + 2); drawFace(x, r, k, r >= 6, r >= 9); }
   function face(cx, px, py, r, kind, angle, alpha, flipX) {
     if (!(r > 0.6) || alpha <= 0.01) { return; }
     var k = KINDS[kind] || KINDS.silver, R = Math.round(r * 2) / 2;
@@ -71,39 +98,37 @@
 
   /* ------------------------------------------------------- side on -- */
   function sliceH(w) { return { e: Math.max(3, w * 0.105), ry: Math.max(3, w * 0.15) }; }
-  function paintSlice(x, w, k, top) {
-    var h = sliceH(w), e = h.e, ry = h.ry, rx = w / 2;
-    x.translate(2, 2);
-    /* the edge: a band under the face, its bottom an arc */
+  function band(x, w, e, ry) {
+    var rx = w / 2;
     x.beginPath(); x.moveTo(0, ry); x.lineTo(0, ry + e); x.ellipse(rx, ry + e, rx, ry, 0, Math.PI, 0, true); x.lineTo(w, ry); x.closePath();
-    var g = x.createLinearGradient(0, 0, w, 0);
-    g.addColorStop(0, k.edge[0]); g.addColorStop(0.28, k.edge[1]); g.addColorStop(0.7, k.edge[2]); g.addColorStop(1, k.edge[3]);
+  }
+  function paintSlice(x, w, k, top) {
+    var h = sliceH(w), e = h.e, ry = h.ry, rx = w / 2, i;
+    x.translate(2, 2);
+    /* the milled edge: a cylinder, light from the upper left */
+    band(x, w, e, ry);
+    var g = x.createLinearGradient(0, 0, w, 0), at = [0, 0.1, 0.27, 0.45, 0.63, 0.86, 1];
+    for (i = 0; i < 7; i++) { g.addColorStop(at[i], k.edge[i]); }
     x.fillStyle = g; x.fill();
-    /* milling on the edge */
-    if (e >= 5) {
-      x.save(); x.clip(); x.lineWidth = 1; x.strokeStyle = 'rgba(0,0,0,.09)';
-      for (var m = 2; m < w; m += 3) { x.beginPath(); x.moveTo(m, ry); x.lineTo(m, ry + e + ry); x.stroke(); }
-      x.restore();
+    x.save(); band(x, w, e, ry); x.clip();
+    if (e >= 4) {
+      /* the ridges, closer together towards the sides as the edge turns away */
+      var n = Math.max(10, Math.round(w / 2.4));
+      for (i = 0; i < n; i++) {
+        var xx = rx - rx * Math.cos((i + 0.5) / n * Math.PI);
+        x.fillStyle = k.tint + '.16)'; x.fillRect(xx, ry - 1, 0.8, e + ry + 2);
+        x.fillStyle = 'rgba(255,255,255,.22)'; x.fillRect(xx + 0.8, ry - 1, 0.6, e + ry + 2);
+      }
     }
-    /* where one coin sits on the next: a dark seam at the foot, a light one under the face */
-    x.lineWidth = 1.2; x.strokeStyle = 'rgba(0,0,0,.2)';
-    x.beginPath(); x.ellipse(rx, ry + e, rx - 0.6, ry - 0.6, 0, Math.PI * 0.04, Math.PI * 0.96); x.stroke();
-    x.lineWidth = 1; x.strokeStyle = 'rgba(255,255,255,.45)';
-    x.beginPath(); x.ellipse(rx, ry + 1.2, rx - 0.6, ry - 0.6, 0, Math.PI * 0.08, Math.PI * 0.92); x.stroke();
-    /* the face */
-    var f = x.createRadialGradient(w * 0.36, ry * 0.55, 1, rx, ry, rx);
-    f.addColorStop(0, k.face[0]); f.addColorStop(0.5, k.face[1]); f.addColorStop(1, k.face[2]);
-    x.beginPath(); x.ellipse(rx, ry, rx, ry, 0, 0, Math.PI * 2); x.fillStyle = f; x.fill();
-    x.lineWidth = Math.max(1, w * 0.012); x.strokeStyle = k.ring;
-    x.beginPath(); x.ellipse(rx, ry + 0.4, rx * 0.8, ry * 0.8, 0, 0, Math.PI * 2); x.stroke();
-    x.strokeStyle = 'rgba(255,255,255,.55)';
-    x.beginPath(); x.ellipse(rx, ry - 0.4, rx * 0.8, ry * 0.8, 0, Math.PI * 1.05, Math.PI * 1.7); x.stroke();
-    if (top && w > 30) {
-      x.save(); x.translate(rx, ry); x.scale(1, ry / rx * 1.15);
-      x.font = '800 ' + (w * 0.5).toFixed(1) + 'px Figtree, system-ui, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle';
-      x.fillStyle = 'rgba(255,255,255,.7)'; x.fillText('€', -1, -1.5);
-      x.fillStyle = k.glyph; x.fillText('€', 0.5, 1); x.restore();
-    }
+    /* light just under the face, shade where it sits on the coin below */
+    var v = x.createLinearGradient(0, ry, 0, ry * 2 + e);
+    v.addColorStop(0, 'rgba(255,255,255,.28)'); v.addColorStop(0.25, 'rgba(255,255,255,0)'); v.addColorStop(0.6, 'rgba(0,0,0,0)'); v.addColorStop(1, k.tint + '.3)');
+    x.fillStyle = v; x.fillRect(0, 0, w, e + ry * 2);
+    x.restore();
+    x.lineWidth = 1; x.strokeStyle = k.tint + '.28)';
+    x.beginPath(); x.ellipse(rx, ry + e, rx - 0.5, ry - 0.5, 0, Math.PI * 0.03, Math.PI * 0.97); x.stroke();
+    /* the face, seen at a slant */
+    x.save(); x.translate(rx, ry); x.scale(1, ry / rx); drawFace(x, rx, k, top && w > 28, top && w > 44); x.restore();
   }
   function slice(cx, px, py, w, kind, alpha, top) {
     if (!(w > 2) || alpha <= 0.01) { return; }
@@ -129,7 +154,7 @@
     var k = KINDS[kind] || KINDS.silver;
     for (var i = 0; i < n; i++) {
       var a = Math.random() * Math.PI * 2, v = 20 + Math.random() * 90;
-      this.add({ t: 'dust', x: x + (Math.random() - 0.5) * 10, y: y + (Math.random() - 0.5) * 6, vx: Math.cos(a) * v, vy: Math.sin(a) * v * 0.6 - 30, g: 160, life: 0.9 + Math.random() * 0.8, age: 0, s: 1.4 + Math.random() * 2.6, c: [k.edge[0], k.edge[2], k.face[1]][i % 3] });
+      this.add({ t: 'dust', x: x + (Math.random() - 0.5) * 10, y: y + (Math.random() - 0.5) * 6, vx: Math.cos(a) * v, vy: Math.sin(a) * v * 0.6 - 30, g: 160, life: 0.9 + Math.random() * 0.8, age: 0, s: 1.4 + Math.random() * 2.6, c: [k.edge[0], k.edge[2], k.mid][i % 3] });
     }
   };
   FX.prototype.spark = function (x, y, n, cols) {
