@@ -48,6 +48,9 @@ HELD = sorted({p.out for p in pagebuild.PAGES.values() if p.noindex} | {'how-we-
 # reached some other way: the booking button, the footer's legal column, or
 # never linked at all (the 404 and the page after a booking)
 ELSEWHERE = {'booking.html', 'privacy.html', 'terms.html', 'complaints.html', '404.html', 'thank-you.html', 'index.html'}
+# Since Run 54 (11 October 2026) "Directors" is one link to the director page;
+# the full calculator, the 2026 rules and the checklist are reached from it
+ELSEWHERE |= {'director-calculator.html', 'director-pension-rules.html', 'director-year-end-checklist.html'}
 
 PROBE = r"""<script>
 (function(){
@@ -114,23 +117,23 @@ PROBE = r"""<script>
     }
     if(job==='nojs'){
       L.classList.remove('dd-js');
-      btn('navDirectors').focus(); R.focusShows=shown(panel('navDirectors'));
-      panel('navDirectors').querySelector('a').focus(); R.focusInside=shown(panel('navDirectors'));
-      L.querySelector(':scope > a.lnk').focus(); R.focusGone=shown(panel('navDirectors'));
+      btn('navTools').focus(); R.focusShows=shown(panel('navTools'));
+      panel('navTools').querySelector('a').focus(); R.focusInside=shown(panel('navTools'));
+      L.querySelector(':scope > a.lnk').focus(); R.focusGone=shown(panel('navTools'));
       return done();
     }
     if(job==='drawer'){
       var tg=document.getElementById('navToggle'); tg.click(); await wait(50);
       R.open=[L.classList.contains('open'),shown(L),tg.getAttribute('aria-expanded')];
-      var D=btn('navDirectors'); D.click();
-      var p=panel('navDirectors'), pb=p.getBoundingClientRect(), bb=D.getBoundingClientRect(), lb=L.getBoundingClientRect();
-      R.inPlace=[exp('navDirectors'),shown(p),getComputedStyle(p).position,Math.round(pb.top-bb.bottom)>=0 && Math.round(pb.top-bb.bottom)<=2,
+      var D=btn('navTools'); D.click();
+      var p=panel('navTools'), pb=p.getBoundingClientRect(), bb=D.getBoundingClientRect(), lb=L.getBoundingClientRect();
+      R.inPlace=[exp('navTools'),shown(p),getComputedStyle(p).position,Math.round(pb.top-bb.bottom)>=0 && Math.round(pb.top-bb.bottom)<=2,
                  pb.left>=lb.left-1 && pb.right<=lb.right+1];
       var nb=nav.getBoundingClientRect();
       R.fits=Math.round(lb.bottom)<=innerHeight+1; R.scrolls=getComputedStyle(L).overflowY;
       R.allLinks=[].slice.call(L.querySelectorAll('a')).length;
       R.sw2=document.documentElement.scrollWidth;
-      D.focus(); key(D,'Escape'); R.esc1=[exp('navDirectors'),L.classList.contains('open')];
+      D.focus(); key(D,'Escape'); R.esc1=[exp('navTools'),L.classList.contains('open')];
       key(D,'Escape'); R.esc2=[L.classList.contains('open'),act()];
       return done();
     }
@@ -220,22 +223,22 @@ def main():
         eq('1. %s: one nav, the row, not past the window' % page,
            (r['navs'], r['drawer'], r['right'] <= r['w'], r['sw'] <= r['w']), (1, False, True, True))
         eq('1. %s: items at 18px, weight 600' % page, r['font'], ['18px', '600'])
-        eq('1. %s: three dropdowns, named' % page, [d['name'] for d in r['dd']],
-           ['Directors', 'Tools', 'Guides'])
+        eq('1. %s: two dropdowns, named' % page, [d['name'] for d in r['dd']],
+           ['Tools', 'Guides'])
         eq('1. %s: each a collapsed type="button" controlling the list after it, closed' % page,
            [(d['type'], d['exp'], d['next'], d['list'], d['links'] > 0, d['open'], d['js']) for d in r['dd']],
-           [('button', 'false', True, 'UL', True, False, True)] * 3)
+           [('button', 'false', True, 'UL', True, False, True)] * 2)
         eq('1. %s: no control in the nav is filled' % page, r['filled'], [])
         eq('1. %s: the booking button is an aqua outline' % page, r['booking'],
            ['rgba(0, 0, 0, 0)', 'solid', True, 'rgb(22, 201, 176)'])
         want = [page] if page in targets else []
         eq('1. %s: its own link marked current, once' % page, r['current'], want)
-        # the three plain links (Home since 11 October 2026) carry their own
+        # the plain links (Home since 11 October 2026, Directors since Run 54) carry their own
         # underline; a page inside a dropdown underlines the dropdown's
         # button, and only that one
         under = [d['name'] for d in r['dd'] if d['underline']]
         eq('1. %s: and only its own dropdown underlined' % page, len(under),
-           1 if want and page not in ('tracker.html', 'starter.html', 'index.html') else 0)
+           1 if want and page not in ('tracker.html', 'starter.html', 'index.html', 'director.html') else 0)
         eq('1. %s: no script error' % page, r['errors'], [])
         R[(page, 'reached')] = {h.split('#')[0] or page for h in r['hrefs']}
     # 2, page by page: a nav that lost a link on one page is caught on that page

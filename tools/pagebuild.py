@@ -328,7 +328,7 @@ PAGES = {
         desc="What changed for company directors: executive pensions set up before April 2021, and a company's payments into a PRSA. Information, not advice.",
         modules=['assets/js/director-topics.js', 'assets/js/pb-dr-motion.js', 'assets/js/pb-guide-scene.js'],
         keep=[],
-        nav='director-pension-rules.html',
+        nav=None,   # Run 54: reached from director.html, not the nav
         reviewed=True,
         checks=(('id="drForm"', 'the four questions'),
                 ('Rules as at 8 October 2026', 'the date the rules were checked'),

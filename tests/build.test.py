@@ -137,10 +137,11 @@ def run():
     # Run 29: the dropdowns put every page a reader can reach in the nav, so
     # every one of them marks itself; the three held pages stay out of it.
     # Since 11 October 2026 the nav opens on Home, so the home page marks itself too.
-    eq('8. the pages that mark themselves current are derived from the nav, and are these twenty',
+    # Since Run 54 "Directors" is one link: the director page marks itself, the
+    # full calculator, the 2026 rules and the checklist are reached from it.
+    eq('8. the pages that mark themselves current are derived from the nav, and are these seventeen',
        sorted(pagebuild.nav_targets(skel_nav)),
-       ['broker-vs-autoenrolment.html', 'director-calculator.html', 'director-pension-rules.html',
-        'director-year-end-checklist.html', 'director.html', 'glossary.html', 'index.html', 'my-pensions.html',
+       ['broker-vs-autoenrolment.html', 'director.html', 'glossary.html', 'index.html', 'my-pensions.html',
         'old-pension-checklist.html', 'pension-calculator.html', 'pension-fees-calculator.html',
         'pensions-over-50.html', 'pia.html', 'self-employed-pensions.html', 'standard-fund-threshold.html',
         'starter.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html', 'tracker.html',
