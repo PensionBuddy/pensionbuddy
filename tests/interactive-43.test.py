@@ -24,8 +24,10 @@ C4b (INTERACTIVE-PROPOSALS-42 rank 14), index.html:
   the phone slider in "What changes, and when." picking the relief step (T1-T8)
 
 C4c (INTERACTIVE-PROPOSALS-42 ranks 6, 15 and 9):
-  starter.html, director.html, pensions-over-50.html, self-employed-pensions.html
+  starter.html, pensions-over-50.html, self-employed-pensions.html
                                the age slider over the relief ladder (LD1-LD5)
+                               (director.html's went in Run 54: the new page shows the
+                               reader's own limit in its calculator instead)
   starter.html                 the auto-enrolment phases, one button each, and their caveat (A1-A7)
 
 Not part of tests/run-tests.py: one Chrome launch per scenario. Exit 0 or 1.
@@ -366,8 +368,6 @@ SCEN = {
     'starter-1440': ('starter', 1440, False, []),
     'starter-500': ('starter', 500, False, []),
     'starter-nojs-1440': ('starter', 1440, True, []),
-    'director-1440': ('director', 1440, False, []),
-    'director-nojs-1440': ('director', 1440, True, []),
     'over50-1440': ('over50', 1440, False, []),
     'over50-nojs-1440': ('over50', 1440, True, []),
     'selfemp-1440': ('selfemp', 1440, False, []),
@@ -590,7 +590,6 @@ def check_t1(sid, r):
 # are the plan's words; the starter's and director's are the pages' own, unchanged
 LAD = {
     'starter': (30, '30', None, None),
-    'director': (48, '40', None, None),
     'over50': (50, '50', "Revenue's limit on the contributions that get tax relief, as a share of earnings.",
                'Earnings count up to €115,000.'),
     'selfemp': (40, '40', "Revenue's limit on the contributions that get tax relief, as a share of net relevant earnings.",

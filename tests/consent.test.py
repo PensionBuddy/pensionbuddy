@@ -231,14 +231,15 @@ class Handler(SimpleHTTPRequestHandler):
 # Pixel 7)
 # (11 October 2026: not the home page any more; Damian's brief moved its
 # lockup from the hero to his own section, under his name)
-FIRST_SCREEN = ('director.html', 'starter.html', 'tracker.html',
+# (Run 54: nor the director page; its hero is its picture, its lockup sits with the booking button)
+FIRST_SCREEN = ('starter.html', 'tracker.html',
                 'pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html',
                 'director-pension-rules.html', 'my-pensions.html', 'pension-fees-calculator.html', 'pia.html',
                 'standard-fund-threshold.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html')
 PHONES = ((320, 568), (375, 667), (375, 812), (412, 915), (560, 800))   # 560: the widest the phone bar gets
 SIDEWAYS = ((667, 375), (915, 412))   # phones held sideways: the bar is one row
 WIDE = ((1200, 800),)                  # the lockup at the end of the hero, as it always was
-HERO_PAGES = ('director.html', 'starter.html', 'tracker.html')
+HERO_PAGES = ('starter.html', 'tracker.html')
 
 CALCS = {
     'pension-calculator.html': 'pension-calculator',

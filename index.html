@@ -2731,6 +2731,25 @@ html:not(.pb-js) .pb-i2-stage{display:none}
 @media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}}
 @media print{.pb-c2-potbox,.pb-i2-stage,.pb-g2-cv{display:none}}
 #damian .pb-reg{margin:6px 0 18px;align-items:flex-start;text-align:left}
+/* ARE YOU A DIRECTOR? (Run 54): the band at the foot of the inflation section */
+.pb-drb{margin-top:56px}
+.pb-drb-in{display:flex;align-items:center;gap:26px;padding:26px 30px;border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 18px 44px rgba(11,31,28,.06);color:var(--ink);text-decoration:none;transition:transform .3s cubic-bezier(.3,1.4,.5,1),box-shadow .3s}
+.pb-drb-in:hover{transform:translateY(-3px);box-shadow:0 24px 54px rgba(11,31,28,.1)}
+.pb-drb-in:focus-visible{outline:3px solid #0B7A6E;outline-offset:4px}
+.pb-drb-cv{flex:0 0 auto;width:132px;height:72px}
+html:not(.pb-js) .pb-drb-cv{display:none}
+.pb-drb-t{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pb-drb-t b{font-size:clamp(28px,3.4vw,44px);font-weight:800;line-height:1.02;letter-spacing:-.04em}
+.pb-drb-t span{font-size:clamp(17px,1.6vw,20px);line-height:1.35;font-weight:600;color:var(--ink-2)}
+.pb-drb-go{margin-left:auto;flex:0 0 auto}
+.pb-drb-go svg{animation:none !important}
+@media(max-width:700px){
+  .pb-drb{margin-top:40px}
+  .pb-drb-in{flex-wrap:wrap;gap:14px 18px;padding:22px 20px}
+  .pb-drb-cv{width:96px;height:56px}
+  .pb-drb-t{flex:1 1 180px}
+  .pb-drb-go{margin-left:0;width:100%;justify-content:center}
+}
 /* HOME-V2:END */
 </style>
 </head>
@@ -2930,7 +2949,19 @@ html:not(.pb-js) .pb-i2-stage{display:none}
     <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;2,114</b><i>Government</i></span>
     <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
   </div>
-</div></section>
+</div>
+  <!-- ARE YOU A DIRECTOR? (Run 54, Damian's brief: "underneath, in big bold writing: are you a
+       director? This differs for you. Click here"). One link to director.html; three company coins
+       (blue) turn into yours (silver) as it comes into view (assets/js/pb-home-dband.js). Inside the
+       inflation section on purpose: tests/build.test.py check 32 wants #learn straight after it. -->
+  <div class="wrap pb-drb" id="pbDrb">
+    <a class="pb-drb-in" href="director.html">
+      <canvas class="pb-drb-cv" aria-hidden="true"></canvas>
+      <span class="pb-drb-t"><b>Are you a director?</b><span>It works differently for you.</span></span>
+      <span class="pb-g2-go pb-drb-go">See how <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+    </a>
+  </div>
+</section>
 
 <!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
      (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
@@ -3227,6 +3258,7 @@ html:not(.pb-js) .pb-i2-stage{display:none}
 <script src="assets/js/pb-home-gap.js?v=532e2b32"></script>
 <script src="assets/js/pb-home-calc.js?v=5b0c6175"></script>
 <script src="assets/js/pb-home-infl.js?v=721dba51"></script>
+<script src="assets/js/pb-home-dband.js?v=fd50eb2a"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');
@@ -3378,7 +3410,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=548769f1" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=9d9b82fb" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

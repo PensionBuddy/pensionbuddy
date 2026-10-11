@@ -1072,7 +1072,9 @@ def run():
     # 11 October 2026 (Damian's brief): the home page's hero is the gap alone; its
     # lockup moved to Damian's own section, under his name (the footer's
     # disclosure names the regulation on every page, as before)
-    HEROES = ('director.html', 'starter.html', 'tracker.html')
+    # Run 54 (11 October 2026): the director page's hero is its picture alone, as the
+    # home page's is; its one lockup sits with the booking button (.dr-ask)
+    HEROES = ('starter.html', 'tracker.html')
     def lockups(src):
         # the hero's container, its two copies, where each sits, and whether they say the same
         i = src.find('<div class="pb-hero-copy">') if '<div class="pb-hero-copy">' in src else src.find('<div class="hero-copy pb-hero-copy">')
@@ -1092,16 +1094,22 @@ def run():
         if ' '.join(top.group(1).split()) != ' '.join(tail.group(1).split()):
             return 'the two copies differ'
         return None
-    eq('28. the three heroes: a lockup straight after the eyebrow and one last, saying the same, in a .pb-hero-copy container',
+    eq('28. the two heroes: a lockup straight after the eyebrow and one last, saying the same, in a .pb-hero-copy container',
        {n: lockups(sources[n]) for n in HEROES if lockups(sources[n])}, {})
     hx = sources['index.html']
     dam = hx[hx.find('<section id="damian"'):hx.find('</section>', hx.find('<section id="damian"'))]
     eq('28. the home page: no lockup in the hero, one under Damian\'s name',
        [hx[:hx.find('</header>')].count('class="pb-reg'), dam.count('<div class="pb-reg">'), dam.find('<h2>Damian Condon</h2>') < dam.find('<div class="pb-reg">')],
        [0, 1, True])
+    dx = sources['director.html']
+    ask = dx[dx.find('<div class="dr-ask">'):dx.find('</div>\n  <details', dx.find('<div class="dr-ask">'))]
+    eq('28. the director page: no lockup in the hero, one with the booking button, before it',
+       [dx[:dx.find('</header>')].count('<div class="pb-reg'), dx.count('<div class="pb-reg'), ask.count('<div class="pb-reg">'),
+        0 <= ask.find('<div class="pb-reg">') < ask.find('href="booking.html"')],
+       [0, 1, 1, True])
     eq('28. and no other page carries the lockup in a hero', sorted(n for n, t in sources.items()
        if '<div class="pb-reg' in t and n not in HEROES and t.find('<div class="pb-reg') < t.find('</header>')), [])
-    dr = sources['director.html']
+    dr = sources['starter.html']
     for label, mut, want in (
             ('the class dropped from a hero', dr.replace('<div class="pb-hero-copy">', '<div>', 1), 'no .pb-hero-copy container'),
             ('the copy under the eyebrow dropped', re.sub(r'\n\s*<div class="pb-reg pb-reg-top">.*?\n\s*</div>(?=\n)', '', dr, count=1, flags=re.S),
@@ -2258,8 +2266,9 @@ def run():
         'tracker.html': ('Book a free 20-minute call with us', ('id="pbTrace"',),
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
-        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
-                          '</div></section>\n\n<section class="coverband pb-bleed pb-wash">'),
+        # Run 54: the director page asks after its own numbers, with its one lockup
+        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potToday"', '<!-- WARN:END -->', '<div class="pb-reg">'),
+                          '  <p class="dr-ia"><b>This page is information, not advice.</b></p>'),
     }
 
     def moved_block(words):
@@ -2273,7 +2282,7 @@ def run():
         hero = src[h:end]
         if h < 0 or end < 0 or 'href="booking.html"' in hero:
             return 'the hero asks before the page gives'
-        if '<a class="btn btn-ghost"' not in hero:
+        if '<a class="btn btn-ghost"' not in hero and '<a class="pb-g2-go"' not in hero:
             return 'the hero lost its second button'
         block = moved_block(words)
         if src.count(block) != 1:
@@ -2290,8 +2299,8 @@ def run():
     sblock = moved_block('Book a free 20-minute call with us')
     for label, name, mut, want in (
             ('the button put back in a hero', 'director.html',
-             dr.replace('<a class="btn btn-ghost" href="director-calculator.html">',
-                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="btn btn-ghost" href="director-calculator.html">', 1),
+             dr.replace('<a class="pb-g2-go" href="#drCalc">',
+                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="pb-g2-go" href="#drCalc">', 1),
              'the hero asks before the page gives'),
             ('the button above the chart', 'starter.html',
              st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
@@ -2626,7 +2635,7 @@ def run():
     eq('53. pagebuild.WARN is the two sentences, word for word, each bold, in one pb-warn box',
        pagebuild.WARN, '<div class="pb-warn"><p><b>%s</b></p><p><b>%s</b></p></div>' % SENT)
     eq('53. the pages with projected figures, and their boxes',
-       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('index.html', 1), ('pension-calculator.html', 1),
+       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('director.html', 1), ('index.html', 1), ('pension-calculator.html', 1),
                                               ('pension-fees-calculator.html', 1), ('pia.html', 1), ('starter.html', 3)])
     eq('53. every page carries exactly its warnings, word for word, from pagebuild.WARN, and no other page one',
        findings(pagebuild.warn_drift(sources)), [])

@@ -1067,6 +1067,7 @@ WARN_PAGES = {
     'pia.html': 1,                      # the three take-home figures
     'starter.html': 3,                  # the cost-of-waiting chart and the two growth charts
     'index.html': 1,                    # the home calculator's pot and income at 66 (11 October 2026)
+    'director.html': 1,                 # the director page's pot at 66 (Run 54, 11 October 2026)
 }
 
 
