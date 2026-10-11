@@ -210,19 +210,23 @@ for (const page of ['director-pension-rules.html', 'booking.html', 'index.html']
 /* 2b: the calculator's "Aiming for" pills on the home page at 375 (since
    11 October 2026; the product tabs this walked went with the product
    band), the way a keyboard moves through them: the first focused, then Tab
-   to each of the others, each checked where it lands. The second pill is
-   brought level with Ask Buddy's place first, so a stuck Buddy would cover it. */
+   to each of the others, each checked where it lands. The pill under Buddy's
+   column is brought level with his place first, so a stuck Buddy would cover it. */
 await open('index.html', 375);
 const PILLS = `[].slice.call(document.querySelectorAll('.pb-c2-lv button, .pb-c2-hh button'))`;
+/* the pill under Buddy's column: the first after the first whose span meets the button's */
+const AT = `(() => { const b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+  return Math.max(1, ${PILLS}.findIndex((p, i) => { const r = p.getBoundingClientRect(); return i > 0 && r.left < b.right && r.right > b.left; })); })()`;
+const k = await ev(AT);
 const LEVEL = `(() => {
-  const t = ${PILLS}[1].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+  const t = ${PILLS}[${k}].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
   window.scrollBy(0, Math.round((t.top + t.bottom) / 2 - (b.top + b.bottom) / 2)); return 1; })()`;
 await ev(`${PILLS}[0].scrollIntoView({ block: 'center' })`);
 for (let i = 0; i < 3; i++) { await sleep(400); await ev(LEVEL); }
 await sleep(1500);
-const levelled = await ev(`(() => { const t = ${PILLS}[1].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+const levelled = await ev(`(() => { const t = ${PILLS}[${k}].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
   return t.left < b.right && t.right > b.left && t.top < b.bottom && t.bottom > b.top; })()`);
-eq('2b. the second "Aiming for" pill sits under Ask Buddy\'s place before the keyboard reaches it (the case under test)', levelled, true);
+eq('2b. an "Aiming for" pill sits under Ask Buddy\'s place before the keyboard reaches it (the case under test)', levelled, true);
 await ev(`${PILLS}[0].focus({ focusVisible: true, preventScroll: true })`);
 await sleep(200);
 const UNDER = `(() => {
