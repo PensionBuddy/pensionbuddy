@@ -387,9 +387,11 @@ the brief removes, the test now holds the new page instead.
 - **Tests.** `build.test.py` 484/0 (checks 8, 13, 19, 20, 28, 32, 33, 36,
   47, 52 and 53 follow the new page). `run-tests.py` 636/0. `interactive-43`
   340/0 (its H checks went with the chart; main had 8 failures there).
-  `nav`, `consent` and `deadline` fail exactly the checks main fails in this
-  container, and no more. The readiness check's "Start from a way of life"
-  link now goes to `index.html#gap`.
+  `regulator-lines` 31/0 and `--caveats` 31/0. `boxes` 8/0 (main fails 2
+  here). `nav`, `consent`, `deadline`, `floating-chrome`, `terms` and `ux4`
+  fail exactly what main fails in this container (Linux Chromium as root:
+  no H.264 decoder, hover and Ask Buddy timing), and no more. The readiness
+  check's "Start from a way of life" link now goes to `index.html#gap`.
 - **The launch video:** see `tools/launch-video/README.md`.
 
 ---
