@@ -51,7 +51,8 @@ export async function playwright() {
 export async function browser() {
   const { chromium } = await playwright();
   const args = ['--force-color-profile=srgb', '--hide-scrollbars', '--mute-audio', '--disable-lcd-text',
-    '--font-render-hinting=none', '--disable-gpu-vsync', '--enable-unsafe-swiftshader'];
+    '--font-render-hinting=none', '--disable-background-networking', '--disable-component-update', '--no-default-browser-check',
+    '--disable-domain-reliability', '--disable-sync', '--metrics-recording-only'];
   const opts = { headless: true, args };
   if (process.env.CHROME) opts.executablePath = process.env.CHROME;
   return chromium.launch(opts);

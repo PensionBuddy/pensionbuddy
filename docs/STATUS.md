@@ -392,7 +392,18 @@ the brief removes, the test now holds the new page instead.
   fail exactly what main fails in this container (Linux Chromium as root:
   no H.264 decoder, hover and Ask Buddy timing), and no more. The readiness
   check's "Start from a way of life" link now goes to `index.html#gap`.
-- **The launch video:** see `tools/launch-video/README.md`.
+- **The launch video** (`docs/launch-video/`, sources and re-render steps in
+  `tools/launch-video/README.md`). Built in code like the Reddit teaser
+  Damian sent: one canvas page, every frame a function of time, springs,
+  96 BPM, Chromium at 60 fps with 4 subframes, music and sound synthesised
+  on the same cue list. 36.25 s, not 30: every line stays up long enough to
+  read (the teaser's one criticism was pace). 16:9 and 9:16 from one
+  timeline. Intro, the gap (Modest to Comfortable, €18,036 a year short),
+  the real pension calculator page, tax relief as coins, PRSA and AVC
+  decoded, Damian and Buddy, the end card with the regulatory line.
+  -14.0 LUFS, -2.4 dBTP; at most 4 changes in any second (limit 6).
+  **Needs Damian:** listen to it before posting (the mix was checked by
+  meter, not by ear), and compliance on an advert's wording.
 
 ---
 # Run 49 — 2026-10-08 · GA4 and Tag Manager: one load each, the events reach GA4 (on `claude/ga4-gtm`)

@@ -28,8 +28,8 @@ mkdirSync(dir, { recursive: true });
    settling, and each shot's last frame */
 const MOMENTS = [
   ['intro, gap', [0, 0.25, 0.9, 1.95, 2.55, 2.95, 3.4, 4.1, 4.98, 5.0, 5.4, 6.2, 8.74, 8.95, 9.5, 10.2, 11.4, 12.48]],
-  ['calculator, tax relief', [12.5, 12.75, 13.4, 14.2, 14.9, 15.6, 16.2, 16.6, 17.2, 18.1, 18.13, 18.6, 19.0, 19.5, 20.2, 20.8, 21.6, 22.48]],
-  ['jargon, people, end card', [22.5, 22.7, 23.0, 23.5, 24.2, 25.0, 28.1, 28.13, 28.5, 29.1, 30.5, 31.24, 31.25, 31.6, 32.2, 33.0, 35.1, 35.98]],
+  ['calculator, tax relief', [12.5, 12.75, 13.4, 14.2, 14.9, 15.6, 16.2, 16.6, 17.2, 18.1, 18.13, 18.7, 19.2, 19.85, 20.4, 21.1, 21.9, 23.1]],
+  ['jargon, people, end card', [23.125, 23.35, 23.65, 24.1, 24.8, 25.6, 28.73, 28.75, 29.1, 29.7, 31.0, 31.86, 31.875, 32.2, 32.8, 33.6, 35.1, 36.23]],
 ];
 
 const srv = await serve();
@@ -76,8 +76,9 @@ try {
     if (!arg('check') && !(stills && stills !== true)) {
       for (const [i, [title, times]] of MOMENTS.entries()) {
         const cols = port ? 6 : 4, tw = port ? 300 : 520;
-        const url = await page.evaluate(({ times, cols, tw, title }) => window.FILM.sheet(times, cols, tw, title), { times, cols, tw, title: `Pensionbuddy launch film ${fmt}: ${title}` });
-        const f = join(dir, `contact-${fmt}-${i + 1}.png`);
+        const url = await page.evaluate(({ times, cols, tw, title, jpeg }) => window.FILM.sheet(times, cols, tw, title, true, jpeg), { times, cols, tw, title: `Pensionbuddy launch film ${fmt}: ${title}`, jpeg: final });
+        /* the final sheets for docs/ are JPEG, to keep the repo light */
+        const f = join(dir, `contact-${fmt}-${i + 1}.${final ? 'jpg' : 'png'}`);
         writeFileSync(f, Buffer.from(url.split(',')[1], 'base64'));
         console.log(f);
       }

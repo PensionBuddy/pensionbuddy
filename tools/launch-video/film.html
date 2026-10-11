@@ -28,6 +28,7 @@
    by TS, so a cut never blends two shots. */
 import * as TL from './timeline.mjs';
 const { b, cueT, COPY, BEAT } = TL;
+const from = id => b(TL.SHOTS.find(s => s.id === id).from);   // a shot's first moment
 
 const Q = new URLSearchParams(location.search);
 const FMT = Q.get('fmt') === '9x16' ? '9x16' : '16x9';
@@ -49,7 +50,7 @@ const C = {
 
 const out = document.getElementById('out');
 out.width = W; out.height = H;
-const octx = out.getContext('2d');
+const octx = out.getContext('2d', { willReadFrequently: true });
 const sub = document.createElement('canvas'); sub.width = W; sub.height = H;
 const g = sub.getContext('2d');
 
@@ -269,7 +270,7 @@ function gapState(t, ts) {
   return { steps, cost, costS, k, settled, gapV: settled ? steps[k].cost - TL.STATE_PENSION : costS - TL.STATE_PENSION };
 }
 shots.gap = (t, ts) => {
-  const L = gapLayout(), t0 = b(8), tH2 = cueT('gap.h2');
+  const L = gapLayout(), t0 = from('gap'), tH2 = cueT('gap.h2');
   if (ts < tH2 + 0.13) { const e = ent(ts, t0, 3 * U), x = ext(ts, tH2); H1('gapH1', COPY.gapH1, L.head.x, L.head.y, L.head.maxW, { a: e.a * x.a, dy: e.dy + x.dy }, { hi: { text: '€15,564', color: C.tealDeep } }); }
   if (ts >= tH2 + 0.1) H1('gapH2', COPY.gapH2, L.head.x, L.head.y, L.head.maxW, ent(ts, tH2 + 0.22, 3 * U));
   const ea = ent(ts, t0, 0, 0.12).a;
@@ -380,7 +381,7 @@ function calcLayout() {
   } };
 }
 shots.calc = (t, ts) => {
-  const L = calcLayout(), R = L.R, cd = L.card, t0 = b(20);
+  const L = calcLayout(), R = L.R, cd = L.card, t0 = from('calc');
   const hh = H1('calcH', COPY.calcH, L.head.x, L.head.y, L.head.maxW, ent(ts, t0, 3 * U), { color: C.white });
   const e2 = ent(ts, cueT('calc.sub'), 2 * U);
   para('calcSub', COPY.calcSub, L.head.x, L.head.y + hh.h + 1.6 * U, { px: T.sub, wt: 600, color: C.mint, maxW: L.head.maxW, a: e2.a, dy: e2.dy, ls: -0.01 });
@@ -461,7 +462,7 @@ function coin(x, yTop, D, kind, tilt) {
   g.restore();
 }
 shots.tax = (t, ts) => {
-  const L = taxLayout(), t0 = b(29), D = L.D, th = D * 0.2, ry = D * 0.17;
+  const L = taxLayout(), t0 = from('tax'), D = L.D, th = D * 0.2, ry = D * 0.17;
   const h1 = H1('taxH1', COPY.taxH1, L.head.x, L.head.y, L.head.maxW, ent(ts, t0, 3 * U));
   H1('taxH2', COPY.taxH2, L.head.x, L.head.y + h1.h + 0.15 * T.h1, L.head.maxW, ent(ts, cueT('tax.h2'), 3 * U), { color: C.ink2, hi: { text: '€60', color: C.ink } });
   SMALL('taxSmall', COPY.taxSmall, S.x, L.smallY, L.smallMax, ent(ts, t0, 0).a);
@@ -509,13 +510,13 @@ shots.tax = (t, ts) => {
 /* 5. jargon buster, dark: the term decodes, its meaning lands under it */
 const ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 shots.jargon = (t, ts) => {
-  const t0 = b(36), kpx = PORT ? 3.2 * U : 3.0 * U;
-  const tpx = 15 * U, dpx = PORT ? 4.8 * U : 4.4 * U, pad = 4.6 * U;
+  const t0 = from('jargon'), kpx = PORT ? 3.2 * U : 3.0 * U;
+  const tpx = PORT ? 15 * U : 17 * U, dpx = PORT ? 4.8 * U : 4.6 * U, pad = 4.6 * U;
   const cw = PORT ? S.w : (S.w - 6 * U) / 2;
   const hDef = i => textH(COPY.terms[i].def, 500, dpx, cw - 2 * pad, 1.3, 0);
   const ch = Math.max(hDef(0), hDef(1)) + tpx * 0.95 + 2.4 * U + 2 * pad;
   const total = PORT ? kpx * 2.2 + 2 * ch + 4 * U : kpx * 2.6 + ch;
-  const y0 = S.y + (S.h - total) / 2 - (PORT ? 0 : 2 * U);
+  const y0 = S.y + (S.h - total) / 2 + (PORT ? 0 : 3 * U);
   const ek = ent(ts, t0, 0);
   para('jargonKicker', COPY.jargonKicker.toUpperCase(), S.x, y0, { px: kpx, wt: 800, color: C.mint, a: ek.a, ls: 0.14, track: false });
   seen('jargonKicker', COPY.jargonKicker, ek.a >= 0.98);
@@ -587,7 +588,7 @@ shots.people = (t, ts) => {
 
 /* 7. the end card, light: the lockup, the address, the call to action */
 shots.end = (t, ts) => {
-  const t0 = b(50);
+  const t0 = from('end');
   const HL = PORT ? 14.6 * U : 18 * U, LW = LOCK.w * HL;
   const cy = PORT ? S.y + 0.33 * S.h : S.y + 0.27 * S.h;
   const left = W / 2 - LW / 2, top = cy - HL / 2;
@@ -659,18 +660,21 @@ function frameAt(ts, subframes = 4) {
   }
   octx.globalAlpha = 1;
 }
-/* luminance of the frame, for the flash check: the whole and a 6x3 grid */
-const lc = document.createElement('canvas'); lc.width = 96; lc.height = 54; const lctx = lc.getContext('2d', { willReadFrequently: true });
+/* luminance of the frame, for the flash check: the whole and a 6x3 grid,
+   from the full-resolution frame (every second pixel each way; a coarse
+   downscale aliases on moving text and reports flicker that is not there) */
+const LIN = new Float32Array(256).map((_, c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); });
 function lum() {
-  lctx.drawImage(out, 0, 0, 96, 54);
-  const d = lctx.getImageData(0, 0, 96, 54).data, G = new Array(18).fill(0), n = new Array(18).fill(0);
-  const lin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
-  let all = 0;
-  for (let y = 0; y < 54; y++) for (let x = 0; x < 96; x++) {
-    const k = (y * 96 + x) * 4, L = 0.2126 * lin(d[k]) + 0.7152 * lin(d[k + 1]) + 0.0722 * lin(d[k + 2]);
-    const gi = Math.min(2, Math.floor(y / 18)) * 6 + Math.min(5, Math.floor(x / 16)); G[gi] += L; n[gi]++; all += L;
+  const d = octx.getImageData(0, 0, W, H).data, G = new Float64Array(18), n = new Float64Array(18);
+  let all = 0, cnt = 0;
+  for (let y = 0; y < H; y += 2) {
+    const gy = Math.min(2, Math.floor(y / H * 3)) * 6;
+    for (let x = 0; x < W; x += 2) {
+      const k = (y * W + x) * 4, L = 0.2126 * LIN[d[k]] + 0.7152 * LIN[d[k + 1]] + 0.0722 * LIN[d[k + 2]];
+      const gi = gy + Math.min(5, Math.floor(x / W * 6)); G[gi] += L; n[gi]++; all += L; cnt++;
+    }
   }
-  return { whole: all / (96 * 54), cells: G.map((v, i) => v / n[i]) };
+  return { whole: all / cnt, cells: Array.from(G, (v, i) => v / n[i]) };
 }
 
 window.FILM = {
@@ -683,7 +687,7 @@ window.FILM = {
   /* the text drawn in the last frame, and whether each line was fully readable */
   step(t) { frameAt(t, 1); return SEEN; },
   /* a contact sheet: stills at the given times, in a grid */
-  sheet(times, cols, tw, title, blur = true) {
+  sheet(times, cols, tw, title, blur = true, jpeg = false) {
     const th = Math.round(tw * H / W), lab = 34, pad = 14, rows = Math.ceil(times.length / cols);
     const c = document.createElement('canvas'); c.width = cols * (tw + pad) + pad; c.height = rows * (th + lab + pad) + pad + 50;
     const x = c.getContext('2d'); x.fillStyle = '#222'; x.fillRect(0, 0, c.width, c.height);
@@ -696,7 +700,7 @@ window.FILM = {
       const sh = TL.shotAt(t);
       x.fillText(`${t.toFixed(2)}s  b${(t / BEAT).toFixed(2)}  ${sh.id}`, cx + 4, cy + th + 24);
     });
-    return c.toDataURL('image/png');
+    return jpeg ? c.toDataURL('image/jpeg', 0.88) : c.toDataURL('image/png');
   },
 };
 </script>

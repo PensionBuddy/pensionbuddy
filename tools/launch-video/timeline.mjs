@@ -16,7 +16,7 @@ export const BPM = 96;
 export const BEAT = 60 / BPM;          // 0.625 s
 export const BAR = 4 * BEAT;           // 2.5 s
 export const FPS = 60;
-export const DURATION = 36.0;          // 57.6 beats: 12 bars + the end card's tail
+export const DURATION = 36.25;         // 58 beats: 12 bars + the end card's tail
 export const FRAMES = Math.round(DURATION * FPS);
 export const b = n => n * BEAT;        // beats -> seconds
 
@@ -25,10 +25,10 @@ export const SHOTS = [
   { id: 'intro',  from: 0,  to: 8,    ground: 'dark'  },
   { id: 'gap',    from: 8,  to: 20,   ground: 'light' },
   { id: 'calc',   from: 20, to: 29,   ground: 'dark'  },
-  { id: 'tax',    from: 29, to: 36,   ground: 'light' },
-  { id: 'jargon', from: 36, to: 45,   ground: 'dark'  },
-  { id: 'people', from: 45, to: 50,   ground: 'light' },
-  { id: 'end',    from: 50, to: DURATION / BEAT, ground: 'light' },
+  { id: 'tax',    from: 29, to: 37,   ground: 'light' },
+  { id: 'jargon', from: 37, to: 46,   ground: 'dark'  },
+  { id: 'people', from: 46, to: 51,   ground: 'light' },
+  { id: 'end',    from: 51, to: DURATION / BEAT, ground: 'light' },
 ];
 export const shotAt = t => SHOTS.find(s => t >= b(s.from) && t < b(s.to)) || SHOTS[SHOTS.length - 1];
 
@@ -103,32 +103,34 @@ cue('calc.lift0', 22, 'lift');
 cue('calc.lift1', 24, 'lift');
 cue('calc.scroll', 25.5, 'scroll');
 cue('calc.lift2', 26, 'lift');
-// 4. tax relief: three dark coins (you pay EUR 60), two amber (Revenue adds EUR 40)
+// 4. tax relief: three dark coins (you pay EUR 60), two amber (Revenue adds
+//    EUR 40), one a beat. (On eighths, three dark coins crossing the same
+//    part of the screen inside a second sat exactly at the flash limit.)
 cue('tax.in', 29, 'cut');
 cue('tax.h2', 30, 'tick2');
 cue('tax.c0', 30, 'coin', { kind: 'ink' });
-cue('tax.c1', 30.5, 'coin', { kind: 'ink' });
-cue('tax.c2', 31, 'coin', { kind: 'ink' });
-cue('tax.you', 31);
-cue('tax.c3', 32, 'coin', { kind: 'amber' });
-cue('tax.c4', 32.5, 'coin', { kind: 'amber' });
-cue('tax.rev', 32);
+cue('tax.c1', 31, 'coin', { kind: 'ink' });
+cue('tax.c2', 32, 'coin', { kind: 'ink' });
+cue('tax.you', 32);
+cue('tax.c3', 33, 'coin', { kind: 'amber' });
+cue('tax.c4', 34, 'coin', { kind: 'amber' });
+cue('tax.rev', 33);
 // 5. jargon: letters lock on sixteenths, the meaning lands on the next beat
-cue('jargon.in', 36, 'cut');
-cue('term0', 36, 'scramble', { len: 1 });
-cue('def0', 37, 'tick2');
-cue('term1', 37, 'scramble', { len: 0.75 });
-cue('def1', 38, 'tick2');
-cue('riser2', 45, 'riser', { len: 3 });
+cue('jargon.in', 37, 'cut');
+cue('term0', 37, 'scramble', { len: 1 });
+cue('def0', 38, 'tick2');
+cue('term1', 38, 'scramble', { len: 0.75 });
+cue('def1', 39, 'tick2');
+cue('riser2', 46, 'riser', { len: 3 });
 // 6. people, then the end card
-cue('people.in', 45, 'photo');
-cue('people.buddy', 46, 'photo');
-cue('reg', 45);
-cue('end.in', 50, 'cut');
-cue('end.mark', 50, 'pop', { note: 0 });
-cue('end.url', 51, 'tick2');
-cue('end.cta', 52, 'chime');
-cue('end.wink', 56, 'wink');
+cue('people.in', 46, 'photo');
+cue('people.buddy', 47, 'photo');
+cue('reg', 46);
+cue('end.in', 51, 'cut');
+cue('end.mark', 51, 'pop', { note: 0 });
+cue('end.url', 52, 'tick2');
+cue('end.cta', 53, 'chime');
+cue('end.wink', 56, 'wink');   // the last downbeat, on the final chord
 export const CUES = C;
 export const cueT = id => { const c = C.find(x => x.id === id); if (!c) throw new Error('no cue ' + id); return c.t; };
 

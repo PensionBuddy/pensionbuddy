@@ -195,7 +195,9 @@ const HOOK = {
   A: [[0, 76, .5], [0.75, 81, .5], [1.5, 85, .5], [2, 83, .5], [3, 81, 1]],
 };
 const bt = TL.b;
-const END = TL.DURATION / BEAT;   // 57.6 beats
+const END = TL.DURATION / BEAT;   // 58 beats
+const SH = id => TL.SHOTS.find(s => s.id === id);
+const CALC = SH('calc').from, JAR = SH('jargon'), ENDC = SH('end').from, FINAL = (TL.CHORDS.length - 1) * 4;   // the end card; the last chord's downbeat
 TL.CHORDS.forEach((name, bar) => {
   const c = CH[name], b0 = bar * 4;
   if (b0 >= END) return;
@@ -205,24 +207,23 @@ TL.CHORDS.forEach((name, bar) => {
   if (bar >= 2 && !last) {
     /* bass: root, a bounce, the octave, the fifth */
     for (const [o, iv, d] of [[0, 0, 0.9], [1.5, 0, 0.4], [2, 12, 0.35], [2.5, 0, 0.9], [3.5, 7, 0.4]]) {
-      const beat = b0 + o; if (beat >= 50 && beat < 56) { if (o === 0 || o === 2.5) bass(bt(beat), BEAT * 1.6, c.bass, 0.8); continue; }
+      const beat = b0 + o; if (beat >= ENDC && beat < FINAL) { if (o === 0 || o === 2.5) bass(bt(beat), BEAT * 1.6, c.bass, 0.8); continue; }
       bass(bt(beat), BEAT * d, c.bass + iv, 1);
     }
     /* pluck arpeggio in eighths */
-    [0, 1, 2, 3, 2, 1, 2, 3].forEach((k, j) => { const beat = b0 + j / 2; if (beat >= 50) return; pluck(bt(beat), c.arp[k] - 12, j % 2 ? 0.55 : 0.75, j % 2 ? 0.35 : 0.15, 0.6, 0.45); });
+    [0, 1, 2, 3, 2, 1, 2, 3].forEach((k, j) => { const beat = b0 + j / 2; if (beat >= ENDC) return; pluck(bt(beat), c.arp[k] - 12, j % 2 ? 0.55 : 0.75, j % 2 ? 0.35 : 0.15, 0.6, 0.45); });
   }
   if (last) { bass(bt(b0), TL.DURATION - bt(b0) - 0.3, c.bass, 1); }
   /* the hook over the calculator, tax relief and the people */
-  if ((b0 >= 20 && b0 < 36) || (b0 >= 44 && b0 < 52)) {
-    for (const [o, m, d] of HOOK[name]) { const beat = b0 + o; if (beat >= 20 && beat < 50) bell(bt(beat), m, 0.8, 0.1, d * BEAT + 0.8); }
-  }
+  /* (not under the jargon, where the scramble's blips have the treble) */
+  for (const [o, m, d] of HOOK[name]) { const beat = b0 + o; if (beat >= CALC && beat < ENDC && !(beat >= JAR.from && beat < JAR.to)) bell(bt(beat), m, 0.8, 0.1, d * BEAT + 0.8); }
 });
 /* intro: pad and the toes, then a pulse in bar 2 */
 for (let s = 4; s < 8; s += 0.25) shaker(bt(s), s % 1 === 0 ? 0.55 : 0.3);
 kick(bt(4), 0.55); kick(bt(6), 0.55);
 /* drums from the drop to the end card */
-for (let beat = 8; beat < 50; beat++) {
-  const inBar = beat % 4, jargon = beat >= 36 && beat < 45;
+for (let beat = 8; beat < ENDC; beat++) {
+  const inBar = beat % 4, jargon = beat >= JAR.from && beat < JAR.to;
   if (inBar === 0 || inBar === 2) kick(bt(beat), 1);
   if (inBar === 1 && !jargon) kick(bt(beat + 0.5), 0.7);
   if (inBar === 1 || inBar === 3) clap(bt(beat), jargon ? 0.7 : 1);
@@ -230,9 +231,9 @@ for (let beat = 8; beat < 50; beat++) {
   if (!jargon) { hat(bt(beat + 0.25), 0.25, false, 0.3); hat(bt(beat + 0.75), 0.3, false, 0.3); }
 }
 /* the end card: a hit as it lands, soft time, the last chord */
-kick(bt(50), 1); shimmer(bt(50), 0.8);
-for (let beat = 51; beat < 56; beat++) { hat(bt(beat + 0.5), 0.5); if (beat % 2 === 1) kick(bt(beat), 0.55); }
-kick(bt(56), 1); shimmer(bt(56), 1);
+kick(bt(ENDC), 1); shimmer(bt(ENDC), 0.8);
+for (let beat = ENDC + 1; beat < FINAL; beat++) { hat(bt(beat + 0.5), 0.5); if ((beat - ENDC) % 2 === 0) kick(bt(beat), 0.55); }
+kick(bt(FINAL), 1); shimmer(bt(FINAL), 1);
 
 /* ---- the effects, from the cue list ---- */
 const TOE_NOTES = [74, 78, 81, 86];
@@ -369,7 +370,7 @@ for (let it = 0; it < 8; it++) {
   const l = mix[0].map(v => v * g), r = mix[1].map(v => v * g);
   out = limit(l, r, ceil); I = lufs(out[0], out[1]);
   TP = Math.max(truePeak(out[0]), truePeak(out[1]));
-  if (TP > -1.4) { ceil -= 0.3; continue; }
+  if (TP > -1.9) { ceil -= 0.3; continue; }   /* headroom for the AAC encode, which adds a few tenths */
   if (Math.abs(I + 14) < 0.03) break;
   gainDb += -14 - I;
 }
