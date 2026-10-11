@@ -340,6 +340,61 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 54 — 2026-10-11 · One director page; "Are you a director?" on the home page; Directors is one link (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief: one unified director landing page; at the very top, as
+simply as possible and in pictures, why a director is different; then the
+pain (why directors leave it); then a simpler calculator; super
+interactive, no unnecessary text. On the home page, under "€1,000 buys
+less every year", in big bold writing: "Are you a director?"
+
+- **How it was made.** Five readers mapped the four director pages, their
+  facts and their tests; three designers proposed pages, three judges
+  scored them, one spec was merged; three engineers built the motion in
+  parallel and three more reviewed and fixed each in a real browser;
+  three fact checkers tested every figure and claim (their fixes are in).
+- **`director.html`, rebuilt** (URL kept). Hero: "You own the company. It
+  can pay into your pension." €1,000 of company profit, three ways, as
+  three stacks of metal coins (`assets/js/pb-dir-three.js`): as salary
+  €477 reaches you and €523 goes in tax now; left as profit €875 stays,
+  €125 corporation tax; into your pension all €1,000 goes in. Drag runs it
+  back and forth, a tap replays a column. Then "The company comes first.
+  The pension comes last." (`pb-dir-why.js`): the CSO coverage rows (57%
+  of the self-employed, 68% of employees; said to be not a figure for
+  directors) and a year-end ring: days to the company's year end, "No
+  backdating". Then "Your own numbers." (`pb-dir-calc.js`): age and what
+  the company pays a year; the pot at 66 in today's money as a coin tower,
+  the cost of starting a year later, the same money as salary or profit,
+  the reader's own tax-relief limit, the Standard Fund Threshold note (from
+  `sft.js`). 6% growth, the two warnings, the past-performance warning,
+  one lockup with the page's one booking button. Then the executive-pension
+  note, linking to the 2026 rules page. Cut: the benefit cards, the ladder,
+  the coverage band, the dark panel, the rules cards, the FAQs and their
+  structured data, the closing band. The hidden guide form stays.
+- **Kept live, off the nav:** `director-calculator.html`,
+  `director-pension-rules.html`, `director-year-end-checklist.html`
+  (Related pages and the page's own links reach them; no redirects file
+  exists, so removing them would break links).
+- **Nav:** "Directors" is one link to `director.html` on every page.
+- **Home:** `#pbDrb`, inside `#inflation` (check 32), "Are you a director?
+  Pensions work differently for you." with three company coins turning
+  into yours (`assets/js/pb-home-dband.js`).
+- **Contrast:** small coral and gold text darkened on both pages
+  (verify.py: director.html 0 FAIL; total 57, baseline 58).
+- **Tests.** `build.test.py` 485/0 (checks 8, 17, 28, 46 and 53 follow
+  the new page). `nav`, `consent`, `deadline`, `floating-chrome`, `terms`
+  and `ux4` fail exactly what the commit before this work fails here (and
+  `consent` one fewer); `interactive-43` 320/0 (the director ladder's
+  scenarios went with the ladder); `run-tests.py`, `flags`, `lead-forms`,
+  `boxes`, `search`, `give-then-ask` pass.
+- **Needs Damian:** (1) the 6% cap rests on Pensions Authority guidance
+  v1.2; v1.3 applies from 1 July 2026 and should be checked; (2) the page
+  says nothing on the tax when profit is taken out of the company (no page
+  on the site states it); (3) the old director pages: keep, redirect or
+  remove.
+
+---
+
 # Run 53 — 2026-10-11 · The home page grows at 6% (on `claude/optimistic-keller-kfqggu`)
 
 Damian: "use six percent, and say historically it could be higher, still

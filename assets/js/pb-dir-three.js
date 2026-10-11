@@ -22,11 +22,14 @@
    base row and the fine print carry every figure, and every figure here ends
    on the markup's.
 
-   Motion: the first time it is seen (a third on screen) the H1 rises word by
-   word and thirty blue coins drop into three stacks; then salary peels (the
-   top coins hop, tumble over, turn gold mid-air and land in the tray; the
-   sixth splits in a puff of dust; the rest turn silver, bottom up), then
-   profit, then the pension's ten turn silver with a ring and a few sparks.
+   Motion: the H1 rises word by word as the page arrives. The first time the
+   stage is seen (35% on screen) thirty blue coins drop into three stacks;
+   then salary peels (the top coins hop off one by one and follow one
+   another along the same curve, out to the right, over and down onto the
+   tax tray, flipping over in the air and coming round gold; the sixth
+   splits and its part follows; the rest turn silver, a ripple up the
+   stack), then profit, then the pension's ten turn silver, a teal ring
+   spreads off the top coin and a sheen of light runs up the stack.
    The figures roll. Then the reader plays it: the stacks lean away from the
    pointer and riffle round it; a sideways drag runs it back to "before tax"
    and forward again (each coin on its own spring, so the stacks bend), and on
@@ -49,8 +52,8 @@
   var fmt = K.fmt, TEN = 10, PER = 100;
   /* the peel, in seconds: each coin that goes hops, then flies; the next one
      goes STAG later; the coins that stay turn over FSTAG apart, bottom up */
-  var STAG = 0.09, HOP = 0.14, FL = 0.62, SQ = 0.18, FLIP = 0.3, FSTAG = 0.04, LIFT = 14;
-  var MINUS = '−';
+  var STAG = 0.12, HOP = 0.12, FL = 0.44, SQ = 0.18, FLIP = 0.3, FSTAG = 0.04, LIFT = 14, SHINE = 0.9;
+  var MINUS = '\u2212';
 
   /* ------------------------------------------------------- the stacks -- */
   function coin() { return { o: 0, vo: 0, hop: 0, vh: 0, wd: 0, wv: 0, dy: 0, vy: 0, land: true, sq: 0, dl: 0 }; }
@@ -58,7 +61,7 @@
     var tag = $('dr3T' + id.charAt(0).toUpperCase() + id.slice(1)), b = $('dr3' + id.charAt(0).toUpperCase() + id.slice(1));
     var c = {
       id: id, stay: stay, fig: fig, tax: 1000 - fig, taxC: TEN - kc, fly: [], coins: [], tray: [], flipAt: [],
-      u: 1, v: 0, tau: 0, drv: null, x: 0, lean: { x: 0, v: 0 },
+      u: 1, v: 0, tau: 0, drv: null, x: 0, lean: { x: 0, v: 0 }, sh: -1,
       bR: b ? new K.Roll(b) : null, bEl: b, tag: tag, tB: tag ? tag.querySelector('b') : null, tR: null,
       tA: { x: 1, v: 0 }, tY: { x: 0, v: 0 }, tOn: true, tSet: false
     };
@@ -70,7 +73,9 @@
        coin splits, and its part goes last */
     for (i = TEN - 1; i >= whole + (frac ? 1 : 0); i--) { c.fly.push({ from: i, val: 1, slot: s++ }); }
     if (frac) { c.fly.push({ from: whole, val: 1 - frac, slot: s++, piece: true }); }
-    c.fly.forEach(function (f, m) { f.s0 = m * STAG; f.up = f.s0 + HOP; f.land = f.up + FL; f.side = m % 2 ? 1 : -1; });
+    /* every coin takes the same arc, out to the right and over: a stream,
+       not a scatter */
+    c.fly.forEach(function (f, m) { f.s0 = m * STAG; f.up = f.s0 + HOP; f.land = f.up + FL; f.side = 1; });
     var F0 = c.fly.length ? c.fly[c.fly.length - 1].s0 + HOP + 0.1 : 0.05, end = 0.3;
     for (i = 0; i < TEN; i++) {
       c.coins.push(coin());
@@ -86,14 +91,15 @@
     Col('pro', 1000 * (1 - PD.CT) / PER, 'blue', Math.round(1000 * (1 - PD.CT))),
     Col('pen', TEN, 'silver', 1000)
   ];
-  var hint = $('dr3Hint'), fx = new C.FX();
+  var hint = $('dr3Hint');
 
   /* ----------------------------------------------------------- layout -- */
   var W = 0, H = 0, dpr = 1, G = null;
   function size() {
     var b = cv.getBoundingClientRect(); W = b.width; H = b.height; dpr = Math.min(window.devicePixelRatio || 1, 2);
     cv.width = Math.max(1, Math.round(W * dpr)); cv.height = Math.max(1, Math.round(H * dpr));
-    var small = W < 480, bot = small ? 32 : 42, top = 34, tagH = (COLS[0].tag && COLS[0].tag.offsetHeight) || 41;
+    /* top: clear of the hint (13px type at 14px from the top) */
+    var small = W < 480, bot = small ? 32 : 42, top = 46, tagH = (COLS[0].tag && COLS[0].tag.offsetHeight) || 41;
     var maxT = 1; COLS.forEach(function (c) { maxT = Math.max(maxT, c.fly.length); });
     /* the coins as wide as the stage allows, then narrower until the stack,
        the tray, its figure and the hint all fit one above the other */
@@ -105,7 +111,7 @@
       if (room >= 26 || w <= 30) { break; }
       w -= 2;
     }
-    var gap = Math.max(26, Math.min(room, H * 0.24)), baseY = H - bot;
+    var gap = Math.max(26, Math.min(room, H * 0.18)), baseY = H - bot;
     G = { w: Math.round(w), e: hS.e, ry: hS.ry, wt: wt, et: hT.e, ryt: hT.ry, base: baseY, shelf: baseY - stackH - gap, small: small };
     COLS.forEach(function (c, j) { c.x = W * (0.2 + 0.3 * j); if (!c.tSet) { c.tY.x = tagTarget(c); } });
   }
@@ -149,9 +155,9 @@
   }
   /* motion off: the finished picture, or "before" while a drag holds it */
   function still() {
-    intro = null; fx.p = [];
+    intro = null; rings = [];
     COLS.forEach(function (c) {
-      c.drv = null; c.u = ptr.scrub ? ptr.t : 1; c.tau = c.u * c.D; c.lean.x = c.lean.v = 0; c.tOn = true; c.tA.x = 1; c.tY.x = tagTarget(c);
+      c.drv = null; c.sh = -1; c.u = ptr.scrub ? ptr.t : 1; c.tau = c.u * c.D; c.lean.x = c.lean.v = 0; c.tOn = true; c.tA.x = 1; c.tY.x = tagTarget(c);
       c.coins.concat(c.tray).forEach(function (o) { o.dy = o.vy = o.o = o.vo = o.hop = o.vh = o.sq = o.dl = o.wd = 0; o.land = true; });
       figures(c, true);
     });
@@ -165,16 +171,17 @@
       var a = c.tau;
       if (drive(c, now, dt)) { moving = true; }
       c.tau = c.u * c.D;
-      if (c.tau > a) { events(c, j, a, c.tau); }
+      if (c.tau > a) { events(c, a, c.tau); }
       figures(c);
       /* its figure: fades and drops in when its column first goes, then rides */
       var ta = c.tOn ? 1 : 0, ty = tagTarget(c);
       c.tA.v += (220 * (ta - c.tA.x) - 26 * c.tA.v) * dt; c.tA.x += c.tA.v * dt;
       c.tY.v += (210 * (ty - c.tY.x) - 17 * c.tY.v) * dt; c.tY.x += c.tY.v * dt;
       if (Math.abs(c.tA.v) > 0.01 || Math.abs(ta - c.tA.x) > 0.005 || Math.abs(c.tY.v) > 0.3 || Math.abs(ty - c.tY.x) > 0.2) { moving = true; }
+      if (c.sh >= 0) { c.sh += dt; if (c.sh > SHINE) { c.sh = -1; } moving = true; }
     });
     if (stepCoins(dt)) { moving = true; }
-    fx.step(dt); if (fx.busy()) { moving = true; }
+    if (stepRings(dt)) { moving = true; }
     ptr.vx *= Math.exp(-dt * 7);
     return moving;
   }
@@ -207,18 +214,38 @@
     if (d.next) { d.next.from = d.to; d.next.t0 = d.t0 + d.dur + (d.next.wait || 0); begin(c, d.next); }
     return d;
   }
-  /* a ripple where a part coin splits, and where each coin lands */
-  function events(c, j, a, b) {
+  /* a ripple where a part coin splits, and where each coin lands: it
+     starts as the coin's own outline and spreads out from under it */
+  function events(c, a, b) {
     c.fly.forEach(function (f) {
-      if (f.piece && a < f.s0 && b >= f.s0) { fx.ring(c.x, slotY(f.from), 'rgba(110,136,180,.6)', G.w * 0.42); }
-      if (a < f.land && b >= f.land) { fx.ring(c.x, trayY(f.slot), 'rgba(182,139,55,.55)', G.wt * 0.42); }
+      if (f.piece && a < f.s0 && b >= f.s0) { ring(c.x, slotY(f.from), G.w / 2, G.ry, 'rgba(96,122,168,.5)', 0.45, true); }
+      if (a < f.land && b >= f.land) { ring(c.x, trayY(f.slot) + G.et, G.wt / 2, G.ryt, 'rgba(170,128,46,.55)', 0.5, false); }
     });
   }
+  /* the pension's ten are all yours: a teal ring off the top coin and a
+     sheen of light up the stack, no confetti */
   function finale(c) {
-    var top = slotY(TEN - 1) - G.ry;
-    fx.ring(c.x, top + G.ry * 0.4, 'rgba(20,203,177,.75)', G.w * 0.55);
-    fx.spark(c.x, top, 8, ['#FFFFFF', '#D8DFDE', '#14CBB1', '#B4BFBC', '#7FE3D3']);
+    ring(c.x, slotY(TEN - 1), G.w / 2, G.ry, 'rgba(20,203,177,.8)', 0.7, true);
+    c.sh = 0;
     pulse(c.bEl, 1.1); pulse(c.tB, 1.18);
+  }
+  /* how much light the sheen puts on coin i: a soft band, bottom to top */
+  function sheen(c, i) {
+    if (c.sh < 0) { return 0; }
+    var s = c.sh / SHINE * 1.5 - 0.25, d = (i / (TEN - 1) - s) / 0.14;
+    return 0.22 * Math.exp(-d * d) * Math.min(1, (SHINE - c.sh) * 6);
+  }
+  var rings = [];
+  function ring(x, y, rx, ry, col, life, front) { rings.push({ x: x, y: y, rx: rx, ry: ry, c: col, age: 0, life: life, front: front }); }
+  function stepRings(dt) { rings = rings.filter(function (r) { r.age += dt; return r.age < r.life; }); return rings.length > 0; }
+  function drawRings(front) {
+    rings.forEach(function (r) {
+      if (r.front !== front) { return; }
+      var k = r.age / r.life, s = 1 + 0.5 * (1 - Math.pow(1 - k, 3));
+      cx.globalAlpha = (1 - k) * (1 - k); cx.strokeStyle = r.c; cx.lineWidth = 1.7 - k;
+      cx.beginPath(); cx.ellipse(r.x, r.y, r.rx * s, r.ry * s, 0, 0, Math.PI * 2); cx.stroke();
+    });
+    cx.globalAlpha = 1;
   }
   function pulse(el, s) {
     if (!el || !el.animate || !K.motion()) { return; }
@@ -267,6 +294,7 @@
   function draw() {
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
     shelf();
+    drawRings(false);
     var air = [];
     COLS.forEach(function (c, j) {
       var tau = c.tau, home = -1, gone = 0, i;
@@ -293,12 +321,13 @@
         /* a coin that becomes yours turns over in place: a ripple runs up
            the stack, each coin lifts a little and the silver comes up through
            the blue with a glint */
-        if (q <= 0) { metal(x, y, w, 'blue', a, top, 1, 0, 0); }
-        else if (q >= 1) { metal(x, y, w, c.stay, a, top, 1, 0, 0); }
+        var gl = sheen(c, i);
+        if (q <= 0) { metal(x, y, w, 'blue', a, top, 1, 0, gl); }
+        else if (q >= 1) { metal(x, y, w, c.stay, a, top, 1, 0, gl); }
         else {
           var bump = Math.sin(Math.PI * q);
           metal(x, y - 3 * bump, w, 'blue', a, top, 1, 0, 0);
-          metal(x, y - 3 * bump, w, c.stay, a * q * q * (3 - 2 * q), top, 1, 0, 0.5 * bump);
+          metal(x, y - 3 * bump, w, c.stay, a * q * q * (3 - 2 * q), top, 1, 0, 0.16 * bump + gl);
         }
       }
       /* the tax tray */
@@ -308,12 +337,12 @@
       c.fly.forEach(function (f) {
         if (phase(f, tau) !== 3) { return; }
         var t = c.tray[f.slot], sq = Math.max(0, 1 - (tau - f.land) / SQ);
-        metal(c.x + jit(f.slot, j + 5) * 0.6 + t.o, trayY(f.slot) + t.hop + sq * 2, G.wt * (1 + sq * 0.08), 'gold', f.val < 1 ? 0.12 + 0.88 * f.val : 1, f.slot === n - 1, 1, 0, sq * 0.4);
+        metal(c.x + jit(f.slot, j + 5) * 0.6 + t.o, trayY(f.slot) + t.hop + sq * 2, G.wt * (1 + sq * 0.08), 'gold', f.val < 1 ? 0.12 + 0.88 * f.val : 1, f.slot === n - 1, 1, 0, sq * 0.2);
       });
     });
     /* the coins in the air, over everything */
     air.forEach(function (q) { flying(q.c, q.f, q.j); });
-    fx.draw(cx);
+    drawRings(true);
     cx.fillStyle = 'rgba(84,99,95,.85)'; cx.font = '600 12px Figtree, system-ui, sans-serif'; cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
     cx.fillText('1 coin = €100', G.small ? 14 : 18, H - (G.small ? 11 : 15));
     place();
@@ -338,14 +367,17 @@
       C.slice(cx, c.x + jit(f.from, j) + c.coins[f.from].o, slotY(f.from) - LIFT * k, G.w, 'blue', alpha * k, false);
       return;
     }
-    var p = clamp((tau - f.up) / FL, 0, 1);
-    var d = Math.max(30, y0 - y1), hh = d * 0.32 + 18, side = f.side * (j === 1 ? -1 : 1);
-    var x = x0 + (x1 - x0) * p + side * G.w * 0.42 * Math.sin(Math.PI * p);
-    var y = y0 + (y1 - y0) * p - 4 * hh * p * (1 - p);
+    /* one curve for every coin (a cubic Bezier): off the stack up and out
+       to the right, over, and down onto the tray with some weight, so each
+       one lands rather than drifts in */
+    var p = clamp((tau - f.up) / FL, 0, 1), side = f.side, d = Math.max(40, y0 - y1);
+    var ax = x0 + side * G.w * 0.8, ay = y0 - d * 0.6, bx = x1 + side * G.w * 0.6, by = y1 - Math.min(G.wt, d * 0.45 + 16);
+    var m = 1 - p, k0 = m * m * m, k1 = 3 * m * m * p, k2 = 3 * m * p * p, k3 = p * p * p;
+    var x = k0 * x0 + k1 * ax + k2 * bx + k3 * x1, y = k0 * y0 + k1 * ay + k2 * by + k3 * y1;
     var w = G.w + (G.wt - G.w) * easeOut(p);
     var q = clamp((p - 0.16) / 0.46, 0, 1), sx = Math.abs(Math.cos(Math.PI * q)), gold = q >= 0.5;
-    var glint = gold ? 0.6 * Math.max(0, 1 - (q - 0.5) * 2.2) : 0;
-    metal(x, y, w, gold ? 'gold' : 'blue', alpha, false, sx, side * 0.24 * Math.sin(Math.PI * p), glint);
+    var glint = gold ? 0.2 * Math.max(0, 1 - (q - 0.5) * 2.2) : 0;
+    metal(x, y, w, gold ? 'gold' : 'blue', alpha, false, sx, side * 0.16 * Math.sin(Math.PI * p), glint);
   }
   /* the €1,000 a stack was: a faint outline, only above the coins left */
   function ghost(c, solid, a) {

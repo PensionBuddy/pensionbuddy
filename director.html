@@ -2399,7 +2399,7 @@ main h1{font-weight:800}
 .dr3-base{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .dr3-base li{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 6px;border-radius:18px;background:#fff;border:1px solid var(--line,#E7EBE9);cursor:pointer;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
 .dr3-base li:hover{transform:translateY(-2px)}
-.dr3-base span{font-size:14px;font-weight:700;color:var(--ink-2)}
+.dr3-base li>span{font-size:14px;font-weight:700;color:var(--ink-2)}
 .dr3-base b{margin:2px 0 0;font-size:clamp(24px,2.4vw,32px);font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
 .dr3-base li[data-col="sal"] b{color:#D4573D}
 .dr3-base i{font-style:normal;font-size:13px;color:var(--ink-2)}
@@ -2413,14 +2413,17 @@ main h1{font-weight:800}
 .dr-stat .pb-stat-n{font-size:1.5em;font-weight:800;letter-spacing:-.02em;color:var(--slate,#586B85);font-variant-numeric:tabular-nums}
 .dr-card .dr-stage{border-radius:20px;box-shadow:none}
 .dr-rows-stage{height:170px}
+.dr-cov .dr-rows-stage{flex:1 0 auto}
+.drw-rows,.dre-cv{cursor:pointer}
+.dr-stat .pb-stat-n:not(.pb-odo){display:inline}
 .dr-ring-stage{height:300px}
 .drw-ring{touch-action:pan-y;cursor:pointer}
 .dr-ring-mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;text-align:center}
 .dr-ring-mid b{font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.dr-ring-mid span{font-size:14px;font-weight:600;color:var(--ink-2)}
-.dr-ring-mid em{margin-top:4px;padding:2px 8px;border-radius:99px;background:#FADCD3;color:#A33E27;font-style:normal;font-size:12px;font-weight:800}
+.dr-ring-mid>span{font-size:14px;font-weight:600;color:var(--ink-2)}
+.dr-ring-mid em{margin-top:4px;padding:2px 8px;border-radius:99px;background:#E7EBE9;color:var(--ink);font-style:normal;font-size:12px;font-weight:800}
 .dr-ring-mid em[hidden]{display:none}
-.dr-ye-range{position:absolute;left:0;right:0;bottom:0;width:100%;height:44px;margin:0;opacity:0;cursor:pointer}
+.dr-ye-range{position:absolute;left:0;right:0;bottom:0;width:100%;height:44px;margin:0;opacity:0;pointer-events:none}
 .dr-ye-range[hidden]{display:none}
 .dr-card .pb-src{margin:0;font-size:13px}
 /* the calculator */
@@ -2445,7 +2448,7 @@ html.pb-js .dr-eg{display:none}
 .dr-yr li b{margin-left:auto;font-size:17px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .dr-yr i{width:12px;height:12px;border-radius:50%;flex:0 0 auto;background:linear-gradient(135deg,#FBFCFC,#9EAAA7);box-shadow:inset 0 0 0 1px rgba(62,78,74,.3)}
 .dr-yr .dr-yr-pro i{background:linear-gradient(135deg,#F5F8FD,#8BA3C9)}
-.dr-yr .dr-yr-sal b{color:#D4573D}
+.dr-yr .dr-yr-sal b{color:#B8432B}
 .dr-lim{margin:0;padding:12px 14px;border-radius:16px;background:#F3F5F4;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
 .dr-lim b{color:var(--ink)}
 .dr-sft{margin:0;font-size:14.5px;color:var(--ink)}
@@ -2453,19 +2456,22 @@ html.pb-js .dr-eg{display:none}
 .dr-fine-wrap{margin:18px 0 0;max-width:62em}
 .dr-note{margin:10px 0 0}
 .dr-ask{margin:30px 0 0}
-.dr-ask .pb-reg{margin:0}
+.dr-ask .pb-reg{margin:0;text-align:left;align-items:flex-start;justify-content:flex-start}
 .dr-ia{margin:14px 0 0;font-size:15px;color:var(--ink-2)}
 .dr-work{margin:22px 0 0;max-width:62em}
 .dr-work ul{margin:10px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px;color:var(--ink-2)}
 /* the executive-pension row */
 .dr-exec{padding:44px 0;background:#fff;border-top:1px solid var(--line,#E7EBE9)}
 .dr-exec-in{display:flex;align-items:center;gap:28px}
-.dr-exec-stage{flex:0 0 300px;height:72px;border-radius:18px;box-shadow:none}
+.dr-exec-stage{flex:0 0 360px;height:72px;border-radius:18px;box-shadow:none}
 .dr-exec-h{margin:0;font-size:18px;font-weight:700;color:var(--ink)}
 .dr-exec-copy .pb-src{margin:4px 0 0;font-size:13px}
 /* no script, no motion, print */
 html:not(.pb-js) .dr3-stage,html:not(.pb-js) .dr-rows-stage,html:not(.pb-js) .dr-ring-stage,html:not(.pb-js) .drc-stage,html:not(.pb-js) .dr-exec-stage{display:none}
 html:not(.pb-js) .dr3-base li{cursor:default}
+html:not(.pb-js) .dr-calc-stage{justify-content:center}
+/* the payment slider's notch: where the reader's own tax-relief limit sits (pb-dir-calc.js sets --dr-lim) */
+#drPay{background-image:linear-gradient(#586B85,#586B85),linear-gradient(to right,var(--aqua) var(--fill,50%),var(--line-2) var(--fill,50%)),linear-gradient(var(--aqua),var(--aqua)),linear-gradient(var(--line-2),var(--line-2));background-size:2px 14px,calc(100% - 28px) 6px,14px 6px,100% 6px;background-position:calc(13px + (100% - 26px) * var(--dr-lim,0)) center,14px center,0 center,0 center;background-repeat:no-repeat}
 @media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}}
 @media print{.dr-stage{display:none}}
 @media(max-width:920px){
@@ -2483,13 +2489,14 @@ html:not(.pb-js) .dr3-base li{cursor:default}
   .dr-exec-in{flex-direction:column;align-items:flex-start;gap:14px}
   .dr-exec-stage{flex-basis:auto;width:100%;max-width:340px;height:64px}
 }
+@media(min-width:561px) and (max-width:920px){.dr3-stage{height:380px}}
 @media(max-width:560px){
   .dr3-base{gap:6px}
   .dr3-base li{padding:10px 4px}
-  .dr3-base span{font-size:12px}
+  .dr3-base li>span{font-size:12px}
   .dr3-base i{font-size:11.5px}
   .dr-card{padding:20px 18px 18px}
-  .dr-ring-stage{height:270px}
+  .dr-ring-stage{height:300px}
 }
 /* DIRECTORS:END */
 </style>
@@ -2906,9 +2913,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-home-kit.js?v=0c885de1"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
-<script src="assets/js/pb-dir-three.js"></script>
-<script src="assets/js/pb-dir-why.js"></script>
-<script src="assets/js/pb-dir-calc.js"></script>
+<script src="assets/js/pb-dir-three.js?v=34372856"></script>
+<script src="assets/js/pb-dir-why.js?v=22320a3a"></script>
+<script src="assets/js/sft.js?v=b0329bc2"></script>
+<script src="assets/js/pb-dir-calc.js?v=eea3b490"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 </body>
 </html>

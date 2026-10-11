@@ -165,7 +165,14 @@
       var g = { wide: W >= 430, fs: W >= 430 ? 13.5 : 12.5 }, r, p;
       cx.font = '600 ' + g.fs + 'px ' + FONT;
       var lw = Math.ceil(Math.max(cx.measureText(rows[0].label).width, cx.measureText(rows[1].label).width));
-      if (g.wide) {
+      if (H >= 230 && W >= 430) {
+        /* a tall stage: each label over its row, bigger coins across the width */
+        g.wide = false; g.fs = 14;
+        r = Math.min(20, (W - 60) / 10 / 2.36); p = r * 2.36;
+        g.x0 = (W - 9 * p) / 2; g.lx = g.x0 - r;
+        var tt = (H - (2 * (g.fs + 10 + 2 * r) + 34)) / 2;
+        g.y = [tt + g.fs + 10 + r, tt + 2 * (g.fs + 10) + 3 * r + 34];
+      } else if (g.wide) {
         /* the labels in a column at the left, the coins beside them, the whole centred */
         r = clamp((W - lw - 26 - 80) / 23.3, 11, 15); p = r * 2.36;
         g.lx = Math.round((W - (lw + 26 + 9 * p + 2 * r)) / 2); g.x0 = g.lx + lw + 26 + r;
@@ -232,7 +239,7 @@
     }
     /* a tap: a ring spreads from it at 600px a second, and each coin hops as it passes */
     function wave(p) {
-      var g = G, top = g.wide ? 215 : 185;
+      var g = G, top = Math.sqrt(2400 * g.r);
       rip.add(p.x, p.y, { v: 600, life: 0.6, a: 0.45 });
       rows.forEach(function (row, ri) {
         row.c.forEach(function (c, i) {
@@ -255,21 +262,37 @@
       rows.forEach(function (row, ri) {
         var y = g.y[ri];
         if (g.wide) { cx.textBaseline = 'middle'; cx.fillText(row.label, g.lx, y + 0.5); }
-        else { cx.textBaseline = 'alphabetic'; cx.fillText(row.label, g.lx, y - r - 8); }
+        else { cx.textBaseline = 'alphabetic'; cx.fillText(row.label, g.lx, y - r - (g.fs > 13 ? 10 : 8)); }
         for (var i = 0; i < 10; i++) {
-          var c = row.c[i], x = g.x0 + i * g.p, f = lit(row, i), gp = gapOf(row, i);
-          /* the empty place, grey, except where the gap is */
-          cx.save();
-          if (gp) { cx.beginPath(); band(cx, x, y, r, 0, gp[0]); band(cx, x, y, r, gp[1], 1); cx.clip(); }
-          dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
-          cx.restore();
-          /* the gap: coral, a faint fill; it swells once as it pulses */
+          var c = row.c[i], x = g.x0 + i * g.p, f = lit(row, i), gp = gapOf(row, i), g0 = gp ? gp[1] : f;
+          /* the empty place, grey: where no coin is and the gap is not. Under
+             a coin only while it pops in, so a coin that lifts or hops leaves
+             its floor clean, not a second dashed rim */
+          if (g0 < 1) {
+            cx.save();
+            if (g0 > 0) { cx.beginPath(); band(cx, x, y, r, g0, 1); cx.clip(); }
+            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
+            cx.restore();
+          }
+          if (f > 0 && c.sp.x < 1) {
+            cx.save(); cx.globalAlpha = 1 - clamp(c.sp.x, 0, 1);
+            if (f < 1) { cx.beginPath(); band(cx, x, y, r, 0, f); cx.clip(); }
+            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
+            cx.restore();
+          }
+          /* the gap: coral, a faint fill; it swells once as it pulses (grey until it arrives) */
+          if (gp && gapA < 1) {
+            cx.save(); cx.globalAlpha = 1 - gapA;
+            cx.beginPath(); band(cx, x, y, r, gp[0], gp[1]); cx.clip();
+            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
+            cx.restore();
+          }
           if (gp && gapA > 0) {
             var sc = 1 + 0.12 * pb;
             cx.save(); cx.globalAlpha = gapA;
             cx.translate(x, y); cx.scale(sc, sc); cx.translate(-x, -y);
             cx.beginPath(); band(cx, x, y, r, gp[0], gp[1]); cx.clip();
-            dashed(cx, x, y, r - 0.7, CORAL + (0.75 + 0.25 * pb).toFixed(3) + ')', CORAL + (0.12 + 0.18 * pb).toFixed(3) + ')', pulse >= 0 ? -pulse * 14 : 0);
+            dashed(cx, x, y, r - 0.7, CORAL + (0.75 + 0.25 * pb).toFixed(3) + ')', CORAL + (0.12 + 0.13 * pb).toFixed(3) + ')', pulse >= 0 ? -pulse * 14 : 0);
             cx.restore();
           }
           /* the coin, lit as far as the figure goes */
@@ -296,8 +319,10 @@
         new IntersectionObserver(function (es, o) {
           var e = es[es.length - 1];
           if (e.isIntersecting && e.intersectionRatio >= 0.95) { roll(); o.disconnect(); }
-        }, { threshold: [0, 1] }).observe(stat);
+        }, { threshold: [0, 0.95, 1] }).observe(stat);
       }
+      /* printed before it was ever seen: the figures, not 0% */
+      window.addEventListener('beforeprint', function () { if (!rolled) { rolled = true; rSe.set(tSe, true); rEmp.set(tEmp, true); } });
     }
     cv.addEventListener('pointermove', function (e) {
       var p = st.local(e);
@@ -363,7 +388,7 @@
     function layout(W, H) {
       /* the hint sits over the top of the ring, the letters round the outside of the track */
       var L = Math.min((H / 2 - 41) / 0.966, W / 2 - 22), R = L - 17;
-      G = { x: W / 2, y: H / 2, L: L, R: R, kr: R >= 90 ? 15 : 13, tw: R >= 90 ? 10 : 9, fs: R >= 90 ? 12 : 11 };
+      G = { x: W / 2, y: H / 2, L: L, R: R, kr: R >= 90 ? 16 : 14, tw: R >= 90 ? 10 : 9, fs: R >= 90 ? 12 : 11 };
     }
     function ang(q) { return q / 12 * TAU; }
     function at(q, r) { var a = ang(q); return { x: G.x + Math.sin(a) * r, y: G.y - Math.cos(a) * r }; }
@@ -375,12 +400,17 @@
     function onBand(p) { var d = rad(p); return d > G.R - 22 && d < G.L + 14; }
     function focused() { try { return rng.matches(':focus-visible'); } catch (e) { return document.activeElement === rng; } }
 
+    /* how near the coin may come to today's dot, in months */
+    function gap() { return (G.kr + 9) / G.R / TAU * 12; }
+    /* the dot is a wall: a coin whose year end is right by today rests
+       against it, not on it, and the arc still ends at the year end itself */
+    function wall(q) { return clamp(q, qT + gap(), qT + 12 - gap()); }
     /* dragged back past today, the coin knocks against the dot and then
        rolls the long way round, to the same month next year (and forward
        past today, back again the other way) */
     function knock(dir) {
       if (!K.motion()) { return; }
-      var gq = (G.kr + 9) / G.R / TAU * 12;
+      var gq = gap();
       kt = dir > 0 ? qT + gq : qT + 12 - gq; mode = 'drag'; knockT = 0.22;
       kn.v = dir * 190; dotS.v = 7;
       var d = at(qT, G.R); rip.add(d.x, d.y, { r0: 8, v: 60, life: 0.45, c: 'rgba(11,31,28,', a: 0.4, w: 1.4 });
@@ -408,18 +438,18 @@
 
     function first() {
       intro = { t: -0.15, dur: 0.9 };
-      kq.x = kt = end(sel).q; arcEnd = qT; kA = 0;
+      kt = end(sel).q; kq.x = wall(kt); arcEnd = qT; kA = 0;
       if (rDays) { rDays.set('0', true); zeroed = true; }
     }
     function finish() {
       if (!intro) { return; }
-      intro = null; kA = 1; kS.x = 1; kS.v = 0; arcEnd = kq.x; words(true); offer();
+      intro = null; kA = 1; kS.x = 1; kS.v = 0; arcEnd = kq.x + kt - wall(kt); words(true); offer();
     }
     function settle() {
       finish();
       if (zeroed) { words(true); }
       knockT = 0; kt = drag ? drag.q : end(sel).q; mode = 'snap';
-      kq.x = kt; kq.v = 0; arcEnd = kq.x; kA = 1; kS.x = drag ? 1.12 : 1; kS.v = 0; kn.x = kn.v = 0; dotS.x = 1; dotS.v = 0;
+      kq.x = wall(kt); kq.v = 0; arcEnd = kt; kA = 1; kS.x = drag ? 1.12 : 1; kS.v = 0; kn.x = kn.v = 0; dotS.x = 1; dotS.v = 0;
       lets.forEach(function (l) { l.z.x = 1; l.z.v = 0; l.h.x = 0; l.h.v = 0; l.hd = -1; });
       rip.clear();
       if (st && st.seen && !intro) { offer(); }
@@ -428,7 +458,7 @@
       var moving = false;
       if (knockT > 0) { knockT -= dt; moving = true; if (knockT <= 0) { knockT = 0; mode = 'roll'; kt = drag ? drag.q : end(sel).q; } }
       var kk = MODE[mode];
-      if (spring(kq, kt, kk[0], kk[1], dt, 0.0015)) { moving = true; }
+      if (spring(kq, wall(kt), kk[0], kk[1], dt, 0.0015)) { moving = true; }
       if (mode === 'roll' && Math.abs(kq.x - kt) < 0.3) { mode = drag ? 'drag' : 'snap'; }
       if (spring(kn, 0, 520, 15, dt, 0.05)) { moving = true; }
       if (spring(dotS, 1, 420, 13, dt, 0.002)) { moving = true; }
@@ -436,14 +466,15 @@
         intro.t += dt; moving = true;
         var k = clamp(intro.t / intro.dur, 0, 1), e = 1 - Math.pow(1 - k, 3);
         if (intro.t >= 0 && !intro.rolled) { intro.rolled = true; words(); }
-        arcEnd = qT + (kq.x - qT) * e;
-        if (k >= 1 && !intro.landed) { intro.landed = true; kS.x = 1.8; kS.v = 0; }
+        arcEnd = qT + (kt - qT) * e;
+        if (k >= 1 && !intro.landed) { intro.landed = true; kS.x = 1.6; kS.v = 0; }
         if (intro.landed) {
-          kA = Math.min(1, kA + dt * 8);
+          /* solid within a few frames: a coin that drops in, not a ghost over the arc */
+          kA = Math.min(1, kA + dt * 16);
           if (!intro.rang && kS.x < 1.06) { intro.rang = true; var kp = knob(); rip.add(kp.x, kp.y, { r0: G.kr, v: 90, life: 0.55, a: 0.7, w: 2 }); }
           if (intro.rang && intro.t > intro.dur + 0.75) { intro = null; offer(); }
         }
-      } else { arcEnd = kq.x; }
+      } else { arcEnd = kq.x + kt - wall(kt); }
       var ht = drag ? 1.12 : (ptr.in && onKnob(ptr)) ? 1.07 : 1;
       if (spring(kS, intro && !intro.landed ? kS.x : ht, intro ? 260 : 320, intro ? 15 : 18, dt, 0.002)) { moving = true; }
       /* the letters swell near the pointer and hop outwards as a tap's ring passes */
@@ -485,7 +516,10 @@
       /* the coin, rolling: one turn a month, so it rests upright on every month end */
       if (kA > 0.01) {
         var k = knob(), s = kS.x, rr = g.kr * s;
-        shadow(cx, k.x + 1, k.y + rr * 0.55, rr * 1.15, kA * (0.9 + (s - 1) * 2), 0.5);
+        /* its shadow: darker as it is picked up; as it drops in from above,
+           faint and wide at first, tightening as it lands */
+        var up = Math.max(0, s - 1), sk = up <= 0.12 ? 0.9 + up * 2 : 1.14 * (1 - clamp((up - 0.12) / 0.5, 0, 0.75));
+        shadow(cx, k.x + 1, k.y + rr * 0.55 + up * 14, rr * (1.15 + up * 0.4), kA * sk, 0.5);
         C.face(cx, k.x, k.y, rr, 'blue', (kq.x - Math.round(kq.x)) * TAU, kA);
         if (focused()) { cx.lineWidth = 3; cx.strokeStyle = '#14CBB1'; cx.beginPath(); cx.arc(k.x, k.y, rr + 5, 0, TAU); cx.stroke(); }
       }
@@ -504,7 +538,7 @@
       if (onKnob(st.local(e.touches[0]))) { e.preventDefault(); }
     }, { passive: false });
     cv.addEventListener('pointerdown', function (e) {
-      if (!st.ready()) { return; }
+      if (!st.ready() || (e.pointerType === 'mouse' && e.button !== 0)) { return; }
       var p = st.local(e), onK = onKnob(p);
       finish();
       if (onK || (e.pointerType === 'mouse' && e.button === 0 && onBand(p) && !letterAt(p))) {
@@ -561,8 +595,8 @@
     var G = null, ptr = { in: false, x: 0, y: 0 }, press = null, rip = new Ripples(), cue = -1;
 
     function layout(W, H) {
-      var p = Math.min(22, (W - 28) / N);
-      G = { p: p, r: p * 0.41, x0: (W - (N - 1) * p) / 2, y: H / 2 + 1, W: W };
+      var p = Math.min(26, (W - 24) / N);
+      G = { p: p, r: p * 0.44, x0: (W - (N - 1) * p) / 2, y: H / 2 + 1, W: W };
     }
     /* ten roll out to the right, the last first, each with a hop */
     function leave(t0) {
@@ -639,7 +673,7 @@
     if (K.motion() && LIVE) { coins.forEach(function (c) { c.st = 'home'; }); }
     /* a tap: they roll back in, wait, and go again */
     function replay(p) {
-      rip.add(p.x, p.y, { v: 500, life: 0.5, c: BLUE, a: 0.4 });
+      rip.add(p.x, p.y, { r0: 4, v: 160, life: 0.4, c: BLUE, a: 0.45 });
       if (busy()) { return; }
       var lastD = 0;
       coins.forEach(function (c, j) { if (j >= keep) { c.st = 'back'; c.t = 0; c.d = (j - keep) * 0.05; lastD = c.d; } });
