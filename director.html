@@ -2454,7 +2454,7 @@ html.pb-js .dr-eg{display:none}
 .dr-note{margin:10px 0 0}
 .dr-ask{margin:30px 0 0}
 .dr-ask .pb-reg{margin:0}
-.dr-ia{margin:14px 0 0;font-size:14px;color:var(--ink-2)}
+.dr-ia{margin:14px 0 0;font-size:15px;color:var(--ink-2)}
 .dr-work{margin:22px 0 0;max-width:62em}
 .dr-work ul{margin:10px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px;color:var(--ink-2)}
 /* the executive-pension row */
@@ -2562,7 +2562,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="hero-cta dr-hero-cta"><a class="pb-g2-go" href="#drCalc">Work out yours <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a></div>
   </div>
   <div class="dr3">
-    <div class="dr-stage dr3-stage pb-al-skip" role="img" aria-label="1,000 euro of profit. As salary, 477 euro reaches you and 523 goes in tax. Left as profit, 875 stays in the company and 125 goes in corporation tax. Into your pension, all 1,000 goes in; tax comes later, when you take it.">
+    <div class="dr-stage dr3-stage pb-al-skip" role="img" aria-label="1,000 euro of profit. As salary, 477 euro reaches you and 523 goes in tax. Left as profit, 875 stays in the company and 125 goes in corporation tax. Into your pension, all 1,000 goes in; you can usually take it from 60, and tax comes then.">
       <canvas class="dr-cv dr3-cv" aria-hidden="true"></canvas>
       <span class="dr-tag dr-tax" id="dr3TSal" aria-hidden="true"><b>&minus;&euro;523</b><i>tax now</i></span>
       <span class="dr-tag dr-tax" id="dr3TPro" aria-hidden="true"><b>&minus;&euro;125</b><i>tax now</i></span>
@@ -2574,7 +2574,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <li data-col="pro"><span>Left as profit</span><b id="dr3Pro">&euro;875</b><i>stays in the company</i></li>
       <li data-col="pen"><span>Into your pension</span><b id="dr3Pen">&euro;1,000</b><i>goes in</i></li>
     </ul>
-    <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026). Into your pension, all &euro;1,000 goes in; tax applies when you take the pension. Left as profit, corporation tax at the 12.5% trading rate takes &euro;125; salary and pension payments are both company costs, so neither pays it. Lower tax bands and employer PRSI left out.</p>
+    <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026). Into your pension, all &euro;1,000 goes in: you can usually take it from 60, and it is taxed then, apart from a tax-free lump sum within limits. Left as profit, corporation tax at the 12.5% trading rate takes &euro;125; salary and pension payments are normally company costs, so the company pays no corporation tax on them, within Revenue&rsquo;s limits. Assumes you already pay the top rates; employer PRSI left out.</p>
   </div>
 </div></header>
 
@@ -2584,7 +2584,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="dr-card dr-cov">
       <p class="dr-stat"><b class="pb-stat-n" id="drS1">57%</b> of the self-employed have a pension. <b class="pb-stat-n" id="drS2">68%</b> of employees do.</p>
       <div class="dr-stage dr-rows-stage pb-al-skip"><canvas class="dr-cv drw-rows" aria-hidden="true"></canvas></div>
-      <p class="pb-src">Central Statistics Office (CSO), Pension Coverage, Quarter 3 2025. The self-employed as a group, not directors alone.</p>
+      <p class="pb-src">Central Statistics Office (CSO), Pension Coverage, Quarter 3 2025: the self-employed and assisting relatives. Not a figure for company directors.</p>
     </div>
     <div class="dr-card dr-ye">
       <p class="dr-stat">Company payments count in the year they&rsquo;re paid. <b>No backdating.</b></p>
@@ -2617,22 +2617,22 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="drStartL">Start</span><div class="pb-seg pb-seg-sm dr-start" role="group" aria-labelledby="drStartL"><button type="button" data-start="0" aria-pressed="true">This year</button><button type="button" data-start="1" aria-pressed="false">A year later</button></div></div>
       </div>
       <p class="dr-eg" id="drEg">Example: age 48, the company pays &euro;40,000 a year from now to 66.</p>
-      <p class="dr-wait" id="drWait">A year later: <b id="drWaitV">&euro;77,467</b> less, in today&rsquo;s money.</p>
-      <p class="dr-yr-h">Each year, the company&rsquo;s <span id="drYrPay">&euro;40,000</span>:</p>
+      <p class="dr-wait" id="drWait">Start a year later: about <b id="drWaitV">&euro;77,467</b> less at 66, in today&rsquo;s money.</p>
+      <p class="dr-yr-h">Each year, the company&rsquo;s <span id="drYrPay">&euro;40,000</span> could go one of three ways:</p>
       <ul class="dr-yr" id="drYr">
         <li class="dr-yr-pen"><i aria-hidden="true"></i>Into your pension <b id="drYrPen">&euro;40,000</b></li>
         <li class="dr-yr-sal"><i aria-hidden="true"></i>As salary, to you <b id="drYrSal">&euro;19,060</b></li>
         <li class="dr-yr-pro"><i aria-hidden="true"></i>Left as profit <b id="drYrPro">&euro;35,000</b></li>
       </ul>
-      <p class="dr-lim" id="drLim">Your own limit at <span id="drLimAge">48</span>: <span id="drLimPct">25%</span> of earnings, up to <b id="drLimV">&euro;28,750</b> a year. The company isn&rsquo;t held to it.</p>
-      <p class="dr-sft" id="drSft" hidden>That could pass the <a href="standard-fund-threshold.html">Standard Fund Threshold</a>: <span id="drSftV">&euro;2.8 million in 2044</span>. Above it, the excess is taxed at 40% when taken.</p>
+      <p class="dr-lim" id="drLim">Paying in yourself, tax relief at <span id="drLimAge">48</span> stops at <span id="drLimPct">25%</span> of earnings: <b id="drLimV">&euro;28,750</b> a year. The company&rsquo;s limits are its own: into a Personal Retirement Savings Account (PRSA), up to 100% of your pay from it that year.</p>
+      <p class="dr-sft" id="drSft" hidden>With your other pensions, that could pass the <a href="standard-fund-threshold.html">Standard Fund Threshold</a>: <span id="drSftV">at least &euro;2.8 million by 2044</span>. Above it, the excess is taxed at 40% when taken.</p>
       <p class="tk-sr" id="drSr" aria-live="polite" aria-atomic="true"></p>
     </div>
   </div>
   <div class="dr-fine-wrap">
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note dr-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, retiring at 66, paid in monthly. <a href="director-calculator.html">The full director calculator</a></p>
-    <p class="pb-past"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+    <p class="gap-note dr-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, paid in monthly to 66. Before tax: the pension is taxed when you take it. Pensions you have now left out. Each payment assumed within Revenue&rsquo;s limits. <a href="director-calculator.html">The full director calculator</a></p>
+    <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
   </div>
   <div class="dr-ask">
       <div class="pb-reg">
@@ -2642,28 +2642,29 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="hero-cta" style="margin-top:22px">
       <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
-  <p class="dr-ia"><b>This page is information, not advice.</b></p>
+  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b> Rules as at 11 October 2026.</p>
   </div>
   <details class="pb-work dr-work"><summary>How we worked this out</summary><ul>
     <li>The company pays the same amount every year, monthly, from now to 66.</li>
     <li>Growth: 6% a year before charges, the most the Pensions Authority&rsquo;s guidance lets a projection assume. Today&rsquo;s money: prices up 2% a year, the European Central Bank&rsquo;s target.</li>
-    <li>A year later: the same payments, starting a year late.</li>
-    <li>As salary: 40% income tax, 8% USC and <span data-pb-prsi>4.35%</span> PRSI. Lower bands and employer PRSI left out.</li>
+    <li>A year later: the same yearly payment, starting a year late and still stopping at 66: one year&rsquo;s payments fewer, and their growth.</li>
+    <li>As salary: 40% income tax, 8% Universal Social Charge (USC) and <span data-pb-prsi>4.35%</span> Pay-Related Social Insurance (PRSI), as for someone already paying the top rates. Employer PRSI left out.</li>
     <li>Left as profit: corporation tax at 12.5%, the trading rate.</li>
-    <li>Your own limit: 15% of earnings under 30, up to 40% at 60 and over, on earnings up to &euro;115,000. The company&rsquo;s payments are not capped by these percentages.</li>
-    <li>PRSA: the company&rsquo;s payments are tax-free for you up to 100% of your pay from the company that year (since 1 January 2025). Above that, the excess is a taxable benefit-in-kind and the company can&rsquo;t deduct it.</li>
-    <li>Master trust: not held to the 100% test. Revenue&rsquo;s maximum funding rules limit it, by salary, service and age; an actuary works it out.</li>
+    <li>Tax relief on your own payments: 15% of earnings under 30, up to 40% at 60 and over, on earnings up to &euro;115,000. The company&rsquo;s payments are not capped by these percentages.</li>
+    <li>Personal Retirement Savings Account (PRSA): the company&rsquo;s payments are tax-free for you up to 100% of your pay from the company that year (since 1 January 2025). Above that, the excess is a taxable benefit-in-kind and the company can&rsquo;t deduct it.</li>
+    <li>A company scheme such as a master trust: not held to the 100% test. Revenue&rsquo;s maximum funding rules limit it, by salary, service and age; an actuary works it out.</li>
     <li>Left out: pensions you have now, charges, and the tax when you take the pension.</li>
-    <li>Sources: Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, section 12; the Pensions Authority; the European Central Bank; the Department of Social Protection, SW14.</li>
+    <li>Standard Fund Threshold: &euro;2.2 million in 2026, rising &euro;200,000 a year to &euro;2.8 million in 2029, then with earnings; any excess is taxed at 40% when taken.</li>
+    <li>Sources: Revenue, tax rates and bands, USC and Corporation Tax rates (Taxes Consolidation Act 1997, section 21A); Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, sections 12 and 13; the Pensions Authority; the European Central Bank; the Department of Social Protection, SW14.</li>
   </ul></details>
 </div></section>
 
 <section class="dr-exec" id="drExec" aria-labelledby="drExecH"><div class="wrap dr-exec-in">
   <div class="dr-stage dr-exec-stage pb-al-skip"><canvas class="dr-cv dre-cv" aria-hidden="true"></canvas></div>
   <div class="dr-exec-copy">
-    <p class="dr-exec-h" id="drExecH">Executive pension set up before 22 April 2021? Its grace period ended on 21 April 2026.</p>
+    <p class="dr-exec-h" id="drExecH">Executive pension set up before 22 April 2021? Since 22 April 2026 it must meet the full rules for company schemes.</p>
     <a class="pb-g2-more" href="director-pension-rules.html#executive">What changed in 2026 <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    <p class="pb-src">One-member arrangements: 141,500 in January 2023; 40,644 on 1 September 2026. The Pensions Authority.</p>
+    <p class="pb-src">Executive pensions (one-member arrangements): 141,500 in January 2023; 40,644 on 1 September 2026, some being wound up. The Pensions Authority.</p>
   </div>
 </div></section>
 
@@ -2895,8 +2896,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   var pct=p.pct;
   window.PBDirKeep={rate:PBDirector.keepRate(prsi),per1000:keep,pct:pct};
   var out=document.getElementById('pbTwoOut'), b=out&&out.querySelector('b'), base=document.getElementById('dr3Sal');
-  if(b) b.innerHTML='\u20ac'+Math.round(keep);
-  if(base) base.innerHTML='\u20ac'+Math.round(keep);
+  var you=Math.round(keep), tax=1000-you, tag=document.querySelector('#dr3TSal b'), st=document.querySelector('.dr3-stage');
+  if(b) b.innerHTML='\u20ac'+you;
+  if(base) base.innerHTML='\u20ac'+you;
+  if(tag) tag.innerHTML='\u2212\u20ac'+tax;
+  if(st) st.setAttribute('aria-label',st.getAttribute('aria-label').replace(/As salary, \d+ euro reaches you and \d+ goes in tax/,'As salary, '+you+' euro reaches you and '+tax+' goes in tax'));
   [].forEach.call(document.querySelectorAll('[data-pb-prsi]'),function(e){e.textContent=pct;});
 })();
 </script>

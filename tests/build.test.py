@@ -2268,7 +2268,7 @@ def run():
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
         # Run 54: the director page asks after its own numbers, with its one lockup
         'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potToday"', '<!-- WARN:END -->', '<div class="pb-reg">'),
-                          '  <p class="dr-ia"><b>This page is information, not advice.</b></p>'),
+                          '  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b>'),
     }
 
     def moved_block(words):
