@@ -554,7 +554,8 @@ def build(page):
 #
 # The two rules. The nav item for the page itself carries class="lnk active"
 # and aria-current="page"; only pages that are plain nav targets mark
-# themselves, so index.html, which the nav reaches by fragment, marks none.
+# themselves (since 11 October 2026 the nav opens on Home, so index.html
+# marks itself as well).
 # And on index.html the nav's own-page fragments are same-page anchors, so
 # the countdown chip and About scroll instead of reloading whichever URL the
 # home page was served as. The footer keeps the absolute index.html#story on
@@ -1065,6 +1066,7 @@ WARN_PAGES = {
     'pension-fees-calculator.html': 1,  # the pot with and without the charges
     'pia.html': 1,                      # the three take-home figures
     'starter.html': 3,                  # the cost-of-waiting chart and the two growth charts
+    'index.html': 1,                    # the home calculator's pot and income at 66 (11 October 2026)
 }
 
 

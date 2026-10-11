@@ -1330,21 +1330,6 @@ html.pb-motion .pb-vid-btn{display:inline-flex;align-items:center;justify-conten
 .pb-vid-btn[data-state="playing"] .pb-vid-i-play,.pb-vid-btn[data-state="paused"] .pb-vid-i-pause{display:none}
 html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
 .pb-vid-btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
-/* Run 37, item 1: "What's changed?", straight under the hero and centred like
-   it. Six plain links as chips, each to the page that already covers that
-   change; only colours change under the pointer, and nothing moves. The
-   margin undoes the reach pass's -13px on every li a: a chip is 44px already. */
-.pb-changed{padding:4px 0 30px;text-align:center}
-.pb-changed .pb-changed-h{margin:0 0 16px;font-size:20px;line-height:1.3;letter-spacing:-.01em}
-.pb-changed-list{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:980px;margin:0 auto;padding:0;list-style:none}
-.pb-changed-list li{margin:0}
-.pb-changed-chip{display:inline-flex;align-items:center;min-height:44px;margin:0;padding:10px 18px;border:1px solid var(--line-2);
-  border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:15px;font-weight:600;line-height:1.3;
-  text-decoration:none;transition:background-color var(--pb-t-swap),border-color var(--pb-t-swap),color var(--pb-t-swap)}
-.pb-changed-chip:hover{border-color:var(--teal);background:var(--teal-50);color:var(--teal-900)}
-.pb-changed-chip:focus-visible{outline:2px solid transparent;box-shadow:0 0 0 4px var(--ring)}  /* the transparent outline is what forced colours draw */
-@media(max-width:560px){.pb-changed{padding:0 0 24px}.pb-changed-list{gap:8px}.pb-changed-chip{padding:10px 15px}}
-@media(prefers-reduced-motion:reduce){.pb-changed-chip{transition:none}}
 /* Run 37, item 4: "Your pension through life". The list reads on its own:
    ages down a line, each step a whole-card link (MOTION rule 5's shadow is
    the step's ::before, so its dot on the line is the ::after).
@@ -1478,28 +1463,6 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
   text-underline-offset:3px;text-decoration-thickness:1px}
 .pb-phone-link a:hover{text-decoration-thickness:2px}
 .pb-phone-replies{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
-.pb-chip-hero{display:inline-flex;align-items:center;min-height:44px;max-width:88%;
-  padding:10px 14px;font-size:13.5px;line-height:1.5;border-radius:14px;
-  border-bottom-right-radius:5px;border:1px solid var(--teal-700);
-  background:var(--surface);color:var(--teal-700);text-decoration:none}
-.pb-chip-hero:hover,.pb-chip-hero:active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.pb-chip-hero:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring)}
-/* Run 45: the same three paths in the hero: the hero gives the figure and
-   asks only which situation is the reader's (no button, no booking link:
-   the booking ask follows the picker in #life) */
-.pb-hero-paths{margin:0}
-/* beside the chart on a wide screen, under the figure and the lockup; on a
-   phone after the chart and its caveat, so the first screen stays as Run 42
-   measured it (the chart and its source clear of the cookie bar) */
-@media(min-width:921px){
-  .pb-hero-gap-grid > .pb-hero-copy{grid-column:1;grid-row:1}
-  .pb-hero-gap-grid > .pb-hero-chart{grid-column:2;grid-row:1 / span 2}
-  .pb-hero-gap-grid > .pb-hero-paths{grid-column:1;grid-row:2}
-}
-.pb-hero-paths .pb-hero-paths-q{margin:0 0 10px;font-size:1rem;font-weight:600;line-height:1.5;color:var(--ink)}
-.pb-hero-paths-list{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.pb-hero-paths-list li{display:flex;margin:0;padding:0}
-.pb-hero-paths .pb-chip-hero{max-width:none;margin:0;padding:10px 16px;font-size:1rem;font-weight:600;border-radius:8px}
 @media(max-width:560px){.hero-phone{max-width:100%;margin-top:34px}}
 
 /* ============================================================
@@ -1576,135 +1539,6 @@ button{font-family:inherit}
 .cover{border:0;background:none;border-radius:0;overflow:visible}
 @media(max-width:920px){
   .pb-statrow{gap:26px 28px}
-}
-
-/* ============================================================
-   v4 - THE GAP. What people expect to need against what the
-   State Pension pays, as two bars on the soft wash, the shortfall
-   drawn as the space between them. The bars grow and the figures
-   count up once, when the band scrolls into view, with the
-   calculators' own display engine: each frame closes a fixed
-   fraction of the distance left. Reduced motion: final state at
-   once. The whole figure is one image to assistive tech, with the
-   three figures in its label, so the counting is never read out.
-   ============================================================ */
-.pb-gap-aside .pb-plain{max-width:22ch}
-.pb-gap-aside .pb-src{margin-top:18px}
-@media(max-width:920px){
-  .pb-gap-aside .pb-plain{max-width:26ch}
-}
-.pb-gap{--gh:320px;display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,5vw,56px);
-  max-width:760px;align-items:end}
-.pb-gap-col{min-width:0}
-.pb-gap-stage{position:relative;height:var(--gh)}
-/* the bars stand at their full height by default, figures in the markup, so a
-   page without script shows the finished chart. Once the page has loaded,
-   the script arms them (.pb-armed: height 0) if the band is below the fold,
-   in one frame with no transition (.pb-still), and lets them go (.pb-go)
-   when it scrolls into view; a band on screen by then is left finished.
-   The figures are never written as zero (Run 26): they keep the markup's
-   until the count-up starts, and its first frame is already 16% of the way. */
-.pb-gap-bar,.pb-gap-short{position:absolute;left:0;right:0;height:var(--h);overflow:hidden;
-  border-radius:14px 14px 0 0;transition:height 1.15s cubic-bezier(.2,.7,.2,1)}
-.pb-gap-bar{bottom:0}
-.pb-gap-need .pb-gap-bar{background:var(--ink)}
-.pb-gap-state .pb-gap-bar{background:var(--aqua)}
-.pb-gap-short{bottom:var(--from);background:var(--gap);transition-delay:.12s}
-.pb-gap.pb-armed:not(.pb-go) .pb-gap-bar,.pb-gap.pb-armed:not(.pb-go) .pb-gap-short{height:0}
-.pb-gap.pb-still .pb-gap-bar,.pb-gap.pb-still .pb-gap-short{transition:none}
-@media print{.pb-gap.pb-armed .pb-gap-bar,.pb-gap.pb-armed .pb-gap-short{height:var(--h);transition:none}}
-.pb-gap-n{position:absolute;left:20px;top:18px;font-family:var(--font);font-variant-numeric:tabular-nums;
-  font-weight:300;font-size:clamp(1.9rem,4.2vw,3.1rem);letter-spacing:-.03em;line-height:1;white-space:nowrap}
-.pb-gap-need .pb-gap-n{color:#fff}
-.pb-gap-state .pb-gap-bar .pb-gap-n{color:var(--aqua-ink)}
-.pb-gap-short .pb-gap-n{color:var(--ink)}
-.pb-gap-sl{position:absolute;left:20px;top:calc(18px + clamp(1.9rem,4.2vw,3.1rem) + 8px);
-  font-size:.92rem;color:var(--ink-2);white-space:nowrap}
-.pb-gap-l{display:block;margin-top:14px;font-size:.98rem;line-height:1.5;color:var(--ink-2);max-width:26ch}
-.pb-gap-col:hover .pb-gap-bar{filter:brightness(1.06)}
-@media(max-width:600px){
-  .pb-gap{--gh:250px;gap:14px}
-  .pb-gap-n{left:12px;top:12px}
-  .pb-gap-sl{left:12px;top:calc(12px + clamp(1.9rem,4.2vw,3.1rem) + 6px);font-size:.82rem}
-  .pb-gap-l{font-size:.9rem}
-}
-@media(prefers-reduced-motion:reduce){
-  .pb-gap-bar,.pb-gap-short{transition:none;height:var(--h)}
-}
-/* THE GAP, YOUR OWN (#pbNeedCtl). A slider under the chart: the reader's own
-   figure for what they expect to need a year, against the same €15,564. The
-   chart re-scales to the larger of the two; at or under €15,564 the need is
-   covered and there is no yellow block, never a negative gap. Hidden in the
-   markup and switched on by script, so a page without script shows the
-   survey chart and no dead control. Bars follow the thumb with no easing. */
-.pb-gapctl{max-width:420px;margin-top:22px}
-.pb-gapctl[hidden]{display:none}
-.pb-gapctl input[type=range]{display:block;width:100%}
-.pb-gapctl-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.pb-gapctl label{font-size:.98rem;font-weight:600;color:var(--ink)}
-.pb-gapctl-v{font-size:1.05rem;font-weight:600;color:var(--teal-700);font-variant-numeric:tabular-nums}
-.pb-gap.pb-gap-live .pb-gap-bar,.pb-gap.pb-gap-live .pb-gap-short{transition:none}
-/* A WAY OF LIFE (#pbLife, #2 in Run 20). The Pensions Council's three
-   standards of living, for one person or a couple, as a start point for the
-   need slider above: a card sets the slider to its annual figure, so the
-   chart and the sentence under it follow exactly as they do for a drag. A
-   couple is measured against two State Pensions at the maximum rate, the
-   report's own basis for its couple Modest figure, and the State bar says so.
-   The chosen card opens its month, category by category, from
-   assets/js/living-standards.js. Hidden in the markup and switched on by
-   script, like the slider. */
-.pb-life{margin-top:34px;max-width:640px}
-.pb-life[hidden],.pb-life-split[hidden]{display:none}
-.pb-life-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin-bottom:14px}
-.pb-life-q{margin:0;font-size:.98rem;font-weight:600;color:var(--ink);max-width:36ch}
-.pb-life-hh{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;background:var(--surface)}
-.pb-life-hh button{font:inherit;font-size:.9rem;font-weight:600;color:var(--ink-2);background:none;border:0;border-radius:999px;padding:8px 16px;min-height:40px;cursor:pointer}
-.pb-life-hh button[aria-pressed="true"]{background:var(--ink);color:#fff}
-.pb-life-hh button:focus-visible,.pb-life-card:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-.pb-life-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.pb-life-card{font:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 14px 16px;
-  background:var(--surface);color:var(--ink);border:1.5px solid var(--line-2);border-radius:var(--r-lg);cursor:pointer}
-.pb-life-card b{font-size:1rem;font-weight:700}
-.pb-life-n{font-size:1.2rem;font-weight:600;color:var(--slate);font-variant-numeric:tabular-nums}
-.pb-life-d{font-size:.84rem;line-height:1.45;color:var(--ink-2)}
-.pb-life-card[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
-.pb-life-split{margin-top:20px}
-.pb-life-st{margin:0 0 12px;font-size:1rem;font-weight:600;color:var(--ink)}
-.pb-life-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
-.pb-life-rows li{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 4.8em;gap:12px;align-items:center;font-size:.92rem;color:var(--ink)}
-.pb-life-rows i{display:block;height:10px;border-radius:99px;background:var(--slate);width:var(--w)}
-.pb-life-rows b{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
-.pb-life-note{margin:14px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
-.pb-life .pb-src{margin-top:12px}
-@media(max-width:600px){
-  .pb-life-cards{grid-template-columns:1fr}
-  .pb-life-card{flex-direction:row;flex-wrap:wrap;align-items:baseline;column-gap:10px}
-  .pb-life-d{flex-basis:100%}
-  .pb-life-rows li{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
-  .pb-life-rows span{grid-column:1;grid-row:1}
-  .pb-life-rows b{grid-column:2;grid-row:1}
-  .pb-life-rows i{grid-column:1 / -1;grid-row:2}
-}
-
-/* ============================================================
-   v4 - THE PRODUCT. The calculator showcase was a card that
-   described the tool with made-up bars. It is now the tool itself,
-   photographed as it runs (tools/shoot-product.py), on a deep
-   full-bleed band the way Plaid drops to dark for its own product.
-   ============================================================ */
-.pb-product{padding:96px 0}
-.pb-product .calc-copy p{font-size:1.06rem;line-height:1.62;margin:0 0 26px;max-width:46ch}
-.pb-product-shot{display:block;position:relative;border-radius:16px;overflow:hidden;
-  box-shadow:0 32px 90px rgba(0,0,0,.45);background:var(--bg);
-  transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
-.pb-product-shot:hover{box-shadow:0 40px 100px rgba(0,0,0,.5)}
-.pb-product-shot:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
-.pb-product-shot img{display:block;width:100%;height:auto}
-.pb-product-fig{margin:0;min-width:0}
-.pb-product-cap{display:block;margin-top:14px;font-size:.82rem;line-height:1.5;color:rgba(255,255,255,.62)}
-@media(max-width:920px){
-  .pb-product{padding:64px 0}
-  .pb-product .calc-grid{grid-template-columns:1fr;gap:34px}
 }
 
 /* ============================================================
@@ -1829,37 +1663,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   .pb-reg-yrs{display:block}
 }
 @media(max-width:420px){.pb-reg{margin-top:14px;font-size:.82rem}}
-/* PRODUCT TABS (#pbPtTabs). One tab per tool on the dark product band,
-   each swapping the screenshot, the one line under the heading and the
-   button, in each tool's own words. Built by script (WAI-ARIA tabs, arrow
-   keys, Home and End); without it the band is the pension calculator as
-   before, with a plain list of links to the other four. */
-.pb-pt-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px}
-.pb-pt-list[hidden]{display:none}
-.pb-pt-list a{color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px}
-.pb-pt-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
-.pb-pt-tabs [role=tab]{font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border-radius:99px;cursor:pointer;
-  border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff}
-.pb-pt-tabs [role=tab]:hover{border-color:rgba(255,255,255,.6)}
-.pb-pt-tabs [role=tab][aria-selected=true]{background:var(--aqua);border-color:var(--aqua);color:var(--ink)}
-/* MIST TEAL (6 October 2026): the free-tool band (#calc) is pale, like the
-   result card it shows. Scoped by id so the other .pb-dark bands stay dark. */
-#calc.pb-dark{background:var(--teal-50);border-block:1px solid var(--teal-100)}
-#calc .eyebrow{color:var(--teal-700)}
-#calc h2{color:var(--ink)}
-#calc p{color:var(--ink-2)}
-#calc .pb-pt-list a{color:var(--teal-700)}
-#calc .pb-pt-tabs [role=tab]{border-color:rgba(11,31,28,.22);color:var(--ink)}
-#calc .pb-pt-tabs [role=tab]:hover{border-color:var(--ink-3)}
-#calc .pb-pt-tabs [role=tab][aria-selected=true]{background:var(--aqua);border-color:var(--aqua);color:var(--ink)}
-#calc .btn.btn-quiet-dark{color:var(--ink);border-color:rgba(11,31,28,.4)}
-#calc .btn.btn-quiet-dark:hover{background:rgba(11,31,28,.05);border-color:var(--ink);color:var(--ink)}
-#calc .btn.btn-quiet-dark:focus-visible{box-shadow:0 0 0 3px var(--ring)}
-#calc .pb-product-cap{color:var(--ink-2)}
-#calc .pb-product-shot{box-shadow:0 1px 2px rgba(11,31,28,.06),0 24px 60px -28px rgba(11,31,28,.35)}
-#calc .pb-product-shot:hover{box-shadow:0 1px 2px rgba(11,31,28,.06),0 30px 70px -28px rgba(11,31,28,.42)}
-#calc .pb-ann-under{opacity:0}
-#calc .pb-ann-l{box-shadow:0 1px 3px rgba(11,31,28,.18)}
 /* MIST TEAL (7 October 2026): the deadline band (.tick) is pale too; the
    countdown keeps its three boxes, white on the mist. Scoped .tickband .tick
    to outrank the shared .tick rules. */
@@ -1872,25 +1675,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .tickband .tick .btn.btn-quiet-dark{color:var(--ink);border-color:rgba(11,31,28,.4)}
 .tickband .tick .btn.btn-quiet-dark:hover{background:rgba(11,31,28,.05);border-color:var(--ink);color:var(--ink)}
 .tickband .tick .btn.btn-quiet-dark:focus-visible{box-shadow:0 0 0 3px var(--ring)}
-.pb-pt-tabs [role=tab]:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
-/* ANNOTATED SHOT (.pb-ann). Two labelled arrows over the pension
-   calculator's photograph: a slider, and the figures that follow it. The
-   layer is anchored to the photo's top edge and scales with its width
-   (aspect-ratio 2184 / 900, the shot's width in pixels), so its
-   coordinates are the photo's own and survive a taller re-shoot; both
-   targets sit in the photo's top band. Each label is centred (translateY)
-   on a gap in the photo, so it covers no text at any width: under the age
-   slider's track (y 423 to 546) and under the figures' paragraph (y 396
-   to 514), as re-shot on 2026-09-25. A re-shoot that moves those gaps
-   moves these. Decorative (the photo's alt says what it shows). Hidden
-   under 600px, where the photo is too small. */
-.pb-ann{position:absolute;left:0;top:0;width:100%;aspect-ratio:2184/900;pointer-events:none;display:none}
-@media(min-width:600px){.pb-ann{display:block}}
-.pb-ann svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.pb-ann-under{fill:none;stroke:#0B1F1C;stroke-width:14;stroke-linecap:round;opacity:.55}
-.pb-ann-line{fill:none;stroke:#16C9B0;stroke-width:7;stroke-linecap:round}
-.pb-ann-l{position:absolute;padding:3px 9px;border-radius:99px;background:var(--aqua);color:var(--ink);font-size:12.5px;font-weight:700;line-height:1.3;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
-#pbPtFig[data-pb-tool]:not([data-pb-tool="pension-calculator.html"]) .pb-ann{display:none}
 /* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
    second is the supporting one and sits quieter (Stripe, Ramp). Opacity
    rather than a colour, so it mutes against whatever band it is on, light
@@ -2393,72 +2177,14 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-t::after{content:"\2192";content:"\2192" / "";margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.55;color:var(--ink-2)}
 /* RELATED:END */
-/* HERO = THE GAP (Run 42, item 1). The opening screen gives before it asks:
-   the regulator and QFA lockup, the band's old heading as the page's one h1,
-   the shortfall as the one hero figure (the Page role, weight 300), the two
-   bars, their source and the reader's own slider. No button here: the
-   booking ask follows the give (#life). Left-aligned, two columns from 921px
-   (copy | chart), one column below. The chart stage is 180px on a phone so
-   the chart and its source are on the first screen at 375x812; the slider
-   follows, under the cookie bar until it is answered. The figure's two spans
-   are separated by a real space (the accessible name), not a margin. */
-.pb-hero-gap{padding:40px 0 36px}
-.pb-hero-gap-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:32px 56px;align-items:start}
-.pb-hero-gap .pb-hero-copy{text-align:left}
-.pb-hero-gap h1{margin:18px 0 0}
-.pb-hero-gap .pb-sub{margin:14px 0 0}
-.pb-hero-gap .pb-hero-copy > .pb-reg{align-items:flex-start;text-align:left}
-.pb-hero-gap .pb-hero-copy > .pb-reg:not(.pb-reg-top){margin-top:28px}
-.pb-gap-big{margin:22px 0 0;font-family:var(--font);font-size:20px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.06;letter-spacing:-.03em;text-wrap:balance}
-.pb-gap-big-n{font-weight:300;font-size:34px;white-space:nowrap}
-.pb-gap-big-w{display:inline-block;font-size:20px;font-weight:400;line-height:1.24;letter-spacing:0;color:var(--ink-2)}
-.pb-hero-chart .pb-gap{max-width:none}
-.pb-hero-chart .pb-src{margin-top:14px}
-.pb-hero-chart .pb-gapctl{margin-top:16px;max-width:none}
-.pb-hero-chart .gap-note{margin:16px 0 0}
-/* WHERE EACH FIGURE COMES FROM (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 3). Once the
-   script runs, the chart's three figures are toggle buttons: as they were, with a dotted
-   underline that turns solid while pressed; the focus ring is the figure's own colour. The
-   pressed one's source shows on one line after the caveat "These are survey averages…", so
-   nothing new comes between the figures and the caveat; "Royal London Ireland, 2026." always
-   stays. Nothing moves or fades. Not a caveat class: it is extra, on request. Each button
-   covers its own bar (inset 0), so it has a real box and the whole bar is the target; the
-   figure inside it sits where it did. While empty the line stays in the page at no height,
-   so the live region exists before its first words arrive. */
-.pb-gap-why-b{position:absolute;inset:0;display:block;font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.pb-gap-why-b[hidden]{display:none}
-.pb-gap-why-b .pb-gap-n{text-decoration:underline dotted;text-decoration-thickness:2px;text-underline-offset:.14em}
-.pb-gap-why-b[aria-pressed="true"] .pb-gap-n{text-decoration-style:solid}
-.pb-gap-why-b:focus{outline:none}
-.pb-gap-why-b:focus-visible .pb-gap-n{outline:2px solid currentColor;outline-offset:2px;border-radius:4px}
-.pb-gap-why{margin:8px 0 0;font-size:.86rem;line-height:1.6;color:var(--ink-3);max-width:80ch}
-.pb-gap-why:empty{margin:0}
-.pb-gap-why-b ~ .pb-gap-sl{pointer-events:none}
-@media print{.pb-gap-why-b .pb-gap-n{text-decoration:none}}
-@media(min-width:921px){
-  .pb-gap-big-n{font-size:68px}
-}
-@media(max-width:920px){
-  .pb-hero-gap{padding:16px 0 28px}
-  .pb-hero-gap-grid{grid-template-columns:1fr;gap:14px}
-  .pb-hero-gap .pb-reg-top{margin-top:10px}
-  .pb-hero-gap h1{margin-top:14px}
-  .pb-hero-gap .pb-sub{margin-top:10px}
-  .pb-gap-big{margin-top:12px}
-  .pb-hero-gap .pb-gap{--gh:180px}
-  .pb-hero-gap .pb-gap-l{margin-top:10px}
-  .pb-hero-chart .pb-src{margin-top:10px}
-  .pb-hero-chart .pb-gapctl{margin-top:12px}
-}
 /* Nothing on the first screen moves as the page's scripts arrive: until
-   DOMContentLoaded (html.pb-ready) the slider and the provider logos keep
-   the room they are about to take, so a first paint drawn before the scripts
-   at the end of the page have run does not shift the chart's caveat or the
-   band after the logos. Without JavaScript (no html.pb-js) both stay hidden
+   DOMContentLoaded (html.pb-ready) the provider logos keep the room they are
+   about to take, so a first paint drawn before the scripts at the end of the
+   page have run does not shift the band after the logos. Without JavaScript
+   (no html.pb-js) they stay hidden
    and take no room; if a script does not run, the room goes at
    DOMContentLoaded. The heights are the built ticker's (pb-providers.js:
    its boxes are smaller from 600px down). */
-html.pb-js:not(.pb-ready) #pbNeedCtl[hidden]{display:block;visibility:hidden}
 html.pb-js:not(.pb-ready) [data-pb-providers][hidden]{display:block;min-height:166px}
 @media(max-width:600px){
   html.pb-js:not(.pb-ready) [data-pb-providers][hidden]{min-height:158px}
@@ -2480,16 +2206,6 @@ html.pb-js:not(.pb-ready) [data-pb-providers][hidden]{display:block;min-height:1
 }
 @media(prefers-reduced-motion:reduce) and (min-width:1020px){
   html.pb-js:not(.pb-ready) [data-pb-providers][hidden]{min-height:154px}
-}
-/* the band after the logos: the survey's other figure and the way-of-life
-   picker, then the booking ask the hero no longer carries */
-.pb-gap-more{padding:56px 0 48px}
-.pb-gap-more-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:36px 72px;align-items:start}
-.pb-gap-more .pb-life{margin-top:0}
-.pb-gap-more .hero-cta{grid-column:1 / -1;margin-top:8px}
-@media(max-width:920px){
-  .pb-gap-more{padding:40px 0 36px}
-  .pb-gap-more-grid{grid-template-columns:1fr;gap:28px}
 }
 /* POP:BEGIN (Run 38, item 2). Media, and only media, may pop in once as it
    scrolls into view. assets/js/pb-pop.js arms it off screen (data-pb-pop),
@@ -2713,23 +2429,10 @@ main h1{font-weight:800}
 @keyframes pbWSafeT{to{transform:none}}
 @media(max-width:560px){.pb-w-in{padding:40px 0 120px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
 /* WELCOME:END */
-/* MOTION-3:BEGIN (8 October 2026, Damian's brief). Three pieces of motion:
-   the hero gap chart's drag handle (assets/js/pb-gap-grab.js), the relief
-   jar beside Revenue's deadline and the countdown's flipping digits
-   (assets/js/pb-tickband.js). */
-.pb-gap-grab{position:absolute;left:50%;bottom:100%;z-index:3;display:inline-flex;align-items:center;gap:6px;height:38px;margin:0;padding:0 15px 0 11px;border:0;border-radius:999px;background:#fff;color:var(--ink);font:700 15px/1 var(--font);box-shadow:0 8px 20px rgba(11,31,28,.24),0 0 0 1px rgba(11,31,28,.08);cursor:ns-resize;touch-action:none;-webkit-tap-highlight-color:transparent;opacity:0;transform:translate(-50%,30%) scale(0);transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .25s,padding .3s}
-.pb-gap-grab svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.pb-gap-grab:focus-visible{outline:3px solid #14CBB1;outline-offset:3px}
-.pb-gap-grab.pb-gap-grab-on{opacity:1;transform:translate(-50%,30%) scale(1)}
-.pb-motion .pb-gap-grab.pb-gap-grab-on:not(.pb-gap-grab-used){animation:pbGrabBob 1.5s ease-in-out .7s infinite}
-@keyframes pbGrabBob{0%,100%{transform:translate(-50%,30%) scale(1)}50%{transform:translate(-50%,calc(30% - 9px)) scale(1.04)}}
-.pb-gap-grab-used{padding:0 11px}
-.pb-gap-grab-used .pb-gap-grab-t{display:none}
-.pb-gap-dragging .pb-gap-grab{transform:translate(-50%,30%) scale(1.14);box-shadow:0 12px 28px rgba(11,31,28,.3),0 0 0 4px rgba(20,203,177,.45)}
-.pb-gap-need .pb-gap-bar{cursor:ns-resize}
-.pb-gap-dragging,.pb-gap-dragging *{user-select:none;-webkit-user-select:none;cursor:ns-resize}
-#pbNeedOut .pb-gap-big-n{display:inline-block;transform-origin:0 80%}
-.pb-gap.pb-gap-has-grab{margin-top:24px}
+/* MOTION-3:BEGIN (8 October 2026, Damian's brief). The relief jar beside
+   Revenue's deadline and the countdown's flipping digits
+   (assets/js/pb-tickband.js). The gap chart's drag handle went with the
+   slider on 11 October 2026. */
 .tk-side{display:flex;flex-direction:column;align-items:flex-end;gap:22px}
 .tk-unit{perspective:420px}
 .tk-n.pb-flip{animation:pbFlip .5s cubic-bezier(.3,1.5,.5,1)}
@@ -2762,31 +2465,10 @@ main h1{font-weight:800}
 .pb-tl-step.pb-tl-ping::after{animation:pbTlPing .7s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pbTlPing{0%{transform:scale(1)}40%{transform:scale(1.9);box-shadow:0 0 0 8px rgba(20,203,177,.22)}100%{transform:scale(1)}}
 /* MOTION-4 TIMELINE:END */
-/* MOTION-6:BEGIN (9 October 2026, Damian's brief: go all out). The way-of-
-   life cards (assets/js/pb-life-motion.js) and "How a call works"
-   (assets/js/pb-call-motion.js); the scripts add every element and class
-   here, only with motion on. */
-.pb-lc{position:relative;overflow:hidden;will-change:transform;transition:box-shadow .3s,border-color .3s}
-.pb-lc:hover{box-shadow:0 22px 44px rgba(11,31,28,.14)}
-.pb-lc-art{display:block;width:100%;height:150px;margin:-2px 0 8px;flex:0 0 auto}
-.pb-lc-sheen{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(88,107,133,.13),rgba(88,107,133,0) 65%);opacity:0;transition:opacity .3s;pointer-events:none}
-.pb-lc:hover .pb-lc-sheen{opacity:1}
-.pb-lc[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink),0 18px 40px rgba(11,31,28,.16)}
-.pb-lc.pb-lc-press{animation:pbLcPress .4s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pbLcPress{0%{transform:perspective(800px) scale(.95)}100%{transform:perspective(800px) scale(1)}}
-.pb-lc.pb-lc-flip{animation:pbLcFlip .7s cubic-bezier(.45,0,.25,1)}
-@keyframes pbLcFlip{0%{transform:perspective(800px) rotateY(0)}50%{transform:perspective(800px) rotateY(90deg)}100%{transform:perspective(800px) rotateY(0)}}
-.pb-lc-old{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:14px 14px 16px;background:var(--surface);pointer-events:none;animation:pbLcOld .7s linear forwards}
-@keyframes pbLcOld{0%,49%{opacity:1}50%,100%{opacity:0}}
-.pb-gap-need .pb-gap-bar{transform-origin:50% 100%}
-#pbGap.pb-lc-hit .pb-gap-need .pb-gap-bar{animation:pbLcHit .7s cubic-bezier(.3,1.5,.5,1)}
-@keyframes pbLcHit{30%{filter:brightness(1.7);transform:scaleY(1.04)}100%{filter:none;transform:none}}
-.pb-lc-fly{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
-.pb-lr{animation:pbLrIn .55s cubic-bezier(.3,1.4,.5,1) both}
-@keyframes pbLrIn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
-.pb-lr i{animation:pbLrBar .9s cubic-bezier(.3,1.25,.5,1) both}
-@keyframes pbLrBar{from{width:0}to{width:var(--w)}}
-@media(max-width:600px){.pb-lc-art{height:130px}}
+/* MOTION-6:BEGIN (9 October 2026, Damian's brief: go all out). "How a call
+   works" (assets/js/pb-call-motion.js); the script adds every element and
+   class here, only with motion on. (The way-of-life cards' rules went with
+   the cards on 11 October 2026.) */
 .pb-cs{position:relative}
 .pb-cs-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
 .pb-cs-track{fill:none;stroke:#D8DFDC;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
@@ -2807,8 +2489,226 @@ main h1{font-weight:800}
 .pb-cs-step.pb-cs-pop{animation:pbCsPop .5s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pbCsPop{40%{transform:scale(1.04)}100%{transform:none}}
 @media(max-width:920px){.pb-cs .step{padding-left:40px}.pb-cs-walker{width:28px;height:28px;border-radius:8px}.pb-cs-walker svg{width:18px;height:18px}}
-@media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film,.pb-lc-art{display:none}}
+@media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film{display:none}}
 /* MOTION-6:END */
+/* HOME-V2:BEGIN (11 October 2026, Damian's brief: one clear path down the home page,
+   the gap, the calculator, inflation, each alive). Scripts: assets/js/pb-home-kit.js,
+   pb-home-gap.js, pb-home-calc.js, pb-home-basket.js and pb-w-scene.js. */
+/* the welcome's picture, where the tagline was */
+.pb-w-scene{width:min(640px,92vw);height:128px;margin:26px auto 0}
+.pb-w-scene canvas{display:block;width:100%;height:100%;cursor:pointer;touch-action:manipulation}
+.pb-w-armed .pb-w-scene{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.pb-w-armed.pb-w-shown .pb-w-scene{opacity:1;transform:none}
+.pb-w-armed:not(.pb-w-run) .pb-w-scene{animation:pbWSafe 0s 2.5s forwards}
+html:not(.pb-js) .pb-w-scene{display:none}
+@media(max-width:560px){.pb-w-scene{height:104px;margin-top:20px}}
+
+/* the segmented pills: one pill behind the pressed answer, springing between them */
+.pb-seg{position:relative;display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:#fff;border:1.5px solid var(--line-2,#D8DFDC);box-shadow:0 1px 2px rgba(11,31,28,.04)}
+.pb-seg button{position:relative;z-index:1;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:transparent;font:inherit;font-weight:700;font-size:15px;color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:color .25s;-webkit-tap-highlight-color:transparent}
+.pb-seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pb-seg.pb-seg-live button[aria-pressed="true"]{background:transparent}
+.pb-seg button:focus-visible{outline:3px solid #14CBB1;outline-offset:1px}
+.pb-seg button:hover:not([aria-pressed="true"]){color:var(--ink)}
+.pb-seg-ind{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:var(--ink);box-shadow:0 6px 16px rgba(11,31,28,.22);transition:transform .55s cubic-bezier(.3,1.35,.45,1),width .55s cubic-bezier(.3,1.35,.45,1)}
+.pb-seg-ind.pb-seg-pop{animation:pbSegPop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbSegPop{40%{scale:1.06 .9}100%{scale:1}}
+.pb-seg-sm{padding:3px}
+.pb-seg-sm button{min-height:38px;padding:0 13px;font-size:14px}
+.pb-seg-sm .pb-seg-ind{top:3px;bottom:3px}
+
+/* odometer figures (PBKit.Roll, .pb-odo: .pb-roll is the timeline's) */
+.pb-odo{display:inline-block;white-space:nowrap}
+.pb-odo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pb-odo-vis{display:inline-flex;align-items:flex-start;font-variant-numeric:tabular-nums}
+.pb-odo-c{display:inline-block;height:1.08em;overflow:hidden;line-height:1.08}
+.pb-odo-s{display:flex;flex-direction:column;transition:transform .8s cubic-bezier(.22,1.3,.36,1)}
+.pb-odo-s span{display:block;height:1.08em;line-height:1.08}
+.pb-odo-x{display:inline-block;line-height:1.08;height:1.08em}
+
+/* ---------------------------------------------------------------- THE GAP */
+.pb-g2{padding:72px 0 64px}
+.pb-g2-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px 64px;align-items:center}
+.pb-g2 h1{margin:0;font-size:clamp(38px,5vw,64px);line-height:1.02;letter-spacing:-.04em}
+.pb-g2 .pb-sub{margin:14px 0 0;font-size:clamp(18px,1.6vw,21px);color:var(--ink-2)}
+.pb-g2-pick{display:flex;flex-wrap:wrap;gap:10px;margin:30px 0 0}
+.pb-g2-pick[hidden]{display:none}
+.pb-g2-what{margin:16px 0 0;font-size:17px;color:var(--ink-2);min-height:1.6em}
+.pb-g2-what b{color:var(--ink)}
+.pb-g2-big{margin:18px 0 0;font-family:var(--font);line-height:1;letter-spacing:-.035em;color:var(--ink);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.pb-g2-big-n{font-size:clamp(52px,7.4vw,96px);font-weight:300;font-variant-numeric:tabular-nums}
+.pb-g2-big-w{font-size:clamp(20px,2vw,26px);font-weight:500;letter-spacing:-.01em;color:#A4291D}
+.pb-g2-is-covered .pb-g2-big-n{color:#0B7A6E;font-weight:400}
+.pb-g2-month{margin:14px 0 0;font-size:17px;color:var(--ink-2);max-width:34em}
+.pb-g2-month b{color:var(--ink)}
+.pb-g2-thud{animation:pbG2Thud .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbG2Thud{0%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}100%{transform:none}}
+.pb-g2-yay{animation:pbG2Yay .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbG2Yay{40%{transform:scale(1.06)}100%{transform:none}}
+.pb-g2-acts{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin:28px 0 0}
+.pb-g2-go{display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:14px 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s}
+.pb-g2-go:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
+.pb-g2-go svg,.pb-g2-more svg,.pb-c2-close svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pb-motion .pb-g2-go svg{animation:pbWNudge 1.8s ease-in-out infinite}
+.pb-g2-more{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;border:0;background:none;font:inherit;font-weight:700;font-size:16px;color:var(--teal-700,#08655A);cursor:pointer;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.pb-g2-more[hidden]{display:none}
+.pb-g2-more svg{transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.pb-g2-more[aria-expanded="true"] svg{transform:rotate(180deg)}
+/* the two bars */
+.pb-g2-chartwrap{min-width:0}
+.pb-g2-chart{display:grid;grid-template-columns:1fr 1fr;gap:18px;--gh:380px}
+.pb-g2-col{min-width:0}
+.pb-g2-stage{position:relative;height:var(--gh)}
+.pb-g2-bar{position:absolute;left:0;right:0;bottom:0;height:var(--h);z-index:1;border-radius:20px;overflow:hidden}
+.pb-g2-need .pb-g2-bar{background:linear-gradient(180deg,#1B2E2A,#0B1F1C);color:#fff;box-shadow:0 18px 34px rgba(11,31,28,.18)}
+.pb-g2-state .pb-g2-bar{background:linear-gradient(180deg,#2BD6BE,#14CBB1);color:#04302A;box-shadow:0 18px 34px rgba(20,203,177,.22)}
+.pb-g2-n{position:absolute;top:16px;left:18px;right:12px;font-size:clamp(22px,2.5vw,34px);font-weight:600;letter-spacing:-.03em;line-height:1.08}
+.pb-g2-gapblk{position:absolute;left:0;right:0;bottom:calc(var(--from) - 20px);height:calc(var(--h) + 20px);z-index:0;border-radius:20px 20px 0 0;background:repeating-linear-gradient(-45deg,#FADCD3 0 12px,#F6CFC4 12px 24px);background-size:34px 34px;box-shadow:inset 0 0 0 2px rgba(164,41,29,.14)}
+.pb-motion .pb-g2-gapblk{animation:pbG2Drift 2.4s linear infinite}
+@keyframes pbG2Drift{to{background-position:34px 0}}
+.pb-g2-gapblk.pb-g2-wob{animation:pbG2Wob .6s cubic-bezier(.3,1.6,.5,1),pbG2Drift 2.4s linear infinite}
+@keyframes pbG2Wob{30%{transform:scaleX(1.05)}60%{transform:scaleX(.98)}100%{transform:none}}
+.pb-g2-gn{position:absolute;left:0;right:0;bottom:calc(100% + 8px);font-size:16px;font-weight:600;color:#A4291D;line-height:1.1;white-space:nowrap}
+.pb-g2-gn b{display:block;font-size:clamp(24px,2.6vw,34px);font-weight:700;letter-spacing:-.03em}
+.pb-g2-covered .pb-g2-gapblk{background:none;box-shadow:none;animation:none}
+.pb-g2-covered .pb-g2-gn{color:#0B7A6E}
+.pb-g2-l{display:block;margin-top:12px;font-size:15px;line-height:1.35;color:var(--ink-2)}
+.pb-g2-chartwrap .pb-src{margin:16px 0 0}
+/* where the money goes */
+.pb-g2-split{margin:36px 0 0;padding:26px 28px;border-radius:22px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 10px 30px rgba(11,31,28,.06)}
+.pb-g2-split[hidden]{display:none}
+.pb-g2-split-h{margin:0 0 14px;font-size:18px;color:var(--ink-2)}
+.pb-g2-split-h b{color:var(--ink)}
+.pb-g2-rows{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 40px}
+.pb-g2-rows li{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;align-items:center;gap:12px;font-size:15px}
+.pb-g2-rows i{display:block;height:10px;border-radius:99px;background:var(--slate,#586B85);width:var(--w);transform-origin:0 50%}
+.pb-g2-rows b{font-variant-numeric:tabular-nums}
+.pb-g2-split .pb-src{margin:16px 0 0}
+.pb-motion .pb-g2-pour li{animation:pbG2Row .55s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i) * 55ms)}
+.pb-motion .pb-g2-pour li i{animation:pbG2Grow .8s cubic-bezier(.2,.9,.3,1.15) both;animation-delay:calc(var(--i) * 55ms + 120ms)}
+@keyframes pbG2Row{from{opacity:0;transform:translateY(10px)}}
+@keyframes pbG2Grow{from{transform:scaleX(0)}}
+@media(max-width:920px){
+  .pb-g2{padding:36px 0 44px}
+  .pb-g2-grid{grid-template-columns:1fr;gap:28px}
+  .pb-g2-chart{--gh:260px;gap:12px}
+  .pb-g2-n{top:12px;left:14px}
+  .pb-g2-rows{grid-template-columns:1fr}
+  .pb-g2-split{padding:20px}
+}
+@media(max-width:420px){
+  .pb-g2-pick{gap:8px}
+  .pb-g2-pick .pb-seg button{padding:0 12px;font-size:14px}
+  .pb-g2-chart{--gh:230px}
+  .pb-g2-gn{font-size:14px}
+}
+
+/* --------------------------------------------------------- THE CALCULATOR */
+.pb-c2{padding:84px 0;background:linear-gradient(180deg,#EAF7F3 0%,#F4FAF8 100%)}
+.pb-c2-head{margin-bottom:32px}
+.pb-c2-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.10);overflow:hidden;overflow:clip}
+.pb-c2-stage{padding:28px 30px 30px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px;background:radial-gradient(80% 70% at 30% 30%,#F0FBF8 0%,#fff 70%)}
+.pb-c2-jarbox{position:relative;height:300px}
+.pb-c2-jar{display:block;width:100%;height:100%}
+html:not(.pb-js) .pb-c2-jarbox{display:none}
+.pb-c2-k{margin:0;font-size:15px;font-weight:600;color:var(--ink-2)}
+.pb-c2-big{margin:2px 0 0;font-size:clamp(48px,5.4vw,72px);font-weight:300;letter-spacing:-.04em;line-height:1;color:var(--ink)}
+.pb-c2-big::after{content:" a month";font-size:20px;font-weight:500;letter-spacing:0;color:var(--ink-2)}
+.pb-c2-bar{position:relative;height:22px;margin:16px 0 0;border-radius:99px;background:#EEF2F1;--sp:0%;--you:0%;--gap:0%;--need:0%}
+.pb-c2-bar i{position:absolute;top:0;bottom:0;display:block;border-radius:99px}
+.pb-c2-sp{left:0;width:var(--sp);background:#14CBB1;z-index:2}
+.pb-c2-you{left:calc(var(--sp) - 11px);width:calc(var(--you) + 11px);background:#586B85;z-index:1}
+.pb-c2-gap{left:calc(var(--sp) + var(--you) - 11px);width:calc(var(--gap) + 11px);background:repeating-linear-gradient(-45deg,#FADCD3 0 8px,#F6CFC4 8px 16px);z-index:0}
+.pb-c2-need{position:absolute;top:-8px;bottom:-8px;left:var(--need);width:3px;margin-left:-1.5px;border-radius:2px;background:#0B1F1C;z-index:3}
+.pb-c2-need span{position:absolute;bottom:calc(100% + 4px);right:0;white-space:nowrap;font-size:12.5px;font-weight:700;color:var(--ink)}
+.pb-c2-ok .pb-c2-need{background:#0B7A6E}
+.pb-c2-ok .pb-c2-need span{color:#0B7A6E}
+.pb-c2-bar{margin-top:34px}
+.pb-c2-parts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:14.5px;color:var(--ink-2)}
+.pb-c2-parts span{display:inline-flex;align-items:center;gap:7px}
+.pb-c2-parts i{display:inline-block;width:11px;height:11px;border-radius:3px}
+.pb-c2-parts b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-c2-k-sp i{background:#14CBB1}
+.pb-c2-k-you i{background:#586B85}
+.pb-c2-k-gap i{background:#FADCD3;box-shadow:inset 0 0 0 1.5px rgba(164,41,29,.35)}
+.pb-c2-verdict{margin:16px 0 0;font-size:17px;line-height:1.5;color:var(--ink-2)}
+.pb-c2-verdict b{color:var(--ink)}
+.pb-c2-verdict .pb-c2-no{color:#A4291D}
+.pb-c2-verdict .pb-c2-yes{color:#0B7A6E}
+.pb-c2-close{display:inline-flex;align-items:center;gap:10px;margin:14px 0 0;min-height:52px;padding:0 24px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s;justify-self:start}
+.pb-c2-close:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
+.pb-c2-close[hidden]{display:none}
+.pb-c2-close:focus-visible{outline:3px solid #14CBB1;outline-offset:3px}
+.pb-motion .pb-c2-close:not([hidden]){animation:pbC2Breathe 2.6s ease-in-out infinite}
+@keyframes pbC2Breathe{50%{box-shadow:0 10px 24px rgba(11,31,28,.18),0 0 0 8px rgba(20,203,177,.18)}}
+.pb-c2-panel{padding:30px 30px 32px;border-left:1px solid var(--line,#E7EBE9);background:#FBFCFB;display:flex;flex-direction:column;gap:26px}
+.pb-c2-panel[hidden]{display:none}
+.pb-c2-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.pb-c2-row label{font-size:16px;font-weight:700;color:var(--ink)}
+.pb-c2-v{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-c2-f input[type=range]{display:block;width:100%;margin:6px 0 0}
+.pb-c2-taxrow,.pb-b2-raterow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin:14px 0 0}
+.pb-c2-taxl{font-size:14.5px;font-weight:600;color:var(--ink-2)}
+.pb-c2-relief{margin:12px 0 0;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.pb-c2-relief .pb-c2-you-t{color:var(--ink)}
+.pb-c2-relief .pb-c2-rev-t{color:#7A5200;background:#FCEFCF;padding:1px 7px;border-radius:6px}
+.pb-c2-aim{display:flex;flex-direction:column;gap:10px;padding-top:20px;border-top:1px dashed var(--line-2,#D8DFDC)}
+.pb-c2-aims{display:flex;flex-wrap:wrap;gap:8px}
+.pb-c2 .pb-warn{margin:22px 0 0}
+.pb-c2-note{margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--ink-3);max-width:80ch}
+.pb-c2-more{margin:16px 0 0;font-size:16px;color:var(--ink-2)}
+.pb-c2-more a{color:var(--teal-700,#08655A);font-weight:700}
+html:not(.pb-js) .pb-c2-panel{display:none}
+@media(max-width:920px){
+  .pb-c2{padding:56px 0}
+  .pb-c2-card{grid-template-columns:1fr;border-radius:22px}
+  .pb-c2-stage{padding:18px 18px 22px}
+  .pb-c2-jarbox{height:230px}
+  .pb-c2-panel{border-left:0;border-top:1px solid var(--line,#E7EBE9);padding:22px 18px 24px;gap:22px}
+  .pb-c2-big::after{font-size:17px}
+}
+
+/* ---------------------------------------------------------- THE BASKETS */
+.pb-b2{padding:84px 0}
+.pb-b2-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px 56px;align-items:center}
+.pb-b2-copy h2{margin-top:12px}
+.pb-b2-copy > p{font-size:18px;color:var(--ink-2);margin:12px 0 0}
+.pb-b2 .pb-b2-out{margin:22px 0 0;font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.02em;color:var(--ink);font-weight:500}
+.pb-b2-out b{font-weight:800;color:#A4291D}
+.pb-b2 .pb-b2-sub{margin:10px 0 0;font-size:16px}
+.pb-b2-sub b{color:var(--ink)}
+.pb-b2-ctl{margin:24px 0 0;max-width:460px}
+.pb-b2-ctl[hidden]{display:none}
+.pb-b2-ctl input[type=range]{display:block;width:100%;margin:6px 0 0}
+.pb-b2-link{display:inline-flex;align-items:center;gap:8px;margin:22px 0 0;font-weight:700;color:var(--teal-700,#08655A)}
+.pb-b2-link .ico{width:18px;height:18px}
+.pb-b2-stage{position:relative;height:340px;border-radius:26px;background:radial-gradient(70% 80% at 50% 100%,#FFF4E2 0%,#FAFAF9 70%);border:1px solid var(--line,#E7EBE9)}
+.pb-b2-cv{display:block;width:100%;height:100%;cursor:pointer;touch-action:manipulation}
+html:not(.pb-js) .pb-b2-stage{display:none}
+@media(max-width:920px){
+  .pb-b2{padding:56px 0}
+  .pb-b2-grid{grid-template-columns:1fr}
+  .pb-b2-stage{height:270px;order:-1}
+}
+@media(prefers-reduced-motion:reduce){.pb-odo-s,.pb-seg-ind{transition:none}.pb-g2-gapblk{animation:none!important}}
+@media print{.pb-w-scene,.pb-c2-jarbox,.pb-b2-stage{display:none}}
+.pb-c2-mini{display:none}
+.pb-g2-big-n .pb-odo-c,.pb-g2-big-n .pb-odo-x,.pb-c2-big .pb-odo-c,.pb-c2-big .pb-odo-x{margin-right:-.045em}
+.pb-c2-big::after{margin-left:.3em}
+.pb-g2-pick .pb-seg button{padding:0 15px}
+@media(max-width:920px){
+  .pb-g2-copy{display:contents}
+  .pb-g2-grid{gap:0}
+  .pb-g2-grid > *, .pb-g2-copy > *{order:9}
+  .pb-g2 h1{order:1}.pb-g2 .pb-sub{order:2}.pb-g2-pick{order:3}.pb-g2-what{order:4}.pb-g2-chartwrap{order:5;margin-top:26px}.pb-g2-big{order:6;margin-top:22px}.pb-g2-month{order:7}.pb-g2-acts{order:8}
+  .pb-c2-mini{display:flex;align-items:baseline;gap:8px;position:sticky;top:82px;z-index:5;margin:-6px 0 0;padding:10px 16px;border-radius:999px;background:var(--ink);color:#C9D4D1;font-size:14px;box-shadow:0 10px 24px rgba(11,31,28,.25)}
+  .pb-c2-mini b{font-size:20px;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .pb-c2-mini span{margin-left:auto;font-weight:700;color:#FADCD3}
+  .pb-c2-is-ok .pb-c2-mini span{color:#7FE3D3}
+}
+.pb-c2-close[data-act="close"] .pb-c2-i-up,.pb-c2-close[data-act="up"] .pb-c2-i-close{display:none}
+#damian .pb-reg{margin:6px 0 18px;align-items:flex-start;text-align:left}
+/* HOME-V2:END */
 </style>
 </head>
 <body>
@@ -2818,6 +2718,7 @@ main h1{font-weight:800}
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
   <a class="nav-tick" id="navTick" href="#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true" data-pb-wait>--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
+    <a class="lnk active" href="index.html" aria-current="page">Home</a>
     <a class="lnk" href="tracker.html">Find a pension</a>
     <a class="lnk" href="starter.html">Start a pension</a>
     <div class="nav-dd">
@@ -2868,7 +2769,7 @@ main h1{font-weight:800}
   <div class="wrap pb-w-in">
     <div class="pb-w-mark" aria-hidden="true"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
     <p class="pb-w-title" id="pbWelcomeT"><span class="pb-w-sr">Welcome to Pensionbuddy</span><span class="pb-w-l1" aria-hidden="true"><span class="pb-w-word">Welcome</span> <span class="pb-w-word">to</span></span><span class="pb-w-l2" aria-hidden="true"><span class="pb-w-ch">P</span><span class="pb-w-ch">e</span><span class="pb-w-ch">n</span><span class="pb-w-ch">s</span><span class="pb-w-ch">i</span><span class="pb-w-ch">o</span><span class="pb-w-ch">n</span><span class="pb-w-ch">b</span><span class="pb-w-ch">u</span><span class="pb-w-ch">d</span><span class="pb-w-ch">d</span><span class="pb-w-ch">y</span><span class="pb-w-line"></span></span></p>
-    <p class="pb-w-sub">Pensions, in plain English.</p>
+    <div class="pb-w-scene" aria-hidden="true"><canvas></canvas></div>
     <a class="pb-w-go" href="#gap">Start here <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
     <p class="pb-w-hint" aria-hidden="true"></p>
   </div>
@@ -2876,109 +2777,47 @@ main h1{font-weight:800}
 <script>(function(){var s=document.getElementById('welcome');if(s&&document.documentElement.classList.contains('pb-motion'))s.classList.add('pb-w-armed');})();</script>
 <script src="assets/js/pb-welcome.js?v=054270da"></script>
 
-<header class="hero pb-hero-gap pb-wash" id="gap"><div class="wrap pb-hero-gap-grid">
-  <div class="hero-copy pb-hero-copy">
-    <span class="eyebrow"><span class="pip"></span>Pensions, in plain English</span>
-    <div class="pb-reg pb-reg-top">
-      <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
-      <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
-    </div>
-    <h1>People know roughly what they&rsquo;ll need.</h1>
-    <p class="pb-sub">Far fewer know what they&rsquo;re on track for.</p>
-    <p class="pb-gap-big" id="pbNeedOut"><span class="pb-gap-big-n">€25,296</span> <span class="pb-gap-big-w">a year short.</span></p>
-    <div class="pb-reg">
-      <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
-      <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
-    </div>
-  </div>
-  <div class="pb-hero-chart">
-    <div class="pb-gap" id="pbGap" role="img" aria-label="Two bars. People expect to need 40,860 euro a year. The State Pension pays 15,564. The gap is 25,296.">
-      <div class="pb-gap-col pb-gap-need">
-        <div class="pb-gap-stage">
-          <div class="pb-gap-bar" style="--h:100%"><span class="pb-gap-n" data-pb-count="40860">&euro;40,860</span></div>
+<!-- THE GAP (11 October 2026, Damian's brief: "make it clear: here's the bare minimum, here's
+     the State Pension, here's the gap; fewer options"). Three ways of life and Single or Couple,
+     side by side; two bars; the gap in blush coral with its figure above it. The markup is the
+     finished picture for Modest, one person; assets/js/pb-home-gap.js makes it answer. -->
+<header class="hero pb-g2 pb-wash" id="gap"><div class="wrap">
+  <div class="pb-g2-grid">
+    <div class="pb-g2-copy">
+      <h1>People know roughly what they&rsquo;ll need.</h1>
+      <p class="pb-sub">Far fewer know what they&rsquo;re on track for.</p>
+      <div class="pb-g2-pick" id="pbG2Pick" hidden>
+        <div class="pb-seg pb-g2-lv" role="group" aria-label="Way of life">
+          <button type="button" data-level="modest" aria-pressed="true">Modest</button>
+          <button type="button" data-level="moderate" aria-pressed="false">Moderate</button>
+          <button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button>
         </div>
-        <span class="pb-gap-l">What people expect to need</span>
+        <div class="pb-seg pb-g2-hh" role="group" aria-label="Who it is for">
+          <button type="button" data-hh="single" aria-pressed="true">Single</button>
+          <button type="button" data-hh="couple" aria-pressed="false">Couple</button>
+        </div>
       </div>
-      <div class="pb-gap-col pb-gap-state">
-        <div class="pb-gap-stage">
-          <div class="pb-gap-short" style="--h:61.9%;--from:38.1%"><span class="pb-gap-n" data-pb-count="25296">&euro;25,296</span><span class="pb-gap-sl">a year short</span></div>
-          <div class="pb-gap-bar" style="--h:38.1%"><span class="pb-gap-n" data-pb-count="15564">&euro;15,564</span></div>
-        </div>
-        <span class="pb-gap-l">What the State Pension pays</span>
+      <p class="pb-g2-what" id="pbG2What"><b>Modest</b> is the bare minimum to get by.</p>
+      <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
+      <p class="pb-g2-month" id="pbG2Month">That is <b>&euro;303 a month</b>. Over a 20-year retirement, <b>&euro;72,720</b>.</p>
+      <div class="pb-g2-acts">
+        <a class="pb-g2-go" href="#calc">Can you close it? Try the calculator <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
+        <button type="button" class="pb-g2-more" id="pbG2More" aria-expanded="false" aria-controls="pbG2Split" hidden>Where the money goes <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
     </div>
-    <p class="pb-src">Royal London Ireland, 2026.</p>
-    <div class="pb-gapctl" id="pbNeedCtl" hidden>
-      <div class="pb-gapctl-row"><label for="pbNeed">What you expect to need</label><span class="pb-gapctl-v" id="pbNeedV">€40,860 a year</span></div>
-      <input type="range" id="pbNeed" min="15000" max="80000" step="20" value="40860" aria-valuetext="€40,860 a year">
+    <div class="pb-g2-chartwrap">
+      <div class="pb-g2-chart" id="pbG2Chart" role="img" aria-label="Two bars. A modest retirement for one person costs 19,200 euro a year. The State Pension pays 15,564. The gap is 3,636 a year.">
+        <div class="pb-g2-col pb-g2-need"><div class="pb-g2-stage"><div class="pb-g2-bar" style="--h:54.95%"><span class="pb-g2-n">&euro;19,200</span></div></div><span class="pb-g2-l">A modest life for one costs</span></div>
+        <div class="pb-g2-col pb-g2-state"><div class="pb-g2-stage"><div class="pb-g2-gapblk" style="--h:10.41%;--from:44.54%"><span class="pb-g2-gn"><b>&euro;3,636</b> short</span></div><div class="pb-g2-bar" style="--h:44.54%"><span class="pb-g2-n">&euro;15,564</span></div></div><span class="pb-g2-l">The State Pension pays</span></div>
+      </div>
+      <p class="pb-src">A year, at 2024 prices: Pensions Council, Irish Retirement Living Standards (researched by KPMG). The State Pension (Contributory) at the maximum personal rate, 2026.</p>
     </div>
-    <p class="gap-note">Survey averages, not a projection for you. The value of a pension can fall as well as rise.
-   </p>
   </div>
-  <div class="pb-hero-paths">
-    <p class="pb-hero-paths-q" id="pbPathsQ">Which of these sounds most like you?</p>
-    <ul class="pb-hero-paths-list" aria-labelledby="pbPathsQ">
-      <li><a class="pb-chip-hero" href="starter.html" aria-label="Just starting out: starting a pension">Just starting out</a></li>
-      <li><a class="pb-chip-hero" href="tracker.html" aria-label="Changed jobs a few times: finding old pensions">Changed jobs a few times</a></li>
-      <li><a class="pb-chip-hero" href="director.html" aria-label="Run my own company: pensions for directors">Run my own company</a></li>
-    </ul>
-  </div>
+  <div class="pb-g2-split" id="pbG2Split" hidden></div>
 </div></header>
 
-<!-- THE GAP, CONTINUED (Run 42, item 1). Straight under the hero: the survey's other
-     figure, the way-of-life picker that sets the hero's slider, then the booking ask the
-     hero no longer carries. tests/build.test.py check 33 holds "What's changed?" after it. -->
-<section class="pb-gap-more" id="life">
-  <div class="wrap pb-gap-more-grid">
-    <div class="pb-gap-aside">
-      <div class="eyebrow"><i class="pip"></i>The gap</div>
-      <p class="pb-plain">79% feel unprepared.</p>
-      <p class="pb-src">Source: Am&aacute;rach Research, May 2026.</p>
-    </div>
-    <div class="pb-life" id="pbLife" hidden>
-      <div class="pb-life-head">
-        <p class="pb-life-q" id="pbLifeQ">Or start from a way of life.</p>
-        <div class="pb-life-hh" role="group" aria-label="Who it is for">
-          <button type="button" id="pbLifeSingle" aria-pressed="true">Single</button>
-          <button type="button" id="pbLifeCouple" aria-pressed="false">Couple</button>
-        </div>
-      </div>
-      <div class="pb-life-cards" role="group" aria-labelledby="pbLifeQ">
-        <button type="button" class="pb-life-card" data-level="modest" aria-pressed="false"><b>Modest</b><span class="pb-life-n">€19,200</span><span class="pb-life-d">The basics, with a little left for extras.</span></button>
-        <button type="button" class="pb-life-card" data-level="moderate" aria-pressed="false"><b>Moderate</b><span class="pb-life-n">€27,600</span><span class="pb-life-d">More room to manoeuvre, and more security.</span></button>
-        <button type="button" class="pb-life-card" data-level="comfortable" aria-pressed="false"><b>Comfortable</b><span class="pb-life-n">€33,600</span><span class="pb-life-d">More freedom, and room for a few luxuries.</span></button>
-      </div>
-      <div class="pb-life-split" id="pbLifeSplit" hidden>
-        <p class="pb-life-st" id="pbLifeSt"></p>
-        <ul class="pb-life-rows" id="pbLifeRows"></ul>
-        <p class="pb-life-note">National averages at 2024 prices, not a budget for you.</p>
-      </div>
-      <p class="pb-src">Standards of living: Pensions Council, Irish Retirement Living Standards, researched by KPMG, 2024 prices.</p>
-    </div>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-  </div>
-</section>
-
-<!-- WHAT'S CHANGED? (Run 37, item 1). After the way-of-life band, before the games: six plain links,
-     one for each change in a life, each to the page that already covers it.
-     Nothing runs and nothing is stored; each link's name says where it goes.
-     tests/build.test.py check 33 holds the six, their pages, and the stillness. -->
-<section class="pb-changed" id="changed" aria-labelledby="pbChangedH"><div class="wrap">
-  <h2 class="pb-changed-h" id="pbChangedH">What&rsquo;s changed?</h2>
-  <ul class="pb-changed-list">
-    <li><a class="pb-changed-chip" href="broker-vs-autoenrolment.html" aria-label="New job: Auto-enrolment comparison">New job</a></li>
-    <li><a class="pb-changed-chip" href="tracker.html" aria-label="Left a job: Find a pension">Left a job</a></li>
-    <li><a class="pb-changed-chip" href="director.html" aria-label="Started a company: Pensions for company directors">Started a company</a></li>
-    <li><a class="pb-changed-chip" href="pensions-over-50.html" aria-label="Turning 50: Pensions after 50">Turning 50</a></li>
-    <li><a class="pb-changed-chip" href="state-pension-entitlement.html" aria-label="Had a baby or a career break: State Pension check">Had a baby or a career break</a></li>
-    <li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html" aria-label="Moved from the UK: A UK pension, and living in Ireland">Moved from the UK</a></li>
-  </ul>
-</div></section>
-
-<!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35); under "What's changed?"
-     since 7 October 2026: assets/js/pb-providers.js fills
+<!-- PROVIDER TICKER (Run 29), switched on 29 September 2026 (Run 35); straight under the gap
+     since 11 October 2026: assets/js/pb-providers.js fills
      this; the <noscript> row after it is the same list, still, for a reader without JavaScript
      (tests/providers.test.py holds the two together). The list must match the agencies on
      how-we-work.html when that page is released. -->
@@ -2994,6 +2833,71 @@ main h1{font-weight:800}
     <li><img src="assets/logos/standard-life.svg" alt="Standard Life" width="194" height="40" style="--pb-logo-h:27"></li>
   </ul>
 </div></noscript>
+
+<!-- THE CALCULATOR (11 October 2026, Damian's brief: "a really interactive pension calculator
+     right below, that people can use straight away; as simple as possible"). Three questions and
+     the tax rate; one answer, in today's money, from 66, against the way of life picked above.
+     assets/js/pb-home-calc.js runs it, with the pension calculator's own sums; the markup is the
+     answer at its starting values (35, €10,000 saved, €100 a month, Modest, one person). -->
+<section class="pb-c2" id="calc" aria-labelledby="pbC2H"><div class="wrap">
+  <div class="sec-head pb-c2-head">
+    <span class="kicker">Pension calculator</span>
+    <h2 id="pbC2H">Can you close the gap?</h2>
+    <p>Three questions. No sign-up. Everything in today&rsquo;s money.</p>
+  </div>
+  <div class="pb-c2-card pb-al-skip">
+    <div class="pb-c2-stage">
+      <div class="pb-c2-jarbox"><canvas class="pb-c2-jar" aria-hidden="true"></canvas></div>
+      <div class="pb-c2-res">
+        <p class="pb-c2-k">From 66, in today&rsquo;s money</p>
+        <p class="pb-c2-big"><span id="pbC2Total">&euro;1,536</span></p>
+        <div class="pb-c2-bar" id="pbC2Bar" aria-hidden="true" style="--sp:76.47%;--you:14.09%;--gap:3.77%;--need:94.34%"><i class="pb-c2-sp"></i><i class="pb-c2-you"></i><i class="pb-c2-gap"></i><b class="pb-c2-need"><span>Modest life &euro;1,600</span></b></div>
+        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;239</b></span><span class="pb-c2-k-gap"><i aria-hidden="true"></i>Short <b>&euro;64</b></span></p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><b class="pb-c2-no">&euro;64 a month short</b> of a modest life. About <b>&euro;150 a month</b> going in would cover it.</p>
+        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close" hidden><span>Close my gap</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
+        <p class="tk-sr" id="pbC2Sr" aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </div>
+    <div class="pb-c2-panel" id="pbC2Live" hidden>
+      <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;1,536</b> a month <span id="pbC2MiniV">&euro;64 short</span></p>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Age">Your age</label><span class="pb-c2-v" id="pbC2AgeV">35</span></div><input type="range" id="pbC2Age" min="18" max="65" step="1" value="35"></div>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">In pensions already</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
+      <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">Going in each month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
+        <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="pbC2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-c2-tax" role="group" aria-labelledby="pbC2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
+        <p class="pb-c2-relief" id="pbC2Relief">Costs you about <b class="pb-c2-you-t">&euro;60</b> a month. <b class="pb-c2-rev-t">Revenue adds &euro;40</b> in tax relief.</p>
+      </div>
+      <div class="pb-c2-f pb-c2-aim"><span class="pb-c2-taxl" id="pbC2AimL">Aiming for</span>
+        <div class="pb-c2-aims">
+          <div class="pb-seg pb-seg-sm pb-c2-lv" role="group" aria-labelledby="pbC2AimL"><button type="button" data-level="modest" aria-pressed="true">Modest</button><button type="button" data-level="moderate" aria-pressed="false">Moderate</button><button type="button" data-level="comfortable" aria-pressed="false">Comfortable</button></div>
+          <div class="pb-seg pb-seg-sm pb-c2-hh" role="group" aria-label="Who it is for"><button type="button" data-hh="single" aria-pressed="true">Single</button><button type="button" data-hh="couple" aria-pressed="false">Couple</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+  <p class="gap-note pb-c2-note">An illustration, not advice. It assumes growth of 5% a year before charges, prices rising 2% a year (the European Central Bank&rsquo;s target), the same amount going in every month until 66, and 4% of the pot taken as income each year. The State Pension is at today&rsquo;s maximum rate. Tax relief is within Revenue&rsquo;s age-related limits.</p>
+  <p class="pb-c2-more">Want the detail? <a href="pension-calculator.html">Open the full pension calculator</a>, or try the <a href="director-calculator.html">director calculator</a>, the <a href="broker-vs-autoenrolment.html">auto-enrolment comparison</a> or the <a href="state-pension-entitlement.html">State Pension check</a>.</p>
+</div></section>
+
+<!-- INFLATION, IN ONE PICTURE (11 October 2026, Damian's brief: the jargon buster's egg basket,
+     just below the calculator). The same sum as glossary.html's inflation widget;
+     assets/js/pb-home-basket.js draws the baskets and moves the shopping. -->
+<section class="pb-b2" id="inflation" aria-labelledby="pbB2H"><div class="wrap pb-b2-grid">
+  <div class="pb-b2-copy">
+    <span class="kicker">Why today&rsquo;s money</span>
+    <h2 id="pbB2H">&euro;1,000 buys less every year.</h2>
+    <p>Prices rise. So the calculator above shows every figure in today&rsquo;s money.</p>
+    <p class="pb-b2-out" id="pbB2Out">In <span id="pbB2YrsV">30</span> <span id="pbB2YrsW">years</span>, &euro;1,000 buys what <b id="pbB2Buy">&euro;552</b> buys today.</p>
+    <p class="pb-b2-sub">What costs &euro;1,000 now would cost about <b id="pbB2Cost">&euro;1,811</b>, with prices rising <span id="pbB2RateW">2%</span> a year.</p>
+    <div class="pb-b2-ctl" id="pbB2Ctl" hidden>
+      <div class="pb-c2-row"><label for="pbB2Yrs">Years from now</label></div>
+      <input type="range" id="pbB2Yrs" min="1" max="45" step="1" value="30">
+      <div class="pb-b2-raterow"><span class="pb-c2-taxl" id="pbB2RateL">Prices rising a year</span><div class="pb-seg pb-seg-sm pb-b2-rate" role="group" aria-labelledby="pbB2RateL"><button type="button" data-rate="2" aria-pressed="true">2%</button><button type="button" data-rate="3" aria-pressed="false">3%</button><button type="button" data-rate="4" aria-pressed="false">4%</button></div></div>
+    </div>
+    <a class="pb-b2-link" href="glossary.html#inflation">More plain English in the jargon buster <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
+  <div class="pb-b2-stage"><canvas class="pb-b2-cv" aria-hidden="true"></canvas></div>
+</div></section>
 
 <!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
      (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
@@ -3028,26 +2932,6 @@ main h1{font-weight:800}
       </div>
     </div></li>
   </ul>
-</div></section>
-
-<section id="calc" class="pb-bleed pb-dark pb-product"><div class="wrap calc-grid">
-  <div class="calc-copy">
-    <h2>What your payments could build.</h2>
-    <p id="pbPtDesc">See your projection and Revenue&rsquo;s tax relief. Two minutes, no sign-up.</p>
-    <a class="btn btn-quiet-dark" id="pbPtBtn" href="pension-calculator.html"><span id="pbPtBtnT">Open the calculator</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    <ul class="pb-pt-list" id="pbPtList">
-      <li><a href="director-calculator.html">Director calculator</a></li>
-      <li><a href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
-      <li><a href="state-pension-reality-check.html">State Pension reality check</a></li>
-      <li><a href="state-pension-entitlement.html">State Pension entitlement check</a></li>
-    </ul>
-  </div>
-  <figure class="pb-product-fig" id="pbPtFig">
-    <a class="pb-product-shot" id="pbPtShot" href="pension-calculator.html" aria-label="Open the calculator">
-      <picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=47e6e103"><img src="assets/img/product-pension-calculator.jpg?v=401ea23d" width="2184" height="3098" loading="lazy" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief."></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadI" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 484 Q470 484 425 420" class="pb-ann-under"/><path d="M560 484 Q470 484 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-under"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadI)"/></svg><span class="pb-ann-l" style="left:26.1%;top:53.8%;transform:translateY(-50%)">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:50.6%;transform:translateY(-50%)">The figures follow</span></span>
-    </a>
-    <figcaption class="pb-product-cap">Illustration only. Investments can fall as well as rise.</figcaption>
-  </figure>
 </div></section>
 
 <!-- YOUR PENSION THROUGH LIFE (Run 37, item 4). The ages the site already
@@ -3161,6 +3045,10 @@ main h1{font-weight:800}
   <div class="about">
     <span class="kicker">Founder and CEO, QFA</span>
     <h2>Damian Condon</h2>
+    <div class="pb-reg">
+      <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
+      <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
+    </div>
     <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can serve real people. Clarity is the whole point.</p>
     <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and still lead it. I am the Qualified Financial Adviser behind Pensionbuddy.</p>
     <p class="bio">That work left me one firm opinion. Hardly anyone is bad with money. They have never had it explained in words they felt free to question.</p>
@@ -3273,10 +3161,10 @@ main h1{font-weight:800}
     <details><summary>What does it cost if I become a client?<span class="pm">+</span></summary><p>It depends on what you need. You know before you commit. We are paid by fee, commission or a mix.</p></details>
     <details><summary>Do I need to know anything before we talk?<span class="pm">+</span></summary><p>No. Bring what you remember. Doing the digging is our job.</p></details>
     <details><summary>Is my information kept private?<span class="pm">+</span></summary><p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p></details>
-    <!-- the page's second booking ask, quiet (one filled button per page: the one
-         after the way-of-life picker); Damian, 8 October 2026 -->
+    <!-- the page's one booking ask in its content, filled (Damian, 11 October 2026: the
+         ask under the gap went; "we have that below") -->
     <div class="faq-ask">
-      <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
   </div>
 </div></section>
@@ -3300,6 +3188,13 @@ main h1{font-weight:800}
 
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 <script src="assets/js/living-standards.js?v=97a698fc"></script>
+<script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
+<script src="assets/js/pb-home-kit.js?v=08342f2e"></script>
+<script src="assets/js/pb-home-gap.js?v=3a64d771"></script>
+<script src="assets/js/pb-home-calc.js?v=13113602"></script>
+<script src="assets/js/pb-home-basket.js?v=4336d6b2"></script>
+<script src="games/buddy-sprites.js"></script>
+<script src="assets/js/pb-w-scene.js?v=27f5dcfb"></script>
 <script>
 /* sticky nav shadow */
 const nav=document.getElementById('nav');
@@ -3324,196 +3219,6 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
       l.classList.remove('open');t.setAttribute('aria-expanded','false');
       t.setAttribute('aria-label','Open menu');t.focus();}
   });
-})();
-/* the gap: bars grow and figures count up once, when the band scrolls into view */
-(function(){
-  var gap=document.getElementById('pbGap'); if(!gap) return;
-  var nums=[].slice.call(gap.querySelectorAll('[data-pb-count]'));
-  var REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fmt=function(v){return '\u20ac'+Math.round(v).toLocaleString('en-IE');};
-  /* the markup carries the finished chart; without an observer, or with
-     reduced motion, it stays exactly as written */
-  if(REDUCE||!('IntersectionObserver' in window)||!('requestAnimationFrame' in window)) return;
-  function inView(){var r=gap.getBoundingClientRect();return r.top<window.innerHeight&&r.bottom>0;}
-  /* a link to the band itself (#gap) lands on it: that reader is looking at
-     the finished chart, so it stays finished */
-  var to=null; try{to=location.hash.length>1&&document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch(e){}
-  if(to&&(to===gap||to.contains(gap))) return;
-  var done=false;
-  function run(){
-    if(done) return; done=true;
-    gap.classList.add('pb-go');
-    /* the calculators' display engine: each frame closes a fixed fraction of what is left */
-    var anims=nums.map(function(n){return {el:n,cur:0,target:+n.getAttribute('data-pb-count')};});
-    function step(){
-      /* the reader has moved the slider: their figures stand, the count-up stops */
-      if(gap.classList.contains('pb-gap-live')) return;
-      var active=false;
-      anims.forEach(function(a){
-        var d=a.target-a.cur;
-        if(Math.abs(d)>Math.max(0.6,Math.abs(a.target)*0.0004)){a.cur+=d*0.16;active=true;}else{a.cur=a.target;}
-        a.el.textContent=fmt(a.cur);
-      });
-      if(active) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  /* decided once the page has settled, after any restored scroll: a band on
-     screen then (a tall window, a reload part-way down) stays finished; one
-     below the fold is armed in a single frame, with no transition that could
-     shrink bars in view, and let go when it scrolls in */
-  function arm(){
-    if(inView()) return;
-    gap.classList.add('pb-still','pb-armed'); void gap.offsetHeight; gap.classList.remove('pb-still');
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){io.disconnect();run();}});
-    },{threshold:0.3});
-    io.observe(gap);
-    /* never leave the bars empty: a browser whose observer never reports */
-    setTimeout(function(){if(inView())run();},1200);
-  }
-  if(document.readyState==='complete') requestAnimationFrame(arm);
-  else addEventListener('load',function(){requestAnimationFrame(arm);});
-})();
-/* the gap, your own: the reader's figure for what they expect to need, against
-   the State Pension figure the chart already carries. Only the chart's own
-   proportions are worked out here; nothing is a projection.
-
-   A WAY OF LIFE (#pbLife, Run 20 #2). The Pensions Council's three standards
-   of living, for one person or a couple, as a start point for the slider: a
-   card sets the slider to its annual figure and paints exactly what a drag
-   to that figure paints, then opens its month category by category
-   (assets/js/living-standards.js). Dragging again is the reader's own figure
-   and lets the card go. A couple is set against two State Pensions at the
-   maximum rate, which is how the report built its couple Modest figure; the
-   rate is state-pension.js's, a year of it is 52 weeks, and the chart says
-   "two State Pensions" whenever it is showing them. */
-(function(){
-  var gap=document.getElementById('pbGap'), ctl=document.getElementById('pbNeedCtl'), r=document.getElementById('pbNeed');
-  if(!gap||!ctl||!r) return;
-  var needN=gap.querySelector('.pb-gap-need .pb-gap-n'), needBar=gap.querySelector('.pb-gap-need .pb-gap-bar');
-  var needL=gap.querySelector('.pb-gap-need .pb-gap-l'), stBar=gap.querySelector('.pb-gap-state .pb-gap-bar');
-  var stN=stBar.querySelector('[data-pb-count]'), stL=gap.querySelector('.pb-gap-state .pb-gap-l');
-  var st1=+stN.getAttribute('data-pb-count'), st=st1, stLabel1=stL.textContent;
-  var sh=gap.querySelector('.pb-gap-short'), shN=sh.querySelector('.pb-gap-n'), shL=sh.querySelector('.pb-gap-sl');
-  var src=gap.parentNode.querySelector('.pb-gap + .pb-src'), src1=src?src.textContent:'';
-  var fmt=function(v){return '€'+Math.round(v).toLocaleString('en-IE');};
-  var LS=window.PBLivingStandards, SP=window.PBStatePension;
-  var life=document.getElementById('pbLife');
-  var household='single', level=null;
-  /* two State Pensions at the maximum rate, from the rate itself rather than
-     double the rounded figure: 2 x 299.30 x 52 is 31,127.20 */
-  var st2=SP?Math.round(2*SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100):2*st1;
-  /* the slider's fill and spoken value, as the calculators' paintSlider() sets them */
-  function slide(){var v=+r.value;r.style.setProperty('--fill',((v-r.min)/(r.max-r.min))*100+'%');r.setAttribute('aria-valuetext',fmt(v)+' a year');}
-  function paint(){
-    var need=+r.value, top=Math.max(need,st), g=need-st, pc=function(v){return (v/top*100).toFixed(2)+'%';};
-    var two=household==='couple';
-    var std=level&&LS?LS.standard(level,household):null;
-    gap.classList.add('pb-gap-live');
-    needBar.style.setProperty('--h',pc(need));
-    stBar.style.setProperty('--h',pc(st));
-    sh.style.setProperty('--from',pc(st));
-    sh.style.setProperty('--h',g>0?pc(g):'0%');
-    needN.setAttribute('data-pb-count',need); needN.textContent=fmt(need);
-    stN.setAttribute('data-pb-count',st); stN.textContent=fmt(st);
-    shN.setAttribute('data-pb-count',Math.max(g,0)); shN.textContent=g>0?fmt(g):'';
-    shL.textContent=g>0?'a year short':'';
-    needL.textContent=std?(std.label+', '+(two?'for a couple':'for one')):'What you expect to need';
-    stL.textContent=two?'Two State Pensions, both at the maximum':stLabel1;
-    if(src) src.textContent=std?'Pensions Council, Irish Retirement Living Standards, 2024 prices.':src1;
-    document.getElementById('pbNeedV').textContent=fmt(need)+' a year';
-    var big=document.getElementById('pbNeedOut');
-    big.querySelector('.pb-gap-big-n').textContent=g>0?fmt(g):'';
-    big.querySelector('.pb-gap-big-w').textContent=g>0?'a year short.':(two?'Covered by two State Pensions.':'Covered by the State Pension.');
-    gap.setAttribute('aria-label','Two bars. '+(std?'A '+std.label.toLowerCase()+' retirement '+(two?'for a couple':'for one')+' costs ':'You expect to need ')+
-      Math.round(need).toLocaleString('en-IE')+' euro a year. '+(two?'Two State Pensions at the maximum pay ':'The State Pension pays ')+
-      st.toLocaleString('en-IE')+'. '+(g>0?'The gap is '+Math.round(g).toLocaleString('en-IE')+'.':'That is covered.'));
-    why(false);
-  }
-  ctl.hidden=false;
-  slide();
-  r.addEventListener('input',function(){ if(level) choose(null); slide(); paint(); });
-  /* WHERE EACH FIGURE COMES FROM (Run 43). Each figure becomes a toggle button wrapping
-     its own span, so the count-up and paint() keep their references; pressing changes no
-     figure. The line goes after the caveat (.gap-note), never between the figures and it,
-     and is polite only when a press changed it, never while the slider drags. */
-  var need1=+needN.getAttribute('data-pb-count'), pressed=null, whyB=[];
-  var note=gap.parentNode.querySelector('.gap-note'), whyP=document.createElement('p');
-  whyP.className='pb-gap-why'; whyP.id='pbGapWhy'; whyP.setAttribute('aria-live','off'); whyP.setAttribute('aria-atomic','true');
-  if(note||src) (note||src).parentNode.insertBefore(whyP,(note||src).nextSibling);
-  gap.setAttribute('role','group');
-  [['need',needN,needL,'Need'],['short',shN,shL,'Short'],['state',stN,stL,'State']].forEach(function(w,i){
-    var b=document.createElement('button');
-    b.type='button'; b.className='pb-gap-why-b'; b.id='pbGapWhy'+w[3];
-    b.setAttribute('aria-pressed','false'); b.setAttribute('aria-controls','pbGapWhy');
-    w[1].id='pbGapN'+i; w[2].id='pbGapL'+i;
-    b.setAttribute('aria-labelledby',w[1].id+' '+w[2].id);
-    w[1].parentNode.insertBefore(b,w[1]); b.appendChild(w[1]);
-    b.addEventListener('click',function(){ pressed=pressed===w[0]?null:w[0]; why(true); });
-    whyB.push([w[0],b]);
-  });
-  function why(fromPress){
-    if(!whyP||!whyB) return;
-    var need=+r.value, g=need-st, two=household==='couple', std=level&&LS?LS.standard(level,household):null;
-    var wk=SP?'€'+(SP.MAX_WEEKLY_CENTS/100).toFixed(2):'€299.30', t='';
-    whyB.forEach(function(x){ if(x[0]==='short') x[1].hidden=!(g>0); if(x[1].hidden&&pressed===x[0]) pressed=null; });
-    whyB.forEach(function(x){ x[1].setAttribute('aria-pressed',pressed===x[0]?'true':'false'); });
-    if(pressed==='need') t=std?fmt(need)+' a year is the Pensions Council’s '+std.label+' standard of living '+(two?'for a couple':'for one person')+', at 2024 prices.'
-      :need===need1?fmt(need)+' a year is the survey average for what people expect to need (Royal London Ireland, 2026).'
-      :fmt(need)+' a year is your own figure, set with the slider above.';
-    else if(pressed==='state') t=(two?fmt(st)+' a year is two State Pensions (Contributory), each':fmt(st)+' a year is the State Pension (Contributory)')+
-      ' at the maximum personal rate: '+wk+' a week from January 2026, 52 weekly payments. Rates change, usually at each Budget.';
-    else if(pressed==='short') t=fmt(g)+' a year is '+fmt(need)+' less '+fmt(st)+'.';
-    whyP.setAttribute('aria-live',fromPress?'polite':'off');
-    whyP.textContent=t;
-  }
-  why(false);
-  if(!life||!LS) return;
-
-  var cards=[].slice.call(life.querySelectorAll('.pb-life-card'));
-  var bSingle=document.getElementById('pbLifeSingle'), bCouple=document.getElementById('pbLifeCouple');
-  var split=document.getElementById('pbLifeSplit'), rows=document.getElementById('pbLifeRows'), head=document.getElementById('pbLifeSt');
-  function figures(){
-    cards.forEach(function(c){
-      c.querySelector('.pb-life-n').textContent=fmt(LS.standard(c.getAttribute('data-level'),household).annual);
-      c.setAttribute('aria-pressed',c.getAttribute('data-level')===level?'true':'false');
-    });
-    bSingle.setAttribute('aria-pressed',household==='single'?'true':'false');
-    bCouple.setAttribute('aria-pressed',household==='couple'?'true':'false');
-  }
-  function month(){
-    if(!level){ split.hidden=true; return; }
-    var s=LS.standard(level,household), top=0;
-    s.categories.forEach(function(c){ top=Math.max(top,c.monthly); });
-    head.textContent=s.label+(household==='couple'?', for a couple':', for one person')+': '+fmt(s.monthly)+' a month';
-    rows.innerHTML=s.categories.map(function(c){
-      return '<li><span>'+c.label+'</span><i style="--w:'+(c.monthly/top*100).toFixed(2)+'%" aria-hidden="true"></i><b>'+fmt(c.monthly)+'</b></li>';
-    }).join('');
-    split.hidden=false;
-  }
-  /* a level of null lets the card go: the slider is the reader's own again */
-  function choose(lv){ level=lv; figures(); month(); }
-  function setNeed(){
-    if(!level) return;
-    r.value=LS.standard(level,household).annual;
-    slide();
-  }
-  cards.forEach(function(c){
-    c.addEventListener('click',function(){
-      var lv=c.getAttribute('data-level');
-      choose(level===lv?null:lv);
-      setNeed(); paint();
-    });
-  });
-  function setHousehold(h){
-    household=h; st=h==='couple'?st2:st1;
-    figures(); setNeed(); month(); paint();
-  }
-  bSingle.addEventListener('click',function(){ setHousehold('single'); });
-  bCouple.addEventListener('click',function(){ setHousehold('couple'); });
-  figures();
-  life.hidden=false;
 })();
 /* scroll reveal */
 </script>
@@ -3637,12 +3342,11 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-tl-motion.js?v=5a0eb56f"></script>
-<script src="assets/js/pb-life-motion.js?v=dc01bd9c"></script>
 <script src="assets/js/pb-call-motion.js?v=bce36f1f"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=300a3ade" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=a315e6ad" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3651,53 +3355,10 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 
 
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
-<script src="assets/js/pb-bookbar.js?v=9603deff"></script>
-<script>
-/* product tabs: one per tool, swapping the band's screenshot, line and button */
-(function(){
-  var T=[{"tab": "Pension calculator", "href": "pension-calculator.html", "btn": "Open the calculator", "desc": "See your projection and Revenue’s tax relief. Two minutes, no sign-up.", "img": "product-pension-calculator", "w": 2184, "h": 2554, "alt": "The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief.", "jpg": "assets/img/product-pension-calculator.jpg?v=401ea23d", "webp": "assets/img/product-pension-calculator.webp?v=47e6e103"}, {"tab": "Director calculator", "href": "director-calculator.html", "btn": "Open the director calculator", "desc": "See the pot you could build, the income it could pay and the corporation tax your company could save. Two minutes, no sign-up.", "img": "product-director-calculator", "w": 2184, "h": 2968, "alt": "The director calculator: sliders for age, retirement age, salary, pot and company contribution, with projected pot, corporation tax relief, and salary compared against pension.", "jpg": "assets/img/product-director-calculator.jpg?v=179da201", "webp": "assets/img/product-director-calculator.webp?v=673872e6"}, {"tab": "Auto-enrolment comparison", "href": "broker-vs-autoenrolment.html", "btn": "Compare the two side by side", "desc": "My Future Fund and a personal pension, side by side.", "img": "product-broker-vs-autoenrolment", "w": 2184, "h": 2302, "alt": "The auto-enrolment comparison: sliders for age, salary and contribution, with what goes into your pension each way and what each costs you.", "jpg": "assets/img/product-broker-vs-autoenrolment.jpg?v=b9667b07", "webp": "assets/img/product-broker-vs-autoenrolment.webp?v=1b15a6c0"}, {"tab": "State Pension reality check", "href": "state-pension-reality-check.html", "btn": "See the State Pension reality check", "desc": "What the State Pension leaves you to find.", "img": "product-state-pension-reality-check", "w": 2184, "h": 2067, "alt": "The State Pension reality check: a contributions slider, the weekly and yearly State Pension, and how much of three living standards it covers.", "jpg": "assets/img/product-state-pension-reality-check.jpg?v=a885d3f7", "webp": "assets/img/product-state-pension-reality-check.webp?v=b3179739"}, {"tab": "State Pension entitlement check", "href": "state-pension-entitlement.html", "btn": "Open the entitlement check", "desc": "What the State Pension would pay you, worked out both ways the Department does.", "img": "product-state-pension-entitlement", "w": 2184, "h": 2582, "alt": "The State Pension entitlement check: sliders for birth year, the year you first paid Pay-Related Social Insurance (PRSI) and contributions, with the weekly rate and both calculations side by side.", "jpg": "assets/img/product-state-pension-entitlement.jpg?v=42e406df", "webp": "assets/img/product-state-pension-entitlement.webp?v=0bf51cb1"}];
-  var copy=document.querySelector('#calc .calc-copy'), desc=document.getElementById('pbPtDesc'), btn=document.getElementById('pbPtBtn'),
-      btnT=document.getElementById('pbPtBtnT'), fig=document.getElementById('pbPtFig'), shot=document.getElementById('pbPtShot'), list=document.getElementById('pbPtList');
-  if(!copy||!desc||!btn||!btnT||!fig||!shot||!list) return;
-  var img=shot.querySelector('img'), src=shot.querySelector('source');
-  var tl=document.createElement('div'); tl.className='pb-pt-tabs'; tl.setAttribute('role','tablist'); tl.setAttribute('aria-label','The free tools');
-  /* the tab panel is the picture itself: a <figure> with a caption cannot
-     take the role (Run 34, item 5), so the shot is wrapped in one */
-  var panel=document.createElement('div'); panel.id='pbPtPanel'; panel.setAttribute('role','tabpanel');
-  shot.parentNode.insertBefore(panel,shot); panel.appendChild(shot);
-  var tabs=T.map(function(t,i){
-    var b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab'); b.id='pbPtTab'+i;
-    b.setAttribute('aria-controls','pbPtPanel'); b.textContent=t.tab; tl.appendChild(b);
-    b.addEventListener('click',function(){pick(i,false);});
-    return b;
-  });
-  /* each URL carries its content stamp, embedded when the shots are taken */
-  function url(t,ext){return t[ext];}
-  function pick(i,focus){
-    var t=T[i];
-    tabs.forEach(function(b,k){b.setAttribute('aria-selected',k===i?'true':'false');b.tabIndex=k===i?0:-1;});
-    panel.setAttribute('aria-labelledby','pbPtTab'+i);
-    fig.setAttribute('data-pb-tool',t.href);
-    desc.textContent=t.desc; btn.setAttribute('href',t.href); btnT.textContent=t.btn;
-    shot.setAttribute('href',t.href); shot.setAttribute('aria-label',t.btn);
-    if(src) src.setAttribute('srcset',url(t,'webp'));
-    img.setAttribute('src',url(t,'jpg')); img.setAttribute('width',t.w); img.setAttribute('height',t.h); img.setAttribute('alt',t.alt);
-    if(focus) tabs[i].focus();
-  }
-  tl.addEventListener('keydown',function(e){
-    var i=tabs.indexOf(document.activeElement); if(i<0) return;
-    var n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];
-    if(n===undefined) return; e.preventDefault(); pick((n+tabs.length)%tabs.length,true);
-  });
-  copy.insertBefore(tl,desc);
-  list.hidden=true;
-  pick(0,false);
-})();
-</script>
+<script src="assets/js/pb-bookbar.js?v=6d8b7491"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-providers.js?v=d29ad6be"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
-<script src="assets/js/pb-gap-grab.js?v=7d04161b"></script>
 <script src="assets/js/pb-tickband.js?v=8820d919"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 </body>

@@ -230,11 +230,12 @@ def main():
            ['rgba(0, 0, 0, 0)', 'solid', True, 'rgb(22, 201, 176)'])
         want = [page] if page in targets else []
         eq('1. %s: its own link marked current, once' % page, r['current'], want)
-        # the two plain links carry their own underline; a page inside a
-        # dropdown underlines the dropdown's button, and only that one
+        # the three plain links (Home since 11 October 2026) carry their own
+        # underline; a page inside a dropdown underlines the dropdown's
+        # button, and only that one
         under = [d['name'] for d in r['dd'] if d['underline']]
         eq('1. %s: and only its own dropdown underlined' % page, len(under),
-           1 if want and page not in ('tracker.html', 'starter.html') else 0)
+           1 if want and page not in ('tracker.html', 'starter.html', 'index.html') else 0)
         eq('1. %s: no script error' % page, r['errors'], [])
         R[(page, 'reached')] = {h.split('#')[0] or page for h in r['hrefs']}
     # 2, page by page: a nav that lost a link on one page is caught on that page

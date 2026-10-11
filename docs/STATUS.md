@@ -340,6 +340,59 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 50 — 2026-10-11 · The home page, simpler and alive; a Home link; a launch video (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief (11 October 2026): "make it as simple as possible", "remind
+people the pain", a Home button, the calculator straight under the gap (a
+note from Zurich), the jargon buster's inflation basket under that, and go
+all out on motion. "Forget any previous rules": where a test held something
+the brief removes, the test now holds the new page instead.
+
+- **The home page, top to bottom.** Welcome (its tagline replaced by a
+  picture: the games' pixel Buddy runs from 25 to 66 and each age drops a
+  coin in a jar, `assets/js/pb-w-scene.js`); the gap; the providers we hold
+  agencies with; the calculator; inflation; the games; then as before.
+  Gone: the eyebrow, the regulator lockup in the hero (now under Damian's
+  name in his section; the footer disclosure is unchanged), "Which of these
+  sounds most like you?", the survey slider and its drag handle, the
+  way-of-life cards, "79% feel unprepared", the booking button under the
+  gap, "What's changed?" and the product band. The page's one filled
+  booking button is now the one after the questions.
+- **The gap** (`assets/js/pb-home-gap.js`). Modest, Moderate, Comfortable
+  and Single, Couple, side by side. Two bars on springs: what the life
+  costs a year, what the State Pension pays (two at the maximum for a
+  couple); the gap in coral with its figure above it, "Covered" when there
+  is none. The figure rolls like an odometer; "€303 a month, €72,720 over a
+  20-year retirement" under it; "Where the money goes" opens the seven
+  categories. Figures from living-standards.js and state-pension.js only.
+- **The calculator** (`assets/js/pb-home-calc.js`). Age, in pensions
+  already, going in each month, and 20% or 40% for the relief. One answer,
+  in today's money, from 66: the State Pension plus 4% of the pot a year,
+  against the way of life picked above (shared, `PBKit.aim`). The pension
+  calculator's own sums (5% a year, monthly; today's money at 2%). A jar of
+  coins (slate yours, amber Revenue's) with a line for the pot that covers
+  the life; "Close my gap" slides the monthly amount to the figure that
+  covers it, "Aim higher" moves the life up. The two warnings sit under it
+  (`pagebuild.WARN_PAGES` now lists index.html). On a phone a small answer
+  rides along above the sliders, and the booking bar keeps off the card.
+- **Inflation** (`assets/js/pb-home-basket.js`). The glossary's sum: what
+  €1,000 buys after the years chosen at 2, 3 or 4%. Two baskets; the
+  shopping (half of it eggs) jumps out or drops back in.
+- **Home** is the first nav item on every page (skeleton, then
+  `tools/pagebuild.py` and `tools/sync-chrome.py`), so index.html marks
+  itself current.
+- **Removed files:** `assets/js/pb-gap-grab.js`, `assets/js/pb-life-motion.js`
+  (nothing else used them), `tests/gap-band.py` (it tested the old chart),
+  and about 23 KB of the home page's CSS for the parts that went.
+- **Tests.** `build.test.py` 484/0 (checks 8, 13, 19, 20, 28, 32, 33, 36,
+  47, 52 and 53 follow the new page). `run-tests.py` 636/0. `interactive-43`
+  340/0 (its H checks went with the chart; main had 8 failures there).
+  `nav`, `consent` and `deadline` fail exactly the checks main fails in this
+  container, and no more. The readiness check's "Start from a way of life"
+  link now goes to `index.html#gap`.
+- **The launch video:** see `tools/launch-video/README.md`.
+
+---
 # Run 49 — 2026-10-08 · GA4 and Tag Manager: one load each, the events reach GA4 (on `claude/ga4-gtm`)
 
 Damian's brief: put GTM-WX8BZHFN in the consent-gated Tag Manager setup,

@@ -207,43 +207,41 @@ for (const page of ['director-pension-rules.html', 'booking.html', 'index.html']
   eq(`2. ${page} at 375px: no control, focused in order (${r.n}), lies under the floating chrome`, r.bad, []);
 }
 
-/* 2b: the product tabs on the home page at 375, the way a keyboard moves
-   through them: the chosen tab focused, then ArrowRight to each of the
-   others, each checked where it lands. Since 8 October 2026 (the one
-   booking wording, Run 48) the second tab can land just where Ask Buddy
-   rides above the booking bar, so Buddy must step aside for it. */
+/* 2b: the calculator's "Aiming for" pills on the home page at 375 (since
+   11 October 2026; the product tabs this walked went with the product
+   band), the way a keyboard moves through them: the first focused, then Tab
+   to each of the others, each checked where it lands. The second pill is
+   brought level with Ask Buddy's place first, so a stuck Buddy would cover it. */
 await open('index.html', 375);
-/* the tab row brought level with Ask Buddy (twice: the booking bar, and
-   Buddy riding over it, settle after a scroll), so the second tab, under
-   Buddy's right-hand place, is where a stuck Buddy would cover it */
+const PILLS = `[].slice.call(document.querySelectorAll('.pb-c2-lv button, .pb-c2-hh button'))`;
 const LEVEL = `(() => {
-  const t = document.getElementById('pbPtTab1').getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+  const t = ${PILLS}[1].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
   window.scrollBy(0, Math.round((t.top + t.bottom) / 2 - (b.top + b.bottom) / 2)); return 1; })()`;
-await ev(`document.getElementById('pbPtTab0').scrollIntoView({ block: 'center' })`);
+await ev(`${PILLS}[0].scrollIntoView({ block: 'center' })`);
 for (let i = 0; i < 3; i++) { await sleep(400); await ev(LEVEL); }
 await sleep(1500);
-const levelled = await ev(`(() => { const t = document.getElementById('pbPtTab1').getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
+const levelled = await ev(`(() => { const t = ${PILLS}[1].getBoundingClientRect(), b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
   return t.left < b.right && t.right > b.left && t.top < b.bottom && t.bottom > b.top; })()`);
-eq('2b. the second product tab sits under Ask Buddy\'s place before the keyboard reaches it (the case under test)', levelled, true);
-await ev(`document.getElementById('pbPtTab0').focus({ focusVisible: true, preventScroll: true })`);
+eq('2b. the second "Aiming for" pill sits under Ask Buddy\'s place before the keyboard reaches it (the case under test)', levelled, true);
+await ev(`${PILLS}[0].focus({ focusVisible: true, preventScroll: true })`);
 await sleep(200);
 const UNDER = `(() => {
   const a = document.activeElement, b = document.getElementById('pbBuddyBtn');
   const cs = getComputedStyle(b), r = a.getBoundingClientRect(), L = b.getBoundingClientRect();
   const on = cs.display !== 'none' && cs.visibility === 'visible' && L.width && L.bottom > 0 && L.top < innerHeight && L.left < innerWidth;
   const w = Math.min(r.right, L.right) - Math.max(r.left, L.left), h = Math.min(r.bottom, L.bottom) - Math.max(r.top, L.top);
-  return [a.id, on && w > 1 && h > 1];
+  return [a.textContent.trim(), on && w > 1 && h > 1];
 })()`;
-const tabsUnder = [];
-const tabCount = await ev(`document.querySelectorAll('#pbPtTabs [role=tab], .pb-pt-tabs [role=tab]').length`);
-for (let i = 1; i < tabCount; i++) {
-  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
-  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 });
+const pillsUnder = [];
+const pillNames = await ev(`${PILLS}.map(b => b.textContent.trim())`);
+for (let i = 1; i < pillNames.length; i++) {
+  await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
+  await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 });
   await sleep(150);
-  tabsUnder.push(await ev(UNDER));
+  pillsUnder.push(await ev(UNDER));
 }
-eq('2b. index.html at 375px: the product tabs, reached by ArrowRight, each focused and none under Ask Buddy',
-   tabsUnder, Array.from({ length: tabCount - 1 }, (_, i) => ['pbPtTab' + (i + 1), false]));
+eq('2b. index.html at 375px: the "Aiming for" pills, reached by Tab, each focused and none under Ask Buddy',
+   pillsUnder, pillNames.slice(1).map(n => [n, false]));
 
 /* 3 and 4, on the home page at 375 */
 await open('index.html', 375);
