@@ -168,7 +168,7 @@ has('39. why they got it', g.text, 'You got this email because you asked for thi
 
 group('THE REPLY FORMS: ENQUIRY AND PENSION-TRACE');
 function ask(over) {
-  var d = { 'form-name': 'enquiry', 'bot-field': '', topic: 'Check my pension', details: 'Provider: Zurich | Roughly in it: €25,000 to €100,000',
+  var d = { 'form-name': 'enquiry', 'bot-field': '', topic: 'Check my pension', details: 'Provider: Zurich | Value: €25,000 to €100,000',
             message: 'Are the charges fair?', name: 'Mary', email: 'mary@example.com', contact_by: 'Email', phone: '',
             page: 'https://pensionbuddy.ie/index.html', reply_by: 'Tuesday 13 October' };
   Object.keys(over || {}).forEach(function (k) { d[k] = over[k]; });
@@ -184,9 +184,10 @@ function trace(over) {
 var aq = E.plan('enquiry', ask(), {}), tq = E.plan('pension-trace', trace(), {});
 eq('52. enquiry: a copy to the sender, with no box to tick', [aq.send, aq.message && aq.message.to], [true, ['mary@example.com']]);
 eq('52. pension-trace: a copy to the sender', [tq.send, tq.message && tq.message.to], [true, ['mary@example.com']]);
-eq('53. subjects', [aq.message.subject, tq.message.subject], ['Mary, Damian has your question', 'Mary, Damian has your list of old jobs']);
-has('54. enquiry copy: the day Damian replies', aq.message.text, 'Damian will reply by email by Tuesday 13 October.');
-has('54. enquiry copy: a phone call when asked for one', E.plan('enquiry', ask({ contact_by: 'Phone', phone: '087 1' }), {}).message.text, 'Damian will phone you by Tuesday 13 October.');
+eq('53. subjects', [aq.message.subject, tq.message.subject], ['Mary, we have your question', 'Mary, we have your list of old jobs']);
+eq('53. no name: still plain', E.plan('enquiry', ask({ name: '' }), {}).message.subject, 'We have your question');
+has('54. enquiry copy: the day we reply', aq.message.text, 'We’ll reply by Tuesday 13 October.');
+has('54. enquiry copy: a call when asked for one', E.plan('enquiry', ask({ contact_by: 'Phone', phone: '087 1' }), {}).message.text, 'We’ll call you by Tuesday 13 October.');
 has('54. a day not in our shape is not repeated', E.plan('enquiry', ask({ reply_by: '<b>tomorrow</b>' }), {}).message.text, 'within one working day');
 has('55. enquiry copy: what they sent', aq.message.text, 'Provider: Zurich');
 has('55. and the question', aq.message.text, 'Question: Are the charges fair?');
@@ -200,7 +201,7 @@ eq('57. LEAD_TO moves it', E.alert('enquiry', ask(), { LEAD_TO: 'damian@greshamw
 eq('57. test mode: EMAIL_TEST_TO', E.alert('enquiry', ask(), { EMAIL_TEST: '1', EMAIL_TEST_TO: 't@x.ie' }).message.to, ['t@x.ie']);
 eq('58. alert subjects', [al.message.subject, tl.message.subject], ['New question: Check my pension, from Mary', 'New trace request: 2 old jobs, from Mary Byrne']);
 has('58. the alert carries the phone', tl.message.text, 'Phone: 087 123 4567');
-has('58. and the other name', tl.message.text, 'Other name at those jobs: Mary Kelly');
+has('58. and the previous surname', tl.message.text, 'Previous surname: Mary Kelly');
 eq('58. an alert with no valid address still goes, with no reply-to', [E.alert('enquiry', ask({ email: 'x' }), {}).send, 'reply_to' in E.alert('enquiry', ask({ email: 'x' }), {}).message], [true, false]);
 eq('59. no alert for the other forms', ['calculator-results', 'director-guide', 'pension-finder'].map(function (f) { return E.alert(f, calc(), {}).send; }), [false, false, false]);
 var ae = E.plan('enquiry', ask({ message: '<script>x</script>', name: '<b>Eve</b>' }), {}).message;

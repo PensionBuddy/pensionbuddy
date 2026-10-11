@@ -1,8 +1,7 @@
 <section class="pbj" id="trace" aria-labelledby="pbjH"><div class="wrap">
   <div class="sec-head ctr">
-    <span class="eyebrow acc"><span class="pip"></span>Pension tracker</span>
-    <h2 id="pbjH">List your old jobs. <span class="hl">Damian finds the pensions.</span></h2>
-    <p class="pbj-lede">Names and rough years are enough. Free to start.</p>
+    <h2 id="pbjH">List your old jobs. <span class="hl">We find the pensions.</span></h2>
+    <p class="pbj-lede">Names and rough years are enough.</p>
   </div>
   <div class="pbj-card">
     <form class="pbj-form" id="pbjForm" name="pension-trace" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -13,55 +12,54 @@
 
       <div class="pbj-add" id="pbjAdd">
         <div class="pbj-add-row">
-          <span class="ffield pbj-emp"><input id="pbjEmp" type="text" autocomplete="organization" maxlength="80" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjEmp">Employer&rsquo;s name</label></span>
-          <span class="ffield pbj-yr"><input id="pbjFrom" type="text" inputmode="numeric" maxlength="4" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjFrom">From (year)</label></span>
-          <span class="ffield pbj-yr"><input id="pbjTo" type="text" maxlength="4" placeholder=" " aria-describedby="pbjErr pbjToHint"><label class="flabel" for="pbjTo">To (year)</label></span>
-          <button type="button" class="btn btn-primary pbj-addbtn" id="pbjAddBtn"><span>Add job</span><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <span class="ffield pbj-emp"><input id="pbjEmp" type="text" autocomplete="organization" maxlength="80" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjEmp">Employer</label></span>
+          <span class="ffield pbj-yr"><input id="pbjFrom" type="text" inputmode="numeric" maxlength="4" placeholder=" " aria-describedby="pbjErr"><label class="flabel" for="pbjFrom">From</label></span>
+          <span class="ffield pbj-yr"><input id="pbjTo" type="text" maxlength="4" placeholder=" " aria-describedby="pbjErr pbjToHint"><label class="flabel" for="pbjTo">To</label></span>
+          <button type="button" class="btn btn-primary pbj-addbtn" id="pbjAddBtn"><span>Add</span><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
         </div>
         <div class="pbj-add-more">
           <span class="pbj-hint" id="pbjToHint">Still there? Type <b>now</b>.</span>
-          <button type="button" class="pbj-provbtn" id="pbjProvBtn" aria-expanded="false" aria-controls="pbjProvBox">Know the pension company? <span>Add it</span></button>
+          <button type="button" class="pbj-provbtn" id="pbjProvBtn" aria-expanded="false" aria-controls="pbjProvBox"><span>+ Pension company</span></button>
         </div>
-        <div class="pbj-prov" id="pbjProvBox"><span class="ffield"><input id="pbjProv" type="text" maxlength="80" placeholder=" "><label class="flabel" for="pbjProv">Pension company or scheme (optional)</label></span></div>
+        <div class="pbj-prov" id="pbjProvBox"><span class="ffield"><input id="pbjProv" type="text" maxlength="80" placeholder=" "><label class="flabel" for="pbjProv">Pension company (optional)</label></span></div>
         <p class="pbj-err" id="pbjErr" role="alert"></p>
       </div>
 
       <div class="pbj-tl" id="pbjTl">
-        <div class="pbj-empty" id="pbjEmpty" aria-hidden="true"><i></i><i></i><i></i><span>Your jobs line up here, oldest first.</span></div>
+        <div class="pbj-empty" id="pbjEmpty" aria-hidden="true"><i></i><i></i><i></i><span>Your jobs appear here.</span></div>
         <ol class="pbj-rows" id="pbjRows" aria-label="Your jobs"></ol>
         <div class="pbj-axis" id="pbjAxis" aria-hidden="true"></div>
         <span class="pbj-scan" aria-hidden="true"></span>
       </div>
 
       <div class="pbj-stats" id="pbjStats">
-        <div><b data-pbj="jobs">0</b><span>jobs listed</span></div>
-        <div><b data-pbj="years">0</b><span>years of work</span></div>
+        <div><b data-pbj="jobs">0</b><span>jobs</span></div>
+        <div><b data-pbj="years">0</b><span>years</span></div>
         <div class="pbj-st-short"><b data-pbj="short">0</b><span>under 2 years</span></div>
       </div>
-      <p class="pbj-short-note" id="pbjShortNote" hidden><b>Under 2 years in a job?</b> The scheme may have offered a refund of your own payments when you left. If you never claimed it, it may still be there.</p>
+      <p class="pbj-short-note" id="pbjShortNote" hidden>A job under 2 years may hold a refund you never claimed.</p>
 
       <div class="pbj-send" id="pbjSend">
         <div class="pbj-send-in">
-          <h3>Where should Damian send what he finds?</h3>
+          <h3>Your details</h3>
           <div class="pbj-two">
-            <span class="ffield"><input id="pbjName" name="name" type="text" autocomplete="name" maxlength="80" placeholder=" " aria-describedby="pbjErr2"><label class="flabel" for="pbjName">Your full name</label></span>
-            <span class="ffield"><input id="pbjEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbjErr2"><label class="flabel" for="pbjEmail">Your email</label></span>
+            <span class="ffield"><input id="pbjName" name="name" type="text" autocomplete="name" maxlength="80" placeholder=" " aria-describedby="pbjErr2"><label class="flabel" for="pbjName">Full name</label></span>
+            <span class="ffield"><input id="pbjEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbjErr2"><label class="flabel" for="pbjEmail">Email</label></span>
             <span class="ffield"><input id="pbjPhone" name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder=" "><label class="flabel" for="pbjPhone">Phone (optional)</label></span>
-            <span class="ffield"><input id="pbjOther" name="other_names" type="text" maxlength="80" placeholder=" "><label class="flabel" for="pbjOther">Other name at those jobs (optional)</label></span>
+            <span class="ffield"><input id="pbjOther" name="other_names" type="text" maxlength="80" placeholder=" "><label class="flabel" for="pbjOther">Previous surname (optional)</label></span>
           </div>
           <p class="pbj-err" id="pbjErr2" role="alert"></p>
-          <button type="submit" class="btn btn-primary pbj-go" id="pbjGo"><span>Send my list to Damian</span><svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-          <p class="pbj-note">We use these details only to look for your pensions and to reply to you. Netlify, our website host, stores them. See our <a href="privacy.html">Privacy Notice</a>.</p>
+          <button type="submit" class="btn btn-primary pbj-go" id="pbjGo"><span>Send list</span><svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          <p class="pbj-note">Used only to trace your pensions and reply. <a href="privacy.html">Privacy Notice</a></p>
         </div>
       </div>
     </form>
 
     <div class="pbj-ok" id="pbjOk" role="status" tabindex="-1" hidden>
       <svg class="ico pbj-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-      <h3 id="pbjOkH">Sent. Damian has your list.</h3>
+      <h3 id="pbjOkH">Sent.</h3>
       <p id="pbjOkText"></p>
-      <ol class="pbj-after" id="pbjAfter"></ol>
-      <div class="pbj-ok-cta"><a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us</a><button type="button" class="pbj-again" id="pbjAgain">Start a new list</button></div>
+      <button type="button" class="pbj-again" id="pbjAgain">New list</button>
     </div>
   </div>
 </div></section>

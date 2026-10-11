@@ -5,10 +5,9 @@
    as a bar on a timeline, oldest first, and the counts under it say how
    many jobs, how many years of work, and how many lasted under 2 years (a
    scheme may have paid those back as a refund, or may still hold it). Once
-   there is one job the reply details open, and "Send my list to Damian"
-   posts it to Netlify Forms as "pension-trace" through
+   there is one job the reply details open, and "Send list" posts it to Netlify Forms as "pension-trace" through
    assets/js/pb-forms.js. netlify/functions/submission-created.js then emails
-   Damian the list, with the sender's address as the reply-to, and the
+   us the list, with the sender's address as the reply-to, and the
    sender a copy. A refused post opens a pre-filled email instead.
 
    The list stays on this device (localStorage) until it is sent, so a
@@ -77,12 +76,11 @@
   function add() {
     var n = emp.value.trim().replace(/\s+/g, ' '), f = year(from.value), t = year(to.value, true);
     var isNow = /^[a-z]+$/i.test(to.value.trim());
-    if (!n) return bad(emp, 'Add the employer’s name.');
-    if (f == null) return bad(from, 'Add the year you started, like 1998.');
-    if (!to.value.trim()) return bad(to, 'Add the year you left, or type now.');
-    if (t == null) return bad(to, 'Add the year you left, like 2004, or type now.');
-    if (t < f) return bad(to, 'The year you left is before the year you started.');
-    if (jobs.length >= MAX) return bad(emp, MAX + ' jobs is the most for one list. Send these, and tell Damian about the rest when he replies.');
+    if (!n) return bad(emp, 'Add the employer.');
+    if (f == null) return bad(from, 'Add the start year, like 1998.');
+    if (!to.value.trim() || t == null) return bad(to, 'Add the end year, or type now.');
+    if (t < f) return bad(to, 'The end year is before the start year.');
+    if (jobs.length >= MAX) return bad(emp, MAX + ' jobs is the most for one list.');
     err.textContent = '';
     jobs.push({ id: ++seq, name: n.slice(0, 80), from: f, to: t, now: isNow, prov: prov.value.trim().slice(0, 80) });
     emp.value = from.value = to.value = prov.value = '';
@@ -90,7 +88,7 @@
     save();
     var label = addBtn.querySelector('span');
     addBtn.classList.add('is-done'); label.textContent = 'Added';
-    setTimeout(function () { addBtn.classList.remove('is-done'); label.textContent = 'Add another'; }, 900);
+    setTimeout(function () { addBtn.classList.remove('is-done'); label.textContent = 'Add'; }, 900);
     emp.focus();
     return true;
   }
@@ -139,7 +137,7 @@
     label.className = 'pbj-label';
     b.textContent = j.name; s.textContent = when(j);
     label.appendChild(b); label.appendChild(s);
-    if (j.now) tag(label, 'Current job', '');
+    if (j.now) tag(label, 'Current', '');
     if (short(j)) tag(label, 'Under 2 years', 'is-short');
     if (j.prov) tag(label, j.prov, '');
     x.type = 'button'; x.className = 'pbj-x'; x.innerHTML = X; x.setAttribute('aria-label', 'Remove ' + j.name);
@@ -290,9 +288,9 @@
     if (go.getAttribute('aria-disabled') === 'true') return;   // one send per click
     /* a job typed but not added yet is added first */
     if ((emp.value.trim() || from.value.trim() || to.value.trim()) && !add()) return;
-    if (!jobs.length) { bad(emp, 'Add at least one job first.'); return; }
-    if (!nameEl.value.trim()) { bad(nameEl, 'Please add your full name. Pension companies search by name.', err2); return; }
-    if (!EMAIL.test(emailEl.value.trim())) { bad(emailEl, 'Please enter a valid email address, so Damian can reply.', err2); return; }
+    if (!jobs.length) { bad(emp, 'Add a job first.'); return; }
+    if (!nameEl.value.trim()) { bad(nameEl, 'Add your full name.', err2); return; }
+    if (!EMAIL.test(emailEl.value.trim())) { bad(emailEl, 'Enter a valid email.', err2); return; }
     err2.textContent = '';
     jobsBox.value = text();
     var values = { jobs_count: String(jobs.length), page: location.href.split('#')[0], reply_by: by };
@@ -309,37 +307,27 @@
   function viaEmail() {
     var body = ['My old jobs:', text().replace(/ \| /g, '\n'), '',
       'Name: ' + nameEl.value.trim(),
-      otherEl.value.trim() ? 'Other name at those jobs: ' + otherEl.value.trim() : '',
+      otherEl.value.trim() ? 'Previous surname: ' + otherEl.value.trim() : '',
       phoneEl.value.trim() ? 'Phone: ' + phoneEl.value.trim() : ''].filter(function (x, i) { return x || i === 2; }).join('\n');
     window.location.href = 'mailto:' + FALLBACK + '?subject=' + encodeURIComponent('Please look for my old pensions') +
       '&body=' + encodeURIComponent(body);
-    show('One more step.', 'Your email app should have opened with your list ready to send. If it didn’t, email ' + FALLBACK + ' and Damian will reply.', false);
+    show('One more step.', 'Your email app should have opened with your list ready to send. If not, email ' + FALLBACK + '.');
   }
 
   function sent() {
-    var n = jobs.length, hi = first();
-    var msg = (hi ? 'Thanks, ' + hi + '. ' : 'Thanks. ') + 'Damian will email you ' + (by ? 'by ' + by : 'within one working day') + '.';
+    var hi = first();
+    var msg = (hi ? 'Thanks, ' + hi + '. ' : 'Thanks. ') + 'We’ll reply ' + (by ? 'by ' + by : 'within one working day') + '.';
     try { localStorage.removeItem(KEY); } catch (e) { /* nothing kept */ }
-    if (!motion()) { show('Sent. Damian has your list.', msg, true, n); return; }
+    if (!motion()) { show('Sent.', msg); return; }
     var lis = [].slice.call(rows.querySelectorAll('.pbj-row:not(.is-out)'));
     tl.classList.add('is-scan');
     lis.forEach(function (li, i) { setTimeout(function () { li.classList.add('is-found'); }, 180 + i * (950 / Math.max(lis.length, 1))); });
-    setTimeout(function () { show('Sent. Damian has your list.', msg, true, n); }, 1500);
+    setTimeout(function () { show('Sent.', msg); }, 1500);
   }
 
-  function show(h, msg, real, n) {
-    var after = $('pbjAfter');
+  function show(h, msg) {
     $('pbjOkH').textContent = h;
     $('pbjOkText').textContent = msg;
-    after.textContent = '';
-    if (real) {
-      [['Now', 'Your list of ' + (n === 1 ? 'one job' : n + ' jobs') + ' is with Damian.'],
-       [by ? 'By ' + by : 'Within one working day', 'Damian emails you to say what he needs. Pension companies usually ask for a signed letter before they share details.'],
-       ['Then', 'He tells you what he found, what each pension is worth, and your options.']].forEach(function (r) {
-        var li = document.createElement('li'), b = document.createElement('b');
-        b.textContent = r[0]; li.appendChild(b); li.appendChild(document.createTextNode(r[1])); after.appendChild(li);
-      });
-    }
     form.hidden = true;
     ok.hidden = false;
     ok.classList.remove('show'); void ok.offsetWidth; ok.classList.add('show');

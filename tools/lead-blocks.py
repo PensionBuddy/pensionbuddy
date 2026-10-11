@@ -4,7 +4,7 @@
     python3 tools/lead-blocks.py            # write the pages
     python3 tools/lead-blocks.py --check    # report, change nothing, exit 1 if stale
 
-    ask    "Ask Damian. He replies by email." (Netlify form "enquiry"):
+    ask    "Ask us. We reply by email." (Netlify form "enquiry"):
            the home, starter, directors' and booking pages
     jobs   the old jobs timeline (Netlify form "pension-trace"): tracker.html
 

@@ -13,8 +13,8 @@
      tracker-guide        the guide's link and nothing else; no link set in
                           the environment, no email
      enquiry,
-     pension-trace        a copy of what they sent and the day Damian
-                          replies by; and, through alert(), the same to
+     pension-trace        a copy of what they sent and the day we
+                          reply by; and, through alert(), the same to
                           Damian with the sender as the reply-to, so a
                           lead never waits on a Netlify setting
      anything else        nothing (pension-finder, and the old booking and
@@ -362,7 +362,7 @@ function sentRows(form, d) {
     add('Question', str(d.message, MAX.message));
   } else {
     lines(d.jobs, 3000, 20).forEach(function (x, i) { add('Job ' + (i + 1), x); });
-    add('Other name at those jobs', str(d.other_names, MAX.name));
+    add('Previous surname', str(d.other_names, MAX.name));
   }
   add('Name', str(d.name, MAX.name));
   add('Email', validEmail(str(d.email)) ? str(d.email) : '');
@@ -381,25 +381,25 @@ function rowsTable(rows) {
 
 function rowsText(rows) { return rows.map(function (r) { return r.label + ': ' + r.value; }).join('\n'); }
 
-/* to the sender: what they sent, and when Damian replies */
+/* to the sender: what they sent, and when we reply */
 function copyEmail(form, d, env) {
   var base = siteBase(env), r = REPLY[form], hi = firstName(d.name), day = replyDay(d.reply_by);
   var phone = form === 'enquiry' && /^phone$/i.test(str(d.contact_by));
   var when = day ? 'by ' + day : 'within one working day';
-  var subject = (hi ? hi + ', ' : '') + 'Damian has your ' + r.what;
-  var promise = phone ? 'Damian will phone you ' + when + '.' : 'Damian will reply by email ' + when + '.';
-  var why = 'You got this email because you sent your ' + r.what + ' to Damian on pensionbuddy.ie.';
+  var subject = (hi ? hi + ', we' : 'We') + ' have your ' + r.what;
+  var promise = phone ? 'We\u2019ll call you ' + when + '.' : 'We\u2019ll reply ' + when + '.';
+  var why = 'You got this email because you sent your ' + r.what + ' on pensionbuddy.ie.';
   var rows = sentRows(form, d).filter(function (x) { return x.label !== 'Email'; });
   var body = [
     p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
-    p(esc('Thanks for your ' + r.what + '. ' + promise + ' Damian reads every one himself.')),
+    p(esc('Thanks. ' + promise)),
     h2('What you sent'),
     rowsTable(rows),
     p(esc('Want to talk sooner?')),
     button(base + '/booking.html', BOOK_WORDS)
   ].join('\n');
   var text = [hi ? 'Hello ' + hi + ',' : 'Hello,', '',
-    'Thanks for your ' + r.what + '. ' + promise + ' Damian reads every one himself.', '',
+    'Thanks. ' + promise, '',
     'WHAT YOU SENT', rowsText(rows), '',
     'Want to talk sooner? ' + BOOK_WORDS + ': ' + base + '/booking.html', '',
     '--', TEXT.regulator + ' ' + TEXT.register, why, ''].join('\n');

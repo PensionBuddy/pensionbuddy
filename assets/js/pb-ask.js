@@ -1,15 +1,13 @@
-/* Ask Damian by email: the enquiry form (tools/lead-parts/ask.html, written
-   into the home, starter, directors' and booking pages by
+/* "Ask us. We reply by email.": the enquiry form (tools/lead-parts/ask.html,
+   written into the home, starter, directors' and booking pages by
    tools/lead-blocks.py).
 
    Three steps in one card: a topic, a few taps of detail, then where to
-   reply. Beside them a draft of the note fills in as the reader goes, so
-   they see exactly what Damian will get. The note posts to Netlify Forms as
-   "enquiry" through assets/js/pb-forms.js, and
-   netlify/functions/submission-created.js then emails it to Damian, with
+   reply. Beside them a draft of the note fills in as the reader goes. The
+   note posts to Netlify Forms as "enquiry" through assets/js/pb-forms.js,
+   and netlify/functions/submission-created.js then emails it to us, with
    the sender's address as the reply-to, and a copy to the sender. A refused
-   post opens a pre-filled email to Damian instead, as every lead form here
-   does.
+   post opens a pre-filled email instead, as every lead form here does.
 
    Without this script the form is one plain page that posts as it is.
 
@@ -29,26 +27,21 @@
 
   var TOPICS = {
     'Check my pension': {
-      qs: [{ k: 'Provider', q: 'Who is it with?', a: ['Irish Life', 'Zurich', 'Aviva', 'New Ireland', 'Royal London', 'Standard Life', 'Another one', 'Not sure'] },
-           { k: 'Roughly in it', q: 'Roughly how much is in it?', a: ['Under €25,000', '€25,000 to €100,000', '€100,000 to €250,000', 'Over €250,000', 'Not sure'] }],
-      ph: 'For example: I have not looked at it in years. Are the charges fair?'
+      qs: [{ k: 'Provider', q: 'Who is it with?', a: ['Irish Life', 'Zurich', 'Aviva', 'New Ireland', 'Royal London', 'Standard Life', 'Other', 'Not sure'] },
+           { k: 'Value', q: 'Roughly how much?', a: ['Under \u20ac25,000', '\u20ac25,000 to \u20ac100,000', '\u20ac100,000 to \u20ac250,000', 'Over \u20ac250,000', 'Not sure'] }]
     },
     'Start a pension': {
-      qs: [{ k: 'Work', q: 'How do you work?', a: ['Employee', 'Self-employed', 'Company director'] },
-           { k: 'Age', q: 'Your age', a: ['Under 30', '30 to 39', '40 to 49', '50 to 59', '60 or over'] }],
-      ph: 'For example: My employer has no scheme. Where do I start?'
+      qs: [{ k: 'Work', q: 'You are', a: ['Employed', 'Self-employed', 'A company director'] },
+           { k: 'Age', q: 'Your age', a: ['Under 30', '30s', '40s', '50s', '60+'] }]
     },
     'Find an old pension': {
-      qs: [{ k: 'Old jobs', q: 'How many old jobs might have had a pension?', a: ['1', '2', '3', '4 or more', 'Not sure'] }],
-      tip: true,
-      ph: 'For example: I worked at a bank in Dublin from 1998 to 2004.'
+      qs: [{ k: 'Old jobs', q: 'How many old jobs?', a: ['1', '2', '3', '4+'] }],
+      tip: true
     },
-    'Company director': {
-      qs: [{ k: 'Company pays in now', q: 'Does your company pay into a pension for you now?', a: ['Yes', 'No', 'Not sure'] },
-           { k: 'On your mind', q: 'What is on your mind?', a: ['Paying less tax', 'Year end is coming', 'Taking money out later', 'Something else'] }],
-      ph: 'For example: Our year end is March. How much can the company pay in?'
+    'Company pension': {
+      qs: [{ k: 'Company pays in now', q: 'Does the company pay in now?', a: ['Yes', 'No', 'Not sure'] }]
     },
-    'Something else': { qs: [], ph: 'Ask anything about pensions.' }
+    'Something else': { qs: [] }
   };
 
   function motion() { return root.classList.contains('pb-motion'); }
@@ -100,7 +93,7 @@
   }
 
   function next() {
-    if (at === 0 && !topic) { say('Pick a topic to start.', $('.pb-ask-topics')); return; }
+    if (at === 0 && !topic) { say('Pick a topic.', $('.pb-ask-topics')); return; }
     say('');
     go(at === 0 && !TOPICS[topic].qs.length && !TOPICS[topic].tip ? 2 : at + 1);
   }
@@ -119,7 +112,6 @@
     answers = {};
     $$('.pb-ask-topic', topicBox).forEach(function (l) { l.classList.toggle('is-on', l.contains(e.target)); });
     buildQs();
-    msg.placeholder = TOPICS[topic].ph;
     say('');
     draw();
     if (Date.now() - lastPointer < 900) setTimeout(function () { if (at === 0) next(); }, motion() ? 420 : 0);
@@ -198,9 +190,9 @@
 
   function check() {
     var e = emailEl.value.trim();
-    if (!EMAIL.test(e)) { say('Please enter a valid email address, so Damian can reply.', emailEl.closest('.ffield')); emailEl.focus(); return false; }
+    if (!EMAIL.test(e)) { say('Enter a valid email.', emailEl.closest('.ffield')); emailEl.focus(); return false; }
     if (form.elements.contact_by.value === 'Phone' && digits(phoneEl.value) < 7) {
-      say('Please add your phone number, or choose a reply by email.', phoneEl.closest('.ffield')); phoneEl.focus(); return false;
+      say('Add your phone number.', phoneEl.closest('.ffield')); phoneEl.focus(); return false;
     }
     say('');
     return true;
@@ -215,7 +207,7 @@
 
   function flash(el) { el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new'); }
   function draw() {
-    var s = topic || 'pick a topic';
+    var s = topic || '\u2026';
     if (subj.textContent !== s) { subj.textContent = s; if (topic) flash(subj); }
     var want = [];
     if (topic) TOPICS[topic].qs.forEach(function (q) { if (answers[q.k]) want.push([q.k, answers[q.k]]); });
@@ -223,7 +215,7 @@
     if (m) want.push(['Note', m.length > 60 ? m.slice(0, 59) + '…' : m]);
     var who = nameEl.value.trim(), e = emailEl.value.trim(), phone = form.elements.contact_by.value === 'Phone';
     if (who || e) want.push(['From', [who, e].filter(Boolean).join(', ')]);
-    if (phone) want.push(['Reply', 'a phone call' + (phoneEl.value.trim() ? ', ' + phoneEl.value.trim() : '')]);
+    if (phone) want.push(['Call', phoneEl.value.trim() || 'yes']);
     /* keyed by label, so only a new line animates in */
     var have = {}, keys = want.map(function (w) { return w[0]; });
     [].slice.call(lines.children).forEach(function (li) {
@@ -279,35 +271,24 @@
       'Reply by: ' + form.elements.contact_by.value + (phoneEl.value.trim() ? ', ' + phoneEl.value.trim() : ''),
       'From: ' + location.href.split('#')[0]
     ].filter(Boolean).join('\n');
-    window.location.href = 'mailto:' + FALLBACK + '?subject=' + encodeURIComponent('Question for Damian: ' + (topic || 'pensions')) +
+    window.location.href = 'mailto:' + FALLBACK + '?subject=' + encodeURIComponent('Question: ' + (topic || 'pensions')) +
       '&body=' + encodeURIComponent(body);
-    show('One more step.', 'Your email app should have opened with your note ready to send. If it didn’t, email ' + FALLBACK + ' and Damian will reply.', false);
+    show('One more step.', 'Your email app should have opened with your note ready to send. If not, email ' + FALLBACK + '.', false);
   }
 
   function sent() {
     var phone = form.elements.contact_by.value === 'Phone', hi = first(), when = by ? 'by ' + by : 'within one working day';
-    var text = (hi ? 'Thanks, ' + hi + '. ' : 'Thanks. ') + (phone ? 'Damian will phone you ' + when + '.' : 'Damian will reply by email ' + when + '.');
-    if (!motion()) { show('Sent. Over to Damian.', text, true); return; }
+    var text = (hi ? 'Thanks, ' + hi + '. ' : 'Thanks. ') + (phone ? 'We\u2019ll call you ' : 'We\u2019ll reply ') + when + '.';
+    if (!motion()) { show('Sent.', text, true); return; }
     sendBtn.classList.add('is-sent');
     draft.classList.add('is-sent');
-    setTimeout(function () { show('Sent. Over to Damian.', text, true); }, 520);
+    setTimeout(function () { show('Sent.', text, true); }, 520);
   }
 
   function show(h, text, real) {
-    var after = document.getElementById('askAfter');
     document.getElementById('askOkH').textContent = h;
     document.getElementById('askOkText').textContent = text;
-    after.textContent = '';
-    if (real) {
-      var phone = form.elements.contact_by.value === 'Phone';
-      [['Now', 'Your note is with Damian. He reads every one himself.'],
-       [by ? 'By ' + by : 'Within one working day', phone ? 'A call from Damian, at a time that suits you.' : 'A reply from Damian, by email.'],
-       ['Then', 'You decide what, if anything, happens next.']].forEach(function (r) {
-        var li = document.createElement('li'), b = document.createElement('b');
-        b.textContent = r[0]; li.appendChild(b); li.appendChild(document.createTextNode(r[1])); after.appendChild(li);
-      });
-      burst();
-    }
+    if (real) burst();
     form.hidden = true;
     ok.hidden = false;
     ok.classList.remove('show'); void ok.offsetWidth; ok.classList.add('show');

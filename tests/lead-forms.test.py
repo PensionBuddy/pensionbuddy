@@ -249,8 +249,8 @@ class Declared(HTMLParser):
 SUCCESS = "Thanks - we've got it. The guide is emailed to you automatically."
 SUCCESS_FINDER = "Thanks - we've got it. Damian will be in touch personally."
 SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is emailed to you automatically.'
-SUCCESS_REPLY = {'enquiry': re.compile(r'^Thanks, Test\. Damian will reply by email by [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+\.$'),
-                 'pension-trace': re.compile(r'^Thanks, Test\. Damian will email you by [A-Z][a-z]+day \d{1,2} [A-Z][a-z]+\.$')}
+REPLIED = re.compile('^Thanks, Test\\. We\u2019ll reply by [A-Z][a-z]+day \\d{1,2} [A-Z][a-z]+\\.$')
+SUCCESS_REPLY = {'enquiry': REPLIED, 'pension-trace': REPLIED}
 
 def main():
     if not os.path.exists(CHROME):
@@ -319,12 +319,12 @@ def main():
             if name == 'enquiry':
                 eq('%s: the topic, the taps, the question, the name and the way to reply' % tag,
                    [fields.get(k, [''])[0] for k in ('topic', 'details', 'message', 'name', 'contact_by')],
-                   ['Check my pension', 'Provider: Zurich | Roughly in it: \u20ac25,000 to \u20ac100,000', 'Are the charges fair?', 'Test Person', 'Email'])
+                   ['Check my pension', 'Provider: Zurich | Value: \u20ac25,000 to \u20ac100,000', 'Are the charges fair?', 'Test Person', 'Email'])
             if name == 'pension-trace':
                 eq('%s: the jobs, how many, and the name' % tag,
                    [fields.get(k, [''])[0] for k in ('jobs', 'jobs_count', 'name')], ['Harbour Bank, 2005 to 2011', '1', 'Test Person'])
             if name in REPLY_FORMS:
-                eq('%s: the day Damian replies by, in the one shape' % tag,
+                eq('%s: the day we reply by, in the one shape' % tag,
                    bool(re.match(r'^(Monday|Tuesday|Wednesday|Thursday|Friday) \d{1,2} [A-Z][a-z]+$', fields.get('reply_by', [''])[0])), True)
             if name.endswith('-guide'):
                 # the box to email the guide (netlify/functions/submission-created.js sends only on yes)
@@ -344,7 +344,7 @@ def main():
                 # Run 28: one success message on every form, promising only
                 # what happens (Netlify emails the visitor nothing)
                 if name in SUCCESS_REPLY:
-                    eq('%s: says it arrived, and when Damian replies' % tag, bool(SUCCESS_REPLY[name].match(said)), True)
+                    eq('%s: says it arrived, and when we reply' % tag, bool(SUCCESS_REPLY[name].match(said)), True)
                 else:
                     eq('%s: says it arrived' % tag, (SUCCESS_RESULT if name == 'calculator-results' else SUCCESS_FINDER if name == 'pension-finder' else SUCCESS) in said and 'email app' not in said, True)
                 eq('%s: and promises nothing that is not sent' % tag,
