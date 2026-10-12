@@ -340,6 +340,29 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 55 — 2026-10-12 · The director calculator counts what you have already (on `claude/optimistic-keller-kfqggu`)
+
+Damian: "we're missing something" in the director calculator; no salary
+unless the figure needs it. The missing input was what the director has in
+pensions already: most directors past 40 have a pot, it changes the answer
+more than anything but the payment, and the Standard Fund Threshold note
+needs it. One slider, "Pension built up so far", €0 to €2 million, default
+€50,000. It grows at the same 6% and starts the tower; at the defaults the
+pot at 66 is €989,032 in today's money (€1,412,582 before inflation); a year
+later still costs €77,467. "Pensions you have now left out" is gone from the
+notes. Salary stays out: the figure doesn't need it.
+
+- **Pensions Authority guidance v1.3: not confirmed.** The environment's
+  network policy blocks pensionsauthority.ie, actuaries.ie and the trade
+  press. Search results confirm v1.3 exists, was issued under Regulation
+  34(4) of S.I. 128 of 2021 to stay in line with the Society of Actuaries'
+  revised projection guidance, and is reported to apply from 1 July 2026;
+  none showed its figures. The 6% overall cap for Statements of Reasonable
+  Projection is set by the regulations, not the guidance. Open item:
+  `assets/js/pb-assumptions.js` ASSETS still cites v1.2.
+
+---
+
 # Run 54 — 2026-10-11 · One director page; "Are you a director?" on the home page; Directors is one link (on `claude/optimistic-keller-kfqggu`)
 
 Damian's brief: one unified director landing page; at the very top, as

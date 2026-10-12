@@ -2,15 +2,18 @@
    "a simpler calculator; super motion design, super simple, super
    interactive; no unnecessary text".
 
-   Two sliders and a pair of pills: your age (25 to 65), what the company pays
-   in each year (€5,000 to €150,000) and when it starts (this year, or a year
-   later). One answer: the pot at 66, in today's money.
-     The pot      y = 66 - age years of the company's payments, monthly, at
-                  PBAssume.assets.cap a year (6% before charges, the most the
-                  Pensions Authority lets a projection assume):
-                  PBDirector.project(12y, 0, pay / 12, monthlyRate(cap)),
+   Three sliders and a pair of pills: your age (25 to 65), what the company
+   pays in each year (€5,000 to €150,000), what you have in pensions already
+   (€0 to €2 million; Damian, 12 October 2026: "we're missing something")
+   and when the payments start (this year, or a year later). One answer: the
+   pot at 66, in today's money.
+     The pot      y = 66 - age years of the company's payments, monthly, on
+                  top of what you have now, both at PBAssume.assets.cap a
+                  year (6% before charges, the most the Pensions Authority
+                  lets a projection assume):
+                  PBDirector.project(12y, have, pay / 12, monthlyRate(cap)),
                   then PBAssume.today(that, y) for today's money (the ECB's
-                  2%). €889,108 at the defaults, €1,269,865 before inflation.
+                  2%). €989,032 at the defaults, €1,412,582 before inflation.
      A year later PBDirector.waiting({ delay: 1 }): the same payments, a year
                   fewer of them. €77,467 less at 66 in today's money; pressed,
                   the pot shows today - gapToday and waiting's later.
@@ -63,7 +66,7 @@
   var PD = window.PBDirector, PA = window.PBAssume, PR = window.PBRelief;
   if (!sec || !K || !PD || !PA || !PR || !PA.assets) { return; }
   var $ = function (id) { return document.getElementById(id); };
-  var age = $('drAge'), pay = $('drPay'), ctl = $('drCalcCtl');
+  var age = $('drAge'), pay = $('drPay'), have = $('drHave'), ctl = $('drCalcCtl');
   if (!age || !pay || !ctl) { return; }
   var fmt = K.fmt, GROW = PA.assets.cap, MR = PD.monthlyRate(GROW), CAP = PR.EARN_CAP || 115000;
   /* the page's retirement age: every figure is "at 66" */
@@ -85,11 +88,12 @@
   var st = { a: AT, later: false };
   function A() { return +age.value; }
   function P() { return +pay.value; }
+  function Hv() { return have ? +have.value : 0; }
   /* the pot at age a, for the reader's age and payment: { now, today, nom, gap } */
   function pot(a, ag, py, later) {
     var n = Math.max(0, Math.min(AT, a) - ag);
-    var nom = PD.project(12 * n, 0, py / 12, MR), today = PA.today(nom, n);
-    var w = PD.waiting({ pot: 0, yearly: py, years: n, delay: 1, rate: GROW, today: PA.today });
+    var nom = PD.project(12 * n, Hv(), py / 12, MR), today = PA.today(nom, n);
+    var w = PD.waiting({ pot: Hv(), yearly: py, years: n, delay: 1, rate: GROW, today: PA.today });
     return { now: today, today: later ? today - w.gapToday : today, nom: later ? w.later : nom, gap: w.gapToday };
   }
   /* one coin: the first size that keeps this year's pot at 66 within 28 coins */
@@ -111,7 +115,7 @@
   var rPen = roll('drYrPen'), rSal = roll('drYrSal'), rPro = roll('drYrPro');
   /* the two inside sentences stay plain words */
   var rYrPay = text('drYrPay'), rLim = text('drLimV');
-  var ageV = $('drAgeV'), payV = $('drPayV'), limAge = $('drLimAge'), limPct = $('drLimPct'), sftP = $('drSft'), sftV = $('drSftV'), sr = $('drSr');
+  var haveV = $('drHaveV'), ageV = $('drAgeV'), payV = $('drPayV'), limAge = $('drLimAge'), limPct = $('drLimPct'), sftP = $('drSft'), sftV = $('drSftV'), sr = $('drSr');
   function fill(r) { r.style.setProperty('--fill', ((r.value - r.min) / (r.max - r.min) * 100) + '%'); }
   function sftText(t) {
     var m = (t.value / 1e6).toFixed(1).replace(/\.0$/, '');
@@ -120,7 +124,7 @@
   /* the panel: everything that does not run with the years */
   function panel(quiet) {
     var ag = A(), py = P(), lim = PR.reliefLimit(ag, CAP), end = pot(AT, ag, py, st.later), year = new Date().getFullYear() + (AT - ag);
-    fill(age); fill(pay);
+    fill(age); fill(pay); if (have) { fill(have); have.setAttribute('aria-valuetext', fmt(Hv())); if (haveV) { haveV.textContent = fmt(Hv()); } }
     age.setAttribute('aria-valuetext', 'Age ' + ag);
     pay.setAttribute('aria-valuetext', fmt(py) + ' a year');
     /* where the reader's own limit sits on the payment track, 0 to 1, for a notch */
@@ -152,7 +156,7 @@
     clearTimeout(srT);
     srT = setTimeout(function () {
       var ag = A(), py = P(), e = pot(AT, ag, py, st.later), t = sft(new Date().getFullYear() + AT - ag);
-      sr.textContent = 'Age ' + ag + ', the company paying ' + fmt(py) + ' a year' + (st.later ? ', starting a year later' : '') +
+      sr.textContent = 'Age ' + ag + ', ' + fmt(Hv()) + ' in pensions now, the company paying ' + fmt(py) + ' a year' + (st.later ? ', starting a year later' : '') +
         ': about ' + fmt(e.today) + ' at ' + AT + ' in today’s money, ' + fmt(e.nom) + ' before inflation. ' +
         (st.later ? fmt(e.gap) + ' less than starting this year.' : 'Starting a year later: about ' + fmt(e.gap) + ' less.') +
         (e.nom > t.value ? ' That could pass the Standard Fund Threshold.' : '');
@@ -236,7 +240,7 @@
     T.n.t = s.today / COIN; T.gh.t = s.now / COIN;
     /* the string: what your own limit would build by 66, the same way */
     T.limAt = py > lim ? 1 : 0;
-    if (py > lim) { T.lim.t = end.today * lim / py / COIN; if (T.limA < 0.05) { T.lim.x = T.lim.t; T.lim.v = 0; } }
+    if (py > lim) { T.lim.t = pot(AT, ag, lim, false).today / COIN; if (T.limA < 0.05) { T.lim.x = T.lim.t; T.lim.v = 0; } }
     T.ghAt = st.later ? 1 : 0;
     if (snap || !K.motion() || !seen) {
       T.n.x = T.n.t; T.gh.x = T.gh.t; T.lim.x = T.lim.t; T.limA = T.limAt; T.ghA = T.ghAt;
@@ -513,6 +517,7 @@
   }
   age.addEventListener('input', function () { why = ''; changed(); });
   pay.addEventListener('input', function () { why = ''; changed(); });
+  if (have) { have.addEventListener('input', function () { why = ''; changed(); }); }
   var segEl = sec.querySelector('.dr-start'), seg = null;
   if (segEl) {
     seg = K.seg(segEl, function (b) {
