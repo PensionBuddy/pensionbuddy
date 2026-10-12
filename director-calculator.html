@@ -2852,7 +2852,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <details class="pb-work"><summary>How we worked this out</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
+    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief in the year you retire: &euro;2.4 million in 2027, rising to &euro;2.8 million in 2029. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
 
     <div class="vs-card pb-split" id="splitCard">
       <h3>Salary or pension: how to split it</h3>
@@ -3012,7 +3012,10 @@ var PRSI = PRSI_NOW.rate;
   if (f) f.style.width = pc;
   if (n) n.textContent = pc;
 })();
-var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
+/* Standard Fund Threshold in a given year: Finance Act 2024, s.13 (the same
+   steps as assets/js/sft.js). From 2030 it can only rise, so 2029's is a floor.
+   Confirm annually with Damian. */
+function sftFor(year){ return year<=2025?2000000: year>=2029?2800000: 2200000+200000*(year-2026); }
 
 /* Job 5: the arithmetic is assets/js/director-calc.js (PBDirector), the rates
    assets/js/pb-assumptions.js (PBAssume), today's money assets/js/pb-today.js
@@ -3223,7 +3226,7 @@ function calc(){
   $('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
   ['age','ret','sal','pot','contrib','risk','split','waitYears'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
-  const overSFT=p018>SFT, sftNote=$('sftNote');
+  const overSFT=p018>sftFor(new Date().getFullYear()+ret-age), sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
   reveal();
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
@@ -3443,11 +3446,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=c1357ad4" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=56c86fd5" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=1b817f0e" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>

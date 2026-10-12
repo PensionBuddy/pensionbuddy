@@ -32,7 +32,8 @@
                          as income when drawn. The Department of Finance's
                          independent examination of the SFT (de Buitleir,
                          September 2024, section 4.2) puts the combined rate
-                         at up to 68.8%, or 71.2% with PRSI: 40% + 60% x 52%.
+                         at up to 68.8%, or 71.2% with 4% PRSI: 40% + 60% x 52%.
+                         At today's 4.35% PRSI: 40% + 60% x 52.35%, about 71.4%.
    ------------------------------------------------------------------------
 
    Contract: this header and tests/sft.test.js.
