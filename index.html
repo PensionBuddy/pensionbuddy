@@ -2759,6 +2759,304 @@ html:not(.pb-js) .pb-drb-cv{display:none}
   .pb-drb-go{margin-left:0;width:100%;justify-content:center}
 }
 /* HOME-V2:END */
+/* LEAD:kit:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/kit.css) */
+/* KIT (tools/lead-parts/kit.css; tools/lead-blocks.py writes it into each
+   page with a reply tool): the card, fields, chips, reveal and sent state
+   the fee check, year-end reminder, changing jobs and call-back share.
+   Motion only under html.pb-motion; assets/js/pb-kit.js drives the parts. */
+.pbk{padding:64px 0}
+.pbk-card{position:relative;max-width:980px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:40px;overflow:hidden;isolation:isolate}
+.pbk-card::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(55% 75% at 100% 0,var(--teal-50),transparent 62%);pointer-events:none}
+.pbk h2{margin:0 0 26px}
+.pbk h2 .hl{color:var(--teal-700)}
+.pbk .ffield input{width:100%;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.pbk .ffield input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--teal-50)}
+.pbk .ffield.is-ok::after{content:"";position:absolute;right:15px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;background:var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat}
+.pbk .ffield.is-ok input{padding-right:46px !important}
+:root.pb-motion .pbk .ffield.is-ok::after{animation:pbkPop .35s cubic-bezier(.34,1.56,.64,1)}
+.pbk-send{display:flex;gap:10px;align-items:stretch}
+.pbk-send .ffield{flex:1}
+.pbk-send .btn{white-space:nowrap}
+
+/* chips: radios drawn as pills */
+.pbk-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pbk-chip{position:relative;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:var(--r-pill);background:var(--surface-2);border:1.5px solid transparent;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.pbk-chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pbk-chip:hover{border-color:var(--teal);color:var(--ink)}
+.pbk-chip:focus-within{outline:2px solid var(--teal-700);outline-offset:2px}
+.pbk-chip:has(input:checked){background:var(--teal);color:#fff}
+:root.pb-motion .pbk-chip:has(input:checked){animation:pbkPop2 .35s cubic-bezier(.34,1.56,.64,1)}
+
+/* a block that opens: rows 0fr to 1fr, so it pushes the page down smoothly */
+.pbk-fold{display:grid;grid-template-rows:0fr;opacity:0}
+.pbk-fold > *{min-height:0;overflow:hidden;margin:0 -6px;padding:0 6px}
+.pbk-fold.on,html:not(.pb-js) .pbk-fold{grid-template-rows:1fr;opacity:1}
+.pbk-fold.on > *{overflow:visible}
+.pb-js .pbk-fold:not(.on) > *{visibility:hidden}
+:root.pb-motion .pbk-fold{transition:grid-template-rows .55s cubic-bezier(.22,.61,.36,1),opacity .4s ease}
+:root.pb-motion .pbk-fold.on > *{animation:pbkClip .55s steps(1,end)}
+@keyframes pbkClip{from{overflow:hidden}}
+
+.pbk-err{color:var(--red);font-size:13.5px;font-weight:600;margin:10px 0 0}
+.pbk-err:empty{display:none}
+.pbk-note{font-size:12px;color:var(--ink-3);line-height:1.5;margin:12px 0 0}
+.pbk-note a{color:var(--teal-700);font-weight:600}
+.pbk .btn[aria-disabled="true"]{opacity:.75;cursor:progress}
+:root.pb-motion .pbk .btn.is-sending svg{animation:pbkNudge .6s ease-in-out infinite}
+:root.pb-motion .pbk .is-bad{animation:pbkShake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes pbkShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes pbkNudge{50%{transform:translateX(4px)}}
+@keyframes pbkPop{from{transform:scale(0)}}
+@keyframes pbkPop2{40%{transform:scale(1.08)}}
+@keyframes pbkIn{from{opacity:0;transform:translateY(8px)}}
+
+/* sent */
+.pbk-ok{position:relative}
+.pbk-ok:focus{outline:none}
+.pbk-ok-ic{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff}
+.pbk-ok-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pbk-ok-ic .pbk-tick{stroke-dasharray:24 24}
+.pbk-ok h3{margin:16px 0 6px}
+.pbk-ok p{font-size:16px;color:var(--ink-2);margin:0}
+.pbk-ok-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:14px}
+.pbk-again{font:600 14.5px/1 var(--font);color:var(--ink-2);background:none;border:0;padding:12px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.pbk-again:hover{color:var(--teal-700)}
+.pbk-burst{position:absolute;left:28px;top:28px;width:0;height:0}
+.pbk-burst i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--teal);opacity:0}
+:root.pb-motion .pbk-ok.show .pbk-ok-ic{animation:pbkPop .5s cubic-bezier(.34,1.56,.64,1) both}
+:root.pb-motion .pbk-ok.show .pbk-tick{animation:pbkDraw .4s cubic-bezier(.22,.61,.36,1) .22s backwards}
+:root.pb-motion .pbk-ok.show h3,:root.pb-motion .pbk-ok.show p,:root.pb-motion .pbk-ok.show .pbk-ok-row{animation:pbkIn .45s cubic-bezier(.22,.61,.36,1) .15s both}
+:root.pb-motion .pbk-ok.show .pbk-burst i{animation:pbkBurst .8s cubic-bezier(.22,.61,.36,1) .1s forwards}
+@keyframes pbkDraw{from{stroke-dashoffset:-23}}
+@keyframes pbkBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(.4)}}
+
+@media(max-width:720px){
+  .pbk{padding:44px 0}
+  .pbk-card{padding:26px 18px}
+  .pbk-send{flex-direction:column}
+}
+/* LEAD:kit:END */
+/* LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.css) */
+/* ASK US (tools/lead-parts/ask.css; tools/lead-blocks.py writes it into
+   each page that carries the block). The enquiry form: a topic, a few taps
+   of detail, then where to reply, beside a live draft of the note. Without
+   script it is one plain form that posts as it is. Motion only under
+   html.pb-motion; assets/js/pb-ask.js drives the steps. */
+.pb-ask{padding:72px 0}
+.pb-ask-card{display:grid;grid-template-columns:.82fr 1.18fr;gap:48px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:44px;position:relative;overflow:hidden}
+.pb-ask-card::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 80% at 0 0,var(--teal-50),transparent 62%);pointer-events:none}
+.pb-ask-intro,.pb-ask-body{position:relative;min-width:0}
+.pb-ask h2{margin:0 0 24px}
+.pb-ask h2 .hl{color:var(--teal-700)}
+.pb-ask-opt{font-weight:500;color:var(--ink-3);font-size:.85em}
+
+/* progress */
+.pb-ask-prog{display:flex;gap:6px;list-style:none;margin:0 0 24px;padding:0;max-width:380px}
+.pb-ask-prog li{flex:1;font-size:12px;font-weight:700;color:var(--ink-3);transition:color .3s}
+.pb-ask-prog li::before{content:"";display:block;height:4px;border-radius:4px;margin-bottom:7px;background:var(--line) linear-gradient(var(--teal),var(--teal)) no-repeat;background-size:0 100%;transition:background-size .55s cubic-bezier(.22,.61,.36,1)}
+.pb-ask-prog li.on{color:var(--teal-700)}
+.pb-ask-prog li.on::before{background-size:100% 100%}
+
+/* the live draft */
+.pb-ask-draft{position:relative;max-width:380px;background:var(--bg,#FAFAF9);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 16px 14px;font-size:13.5px;line-height:1.45;color:var(--ink-2);box-shadow:0 22px 40px -30px rgba(11,31,28,.45);transform:rotate(-1.2deg)}
+.pb-ask-draft-top{display:flex;align-items:center;gap:5px;padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid var(--line)}
+.pb-ask-draft-top i{width:8px;height:8px;border-radius:50%;background:var(--line-2,#D8DFDC)}
+.pb-ask-draft-top span{margin-left:8px;font-weight:700;color:var(--ink)}
+.pb-ask-draft p{margin:0 0 6px}
+.pb-ask-draft b{color:var(--ink);font-weight:700}
+.pb-ask-draft-lines{list-style:none;margin:0 0 6px;padding:0}
+.pb-ask-draft-lines li{padding:2px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pb-ask-draft-by{padding-top:8px;border-top:1px dashed var(--line);margin-top:8px !important}
+.pb-ask-stamp{position:absolute;right:14px;top:38px;font:800 16px/1 var(--font);color:var(--teal-700);border:2.5px solid currentColor;border-radius:6px;padding:6px 10px;transform:rotate(-14deg) scale(1.6);opacity:0;pointer-events:none}
+.pb-ask-draft.is-sent .pb-ask-stamp{opacity:.9;transform:rotate(-14deg) scale(1)}
+:root.pb-motion .pb-ask-draft{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+:root.pb-motion .pb-ask-draft.is-live{transform:rotate(0) translateY(-3px)}
+:root.pb-motion .pb-ask-draft-lines li{animation:pbAskIn .38s cubic-bezier(.22,.61,.36,1) both}
+:root.pb-motion .pb-ask-draft [data-ask-subj].is-new,:root.pb-motion .pb-ask-draft [data-ask-by].is-new{animation:pbAskGlow .9s ease-out}
+:root.pb-motion .pb-ask-draft.is-sent .pb-ask-stamp{transition:transform .32s cubic-bezier(.34,1.56,.64,1),opacity .2s}
+@keyframes pbAskIn{from{opacity:0;transform:translateY(6px)}}
+@keyframes pbAskGlow{0%{background:var(--teal-100)}100%{background:transparent}}
+
+/* steps */
+.pb-ask-form{margin:0}
+.pb-ask-step{border:0;margin:0;padding:0;min-width:0}
+.pb-ask-step + .pb-ask-step{margin-top:28px}
+.pb-ask-step legend{float:left;width:100%;font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--ink);padding:0;margin:0 0 14px}
+.pb-ask-step legend:focus{outline:none}
+.pb-ask-step legend + *{clear:both}
+.pb-ask-stage{position:relative}
+.pb-js .pb-ask-step + .pb-ask-step{margin-top:0}
+.pb-js .pb-ask-step:not(.on){position:absolute;top:0;left:0;right:0;visibility:hidden;opacity:0;pointer-events:none}
+:root.pb-motion .pb-ask-stage{transition:height .45s cubic-bezier(.22,.61,.36,1)}
+:root.pb-motion .pb-ask-step{transition:opacity .28s ease,transform .45s cubic-bezier(.22,.61,.36,1),visibility 0s linear .45s}
+:root.pb-motion .pb-ask-step.on{transition:opacity .36s ease .1s,transform .5s cubic-bezier(.22,.61,.36,1) .05s,visibility 0s}
+:root.pb-motion .pb-ask-step.is-left{transform:translateX(-44px)}
+:root.pb-motion .pb-ask-step.is-right{transform:translateX(44px)}
+
+/* step 1: topics */
+.pb-ask-topics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pb-ask-topic{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:13px 15px;border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--surface);cursor:pointer;transition:border-color .2s,background-color .2s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pb-ask-topic input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.pb-ask-topic .ti{width:40px;height:40px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);display:flex;align-items:center;justify-content:center;transition:background-color .2s,color .2s,transform .4s cubic-bezier(.34,1.56,.64,1)}
+.pb-ask-topic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb-ask-topic b{font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.25}
+.pb-ask-topic:last-child:nth-child(odd){grid-column:1 / -1}
+.pb-ask-topic:hover{border-color:var(--teal)}
+:root.pb-motion .pb-ask-topic:hover{transform:translateY(-2px)}
+.pb-ask-topic:focus-within{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-ask-topic.is-on{border-color:var(--teal);background:var(--teal-50)}
+.pb-ask-topic.is-on .ti{background:var(--teal);color:#fff;transform:scale(1.08) rotate(-6deg)}
+:root.pb-motion .pb-ask-topic.is-on{animation:pbAskPop .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pbAskPop{40%{transform:scale(1.035)}}
+
+/* step 2: chips */
+.pb-ask-q{margin:0 0 18px}
+.pb-ask-q > p{font-size:14.5px;font-weight:600;color:var(--ink);margin:0 0 9px}
+.pb-ask-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pb-ask-chip{min-height:40px;font:600 14px/1.2 var(--font);color:var(--ink-2);background:var(--surface-2);border:1.5px solid transparent;border-radius:var(--r-pill);padding:9px 15px;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.pb-ask-chip:hover{border-color:var(--teal);color:var(--ink)}
+.pb-ask-chip:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-ask-chip[aria-pressed="true"]{background:var(--teal);color:#fff}
+:root.pb-motion .pb-ask-chip[aria-pressed="true"]{animation:pbAskPop .35s cubic-bezier(.34,1.56,.64,1)}
+:root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
+:root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
+.pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* step 3: fields */
+.pb-ask-field{margin:0 0 12px}
+.pb-ask-field label{display:block;font-size:14px;font-weight:600;color:var(--ink);margin:0 0 7px}
+.pb-ask textarea,.pb-ask .ffield input{width:100%;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;transition:border-color .2s,background-color .2s,box-shadow .2s}
+.pb-ask textarea{display:block;line-height:1.5;padding:13px 16px;resize:vertical;min-height:88px}
+.pb-ask textarea:focus,.pb-ask .ffield input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--teal-50)}
+.pb-ask-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.pb-ask .ffield.is-ok::after{content:"";position:absolute;right:15px;top:50%;width:20px;height:20px;margin-top:-10px;border-radius:50%;background:var(--teal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat}
+.pb-ask .ffield.is-ok input{padding-right:46px !important}
+:root.pb-motion .pb-ask .ffield.is-ok::after{animation:pbAskPop2 .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pbAskPop2{from{transform:scale(0)}}
+.pb-ask-how{position:relative;display:inline-flex;gap:2px;background:var(--surface-2);border-radius:var(--r-pill);padding:4px;max-width:100%}
+.pb-ask-how label{position:relative;z-index:1;display:flex;align-items:center;min-height:38px;font-size:14px;font-weight:600;padding:0 16px;border-radius:var(--r-pill);cursor:pointer;color:var(--ink-2);transition:color .3s,background-color .3s}
+.pb-ask-how input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pb-ask-how label:focus-within{outline:2px solid var(--teal-700);outline-offset:1px}
+.pb-ask-how label.is-on{color:#fff;background:var(--teal)}
+.pb-ask-how-pill{display:none}
+.pb-js .pb-ask-how.is-sliding label.is-on{background:transparent}
+.pb-js .pb-ask-how.is-sliding .pb-ask-how-pill{display:block;position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:var(--w,0);transform:translateX(var(--x,0));border-radius:var(--r-pill);background:var(--teal)}
+:root.pb-motion .pb-ask-how-pill{transition:transform .4s cubic-bezier(.34,1.3,.64,1),width .4s cubic-bezier(.34,1.3,.64,1)}
+.pb-ask-phone{display:grid;grid-template-rows:1fr;margin-top:12px}
+.pb-ask-phone > .ffield{min-height:0}
+.pb-js .pb-ask-phone{grid-template-rows:0fr;margin-top:0;overflow:hidden}
+.pb-js .pb-ask-phone.on{grid-template-rows:1fr;margin-top:12px;overflow:visible}
+.pb-js .pb-ask-phone:not(.on) > .ffield{visibility:hidden}
+:root.pb-motion .pb-ask-phone{transition:grid-template-rows .4s cubic-bezier(.22,.61,.36,1),margin-top .4s}
+.pb-ask-err{color:var(--red);font-size:13.5px;font-weight:600;margin:10px 0 0}
+.pb-ask-err:empty{display:none}
+:root.pb-motion .pb-ask .is-bad{animation:pbAskShake .42s cubic-bezier(.36,.07,.19,.97)}
+@keyframes pbAskShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pb-ask-note{font-size:12px;color:var(--ink-3);line-height:1.5;margin:14px 0 0}
+.pb-ask-note a{color:var(--teal-700);font-weight:600}
+
+/* step buttons */
+.pb-ask-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px}
+.pb-ask-back,.pb-ask-again{font:600 14.5px/1 var(--font);color:var(--ink-2);background:none;border:0;padding:12px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.pb-ask-back:hover,.pb-ask-again:hover{color:var(--teal-700)}
+html:not(.pb-js) .pb-ask-back,html:not(.pb-js) .pb-ask-next,html:not(.pb-js) .pb-ask-prog,html:not(.pb-js) .pb-ask-draft{display:none}
+html:not(.pb-js) .pb-ask-topic:has(input:checked){border-color:var(--teal);background:var(--teal-50)}
+html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(--teal)}
+.pb-ask-send .pb-ask-plane{transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.pb-ask-send:hover .pb-ask-plane{transform:translate(2px,-2px) rotate(-4deg)}
+.pb-ask-send[aria-disabled="true"]{opacity:.75;cursor:progress}
+:root.pb-motion .pb-ask-send.is-sending .pb-ask-plane{animation:pbAskWobble .7s ease-in-out infinite}
+:root.pb-motion .pb-ask-send.is-sent .pb-ask-plane{animation:pbAskFly .6s cubic-bezier(.55,0,.75,.2) forwards}
+@keyframes pbAskWobble{50%{transform:translate(3px,-3px) rotate(-8deg)}}
+@keyframes pbAskFly{to{transform:translate(150px,-110px) rotate(-18deg) scale(.6);opacity:0}}
+
+/* sent */
+.pb-ask-ok{position:relative}
+.pb-ask-tick{width:52px;height:52px;padding:12px;border-radius:50%;background:var(--teal);color:#fff;stroke-width:3}
+.pb-ask-tick path{stroke-dasharray:24 24;stroke-dashoffset:0}
+.pb-ask-ok h3{margin:16px 0 6px}
+.pb-ask-ok > p{font-size:16px;color:var(--ink-2);margin:0;max-width:440px}
+.pb-ask-ok:focus{outline:none}
+.pb-ask-again{margin-top:14px}
+.pb-ask-burst{position:absolute;left:26px;top:26px;width:0;height:0}
+.pb-ask-burst i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--teal);opacity:0}
+:root.pb-motion .pb-ask-ok.show .pb-ask-tick{animation:pbAskPop2 .45s cubic-bezier(.34,1.56,.64,1) both}
+:root.pb-motion .pb-ask-ok.show .pb-ask-tick path{animation:pbAskDraw .4s cubic-bezier(.22,.61,.36,1) .2s backwards}
+:root.pb-motion .pb-ask-ok.show h3,:root.pb-motion .pb-ask-ok.show > p{animation:pbAskIn .45s cubic-bezier(.22,.61,.36,1) .15s both}
+:root.pb-motion .pb-ask-ok.show .pb-ask-burst i{animation:pbAskBurst .8s cubic-bezier(.22,.61,.36,1) .1s forwards}
+@keyframes pbAskDraw{from{stroke-dashoffset:-23}}
+@keyframes pbAskBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(.4)}}
+
+@media(max-width:920px){
+  .pb-ask{padding:48px 0}
+  .pb-ask-card{grid-template-columns:1fr;gap:20px;padding:30px 22px}
+  .pb-ask-draft{display:none}
+  .pb-ask-prog{margin-bottom:0}
+}
+@media(max-width:560px){
+  .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
+  .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
+  .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-how{display:flex}
+  .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
+}
+/* LEAD:ask:END */
+/* LEAD:fee:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/fee.css) */
+/* FEE CHECK (tools/lead-parts/fee.css; tools/lead-blocks.py writes it into
+   index.html). Three sliders, one number: what a yearly fee takes by 66,
+   and two growth lines with the gap between them filled. assets/js/pb-fee.js
+   drives it with assets/js/pension-fees.js's maths. */
+.pbf-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
+.pbf-in{display:grid;gap:22px}
+.pbf-sl{display:grid;grid-template-columns:1fr auto;align-items:baseline;row-gap:10px}
+.pbf-sl label{font-size:14px;font-weight:600;color:var(--ink-2)}
+.pbf-sl output{font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+:root.pb-motion .pbf-sl output.is-bump{animation:pbkPop2 .3s cubic-bezier(.34,1.56,.64,1)}
+.pbf-sl input[type=range]{grid-column:1 / -1;-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:transparent;cursor:pointer;--p:50%}
+.pbf-sl input[type=range]:focus{outline:none}
+.pbf-sl input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--teal) var(--p),var(--line) var(--p))}
+.pbf-sl input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--teal) var(--p),var(--line) var(--p))}
+.pbf-sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-9px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 2px var(--teal),0 4px 12px -2px rgba(11,31,28,.25);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.pbf-sl input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 2px var(--teal),0 4px 12px -2px rgba(11,31,28,.25)}
+.pbf-sl input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.1)}
+.pbf-sl input[type=range]:active::-webkit-slider-thumb{transform:scale(1.25);box-shadow:0 0 0 2px var(--teal),0 0 0 10px var(--teal-50)}
+.pbf-sl input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 2px var(--teal-700),0 0 0 6px var(--teal-100)}
+.pbf-sl input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 2px var(--teal-700),0 0 0 6px var(--teal-100)}
+
+.pbf-out{min-width:0}
+.pbf-big{margin:0 0 14px;line-height:1}
+.pbf-big #pbfCost{display:block;font-size:clamp(40px,5.4vw,64px);font-weight:800;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pbf-lab{display:block;margin-top:8px;font-size:15px;font-weight:600;color:var(--ink-3)}
+.pbf-chart{position:relative;height:150px}
+.pbf-chart svg{display:block;width:100%;height:100%;overflow:visible}
+.pbf-gap{fill:var(--amber-soft,#FCEFCF)}
+.pbf-none{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 5;opacity:.6}
+.pbf-with{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+:root.pb-motion .pbf-chart path{transition:d .6s cubic-bezier(.34,1.15,.64,1)}
+.pbf-dot{position:absolute;right:-6px;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--teal)}
+.pbf-dot-none{box-shadow:0 0 0 3px var(--ink-3)}
+:root.pb-motion .pbf-dot{transition:top .6s cubic-bezier(.34,1.15,.64,1)}
+html:not(.pb-js) .pbf-chart,html:not(.pb-js) .pbf-key{display:none}
+.pbf-key{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:12.5px;color:var(--ink-3)}
+.pbf-key span{display:inline-flex;align-items:center;gap:6px}
+.pbf-key i{width:14px;height:3px;border-radius:2px;background:var(--teal)}
+.pbf-key i.k1{background:none;border-top:2px dashed var(--ink-3)}
+.pbf-at{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+.pbf-out .pb-past{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+
+.pbf-ask{margin-top:30px;padding-top:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.pbf-check{white-space:nowrap}
+:root.pb-motion .pbf-check{transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s}
+.pbf-check[aria-expanded="true"]{display:none}
+.pbf-ask .pbk-fold{grid-column:1 / -1}
+html:not(.pb-js) .pbf-check{display:none}
+
+@media(max-width:860px){
+  .pbf-grid{grid-template-columns:1fr;gap:28px}
+}
+/* LEAD:fee:END */
 </style>
 </head>
 <body>
@@ -3212,6 +3510,118 @@ html:not(.pb-js) .pb-drb-cv{display:none}
   </div>
 </div></section>
 
+<!-- LEAD:fee:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/fee.html) -->
+<section class="pbk pbf" id="fees" aria-labelledby="pbfH"><div class="wrap"><div class="pbk-card">
+  <h2 id="pbfH">What fees cost you.</h2>
+  <form class="pbf-form" id="pbfForm" name="fee-check" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="fee-check"><input type="hidden" name="cost"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+    <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <div class="pbf-grid">
+      <div class="pbf-in">
+        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000"></div>
+        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1"></div>
+        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40"></div>
+      </div>
+      <div class="pbf-out">
+        <p class="pbf-big" aria-live="polite"><span id="pbfCost">&euro;104,616</span> <span class="pbf-lab">in fees by 66</span></p>
+        <div class="pbf-chart" aria-hidden="true">
+          <svg viewBox="0 0 600 200" preserveAspectRatio="none"><path class="pbf-gap" d=""/><path class="pbf-none" d="" vector-effect="non-scaling-stroke"/><path class="pbf-with" d="" vector-effect="non-scaling-stroke"/></svg>
+          <span class="pbf-dot pbf-dot-none"></span><span class="pbf-dot pbf-dot-with"></span>
+        </div>
+        <p class="pbf-key"><span><i class="k1"></i>No fees</span><span><i class="k2"></i>Your fee</span></p>
+        <p class="pbf-at">6% growth a year, the most a projection may assume. Historically, shares have often done better.</p>
+        <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+      </div>
+    </div>
+    <div class="pbf-ask">
+      <button type="button" class="btn btn-primary pbf-check" id="pbfCheck" aria-expanded="false" aria-controls="pbfMail">Get it checked</button>
+      <div class="pbk-fold" id="pbfMail"><div>
+        <div class="pbk-send"><span class="ffield"><input id="pbfEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbfErr"><label class="flabel" for="pbfEmail">Email</label></span><button type="submit" class="btn btn-primary pbk-go">Send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+        <p class="pbk-err" id="pbfErr" role="alert"></p>
+        <p class="pbk-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
+      </div></div>
+    </div>
+  </form>
+  <div class="pbk-ok" id="pbfOk" role="status" tabindex="-1" hidden>
+    <span class="pbk-burst" aria-hidden="true"></span>
+    <span class="pbk-ok-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="pbk-tick" d="M20 6L9 17l-5-5"/></svg></span>
+    <h3>Sent.</h3>
+    <p data-ok-text></p>
+  </div>
+</div></div></section>
+<!-- LEAD:fee:END -->
+<!-- LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.html) -->
+<section class="pb-ask" id="ask" aria-labelledby="askH"><div class="wrap">
+<div class="pb-ask-card">
+  <div class="pb-ask-intro">
+    <h2 id="askH">Ask us. <span class="hl">We reply by email.</span></h2>
+    <ol class="pb-ask-prog" aria-hidden="true"><li class="on">Topic</li><li>Details</li><li>Send</li></ol>
+    <div class="pb-ask-draft" aria-hidden="true">
+      <div class="pb-ask-draft-top"><i></i><i></i><i></i><span>To: Pensionbuddy</span></div>
+      <p class="pb-ask-draft-subj">Subject: <b data-ask-subj>&hellip;</b></p>
+      <ul class="pb-ask-draft-lines" data-ask-lines></ul>
+      <p class="pb-ask-draft-by">Reply by <b data-ask-by>the next working day</b></p>
+      <span class="pb-ask-stamp">Sent</span>
+    </div>
+  </div>
+
+  <div class="pb-ask-body">
+    <form class="pb-ask-form" id="askForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="pb-ask-stage">
+
+      <fieldset class="pb-ask-step on" data-step="topic">
+        <legend tabindex="-1">What is it about?</legend>
+        <div class="pb-ask-topics">
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Check my pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><b>Check my pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Start a pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 14c0-4 3-7 9-7 0 4-3 7-9 7z"/></svg></span><b>Start a pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Find an old pension"><span class="ti"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><b>Find an old pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Company pension"><span class="ti"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/><path d="M10 21v-3h4v3"/></svg></span><b>I run a company</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Something else"><span class="ti"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>Something else</b></label>
+        </div>
+        <div class="pb-ask-nav"><span></span><button type="button" class="btn btn-primary pb-ask-next">Next <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </fieldset>
+
+      <fieldset class="pb-ask-step" data-step="details" hidden>
+        <legend tabindex="-1">Details <span class="pb-ask-opt">(optional)</span></legend>
+        <div class="pb-ask-qs" data-ask-qs></div>
+        <p class="pb-ask-tip" data-ask-tip hidden><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Know where you worked? <a href="tracker.html#trace">Use the pension tracker</a>.</span></p>
+        <div class="pb-ask-nav"><button type="button" class="pb-ask-back">Back</button><button type="button" class="btn btn-primary pb-ask-next">Next <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </fieldset>
+
+      <fieldset class="pb-ask-step" data-step="reply">
+        <legend tabindex="-1">Your details</legend>
+        <div class="pb-ask-field"><label for="askMsg">Your question <span class="pb-ask-opt">(optional)</span></label><textarea id="askMsg" name="message" rows="3" maxlength="1500"></textarea></div>
+        <div class="pb-ask-two">
+          <span class="ffield"><input id="askName" name="name" type="text" autocomplete="given-name" maxlength="80" placeholder=" "><label class="flabel" for="askName">First name</label></span>
+          <span class="ffield"><input id="askEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " required aria-describedby="askErr"><label class="flabel" for="askEmail">Email</label></span>
+        </div>
+        <div class="pb-ask-how" role="radiogroup" aria-label="How we reply">
+          <span class="pb-ask-how-pill" aria-hidden="true"></span>
+          <label><input type="radio" name="contact_by" value="Email" checked>Email me</label>
+          <label><input type="radio" name="contact_by" value="Phone">Call me</label>
+        </div>
+        <div class="pb-ask-phone" data-ask-phone><span class="ffield"><input id="askPhone" name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder=" "><label class="flabel" for="askPhone">Phone</label></span></div>
+        <p class="pb-ask-err" id="askErr" role="alert"></p>
+        <div class="pb-ask-nav"><button type="button" class="pb-ask-back">Back</button><button type="submit" class="btn btn-primary pb-ask-send"><span>Send</span><svg class="ico pb-ask-plane" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div>
+        <p class="pb-ask-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
+      </fieldset>
+
+      </div>
+    </form>
+
+    <div class="pb-ask-ok" id="askOk" role="status" tabindex="-1" hidden>
+      <span class="pb-ask-burst" aria-hidden="true"></span>
+      <svg class="ico pb-ask-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+      <h3 id="askOkH">Sent.</h3>
+      <p id="askOkText"></p>
+      <button type="button" class="pb-ask-again" id="askAgain">Send another</button>
+    </div>
+  </div>
+</div>
+</div></section>
+<!-- LEAD:ask:END -->
 <section class="expect"><div class="wrap faq-grid">
   <div class="sec-head" style="margin-bottom:0">
     
@@ -3410,7 +3820,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=0ee375c4" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3425,5 +3835,10 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 <script src="assets/js/pb-tickband.js?v=8820d919"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
+<script src="assets/js/pb-forms.js?v=0649104a"></script>
+<script src="assets/js/pb-kit.js?v=f2ab740a"></script>
+<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
+<script src="assets/js/pension-fees.js?v=8ac63932"></script>
+<script src="assets/js/pb-fee.js?v=26724ed9"></script>
 </body>
 </html>

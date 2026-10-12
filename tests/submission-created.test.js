@@ -166,6 +166,88 @@ eq('37. one link in the body, the guide', (g.html.match(/<a /g) || []).length, 1
 eq('38. no booking button, no warnings', [g.html.indexOf('booking.html') < 0, g.html.indexOf(WARN1) < 0], [true, true]);
 has('39. why they got it', g.text, 'You got this email because you asked for this guide');
 
+group('THE REPLY FORMS: ENQUIRY AND PENSION-TRACE');
+function ask(over) {
+  var d = { 'form-name': 'enquiry', 'bot-field': '', topic: 'Check my pension', details: 'Provider: Zurich | Value: €25,000 to €100,000',
+            message: 'Are the charges fair?', name: 'Mary', email: 'mary@example.com', contact_by: 'Email', phone: '',
+            page: 'https://pensionbuddy.ie/index.html', reply_by: 'Tuesday 13 October' };
+  Object.keys(over || {}).forEach(function (k) { d[k] = over[k]; });
+  return d;
+}
+function trace(over) {
+  var d = { 'form-name': 'pension-trace', 'bot-field': '', jobs: 'Harbour Bank, 1998 to 2004, Irish Life | Quay Foods, 2005 to 2006',
+            jobs_count: '2', name: 'Mary Byrne', other_names: 'Mary Kelly', email: 'mary@example.com', phone: '087 123 4567',
+            page: 'https://pensionbuddy.ie/tracker.html', reply_by: 'Monday 12 October' };
+  Object.keys(over || {}).forEach(function (k) { d[k] = over[k]; });
+  return d;
+}
+var aq = E.plan('enquiry', ask(), {}), tq = E.plan('pension-trace', trace(), {});
+eq('52. enquiry: a copy to the sender, with no box to tick', [aq.send, aq.message && aq.message.to], [true, ['mary@example.com']]);
+eq('52. pension-trace: a copy to the sender', [tq.send, tq.message && tq.message.to], [true, ['mary@example.com']]);
+eq('53. subjects', [aq.message.subject, tq.message.subject], ['Mary, we have your question', 'Mary, we have your list of old jobs']);
+eq('53. no name: still plain', E.plan('enquiry', ask({ name: '' }), {}).message.subject, 'We have your question');
+has('54. enquiry copy: the day we reply', aq.message.text, 'We’ll reply by Tuesday 13 October.');
+has('54. enquiry copy: a call when asked for one', E.plan('enquiry', ask({ contact_by: 'Phone', phone: '087 1' }), {}).message.text, 'We’ll call you by Tuesday 13 October.');
+has('54. a day not in our shape is not repeated', E.plan('enquiry', ask({ reply_by: '<b>tomorrow</b>' }), {}).message.text, 'within one working day');
+has('55. enquiry copy: what they sent', aq.message.text, 'Provider: Zurich');
+has('55. and the question', aq.message.text, 'Question: Are the charges fair?');
+has('55. pension-trace copy: each job', tq.message.text, 'Job 2: Quay Foods, 2005 to 2006');
+eq('56. honeypot filled: no copy and no alert', [E.plan('enquiry', ask({ 'bot-field': 'x' }), {}).send, E.alert('enquiry', ask({ 'bot-field': 'x' }), {}).send], [false, false]);
+eq('56. a bad address: no copy', E.plan('enquiry', ask({ email: 'nope' }), {}).send, false);
+var al = E.alert('enquiry', ask(), {}), tl = E.alert('pension-trace', trace(), {});
+eq('57. the alert goes to hello@, from the website', [al.message.to, al.message.from], [['hello@pensionbuddy.ie'], 'Pensionbuddy website <hello@pensionbuddy.ie>']);
+eq('57. replying answers the sender', al.message.reply_to, 'mary@example.com');
+eq('57. LEAD_TO moves it', E.alert('enquiry', ask(), { LEAD_TO: 'damian@greshamwealth.ie' }).message.to, ['damian@greshamwealth.ie']);
+eq('57. test mode: EMAIL_TEST_TO', E.alert('enquiry', ask(), { EMAIL_TEST: '1', EMAIL_TEST_TO: 't@x.ie' }).message.to, ['t@x.ie']);
+eq('58. alert subjects', [al.message.subject, tl.message.subject], ['New question: Check my pension, from Mary', 'New trace request: 2 old jobs, from Mary Byrne']);
+has('58. the alert carries the phone', tl.message.text, 'Phone: 087 123 4567');
+has('58. and the previous surname', tl.message.text, 'Previous surname: Mary Kelly');
+eq('58. an alert with no valid address still goes, with no reply-to', [E.alert('enquiry', ask({ email: 'x' }), {}).send, 'reply_to' in E.alert('enquiry', ask({ email: 'x' }), {}).message], [true, false]);
+eq('59. no alert for the other forms', ['calculator-results', 'director-guide', 'pension-finder'].map(function (f) { return E.alert(f, calc(), {}).send; }), [false, false, false]);
+var ae = E.plan('enquiry', ask({ message: '<script>x</script>', name: '<b>Eve</b>' }), {}).message;
+eq('60. what they typed is escaped', /<script>x|<b>Eve/.test(ae.html + E.alert('enquiry', ask({ message: '<script>x</script>' }), {}).message.html), false);
+eq('60. a day is our shape or nothing', [E.replyDay('Monday 12 October'), E.replyDay('Sunday 11 October'), E.replyDay('Monday 32 October')], ['Monday 12 October', '', '']);
+
+group('THE TOOLS: FEE CHECK, YEAR-END REMINDER, CHANGING JOBS, CALL BACK');
+E.clock.now = function () { return new Date('2026-10-12T10:00:00Z'); };
+var fc = E.plan('fee-check', { pot: '100000', fee: '1', age: '40', cost: '€1', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {});
+eq('63. fee check: a copy to the sender', [fc.send, fc.message.subject], [true, 'We have your fee check']);
+has('63. the cost worked out again here at 6%, not taken from the page', fc.message.text, 'Fees by 66: €104,616');
+eq('63. figures that are not figures are left out', E.plan('fee-check', { pot: 'x', fee: '1', age: '40', email: 'a@b.ie' }, {}).message.text.indexOf('Fees by 66'), -1);
+eq('63. fee check alert subject', E.alert('fee-check', { pot: '100000', fee: '1', age: '40', email: 'mary@example.com' }, {}).message.subject, 'Fee check: €100,000 at 1.00%, from mary@example.com');
+eq('64. year end: March from 12 October 2026 is 31 March 2027, reminder 17 February',
+   [E.yearEnd('March', E.clock.now()).end.toISOString().slice(0, 10), E.yearEnd('March', E.clock.now()).rem.toISOString().slice(0, 10)], ['2027-03-31', '2027-02-17']);
+eq('64. October: the end of this month, too close, so today', [E.yearEnd('October', E.clock.now()).close, E.yearEnd('October', E.clock.now()).days], [true, 19]);
+eq('64. September: already past, so next year', E.yearEnd('September', E.clock.now()).end.toISOString().slice(0, 10), '2027-09-30');
+eq('64. not a month: nothing', E.yearEnd('Smarch', E.clock.now()), null);
+var yc = E.plan('year-end-reminder', { year_end: 'March', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {});
+eq('65. year end: the copy says the day, and every year', [yc.message.subject, /We\u2019ll remind you on 17 February 2027, and every year after\./.test(yc.message.text)], ['Your year-end reminder is set', true]);
+var yclose = E.plan('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message;
+eq('65. close: the copy is the reminder itself', [yclose.subject, /year end is 31 October 2026\./.test(yclose.text), /counts against this year/.test(yclose.text)], ['Your year end is close', true, true]);
+var ya = E.alert('year-end-reminder', { year_end: 'March', email: 'mary@example.com' }, {}).message;
+eq('66. the alert: no calendar file, it goes by itself', ['attachments' in ya, /every year after, by itself/.test(ya.text)], [false, true]);
+eq('66. close: the subject says how close', E.alert('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message.subject, 'Year end in 19 days: a@b.ie');
+eq('66. due: six weeks before the end of the month, any year', [E.reminderDue('March', new Date('2027-02-17T07:00:00Z')).toISOString().slice(0, 10),
+   E.reminderDue('March', new Date('2028-02-18T07:00:00Z')) && E.reminderDue('March', new Date('2028-02-18T07:00:00Z')).toISOString().slice(0, 10),
+   E.reminderDue('March', new Date('2027-02-18T07:00:00Z')), E.reminderDue('December', new Date('2026-11-19T07:00:00Z')).toISOString().slice(0, 10)],
+   ['2027-03-31', '2028-03-31', null, '2026-12-31']);
+var rm = E.reminder({ email: 'mary@example.com', year_end: 'March' }, new Date(Date.UTC(2027, 2, 31)), {});
+eq('66. the reminder: to them, from us, the date and the line', [rm.to, rm.subject, /year end is 31 March 2027\./.test(rm.text), /Reply to stop them/.test(rm.text)],
+   [['mary@example.com'], 'Your year end is six weeks away', true, true]);
+eq('66. no address, or the honeypot: no reminder', [E.reminder({ email: 'x' }, new Date(), {}), E.reminder({ email: 'a@b.ie', 'bot-field': 'x' }, new Date(), {})], [null, null]);
+var jc = E.plan('job-change', { change: 'Leaving a job', when: 'This month', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {}).message;
+eq('67. changing jobs: subject', jc.subject, 'Changing jobs: first steps');
+has('67. leaving: its first steps', jc.text, 'Keep your leaving statement.');
+has('67. starting: its own', E.plan('job-change', { change: 'Starting a job', email: 'a@b.ie' }, {}).message.text, 'Join as early as you can.');
+eq('67. alert subject', E.alert('job-change', { change: 'Leaving a job', when: 'This month', email: 'mary@example.com' }, {}).message.subject, 'Changing jobs: Leaving a job, this month, from mary@example.com');
+var cb = { name: 'Mary', phone: '087 123 4567', time: 'Afternoon', reply_by: 'Monday 12 October' };
+eq('68. call back: no email asked for, so no copy', E.plan('callback', cb, {}).send, false);
+eq('68. but the alert goes, with no reply-to', [E.alert('callback', cb, {}).send, 'reply_to' in E.alert('callback', cb, {}).message], [true, false]);
+eq('68. subject and line', [E.alert('callback', cb, {}).message.subject, E.alert('callback', cb, {}).message.text.split('\n')[0]],
+   ['Call back: Mary, 087 123 4567, afternoon', 'The site told them we call Monday 12 October, in the afternoon.']);
+var ar = E.plan('enquiry', ask({ topic: 'About a result', details: 'Calculator: Pension calculator | Projected pot at retirement: €460,066 | Your age now: 40 | Pension saved so far: €50,000' }), {}).message;
+has('69. a result: every row of it in the copy', ar.text, 'Pension saved so far: €50,000');
+
 group('THE FUNCTION: NEVER THROWS, ALWAYS 200, LOGS NO ADDRESS');
 var logs = [];
 var origLog = console.log, origErr = console.error;
@@ -220,4 +302,46 @@ function event(form, data) { return { body: JSON.stringify({ payload: { id: 'sub
   r = await F._handler(undefined, {}, { env: {}, fetch: okFetch });
   loud();
   eq('51. no event at all: 200', r.statusCode, 200);
+
+  calls = [];
+  quiet();
+  r = await F._handler(event('enquiry', ask()), {}, { env: { EMAIL_API_KEY: 'k' }, fetch: okFetch });
+  loud();
+  eq('61. enquiry: two calls, the alert to Damian first', calls.map(function (c) { return JSON.parse(c.opts.body).to[0]; }), ['hello@pensionbuddy.ie', 'mary@example.com']);
+  eq('61. each idempotent on its own key', calls.map(function (c) { return c.opts.headers['Idempotency-Key']; }), ['submission-sub123-alert', 'submission-sub123']);
+  eq('61. no address in the log', logs.join(' ').indexOf('mary@example.com'), -1);
+
+  calls = [];
+  quiet();
+  r = await F._handler(event('pension-trace', trace({ email: 'bad' })), {}, { env: { EMAIL_API_KEY: 'k' }, fetch: okFetch });
+  loud();
+  eq('62. no valid address: the alert still goes, no copy', [r.body, calls.length], ['sent', 1]);
+
+  /* the daily reminders: Netlify's API stood in for, and Resend */
+  var Y = await import('../netlify/functions/year-end-reminders.mjs');
+  calls = [];
+  var subs = [{ id: 's1', data: { year_end: 'March', email: 'mary@example.com' } }, { id: 's2', data: { year_end: 'June', email: 'joe@example.com' } },
+              { id: 's3', data: { year_end: 'March', email: 'not an address' } }];
+  function api(url, opts) {
+    calls.push({ url: url, opts: opts || {} });
+    if (/\/sites\/site1\/forms$/.test(url)) return Promise.resolve({ ok: true, json: function () { return Promise.resolve([{ id: 'f9', name: 'year-end-reminder' }]); } });
+    if (/\/forms\/f9\/submissions/.test(url)) return Promise.resolve({ ok: true, json: function () { return Promise.resolve(/page=1$/.test(url) ? subs : []); } });
+    return Promise.resolve({ ok: true, status: 200 });
+  }
+  quiet();
+  var y1 = await Y.run({ env: { NETLIFY_API_TOKEN: 't', EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date('2027-02-17T07:00:00Z') });
+  loud();
+  var mails = calls.filter(function (c) { return c.url === 'https://api.resend.com/emails'; });
+  eq('70. the day: only March\u2019s reminder with an address goes', [y1.sent, mails.map(function (c) { return JSON.parse(c.opts.body).to[0]; })], [1, ['mary@example.com']]);
+  eq('70. once per submission per year', mails[0].opts.headers['Idempotency-Key'], 'reminder-s1-2027-03-31');
+  eq('70. no address in the log', logs.join(' ').indexOf('mary@example.com'), -1);
+  calls = [];
+  quiet();
+  var y2 = await Y.run({ env: { NETLIFY_API_TOKEN: 't', EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date('2027-02-18T07:00:00Z') });
+  loud();
+  eq('70. the day after: nothing', y2.sent, 0);
+  quiet();
+  var y3 = await Y.run({ env: { EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date() });
+  loud();
+  eq('70. no token: nothing, logged', [y3.sent, /NETLIFY_API_TOKEN/.test(logs.join(' '))], [0, true]);
 })();

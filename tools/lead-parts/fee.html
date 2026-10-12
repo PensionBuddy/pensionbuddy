@@ -1,0 +1,38 @@
+<section class="pbk pbf" id="fees" aria-labelledby="pbfH"><div class="wrap"><div class="pbk-card">
+  <h2 id="pbfH">What fees cost you.</h2>
+  <form class="pbf-form" id="pbfForm" name="fee-check" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="fee-check"><input type="hidden" name="cost"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+    <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <div class="pbf-grid">
+      <div class="pbf-in">
+        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000"></div>
+        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1"></div>
+        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40"></div>
+      </div>
+      <div class="pbf-out">
+        <p class="pbf-big" aria-live="polite"><span id="pbfCost">&euro;104,616</span> <span class="pbf-lab">in fees by 66</span></p>
+        <div class="pbf-chart" aria-hidden="true">
+          <svg viewBox="0 0 600 200" preserveAspectRatio="none"><path class="pbf-gap" d=""/><path class="pbf-none" d="" vector-effect="non-scaling-stroke"/><path class="pbf-with" d="" vector-effect="non-scaling-stroke"/></svg>
+          <span class="pbf-dot pbf-dot-none"></span><span class="pbf-dot pbf-dot-with"></span>
+        </div>
+        <p class="pbf-key"><span><i class="k1"></i>No fees</span><span><i class="k2"></i>Your fee</span></p>
+        <p class="pbf-at">6% growth a year, the most a projection may assume. Historically, shares have often done better.</p>
+        <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+      </div>
+    </div>
+    <div class="pbf-ask">
+      <button type="button" class="btn btn-primary pbf-check" id="pbfCheck" aria-expanded="false" aria-controls="pbfMail">Get it checked</button>
+      <div class="pbk-fold" id="pbfMail"><div>
+        <div class="pbk-send"><span class="ffield"><input id="pbfEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbfErr"><label class="flabel" for="pbfEmail">Email</label></span><button type="submit" class="btn btn-primary pbk-go">Send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+        <p class="pbk-err" id="pbfErr" role="alert"></p>
+        <p class="pbk-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
+      </div></div>
+    </div>
+  </form>
+  <div class="pbk-ok" id="pbfOk" role="status" tabindex="-1" hidden>
+    <span class="pbk-burst" aria-hidden="true"></span>
+    <span class="pbk-ok-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="pbk-tick" d="M20 6L9 17l-5-5"/></svg></span>
+    <h3>Sent.</h3>
+    <p data-ok-text></p>
+  </div>
+</div></div></section>

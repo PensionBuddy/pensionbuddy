@@ -38,7 +38,8 @@
       name, email or figure goes with the event. A refusal opens a
       pre-filled email to Damian instead, as the forms always have.
 
-   Classic script, no globals. */
+   Classic script; its one global, window.PBAfter, lends results() and
+   inputs() to assets/js/pb-askresult.js. */
 (function () {
   'use strict';
   var after = document.getElementById('pbAfter');
@@ -98,6 +99,9 @@
     link.addEventListener('focus', refresh);
     link.addEventListener('mouseenter', refresh);
   }
+
+  /* what assets/js/pb-askresult.js sends with "Ask us about this" */
+  window.PBAfter = { results: results, inputs: inputs };
 
   var more = document.getElementById('ecMore'), cap = document.getElementById('ecCap');
   var form = document.getElementById('ecForm');

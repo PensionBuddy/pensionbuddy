@@ -1,0 +1,58 @@
+/* YEAR-END REMINDER (tools/lead-parts/yearend.css; tools/lead-blocks.py
+   writes it into director.html). Twelve month tiles; the pick draws a line
+   from today to the reminder to year end, and counts the days.
+   assets/js/pb-yearend.js drives it. */
+.pby-pick{border:0;margin:0;padding:0;min-width:0}
+.pby-pick legend{padding:0;margin:0 0 12px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.pby-months{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.pby-m{position:relative;display:flex;align-items:center;justify-content:center;height:52px;border-radius:var(--r-lg);background:var(--surface-2);border:1.5px solid transparent;font-size:15px;font-weight:700;color:var(--ink-2);cursor:pointer;transition:background-color .2s,color .2s,border-color .2s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pby-m input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pby-m:hover{border-color:var(--teal);color:var(--ink)}
+:root.pb-motion .pby-m:hover{transform:translateY(-2px)}
+.pby-m:focus-within{outline:2px solid var(--teal-700);outline-offset:2px}
+.pby-m:has(input:checked){background:var(--teal);color:#fff;border-color:var(--teal)}
+:root.pb-motion .pby-m:has(input:checked){animation:pbyPick .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pbyPick{35%{transform:scale(1.12) rotate(-3deg)}70%{transform:scale(.97)}}
+
+/* the line: today, the reminder, year end */
+.pby-tl{position:relative;height:104px;margin:30px 10px 0;opacity:.35;filter:grayscale(1)}
+:root.pb-motion .pby-tl{transition:opacity .4s,filter .4s}
+.pby-tl.on{opacity:1;filter:none}
+.pby-track{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:var(--line)}
+.pby-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:linear-gradient(90deg,var(--teal-100),var(--teal))}
+.pby-tl.on .pby-fill{width:100%}
+:root.pb-motion .pby-fill{transition:width .9s cubic-bezier(.65,0,.35,1)}
+.pby-node{position:absolute;top:50%;left:var(--x,0%);width:0;height:0}
+:root.pb-motion .pby-node{transition:left .7s cubic-bezier(.34,1.2,.64,1)}
+.pby-node i{position:absolute;left:-8px;top:-8px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--line-2,#D8DFDC)}
+.pby-tl.on .pby-node i{box-shadow:0 0 0 3px var(--teal)}
+.pby-n1 i{background:var(--amber,#F4B740)}
+.pby-node b,.pby-node small{position:absolute;white-space:nowrap;line-height:1.2}
+.pby-node b{font-size:13px;font-weight:700;color:var(--ink)}
+.pby-node small{font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.pby-n0 b,.pby-n2 b{top:18px}
+.pby-n0 small,.pby-n2 small{top:36px}
+.pby-n0 b,.pby-n0 small{left:-8px}
+.pby-n2 b,.pby-n2 small{right:-8px}
+.pby-n1 b{bottom:36px;transform:translateX(-50%)}
+.pby-n1 small{bottom:18px;transform:translateX(-50%)}
+:root.pb-motion .pby-tl.on .pby-node{animation:pbyNode .5s cubic-bezier(.34,1.56,.64,1) both}
+:root.pb-motion .pby-tl.on .pby-n1{animation-delay:.35s}
+:root.pb-motion .pby-tl.on .pby-n2{animation-delay:.7s}
+@keyframes pbyNode{from{opacity:0;transform:scale(.4)}}
+:root.pb-motion .pby-tl.on .pby-n1 i{animation:pbyRing 1.6s ease-out 1s 2}
+@keyframes pbyRing{0%{box-shadow:0 0 0 3px var(--teal),0 0 0 0 rgba(244,183,64,.55)}100%{box-shadow:0 0 0 3px var(--teal),0 0 0 14px rgba(244,183,64,0)}}
+
+.pby-days{margin:6px 0 22px;font-size:15px;color:var(--ink-3);opacity:0}
+.pby-days.on{opacity:1}
+:root.pb-motion .pby-days{transition:opacity .4s .2s}
+.pby-days b{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
+html:not(.pb-js) .pby-tl,html:not(.pb-js) .pby-days{display:none}
+
+:root.pb-motion .pbk-ok.show .pby-bell svg{animation:pbyBell .9s ease-in-out .45s 2;transform-origin:50% 10%}
+@keyframes pbyBell{0%,100%{transform:rotate(0)}20%{transform:rotate(16deg)}40%{transform:rotate(-14deg)}60%{transform:rotate(9deg)}80%{transform:rotate(-5deg)}}
+
+@media(max-width:720px){
+  .pby-months{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .pby-tl{margin-left:12px;margin-right:12px}
+}

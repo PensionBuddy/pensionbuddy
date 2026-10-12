@@ -1,0 +1,32 @@
+/* CHANGING JOBS (tools/lead-parts/move.css; tools/lead-blocks.py writes it
+   into tracker.html). Two doors, leaving and starting; the pick walks its
+   arrow through the door and opens "when" and the email.
+   assets/js/pb-move.js drives it. */
+.pbm-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pbm-opt{position:relative;display:flex;align-items:center;gap:16px;padding:22px 24px;border-radius:var(--r-xl);background:var(--surface-2);border:1.5px solid transparent;cursor:pointer;transition:background-color .25s,border-color .25s,opacity .3s,transform .4s cubic-bezier(.34,1.56,.64,1)}
+.pbm-opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pbm-opt:hover{border-color:var(--teal)}
+.pbm-opt:focus-within{outline:2px solid var(--teal-700);outline-offset:2px}
+.pbm-opt b{font-size:20px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.pbm-ic{display:flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:14px;background:#fff;color:var(--teal-700);transition:background-color .25s,color .25s}
+.pbm-ic svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.pbm-opt:has(input:checked){background:var(--teal-50);border-color:var(--teal)}
+.pbm-opt:has(input:checked) .pbm-ic{background:var(--teal);color:#fff}
+.pbm-pick:has(input:checked) .pbm-opt:not(:has(input:checked)){opacity:.55}
+:root.pb-motion .pbm-opt:hover .arw{transform:translateX(2px)}
+:root.pb-motion .pbm-opt .arw{transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+:root.pb-motion .pbm-out:has(input:checked) .arw{animation:pbmOut .9s cubic-bezier(.65,0,.35,1)}
+:root.pb-motion .pbm-in:has(input:checked) .arw{animation:pbmIn .9s cubic-bezier(.65,0,.35,1)}
+:root.pb-motion .pbm-opt:has(input:checked){animation:pbkPop2 .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pbmOut{0%{transform:none}45%{transform:translateX(9px);opacity:0}46%{transform:translateX(-7px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes pbmIn{0%{transform:none}45%{transform:translateX(7px);opacity:0}46%{transform:translateX(-9px);opacity:0}100%{transform:none;opacity:1}}
+.pbm-when{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px}
+:root.pb-motion .pbk-fold.on .pbm-when .pbk-chip{animation:pbkIn .4s cubic-bezier(.22,.61,.36,1) both}
+:root.pb-motion .pbk-fold.on .pbm-when .pbk-chip:nth-child(2){animation-delay:.06s}
+:root.pb-motion .pbk-fold.on .pbm-when .pbk-chip:nth-child(3){animation-delay:.12s}
+@media(max-width:480px){.pbm-pick{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .pbm-opt{padding:16px;gap:12px}
+  .pbm-opt b{font-size:17px}
+  .pbm-ic{width:44px;height:44px}
+}

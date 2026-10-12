@@ -1,0 +1,70 @@
+<section class="pb-ask" id="ask" aria-labelledby="askH"><div class="wrap">
+<div class="pb-ask-card">
+  <div class="pb-ask-intro">
+    <h2 id="askH">Ask us. <span class="hl">We reply by email.</span></h2>
+    <ol class="pb-ask-prog" aria-hidden="true"><li class="on">Topic</li><li>Details</li><li>Send</li></ol>
+    <div class="pb-ask-draft" aria-hidden="true">
+      <div class="pb-ask-draft-top"><i></i><i></i><i></i><span>To: Pensionbuddy</span></div>
+      <p class="pb-ask-draft-subj">Subject: <b data-ask-subj>&hellip;</b></p>
+      <ul class="pb-ask-draft-lines" data-ask-lines></ul>
+      <p class="pb-ask-draft-by">Reply by <b data-ask-by>the next working day</b></p>
+      <span class="pb-ask-stamp">Sent</span>
+    </div>
+  </div>
+
+  <div class="pb-ask-body">
+    <form class="pb-ask-form" id="askForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="pb-ask-stage">
+
+      <fieldset class="pb-ask-step on" data-step="topic">
+        <legend tabindex="-1">What is it about?</legend>
+        <div class="pb-ask-topics">
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Check my pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><b>Check my pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Start a pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 14c0-4 3-7 9-7 0 4-3 7-9 7z"/></svg></span><b>Start a pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Find an old pension"><span class="ti"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><b>Find an old pension</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Company pension"><span class="ti"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/><path d="M10 21v-3h4v3"/></svg></span><b>I run a company</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Something else"><span class="ti"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>Something else</b></label>
+        </div>
+        <div class="pb-ask-nav"><span></span><button type="button" class="btn btn-primary pb-ask-next">Next <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </fieldset>
+
+      <fieldset class="pb-ask-step" data-step="details" hidden>
+        <legend tabindex="-1">Details <span class="pb-ask-opt">(optional)</span></legend>
+        <div class="pb-ask-qs" data-ask-qs></div>
+        <p class="pb-ask-tip" data-ask-tip hidden><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span>Know where you worked? <a href="tracker.html#trace">Use the pension tracker</a>.</span></p>
+        <div class="pb-ask-nav"><button type="button" class="pb-ask-back">Back</button><button type="button" class="btn btn-primary pb-ask-next">Next <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+      </fieldset>
+
+      <fieldset class="pb-ask-step" data-step="reply">
+        <legend tabindex="-1">Your details</legend>
+        <div class="pb-ask-field"><label for="askMsg">Your question <span class="pb-ask-opt">(optional)</span></label><textarea id="askMsg" name="message" rows="3" maxlength="1500"></textarea></div>
+        <div class="pb-ask-two">
+          <span class="ffield"><input id="askName" name="name" type="text" autocomplete="given-name" maxlength="80" placeholder=" "><label class="flabel" for="askName">First name</label></span>
+          <span class="ffield"><input id="askEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " required aria-describedby="askErr"><label class="flabel" for="askEmail">Email</label></span>
+        </div>
+        <div class="pb-ask-how" role="radiogroup" aria-label="How we reply">
+          <span class="pb-ask-how-pill" aria-hidden="true"></span>
+          <label><input type="radio" name="contact_by" value="Email" checked>Email me</label>
+          <label><input type="radio" name="contact_by" value="Phone">Call me</label>
+        </div>
+        <div class="pb-ask-phone" data-ask-phone><span class="ffield"><input id="askPhone" name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder=" "><label class="flabel" for="askPhone">Phone</label></span></div>
+        <p class="pb-ask-err" id="askErr" role="alert"></p>
+        <div class="pb-ask-nav"><button type="button" class="pb-ask-back">Back</button><button type="submit" class="btn btn-primary pb-ask-send"><span>Send</span><svg class="ico pb-ask-plane" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div>
+        <p class="pb-ask-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
+      </fieldset>
+
+      </div>
+    </form>
+
+    <div class="pb-ask-ok" id="askOk" role="status" tabindex="-1" hidden>
+      <span class="pb-ask-burst" aria-hidden="true"></span>
+      <svg class="ico pb-ask-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+      <h3 id="askOkH">Sent.</h3>
+      <p id="askOkText"></p>
+      <button type="button" class="pb-ask-again" id="askAgain">Send another</button>
+    </div>
+  </div>
+</div>
+</div></section>

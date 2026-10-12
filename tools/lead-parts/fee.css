@@ -1,0 +1,52 @@
+/* FEE CHECK (tools/lead-parts/fee.css; tools/lead-blocks.py writes it into
+   index.html). Three sliders, one number: what a yearly fee takes by 66,
+   and two growth lines with the gap between them filled. assets/js/pb-fee.js
+   drives it with assets/js/pension-fees.js's maths. */
+.pbf-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
+.pbf-in{display:grid;gap:22px}
+.pbf-sl{display:grid;grid-template-columns:1fr auto;align-items:baseline;row-gap:10px}
+.pbf-sl label{font-size:14px;font-weight:600;color:var(--ink-2)}
+.pbf-sl output{font-size:18px;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+:root.pb-motion .pbf-sl output.is-bump{animation:pbkPop2 .3s cubic-bezier(.34,1.56,.64,1)}
+.pbf-sl input[type=range]{grid-column:1 / -1;-webkit-appearance:none;appearance:none;width:100%;height:28px;margin:0;background:transparent;cursor:pointer;--p:50%}
+.pbf-sl input[type=range]:focus{outline:none}
+.pbf-sl input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--teal) var(--p),var(--line) var(--p))}
+.pbf-sl input[type=range]::-moz-range-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--teal) var(--p),var(--line) var(--p))}
+.pbf-sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-9px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 2px var(--teal),0 4px 12px -2px rgba(11,31,28,.25);transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s}
+.pbf-sl input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:0;box-shadow:0 0 0 2px var(--teal),0 4px 12px -2px rgba(11,31,28,.25)}
+.pbf-sl input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.1)}
+.pbf-sl input[type=range]:active::-webkit-slider-thumb{transform:scale(1.25);box-shadow:0 0 0 2px var(--teal),0 0 0 10px var(--teal-50)}
+.pbf-sl input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 2px var(--teal-700),0 0 0 6px var(--teal-100)}
+.pbf-sl input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 2px var(--teal-700),0 0 0 6px var(--teal-100)}
+
+.pbf-out{min-width:0}
+.pbf-big{margin:0 0 14px;line-height:1}
+.pbf-big #pbfCost{display:block;font-size:clamp(40px,5.4vw,64px);font-weight:800;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pbf-lab{display:block;margin-top:8px;font-size:15px;font-weight:600;color:var(--ink-3)}
+.pbf-chart{position:relative;height:150px}
+.pbf-chart svg{display:block;width:100%;height:100%;overflow:visible}
+.pbf-gap{fill:var(--amber-soft,#FCEFCF)}
+.pbf-none{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 5;opacity:.6}
+.pbf-with{fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+:root.pb-motion .pbf-chart path{transition:d .6s cubic-bezier(.34,1.15,.64,1)}
+.pbf-dot{position:absolute;right:-6px;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--teal)}
+.pbf-dot-none{box-shadow:0 0 0 3px var(--ink-3)}
+:root.pb-motion .pbf-dot{transition:top .6s cubic-bezier(.34,1.15,.64,1)}
+html:not(.pb-js) .pbf-chart,html:not(.pb-js) .pbf-key{display:none}
+.pbf-key{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:12.5px;color:var(--ink-3)}
+.pbf-key span{display:inline-flex;align-items:center;gap:6px}
+.pbf-key i{width:14px;height:3px;border-radius:2px;background:var(--teal)}
+.pbf-key i.k1{background:none;border-top:2px dashed var(--ink-3)}
+.pbf-at{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+.pbf-out .pb-past{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+
+.pbf-ask{margin-top:30px;padding-top:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.pbf-check{white-space:nowrap}
+:root.pb-motion .pbf-check{transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s}
+.pbf-check[aria-expanded="true"]{display:none}
+.pbf-ask .pbk-fold{grid-column:1 / -1}
+html:not(.pb-js) .pbf-check{display:none}
+
+@media(max-width:860px){
+  .pbf-grid{grid-template-columns:1fr;gap:28px}
+}

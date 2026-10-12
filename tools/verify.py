@@ -266,7 +266,8 @@ AUDIT_JS = r"""
     const embedWrap=document.getElementById('calStage')||document.getElementById('calEmbed');
     const vis=el=>{if(!el)return false;const cs=getComputedStyle(el);return cs.display!=='none'&&cs.visibility!=='hidden'&&el.getBoundingClientRect().height>0};
     const w=document.getElementById('calWidget');
-    const g={gateForm:!!document.querySelector('main form'),embedVisible:vis(embedWrap),widgetCreated:!!w,
+    /* a form in front of the calendar; the enquiry form after it is not one */
+    const g={gateForm:!!embedWrap&&[...document.querySelectorAll('main form')].some(f=>!!(f.compareDocumentPosition(embedWrap)&Node.DOCUMENT_POSITION_FOLLOWING)),embedVisible:vis(embedWrap),widgetCreated:!!w,
       dataUrl:w?(w.getAttribute('data-url')||'').slice(0,190):null,
       scriptInjected:!!document.querySelector('script[src*="calendly"]'),cssInjected:!!document.querySelector('link[href*="calendly"]'),
       widgetHeight:w?Math.round(w.getBoundingClientRect().height):0,

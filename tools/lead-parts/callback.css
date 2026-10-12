@@ -1,0 +1,33 @@
+/* CALL ME BACK (tools/lead-parts/callback.css; tools/lead-blocks.py writes it
+   into booking.html). One row: name, phone, morning or afternoon, call me.
+   assets/js/pb-callback.js drives it. */
+.pbc .pbk-card{padding:32px 36px}
+.pbc h2{margin-bottom:20px}
+.pbc-row{display:grid;grid-template-columns:1fr 1.2fr auto auto;gap:10px;align-items:stretch}
+.pbc-when{position:relative;display:flex;gap:2px;padding:4px;border-radius:var(--r-pill);background:var(--surface-2)}
+.pbc-when label{position:relative;z-index:1;display:flex;align-items:center;padding:0 16px;border-radius:var(--r-pill);font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;white-space:nowrap;transition:color .3s}
+.pbc-when input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pbc-when label:focus-within{outline:2px solid var(--teal-700);outline-offset:1px}
+.pbc-when label:has(input:checked){color:#fff;background:var(--teal)}
+.pbc-pill{display:none}
+.pbc-when.is-sliding label:has(input:checked){background:transparent}
+.pbc-when.is-sliding .pbc-pill{display:block;position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:var(--w,0);transform:translateX(var(--x,0));border-radius:var(--r-pill);background:var(--teal)}
+:root.pb-motion .pbc-pill{transition:transform .4s cubic-bezier(.34,1.3,.64,1),width .4s cubic-bezier(.34,1.3,.64,1)}
+.pbc-go{white-space:nowrap}
+.pbc-go .pbc-phone{margin:0 6px 0 0;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.pbc-go:hover .pbc-phone{transform:rotate(-12deg)}
+:root.pb-motion .pbc-go.is-sending .pbc-phone{animation:pbcBuzz .5s ease-in-out infinite}
+:root.pb-motion .pbk-ok.show .pbc-ring svg{animation:pbcBuzz .45s ease-in-out .45s 3}
+:root.pb-motion .pbk-ok.show .pbc-ring{animation:pbkPop .5s cubic-bezier(.34,1.56,.64,1) both,pbcWave 1.4s ease-out .5s 2}
+@keyframes pbcBuzz{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+@keyframes pbcWave{0%{box-shadow:0 0 0 0 rgba(12,129,117,.45)}100%{box-shadow:0 0 0 18px rgba(12,129,117,0)}}
+@media(max-width:860px){
+  .pbc-row{grid-template-columns:1fr 1fr}
+  .pbc-when{justify-content:stretch}
+  .pbc-when label{flex:1;justify-content:center;min-height:44px}
+  .pbc-go{justify-content:center}
+}
+@media(max-width:560px){
+  .pbc .pbk-card{padding:24px 18px}
+  .pbc-row{grid-template-columns:1fr}
+}

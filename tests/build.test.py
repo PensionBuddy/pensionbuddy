@@ -387,7 +387,9 @@ def run():
     want_forms = {}
     for p, n in LEAD_FORMS.items():
         want_forms.setdefault(n, []).append(p)
-    eq('14. the five lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
+    for n, ps in REPLY_FORMS.items():
+        want_forms.setdefault(n, []).extend(ps)
+    eq('14. the lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
        sorted((n, sorted(ps)) for n, ps in want_forms.items()))
     for form_name, where in sorted(netlify.items()):
         page, form = where[0]
@@ -398,7 +400,8 @@ def run():
            [f for f in form['fields'] if f[1] == 'form-name'], [('hidden', 'form-name', form_name)])
         eq('14. %s: one honeypot field, not hidden by type' % form_name,
            [f[0] for f in form['fields'] if f[1] == 'bot-field'], ['input'])
-        eq('14. %s: an email field' % form_name, 'email' in names, True)
+        # the call-back asks for a phone number instead
+        eq('14. %s: an email field' % form_name, ('phone' if form_name == 'callback' else 'email') in names, True)
         single = [f[1] for f in form['fields'] if f[0] != 'radio']   # a radio group shares its name
         eq('14. %s: no field declared twice' % form_name, len(single), len(set(single)))
     eq('14. calculator-results: every calculator declares the same fields, in the same order (Run 45: name, email and the box to tick; no opt-in)',
@@ -408,6 +411,13 @@ def run():
        sorted(set(f for _, form in netlify.get('calculator-results', []) for f in form['fields'] if f[0] == 'checkbox')),
        [('checkbox', 'consent', 'yes')])
     eq('14. and no form stands in front of the booking calendar (Run 45)', 'booking' in netlify, False)
+    eq('14. enquiry: every page declares the same fields, in the same order',
+       len(set(tuple(f[1] for f in form['fields']) for _, form in netlify.get('enquiry', []))), 1)
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('lead_blocks', os.path.join(ROOT, 'tools', 'lead-blocks.py'))
+    lead_blocks = importlib.util.module_from_spec(spec); spec.loader.exec_module(lead_blocks)
+    eq('14. the reply forms on every page match tools/lead-parts',
+       [p for p in lead_blocks.pages() if lead_blocks.build(p, sources[p]) != sources[p]], [])
     finder = read('assets/js/pension-finder.js')
     m = re.search(r"var FIELDS = \[([^\]]*)\]", finder)
     eq('14. the finder declares exactly what PBFinder.fields() sends',
@@ -800,7 +810,9 @@ def run():
 
     # ----------------------------------------------------------------- 21
     # Run 45, and the stripped booking page: the heading, one line, then the
-    # calendar. No form in front of it, and none of the old reassurance.
+    # calendar. No form in front of it, and none of the old reassurance. The
+    # enquiry form ("Rather email than call?", tools/lead-blocks.py) comes
+    # after the calendar, never before it.
     BOOK_H1, BOOK_LINE = 'Book a call with us', 'Free. 20 minutes.'
     FILLER = ('That is the lot.', 'We do not ask what you earn', 'none of it is needed to book a chat',
               'this site gives information, not advice', 'The house promise', 'class="timeline"',
@@ -808,9 +820,9 @@ def run():
     def booking_faults(src):
         main = src[src.find('<main'):src.find('</main>')]
         out = []
-        if '<form' in main:
-            out.append('a form')
         h1, line, stage = main.find('<h1>%s</h1>' % BOOK_H1), main.find('<p class="sub">%s</p>' % BOOK_LINE), main.find('<div id="calStage">')
+        if '<form' in main[:stage]:
+            out.append('a form')
         if not 0 <= h1 < line < stage:
             out.append('order')
         if len(re.findall(r'<p\b', main[:stage])) != 1:
@@ -2542,7 +2554,8 @@ def run():
 
     # ----------------------------------------------------------------- 52
     # Run 45: one primary ask per page. A link drawn as a filled button
-    # (btn-primary, btn-acc, btn-light) leads to booking; every other link is
+    # (btn-primary, btn-acc, btn-light) leads to booking, or to the page's own
+    # reply form (#ask, #trace: tools/lead-blocks.py); every other link is
     # drawn quieter (btn-ghost, btn-quiet-dark or a plain link). Exempt by
     # name: the 404, whose filled button is the way home, and the two pages
     # held back. The home page's hero gives the figure and asks only which of
@@ -2559,7 +2572,7 @@ def run():
             for m in re.finditer(r'<a\b([^>]*)>', body):
                 cls = (re.search(r'class="([^"]*)"', m.group(1)) or [None, ''])[1].split()
                 href = (re.search(r'href="([^"]*)"', m.group(1)) or [None, ''])[1]
-                if 'btn' in cls and FILLED & set(cls) and not re.match(r'(booking\.html|https://calendly\.com/)', href):
+                if 'btn' in cls and FILLED & set(cls) and not re.match(r'(booking\.html|https://calendly\.com/|#(ask|trace)$)', href):
                     out.append('%s: %s' % (page, href))
         return out
     eq('52. every link drawn as a filled button leads to booking', loud_links(sources), [])
@@ -2696,6 +2709,18 @@ LEAD_FORMS = {
     'state-pension-entitlement.html': 'calculator-results',
     'standard-fund-threshold.html': 'calculator-results',
     'pia.html': 'calculator-results',
+}
+
+# The forms that ask us to reply (tools/lead-blocks.py), on pages that may
+# carry another form too, so by form name. "Ask us about this" under each
+# calculator's result posts as enquiry from a form its script builds.
+REPLY_FORMS = {
+    'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
+    'pension-trace': ['tracker.html'],
+    'fee-check': ['index.html'],
+    'year-end-reminder': ['director.html'],
+    'job-change': ['tracker.html'],
+    'callback': ['booking.html'],
 }
 
 
