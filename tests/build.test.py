@@ -2201,51 +2201,63 @@ def run():
         eq('44. %s is caught' % label, any(want in x for x in pop_faults(srcs, j2, c2)), True)
 
     # ----------------------------------------------------------------- 45
-    # Run 39's three steps on the home page, as Damian set them on 8 October
-    # 2026: the heading "How a call works.", step 1 "Pick a time that suits
-    # you." (no "No forms."), the other two steps' words unchanged, and no
-    # picture over any step (Run 39's placeholder posters are gone, files and
-    # all; the comment over the section says how to bring the video slots
-    # back).
-    CALL_STEPS = [('You reach out', 'Pick a time that suits you.'),
+    # "How a call works.", as Damian set it on 12 October 2026: the home page
+    # shows the three filmed clips (talk, trace, decide), each a muted loop
+    # over its still (assets/js/pb-video.js); the drawn version, Run 39's
+    # three steps with pb-call-motion.js's films, moved to the booking page
+    # with its 8 October words (step 1 "Pick a time that suits you.", no
+    # "No forms.") and no picture over any step.
+    HOME_STEPS = [('We talk', 'Twenty minutes, by phone or video. Pick a time that suits you.'),
+                  ('We trace', 'We find your old pensions and read what they charge.'),
+                  ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
+    BOOK_STEPS = [('You reach out', 'Pick a time that suits you.'),
                   ('We talk it through', 'Twenty minutes, by phone or video.'),
                   ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
+    CLIPS = ['talk', 'trace', 'decide']
 
-    def call_faults(ix, placeholders):
+    def call_faults(html, opening, want, clips):
         f = []
-        sec = re.search(r'<section class="expect" id="call">(.*?)</section>', ix, re.S)
+        sec = re.search(re.escape(opening) + r'(.*?)</section>', html, re.S)
         if not sec:
             return ['no "How a call works" section']
         body = sec.group(1)
-        if re.findall(r'<h2>(.*?)</h2>', body) != ['How a call works.'] or 'kicker' in body:
+        if [re.sub(r'<[^>]+>', '', h) for h in re.findall(r'<h2[^>]*>(.*?)</h2>', body)] != ['How a call works.'] or 'kicker' in body:
             f.append('the heading')
-        steps = re.findall(r'<div class="step"><div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body)
-        if [(h, p) for _, h, p in steps] != CALL_STEPS or [n for n, _, _ in steps] != ['1', '2', '3'] \
+        steps = re.findall(r'<div class="step">(.*?)<div class="sx">(\d)</div><h3>([^<]*)</h3><p>([^<]*)</p></div>', body)
+        if [(h, p) for _, _, h, p in steps] != want or [n for _, n, _, _ in steps] != ['1', '2', '3'] \
                 or body.count('<div class="step">') != 3:
-            f.append('the steps are not the three set on 8 October 2026: %s' % [(h, p[:20]) for _, h, p in steps])
+            f.append('the steps are not the three set on 12 October 2026: %s' % [(h, p[:20]) for _, _, h, p in steps])
         if 'No forms' in body:
             f.append('"No forms." is back')
-        if re.search(r'<(?:img|picture|video|source)\b', body) or 'class="pb-call-slot"' in ix or '.step .pb-call-slot' in ix or 'call-video-placeholder.' in ix:
+        if clips:
+            got = [re.findall(r'assets/video/step-([a-z]+)\.', m) for m, _, _, _ in steps]
+            if [sorted(set(g)) for g in got] != [[c] for c in clips] or any('data-pb-video' not in m or 'muted' not in m for m, _, _, _ in steps):
+                f.append('a clip missing or out of order: %s' % got)
+            for c in clips:
+                for ext in ('mp4', 'webm'):
+                    if not os.path.exists(os.path.join(ROOT, 'assets', 'video', 'step-%s.%s' % (c, ext))):
+                        f.append('assets/video/step-%s.%s is missing' % (c, ext))
+        elif re.search(r'<(?:img|picture|video|source)\b', body):
             f.append('a picture over the steps')
-        if placeholders:
-            f.append('the placeholder files are back: %s' % placeholders)
         return f
 
-    cph = [e for e in ('jpg', 'webp') if os.path.exists(os.path.join(ROOT, 'assets', 'img', 'call-video-placeholder.' + e))]
-    cix = sources['index.html']
-    eq('45. "How a call works.": three steps, step 1 "Pick a time that suits you.", no pictures',
-       call_faults(cix, cph), [])
-    for label, find, repl, want in (
-            ('a step reworded', "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the three'),
-            ('"No forms." back', '<p>Pick a time that suits you.</p>', '<p>Pick a time that suits you. No forms.</p>', 'No forms'),
-            ('the old heading back', '<h2>How a call works.</h2>', '<h2>Three steps.</h2>', 'the heading'),
-            ('a placeholder back', '<div class="step"><div class="sx">2</div>',
-             '<div class="step"><div class="pb-call-slot" aria-hidden="true"><picture><img src="assets/img/call-video-placeholder.jpg" alt=""></picture></div><div class="sx">2</div>',
-             'a picture')):
-        assert find in cix, label
-        mix = cix.replace(find, repl, 1)
-        eq('45. %s is caught' % label, any(want in x for x in call_faults(mix, [])), True)
-    eq('45. the placeholder files back is caught', any('files are back' in x for x in call_faults(cix, ['jpg'])), True)
+    cix, cbk = sources['index.html'], sources['booking.html']
+    HOME_OPEN, BOOK_OPEN = '<section class="expect" id="call">', '<section class="pb-book-how" id="call"'
+    eq('45. home "How a call works.": the three clips, talk, trace, decide',
+       call_faults(cix, HOME_OPEN, HOME_STEPS, CLIPS), [])
+    eq('45. booking "How a call works.": the drawn steps, no pictures',
+       call_faults(cbk, BOOK_OPEN, BOOK_STEPS, None), [])
+    eq('45. booking loads pb-call-motion.js', bool(re.search(r'<script src="assets/js/pb-call-motion\.js\?v=[0-9a-f]+"></script>', cbk)), True)
+    for label, page, opening, want, clips, find, repl, fault in (
+            ('a home step reworded', cix, HOME_OPEN, HOME_STEPS, CLIPS, "We find your old pensions", "We find all your pensions", 'not the three'),
+            ('a home clip swapped', cix, HOME_OPEN, HOME_STEPS, CLIPS, 'step-trace.webm', 'step-decide.webm', 'a clip'),
+            ('a booking step reworded', cbk, BOOK_OPEN, BOOK_STEPS, None, "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the three'),
+            ('"No forms." back on booking', cbk, BOOK_OPEN, BOOK_STEPS, None, '<p>Pick a time that suits you.</p>', '<p>Pick a time that suits you. No forms.</p>', 'No forms'),
+            ('the old heading back', cix, HOME_OPEN, HOME_STEPS, CLIPS, '<h2>How a call works.</h2>', '<h2>Three steps.</h2>', 'the heading'),
+            ('a picture on booking', cbk, BOOK_OPEN, BOOK_STEPS, None, '<div class="step"><div class="sx">2</div>',
+             '<div class="step"><picture><img src="x.jpg" alt=""></picture><div class="sx">2</div>', 'a picture')):
+        assert find in page, label
+        eq('45. %s is caught' % label, any(fault in x for x in call_faults(page.replace(find, repl, 1), opening, want, clips)), True)
 
 
     # ----------------------------------------------------------------- 46

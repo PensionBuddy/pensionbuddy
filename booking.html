@@ -2114,6 +2114,43 @@ main h1{font-weight:800}
    (booking.html#from=...); hidden for everyone else, shown before the first paint */
 .pb-from{margin:12px 0 0;font-size:1.05rem;font-weight:600;line-height:1.5;color:var(--ink)}
 .pb-from[hidden]{display:none}
+/* "How a call works", moved here from the home page on 12 October 2026
+   (Damian: the home page shows the filmed clips; the drawn version lives
+   where people book). Base step rules from index.html, then its MOTION-6. */
+.pb-book-how{padding:8px 0 84px}
+.pb-book-how h2{text-align:center;margin:0 0 36px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:960px;margin:0 auto}
+.step{position:relative;padding-top:8px}
+.step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.step p{color:var(--ink-2);font-size:15px}
+@media(max-width:920px){.steps{grid-template-columns:1fr}}
+/* MOTION-6:BEGIN (9 October 2026, Damian's brief: go all out). "How a call
+   works" (assets/js/pb-call-motion.js); the script adds every element and
+   class here, only with motion on. (The way-of-life cards' rules went with
+   the cards on 11 October 2026.) */
+.pb-cs{position:relative}
+.pb-cs-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+.pb-cs-track{fill:none;stroke:#D8DFDC;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.pb-cs-ink{fill:none;stroke:#0B1F1C;stroke-width:3.5;stroke-linecap:round}
+.pb-cs .step{z-index:1}
+.pb-cs-walker{position:absolute;left:0;top:0;z-index:3;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:#14CBB1;box-shadow:0 8px 18px rgba(20,203,177,.4);opacity:0;transition:opacity .3s;pointer-events:none}
+.pb-cs-walker.pb-on{opacity:1}
+.pb-cs-walker svg{width:22px;height:22px}
+.pb-cs-film{display:block;width:100%;height:140px;margin:0 0 8px}
+.pb-cs-step{cursor:pointer;opacity:.25;transform:perspective(900px) translateY(30px) rotateX(22deg);transition:opacity .6s,transform .8s cubic-bezier(.3,1.4,.5,1)}
+.pb-cs-step.pb-cs-on{opacity:1;transform:none}
+.pb-cs-step.pb-cs-on:hover{transform:translateY(-4px)}
+.pb-cs-step .sx{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0 0 14px;border-radius:12px;background:#EEF2F1;color:#0B1F1C;font-size:16px!important;font-weight:800;transition:background-color .3s,color .3s}
+.pb-cs-step.pb-cs-on .sx{background:#0B1F1C;color:#fff;animation:pbCsNum .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbCsNum{0%{transform:scale(.6)}50%{transform:scale(1.35)}100%{transform:none}}
+.pb-cs-step.pb-cs-on .sx::after{content:"";position:absolute;inset:-6px;border:2px solid #0B1F1C;border-radius:12px;animation:pbCsRing .9s ease-out forwards}
+@keyframes pbCsRing{from{opacity:.6;transform:scale(.8)}to{opacity:0;transform:scale(1.8)}}
+.pb-cs-step.pb-cs-pop{animation:pbCsPop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pbCsPop{40%{transform:scale(1.04)}100%{transform:none}}
+@media(max-width:920px){.pb-cs .step{padding-left:40px}.pb-cs-walker{width:28px;height:28px;border-radius:8px}.pb-cs-walker svg{width:18px;height:18px}}
+@media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film{display:none}}
+/* MOTION-6:END */
 </style>
 </head>
 <body>
@@ -2193,6 +2230,15 @@ main h1{font-weight:800}
   </div>
 
 </div></div>
+
+<section class="pb-book-how" id="call" aria-labelledby="pbBookHow"><div class="wrap">
+  <h2 id="pbBookHow">How a call works.</h2>
+  <div class="steps">
+    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>Pick a time that suits you.</p></div>
+    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
+    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
+  </div>
+</div></section>
 
 </main>
 <footer><div class="wrap">
@@ -2391,8 +2437,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=9d9b82fb" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=0ee375c4" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
+<script src="assets/js/pb-call-motion.js?v=9eca6a27"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
 
