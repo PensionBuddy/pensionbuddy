@@ -62,6 +62,9 @@
 
   /* ---------------------------------------------------------- the films -- */
   var films = steps.map(function (s, i) {
+    /* a step with its own filmed clip (.pb-step-media) keeps the path and
+       the pop, but gets no drawn film over it */
+    if (s.querySelector('.pb-step-media')) { s.classList.add('pb-cs-step'); return { el: s, cv: null, on: false }; }
     var cv = document.createElement('canvas'); cv.className = 'pb-cs-film'; cv.setAttribute('aria-hidden', 'true');
     s.insertBefore(cv, s.firstChild);
     s.classList.add('pb-cs-step');
@@ -182,6 +185,7 @@
     films.forEach(function (f, i) {
       var on = prog >= at[i] - 0.02;
       if (on && !f.on) { f.on = true; f.local = 0; f.el.classList.add('pb-cs-on'); }
+      if (!f.cv) { return; }
       if (!f.W) { size(f); }
       if (!f.on) { f.cx.setTransform(f.d, 0, 0, f.d, 0, 0); f.cx.clearRect(0, 0, f.W, f.H); return; }
       f.local += dt * f.speed;

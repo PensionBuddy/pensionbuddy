@@ -1330,6 +1330,14 @@ html.pb-motion .pb-vid-btn{display:inline-flex;align-items:center;justify-conten
 .pb-vid-btn[data-state="playing"] .pb-vid-i-play,.pb-vid-btn[data-state="paused"] .pb-vid-i-pause{display:none}
 html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
 .pb-vid-btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+/* "How a call works": each step carries a short muted loop (talk, trace,
+   decide) over its still, by the same rules as the game cards
+   (assets/js/pb-video.js); assets/js/pb-call-motion.js draws no film over
+   a step that has one. */
+.pb-step-media{position:relative;aspect-ratio:16/9;margin-bottom:16px;border-radius:var(--r-lg);overflow:hidden;background:var(--line-2)}
+.pb-step-media img{display:block;width:100%;height:100%;object-fit:cover}
+.pb-step-vid{display:none}
+html.pb-motion .pb-step-vid{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* Run 37, item 4: "Your pension through life". The list reads on its own:
    ages down a line, each step a whole-card link (MOTION rule 5's shadow is
    the step's ::before, so its dot on the line is the ::after).
@@ -3198,9 +3206,9 @@ html:not(.pb-js) .pb-drb-cv{display:none}
     <h2>How a call works.</h2>
   </div>
   <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>Pick a time that suits you.</p></div>
-    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
-    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
+    <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-talk.webp?v=70b6ed05"><img src="assets/img/step-talk.jpg?v=4488780f" width="1280" height="720" loading="lazy" alt="Damian at his desk, talking a client through their pension."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-talk.webp?v=70b6ed05" width="1280" height="720" data-pb-video><source src="assets/video/step-talk.webm" type="video/webm"><source src="assets/video/step-talk.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="We talk" data-state="paused" aria-label="Play video: We talk"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">1</div><h3>We talk</h3><p>Twenty minutes, by phone or video. Pick a time that suits you.</p></div>
+    <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-trace.webp?v=5c0e5334"><img src="assets/img/step-trace.jpg?v=bc7a9f6e" width="1280" height="720" loading="lazy" alt="A pension statement on the desk, read line by line with a pen."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-trace.webp?v=5c0e5334" width="1280" height="720" data-pb-video><source src="assets/video/step-trace.webm" type="video/webm"><source src="assets/video/step-trace.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="We trace" data-state="paused" aria-label="Play video: We trace"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">2</div><h3>We trace</h3><p>We find your old pensions and read what they charge.</p></div>
+    <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-decide.webp?v=d491156f"><img src="assets/img/step-decide.jpg?v=b9be07e7" width="1280" height="720" loading="lazy" alt="A 2026 diary and a pen on the desk, ready to sign."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-decide.webp?v=d491156f" width="1280" height="720" data-pb-video><source src="assets/video/step-decide.webm" type="video/webm"><source src="assets/video/step-decide.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="You decide" data-state="paused" aria-label="Play video: You decide"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
   </div>
 </div></section>
 
@@ -3398,7 +3406,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-tl-motion.js?v=5a0eb56f"></script>
-<script src="assets/js/pb-call-motion.js?v=bce36f1f"></script>
+<script src="assets/js/pb-call-motion.js?v=9eca6a27"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
