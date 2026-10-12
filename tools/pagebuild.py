@@ -953,7 +953,7 @@ CARDS = {
     'state-pension-entitlement.html': ('State Pension check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
     'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
     'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
-    'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.', 'uk-pensions-in-ireland.html'),
+    'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'You may have a UK workplace or personal pension, and a UK State Pension.', 'uk-pensions-in-ireland.html'),
     'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.', 'glossary.html'),
     'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
     'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),

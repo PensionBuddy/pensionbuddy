@@ -1270,9 +1270,9 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 @media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:calc(var(--pb-logo-h,32) * .875px)}}
 /* Run 35: "Just here to learn?", after the forms since 12 October 2026. The two
    games, each a still photograph of the real game mid-play, shot by
-   tools/shoot-product.py like the calculators' pictures, then a line and a
-   play link. Static: nothing moves, nothing is rewarded; the whole card is
-   the play link's, and only colours change under the pointer. */
+   tools/shoot-product.py like the calculators' pictures, with a short muted
+   loop over it (assets/js/pb-video.js), then a line and a play link. Nothing
+   is rewarded; the whole card is the play link's. */
 .pb-learn{background:transparent}  /* white cards on the page, like the forms above; Revenue's mint band follows */
 .pb-learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
 .pb-learn-grid li{margin:0}
@@ -2449,9 +2449,14 @@ main h1{font-weight:800}
 :root.pb-motion .pb-hc .step.pb-hc-on .pb-step-media,:root.pb-motion .pb-hc .step.pb-hc-on h3,:root.pb-motion .pb-hc .step.pb-hc-on p,
 :root.pb-motion .pb-hc .step:focus-within .pb-step-media,:root.pb-motion .pb-hc .step:focus-within h3,:root.pb-motion .pb-hc .step:focus-within p{opacity:1;transform:none}
 @media print{:root.pb-motion .pb-hc .step .pb-step-media,:root.pb-motion .pb-hc .step h3,:root.pb-motion .pb-hc .step p{opacity:1;transform:none}}
+:root.pb-motion .pb-hc ~ .call-ask{opacity:0;transform:translateY(var(--pb-rise));transition:opacity var(--pb-t-state),transform var(--pb-t-state)}
+:root.pb-motion .pb-hc.pb-hc-all ~ .call-ask{opacity:1;transform:none;transition-delay:calc(var(--hc-n,0) * var(--pb-d-4) + var(--pb-d-3))}
+:root.pb-motion .pb-hc ~ .call-ask:focus-within{opacity:1;transform:none;transition-delay:0s}
+@media print{:root.pb-motion .pb-hc ~ .call-ask{opacity:1;transform:none}}
 /* HOME-CALL:END */
 /* the two forms read as one stop under "How a call works": the second sits close under the first */
 .pb-ask + .pbk{padding-top:8px}
+.pb-ask + .pbk .pbk-card{max-width:none}
 /* HOME-V2:BEGIN (11 October 2026, Damian's brief: one clear path down the home page,
    the gap, the calculator, inflation; light, teal and light grey; as alive as the welcome).
    Scripts: assets/js/pb-home-kit.js, pb-coins.js, pb-home-gap.js, pb-home-calc.js and
@@ -3319,9 +3324,9 @@ html:not(.pb-js) .pbf-check{display:none}
     <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
     <div class="pbf-grid">
       <div class="pbf-in">
-        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000"></div>
-        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1"></div>
-        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40"></div>
+        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000" style="--fill:9.55%"></div>
+        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1" style="--fill:31.03%"></div>
+        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40" style="--fill:46.81%"></div>
       </div>
       <div class="pbf-out">
         <p class="pbf-big" aria-live="polite"><span id="pbfCost">&euro;104,616</span> <span class="pbf-lab">in fees by 66</span></p>
@@ -3427,7 +3432,7 @@ html:not(.pb-js) .pbf-check{display:none}
   <div class="sec-head">
     <span class="kicker">Our story</span>
     <h2>Father, son, dog.</h2>
-    <p>Pensionbuddy started as a father-son conversation. Damian kept seeing people ignore their pension, or think about it only when auto-enrolment came in. Adam, a new Trinity graduate, saw the same gap from the other side. So they built Pensionbuddy together.</p>
+    <p>Pensionbuddy started as a father-son conversation. Damian kept seeing people ignore their pension, or think about it only when auto-enrolment came in. Adam saw the same gap from the other side. So they built Pensionbuddy together.</p>
   </div>
   <div class="pb-story-shots">
     <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-screen.webp?v=04aef3f5"><img src="assets/img/damian-at-desk-screen.jpg?v=675b5c57" width="1200" height="800" alt="Damian at his desk with Pensionbuddy&rsquo;s State Pension entitlement page on screen" loading="lazy" decoding="async"></picture></figure>
@@ -3668,9 +3673,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-tl-motion.js?v=5a0eb56f"></script>
-<script src="assets/js/pb-home-call.js?v=59dc37b6"></script>
+<script src="assets/js/pb-home-call.js?v=37c26d93"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
-<script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>

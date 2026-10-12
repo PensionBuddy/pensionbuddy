@@ -14,8 +14,9 @@
 
    About three and a half seconds in all, then it stops (nothing loops, so
    nothing needs a pause button). The words never move: only the nodes, the
-   icons and the lines do. Scrolled fully out of view and back, it plays
-   again. With a mouse, resting on a step replays that step's icon.
+   icons and the lines do. It plays once a page view, once the row is well
+   on screen (not a sliver at the bottom). With a mouse, resting on a step
+   replays that step's icon.
    If motion is switched off mid-play, the row settles at once. */
 (function () {
   'use strict';
@@ -29,7 +30,7 @@
     var steps = [].slice.call(root.querySelectorAll('.pbs-step'));
     if (steps.length < 2) return;
     steps.forEach(function (s, i) { s.style.setProperty('--i', i); });
-    var timers = [], state = 'still', io = null;
+    var timers = [], state = 'still', io = null, io2 = null, played = false;
     var STEP_CLS = ['pbs-on', 'pbs-link', 'pbs-ping'];
 
     function later(ms, fn) { timers.push(setTimeout(fn, ms)); }
@@ -83,8 +84,8 @@
       later(runAt + RUN + 700, function () {
         reset();
         root.classList.remove('pbs-armed');
-        state = 'done';
-        if (!inView()) arm();   /* scrolled away mid-play: ready for the next look */
+        state = 'done'; played = true;
+        unwatch();
       });
     }
 
@@ -94,21 +95,27 @@
     }
 
     function start() {
-      if (!motionOn() || !('IntersectionObserver' in window) || io) return;
+      if (!motionOn() || !('IntersectionObserver' in window) || io || played) return;
       /* on screen already (a reload half way down): leave it as it is, and
          play it the next time it comes into view */
       if (!inView()) arm(); else state = 'done';
+      /* armed only once fully off screen; played once well inside it */
       io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) {
-          if (e.isIntersecting && e.intersectionRatio >= 0.3) play();
-          else if (!e.isIntersecting && state === 'done') arm();
-        });
-      }, { threshold: [0, 0.3] });
-      io.observe(root);
+        es.forEach(function (e) { if (!e.isIntersecting && state === 'done') arm(); });
+      }, { threshold: 0 });
+      io2 = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting && e.intersectionRatio >= 0.3) play(); });
+      }, { threshold: [0, 0.3], rootMargin: '0px 0px -25% 0px' });
+      io.observe(root); io2.observe(root);
+    }
+
+    function unwatch() {
+      if (io) { io.disconnect(); io = null; }
+      if (io2) { io2.disconnect(); io2 = null; }
     }
 
     function stop() {
-      if (io) { io.disconnect(); io = null; }
+      unwatch();
       settle();
     }
 

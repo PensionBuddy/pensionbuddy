@@ -212,7 +212,6 @@
     });
     stats(list);
     openSend(list.length > 0);
-    tickChecklist(list.length > 0);
   }
 
   function drawAxis(r) {
@@ -273,14 +272,6 @@
     send.classList.remove('is-open');
     send.querySelector('.pbj-send-in').inert = !on;
     if (on) openTimer = setTimeout(function () { send.classList.add('is-open'); }, motion() ? 620 : 0);
-  }
-
-  /* "Listed the employers I have had", the first box of the page's checklist */
-  function tickChecklist(on) {
-    var box = $('pbTick1');
-    if (!box || !on || box.checked) return;
-    box.checked = true;
-    box.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   /* ---------------------------------------------------------------- send */

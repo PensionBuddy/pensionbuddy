@@ -328,9 +328,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .email-cap .pb-optin input,.magnet-form .pb-optin input{flex:0 0 auto;width:24px;height:24px;min-width:24px;min-height:0;margin:-2px 0 0;padding:0;border:0;border-radius:3px;background:none;box-shadow:none;accent-color:var(--teal-700)}
 .email-cap .pb-optin input:focus-visible,.magnet-form .pb-optin input:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
 .magnet-form .pb-optin{margin-top:0}
-/* Run 20 #12: under the tick list, the page that lists what you have */
-.pb-trace-more{margin:14px 0 4px;font-size:15px;line-height:1.55;color:var(--ink-2)}
-.pb-trace-more a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .magnet .ok{display:none;position:relative;background:var(--ac-50);border-radius:var(--r-lg);padding:24px;text-align:center}
 .magnet .ok.show{display:block}
 .magnet .ok svg{width:36px;height:36px;color:var(--ac-700);margin-bottom:8px}
@@ -2305,6 +2302,9 @@ main h1{font-weight:800}
 .pb-scene h1.pb-words-done .hl{background-size:100% .18em}
 .pb-scene-hint{position:absolute;left:50%;top:auto;bottom:calc(250px - 58px);z-index:1;margin:0;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.85);color:var(--ink-2);font-size:15px;white-space:nowrap;transform:translate(-50%,8px);opacity:0;transition:opacity .5s,transform .5s;pointer-events:none}
 .pb-scene-hint.pb-on{opacity:1;transform:translate(-50%,0)}
+/* tracker: the jobs form starts on the first screen (12 October 2026, Damian: the form up at the top);
+   on a wide screen the pots hide beside the words, so the band under them is shorter */
+@media(min-width:601px){.aud-hero.pb-scene-tracker{min-height:0;padding-bottom:96px}.pb-scene-tracker .pb-scene-hint{bottom:28px}}
 @media(max-width:600px){.aud-hero.pb-scene{padding-bottom:270px}.pb-scene-hint{bottom:calc(270px - 58px);font-size:14px;white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center}}
 @media print{.pb-scene-cv,.pb-scene-hint{display:none}}
 /* SCENE:END */
@@ -2880,7 +2880,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <ul class="pb-related-list">
     <li><a class="pb-related-card pb-card-link" href="my-pensions.html"><span class="pb-related-t">All your pensions in one view</span><span class="pb-related-d">Add each pension and see your total, how it is split and what the fees cost you each year.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-t">Pension charges calculator</span><span class="pb-related-d">What an annual management charge and a charge on each payment take out of a pension pot by retirement.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="uk-pensions-in-ireland.html"><span class="pb-related-t">A UK pension, and living in Ireland</span><span class="pb-related-d">Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="uk-pensions-in-ireland.html"><span class="pb-related-t">A UK pension, and living in Ireland</span><span class="pb-related-d">You may have a UK workplace or personal pension, and a UK State Pension.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3024,7 +3024,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
@@ -3063,10 +3063,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
-<script src="assets/js/pb-steps.js?v=d2e0493f"></script>
+<script src="assets/js/pb-steps.js?v=ba4653cc"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 <script src="assets/js/pb-kit.js?v=f2ab740a"></script>
-<script src="assets/js/pb-jobs.js?v=89766d1d"></script>
+<script src="assets/js/pb-jobs.js?v=b91bf02b"></script>
 <script src="assets/js/pb-move.js?v=cd48ce2e"></script>
 </body>
 </html>

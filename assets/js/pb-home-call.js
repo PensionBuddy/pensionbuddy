@@ -7,7 +7,8 @@
    (--i): a dot lands under the number, the rule draws from it, the number
    turns teal, then the clip and the words rise into place. Once shown, a
    step stays shown. A step already on screen or scrolled past when this runs
-   is shown at once. Nothing is stored; nothing scrolls. Without script, or
+   is shown at once. The booking button under the steps rises in after the
+   last one (.pb-hc-all). Nothing is stored; nothing scrolls. Without script, or
    with less motion asked for (html.pb-motion off, now or later), the steps
    simply stand. */
 (function () {
@@ -26,6 +27,11 @@
       s.style.setProperty('--i', String(i));
       s.classList.add('pb-hc-on');
     });
+    /* the booking button under the steps comes last, after the last step */
+    if (steps.every(function (s) { return s.classList.contains('pb-hc-on'); })) {
+      sec.style.setProperty('--hc-n', String(list.length));
+      wrap.classList.add('pb-hc-all');
+    }
   }
 
   /* on screen, or above it, already: shown together, still in turn */
