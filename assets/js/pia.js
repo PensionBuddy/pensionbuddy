@@ -24,7 +24,11 @@
                     here is in the future, so 35% applies throughout.
      Pension        tax relief from assets/js/pension-tax-relief.js (PBRelief),
                     the lump sum's bands from assets/js/sft.js (PBSft). Nothing
-                    about pensions is restated here.
+                    about pensions is restated here. Given no earnings (as
+                    pia.html, since 12 October 2026, asks for none), no
+                    age-related limit is applied: relief at the reader's rate
+                    on all of it, and the page says it assumes the payments
+                    are within the limit.
    ------------------------------------------------------------------------
 
    The reader pays the same amount out of take-home pay every month into
@@ -65,12 +69,20 @@
   /* ---- the pension -------------------------------------------------------
      Each year the take-home amount is grossed up through PBRelief at the
      reader's age that year, so the age-related limit applies as it would.
+     With no earnings given (salary null or undefined) there is no limit to
+     apply: the amount is grossed up at the reader's rate, net / (1 - rate),
+     and age, if also not given, only leaves endAge and beforeAccess null.
      At the end, a quarter is taken as a lump sum through PBSft's bands and
      the rest is taxed as income at the reader's rate. */
+  function grossUp(net, o, y) {
+    if (o.salary == null) return net / (1 - o.taxRate / 100);
+    return PBRelief.grossForNetCost(net, o.age + y, o.salary, o.taxRate);
+  }
+
   function pension(o) {
     var net = o.monthly * 12, pot = 0, gross = 0, relief = 0, yearly = [0];
     for (var y = 0; y < o.path.length; y++) {
-      var g = PBRelief.grossForNetCost(net, o.age + y, o.salary, o.taxRate);
+      var g = grossUp(net, o, y);
       var m = g / 12, f = monthsFactor(o.path[y]);
       for (var k = 0; k < 12; k++) pot = pot * f + m;
       gross += g;
@@ -80,7 +92,7 @@
     var lump = PBSft.lumpSum(pot * LUMP_SHARE);
     var lumpTax = lump.standardTax + lump.asIncome * o.taxRate / 100;
     var restTax = pot * (1 - LUMP_SHARE) * o.taxRate / 100;
-    var endAge = o.age + o.path.length;
+    var endAge = o.age == null ? null : o.age + o.path.length;
     return {
       paidIn: net * o.path.length,
       gross: gross,
@@ -91,7 +103,7 @@
       lumpTaxFree: lump.taxFree,
       afterTax: pot - lumpTax - restTax,
       endAge: endAge,
-      beforeAccess: endAge < PENSION_ACCESS_AGE,
+      beforeAccess: endAge == null ? null : endAge < PENSION_ACCESS_AGE,
       yearly: yearly
     };
   }
@@ -180,7 +192,7 @@
 
   /* The three side by side, for one growth path. `o`: monthly (euro, from
      take-home pay), path (a yearly growth rate per year, as fractions), age,
-     salary, taxRate (20 or 40), piaRate (a fraction), piaThreshold (euro, or
+     salary (or null: no age-related limit, as pia.html), taxRate (20 or 40), piaRate (a fraction), piaThreshold (euro, or
      null while the reader has not entered one). */
   function compare(o) {
     return {

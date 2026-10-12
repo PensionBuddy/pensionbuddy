@@ -58,6 +58,15 @@
   eq('2. lump sum EUR 287,500: 200,000 free, 87,500 at 20%; the rest at 40%', big.taxOut, 17500 + 862500 * 0.4);
   yes('2. 35 plus 10 years is before 60', P.pension(base({ path: steady(0, 10) })).beforeAccess);
   yes('2. 50 plus 10 years is not', !P.pension(base({ age: 50, path: steady(0, 10) })).beforeAccess);
+
+  group('2b  the pension with no earnings given (pia.html asks for none)');
+  var free = P.pension(base({ monthly: 1000, age: 25, salary: null }));
+  eq('2b. EUR 1,000 a month at 40%, no earnings: no limit, EUR 20,000 goes in', free.gross, 20000);
+  eq('2b. EUR 8,000 of it is tax relief', free.relief, 8000);
+  eq('2b. at 20%: EUR 15,000 goes in', P.pension(base({ monthly: 1000, salary: null, taxRate: 20 })).gross, 15000);
+  var bare = P.pension(base({ age: null, salary: null }));
+  eq('2b. no age either: the same EUR 1,400 after tax as within the limit', bare.afterTax, 1400);
+  yes('2b. and no end age or access flag', bare.endAge === null && bare.beforeAccess === null);
   var g5 = P.pension(base({ path: [0.05] }));
   var f = Math.pow(1.05, 1 / 12), ann = 0;
   for (var k = 0; k < 12; k++) ann = ann * f + 2000 / 12;

@@ -1,69 +1,72 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
   <h1>What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
-  <p>Your plan&rsquo;s charges next to another plan&rsquo;s. Yours are on your annual statement.</p>
+  <p>Your plan&rsquo;s charges are on your annual statement.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pension-fees-calculator">
   <div class="panel">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
-    <div class="field"><div class="row"><label for="monthly">Paid in each month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
-    <div class="field"><div class="row"><label for="years">Years until you retire</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
+    <h2>Your pension</h2>
+    <p class="hint">Slide, or tap a figure to type it.</p>
+    <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
+    <div class="field"><div class="row"><label for="monthly">Paid in, a month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
+    <div class="field"><div class="row"><label for="years">Years to retirement</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
 
-    <p class="fee-grp">Your plan&rsquo;s charges</p>
-    <div class="field"><div class="row"><label for="amcA">Annual management charge<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">A yearly share of the fund. Older plans may call it a fund management charge.</p></div>
-    <div class="field"><div class="row"><label for="feeA">Charge on each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">Or an allocation rate: 95% allocated means a 5% charge.</p></div>
+    <p class="fee-grp">Its charges</p>
+    <div class="field"><div class="row"><label for="amcA">A year, of the fund<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">The annual (or fund) management charge.</p></div>
+    <div class="field"><div class="row"><label for="feeA">On each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">95% allocated means a 5% charge.</p></div>
 
-    <p class="fee-grp">For comparison: another plan&rsquo;s charges</p>
-    <div class="field"><div class="row"><label for="amcB">Annual management charge<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
-    <div class="field"><div class="row"><label for="feeB">Charge on each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
-
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth, before charges</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <details class="adv fee-other" id="feeOther">
+      <summary><span class="fee-other-l">Compared with</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
+      <div class="adv-in">
+        <div class="field"><div class="row"><label for="amcB">A year, of the fund<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
+        <div class="field" style="margin-bottom:0"><div class="row"><label for="feeB">On each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
+      </div>
+    </details>
+    <input type="hidden" id="growth" value="5">
   </div>
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero">
       <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
-      <div><div class="rl">The other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
+      <div><div class="rl">Another plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
       <div class="divline"></div>
       <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms. The growth assumed may not happen.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
 
-    <div class="chart-card">
+    <div class="chart-card fee-chart-card">
       <h3>How your pot could grow</h3>
-      <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
+      <p class="fee-sub">At <span id="growthV">5%</span> a year, before charges. Tap or point at the chart for any year.</p>
+      <div class="fee-plot">
+        <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
+        <div class="fee-tip" id="feeTip" aria-hidden="true" hidden></div>
+      </div>
       <ul class="fee-key" aria-hidden="true">
         <li><i class="fee-k-none"></i>No charges</li>
-        <li><i class="fee-k-b"></i>The other plan&rsquo;s charges</li>
-        <li><i class="fee-k-a"></i>Your plan&rsquo;s charges</li>
+        <li><i class="fee-k-b"></i>Another plan</li>
+        <li><i class="fee-k-a"></i>Your plan</li>
         <li><i class="fee-k-gap"></i>What your plan&rsquo;s charges take</li>
-        <li id="feeKeyToday"><i class="fee-k-today"></i>Your plan in today&rsquo;s money</li>
       </ul>
     </div>
 
-    <div class="fee-card">
-      <h3>Where it goes</h3>
+    <details class="pb-work fee-work">
+      <summary>How we got this</summary>
       <table class="fee-t">
         <caption class="tk-sr">What the charges take, for each plan</caption>
-        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">The other plan</th></tr></thead>
+        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Another plan</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Annual charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
+          <tr><th scope="row">Yearly charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
           <tr><th scope="row">Charges on payments</th><td id="feePaidA">€3,000</td><td id="feePaidB">€0</td></tr>
           <tr><th scope="row">What they cost you by retirement</th><td id="costA">€58,754</td><td id="costB">€28,327</td></tr>
         </tbody>
       </table>
       <p class="fee-note">Every euro a charge takes stops growing. So the last line is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
-    </div>
+    </details>
 
-    <div class="fee-side">
-      <h3>The other side</h3>
-      <p>Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
-    </div>
+    <p class="fee-side">Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
     <!-- AFTER -->
   </div>
 </div></div>
@@ -79,12 +82,10 @@
 <section class="assume"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
-    <li>Not included: policy, set-up and exit charges, the terms an older plan may carry, your tax relief.</li>
-    <li>Each month the pot grows at your yearly rate, before charges. Then a twelfth of the annual management charge comes out. Then the payment goes in, less the charge on payments.</li>
-    <li>Your plan&rsquo;s defaults, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
-    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
-    <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target). Figures ignore tax relief. Relief changes what a payment costs you, not what the charges take.</li>
-    <li>Growth is steady and the same for both plans. Real returns also differ between funds.</li>
+    <li>Each month the pot grows at 5% a year, before charges: risk level 4 of 7, about half shares and half bonds, a mix we chose for illustration. Then a twelfth of the yearly charge comes out. Then the payment goes in, less the charge on payments. Growth is steady and the same for both plans; real returns differ between funds and can be negative.</li>
+    <li>Your plan starts at 1% a year and 5% of each payment, the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
+    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges, the terms an older plan may carry, your tax relief. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
+    <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target).</li>
   </ul>
   </details>
 </div></section>

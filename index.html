@@ -29,7 +29,6 @@
 <meta name="twitter:image:alt" content="Pensionbuddy. Pensions, in plain English: Is the State Pension enough?">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FinancialService", "name": "Pensionbuddy", "legalName": "Damian Condon T/A Gresham Wealth Management", "description": "Pensionbuddy is a trading name of Damian Condon T/A Gresham Wealth Management, which is regulated by the Central Bank of Ireland.", "url": "https://pensionbuddy.ie/", "logo": "https://pensionbuddy.ie/assets/brand/og-mark-512.png", "image": "https://pensionbuddy.ie/assets/brand/og/og-home.png", "email": "hello@pensionbuddy.ie", "address": {"@type": "PostalAddress", "streetAddress": "Bushfield House, Philipsburgh Avenue", "addressLocality": "Fairview", "addressRegion": "Dublin 3", "addressCountry": "IE"}, "areaServed": "IE", "founder": {"@type": "Person", "name": "Damian Condon", "honorificSuffix": "QFA"}}</script>
 <!-- SEO:END -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What will I walk away with?", "acceptedAnswer": {"@type": "Answer", "text": "What you have, what it may be worth at 66, and what is worth doing. Written down."}}, {"@type": "Question", "name": "What does it cost if I become a client?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on what you need. You know before you commit. We are paid by fee, commission or a mix."}}, {"@type": "Question", "name": "Do I need to know anything before we talk?", "acceptedAnswer": {"@type": "Answer", "text": "No. Bring what you remember. Doing the digging is our job."}}, {"@type": "Question", "name": "Is my information kept private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry."}}]}</script>
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
@@ -170,6 +169,7 @@ section{padding:88px 0}
 .step .sx{width:38px;height:38px;border-radius:11px;background:var(--teal-50);color:var(--teal-700);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
 .step h3{font-size:19px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .step p{color:var(--ink-2);font-size:15px}
+.call-ask{margin-top:32px;text-align:center}
 
 /* ---- calculator showcase ---- */
 .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
@@ -202,16 +202,6 @@ section{padding:88px 0}
 .tcard .who span{font-size:13px;color:var(--ink-3)}
 .tcol{display:flex;flex-direction:column;gap:22px}
 
-/* ---- faq ---- */
-.faq-grid{display:grid;grid-template-columns:.7fr 1.3fr;gap:44px;align-items:start}
-.faq-list{display:flex;flex-direction:column;gap:12px}
-.faq-ask{margin-top:12px}
-details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:4px 22px;box-shadow:var(--sh-sm);transition:box-shadow .2s,border-color .2s}
-details[open]{box-shadow:var(--sh-md);border-color:transparent}
-summary{font-size:17px;font-weight:600;letter-spacing:-0.01em;padding:18px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;align-items:center}
-summary::-webkit-details-marker{display:none}
-details p{color:var(--ink-2);font-size:15.5px;padding:0 0 22px;line-height:1.7}
-
 /* ---- final CTA ---- */
 .final-band{padding:36px 0 88px}
 .final{background:var(--teal-50);color:var(--ink);border-block:1px solid var(--teal-100);border-radius:var(--r-xl);padding:76px 48px;text-align:center;position:relative;overflow:hidden}
@@ -240,7 +230,7 @@ footer{padding:64px 0 40px;border-top:1px solid var(--line)}
    ============================================================ */
 @media(max-width:920px){
   .hero{padding:48px 0 24px}
-  .hero-grid,.calc-grid,.about-grid,.tgrid,.faq-grid{grid-template-columns:1fr;gap:40px}
+  .hero-grid,.calc-grid,.about-grid,.tgrid{grid-template-columns:1fr;gap:40px}
   .hero-card{order:-1;max-width:460px;margin:0 auto}
   .steps{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr 1fr;gap:30px}
@@ -279,17 +269,12 @@ nav.scrolled .logo-mark{width:34px;height:34px}
 .pain,.benefit,.tcard,.cred,.gterm,.step,.assure,.dline{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s ease,border-color .25s ease}
 .benefit:active{transform:translateY(-2px) scale(.995)}
 .back,.foot-col a,.disclosure a{transition:color .2s ease,transform .15s ease}
-/* smooth FAQ expand/collapse */
-details{overflow:hidden}
-details .faq-inner{display:grid;grid-template-rows:0fr}
-details[open] .faq-inner{grid-template-rows:1fr}
-details .faq-inner>div{overflow:hidden;min-height:0}
 a.lnk:focus-visible,.back:focus-visible,summary:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-radius:12px}
 summary:focus-visible{border-radius:8px}
 /* honor reduced motion for everything added here */
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;scroll-padding-top:90px}
-    nav,.nav-in,.logo-mark,.nav-links a.lnk::after,details .faq-inner,body{transition:none;animation:none}
+    nav,.nav-in,.logo-mark,.nav-links a.lnk::after,body{transition:none;animation:none}
 }
 
 /* ============================================================
@@ -339,8 +324,6 @@ input[type=range]::-moz-range-thumb{border-color:var(--teal-700)}
 .skip:focus{left:0;outline:none;box-shadow:0 0 0 4px var(--ring)}
 main{display:block}
 #main:focus{outline:none}
-/* 6) FAQ affordance: hover cue on the question row */
-details:not([open]) summary:hover{color:var(--teal-700)}
 /* 7) quieter announcement on small screens: keep only the regulator line */
 @media(max-width:480px){.announce span:nth-child(n+2){display:none}}
 
@@ -465,7 +448,6 @@ body.pb-banner-open .pb-b-panel{bottom:calc(var(--pb-consent-h,82px) + 80px)}
 /* booking stepper: circle dots -> brand dash */
 .tl::before{width:14px;height:2px;border-radius:0;left:-30px;top:9px;box-shadow:none;background:var(--teal)}
 /* section rhythm follows density */
-section:has(details){padding-top:64px;padding-bottom:72px}
 section:has(.tcol){padding-top:72px}
 /* floating photo chips: sticker pills -> sharp chips */
 .hc-badge,.hc-pill,.about-port .badge{border-radius:8px}
@@ -533,7 +515,6 @@ p,li{letter-spacing:-.004em}
 .about-port{border:1px solid var(--line-2)}
 .hc-pill{border:1px solid var(--line-2);box-shadow:none}
 .hc-avatar{box-shadow:none;border:1px solid var(--line-2)}
-details[open]{box-shadow:none;border-color:var(--line-2)}
 nav.scrolled{box-shadow:none;border-color:var(--line)}
 nav{background:var(--bg)}
 nav.scrolled{background:var(--bg)}
@@ -608,7 +589,6 @@ input[type=range]::-moz-range-track{height:6px;background:transparent}
     padding:20px 24px;flex-wrap:wrap;justify-content:center}
   .strip-item.is-clone{display:none}
   .strip::before,.strip::after{display:none}
-    details .faq-inner{transition:none}
 }
 
 /* --- pass 4 additions --- */
@@ -1288,12 +1268,12 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
 .pb-prov-ns-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 40px;margin:0;padding:0;list-style:none}
 .pb-prov-ns-list img{display:block;width:auto;height:calc(var(--pb-logo-h,32) * 1px)}
 @media(max-width:600px){.pb-prov-ns-list{gap:14px 28px}.pb-prov-ns-list img{height:calc(var(--pb-logo-h,32) * .875px)}}
-/* Run 35: "Just here to learn?", straight after the first section. The two
+/* Run 35: "Just here to learn?", after the forms since 12 October 2026. The two
    games, each a still photograph of the real game mid-play, shot by
    tools/shoot-product.py like the calculators' pictures, then a line and a
    play link. Static: nothing moves, nothing is rewarded; the whole card is
    the play link's, and only colours change under the pointer. */
-.pb-learn{background:#EEF8F5}  /* the gap band's wash ends on this colour, and the dark band below fades in from it (#calc::before): the seams stay soft */
+.pb-learn{background:transparent}  /* white cards on the page, like the forms above; Revenue's mint band follows */
 .pb-learn-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
 .pb-learn-grid li{margin:0}
 .pb-learn-card{position:relative;display:flex;flex-direction:column;height:100%;background:var(--surface);
@@ -1332,8 +1312,7 @@ html.pb-motion .pb-vid-btn:hover{background:#fff;border-color:var(--teal)}
 .pb-vid-btn:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
 /* "How a call works": each step carries a short muted loop (talk, trace,
    decide) over its still, by the same rules as the game cards
-   (assets/js/pb-video.js); assets/js/pb-call-motion.js draws no film over
-   a step that has one. */
+   (assets/js/pb-video.js); HOME-CALL settles the steps in, in turn. */
 .pb-step-media{position:relative;aspect-ratio:16/9;margin-bottom:16px;border-radius:var(--r-lg);overflow:hidden;background:var(--line-2)}
 .pb-step-media img{display:block;width:100%;height:100%;object-fit:cover}
 .pb-step-vid{display:none}
@@ -1693,32 +1672,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Figtree',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
-/* DAMIAN'S PHOTOS (October 2026). Two headshots in his section, shown in
-   turn: the first is the section's own <picture>, the second sits over it
-   in .pb-port-alt and fades in and out as a whole, so no listed image is
-   ever left faded on its own (POP's test reads each image's opacity). It
-   turns every 6s while on screen; hover or focus holds it, the pause
-   button or any arrow or dot stops it, and a reader who asks for less
-   motion gets the arrows and dots only. Without JS: the first photo, no
-   buttons. The two desk shots sit under "Our story". */
-.pb-port-alt{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity var(--pb-t-state)}
-.about-port.pb-port-2 .pb-port-alt{opacity:1}
-.pb-port-alt img{width:100%;height:100%;object-fit:cover;display:block}
-.pb-port-nav{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:4px;
-  background:rgba(255,255,255,.95);border-radius:8px;box-shadow:0 1px 3px rgba(11,31,28,.18)}
-.pb-port-nav[hidden],.pb-port-nav [hidden]{display:none}
-.pb-port-nav button{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;
-  border-radius:6px;background:none;color:var(--ink);cursor:pointer}
-.pb-port-nav button:hover{background:var(--surface-2)}
-.pb-port-nav button:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring)}
-.pb-port-nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.pb-port-nav .pb-i-play{fill:currentColor}
-.pb-port-nav .pb-i-play,.pb-port-paused .pb-i-pause{display:none}
-.pb-port-paused .pb-i-play{display:block}
-.pb-port-nav .pb-port-dot{width:24px}
-.pb-port-dot::before{content:"";width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink-3);box-sizing:border-box}
-.pb-port-dot[aria-current="true"]::before{background:var(--teal-700);border-color:var(--teal-700)}
-@media(prefers-reduced-motion:reduce){.pb-port-alt{transition:none}}
 .pb-story-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:-8px}
 .pb-story-shots figure{margin:0;aspect-ratio:3/2;overflow:hidden;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2)}
 .pb-story-shots img{width:100%;height:100%;object-fit:cover;display:block}
@@ -2475,32 +2428,30 @@ main h1{font-weight:800}
 .pb-tl-step.pb-tl-ping::after{animation:pbTlPing .7s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pbTlPing{0%{transform:scale(1)}40%{transform:scale(1.9);box-shadow:0 0 0 8px rgba(20,203,177,.22)}100%{transform:scale(1)}}
 /* MOTION-4 TIMELINE:END */
-/* MOTION-6:BEGIN (9 October 2026, Damian's brief: go all out). "How a call
-   works" (assets/js/pb-call-motion.js); the script adds every element and
-   class here, only with motion on. (The way-of-life cards' rules went with
-   the cards on 11 October 2026.) */
-.pb-cs{position:relative}
-.pb-cs-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
-.pb-cs-track{fill:none;stroke:#D8DFDC;stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
-.pb-cs-ink{fill:none;stroke:#0B1F1C;stroke-width:3.5;stroke-linecap:round}
-.pb-cs .step{z-index:1}
-.pb-cs-walker{position:absolute;left:0;top:0;z-index:3;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:#14CBB1;box-shadow:0 8px 18px rgba(20,203,177,.4);opacity:0;transition:opacity .3s;pointer-events:none}
-.pb-cs-walker.pb-on{opacity:1}
-.pb-cs-walker svg{width:22px;height:22px}
-.pb-cs-film{display:block;width:100%;height:140px;margin:0 0 8px}
-.pb-cs-step{cursor:pointer;opacity:.25;transform:perspective(900px) translateY(30px) rotateX(22deg);transition:opacity .6s,transform .8s cubic-bezier(.3,1.4,.5,1)}
-.pb-cs-step.pb-cs-on{opacity:1;transform:none}
-.pb-cs-step.pb-cs-on:hover{transform:translateY(-4px)}
-.pb-cs-step .sx{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0 0 14px;border-radius:12px;background:#EEF2F1;color:#0B1F1C;font-size:16px!important;font-weight:800;transition:background-color .3s,color .3s}
-.pb-cs-step.pb-cs-on .sx{background:#0B1F1C;color:#fff;animation:pbCsNum .7s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pbCsNum{0%{transform:scale(.6)}50%{transform:scale(1.35)}100%{transform:none}}
-.pb-cs-step.pb-cs-on .sx::after{content:"";position:absolute;inset:-6px;border:2px solid #0B1F1C;border-radius:12px;animation:pbCsRing .9s ease-out forwards}
-@keyframes pbCsRing{from{opacity:.6;transform:scale(.8)}to{opacity:0;transform:scale(1.8)}}
-.pb-cs-step.pb-cs-pop{animation:pbCsPop .5s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pbCsPop{40%{transform:scale(1.04)}100%{transform:none}}
-@media(max-width:920px){.pb-cs .step{padding-left:40px}.pb-cs-walker{width:28px;height:28px;border-radius:8px}.pb-cs-walker svg{width:18px;height:18px}}
-@media print{.pb-cs-svg,.pb-cs-walker,.pb-cs-film{display:none}}
-/* MOTION-6:END */
+/* HOME-CALL:BEGIN (12 October 2026, Damian's brief: how a call works, crisp and calm).
+   assets/js/pb-home-call.js marks the steps .pb-hc with motion on, and each step
+   .pb-hc-on as it comes into view, in turn (--i): the rule under its number draws
+   from a dot, the number turns teal, the clip and the words rise into place. All
+   on the house tokens; without motion or script the steps simply stand. */
+:root.pb-motion .pb-hc .step{--hc-d:calc(var(--i,0) * var(--pb-d-4))}
+:root.pb-motion .pb-hc .step .sx{position:relative;transition:color var(--pb-t-swap);transition-delay:var(--hc-d)}
+:root.pb-motion .pb-hc .step .sx::before,:root.pb-motion .pb-hc .step .sx::after{content:"";position:absolute;bottom:-1px;left:0;pointer-events:none}
+:root.pb-motion .pb-hc .step .sx::after{right:0;height:2px;margin-bottom:-.5px;background:var(--teal);border-radius:2px;transform:scaleX(0);transform-origin:0 50%;
+  transition:transform var(--pb-t-draw);transition-delay:calc(var(--hc-d) + var(--pb-d-2))}
+:root.pb-motion .pb-hc .step .sx::before{z-index:1;width:9px;height:9px;margin:0 0 -4.5px -1px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--surface);
+  transform:scale(0);transition:transform var(--pb-t-fill);transition-delay:var(--hc-d)}
+:root.pb-motion .pb-hc .step .pb-step-media,:root.pb-motion .pb-hc .step h3,:root.pb-motion .pb-hc .step p{opacity:0;transform:translateY(var(--pb-rise));
+  transition:opacity var(--pb-t-fill),transform var(--pb-t-fill);transition-delay:var(--hc-d)}
+:root.pb-motion .pb-hc .step h3,:root.pb-motion .pb-hc .step p{transition-delay:calc(var(--hc-d) + var(--pb-d-3))}
+:root.pb-motion .pb-hc .step.pb-hc-on .sx{color:var(--teal-700)}
+:root.pb-motion .pb-hc .step.pb-hc-on .sx::after{transform:scaleX(1)}
+:root.pb-motion .pb-hc .step.pb-hc-on .sx::before{transform:scale(1)}
+:root.pb-motion .pb-hc .step.pb-hc-on .pb-step-media,:root.pb-motion .pb-hc .step.pb-hc-on h3,:root.pb-motion .pb-hc .step.pb-hc-on p,
+:root.pb-motion .pb-hc .step:focus-within .pb-step-media,:root.pb-motion .pb-hc .step:focus-within h3,:root.pb-motion .pb-hc .step:focus-within p{opacity:1;transform:none}
+@media print{:root.pb-motion .pb-hc .step .pb-step-media,:root.pb-motion .pb-hc .step h3,:root.pb-motion .pb-hc .step p{opacity:1;transform:none}}
+/* HOME-CALL:END */
+/* the two forms read as one stop under "How a call works": the second sits close under the first */
+.pb-ask + .pbk{padding-top:8px}
 /* HOME-V2:BEGIN (11 October 2026, Damian's brief: one clear path down the home page,
    the gap, the calculator, inflation; light, teal and light grey; as alive as the welcome).
    Scripts: assets/js/pb-home-kit.js, pb-coins.js, pb-home-gap.js, pb-home-calc.js and
@@ -3085,7 +3036,6 @@ html:not(.pb-js) .pbf-check{display:none}
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -3259,7 +3209,7 @@ html:not(.pb-js) .pbf-check{display:none}
   <!-- ARE YOU A DIRECTOR? (Run 54, Damian's brief: "underneath, in big bold writing: are you a
        director? This differs for you. Click here"). One link to director.html; three company coins
        (blue) turn into yours (silver) as it comes into view (assets/js/pb-home-dband.js). Inside the
-       inflation section on purpose: tests/build.test.py check 32 wants #learn straight after it. -->
+       inflation section on purpose: the section after it is "How a call works", then the forms. -->
   <div class="wrap pb-drb" id="pbDrb">
     <a class="pb-drb-in" href="director.html">
       <canvas class="pb-drb-cv" aria-hidden="true"></canvas>
@@ -3269,236 +3219,11 @@ html:not(.pb-js) .pbf-check{display:none}
   </div>
 </section>
 
-<!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
-     (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
-<section class="pb-learn" id="learn"><div class="wrap">
-  <div class="sec-head">
-    <span class="kicker">Learn it the fun way</span>
-    <h2>Play the jargon buster.</h2>
-  </div>
-  <ul class="pb-learn-grid">
-    <li><div class="pb-learn-card pb-card-link">
-      <div class="pb-learn-media">
-        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=e44f6980"><img src="assets/img/product-buddys-run.jpg?v=79d7295e" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer comes down from a double jump onto Poolbeg Lighthouse, with the excuse &ldquo;I&rsquo;m only 25&rdquo; on its tower, on Dollymount Strand, with the Poolbeg stacks behind him. Score 80, three lives."></picture>
-        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=e44f6980" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
-        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Buddy&rsquo;s Run" data-state="paused" aria-label="Play video: Buddy&rsquo;s Run"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
-      </div>
-      <div class="pb-learn-body">
-        <h3>Buddy&rsquo;s Run</h3>
-        <p class="pb-learn-d">Collect the benefits, jump the excuses.</p>
-        <a class="pb-learn-play" href="games/buddys-run.html">Play Buddy&rsquo;s Run <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-    </div></li>
-    <li><div class="pb-learn-card pb-card-link">
-      <div class="pb-learn-media">
-        <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=fe76871b"><img src="assets/img/product-jargon-battle.jpg?v=312a07e5" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
-        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-jargon-battle.webp?v=fe76871b" width="1280" height="720" data-pb-video><source src="assets/video/jargon-battle.mp4" type="video/mp4"><source src="assets/video/jargon-battle.webm" type="video/webm"></video>
-        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Jargon Battle" data-state="paused" aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
-      </div>
-      <div class="pb-learn-body">
-        <h3>Jargon Battle</h3>
-        <p class="pb-learn-d">Pick the right meaning to bust the Jargon Blob.</p>
-        <a class="pb-learn-play" href="games/jargon-battle.html">Play Jargon Battle <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-    </div></li>
-  </ul>
-</div></section>
-
-<!-- YOUR PENSION THROUGH LIFE (Run 37, item 4). The ages the site already
-     explains, from 18 to 75, each a link to the page that explains it: the
-     relief bands (the self-employed and over-50s guides, the calculators'
-     ladder), early access and the Approved Retirement Fund (the over-50s
-     guide), pension age (the starter page). Every figure and sentence is the
-     site's own. The list is the component and reads the same without script;
-     on a wide screen a card beside it follows the step in the middle of the
-     screen (assets/js/pb-timeline.js), and on a phone, with script, a "Your
-     age" slider above the list picks the relief step that applies at that
-     age, a colour only (Run 43, INTERACTIVE-PROPOSALS-42 rank 14; the same
-     script); without script the list is alone.
-     Age 75 has no milestone: nothing on the site says what happens at 75
-     (STATUS, Run 37, question 1). tests/build.test.py check 36 holds it. -->
-<section class="pb-tl-sec" id="through-life"><div class="wrap">
-  <div class="sec-head">
-    <span class="kicker">Your pension through life</span>
-    <h2>What changes, and when.</h2>
-  </div>
-  <div class="pb-tl" id="pbTl">
-    <div class="pb-tl-stage" aria-hidden="true"><div class="pb-tl-card">
-      <span class="pb-tl-age" id="pbTlAge">15%</span>
-      <span class="pb-tl-what" id="pbTlWhat">Under 30</span>
-      <span class="pb-tl-ruler"><i class="pb-tl-fill" id="pbTlFill" style="width:0%"></i><b class="pb-tl-mark" id="pbTlMark" style="left:0%"></b></span>
-      <span class="pb-tl-ends"><span>18</span><span>75</span></span>
-    </div></div>
-    <div class="pb-tl-pick" id="pbTlPick">
-      <div class="pb-tl-pick-row"><label for="pbTlAgeS">Your age</label><span class="pb-tl-pick-v" id="pbTlAgeSV">40</span></div>
-      <input type="range" id="pbTlAgeS" min="18" max="75" step="1" value="40" aria-valuetext="40: 25%, From 40" style="--fill:38.60%">
-      <p class="pb-tl-now" id="pbTlNow" aria-hidden="true"><b>25%</b> From 40</p>
-    </div>
-    <ol class="pb-tl-steps">
-      <li class="pb-tl-step pb-card-link" data-age="18" data-show="15%"><h3><a href="pension-calculator.html">Under 30</a></h3><p>Tax relief on up to 15% of earnings, capped at &euro;115,000.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="30" data-show="20%"><h3><a href="pension-calculator.html">From 30</a></h3><p>20% from 30 to 39.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="40" data-show="25%"><h3><a href="pension-calculator.html">From 40</a></h3><p>25% from 40 to 49.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="50" data-show="30%"><h3><a href="pensions-over-50.html#early">From 50</a></h3><p>30% from 50 to 54. A pension from a past job can be taken from 50, if its rules allow.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="55" data-show="35%"><h3><a href="pensions-over-50.html#catch-up">From 55</a></h3><p>35% from 55 to 59.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="60" data-show="40%"><h3><a href="pensions-over-50.html#early">From 60</a></h3><p>40% from 60 on. A Personal Retirement Savings Account (PRSA) and a personal pension are normally taken from 60.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="61" data-show="4%"><h3><a href="pensions-over-50.html#after">From 61</a></h3><p>An Approved Retirement Fund (ARF) is taxed on at least 4% a year, taken or not.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="66" data-show="66"><h3><a href="state-pension-reality-check.html">At 66</a></h3><p>Pension age. The State Pension pays &euro;15,564 a year at the maximum, &euro;16,084 from January 2027.</p></li>
-      <li class="pb-tl-step pb-card-link" data-age="71" data-show="5%"><h3><a href="pensions-over-50.html#after">From 71</a></h3><p>The ARF is taxed on at least 5% a year.</p></li>
-    </ol>
-  </div>
-  <p class="pb-src">Rules as at 8 October 2026.</p>
-</div></section>
-
-<section class="tickband" id="deadline">
-  <div class="wrap">
-    <div class="tick">
-      <div class="tk-copy">
-        <div class="eyebrow"><i class="pip"></i><span id="tkTag">Revenue&rsquo;s deadline</span></div>
-        <h2>Revenue&rsquo;s deadline is 18 November if you pay and file online.</h2>
-        <p><span id="tkRev">If you do not pay and file online through the Revenue Online Service, it is 31
-        October.</span> Pay in before then to claim against last year&rsquo;s tax.</p>
-        <p class="tk-who">For relief on the <span id="tkYear">2025</span> tax year, additional voluntary contributions (AVCs) and company directors included.</p>
-<div class="pb-rw">
-  <div class="pb-rw-row"><label for="rwAmt3">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
-  <input type="range" id="rwAmt3" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
-  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
-  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
-</div>
-        <a class="btn btn-quiet-dark" href="pension-calculator.html">See what it&rsquo;s worth to you <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-      </div>
-      <div class="tk-side">
-        <div class="tk-clock" aria-hidden="true">
-          <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
-          <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
-          <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
-        </div>
-        <div class="pb-jar" id="pbJar" hidden>
-          <canvas class="pb-jar-cv" width="300" height="300" aria-hidden="true"></canvas>
-          <div class="pb-jar-rates" role="group" aria-label="Which rate of tax">
-            <button type="button" data-rate="0.4" aria-pressed="true">Higher rate</button>
-            <button type="button" data-rate="0.2" aria-pressed="false">Standard rate</button>
-          </div>
-          <p class="pb-jar-key"><span class="pb-jar-you"><i aria-hidden="true"></i>You pay <b>€60</b></span><span class="pb-jar-rev"><i aria-hidden="true"></i>Revenue adds <b>€40</b></span></p>
-        </div>
-      </div>
-      <p class="tk-sr" id="tkSr"></p>
-    </div>
-  </div>
-</section>
-
-<section id="story"><div class="wrap">
-  <div class="sec-head">
-    <span class="kicker">Our story</span>
-    <h2>Father, son, dog.</h2>
-    <p>Pensionbuddy started as a father-son conversation. Damian has 30 years' experience advising people on pensions. He kept seeing the same thing. People ignored their pension, or thought about it only when auto-enrolment came in.</p>
-    <p>Adam, a new Trinity graduate, saw the same gap from the other side. So they built Pensionbuddy together.</p>
-  </div>
-  <div class="pb-story-shots">
-    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-screen.webp?v=04aef3f5"><img src="assets/img/damian-at-desk-screen.jpg?v=675b5c57" width="1200" height="800" alt="Damian at his desk with Pensionbuddy&rsquo;s State Pension entitlement page on screen" loading="lazy" decoding="async"></picture></figure>
-    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-notes.webp?v=7e0a733b"><img src="assets/img/damian-at-desk-notes.jpg?v=b3c11604" width="1200" height="800" alt="Damian at his desk going through paperwork, pen in hand" loading="lazy" decoding="async"></picture></figure>
-  </div>
-</div></section>
-
-<section id="damian" style="padding-top:56px"><div class="wrap about-grid">
-  <div class="about-port">
-    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=fb5e0053"><img src="assets/img/damian-condon-portrait.jpg?v=9c3cfb4a" width="800" height="1000" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management" loading="lazy" decoding="async"></picture>
-    <span class="badge">B.A., Q.F.A.</span>
-  </div>
-  <div class="about">
-    <span class="kicker">Founder and CEO, QFA</span>
-    <h2>Damian Condon</h2>
-    <div class="pb-reg">
-      <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
-      <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
-    </div>
-    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can serve real people. Clarity is the whole point.</p>
-    <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and still lead it. I am the Qualified Financial Adviser behind Pensionbuddy.</p>
-    <p class="bio">That work left me one firm opinion. Hardly anyone is bad with money. They have never had it explained in words they felt free to question.</p>
-        <span class="sig">Damian</span>
-    <div class="pb-quals">
-      <p class="pb-quals-label" id="pbQualsDamian">Damian&rsquo;s qualifications and memberships</p>
-      <ul class="pb-quals-list" aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
-    </div>
-  </div>
-</div></section>
-
-<section id="adam" style="padding-top:8px"><div class="wrap about-grid">
-  <div class="about-port">
-    <picture><source type="image/webp" srcset="assets/img/adam-condon-portrait.webp?v=464a5b37"><img src="assets/img/adam-condon-portrait.jpg?v=05f33fd4" width="800" height="1000" alt="Adam Condon, co-founder of Pensionbuddy" loading="lazy"></picture>
-  </div>
-  <div class="about">
-    <span class="kicker">Co-founder and CMO</span>
-    <h2>Adam Condon</h2>
-    <p class="pullquote">&ldquo;Nobody was explaining it in a way that made sense. I wanted to fix that.&rdquo;</p>
-    <p class="bio">Adam graduated from Trinity College Dublin this year with an honours degree in Business, Economics and Social Sciences. He turns three decades of his dad&rsquo;s experience into something people can follow, from auto-enrolment to retirement planning.</p>
-    <p class="bio">Adam runs the social and education side of Pensionbuddy. The aim is to take the fear out of pensions.</p>
-    <span class="sig">Adam</span>
-  </div>
-</div></section>
-
-<section id="buddy" style="padding-top:8px"><div class="wrap about-grid">
-  <div class="about-port">
-    <img src="assets/img/buddy-beach.jpg?v=4aed90ed" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
-  </div>
-  <div class="about">
-    <span class="kicker">Chief Napping Officer</span>
-    <h2>Buddy</h2>
-    <p class="bio">Buddy is a boxer, and Pensionbuddy is named after him. He is the mascot. The paw print in the logo is his.</p>
-  </div>
-</div></section>
-
-<!-- OUT OF OFFICE: switched off 25 September 2026 at Damian's request (Run 29); may come back.
-     To restore: delete the hidden attribute on the next line. Nothing else was removed. -->
-<section class="snaps" hidden><div class="wrap">
-  <div class="sec-head">
-    <span class="kicker">Off duty</span>
-    <h2>Out of office.</h2>
-    <p>From &lsquo;Champagne Supernova&rsquo; to &lsquo;All Roads Lead To Prague&rsquo;. We&rsquo;re ready for this next adventure.</p>
-  </div>
-</div>
-  <div class="strip pstrip" role="group" aria-label="Photographs of the Pensionbuddy team off duty">
-    <div class="strip-in pstrip-in">
-    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
-    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
-    </div>
-  </div>
-</section>
-<section><div class="wrap">
-  <div class="sec-head">
-    <h2>Who you are dealing with.</h2>
-    <p>Pensionbuddy is a name, not a separate company. The business behind it is Damian Condon T/A Gresham Wealth Management, and that is the business the Central Bank of Ireland regulates. Registered office: Bushfield House, Philipsburgh Avenue, Fairview, Dublin 3.</p>
-    <p>You can check that for yourself, and you should. The Central Bank publishes its register at registers.centralbank.ie.</p>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="infoadvice">
-    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Advice is given in a personal consultation with Damian.</p>
-  </div>
-</div></section>
-
-<!-- "How a call works" (Run 39's three steps). Damian, 8 October 2026: the
-     placeholder pictures over the steps are gone, step 1 says "Pick a time
-     that suits you." and the heading is "How a call works." When his own
-     short videos are ready, Run 39's 16:9 slots can come back over the steps
-     (git show a1f7122:index.html, the "pb-call-slot" markup and CSS, and
-     build check 45 at that commit). tests/build.test.py check 45 holds the
-     heading, the words and no pictures. -->
+<!-- "How a call works" (12 October 2026, Damian's brief: how a call works, then the forms,
+     then the games, straight under "Are you a director?"). The three filmed clips (talk, trace,
+     decide; assets/js/pb-video.js); assets/js/pb-home-call.js draws the rule under each number
+     and settles each step in, in turn, as it comes into view. tests/build.test.py check 45
+     holds the heading, the words and the clips. -->
 <section class="expect" id="call"><div class="wrap">
   <div class="sec-head ctr">
     <h2>How a call works.</h2>
@@ -3508,48 +3233,12 @@ html:not(.pb-js) .pbf-check{display:none}
     <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-trace.webp?v=5c0e5334"><img src="assets/img/step-trace.jpg?v=bc7a9f6e" width="1280" height="720" loading="lazy" alt="A pension statement on the desk, read line by line with a pen."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-trace.webp?v=5c0e5334" width="1280" height="720" data-pb-video><source src="assets/video/step-trace.webm" type="video/webm"><source src="assets/video/step-trace.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="We trace" data-state="paused" aria-label="Play video: We trace"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">2</div><h3>We trace</h3><p>We find your old pensions and read what they charge.</p></div>
     <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-decide.webp?v=d491156f"><img src="assets/img/step-decide.jpg?v=b9be07e7" width="1280" height="720" loading="lazy" alt="A 2026 diary and a pen on the desk, ready to sign."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-decide.webp?v=d491156f" width="1280" height="720" data-pb-video><source src="assets/video/step-decide.webm" type="video/webm"><source src="assets/video/step-decide.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="You decide" data-state="paused" aria-label="Play video: You decide"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
   </div>
+  <!-- the page's one booking ask in its content, filled: under how a call works -->
+  <div class="call-ask">
+    <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
 </div></section>
 
-<!-- LEAD:fee:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/fee.html) -->
-<section class="pbk pbf" id="fees" aria-labelledby="pbfH"><div class="wrap"><div class="pbk-card">
-  <h2 id="pbfH">What fees cost you.</h2>
-  <form class="pbf-form" id="pbfForm" name="fee-check" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-    <input type="hidden" name="form-name" value="fee-check"><input type="hidden" name="cost"><input type="hidden" name="page"><input type="hidden" name="reply_by">
-    <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-    <div class="pbf-grid">
-      <div class="pbf-in">
-        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000"></div>
-        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1"></div>
-        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40"></div>
-      </div>
-      <div class="pbf-out">
-        <p class="pbf-big" aria-live="polite"><span id="pbfCost">&euro;104,616</span> <span class="pbf-lab">in fees by 66</span></p>
-        <div class="pbf-chart" aria-hidden="true">
-          <svg viewBox="0 0 600 200" preserveAspectRatio="none"><path class="pbf-gap" d=""/><path class="pbf-none" d="" vector-effect="non-scaling-stroke"/><path class="pbf-with" d="" vector-effect="non-scaling-stroke"/></svg>
-          <span class="pbf-dot pbf-dot-none"></span><span class="pbf-dot pbf-dot-with"></span>
-        </div>
-        <p class="pbf-key"><span><i class="k1"></i>No fees</span><span><i class="k2"></i>Your fee</span></p>
-        <p class="pbf-at">6% growth a year, the most a projection may assume. Historically, shares have often done better.</p>
-        <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
-      </div>
-    </div>
-    <div class="pbf-ask">
-      <button type="button" class="btn btn-primary pbf-check" id="pbfCheck" aria-expanded="false" aria-controls="pbfMail">Get it checked</button>
-      <div class="pbk-fold" id="pbfMail"><div>
-        <div class="pbk-send"><span class="ffield"><input id="pbfEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbfErr"><label class="flabel" for="pbfEmail">Email</label></span><button type="submit" class="btn btn-primary pbk-go">Send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
-        <p class="pbk-err" id="pbfErr" role="alert"></p>
-        <p class="pbk-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
-      </div></div>
-    </div>
-  </form>
-  <div class="pbk-ok" id="pbfOk" role="status" tabindex="-1" hidden>
-    <span class="pbk-burst" aria-hidden="true"></span>
-    <span class="pbk-ok-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="pbk-tick" d="M20 6L9 17l-5-5"/></svg></span>
-    <h3>Sent.</h3>
-    <p data-ok-text></p>
-  </div>
-</div></div></section>
-<!-- LEAD:fee:END -->
 <!-- LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.html) -->
 <section class="pb-ask" id="ask" aria-labelledby="askH"><div class="wrap">
 <div class="pb-ask-card">
@@ -3622,25 +3311,258 @@ html:not(.pb-js) .pbf-check{display:none}
 </div>
 </div></section>
 <!-- LEAD:ask:END -->
-<section class="expect"><div class="wrap faq-grid">
-  <div class="sec-head" style="margin-bottom:0">
-    
-    <h2>Questions before you call.</h2>
+<!-- LEAD:fee:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/fee.html) -->
+<section class="pbk pbf" id="fees" aria-labelledby="pbfH"><div class="wrap"><div class="pbk-card">
+  <h2 id="pbfH">What fees cost you.</h2>
+  <form class="pbf-form" id="pbfForm" name="fee-check" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="fee-check"><input type="hidden" name="cost"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+    <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+    <div class="pbf-grid">
+      <div class="pbf-in">
+        <div class="pbf-sl"><label for="pbfPot">Pension</label><output id="pbfPotV" for="pbfPot">&euro;100,000</output><input type="range" id="pbfPot" name="pot" min="5000" max="1000000" step="5000" value="100000"></div>
+        <div class="pbf-sl"><label for="pbfFee">Yearly fee</label><output id="pbfFeeV" for="pbfFee">1.00%</output><input type="range" id="pbfFee" name="fee" min="0.1" max="3" step="0.05" value="1"></div>
+        <div class="pbf-sl"><label for="pbfAge">Age</label><output id="pbfAgeV" for="pbfAge">40</output><input type="range" id="pbfAge" name="age" min="18" max="65" step="1" value="40"></div>
+      </div>
+      <div class="pbf-out">
+        <p class="pbf-big" aria-live="polite"><span id="pbfCost">&euro;104,616</span> <span class="pbf-lab">in fees by 66</span></p>
+        <div class="pbf-chart" aria-hidden="true">
+          <svg viewBox="0 0 600 200" preserveAspectRatio="none"><path class="pbf-gap" d=""/><path class="pbf-none" d="" vector-effect="non-scaling-stroke"/><path class="pbf-with" d="" vector-effect="non-scaling-stroke"/></svg>
+          <span class="pbf-dot pbf-dot-none"></span><span class="pbf-dot pbf-dot-with"></span>
+        </div>
+        <p class="pbf-key"><span><i class="k1"></i>No fees</span><span><i class="k2"></i>Your fee</span></p>
+        <p class="pbf-at">6% growth a year, the most a projection may assume. Historically, shares have often done better.</p>
+        <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+      </div>
+    </div>
+    <div class="pbf-ask">
+      <button type="button" class="btn btn-primary pbf-check" id="pbfCheck" aria-expanded="false" aria-controls="pbfMail">Get it checked</button>
+      <div class="pbk-fold" id="pbfMail"><div>
+        <div class="pbk-send"><span class="ffield"><input id="pbfEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbfErr"><label class="flabel" for="pbfEmail">Email</label></span><button type="submit" class="btn btn-primary pbk-go">Send <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+        <p class="pbk-err" id="pbfErr" role="alert"></p>
+        <p class="pbk-note">Used only to reply. <a href="privacy.html">Privacy Notice</a></p>
+      </div></div>
+    </div>
+  </form>
+  <div class="pbk-ok" id="pbfOk" role="status" tabindex="-1" hidden>
+    <span class="pbk-burst" aria-hidden="true"></span>
+    <span class="pbk-ok-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path class="pbk-tick" d="M20 6L9 17l-5-5"/></svg></span>
+    <h3>Sent.</h3>
+    <p data-ok-text></p>
   </div>
-  <div class="faq-list">
-    <details>
-      <summary>What will I walk away with?<span class="pm">+</span></summary>
-      <p>What you have, what it may be worth at 66, and what is worth doing. Written down.</p>
-    </details>
-    <details><summary>What does it cost if I become a client?<span class="pm">+</span></summary><p>It depends on what you need. You know before you commit. We are paid by fee, commission or a mix.</p></details>
-    <details><summary>Do I need to know anything before we talk?<span class="pm">+</span></summary><p>No. Bring what you remember. Doing the digging is our job.</p></details>
-    <details><summary>Is my information kept private?<span class="pm">+</span></summary><p>Yes. Anything you share is handled in line with our Privacy Notice and data-protection law. We'll only ever use it to help with your enquiry.</p></details>
-    <!-- the page's one booking ask in its content, filled (Damian, 11 October 2026: the
-         ask under the gap went; "we have that below") -->
-    <div class="faq-ask">
-      <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></div></section>
+<!-- LEAD:fee:END -->
+
+<!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
+     (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
+<section class="pb-learn" id="learn"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Learn it the fun way</span>
+    <h2>Play the jargon buster.</h2>
+  </div>
+  <ul class="pb-learn-grid">
+    <li><div class="pb-learn-card pb-card-link">
+      <div class="pb-learn-media">
+        <picture><source type="image/webp" srcset="assets/img/product-buddys-run.webp?v=e44f6980"><img src="assets/img/product-buddys-run.jpg?v=79d7295e" width="2400" height="1350" loading="lazy" alt="Buddy&rsquo;s Run, mid-game: Buddy the boxer comes down from a double jump onto Poolbeg Lighthouse, with the excuse &ldquo;I&rsquo;m only 25&rdquo; on its tower, on Dollymount Strand, with the Poolbeg stacks behind him. Score 80, three lives."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-buddys-run.webp?v=e44f6980" width="1280" height="720" data-pb-video><source src="assets/video/buddys-run.mp4" type="video/mp4"><source src="assets/video/buddys-run.webm" type="video/webm"></video>
+        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Buddy&rsquo;s Run" data-state="paused" aria-label="Play video: Buddy&rsquo;s Run"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <div class="pb-learn-body">
+        <h3>Buddy&rsquo;s Run</h3>
+        <p class="pb-learn-d">Collect the benefits, jump the excuses.</p>
+        <a class="pb-learn-play" href="games/buddys-run.html">Play Buddy&rsquo;s Run <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+    <li><div class="pb-learn-card pb-card-link">
+      <div class="pb-learn-media">
+        <picture><source type="image/webp" srcset="assets/img/product-jargon-battle.webp?v=fe76871b"><img src="assets/img/product-jargon-battle.jpg?v=312a07e5" width="2400" height="1350" loading="lazy" alt="Jargon Battle, mid-game: Buddy faces the Jargon Blob, which asks what a pension scheme trustee is, with four answers to pick from. The Blob is down to six of eight, and Buddy has two hearts of three."></picture>
+        <video class="pb-learn-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/product-jargon-battle.webp?v=fe76871b" width="1280" height="720" data-pb-video><source src="assets/video/jargon-battle.mp4" type="video/mp4"><source src="assets/video/jargon-battle.webm" type="video/webm"></video>
+        <button type="button" class="pb-vid-btn" data-pb-video-btn data-name="Jargon Battle" data-state="paused" aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
+      </div>
+      <div class="pb-learn-body">
+        <h3>Jargon Battle</h3>
+        <p class="pb-learn-d">Pick the right meaning to bust the Jargon Blob.</p>
+        <a class="pb-learn-play" href="games/jargon-battle.html">Play Jargon Battle <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      </div>
+    </div></li>
+  </ul>
+</div></section>
+
+<section class="tickband" id="deadline">
+  <div class="wrap">
+    <div class="tick">
+      <div class="tk-copy">
+        <div class="eyebrow"><i class="pip"></i><span id="tkTag">Revenue&rsquo;s deadline</span></div>
+        <h2>Revenue&rsquo;s deadline is 18 November if you pay and file online.</h2>
+        <p><span id="tkRev">If you do not pay and file online through the Revenue Online Service, it is 31
+        October.</span> Pay in before then to claim against last year&rsquo;s tax.</p>
+        <p class="tk-who">For relief on the <span id="tkYear">2025</span> tax year, additional voluntary contributions (AVCs) and company directors included.</p>
+<div class="pb-rw">
+  <div class="pb-rw-row"><label for="rwAmt3">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
+  <input type="range" id="rwAmt3" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
+  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
+  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
+</div>
+      </div>
+      <div class="tk-side">
+        <div class="tk-clock" aria-hidden="true">
+          <div class="tk-unit"><span class="tk-n" id="tkD" data-pb-wait>--</span><span class="tk-l">Days</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkH" data-pb-wait>--</span><span class="tk-l">Hours</span></div>
+          <div class="tk-unit"><span class="tk-n" id="tkM" data-pb-wait>--</span><span class="tk-l">Minutes</span></div>
+        </div>
+        <div class="pb-jar" id="pbJar" hidden>
+          <canvas class="pb-jar-cv" width="300" height="300" aria-hidden="true"></canvas>
+          <div class="pb-jar-rates" role="group" aria-label="Which rate of tax">
+            <button type="button" data-rate="0.4" aria-pressed="true">Higher rate</button>
+            <button type="button" data-rate="0.2" aria-pressed="false">Standard rate</button>
+          </div>
+          <p class="pb-jar-key"><span class="pb-jar-you"><i aria-hidden="true"></i>You pay <b>€60</b></span><span class="pb-jar-rev"><i aria-hidden="true"></i>Revenue adds <b>€40</b></span></p>
+        </div>
+      </div>
+      <p class="tk-sr" id="tkSr"></p>
     </div>
   </div>
+</section>
+
+<section id="story"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Our story</span>
+    <h2>Father, son, dog.</h2>
+    <p>Pensionbuddy started as a father-son conversation. Damian kept seeing people ignore their pension, or think about it only when auto-enrolment came in. Adam, a new Trinity graduate, saw the same gap from the other side. So they built Pensionbuddy together.</p>
+  </div>
+  <div class="pb-story-shots">
+    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-screen.webp?v=04aef3f5"><img src="assets/img/damian-at-desk-screen.jpg?v=675b5c57" width="1200" height="800" alt="Damian at his desk with Pensionbuddy&rsquo;s State Pension entitlement page on screen" loading="lazy" decoding="async"></picture></figure>
+    <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-notes.webp?v=7e0a733b"><img src="assets/img/damian-at-desk-notes.jpg?v=b3c11604" width="1200" height="800" alt="Damian at his desk going through paperwork, pen in hand" loading="lazy" decoding="async"></picture></figure>
+  </div>
+</div></section>
+
+<section id="damian" style="padding-top:56px"><div class="wrap about-grid">
+  <div class="about-port">
+    <picture><source type="image/webp" srcset="assets/img/damian-condon-portrait.webp?v=fb5e0053"><img src="assets/img/damian-condon-portrait.jpg?v=9c3cfb4a" width="800" height="1000" alt="Damian Condon, founder of Pensionbuddy and Gresham Wealth Management" loading="lazy" decoding="async"></picture>
+    <span class="badge">B.A., Q.F.A.</span>
+  </div>
+  <div class="about">
+    <span class="kicker">Founder and CEO</span>
+    <h2>Damian Condon</h2>
+    <div class="pb-reg">
+      <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
+      <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
+    </div>
+    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can serve real people. Clarity is the whole point.</p>
+    <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and still lead it.</p>
+    <p class="bio">That work left me one firm opinion. Hardly anyone is bad with money. They have never had it explained in words they felt free to question.</p>
+        <span class="sig">Damian</span>
+    <div class="pb-quals">
+      <p class="pb-quals-label" id="pbQualsDamian">Damian&rsquo;s qualifications and memberships</p>
+      <ul class="pb-quals-list" aria-labelledby="pbQualsDamian"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="adam" style="padding-top:8px"><div class="wrap about-grid">
+  <div class="about-port">
+    <picture><source type="image/webp" srcset="assets/img/adam-condon-portrait.webp?v=464a5b37"><img src="assets/img/adam-condon-portrait.jpg?v=05f33fd4" width="800" height="1000" alt="Adam Condon, co-founder of Pensionbuddy" loading="lazy"></picture>
+  </div>
+  <div class="about">
+    <span class="kicker">Co-founder and CMO</span>
+    <h2>Adam Condon</h2>
+    <p class="pullquote">&ldquo;Nobody was explaining it in a way that made sense. I wanted to fix that.&rdquo;</p>
+    <p class="bio">Adam graduated from Trinity College Dublin this year with an honours degree in Business, Economics and Social Sciences. He runs the social and education side of Pensionbuddy, to take the fear out of pensions.</p>
+    <span class="sig">Adam</span>
+  </div>
+</div></section>
+
+<section id="buddy" style="padding-top:8px"><div class="wrap about-grid">
+  <div class="about-port">
+    <img src="assets/img/buddy-beach.jpg?v=4aed90ed" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
+  </div>
+  <div class="about">
+    <span class="kicker">Chief Napping Officer</span>
+    <h2>Buddy</h2>
+    <p class="bio">A boxer. Pensionbuddy is named after him, and the paw print in the logo is his.</p>
+  </div>
+</div></section>
+
+<!-- OUT OF OFFICE: switched off 25 September 2026 at Damian's request (Run 29); may come back.
+     To restore: delete the hidden attribute on the next line. Nothing else was removed. -->
+<section class="snaps" hidden><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Off duty</span>
+    <h2>Out of office.</h2>
+    <p>From &lsquo;Champagne Supernova&rsquo; to &lsquo;All Roads Lead To Prague&rsquo;. We&rsquo;re ready for this next adventure.</p>
+  </div>
+</div>
+  <div class="strip pstrip" role="group" aria-label="Photographs of the Pensionbuddy team off duty">
+    <div class="strip-in pstrip-in">
+    <figure class="psnap" style="--rot:-3deg;--ph:196px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="Damian and Adam in matching pink cycling kit after a charity cycle" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.5deg;--ph:182px"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="Damian and Adam in blue cycling kit at a post-ride event" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-1.8deg;--ph:204px"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="Adam and Damian in bucket hats at an outdoor gig" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3.2deg;--ph:178px"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="Adam and Damian waiting on a train platform on a trip abroad" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:-2.4deg;--ph:190px"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="Adam crouched beside Buddy on the grass in St Anne’s Park" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:2.2deg;--ph:198px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="Buddy grinning on his lead out for a walk" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:3deg;--ph:202px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="Buddy sitting to attention on a blanket at home" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap" style="--rot:1.9deg;--ph:194px"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="A close-up of Buddy looking unimpressed" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-3deg;--ph:196px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-pink-kit.webp?v=a13afdb5"><img src="assets/img/strip-cycling-pink-kit.jpg?v=24595818" width="131" height="196" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.5deg;--ph:182px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-cycling-blue-kit.webp?v=6cd13b45"><img src="assets/img/strip-cycling-blue-kit.jpg?v=925f1c1d" width="185" height="182" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-1.8deg;--ph:204px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-gig-bucket-hats.webp?v=867f5f20"><img src="assets/img/strip-gig-bucket-hats.jpg?v=5dabbaf0" width="172" height="204" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3.2deg;--ph:178px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-train-platform.webp?v=2c0bc730"><img src="assets/img/strip-train-platform.jpg?v=c90d034f" width="180" height="178" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:-2.4deg;--ph:190px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-adam-rocky-park.webp?v=fd1d1839"><img src="assets/img/strip-adam-rocky-park.jpg?v=6c4efe2b" width="143" height="190" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:2.2deg;--ph:198px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-grinning.webp?v=509e9c49"><img src="assets/img/strip-rocky-grinning.jpg?v=d6984891" width="152" height="198" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:3deg;--ph:202px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-blanket.webp?v=3d074f28"><img src="assets/img/strip-rocky-blanket.jpg?v=495c7feb" width="152" height="202" alt="" loading="lazy" decoding="async"></picture></figure>
+    <figure class="psnap is-clone" style="--rot:1.9deg;--ph:194px" aria-hidden="true"><picture><source type="image/webp" srcset="assets/img/strip-rocky-closeup.webp?v=28c6f931"><img src="assets/img/strip-rocky-closeup.jpg?v=61fb79d8" width="178" height="194" alt="" loading="lazy" decoding="async"></picture></figure>
+    </div>
+  </div>
+</section>
+<section style="padding-top:0"><div class="wrap">
+  <div class="infoadvice">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This page is information, not advice.</b> Advice is given in a personal consultation with Damian.</p>
+  </div>
+</div></section>
+
+<!-- YOUR PENSION THROUGH LIFE (Run 37, item 4; last in <main> since 12 October 2026, Damian's
+     brief: "put that at the very bottom, it is in the way"). The ages the site already
+     explains, from 18 to 75, each a link to the page that explains it: the
+     relief bands (the self-employed and over-50s guides, the calculators'
+     ladder), early access and the Approved Retirement Fund (the over-50s
+     guide), pension age (the starter page). Every figure and sentence is the
+     site's own. The list is the component and reads the same without script;
+     on a wide screen a card beside it follows the step in the middle of the
+     screen (assets/js/pb-timeline.js), and on a phone, with script, a "Your
+     age" slider above the list picks the relief step that applies at that
+     age, a colour only (Run 43, INTERACTIVE-PROPOSALS-42 rank 14; the same
+     script); without script the list is alone.
+     Age 75 has no milestone: nothing on the site says what happens at 75
+     (STATUS, Run 37, question 1). tests/build.test.py check 36 holds it. -->
+<section class="pb-tl-sec" id="through-life"><div class="wrap">
+  <div class="sec-head">
+    <span class="kicker">Your pension through life</span>
+    <h2>What changes, and when.</h2>
+  </div>
+  <div class="pb-tl" id="pbTl">
+    <div class="pb-tl-stage" aria-hidden="true"><div class="pb-tl-card">
+      <span class="pb-tl-age" id="pbTlAge">15%</span>
+      <span class="pb-tl-what" id="pbTlWhat">Under 30</span>
+      <span class="pb-tl-ruler"><i class="pb-tl-fill" id="pbTlFill" style="width:0%"></i><b class="pb-tl-mark" id="pbTlMark" style="left:0%"></b></span>
+      <span class="pb-tl-ends"><span>18</span><span>75</span></span>
+    </div></div>
+    <div class="pb-tl-pick" id="pbTlPick">
+      <div class="pb-tl-pick-row"><label for="pbTlAgeS">Your age</label><span class="pb-tl-pick-v" id="pbTlAgeSV">40</span></div>
+      <input type="range" id="pbTlAgeS" min="18" max="75" step="1" value="40" aria-valuetext="40: 25%, From 40" style="--fill:38.60%">
+      <p class="pb-tl-now" id="pbTlNow" aria-hidden="true"><b>25%</b> From 40</p>
+    </div>
+    <ol class="pb-tl-steps">
+      <li class="pb-tl-step pb-card-link" data-age="18" data-show="15%"><h3><a href="pension-calculator.html">Under 30</a></h3><p>Tax relief on up to 15% of earnings, capped at &euro;115,000.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="30" data-show="20%"><h3><a href="pension-calculator.html">From 30</a></h3><p>20% from 30 to 39.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="40" data-show="25%"><h3><a href="pension-calculator.html">From 40</a></h3><p>25% from 40 to 49.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="50" data-show="30%"><h3><a href="pensions-over-50.html#early">From 50</a></h3><p>30% from 50 to 54. A pension from a past job can be taken from 50, if its rules allow.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="55" data-show="35%"><h3><a href="pensions-over-50.html#catch-up">From 55</a></h3><p>35% from 55 to 59.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="60" data-show="40%"><h3><a href="pensions-over-50.html#early">From 60</a></h3><p>40% from 60 on. A Personal Retirement Savings Account (PRSA) and a personal pension are normally taken from 60.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="61" data-show="4%"><h3><a href="pensions-over-50.html#after">From 61</a></h3><p>An Approved Retirement Fund (ARF) is taxed on at least 4% a year, taken or not.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="66" data-show="66"><h3><a href="state-pension-reality-check.html">At 66</a></h3><p>Pension age. The State Pension pays &euro;15,564 a year at the maximum.</p></li>
+      <li class="pb-tl-step pb-card-link" data-age="71" data-show="5%"><h3><a href="pensions-over-50.html#after">From 71</a></h3><p>The ARF is taxed on at least 5% a year.</p></li>
+    </ol>
+  </div>
+  <p class="pb-src">Rules as at 8 October 2026.</p>
 </div></section>
 
 </main>
@@ -3714,35 +3636,14 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
   },{rootMargin:'-45% 0px -50% 0px',threshold:0});
   Object.keys(map).forEach(function(id){var s=document.getElementById(id);if(s)secObs.observe(s);});
 })();
-/* --- UX polish: FAQ smooth expand (wrap answer for grid animation) --- */
-(function(){
-  var ds=[].slice.call(document.querySelectorAll('details'));
-  ds.forEach(function(d){
-    var sum=d.querySelector('summary');
-    if(!sum)return;
-    // collect everything after summary into an inner wrapper
-    var inner=document.createElement('div'); inner.className='faq-inner';
-    var box=document.createElement('div');
-    var node=sum.nextSibling;
-    while(node){var next=node.nextSibling; box.appendChild(node); node=next;}
-    inner.appendChild(box); d.appendChild(inner);
-  });
-})();
 </script>
 
 
 <script>
-/* A11Y+UX runtime: decorative-svg aria, single-open FAQ.
+/* A11Y runtime: decorative-svg aria.
    (The skip link and the main landmark are static in the page markup.) */
 (function(){
   document.querySelectorAll('svg').forEach(function(s){s.setAttribute('aria-hidden','true');s.setAttribute('focusable','false');});
-  document.querySelectorAll('.faq-list').forEach(function(list){
-    list.addEventListener('toggle',function(e){
-      if(e.target.tagName==='DETAILS'&&e.target.open){
-        list.querySelectorAll('details[open]').forEach(function(d){if(d!==e.target)d.open=false;});
-      }
-    },true);
-  });
 })();
 </script>
 
@@ -3765,62 +3666,13 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 </script>
 
 
-<script>
-/* Damian's photos: the two headshots in his section, in turn (see the
-   DAMIAN'S PHOTOS styles). Turns only while on screen, the tab is showing
-   and motion is allowed; hover or focus holds it; the pause button, or
-   any arrow or dot, stops it until the reader presses play. */
-(function(){
-  var port=document.querySelector('#damian .about-port'),nav=port&&port.querySelector('.pb-port-nav');
-  if(!port||!nav)return;
-  var root=document.documentElement,alt=port.querySelector('.pb-port-alt'),main=port.querySelector('img');
-  var dots=[].slice.call(nav.querySelectorAll('.pb-port-dot')),pause=nav.querySelector('[data-pb-port="pause"]');
-  var EVERY=6000,at=0,timer=null,seen=!('IntersectionObserver' in window),held=false,stopped=false;
-  function show(i){
-    at=(i+2)%2;
-    port.classList.toggle('pb-port-2',at===1);
-    alt.setAttribute('aria-hidden',at===1?'false':'true');
-    if(at===1)main.setAttribute('aria-hidden','true');else main.removeAttribute('aria-hidden');
-    dots.forEach(function(d,n){if(n===at)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current');});
-  }
-  function sync(){
-    var motion=root.classList.contains('pb-motion');
-    pause.hidden=!motion;
-    var run=motion&&seen&&!held&&!stopped&&!document.hidden;
-    if(run&&!timer)timer=setInterval(function(){show(at+1);},EVERY);
-    else if(!run&&timer){clearInterval(timer);timer=null;}
-  }
-  function stop(v){
-    stopped=v;
-    nav.classList.toggle('pb-port-paused',v);
-    pause.setAttribute('aria-label',v?'Play the photos':'Pause the photos');
-    sync();
-  }
-  nav.addEventListener('click',function(e){
-    var b=e.target.closest('button');if(!b)return;
-    var k=b.getAttribute('data-pb-port');
-    if(k==='pause'){stop(!stopped);return;}
-    show(k==='prev'?at-1:k==='next'?at+1:+k);
-    stop(true);
-  });
-  port.addEventListener('mouseenter',function(){held=true;sync();});
-  port.addEventListener('mouseleave',function(){held=port.contains(document.activeElement);sync();});
-  port.addEventListener('focusin',function(){held=true;sync();});
-  port.addEventListener('focusout',function(e){held=port.contains(e.relatedTarget)||port.matches(':hover');sync();});
-  document.addEventListener('visibilitychange',sync);
-  document.addEventListener('pb:motion',sync);
-  if(!seen)new IntersectionObserver(function(es){seen=es[es.length-1].isIntersecting;sync();},{threshold:.5}).observe(port);
-  nav.hidden=false;
-  sync();
-})();
-</script>
 <script src="assets/js/pb-timeline.js?v=17df1081"></script>
 <script src="assets/js/pb-tl-motion.js?v=5a0eb56f"></script>
-<script src="assets/js/pb-call-motion.js?v=9eca6a27"></script>
+<script src="assets/js/pb-home-call.js?v=59dc37b6"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

@@ -281,7 +281,8 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
     eq(`G7. ${page}: the line, the button, then "Email me this result", shown by the script`, [p.order, p.more], [true, ['Email me this result', false, true]]);
   }
   eq(`G7. ${page}: no other booking link in the results`, p.stray, []);
-  if (['pension-calculator.html', 'director-calculator.html', 'broker-vs-autoenrolment.html'].includes(page))
+  /* broker-vs-autoenrolment.html: its lead line sits in the result card, no waitcard (12 October 2026) */
+  if (['pension-calculator.html', 'director-calculator.html'].includes(page))
     eq(`G9. ${page}: its waitcard holds no booking link`, [p.waitcards > 0, p.waitLinks], [true, 0]);
   if (page === 'director-pension-rules.html') continue;
 

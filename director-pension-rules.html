@@ -2468,14 +2468,126 @@ main h1{font-weight:800}
 @keyframes pbDrDeal{from{transform:translate(-40px,-24px) rotate(-5deg) scale(.92);opacity:.2}to{transform:none;opacity:1}}
 :root.pb-motion .dr-opt span{display:inline-block}
 
-/* GUIDESCENE (9 October 2026, Damian's brief): the guide's own
-   scene, drawn by assets/js/pb-guide-scene.js; with motion off none of this
-   is in the page. */
-.pb-gs{margin:18px 0 22px;padding:10px 12px 8px;border-radius:18px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
-.pb-gs-cv{display:block;width:100%;height:210px;cursor:pointer;touch-action:pan-y}
-.pb-gs .pb-gs-hint{margin:4px 0 2px;max-width:none;font-size:16px;line-height:1.4;color:var(--ink-2);text-align:center;transition:opacity .4s}
-.pb-gs .pb-gs-hint.pb-off{opacity:0}
-@media(max-width:560px){.pb-gs-cv{height:190px}}
+/* GUIDEFIG:BEGIN (12 October 2026, Damian: the guides' animations were
+   "shocking ... too complicated"; "simplify, more visual"). One figure per
+   idea, in the section it shows: plain HTML and CSS, so every word and the
+   end state are there with no script and no motion. With motion on,
+   assets/js/pb-guide-scene.js holds a figure at its start (.pb-gx-arm) and
+   plays it once as it comes into view (.pb-gx-in); it also works the
+   figure's one control. Only marks move, never words. Your money is slate,
+   Revenue's amber, money lost the gap's coral. */
+.pb-gx{margin:24px 0 30px;padding:20px 20px 18px;border-radius:12px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.pb-gx .pb-gx-k{display:block;margin:0 0 14px;font-size:1.02rem;font-weight:700;line-height:1.35;color:var(--ink)}
+.pb-gx .pb-gx-p{margin:0;font-size:.95rem;line-height:1.55;color:var(--ink-2)}
+.pb-gx .pb-gx-p b{color:var(--ink)}
+.pb-gx .pb-gx-live{margin:14px 0 0;font-size:.98rem;font-weight:600;line-height:1.5;color:var(--ink)}
+.pb-gx .pb-gx-nojs{margin-top:10px}
+html.pb-js .pb-gx .pb-gx-nojs{display:none}
+/* the one control: two buttons on a sliding pill */
+.pb-gx-seg{position:relative;display:none;gap:2px;padding:3px;margin:0 0 18px;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);max-width:100%}
+html.pb-js .pb-gx-seg{display:inline-flex}
+.pb-gx-seg::before{content:"";position:absolute;top:3px;bottom:3px;left:0;width:var(--w,0px);transform:translateX(var(--x,0px));border-radius:999px;background:var(--surface);box-shadow:0 1px 3px rgba(11,31,28,.14),inset 0 0 0 1px var(--line-2);transition:transform var(--pb-t-state),width var(--pb-t-state)}
+.pb-gx-seg button{position:relative;z-index:1;min-height:44px;margin:0;padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--ink-2);font:600 .95rem/1.2 var(--font);cursor:pointer;transition:color var(--pb-t-swap)}
+.pb-gx-seg button[aria-pressed="true"]{color:var(--ink)}
+.pb-gx-seg:not(.pb-gx-pill) button[aria-pressed="true"]{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line-2)}
+.pb-gx-seg button:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+/* a key: a swatch and its words */
+.pb-gx .pb-gx-keys{display:grid;gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.pb-gx .pb-gx-keys li{display:flex;align-items:baseline;gap:10px;margin:0;padding:0;font-size:.95rem;line-height:1.5;color:var(--ink-2)}
+.pb-gx .pb-gx-keys li::before{content:none}
+.pb-gx .pb-gx-keys b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-gx-sw{flex:0 0 auto;width:12px;height:12px;border-radius:3px;transform:translateY(1px)}
+.pb-gx-sw-you,.pb-gx-sw-ok{background:var(--slate)}
+.pb-gx-sw-rev{background:var(--amber)}
+.pb-gx-sw-ov{background:#FADCD3;box-shadow:inset 0 0 0 1.5px #D4573D}
+/* replay, only where there is motion to replay */
+.pb-gx-replay{display:none;align-items:center;gap:8px;min-height:44px;margin:14px 0 0;padding:0 14px 0 10px;border:0;border-radius:999px;background:transparent;color:var(--ink-2);font:600 .92rem/1 var(--font);cursor:pointer;box-shadow:inset 0 0 0 1px var(--line-2);transition:color var(--pb-t-swap),box-shadow var(--pb-t-swap)}
+:root.pb-motion .pb-gx-replay{display:inline-flex}
+.pb-gx-replay svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb-gx-replay:hover{color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink-3)}
+.pb-gx-replay:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-gx-reset,.pb-gx-reset *,.pb-gx-reset::before{transition:none!important}
+
+/* pensions-over-50.html: an annuity and an ARF, as markets rise or fall */
+.pb-gx-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pb-gx-card{min-width:0;padding:14px 14px 12px;border-radius:10px;background:var(--surface-2)}
+.pb-gx-bars{position:relative;display:flex;align-items:flex-end;gap:4px;height:86px;margin:0 0 10px;border-bottom:1.5px solid var(--line-2)}
+.pb-gx-bars i{flex:1 1 0;height:100%;border-radius:2px 2px 0 0;background:var(--slate);transform-origin:50% 100%;--v:var(--a);transform:scaleY(var(--v));transition:transform var(--pb-t-fill) calc(var(--k,0) * var(--pb-ripple))}
+.pb-gx[data-v="down"] .pb-gx-bars i{--v:var(--b)}
+.pb-gx-arm:not(.pb-gx-in) .pb-gx-bars i{--v:0}
+.pb-gx .pb-gx-t{margin:0;font-size:1rem;font-weight:700;line-height:1.3;color:var(--ink)}
+.pb-gx .pb-gx-s{margin:2px 0 0;font-size:.88rem;line-height:1.4;color:var(--ink-2)}
+
+/* uk-pensions-in-ireland.html: where a UK pension can go */
+.pb-gx-shores{display:flex;justify-content:space-between;margin:0 0 6px;padding:0 4px;font-size:.82rem;font-weight:700;letter-spacing:.02em;color:var(--ink-2)}
+.pb-gx .pb-gx-routes{display:grid;gap:16px;margin:0;padding:0;list-style:none}
+.pb-gx .pb-gx-r{margin:0;padding:0}
+.pb-gx .pb-gx-r::before{content:none}
+.pb-gx-lane{position:relative;display:block;height:32px;margin:0 0 8px;border-radius:8px;overflow:hidden;background:linear-gradient(90deg,var(--surface-2) 0 45%,transparent 45% 55%,var(--surface-2) 55%)}
+.pb-gx-lane::after{content:"";position:absolute;left:50%;top:5px;bottom:5px;border-left:2px dotted var(--line-2)}
+.pb-gx-car,.pb-gx-drop{position:absolute;inset:0;z-index:1;display:block}
+.pb-gx-pot{position:absolute;left:6px;top:6px;bottom:6px;width:36%;border-radius:5px;background:var(--slate)}
+.pb-gx-r2 .pb-gx-car,.pb-gx-r3 .pb-gx-car{transform:translateX(58%);transition:transform var(--pb-d-5) var(--pb-ease-move)}
+.pb-gx-r2 .pb-gx-car{transition-delay:var(--pb-beat-gap)}
+.pb-gx-r3 .pb-gx-car{transition-delay:calc(var(--pb-beat-gap) * 2)}
+.pb-gx-r3 .pb-gx-pot{background:linear-gradient(90deg,var(--slate) 0 60%,transparent 60%)}
+.pb-gx-cut{position:absolute;right:0;top:0;bottom:0;width:40%;border:1.5px dashed #D4573D;border-radius:5px;background:rgba(250,220,211,.35)}
+/* the 40% lost on the move: it drops off as the pot crosses, and its outline goes on */
+.pb-gx-sink{position:absolute;right:0;top:0;bottom:0;width:40%;border:1.5px solid #D4573D;border-radius:5px;background:#FADCD3;opacity:0}
+.pb-gx-arm .pb-gx-sink{opacity:1}
+.pb-gx-arm.pb-gx-in .pb-gx-sink{animation:pbGxSink calc(var(--pb-d-5) * 1.4) calc(var(--pb-beat-gap) * 2) both}
+@keyframes pbGxSink{
+  0%,30%{transform:none;opacity:1;animation-timing-function:cubic-bezier(.4,0,1,1)}
+  100%{transform:translate(-24px,30px) rotate(-12deg);opacity:0}}
+.pb-gx-drop i{position:absolute;left:calc(36% + 14px);top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--slate)}
+.pb-gx-drop{transition:transform var(--pb-d-5) var(--pb-ease-move)}
+.pb-gx-drop:nth-child(2){transform:translateX(24%)}
+.pb-gx-drop:nth-child(3){transform:translateX(36%);transition-delay:calc(var(--pb-stagger) * 2)}
+.pb-gx-drop:nth-child(4){transform:translateX(48%);transition-delay:calc(var(--pb-stagger) * 4)}
+.pb-gx-arm:not(.pb-gx-in) .pb-gx-car,.pb-gx-arm:not(.pb-gx-in) .pb-gx-drop{transform:none}
+
+/* self-employed-pensions.html: €100 in, and what it costs you */
+.pb-gx-rel{--r:40%}
+.pb-gx-rel[data-v="lo"]{--r:20%}
+.pb-gx-split{position:relative;display:block;height:44px;border-radius:10px;overflow:hidden;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.pb-gx-you{position:absolute;inset:0;background:var(--slate);transform-origin:0 50%;transition:transform var(--pb-t-fill)}
+.pb-gx-rev{position:absolute;top:0;bottom:0;right:0;width:var(--r);background:var(--amber);transform-origin:100% 50%;transition:width var(--pb-t-state),transform var(--pb-t-fill) calc(var(--pb-d-4) + var(--pb-beat-gap))}
+.pb-gx-arm:not(.pb-gx-in) .pb-gx-you,.pb-gx-arm:not(.pb-gx-in) .pb-gx-rev{transform:scaleX(0)}
+
+/* director-pension-rules.html: company payments against 100% of your pay */
+.pb-gx-ctl{margin:0 0 16px}
+.pb-gx-ctl-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 10px}
+.pb-gx-ctl-row label{font-size:.98rem;font-weight:600;color:var(--ink)}
+.pb-gx-ctl-row output{font-size:1.05rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pb-gx-ctl input[type=range]{display:block;width:100%}
+html:not(.pb-js) .pb-gx-ctl input{display:none}
+.pb-gx-ctl .sbubble{display:none}
+.pb-gx-rows{display:grid;gap:10px}
+.pb-gx-row{display:grid;grid-template-columns:9em minmax(0,1fr);gap:12px;align-items:center}
+.pb-gx-rl{font-size:.9rem;font-weight:600;color:var(--ink)}
+.pb-gx-track{position:relative;display:block;height:24px;border-radius:6px;overflow:hidden;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line)}
+.pb-gx-pay,.pb-gx-ok,.pb-gx-ov{position:absolute;top:0;bottom:0;transform-origin:0 50%}
+.pb-gx-pay{left:0;width:50%;border-radius:0 6px 6px 0;background:repeating-linear-gradient(135deg,rgba(84,99,95,.16) 0 6px,transparent 6px 12px);box-shadow:inset 0 0 0 2px var(--ink-2);transition:transform var(--pb-t-fill)}
+.pb-gx-ok{left:0;width:var(--ok);background:var(--slate);transition:width var(--pb-t-swap),transform var(--pb-t-fill) var(--pb-beat-gap)}
+.pb-gx-ov{left:50%;width:var(--ov);background:#FADCD3;box-shadow:inset 0 0 0 1.5px #D4573D;transition:width var(--pb-t-swap),transform var(--pb-t-fill) calc(var(--pb-d-4) + var(--pb-beat-gap))}
+.pb-gx-line::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;border-left:2px dashed var(--ink)}
+.pb-gx-arm:not(.pb-gx-in) .pb-gx-pay,.pb-gx-arm:not(.pb-gx-in) .pb-gx-ok,.pb-gx-arm:not(.pb-gx-in) .pb-gx-ov{transform:scaleX(0)}
+.pb-gx-dir:not(.pb-gx-over) .pb-gx-k-ov .pb-gx-sw{opacity:.35;transition:opacity var(--pb-t-swap)}
+@media(max-width:560px){
+  .pb-gx{padding:16px 14px 14px}
+  .pb-gx-row{grid-template-columns:1fr;gap:4px}
+  .pb-gx-card{padding:12px 10px 10px}
+  .pb-gx-bars{gap:3px;height:74px}
+}
+
+/* the relief ladder plays too: its bars fill once in view, and the step
+   for the reader's age is full amber, the others a paler amber */
+.pb-lad-track i{transform-origin:0 50%;transition:transform var(--pb-t-fill) calc(var(--r,0) * var(--pb-stagger)),background-color var(--pb-t-swap)}
+.pb-lad-row:nth-child(4){--r:1}.pb-lad-row:nth-child(5){--r:2}.pb-lad-row:nth-child(6){--r:3}.pb-lad-row:nth-child(7){--r:4}.pb-lad-row:nth-child(8){--r:5}
+.pb-lad.pb-gx-arm:not(.pb-gx-in) .pb-lad-track i{transform:scaleX(0)}
+html.pb-js .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-track i{background:#F8D48A}
+html.pb-js .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-row:has(.pb-lad-you:not([hidden])) .pb-lad-track i{background:var(--amber)}
+/* GUIDEFIG:END */
 </style>
 
 <script>
@@ -2521,7 +2633,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2557,6 +2668,21 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <section class="dr-sec" id="prsa">
     <h2>Company payments into a Personal Retirement Savings Account (PRSA)</h2>
     <p>Since 1 January 2025, company payments into your PRSA are tax-free for you, up to 100% of your pay from the company that year. The company can deduct them. Pay means salary, bonuses and other benefits. Above 100%, the excess is a taxable benefit-in-kind for you. The company cannot deduct it.</p>
+    <figure class="pb-gx pb-gx-dir pb-noterms" data-pb-gx="dir" aria-labelledby="gxDirK" style="--ok:50%;--ov:25%">
+      <figcaption class="pb-gx-k" id="gxDirK">Against your pay from the company</figcaption>
+      <div class="pb-gx-ctl">
+        <div class="pb-gx-ctl-row"><label for="gxDirPay">Company pays into your PRSA</label><output id="gxDirOut" for="gxDirPay">150% of your pay</output></div>
+        <input type="range" id="gxDirPay" min="25" max="200" step="5" value="150" aria-valuetext="150% of your pay: 100% tax-free for you, 50% a taxable benefit-in-kind" style="--fill:71.43%">
+      </div>
+      <span class="pb-gx-rows" aria-hidden="true">
+        <span class="pb-gx-row"><span class="pb-gx-rl">Your pay</span><span class="pb-gx-track"><i class="pb-gx-pay"></i></span></span>
+        <span class="pb-gx-row"><span class="pb-gx-rl">Company pays in</span><span class="pb-gx-track pb-gx-line"><i class="pb-gx-ok"></i><i class="pb-gx-ov"></i></span></span>
+      </span>
+      <ul class="pb-gx-keys">
+        <li><i class="pb-gx-sw pb-gx-sw-ok" aria-hidden="true"></i><span>Up to 100% of your pay: tax-free for you, and the company can deduct it.</span></li>
+        <li class="pb-gx-k-ov"><i class="pb-gx-sw pb-gx-sw-ov" aria-hidden="true"></i><span>Over 100%: a taxable benefit-in-kind, and the company cannot deduct it.</span></li>
+      </ul>
+    </figure>
     <p>A company scheme such as a master trust is not held to this 100% test. Revenue&rsquo;s maximum funding rules limit it instead, by salary, service and age.</p>
     <p class="dr-src">Sources: Finance Act 2024, section 12; Revenue Pensions Manual, chapter 24.</p>
   </section>
@@ -2676,7 +2802,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/director-topics.js?v=9527d4dd"></script>
 <script src="assets/js/pb-dr-motion.js?v=106dc5c9"></script>
-<script src="assets/js/pb-guide-scene.js?v=12de3c1b"></script>
+<script src="assets/js/pb-guide-scene.js?v=ce3e6bfd"></script>
 <script>
 /* director-pension-rules.html (Run 20 #6).
 
@@ -2930,7 +3056,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3034,7 +3160,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=9d83afbc"></script>
+<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
 <script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

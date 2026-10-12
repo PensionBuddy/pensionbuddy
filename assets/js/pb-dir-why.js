@@ -40,7 +40,14 @@
    (#drYe, unseen) is the same coin for the keyboard and screen readers. A
    tap on the fourteen plays them again. Each stage runs one frame loop,
    only while on screen, and stops once still. With motion off each is
-   drawn once, finished. */
+   drawn once, finished.
+
+   12 October 2026: the year-end reminder (#pbyForm, tools/lead-parts/
+   yearend.html) sits straight under this section, so the ring hands it the
+   reader's month: a settled choice on the ring (a tap, the end of a drag, a
+   key) ticks the same month in the form, which draws its own line and asks
+   only for the email. Once the reader picks a month in the form, the ring
+   leaves it alone. */
 (function () {
   'use strict';
   var K = window.PBKit, C = window.PBCoins;
@@ -376,6 +383,20 @@
       rng.setAttribute('aria-valuetext', NAMES[sel - 1] + (e.next ? ' next year' : '') + ', ' + n + (n === 1 ? ' day' : ' days'));
     }
     function touch() { touched = true; if (hint) { hint.classList.remove('pb-on'); } }
+    /* the month, handed to the reminder below; a pause first, so a run of
+       arrow keys hands over once */
+    var remind = $('pbyForm'), own = false, handT = 0;
+    if (remind) { remind.addEventListener('change', function (e) { if (e.isTrusted && e.target.name === 'year_end') { own = true; } }); }
+    function handoff() {
+      if (!remind || own) { return; }
+      clearTimeout(handT);
+      handT = setTimeout(function () {
+        var r = remind.querySelector('input[name="year_end"][value="' + NAMES[sel - 1] + '"]');
+        if (!r || r.checked || own) { return; }
+        r.checked = true;
+        r.dispatchEvent(new Event('change', { bubbles: true }));
+      }, 400);
+    }
     function offer() { if (hint) { setTimeout(function () { if (!touched) { hint.classList.add('pb-on'); } }, K.motion() ? 450 : 0); } }
 
     /* the coin: kq is where it is round the ring (in months), kt where it is
@@ -433,7 +454,7 @@
       lets.forEach(function (l, i) { l.hd = dist(p, at(i + 0.5, G.L)) / 600; });
       var m = letterAt(p);
       if (!m && onBand(p)) { m = nearest(inYear(qAt(p))); }
-      if (m) { touch(); sel = m; kt = end(m).q; mode = 'send'; words(); }
+      if (m) { touch(); sel = m; kt = end(m).q; mode = 'send'; words(); handoff(); }
     }
 
     function first() {
@@ -566,7 +587,7 @@
       if (drag) {
         drag = null; knockT = 0; cv.style.touchAction = ''; cv.style.cursor = '';
         kt = end(sel).q; mode = Math.abs(kq.x - kt) > 1.5 ? 'roll' : 'snap';
-        words(); st.kick(); return;
+        words(); st.kick(); if (!cancel) { handoff(); } return;
       }
       if (press && !press.moved && !cancel && G) { tap(st.local(e)); }
       press = null; st.kick();
@@ -576,7 +597,7 @@
     cv.addEventListener('lostpointercapture', function (e) { if (drag) { up(e, true); } });
     rng.addEventListener('input', function () {
       sel = clamp(Math.round(+rng.value) || 12, 1, 12); finish();
-      kt = end(sel).q; mode = 'send'; touch(); words(); st.kick();
+      kt = end(sel).q; mode = 'send'; touch(); words(); st.kick(); handoff();
     });
     rng.addEventListener('focus', st.kick);
     rng.addEventListener('blur', st.kick);

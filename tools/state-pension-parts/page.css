@@ -1,83 +1,82 @@
-/* ---- living standards comparison, this page only ---- */
-.lstd{display:flex;flex-direction:column;gap:20px;margin-top:6px}
-.lsrow .lshead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:8px}
-.lsrow .lsname{font-weight:700;font-size:15px;letter-spacing:-0.01em}
-.lsrow .lstarget{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}
-.lsbar{height:13px;border-radius:99px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line)}
-.lsbar i{display:block;height:100%;background:var(--teal);border-radius:99px;
-  transition:width .45s cubic-bezier(.22,.61,.36,1)}
-.lsrow.is-covered .lsbar i{background:var(--aqua)}
-.lsrow .lsgap{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin-top:9px}
-.lsrow .lsgap b{color:var(--ink);font-variant-numeric:tabular-nums}
-.srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:22px;
-  padding-top:16px;border-top:1px solid var(--line)}
-@media(prefers-reduced-motion:reduce){.lsbar i{transition:none}}
-/* ---- the contributions jar, this page only ----
-   One dot per 52 reckonable contributions, forty of them, filling from the
-   bottom row up: .pb-jar-dots is flipped with scaleY(-1) so DOM order 0..39
-   reads as bottom to top. The bottom row, the first 520, was amber until
-   Run 42 and carried no label; every lit dot is now aqua (UX-MOTION-AUDIT
-   D15 (a)). Eligibility needs 520 PAID contributions, this slider holds the
-   reckonable total, and the mark made no claim either way.
-
-   Every text node in here is var(--ink-3), which is 5:1 on --surface-2.
-   --aqua carries no text: it is a dot fill only, and tools/
-   verify.py samples colour on elements with a direct text child.
-
-   A full record is simply a full jar (Run 32, docs/UX-MOTION-AUDIT.md 5a):
-   the five dots that rose onto the rim when the slider reached 2,080, and
-   rested there after, went with D15, because a celebration there rewards a
-   number and dots above the rim suggest more than a full record. The page
-   script still marks the jar pb-full and pb-spill; nothing styles either. */
-.pb-jar{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);
-  grid-template-rows:auto auto 1fr;column-gap:16px}
-.pb-jar-stage{position:relative;width:200px;max-width:100%;padding-top:12px;overflow:hidden;
-  grid-row:1 / span 3}
-/* the jar is a control as well as a picture: pointing at a dot fills to it,
-   and a drag must not scroll the page out from under the finger doing it */
-.pb-jar-body{cursor:pointer;touch-action:none;
+/* ---- the record: forty dots, this page only ----
+   One dot per 52 reckonable contributions, filling from the bottom row up:
+   .pb-jar-dots is flipped with scaleY(-1) so DOM order 0..39 reads bottom to
+   top. Each dot is a grey socket; a lit year is an aqua disc (::after) that
+   fills it. Aqua is the State's colour and carries no text. A full record is
+   simply a full set and a plain label: no celebration (UX-MOTION-AUDIT D15).
+   The dots are a pointer control as well as a picture, so a drag across
+   them must not scroll the page. */
+.pb-jar{margin:0 0 22px}
+.pb-jar-stage{position:relative}
+.pb-jar-body{cursor:pointer;touch-action:none;-webkit-tap-highlight-color:transparent;
   position:relative;background:var(--surface-2);border:1px solid var(--line);
-  border-radius:var(--r-lg);padding:11px 12px 9px}
-.pb-jar-dots{display:grid;grid-template-columns:repeat(10,12px);gap:6px;transform:scaleY(-1)}
-.pb-jar-dot{display:block;width:12px;height:12px;border-radius:50%;background:var(--line-2);
-  transition:background-color .3s ease}
-.pb-jar-dot.pb-on{background:var(--aqua)}
-.pb-jar-cap{font-size:12.5px;line-height:1.5;font-weight:600;color:var(--ink-3);margin-top:0;
-  font-variant-numeric:tabular-nums;grid-column:2;grid-row:1}
-.pb-jar-lead{font-size:12.5px;line-height:1.5;color:var(--ink-3);margin-top:4px;
-  grid-column:2;grid-row:2}
-/* one column again where two would squeeze the words into a ribbon */
-@media(max-width:600px){
-  .pb-jar{display:block}
-  .pb-jar-cap{margin-top:10px}
-}
-@media(prefers-reduced-motion:reduce){
-  .pb-jar-dot{transition:none}
-}
+  border-radius:var(--r-lg);padding:16px}
+.pb-jar-dots{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:9px;transform:scaleY(-1)}
+.pb-jar-dot{position:relative;display:block;width:100%;max-width:30px;aspect-ratio:1;justify-self:center;
+  border-radius:50%;background:var(--line-2)}
+.pb-jar-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--aqua);
+  transform:scale(0)}
+.pb-jar-dot.pb-on::after{transform:none}
+/* hovering with a mouse previews what a press would change: a seed in each
+   socket that would fill, a faded disc in each that would empty */
+.pb-jar-dot.pb-peek-add::after{transform:scale(.42);opacity:.75}
+.pb-jar-dot.pb-peek-cut::after{opacity:.35}
+.pb-jar-cap{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:12px;font-size:1rem;line-height:1.4;color:var(--ink-2)}
+.pb-jar-cap b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.pb-jar-full{padding:3px 11px;border-radius:var(--r-pill);background:var(--teal-50);
+  border:1px solid var(--teal-100);color:var(--teal-700);font-weight:600;font-size:1rem;white-space:nowrap}
+.pb-jar-full[hidden]{display:none}
+@media(max-width:400px){.pb-jar-dots{gap:7px}.pb-jar-body{padding:12px}}
+
 /* the two result states are wrappers inside the results column, so they carry
    the column's own vertical rhythm or the cards inside them touch */
 #spHas,#spNone{display:flex;flex-direction:column;gap:18px}
 #spHas[hidden],#spNone[hidden]{display:none}
-/* the explainer reads as prose, not as an assumptions list */
-.assume .expl{max-width:70ch}
-.assume .expl p{font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:14px}
-.assume .expl p:last-child{margin-bottom:0}
-.assume .expl b{color:var(--ink);font-weight:600}
+
+/* the week and the year side by side on a phone too: both are short */
+@media(max-width:920px){#spHas .res-hero{grid-template-columns:1fr 1fr;gap:18px 16px;padding:24px 22px;align-items:end}
+  #spHas .res-hero>.foot,#spHas .res-hero>.pb-sp27{align-self:start}}
 
 /* Budget 2027: the next year's rate, beside this year's */
-.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}
-/* MOTION-5:BEGIN (9 October 2026, Damian's brief): the page alive
-   (assets/js/pb-sp-motion.js sets :root.pb-sp-alive and every class here,
-   only with motion on). */
-:root.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .45s cubic-bezier(.3,1.5,.5,1) both}
-@keyframes pbSpRoll{from{transform:translateY(55%);opacity:0}to{transform:none;opacity:1}}
-.pb-sp-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
-:root.pb-sp-alive .pb-jar{position:relative}
-:root.pb-sp-alive .pb-jar-dot.pb-dropin{animation:pbDotDrop .6s cubic-bezier(.3,1.35,.5,1) both}
-@keyframes pbDotDrop{from{transform:translateY(110px) scale(.5);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
-:root.pb-sp-alive .pb-jar-dot.pb-popout{animation:pbDotPop .4s ease-out}
-@keyframes pbDotPop{0%{transform:scale(1.8)}100%{transform:none}}
-.pb-sp-badge{position:absolute;left:50%;top:-6px;z-index:2;padding:5px 12px;border-radius:999px;background:#16C9B0;color:#04302A;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;animation:pbSpBadge 2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes pbSpBadge{0%{transform:translate(-50%,10px) scale(.6);opacity:0}15%{transform:translate(-50%,-12px) scale(1.08);opacity:1}75%{transform:translate(-50%,-18px);opacity:1}100%{transform:translate(-50%,-34px);opacity:0}}
-:root.pb-sp-alive .lsbar i{transition:width .8s cubic-bezier(.34,1.56,.64,1)}
-/* MOTION-5:END */
+.pb-sp27{grid-column:1 / -1;margin:-8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+
+/* ---- against what retirement costs, this page only ----
+   Three bars, each against its own standard: the share the State Pension
+   covers, in teal (what the State pays), and the monthly shortfall. */
+.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px}
+.vs-card .sub{font-size:1rem;color:var(--ink-3);margin:4px 0 20px;line-height:1.5}
+.lstd{display:flex;flex-direction:column;gap:22px}
+.lsrow .lshead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:8px}
+.lsrow .lsname{font-weight:700;font-size:1rem;letter-spacing:-0.01em}
+.lsrow .lstarget{font-size:1rem;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lsbar{height:12px;border-radius:99px;overflow:hidden;background:var(--surface-2);border:1px solid var(--line)}
+.lsbar i{display:block;height:100%;width:0;background:var(--teal);border-radius:99px}
+.lsrow.is-covered .lsbar i{background:var(--aqua)}
+.lsrow .lsgap{display:flex;justify-content:space-between;align-items:baseline;gap:6px 14px;flex-wrap:wrap;
+  font-size:1rem;color:var(--ink-2);line-height:1.5;margin-top:8px}
+.lsrow .lsgap b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.vs-card .srcnote{font-size:1rem;color:var(--ink-3);line-height:1.55;margin-top:22px;
+  padding-top:16px;border-top:1px solid var(--line)}
+.vs-card .srcnote a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:600px){.vs-card{padding:22px 18px}}
+
+/* MOTION-6:BEGIN (12 October 2026, Damian's brief: calm and clear).
+   assets/js/pb-sp-motion.js sets :root.pb-sp-alive and the classes and
+   custom properties here, only while motion is allowed; every rule is also
+   behind :root.pb-motion, so turning motion off mid-visit stills the page.
+   Nothing overshoots and nothing bounces: eases out, settles, stops. */
+:root.pb-motion.pb-sp-alive .pb-jar-dot::after{
+  transition:transform .34s cubic-bezier(.2,.7,.2,1) var(--pb-d,0ms),opacity .2s ease}
+:root.pb-motion.pb-sp-alive .pb-jar-dot.pb-peek-add::after,
+:root.pb-motion.pb-sp-alive .pb-jar-dot.pb-peek-cut::after{transition-delay:0ms}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .pb-jar-dot::after{transform:scale(0) !important}
+:root.pb-motion.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSpRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
+:root.pb-motion.pb-sp-alive .lsbar i{transition:width .7s cubic-bezier(.22,.61,.36,1)}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .lsbar i{width:0 !important}
+:root.pb-motion.pb-sp-alive .lsrow:nth-child(2) .lsbar i{transition-delay:.06s}
+:root.pb-motion.pb-sp-alive .lsrow:nth-child(3) .lsbar i{transition-delay:.12s}
+:root.pb-motion.pb-sp-alive .pb-jar-full{animation:pbSpFade .4s ease-out both}
+@keyframes pbSpFade{from{opacity:0}to{opacity:1}}
+/* MOTION-6:END */

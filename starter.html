@@ -29,7 +29,6 @@
 <meta name="twitter:image:alt" content="Pensionbuddy. For pension starters: No pension yet. Tax relief is there at any age.">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Start a pension", "item": "https://pensionbuddy.ie/starter.html"}]}</script>
 <!-- SEO:END -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Have I left it too late to start?", "acceptedAnswer": {"@type": "Answer", "text": "Almost certainly not. Starting now beats waiting longer."}}, {"@type": "Question", "name": "How much do I need to put in?", "acceptedAnswer": {"@type": "Answer", "text": "There's no single right number. It depends on your income, your goals and what's comfortable."}}, {"@type": "Question", "name": "I've a work pension I've ignored. Where do I start?", "acceptedAnswer": {"@type": "Answer", "text": "It may already hold value and employer contributions you could miss. We'll look at whether it's set up well."}}]}</script>
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
@@ -1672,8 +1671,6 @@ button{font-family:inherit}
    which the chart above now reads too. The name column is wider than the
    chart's because "In 10 years, at 40" is. The markup carries the default. */
 .pb-wait{margin-top:56px;padding-top:40px;border-top:1px solid var(--line)}
-.pb-wait h3{margin-bottom:8px}
-.pb-wait-lead{margin:0 0 24px;color:var(--ink-2);max-width:60ch}
 .pb-wait-ctls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;max-width:760px}
 .pb-wait-ctls .pb-sa-ctl{max-width:none}
 .pb-wait .pb-sa-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em 7.2em}
@@ -1688,13 +1685,6 @@ button{font-family:inherit}
      outranks the chart's own media rule by specificity */
   .pb-wait .pb-sa-row{grid-template-columns:minmax(0,1fr) auto}
 }
-/* TIME OUT (.pb-break, #15 in Run 20). The If-you-wait card's layout for a
-   break in payments: the chart's monthly amount paid from 30 to 66, with and
-   without one to ten years out, from PBWaiting.withBreak(). Under it, the
-   State Pension side: HomeCaring Periods, which only caring earns. The
-   markup carries the default. */
-.pb-break-sp{margin:22px 0 0;font-size:1rem;line-height:1.6;color:var(--ink-2);max-width:60ch}
-.pb-break-sp a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 /* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
    one scale: what you pay in, what your employer adds, what the State adds,
    in a year at this year's auto-enrolment rates (PBCompare.autoEnrolment,
@@ -1707,10 +1697,10 @@ button{font-family:inherit}
 .pb-ae .pb-sa-rows .pb-ae-row:nth-child(2) .pb-sa-fill,.pb-ae .pb-sa-rows .pb-ae-row:nth-child(3) .pb-sa-fill{background:var(--amber)}
 /* the phase picker (Run 43, item 4; INTERACTIVE-PROPOSALS-42 rank 9): a press changes the
    pressed colour and the figures below, nothing else */
-.pb-ae-ph{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.pb-ae-ph{display:flex;flex-wrap:wrap;gap:4px;width:max-content;max-width:100%;margin:0 0 24px;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
 .pb-ae-ph[hidden]{display:none}
-.pb-ae-ph button{font:inherit;font-size:15px;font-weight:600;min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);cursor:pointer;transition:none}
-.pb-ae-ph button[aria-pressed="true"]{border-color:var(--teal-700);background:var(--teal-50);color:var(--teal-700)}
+.pb-ae-ph button{font:inherit;font-size:15px;font-weight:600;min-height:44px;padding:8px 14px;border-radius:9px;border:0;background:none;color:var(--ink-2);cursor:pointer;transition:none}
+.pb-ae-ph button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(11,31,28,.08),0 4px 12px -4px rgba(11,31,28,.16)}
 .pb-ae-ph button:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
 @media(max-width:700px){
   .pb-sa-row{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
@@ -1718,24 +1708,6 @@ button{font-family:inherit}
   .pb-sa-fig{grid-column:2;grid-row:1}
   .pb-sa-track{grid-column:1 / -1;grid-row:2}
   .pb-sa-less{grid-column:1 / -1;grid-row:3}
-}
-/* MY FUTURE FUND, WHAT HAPPENS WHEN (.pb-mff, #14 in Run 20). Under the
-   3 : 3 : 1 split: the dates and windows the Automatic Enrolment Retirement
-   Savings System Act 2024 sets, as a list with a line down it. The rates are
-   s.61's, the opt-out windows s.54(2), the refund s.63, pausing s.62 and
-   re-enrolment s.55. Plain markup, no script. */
-.pb-mff{max-width:760px;margin:40px 0 30px;padding-top:32px;border-top:1px solid var(--line)}
-.pb-mff h3{margin-bottom:18px}
-.pb-mff-list{list-style:none;margin:0;padding:0}
-.pb-mff-list li{position:relative;display:grid;grid-template-columns:14em minmax(0,1fr);gap:4px 18px;padding:0 0 16px 26px}
-.pb-mff-list li::before{content:"";position:absolute;left:0;top:.42em;width:12px;height:12px;border-radius:50%;background:var(--teal);box-sizing:border-box}
-.pb-mff-list li::after{content:"";position:absolute;left:5px;top:calc(.42em + 16px);bottom:2px;width:2px;background:var(--line-2)}
-.pb-mff-list li:last-child{padding-bottom:0}
-.pb-mff-list li:last-child::after{display:none}
-.pb-mff-list b{font-size:.98rem;font-weight:700;color:var(--ink);line-height:1.55}
-.pb-mff-list span{font-size:.98rem;line-height:1.55;color:var(--ink-2)}
-@media(max-width:700px){
-  .pb-mff-list li{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---- the brand lockup (assets/brand/lockup.html) ----
@@ -1852,24 +1824,6 @@ html.pb-js .pb-lad-ctl{display:block}
 .pb-lad-ctl input[type=range]{display:block;width:100%}
 html:not(.pb-js) .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{display:none}
 .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-you{margin-top:-2px;margin-bottom:-2px}
-/* ANNOTATED SHOT (.pb-ann). Two labelled arrows over the pension
-   calculator's photograph: a slider, and the figures that follow it. The
-   layer is anchored to the photo's top edge and scales with its width
-   (aspect-ratio 2184 / 900, the shot's width in pixels), so its
-   coordinates are the photo's own and survive a taller re-shoot; both
-   targets sit in the photo's top band. Each label is centred (translateY)
-   on a gap in the photo, so it covers no text at any width: under the age
-   slider's track (y 423 to 546) and under the figures' paragraph (y 396
-   to 514), as re-shot on 2026-09-25. A re-shoot that moves those gaps
-   moves these. Decorative (the photo's alt says what it shows). Hidden
-   under 600px, where the photo is too small. */
-.pb-ann{position:absolute;left:0;top:0;width:100%;aspect-ratio:2184/900;pointer-events:none;display:none}
-@media(min-width:600px){.pb-ann{display:block}}
-.pb-ann svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.pb-ann-under{fill:none;stroke:#0B1F1C;stroke-width:14;stroke-linecap:round;opacity:.55}
-.pb-ann-line{fill:none;stroke:#16C9B0;stroke-width:7;stroke-linecap:round}
-.pb-ann-l{position:absolute;padding:3px 9px;border-radius:99px;background:var(--aqua);color:var(--ink);font-size:12.5px;font-weight:700;line-height:1.3;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
-.pb-ann-wrap{position:relative;display:block}
 /* TWO-TONE HEADLINES (.pb-soft). Where a heading is two sentences, the
    second is the supporting one and sits quieter (Stripe, Ramp). Opacity
    rather than a colour, so it mutes against whatever band it is on, light
@@ -2061,55 +2015,6 @@ a.assure:hover{border-color:var(--teal)}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;src:url(assets/fonts/figtree-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 /* FONTS:END */
-/* ============================================================
-   FIRST PAYSLIP TO 66 (#pbStory). The one pinned section: a card held
-   in view while five steps scroll past; as each reaches the middle of the
-   screen the card shows its figure and the bar fills toward a full record.
-   Every figure is already on the site (52 a year, 520, 15% to 40%, 2,080,
-   €299.30, 66, €15,564). The card is decorative (aria-hidden): the steps
-   carry the words. Without script, and under reduced motion, it is a plain
-   list beside the card's final state.
-   ============================================================ */
-.pb-story-sec{padding-top:0}
-.pb-story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:start}
-.pb-story-stage{position:sticky;top:120px}
-.pb-story-card{display:flex;flex-direction:column;gap:8px;padding:28px 28px 24px;border:1px solid var(--line-2);border-radius:var(--r-xl);background:var(--surface)}
-.pb-story-n{font-size:clamp(2.6rem,6vw,4.2rem);font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--teal-700);font-variant-numeric:tabular-nums}
-.pb-story-c{font-size:1rem;color:var(--ink);font-weight:600}
-.pb-story-bar{position:relative;display:block;height:10px;margin-top:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-story-bar i{position:absolute;left:0;top:0;bottom:0;display:block;background:var(--aqua);transition:width .6s cubic-bezier(.2,.7,.2,1)}
-.pb-story-bl{font-size:13px;color:var(--ink-2)}
-.pb-story-steps{list-style:none;margin:0;padding:0}
-.pb-story-step{padding:18vh 0 18vh 22px;border-left:2px solid var(--line)}
-.pb-story-step:first-child{padding-top:0}
-.pb-story-step:last-child{padding-bottom:6vh}
-.pb-story-step h3{margin:0 0 8px}
-.pb-story-step p{margin:0;font-size:1.02rem;line-height:1.6;color:var(--ink-2);max-width:46ch}
-.pb-story-step.pb-on{border-left-color:var(--teal-700)}
-@media(max-width:820px){
-  .pb-story{grid-template-columns:1fr;gap:20px}
-  .pb-story-stage{top:78px;z-index:2}
-  .pb-story-card{padding:16px 18px;box-shadow:0 8px 24px rgba(11,31,28,.08)}
-  .pb-story-n{font-size:2.2rem}
-  .pb-story-step{padding:12vh 0 12vh 18px}
-}
-@media(prefers-reduced-motion:reduce){.pb-story-bar i{transition:none}}
-/* ============================================================
-   RELIEF WIDGET (.pb-rw). One amount in, one sentence out: what a
-   contribution could cost after tax relief at the two rates. Built by
-   assets/js/pb-relief-widget.js; the markup carries the €100 example and
-   a plain link, and the slider stays hidden without script. Text inherits
-   the surrounding colour. Byte-identical wherever used.
-   ============================================================ */
-.pb-rw{max-width:440px;margin:18px 0 22px;color:inherit}
-.pb-rw-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
-.pb-rw-row label{font-size:.98rem;font-weight:600;color:inherit}
-.pb-rw-v{font-size:1.05rem;font-weight:700;color:inherit;font-variant-numeric:tabular-nums}
-.pb-rw input[type=range]{display:block;width:100%}
-.pb-rw input[type=range][hidden]{display:none}
-.pb-rw-out{margin:12px 0 8px;font-size:1rem;line-height:1.55;color:inherit;font-variant-numeric:tabular-nums}
-.pb-rw-out b{font-weight:700;color:inherit}
-.pb-rw-link{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 /* TRUST:BEGIN (Run 26). Two shared components, each one string in
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
@@ -2578,6 +2483,150 @@ main h1{font-weight:800}
 @media(max-width:600px){.aud-hero.pb-scene{padding-bottom:270px}.pb-scene-hint{bottom:calc(270px - 58px);font-size:14px;white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center}}
 @media print{.pb-scene-cv,.pb-scene-hint{display:none}}
 /* SCENE:END */
+/* STEPS (assets/js/pb-steps.js): "How it works" as a journey. The markup
+   is the finished picture (nodes lit, icons drawn, lines full): what no
+   script, reduced motion and a screenshot all get. The script arms the row
+   off screen and plays it once on arrival; only nodes, icons and lines
+   move, never the words. */
+.pbs{--pbs-node:84px;--pbs-gap:32px;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--pbs-gap);
+  list-style:none;max-width:960px;margin:8px auto 0;padding:0}
+.pbs-step{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+.pbs-node{position:relative;z-index:1;display:grid;place-items:center;flex:none;width:var(--pbs-node);height:var(--pbs-node);margin-bottom:20px;
+  border-radius:50%;background:var(--teal-50);border:1.5px solid var(--teal-100);color:var(--ink);
+  box-shadow:0 10px 24px -16px rgba(8,101,90,.55)}
+.pbs-ico{width:42px;height:42px;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pbs-ico .pbs-k{stroke:var(--teal-700)}
+.pbs-ico .pbs-f{fill:var(--teal-700);stroke:none}
+.pbs-ico .pbs-d{stroke-dasharray:1 1}
+.pbs-ico .pbs-a{transform-box:fill-box;transform-origin:50% 50%}
+.pbs-ico .pbs-a-ring{opacity:0}
+.pbs-n{position:absolute;top:-3px;right:-3px;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--ink);color:#fff;
+  font-size:13px;font-weight:700;line-height:26px;text-align:center;font-variant-numeric:tabular-nums;box-shadow:0 0 0 3px var(--bg)}
+.pbs-node::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none}
+.pbs-txt h3{margin:0 auto;max-width:15em}
+.pbs-txt p{margin:6px auto 0;max-width:18em;color:var(--ink-2)}
+/* the line between two nodes: a dotted route under a drawn one */
+.pbs-step:not(:last-child)::before,.pbs-step:not(:last-child)::after{content:"";position:absolute;z-index:0;height:2px;border-radius:2px;
+  top:calc(var(--pbs-node) / 2 - 1px);left:calc(50% + var(--pbs-node) / 2 + 12px);width:calc(100% + var(--pbs-gap) - var(--pbs-node) - 24px)}
+.pbs-step:not(:last-child)::before{background:repeating-linear-gradient(90deg,var(--line-2) 0 5px,transparent 5px 10px)}
+.pbs-step:not(:last-child)::after{background:linear-gradient(90deg,var(--teal-100),var(--teal));transform-origin:0 50%}
+.pbs::after{content:"";position:absolute;z-index:0;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--teal);
+  box-shadow:0 0 0 5px rgba(12,129,117,.16);opacity:0;pointer-events:none}
+@media(max-width:640px){
+  .pbs{--pbs-node:60px;grid-template-columns:1fr;gap:0;max-width:440px;margin-top:0}
+  .pbs-step{display:grid;grid-template-columns:var(--pbs-node) minmax(0,1fr);column-gap:18px;align-items:start;text-align:left;padding-bottom:40px}
+  .pbs-step:last-child{padding-bottom:0}
+  .pbs-node{margin:0}
+  .pbs-ico{width:32px;height:32px}
+  .pbs-n{min-width:22px;height:22px;line-height:22px;font-size:12px;padding:0 6px}
+  .pbs-txt{padding-top:calc(var(--pbs-node) / 2 - 13px)}
+  .pbs-txt h3,.pbs-txt p{margin-left:0;max-width:none}
+  .pbs-step:not(:last-child)::before,.pbs-step:not(:last-child)::after{width:2px;height:auto;
+    top:calc(var(--pbs-node) + 7px);bottom:7px;left:calc(var(--pbs-node) / 2 - 1px)}
+  .pbs-step:not(:last-child)::before{background:repeating-linear-gradient(180deg,var(--line-2) 0 5px,transparent 5px 10px)}
+  .pbs-step:not(:last-child)::after{background:linear-gradient(180deg,var(--teal-100),var(--teal));transform-origin:50% 0}
+}
+/* armed (the script, off screen, motion allowed): outlines waiting */
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-node{background:var(--surface);border-color:var(--line-2);box-shadow:none}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-n{background:var(--surface-2);color:var(--ink-2)}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-d{stroke-dashoffset:1;opacity:0}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-a{opacity:0}
+.pbs-armed .pbs-step:not(.pbs-link)::after{transform:scaleX(0)}
+@media(max-width:640px){.pbs-armed .pbs-step:not(.pbs-link)::after{transform:scaleY(0)}}
+:root.pb-motion .pbs-node{transition:background-color var(--pb-t-state),border-color var(--pb-t-state),box-shadow var(--pb-t-state)}
+:root.pb-motion .pbs-n{transition:background-color var(--pb-t-state),color var(--pb-t-state)}
+:root.pb-motion .pbs-d{transition:stroke-dashoffset var(--pb-t-draw),opacity var(--pb-t-swap);transition-delay:calc(var(--k,0) * 90ms)}
+:root.pb-motion .pbs-step::after{transition:transform var(--pb-d-4) var(--pb-ease-move)}
+/* each icon's own little move: on arrival, and again when a mouse rests on it */
+:root.pb-motion .pbs-ping .pbs-a{animation:var(--pb-d-4) var(--pb-ease-out) both;animation-delay:calc(220ms + var(--k,0) * 90ms)}
+:root.pb-motion .pbs-ping .pbs-a-drop{animation-name:pbsDrop}
+:root.pb-motion .pbs-ping .pbs-a-sweep{animation-name:pbsSweep}
+:root.pb-motion .pbs-ping .pbs-a-pop{animation-name:pbsPop}
+:root.pb-motion .pbs-ping .pbs-a-tick{animation-name:pbsTick}
+:root.pb-motion .pbs-ping .pbs-a-ring{animation-name:pbsRing;animation-duration:var(--pb-d-5)}
+@keyframes pbsDrop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes pbsSweep{from{opacity:0;transform:translate(-7px,-6px) rotate(-14deg)}to{opacity:1;transform:none}}
+@keyframes pbsPop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
+@keyframes pbsTick{from{opacity:1;stroke-dashoffset:1}to{opacity:1;stroke-dashoffset:0}}
+@keyframes pbsRing{0%{opacity:0;transform:scale(.55)}20%{opacity:.9}100%{opacity:0;transform:scale(1.5)}}
+/* the finish: one dot along the whole route, a halo at each node it passes */
+:root.pb-motion .pbs-run::after{animation:pbsRun calc(var(--pb-d-5) * 2) cubic-bezier(.45,0,.55,1) both}
+:root.pb-motion .pbs-run .pbs-node::after{animation:pbsHalo var(--pb-d-5) var(--pb-ease-out) both;animation-delay:calc(var(--i,0) * var(--pbs-gapms,640ms))}
+@keyframes pbsRun{0%{opacity:0;transform:translate(var(--pbs-x0),var(--pbs-y0))}10%,90%{opacity:1}100%{opacity:0;transform:translate(var(--pbs-x1),var(--pbs-y1))}}
+@keyframes pbsHalo{0%{opacity:0;transform:scale(.9)}35%{opacity:.6}100%{opacity:0;transform:scale(1.2)}}
+@media (hover:hover) and (pointer:fine){
+  :root.pb-motion .pbs-step:hover .pbs-node{box-shadow:0 14px 30px -14px rgba(8,101,90,.6)}
+}
+@media print{.pbs::after{display:none}}
+/* THE COST OF WAITING, ONE CARD (.pb-cw-*). One amount paid in each month,
+   three ways to see what time does to it: started at 30, 40 or 50; started
+   now or later; a break in payments (the maths: assets/js/cost-of-waiting.js).
+   The script shows the three tabs and one view at a time; with no script the
+   three views stand one under the other, each under its own heading. The
+   views swap at once: each carries its warnings, which never fade. */
+.pb-cw-amt{margin-bottom:22px}
+.pb-cw-tabs{position:relative;display:flex;gap:4px;max-width:520px;margin:0 0 28px;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.pb-cw-tabs[hidden]{display:none}
+.pb-cw-tabs button{position:relative;z-index:1;flex:1 1 0;min-width:0;min-height:44px;padding:8px 10px;border:0;border-radius:9px;background:none;
+  font:inherit;font-size:15px;font-weight:600;line-height:1.25;color:var(--ink-2);cursor:pointer}
+.pb-cw-tabs button[aria-selected="true"]{color:var(--ink)}
+.pb-cw-tabs button:focus-visible{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-cw-pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 16px) / 3);border-radius:9px;background:var(--surface);
+  box-shadow:0 1px 2px rgba(11,31,28,.08),0 4px 12px -4px rgba(11,31,28,.16);transform:translateX(calc(var(--cw,0) * (100% + 4px)))}
+:root.pb-motion .pb-cw-pill{transition:transform var(--pb-t-state)}
+.pb-cw-h{margin:0 0 18px}
+.pb-cw-on .pb-cw-h{display:none}
+.pb-cw-on .pb-cw-p.pb-wait{margin-top:0;padding-top:0;border-top:0}
+.pb-cw-p[hidden]{display:none}
+@media(max-width:480px){.pb-cw-tabs button{font-size:14px;padding:8px 6px}}
+/* REVENUE HELPS YOU SAVE (.pb-rv). One idea: what tax relief does to the
+   cost of paying in. One amount, the reader's rate of income tax (20% or
+   40%, the site's two rates), one bar split into what it costs you (your own
+   money: ink) and what Revenue adds (money added: amber), within Revenue's
+   age-related limit, which the note gives. No script: the €100 example at
+   20%, true as it stands, and no control that does nothing. */
+@media(min-width:921px){.callout.pb-split.pb-rv-band{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)}}
+.callout.pb-split.pb-rv-band{gap:28px 64px}
+.pb-rv{position:relative;padding:28px;border-radius:var(--r-xl);background:var(--surface);border:1px solid var(--teal-100);color:var(--ink);
+  box-shadow:0 1px 2px rgba(11,31,28,.05),0 24px 60px -34px rgba(11,31,28,.4)}
+.callout .pb-rv p{margin:0;max-width:none;font-size:1rem;color:var(--ink)}
+.pb-rv-ctl{margin:0 0 22px}
+.pb-rv-ctl[hidden],.pb-rv-rate[hidden],.pb-rv-static[hidden]{display:none}
+.pb-rv-ctl label,.pb-rv-rate legend{font-size:.98rem;font-weight:600;color:var(--ink)}
+.pb-rv-amt{font-size:1.15rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-rv-ctl input[type=range]{display:block;width:100%}
+.pb-rv-rate{min-width:0;margin:0 0 26px;padding:0;border:0}
+.pb-rv-rate legend{float:left;margin:12px 16px 0 0;padding:0}
+.pb-rv-seg{position:relative;display:flex;gap:4px;max-width:220px;margin-left:auto;padding:4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.pb-rv-seg label{position:relative;z-index:1;flex:1 1 0;cursor:pointer}
+.pb-rv-seg input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.pb-rv-seg span{display:flex;align-items:center;justify-content:center;min-height:40px;border-radius:9px;font-size:15px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-rv-seg input:checked+span{color:var(--ink)}
+.pb-rv-seg input:focus-visible+span{outline:2px solid var(--teal-700);outline-offset:2px}
+.pb-rv-pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 12px) / 2);border-radius:9px;background:var(--surface);
+  box-shadow:0 1px 2px rgba(11,31,28,.08),0 4px 12px -4px rgba(11,31,28,.16);transform:translateX(calc(var(--rv,0) * (100% + 4px)))}
+:root.pb-motion .pb-rv-pill{transition:transform var(--pb-t-state)}
+.pb-rv-rate::after{content:"";display:block;clear:both}
+.callout .pb-rv .pb-rv-static{margin:0 0 14px;color:var(--ink-2);font-size:.95rem}
+.pb-rv-bar{position:relative;height:20px;margin:0 0 18px;border-radius:99px;background:var(--amber);overflow:hidden}
+.pb-rv-you{position:absolute;inset:0;background:var(--ink-2);transform-origin:0 50%;transform:scaleX(var(--you,.8))}
+:root.pb-motion .pb-rv-you{transition:transform var(--pb-t-fill)}
+.pb-rv-out{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.callout .pb-rv .pb-rv-out p{display:flex;flex-direction:column;gap:4px}
+.callout .pb-rv .pb-rv-o-rev{align-items:flex-end;text-align:right}
+.pb-rv-l{display:inline-flex;align-items:center;gap:8px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
+.pb-rv-sw{width:10px;height:10px;border-radius:3px;background:var(--ink-2)}
+.pb-rv-o-rev .pb-rv-sw{background:var(--amber)}
+.pb-rv-out b{font-size:clamp(2rem,3.6vw,2.6rem);font-weight:800;line-height:1.05;letter-spacing:-.025em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-rv-o-rev b{color:#8C6010}
+.callout .pb-rv .pb-sa-note{margin:20px 0 0;font-size:.82rem;line-height:1.6;color:var(--ink-3)}
+.pb-rv-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-weight:600;color:var(--teal-700);text-decoration:underline;text-underline-offset:3px}
+.pb-rv-link .ico{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:520px){
+  .pb-rv{padding:22px 18px}
+  .pb-rv-rate legend{float:none;margin:0 0 10px}
+  .pb-rv-seg{margin-left:0;max-width:none}
+}
 /* LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.css) */
 /* ASK US (tools/lead-parts/ask.css; tools/lead-blocks.py writes it into
    each page that carries the block). The enquiry form: a topic, a few taps
@@ -2784,7 +2833,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2818,293 +2866,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 
 </div></header>
-
-<section><div class="wrap">
-  <div class="sec-head ctr"><h2>How it works.</h2></div>
-  <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>Tell us where you're at</h3><p>Nothing to prepare.</p></div>
-    <div class="step"><div class="sx">2</div><h3>We explain your options</h3><p>In plain English.</p></div>
-    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>If you go ahead, we help set it up.</p></div>
-  </div>
-</div></section>
-
-<section class="pb-story-sec"><div class="wrap">
-  <div class="sec-head">
-    <span class="kicker">First payslip to 66</span>
-    <h2>What builds up, and when.</h2>
-  </div>
-  <div class="pb-story" id="pbStory">
-    <div class="pb-story-stage" aria-hidden="true"><div class="pb-story-card">
-      <span class="pb-story-n" id="pbStoryN">66</span>
-      <span class="pb-story-c" id="pbStoryC">pension age</span>
-      <span class="pb-story-bar"><i id="pbStoryFill" style="width:100%"></i></span>
-      <span class="pb-story-bl">Toward a full record</span>
-    </div></div>
-    <ol class="pb-story-steps">
-      <li class="pb-story-step" data-n="52" data-c="contributions a year" data-f="2.5"><h3>Your first payslip</h3><p>Pay-Related Social Insurance (PRSI) starts: 52 contributions a year toward your State Pension.</p></li>
-      <li class="pb-story-step" data-n="520" data-c="paid contributions: the qualifying minimum" data-f="25"><h3>Ten years in</h3><p>520 paid contributions: the minimum for any State Pension (Contributory). Credits and HomeCaring Periods do not count.</p></li>
-      <li class="pb-story-step" data-n="15% to 40%" data-c="of earnings can get tax relief, rising with age" data-f="50"><h3>All along the way</h3><p>Pension contributions get tax relief, rising with age.</p></li>
-      <li class="pb-story-step" data-n="2,080" data-c="reckonable contributions: a full record" data-f="100"><h3>Forty years in</h3><p>2,080 reckonable contributions: a full record, for the maximum rate.</p></li>
-      <li class="pb-story-step" data-n="66" data-c="pension age" data-f="100"><h3>Sixty-six</h3><p>Pension age.</p></li>
-    </ol>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head">
-    <h2>The same monthly amount, started at 30, 40 and 50.</h2>
-  </div>
-  <div class="pb-sa">
-    <div class="pb-sa-ctl">
-      <div class="pb-sa-row0"><label for="saMonthly">Your monthly contribution</label><span class="pb-sa-val" id="saMonthlyV">€300</span></div>
-      <input type="range" id="saMonthly" min="50" max="1000" step="25" value="300" aria-valuetext="€300 a month">
-    </div>
-    <div class="pb-sa-rows">
-      <div class="pb-sa-row">
-        <span class="pb-sa-name">Started at 30</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
-        <span class="pb-sa-fig" id="sa30">€352,848</span>
-        <span class="pb-sa-less" id="sa30Less"></span>
-      </div>
-      <div class="pb-sa-row">
-        <span class="pb-sa-name">Started at 40</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:53.3341%"></i><i class="pb-sa-gap" style="left:53.3341%;width:46.6659%"></i></span>
-        <span class="pb-sa-fig" id="sa40">€188,188</span>
-        <span class="pb-sa-less" id="sa40Less">€164,659 less</span>
-      </div>
-      <div class="pb-sa-row">
-        <span class="pb-sa-name">Started at 50</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:24.6853%"></i><i class="pb-sa-gap" style="left:24.6853%;width:75.3147%"></i></span>
-        <span class="pb-sa-fig" id="sa50">€87,102</span>
-        <span class="pb-sa-less" id="sa50Less">€265,746 less</span>
-      </div>
-    </div>
-    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="pb-sa-note">Illustration only. Assumes 5% growth a year, paying in from that age to 66, and no pension to start. Ignores charges and inflation.</p>
-  </div>
-  <div class="hero-cta" style="margin-top:22px">
-      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  </div>
-  <div class="pb-sa pb-wait" id="pbWait">
-    <h3>If you wait.</h3>
-    <p class="pb-wait-lead">Start now, or a few years later.</p>
-    <div class="pb-wait-ctls">
-      <div class="pb-sa-ctl">
-        <div class="pb-sa-row0"><label for="pbWaitAge">Your age now</label><span class="pb-sa-val" id="pbWaitAgeV">30</span></div>
-        <input type="range" id="pbWaitAge" min="18" max="60" step="1" value="30" aria-valuetext="30 years old">
-      </div>
-      <div class="pb-sa-ctl">
-        <div class="pb-sa-row0"><label for="pbWaitYrs">If you start in</label><span class="pb-sa-val" id="pbWaitYrsV">5 years</span></div>
-        <input type="range" id="pbWaitYrs" min="1" max="10" step="1" value="5" aria-valuetext="5 years">
-      </div>
-    </div>
-    <div class="pb-sa-rows">
-      <div class="pb-sa-row">
-        <span class="pb-sa-name" id="pbWaitNowName">Now, at 30</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
-        <span class="pb-sa-fig" id="pbWaitNow">€352,848</span>
-        <span class="pb-sa-less"></span>
-      </div>
-      <div class="pb-sa-row">
-        <span class="pb-sa-name" id="pbWaitLaterName">In 5 years, at 35</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbWaitFill" style="width:73.8350%"></i><i class="pb-sa-gap" id="pbWaitGap" style="left:73.8350%;width:26.1650%"></i></span>
-        <span class="pb-sa-fig" id="pbWaitLater">€260,525</span>
-        <span class="pb-sa-less" id="pbWaitLess">€92,322 less</span>
-      </div>
-    </div>
-    <p class="pb-wait-say" id="pbWaitSay">To end up with the same pot, starting at 35 would take about <b>€406 a month</b> instead of €300: €106 more each month.</p>
-    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="pb-wait-sr" id="pbWaitSr" aria-live="polite" aria-atomic="true"></p>
-    <p class="pb-sa-note">Illustration only. Uses the monthly amount and assumptions of the chart above. Also ignores tax relief.</p>
-  </div>
-  <div class="pb-sa pb-wait pb-break" id="pbBreak">
-    <h3>Time out.</h3>
-    <p class="pb-wait-lead">A break in payments, to care, study or travel.</p>
-    <div class="pb-wait-ctls">
-      <div class="pb-sa-ctl">
-        <div class="pb-sa-row0"><label for="pbBrAge">The break starts at</label><span class="pb-sa-val" id="pbBrAgeV">32</span></div>
-        <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old">
-      </div>
-      <div class="pb-sa-ctl">
-        <div class="pb-sa-row0"><label for="pbBrYrs">Years out</label><span class="pb-sa-val" id="pbBrYrsV">3 years</span></div>
-        <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years">
-      </div>
-    </div>
-    <div class="pb-sa-rows">
-      <div class="pb-sa-row">
-        <span class="pb-sa-name">Paying in all along</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100%"></i></span>
-        <span class="pb-sa-fig" id="pbBrFull">&euro;352,848</span>
-        <span class="pb-sa-less"></span>
-      </div>
-      <div class="pb-sa-row">
-        <span class="pb-sa-name" id="pbBrName">3 years out at 32</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbBrFill" style="width:85.0723%"></i><i class="pb-sa-gap" id="pbBrGap" style="left:85.0723%;width:14.9277%"></i></span>
-        <span class="pb-sa-fig" id="pbBrWith">&euro;300,176</span>
-        <span class="pb-sa-less" id="pbBrLess">&euro;52,672 less</span>
-      </div>
-    </div>
-    <p class="pb-wait-say" id="pbBrSay">A break of 3 years at 32 leaves the pot at 66 about <b>&euro;52,672 smaller</b>: 15% of it, from 8% of the payments, because early payments have the longest to grow. Paying about &euro;61 a month more from 35 would make it up.</p>
-    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="pb-break-sp">Caring full-time? Those weeks can still count toward your State Pension. The <a href="state-pension-entitlement.html">State Pension check</a> counts them in.</p>
-    <p class="pb-wait-sr" id="pbBrSr" aria-live="polite" aria-atomic="true"></p>
-    <p class="pb-sa-note">Illustration only. The pot keeps growing through the break. Ignores tax relief.</p>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="callout pb-bleed pb-dark pb-split">
-    <div class="pb-split-copy">
-    <h2>Revenue helps you save.</h2>
-<div class="pb-rw">
-  <div class="pb-rw-row"><label for="rwAmt2">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
-  <input type="range" id="rwAmt2" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
-  <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
-  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
-</div>
-    <a class="btn btn-quiet-dark" href="pension-calculator.html">See what I could build <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <figure class="pb-split-media">
-      <span class="pb-ann-wrap"><picture><source type="image/webp" srcset="assets/img/product-pension-calculator.webp?v=47e6e103"><img src="assets/img/product-pension-calculator.jpg?v=401ea23d" width="2184" height="3098" alt="The pension calculator: sliders for age, retirement age, pot, contribution and earnings, with projected pot, monthly income, growth chart and tax relief." loading="lazy"></picture><span class="pb-ann" aria-hidden="true"><svg viewBox="0 0 2184 900" preserveAspectRatio="none"><defs><marker id="pbAnnHeadS" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#16C9B0"/></marker></defs><path d="M560 484 Q470 484 425 420" class="pb-ann-under"/><path d="M560 484 Q470 484 425 420" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-under"/><path d="M1180 455 Q1110 430 1110 225" class="pb-ann-line" marker-end="url(#pbAnnHeadS)"/></svg><span class="pb-ann-l" style="left:26.1%;top:53.8%;transform:translateY(-50%)">Drag a slider</span><span class="pb-ann-l" style="left:54.3%;top:50.6%;transform:translateY(-50%)">The figures follow</span></span></span>
-      <figcaption class="pb-split-cap">Example figures.</figcaption>
-    </figure>
-  </div>
-</div></section>
-<section style="padding-top:0"><div class="wrap">
-  <div class="pb-lad" data-pb-age="ladAge">
-    <p class="pb-lad-cap">Revenue's limit on contributions that get tax relief, as a share of earnings.</p>
-    <div class="pb-lad-ctl"><div class="pb-lad-ctl-row"><label for="ladAge">Your age</label><span class="pb-lad-ctl-v" id="ladAgeV">30</span></div><input type="range" id="ladAge" min="18" max="70" step="1" value="30" aria-valuetext="30, 20%" style="--fill:23.08%"></div>
-    <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-    <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
-    <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
-    <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
-    <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
-    <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-note">Earnings count up to €115,000.</p>
-  </div>
-</div></section>
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head">
-    <h2>Your employer and the State pay into auto-enrolment. <span class="pb-soft">A personal pension gets tax relief instead.</span></h2>
-  </div>
-  <div class="pb-sa pb-ae">
-    <div class="pb-sa-ctl">
-      <div class="pb-ae-ph" id="aePh" role="group" aria-label="Auto-enrolment rates, by years" hidden><button type="button" id="aePh1" aria-pressed="true">2026 to 2028</button><button type="button" id="aePh2" aria-pressed="false">2029 to 2031</button><button type="button" id="aePh3" aria-pressed="false">2032 to 2034</button><button type="button" id="aePh4" aria-pressed="false">2035 onward</button></div>
-      <div class="pb-sa-row0"><label for="aeSalary">Your gross salary</label><span class="pb-sa-val" id="aeSalaryV">€50,000</span></div>
-      <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year">
-    </div>
-    <div class="pb-sa-rows">
-      <div class="pb-sa-row pb-ae-row">
-        <span class="pb-sa-name">You pay in</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
-        <span class="pb-sa-fig" id="aeYou">€750</span>
-      </div>
-      <div class="pb-sa-row pb-ae-row">
-        <span class="pb-sa-name">Your employer adds</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
-        <span class="pb-sa-fig" id="aeEmp">€750</span>
-      </div>
-      <div class="pb-sa-row pb-ae-row">
-        <span class="pb-sa-name">The State adds</span>
-        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:33.3333%"></i></span>
-        <span class="pb-sa-fig" id="aeState">€250</span>
-      </div>
-    </div>
-    <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000. The ratio is always 3 to 3 to 1.</p>
-    <p class="pb-sa-note pb-caveat pb-noterms" id="aePhNote">Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them.</p>
-  </div>
-  <div class="pb-mff" id="pbMff">
-    <h3>Once enrolled through payroll: what happens when.</h3>
-    <ol class="pb-mff-list">
-      <li><b>Months 7 and 8</b><span>You can opt out and get back what you paid. Employer and State payments stay invested until you can draw them at 66.</span></li>
-      <li><b>From month 7</b><span>You can pause for one to two years. After month 8 you can pause but not opt out.</span></li>
-      <li><b>Two years after an opt-out</b><span>You are enrolled again if under 66 and still in a job without a pension through payroll.</span></li>
-      <li><b>2029</b><span>Rates double: 3% each from you and your employer, 1% from the State. Opting out in months 7 and 8 after the rise refunds only the extra the rise added.</span></li>
-      <li><b>2032</b><span>4.5% each, 1.5% from the State, and another opt-out window.</span></li>
-      <li><b>2035 on</b><span>6% each, 2% from the State, and one more opt-out window.</span></li>
-    </ol>
-    <p class="pb-sa-note">For employees aged 23 to 59 earning &euro;20,000 or more, with no pension through payroll. Not for the self-employed.</p>
-  </div>
-  <a class="btn btn-ghost" href="broker-vs-autoenrolment.html">Compare the two side by side <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="sec-head">
-    <h2>What the State Pension leaves you to find.</h2>
-  </div>
-  <div class="pb-lsb" data-pb-bars role="img" aria-label="Three bars on one scale. The State Pension pays 15,564 euro a year. A modest retirement costs 19,200 euro, which is 3,636 euro more. A comfortable retirement costs 33,600 euro, which is 18,036 euro more.">
-    <div class="pb-lsb-col">
-      <div class="pb-lsb-stage">
-        <span class="pb-lsb-fig" data-pb-count="15564" style="--h:46.32%">&euro;15,564</span>
-        <div class="pb-lsb-seg pb-lsb-teal pb-lsb-top" style="--h:46.32%"></div>
-      </div>
-      <span class="pb-lsb-name">The State Pension, a year</span>
-      <span class="pb-lsb-short">&euro;299.30 a week, at the maximum rate</span>
-    </div>
-    <div class="pb-lsb-col">
-      <div class="pb-lsb-stage">
-        <span class="pb-lsb-fig" data-pb-count="19200" style="--h:57.14%">&euro;19,200</span>
-        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:57.14%;--from:46.32%"></div>
-        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
-      </div>
-      <span class="pb-lsb-name">A modest retirement</span>
-      <span class="pb-lsb-short"><b data-pb-count="3636">&euro;3,636</b> a year to find</span>
-    </div>
-    <div class="pb-lsb-col">
-      <div class="pb-lsb-stage">
-        <span class="pb-lsb-fig" data-pb-count="33600" style="--h:100%">&euro;33,600</span>
-        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:100%;--from:46.32%"></div>
-        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
-      </div>
-      <span class="pb-lsb-name">A comfortable retirement</span>
-      <span class="pb-lsb-short"><b data-pb-count="18036">&euro;18,036</b> a year to find</span>
-    </div>
-  </div>
-  <p class="pb-src">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. The maximum personal rate is &euro;299.30 a week from January 2026, and &euro;309.30 from January 2027 (Budget 2027).</p>
-  <a class="btn btn-ghost pb-btn-long" href="state-pension-reality-check.html">See the State Pension reality check <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></section>
-
-<section class="pb-bleed pb-wash pb-magnetband" data-flag="guide_forms" hidden><div class="wrap"><div class="magnet">
-  <div class="mtext">
-    <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
-    <h2>A short guide to pensions.</h2>
-  </div>
-  <div>
-    <form class="magnet-form" id="mForm" name="starter-guide" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendMagnet();return false" novalidate>
-      <input type="hidden" name="form-name" value="starter-guide"><input type="hidden" name="marketing_consent"><input type="hidden" name="page">
-      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-      <div class="row">
-        <span class="ffield"><input type="email" id="mEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
-        <button class="btn btn-ghost" type="submit">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-      </div>
-      <label class="pb-optin"><input type="checkbox" id="mConsent" name="consent" value="yes" aria-describedby="mErr"><span>Yes, email me the guide. It is sent to me automatically when I tick this box and send.</span></label>
-      <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
-      <p class="note">We use your email only to send you the guide, and for nothing else unless you tick the box for occasional emails. Netlify, our website host, stores it; Resend, our email service, sends the email. See our <a href="privacy.html">Privacy Notice</a>.</p>
-      <p class="note" id="mErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
-    </form>
-    <div class="ok" id="mOk" role="status" tabindex="-1">
-      <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-      <h3>Check your inbox.</h3>
-      <p><span id="mOkText">Thanks - we've got it. The guide is emailed to you automatically.</span></p>
-    </div>
-  </div>
-</div></div></section>
-
-<section style="padding-top:56px"><div class="wrap faq-grid">
-  <div class="sec-head" style="margin-bottom:0"><h2>Questions, answered.</h2></div>
-  <div class="faq-list">
-    <details><summary>Have I left it too late to start?<span class="pm">+</span></summary><p>Almost certainly not. Starting now beats waiting longer.</p></details>
-    <details><summary>How much do I need to put in?<span class="pm">+</span></summary><p>There's no single right number. It depends on your income, your goals and what's comfortable.</p></details>
-    <details><summary>I've a work pension I've ignored. Where do I start?<span class="pm">+</span></summary><p>It may already hold value and <a class="gref" href="glossary.html#employer-contribution" title="See this in the jargon buster">employer contributions</a> you could miss. We'll look at whether it's set up well.</p></details>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="infoadvice">
-    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b></p>
-  </div>
-</div></section>
 
 <!-- LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.html) -->
 <section class="pb-ask" id="ask" aria-labelledby="askH"><div class="wrap">
@@ -3178,6 +2939,261 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div>
 </div></section>
 <!-- LEAD:ask:END -->
+
+<section><div class="wrap">
+  <div class="sec-head ctr"><h2>How it works.</h2></div>
+  <ol class="pbs" data-pb-steps>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-k pbs-a pbs-a-ring" style="--k:2" d="M3.5 27.6c0-2.2 5.6-4 12.5-4s12.5 1.8 12.5 4-5.6 4-12.5 4-12.5-1.8-12.5-4z"/><path class="pbs-d" style="--k:2" pathLength="1" d="M10 25.3c-2.3.5-3.7 1.3-3.7 2.2 0 1.6 4.3 2.9 9.7 2.9s9.7-1.3 9.7-2.9c0-.9-1.4-1.7-3.7-2.2"/><g class="pbs-a pbs-a-drop"><path class="pbs-d" pathLength="1" d="M16 2.5c4.3 0 7.7 3.3 7.7 7.5 0 5.6-7.7 12.8-7.7 12.8S8.3 15.6 8.3 10c0-4.2 3.4-7.5 7.7-7.5z"/><path class="pbs-k pbs-d" style="--k:1" pathLength="1" d="M18.9 10a2.9 2.9 0 1 1-5.8 0 2.9 2.9 0 0 1 5.8 0z"/></g></svg><span class="pbs-n">1</span></span>
+      <div class="pbs-txt"><h3>Tell us where you're at</h3><p>Nothing to prepare.</p></div>
+    </li>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M16 30v-9"/><path class="pbs-d" style="--k:1" pathLength="1" d="M16 21l-7.3-8.2M16 21V9.2M16 21l7.3-8.2"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:1" d="M9.8 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:2" d="M18.6 6.4a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:3" d="M27.4 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/></svg><span class="pbs-n">2</span></span>
+      <div class="pbs-txt"><h3>We explain your options</h3><p>In plain English.</p></div>
+    </li>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M28 16a12 12 0 1 1-24 0 12 12 0 0 1 24 0z"/><path class="pbs-k pbs-d pbs-a pbs-a-tick" style="--k:2" pathLength="1" d="M10.6 16.4l3.7 3.7 7.2-7.4"/></svg><span class="pbs-n">3</span></span>
+      <div class="pbs-txt"><h3>You decide</h3><p>If you go ahead, we help set it up.</p></div>
+    </li>
+  </ol>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head">
+    <h2>The cost of waiting.</h2>
+  </div>
+  <div class="pb-sa">
+    <div class="pb-sa-ctl pb-cw-amt">
+      <div class="pb-sa-row0"><label for="saMonthly">Paid in each month</label><span class="pb-sa-val" id="saMonthlyV">€300</span></div>
+      <input type="range" id="saMonthly" min="50" max="1000" step="25" value="300" aria-valuetext="€300 a month">
+    </div>
+    <div class="pb-cw-tabs" role="tablist" aria-label="The cost of waiting" hidden>
+      <span class="pb-cw-pill" aria-hidden="true"></span>
+      <button type="button" role="tab" id="cwTab1" aria-controls="pbStart" aria-selected="true">30, 40, 50</button>
+      <button type="button" role="tab" id="cwTab2" aria-controls="pbWait" aria-selected="false" tabindex="-1">Start later</button>
+      <button type="button" role="tab" id="cwTab3" aria-controls="pbBreak" aria-selected="false" tabindex="-1">Take a break</button>
+    </div>
+    <div class="pb-cw-p" id="pbStart" role="tabpanel" aria-labelledby="cwTab1">
+      <h3 class="pb-cw-h">Start at 30, 40 or 50.</h3>
+      <div class="pb-sa-rows">
+        <div class="pb-sa-row">
+          <span class="pb-sa-name">Started at 30</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
+          <span class="pb-sa-fig" id="sa30">€352,848</span>
+          <span class="pb-sa-less" id="sa30Less"></span>
+        </div>
+        <div class="pb-sa-row">
+          <span class="pb-sa-name">Started at 40</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:53.3341%"></i><i class="pb-sa-gap" style="left:53.3341%;width:46.6659%"></i></span>
+          <span class="pb-sa-fig" id="sa40">€188,188</span>
+          <span class="pb-sa-less" id="sa40Less">€164,659 less</span>
+        </div>
+        <div class="pb-sa-row">
+          <span class="pb-sa-name">Started at 50</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:24.6853%"></i><i class="pb-sa-gap" style="left:24.6853%;width:75.3147%"></i></span>
+          <span class="pb-sa-fig" id="sa50">€87,102</span>
+          <span class="pb-sa-less" id="sa50Less">€265,746 less</span>
+        </div>
+      </div>
+      <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+      <p class="pb-sa-note">Illustration only. Assumes 5% growth a year, paying in from that age to 66, and no pension to start. Ignores charges and inflation.</p>
+    </div>
+    <div class="pb-cw-p pb-wait" id="pbWait" role="tabpanel" aria-labelledby="cwTab2">
+      <h3 class="pb-cw-h">Start later.</h3>
+      <div class="pb-wait-ctls">
+        <div class="pb-sa-ctl">
+          <div class="pb-sa-row0"><label for="pbWaitAge">Your age now</label><span class="pb-sa-val" id="pbWaitAgeV">30</span></div>
+          <input type="range" id="pbWaitAge" min="18" max="60" step="1" value="30" aria-valuetext="30 years old">
+        </div>
+        <div class="pb-sa-ctl">
+          <div class="pb-sa-row0"><label for="pbWaitYrs">If you start in</label><span class="pb-sa-val" id="pbWaitYrsV">5 years</span></div>
+          <input type="range" id="pbWaitYrs" min="1" max="10" step="1" value="5" aria-valuetext="5 years">
+        </div>
+      </div>
+      <div class="pb-sa-rows">
+        <div class="pb-sa-row">
+          <span class="pb-sa-name" id="pbWaitNowName">Now, at 30</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100.0000%"></i></span>
+          <span class="pb-sa-fig" id="pbWaitNow">€352,848</span>
+          <span class="pb-sa-less"></span>
+        </div>
+        <div class="pb-sa-row">
+          <span class="pb-sa-name" id="pbWaitLaterName">In 5 years, at 35</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbWaitFill" style="width:73.8350%"></i><i class="pb-sa-gap" id="pbWaitGap" style="left:73.8350%;width:26.1650%"></i></span>
+          <span class="pb-sa-fig" id="pbWaitLater">€260,525</span>
+          <span class="pb-sa-less" id="pbWaitLess">€92,322 less</span>
+        </div>
+      </div>
+      <p class="pb-wait-say" id="pbWaitSay">Catching up from 35 takes about <b>€406 a month</b>: €106 more.</p>
+      <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+      <p class="pb-wait-sr" id="pbWaitSr" aria-live="polite" aria-atomic="true"></p>
+      <p class="pb-sa-note">Illustration only. Assumes 5% growth a year to 66 and no pension to start. Ignores charges, inflation and tax relief.</p>
+    </div>
+    <div class="pb-cw-p pb-wait pb-break" id="pbBreak" role="tabpanel" aria-labelledby="cwTab3">
+      <h3 class="pb-cw-h">Take a break.</h3>
+      <div class="pb-wait-ctls">
+        <div class="pb-sa-ctl">
+          <div class="pb-sa-row0"><label for="pbBrAge">The break starts at</label><span class="pb-sa-val" id="pbBrAgeV">32</span></div>
+          <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old">
+        </div>
+        <div class="pb-sa-ctl">
+          <div class="pb-sa-row0"><label for="pbBrYrs">Years out</label><span class="pb-sa-val" id="pbBrYrsV">3 years</span></div>
+          <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years">
+        </div>
+      </div>
+      <div class="pb-sa-rows">
+        <div class="pb-sa-row">
+          <span class="pb-sa-name">No break</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:100%"></i></span>
+          <span class="pb-sa-fig" id="pbBrFull">&euro;352,848</span>
+          <span class="pb-sa-less"></span>
+        </div>
+        <div class="pb-sa-row">
+          <span class="pb-sa-name" id="pbBrName">3 years out at 32</span>
+          <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" id="pbBrFill" style="width:85.0723%"></i><i class="pb-sa-gap" id="pbBrGap" style="left:85.0723%;width:14.9277%"></i></span>
+          <span class="pb-sa-fig" id="pbBrWith">&euro;300,176</span>
+          <span class="pb-sa-less" id="pbBrLess">&euro;52,672 less</span>
+        </div>
+      </div>
+      <p class="pb-wait-say" id="pbBrSay">Making it up from 35 takes about <b>&euro;61 a month</b> more.</p>
+      <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+      <p class="pb-wait-sr" id="pbBrSr" aria-live="polite" aria-atomic="true"></p>
+      <p class="pb-sa-note">Illustration only. Paying in from 30 to 66, 5% growth a year; the pot keeps growing through the break. Ignores charges, inflation and tax relief.</p>
+    </div>
+  </div>
+  <div class="hero-cta" style="margin-top:22px">
+      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="callout pb-bleed pb-dark pb-split pb-rv-band">
+    <div class="pb-split-copy">
+      <h2>Revenue helps you save.</h2>
+    </div>
+    <div class="pb-rv" id="pbRv">
+      <div class="pb-rv-ctl" hidden>
+        <div class="pb-sa-row0"><label for="rvAmt">Into your pension</label><span class="pb-rv-amt" id="rvAmtV">€100 a month</span></div>
+        <input type="range" id="rvAmt" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month">
+      </div>
+      <fieldset class="pb-rv-rate" hidden>
+        <legend>Your rate of income tax</legend>
+        <div class="pb-rv-seg"><span class="pb-rv-pill" aria-hidden="true"></span><label><input type="radio" name="rvRate" value="20" checked><span>20%</span></label><label><input type="radio" name="rvRate" value="40"><span>40%</span></label></div>
+      </fieldset>
+      <p class="pb-rv-static">€100 a month into your pension, at the 20% rate of income tax:</p>
+      <div class="pb-rv-bar" aria-hidden="true"><i class="pb-rv-you"></i></div>
+      <div class="pb-rv-out">
+        <p class="pb-rv-o-you"><span class="pb-rv-l"><span class="pb-rv-sw" aria-hidden="true"></span>It costs you</span><b id="rvYou">€80</b></p>
+        <p class="pb-rv-o-rev"><span class="pb-rv-l"><span class="pb-rv-sw" aria-hidden="true"></span>Revenue adds</span><b id="rvRev">€20</b></p>
+      </div>
+      <p class="pb-wait-sr" id="rvSr" aria-live="polite" aria-atomic="true"></p>
+      <p class="pb-sa-note">Relief is at your rate of income tax, within Revenue&rsquo;s limit: 15% of earnings under 30, rising with age to 40% from 60, on earnings up to &euro;115,000.</p>
+      <a class="pb-rv-link" id="rvLink" href="pension-calculator.html">See it for your age and salary <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+</div></section>
+<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head">
+    <h2>Auto-enrolment. <span class="pb-soft">Three pay&nbsp;in.</span></h2>
+  </div>
+  <div class="pb-sa pb-ae">
+    <div class="pb-ae-ph" id="aePh" role="group" aria-label="Auto-enrolment rates, by years" hidden><button type="button" id="aePh1" aria-pressed="true">2026 to 2028</button><button type="button" id="aePh2" aria-pressed="false">2029 to 2031</button><button type="button" id="aePh3" aria-pressed="false">2032 to 2034</button><button type="button" id="aePh4" aria-pressed="false">2035 onward</button></div>
+    <div class="pb-sa-ctl">
+      <div class="pb-sa-row0"><label for="aeSalary">Your gross salary</label><span class="pb-sa-val" id="aeSalaryV">€50,000</span></div>
+      <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year">
+    </div>
+    <div class="pb-sa-rows">
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">You pay in</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="aeYou">€750</span>
+      </div>
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">Your employer adds</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill pb-ae-own" style="width:100%"></i></span>
+        <span class="pb-sa-fig" id="aeEmp">€750</span>
+      </div>
+      <div class="pb-sa-row pb-ae-row">
+        <span class="pb-sa-name">The State adds</span>
+        <span class="pb-sa-track" aria-hidden="true"><i class="pb-sa-fill" style="width:33.3333%"></i></span>
+        <span class="pb-sa-fig" id="aeState">€250</span>
+      </div>
+    </div>
+    <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000.</p>
+    <p class="pb-sa-note pb-caveat pb-noterms" id="aePhNote">Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them.</p>
+  </div>
+  <a class="btn btn-ghost" href="broker-vs-autoenrolment.html">Compare it with a personal pension <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="sec-head">
+    <h2>What the State Pension leaves you to find.</h2>
+  </div>
+  <div class="pb-lsb" data-pb-bars role="img" aria-label="Three bars on one scale. The State Pension pays 15,564 euro a year. A modest retirement costs 19,200 euro, which is 3,636 euro more. A comfortable retirement costs 33,600 euro, which is 18,036 euro more.">
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="15564" style="--h:46.32%">&euro;15,564</span>
+        <div class="pb-lsb-seg pb-lsb-teal pb-lsb-top" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">The State Pension, a year</span>
+      <span class="pb-lsb-short">&euro;299.30 a week</span>
+    </div>
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="19200" style="--h:57.14%">&euro;19,200</span>
+        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:57.14%;--from:46.32%"></div>
+        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">A modest retirement</span>
+      <span class="pb-lsb-short"><b data-pb-count="3636">&euro;3,636</b> a year to find</span>
+    </div>
+    <div class="pb-lsb-col">
+      <div class="pb-lsb-stage">
+        <span class="pb-lsb-fig" data-pb-count="33600" style="--h:100%">&euro;33,600</span>
+        <div class="pb-lsb-seg pb-lsb-amber pb-lsb-top" style="--h:100%;--from:46.32%"></div>
+        <div class="pb-lsb-seg pb-lsb-teal" style="--h:46.32%"></div>
+      </div>
+      <span class="pb-lsb-name">A comfortable retirement</span>
+      <span class="pb-lsb-short"><b data-pb-count="18036">&euro;18,036</b> a year to find</span>
+    </div>
+  </div>
+  <p class="pb-src">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards (KPMG, September 2024), single person. State Pension at the maximum personal rate: &euro;299.30 a week from January 2026, &euro;309.30 from January 2027 (Budget 2027).</p>
+  <a class="btn btn-ghost pb-btn-long" href="state-pension-reality-check.html">See the State Pension reality check <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+</div></section>
+
+<section class="pb-bleed pb-wash pb-magnetband" data-flag="guide_forms" hidden><div class="wrap"><div class="magnet">
+  <div class="mtext">
+    <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
+    <h2>A short guide to pensions.</h2>
+  </div>
+  <div>
+    <form class="magnet-form" id="mForm" name="starter-guide" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="sendMagnet();return false" novalidate>
+      <input type="hidden" name="form-name" value="starter-guide"><input type="hidden" name="marketing_consent"><input type="hidden" name="page">
+      <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="row">
+        <span class="ffield"><input type="email" id="mEmail" name="email" placeholder=" " autocomplete="email"><label class="flabel" for="mEmail">Your email</label></span>
+        <button class="btn btn-ghost" type="submit">Send me the guide <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      </div>
+      <label class="pb-optin"><input type="checkbox" id="mConsent" name="consent" value="yes" aria-describedby="mErr"><span>Yes, email me the guide. It is sent to me automatically when I tick this box and send.</span></label>
+      <label class="pb-optin"><input type="checkbox" id="mOptin"><span>Also send me occasional emails about pension deadlines and rule changes. Optional, and you can unsubscribe at any time.</span></label>
+      <p class="note">We use your email only to send you the guide, and for nothing else unless you tick the box for occasional emails. Netlify, our website host, stores it; Resend, our email service, sends the email. See our <a href="privacy.html">Privacy Notice</a>.</p>
+      <p class="note" id="mErr" role="alert" style="color:var(--red);display:none">Please enter a valid email address.</p>
+    </form>
+    <div class="ok" id="mOk" role="status" tabindex="-1">
+      <svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+      <h3>Check your inbox.</h3>
+      <p><span id="mOkText">Thanks - we've got it. The guide is emailed to you automatically.</span></p>
+    </div>
+  </div>
+</div></div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="infoadvice">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This page is information, not advice.</b></p>
+  </div>
+</div></section>
+
 <div class="final-band"><div class="wrap"><div class="final pb-bleed">
   <div class="paw-bg"><svg fill="#fff" viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
   <h2>Let's get your<br>pension started.</h2>
@@ -3335,7 +3351,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3369,7 +3385,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <script src="assets/js/pb-bars.js?v=1504d494"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
@@ -3452,11 +3467,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     $('pbWaitGap').style.left = f.toFixed(4) + '%';
     $('pbWaitGap').style.width = (100 - f).toFixed(4) + '%';
     var say = c.tooLate
-      ? 'By ' + c.startLater + ' there are no years left to pay in before pension age, ' +
-        W.PENSION_AGE + ', so there is no catch-up figure to show.'
-      : 'To end up with the same pot, starting at ' + c.startLater + ' would take about <b>' +
-        euro(c.catchUpMonthly) + ' a month</b> instead of ' + euro(m) + ': ' +
-        euro(c.extraMonthly) + ' more each month.';
+      ? 'By ' + c.startLater + ' there are no years left to pay in before ' + W.PENSION_AGE + '.'
+      : 'Catching up from ' + c.startLater + ' takes about <b>' + euro(c.catchUpMonthly) + ' a month</b>: ' +
+        euro(c.extraMonthly) + ' more.';
     $('pbWaitSay').innerHTML = say;
     if (!spoken) return;
     clearTimeout(srTimer);
@@ -3506,19 +3519,14 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     $('pbBrFill').style.width = f.toFixed(4) + '%';
     $('pbBrGap').style.left = f.toFixed(4) + '%';
     $('pbBrGap').style.width = (100 - f).toFixed(4) + '%';
-    var potPct = Math.round(b.share * 100);
-    var payPct = Math.round(b.yearsOut / (W.PENSION_AGE - b.from) * 100);
-    var say = 'A break of ' + years(b.yearsOut) + ' at ' + b.breakStart + ' leaves the pot at ' + W.PENSION_AGE +
-      ' about <b>' + euro(b.less) + ' smaller</b>: ' + potPct + '% of it, from ' + payPct + '% of the payments' +
-      (potPct > payPct ? ', because early payments have the longest to grow.' : '.');
-    say += b.tooLate
-      ? ' The break runs to pension age, so there are no years after it to make that up.'
-      : ' Paying about ' + euro(b.extraMonthly) + ' a month more from ' + b.breakEnd + ' would make it up.';
+    var say = b.tooLate
+      ? 'The break runs to ' + W.PENSION_AGE + ', so there is no time after it to make that up.'
+      : 'Making it up from ' + b.breakEnd + ' takes about <b>' + euro(b.extraMonthly) + ' a month</b> more.';
     $('pbBrSay').innerHTML = say;
     if (!spoken) return;
     clearTimeout(srTimer);
     srTimer = setTimeout(function () {
-      $('pbBrSr').textContent = 'Paying in all along: ' + euro(b.full) + '. ' + years(b.yearsOut) + ' out at ' +
+      $('pbBrSr').textContent = 'No break: ' + euro(b.full) + '. ' + years(b.yearsOut) + ' out at ' +
         b.breakStart + ': ' + euro(b.withBreak) + ', ' + euro(b.less) + ' less. ' + say.replace(/<[^>]+>/g, '');
     }, 700);
   }
@@ -3531,7 +3539,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   paint(false);
 })();
 </script>
-<script src="assets/js/autoenrolment.js?v=f94c659a"></script>
+<script src="assets/js/autoenrolment.js?v=c29eed67"></script>
 <script>
 /* THE 3 : 3 : 1 SPLIT. One slider, the reader's gross salary, and what goes
    in a year under auto-enrolment at this year's rates, straight from
@@ -3588,26 +3596,92 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   paint();
 })();
 </script>
+<script>
+/* THE COST OF WAITING, ONE CARD: three tabs over one monthly amount, each
+   showing one of the three views above (their own scripts paint them).
+   Arrow keys, Home and End move between the tabs. With no script the tabs
+   stay hidden and the three views stand one under another. */
+(function () {
+  var list = document.querySelector('.pb-cw-tabs');
+  if (!list) return;
+  var tabs = [].slice.call(list.querySelectorAll('[role=tab]'));
+  var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+  if (!tabs.length || panels.some(function (p) { return !p; })) return;
+  function pick(i, focus) {
+    tabs.forEach(function (t, k) {
+      t.setAttribute('aria-selected', k === i ? 'true' : 'false');
+      t.tabIndex = k === i ? 0 : -1;
+      panels[k].hidden = k !== i;
+    });
+    list.style.setProperty('--cw', i);
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { pick(i, false); });
+    t.addEventListener('keydown', function (e) {
+      var n = tabs.length;
+      var k = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i + n - 1) % n
+            : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+      if (k < 0) return;
+      e.preventDefault();
+      pick(k, true);
+    });
+  });
+  panels[0].tabIndex = 0;   /* the first view holds no control of its own */
+  list.parentNode.classList.add('pb-cw-on');
+  list.hidden = false;
+  pick(0, false);
+})();
+
+/* REVENUE HELPS YOU SAVE. One amount and the reader's rate of income tax,
+   20% or 40%: relief at that rate on what is paid in, within Revenue's
+   age-related limit (the note under it says so), as the glossary's "put in
+   €100 and it could cost you about €60 at the higher rate, or €80 at the
+   standard rate". The bar's split is the rate; the figures are written,
+   never counted. The link hands the amount to the pension calculator after
+   the # (#monthly=), which never reaches a server. */
+(function () {
+  var box = document.getElementById('pbRv');
+  var amt = document.getElementById('rvAmt');
+  if (!box || !amt || !window.PBPage) return;
+  var euro = window.PBPage.euro, srTimer = 0;
+  var radios = [].slice.call(box.querySelectorAll('input[name=rvRate]'));
+  var seg = box.querySelector('.pb-rv-seg'), link = document.getElementById('rvLink');
+  var $ = function (id) { return document.getElementById(id); };
+  function rate() {
+    var r = 20;
+    radios.forEach(function (x) { if (x.checked) r = +x.value; });
+    return r;
+  }
+  function paint(spoken) {
+    var n = +amt.value, r = rate(), you = n * (100 - r) / 100, rev = n - you;
+    $('rvAmtV').textContent = euro(n) + ' a month';
+    amt.setAttribute('aria-valuetext', euro(n) + ' a month');
+    amt.style.setProperty('--fill', (n - amt.min) / (amt.max - amt.min) * 100 + '%');
+    $('rvYou').textContent = euro(you);
+    $('rvRev').textContent = euro(rev);
+    box.style.setProperty('--you', String((100 - r) / 100));
+    seg.style.setProperty('--rv', r === 40 ? 1 : 0);
+    link.setAttribute('href', 'pension-calculator.html#monthly=' + n);
+    if (!spoken) return;
+    clearTimeout(srTimer);
+    srTimer = setTimeout(function () {
+      $('rvSr').textContent = euro(n) + ' a month, at ' + r + '% tax: it costs you ' + euro(you) + ', and Revenue adds ' + euro(rev) + '.';
+    }, 700);
+  }
+  amt.addEventListener('input', function () { paint(true); });
+  radios.forEach(function (x) { x.addEventListener('change', function () { paint(true); }); });
+  box.querySelector('.pb-rv-ctl').hidden = false;
+  box.querySelector('.pb-rv-rate').hidden = false;
+  box.querySelector('.pb-rv-static').hidden = true;
+  paint(false);
+})();
+</script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script src="assets/js/pb-jargon-chips.js?v=7bb8e78f"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script>
-/* first payslip to 66: the step nearest the middle of the screen sets the
-   card. Without an observer the card keeps its final state. */
-(function(){
-  var st=document.getElementById('pbStory'); if(!st||!('IntersectionObserver' in window)) return;
-  var n=document.getElementById('pbStoryN'), c=document.getElementById('pbStoryC'), f=document.getElementById('pbStoryFill');
-  var steps=[].slice.call(st.querySelectorAll('.pb-story-step'));
-  function show(li){
-    steps.forEach(function(s){s.classList.toggle('pb-on',s===li);});
-    n.textContent=li.getAttribute('data-n'); c.textContent=li.getAttribute('data-c'); f.style.width=li.getAttribute('data-f')+'%';
-  }
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)show(e.target);});},{rootMargin:'-45% 0px -45% 0px',threshold:0});
-  steps.forEach(function(s){io.observe(s);});
-})();
-</script>
-<script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
+<script src="assets/js/pb-steps.js?v=d2e0493f"></script>
 <script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 <script src="assets/js/pb-ask.js?v=9226fdb1"></script>

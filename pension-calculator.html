@@ -2652,7 +2652,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2674,72 +2673,114 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
+<style>
+/* THE PENSION CALCULATOR, this page only (12 October 2026, Damian: "simplify
+   the calculator as much as possible. We don't need to know their annual
+   earnings. A bit more interactive."). It sits inside <main>, which
+   tools/pagebuild.py replaces, so no page built on this skeleton carries it.
+   Five sliders; growth is a stated assumption; the tax rate is a switch on
+   the card it changes. Text stays at 1rem or more (the FLOOR16 block).
+   Teal is the State's: these marks are slate, grey and amber. */
+[data-pb-calc="pension-calculator"] .res-hero{gap:18px 24px}
+.pc-mix{grid-column:1/-1;min-width:0}
+.pc-bar{display:flex;height:16px;border-radius:99px;overflow:hidden;background:rgba(11,31,28,.07)}
+.pc-bar i{display:block;flex:none;height:100%}
+.pc-bar i+i{box-shadow:inset 2px 0 0 var(--teal-50)}
+.pc-b-saved,.pc-key .pc-k-saved{background:#97A3B4}
+.pc-b-paid,.pc-key .pc-k-paid{background:var(--slate)}
+.pc-b-grow,.pc-key .pc-k-grow{background:#F4B740}
+.pc-key{display:flex;flex-wrap:wrap;gap:4px 22px;margin:12px 0 0;padding:0;list-style:none;font-size:1rem;color:var(--ink-2)}
+.pc-key li{display:inline-flex;align-items:center;gap:8px}
+.pc-key i{width:10px;height:10px;border-radius:50%;flex:none}
+.pc-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+/* the slider in hand lights its own part of the pot */
+.pc-mix[data-hl] .pc-bar i,.pc-mix[data-hl] .pc-key li{opacity:.28}
+.pc-mix[data-hl="saved"] .pc-b-saved,.pc-mix[data-hl="saved"] .pc-key li:nth-child(1),
+.pc-mix[data-hl="paid"] .pc-b-paid,.pc-mix[data-hl="paid"] .pc-key li:nth-child(2){opacity:1}
+:root.pb-motion .pc-bar i{transition:width .9s cubic-bezier(.22,1,.36,1),opacity .35s ease}
+:root.pb-motion .pc-key li{transition:opacity .35s ease}
+:root.pb-motion .pc-mix.pc-pre .pc-bar i{width:0!important;transition:none}
+:root.pb-motion .pc-mix.pc-intro .pc-b-paid{transition-delay:.12s}
+:root.pb-motion .pc-mix.pc-intro .pc-b-grow{transition-delay:.24s}
+[data-pb-calc="pension-calculator"] .res-hero .pb-sp-top{margin:0;font-size:1rem}
+/* the cost of waiting: once assets/js/pb-calc-motion.js has drawn its handle
+   and bars, they carry the figure, so the sentence is not said twice */
+:root.pb-calc-alive .waitcard:has(.pb-wait:not([hidden])) #waitOut{display:none}
+/* calm: the figures glide to their value; nothing bursts or bounces */
+[data-pb-calc="pension-calculator"] #potOut.pb-pot-bump{animation:none}
+[data-pb-calc="pension-calculator"] .pb-mile,.pb-party{display:none}
+.pc-sub{margin:0;font-size:1rem;color:var(--ink-2)}
+[data-pb-calc="pension-calculator"] .chart-legend .dashk{padding:0;margin:0}
+[data-pb-calc="pension-calculator"] .pb-today-v,:root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar{font-size:1rem}
+/* what Revenue adds, with the one switch it needs */
+.pc-rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:14px}
+.relief-card .pc-rhead .rt{margin:0}
+.pc-tax{display:flex;align-items:center;gap:10px}
+.pc-tax-l{font-size:1rem;color:#5E4408}
+.relief-card .seg{width:200px;background:rgba(154,107,18,.14)}
+.relief-card .seg button{min-height:44px;padding:6px 10px;color:#5E4408}
+.relief-card .seg button.on{color:#3F2D04}
+.relief-card .seg button:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.pc-rnote{margin:12px 0 0;font-size:1rem;line-height:1.5;color:#5E4408}
+@media(max-width:520px){.pc-key{gap:4px 16px}.relief-card .seg{width:100%}.pc-tax{width:100%}.pc-tax .seg{flex:1}}
+</style>
+
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pension-calculator">
 <script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
     <div class="panel">
     <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40" data-pb-ticks="relief-age"></div>
-    <div class="field"><div class="row"><label for="ret">Retirement age</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
-    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
-    <div class="field"><div class="row"><label for="mine">Your monthly contribution</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
-    <div class="field"><div class="row"><label for="earn">Your annual earnings</label><span class="val" id="earnV">€50,000</span></div><input type="range" id="earn" min="10000" max="300000" step="1000" value="50000" data-pb-ticks="relief-cap"><p class="subnote">Sets your relief limit: an age-related share of earnings up to €115,000.</p></div>
-    <div class="field"><div class="row"><label for="emp">Employer monthly contribution</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
-    <div class="field"><div class="row"><label for="growth">Assumed yearly growth</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Returns can be negative.</p></div>
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label>Your income tax rate</label></div>
-      <div class="seg"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button id="t20" onclick="setTax(20)">20% rate</button><button id="t40" class="on" onclick="setTax(40)">40% rate</button></div>
-      <p class="subnote">For the <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> on your own contributions.</p>
-    </div>
+    <p class="hint">Slide, or tap a figure to type it.</p>
+    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">40</span></div><input type="range" id="age" min="18" max="70" value="40" data-pb-ticks="relief-age"></div>
+    <div class="field"><div class="row"><label for="ret">Retire at</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="75" value="66"></div>
+    <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000"></div>
+    <div class="field"><div class="row"><label for="mine">You pay in, a month</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300"></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="emp">Your employer pays in, a month</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150"></div>
+    <input type="hidden" id="growth" value="5">
   </div>
 
   <div class="results">
     <div class="res-hero">
-      <div><div class="rl">Projected pot at retirement</div><div class="big" id="potOut" data-pb-wait>€0</div></div>
-      <div><div class="rl">Estimated income, per month</div><div class="big" id="incOut" data-pb-wait>€0</div></div>
-      <p class="pb-say" id="pbSay">At 40, with €450 a month going in and €50,000 saved already, your pot could reach €460,066 by 66: an income of about €1,534 a month.</p>
-      <p class="pb-say pb-sp-top" id="pbSpTop">Add the State Pension (Contributory) at the maximum rate from 66, and it comes to about €2,831 a month.</p>
+      <div><div class="rl">A month, from <span id="pcAtInc">66</span></div><div class="big" id="incOut" data-pb-wait>€0</div></div>
+      <div><div class="rl">Your pot at <span id="pcAtPot">66</span></div><div class="big" id="potOut" data-pb-wait>€0</div></div>
+      <div class="pc-mix" id="pcMix">
+        <div class="pc-bar" aria-hidden="true"><i class="pc-b-saved" id="pcBarSaved" style="width:10.87%"></i><i class="pc-b-paid" id="pcBarPaid" style="width:30.52%"></i><i class="pc-b-grow" id="pcBarGrow" style="width:58.61%"></i></div>
+        <ul class="pc-key">
+          <li><i class="pc-k-saved" aria-hidden="true"></i>Saved <b id="pcSaved">€50,000</b></li>
+          <li><i class="pc-k-paid" aria-hidden="true"></i>Paid in <b id="pcPaid">€140,400</b></li>
+          <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€269,666</b></li>
+        </ul>
+      </div>
+      <p class="pb-say pb-sp-top" id="pbSpTop">With the State Pension (Contributory) at the full rate from 66: about €2,831 a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
-      <div class="foot">An illustration only. Retirement options differ. The State Pension may be paid on top.</div>
+      <div class="foot">An illustration only. Retirement options differ.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a>. That is the cap on funds with full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed on drawdown. The real ceiling is lower.</p>
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
+      <div class="wtext" id="waitOut">Put this off for a year and you retire with roughly <b>€18,702</b> less: the payments you never made, and the growth they never earned.</div>
+    </div>
+    <div class="relief-card">
+      <div class="pc-rhead">
+        <div class="rt">What Revenue adds</div>
+        <div class="pc-tax"><span class="pc-tax-l" id="pcTaxL">Your tax rate</span>
+          <div class="seg" role="group" aria-labelledby="pcTaxL"><span class="ind" id="segInd" style="transform:translateX(100%)"></span><button type="button" id="t20" aria-pressed="false" onclick="setTax(20)">20%</button><button type="button" id="t40" class="on" aria-pressed="true" onclick="setTax(40)">40%</button></div>
+        </div>
+      </div>
+      <div class="rbig" id="reliefOut"><b>€300</b> a month costs you about <b>€180</b>.</div>
+      <div class="relief-viz" id="reliefViz">
+        <div class="rv-bar"><div class="rv-you" id="rvYou" style="width:60%"></div><div class="rv-tax" id="rvTax" style="width:40%"></div></div>
+        <div class="rv-keys"><span><i class="rv-d you"></i>You pay <b id="rvYouV" data-pb-wait>€0/mo</b></span><span><i class="rv-d tax"></i>Revenue adds <b id="rvTaxV" data-pb-wait>€0/mo</b></span></div>
+      </div>
+      <p class="pc-rnote" id="pcLimit">Full relief if you earn €14,400 a year or more: at 40, it is on up to 25% of earnings.</p>
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With an extra €100/month</span><span id="chartKeyToday"><i class="pb-k-today"></i>Your plan in today&rsquo;s money</span></div>
+      <p class="pc-sub">At <span id="growthV">5%</span> a year, before charges.</p>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With €100 more a month</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span></div>
       <div id="chart"></div>
-    </div>
-    <div class="relief-card">
-      <div class="rt">What Revenue adds</div>
-      <div class="rbig" id="reliefOut">Move the sliders to see your tax relief.</div>
-      <div class="relief-viz" id="reliefViz">
-        <div class="rv-bar"><div class="rv-you" id="rvYou" style="width:60%"></div><div class="rv-tax" id="rvTax" style="width:40%"></div></div>
-        <div class="rv-keys"><span><i class="rv-d you"></i>You really pay <b id="rvYouV" data-pb-wait>€0/mo</b></span><span><i class="rv-d tax"></i>Revenue adds <b id="rvTaxV" data-pb-wait>€0/mo</b></span></div>
-      </div>
-    </div>
-    <div class="chart-card">
-      <h3>Your relief limit</h3>
-    <div class="pb-lad" data-pb-age="age" data-pb-earn="earn">
-    <p class="pb-lad-cap">Revenue's limit, as a share of earnings.</p>
-      <div class="pb-lad-row" data-from="0" data-to="29"><span class="pb-lad-age">Under 30<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:37.5%"></i></span><span class="pb-lad-pct">15%</span></div>
-      <div class="pb-lad-row" data-from="30" data-to="39"><span class="pb-lad-age">30 to 39<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:50%"></i></span><span class="pb-lad-pct">20%</span></div>
-      <div class="pb-lad-row" data-from="40" data-to="49"><span class="pb-lad-age">40 to 49<span class="pb-lad-you">You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:62.5%"></i></span><span class="pb-lad-pct">25%</span></div>
-      <div class="pb-lad-row" data-from="50" data-to="54"><span class="pb-lad-age">50 to 54<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:75%"></i></span><span class="pb-lad-pct">30%</span></div>
-      <div class="pb-lad-row" data-from="55" data-to="59"><span class="pb-lad-age">55 to 59<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:87.5%"></i></span><span class="pb-lad-pct">35%</span></div>
-      <div class="pb-lad-row" data-from="60" data-to="120"><span class="pb-lad-age">60 and over<span class="pb-lad-you" hidden>You</span></span><span class="pb-lad-track" aria-hidden="true"><i style="width:100%"></i></span><span class="pb-lad-pct">40%</span></div>
-    <p class="pb-lad-out">At 40, relief applies to contributions up to €12,500 a year: 25% of €50,000.</p>
-    <p class="pb-lad-note">Earnings count up to €115,000.</p>
-  </div>
-    </div>
-    <div class="boost-card">
-      <div class="boost-ico"><svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
-      <div class="bt" id="boostOut">See what an extra €100 a month could do.</div>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="pension-calculator">
@@ -2775,18 +2816,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
-    <li>Not included: product charges, the tax on your income when you draw it.</li>
-    <li>Growth is constant, at the rate you choose. Real returns will differ and can be negative.</li>
+    <li>Growth: 5% a year, before charges, every year. That is about half shares and half bonds, a mix we chose for illustration (the Pensions Authority&rsquo;s guidance allows a projection 6% at most). Real returns will differ and can be negative.</li>
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
-    <li>Tax relief is at your chosen rate, on your own contributions only. The limit is 15% of earnings under 30. It rises in steps to 40% at 60 and over. Earnings are capped at €115,000.</li>
-    <li>The main figures ignore inflation. The line under each gives today&rsquo;s money, with prices rising 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland). Figures ignore product charges, which will reduce returns. Nothing is guaranteed.</li>
+    <li>Not included: product charges, the tax on your income when you draw it.</li>
+    <li>Tax relief is at the rate you choose, on your own payments only. Revenue&rsquo;s limit is 15% of earnings under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. We do not ask what you earn, so the figure assumes your earnings cover your payments, and says what that takes.</li>
+    <li>Today&rsquo;s money: prices rising 2% a year, the European Central Bank&rsquo;s target. Nothing is guaranteed.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year in 2026, and €16,084 from January 2027 (Budget 2027). Check gov.ie for the current rate.</li>
   </ul>
   </details>
 </div></section>
 
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
-<script src="assets/js/pb-ladder.js?v=7dc24e26"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
@@ -2829,12 +2869,22 @@ const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const {$,euro,paintSlider,wireRanges,announce}=window.PBPage;
 let taxRate=40;
 /* Revenue's age-related limit on tax-relievable personal contributions:
-   a percentage of earnings, with earnings capped at EARN_CAP (B4/B5). */
+   a percentage of earnings, with earnings capped at EARN_CAP (B4/B5).
+   12 October 2026: the page no longer asks what you earn. Relief is worked
+   out on what you pay, up to the most the limit allows at your age on any
+   earnings (band x EARN_CAP), and the card says the earnings that takes. */
 const EARN_CAP=115000;
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
+/* Growth is no longer a slider: risk level 4 of assets/js/pb-assumptions.js,
+   about half shares and half bonds, 5% a year before charges. #growth holds
+   it for the scripts that read it (pb-calc-motion.js, pb-after.js). */
+const GROWTH=window.PBAssume?Math.round(PBAssume.level(4).rate*1000)/10:5;
+$('growth').value=GROWTH;$('growthV').textContent=GROWTH+'%';
 
-function setTax(r){taxRate=r;$('t20').classList.toggle('on',r===20);$('t40').classList.toggle('on',r===40);$('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
+function setTax(r){taxRate=r;
+  ['t20','t40'].forEach(function(id){const on=id==='t'+r;$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',on?'true':'false');});
+  $('segInd').style.transform=r===20?'translateX(0)':'translateX(100%)';calc();}
 
 function project(months,startPot,monthly,mRate){
   const grownPot=startPot*Math.pow(1+mRate,months);
@@ -2920,15 +2970,24 @@ const chart={
 };
 
 /* ---- slider fill paint ---- */
-/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years", "5%"), not the raw number.
-   The four money sliders have no wording of their own and take paintSlider's euro fallback. */
-const VALTEXT={age:v=>v+' years',ret:v=>v+' years',growth:v=>v+'%'};
+/* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years"), not the raw number.
+   The three money sliders have no wording of their own and take paintSlider's euro fallback. */
+const VALTEXT={age:v=>v+' years',ret:v=>v+' years'};
 const paint=el=>paintSlider(el,VALTEXT);
 
-/* ---- the maths (unchanged) ---- */
+/* ---- the pot in three parts: what was there, what went in, what growth
+   added (the workings' own three lines, as one bar). Widths only here; the
+   figures are in its key, and the key is what a screen reader reads. */
+function mix(pot,paidIn,grown,base){
+  const t=Math.max(base,1),w=v=>(Math.max(0,v)/t*100).toFixed(2)+'%';
+  $('pcBarSaved').style.width=w(pot);$('pcBarPaid').style.width=w(paidIn);$('pcBarGrow').style.width=w(grown);
+  tween('pcSaved',pot,euro);tween('pcPaid',paidIn,euro);tween('pcGrow',Math.max(0,grown),euro);
+}
+
+/* ---- the maths ---- */
 function calc(){
   let age=+$('age').value, ret=+$('ret').value;
-  const pot=+$('pot').value, mine=+$('mine').value, earn=+$('earn').value, emp=+$('emp').value, g=+$('growth').value;
+  const pot=+$('pot').value, mine=+$('mine').value, emp=+$('emp').value, g=+$('growth').value;
   /* R29-9 (Run 30): never below 50, as on the director calculator (Run 29):
      the earliest age Revenue allows benefits other than on ill health
      (Pensions Manual 9.1); the slider's own min="50" was being replaced by
@@ -2941,9 +3000,8 @@ function calc(){
   $('retV').textContent=ret;
   $('potV').textContent=euro(pot);
   $('mineV').textContent=euro(mine);
-  $('earnV').textContent=euro(earn);
   $('empV').textContent=euro(emp);
-  $('growthV').textContent=g+'%';
+  $('pcAtInc').textContent=ret;$('pcAtPot').textContent=ret;
 
   const months=(ret-age)*12;
   const mRate=Math.pow(1+g/100,1/12)-1;
@@ -2953,26 +3011,15 @@ function calc(){
 
   tween('potOut',base,euro);
   tween('incOut',base*0.04/12,euro);
-  if(window.PBToday){PBToday.set('potOut',base,ret-age);PBToday.set('incOut',base*0.04/12,ret-age);PBToday.cash(ret-age);}
-  /* #4: the two figures above as one sentence. Written from the same final
-     values the tweens are aimed at, never the in-between ones, so it cannot
-     disagree with them once they land. Nothing new is worked out here. The
-     markup carries this sentence at the page's defaults for readers without
-     script, and assets/js/pb-guess.js veils it with the figures it repeats. */
-  $('pbSay').textContent=(monthly>0||pot>0)
-    ?'At '+age+', with '+(monthly>0?euro(monthly)+' a month going in':'nothing going in each month')+
-     ' and '+(pot>0?euro(pot)+' saved already':'nothing saved yet')+
-     ', your pot could reach '+euro(base)+' by '+ret+': an income of about '+euro(base*0.04/12)+' a month.'
-    :'At '+age+', with nothing saved yet and nothing going in each month, there is no pot to grow by '+ret+'.';
+  if(window.PBToday){PBToday.set('potOut',base,ret-age);PBToday.set('incOut',base*0.04/12,ret-age);}
   /* #11: the same monthly income with the State Pension (Contributory) at its
      maximum rate on top, from 66, the pension age. The rate is the reality
      check's module's, a year over twelve; only the addition is done here. */
   if(window.PBStatePension){
     const SPm=PBStatePension.MAX_WEEKLY_CENTS*PBStatePension.WEEKS_PER_YEAR/100/12;
-    $('pbSpTop').textContent='Add the State Pension (Contributory) at the maximum rate from '+PBStatePension.PENSION_AGE+
-      ', and it comes to about '+euro(base*0.04/12+SPm)+' a month.';
+    $('pbSpTop').textContent='With the State Pension (Contributory) at the full rate from '+PBStatePension.PENSION_AGE+
+      ': about '+euro(base*0.04/12+SPm)+' a month.';
   }
-
 
   /* #29: the workings, from the same values: what went in, what was there
      already, and what growth added (the rest of the pot) */
@@ -2982,34 +3029,40 @@ function calc(){
     '<li>Growth at '+g+'% a year <b>'+euro(grown)+'</b></li>'+
     '<li>Your pot at '+ret+' <b>'+euro(base)+'</b></li>'+
     '<li>4% of it a year, over twelve months <b>'+euro(base*0.04/12)+'</b></li>';
+  mix(pot,paidIn,grown,base);
 
   /* cost of waiting: existing pot keeps growing, twelve months of
-     contributions never happen. Same engine, one shifted start date. */
+     contributions never happen. Same engine, one shifted start date.
+     assets/js/pb-calc-motion.js adds the handle for one to ten years. */
   if(months>12){
     const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
     const gap=Math.max(0,base-later);
-    $('waitOut').innerHTML='Put this off for twelve months and you retire with roughly <b>'+euro(gap)+'</b> less. That gap is the contributions you never made, plus the growth they never earned.';
+    $('waitOut').innerHTML='Put this off for a year and you retire with roughly <b>'+euro(gap)+'</b> less: the payments you never made, and the growth they never earned.';
   }else{
-    $('waitOut').innerHTML='With less than a year to go, the decisions that matter now are about how you draw the pot down rather than how you build it.';
+    $('waitOut').innerHTML='With a year or less to go, what matters now is how you draw the pot down.';
   }
   /* tax relief (B4/B5): only the part of the personal contribution inside
-     Revenue's age-related limit gets relief.
-       reliefLimit      = band(age) x min(earnings, 115,000)
-       relievableAnnual = min(contribution x 12, reliefLimit)
-       reliefMonthly    = relievableAnnual / 12 x taxRate */
+     Revenue's age-related limit gets relief. With no earnings asked, the
+     limit used is the most it can be at this age:
+       maxRelievable    = band(age) x 115,000
+       relievableAnnual = min(contribution x 12, maxRelievable)
+       reliefMonthly    = relievableAnnual / 12 x taxRate
+       earningsNeeded   = relievableAnnual / band(age)  (said, not assumed away) */
   const annualMine=mine*12;
   const band=reliefBand(age);
-  const reliefLimit=Math.round(band*Math.min(earn,EARN_CAP));
-  const relievableAnnual=Math.min(annualMine,reliefLimit);
+  const maxRelievable=Math.round(band*EARN_CAP);
+  const relievableAnnual=Math.min(annualMine,maxRelievable);
   const reliefMonthly=(relievableAnnual/12)*(taxRate/100);
   const costMonthly=mine-reliefMonthly;
+  const pct=Math.round(band*100)+'%';
   if(mine>0){
-    const capNote=annualMine>relievableAnnual
-      ?' <span style="display:block;margin-top:6px;font-size:13px">At '+age+', Revenue allows relief on up to '+Math.round(band*100)+'% of earnings (capped at \u20AC115,000), so about '+euro(relievableAnnual)+' of your '+euro(annualMine)+' a year qualifies. The rest still goes into your pension, but without relief this year.</span>'
-      :'';
-    $('reliefOut').innerHTML='Your <b>'+euro(mine)+'/month</b> really costs you about <b>'+euro(costMonthly)+'</b>. Tax relief covers the other '+euro(reliefMonthly)+'.'+capNote;
+    $('reliefOut').innerHTML='<b>'+euro(mine)+'</b> a month costs you about <b>'+euro(costMonthly)+'</b>.';
+    $('pcLimit').textContent=annualMine>maxRelievable
+      ?'At '+age+', relief stops at '+euro(maxRelievable)+' a year, whatever you earn: '+pct+' of earnings up to '+euro(EARN_CAP)+'.'
+      :'Full relief if you earn '+euro(Math.ceil(relievableAnnual/band))+' a year or more: at '+age+', it is on up to '+pct+' of earnings.';
   }else{
-    $('reliefOut').innerHTML='Add a personal contribution to see how much tax relief you\u2019d get back.';
+    $('reliefOut').innerHTML='Pay in yourself to see the relief.';
+    $('pcLimit').textContent='At '+age+', relief is on up to '+pct+' of earnings, up to '+euro(EARN_CAP)+'.';
   }
   /* relief visualizer: presentation only, driven by the same costMonthly/reliefMonthly values */
   if(mine>0){
@@ -3026,10 +3079,6 @@ function calc(){
     $('reliefViz').style.opacity='.45';
   }
 
-  const diffPot=boost-base;
-  const diffInc=diffPot*0.04/12;
-  $('boostOut').innerHTML='Add just <b>€100 a month</b> and your pot grows by about <b>'+euro(diffPot)+'</b> more. That is roughly '+euro(diffInc)+' extra income every month in retirement.';
-
   const b=[],u=[],t=[];
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
@@ -3039,12 +3088,12 @@ function calc(){
   }
   chart.setTarget(b,u,age,ret,t);
   if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
-  ['age','ret','pot','mine','earn','emp','growth'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
+  ['age','ret','pot','mine','emp'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=base>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  announce('Projected pot at retirement '+euro(base)+'. Estimated income '+euro(base*0.04/12)+' a month.'+(overSFT?' Above the Standard Fund Threshold.':''));
+  announce('About '+euro(base*0.04/12)+' a month from '+ret+', from a pot of '+euro(base)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
 /* #2: a monthly amount handed over in the link's fragment (#monthly=100) by
@@ -3057,9 +3106,37 @@ function calc(){
   var r=$('mine'),v=+m[1];
   if(v>=+r.min&&v<=+r.max&&(v-(+r.min))%(+r.step||1)===0)r.value=v;
 })();
-if(window.PBToday){PBToday.card(document.querySelector('.chart-card'));PBToday.onChange(function(){chart.render();$('chartKeyToday').hidden=!PBToday.on();});}
 wireRanges(VALTEXT,calc);
 calc();
+
+/* The pot's bar, alive. It grows in once, left to right, the first time it
+   comes into view; after that each part glides to its new width. The slider
+   in hand lights the part it drives (saved so far, or what is paid in), so
+   cause and effect sit side by side. Without motion the bar is drawn at its
+   value and nothing glides; the lighting still follows focus. */
+(function(){
+  const box=$('pcMix');if(!box)return;
+  const root=document.documentElement;
+  if(root.classList.contains('pb-motion')&&'IntersectionObserver' in window){
+    box.classList.add('pc-pre');
+    const io=new IntersectionObserver(function(es){
+      if(!es[0].isIntersecting)return;io.disconnect();
+      requestAnimationFrame(function(){box.classList.add('pc-intro');box.classList.remove('pc-pre');
+        setTimeout(function(){box.classList.remove('pc-intro');},1400);});
+    },{threshold:0.5});
+    io.observe(box);
+  }
+  const HL={pot:'saved',mine:'paid',emp:'paid'};let t=0;
+  function on(id){clearTimeout(t);box.setAttribute('data-hl',HL[id]);}
+  function off(){clearTimeout(t);t=setTimeout(function(){box.removeAttribute('data-hl');},700);}
+  Object.keys(HL).forEach(function(id){
+    const r=$(id),f=r.closest('.field');
+    r.addEventListener('focus',function(){on(id);});r.addEventListener('input',function(){on(id);});
+    r.addEventListener('blur',off);r.addEventListener('change',off);
+    if(f){f.addEventListener('pointerenter',function(e){if(e.pointerType==='mouse')on(id);});
+      f.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse'&&document.activeElement!==r)off();});}
+  });
+})();
 
 /* nav */
 const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
@@ -3272,7 +3349,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3310,7 +3387,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
-  var KEEP = ['age','ret','pot','mine','earn'];   /* primary controls: ids on THIS page */
+  var KEEP = ['age','ret','pot','mine','emp'];   /* primary controls: ids on THIS page */
   var panel = document.querySelector('.panel');
   if(!panel) return;
 
@@ -3374,7 +3451,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=9d83afbc"></script>
+<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
 <script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

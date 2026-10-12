@@ -45,7 +45,10 @@ forecasts.
 **Pension.** Each year, the take-home amount `12 x monthly` is grossed up with
 `PBRelief.grossForNetCost(net, age + y, salary, taxRate)`, so the age-related
 limit moves with the reader's age each year and anything above it gets no
-relief. `gross / 12` goes in each month. At the end, `pot x 0.25` goes
+relief. With no earnings given (`salary` null, as pia.html since 12 October
+2026, which asks for neither age nor earnings), no limit is applied: `gross =
+net / (1 - taxRate)`, and the page says it assumes the payments are within
+the limit. `age` null leaves `endAge` and `beforeAccess` null. `gross / 12` goes in each month. At the end, `pot x 0.25` goes
 through `PBSft.lumpSum`: its standard-rate tax, plus its "as income" part at
 `taxRate`. The other `pot x 0.75` is taxed at `taxRate`. `afterTax = pot -
 both`. `beforeAccess` is true when `age + n < 60`.
@@ -81,7 +84,11 @@ PIA `taxes` (per year), `lossYears`, `taxedLossYears`, `lossYearTax`; the ETF
 
 Fees and charges (the PIA's are unknown), inflation, the Universal Social
 Charge and PRSI, employer contributions, the PIA's annual limit, and
-drawing a pension over years rather than all at the end.
+drawing a pension over years rather than all at the end. Since 12 October
+2026 the page also assumes the pension payments are within Revenue's
+age-related limit (it no longer asks for age or earnings), and shows the
+reader's own growth only: `scenarios().lower` and `.fall` stay in the module
+and its tests but are not on the page.
 
 ## P6. Worked examples (asserted)
 

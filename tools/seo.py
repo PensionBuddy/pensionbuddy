@@ -56,7 +56,6 @@ CRUMB = {
     'pensions-over-50.html': 'Pensions after 50',
     'self-employed-pensions.html': 'Pensions when you are self-employed',
     'uk-pensions-in-ireland.html': 'A UK pension, and living in Ireland',
-    'old-pension-checklist.html': 'The old pension hunt: a checklist',
     'director-year-end-checklist.html': 'Year-end pension checklist',
     'director-pension-rules.html': 'What changed for directors in 2026',
     'standard-fund-threshold.html': 'The Standard Fund Threshold',

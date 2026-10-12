@@ -206,7 +206,7 @@ if (has('pensions-over-50.html', 'class="pb-toc"')) {
     if(!b)return null;var r=b.getBoundingClientRect();var p=b.querySelector('.pb-tocbar-prog');var m=(p.style.transform.match(/scaleX\\(([\\d.]+)\\)/)||[])[1];
     return {shown:!b.hidden&&r.height>0,top:Math.round(r.top),navBottom:Math.max(0,Math.round(n.bottom)),now:b.querySelector('.pb-tocbar-now').textContent,p:m?+m:null,
       open:!document.getElementById('pbTocbarList').hidden};})()`;
-  for (const [page, w] of [['pensions-over-50.html', 375], ['pensions-over-50.html', 1440], ['pia.html', 375], ['director-pension-rules.html', 1440]]) {
+  for (const [page, w] of [['pensions-over-50.html', 375], ['pensions-over-50.html', 1440], ['director-pension-rules.html', 1440]]) {
     await open(page, w);
     const b0 = await ev(BAR);
     const links = await ev(`[].map.call(document.querySelectorAll('.pb-toc a'),function(a){return [a.getAttribute('href').slice(1),a.textContent];})`);
@@ -276,7 +276,7 @@ if (has('404.html', 'class="pb-nf-six"')) {
 
 /* ---- 9. slider feel (Run 37, built in Run 39) ---- */
 if (has('pension-calculator.html', 'data-pb-ticks=')) {
-  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]], ['pension-calculator.html', 'earn', [115000]], ['broker-vs-autoenrolment.html', 'age', [30, 40, 50, 55, 60]]]) {
+  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]], ['broker-vs-autoenrolment.html', 'age', [30, 40, 50, 55, 60]]]) {
     await open(page, 1440);
     const before = await ev(`document.getElementById('potOut') ? document.getElementById('potOut').textContent : document.body.innerText.length`);
     const t = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');var ts=[].slice.call(w.querySelectorAll('.pb-tick'));
@@ -295,7 +295,7 @@ if (has('pension-calculator.html', 'data-pb-ticks=')) {
 
 /* ---- 10. figures that wait (Run 37, built in Run 39) ---- */
 if (has('pension-calculator.html', 'data-pb-wait')) {
-  for (const [page, w] of [['pension-calculator.html', 1440], ['director-calculator.html', 375], ['broker-vs-autoenrolment.html', 1440], ['index.html', 1440]]) {
+  for (const [page, w] of [['pension-calculator.html', 1440], ['director-calculator.html', 375], ['index.html', 1440]]) {
     await open(page, w);
     const r = await ev(`(function(){var h=document.documentElement;var els=[].slice.call(document.querySelectorAll('[data-pb-wait]'));
       function snap(){return els.map(function(e){var q=e.getBoundingClientRect();var c=getComputedStyle(e);return [Math.round(q.left),Math.round(q.top),Math.round(q.width),Math.round(q.height),c.color,c.backgroundImage!=='none'];});}
@@ -310,7 +310,7 @@ if (has('pension-calculator.html', 'data-pb-wait')) {
   /* on a real load, the moment the page is ready a waiting figure arrives
      at once: two frames later none of them is part way through a transition */
   const rec = await send('Page.addScriptToEvaluateOnNewDocument', { source: "document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(function(){requestAnimationFrame(function(){window.__waitFades=document.getAnimations().filter(function(a){return a.effect&&a.effect.target&&a.effect.target.hasAttribute&&a.effect.target.hasAttribute('data-pb-wait')&&a.transitionProperty;}).map(function(a){return a.effect.target.id+':'+a.transitionProperty;});});});});" });
-  await open('broker-vs-autoenrolment.html', 1440);
+  await open('pension-calculator.html', 1440);
   await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: rec.identifier });
   eq('10. when the page is ready its waiting figures arrive at once, none fading in', await ev('window.__waitFades'), []);
   await open('pension-calculator.html', 1440, { nojs: true });
@@ -328,8 +328,8 @@ if (has('index.html', 'data-pb-video')) {
      pictures (<img loading="lazy">, the same files a poster would name) are
      fetched with the page by design; what must not be there yet is a video
      file or a poster on a video */
-  const posters = () => ev(`[].filter.call(document.querySelectorAll('video[data-pb-video]'),function(v){return v.hasAttribute('poster');}).length`);
-  const V = `(function(){return [].map.call(document.querySelectorAll('video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
+  const posters = () => ev(`[].filter.call(document.querySelectorAll('#learn video[data-pb-video]'),function(v){return v.hasAttribute('poster');}).length`);
+  const V = `(function(){return [].map.call(document.querySelectorAll('#learn video[data-pb-video]'),function(v){var b=v.parentNode.querySelector('[data-pb-video-btn]');
     return {paused:v.paused,t:Math.round(v.currentTime*10)/10,shown:getComputedStyle(v).display!=='none',btn:b.getAttribute('aria-label').split(':')[0],name:b.getAttribute('aria-label'),state:b.getAttribute('data-state'),btnShown:getComputedStyle(b).display!=='none',
       poster:!!v.poster&&v.poster===v.parentNode.querySelector('picture img').currentSrc};});})()`;
   await open('index.html', 1440);
@@ -339,7 +339,7 @@ if (has('index.html', 'data-pb-video')) {
   eq('R38-1. no video fetched and no poster set while the cards are off screen; near, both videos play, the poster is the card\'s own picture, the button shows pause and is named Pause video: the game',
      [far, vids().length >= 2, near.map(v => [v.shown, !v.paused, v.t > 0.3, v.btn, v.state, v.btnShown, v.poster])],
      [[0, 0], true, [[true, true, true, 'Pause video', 'playing', true, true], [true, true, true, 'Pause video', 'playing', true, true]]]);
-  await ev(`document.querySelector('[data-pb-video-btn]').click()`); await sleep(600);
+  await ev(`document.querySelector('#learn [data-pb-video-btn]').click()`); await sleep(600);
   const held = (await ev(V))[0];
   await ev(`window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'})`); await sleep(800);
   const away = await ev(V);

@@ -1,8 +1,11 @@
 /* ---- both calculations card, this page only ---- */
 .bothcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
 .bothcard h3{letter-spacing:-0.02em;margin-bottom:4px}
-.bothcard .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:6px;line-height:1.55}
-.mrow{padding:16px 0;border-top:1px solid var(--line)}
+.bothcard .sub{font-size:1rem;color:var(--ink-3);margin-bottom:14px;line-height:1.55}
+/* each method is a soft card; the one the Department pays is tinted (both at
+   a tie). The tint is the State's teal: it is what is paid. */
+.mrow{padding:14px 16px 10px;margin-top:10px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+.mrow.is-paid{background:var(--teal-50);border-color:var(--teal-100)}
 .mrow[hidden]{display:none}
 .mrow .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px 16px;flex-wrap:wrap}
 .mrow .mname{font-weight:700;font-size:15px;letter-spacing:-0.01em}
@@ -10,7 +13,7 @@
 .mrow .mdetail,.mrow .mnote{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-top:8px}
 .mrow .mnote{color:var(--ink-3)}
 .mrow .mdetail b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
-.mclose{font-size:14.5px;line-height:1.6;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
+.mclose{font-size:1rem;line-height:1.6;color:var(--ink);padding-top:16px}
 .mclose[hidden]{display:none}
 .mclose b{font-family:var(--font);font-variant-numeric:tabular-nums;color:var(--teal-700);font-weight:600}
 .srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:4px;
@@ -34,23 +37,19 @@
    added, Run 42). Both bars are
    aria-hidden, because the rates, the difference and the verdict are already
    sentences in this card. */
-.mbar{position:relative;margin:10px 0 2px;height:32px}
+.mbar{position:relative;margin:10px 0 2px;height:36px}
 .mbar-track{position:relative;height:10px;border-radius:99px;background:var(--surface-2);
   border:1px solid var(--line);overflow:hidden}
 .mbar-fill,.mbar-gap{position:absolute;top:0;bottom:0;display:block}
-.mbar-fill{left:0;background:var(--aqua);
-  transition:width .45s cubic-bezier(.22,.61,.36,1)}
-.mbar-gap{background:var(--amber-soft);
-  transition:left .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-fill{left:0;background:var(--aqua)}
+/* the method that is not paid is drawn grey: its rate is still in words */
+.mrow:not(.is-paid) .mbar-fill{background:#A9B6B3}
+.mbar-gap{background:var(--amber)}
 .mbar-gap[hidden]{display:none}
-.mbar-lab{position:absolute;top:15px;font-size:12.5px;line-height:1.3;color:var(--ink);
-  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;
-  transform:translateX(-50%);transition:left .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-lab{position:absolute;top:15px;font-size:1rem;line-height:1.3;color:var(--ink);
+  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;transform:translateX(-50%)}
 .mbar-lab[hidden]{display:none}
 .mbar-scale{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
-@media(prefers-reduced-motion:reduce){
-  .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
-}
 
 /* ---- the Yearly Average band ladder ----
    Six bands, each drawn against the same scale as the bars above, the
@@ -93,21 +92,26 @@
    the credits and HomeCaring Periods that count, then, greyed, the part the
    caps leave out. Every count is the module's (tca.creditsCounted and
    the rest); the page only divides by the scale. All the State's: teal. */
-.pb-rec{margin:10px 0 0}
+.pb-rec{margin:0 0 14px}
 .pb-rec-track{position:relative;display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-rec-track i{display:block;height:100%}
 .pb-rec-paid{background:var(--teal-700)}
 .pb-rec-extra{background:var(--aqua)}
 .pb-rec-over{background:repeating-linear-gradient(135deg,var(--line-2) 0 4px,var(--surface-2) 4px 8px)}
 .pb-rec-track .pb-rec-full{position:absolute;top:-1px;bottom:-1px;width:2px;margin-left:-1px;background:var(--ink)}
-.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key [hidden]{display:none}
 .pb-rec-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .pb-rec-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 
-/* the jump row under the result: the explainer and the assumptions are two
-   long scrolls down on a phone */
-.pb-jump{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
-.pb-jump a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+/* 12 October 2026: credits and caring fold away inside the panel, their
+   values on the summary */
+.pb-more{margin-top:2px;padding:0 16px;background:var(--surface-2)}
+.pb-more>summary{gap:10px;font-size:1rem;padding:10px 0;line-height:1.35}
+.pb-more-t{display:flex;flex-direction:column;gap:2px}
+.pb-more-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-more[open]>summary{margin-bottom:6px}
+.pb-more .field{margin-bottom:18px}
 
 /* #27: the "between 1 January and 5 April" box under the entry year, the
    comparison page's checkbox row */
@@ -126,6 +130,9 @@
    teal: they mark the reader's place, not what the State pays (Run 43). */
 .pb-glide{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;max-width:620px}
 .pb-glide-col{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:14px}
+/* the glide is a list inside .assume: no assumption tick on its columns */
+.assume .pb-glide-col{padding-left:0}
+.assume .pb-glide-col::before{content:none}
 .pb-glide-bar{position:relative;display:block;width:100%;max-width:34px;height:72px;border-radius:6px;background:var(--teal-50);border:1px solid var(--teal-100);overflow:hidden}
 .pb-glide-bar i{position:absolute;left:0;right:0;bottom:0;display:block;background:var(--aqua)}
 .pb-glide-pct{font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -139,20 +146,29 @@
 .pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* 8 October 2026: the working folds away inside the card */
 .pb-fold-in{margin-top:14px;padding:0 14px;background:var(--surface-2)}
-.pb-fold-in>summary{min-height:44px;font-size:15px}
+.pb-fold-in>summary{min-height:44px;font-size:1rem}
 .pb-fold-in .mdetail,.pb-fold-in .mbar-scale{margin:0 0 10px}
 
+/* the week and the year side by side on a phone too: both are short */
+@media(max-width:920px){#spHas .res-hero{grid-template-columns:1fr 1fr;gap:18px 16px;padding:24px 22px;align-items:end}
+  #spHas .res-hero>.foot,#spHas .res-hero>.pb-sp27{align-self:start}}
+
 /* Budget 2027: the next year's rate, beside this year's */
-.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}
-/* MOTION-5:BEGIN (9 October 2026, Damian's brief): the page alive
-   (assets/js/pb-sp-motion.js sets :root.pb-sp-alive and every class here,
-   only with motion on). */
-:root.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .45s cubic-bezier(.3,1.5,.5,1) both}
-@keyframes pbSpRoll{from{transform:translateY(55%);opacity:0}to{transform:none;opacity:1}}
-.pb-sp-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
-:root.pb-sp-alive .mbar-fill,:root.pb-sp-alive .mbar-gap,:root.pb-sp-alive .mbar-lab,:root.pb-sp-alive .pb-rec-track i{transition:width .7s cubic-bezier(.34,1.56,.64,1),left .7s cubic-bezier(.34,1.56,.64,1)}
-:root.pb-sp-alive .mrow{margin-left:-12px;margin-right:-12px;padding:10px 12px;border-radius:14px;transition:box-shadow .4s,background-color .4s}
-:root.pb-sp-alive .mrow.pb-sp-win{background-color:rgba(230,251,247,.7);box-shadow:0 0 0 2px rgba(22,201,176,.55),0 10px 26px rgba(22,201,176,.16)}
-:root.pb-sp-alive .mrow.pb-sp-swap{animation:pbSpSwap .6s cubic-bezier(.3,1.5,.5,1)}
-@keyframes pbSpSwap{40%{transform:scale(1.03)}100%{transform:none}}
-/* MOTION-5:END */
+.pb-sp27{grid-column:1 / -1;margin:-8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+/* MOTION-6:BEGIN (12 October 2026, Damian's brief: calm and clear).
+   assets/js/pb-sp-motion.js sets :root.pb-sp-alive and .pb-sp-pre, only while
+   motion is allowed; every rule is also behind :root.pb-motion. Nothing
+   overshoots or bounces. The first time the card is seen both bars grow from
+   nothing, then the difference and the "Paid" mark fade in after them. */
+:root.pb-motion.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSpRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
+:root.pb-motion.pb-sp-alive .mbar-fill{transition:width .6s cubic-bezier(.22,.61,.36,1),background-color .35s ease}
+:root.pb-motion.pb-sp-alive .mbar-gap{transition:left .6s cubic-bezier(.22,.61,.36,1),width .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
+:root.pb-motion.pb-sp-alive .mbar-lab{transition:left .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
+:root.pb-motion.pb-sp-alive .mrow{transition:background-color .35s ease,border-color .35s ease}
+:root.pb-motion.pb-sp-alive .pb-rec-track i{transition:width .5s cubic-bezier(.22,.61,.36,1),left .5s cubic-bezier(.22,.61,.36,1)}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-fill{width:0 !important}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-gap,
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-lab{opacity:0}
+:root.pb-motion.pb-sp-alive #m2Row .mbar-fill{transition-delay:.08s}
+/* MOTION-6:END */

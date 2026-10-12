@@ -7,61 +7,66 @@
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="standard-fund-threshold">
   <div class="panel">
-    <h2 id="details">Your details</h2>
-    <p class="hint">Slide, or tap a value to type it.</p>
-    <div class="field"><div class="row"><label for="total">All your pensions, when you take them</label><span class="val" id="totalV">€1,650,000</span></div><input type="range" id="total" min="0" max="4000000" step="25000" value="1650000"><p class="subnote">Defined benefit pensions are valued with Revenue&rsquo;s factors.</p></div>
-    <div class="field"><div class="row"><label for="year">The year you take them</label><span class="val" id="yearV">2026</span></div><input type="range" id="year" min="2026" max="2030" step="1" value="2026"></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="lump">The lump sum you take</label><span class="val" id="lumpV">€400,000</span></div><input type="range" id="lump" min="0" max="1000000" step="5000" value="400000"><p class="subnote">Usually up to 25% of a fund, within limits. The bands are lifetime limits.</p></div>
+    <h2 id="details">Your pensions</h2>
+    <p class="hint">Slide, or tap a figure to type it.</p>
+    <div class="field"><div class="row"><label for="total">All of them, when you take them</label><span class="val" id="totalV">€1,650,000</span></div><input type="range" id="total" min="0" max="4000000" step="25000" value="1650000"><p class="subnote">Defined benefit pensions are valued with Revenue&rsquo;s factors.</p></div>
+    <fieldset class="field sft-years">
+      <legend class="sft-years-l">The year you take them</legend>
+      <div class="sft-chips">
+        <label class="sft-chip"><input type="radio" name="sftYear" value="2026" checked><span>2026</span></label>
+        <label class="sft-chip"><input type="radio" name="sftYear" value="2027"><span>2027</span></label>
+        <label class="sft-chip"><input type="radio" name="sftYear" value="2028"><span>2028</span></label>
+        <label class="sft-chip"><input type="radio" name="sftYear" value="2029"><span>2029</span></label>
+        <label class="sft-chip"><input type="radio" name="sftYear" value="2030" aria-label="2030 or later"><span>2030+</span></label>
+      </div>
+      <input type="hidden" id="year" value="2026">
+    </fieldset>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="lump">The lump sum you take</label><span class="val" id="lumpV">€400,000</span></div><input type="range" id="lump" min="0" max="1000000" step="5000" value="400000"><p class="subnote">Usually up to 25% of a fund, within limits.</p></div>
   </div>
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
-    <div class="res-hero">
+    <div class="res-hero sft-hero">
       <div><div class="rl" id="thrL">The threshold for 2026</div><div class="big" id="thr">€2,200,000</div></div>
       <div><div class="rl">Share used</div><div class="big" id="share">75%</div></div>
+      <div class="sft-lim" id="sftLim" aria-hidden="true">
+        <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
+        <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
+      </div>
       <p class="pb-say" id="pbSay">€1,650,000 taken in 2026 uses 75% of that year&rsquo;s threshold, leaving €550,000 of headroom.</p>
       <div class="divline"></div>
       <div class="foot">Revenue&rsquo;s rules, not your tax. A Personal Fund Threshold, if held, may apply instead.</div>
     </div>
 
-    <div class="chart-card sft-strip-card">
-      <h3>Year by year</h3>
-      <div class="sft-lim" id="sftLim" aria-hidden="true">
-        <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
-        <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i><span id="sftLimThrL">The threshold for 2026</span> <b id="sftLimThr">&euro;2,200,000</b></span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
-      </div>
-      <ol class="sft-strip" id="sftStrip">
-        <li data-y="2025"><b>2025</b><span>€2.0m</span></li>
-        <li data-y="2026" class="sft-on"><b>2026</b><span>€2.2m</span></li>
-        <li data-y="2027"><b>2027</b><span>€2.4m</span></li>
-        <li data-y="2028"><b>2028</b><span>€2.6m</span></li>
-        <li data-y="2029"><b>2029</b><span>€2.8m</span></li>
-        <li data-y="2030"><b>2030 on</b><span>At least €2.8m</span></li>
-      </ol>
-    </div>
-
-    <div class="sft-card" id="sftOver" hidden>
+    <div class="sft-card sft-over" id="sftOver" hidden>
       <h3>Over the threshold</h3>
       <p id="sftOverText"></p>
       <p class="sft-small">Income tax on the rest takes the combined rate up to 68.8%, or 71.2% with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
     </div>
 
-    <div class="sft-card">
-      <h3>Lump sum tax</h3>
-      <table class="sft-t">
-        <caption class="tk-sr">Lump sum bands</caption>
-        <tbody>
-          <tr><th scope="row">First €200,000, tax-free</th><td id="lumpFree">€200,000</td></tr>
-          <tr><th scope="row">Next €300,000, at 20%</th><td id="lumpStd">€200,000</td></tr>
-          <tr><th scope="row">Tax at 20%</th><td id="lumpTax">€40,000</td></tr>
-          <tr><th scope="row">Above €500,000, as income</th><td id="lumpInc">€0</td></tr>
-        </tbody>
-      </table>
-      <p class="sft-small">Above €500,000: your marginal rate, usually 40%, plus the Universal Social Charge (USC). The €500,000 has been fixed since 1 January 2025 (Revenue Pensions Manual, chapter 27).</p>
+    <div class="chart-card sft-strip-card">
+      <h3>Year by year</h3>
+      <p class="sft-sub">Each column is a year&rsquo;s threshold; the line is your pensions. Drag the line, or tap a year.</p>
+      <div class="sft-cols" id="sftCols" aria-hidden="true">
+        <div class="sft-line" id="sftLine" style="--f:0.5612"><span class="sft-line-v" id="sftLineV">€1.65m</span><span class="sft-grip"></span></div>
+        <ol class="sft-strip" id="sftStrip">
+          <li data-y="2026" class="sft-on"><span class="sft-col"><i class="sft-col-fill" style="height:74.83%"></i><i class="sft-col-over" style="bottom:74.83%;height:0%"></i></span><b>2026</b><span>€2.2m</span></li>
+          <li data-y="2027"><span class="sft-col"><i class="sft-col-fill" style="height:81.63%"></i><i class="sft-col-over" style="bottom:81.63%;height:0%"></i></span><b>2027</b><span>€2.4m</span></li>
+          <li data-y="2028"><span class="sft-col"><i class="sft-col-fill" style="height:88.44%"></i><i class="sft-col-over" style="bottom:88.44%;height:0%"></i></span><b>2028</b><span>€2.6m</span></li>
+          <li data-y="2029"><span class="sft-col"><i class="sft-col-fill" style="height:95.24%"></i><i class="sft-col-over" style="bottom:95.24%;height:0%"></i></span><b>2029</b><span>€2.8m</span></li>
+          <li data-y="2030" class="sft-open"><span class="sft-col"><i class="sft-col-fill" style="height:95.24%"></i><i class="sft-col-over" style="bottom:95.24%;height:0%"></i></span><b>2030+</b><span>€2.8m+</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="sft-card sft-lump">
+      <h3>Your lump sum</h3>
+      <p class="sft-small">The first €200,000 is tax-free and the next €300,000 is taxed at 20%. Both are lifetime limits.</p>
       <div class="sft-lb" id="sftLb" aria-hidden="true">
         <div class="sft-lb-track"><i class="sft-lb-free" id="sftLbFree" style="flex-grow:200000"></i><i class="sft-lb-std" id="sftLbStd" style="flex-grow:200000"></i><i class="sft-lb-inc" id="sftLbInc" style="flex-grow:0" hidden></i></div>
         <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
       </div>
+      <p class="sft-lump-tax">Tax at 20%: <b id="lumpTax">€40,000</b>.<span id="lumpIncLine" hidden> On the <b id="lumpInc">€0</b> above €500,000, income tax at your marginal rate, usually 40%, plus the Universal Social Charge (USC).</span></p>
     </div>
     <!-- AFTER -->
   </div>
@@ -79,10 +84,11 @@
   <details class="pb-fold"><summary><h3 id="rules">The rules</h3></summary>
   <ul>
     <li>Not included: what your pensions are worth, your tax position, a Personal Fund Threshold you may hold.</li>
-    <li>Budget 2027 keeps the threshold&rsquo;s path (&euro;2.4 million in 2027). It also revises the factors that value a defined benefit pension against it, from 1 January 2027; the new factors are due in the Finance (No. 2) Bill 2026, and this page does not use them yet.</li>
     <li>Finance Act 2024, section 13, sets the threshold. It was €2 million from 2014 to 2025. From 2030 it tracks Central Statistics Office average weekly earnings and cannot fall.</li>
+    <li>Budget 2027 keeps the threshold&rsquo;s path (&euro;2.4 million in 2027). It also revises the factors that value a defined benefit pension against it, from 1 January 2027; the new factors are due in the Finance (No. 2) Bill 2026, and this page does not use them yet.</li>
     <li>Each benefit is tested against all taken since 7 December 2005. Here, all are taken in one year.</li>
     <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it.</li>
+    <li>Lump sum: the €500,000 has been fixed since 1 January 2025 (Revenue Pensions Manual, chapter 27). Above it, a lump sum is taxed as income.</li>
     <li>Figures are illustrations, not a guarantee.</li>
   </ul>
   </details>

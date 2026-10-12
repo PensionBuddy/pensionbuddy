@@ -138,6 +138,8 @@ function render() {
   $('paidV').textContent = num(paid);
   $('creditedV').textContent = num(credited);
   $('homecaringV').textContent = num(homeCaring);
+  /* the folded refinements say what they hold while closed */
+  $('pbMoreSum').textContent = num(credited) + ' credited, ' + num(homeCaring) + ' caring';
 
   // Which side of the transition window the drawdown year falls on. Asked of
   // the shared module by name, so 'after' cannot be confused with 'before':
@@ -222,6 +224,9 @@ function render() {
        one adds, and whichever method the Department actually pays is labelled as
        paid. At a tie both are paid, which is what the closing sentence says. */
     const paidOn = { m1: res.award.basis !== 'method2', m2: hasBoth(res) && res.award.basis !== 'method1' };
+    /* the row the Department pays is marked; at a tie, both */
+    $('m1Row').classList.toggle('is-paid', paidOn.m1);
+    $('m2Row').classList.toggle('is-paid', paidOn.m2);
     ['m1', 'm2'].forEach(function (m) {
       const gap = $(m + 'Gap'), lab = $(m + 'Lab');
       gap.hidden = tailOn !== m;
@@ -258,6 +263,7 @@ function render() {
     $('pbRecPaidN').textContent = num(res.paid);
     $('pbRecExtraN').textContent = num(tca.extrasCounted);
     $('pbRecOverN').textContent = num(over);
+    $('pbRecOverK').hidden = over <= 0;
     if (tca.capBit) {
       $('m1Cap').textContent = num(tca.extrasCounted) + ' of your ' + num(res.credited + res.homeCaring) +
         ' credits and HomeCaring Periods count; the rest are over the caps.';

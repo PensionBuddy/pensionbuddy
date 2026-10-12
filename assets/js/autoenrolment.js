@@ -220,10 +220,19 @@
 
      Contributions are grown from the end of the year they are paid, so the
      last year's are not grown at all. Nothing is deducted for charges or
-     inflation, which the page also says. */
+     inflation, which the page also says.
+
+       matched          (12 October 2026) when true, opts.gross is ignored and
+                        each year's personal contribution is the one that
+                        costs the reader what that year's auto-enrolment
+                        costs them, matchedGross() for that year and age. So
+                        the two paths cost the same in every year, not only
+                        the first: held flat, the personal side stood still
+                        while auto-enrolment's own rate rose fourfold. */
   function cumulative(opts) {
     var years = Math.max(0, Math.round(opts.retireAge - opts.age));
     var growth = opts.growth || 0;
+    var relief = reliefFrom(opts);
     var ae = 0, personal = 0, i, one, grown;
     for (i = 0; i < years; i++) {
       one = compare({
@@ -232,7 +241,7 @@
         age: opts.age + i,
         srcop: opts.srcop,
         taxRate: opts.taxRate,
-        gross: opts.gross,
+        gross: opts.matched ? matchedGross(opts.salary, opts.firstYear + i, opts.age + i, relief) : opts.gross,
         employerMatchPct: opts.employerMatchPct
       });
       grown = Math.pow(1 + growth, years - 1 - i);
@@ -249,6 +258,32 @@
     };
   }
 
+  /* MODE 2, EVERY YEAR TO PENSION AGE (12 October 2026). combined() walked
+     over the same years as cumulative(): auto-enrolment at each year's rate,
+     and the same extra each month on top, grossed up at each year's age.
+     Grown the same way, at the caller's rate. Returns auto-enrolment alone,
+     the top-up's own total, and the two together. */
+  function cumulativeCombined(opts) {
+    var years = Math.max(0, Math.round(opts.retireAge - opts.age));
+    var growth = opts.growth || 0;
+    var ae = 0, extra = 0, i, one, grown;
+    for (i = 0; i < years; i++) {
+      one = combined({
+        salary: opts.salary,
+        year: opts.firstYear + i,
+        age: opts.age + i,
+        srcop: opts.srcop,
+        taxRate: opts.taxRate,
+        extraMonthly: opts.extraMonthly,
+        topUpMatchPct: opts.topUpMatchPct
+      });
+      grown = Math.pow(1 + growth, years - 1 - i);
+      ae += one.autoEnrolment.totalIn * grown;
+      extra += one.extra.totalIn * grown;
+    }
+    return { years: years, autoEnrolment: ae, extra: extra, total: ae + extra };
+  }
+
   return {
     AE_SALARY_CAP: AE_SALARY_CAP,
     AE_PHASES: AE_PHASES,
@@ -259,6 +294,7 @@
     aboveCap: aboveCap,
     compare: compare,
     cumulative: cumulative,
+    cumulativeCombined: cumulativeCombined,
     combined: combined
   };
 }));

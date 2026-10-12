@@ -29,7 +29,6 @@
 <meta name="twitter:image:alt" content="Pensionbuddy. For pension trackers: The statements went in the bin. The pension didn't.">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pensionbuddy.ie/"}, {"@type": "ListItem", "position": 2, "name": "Find a pension", "item": "https://pensionbuddy.ie/tracker.html"}]}</script>
 <!-- SEO:END -->
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "I have no paperwork. Is that a problem?", "acceptedAnswer": {"@type": "Answer", "text": "No. When and where you worked is usually enough."}}, {"@type": "Question", "name": "Can I combine my old pensions into one?", "acceptedAnswer": {"@type": "Answer", "text": "Often, yes. But some older pensions carry valuable guarantees worth keeping."}}, {"@type": "Question", "name": "Is it worth the hassle?", "acceptedAnswer": {"@type": "Answer", "text": "There usually is money there. Knowing what you have, and that it is invested, helps."}}]}</script>
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
@@ -1664,72 +1663,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Figtree',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
-/* ============================================================
-   MESS TO ORDER (#pbMess). On the tracker page: five pieces of old
-   paperwork (an envelope, a statement, a P60, a booklet, a sticky note),
-   scattered, gathered into one pile under a single card. Words only: no
-   figure, date or provider name on any of them. The markup is the settled
-   state (no script, reduced motion and screenshots all get it). With motion
-   on, the script ties the gathering to the scroll: each piece lifts, moves
-   and lands in turn, one after another, as the section rises up the screen,
-   and the card comes last. Scrolling back up undoes it. Decorative,
-   aria-hidden: the three steps under it carry the meaning.
-   ============================================================ */
-.pb-mess{position:relative;height:320px;max-width:720px;margin:0 auto 34px;overflow:hidden}
-.pb-mess-p,.pb-mess-sum{position:absolute;left:50%;top:50%;display:block;will-change:transform}
-.pb-mess-p{--lift:0;box-sizing:border-box;width:128px;height:164px;margin:-100px 0 0 -64px;padding:12px 12px 0;
-  background:linear-gradient(180deg,#fff,#FAFAF8);border:1px solid rgba(11,31,28,.10);border-radius:3px;
-  box-shadow:0 1px 1px rgba(11,31,28,.06),0 calc(2px + 18px*var(--lift)) calc(6px + 30px*var(--lift)) rgba(11,31,28,calc(.10 + .08*var(--lift)));
-  font-size:11.5px;font-weight:700;line-height:1.25;color:var(--ink)}
-.pb-mess-p b{display:block;font-weight:700}
-/* ruled lines: the body of each sheet */
-.pb-mess-p::after{content:"";position:absolute;left:12px;right:22px;bottom:16px;height:62px;
-  background:repeating-linear-gradient(to bottom,rgba(11,31,28,.10) 0 2px,transparent 2px 10px)}
-/* statement: a grey letterhead band and a short table */
-.pb-p-stmt{padding-top:30px}
-.pb-p-stmt::before{content:"";position:absolute;left:0;right:0;top:0;height:20px;background:#E9ECEA;border-radius:3px 3px 0 0}
-.pb-p-stmt::after{right:12px;height:44px;bottom:22px;
-  background:linear-gradient(90deg,transparent 58%,rgba(11,31,28,.10) 58% 60%,transparent 60%),
-             repeating-linear-gradient(to bottom,rgba(11,31,28,.12) 0 1px,transparent 1px 11px)}
-/* P60: a pale form with boxes */
-.pb-p-p60{background:#F1F4F0;font-size:15px;letter-spacing:.02em}
-.pb-p-p60::after{left:10px;right:10px;height:84px;bottom:12px;
-  background:repeating-linear-gradient(90deg,rgba(11,31,28,.14) 0 1px,transparent 1px 27px),
-             repeating-linear-gradient(to bottom,rgba(11,31,28,.14) 0 1px,transparent 1px 21px);
-  border-right:1px solid rgba(11,31,28,.14);border-bottom:1px solid rgba(11,31,28,.14)}
-/* envelope: landscape, manila, a flap and a stamp */
-.pb-p-env{width:176px;height:110px;margin:-72px 0 0 -88px;padding:62px 0 0 46px;background:#EADFC6;border-color:rgba(90,70,30,.18)}
-.pb-p-env::before{content:"";position:absolute;left:0;right:0;top:0;height:44px;
-  background:linear-gradient(to bottom right,transparent 49%,rgba(90,70,30,.16) 50%,transparent 51%),
-             linear-gradient(to bottom left,transparent 49%,rgba(90,70,30,.16) 50%,transparent 51%)}
-.pb-p-env::after{left:auto;right:12px;top:10px;bottom:auto;width:22px;height:26px;
-  background:repeating-linear-gradient(45deg,rgba(90,70,30,.22) 0 2px,transparent 2px 4px);outline:1px dashed rgba(90,70,30,.35)}
-/* booklet: a dark cover with pages showing at the edge */
-.pb-p-book{width:120px;height:158px;margin:-96px 0 0 -60px;padding:18px 14px 0;background:#33433F;color:#fff;border-color:#2A3835;border-radius:2px 5px 5px 2px;
-  box-shadow:2px 2px 0 -1px #fff,3px 3px 0 -1px var(--line-2),4px 4px 0 -1px #fff,5px 5px 0 -1px var(--line-2),
-             0 calc(2px + 18px*var(--lift)) calc(6px + 30px*var(--lift)) rgba(11,31,28,calc(.14 + .08*var(--lift)))}
-.pb-p-book::after{left:14px;right:auto;width:28px;height:3px;top:58px;bottom:auto;background:rgba(255,255,255,.55)}
-/* sticky note: square, yellow, written by hand */
-.pb-p-note{width:104px;height:96px;margin:-120px 0 0 -2px;padding:14px 12px 0;background:#F8EDA6;border:0;border-radius:1px;
-  font-family:var(--font);font-weight:400;font-size:13px;line-height:1.3;color:#3A3A2A}
-.pb-p-note::after{display:none}
-/* the settled pile */
-.pb-p-env{transform:translate(-10px,52px) rotate(-5deg)}
-.pb-p-stmt{transform:translate(-84px,-4px) rotate(-8deg)}
-.pb-p-p60{transform:translate(80px,-2px) rotate(6deg)}
-.pb-p-book{transform:translate(6px,30px) rotate(-1deg)}
-.pb-p-note{transform:translate(44px,64px) rotate(7deg)}
-.pb-mess-sum{z-index:2;top:auto;bottom:22px;width:230px;margin:0 0 0 -115px;padding:16px 18px;border-radius:10px;
-  background:var(--teal-50);color:var(--ink);border:1px solid var(--teal-100);font-size:15px;font-weight:700;line-height:1.3;
-  display:flex;align-items:center;gap:10px;box-shadow:0 14px 34px rgba(11,31,28,.22)}
-.pb-mess-sum svg{flex:none;width:20px;height:20px;fill:none;stroke:var(--teal);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:600px){
-  .pb-mess{height:300px}
-  .pb-mess-p{width:112px;height:144px;margin:-92px 0 0 -56px}
-  .pb-p-env{width:156px;height:98px;margin:-66px 0 0 -78px;padding:54px 0 0 40px}
-  .pb-p-book{width:106px;height:140px;margin:-88px 0 0 -53px}
-  .pb-p-note{width:94px;height:86px;margin:-110px 0 0 -4px}
-}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2357,11 +2290,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* the self-check list (8 October 2026: its style moved here from the cut paw-prints script) */
-.pb-trace{margin-top:30px}
-.pb-trace h3{margin-bottom:8px}
-.pb-trace .pb-tick{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
-.pb-trace .pb-tick input{width:24px;height:24px;flex:0 0 auto;margin-top:0;accent-color:var(--teal)}
 /* SCENE:BEGIN (9 October 2026, Damian's brief): the hero's scene, behind
    the headline (assets/js/pb-hero-scene.js adds the canvas and every class
    here, only with motion on). */
@@ -2380,6 +2308,81 @@ main h1{font-weight:800}
 @media(max-width:600px){.aud-hero.pb-scene{padding-bottom:270px}.pb-scene-hint{bottom:calc(270px - 58px);font-size:14px;white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center}}
 @media print{.pb-scene-cv,.pb-scene-hint{display:none}}
 /* SCENE:END */
+/* STEPS (assets/js/pb-steps.js): "How it works" as a journey. The markup
+   is the finished picture (nodes lit, icons drawn, lines full): what no
+   script, reduced motion and a screenshot all get. The script arms the row
+   off screen and plays it once on arrival; only nodes, icons and lines
+   move, never the words. */
+.pbs{--pbs-node:84px;--pbs-gap:32px;position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--pbs-gap);
+  list-style:none;max-width:960px;margin:8px auto 0;padding:0}
+.pbs-step{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+.pbs-node{position:relative;z-index:1;display:grid;place-items:center;flex:none;width:var(--pbs-node);height:var(--pbs-node);margin-bottom:20px;
+  border-radius:50%;background:var(--teal-50);border:1.5px solid var(--teal-100);color:var(--ink);
+  box-shadow:0 10px 24px -16px rgba(8,101,90,.55)}
+.pbs-ico{width:42px;height:42px;overflow:visible;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.pbs-ico .pbs-k{stroke:var(--teal-700)}
+.pbs-ico .pbs-f{fill:var(--teal-700);stroke:none}
+.pbs-ico .pbs-d{stroke-dasharray:1 1}
+.pbs-ico .pbs-a{transform-box:fill-box;transform-origin:50% 50%}
+.pbs-ico .pbs-a-ring{opacity:0}
+.pbs-n{position:absolute;top:-3px;right:-3px;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--ink);color:#fff;
+  font-size:13px;font-weight:700;line-height:26px;text-align:center;font-variant-numeric:tabular-nums;box-shadow:0 0 0 3px var(--bg)}
+.pbs-node::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--teal);opacity:0;pointer-events:none}
+.pbs-txt h3{margin:0 auto;max-width:15em}
+.pbs-txt p{margin:6px auto 0;max-width:18em;color:var(--ink-2)}
+/* the line between two nodes: a dotted route under a drawn one */
+.pbs-step:not(:last-child)::before,.pbs-step:not(:last-child)::after{content:"";position:absolute;z-index:0;height:2px;border-radius:2px;
+  top:calc(var(--pbs-node) / 2 - 1px);left:calc(50% + var(--pbs-node) / 2 + 12px);width:calc(100% + var(--pbs-gap) - var(--pbs-node) - 24px)}
+.pbs-step:not(:last-child)::before{background:repeating-linear-gradient(90deg,var(--line-2) 0 5px,transparent 5px 10px)}
+.pbs-step:not(:last-child)::after{background:linear-gradient(90deg,var(--teal-100),var(--teal));transform-origin:0 50%}
+.pbs::after{content:"";position:absolute;z-index:0;left:0;top:0;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--teal);
+  box-shadow:0 0 0 5px rgba(12,129,117,.16);opacity:0;pointer-events:none}
+@media(max-width:640px){
+  .pbs{--pbs-node:60px;grid-template-columns:1fr;gap:0;max-width:440px;margin-top:0}
+  .pbs-step{display:grid;grid-template-columns:var(--pbs-node) minmax(0,1fr);column-gap:18px;align-items:start;text-align:left;padding-bottom:40px}
+  .pbs-step:last-child{padding-bottom:0}
+  .pbs-node{margin:0}
+  .pbs-ico{width:32px;height:32px}
+  .pbs-n{min-width:22px;height:22px;line-height:22px;font-size:12px;padding:0 6px}
+  .pbs-txt{padding-top:calc(var(--pbs-node) / 2 - 13px)}
+  .pbs-txt h3,.pbs-txt p{margin-left:0;max-width:none}
+  .pbs-step:not(:last-child)::before,.pbs-step:not(:last-child)::after{width:2px;height:auto;
+    top:calc(var(--pbs-node) + 7px);bottom:7px;left:calc(var(--pbs-node) / 2 - 1px)}
+  .pbs-step:not(:last-child)::before{background:repeating-linear-gradient(180deg,var(--line-2) 0 5px,transparent 5px 10px)}
+  .pbs-step:not(:last-child)::after{background:linear-gradient(180deg,var(--teal-100),var(--teal));transform-origin:50% 0}
+}
+/* armed (the script, off screen, motion allowed): outlines waiting */
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-node{background:var(--surface);border-color:var(--line-2);box-shadow:none}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-n{background:var(--surface-2);color:var(--ink-2)}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-d{stroke-dashoffset:1;opacity:0}
+.pbs-armed .pbs-step:not(.pbs-on) .pbs-a{opacity:0}
+.pbs-armed .pbs-step:not(.pbs-link)::after{transform:scaleX(0)}
+@media(max-width:640px){.pbs-armed .pbs-step:not(.pbs-link)::after{transform:scaleY(0)}}
+:root.pb-motion .pbs-node{transition:background-color var(--pb-t-state),border-color var(--pb-t-state),box-shadow var(--pb-t-state)}
+:root.pb-motion .pbs-n{transition:background-color var(--pb-t-state),color var(--pb-t-state)}
+:root.pb-motion .pbs-d{transition:stroke-dashoffset var(--pb-t-draw),opacity var(--pb-t-swap);transition-delay:calc(var(--k,0) * 90ms)}
+:root.pb-motion .pbs-step::after{transition:transform var(--pb-d-4) var(--pb-ease-move)}
+/* each icon's own little move: on arrival, and again when a mouse rests on it */
+:root.pb-motion .pbs-ping .pbs-a{animation:var(--pb-d-4) var(--pb-ease-out) both;animation-delay:calc(220ms + var(--k,0) * 90ms)}
+:root.pb-motion .pbs-ping .pbs-a-drop{animation-name:pbsDrop}
+:root.pb-motion .pbs-ping .pbs-a-sweep{animation-name:pbsSweep}
+:root.pb-motion .pbs-ping .pbs-a-pop{animation-name:pbsPop}
+:root.pb-motion .pbs-ping .pbs-a-tick{animation-name:pbsTick}
+:root.pb-motion .pbs-ping .pbs-a-ring{animation-name:pbsRing;animation-duration:var(--pb-d-5)}
+@keyframes pbsDrop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes pbsSweep{from{opacity:0;transform:translate(-7px,-6px) rotate(-14deg)}to{opacity:1;transform:none}}
+@keyframes pbsPop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
+@keyframes pbsTick{from{opacity:1;stroke-dashoffset:1}to{opacity:1;stroke-dashoffset:0}}
+@keyframes pbsRing{0%{opacity:0;transform:scale(.55)}20%{opacity:.9}100%{opacity:0;transform:scale(1.5)}}
+/* the finish: one dot along the whole route, a halo at each node it passes */
+:root.pb-motion .pbs-run::after{animation:pbsRun calc(var(--pb-d-5) * 2) cubic-bezier(.45,0,.55,1) both}
+:root.pb-motion .pbs-run .pbs-node::after{animation:pbsHalo var(--pb-d-5) var(--pb-ease-out) both;animation-delay:calc(var(--i,0) * var(--pbs-gapms,640ms))}
+@keyframes pbsRun{0%{opacity:0;transform:translate(var(--pbs-x0),var(--pbs-y0))}10%,90%{opacity:1}100%{opacity:0;transform:translate(var(--pbs-x1),var(--pbs-y1))}}
+@keyframes pbsHalo{0%{opacity:0;transform:scale(.9)}35%{opacity:.6}100%{opacity:0;transform:scale(1.2)}}
+@media (hover:hover) and (pointer:fine){
+  :root.pb-motion .pbs-step:hover .pbs-node{box-shadow:0 14px 30px -14px rgba(8,101,90,.6)}
+}
+@media print{.pbs::after{display:none}}
 /* LEAD:kit:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/kit.css) */
 /* KIT (tools/lead-parts/kit.css; tools/lead-blocks.py writes it into each
    page with a reply tool): the card, fields, chips, reveal and sent state
@@ -2684,7 +2687,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2788,40 +2790,20 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <section><div class="wrap">
   <div class="sec-head ctr"><h2>How it works.</h2></div>
-  <div class="pb-mess" id="pbMess" aria-hidden="true">
-    <span class="pb-mess-p pb-p-env"><b>Envelope</b></span>
-    <span class="pb-mess-p pb-p-stmt"><b>Old statement</b></span>
-    <span class="pb-mess-p pb-p-p60"><b>P60</b></span>
-    <span class="pb-mess-p pb-p-book"><b>Pension booklet</b></span>
-    <span class="pb-mess-p pb-p-note"><b>Which provider?</b></span>
-    <span class="pb-mess-sum"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>One picture</span>
-  </div>
-  <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>Tell us where you worked</h3></div>
-    <div class="step"><div class="sx">2</div><h3>We trace and value them</h3></div>
-    <div class="step"><div class="sx">3</div><h3>We explain your options</h3></div>
-  </div>
-  <div class="pb-trace" id="pbTrace">
-    <h3>Your checklist</h3>
-    <label class="pb-tick" for="pbTick1"><input type="checkbox" id="pbTick1"><span>Listed the employers I have had</span></label>
-    <label class="pb-tick" for="pbTick2"><input type="checkbox" id="pbTick2"><span>Found out what each pension is worth</span></label>
-    <label class="pb-tick" for="pbTick3"><input type="checkbox" id="pbTick3"><span>Talked the options through</span></label>
-  </div>
-  <div class="hero-cta" style="margin-top:22px">
-      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  </div>
-</div></section>
-
-<section style="padding-top:0"><div class="wrap">
-  <div class="callout pb-bleed pb-dark pb-split">
-    <div class="pb-split-copy">
-    <h2>Forgotten pensions are common.</h2>
-    <a class="btn btn-quiet-dark" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-    <figure class="pb-split-media pb-photo">
-      <picture><source type="image/webp" srcset="assets/img/damian-and-buddy-dublin-hills.webp?v=dd7d6cfc"><img src="assets/img/damian-and-buddy-dublin-hills.jpg?v=81c0c784" width="720" height="897" alt="Damian and Buddy, the Pensionbuddy dog, on a hilltop above green fields." loading="lazy"></picture>
-    </figure>
-  </div>
+  <ol class="pbs" data-pb-steps>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M3 28.5h26"/><path class="pbs-d" style="--k:1" pathLength="1" d="M7 28.5V8.6l8-3.6v23.5"/><path class="pbs-d" style="--k:2" pathLength="1" d="M15 14h10v14.5"/><path class="pbs-d" style="--k:3" pathLength="1" d="M10.2 11.5h1.6M10.2 15.5h1.6M10.2 19.5h1.6M10.2 23.5h1.6M18.6 18.5h2.8M18.6 22.5h2.8"/><g class="pbs-a pbs-a-drop" style="--k:1"><path class="pbs-k" d="M24 1.8c2.1 0 3.8 1.6 3.8 3.7 0 2.8-3.8 6.4-3.8 6.4s-3.8-3.6-3.8-6.4c0-2.1 1.7-3.7 3.8-3.7z"/><path class="pbs-f" d="M25.3 5.4a1.3 1.3 0 1 1-2.6 0 1.3 1.3 0 0 1 2.6 0z"/></g></svg><span class="pbs-n">1</span></span>
+      <div class="pbs-txt"><h3>Tell us where you worked</h3></div>
+    </li>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M6.5 3.5h10l5 5v9"/><path class="pbs-d" style="--k:1" pathLength="1" d="M6.5 3.5v24h6"/><path class="pbs-d" style="--k:1" pathLength="1" d="M16.5 3.5v5h5"/><path class="pbs-d" style="--k:2" pathLength="1" d="M10 12.5h5M10 16.5h3"/><g class="pbs-a pbs-a-sweep" style="--k:1"><path class="pbs-k" d="M26.5 22a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/><path class="pbs-k" d="M25 26l4 4"/></g><path class="pbs-k pbs-d pbs-a pbs-a-tick" style="--k:3" pathLength="1" d="M18.4 22.1l1.7 1.7 3.4-3.5"/></svg><span class="pbs-n">2</span></span>
+      <div class="pbs-txt"><h3>We trace and value them</h3></div>
+    </li>
+    <li class="pbs-step">
+      <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M16 30v-9"/><path class="pbs-d" style="--k:1" pathLength="1" d="M16 21l-7.3-8.2M16 21V9.2M16 21l7.3-8.2"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:1" d="M9.8 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:2" d="M18.6 6.4a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:3" d="M27.4 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/></svg><span class="pbs-n">3</span></span>
+      <div class="pbs-txt"><h3>We explain your options</h3></div>
+    </li>
+  </ol>
 </div></section>
 
 <section class="pb-bleed pb-wash pb-magnetband" data-flag="guide_forms" hidden><div class="wrap"><div class="magnet">
@@ -2880,15 +2862,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div></section>
 <!-- LEAD:move:END -->
-<section style="padding-top:56px"><div class="wrap faq-grid">
-  <div class="sec-head" style="margin-bottom:0"><h2>Questions, answered.</h2></div>
-  <div class="faq-list">
-    <details><summary>I have no paperwork. Is that a problem?<span class="pm">+</span></summary><p>No. When and where you worked is usually enough.</p></details>
-    <details><summary>Can I combine my old pensions into one?<span class="pm">+</span></summary><p>Often, yes. But some older pensions carry valuable guarantees worth keeping.</p></details>
-    <details><summary>Is it worth the hassle?<span class="pm">+</span></summary><p>There usually is money there. Knowing what you have, and that it is invested, helps.</p></details>
-  </div>
-</div></section>
-
 <section style="padding-top:0"><div class="wrap">
   <div class="infoadvice">
     <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
@@ -2905,9 +2878,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="old-pension-checklist.html"><span class="pb-related-t">The old pension hunt: a checklist</span><span class="pb-related-d">Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="my-pensions.html"><span class="pb-related-t">All your pensions in one view</span><span class="pb-related-d">Add each pension and see your total, how it is split and what the fees cost you each year.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-t">Pension charges calculator</span><span class="pb-related-d">What an annual management charge and a charge on each payment take out of a pension pot by retirement.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="uk-pensions-in-ireland.html"><span class="pb-related-t">A UK pension, and living in Ireland</span><span class="pb-related-d">Moving a UK pension to Ireland, the 25% Overseas Transfer Charge, the UK State Pension, and how Ireland taxes UK pensions.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3053,7 +3026,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3088,66 +3061,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script src="assets/js/pb-jargon-chips.js?v=7bb8e78f"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
-<script>
-/* mess to order, tied to the scroll. Progress runs from 0, when the pile's
-   top is near the bottom of the screen, to 1, when its middle reaches the
-   screen's middle. Each piece has its own slice of that run, in
-   turn: it lifts (grows a little, its shadow spreads), travels and lands on
-   the pile. The card comes in over the last slice. The shown progress eases
-   toward the scrolled one each frame, so a wheel's jumps read as a smooth
-   move. Reduced motion, no rAF, or motion turned off: the settled markup
-   stays, untouched. */
-(function(){
-  var m=document.getElementById('pbMess');
-  if(!m||!window.requestAnimationFrame||!window.PBMotion||!PBMotion.on()) return;
-  var ps=[].slice.call(m.querySelectorAll('.pb-mess-p')), sum=m.querySelector('.pb-mess-sum');
-  /* [x, y, deg] scattered on the desk, then settled in the pile (the CSS's own) */
-  var WIDE=[[-250,44,-16],[-200,-34,13],[230,-30,-9],[250,40,11],[-30,-44,-18]],
-      NARROW=[[-104,48,-16],[-100,-30,13],[104,-28,-9],[104,40,11],[-20,-44,-18]],
-      PILE=[[-10,52,-5],[-84,-4,-8],[80,-2,6],[6,30,-1],[44,64,7]];
-  var mq=window.matchMedia?matchMedia('(max-width:600px)'):null;
-  var shown=-1, want=0, raf=0, live=true;
-  function clamp(v){ return v<0?0:v>1?1:v; }
-  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
-  function target(){
-    var r=m.getBoundingClientRect(), vh=innerHeight;
-    var from=vh*.92, to=vh*.5-r.height/2;
-    return clamp((from-r.top)/(from-to));
-  }
-  function paint(p){
-    var from=(mq&&mq.matches)?NARROW:WIDE, n=ps.length, slice=.34, step=(.82-slice)/(n-1);
-    for(var i=0;i<n;i++){
-      var t=clamp((p-i*step)/slice), e=ease(t), a=from[i], b=PILE[i], lift=Math.sin(Math.PI*t);
-      var x=a[0]+(b[0]-a[0])*e, y=a[1]+(b[1]-a[1])*e-lift*10, d=a[2]+(b[2]-a[2])*e, s=1+.07*lift;
-      ps[i].style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+d.toFixed(2)+'deg) scale('+s.toFixed(3)+')';
-      ps[i].style.setProperty('--lift',lift.toFixed(3));
-    }
-    var c=ease(clamp((p-.8)/.2));
-    sum.style.opacity=c.toFixed(3);
-    sum.style.transform='translateY('+((1-c)*18).toFixed(1)+'px) scale('+(.94+.06*c).toFixed(3)+')';
-  }
-  function frame(){
-    raf=0; if(!live) return;
-    var d=want-shown;
-    shown=Math.abs(d)<.002?want:shown+d*.14;
-    paint(shown);
-    if(shown!==want) raf=requestAnimationFrame(frame);
-  }
-  function kick(){ if(!live) return; want=target(); if(!raf) raf=requestAnimationFrame(frame); }
-  function stop(){
-    live=false; if(raf) cancelAnimationFrame(raf);
-    removeEventListener('scroll',kick); removeEventListener('resize',kick);
-    ps.forEach(function(el){ el.style.transform=''; el.style.removeProperty('--lift'); });
-    sum.style.opacity=''; sum.style.transform='';
-  }
-  want=shown=target(); paint(shown);
-  addEventListener('scroll',kick,{passive:true});
-  addEventListener('resize',kick);
-  document.addEventListener('pb:motion',function(ev){ if(ev.detail&&!ev.detail.motion) stop(); });
-})();
-</script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
+<script src="assets/js/pb-steps.js?v=d2e0493f"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>
 <script src="assets/js/pb-kit.js?v=f2ab740a"></script>
 <script src="assets/js/pb-jobs.js?v=89766d1d"></script>

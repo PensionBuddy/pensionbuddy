@@ -91,17 +91,35 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 @media (prefers-reduced-motion: reduce){ .seg{transition:none} }
 
 /* ---------- dialogue ---------- */
-.dlg{background:var(--surface);border:3px solid var(--ink);border-radius:4px;box-shadow:4px 4px 0 var(--line-2);padding:12px 14px;min-height:96px}
+.dlg{display:flex;align-items:flex-start;gap:14px;background:var(--surface);border:3px solid var(--ink);border-radius:4px;box-shadow:4px 4px 0 var(--line-2);padding:12px 14px;min-height:124px}
+.dlg-body{flex:1 1 auto;min-width:0}
 .dlg .term{font-size:12px;font-weight:700;color:var(--teal-600);margin-bottom:4px}
 .dlg p{font-size:16px}
-.dlg .lead{display:block;font-weight:700}
+.dlg .lead{display:block;font-weight:700;margin:0 0 2px;font-size:16px}
+.dlg .nextRow{flex:0 0 auto;align-self:flex-end}
 .dlg .caret{display:inline-block;width:10px;height:14px;background:var(--teal);margin-left:6px;vertical-align:-2px;animation:blink 1s steps(1,end) infinite}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 @media (prefers-reduced-motion: reduce){ .dlg .caret{animation:none;opacity:1} }
 .dlg[hidden]{display:none}
+/* A new line or a new question fades up a few pixels where it stands, the
+   four answers a beat apart, top to bottom. Nothing slides in from
+   anywhere else and nothing changes size but the speech box, which the
+   script eases between heights. */
+@keyframes jbIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: no-preference){
+  .dlg.swap .dlg-body{animation:jbIn .34s cubic-bezier(.2,.7,.2,1) both}
+  .dlg.swap .nextRow{animation:jbIn .34s cubic-bezier(.2,.7,.2,1) .14s both}
+  .menu.swap .opt .txt{animation:jbIn .34s cubic-bezier(.2,.7,.2,1) both}
+  .menu.swap .opt:nth-child(2) .txt{animation-delay:.06s}
+  .menu.swap .opt:nth-child(3) .txt{animation-delay:.12s}
+  .menu.swap .opt:nth-child(4) .txt{animation-delay:.18s}
+}
 
 /* ---------- answer menu ---------- */
 .menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* before the first battle the board keeps its place, unseen under the
+   title card, so the game is its full height from the title screen on */
+.pre{visibility:hidden}
 .opt{display:flex;align-items:flex-start;gap:10px;text-align:left;min-height:64px;padding:12px 14px;background:var(--surface);border:3px solid var(--ink);border-radius:4px;box-shadow:3px 3px 0 var(--line-2);cursor:pointer;font-size:15px;line-height:1.35;transition:transform .12s ease,background-color .15s ease}
 .opt:hover:not(:disabled){background:var(--teal-50)}
 .opt:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line-2)}
@@ -126,13 +144,17 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 .endPanel .sub{color:var(--ink-2);margin-bottom:12px}
 .endPanel .pb-why{margin:8px 0 0;font-size:13px;line-height:1.45;color:var(--ink-2)}
 .scores{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.score{flex:1 1 140px;background:var(--teal-50);border:2px solid var(--teal-100);border-radius:6px;padding:10px 12px}
+.score{flex:1 1 120px;background:var(--teal-50);border:2px solid var(--teal-100);border-radius:6px;padding:10px 12px}
 .score .k{font-size:11px;font-weight:700;color:var(--teal-600)}
 .score .v{font-family:var(--font-display);font-size:22px;font-weight:700}
 .lead{margin:14px 0 10px;font-size:15px}
 
-/* ---------- intro overlay ---------- */
-.intro{position:absolute;inset:0;background:rgba(10,51,46,.96);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;z-index:5}
+/* ---------- intro overlay ----------
+   The title card sits under the scene, over the board, so the title screen
+   is the live scene with Buddy and the Blob already facing off. The script
+   sets --it (the scene's bottom edge) and --ip (the card's padding); without
+   it the card covers the whole game. */
+.intro{position:absolute;inset:var(--it,0) var(--ip,0) var(--ip,0) var(--ip,0);background:var(--pine);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;z-index:5}
 .intro h1{font-size:34px;color:#FBF7EF}
 .intro p{max-width:46ch;color:var(--teal-100);font-size:15px}
 .intro .hint{font-size:13px;color:var(--teal-100);opacity:.9}
@@ -154,7 +176,8 @@ main{max-width:1000px;margin:0 auto;padding:20px}
   /* A taller stage on a phone: the camera then crops the sides and the
      fighters come up to a size the pixel art can actually carry. */
   #scene{aspect-ratio:16/9}
-  .dlg{min-height:0}
+  .dlg{min-height:0;flex-direction:column;align-items:stretch;gap:10px}
+  .dlg .nextRow{align-self:flex-start}
   .site-head .in{padding:10px 14px;gap:10px}
   /* shrink the lockup, not just its wordmark: 28px is the pack's floor */
   .logo{--pb-logo-h:28px}
@@ -170,13 +193,15 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 .embedded body{background:var(--surface)}
 .embedded main{height:100vh;display:flex;flex-direction:column}
 .embedded .game{border-radius:6px;padding:8px;gap:8px;flex:1 1 auto;min-height:0;overflow-y:auto}
-.embedded .stage{flex:1 1 auto;min-height:104px}
-/* in a flex column everything shrinks by default: only the scene may give ground */
+/* One height for the scene, set by the frame and never by the question: it
+   used to take whatever room the words below left it, so the fighters
+   grew and shrank with every question. */
+.embedded .stage{flex:0 0 auto;height:clamp(130px,calc(100vh - 400px),300px)}
 .embedded .hud,.embedded .dlg,.embedded .menu,.embedded .row,.embedded .endPanel{flex:0 0 auto}
 .embedded #scene{width:100%;height:100%;aspect-ratio:auto}
 .embedded .hud{gap:8px}
 .embedded .panel{padding:6px 10px}
-.embedded .dlg{min-height:78px;padding:10px 12px}
+.embedded .dlg{min-height:118px;padding:10px 12px}
 .embedded .opt{min-height:56px;padding:10px 12px}
 
 /* ---- the brand lockup (assets/brand/lockup.html) ----
@@ -225,7 +250,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       <canvas id="scene" width="640" height="220" role="img" aria-label="Battle scene: Buddy the boxer dog faces the Jargon Blob."></canvas>
     </div>
 
-    <div class="hud" id="hud" hidden>
+    <div class="hud pre" id="hud">
       <div class="panel">
         <div class="nm">Jargon Blob</div>
         <div class="bar" id="blobBar" role="img" aria-label="Jargon Blob health: 8 of 8"></div>
@@ -236,20 +261,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       </div>
     </div>
 
-    <div class="dlg" id="dlg" hidden>
-      <div class="term" id="dlgTerm"></div>
-      <p id="dlgText">Buddy is warming up.<span class="caret" aria-hidden="true"></span></p>
+    <div class="dlg pre" id="dlg">
+      <div class="dlg-body">
+        <div class="term" id="dlgTerm" hidden></div>
+        <p id="dlgText">Buddy is warming up.<span class="caret" aria-hidden="true"></span></p>
+      </div>
+      <div class="row nextRow" id="nextRow" hidden>
+        <button class="btn" type="button" id="nextBtn">Next</button>
+      </div>
     </div>
 
-    <div class="menu" id="menu" hidden>
+    <div class="menu pre" id="menu">
       <button class="opt" type="button" data-i="0"><span class="key" aria-hidden="true">1</span><span class="txt"></span></button>
       <button class="opt" type="button" data-i="1"><span class="key" aria-hidden="true">2</span><span class="txt"></span></button>
       <button class="opt" type="button" data-i="2"><span class="key" aria-hidden="true">3</span><span class="txt"></span></button>
       <button class="opt" type="button" data-i="3"><span class="key" aria-hidden="true">4</span><span class="txt"></span></button>
-    </div>
-
-    <div class="row" id="nextRow" hidden>
-      <button class="btn" type="button" id="nextBtn">Next</button>
     </div>
 
     <div class="endPanel" id="endPanel" hidden>
@@ -598,7 +624,8 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     global.setTimeout(done, 1500);
   }());
 
-  var uiBeat = '';   /* '' | 'appear' */
+  var game = doc.getElementById('game');
+  var embedded = doc.documentElement.className.indexOf('embedded') >= 0;
 
   /* ---------- storage ---------- */
   var BEST_KEY = 'pb.jargonBattle.best';
@@ -769,8 +796,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     ctx.fillStyle = '#E8F6F3';
     ctx.fillRect(0, 0, cssW, cssH);
 
+    /* the hit lands with a short, even sway that dies away: side to side
+       only, never a random jitter */
     if (!reduce && fx.shake > 0) {
-      ctx.translate(Math.round((Math.random() * 2 - 1) * fx.shake * 7), Math.round((Math.random() * 2 - 1) * fx.shake * 5));
+      ctx.translate(Math.round(Math.sin((0.45 - fx.shake) * 44) * 3 * (fx.shake / 0.45)), 0);
     }
 
     var cam = camera();
@@ -795,7 +824,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     ctx.restore();
 
     if (!reduce && fx.flash > 0) {
-      ctx.fillStyle = 'rgba(193,80,46,' + (0.4 * (fx.flash / 0.2)).toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(193,80,46,' + (0.22 * (fx.flash / 0.2)).toFixed(3) + ')';
       ctx.fillRect(0, 0, cssW, cssH);
     }
   }
@@ -806,7 +835,20 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   function ensureSize() {
     if (!cv) { return; }
     var w = cv.clientWidth, h = cv.clientHeight;
-    if (w > 8 && h > 8 && (w !== cssW || h !== cssH)) { sizeCanvas(); }
+    if (w > 8 && h > 8 && (w !== cssW || h !== cssH)) { sizeCanvas(); placeIntro(); }
+  }
+
+  /* the title card fills the board under the scene */
+  function placeIntro() {
+    var st = cv && cv.parentNode;
+    if (!intro || !game || !st || intro.hidden) { return; }
+    var cs = global.getComputedStyle ? global.getComputedStyle(game) : null;
+    var pad = cs ? parseFloat(cs.paddingLeft) || 0 : 0, gap = cs ? parseFloat(cs.rowGap) || 0 : 0;
+    var top = st.offsetTop + st.offsetHeight + gap;
+    /* only when the board under the scene has room for the card */
+    if (game.clientHeight - top - pad < 230) { intro.style.removeProperty('--it'); intro.style.removeProperty('--ip'); return; }
+    intro.style.setProperty('--it', top + 'px');
+    intro.style.setProperty('--ip', pad + 'px');
   }
 
   var lastTs = 0;
@@ -895,6 +937,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   function setDialogue(term, line1, line2) {
     if (!dlgTerm || !dlgText) { return; }
     dlgTerm.textContent = term || '';
+    dlgTerm.hidden = !term;
     dlgText.textContent = '';
     if (line2) {
       var lead = doc.createElement('strong');
@@ -911,48 +954,79 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     dlgText.appendChild(caret);
   }
 
+  /* Focus follows the game for keyboard players, but never scrolls: a
+     focus that scrolled used to carry the scene off the top of a phone,
+     and the glossary page with it when the game sits in its frame. */
+  function hold(el) {
+    if (!el) { return; }
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+  }
+
+  /* Every change of words goes through here. The scene above never moves;
+     the speech box eases from its old height to its new one, and the new
+     words fade up where they stand. */
+  var easeT = 0;
+  function restart(el, cls) { if (!el) { return; } el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+  function change(apply, answersToo) {
+    var calm = reduce || !dlg || dlg.hidden;
+    var h0 = calm ? 0 : dlg.getBoundingClientRect().height;
+    if (dlg) { global.clearTimeout(easeT); dlg.style.height = ''; dlg.style.transition = ''; dlg.style.overflow = ''; }
+    apply();
+    if (calm || dlg.hidden) { return; }
+    restart(dlg, 'swap');
+    if (answersToo) { restart(menu, 'swap'); }
+    var h1 = dlg.getBoundingClientRect().height;
+    if (h0 > 0 && Math.abs(h1 - h0) > 1) {
+      dlg.style.overflow = 'hidden';
+      dlg.style.height = h0 + 'px';
+      void dlg.offsetHeight;
+      dlg.style.transition = 'height .3s cubic-bezier(.2,.7,.2,1)';
+      dlg.style.height = h1 + 'px';
+      easeT = global.setTimeout(function () { dlg.style.height = ''; dlg.style.transition = ''; dlg.style.overflow = ''; }, 340);
+    }
+  }
+
   /* ---------- screens ---------- */
   function showQuestion(s) {
     var q = s.current;
     if (!q) { return; }
-    setDialogue(q.term, 'A wild ' + q.shortTerm + ' appears!', q.prompt);
-    for (var i = 0; i < opts.length; i++) {
-      opts[i].className = 'opt';
-      opts[i].disabled = false;
-      opts[i].querySelector('.txt').textContent = q.options[i];
-      opts[i].setAttribute('aria-label', 'Answer ' + (i + 1) + ': ' + q.options[i]);
-    }
-    if (menu) { menu.hidden = false; }
-    if (nextRow) { nextRow.hidden = true; }
-    if (endPanel) { endPanel.hidden = true; }
-    if (dlg) { dlg.hidden = false; }
+    change(function () {
+      /* the name only: the bank's longer form can give the answer away */
+      setDialogue('', 'A wild ' + q.shortTerm + ' appears!', q.prompt);
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].className = 'opt';
+        opts[i].disabled = false;
+        opts[i].querySelector('.txt').textContent = q.options[i];
+        opts[i].setAttribute('aria-label', 'Answer ' + (i + 1) + ': ' + q.options[i]);
+      }
+      if (nextRow) { nextRow.hidden = true; }
+    }, true);
     paintBar(s.blobHp);
     paintHearts(s.hearts);
     describeScene(s);
     say('Question ' + (s.index + 1) + ' of ' + s.total + '. ' + q.prompt + ' Four answers, use keys 1 to 4.');
-    if (started && opts.length) { opts[0].focus(); }
+    if (started && opts.length) { hold(opts[0]); }
   }
 
   function showResult(s) {
     var L = s.last;
     if (!L) { return; }
-    var line = L.correct
-      ? 'Direct hit! Buddy says: ' + L.buddySays
-      : 'Ouch. The answer was: ' + L.correctText + ' Buddy says: ' + L.buddySays;
-    setDialogue(L.term, line);
-    for (var i = 0; i < opts.length; i++) {
-      opts[i].disabled = true;
-      if (i === s.current.correctIndex) { opts[i].className = 'opt right'; }
-      else if (i === L.chosen) { opts[i].className = 'opt wrong'; }
-      else { opts[i].className = 'opt'; }
-    }
-    if (nextRow) { nextRow.hidden = false; }
+    change(function () {
+      setDialogue(L.term, L.correct ? 'Direct hit!' : 'Not quite. It means: ' + L.correctText, L.buddySays);
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].disabled = true;
+        if (i === s.current.correctIndex) { opts[i].className = 'opt right'; }
+        else if (i === L.chosen) { opts[i].className = 'opt wrong'; }
+        else { opts[i].className = 'opt'; }
+      }
+      if (nextRow) { nextRow.hidden = false; }
+    }, false);
     paintBar(s.blobHp);
     describeScene(s);
     say((L.correct ? 'Correct. The Jargon Blob is down to ' + s.blobHp + ' of ' + QUESTIONS_PER_BATTLE + '. '
                    : 'Wrong. The answer was: ' + L.correctText + ' Buddy has ' + s.hearts + ' hearts left. ')
         + 'Buddy says: ' + L.buddySays);
-    if (nextBtn) { nextBtn.focus(); }
+    hold(nextBtn);
   }
 
   function showEnd(s) {
@@ -964,8 +1038,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     var best = readBest();
     if (s.hits > best) { best = s.hits; writeBest(best); }
 
+    /* the end card takes the place of the board: the scene stays put */
     if (menu) { menu.hidden = true; }
     if (nextRow) { nextRow.hidden = true; }
+    if (dlg) { dlg.hidden = true; dlg.style.height = ''; }
+    if (hud) { hud.hidden = true; }
     if (endPanel) { endPanel.hidden = false; }
     if (endTitle) { endTitle.textContent = won ? 'The Jargon Blob is busted!' : 'Buddy needs a nap.'; }
     if (endSub) {
@@ -976,13 +1053,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     if (endHits) { endHits.textContent = s.hits + ' of ' + s.total; }
     if (endBest) { endBest.textContent = best + ' of ' + s.total; }
 
-    setDialogue('', won ? 'Grand job. Buddy is off doing a lap of the garden.' : 'Sure look. Buddy will have a nap and go again.');
     paintBar(s.blobHp);
     paintHearts(s.hearts);
     describeScene(s);
     say((won ? 'Victory. The Jargon Blob is busted. ' : 'Defeat. Buddy needs a nap. ')
         + 'Hits landed: ' + s.hits + ' of ' + s.total + '. Best ever: ' + best + ' of ' + s.total + '.');
-    if (againBtn) { againBtn.focus(); }
+    hold(againBtn);
   }
 
   var started = false;
@@ -1001,7 +1077,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     describeScene(s);
   };
 
+  /* Straight from the title card to the first question. Everything under
+     the scene was already laid out, unseen, beneath the title card, so
+     nothing grows or moves when the battle starts. */
   function startBattle() {
+    var first = !started;
     started = true;
     fx.ending = '';
     setBuddy('idle', 0);
@@ -1012,21 +1092,21 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     paintBar(s.blobHp);
     paintHearts(s.hearts);
     if (intro) { intro.hidden = true; }
-    if (hud) { hud.hidden = false; }
     if (endPanel) { endPanel.hidden = true; }
-    if (menu) { menu.hidden = true; }
-    if (dlg) { dlg.hidden = false; }
-    if (nextRow) { nextRow.hidden = false; }
-    uiBeat = 'appear';
-    setDialogue('', 'A wild Jargon Blob appears! Eight terms, and Buddy is ready.');
-    describeScene(s);
-    say('A wild Jargon Blob appears. Eight terms to get through.');
-    if (nextBtn) { nextBtn.focus(); }
+    [hud, dlg, menu].forEach(function (el) { if (el) { el.hidden = false; el.classList.remove('pre'); } });
+    sync();
+    /* on a short screen, once, the whole card is brought into view */
+    if (first && !embedded && game && game.getBoundingClientRect) {
+      var r = game.getBoundingClientRect();
+      if (r.top > 0 && r.bottom > global.innerHeight && game.scrollIntoView) {
+        game.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      }
+    }
   }
 
   function chooseAnswer(i) {
     var s = state();
-    if (s.phase !== 'question' || uiBeat) { return; }
+    if (s.phase !== 'question') { return; }
     var res = answer(i);
     if (res.correct) { playCorrect(); } else { playWrong(); }
     /* hearts wait for the paper ball; blob HP drops with the hit */
@@ -1035,11 +1115,6 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
   }
 
   function advance() {
-    if (uiBeat === 'appear') {
-      uiBeat = '';
-      sync();
-      return;
-    }
     var s = state();
     if (s.phase !== 'result') { return; }
     fx.paper = -1; fx.paperDelay = 0; fx.bark = -1;
@@ -1076,12 +1151,12 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.altKey) { return; }
     var s = state();
     var tag = e.target && e.target.tagName ? e.target.tagName : '';
-    if (s.phase === 'question' && !uiBeat && e.key >= '1' && e.key <= '4') {
+    if (s.phase === 'question' && e.key >= '1' && e.key <= '4') {
       e.preventDefault();
       chooseAnswer(parseInt(e.key, 10) - 1);
       return;
     }
-    if ((e.key === 'Enter' || e.key === ' ') && (uiBeat === 'appear' || s.phase === 'result')) {
+    if ((e.key === 'Enter' || e.key === ' ') && s.phase === 'result') {
       /* a focused button handles its own Enter and Space, do not fire twice */
       if (tag === 'BUTTON' || tag === 'A') { return; }
       e.preventDefault();
@@ -1091,12 +1166,14 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
   global.addEventListener('resize', function () {
     sizeCanvas();
+    placeIntro();
     render();
   });
 
   /* ---------- boot ---------- */
   function boot() {
     sizeCanvas();
+    placeIntro();
     buildBar();
     buildHearts();
     paintBar(QUESTIONS_PER_BATTLE);

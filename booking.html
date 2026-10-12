@@ -2116,7 +2116,9 @@ main h1{font-weight:800}
 .pb-from[hidden]{display:none}
 /* "How a call works", moved here from the home page on 12 October 2026
    (Damian: the home page shows the filmed clips; the drawn version lives
-   where people book). Base step rules from index.html, then its MOTION-6. */
+   where people book). Base step rules from index.html, then its MOTION-6.
+   Later on 12 October (Damian: "how a call works, then the forms"): it sits
+   straight after the calendar, before "Or we call you." and "Ask us." */
 .pb-book-how{padding:8px 0 84px}
 .pb-book-how h2{text-align:center;margin:0 0 36px}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:960px;margin:0 auto}
@@ -2471,7 +2473,6 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2509,6 +2510,14 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
 
 </div></div>
+<section class="pb-book-how" id="call" aria-labelledby="pbBookHow"><div class="wrap">
+  <h2 id="pbBookHow">How a call works.</h2>
+  <div class="steps">
+    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>Pick a time that suits you.</p></div>
+    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
+    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
+  </div>
+</div></section>
 <!-- LEAD:callback:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/callback.html) -->
 <section class="pbk pbc" id="callback" aria-labelledby="pbcH"><div class="wrap"><div class="pbk-card">
   <h2 id="pbcH">Or we call you.</h2>
@@ -2608,16 +2617,6 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 </div>
 </div></section>
 <!-- LEAD:ask:END -->
-
-<section class="pb-book-how" id="call" aria-labelledby="pbBookHow"><div class="wrap">
-  <h2 id="pbBookHow">How a call works.</h2>
-  <div class="steps">
-    <div class="step"><div class="sx">1</div><h3>You reach out</h3><p>Pick a time that suits you.</p></div>
-    <div class="step"><div class="sx">2</div><h3>We talk it through</h3><p>Twenty minutes, by phone or video.</p></div>
-    <div class="step"><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
-  </div>
-</div></section>
-
 </main>
 <footer><div class="wrap">
   <div class="foot-top">
@@ -2673,7 +2672,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   var THANK_YOU_URL='thank-you.html';
   var LOAD_TIMEOUT_MS=8000;
   /* the pages that are about one situation, by the name pb-cta.js gives them */
-  var SITUATION={'starter':'starter','tracker':'tracker','old-pension-checklist':'tracker','director':'director',
+  var SITUATION={'starter':'starter','tracker':'tracker','director':'director',
     'director-calculator':'director','director-pension-rules':'director','director-year-end-checklist':'director'};
 
   var embed=document.getElementById('calEmbed');
@@ -2815,9 +2814,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-call-motion.js?v=9eca6a27"></script>
+<script src="assets/js/pb-call-motion.js?v=22bb7e4e"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
 

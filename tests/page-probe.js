@@ -85,6 +85,12 @@
   }
 
   // ======================================================= the reality check
+  /* 12 October 2026 (Damian: simplify): the page has one control, the PRSI
+     record. The age slider went (it changed nothing in the figure, spec S4),
+     and each living standard is now a bar, the share covered (.lspct) and the
+     monthly shortfall (.lsmon); the yearly shortfalls are in the spoken
+     summary, so the spec's yearly figures are asserted there. The one-line
+     result sentence (#pbSay) and the bar intro (#lsIntro) went with them. */
   function realityCheck(t) {
     var SP = window.PBStatePension, P = window.PBPage;
     var euro = P.euro, euro2 = P.euro2, num = P.num;
@@ -94,30 +100,34 @@
     t.eq('modules: PBStatePension and PBPage are on the page',
          typeof SP === 'object' && typeof P === 'object', true);
     if (pinned) t.eq('clock: the page read the pinned year ' + pinned, YEAR, pinned);
+    t.eq('one control: the contributions slider is the only slider, and there is no age slider',
+         [document.querySelectorAll('[data-pb-calc] input[type=range]').length, $('age') === null].join('/'), '1/true');
 
     /* S9 rows. `drive` rows carry the figures the spec states, typed in by
-       hand; the rest of what the page shows is checked against the module. */
+       hand; the rest of what the page shows is checked against the module.
+       `age` is no longer a control: it only feeds the module's floorStatus,
+       which row 17 still asserts. */
     var ROWS = [
       { rows: '1, 7, 8, 9, 10', contribs: 2080, age: 40,
         weekly: '€299.30', annual: '€15,564',
-        gaps: { modest: ['81%', '€3,636 a year', '€303 a month'],
-                moderate: ['56%', '€12,036 a year', '€1,003 a month'],
-                comfortable: ['46%', '€18,036 a year', '€1,503 a month'] } },
+        gaps: { modest: ['81%', '€3,636', '€303'],
+                moderate: ['56%', '€12,036', '€1,003'],
+                comfortable: ['46%', '€18,036', '€1,503'] } },
       { rows: '2, 11', contribs: 1560, age: 40,
         weekly: '€224.48', annual: '€11,673',
-        gaps: { comfortable: ['35%', '€21,927 a year', '€1,827 a month'] } },
+        gaps: { comfortable: ['35%', '€21,927', '€1,827'] } },
       { rows: '5', contribs: 520, age: 40, weekly: '€74.83', annual: '€3,891' },
       { rows: '4', contribs: 0, age: 40, none: true, shortBy: '520' },
       { rows: '17 exact at 58', contribs: 2080, age: 58, status: 'exact' },
       { rows: '17 exact at 57', contribs: 2080, age: 57, status: 'exact' },
       { rows: '17 floor at 58', contribs: 1560, age: 58, status: 'floor' },
       { rows: '17 rate at 57', contribs: 1560, age: 57, status: 'rate' },
-      { rows: '14 at 66', contribs: 2080, age: 66, atAge: true },
-      // rows the sliders cannot reach today; driven if they ever can be
+      // rows the slider cannot reach today; driven if it ever can be
       { rows: '3', contribs: 519, age: 40, none: true, shortBy: '1' },
       { rows: '6', contribs: 2500, age: 40, weekly: '€299.30', annual: '€15,564' }
     ];
     var MODULE_ONLY = { '13': 'the three target figures are constants, asserted in the suite',
+                        '14': 'yearsUntilPensionAge() has had no control on this page since the age slider went',
                         '15': 'transition() by year has no control on this page',
                         '16': 'earliestDrawdownYear() is reached through row 17' };
     // row 12, a covered standard, is unreachable by arithmetic: the maximum
@@ -136,33 +146,49 @@
       var blocked = [];
       if (!onStep('contribs', row.contribs)) blocked.push(row.contribs + ' is not on the contribs step of ' + $('contribs').step);
       if (!inRange('contribs', row.contribs)) blocked.push(row.contribs + ' is outside contribs ' + $('contribs').min + ' to ' + $('contribs').max);
-      if (!inRange('age', row.age)) blocked.push(row.age + ' is outside age ' + $('age').min + ' to ' + $('age').max);
       if (blocked.length) { t.skip(label, blocked.join('; ')); return; }
 
-      var got = [setRange('contribs', row.contribs), setRange('age', row.age)];
-      t.eq(label + ': the sliders took contribs ' + row.contribs + ' and age ' + row.age,
-           got.join('/'), row.contribs + '/' + row.age);
+      t.eq(label + ': the slider took contribs ' + row.contribs, setRange('contribs', row.contribs), row.contribs);
 
       var res = SP.statePension(row.contribs);
       var years = row.contribs / 52;
 
-      // C. the sliders announce the page's wording, exactly
+      // C. the slider announces the page's wording, exactly
       t.eq(label + ': contribs aria-valuetext', $('contribs').getAttribute('aria-valuetext'),
            num(row.contribs) + ' reckonable contributions, ' + years + ' years');
-      t.eq(label + ': age aria-valuetext', $('age').getAttribute('aria-valuetext'), row.age + ' years old');
       t.eq(label + ': contribsV', text('contribsV'), num(row.contribs));
-      t.eq(label + ': ageV', text('ageV'), String(row.age));
+      // C. the forty dots say the same count in years
+      t.eq(label + ': the record caption counts the years', text('pbJarCap'), Math.floor(row.contribs / 52) + ' of 40 years');
+      t.eq(label + ': the lit dots are the years', document.querySelectorAll('.pb-jar-dot.pb-on').length, Math.min(40, Math.floor(row.contribs / 52)));
+      t.eq(label + ': "Full record" shows iff the record is full', !$('pbJarFull').hidden, row.contribs >= 2080);
 
       // C. one panel
       t.eq(label + ': the eligible panel shows iff eligible', !$('spHas').hidden, res.eligible);
       t.eq(label + ': the no-entitlement panel shows iff not', !$('spNone').hidden, !res.eligible);
 
-      var toGo = SP.yearsUntilPensionAge(row.age);
-      if (row.atAge) {
-        t.has(label + ': ageNote says at or past 66', text('ageNote'), 'You are at or past 66.');
-      } else {
-        t.has(label + ': ageNote counts the years to 66', text('ageNote'), 'You have ' + toGo + ' years until 66.');
-      }
+      var gaps = SP.gaps(res.eligible ? res.annualCents : 0);
+      gaps.forEach(function (g) {
+        var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
+        var covered = Math.max(0, Math.min(1, (res.eligible ? res.annualCents : 0) / g.targetCents));
+        var gap = rowEl.querySelector('.lsgap').textContent;
+        // the page writes the raw proportion and the browser serialises it
+        // back to six significant digits, so compare within a thousandth
+        var width = parseFloat(rowEl.querySelector('.lsbar i').style.width);
+        t.eq(label + ': ' + g.standard + ' bar width is the covered share, ' + (Math.round(covered * 10000) / 100) + '%',
+             Math.abs(width - covered * 100) < 0.001, true);
+        t.eq(label + ': ' + g.standard + ' is never covered (row 12: the maximum is below every standard)',
+             rowEl.classList.contains('is-covered'), false);
+        t.eq(label + ': ' + g.standard + ' share is the covered share', rowEl.querySelector('.lspct').textContent, Math.round(covered * 100) + '%');
+        t.eq(label + ': ' + g.standard + ' monthly shortfall is the module\'s', rowEl.querySelector('.lsmon').textContent, euro(g.gapMonthly));
+        t.has(label + ': ' + g.standard + ' gap reads as one line', gap, 'Covers ' + Math.round(covered * 100) + '% ' + euro(g.gapMonthly) + ' a month short');
+        if (row.gaps && row.gaps[g.standard]) {
+          var spec = row.gaps[g.standard];
+          t.eq(label + ': ' + g.standard + ', the spec share ' + spec[0], rowEl.querySelector('.lspct').textContent, spec[0]);
+          t.eq(label + ': ' + g.standard + ', the spec year figure ' + spec[1], euro(g.gapAnnual), spec[1]);
+          t.has(label + ': ' + g.standard + ', the spec year figure in the spoken summary', text('srSummary'), spec[1] + (g.standard === 'modest' ? ' a year short' : ' short'));
+          t.eq(label + ': ' + g.standard + ', the spec month figure ' + spec[2], rowEl.querySelector('.lsmon').textContent, spec[2]);
+        }
+      });
 
       if (res.eligible) {
         // A. the spec's figures, where the row states them
@@ -179,42 +205,9 @@
           t.has(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so the rate is ' + pctOfMax + '% of the maximum');
         }
         // exact, floor or rate is still the module's decision and the spec rows
-        // still carry it; the page stopped wording it on 2026-09-20 (the
-        // caveat sentence under the result was removed, Damian's call), so
-        // nothing on the page is asserted for it any more
+        // still carry it; the page stopped wording it on 2026-09-20
         var status = SP.floorStatus(res, row.age, YEAR);
         if (row.status) t.eq(label + ': the module status is the one the spec expects', status, row.status);
-
-        t.has(label + ': lsIntro', text('lsIntro'), 'The bar shows how much of each one the State Pension covers.');
-        var gaps = SP.gaps(res.annualCents);
-        gaps.forEach(function (g) {
-          var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
-          var covered = Math.max(0, Math.min(1, res.annualCents / g.targetCents));
-          var gap = rowEl.querySelector('.lsgap').textContent;
-          // the page writes the raw proportion and the browser serialises it
-          // back to six significant digits, so compare within a thousandth
-          var width = parseFloat(rowEl.querySelector('.lsbar i').style.width);
-          t.eq(label + ': ' + g.standard + ' bar width is the covered share, ' + (Math.round(covered * 10000) / 100) + '%',
-               Math.abs(width - covered * 100) < 0.001, true);
-          t.eq(label + ': ' + g.standard + ' is never covered (row 12: the maximum is below every standard)',
-               rowEl.classList.contains('is-covered'), false);
-          t.has(label + ': ' + g.standard + ' gap carries the percentage', gap, 'covers ' + Math.round(covered * 100) + '%');
-          t.has(label + ': ' + g.standard + ' gap carries the module\'s year figure', gap, euro(g.gapAnnual) + ' a year');
-          t.has(label + ': ' + g.standard + ' gap carries the module\'s month figure', gap, euro(g.gapMonthly) + ' a month');
-          if (row.gaps && row.gaps[g.standard]) {
-            row.gaps[g.standard].forEach(function (needle) {
-              t.has(label + ': ' + g.standard + ' gap, the spec figure ' + needle, gap, needle);
-            });
-          }
-        });
-        // #4: the one-sentence result repeats the two headline figures and the
-        // modest row's share, so it is held to the module like they are
-        var modest = gaps.filter(function (g) { return g.standard === 'modest'; })[0];
-        t.eq(label + ': pbSay is the result in one sentence', text('pbSay'),
-             'On ' + num(row.contribs) + ' reckonable contributions, ' + years + ' years, this shows ' +
-             euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year, which covers ' +
-             Math.round(Math.max(0, Math.min(1, res.annualCents / modest.targetCents)) * 100) +
-             '% of a modest standard of living.');
         var sr = text('srSummary');
         t.has(label + ': srSummary carries the weekly figure', sr, 'State Pension ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) + ' a year.');
         t.has(label + ': srSummary carries the three gaps', sr,
@@ -224,16 +217,10 @@
         t.has(label + ': spNoneFoot carries the count', text('spNoneFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
         t.has(label + ': spNoneFoot carries the shortfall', text('spNoneFoot'), num(res.shortBy) + ' more would bring the total to 520');
         if (row.shortBy) t.has(label + ': the spec shortfall', text('spNoneFoot'), row.shortBy + ' more would bring');
-        t.has(label + ': lsIntro says nothing is covered', text('lsIntro'), 'With no Contributory entitlement, none of these is covered by it.');
-        // #4: below the minimum the one-sentence result must not be seen
-        // beside "No entitlement"; it goes with the eligible panel it sits in
-        t.eq(label + ': pbSay is out of sight with the eligible panel',
-             $('spHas').contains($('pbSay')) && $('pbSay').getClientRects().length === 0, true);
-        SP.gaps(0).forEach(function (g) {
+        gaps.forEach(function (g) {
           var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
           t.eq(label + ': ' + g.standard + ' bar is empty', rowEl.querySelector('.lsbar i').style.width, '0%');
-          t.has(label + ': ' + g.standard + ' gap is the whole target', rowEl.querySelector('.lsgap').textContent,
-                'You would need ' + euro(g.target) + ' a year from somewhere else.');
+          t.eq(label + ': ' + g.standard + ' shortfall is the whole standard, a month', rowEl.querySelector('.lsmon').textContent, euro(g.target / 12));
         });
         t.has(label + ': srSummary says there is no entitlement', text('srSummary'),
               'With ' + num(row.contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
@@ -662,12 +649,11 @@
     function flush() { if (typeof anims === 'object') { for (var k in anims) { anims[k].cur = anims[k].target; } } }
     var rows = [];
     CASES.forEach(function (c) {
-      setRange('age', c[0]); setRange('earn', c[1]); setRange('mine', c[2]);
-      var btn = $(c[3] === 40 ? 't40' : 't20'); if (btn) btn.click();
+      setRange('age', c[0]); setRange('mine', c[1]);
+      var btn = $(c[2] === 40 ? 't40' : 't20'); if (btn) btn.click();
       flush();
-      var txt = text('reliefOut');
-      var m = txt.match(/covers the other €([\d,]+)/);
-      rows.push({ age: c[0], earn: c[1], monthly: c[2], rate: c[3],
+      var m = text('rvTaxV').match(/€([\d,]+)\/mo/);
+      rows.push({ age: c[0], monthly: c[1], rate: c[2],
                   pageRelief: m ? Number(m[1].replace(/,/g, '')) : null });
     });
     return { kind: 'drift', rows: rows, errors: window.__errs };

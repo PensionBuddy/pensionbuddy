@@ -139,10 +139,10 @@ def run():
     # Since 11 October 2026 the nav opens on Home, so the home page marks itself too.
     # Since Run 54 "Directors" is one link: the director page marks itself, the
     # full calculator, the 2026 rules and the checklist are reached from it.
-    eq('8. the pages that mark themselves current are derived from the nav, and are these seventeen',
+    eq('8. the pages that mark themselves current are derived from the nav, and are these sixteen',
        sorted(pagebuild.nav_targets(skel_nav)),
        ['broker-vs-autoenrolment.html', 'director.html', 'glossary.html', 'index.html', 'my-pensions.html',
-        'old-pension-checklist.html', 'pension-calculator.html', 'pension-fees-calculator.html',
+        'pension-calculator.html', 'pension-fees-calculator.html',
         'pensions-over-50.html', 'pia.html', 'self-employed-pensions.html', 'standard-fund-threshold.html',
         'starter.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html', 'tracker.html',
         'uk-pensions-in-ireland.html'])
@@ -229,8 +229,8 @@ def run():
          after('glossary.html', '/* FIRSTSCREEN:BEGIN', '.pb-hero-copy > .pb-reg-top{display:flex}', '.pb-hero-copy > .pb-reg-top{display:block}')),
         ('the FIRSTSCREEN block of CSS missing', 'booking.html', 'firstscreen-css',
          sources['booking.html'].replace('/* FIRSTSCREEN:END */', '/* FIRSTSCREEN-END */', 1)),
-        ('the CTA block of CSS changed', 'old-pension-checklist.html', 'cta-css',
-         after('old-pension-checklist.html', '/* CTA:BEGIN', '.pb-bookbar.pb-bookbar-on{transform:none}', '.pb-bookbar.pb-bookbar-on{transform:translateY(0)}')),
+        ('the CTA block of CSS changed', 'director-year-end-checklist.html', 'cta-css',
+         after('director-year-end-checklist.html', '/* CTA:BEGIN', '.pb-bookbar.pb-bookbar-on{transform:none}', '.pb-bookbar.pb-bookbar-on{transform:translateY(0)}')),
         ('the CTA block of CSS missing', 'privacy.html', 'cta-css',
          sources['privacy.html'].replace('/* CTA:END */', '/* CTA-END */', 1)),
         ('a second nav', 'thank-you.html', 'structure',
@@ -530,8 +530,8 @@ def run():
         # Job 5: the split's sentence, at its default of 50% of €40,000
         if '<p class="vs-split-out" id="splitOut">Put 50% in your pension: you keep <b>€{:,}</b> now'.format(split) not in calc:
             out.append(('director-calculator.html', 'split line'))
-        if not words or '<div class="lab" id="pbPrsiSalary">%s</div>' % words.get('salary') not in calc:
-            out.append(('director-calculator.html', 'salary sentence'))
+        # (12 October 2026: the "Taken as salary" sentence was cut as more
+        # words than the bar and its key need; the rest still say 4.35%)
         if not words or '<li id="pbPrsiAssume">%s</li>' % words.get('assume') not in calc:
             out.append(('director-calculator.html', 'assumption sentence'))
         m = re.search(r'<p class="pb-two-out" id="pbTwoOut">(.*?)</p>', dire)
@@ -559,8 +559,6 @@ def run():
             ('the profit line at the old figure', 'director.html', '<b>&euro;%d</b> in your pocket' % keep, '<b>&euro;478</b> in your pocket', 'profit line'),
             ('a script with its own rate', 'director-calculator.html', 'var PRSI = PRSI_NOW.rate;', 'var PRSI = new Date() < new Date(2026, 9, 1) ? 0.042 : 0.0435;', 'a rate in the script'),
             ('the old one-decimal formatting', 'director.html', 'var pct=p.pct;', "var pct=(Math.round(prsi*1000)/10)+'%';", 'a rate in the script'),
-            ('the salary sentence as it read to 30 September', 'director-calculator.html', 'id="pbPrsiSalary">lands in your pocket after up to 52.35%',
-             'id="pbPrsiSalary">lands in your pocket after up to 52.2%', 'salary sentence'),
             ('the assumption as it read to 30 September', 'director-calculator.html', 'id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.35%',
              'id="pbPrsiAssume">The salary comparison assumes a higher-rate taxpayer facing up to 52.2%', 'assumption sentence')):
         m = dict(sources); m[page] = m[page].replace(find, repl, 1)
@@ -1263,7 +1261,6 @@ def run():
     for label, name, src, want in (
             ('a title of 60 characters', 'terms.html', sources['terms.html'].replace('<title>Terms of Business, Pensionbuddy</title>',
                                                                                     '<title>' + 'T' * 60 + '</title>', 1), 'title 60'),
-            ('a FAQ answer the page no longer shows', 'starter.html', st.replace(q, "We'll tell you whether it's set up well for you.", 1), 'FAQ not word for word'),
             ('a phone number added to the business', 'index.html', ix.replace('"email": "hello@pensionbuddy.ie"', '"telephone": "+353 1 000 0000", "email": "hello@pensionbuddy.ie"', 1), 'block not as'),
             ('a canonical on a held page', 'thank-you.html', sources['thank-you.html'].replace('</title>', '</title>\n<link rel="canonical" href="https://pensionbuddy.ie/thank-you.html">', 1), 'block not as')):
         assert src != everything[name], label
@@ -1400,13 +1397,12 @@ def run():
 
     def learn_faults(ix):
         f = []
-        # since 11 October 2026 (Damian's brief) the games follow the home
-        # page's inflation stacks (#inflation), with at most one comment
-        # between, never a span across others (Run 37)
-        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        infl = ix.find('<section class="pb-i2" id="inflation"')
-        if not m or infl < 0 or ix.rfind('<section', 0, m.start() + len('</section>') + 1) != infl or ix.find('<section', infl + 1) != ix.find('<section class="pb-learn"'):
-            return ['the section is not straight after the inflation stacks']
+        # since 12 October 2026 (Damian's brief: how a call works, then the
+        # forms, then the jargon buster) the games follow the fee check's
+        # block, with at most one comment between (Run 37)
+        m = re.search(r'<!-- LEAD:fee:END -->\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        if not m:
+            return ['the section is not straight after the forms']
         box = m.group(1)
         if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
@@ -1455,7 +1451,7 @@ def run():
         if find is None:
             # take the section out and put it back above the calculator
             s0 = ix.find('<!-- JUST HERE TO LEARN?')
-            s1 = ix.find('<!-- YOUR PENSION THROUGH LIFE')
+            s1 = ix.find('</div></section>', ix.find('<section class="pb-learn"')) + len('</div></section>')
             sec = ix[s0:s1]
             rest = ix[:s0] + ix[s1:]
             c1 = rest.find('<!-- THE CALCULATOR')
@@ -1473,17 +1469,23 @@ def run():
     # (the page's one hero), the providers we hold agencies with, the
     # calculator, the inflation baskets, then the games; "What's changed?",
     # the way-of-life band and the three situations under the hero are gone.
+    # 12 October 2026 (Damian's brief): under "Are you a director?", how a
+    # call works, the forms, then the jargon buster; "Your pension through
+    # life" last; "Who you are dealing with" and "Questions before you
+    # call" gone.
     ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
-             '<section class="pb-i2" id="inflation"', '<section class="pb-learn" id="learn">',
-             '<section class="pb-tl-sec" id="through-life">', '<section class="tickband" id="deadline">', '<section id="story">']
+             '<section class="pb-i2" id="inflation"', '<section class="expect" id="call">',
+             '<section class="pb-ask" id="ask"', '<section class="pbk pbf" id="fees"', '<section class="pb-learn" id="learn">',
+             '<section class="tickband" id="deadline">', '<section id="story">', '<section class="pb-tl-sec" id="through-life">']
 
     def order_faults(ix):
         at = [ix.find(o) for o in ORDER]
         f = ['missing: ' + o for o, i in zip(ORDER, at) if i < 0]
         if not f and at != sorted(at):
             f.append('out of order')
-        for gone in ('id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths'):
+        for gone in ('id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
+                     'Who you are dealing with', 'Questions before you call', 'check that for yourself'):
             if gone in ix:
                 f.append('back: ' + gone)
         return f
@@ -1513,7 +1515,7 @@ def run():
     site_index = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(site_index)
     TERMS_HAND = ['director-calculator.html', 'director-year-end-checklist.html', 'director.html', 'index.html',
-                  'old-pension-checklist.html', 'pension-calculator.html', 'pensions-over-50.html',
+                  'pension-calculator.html', 'pensions-over-50.html',
                   'self-employed-pensions.html', 'starter.html', 'tracker.html', 'uk-pensions-in-ireland.html']
     TERMS_PAGES = sorted(TERMS_HAND + [p.out for p in pagebuild.PAGES.values()])
     LATE = (r'<script src="assets/js/pb-glossary\.js\?v=[0-9a-f]+" type="text/pb-late"></script>\n'
@@ -1639,12 +1641,10 @@ def run():
     # and the mark move, never for a reader who asks for less motion.
     def timeline_faults(ix, srcs, js):
         f = []
-        # since 11 October 2026 straight after the games (#learn)
-        aud = ix.find('<section class="pb-learn" id="learn">')
-        dl = ix.find('<section class="tickband" id="deadline">')
+        # since 12 October 2026 (Damian's brief) last in the page's main part
         m = re.search(r'<section class="pb-tl-sec" id="through-life"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        if not m or aud < 0 or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
-            return ['the section is not straight after the games and before the deadline']
+        if not m or ix[m.end():ix.find('</main>')].strip():
+            return ['the section is not last in the page']
         box = m.group(1)
         if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
             f.append('the kicker or the heading')
@@ -1681,7 +1681,7 @@ def run():
     import html
     tl_js = read('assets/js/pb-timeline.js')
     ix = sources['index.html']
-    eq('36. "Your pension through life": after the games, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
+    eq('36. "Your pension through life": last on the page, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
        timeline_faults(ix, sources, tl_js), [])
     for label, target, find, repl, want in (
             ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
@@ -1718,8 +1718,7 @@ def run():
     # anything; the bar's progress line has no transition (it follows the
     # scroll one to one).
     GUIDES = {'pensions-over-50.html': 'pension-calculator.html', 'self-employed-pensions.html': 'pension-calculator.html',
-              'uk-pensions-in-ireland.html': 'tracker.html', 'director-pension-rules.html': 'director-calculator.html',
-              'pia.html': 'pension-calculator.html'}
+              'uk-pensions-in-ireland.html': 'tracker.html', 'director-pension-rules.html': 'director-calculator.html'}
 
     def heading_text(s, hid):
         m = re.search(r'<(h2|h3)\b[^>]*\bid="%s"[^>]*>(.*?)</\1>' % re.escape(hid), s, re.S)
@@ -1914,7 +1913,7 @@ def run():
     # proves the page scripts' writes), and adds no datalist, so the browser
     # never snaps. It loads after the "slider polish" script that draws the
     # bubble it signs on.
-    MARKED = {'pension-calculator.html': {'age': 'relief-age', 'earn': 'relief-cap'},
+    MARKED = {'pension-calculator.html': {'age': 'relief-age'},
               'broker-vs-autoenrolment.html': {'age': 'relief-age', 'salary': 'relief-cap'}}
 
     def feel_faults(srcs, js):
@@ -2095,7 +2094,8 @@ def run():
             ('a player that never sets the poster', 'js', "v.poster = v.getAttribute('data-poster')", "v.title = v.getAttribute('data-poster')", 'its poster'),
             ('a video drawn for reduced motion', 'ix', '.pb-learn-vid,.pb-vid-btn{display:none}', '.pb-vid-btn{display:none}', 'the CSS'),
             ('a button named otherwise', 'ix', 'aria-label="Play video: Jargon Battle"', 'aria-label="Start the animation"', 'button'),
-            ('a button with no pause icon', 'ix', '<svg class="pb-vid-i pb-vid-i-pause"', '<svg class="pb-vid-i pb-vid-i-stop"', 'button'),
+            ('a button with no pause icon', 'ix', 'aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause"',
+             'aria-label="Play video: Jargon Battle"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-stop"', 'button'),
             ('a video too big', 'sizes', None, None, '1.5 MB'),
             ('a player that does not watch the viewport', 'js', 'new IntersectionObserver(', 'new ResizeObserver(', 'pause'),
             ('the game\'s own pause control back in the clip', 'rec', "    hide: '#hud .hint,#pauseBtn{visibility:hidden!important}',\n", '', 'pause control'),
@@ -2285,11 +2285,11 @@ def run():
     ARROW = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
              '<polyline points="12 5 19 12 12 19"/></svg></a>')
     GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
+        # 12 October 2026: the cost of waiting is one card now, so the button follows the whole card
         'starter.html': ('Book a free 20-minute call with us', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
-                         '  <div class="pb-sa pb-wait" id="pbWait">'),
-        'tracker.html': ('Book a free 20-minute call with us', ('id="pbTrace"',),
-                         '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
-                         '  <div class="callout pb-bleed pb-dark pb-split">'),
+                         '</div></section>\n'),
+        # the tracker's tick list and its button are gone (Damian, 12 October
+        # 2026): its ask is the old jobs form under the hero; only its hero is held
         # Run 54: the director page asks after its own numbers, with its one lockup
         'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potToday"', '<!-- WARN:END -->', '<div class="pb-reg">'),
                           '  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b>'),
@@ -2300,7 +2300,6 @@ def run():
                 + words + ARROW + '\n  </div>\n')
 
     def gives_first(name, src):
-        words, before, follows = GIVE_FIRST[name]
         h = src.find('<header class="hero aud-hero">')
         end = src.find('</header>', h)
         hero = src[h:end]
@@ -2308,6 +2307,9 @@ def run():
             return 'the hero asks before the page gives'
         if '<a class="btn btn-ghost"' not in hero and '<a class="pb-g2-go"' not in hero:
             return 'the hero lost its second button'
+        if name not in GIVE_FIRST:
+            return None
+        words, before, follows = GIVE_FIRST[name]
         block = moved_block(words)
         if src.count(block) != 1:
             return 'the moved button and its reason are missing, doubled or reworded'
@@ -2318,7 +2320,7 @@ def run():
             return 'the button is not where it was put'
         return None
     eq('46. the starter, tracker and director heroes give before they ask: the button and its reason after the first figures (the tracker: its tick list)',
-       {n: gives_first(n, sources[n]) for n in GIVE_FIRST if gives_first(n, sources[n])}, {})
+       {n: gives_first(n, sources[n]) for n in list(GIVE_FIRST) + ['tracker.html'] if gives_first(n, sources[n])}, {})
     st, dr = sources['starter.html'], sources['director.html']
     sblock = moved_block('Book a free 20-minute call with us')
     for label, name, mut, want in (
@@ -2359,8 +2361,9 @@ def run():
                                      '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
         ('director-calculator.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt',
                                       '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
-        ('broker-vs-autoenrolment.html', ('.vs-pension', '.vs-pension .vt', '.vs-pension .amt', '.pb-scale-track::after',
-                                          '#pbScaleAeBar', '#pbScalePpBar', '#pbMyAeBar', '#pbMyPpBar', '.pb-stair-you')),
+        # 12 October 2026: the compare bars; the State's slice (.cmp-s-state) is teal on purpose
+        ('broker-vs-autoenrolment.html', ('.cmp-key [data-part="you"] i', '.cmp-key [data-part="emp"] i', '.cmp-key [data-part="rev"] i',
+                                          '#pbMyAeBar', '#pbMyPpBar', '#pbMyAeBar2', '#pbMyCBar', '.pb-stair-you')),
         ('pension-fees-calculator.html', ('.fee-chart .fee-l-b', '.fee-key .fee-k-b')),
         ('my-pensions.html', ('.pt-seg', '.pt-key i', '.pt-dot')),
         ('pension-readiness-check.html', ('.rd-b-onway', '.rd-b-good')),
@@ -2542,7 +2545,7 @@ def run():
     bar_js = read('assets/js/pb-bookbar.js')
     BAR = sorted(['index.html', 'starter.html', 'tracker.html', 'director.html', 'glossary.html',
                   'pension-calculator.html', 'director-calculator.html', 'pensions-over-50.html', 'self-employed-pensions.html',
-                  'uk-pensions-in-ireland.html', 'old-pension-checklist.html', 'director-year-end-checklist.html'] +
+                  'uk-pensions-in-ireland.html', 'director-year-end-checklist.html'] +
                  [q.out for q in pagebuild.PAGES.values()])
     eq('51. the phone booking bar on the content pages, the calculators and tools and the guides, and nowhere else',
        sorted(p for p, t in sources.items() if re.search(r'<script src="assets/js/pb-bookbar\.js\?v=[0-9a-f]+"></script>', t)), BAR)
@@ -2588,8 +2591,9 @@ def run():
     eq('52. the home page hero: no button and no booking link, and its one way on is the calculator',
        ('class="btn' in hero, 'booking.html' in hero, re.findall(r'<a class="pb-g2-go" href="([^"]+)"', hero)),
        (False, False, ['#calc']))
-    faq = home[home.find('<div class="faq-ask">'):home.find('</div>', home.find('<div class="faq-ask">'))]
-    eq('52. the home page\'s one booking ask is after the questions, filled', re.findall(r'<a class="btn ([^"]*)" href="([^"]+)"', faq), [('btn-primary', 'booking.html')])
+    # 12 October 2026: the questions went; the ask sits under how a call works
+    ask = home[home.find('<div class="call-ask">'):home.find('</div>', home.find('<div class="call-ask">'))]
+    eq('52. the home page\'s one booking ask is under how a call works, filled', re.findall(r'<a class="btn ([^"]*)" href="([^"]+)"', ask), [('btn-primary', 'booking.html')])
 
     # Damian, 8 October 2026: "One primary CTA per page; others secondary",
     # and every booking button reads "Book a free 20-minute call with us".
@@ -2626,6 +2630,8 @@ def run():
     games = {g: read(g) for g in ('games/buddys-run.html', 'games/jargon-battle.html')}
     asks = dict(sources); asks.update(games)
     eq('52. one filled booking button per page at most, and every booking button says "%s"' % STD_ASK, ask_faults(asks), [])
+    # tracker.html: its one ask is the trace form (Damian, 12 October 2026: the
+    # checklist and its booking button went)
     eq('52. the pages that ask have their one filled booking button',
        sorted(p for p, t in sources.items()
               if [1 for _, cls, _ in booking_buttons(t[t.find('<main'):t.find('</main>')]) if FILLED_ASK & set(cls)]),
@@ -2633,7 +2639,7 @@ def run():
                'director.html', 'find-my-pension.html', 'glossary.html', 'index.html', 'my-pensions.html',
                'pension-calculator.html', 'pension-fees-calculator.html', 'pension-readiness-check.html', 'pia.html',
                'standard-fund-threshold.html', 'starter.html', 'state-pension-entitlement.html',
-               'state-pension-reality-check.html', 'tracker.html']))
+               'state-pension-reality-check.html']))
     eq('52. the phone bar and the Ask Buddy panel say it too',
        ['>%s</a>' % STD_ASK in read(j) for j in ('assets/js/pb-bookbar.js', 'assets/js/pb-buddy.js')], [True, True])
     for label, page, find, repl, want in (
@@ -2715,7 +2721,8 @@ LEAD_FORMS = {
 # carry another form too, so by form name. "Ask us about this" under each
 # calculator's result posts as enquiry from a form its script builds.
 REPLY_FORMS = {
-    'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
+    'enquiry': ['booking.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html', 'index.html',
+                'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     'fee-check': ['index.html'],
     'year-end-reminder': ['director.html'],

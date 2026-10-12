@@ -1,19 +1,25 @@
-/* pia.html, the same take-home cost in a pension, the proposed PIA and an
-   ETF outside a wrapper.
+/* pia.html: the same take-home money in a pension, the proposed PIA and an
+   exchange-traded fund (ETF), after tax.
 
    Maths lives in assets/js/pia.js, covered by tests/pia.test.js; the pension
    side of it is assets/js/pension-tax-relief.js and assets/js/sft.js. This
    file reads the controls, hands the module fractions, and paints what comes
-   back: three figures, the scenario table, the tax table and one spoken
-   summary.
+   back: three figures, three bars on one scale, the workings table and one
+   spoken summary. assets/js/pb-pia-motion.js, if motion is on, moves what
+   this paints; it works nothing out.
+
+   SIMPLIFIED, 12 October 2026 (the owner: "PIA needs to be simplified
+   greatly ... we don't need to know their income"): no age and no earnings.
+   The pension is grossed up at the reader's rate with no age-related limit,
+   and "How we worked this out" says it assumes the payments are within it.
+   Growth and the PIA's two figures sit under "Assumptions".
 
    THE PIA'S FIGURES start at Budget 2027's (6 October 2026): 1% a year above
    EUR 50,000. The reader can change both; a cleared threshold shows a
    prompt, not a number. Still a proposal until the Finance (No. 2) Bill 2026
    passes: docs/PIA-BUDGET-DAY.md.
 
-   TONE: the figures do the work. No product is called better, and the page
-   says where each figure leaves things out. */
+   TONE: the figures do the work. No product is called better. */
 (function () {
   'use strict';
   var Pia = window.PBPia, P = window.PBPage;
@@ -28,9 +34,7 @@
     amount: function (v) { return euro(v) + ' a month'; },
     years: function (v) { return years(v); },
     growth: function (v) { return pc(v) + ' a year'; },
-    piaRate: function (v) { return pc(v) + ' a year' + (+v === 1 ? ', the Budget 2027 rate' : ', a figure you are trying'); },
-    age: function (v) { return v + ' years old'; },
-    salary: function (v) { return euro(v) + ' a year'; }
+    piaRate: function (v) { return pc(v) + ' a year' + (+v === 1 ? ', the Budget 2027 rate' : ', a figure you are trying'); }
   };
 
   /* the threshold as typed: digits only, empty means none yet */
@@ -43,76 +47,86 @@
     var n = function (id) { return +$(id).value; };
     return {
       monthly: n('amount'), years: n('years'), growth: n('growth') / 100,
-      age: n('age'), salary: n('salary'), taxRate: taxRate,
+      age: null, salary: null, taxRate: taxRate,
       piaRate: n('piaRate') / 100, piaThreshold: threshold()
     };
   }
 
-  function outTax(v) { return v < -0.5 ? euro(-v) + ' back' : euro(Math.max(0, v)); }
+  /* a product as its bar draws it, in euro: your money, the tax relief, the
+     growth, and the tax, which comes off the end; before tax = after + tax */
+  function parts(x, relief) {
+    if (!x) return null;
+    var rel = relief || 0, tax = Math.max(0, x.taxDuring + x.taxOut), pre = x.afterTax + tax;
+    return { paid: x.paidIn, rel: rel, grow: Math.max(0, pre - x.paidIn - rel), tax: tax, after: x.afterTax, pre: pre };
+  }
+
+  var f2 = function (v) { return (Math.round(v * 100) / 100) + '%'; };
+  function bar(rowId, p, max) {
+    var row = $(rowId), s = row.querySelectorAll('.pia-s');
+    var k = function (v) { return p ? v / max * 100 : 0; };
+    var at = [[0, p ? p.paid : 0], [p ? p.paid : 0, p ? p.rel : 0],
+              [p ? p.paid + p.rel : 0, p ? p.grow : 0], [p ? p.after : 0, p ? p.tax : 0]];
+    for (var i = 0; i < 4; i++) {
+      s[i].style.left = f2(k(at[i][0]));
+      s[i].style.width = f2(k(at[i][1]));
+    }
+    s[3].classList.toggle('pia-zero', !p || p.tax < 0.5);
+    row.classList.toggle('pia-none', !p);
+  }
+
+  function figure(id, v) {
+    var el = $(id);
+    el.textContent = v === null ? NONE : euro(v);
+    el.setAttribute('data-v', v === null ? '' : String(Math.round(v)));
+  }
 
   function render() {
-    var o = read(), s = Pia.scenarios(o), c = s.yours, n = o.years;
+    var o = read(), n = o.years;
+    o.path = Pia.steady(o.growth, n);       /* the reader's growth, every year */
+    var c = Pia.compare(o);
+    var pen = parts(c.pension, c.pension.relief), pia = parts(c.pia), etf = parts(c.etf);
+    var has = pia !== null;
     $('amountV').textContent = euro(o.monthly);
     $('yearsV').textContent = n;
     $('growthV').textContent = pc(+$('growth').value);
     $('piaRateV').textContent = pc(+$('piaRate').value);
-    $('ageV').textContent = o.age;
-    $('salaryV').textContent = euro(o.salary);
+    $('advV').textContent = pc(+$('growth').value) + ' growth, PIA ' +
+      (o.piaThreshold === null ? pc(+$('piaRate').value) + ', no tax-free amount yet'
+                               : pc(+$('piaRate').value) + ' above ' + euro(o.piaThreshold));
 
-    $('heroL').textContent = 'What each could leave you after ' + years(n) + ', after its tax';
-    $('penOut').textContent = euro(c.pension.afterTax);
-    $('penNote').textContent = c.pension.beforeAccess
-      ? 'You would be ' + c.pension.endAge + '. A pension is normally taken from ' + Pia.PENSION_ACCESS_AGE + '.'
-      : 'You would be ' + c.pension.endAge + '. After tax on the way out.';
-    $('etfOut').textContent = euro(c.etf.afterTax);
+    $('heroL').textContent = 'After ' + years(n) + ', after tax';
+    figure('penOut', pen.after);
+    figure('piaOut', has ? pia.after : null);
+    figure('etfOut', etf.after);
+    $('penNote').textContent = euro(pen.tax) + ' tax · normally from ' + Pia.PENSION_ACCESS_AGE;
+    $('piaNote').textContent = has ? euro(pia.tax) + ' tax · any time' : 'Type a tax-free amount to see this. Budget 2027: €50,000.';
+    $('etfNote').textContent = euro(etf.tax) + ' tax · any time';
 
-    var has = c.pia !== null;
-    $('piaOut').textContent = has ? euro(c.pia.afterTax) : NONE;
-    var budget = o.piaRate === 0.01 && o.piaThreshold === 50000;
-    $('piaNote').textContent = !has
-      ? 'Type a tax-free amount to see this. Budget 2027 set it at €50,000.'
-      : budget
-        ? 'At the Budget 2027 figures: 1% above €50,000.'
-        : 'At the rate and tax-free amount you chose. Budget 2027: 1% above €50,000.';
+    var max = Math.max(1, pen.pre, has ? pia.pre : 0, etf.pre);
+    bar('rowPen', pen, max);
+    bar('rowPia', pia, max);
+    bar('rowEtf', etf, max);
 
-    /* Job 5: each figure in today's money too (assets/js/pb-today.js) */
-    if (window.PBToday) {
-      PBToday.set('penOut', c.pension.afterTax, n); PBToday.set('etfOut', c.etf.afterTax, n);
-      if (has) { PBToday.set('piaOut', c.pia.afterTax, n); } else if ($('piaOutToday')) { $('piaOutToday').hidden = true; }
-      PBToday.cash(n);
-    }
+    $('pbSay').textContent = 'Each costs you ' + euro(pen.paid) + ' from take-home pay over ' + years(n) +
+      '. Only the pension adds tax relief: ' + euro(pen.rel) + '.';
 
-    var say = 'Each costs you ' + euro(c.pension.paidIn) + ' from take-home pay over ' + years(n) + '. The pension gets ' +
-      euro(c.pension.relief) + ' of tax relief going in and is taxed on the way out.';
-    if (has && c.pia.taxDuring >= 0.5) say += ' The PIA pays ' + euro(c.pia.taxDuring) + ' in yearly tax at the figures you chose.';
-    $('pbSay').textContent = say;
+    $('paidPen').textContent = $('paidPia').textContent = $('paidEtf').textContent = euro(pen.paid);
+    $('relPen').textContent = euro(pen.rel);
+    $('growPen').textContent = euro(pen.grow);
+    $('growPia').textContent = has ? euro(pia.grow) : NONE;
+    $('growEtf').textContent = euro(etf.grow);
+    $('taxPen').textContent = '−' + euro(pen.tax);
+    $('taxPia').textContent = has ? '−' + euro(pia.tax) : NONE;
+    $('taxEtf').textContent = '−' + euro(etf.tax);
+    $('endPen').textContent = euro(pen.after);
+    $('endPia').textContent = has ? euro(pia.after) : NONE;
+    $('endEtf').textContent = euro(etf.after);
 
-    $('scYours').textContent = pc(+$('growth').value) + ' a year';
-    $('scLower').textContent = pc(+$('growth').value * Pia.LOWER_SHARE) + ' a year';
-    ['yours', 'lower', 'fall'].forEach(function (k) {
-      var cap = k.charAt(0).toUpperCase() + k.slice(1);
-      $('pen' + cap).textContent = euro(s[k].pension.afterTax);
-      $('pia' + cap).textContent = s[k].pia ? euro(s[k].pia.afterTax) : NONE;
-      $('etf' + cap).textContent = euro(s[k].etf.afterTax);
-    });
-    var f = s.fall.pia;
-    $('fallLine').textContent = f && f.taxedLossYears
-      ? 'In the fall, the PIA still pays ' + euro(f.taxes[f.taxes.length - 1]) + ' of tax for the year it lost money.'
-      : 'In a fall, the PIA’s tax is still due for that year.';
+    if (window.PBPiaMotion) window.PBPiaMotion.update();
 
-    $('paidPen').textContent = $('paidPia').textContent = $('paidEtf').textContent = euro(c.pension.paidIn);
-    $('relPen').textContent = euro(c.pension.relief);
-    $('outPen').textContent = euro(c.pension.taxOut);
-    $('endPen').textContent = euro(c.pension.afterTax);
-    $('growPia').textContent = has ? euro(c.pia.taxDuring) : NONE;
-    $('endPia').textContent = has ? euro(c.pia.afterTax) : NONE;
-    $('growEtf').textContent = euro(c.etf.taxDuring);
-    $('outEtf').textContent = outTax(c.etf.taxOut);
-    $('endEtf').textContent = euro(c.etf.afterTax);
-
-    P.announce('After ' + years(n) + ', after tax: pension ' + euro(c.pension.afterTax) + '. PIA ' +
-      (has ? euro(c.pia.afterTax) + ' at the figures you chose' : 'no figure until you type a threshold') +
-      '. ETF ' + euro(c.etf.afterTax) + '.');
+    P.announce('After ' + years(n) + ', after tax: pension ' + euro(pen.after) + '. PIA ' +
+      (has ? euro(pia.after) : 'no figure until you type a tax-free amount') +
+      '. ETF ' + euro(etf.after) + '.');
   }
 
   function setTax(v) {
@@ -127,7 +141,6 @@
   $('r40').addEventListener('click', function () { setTax(40); });
   $('piaThreshold').addEventListener('input', render);
 
-  if (window.PBToday) { PBToday.card(document.querySelector('.results .pb-warn')); PBToday.onChange(render); }
   P.wireRanges(VALTEXT, render);
   setTax(40);
 })();

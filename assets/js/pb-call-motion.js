@@ -34,12 +34,13 @@
   var walker = document.createElement('span'); walker.className = 'pb-cs-walker'; walker.setAttribute('aria-hidden', 'true');
   walker.innerHTML = '<svg viewBox="0 0 64 64"><g fill="#fff"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg>';
   wrap.appendChild(walker);
-  var len = 1, at = [0, 0.5, 1];
+  var len = 1, at = [0, 0.5, 1], ys = [0, 0, 0], col = false;
   function layout() {
     var b = wrap.getBoundingClientRect();
     svg.setAttribute('viewBox', '0 0 ' + b.width + ' ' + b.height);
     var pts = steps.map(function (s) { var r = s.querySelector('.sx').getBoundingClientRect(); return { x: r.left + r.width / 2 - b.left, y: r.top + r.height / 2 - b.top }; });
     var d = 'M ' + pts[0].x + ' ' + pts[0].y, vertical = Math.abs(pts[1].y - pts[0].y) > Math.abs(pts[1].x - pts[0].x);
+    ys = pts.map(function (pt) { return pt.y; }); col = vertical;
     for (var i = 1; i < pts.length; i++) {
       var p = pts[i - 1], q = pts[i];
       if (vertical) {
@@ -169,9 +170,21 @@
 
   /* ------------------------------------------------------------- loop -- */
   var raf = 0, last = 0, onScreen = false, shown = 0, prog = 0;
+  /* 12 October 2026: the section now sits straight under the calendar, not
+     at the foot of the page, so the path is tied to a reading line three
+     quarters of the way down the screen: a step lights as its number
+     crosses it (one column, on a phone), and a row of three is drawn
+     through while its numbers rise from 85% to 62% of the screen. Before,
+     the third step waited until the row had nearly left the screen, and
+     stayed faded for a reader who stopped with it in view. */
   function progress() {
-    var b = wrap.getBoundingClientRect(), vh = window.innerHeight;
-    return clamp((vh * 0.88 - b.top) / (b.height + vh * 0.25), 0, 1);
+    var b = wrap.getBoundingClientRect(), vh = window.innerHeight, R = vh * 0.75 - b.top;
+    if (!col) { return clamp((vh * 0.85 - b.top - ys[0]) / (vh * 0.23), 0, 1); }
+    if (R <= ys[0]) { return 0; }
+    for (var i = 0; i < ys.length - 1; i++) {
+      if (R < ys[i + 1]) { return at[i] + (at[i + 1] - at[i]) * (R - ys[i]) / Math.max(1, ys[i + 1] - ys[i]); }
+    }
+    return 1;
   }
   function frame(ms) {
     raf = 0;

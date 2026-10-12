@@ -112,7 +112,7 @@ const BTN = `(function(){var b=[].filter.call(document.querySelectorAll('main .b
   return {over:over,thin:b.filter(function(e){return parseFloat(getComputedStyle(e).paddingLeft)<12||parseFloat(getComputedStyle(e).paddingRight)<12;}).map(name),n:b.length};})()`;
 for (const w of [375, 1440]) {
   const grew = [], over = [], thin = [];
-  let photo = null, nf = null;
+  let nf = null;
   for (const page of pages) {
     await open(page, w);
     const before = await ev(BOX);
@@ -121,7 +121,6 @@ for (const w of [375, 1440]) {
     before.forEach((x, k) => {
       const y = after[k];
       if (y && !x[3] && (Math.abs(y[1] - x[1]) > 1 || Math.abs(y[2] - x[2]) > 1)) grew.push(`${page}: ${x[0]} ${x[1]}x${x[2]} then ${y[1]}x${y[2]}`);
-      if (page === 'tracker.html' && /damian-and-buddy/.test(x[0])) photo = Math.abs(y[1] - x[1]) <= 1 && Math.abs(y[2] - x[2]) <= 1;   // loaded early or not, the box is the one it ends with
     });
     const b = await ev(BTN);
     b.over.forEach(o => over.push(`${page}: ${o}`));
@@ -130,7 +129,6 @@ for (const w of [375, 1440]) {
   }
   eq(`${w}: every page: each lazy image keeps its box before it loads`, grew, []);
   eq(`${w}: every page: no two buttons lie over each other, and each keeps its sides`, [over, thin], [[], []]);
-  eq(`${w}: the tracker photograph has the box it ends with before it loads`, photo, true);
   eq(`${w}: the 404's two buttons: apart, each with its sides`, nf, [2, 0, 0]);
 }
 

@@ -279,6 +279,14 @@ PROBE = r"""<script>
   }
   async function ladder(){
     var r={}, root=document.querySelector('.pb-lad[data-pb-age]');
+    /* the starter page has no ladder since 12 October 2026: its phases alone */
+    if(!root){
+      if($('aePh')) r.A1=ae();
+      if(nojs||!$('aePh')) return r;
+      $('aePh2').click(); await frames(); r.A2=ae();
+      $('aePh4').click(); setv('aeSalary',100000); await frames(); r.A3=ae();
+      return r;
+    }
     r.LD1=lad();
     if($('aePh')) r.A1=ae();
     if(nojs) return r;
@@ -525,7 +533,7 @@ def check_fees(sid, r, nojs):
            label.endswith(' The red area is what your plan’s charges take: €58,754 by retirement.'), True)
         eq('F4 %s: its figure is #costA' % sid, cost, '€58,754')
     # Job 5: a fifth item follows it, "Your plan in today's money"
-    eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [5, 'What your plan’s charges take', GAP])
+    eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [4, 'What your plan’s charges take', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])
     if SCEN[sid][1] == 500:
         # the plan said "the chart under 140px tall"; at 500 the whole chart is 600:250 of its
@@ -589,7 +597,6 @@ def check_t1(sid, r):
 # page kind: (default age, the default row's data-from, caption, note) -- the guides' caption and note
 # are the plan's words; the starter's and director's are the pages' own, unchanged
 LAD = {
-    'starter': (30, '30', None, None),
     'over50': (50, '50', "Revenue's limit on the contributions that get tax relief, as a share of earnings.",
                'Earnings count up to €115,000.'),
     'selfemp': (40, '40', "Revenue's limit on the contributions that get tax relief, as a share of net relevant earnings.",
@@ -703,10 +710,11 @@ for sid in EXPECTED:
         check_sft(sid, r, nojs, REDUCE in flags)
     elif kind == 'home':
         check_home(sid, rep, r, nojs, REDUCE in flags)
+    elif kind == 'starter':
+        # 12 October 2026: the starter's ladder went; its phases stay
+        check_ae(sid, r, nojs)
     elif kind in LAD:
         check_ladder(sid, kind, r, nojs)
-        if kind == 'starter':
-            check_ae(sid, r, nojs)
     else:
         check_fees(sid, r, nojs)
 

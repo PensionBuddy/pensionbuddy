@@ -63,7 +63,8 @@ LEAD_FORMS = {
 
 # the forms that ask Damian to reply (tools/lead-blocks.py), by form name
 REPLY_FORMS = {
-    'enquiry': ['booking.html', 'director.html', 'index.html', 'starter.html'],
+    'enquiry': ['booking.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html', 'index.html',
+                'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     'fee-check': ['index.html'],
     'year-end-reminder': ['director.html'],

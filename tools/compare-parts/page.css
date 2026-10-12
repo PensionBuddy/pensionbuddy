@@ -1,153 +1,103 @@
-/* ---- side-by-side comparison, ported verbatim from director-calculator.html ---- */
-.vs-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
-.vs-card h3{letter-spacing:-0.02em;margin-bottom:4px}
-.vs-card .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:20px}
-.vs-card .vs-note{margin:16px 0 0;line-height:1.55}
-.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center}
-.vs-col{border-radius:var(--r-lg);padding:22px 20px;text-align:center}
-.vs-salary{background:var(--surface-2)}
-.vs-pension{background:var(--surface-2)}
-.vs-col .vt{font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:10px}
-.vs-pension .vt{color:var(--slate)}
-.vs-col .amt{font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
-.vs-pension .amt{color:var(--slate)}
-.vs-col .lab{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.5}
-.vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-@media(max-width:560px){.vs{grid-template-columns:1fr;gap:12px}.vsmark{margin:0 auto}}
-/* itemised breakdown rows, built from the existing card + divline language */
-.bd{display:flex;justify-content:space-between;gap:16px;padding:9px 0;font-size:14.5px}
-.bd .bl{color:var(--ink-2)}
-.bd .bv{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
-.bd.tot{border-top:1px solid var(--line);margin-top:6px;padding-top:12px;font-weight:700}
-.bd.tot .bl{color:var(--ink)}
-.bd .capnote{font-size:12px;color:var(--ink-3)}
-.verdict{border-left:2px solid var(--teal);padding:2px 0 2px 14px;margin:0}
-.srcwarn{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-top:14px}
-/* ---- headline face ----
-   v3: this page used to load a fourth family for its headline alone, behind its
-   own --font-headline token, requested by PAGES['compare'].fonts. One font
-   sitewide now, so the token, the face and that extra Google Fonts request are
-   all gone; .phead h1 takes the shared heading recipe like every other
-   headline. See docs/STATUS.md for which face it was. */
-/* two modes, one input panel: the mode switch reuses the .seg control as a tablist,
-   and each results panel keeps the results column's own vertical rhythm */
+/* ============================================================
+   AUTO-ENROLMENT OR A PERSONAL PENSION (broker-vs-autoenrolment.html).
+   12 October 2026, Damian: "simplify all the calculators", "drastically
+   improved", "motion design". Two questions, one panel of three or four
+   controls, and one picture per question: who puts the money in, as a
+   bar per path on one scale, every figure in its key. The colours say
+   whose money it is, nothing else: you ink, your employer light slate,
+   the State teal (teal is only ever the State's), Revenue's relief amber.
+   Motion (assets/js/pb-cmp-motion.js) only ever moves these bars to their
+   true widths; with motion off they simply are those widths.
+   ============================================================ */
 .calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
-.modebar .modelab{font-family:var(--font);font-size:.66rem;font-weight:500;color:var(--ink-3)}
-.modebar .modeseg{max-width:560px;margin-top:10px}
-.modebar .subnote{max-width:640px}
+.modebar .modeseg{max-width:560px}
 .modepanel{display:flex;flex-direction:column;gap:18px}
 .modepanel[hidden]{display:none}
-@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:13px;padding:11px 4px}}
+@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:1rem;padding:11px 4px}}
 /* a three-way segmented control: the skeleton's .seg is two columns with a
-   half-width indicator, so a third option needs its own grid and a third-width
-   indicator. translateX(i * 100%) of the indicator's own width still lands it
-   on button i. */
+   half-width indicator, so a third option needs its own grid and a
+   third-width indicator */
 .seg.seg-3{grid-template-columns:repeat(3,1fr)}
 .seg.seg-3 .ind{width:calc(33.333% - 2.667px)}
-@media(max-width:560px){.seg.seg-3 button{font-size:13px;padding:11px 4px}}
-/* the money-above-the-cap card only exists when there is money above the cap */
-#capCard[hidden]{display:none}
-/* yes/no toggles that reveal a secondary control. A plain checkbox row, so it
-   reads as a question rather than another slider. */
-.tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
-.tog input{appearance:auto;-webkit-appearance:checkbox;width:24px;height:24px;min-height:0;margin:-1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
-.tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.togbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
-.togbody[hidden]{display:none}
-/* funds and risk: three illustration tiles, each carrying its own downside.
-   Hidden in Run 30 (see main.html); this rule keeps the attribute winning. */
-#riskCard[hidden],#riskAssume[hidden]{display:none}
-#riskCard .riskintro{font-size:15px;line-height:1.6;color:var(--ink);margin:6px 0 10px}
-#riskCard .risksub{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
-/* one tile a row (Run 21): at the calculators' 16px floor, three across no
-   longer fit the results column, and each row reads label left, figure right */
-.risktiles{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
-.risktile{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px}
-.risktile .rk-name{font-weight:700;font-size:15px;letter-spacing:-0.01em}
-.risktile .rk-sri{font-size:12.5px;color:var(--ink-3)}
-.risktile .rk-sri b{color:var(--ink);font-variant-numeric:tabular-nums}
-.risktile .rk-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--ink-2);padding-top:6px;border-top:1px dashed var(--line)}
-.risktile .rk-row b{color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
-.risktile .rk-note{font-size:12.5px;color:var(--ink-3);line-height:1.5;margin-top:4px}
-.risktile .rk-warn{font-size:12px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:8px}
-#riskCard .riskrule{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:16px 0 8px}
-#riskCard .riskrule b{color:var(--ink)}
+.seg.seg-3 button{line-height:1.25;padding:10px 4px}
+.cmp-tax-l{font-weight:600;font-size:1rem;color:var(--ink)}
 
-/* the risk card ends in the same link the verdict card uses; those rules are scoped to
-   .waitcard, so they are repeated here for #riskCard, otherwise the arrow icon has no
-   size and fills the card */
-#riskCard .wlink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;
-  font-size:.86rem;font-weight:600;color:var(--teal-700);text-decoration:none}
-#riskCard .wlink:hover{text-decoration:underline}
-#riskCard .wlink .ico{width:15px;height:15px}
-#riskCard .wlink{display:inline-flex;align-items:center;padding:11px 0}
-#riskCard .wlink{color:var(--teal)}
-#riskCard .wlink{margin-top:14px}
-#riskCard .wlink .ico{width:16px;height:16px;flex:none}
-/* ---- two lanes, one scale ----
-   A picture of the two figures in the .res-hero directly above, drawn from the
-   totals the page has already written. Its own surface rules rather than
-   .chart-card, because that class carries a 338px CLS lock from 921px up for
-   cards that hold a chart, and a label, a line of text and two thin lanes come
-   nowhere near it. No heading either: every classed h3 on this site takes the
-   20px/800 heading recipe, which beside the answer would read as a second
-   headline, so the card takes the small label the .vs-col .vt rows
-   use. Both tracks carry the same end rule, so it reads as the end of the
-   scale rather than as a verdict on either lane. */
-.pb-scale-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 22px;box-shadow:var(--sh-sm)}
-.pb-scale-title{font-size:12px;font-weight:700;color:var(--ink-3)}
-.pb-scale-sub{font-size:13.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 16px}
-.pb-scale-lane{display:grid;grid-template-columns:140px 1fr;gap:14px;align-items:center;margin-top:11px}
-.pb-scale-lab{font-size:12.5px;font-weight:600;color:var(--ink-2)}
-.pb-scale-track{position:relative;height:12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-scale-track::after{content:"";position:absolute;top:0;right:0;width:2px;height:100%;background:var(--slate)}
-.pb-scale-bar{width:0;height:100%;border-radius:99px;transition:width .9s cubic-bezier(.45,0,.25,1)}
-#pbScaleAeBar{background:var(--slate)}
-#pbScalePpBar{background:var(--slate)}
-@media(max-width:560px){.pb-scale-lane{grid-template-columns:1fr;gap:5px}}
-/* the length each bar travels sets its own duration, written inline by the
-   page script, so both lanes move at one speed; this turns that off */
-@media(prefers-reduced-motion:reduce){.pb-scale-bar{transition:none}}
-/* the one-sentence lead sits above the numbers in both modes */
-.results .lead{margin-bottom:0}
-.results .lead .wtext{font-size:17px;line-height:1.5}
-.results .lead .phaseline{font-size:13.5px;color:var(--ink-2);line-height:1.55;margin:12px 0 0}
+/* the hero: one line, then a bar per path */
+[data-pb-calc] .res-hero.cmp-hero{display:block;padding:26px 28px 22px}
+.cmp-lead{margin:0 0 6px;font-size:18px;line-height:1.45;font-weight:600;color:var(--ink);text-wrap:pretty}
+.cmp-lane{margin-top:20px}
+.cmp-lane-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.cmp-hero .cmp-lane-h .rl{margin:0;font-size:1rem;font-weight:600;color:var(--ink)}
+.cmp-hero .big{font-size:clamp(26px,3vw,34px)}
+.cmp-figs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.cmp-figs .rl{font-size:1rem}
+.cmp-bar{position:relative;display:flex;gap:2px;height:20px;border-radius:6px;overflow:hidden;background:rgba(11,31,28,.06)}
+.cmp-s{display:block;flex:none;height:100%;min-width:0;cursor:default}
+.cmp-s-you,.cmp-key [data-part="you"] i{background:#2C3B38}
+.cmp-s-you2,.cmp-key [data-part="extra"] i{background:repeating-linear-gradient(135deg,#2C3B38 0 3px,#56625F 3px 6px)}
+.cmp-s-emp,.cmp-key [data-part="emp"] i{background:#A9B4C2}
+.cmp-s-state,.cmp-key [data-part="state"] i{background:var(--teal)}
+.cmp-s-rev,.cmp-key [data-part="rev"] i{background:var(--amber)}
+.cmp-bar-lab{display:flex;margin-top:6px;font-size:1rem;color:var(--ink-2)}
+.cmp-bar-lab span{display:block;flex:none;min-width:0;padding-left:2px;border-left:2px solid rgba(11,31,28,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cmp-bar-lab span:empty{border:0}
+.cmp-key{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:1rem;color:var(--ink-2)}
+.cmp-key li{display:inline-flex;align-items:center;gap:8px;padding:2px 0}
+.cmp-key li[hidden]{display:none}
+.cmp-key i{display:block;width:12px;height:12px;border-radius:3px;flex:none}
+.cmp-key b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+/* point at a source and it lights in every bar; the rest step back */
+.cmp-hero[data-hl] .cmp-s:not(.cmp-on),.cmp-hero[data-hl] .cmp-key li:not(.cmp-on){opacity:.28}
+.cmp-hero .foot{margin-top:2px;font-size:1rem}
+.cmp-hero .divline{margin:20px 0 14px}
+.cmp-cap{margin:0;padding:14px 18px;border:1px solid var(--line-2);border-left:3px solid var(--amber);border-radius:var(--r-lg);background:var(--surface);font-size:1rem;line-height:1.55;color:var(--ink)}
+.cmp-cap[hidden]{display:none}
+.cmp-cap b{font-variant-numeric:tabular-nums}
 
-/* ---- everything paid in, by 66 ----
-   The lanes above race one year; this races all of them. Same colour,
-   slate for both lanes (dark teal and teal until Run 43: teal is only what
-   the State pays), and the same names, so the reader reads it as the same comparison over a longer run, and the
-   figures are text rather than bars alone because nothing else on the page
-   carries them. */
+/* ---- everything paid in, by 66 ---- */
 .pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
 .pb-my-card h3{margin:0 0 4px}
-.pb-my-sub{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin:0 0 16px}
-.pb-my-lane{display:grid;grid-template-columns:8.6em minmax(0,1fr) 6.4em;gap:12px;align-items:center;margin-bottom:10px}
-.pb-my-lab{font-size:13.5px;font-weight:600;color:var(--ink)}
-.pb-my-track{position:relative;display:block;height:12px;border-radius:99px;
-  background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:99px;
-  transition:width .9s cubic-bezier(.45,0,.25,1)}
+.pb-my-sub{font-size:1rem;line-height:1.55;color:var(--ink-2);margin:0 0 16px}
+.pb-my-lane{display:grid;grid-template-columns:10em minmax(0,1fr) 7em;gap:12px;align-items:center;margin-bottom:12px}
+.pb-my-lab{font-size:1rem;font-weight:600;color:var(--ink)}
+.pb-my-track{position:relative;display:block;height:14px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:5px}
 #pbMyAeBar{background:var(--slate)}
 #pbMyPpBar{background:var(--slate)}
-.pb-my-fig{font-size:15px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-my-note{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+#pbMyAeBar2{background:var(--slate)}
+#pbMyCBar{background:var(--slate)}
+.pb-my-fig{font-size:17px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.pb-my-note{font-size:1rem;line-height:1.55;color:var(--ink-2);margin:14px 0 0}
+.pb-my-card .pb-warn{margin-top:16px}
 @media(max-width:560px){
+  [data-pb-calc] .res-hero.cmp-hero{padding:22px 18px 18px}
+  .cmp-lead{font-size:17px}
+  .pb-my-card{padding:20px 18px}
   .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
   .pb-my-lab{grid-column:1;grid-row:1}
   .pb-my-fig{grid-column:2;grid-row:1}
   .pb-my-track{grid-column:1 / -1;grid-row:2}
 }
-@media(prefers-reduced-motion:reduce){.pb-my-bar{transition:none}}
 
-/* THE PHASE STAIRCASE (.pb-stair). Auto-enrolment's four phases from
-   PBCompare.AE_PHASES, each column as tall as its total rate and stacked
-   you, your employer, the State (always 3 : 3 : 1). The page tags the
-   phase its figures are using. Amber is the employer's and the State's top-up
-   (the State's at full strength); you are neutral (Run 42). */
+/* ---- motion: bars reach their widths; the first time, one source at a time ---- */
+:root.pb-motion .cmp-s{transition:width var(--pb-d-4) var(--pb-ease-out),opacity var(--pb-d-2) var(--pb-ease-move)}
+:root.pb-motion .cmp-key li{transition:opacity var(--pb-d-2) var(--pb-ease-move)}
+:root.pb-motion .pb-my-bar{transition:width var(--pb-d-5) var(--pb-ease-out)}
+:root.pb-motion .cmp-bar-lab span{transition:width var(--pb-d-4) var(--pb-ease-out)}
+:root.pb-motion .cmp-pre .cmp-s,:root.pb-motion .cmp-pre .pb-my-bar{width:0!important;transition:none}
+:root.pb-motion .cmp-intro .cmp-s:nth-child(2){transition-delay:90ms}
+:root.pb-motion .cmp-intro .cmp-s:nth-child(3){transition-delay:180ms}
+:root.pb-motion .cmp-intro .cmp-s:nth-child(4){transition-delay:240ms}
+:root.pb-motion .cmp-intro .cmp-s:nth-child(5){transition-delay:300ms}
+:root.pb-motion .cmp-intro [data-lane="pp"] .cmp-s:nth-child(1){transition-delay:60ms}
+:root.pb-motion .cmp-intro [data-lane="pp"] .cmp-s:nth-child(2){transition-delay:150ms}
+:root.pb-motion .cmp-intro .pb-my-lane + .pb-my-lane .pb-my-bar{transition-delay:90ms}
+
+/* THE PHASE STAIRCASE (.pb-stair), in the assumptions. Auto-enrolment's
+   four phases from PBCompare.AE_PHASES, each column as tall as its total
+   rate and stacked you, your employer, the State (always 3 : 3 : 1). The
+   page tags this year's phase. */
 .pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
-/* two by two on a phone (Run 21): at 16px, four columns leave each year's
-   rates a word a line and the "Your year" chip wider than its column */
 @media(max-width:420px){.pb-stair{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:18px}}
 .pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
 .assume .pb-stair li{padding-left:0;line-height:1.4}
@@ -157,52 +107,10 @@
 .pb-stair-bar{position:relative;display:block;width:100%;height:84px}
 .pb-stair-stack{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;border-radius:6px 6px 0 0;overflow:hidden}
 .pb-stair-stack i{display:block;width:100%}
-.pb-stair-ee{background:var(--ink-2)}
-.pb-stair-er{background:var(--amber);opacity:.6}
-.pb-stair-st{background:var(--amber)}
+.pb-stair-ee{background:#2C3B38}
+.pb-stair-er{background:#A9B4C2}
+.pb-stair-st{background:var(--teal)}
 .pb-stair-yr{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 .pb-stair-r{font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .pb-stair-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 0;font-size:13px;color:var(--ink-2)}
 .pb-stair-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-
-/* WHERE 20% BECOMES 40% (.pb-band). The reader's salary as one bar, split
-   at the standard rate cut-off point the page is using for their status
-   (PBRelief.SRCOP, through the page's relief()). Income tax, so neutral:
-   neither the State's teal nor the gap's red (amber until Run 42). */
-.pb-band{margin:10px 0 0}
-.pb-band-track{display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
-.pb-band-track i{display:block;height:100%}
-.pb-band-lo{background:var(--line-2)}
-.pb-band-hi{background:var(--ink-2)}
-.pb-band-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
-.pb-band-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.pb-band-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-/* 8 October 2026: the breakdowns open on a tap */
-.pb-bd>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.pb-bd>summary::-webkit-details-marker{display:none}
-.pb-bd>summary h3{margin:0}
-.pb-bd>summary::after{content:"+";font-size:22px;font-weight:400;color:var(--teal-700)}
-.pb-bd[open]>summary{margin-bottom:12px}
-.pb-bd[open]>summary::after{content:"\2212"}
-.pb-bd>summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:var(--r-md)}
-
-/* MOTION-7 (9 October 2026): "Who puts the money in", the two jars after
-   "Side by side", drawn by assets/js/pb-cmp-motion.js; with motion off none
-   of this is in the page. The key under the jars carries every figure as
-   text, at the calculators' 16px; a lit line is the source lit in the jars. */
-.pb-cmp-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:20px 24px 16px;box-shadow:var(--sh-sm)}
-.pb-cmp-t{margin:0;font-size:16px;font-weight:700;color:var(--ink)}
-.pb-cmp-cv{grid-column:2/4;display:block;width:100%;height:250px;touch-action:pan-y}
-.pb-cmp-hint{align-self:center;margin:0;padding-right:8px;font-size:16px;line-height:1.45;color:var(--ink-2);transition:opacity .4s}
-.pb-cmp-hint.pb-off{opacity:0}
-.pb-cmp-key{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) minmax(0,1fr);column-gap:10px;font-size:16px;line-height:1.35;color:var(--ink-2);margin-top:10px}
-.pb-cmp-key>span{padding:6px 4px;border-radius:8px;transition:background-color .2s,color .2s}
-.pb-cmp-h{text-align:center;font-weight:700;color:var(--ink);padding-bottom:10px!important}
-.pb-cmp-l{display:flex;align-items:baseline;gap:8px}
-.pb-cmp-l i{flex:0 0 auto;width:11px;height:11px;border-radius:50%;transform:translateY(1px)}
-.pb-cmp-v{text-align:center;font-variant-numeric:tabular-nums;color:var(--ink)}
-.pb-cmp-none{color:var(--ink-2)}
-.pb-cmp-tot{border-top:1px solid var(--line);border-radius:0!important;font-weight:800;margin-top:4px}
-.pb-cmp-key .pb-on{background:var(--surface-2);color:var(--ink);font-weight:700}
-.pb-cmp-key .pb-on.pb-cmp-none{color:var(--ink-2);font-weight:400}
-@media(max-width:560px){.pb-cmp-card{padding:18px 16px 12px}.pb-cmp-cv{height:230px}.pb-cmp-key{column-gap:6px}}

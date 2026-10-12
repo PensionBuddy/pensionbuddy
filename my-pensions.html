@@ -2421,10 +2421,12 @@ main h1{font-weight:800}
 /* MOTION-4 CALCULATOR:END */
 
 /* ============================================================
-   ALL YOUR PENSIONS (my-pensions.html, Run 20 #12). A list the
-   reader fills in and a summary that follows it as they type: a ring
-   split by pension with the total in its middle, a key, and the
-   yearly fees in euro.
+   ALL YOUR PENSIONS (my-pensions.html, Run 20 #12; simplified 12
+   October 2026). A list the reader fills in (who it is with, what it
+   is worth, its yearly fee if known) and a summary that follows it as
+   they type: a ring split by pension with the total in its middle, a
+   key, and the yearly fees in euro. The arcs glide to their new shares
+   (assets/js/pb-pots-motion.js).
    Nothing is stored; the print button keeps a copy.
    ============================================================ */
 .pt-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start;padding:8px 0 24px}
@@ -2440,9 +2442,9 @@ main h1{font-weight:800}
 .pt-field{margin:0 0 14px;min-width:0}
 .pt-field label{display:block;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:6px}
 .pt-opt{font-weight:400;color:var(--ink-2)}
-.pt-field input,.pt-field select{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
+.pt-field input{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;color:var(--ink);
   background:var(--surface);border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:11px 12px;min-height:48px}
-.pt-field input:focus,.pt-field select:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
+.pt-field input:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}
 .pt-field [aria-invalid="true"]{border-color:var(--red)}
 .pt-bad{margin:6px 0 0;font-size:.86rem;line-height:1.45;font-weight:600;color:var(--red)}
 .pt-add{font:inherit;font-size:.95rem;font-weight:600;color:var(--teal-700);background:var(--surface);border:1.5px dashed var(--line-2);
@@ -2498,9 +2500,7 @@ main h1{font-weight:800}
 }
 @media(max-width:480px){
   .pt-grid{grid-template-columns:1fr}
-  /* room for the longest kind, "A Personal Retirement Bond", in the select */
   .pt-row{padding:12px 10px 2px}
-  .pt-field select{padding-left:10px}
 }
 /* The printout: the title, then the summary, then the list as entered.
    Only main's direct sections go (the note under the page); the summary is
@@ -2523,16 +2523,6 @@ main h1{font-weight:800}
    transition. */
 .pt-row.pt-new{animation:ptRise var(--pb-d-2) var(--pb-ease-out)}
 @keyframes ptRise{from{transform:translateY(var(--pb-nudge))}to{transform:none}}
-/* MOTION-4 POTS:BEGIN (8 October 2026, Damian's brief): each pension a pot
-   round the ring (assets/js/pb-pots-motion.js adds every element and class here). */
-.pt-orbit{position:relative;margin:-14px -24px 4px;padding:100px 24px 104px;touch-action:pan-y}
-.pt-orbit .pt-ring{margin:0 auto}
-.pt-orbit-cv{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.pt-orbit-hot{cursor:grab}
-.pt-orbit-drag{cursor:grabbing}
-@media(max-width:600px){.pt-orbit{padding:76px 16px 80px;margin:-14px -16px 4px}.pt-orbit .pt-ring{width:min(100%,230px)}}
-@media print{.pt-orbit-cv{display:none}.pt-orbit{padding:0;margin:0}}
-/* MOTION-4 POTS:END */
 </style>
 
 <script>
@@ -2578,7 +2568,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2607,10 +2596,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <fieldset class="pt-row">
         <legend><span class="pt-dot" aria-hidden="true"></span>Pension 1</legend>
         <div class="pt-grid">
-          <div class="pt-field pt-wide"><label for="ptName0">Who is it with?</label><input id="ptName0" type="text" placeholder="e.g. Irish Life, or an old job"></div>
-          <div class="pt-field"><label for="ptKind0">Type</label><select id="ptKind0"><option value="workplace">From a job</option><option value="prsa">PRSA (Personal Retirement Savings Account)</option><option value="personal">Personal pension</option><option value="prb">Bond from an old job (PRB)</option><option value="avc">Top-up (AVCs)</option><option value="other">Not sure</option></select></div>
-          <div class="pt-field"><label for="ptValue0">Worth now, €</label><input id="ptValue0" type="text" inputmode="decimal" placeholder="e.g. 40,000"></div>
-          <div class="pt-field"><label for="ptAmc0">Yearly fee, % <span class="pt-opt">(if you know)</span></label><input id="ptAmc0" type="text" inputmode="decimal" placeholder="e.g. 1"></div>
+          <div class="pt-field pt-wide"><label for="ptName0">Who is it with?</label><input id="ptName0" type="text" autocomplete="off" placeholder="e.g. Irish Life, or an old job"></div>
+          <div class="pt-field"><label for="ptValue0">Worth now, €</label><input id="ptValue0" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 40,000"></div>
+          <div class="pt-field"><label for="ptAmc0">Yearly fee, % <span class="pt-opt">(if known)</span></label><input id="ptAmc0" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 1"></div>
         </div>
       </fieldset>
     </div>
@@ -2676,15 +2664,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/pots.js?v=7ab7e05d"></script>
-<script src="assets/js/pb-pots-motion.js?v=264be54e"></script>
+<script src="assets/js/pb-pots-motion.js?v=522c798f"></script>
 <script>
-/* my-pensions.html, all your pensions in one view (Run 20 #12; made a
-   picture first on 8 October 2026: a ring split by pension, the total
-   counting up in its middle, a key, and the fees in a coral tile).
+/* my-pensions.html, all your pensions in one view (Run 20 #12; a picture
+   first since 8 October 2026: a ring split by pension, the total counting
+   up in its middle, a key, and the fees in a coral tile. Simplified on
+   12 October 2026: a pension is who it is with, what it is worth and, if
+   known, its yearly fee).
 
    The sums are assets/js/pots.js, covered by tests/pots.test.js. This file
    keeps the rows (add, remove, renumber), reads them as the reader types,
-   and paints the summary. Nothing is stored, sent or put in a link. */
+   and paints the summary. The ring's arcs are handed to
+   assets/js/pb-pots-motion.js when motion is on, which glides them to
+   their new sizes; otherwise they are drawn where they belong. */
 (function () {
   'use strict';
   var Pots = window.PBPots, P = window.PBPage;
@@ -2692,7 +2684,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   if (!Pots || !P || !form) return;
   var $ = P.$, euro = P.euro;
   var list = $('ptRows'), add = $('ptAdd');
-  var FIELDS = ['Name', 'Kind', 'Value', 'Amc'];
+  var FIELDS = ['Name', 'Value', 'Amc'];
   var srTimer = 0;
 
   function rows() { return [].slice.call(list.querySelectorAll('.pt-row')); }
@@ -2717,9 +2709,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   add.addEventListener('click', function () {
     if (rows().length >= Pots.MAX) return;
     var copy = rows()[0].cloneNode(true);
-    [].forEach.call(copy.querySelectorAll('input'), function (i) { i.value = ''; });
-    [].forEach.call(copy.querySelectorAll('.pt-bad'), function (h) { h.parentNode.removeChild(h); });
-    copy.querySelector('select').selectedIndex = 0;
+    [].forEach.call(copy.querySelectorAll('input'), function (i) { i.value = ''; i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); });
+    [].forEach.call(copy.querySelectorAll('.pt-bad,.pt-x'), function (h) { h.parentNode.removeChild(h); });
     var x = document.createElement('button');
     x.type = 'button'; x.className = 'pt-x'; x.textContent = 'Remove';
     copy.insertBefore(x, copy.querySelector('legend').nextSibling);
@@ -2742,7 +2733,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
   function read() {
     return rows().map(function (r, i) {
-      return { name: $('ptName' + i).value, kind: $('ptKind' + i).value, value: $('ptValue' + i).value, amc: $('ptAmc' + i).value };
+      return { name: $('ptName' + i).value, value: $('ptValue' + i).value, amc: $('ptAmc' + i).value };
     });
   }
 
@@ -2766,10 +2757,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   var SHADES = [1, 0.72, 0.5, 0.34, 0.22];
   function shade(i) { return SHADES[i % SHADES.length]; }
   var NS = 'http://www.w3.org/2000/svg', R = 48, C = 2 * Math.PI * R;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = !document.documentElement.classList.contains('pb-motion');
   var shown = 0, raf = 0;
 
-  // The total counts to its new figure; under reduced motion it is simply there
+  // The total counts to its new figure; with motion off it is simply there
   function count(to) {
     var el = $('ptTotal'), from = shown, t0 = 0;
     cancelAnimationFrame(raf);
@@ -2790,33 +2781,43 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     return out.slice(0, Pots.MAX);
   }
 
+  /* The arcs: for each kept pension, its length round the ring and where it
+     starts, keyed by its row. Drawn here, or glided by the motion module. */
   function ring(s) {
-    var g = $('ptSegs'), at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0;
-    g.textContent = '';
+    var at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0, want = [];
     s.rows.forEach(function (r, k) {
-      var len = r.share * C, c = document.createElementNS(NS, 'circle');
-      c.setAttribute('class', 'pt-seg');
-      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
-      c.setAttribute('stroke-dasharray', Math.max(0, len - gap).toFixed(2) + ' ' + C.toFixed(2));
-      c.setAttribute('stroke-dashoffset', (-at).toFixed(2));
-      c.style.setProperty('--o', shade(idx[k]));
-      c.setAttribute('data-row', idx[k]);
-      g.appendChild(c);
+      var len = r.share * C;
+      want.push({ row: idx[k], len: Math.max(0, len - gap), off: -at, o: shade(idx[k]) });
       at += len;
     });
+    if (window.PBPotsRing && !reduce) { window.PBPotsRing($('ptSegs'), want, C); }
+    else { draw($('ptSegs'), want); }
     return idx;
+  }
+  function draw(g, want) {
+    g.textContent = '';
+    want.forEach(function (w) {
+      var c = document.createElementNS(NS, 'circle');
+      c.setAttribute('class', 'pt-seg');
+      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
+      c.setAttribute('stroke-dasharray', w.len.toFixed(2) + ' ' + C.toFixed(2));
+      c.setAttribute('stroke-dashoffset', w.off.toFixed(2));
+      c.style.setProperty('--o', w.o);
+      c.setAttribute('data-row', w.row);
+      g.appendChild(c);
+    });
   }
 
   // The row being filled in is lit in the ring and the key
+  var lit = -1;
   function light(i) {
+    lit = i;
     [].forEach.call(document.querySelectorAll('#ptSegs .pt-seg, #ptKey li'), function (el) {
       el.classList.toggle('pt-on', el.getAttribute('data-row') === String(i));
     });
   }
   list.addEventListener('focusin', function (e) { var r = e.target.closest('.pt-row'); light(r ? rows().indexOf(r) : -1); });
   list.addEventListener('focusout', function () { light(-1); });
-
-  function label(kind) { var k = Pots.KINDS.filter(function (x) { return x[0] === kind; })[0]; return k ? k[1] : ''; }
 
   function paint(spoken) {
     var s = Pots.summarise(read());
@@ -2841,12 +2842,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     s.rows.forEach(function (r, k) {
       var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);
       var sw = document.createElement('i'); sw.setAttribute('aria-hidden', 'true'); sw.style.setProperty('--o', shade(idx[k]));
-      var b = document.createElement('b'); b.textContent = r.name || label(r.kind);
+      var b = document.createElement('b'); b.textContent = r.name || 'Pension ' + (idx[k] + 1);
       var v = document.createElement('span'); v.textContent = euro(r.value);
       var pc = document.createElement('em'); pc.textContent = Math.round(r.share * 100) + '%';
       li.appendChild(sw); li.appendChild(b); li.appendChild(v); li.appendChild(pc);
       key.appendChild(li);
     });
+    if (lit >= 0) light(lit);
     var c = '', fig = '';
     if (s.chargesKnown > 0) {
       fig = euro(s.yearlyCharges);
@@ -2860,8 +2862,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     out.textContent = '';
     out.classList.toggle('pt-fee', at >= 0);
     if (at >= 0) {
-      var b = document.createElement('b'); b.textContent = fig;
-      out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(b);
+      var bb = document.createElement('b'); bb.textContent = fig;
+      out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(bb);
       out.appendChild(document.createTextNode(c.slice(at + fig.length)));
     } else out.textContent = c;
     if (!spoken) return;
@@ -3084,7 +3086,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3188,7 +3190,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=9d83afbc"></script>
+<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
 <script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

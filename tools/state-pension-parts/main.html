@@ -1,146 +1,94 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
   <h1>If the State Pension is <span class="hl">all you have</span>.</h1>
-  <p>The State Pension (Contributory) beside what retirement in Ireland costs.</p>
+  <p>What it pays, next to what retirement in Ireland costs.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-reality-check">
   <div class="panel">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type it.</p>
+    <h2>Your PRSI record</h2>
+    <p class="hint">Each dot is a year. Tap one, or slide.</p>
 
-    <div class="field">
-      <div class="row"><label for="contribs">Reckonable Pay-Related Social Insurance (PRSI) contributions by 66</label><span class="val" id="contribsV">2,080</span></div>
-      <input type="range" id="contribs" min="0" max="2080" step="52" value="2080">
-      <p class="subnote"><b>Paid</b>, plus <b>credited</b> while unemployed or ill, plus <b>HomeCaring Periods</b>, time caring for a child or someone who needed care. 2,080 is a full record, forty years. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
-    </div>
-
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label for="age">Your age now</label><span class="val" id="ageV">40</span></div>
-      <input type="range" id="age" min="18" max="66" value="40">
-      <p class="subnote" id="ageNote">Used for this line only. It does not change the pension figure, and this page does not project investment growth.</p>
-    </div>
-  </div>
-
-  <div class="results">
-    <!-- The contributions jar. It reads the #contribs slider in the panel and
-         is a second reading of the number that slider already shows. It lives
-         at the head of the results column, not under the slider itself: the
-         .panel is sticky from 921px up, and a jar inside it pushed the panel
-         to 765px against a 681px usable viewport at 1360x768, which put the
-         age slider below the fold while the panel was stuck. Laid out beside
-         its caption the dot card alone still measured 701px, so the card moved
-         here instead and the panel is back to its own 564px. Decorative:
-         #contribs already carries an aria-valuetext saying the same thing in
-         words, so the jar is aria-hidden and adds no second live region. It is
-         painted by initJar() at the foot of the page script and by nothing
-         else. -->
+    <!-- The record: forty dots, one per 52 reckonable contributions, filling
+         from the bottom row up. It is a second reading of the #contribs
+         slider under it, and a pointer-only way to set that slider: the page
+         script (initJarPointer) maps a press on .pb-jar-body to a dot count
+         times 52 and fires the slider's own input event. Decorative to
+         assistive technology: #contribs carries an aria-valuetext saying the
+         same thing in words, so the grid is aria-hidden. -->
     <div class="pb-jar" id="pbJar" aria-hidden="true">
       <div class="pb-jar-stage">
         <div class="pb-jar-body">
           <div class="pb-jar-dots">
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot pb-jar-first"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
-            <i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
+            <i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i><i class="pb-jar-dot"></i>
           </div>
         </div>
       </div>
-      <p class="pb-jar-cap" id="pbJarCap"></p>
-      <p class="pb-jar-lead">Each dot is a year of reckonable contributions.</p>
+      <p class="pb-jar-cap"><b id="pbJarCap">40 of 40 years</b><span class="pb-jar-full" id="pbJarFull">Full record</span></p>
     </div>
 
+    <div class="field" style="margin-bottom:0">
+      <div class="row"><label for="contribs">PRSI contributions by 66</label><span class="val" id="contribsV">2,080</span></div>
+      <input type="range" id="contribs" min="0" max="2080" step="52" value="2080">
+      <p class="subnote">Paid and credited, plus HomeCaring Periods. Yours is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+    </div>
+  </div>
+
+  <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
     <div id="spHas">
       <div class="res-hero">
         <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€299.30</div></div>
-        <div><div class="rl">State Pension, a year</div><div class="big" id="spAnnual">€15,564</div></div>
-        <p class="pb-say" id="pbSay">On 2,080 reckonable contributions, 40 years, this shows €299.30 a week, €15,564 a year, which covers 81% of a modest standard of living.</p>
+        <div><div class="rl">A year</div><div class="big" id="spAnnual">€15,564</div></div>
         <div class="divline"></div>
-        <p class="pb-sp27">2026 rates. Budget 2027 raises the maximum to &euro;309.30 a week, &euro;16,084 a year, from January 2027.</p>
-        <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions.</div>
+        <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.</div>
+        <p class="pb-sp27">2026 rates. From January 2027 the maximum is &euro;309.30 a week (Budget 2027).</p>
       </div>
-
     </div>
 
     <div id="spNone" hidden>
       <div class="res-hero">
         <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">No entitlement</div></div>
         <div class="divline"></div>
-        <div class="foot" id="spNoneFoot">Below 520 contributions, ten years, this tool shows no State Pension (Contributory). Qualifying needs 520 paid contributions; credits and HomeCaring Periods do not count toward that minimum.</div>
+        <div class="foot" id="spNoneFoot">Below 520 contributions, ten years, there is no State Pension (Contributory). The 520 must be paid contributions.</div>
       </div>
     </div>
 
     <div class="vs-card">
       <h3>Against what retirement costs</h3>
-      <p class="sub">Single-person living standards from the Pensions Council. <span id="lsIntro">The bar shows how much of each one the State Pension covers.</span></p>
+      <p class="sub">A year, for one person.</p>
 
       <div class="lstd" id="lsRows">
         <div class="lsrow" data-std="modest">
-          <div class="lshead"><span class="lsname">Modest</span><span class="lstarget">€19,200 a year</span></div>
-          <div class="lsbar"><i></i></div>
-          <div class="lsgap"></div>
+          <div class="lshead"><span class="lsname">Modest</span><span class="lstarget">€19,200</span></div>
+          <div class="lsbar" aria-hidden="true"><i></i></div>
+          <div class="lsgap"><span class="lscov">Covers <b class="lspct">81%</b></span> <span class="lsshort"><b class="lsmon">€303</b> a month short</span></div>
         </div>
         <div class="lsrow" data-std="moderate">
-          <div class="lshead"><span class="lsname">Moderate</span><span class="lstarget">€27,600 a year</span></div>
-          <div class="lsbar"><i></i></div>
-          <div class="lsgap"></div>
+          <div class="lshead"><span class="lsname">Moderate</span><span class="lstarget">€27,600</span></div>
+          <div class="lsbar" aria-hidden="true"><i></i></div>
+          <div class="lsgap"><span class="lscov">Covers <b class="lspct">56%</b></span> <span class="lsshort"><b class="lsmon">€1,003</b> a month short</span></div>
         </div>
         <div class="lsrow" data-std="comfortable">
-          <div class="lshead"><span class="lsname">Comfortable</span><span class="lstarget">€33,600 a year</span></div>
-          <div class="lsbar"><i></i></div>
-          <div class="lsgap"></div>
+          <div class="lshead"><span class="lsname">Comfortable</span><span class="lstarget">€33,600</span></div>
+          <div class="lsbar" aria-hidden="true"><i></i></div>
+          <div class="lsgap"><span class="lscov">Covers <b class="lspct">46%</b></span> <span class="lsshort"><b class="lsmon">€1,503</b> a month short</span></div>
         </div>
       </div>
 
-      <p class="srcnote">Living standards: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, researched by KPMG, September 2024, single person. Pension rate and rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a> and <a href="https://www.gov.ie/en/department-of-social-protection/services/state-pension-contributory/" rel="noopener">gov.ie</a>. Figures checked 9 September 2026.</p>
+      <p class="srcnote">Source: <a href="https://pensionscouncil.ie" rel="noopener">Pensions Council</a>, Irish Retirement Living Standards, 2024 prices.</p>
     </div>
     <!-- AFTER -->
   </div>
 </div></div>
-
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp"><img src="assets/img/buddy-avatar.jpg" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>A second pension closes the gap.</h2><p>How much you need depends on when you start. Damian will go through your numbers.</p></div>
-  <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
 
 <section style="padding:40px 0 0"><div class="wrap">
   <div class="infoadvice">
@@ -156,10 +104,11 @@
     <li>A full record of 2,080 gets the maximum personal rate, €299.30 a week from January 2026, and €309.30 from January 2027 (Budget 2027). Between 520 and 2,080 the rate is pro rata.</li>
     <li>Credited contributions count up to 520. This tool does not check how your total is made up.</li>
     <li>The qualifying minimum is 520 paid contributions, ten years. Credited contributions and HomeCaring Periods do not count toward it. The means-tested State Pension (Non-Contributory) may apply instead. This tool does not calculate it.</li>
-    <li>Until 2034 the Department of Social Protection pays the higher of two calculations. Method 1 is the Total Contributions Approach alone. Method 2 combines it with the Yearly Average method. This tool shows Method 1 only. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension entitlement check</a> does both.</li>
+    <li>Until 2034 the Department of Social Protection pays the higher of two calculations. This tool shows the first, the Total Contributions Approach, only. The <a href="state-pension-entitlement.html" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">State Pension check</a> does both.</li>
     <li>So a figure below the maximum is a <b>floor</b>. You may be paid more, and the gap may be smaller. At 2,080 the figure is exact.</li>
     <li>The rate shown is the personal rate at 66. It excludes increases for a qualified adult or child, and the higher rate from 80. Rates change, usually at each Budget. A year is 52 weekly payments.</li>
-    <li>The living standards are for a <b>single person</b>. They are annual spending in 2024 prices, not adjusted for inflation since. Couple figures are not shown. Both sides move over time, and not together.</li>
+    <li>The living standards are the Pensions Council&rsquo;s Irish Retirement Living Standards, researched by KPMG, September 2024, for a <b>single person</b>. They are annual spending in 2024 prices, not adjusted for inflation since. Both sides move over time, and not together. A month is a twelfth of a year.</li>
+    <li>Rate and rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a> and <a href="https://www.gov.ie/en/department-of-social-protection/services/state-pension-contributory/" rel="noopener">gov.ie</a>.</li>
   </ul>
   </details>
 </div></section>

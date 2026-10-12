@@ -1,113 +1,132 @@
 /* ============================================================
-   THE PERSONAL INVESTMENT ACCOUNT (pia.html, Run 23).
-   A guide and a calculator: what the proposal is, what is
-   confirmed and what comes on 6 October 2026, a four-way table,
-   the same take-home cost three ways, and who it might suit.
-   Every figure in the calculator is from assets/js/pia.js.
-   EQUAL PROMINENCE: the two halves of every .pia-pair share one
-   rule, so the risks can never be set smaller than the benefits.
-   No text here is under 1rem: the page is a calculator and keeps
-   the 16px floor.
+   THE PERSONAL INVESTMENT ACCOUNT (pia.html). Simplified on
+   12 October 2026 (the owner: "PIA needs to be simplified
+   greatly"): the calculator first, one comparison (three bars on
+   one scale), then the proposal in brief and a short table.
+   Every figure is from assets/js/pia.js. No text here is under
+   1rem: the page is a calculator and keeps the 16px floor.
    ============================================================ */
 .pia-asat{margin:10px 0 0;font-size:1rem;font-weight:600;color:var(--ink-2)}
 .phead .pia-asat{max-width:760px}
 .pia-sec{padding:56px 0 8px}
-.pia-sec.pia-alt{background:var(--surface-2);padding-bottom:48px;margin-top:40px}
 .pia-sec h2{margin:0}
-.pia-sec h3{font-size:20px;line-height:1.24;margin:0 0 10px}
-.pia-intro{margin:14px 0 0;max-width:760px;font-size:1.05rem;line-height:1.6;color:var(--ink)}
-.pia-lede{margin:18px 0 0;max-width:760px}
-.pia-lede p{font-size:1.1rem;line-height:1.65;color:var(--ink)}
-.pia-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
-.pia-side{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px;min-width:0}
-.pia-side h3{margin-bottom:4px}
-.pia-side ul,.pia-today ul{margin:14px 0 0;padding-left:20px}
-.pia-side li,.pia-today li{font-size:1rem;line-height:1.6;color:var(--ink);margin:0 0 8px}
-.pia-src{margin:14px 0 0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
-.pia-src a,.pia-sec p a,.pia-p a,.pia-today li a,.pia-t td a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
-.pia-today{margin-top:18px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:22px 24px}
+.pia-src{margin:14px 0 0;max-width:760px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+/* inline links in a line of prose (WCAG 2.5.8's inline exception): the
+   site's 44px reach rule makes them inline blocks, which breaks the line */
+.pia-sec p.pia-src a:not(.btn){display:inline;padding:0;margin:0;line-height:inherit;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
+.pia-t td a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
 
-.pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
-.pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
-.pia-t th,.pia-t td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.pia-t thead th{background:var(--surface-2);font-weight:700;color:var(--ink)}
-.pia-t tbody th{font-weight:600;color:var(--ink);width:17%}
-.pia-t tbody tr:last-child th,.pia-t tbody tr:last-child td{border-bottom:0}
-
-.pia-sec#calculator{padding-bottom:0}
-.pia-sec#calculator > .wrap:first-child{margin-bottom:26px}
+/* ---- the inputs ---- */
 .pia-lbl{font-weight:600;color:var(--ink)}
-.pia-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
+.pia-seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px;background:var(--surface-2);border-radius:var(--r-sm);padding:4px}
 .pia-seg button{min-height:48px;border:0;border-radius:var(--r-sm);background:none;font:600 1rem var(--font);color:var(--ink-2);cursor:pointer}
 .pia-seg button.on{background:var(--surface);color:var(--teal-700);box-shadow:0 0 0 1px var(--line-2)}
 .pia-seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.pia-grp{margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--line);font-weight:700;color:var(--ink);font-size:1rem}
+.pia-taxrate{margin-bottom:6px}
+.pia-adv > summary{flex-wrap:wrap;row-gap:0}
+.pia-adv > summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:4px}
+.pia-adv-l{font-weight:700;color:var(--ink)}
+.pia-adv-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .pia-euro{display:flex;align-items:center;gap:8px;margin-top:8px;border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:0 12px;background:var(--surface)}
 .pia-euro span{font-weight:600;color:var(--ink-2)}
 .pia-euro input{flex:1;min-width:0;border:0;background:none;font:600 1.05rem var(--font);color:var(--ink);padding:12px 0;font-variant-numeric:tabular-nums}
 .pia-euro:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-100)}
 .pia-euro input:focus{outline:none}
-
-.res-hero .pia-hl,.res-hero .pia-three{grid-column:1/-1}
-.res-hero .pia-hl{margin-bottom:0}
-.res-hero .pia-note{color:var(--ink-2)}
-.pia-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.pia-three .big{font-size:clamp(26px,2.6vw,34px);overflow-wrap:anywhere}
-.pia-note{margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
-.pia-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px}
-.pia-card h3{margin:0 0 12px}
-.pia-st{width:100%;border-collapse:collapse;font-size:1rem;font-variant-numeric:tabular-nums}
-.pia-st th,.pia-st td{padding:10px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
-.pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
-.pia-st thead th{font-weight:700;color:var(--ink)}
-.pia-st tr:last-child th,.pia-st tr:last-child td{border-bottom:0}
-/* Below about 352px wide the two results tables (three columns of euros
-   at the 16px floor) are wider than their card: each scrolls inside its
-   own box, not the page, and can be scrolled from the keyboard. The box
-   reaches across the card's side padding (and pads itself by as much), so
-   where a table only runs into that padding, as it does from 370px to
-   about 400px, it is drawn where it always was and nothing is clipped. The
-   calculator's two columns may then be narrower than a table. */
-.pia-stwrap{overflow-x:auto;margin:0 -24px;padding:0 24px}
-.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
 .calc-wrap > .panel,.calc-wrap > .results{min-width:0}
 
-.pia-who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
-.pia-p{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);padding:20px 22px}
-.pia-p p{font-size:1rem;line-height:1.6;color:var(--ink);margin:0}
+/* ---- the one comparison: three bars on one scale ----
+   Each bar is what that product holds before its tax: your money (ink),
+   the pension's tax relief (amber), growth (slate; teal is the State's
+   alone, build check 47). Its tax is the
+   hatched part at the right-hand end, laid over what it takes, so the
+   solid part that is left ends at the figure above it. */
+.res-hero.pia-hero{grid-template-columns:minmax(0,1fr);gap:18px}
+.res-hero .pia-hl{margin-bottom:0;font-weight:600;color:var(--ink)}
+.pia-bars{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.pia-row{margin:0;padding:0;min-width:0}
+.pia-row::before{content:none;display:none}
+.pia-rh{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap}
+.res-hero .pia-rh .rl{margin:0;font-size:1rem;font-weight:600;color:var(--ink)}
+.res-hero .pia-rh .big{font-size:clamp(28px,3vw,36px)}
+.pia-track{position:relative;height:14px;margin:10px 0 0;border-radius:99px;background:rgba(11,31,28,.07);overflow:hidden}
+.pia-s{position:absolute;top:0;bottom:0;left:0;width:0;transform-origin:0 50%}
+.pia-s-in{background:var(--ink-800)}
+.pia-s-rel{background:var(--amber);box-shadow:inset 2px 0 0 #fff}
+.pia-s-grow{background:var(--slate);box-shadow:inset 2px 0 0 #fff}
+.pia-s-tax{transform-origin:100% 50%;border-left:2px solid var(--red);
+  background:repeating-linear-gradient(-45deg,rgba(164,41,29,.45) 0 1.5px,transparent 1.5px 5px),#FADCD3}
+.pia-s-tax.pia-zero{display:none}
+.pia-row.pia-none .pia-track{background:none;box-shadow:inset 0 0 0 1.5px rgba(11,31,28,.3)}
+.res-hero .pia-note{margin:8px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pia-key{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:1rem;color:var(--ink-2)}
+.pia-key li{display:flex;align-items:center;gap:8px;margin:0;padding:0}
+.pia-key li::before{content:none;display:none}
+.pia-key i{width:14px;height:14px;border-radius:4px;flex:0 0 auto}
+.pia-k-in{background:var(--ink-800)}
+.pia-k-rel{background:var(--amber)}
+.pia-k-grow{background:var(--slate)}
+.pia-k-tax{border:1.5px solid var(--red);background:repeating-linear-gradient(-45deg,rgba(164,41,29,.45) 0 1.5px,transparent 1.5px 4px),#FADCD3}
+
+/* ---- the workings, folded ---- */
+.pia-work{margin:0}
+.pia-st{width:100%;margin:10px 0 2px;border-collapse:collapse;font-size:1rem;font-variant-numeric:tabular-nums}
+.pia-st th,.pia-st td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top;white-space:nowrap}
+.pia-st th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2);white-space:normal}
+.pia-st thead th{font-weight:600;color:var(--ink-2)}
+.pia-st tbody tr:last-child th,.pia-st tbody tr:last-child td{font-weight:700;color:var(--ink);border-bottom:0}
+/* a narrow phone: the table scrolls inside its own box, never the page */
+.pia-stwrap{overflow-x:auto;margin:0 -18px;padding:0 18px}
+.pia-stwrap:focus-visible{outline:3px solid var(--ring);outline-offset:-3px}
+
+/* ---- the proposal in brief ---- */
+.pia-facts{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pia-facts li{margin:0;padding:18px 20px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);min-width:0}
+.pia-facts li::before{content:none;display:none}
+.pia-facts b{display:block;font-size:1.3rem;line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
+.pia-facts span{display:block;margin-top:6px;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+
+/* ---- side by side ---- */
+.pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
+.pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
+.pia-t th,.pia-t td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.pia-t thead th{background:var(--surface-2);font-weight:700;color:var(--ink)}
+.pia-t tbody th{font-weight:600;color:var(--ink);width:19%}
+.pia-t tbody tr:last-child th,.pia-t tbody tr:last-child td{border-bottom:0}
 
 @media(max-width:900px){
-  .pia-who{grid-template-columns:1fr 1fr}
-  .pia-three{grid-template-columns:1fr}
+  .pia-facts{grid-template-columns:1fr 1fr}
 }
 @media(max-width:700px){
-  .pia-pair,.pia-who{grid-template-columns:1fr}
-  .pia-side,.pia-today,.pia-card{padding:18px 16px}
-  /* the four-way table becomes one card per row, each cell labelled */
+  .pia-facts li{padding:16px}
+  /* the table becomes one card per row, each cell labelled */
   .pia-t thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .pia-t,.pia-t tbody,.pia-t tr,.pia-t th,.pia-t td{display:block;width:auto}
   .pia-t tbody th{width:auto;background:var(--surface-2);padding:12px 16px}
-  .pia-t td{padding:10px 16px}
-  .pia-t td::before{content:attr(data-l);display:block;font-weight:700;color:var(--ink)}
-  .pia-st th,.pia-st td{padding:10px 4px}
-  .pia-stwrap{margin:0 -16px;padding:0 16px}
+  .pia-t td{padding:8px 16px;border-bottom:0}
+  .pia-t td:last-child{padding-bottom:14px}
+  .pia-t td::before{content:attr(data-l) ": ";font-weight:700;color:var(--ink)}
+  .pia-st th,.pia-st td{padding:9px 4px}
 }
-/* Below 370px the table is wider than the card itself; with a little less
-   side padding it fits down to 352px, and below that it scrolls. */
-@media(max-width:369px){
-  .pia-card{padding-left:12px;padding-right:12px}
-  .pia-stwrap{margin:0 -12px;padding:0 12px}
-  .pia-st th,.pia-st td{padding-left:2px;padding-right:2px}
+/* a phone: one card, a row a fact */
+@media(max-width:420px){
+  .pia-facts{grid-template-columns:1fr;gap:0;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg)}
+  .pia-facts li{display:flex;align-items:baseline;gap:12px;padding:13px 16px;border:0;border-radius:0;background:none}
+  .pia-facts li + li{border-top:1px solid var(--line)}
+  .pia-facts b{flex:0 0 45%;font-size:1.05rem}
+  .pia-facts span{margin:0}
 }
 
-/* MOTION-7 (9 October 2026): "Where the tax comes in", played in three tubes
-   by assets/js/pb-pia-motion.js; with motion off none of this is in the
-   page. The row playing is lit in the table, which carries every figure. */
-.pb-pia-stage{margin:0 0 8px}
-.pb-pia-cv{display:block;width:100%;height:300px;cursor:pointer}
-.pb-pia-bar{margin:6px 0 8px;text-align:center}
-.pb-pia-play{font:inherit;font-size:16px;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-2);border-radius:99px;padding:8px 18px;cursor:pointer}
-.pb-pia-t tbody tr{cursor:pointer}
-.pb-pia-t tr th,.pb-pia-t tr td{transition:background-color .3s,color .3s}
-.pb-pia-t tr.pb-pia-now th,.pb-pia-t tr.pb-pia-now td{background:var(--surface-2);color:var(--ink);font-weight:700}
-@media(max-width:560px){.pb-pia-cv{height:280px}}
+/* MOTION (12 October 2026). assets/js/pb-pia-motion.js marks the bars
+   .pia-armed, then .pia-in once they are on screen: each bar builds in the
+   order the money arrives (yours, then the relief, then the growth), then
+   its tax slides back over the end, one bar after another; the figure
+   above counts up with it. After that a change of input slides the bars
+   to their new lengths. With motion off none of this applies: the bars
+   are drawn at once, as they are. */
+:root.pb-motion .pia-bars.pia-armed:not(.pia-in) .pia-s{transform:scaleX(0);transition:none}
+:root.pb-motion .pia-bars.pia-in .pia-s{transition:left .55s var(--pb-ease-out),width .55s var(--pb-ease-out),transform .75s var(--pb-ease-out)}
+:root.pb-motion .pia-bars.pia-in .pia-s-in{transition-delay:0s,0s,calc(var(--row) * .14s)}
+:root.pb-motion .pia-bars.pia-in .pia-s-rel{transition-delay:0s,0s,calc(var(--row) * .14s + .5s)}
+:root.pb-motion .pia-bars.pia-in .pia-s-grow{transition-delay:0s,0s,calc(var(--row) * .14s + .9s)}
+:root.pb-motion .pia-bars.pia-in .pia-s-tax{transition-delay:0s,0s,calc(var(--row) * .14s + 1.45s)}
+@media print{.pia-bars.pia-armed .pia-s{transform:none!important}}

@@ -1,0 +1,4 @@
+# Netlify redirects. The old pension hunt checklist was deleted on 12 October 2026;
+# its links go to the tracker page, which does the hunting.
+/old-pension-checklist.html  /tracker.html  301
+/old-pension-checklist       /tracker.html  301

@@ -1,10 +1,14 @@
-/* my-pensions.html, all your pensions in one view (Run 20 #12; made a
-   picture first on 8 October 2026: a ring split by pension, the total
-   counting up in its middle, a key, and the fees in a coral tile).
+/* my-pensions.html, all your pensions in one view (Run 20 #12; a picture
+   first since 8 October 2026: a ring split by pension, the total counting
+   up in its middle, a key, and the fees in a coral tile. Simplified on
+   12 October 2026: a pension is who it is with, what it is worth and, if
+   known, its yearly fee).
 
    The sums are assets/js/pots.js, covered by tests/pots.test.js. This file
    keeps the rows (add, remove, renumber), reads them as the reader types,
-   and paints the summary. Nothing is stored, sent or put in a link. */
+   and paints the summary. The ring's arcs are handed to
+   assets/js/pb-pots-motion.js when motion is on, which glides them to
+   their new sizes; otherwise they are drawn where they belong. */
 (function () {
   'use strict';
   var Pots = window.PBPots, P = window.PBPage;
@@ -12,7 +16,7 @@
   if (!Pots || !P || !form) return;
   var $ = P.$, euro = P.euro;
   var list = $('ptRows'), add = $('ptAdd');
-  var FIELDS = ['Name', 'Kind', 'Value', 'Amc'];
+  var FIELDS = ['Name', 'Value', 'Amc'];
   var srTimer = 0;
 
   function rows() { return [].slice.call(list.querySelectorAll('.pt-row')); }
@@ -37,9 +41,8 @@
   add.addEventListener('click', function () {
     if (rows().length >= Pots.MAX) return;
     var copy = rows()[0].cloneNode(true);
-    [].forEach.call(copy.querySelectorAll('input'), function (i) { i.value = ''; });
-    [].forEach.call(copy.querySelectorAll('.pt-bad'), function (h) { h.parentNode.removeChild(h); });
-    copy.querySelector('select').selectedIndex = 0;
+    [].forEach.call(copy.querySelectorAll('input'), function (i) { i.value = ''; i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); });
+    [].forEach.call(copy.querySelectorAll('.pt-bad,.pt-x'), function (h) { h.parentNode.removeChild(h); });
     var x = document.createElement('button');
     x.type = 'button'; x.className = 'pt-x'; x.textContent = 'Remove';
     copy.insertBefore(x, copy.querySelector('legend').nextSibling);
@@ -62,7 +65,7 @@
 
   function read() {
     return rows().map(function (r, i) {
-      return { name: $('ptName' + i).value, kind: $('ptKind' + i).value, value: $('ptValue' + i).value, amc: $('ptAmc' + i).value };
+      return { name: $('ptName' + i).value, value: $('ptValue' + i).value, amc: $('ptAmc' + i).value };
     });
   }
 
@@ -86,10 +89,10 @@
   var SHADES = [1, 0.72, 0.5, 0.34, 0.22];
   function shade(i) { return SHADES[i % SHADES.length]; }
   var NS = 'http://www.w3.org/2000/svg', R = 48, C = 2 * Math.PI * R;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduce = !document.documentElement.classList.contains('pb-motion');
   var shown = 0, raf = 0;
 
-  // The total counts to its new figure; under reduced motion it is simply there
+  // The total counts to its new figure; with motion off it is simply there
   function count(to) {
     var el = $('ptTotal'), from = shown, t0 = 0;
     cancelAnimationFrame(raf);
@@ -110,33 +113,43 @@
     return out.slice(0, Pots.MAX);
   }
 
+  /* The arcs: for each kept pension, its length round the ring and where it
+     starts, keyed by its row. Drawn here, or glided by the motion module. */
   function ring(s) {
-    var g = $('ptSegs'), at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0;
-    g.textContent = '';
+    var at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0, want = [];
     s.rows.forEach(function (r, k) {
-      var len = r.share * C, c = document.createElementNS(NS, 'circle');
-      c.setAttribute('class', 'pt-seg');
-      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
-      c.setAttribute('stroke-dasharray', Math.max(0, len - gap).toFixed(2) + ' ' + C.toFixed(2));
-      c.setAttribute('stroke-dashoffset', (-at).toFixed(2));
-      c.style.setProperty('--o', shade(idx[k]));
-      c.setAttribute('data-row', idx[k]);
-      g.appendChild(c);
+      var len = r.share * C;
+      want.push({ row: idx[k], len: Math.max(0, len - gap), off: -at, o: shade(idx[k]) });
       at += len;
     });
+    if (window.PBPotsRing && !reduce) { window.PBPotsRing($('ptSegs'), want, C); }
+    else { draw($('ptSegs'), want); }
     return idx;
+  }
+  function draw(g, want) {
+    g.textContent = '';
+    want.forEach(function (w) {
+      var c = document.createElementNS(NS, 'circle');
+      c.setAttribute('class', 'pt-seg');
+      c.setAttribute('cx', 60); c.setAttribute('cy', 60); c.setAttribute('r', R);
+      c.setAttribute('stroke-dasharray', w.len.toFixed(2) + ' ' + C.toFixed(2));
+      c.setAttribute('stroke-dashoffset', w.off.toFixed(2));
+      c.style.setProperty('--o', w.o);
+      c.setAttribute('data-row', w.row);
+      g.appendChild(c);
+    });
   }
 
   // The row being filled in is lit in the ring and the key
+  var lit = -1;
   function light(i) {
+    lit = i;
     [].forEach.call(document.querySelectorAll('#ptSegs .pt-seg, #ptKey li'), function (el) {
       el.classList.toggle('pt-on', el.getAttribute('data-row') === String(i));
     });
   }
   list.addEventListener('focusin', function (e) { var r = e.target.closest('.pt-row'); light(r ? rows().indexOf(r) : -1); });
   list.addEventListener('focusout', function () { light(-1); });
-
-  function label(kind) { var k = Pots.KINDS.filter(function (x) { return x[0] === kind; })[0]; return k ? k[1] : ''; }
 
   function paint(spoken) {
     var s = Pots.summarise(read());
@@ -161,12 +174,13 @@
     s.rows.forEach(function (r, k) {
       var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);
       var sw = document.createElement('i'); sw.setAttribute('aria-hidden', 'true'); sw.style.setProperty('--o', shade(idx[k]));
-      var b = document.createElement('b'); b.textContent = r.name || label(r.kind);
+      var b = document.createElement('b'); b.textContent = r.name || 'Pension ' + (idx[k] + 1);
       var v = document.createElement('span'); v.textContent = euro(r.value);
       var pc = document.createElement('em'); pc.textContent = Math.round(r.share * 100) + '%';
       li.appendChild(sw); li.appendChild(b); li.appendChild(v); li.appendChild(pc);
       key.appendChild(li);
     });
+    if (lit >= 0) light(lit);
     var c = '', fig = '';
     if (s.chargesKnown > 0) {
       fig = euro(s.yearlyCharges);
@@ -180,8 +194,8 @@
     out.textContent = '';
     out.classList.toggle('pt-fee', at >= 0);
     if (at >= 0) {
-      var b = document.createElement('b'); b.textContent = fig;
-      out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(b);
+      var bb = document.createElement('b'); bb.textContent = fig;
+      out.appendChild(document.createTextNode(c.slice(0, at))); out.appendChild(bb);
       out.appendChild(document.createTextNode(c.slice(at + fig.length)));
     } else out.textContent = c;
     if (!spoken) return;

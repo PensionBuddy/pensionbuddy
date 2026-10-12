@@ -2611,8 +2611,11 @@ main h1{font-weight:800}
 /* ---- both calculations card, this page only ---- */
 .bothcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 28px;box-shadow:var(--sh-sm)}
 .bothcard h3{letter-spacing:-0.02em;margin-bottom:4px}
-.bothcard .sub{font-size:13.5px;color:var(--ink-3);margin-bottom:6px;line-height:1.55}
-.mrow{padding:16px 0;border-top:1px solid var(--line)}
+.bothcard .sub{font-size:1rem;color:var(--ink-3);margin-bottom:14px;line-height:1.55}
+/* each method is a soft card; the one the Department pays is tinted (both at
+   a tie). The tint is the State's teal: it is what is paid. */
+.mrow{padding:14px 16px 10px;margin-top:10px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+.mrow.is-paid{background:var(--teal-50);border-color:var(--teal-100)}
 .mrow[hidden]{display:none}
 .mrow .mhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px 16px;flex-wrap:wrap}
 .mrow .mname{font-weight:700;font-size:15px;letter-spacing:-0.01em}
@@ -2620,7 +2623,7 @@ main h1{font-weight:800}
 .mrow .mdetail,.mrow .mnote{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-top:8px}
 .mrow .mnote{color:var(--ink-3)}
 .mrow .mdetail b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}
-.mclose{font-size:14.5px;line-height:1.6;color:var(--ink);padding-top:16px;border-top:1px solid var(--line)}
+.mclose{font-size:1rem;line-height:1.6;color:var(--ink);padding-top:16px}
 .mclose[hidden]{display:none}
 .mclose b{font-family:var(--font);font-variant-numeric:tabular-nums;color:var(--teal-700);font-weight:600}
 .srcnote{font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:4px;
@@ -2644,23 +2647,19 @@ main h1{font-weight:800}
    added, Run 42). Both bars are
    aria-hidden, because the rates, the difference and the verdict are already
    sentences in this card. */
-.mbar{position:relative;margin:10px 0 2px;height:32px}
+.mbar{position:relative;margin:10px 0 2px;height:36px}
 .mbar-track{position:relative;height:10px;border-radius:99px;background:var(--surface-2);
   border:1px solid var(--line);overflow:hidden}
 .mbar-fill,.mbar-gap{position:absolute;top:0;bottom:0;display:block}
-.mbar-fill{left:0;background:var(--aqua);
-  transition:width .45s cubic-bezier(.22,.61,.36,1)}
-.mbar-gap{background:var(--amber-soft);
-  transition:left .45s cubic-bezier(.22,.61,.36,1),width .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-fill{left:0;background:var(--aqua)}
+/* the method that is not paid is drawn grey: its rate is still in words */
+.mrow:not(.is-paid) .mbar-fill{background:#A9B6B3}
+.mbar-gap{background:var(--amber)}
 .mbar-gap[hidden]{display:none}
-.mbar-lab{position:absolute;top:15px;font-size:12.5px;line-height:1.3;color:var(--ink);
-  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;
-  transform:translateX(-50%);transition:left .45s cubic-bezier(.22,.61,.36,1)}
+.mbar-lab{position:absolute;top:15px;font-size:1rem;line-height:1.3;color:var(--ink);
+  font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;transform:translateX(-50%)}
 .mbar-lab[hidden]{display:none}
 .mbar-scale{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
-@media(prefers-reduced-motion:reduce){
-  .mbar-fill,.mbar-gap,.mbar-lab{transition:none}
-}
 
 /* ---- the Yearly Average band ladder ----
    Six bands, each drawn against the same scale as the bars above, the
@@ -2703,21 +2702,26 @@ main h1{font-weight:800}
    the credits and HomeCaring Periods that count, then, greyed, the part the
    caps leave out. Every count is the module's (tca.creditsCounted and
    the rest); the page only divides by the scale. All the State's: teal. */
-.pb-rec{margin:10px 0 0}
+.pb-rec{margin:0 0 14px}
 .pb-rec-track{position:relative;display:flex;height:10px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
 .pb-rec-track i{display:block;height:100%}
 .pb-rec-paid{background:var(--teal-700)}
 .pb-rec-extra{background:var(--aqua)}
 .pb-rec-over{background:repeating-linear-gradient(135deg,var(--line-2) 0 4px,var(--surface-2) 4px 8px)}
 .pb-rec-track .pb-rec-full{position:absolute;top:-1px;bottom:-1px;width:2px;margin-left:-1px;background:var(--ink)}
-.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.pb-rec-key [hidden]{display:none}
 .pb-rec-key b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .pb-rec-sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 
-/* the jump row under the result: the explainer and the assumptions are two
-   long scrolls down on a phone */
-.pb-jump{margin:12px 0 0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
-.pb-jump a{color:var(--teal-700);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+/* 12 October 2026: credits and caring fold away inside the panel, their
+   values on the summary */
+.pb-more{margin-top:2px;padding:0 16px;background:var(--surface-2)}
+.pb-more>summary{gap:10px;font-size:1rem;padding:10px 0;line-height:1.35}
+.pb-more-t{display:flex;flex-direction:column;gap:2px}
+.pb-more-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pb-more[open]>summary{margin-bottom:6px}
+.pb-more .field{margin-bottom:18px}
 
 /* #27: the "between 1 January and 5 April" box under the entry year, the
    comparison page's checkbox row */
@@ -2736,6 +2740,9 @@ main h1{font-weight:800}
    teal: they mark the reader's place, not what the State pays (Run 43). */
 .pb-glide{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;max-width:620px}
 .pb-glide-col{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:14px}
+/* the glide is a list inside .assume: no assumption tick on its columns */
+.assume .pb-glide-col{padding-left:0}
+.assume .pb-glide-col::before{content:none}
 .pb-glide-bar{position:relative;display:block;width:100%;max-width:34px;height:72px;border-radius:6px;background:var(--teal-50);border:1px solid var(--teal-100);overflow:hidden}
 .pb-glide-bar i{position:absolute;left:0;right:0;bottom:0;display:block;background:var(--aqua)}
 .pb-glide-pct{font-size:12.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
@@ -2749,23 +2756,32 @@ main h1{font-weight:800}
 .pb-vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* 8 October 2026: the working folds away inside the card */
 .pb-fold-in{margin-top:14px;padding:0 14px;background:var(--surface-2)}
-.pb-fold-in>summary{min-height:44px;font-size:15px}
+.pb-fold-in>summary{min-height:44px;font-size:1rem}
 .pb-fold-in .mdetail,.pb-fold-in .mbar-scale{margin:0 0 10px}
 
+/* the week and the year side by side on a phone too: both are short */
+@media(max-width:920px){#spHas .res-hero{grid-template-columns:1fr 1fr;gap:18px 16px;padding:24px 22px;align-items:end}
+  #spHas .res-hero>.foot,#spHas .res-hero>.pb-sp27{align-self:start}}
+
 /* Budget 2027: the next year's rate, beside this year's */
-.pb-sp27{grid-column:1 / -1;margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--ink-2)}
-/* MOTION-5:BEGIN (9 October 2026, Damian's brief): the page alive
-   (assets/js/pb-sp-motion.js sets :root.pb-sp-alive and every class here,
-   only with motion on). */
-:root.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .45s cubic-bezier(.3,1.5,.5,1) both}
-@keyframes pbSpRoll{from{transform:translateY(55%);opacity:0}to{transform:none;opacity:1}}
-.pb-sp-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
-:root.pb-sp-alive .mbar-fill,:root.pb-sp-alive .mbar-gap,:root.pb-sp-alive .mbar-lab,:root.pb-sp-alive .pb-rec-track i{transition:width .7s cubic-bezier(.34,1.56,.64,1),left .7s cubic-bezier(.34,1.56,.64,1)}
-:root.pb-sp-alive .mrow{margin-left:-12px;margin-right:-12px;padding:10px 12px;border-radius:14px;transition:box-shadow .4s,background-color .4s}
-:root.pb-sp-alive .mrow.pb-sp-win{background-color:rgba(230,251,247,.7);box-shadow:0 0 0 2px rgba(22,201,176,.55),0 10px 26px rgba(22,201,176,.16)}
-:root.pb-sp-alive .mrow.pb-sp-swap{animation:pbSpSwap .6s cubic-bezier(.3,1.5,.5,1)}
-@keyframes pbSpSwap{40%{transform:scale(1.03)}100%{transform:none}}
-/* MOTION-5:END */
+.pb-sp27{grid-column:1 / -1;margin:-8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+/* MOTION-6:BEGIN (12 October 2026, Damian's brief: calm and clear).
+   assets/js/pb-sp-motion.js sets :root.pb-sp-alive and .pb-sp-pre, only while
+   motion is allowed; every rule is also behind :root.pb-motion. Nothing
+   overshoots or bounces. The first time the card is seen both bars grow from
+   nothing, then the difference and the "Paid" mark fade in after them. */
+:root.pb-motion.pb-sp-alive .pb-roll{display:inline-block;animation:pbSpRoll .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSpRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
+:root.pb-motion.pb-sp-alive .mbar-fill{transition:width .6s cubic-bezier(.22,.61,.36,1),background-color .35s ease}
+:root.pb-motion.pb-sp-alive .mbar-gap{transition:left .6s cubic-bezier(.22,.61,.36,1),width .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
+:root.pb-motion.pb-sp-alive .mbar-lab{transition:left .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
+:root.pb-motion.pb-sp-alive .mrow{transition:background-color .35s ease,border-color .35s ease}
+:root.pb-motion.pb-sp-alive .pb-rec-track i{transition:width .5s cubic-bezier(.22,.61,.36,1),left .5s cubic-bezier(.22,.61,.36,1)}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-fill{width:0 !important}
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-gap,
+:root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-lab{opacity:0}
+:root.pb-motion.pb-sp-alive #m2Row .mbar-fill{transition-delay:.08s}
+/* MOTION-6:END */
 </style>
 
 <script>
@@ -2811,7 +2827,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2828,14 +2843,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
   <h1>What the State Pension would <span class="hl">pay</span> you.</h1>
-  <p>Your weekly State Pension, from your social insurance (PRSI) record.</p>
+  <p>From your social insurance (PRSI) record, worked out both ways the Department does.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-entitlement">
   <div class="panel">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type it.</p>
+    <h2>Your PRSI record</h2>
+    <p class="hint">Slide, or tap a figure to type it.</p>
 
     <div class="field">
       <div class="row"><label for="birth">Year you were born</label><span class="val" id="birthV">1962</span></div>
@@ -2847,26 +2862,31 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="row"><label for="entry">Year you first paid PRSI</label><span class="val" id="entryV">1985</span></div>
       <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
       <p class="subnote" id="entryNote" hidden></p>
-      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first PRSI payment was between 1 January and 5 April (years up to 2001)</span></label>
+      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first PRSI payment was between 1 January and 5 April</span></label>
     </div>
 
     <div class="field">
       <div class="row"><label for="paid">Weeks of PRSI you paid</label><span class="val" id="paidV">1,560</span></div>
       <input type="range" id="paid" min="0" max="2600" step="52" value="1560">
-      <p class="subnote" id="paidNote">Up to the year before you turn 66. 52 weeks is a year; you need 520. See yours on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
+      <p class="subnote" id="paidNote">To the year before you turn 66. 52 is a year; you need 520. Yours is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
     </div>
 
-    <div class="field">
-      <div class="row"><label for="credited">Credited weeks</label><span class="val" id="creditedV">260</span></div>
-      <input type="range" id="credited" min="0" max="1040" step="52" value="260">
-      <p class="subnote">Weeks you were out of work or ill.</p>
-    </div>
+    <!-- 12 October 2026 (Damian: fewer inputs): the two refinements fold
+         away, their values on the closed summary so nothing counts unseen -->
+    <details class="pb-fold pb-more" id="pbMore">
+      <summary><span class="pb-more-t">Credits and caring<span class="pb-more-v" id="pbMoreSum">260 credited, 0 caring</span></span></summary>
+      <div class="field">
+        <div class="row"><label for="credited">Credited weeks</label><span class="val" id="creditedV">260</span></div>
+        <input type="range" id="credited" min="0" max="1040" step="52" value="260">
+        <p class="subnote">Weeks you were out of work or ill.</p>
+      </div>
 
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><label for="homecaring">Weeks caring at home</label><span class="val" id="homecaringV">0</span></div>
-      <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
-      <p class="subnote">Caring for a child or someone who needed care.</p>
-    </div>
+      <div class="field">
+        <div class="row"><label for="homecaring">Weeks caring at home</label><span class="val" id="homecaringV">0</span></div>
+        <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
+        <p class="subnote">Caring for a child or someone who needed care.</p>
+      </div>
+    </details>
   </div>
 
   <div class="results">
@@ -2874,11 +2894,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <div id="spHas">
       <div class="res-hero">
-        <div><div class="rl">Your State Pension, a week</div><div class="big" id="spWeekly">€280.86</div></div>
+        <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€280.86</div></div>
         <div><div class="rl">A year</div><div class="big" id="spAnnual">€14,605</div></div>
         <div class="divline"></div>
-        <p class="pb-sp27">2026 rates; the 2027 band rates are not yet published. Budget 2027 raises the maximum to &euro;309.30 a week from January 2027.</p>
         <div class="foot" id="spFoot">Worked out under the Yearly Average blend, for a pension starting in 2028.</div>
+        <p class="pb-sp27">2026 rates. From January 2027 the maximum is &euro;309.30 a week (Budget 2027); the new band rates are not yet published.</p>
       </div>
 
       <div class="bothcard">
@@ -2892,10 +2912,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
             <span class="mbar-lab" id="m1Lab" style="left:90.6699%">€18.97</span>
           </div>
           <p class="mnote" id="m1Cap" hidden></p>
-          <div class="pb-rec">
-            <div class="pb-rec-track" aria-hidden="true"><i class="pb-rec-paid" id="pbRecPaid" style="width:75%"></i><i class="pb-rec-extra" id="pbRecExtra" style="width:12.5%"></i><i class="pb-rec-over" id="pbRecOver" style="width:0%"></i><i class="pb-rec-full" id="pbRecFull" style="left:100%"></i></div>
-            <p class="pb-rec-key"><span><i class="pb-rec-sw pb-rec-paid"></i>Paid <b id="pbRecPaidN">1,560</b></span><span><i class="pb-rec-sw pb-rec-extra"></i>Credits and HomeCaring Periods counted <b id="pbRecExtraN">260</b></span><span><i class="pb-rec-sw pb-rec-over"></i>Over the caps <b id="pbRecOverN">0</b></span></p>
-          </div>
         </div>
 
         <div class="mrow" id="m2Row">
@@ -2910,6 +2926,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="mclose" id="mWhy" hidden></p>
         <details class="pb-fold pb-fold-in"><summary>Show the working</summary>
           <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
+          <div class="pb-rec">
+            <div class="pb-rec-track" aria-hidden="true"><i class="pb-rec-paid" id="pbRecPaid" style="width:75%"></i><i class="pb-rec-extra" id="pbRecExtra" style="width:12.5%"></i><i class="pb-rec-over" id="pbRecOver" style="width:0%"></i><i class="pb-rec-full" id="pbRecFull" style="left:100%"></i></div>
+            <p class="pb-rec-key"><span><i class="pb-rec-sw pb-rec-paid"></i>Paid <b id="pbRecPaidN">1,560</b></span><span><i class="pb-rec-sw pb-rec-extra"></i>Credits and caring counted <b id="pbRecExtraN">260</b></span><span id="pbRecOverK" hidden><i class="pb-rec-sw pb-rec-over"></i>Over the caps <b id="pbRecOverN">0</b></span></p>
+          </div>
           <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
         <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
         </details>
@@ -2957,7 +2977,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
 </div></div>
 
-<section class="assume" id="pbHow" style="padding-bottom:0"><div class="wrap">
+<section style="padding:40px 0 0"><div class="wrap">
+  <div class="infoadvice">
+    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+    <p><b>This page is information, not advice.</b> Only the Department's own calculation counts.</p>
+  </div>
+</div></section>
+
+<section class="assume" id="pbHow" style="padding:40px 0 0"><div class="wrap">
   <details class="pb-fold"><summary>How the two methods work</summary>
   <div class="expl">
     <p><b>Method 1, the Total Contributions Approach (TCA)</b>, adds paid, credited and HomeCaring Periods. A full record, 2,080 or forty years, gets the maximum personal rate: €299.30 a week from January 2026, €309.30 from January 2027 (Budget 2027). Less is pro rata.</p>
@@ -3020,20 +3047,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </details>
 </div></section>
 
-<div class="cta-band"><div class="wrap"><div class="cta-card">
-  <div class="buddy-mini"><picture><source type="image/webp" srcset="assets/img/buddy-avatar.webp?v=e0dc8cdd"><img src="assets/img/buddy-avatar.jpg?v=4d2d6c16" width="320" height="320" alt="Buddy, the Pensionbuddy dog" loading="lazy" decoding="async"></picture></div>
-  <div class="ctext"><h2>Next: what sits on top of it.</h2></div>
-  <a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-</div></div></div>
-
-<section style="padding:40px 0 0"><div class="wrap">
-  <div class="infoadvice">
-    <span class="ii"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
-    <p><b>This page is information, not advice.</b> Only the Department's own calculation counts.</p>
-  </div>
-</div></section>
-
-<section class="assume" id="pbAssume"><div class="wrap">
+<section class="assume" id="pbAssume" style="padding-top:16px"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
     <li>Not included: your old pensions, your tax position, your employer&rsquo;s scheme.</li>
@@ -3049,7 +3063,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Rates and rules change, usually at each Budget. A year is 52 weekly payments.</li>
     <li>The personal rate at 66 excludes increases for a qualified adult or child, and the higher rate from 80.</li>
     <li>Pensions that started before 2025 are not covered.</li>
-    <li>Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. The Department's own web pages on the calculation methods still showed 2025 rates when this was checked, which is why the booklet is cited. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>. Figures checked 11 September 2026.</li>
+    <li>Band rates: the Department of Social Protection's <a href="https://assets.gov.ie/static/documents/9c18b85f/20260520_Rates_of_Payment_Booklet_-_SW19_-_2026_May.pdf" rel="noopener">Rates of Payment 2026 (SW19)</a>, page 33. Rules: <a href="https://www.citizensinformation.ie/en/social-welfare/older-and-retired-people/state-pension-contributory/" rel="noopener">Citizens Information</a>. Your own record: <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</li>
   </ul>
   </details>
 </div></section>
@@ -3087,7 +3101,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
 <script src="assets/js/state-pension-entitlement.js?v=9f242811"></script>
-<script src="assets/js/pb-sp-motion.js?v=c6fde893"></script>
+<script src="assets/js/pb-sp-motion.js?v=5ae3bb04"></script>
 <script>
 /* state-pension-entitlement.html
 
@@ -3229,6 +3243,8 @@ function render() {
   $('paidV').textContent = num(paid);
   $('creditedV').textContent = num(credited);
   $('homecaringV').textContent = num(homeCaring);
+  /* the folded refinements say what they hold while closed */
+  $('pbMoreSum').textContent = num(credited) + ' credited, ' + num(homeCaring) + ' caring';
 
   // Which side of the transition window the drawdown year falls on. Asked of
   // the shared module by name, so 'after' cannot be confused with 'before':
@@ -3313,6 +3329,9 @@ function render() {
        one adds, and whichever method the Department actually pays is labelled as
        paid. At a tie both are paid, which is what the closing sentence says. */
     const paidOn = { m1: res.award.basis !== 'method2', m2: hasBoth(res) && res.award.basis !== 'method1' };
+    /* the row the Department pays is marked; at a tie, both */
+    $('m1Row').classList.toggle('is-paid', paidOn.m1);
+    $('m2Row').classList.toggle('is-paid', paidOn.m2);
     ['m1', 'm2'].forEach(function (m) {
       const gap = $(m + 'Gap'), lab = $(m + 'Lab');
       gap.hidden = tailOn !== m;
@@ -3349,6 +3368,7 @@ function render() {
     $('pbRecPaidN').textContent = num(res.paid);
     $('pbRecExtraN').textContent = num(tca.extrasCounted);
     $('pbRecOverN').textContent = num(over);
+    $('pbRecOverK').hidden = over <= 0;
     if (tca.capBit) {
       $('m1Cap').textContent = num(tca.extrasCounted) + ' of your ' + num(res.credited + res.homeCaring) +
         ' credits and HomeCaring Periods count; the rest are over the caps.';
@@ -3642,7 +3662,7 @@ render();
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3746,7 +3766,7 @@ render();
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=9d83afbc"></script>
+<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
 <script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

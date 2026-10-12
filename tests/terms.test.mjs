@@ -112,7 +112,8 @@ const GLOSSARY = (() => { const s = readFileSync(join(ROOT, 'assets/js/pb-glossa
 
 /* the pages that load it, from the pages themselves */
 const pages = readdirSync(ROOT).filter(f => f.endsWith('.html') && readFileSync(join(ROOT, f), 'utf8').includes('assets/js/pb-terms.js')).sort();
-eq('1. the pages that load it', pages.length >= 21, true);
+/* 20 since 12 October 2026: the old pension checklist went */
+eq('1. the pages that load it', pages.length >= 20, true);
 
 const CONTEXT = `h1,h2,h3,h4,h5,h6,a,button,label,summary,figcaption,nav,footer,[data-pb-calc],.faq-list,#story,#damian,#adam,#buddy,.msg,.hint,.pb-changed,[aria-live]`;
 let total = 0;

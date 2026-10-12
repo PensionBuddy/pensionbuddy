@@ -2609,70 +2609,72 @@ main h1{font-weight:800}
 /* MOTION-4 CALCULATOR:END */
 
 /* ============================================================
-   WHAT CHARGES COST (pension-fees-calculator.html, Run 20 #3).
-   Two sets of charges on one pot, and no charges as the yardstick.
+   WHAT CHARGES COST (pension-fees-calculator.html, Run 20 #3;
+   simplified 12 October 2026). One pot, its charges, and no charges
+   as the yardstick; another plan's charges fold under "Compared with".
    The chart is drawn by the page script as one inline SVG: the
-   no-charge line dashed and quiet, the other plan in slate (teal until Run 43: teal is only what the State pays),
-   the reader's own plan in ink, so the reader's line is the one that
-   reads first. The table says where the money goes; the card under
-   it gives the other side, beside the figures rather than below the
-   tool.
+   no-charge line dashed and quiet, the other plan in slate (teal is
+   only what the State pays), the reader's own plan in ink. Point at it
+   and a line follows, with that year's figures. The table folds under
+   "How we got this".
    ============================================================ */
-.fee-grp{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line);font-size:.98rem;font-weight:700;color:var(--ink)}
-.fee-chart{width:100%;margin:12px 0 8px}
+.fee-grp{margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line);font-size:1rem;font-weight:700;color:var(--ink)}
+.fee-other > summary{flex-wrap:wrap;row-gap:0}
+.fee-other-l{font-weight:700;color:var(--ink)}
+.fee-other-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+[data-pb-calc="pension-fees-calculator"] .pb-today-v{font-size:1rem}
+.fee-sub{margin:0 0 6px;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+.chart-card.fee-chart-card{min-height:0}
+.fee-plot{position:relative}
+.fee-chart{width:100%;margin:12px 0 8px;touch-action:pan-y}
 .fee-chart svg{display:block;width:100%;height:auto;overflow:visible}
 .fee-chart .fee-l-none{fill:none;stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 5}
 .fee-chart .fee-l-b{fill:none;stroke:var(--slate);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
 .fee-chart .fee-l-a{fill:none;stroke:var(--ink);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
 .fee-chart .fee-grid{stroke:var(--line);stroke-width:1}
-/* Run 43 (INTERACTIVE-PROPOSALS-42 rank 1, adapted): what your plan's charges take, the area
-   between the no-charge line and your plan's line, in red, one strength (money missing,
-   docs/DESIGN-RUBRIC.md section 3; no lighter red outside a bar). The other plan's slate line
-   keeps a white edge where it crosses the red (slate on red is 1.32:1). Redrawn with the
-   lines when a slider moves; nothing animates. */
+/* what your plan's charges take: the area between the no-charge line and
+   your plan's line, in the coral of money missing (docs/DESIGN-RUBRIC.md
+   section 3). The other plan's slate line keeps a white edge where it
+   crosses it. Redrawn with the lines when a slider moves. */
 .fee-chart .fee-gap{fill:var(--gap);stroke:none}
 .fee-chart .fee-l-b-edge{fill:none;stroke:var(--surface);stroke-width:7.5;stroke-linecap:round;stroke-linejoin:round}
-.fee-key .fee-k-gap{width:14px;height:10px;border:0;border-radius:2px;background:var(--gap)}
 .fee-chart text{font-family:var(--font);font-size:13px;fill:var(--ink-2)}
-.fee-key{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.86rem;color:var(--ink-2)}
+/* the year the pointer is on */
+.fee-chart .fee-scrub{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 4}
+.fee-chart .fee-dot{stroke:var(--surface);stroke-width:2.5}
+.fee-chart .fee-dot-a{fill:var(--ink)}
+.fee-chart .fee-dot-b{fill:var(--slate)}
+.fee-chart .fee-dot-none{fill:var(--ink-3)}
+.fee-tip{position:absolute;top:0;left:0;z-index:2;min-width:200px;max-width:260px;padding:10px 12px;border-radius:10px;background:var(--surface);
+  border:1px solid var(--line-2);box-shadow:0 10px 28px -12px rgba(11,31,28,.35);font-size:1rem;line-height:1.4;color:var(--ink-2);pointer-events:none}
+.fee-tip[hidden]{display:none}
+.fee-tip b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.fee-tip .fee-tip-y{display:block;font-weight:700;color:var(--ink);margin-bottom:4px}
+.fee-tip .fee-tip-r{display:flex;justify-content:space-between;gap:14px}
+.fee-tip .fee-tip-take{margin-top:4px;padding-top:4px;border-top:1px solid var(--line)}
+.fee-tip .fee-tip-take b{color:var(--red)}
+.fee-key{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:1rem;color:var(--ink-2)}
 .fee-key li{display:flex;align-items:center;gap:8px}
 .fee-key i{display:inline-block;width:20px;height:0;border-top:3px solid}
 .fee-key .fee-k-none{border-top:2px dashed var(--ink-3)}
 .fee-key .fee-k-b{border-color:var(--slate)}
 .fee-key .fee-k-a{border-color:var(--ink)}
-.fee-card,.fee-side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 24px;margin-top:16px}
-.fee-card h3,.fee-side h3{margin:0 0 10px}
-.fee-t{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+.fee-key .fee-k-gap{width:14px;height:10px;border:0;border-radius:2px;background:var(--gap)}
+.fee-work{margin:0}
+.fee-t{width:100%;margin:10px 0 0;border-collapse:collapse;font-size:1rem;font-variant-numeric:tabular-nums}
 .fee-t th,.fee-t td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
 .fee-t th[scope=row]{text-align:left;font-weight:500;color:var(--ink-2)}
-.fee-t thead th{font-size:.86rem;font-weight:600;color:var(--ink-2)}
+.fee-t thead th{font-weight:600;color:var(--ink-2)}
 .fee-t tbody tr:last-child th,.fee-t tbody tr:last-child td{font-weight:700;color:var(--ink);border-bottom:0}
-.fee-note{margin:10px 0 0;font-size:.86rem;line-height:1.55;color:var(--ink-2)}
-.fee-side p{margin:0;font-size:.95rem;line-height:1.6;color:var(--ink)}
+.fee-note{margin:10px 0 4px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
+.fee-side{margin:0;padding:2px 0 2px 14px;border-left:3px solid var(--line-2);font-size:1rem;line-height:1.6;color:var(--ink-2)}
 @media(max-width:480px){
-  .fee-card,.fee-side{padding:18px 16px}
-  .fee-t{font-size:.86rem}
   .fee-t th,.fee-t td{padding:8px 4px}
+  .fee-tip{min-width:0;max-width:220px}
 }
-/* Job 5: your plan in today's money */
-.fee-chart .fee-l-today{fill:none;stroke:#8A97A8;stroke-width:2.5;stroke-dasharray:7 5;stroke-linecap:round}
-.fee-key .fee-k-today{border-top:2.5px dashed #8A97A8;background:none;height:0}
-.fee-key li[hidden]{display:none}
-
-/* MOTION-7 (9 October 2026): the leaking jars over "Where it goes", drawn by
-   assets/js/pb-fee-motion.js; with motion off none of this is in the page.
-   The key carries the figures as text, at the calculators' 16px. */
-.pb-fee-stage{margin:6px 0 18px}
-.pb-fee-cv{display:block;width:100%;height:300px;touch-action:pan-y}
-.pb-fee-keys{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center}
-.pb-fee-k{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:16px;line-height:1.35;color:var(--ink-2);padding:6px 4px;border-radius:12px;transition:background-color .25s}
-.pb-fee-k b{font-size:21px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-.pb-fee-c{color:#B4553C;font-weight:600}
-.pb-fee-k.pb-on{background:var(--surface-2)}
-.pb-fee-k.pb-on .pb-fee-c{color:var(--ink-2)}
-.pb-fee-hint{margin:12px 0 0;font-size:16px;color:var(--ink-2);text-align:center;transition:opacity .4s}
-.pb-fee-hint.pb-off{opacity:0}
-@media(max-width:560px){.pb-fee-cv{height:270px}}
+/* motion: the first time the chart is seen, the lines draw from now to
+   retirement and the coral fills in behind them (assets/js/pb-fee-motion.js,
+   Web Animations, so nothing here holds a transition) */
 </style>
 
 <script>
@@ -2718,7 +2720,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2735,70 +2736,73 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
   <h1>What your pension&rsquo;s charges <span class="hl">cost you</span> by retirement.</h1>
-  <p>Your plan&rsquo;s charges next to another plan&rsquo;s. Yours are on your annual statement.</p>
+  <p>Your plan&rsquo;s charges are on your annual statement.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pension-fees-calculator">
   <div class="panel">
-    <h2>Your details</h2>
-    <p class="hint">Slide, or tap a value to type any amount.</p>
-    <div class="field"><div class="row"><label for="pot">Pension saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
-    <div class="field"><div class="row"><label for="monthly">Paid in each month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
-    <div class="field"><div class="row"><label for="years">Years until you retire</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
+    <h2>Your pension</h2>
+    <p class="hint">Slide, or tap a figure to type it.</p>
+    <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
+    <div class="field"><div class="row"><label for="monthly">Paid in, a month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
+    <div class="field"><div class="row"><label for="years">Years to retirement</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
 
-    <p class="fee-grp">Your plan&rsquo;s charges</p>
-    <div class="field"><div class="row"><label for="amcA">Annual management charge<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">A yearly share of the fund. Older plans may call it a fund management charge.</p></div>
-    <div class="field"><div class="row"><label for="feeA">Charge on each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">Or an allocation rate: 95% allocated means a 5% charge.</p></div>
+    <p class="fee-grp">Its charges</p>
+    <div class="field"><div class="row"><label for="amcA">A year, of the fund<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">The annual (or fund) management charge.</p></div>
+    <div class="field"><div class="row"><label for="feeA">On each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">95% allocated means a 5% charge.</p></div>
 
-    <p class="fee-grp">For comparison: another plan&rsquo;s charges</p>
-    <div class="field"><div class="row"><label for="amcB">Annual management charge<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
-    <div class="field"><div class="row"><label for="feeB">Charge on each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
-
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="growth">Assumed yearly growth, before charges</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="1" max="8" step="0.5" value="5"><p class="subnote">A long-term average. Real returns vary and can be negative.</p></div>
+    <details class="adv fee-other" id="feeOther">
+      <summary><span class="fee-other-l">Compared with</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
+      <div class="adv-in">
+        <div class="field"><div class="row"><label for="amcB">A year, of the fund<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
+        <div class="field" style="margin-bottom:0"><div class="row"><label for="feeB">On each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
+      </div>
+    </details>
+    <input type="hidden" id="growth" value="5">
   </div>
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero">
       <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
-      <div><div class="rl">The other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
+      <div><div class="rl">Another plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
       <div class="divline"></div>
       <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms. The growth assumed may not happen.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
 
-    <div class="chart-card">
+    <div class="chart-card fee-chart-card">
       <h3>How your pot could grow</h3>
-      <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
+      <p class="fee-sub">At <span id="growthV">5%</span> a year, before charges. Tap or point at the chart for any year.</p>
+      <div class="fee-plot">
+        <div class="fee-chart" id="feeChart" role="img" aria-label="A line chart of your pot, year by year, under your plan's charges, under the other plan's, and with no charges at all."></div>
+        <div class="fee-tip" id="feeTip" aria-hidden="true" hidden></div>
+      </div>
       <ul class="fee-key" aria-hidden="true">
         <li><i class="fee-k-none"></i>No charges</li>
-        <li><i class="fee-k-b"></i>The other plan&rsquo;s charges</li>
-        <li><i class="fee-k-a"></i>Your plan&rsquo;s charges</li>
+        <li><i class="fee-k-b"></i>Another plan</li>
+        <li><i class="fee-k-a"></i>Your plan</li>
         <li><i class="fee-k-gap"></i>What your plan&rsquo;s charges take</li>
-        <li id="feeKeyToday"><i class="fee-k-today"></i>Your plan in today&rsquo;s money</li>
       </ul>
     </div>
 
-    <div class="fee-card">
-      <h3>Where it goes</h3>
+    <details class="pb-work fee-work">
+      <summary>How we got this</summary>
       <table class="fee-t">
         <caption class="tk-sr">What the charges take, for each plan</caption>
-        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">The other plan</th></tr></thead>
+        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Another plan</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Annual charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
+          <tr><th scope="row">Yearly charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
           <tr><th scope="row">Charges on payments</th><td id="feePaidA">€3,000</td><td id="feePaidB">€0</td></tr>
           <tr><th scope="row">What they cost you by retirement</th><td id="costA">€58,754</td><td id="costB">€28,327</td></tr>
         </tbody>
       </table>
       <p class="fee-note">Every euro a charge takes stops growing. So the last line is the no-charge pot, <span id="nonePot">€286,465</span> here, less each plan&rsquo;s.</p>
-    </div>
+    </details>
 
-    <div class="fee-side">
-      <h3>The other side</h3>
-      <p>Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
-    </div>
+    <p class="fee-side">Some older plans carry terms worth more than any charge saved, such as a promised defined benefit pension. Moving can mean giving them up.</p>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="pension-fees-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -2834,12 +2838,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
-    <li>Not included: policy, set-up and exit charges, the terms an older plan may carry, your tax relief.</li>
-    <li>Each month the pot grows at your yearly rate, before charges. Then a twelfth of the annual management charge comes out. Then the payment goes in, less the charge on payments.</li>
-    <li>Your plan&rsquo;s defaults, 1% a year and 5% of each payment, are the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
-    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
-    <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target). Figures ignore tax relief. Relief changes what a payment costs you, not what the charges take.</li>
-    <li>Growth is steady and the same for both plans. Real returns also differ between funds.</li>
+    <li>Each month the pot grows at 5% a year, before charges: risk level 4 of 7, about half shares and half bonds, a mix we chose for illustration. Then a twelfth of the yearly charge comes out. Then the payment goes in, less the charge on payments. Growth is steady and the same for both plans; real returns differ between funds and can be negative.</li>
+    <li>Your plan starts at 1% a year and 5% of each payment, the most a Standard Personal Retirement Savings Account (PRSA) may charge under the Pensions Act. Other plans can charge more, or in other ways.</li>
+    <li>Not included: policy fees, set-up charges, bid/offer spreads on older contracts, exit or switching charges, the terms an older plan may carry, your tax relief. A plan with them costs more. The Competition and Consumer Protection Commission (CCPC) explains each in its guide to <a href="https://www.ccpc.ie/manage-your-money/planning-for-the-future/pensions/fees-and-charges" rel="noopener">pension fees and charges</a>.</li>
+    <li>Payments stay level until you retire. The main figures ignore inflation; the line under each gives today&rsquo;s money, with prices rising 2% a year (the European Central Bank&rsquo;s target).</li>
   </ul>
   </details>
 </div></section>
@@ -2848,7 +2850,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
     <li><a class="pb-related-card pb-card-link" href="my-pensions.html"><span class="pb-related-t">All your pensions in one view</span><span class="pb-related-d">Add each pension and see your total, how it is split and what the fees cost you each year.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="old-pension-checklist.html"><span class="pb-related-t">The old pension hunt: a checklist</span><span class="pb-related-d">Ten steps for tracking down pensions from old jobs in Ireland, and what to ask once you find one.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-t">Pension calculator</span><span class="pb-related-d">Your projection, with Revenue&rsquo;s tax relief.</span></a></li>
   </ul>
 </div></section>
@@ -2876,23 +2877,34 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/pension-fees.js?v=8ac63932"></script>
-<script src="assets/js/pb-fee-motion.js?v=b930c320"></script>
+<script src="assets/js/pb-fee-motion.js?v=e63bfafa"></script>
 <script>
-/* pension-fees-calculator.html, what a pension's charges cost (Run 20 #3).
+/* pension-fees-calculator.html, what a pension's charges cost (Run 20 #3;
+   simplified 12 October 2026, Damian: "simplify all the calculators").
 
    Maths lives in assets/js/pension-fees.js, covered by
    tests/pension-fees.test.js. This file reads the sliders, hands the module
    fractions (the sliders are in percent), and paints what comes back: the
-   two pots, the sentence, the table, the chart and one spoken summary.
+   two pots, the sentence, the chart, the workings and one spoken summary.
+   Growth is no longer a slider: risk level 4 of assets/js/pb-assumptions.js,
+   5% a year before charges, the pension calculator's own figure; #growth
+   holds it for the scripts that read it (pb-after.js).
+
+   Point at the chart, or drag a finger along it, and a line follows with
+   that year's three pots and what your plan's charges have taken by then:
+   the module's own yearly figures, nothing worked out here.
 
    TONE: the figures do the work. No provider is named, nobody's charges
-   are called too high, and the card beside the figures says what a lower
+   are called too high, and the line under the figures says what a lower
    charge can cost in other ways. */
 (function () {
   'use strict';
   var Fees = window.PBFees, P = window.PBPage;
   if (!Fees || !P) return;
   var $ = P.$, euro = P.euro;
+  var GROWTH = window.PBAssume ? Math.round(PBAssume.level(4).rate * 1000) / 10 : 5;
+  $('growth').value = GROWTH;
+  $('growthV').textContent = GROWTH + '%';
 
   var pc = function (v) { return (Math.round(v * 100) / 100).toLocaleString('en-IE') + '%'; };
   var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
@@ -2903,8 +2915,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     amcA: function (v) { return pc(v) + ' a year'; },
     feeA: function (v) { return pc(v) + ' of each payment'; },
     amcB: function (v) { return pc(v) + ' a year'; },
-    feeB: function (v) { return pc(v) + ' of each payment'; },
-    growth: function (v) { return pc(v) + ' a year'; }
+    feeB: function (v) { return pc(v) + ' of each payment'; }
   };
 
   function read() {
@@ -2919,6 +2930,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   /* One SVG: the no-charge line, the other plan, your plan, on one scale
      from nothing to the no-charge pot at retirement, the highest point. */
   var NS = 'http://www.w3.org/2000/svg';
+  var G = { W: 600, H: 250, L: 4, R: 4, T: 26, B: 28 };
+  var last = null;   // the figures the chart was last drawn from, for the pointer line
   function svgEl(tag, attrs, text) {
     var e = document.createElementNS(NS, tag);
     Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
@@ -2926,7 +2939,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     return e;
   }
   function chart(c, n) {
-    var W = 600, H = 250, L = 4, R = 4, T = 26, B = 28;
+    var W = G.W, H = G.H, L = G.L, R = G.R, T = G.T, B = G.B;
     var top = Math.max.apply(null, c.none.yearly.concat(c.a.yearly, c.b.yearly)) || 1;
     var x = function (i) { return L + (W - L - R) * (n ? i / n : 0); };
     var y = function (v) { return T + (H - T - B) * (1 - v / top); };
@@ -2935,19 +2948,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(0), y2: y(0), 'class': 'fee-grid' }));
     svg.appendChild(svgEl('line', { x1: L, x2: W - R, y1: y(top), y2: y(top), 'class': 'fee-grid' }));
     svg.appendChild(svgEl('text', { x: L, y: T - 8 }, euro(top)));
-    /* Run 43 (INTERACTIVE-PROPOSALS-42 rank 1, adapted): what your plan's charges take, from
-       the no-charge line down to your plan's line, in red; drawn first, under the lines, and
-       the other plan's line keeps a white edge where it crosses it */
+    /* what your plan's charges take, from the no-charge line down to your
+       plan's line; drawn first, under the lines, and the other plan's line
+       keeps a white edge where it crosses it */
     var back = c.a.yearly.map(function (v, i) { return x(i).toFixed(1) + ',' + y(v).toFixed(1); }).reverse().join(' ');
     svg.appendChild(svgEl('polygon', { points: line(c.none.yearly) + ' ' + back, 'class': 'fee-gap' }));
     svg.appendChild(svgEl('polyline', { points: line(c.none.yearly), 'class': 'fee-l-none' }));
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b-edge' }));
     svg.appendChild(svgEl('polyline', { points: line(c.b.yearly), 'class': 'fee-l-b' }));
     svg.appendChild(svgEl('polyline', { points: line(c.a.yearly), 'class': 'fee-l-a' }));
-    /* Job 5: your plan in today's money (assets/js/pb-today.js), when the switch is on */
-    if (window.PBAssume && (!window.PBToday || PBToday.on())) {
-      svg.appendChild(svgEl('polyline', { points: line(c.a.yearly.map(function (v, i) { return PBAssume.today(v, i); })), 'class': 'fee-l-today' }));
-    }
     svg.appendChild(svgEl('text', { x: L, y: H - 6 }, 'Now'));
     svg.appendChild(svgEl('text', { x: W - R, y: H - 6, 'text-anchor': 'end' }, 'In ' + years(n)));
     var box = $('feeChart');
@@ -2957,7 +2966,57 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       euro(c.a.pot) + ' with your plan’s charges, ' + euro(c.b.pot) + ' with the other plan’s, and ' +
       euro(c.none.pot) + ' with no charges at all.' +
       (c.costA >= 0.5 ? ' The red area is what your plan’s charges take: ' + euro(c.costA) + ' by retirement.' : ''));
+    last = { c: c, n: n, x: x, y: y, svg: svg };
+    if (scrubAt != null) scrub(scrubAt);
   }
+
+  /* ---- the pointer line ---- */
+  var scrubAt = null;
+  function scrub(f) {
+    if (!last) return;
+    var c = last.c, n = last.n, i = Math.round(Math.max(0, Math.min(1, f)) * n), svg = last.svg;
+    scrubAt = f;
+    var g = svg.querySelector('.fee-scrub-g');
+    if (!g) {
+      g = svgEl('g', { 'class': 'fee-scrub-g' });
+      g.appendChild(svgEl('line', { 'class': 'fee-scrub', y1: G.T, y2: G.H - G.B }));
+      ['none', 'b', 'a'].forEach(function (k) { g.appendChild(svgEl('circle', { 'class': 'fee-dot fee-dot-' + k, r: 6 })); });
+      svg.appendChild(g);
+    }
+    var x = last.x(i);
+    g.firstChild.setAttribute('x1', x); g.firstChild.setAttribute('x2', x);
+    [['none', c.none.yearly[i]], ['b', c.b.yearly[i]], ['a', c.a.yearly[i]]].forEach(function (p) {
+      var d = g.querySelector('.fee-dot-' + p[0]); d.setAttribute('cx', x); d.setAttribute('cy', last.y(p[1]));
+    });
+    var tip = $('feeTip');
+    tip.innerHTML = '<span class="fee-tip-y">' + (i === 0 ? 'Now' : 'In ' + years(i)) + '</span>' +
+      '<span class="fee-tip-r">Your plan <b>' + euro(c.a.yearly[i]) + '</b></span>' +
+      '<span class="fee-tip-r">Another plan <b>' + euro(c.b.yearly[i]) + '</b></span>' +
+      '<span class="fee-tip-r">No charges <b>' + euro(c.none.yearly[i]) + '</b></span>' +
+      '<span class="fee-tip-r fee-tip-take">Your charges have taken <b>' + euro(c.none.yearly[i] - c.a.yearly[i]) + '</b></span>';
+    tip.hidden = false;
+    var box = $('feeChart'), bw = box.clientWidth, px = x / G.W * bw, tw = tip.offsetWidth;
+    var left = px + 14 + tw > bw ? px - 14 - tw : px + 14;
+    tip.style.transform = 'translate(' + Math.max(0, Math.round(left)) + 'px,' + Math.round(G.T / G.H * box.clientHeight) + 'px)';
+  }
+  function unscrub() {
+    scrubAt = null;
+    $('feeTip').hidden = true;
+    var g = last && last.svg.querySelector('.fee-scrub-g');
+    if (g) g.parentNode.removeChild(g);
+  }
+  (function () {
+    var box = $('feeChart');
+    function at(e) {
+      var r = box.getBoundingClientRect();
+      var f = ((e.clientX - r.left) / r.width * G.W - G.L) / (G.W - G.L - G.R);
+      scrub(f);
+    }
+    box.addEventListener('pointermove', at);
+    box.addEventListener('pointerdown', at);
+    box.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') unscrub(); });
+    document.addEventListener('pointerdown', function (e) { if (!box.contains(e.target)) unscrub(); });
+  })();
 
   function sentence(c, n) {
     var first = c.costA >= 0.5
@@ -2976,7 +3035,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('potV').textContent = euro(o.pot);
     $('monthlyV').textContent = euro(o.monthly);
     $('yearsV').textContent = n;
-    ['amcA', 'feeA', 'amcB', 'feeB', 'growth'].forEach(function (id) { $(id + 'V').textContent = pc(+$(id).value); });
+    ['amcA', 'feeA', 'amcB', 'feeB'].forEach(function (id) { $(id + 'V').textContent = pc(+$(id).value); });
+    $('feeOtherV').textContent = pc(+$('amcB').value) + ' a year, ' + pc(+$('feeB').value) + ' on payments';
     $('potA').textContent = euro(c.a.pot);
     $('potB').textContent = euro(c.b.pot);
     var say = sentence(c, n);
@@ -2988,13 +3048,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('costA').textContent = euro(c.costA);
     $('costB').textContent = euro(c.costB);
     $('nonePot').textContent = euro(c.none.pot);
-    if (window.PBToday) { PBToday.set('potA', c.a.pot, n); PBToday.set('potB', c.b.pot, n); PBToday.cash(n); }
-    if ($('feeKeyToday')) $('feeKeyToday').hidden = !(!window.PBToday || PBToday.on());
+    if (window.PBToday) { PBToday.set('potA', c.a.pot, n); PBToday.set('potB', c.b.pot, n); }
     chart(c, n);
     P.announce('Your plan at retirement ' + euro(c.a.pot) + '. The other plan ' + euro(c.b.pot) + '. ' + say);
   }
 
-  if (window.PBToday) { PBToday.card(document.querySelector('.chart-card')); PBToday.onChange(render); }
+  /* sliders in a closed fold have no width, so repaint them as it opens */
+  $('feeOther').addEventListener('toggle', function () {
+    if (this.open) [].forEach.call(this.querySelectorAll('input[type=range]'), function (s) { P.paintSlider(s, VALTEXT); });
+  });
   P.wireRanges(VALTEXT, render);
   render();
 })();
@@ -3207,7 +3269,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3311,7 +3373,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 })();
 </script>
 <script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=9d83afbc"></script>
+<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
 <script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>

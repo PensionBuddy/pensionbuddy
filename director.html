@@ -2794,6 +2794,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 :root.pb-motion .pby-days{transition:opacity .4s .2s}
 .pby-days b{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
 html:not(.pb-js) .pby-tl,html:not(.pb-js) .pby-days{display:none}
+/* before a month is picked the three nodes sit on top of each other: hidden until then */
+.pb-js .pby-tl:not(.on),.pb-js .pby-days:not(.on){display:none}
 
 :root.pb-motion .pbk-ok.show .pby-bell svg{animation:pbyBell .9s ease-in-out .45s 2;transform-origin:50% 10%}
 @keyframes pbyBell{0%,100%{transform:rotate(0)}20%{transform:rotate(16deg)}40%{transform:rotate(-14deg)}60%{transform:rotate(9deg)}80%{transform:rotate(-5deg)}}
@@ -2842,7 +2844,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="nav-dd">
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
-        <li><a class="lnk" href="old-pension-checklist.html">The old pension hunt: a checklist</a></li>
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
         <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
         <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
@@ -2864,7 +2865,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
      ring (pb-dir-why.js), the calculator's tower (pb-dir-calc.js) and the executive-pension row
      (in pb-dir-why.js). The markup is the finished answer at its defaults: without JavaScript every
      figure still reads. The full calculator, the 2026 rules and the checklist stay live, linked
-     below and from Related pages. -->
+     below and from Related pages. 12 October 2026 (Damian: "the form up at the top"): the year-end
+     reminder and "Ask us" sit straight after the first section, before the calculator; the ring
+     hands its month to the reminder (pb-dir-why.js). -->
 <header class="hero aud-hero"><div class="wrap dr-hero" id="drHero">
   <div class="pb-hero-copy">
     <span class="eyebrow acc"><span class="pip"></span>For company directors</span>
@@ -2885,7 +2888,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <li data-col="pro"><span>Left as profit</span><b id="dr3Pro">&euro;875</b><i>stays in the company</i></li>
       <li data-col="pen"><span>Into your pension</span><b id="dr3Pen">&euro;1,000</b><i>goes in</i></li>
     </ul>
-    <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026). Into your pension, all &euro;1,000 goes in: you can usually take it from 60, and it is taxed then, apart from a tax-free lump sum within limits. Left as profit, corporation tax at the 12.5% trading rate takes &euro;125; salary and pension payments are normally company costs, so the company pays no corporation tax on them, within Revenue&rsquo;s limits. Assumes you already pay the top rates; employer PRSI left out.</p>
+    <p class="pb-two-out" id="pbTwoOut">&euro;1,000 of profit taken as salary is about <b>&euro;477</b> in your pocket, after 40% income tax, 8% USC and 4.35% PRSI (the rate from 1 October 2026). Left as profit, 12.5% corporation tax takes &euro;125. Into your pension, all &euro;1,000 goes in, within Revenue&rsquo;s limits; it is taxed when you take it, usually from 60, apart from a lump sum that is tax-free within limits. Assumes the top rates; employer PRSI left out.</p>
   </div>
 </div></header>
 
@@ -2907,76 +2910,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <p class="pb-src">The year is the company&rsquo;s accounting period. Revenue Pensions Manual, chapters 4 and 24.</p>
     </div>
-  </div>
-</div></section>
-
-<section class="dr-calc" id="drCalc" aria-labelledby="drCalcH"><div class="wrap">
-  <h2 id="drCalcH">Your own numbers.</h2>
-  <div class="dr-calc-card pb-al-skip" data-pb-calc="director">
-    <div class="dr-calc-stage">
-      <div class="dr-res" id="drRes">
-        <p class="dr-res-k">At <span id="drAt">66</span>, in today&rsquo;s money</p>
-        <p class="dr-res-big"><span id="potToday">&euro;989,032</span></p>
-        <p class="dr-res-sub"><span id="potOut">&euro;1,412,582</span> before inflation</p>
-      </div>
-      <div class="dr-stage drc-stage"><canvas class="dr-cv drc-cv" aria-hidden="true"></canvas><p class="dr-hint" id="drcHint" aria-hidden="true">Drag to run the years.</p></div>
-    </div>
-    <div class="dr-calc-panel">
-      <div class="dr-calc-ctl" id="drCalcCtl" hidden>
-        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drAge">Your age</label><span class="pb-c2-v" id="drAgeV">48</span></div><input type="range" id="drAge" min="25" max="65" step="1" value="48"></div>
-        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drPay">The company pays in, each year</label><span class="pb-c2-v" id="drPayV">&euro;40,000</span></div><input type="range" id="drPay" min="5000" max="150000" step="2500" value="40000"></div>
-        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drHave">Pension built up so far</label><span class="pb-c2-v" id="drHaveV">&euro;50,000</span></div><input type="range" id="drHave" min="0" max="2000000" step="5000" value="50000"></div>
-        <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="drStartL">Start</span><div class="pb-seg pb-seg-sm dr-start" role="group" aria-labelledby="drStartL"><button type="button" data-start="0" aria-pressed="true">This year</button><button type="button" data-start="1" aria-pressed="false">A year later</button></div></div>
-      </div>
-      <p class="dr-eg" id="drEg">Example: age 48, &euro;50,000 in pensions now, the company pays &euro;40,000 a year from now to 66.</p>
-      <p class="dr-wait" id="drWait">Start a year later: about <b id="drWaitV">&euro;77,467</b> less at 66, in today&rsquo;s money.</p>
-      <p class="dr-yr-h">Each year, the company&rsquo;s <span id="drYrPay">&euro;40,000</span> could go one of three ways:</p>
-      <ul class="dr-yr" id="drYr">
-        <li class="dr-yr-pen"><i aria-hidden="true"></i>Into your pension <b id="drYrPen">&euro;40,000</b></li>
-        <li class="dr-yr-sal"><i aria-hidden="true"></i>As salary, to you <b id="drYrSal">&euro;19,060</b></li>
-        <li class="dr-yr-pro"><i aria-hidden="true"></i>Left as profit <b id="drYrPro">&euro;35,000</b></li>
-      </ul>
-      <p class="dr-lim" id="drLim">Paying in yourself, tax relief at <span id="drLimAge">48</span> stops at <span id="drLimPct">25%</span> of earnings: <b id="drLimV">&euro;28,750</b> a year. The company&rsquo;s limits are its own: into a Personal Retirement Savings Account (PRSA), up to 100% of your pay from it that year.</p>
-      <p class="dr-sft" id="drSft" hidden>That could pass the <a href="standard-fund-threshold.html">Standard Fund Threshold</a>: <span id="drSftV">at least &euro;2.8 million by 2044</span>. Above it, the excess is taxed at 40% when taken.</p>
-      <p class="tk-sr" id="drSr" aria-live="polite" aria-atomic="true"></p>
-    </div>
-  </div>
-  <div class="dr-fine-wrap">
-    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note dr-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, paid in monthly to 66. Before tax: the pension is taxed when you take it. Each payment assumed within Revenue&rsquo;s limits. <a href="director-calculator.html">The full director calculator</a></p>
-    <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
-  </div>
-  <div class="dr-ask">
-      <div class="pb-reg">
-        <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
-        <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
-      </div>
-  <div class="hero-cta" style="margin-top:22px">
-      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-  </div>
-  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b> Rules as at 11 October 2026.</p>
-  </div>
-  <details class="pb-work dr-work"><summary>How we worked this out</summary><ul>
-    <li>The company pays the same amount every year, monthly, from now to 66. What you have in pensions now grows at the same rate.</li>
-    <li>Growth: 6% a year before charges, the most the Pensions Authority&rsquo;s guidance lets a projection assume. Today&rsquo;s money: prices up 2% a year, the European Central Bank&rsquo;s target.</li>
-    <li>A year later: the same yearly payment, starting a year late and still stopping at 66: one year&rsquo;s payments fewer, and their growth.</li>
-    <li>As salary: 40% income tax, 8% Universal Social Charge (USC) and <span data-pb-prsi>4.35%</span> Pay-Related Social Insurance (PRSI), as for someone already paying the top rates. Employer PRSI left out.</li>
-    <li>Left as profit: corporation tax at 12.5%, the trading rate.</li>
-    <li>Tax relief on your own payments: 15% of earnings under 30, up to 40% at 60 and over, on earnings up to &euro;115,000. The company&rsquo;s payments are not capped by these percentages.</li>
-    <li>Personal Retirement Savings Account (PRSA): the company&rsquo;s payments are tax-free for you up to 100% of your pay from the company that year (since 1 January 2025). Above that, the excess is a taxable benefit-in-kind and the company can&rsquo;t deduct it.</li>
-    <li>A company scheme such as a master trust: not held to the 100% test. Revenue&rsquo;s maximum funding rules limit it, by salary, service and age; an actuary works it out.</li>
-    <li>Left out: charges, and the tax when you take the pension.</li>
-    <li>Standard Fund Threshold: &euro;2.2 million in 2026, rising &euro;200,000 a year to &euro;2.8 million in 2029, then with earnings; any excess is taxed at 40% when taken.</li>
-    <li>Sources: Revenue, tax rates and bands, USC and Corporation Tax rates (Taxes Consolidation Act 1997, section 21A); Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, sections 12 and 13; the Pensions Authority; the European Central Bank; the Department of Social Protection, SW14.</li>
-  </ul></details>
-</div></section>
-
-<section class="dr-exec" id="drExec" aria-labelledby="drExecH"><div class="wrap dr-exec-in">
-  <div class="dr-stage dr-exec-stage pb-al-skip"><canvas class="dr-cv dre-cv" aria-hidden="true"></canvas></div>
-  <div class="dr-exec-copy">
-    <p class="dr-exec-h" id="drExecH">Executive pension set up before 22 April 2021? Since 22 April 2026 it must meet the full rules for company schemes.</p>
-    <a class="pb-g2-more" href="director-pension-rules.html#executive">What changed in 2026 <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    <p class="pb-src">Executive pensions (one-member arrangements): 141,500 in January 2023; 40,644 on 1 September 2026, some being wound up. The Pensions Authority.</p>
   </div>
 </div></section>
 
@@ -3096,6 +3029,77 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div>
 </div></section>
 <!-- LEAD:ask:END -->
+
+<section class="dr-calc" id="drCalc" aria-labelledby="drCalcH"><div class="wrap">
+  <h2 id="drCalcH">Your own numbers.</h2>
+  <div class="dr-calc-card pb-al-skip" data-pb-calc="director">
+    <div class="dr-calc-stage">
+      <div class="dr-res" id="drRes">
+        <p class="dr-res-k">At <span id="drAt">66</span>, in today&rsquo;s money</p>
+        <p class="dr-res-big"><span id="potToday">&euro;989,032</span></p>
+        <p class="dr-res-sub"><span id="potOut">&euro;1,412,582</span> before inflation</p>
+      </div>
+      <div class="dr-stage drc-stage"><canvas class="dr-cv drc-cv" aria-hidden="true"></canvas><p class="dr-hint" id="drcHint" aria-hidden="true">Drag to run the years.</p></div>
+    </div>
+    <div class="dr-calc-panel">
+      <div class="dr-calc-ctl" id="drCalcCtl" hidden>
+        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drAge">Your age</label><span class="pb-c2-v" id="drAgeV">48</span></div><input type="range" id="drAge" min="25" max="65" step="1" value="48"></div>
+        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drPay">The company pays in, each year</label><span class="pb-c2-v" id="drPayV">&euro;40,000</span></div><input type="range" id="drPay" min="5000" max="150000" step="2500" value="40000"></div>
+        <div class="pb-c2-f"><div class="pb-c2-row"><label for="drHave">Pension built up so far</label><span class="pb-c2-v" id="drHaveV">&euro;50,000</span></div><input type="range" id="drHave" min="0" max="2000000" step="5000" value="50000"></div>
+        <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="drStartL">Start</span><div class="pb-seg pb-seg-sm dr-start" role="group" aria-labelledby="drStartL"><button type="button" data-start="0" aria-pressed="true">This year</button><button type="button" data-start="1" aria-pressed="false">A year later</button></div></div>
+      </div>
+      <p class="dr-eg" id="drEg">Example: age 48, &euro;50,000 in pensions now, the company pays &euro;40,000 a year from now to 66.</p>
+      <p class="dr-wait" id="drWait">Start a year later: about <b id="drWaitV">&euro;77,467</b> less at 66, in today&rsquo;s money.</p>
+      <p class="dr-yr-h">Each year, the company&rsquo;s <span id="drYrPay">&euro;40,000</span> could go one of three ways:</p>
+      <ul class="dr-yr" id="drYr">
+        <li class="dr-yr-pen"><i aria-hidden="true"></i>Into your pension <b id="drYrPen">&euro;40,000</b></li>
+        <li class="dr-yr-sal"><i aria-hidden="true"></i>As salary, to you <b id="drYrSal">&euro;19,060</b></li>
+        <li class="dr-yr-pro"><i aria-hidden="true"></i>Left as profit <b id="drYrPro">&euro;35,000</b></li>
+      </ul>
+      <p class="dr-lim" id="drLim">Paying in yourself, tax relief at <span id="drLimAge">48</span> stops at <span id="drLimPct">25%</span> of earnings: <b id="drLimV">&euro;28,750</b> a year. The company&rsquo;s limits are its own: into a Personal Retirement Savings Account (PRSA), up to 100% of your pay from it that year.</p>
+      <p class="dr-sft" id="drSft" hidden>That could pass the <a href="standard-fund-threshold.html">Standard Fund Threshold</a>: <span id="drSftV">at least &euro;2.8 million by 2044</span>. Above it, the excess is taxed at 40% when taken.</p>
+      <p class="tk-sr" id="drSr" aria-live="polite" aria-atomic="true"></p>
+    </div>
+  </div>
+  <div class="dr-fine-wrap">
+    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+    <p class="gap-note dr-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, paid in monthly to 66. Before tax: the pension is taxed when you take it. Each payment assumed within Revenue&rsquo;s limits. <a href="director-calculator.html">The full director calculator</a></p>
+    <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+  </div>
+  <div class="dr-ask">
+      <div class="pb-reg">
+        <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
+        <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
+      </div>
+  <div class="hero-cta" style="margin-top:22px">
+      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  </div>
+  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b> Rules as at 11 October 2026.</p>
+  </div>
+  <details class="pb-work dr-work"><summary>How we worked this out</summary><ul>
+    <li>The company pays the same amount every year, monthly, from now to 66. What you have in pensions now grows at the same rate.</li>
+    <li>Growth: 6% a year before charges, the most the Pensions Authority&rsquo;s guidance lets a projection assume. Today&rsquo;s money: prices up 2% a year, the European Central Bank&rsquo;s target.</li>
+    <li>A year later: the same yearly payment, starting a year late and still stopping at 66: one year&rsquo;s payments fewer, and their growth.</li>
+    <li>As salary: 40% income tax, 8% Universal Social Charge (USC) and <span data-pb-prsi>4.35%</span> Pay-Related Social Insurance (PRSI), as for someone already paying the top rates. Employer PRSI left out.</li>
+    <li>Left as profit: corporation tax at 12.5%, the trading rate.</li>
+    <li>Tax relief on your own payments: 15% of earnings under 30, up to 40% at 60 and over, on earnings up to &euro;115,000. The company&rsquo;s payments are not capped by these percentages.</li>
+    <li>Personal Retirement Savings Account (PRSA): the company&rsquo;s payments are tax-free for you up to 100% of your pay from the company that year (since 1 January 2025). Above that, the excess is a taxable benefit-in-kind and the company can&rsquo;t deduct it.</li>
+    <li>A company scheme such as a master trust: not held to the 100% test. Revenue&rsquo;s maximum funding rules limit it, by salary, service and age; an actuary works it out.</li>
+    <li>Left out: charges, and the tax when you take the pension.</li>
+    <li>Standard Fund Threshold: &euro;2.2 million in 2026, rising &euro;200,000 a year to &euro;2.8 million in 2029, then with earnings; any excess is taxed at 40% when taken.</li>
+    <li>Sources: Revenue, tax rates and bands, USC and Corporation Tax rates (Taxes Consolidation Act 1997, section 21A); Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, sections 12 and 13; the Pensions Authority; the European Central Bank; the Department of Social Protection, SW14.</li>
+  </ul></details>
+</div></section>
+
+<section class="dr-exec" id="drExec" aria-labelledby="drExecH"><div class="wrap dr-exec-in">
+  <div class="dr-stage dr-exec-stage pb-al-skip"><canvas class="dr-cv dre-cv" aria-hidden="true"></canvas></div>
+  <div class="dr-exec-copy">
+    <p class="dr-exec-h" id="drExecH">Executive pension set up before 22 April 2021? Since 22 April 2026 it must meet the full rules for company schemes.</p>
+    <a class="pb-g2-more" href="director-pension-rules.html#executive">What changed in 2026 <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <p class="pb-src">Executive pensions (one-member arrangements): 141,500 in January 2023; 40,644 on 1 September 2026, some being wound up. The Pensions Authority.</p>
+  </div>
+</div></section>
+
 <section class="pb-bleed pb-wash pb-magnetband" data-flag="guide_forms" hidden><div class="wrap"><div class="magnet">
   <div class="mtext">
     <span class="eyebrow acc"><span class="pip"></span>Free guide</span>
@@ -3273,7 +3277,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30d96e6f" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=db6b9d0f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3335,7 +3339,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-home-kit.js?v=0c885de1"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-dir-three.js?v=34372856"></script>
-<script src="assets/js/pb-dir-why.js?v=22320a3a"></script>
+<script src="assets/js/pb-dir-why.js?v=e462b0cb"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
 <script src="assets/js/pb-dir-calc.js?v=f9390e8e"></script>
 <script src="assets/js/pb-alive.js?v=2e6d5569"></script>

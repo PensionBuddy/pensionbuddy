@@ -270,9 +270,9 @@ def chrome():
 
     # a slider announcing the wrong words
     launches, rc, out = chrome_runs(tmp, ['state-pension'],
-                                    {'PB_MUTATE': "state-pension-reality-check.html|' years old'|' years of age'"})
+                                    {'PB_MUTATE': "state-pension-reality-check.html|' reckonable contributions, '|' contributions counted, '"})
     eq('8. a slider that announces different words fails', rc, 1)
-    eq('8. on its aria-valuetext', 'FAIL S9 row 1, 7, 8, 9, 10: age aria-valuetext' in out, True)
+    eq('8. on its aria-valuetext', 'FAIL S9 row 1, 7, 8, 9, 10: contribs aria-valuetext' in out, True)
 
     # a skip reason that stops being true: the step changes, the rows get driven
     launches, rc, out = chrome_runs(tmp, ['state-pension-entitlement'],

@@ -340,6 +340,33 @@
   eq('the verdict names whichever of the two is larger',
      cum.larger === (cum.personal > cum.autoEnrolment ? 'personal' : 'autoEnrolment') ? 1 : 0, 1);
 
+  // ------------------------------------------------- 12 October 2026, by 66
+  /* matched: the personal side costs what auto-enrolment costs in EVERY year,
+     not only the first. Single, EUR 50,000, so the EUR 6,000 at 40% covers
+     every matched contribution here and each net euro grosses up at 0.60. */
+  group('EXTRA D  cumulative({ matched }): the same cost to you every year');
+  var M = { salary: 50000, srcop: 44000, matched: true, gross: 999999, employerMatchPct: 0 };
+  function withM(o) { var r = {}, k; for (k in M) r[k] = M[k]; for (k in o) r[k] = o[k]; return r; }
+  var m1 = Compare.cumulative(withM({ firstYear: 1, age: 65, retireAge: 66, growth: 0.05 }));
+  eq('one year, phase 1: auto-enrolment', m1.autoEnrolment, 1750);
+  eq('one year: the personal side is the matched EUR 1,250, opts.gross ignored', m1.personal, 1250);
+  /* years 3 and 4 straddle phases 1 and 2: 750 then 1,500 from the reader */
+  var m2 = Compare.cumulative(withM({ firstYear: 3, age: 64, retireAge: 66, growth: 0.05 }));
+  eq('two years across a phase step: auto-enrolment 1,750 x 1.05 + 3,500', m2.autoEnrolment, 5337.5);
+  eq('two years: personal 1,250 x 1.05 + 2,500, matched again in year 4', m2.personal, 3812.5);
+  eq('matched off: the old fixed gross is still what it was',
+     Compare.cumulative({ salary: 50000, srcop: 44000, firstYear: 3, age: 64, retireAge: 66, growth: 0, gross: 1250 }).personal, 2500);
+
+  group('EXTRA E  cumulativeCombined(): auto-enrolment plus the same extra every year');
+  var k1 = Compare.cumulativeCombined({ salary: 50000, srcop: 44000, firstYear: 1, age: 35, retireAge: 36, growth: 0.05, extraMonthly: 100 });
+  eq('one year: auto-enrolment alone', k1.autoEnrolment, 1750);
+  eq('one year: EUR 100 a month grosses up to EUR 2,000 (case 20)', k1.extra, 2000);
+  eq('one year: together, case 8', k1.total, 3750);
+  var k2 = Compare.cumulativeCombined({ salary: 50000, srcop: 44000, firstYear: 3, age: 64, retireAge: 66, growth: 0.05, extraMonthly: 100 });
+  eq('two years: the extra grown, 2,000 x 1.05 + 2,000', k2.extra, 4100);
+  eq('two years: together 5,337.50 + 4,100', k2.total, 9437.5);
+  eq('no years left: nothing', Compare.cumulativeCombined({ salary: 50000, srcop: 44000, firstYear: 1, age: 66, retireAge: 66, growth: 0.05, extraMonthly: 100 }).total, 0);
+
   // ------------------------------------------------------------ relief bands
   group('EXTRA B  age bands match pension-calculator.html');
   eq('under 30', Relief.reliefBand(29), 0.15);

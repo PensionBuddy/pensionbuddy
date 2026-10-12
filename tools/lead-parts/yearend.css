@@ -48,6 +48,8 @@
 :root.pb-motion .pby-days{transition:opacity .4s .2s}
 .pby-days b{font-size:34px;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
 html:not(.pb-js) .pby-tl,html:not(.pb-js) .pby-days{display:none}
+/* before a month is picked the three nodes sit on top of each other: hidden until then */
+.pb-js .pby-tl:not(.on),.pb-js .pby-days:not(.on){display:none}
 
 :root.pb-motion .pbk-ok.show .pby-bell svg{animation:pbyBell .9s ease-in-out .45s 2;transform-origin:50% 10%}
 @keyframes pbyBell{0%,100%{transform:rotate(0)}20%{transform:rotate(16deg)}40%{transform:rotate(-14deg)}60%{transform:rotate(9deg)}80%{transform:rotate(-5deg)}}

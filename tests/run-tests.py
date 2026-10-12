@@ -69,7 +69,7 @@ BREAK = os.environ.get('PB_BREAK')
 #          the exact number of assertions the suite makes)
 SUITES = {
     'compare': (['/assets/js/pension-tax-relief.js', '/assets/js/autoenrolment.js'],
-                '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare'], 151),
+                '/tests/compare-calc.test.js', ['PBRelief', 'PBCompare'], 162),
     'state-pension': (['/assets/js/state-pension.js'],
                       '/tests/state-pension.test.js', ['PBStatePension'], 80),
     'state-pension-entitlement': (['/assets/js/state-pension.js', '/assets/js/state-pension-entitlement.js'],
@@ -91,7 +91,7 @@ SUITES = {
     'pots': (['/assets/js/pots.js'], '/tests/pots.test.js', ['PBPots'], 33),
     'prsi': (['/assets/js/pb-prsi.js'], '/tests/prsi.test.js', ['PBPrsi'], 23),
     'pia': (['/assets/js/pension-tax-relief.js', '/assets/js/sft.js', '/assets/js/pia.js'],
-            '/tests/pia.test.js', ['PBRelief', 'PBSft', 'PBPia'], 44),
+            '/tests/pia.test.js', ['PBRelief', 'PBSft', 'PBPia'], 49),
     # Job 5: the shared rates and risk levels, and the director calculator's arithmetic
     'assumptions': (['/assets/js/pb-assumptions.js'], '/tests/assumptions.test.js', ['PBAssume'], 36),
     'director-calc': (['/assets/js/pb-assumptions.js', '/assets/js/director-calc.js'],
@@ -213,9 +213,10 @@ CLOCK_JS = """<script>
 </script>
 """
 
-# Same relief inputs, asked of the real calculator page and of the module.
-DRIFT_CASES = [(35, 50000, 1000, 40), (29, 40000, 900, 20),
-               (45, 120000, 3000, 40), (62, 200000, 5000, 40)]
+# Same relief inputs, asked of the real calculator page and of the module:
+# (age, monthly, rate). The page asks no earnings (12 October 2026), so the
+# cap is the age band on the earnings limit.
+DRIFT_CASES = [(35, 1000, 40), (29, 900, 20), (45, 3000, 40), (62, 5000, 40)]
 
 PROBE_TAG = '<script src="/tests/page-probe.js"></script>\n'
 HARNESS_TAG = '<script src="/tests/harness.js"></script>\n'
@@ -456,13 +457,13 @@ def report_drift(r):
         # what the shared module says, monthly, to match the page's wording
         band = (0.15 if row['age'] < 30 else 0.20 if row['age'] < 40 else 0.25
                 if row['age'] < 50 else 0.30 if row['age'] < 55 else 0.35 if row['age'] < 60 else 0.40)
-        limit = round(band * min(row['earn'], 115000))
+        limit = round(band * 115000)
         relievable = min(row['monthly'] * 12, limit)
         module_monthly = round(relievable / 12 * row['rate'] / 100)
         ok = row['pageRelief'] is not None and abs(module_monthly - row['pageRelief']) <= 1
         bad += 0 if ok else 1
-        print('  %s age %2d  earn %6d  %4d/mo @%d%%   page %s   module %s'
-              % ('PASS' if ok else 'FAIL', row['age'], row['earn'], row['monthly'],
+        print('  %s age %2d  %4d/mo @%d%%   page %s   module %s'
+              % ('PASS' if ok else 'FAIL', row['age'], row['monthly'],
                  row['rate'], row['pageRelief'], module_monthly))
     for e in r.get('errors', []):
         print('  error: %s' % e)
