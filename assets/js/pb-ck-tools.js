@@ -160,10 +160,20 @@
     function slide() {
       var r = radios[picked() - 1], sp = r && r.nextElementSibling;
       if (!sp || !sp.offsetWidth) { return; }
-      var lab = r.parentNode;
+      var lab = r.parentNode, to = 'translate(' + lab.offsetLeft + 'px,' + lab.offsetTop + 'px)';
+      /* the picked month keeps its own dark tile, and gives it up to the
+         thumb only while the thumb glides to it */
+      if (to !== thumb.style.transform && thumb.classList.contains('ck-go') && motion()) {
+        months.classList.add('ck-sliding');
+        clearTimeout(slideT); slideT = setTimeout(function () { months.classList.remove('ck-sliding'); }, 700);
+      }
       thumb.style.width = sp.offsetWidth + 'px'; thumb.style.height = sp.offsetHeight + 'px';
-      thumb.style.transform = 'translate(' + lab.offsetLeft + 'px,' + lab.offsetTop + 'px)';
+      thumb.style.transform = to;
     }
+    var slideT = 0;
+    thumb.addEventListener('transitionend', function (e) {
+      if (e.propertyName === 'transform') { clearTimeout(slideT); months.classList.remove('ck-sliding'); }
+    });
 
     var last = null;
     function update(byHand) {
