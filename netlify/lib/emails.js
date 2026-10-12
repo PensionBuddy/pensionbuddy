@@ -16,7 +16,9 @@
                           a copy of what they sent and the day we
                           reply by (job-change: with first steps); and, through alert(), the same to
                           Damian with the sender as the reply-to, so a
-                          lead never waits on a Netlify setting
+                          lead never waits on a Netlify setting;
+                          year-end-reminder's yearly email itself is
+                          reminder(), sent by year-end-reminders.mjs
      callback             the alert only: it asks for no email
      anything else        nothing (pension-finder, and the old booking and
                           *-calculator-results forms, whose requests stay in
@@ -73,6 +75,9 @@ var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'A
 var DAY = 864e5;
 // the moment "now" means; tests/submission-created.test.js pins it
 var clock = { now: function () { return new Date(); } };
+
+/* the year-end reminder's one line */
+var REMIND = 'A pension payment the company makes before then counts against this year\u2019s profits. Want to plan it? Reply to this email, or book a call.';
 
 /* first steps for "Changing jobs?" (job-change), by what was picked */
 var FIRST = {
@@ -386,6 +391,35 @@ function yearEnd(month, now) {
 }
 function longDate(d) { return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
 
+/* the year end whose reminder falls today, six weeks before it, any year;
+   null when none does */
+function reminderDue(month, now) {
+  var m = MONTHS.indexOf(str(month));
+  if (m < 0) return null;
+  var t = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  for (var y = now.getUTCFullYear(); y <= now.getUTCFullYear() + 1; y++) {
+    var end = new Date(Date.UTC(y, m + 1, 0));
+    if (end.getTime() - 42 * DAY === t) return end;
+  }
+  return null;
+}
+
+/* the reminder email, sent by netlify/functions/year-end-reminders.mjs;
+   null when the submission has no address to send it to */
+function reminder(d, end, env) {
+  var e = env || {}, base = siteBase(e), to = str(d.email);
+  if (str(d['bot-field']) || !validEmail(to)) return null;
+  if (str(e.EMAIL_TEST) === '1') { to = str(e.EMAIL_TEST_TO); if (!validEmail(to)) return null; }
+  var subject = 'Your year end is six weeks away';
+  var line = 'Your company\u2019s year end is ' + longDate(end) + '.';
+  var why = 'You got this email because you asked for a year-end reminder on pensionbuddy.ie. Reply to stop them.';
+  var body = [p(esc('Hello,')), p(esc(line)), p(esc(REMIND)), button(base + '/booking.html', BOOK_WORDS)].join('\n');
+  var text = ['Hello,', '', line, '', REMIND, '', BOOK_WORDS + ': ' + base + '/booking.html', '', '--',
+              TEXT.regulator + ' ' + TEXT.register, why, ''].join('\n');
+  return { from: FROM, to: [to], reply_to: REPLY_TO, subject: subject,
+           html: shell({ title: subject, preheader: line, body: body, why: why }), text: text };
+}
+
 function euroOf(n) { return '\u20ac' + Math.round(n).toLocaleString('en-IE'); }
 
 /* the fee check's figures, checked, and what the fee costs by 66 worked out
@@ -394,7 +428,7 @@ function feeFigures(d) {
   var pot = parseFloat(d.pot), fee = parseFloat(d.fee), age = parseInt(d.age, 10);
   if (!(pot >= 0 && pot <= 1e8 && fee >= 0 && fee <= 10 && age >= 16 && age <= 80)) return null;
   var years = Math.max(1, 66 - age);
-  var r = FEES.compare({ pot: pot, monthly: 0, years: years, growth: 0.05, a: { amc: fee / 100, contribution: 0 }, b: { amc: 0, contribution: 0 } });
+  var r = FEES.compare({ pot: pot, monthly: 0, years: years, growth: 0.06, a: { amc: fee / 100, contribution: 0 }, b: { amc: 0, contribution: 0 } });
   return { pot: pot, fee: fee, age: age, cost: r.costA };
 }
 
@@ -446,8 +480,9 @@ function promiseOf(form, d) {
   var hi = firstName(d.name), day = replyDay(d.reply_by), when = day ? 'by ' + day : 'within one working day';
   if (form === 'year-end-reminder') {
     var y = yearEnd(d.year_end, clock.now());
+    if (y && y.close) return { subject: 'Your year end is close', line: 'Your company\u2019s year end is ' + longDate(y.end) + '.' };
     return { subject: 'Your year-end reminder is set',
-             line: !y ? 'We\u2019ll remind you before your year end.' : y.close ? 'Year end is close. We\u2019ll email you ' + when + '.' : 'We\u2019ll remind you on ' + longDate(y.rem) + '.' };
+             line: y ? 'We\u2019ll remind you on ' + longDate(y.rem) + ', and every year after.' : 'We\u2019ll remind you before your year end.' };
   }
   if (form === 'job-change') return { subject: 'Changing jobs: first steps', line: 'We\u2019ll email you ' + when + '.' };
   var phone = form === 'enquiry' && /^phone$/i.test(str(d.contact_by));
@@ -462,34 +497,24 @@ function copyEmail(form, d, env) {
   var why = 'You got this email because you sent your ' + r.what + ' on pensionbuddy.ie.';
   var rows = sentRows(form, d).filter(function (x) { return x.label !== 'Email'; });
   var first = form === 'job-change' ? FIRST[str(d.change, 30)] || [] : [];
+  var ye = form === 'year-end-reminder' ? yearEnd(d.year_end, clock.now()) : null;
+  if (ye && ye.close) first = [REMIND];
   var body = [
     p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
-    p(esc('Thanks. ' + promise)),
-    first.length ? h2('First steps') + first.map(function (x) { return p(esc(x)); }).join('') : '',
+    p(esc(ye && ye.close ? promise : 'Thanks. ' + promise)),
+    first.length ? (ye ? '' : h2('First steps')) + first.map(function (x) { return p(esc(x)); }).join('') : '',
     h2('What you sent'),
     rowsTable(rows),
     p(esc('Want to talk sooner?')),
     button(base + '/booking.html', BOOK_WORDS)
   ].filter(Boolean).join('\n');
   var text = [hi ? 'Hello ' + hi + ',' : 'Hello,', '',
-    'Thanks. ' + promise, '',
-    first.length ? 'FIRST STEPS\n' + first.join('\n') + '\n' : '',
+    ye && ye.close ? promise : 'Thanks. ' + promise, '',
+    first.length ? (ye ? '' : 'FIRST STEPS\n') + first.join('\n') + '\n' : '',
     'WHAT YOU SENT', rowsText(rows), '',
     'Want to talk sooner? ' + BOOK_WORDS + ': ' + base + '/booking.html', '',
     '--', TEXT.regulator + ' ' + TEXT.register, why, ''].filter(function (x, i, a) { return x !== '' || a[i - 1] !== ''; }).join('\n');
   return { subject: subject, html: shell({ title: subject, preheader: promise, body: body, why: why }), text: text };
-}
-
-/* the year-end reminder as a calendar file, for us */
-function icsFor(d, y) {
-  function d8(x) { return x.toISOString().slice(0, 10).replace(/-/g, ''); }
-  function line(t) { return t.replace(/[\\;,]/g, function (c) { return '\\' + c; }); }
-  var who = validEmail(str(d.email)) ? str(d.email) : 'the director';
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Pensionbuddy//Year end//EN', 'BEGIN:VEVENT',
-    'UID:year-end-' + d8(y.end) + '-' + Date.now() + '@pensionbuddy.ie', 'DTSTAMP:' + d8(clock.now()) + 'T000000Z',
-    'DTSTART;VALUE=DATE:' + d8(y.rem), 'DTEND;VALUE=DATE:' + d8(new Date(y.rem.getTime() + DAY)),
-    'SUMMARY:' + line('Year-end reminder: ' + who), 'DESCRIPTION:' + line('Company year end ' + longDate(y.end) + '. Email ' + who + '.'),
-    'END:VEVENT', 'END:VCALENDAR', ''].join('\r\n');
 }
 
 /* to us: the lead itself; replying answers the sender */
@@ -508,8 +533,8 @@ function alertEmail(form, d, env) {
     var y = yearEnd(d.year_end, clock.now());
     subject = !y ? 'Year-end reminder: no month, from ' + who
       : y.close ? 'Year end in ' + y.days + ' days: ' + who : 'Year-end reminder on ' + longDate(y.rem) + ': ' + who;
-    lead = !y ? 'No month came with it.' : y.close ? 'Year end is ' + longDate(y.end) + '. The site told them we email ' + by + '.'
-      : 'The site told them we remind them on ' + longDate(y.rem) + '. The calendar file is attached.';
+    lead = !y ? 'No month came with it.' : y.close ? 'Year end is ' + longDate(y.end) + '. They have been sent the reminder now.'
+      : 'They get the reminder on ' + longDate(y.rem) + ', and every year after, by itself (netlify/functions/year-end-reminders.mjs).';
   } else if (form === 'job-change') subject = 'Changing jobs: ' + (str(d.change, 30) || 'not picked') + (str(d.when) ? ', ' + str(d.when, 20).toLowerCase() : '') + ', from ' + who;
   else if (form === 'callback') {
     var time = /afternoon/i.test(str(d.time)) ? 'afternoon' : 'morning';
@@ -522,10 +547,6 @@ function alertEmail(form, d, env) {
   var body = [p(esc(lead)), rowsTable(rows), page ? p('Sent from <a class="pb-link" href="' + esc(page) + '" style="color:' + C.teal + ';">' + esc(page) + '</a>', 'font-size:14px;') : ''].join('\n');
   var text = [lead, '', rowsText(rows), '', page ? 'Sent from ' + page : '', ''].join('\n');
   var out = { subject: subject, html: shell({ title: subject, preheader: lead, body: body, why: 'Sent by the ' + form + ' form on pensionbuddy.ie.' }), text: text };
-  if (form === 'year-end-reminder') {
-    var ye = yearEnd(d.year_end, clock.now());
-    if (ye && !ye.close) out.attachments = [{ filename: 'year-end-reminder.ics', content: Buffer.from(icsFor(d, ye)).toString('base64') }];
-  }
   return out;
 }
 
@@ -543,7 +564,6 @@ function alert(form, data, env) {
   }
   var built = alertEmail(form, d, e);
   var message = { from: ALERT_FROM, to: [to], subject: built.subject, html: built.html, text: built.text };
-  if (built.attachments) message.attachments = built.attachments;
   if (validEmail(str(d.email))) message.reply_to = str(d.email);
   return { send: true, message: message };
 }
@@ -584,6 +604,6 @@ function plan(form, data, env) {
 }
 
 module.exports = {
-  plan: plan, alert: alert, replyDay: replyDay, yearEnd: yearEnd, clock: clock, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
+  plan: plan, alert: alert, replyDay: replyDay, yearEnd: yearEnd, reminderDue: reminderDue, reminder: reminder, clock: clock, inputList: inputList, resultList: resultList, ownLink: ownLink, esc: esc, validEmail: validEmail,
   FROM: FROM, REPLY_TO: REPLY_TO, CALCULATORS: CALCULATORS, GUIDES: GUIDES, REPLY: REPLY, TEXT: TEXT
 };

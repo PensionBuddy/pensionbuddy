@@ -14,7 +14,7 @@ Netlify Forms whatever happens. Nothing else is stored.
 | `pension-trace` (tracker page, the old jobs timeline) | always | the same two emails, with the list of jobs |
 | `enquiry` with topic "About a result" ("Ask us about this" under every calculator's result) | always | the same two, with the result and the inputs |
 | `fee-check` (home page) | always | the same two, with the figures; the cost is worked out again in the function |
-| `year-end-reminder` (directors' page) | always | the same two; ours carries the reminder as a calendar file (`.ics`) to add in one click |
+| `year-end-reminder` (directors' page) | always | the same two. Then, every year, six weeks before their year end, the reminder itself: `netlify/functions/year-end-reminders.mjs` runs each morning and sends what is due. A year end closer than six weeks gets it at once. To stop someone's reminders, delete their submission in Netlify Forms |
 | `job-change` (tracker page) | always | the same two; the sender's carries three first steps for leaving or starting |
 | `callback` (booking page) | always | ours only: it asks for a phone number, not an email |
 | `pension-finder` | never | none |
@@ -67,7 +67,8 @@ HTML. Two settings and the DNS records below do the rest.
    | `GUIDE_URL_DIRECTOR` | https link to the director guide |
    | `GUIDE_URL_STARTER` | https link to the starter guide |
    | `GUIDE_URL_TRACKER` | https link to the lost-pension guide |
-   | `LEAD_TO` | optional: where the `enquiry` and `pension-trace` leads go; hello@pensionbuddy.ie if unset |
+   | `LEAD_TO` | optional: where the leads from the reply forms and tools go; hello@pensionbuddy.ie if unset |
+   | `NETLIFY_API_TOKEN` | a Netlify personal access token (User settings, Applications). The daily year-end reminders read the sign-ups with it. Without it, no reminders go |
 
    No guide link set = no guide email for that form. The guides do not exist
    in the repo yet.

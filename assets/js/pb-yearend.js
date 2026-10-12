@@ -4,11 +4,11 @@
    A company pays into a director's pension before its year end to set the
    payment against that year's profits, so the reminder is six weeks before
    it: the last day of the month picked, this year or next. A year end
-   closer than six weeks means we email by the next working day instead.
+   closer than six weeks gets the reminder at once instead.
    The pick draws a line from today to the reminder to year end and counts
    the days; the email posts as "year-end-reminder" through
-   assets/js/pb-kit.js, and the sent state offers the reminder as a
-   calendar file.
+   assets/js/pb-kit.js. netlify/functions/year-end-reminders.mjs sends the
+   reminder each year; a year end that is close gets it at once.
 
    netlify/lib/emails.js works the dates out again from the month, the
    same way, for the emails. Classic script, no globals. */
@@ -62,16 +62,6 @@
   });
   email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim())); });
 
-  function ics(p) {
-    function d8(d) { return d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2); }
-    var next = new Date(p.rem.getFullYear(), p.rem.getMonth(), p.rem.getDate() + 1);
-    return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Pensionbuddy//Year end//EN', 'BEGIN:VEVENT',
-      'UID:year-end-' + d8(p.end) + '@pensionbuddy.ie', 'DTSTAMP:' + d8(p.t) + 'T000000Z',
-      'DTSTART;VALUE=DATE:' + d8(p.rem), 'DTEND;VALUE=DATE:' + d8(next),
-      'SUMMARY:Pension payment before year end (' + longDate(p.end) + ')',
-      'URL:https://pensionbuddy.ie/director.html', 'END:VEVENT', 'END:VCALENDAR', ''].join('\r\n');
-  }
-
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!plan) { err.textContent = 'Pick a month.'; K.shake($('.pby-months')); return; }
@@ -82,11 +72,9 @@
     K.send(form, { remind_on: plan.close ? 'As soon as possible' : longDate(plan.rem), page: location.href.split('#')[0], reply_by: by }, go, {
       subject: 'Year-end reminder', body: 'Company year end: ' + month + '\nRemind me: ' + when
     }).then(function (how) {
-      if (how === 'mail') { K.done(form, ok, K.MAIL_SAID, K.MAIL_H); ok.querySelector('.pbk-ok-row').hidden = true; return; }
+      if (how === 'mail') { K.done(form, ok, K.MAIL_SAID, K.MAIL_H); return; }
       if (how !== 'sent') return;
-      var link = document.getElementById('pbyIcs');
-      try { link.href = URL.createObjectURL(new Blob([ics(plan)], { type: 'text/calendar' })); } catch (x) { link.hidden = true; }
-      K.done(form, ok, plan.close ? 'Year end is close. We’ll email you ' + when + '.' : 'We’ll remind you ' + when + '.');
+      K.done(form, ok, plan.close ? 'Year end is close. Check your email.' : 'We’ll remind you ' + when + ', and every year after.');
     });
   });
 })();

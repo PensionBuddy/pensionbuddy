@@ -30,6 +30,7 @@
 .pbk-fold > *{min-height:0;overflow:hidden;margin:0 -6px;padding:0 6px}
 .pbk-fold.on,html:not(.pb-js) .pbk-fold{grid-template-rows:1fr;opacity:1}
 .pbk-fold.on > *{overflow:visible}
+.pb-js .pbk-fold:not(.on) > *{visibility:hidden}
 :root.pb-motion .pbk-fold{transition:grid-template-rows .55s cubic-bezier(.22,.61,.36,1),opacity .4s ease}
 :root.pb-motion .pbk-fold.on > *{animation:pbkClip .55s steps(1,end)}
 @keyframes pbkClip{from{overflow:hidden}}

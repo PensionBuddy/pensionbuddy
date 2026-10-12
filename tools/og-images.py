@@ -34,9 +34,11 @@ OUT = os.path.join(ROOT, 'assets', 'brand', 'og')
 W, H = 1200, 630
 
 # name -> (page, eyebrow). The eyebrow is the page's own hero eyebrow; the
-# three guides have none, so theirs is the footer's "Who we help" label.
+# three guides have none, so theirs is the footer's "Who we help" label. The
+# home page lost its eyebrow on 11 October 2026 (Damian's brief: the gap opens
+# on its headline alone); its card keeps the line it was drawn with.
 CARDS = {
-    'home': ('index.html', None),
+    'home': ('index.html', 'Pensions, in plain English'),
     'starter': ('starter.html', None),
     'tracker': ('tracker.html', None),
     'director': ('director.html', None),

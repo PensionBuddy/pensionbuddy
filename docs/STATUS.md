@@ -340,6 +340,233 @@ R27-2 (the forms' success messages promised things nothing sends), A4
 
 ---
 
+# Run 54 — 2026-10-11 · One director page; "Are you a director?" on the home page; Directors is one link (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief: one unified director landing page; at the very top, as
+simply as possible and in pictures, why a director is different; then the
+pain (why directors leave it); then a simpler calculator; super
+interactive, no unnecessary text. On the home page, under "€1,000 buys
+less every year", in big bold writing: "Are you a director?"
+
+- **How it was made.** Five readers mapped the four director pages, their
+  facts and their tests; three designers proposed pages, three judges
+  scored them, one spec was merged; three engineers built the motion in
+  parallel and three more reviewed and fixed each in a real browser;
+  three fact checkers tested every figure and claim (their fixes are in).
+- **`director.html`, rebuilt** (URL kept). Hero: "You own the company. It
+  can pay into your pension." €1,000 of company profit, three ways, as
+  three stacks of metal coins (`assets/js/pb-dir-three.js`): as salary
+  €477 reaches you and €523 goes in tax now; left as profit €875 stays,
+  €125 corporation tax; into your pension all €1,000 goes in. Drag runs it
+  back and forth, a tap replays a column. Then "The company comes first.
+  The pension comes last." (`pb-dir-why.js`): the CSO coverage rows (57%
+  of the self-employed, 68% of employees; said to be not a figure for
+  directors) and a year-end ring: days to the company's year end, "No
+  backdating". Then "Your own numbers." (`pb-dir-calc.js`): age and what
+  the company pays a year; the pot at 66 in today's money as a coin tower,
+  the cost of starting a year later, the same money as salary or profit,
+  the reader's own tax-relief limit, the Standard Fund Threshold note (from
+  `sft.js`). 6% growth, the two warnings, the past-performance warning,
+  one lockup with the page's one booking button. Then the executive-pension
+  note, linking to the 2026 rules page. Cut: the benefit cards, the ladder,
+  the coverage band, the dark panel, the rules cards, the FAQs and their
+  structured data, the closing band. The hidden guide form stays.
+- **Kept live, off the nav:** `director-calculator.html`,
+  `director-pension-rules.html`, `director-year-end-checklist.html`
+  (Related pages and the page's own links reach them; no redirects file
+  exists, so removing them would break links).
+- **Nav:** "Directors" is one link to `director.html` on every page.
+- **Home:** `#pbDrb`, inside `#inflation` (check 32), "Are you a director?
+  Pensions work differently for you." with three company coins turning
+  into yours (`assets/js/pb-home-dband.js`).
+- **Contrast:** small coral and gold text darkened on both pages
+  (verify.py: director.html 0 FAIL; total 57, baseline 58).
+- **Tests.** `build.test.py` 485/0 (checks 8, 17, 28, 46 and 53 follow
+  the new page). `nav`, `consent`, `deadline`, `floating-chrome`, `terms`
+  and `ux4` fail exactly what the commit before this work fails here (and
+  `consent` one fewer); `interactive-43` 320/0 (the director ladder's
+  scenarios went with the ladder); `run-tests.py`, `flags`, `lead-forms`,
+  `boxes`, `search`, `give-then-ask` pass.
+- **Needs Damian:** (1) the 6% cap rests on Pensions Authority guidance
+  v1.2; v1.3 applies from 1 July 2026 and should be checked; (2) the page
+  says nothing on the tax when profit is taken out of the company (no page
+  on the site states it); (3) the old director pages: keep, redirect or
+  remove.
+
+---
+
+# Run 53 — 2026-10-11 · The home page grows at 6% (on `claude/optimistic-keller-kfqggu`)
+
+Damian: "use six percent, and say historically it could be higher, still
+legally in line."
+
+- **The home page's calculator and inflation section** now grow a pension
+  at 6% a year before charges, read from `PBAssume.assets.cap`: the most
+  the Pensions Authority's guidance lets a projection assume. The notes
+  say so, add "Historically, shares have often done better", and, because
+  that is a statement about past performance, carry the Code's warning
+  under each note: "Warning: Past performance is not a reliable guide to
+  future performance."
+- **Knock-on:** the calculator's opening example (35, €10,000 saved, €100
+  a month) is now €5 a month short of Modest, not €64. In the inflation
+  section €1,000 in a pension is worth €3,171 after 30 years (was €2,386);
+  the stacks are sized for 30 years and the view eases back past that.
+- **Not changed:** the full calculator and the other tools keep their risk
+  levels (Level 4, 5%, by default). **Needs Damian:** whether they follow.
+- **Tests.** `build.test.py` 484/0, `run-tests.py` all pass,
+  `interactive-43` 340/0, `regulator-lines` 31/0 and `--caveats` 31/0.
+
+---
+
+# Run 52 — 2026-10-11 · Home page round 3: a fourth level, real coins, the government's share, the nav to the left (on `claude/optimistic-keller-kfqggu`)
+
+Damian's notes on Run 51: a level above Comfortable; the coins looked
+cartoony; "In 30 years, €1,000 buys what... buys what?"; show that the
+government adds €40 for every €60, dim, beside the pension; the menu at
+the top bigger and to the left; as fluid as the welcome.
+
+- **"Your own", the fourth level** (gap and calculator). The Pensions
+  Council has three standards and none above Comfortable, so the fourth is
+  the reader's own figure a year (a slider, €20,000 to €100,000; starts at
+  €40,000 for one, €55,000 for two), not a figure we made up. Shared by
+  both sections (`PBKit.aim.own`, `PBKit.life()`). Past 28 coins the
+  tower eases back to fit. "Aim higher" goes on to "Your own" after
+  Comfortable. "Where the money goes" hides for it (no categories).
+- **The options at the top**: bigger (54px pills, 17.5px); on a phone a
+  grid of big buttons, two to a row. The tower is bigger and further left.
+- **The coins** (`assets/js/pb-coins.js`): metal, not paint. A raised rim,
+  a sunk face, twelve struck dots, an embossed €, a soft shine; the edge
+  milled, its ridges closer at the sides; shade where coins touch. Every
+  section uses them.
+- **Inflation** (`assets/js/pb-home-infl.js`, rewritten). "In 30 years,
+  €1,000 in cash will be worth €552." "In a pension, it could be worth
+  €2,386." "And for every €60 you put in, the government adds €40." Three
+  stacks: cash (a dashed outline keeps the €1,000 it was), pension, and
+  the government's relief beside it, dim gold. Your tax rate, 20% or 40%,
+  shared with the calculator (`PBKit.tax`). No more big year number or
+  dust. The stacks part around the pointer like a riffled deck, lean
+  away, take a tap. On a phone the picture comes before the controls.
+- **The nav** (skeleton NAV block, every page): beside the links the
+  items sit next to the logo at 18px; the booking button, the deadline
+  chip and the search stay right. Fits from 1301px.
+- **Tests.** `build.test.py` 484/0. `nav` now expects 18px; it fails only
+  the 6 hover checks the previous commit fails here. `run-tests.py` 636/0,
+  `interactive-43` 340/0, `regulator-lines` 31/0 and `--caveats` 31/0,
+  `boxes`, `search`, `give-then-ask` all pass. `floating-chrome`,
+  `consent`, `deadline`, `terms` and `ux4` fail exactly what the previous
+  commit fails in this container, no more.
+
+---
+
+# Run 51 — 2026-10-11 · The home page, round 2: cut, coins, light teal (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief after Run 50: Hemingway, "here's the gap, clear as day";
+take Buddy's run out of the welcome; the jar and the egg basket were not
+good enough; the pot must be real coins, as alive as the welcome; light
+grey and teal, not the old green; the calculator at the bare minimum, one
+more line if needed; then a plain inflation point: €1,000 buys less, a
+pension keeps up. The launch video waits for later.
+
+- **Welcome.** As before, without the scene under it. `pb-w-scene.js`
+  stays in the repo; no page loads it.
+- **The gap** (`assets/js/pb-home-gap.js`, rewritten). "Is the State
+  Pension enough?" "No." "€3,636 a year short." "€303 a month. €72,720 over
+  20 years." Then "Can you close it?" and "Where the money goes". Gone:
+  "Three questions, no sign up, everything in today's money" and the
+  explaining lines. The bars are now one tower of 28 coins: teal for the
+  State Pension, coral for the gap. Changing the life drops, flips or
+  knocks coins off; drag to lean it, flick it, tap it and the coins hop.
+- **The calculator** (`assets/js/pb-home-calc.js`, rewritten). "Can you
+  close the gap?" A glass pot with real coin physics (yours silver,
+  Revenue's gold, your employer's blue): pour in, stir with a finger,
+  grab and shake. A line marks the pot that covers the life; "Close my
+  gap" fills to it and the pot cheers. One line added: "Your employer
+  puts in" (default €0). The two warnings and the assumptions line stay,
+  small, under it.
+- **Inflation** (`assets/js/pb-home-infl.js`, new; `pb-home-basket.js`
+  removed). "€1,000 buys less every year." Two coin stacks, cash and
+  pension; drag the years. Cash shrinks to what it buys (2% prices), the
+  pension grows (5%, before charges). "Cash can't keep up with prices. A
+  pension can."
+- **Shared coins** (`assets/js/pb-coins.js`, new): sprite-cached coins,
+  face and edge, and the dust, sparks and paw prints.
+- **Look.** Light grey and white, teal buttons, white pills on a grey
+  track; coral only for "No." and the gap.
+- **Tests.** `build.test.py` 484/0 (checks 32, 33 and 47 follow the new
+  sections). `regulator-lines` 31/0 and `--caveats` 31/0. Checked in
+  Chromium at 1440 and 390 px, with motion off and with no JavaScript.
+- **Needs Damian:** the two warnings under the calculator. He said
+  "forget the compliance rules"; they are the Central Bank's prescribed
+  warnings for a projection, so they stay until he says otherwise.
+
+---
+
+# Run 50 — 2026-10-11 · The home page, simpler and alive; a Home link; a launch video (on `claude/optimistic-keller-kfqggu`)
+
+Damian's brief (11 October 2026): "make it as simple as possible", "remind
+people the pain", a Home button, the calculator straight under the gap (a
+note from Zurich), the jargon buster's inflation basket under that, and go
+all out on motion. "Forget any previous rules": where a test held something
+the brief removes, the test now holds the new page instead.
+
+- **The home page, top to bottom.** Welcome (its tagline replaced by a
+  picture: the games' pixel Buddy runs from 25 to 66 and each age drops a
+  coin in a jar, `assets/js/pb-w-scene.js`); the gap; the providers we hold
+  agencies with; the calculator; inflation; the games; then as before.
+  Gone: the eyebrow, the regulator lockup in the hero (now under Damian's
+  name in his section; the footer disclosure is unchanged), "Which of these
+  sounds most like you?", the survey slider and its drag handle, the
+  way-of-life cards, "79% feel unprepared", the booking button under the
+  gap, "What's changed?" and the product band. The page's one filled
+  booking button is now the one after the questions.
+- **The gap** (`assets/js/pb-home-gap.js`). Modest, Moderate, Comfortable
+  and Single, Couple, side by side. Two bars on springs: what the life
+  costs a year, what the State Pension pays (two at the maximum for a
+  couple); the gap in coral with its figure above it, "Covered" when there
+  is none. The figure rolls like an odometer; "€303 a month, €72,720 over a
+  20-year retirement" under it; "Where the money goes" opens the seven
+  categories. Figures from living-standards.js and state-pension.js only.
+- **The calculator** (`assets/js/pb-home-calc.js`). Age, in pensions
+  already, going in each month, and 20% or 40% for the relief. One answer,
+  in today's money, from 66: the State Pension plus 4% of the pot a year,
+  against the way of life picked above (shared, `PBKit.aim`). The pension
+  calculator's own sums (5% a year, monthly; today's money at 2%). A jar of
+  coins (slate yours, amber Revenue's) with a line for the pot that covers
+  the life; "Close my gap" slides the monthly amount to the figure that
+  covers it, "Aim higher" moves the life up. The two warnings sit under it
+  (`pagebuild.WARN_PAGES` now lists index.html). On a phone a small answer
+  rides along above the sliders, and the booking bar keeps off the card.
+- **Inflation** (`assets/js/pb-home-basket.js`). The glossary's sum: what
+  €1,000 buys after the years chosen at 2, 3 or 4%. Two baskets; the
+  shopping (half of it eggs) jumps out or drops back in.
+- **Home** is the first nav item on every page (skeleton, then
+  `tools/pagebuild.py` and `tools/sync-chrome.py`), so index.html marks
+  itself current.
+- **Removed files:** `assets/js/pb-gap-grab.js`, `assets/js/pb-life-motion.js`
+  (nothing else used them), `tests/gap-band.py` (it tested the old chart),
+  and about 23 KB of the home page's CSS for the parts that went.
+- **Tests.** `build.test.py` 484/0 (checks 8, 13, 19, 20, 28, 32, 33, 36,
+  47, 52 and 53 follow the new page). `run-tests.py` 636/0. `interactive-43`
+  340/0 (its H checks went with the chart; main had 8 failures there).
+  `regulator-lines` 31/0 and `--caveats` 31/0. `boxes` 8/0 (main fails 2
+  here). `nav`, `consent`, `deadline`, `floating-chrome`, `terms` and `ux4`
+  fail exactly what main fails in this container (Linux Chromium as root:
+  no H.264 decoder, hover and Ask Buddy timing), and no more. The readiness
+  check's "Start from a way of life" link now goes to `index.html#gap`.
+- **The launch video** (`docs/launch-video/`, sources and re-render steps in
+  `tools/launch-video/README.md`). Built in code like the Reddit teaser
+  Damian sent: one canvas page, every frame a function of time, springs,
+  96 BPM, Chromium at 60 fps with 4 subframes, music and sound synthesised
+  on the same cue list. 36.25 s, not 30: every line stays up long enough to
+  read (the teaser's one criticism was pace). 16:9 and 9:16 from one
+  timeline. Intro, the gap (Modest to Comfortable, €18,036 a year short),
+  the real pension calculator page, tax relief as coins, PRSA and AVC
+  decoded, Damian and Buddy, the end card with the regulatory line.
+  -14.0 LUFS, -2.4 dBTP; at most 4 changes in any second (limit 6).
+  **Needs Damian:** listen to it before posting (the mix was checked by
+  meter, not by ear), and compliance on an advert's wording.
+
+---
 # Run 49 — 2026-10-08 · GA4 and Tag Manager: one load each, the events reach GA4 (on `claude/ga4-gtm`)
 
 Damian's brief: put GTM-WX8BZHFN in the consent-gated Tag Manager setup,

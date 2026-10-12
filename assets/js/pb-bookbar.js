@@ -21,7 +21,8 @@
    footer; on glossary the in-page game stage (#arcStage) too, so a game is
    never played under the bar. On a calculator it also stays away while the
    inputs (.calc-wrap .panel, the comparison's mode buttons, the tools'
-   forms marked data-pb-calc) are on screen, which is where the results
+   forms marked data-pb-calc, and on the home page its calculator card and
+   the inflation sliders) are on screen, which is where the results
    peek bar (assets/js/pb-peek.js) works, so it never covers a control the
    reader is moving, and never while the peek bar is up (html.pb-peek-on).
    That observer looks 80px below the screen, about the bar's own height,
@@ -88,7 +89,7 @@
   var hero = doc.querySelector('main header.hero, main .page-head, main .phead, main .legal h1');
   if (!hero) return;
   var stops = [].slice.call(doc.querySelectorAll('main a[href^="booking.html"], #pbAfter, .final-band, .cta-band, footer, #arcStage, ' +
-    '.calc-wrap .panel, .calc-wrap .modebar, form[data-pb-calc]'));
+    '.calc-wrap .panel, .calc-wrap .modebar, form[data-pb-calc], #calc .pb-c2-card, #inflation .pb-i2-ctl, #inflation .pb-i2-stage'));
 
   var phone = window.matchMedia('(max-width: 920px)');
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)');

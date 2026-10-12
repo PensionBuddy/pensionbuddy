@@ -274,7 +274,7 @@ REPLIED = re.compile('^Thanks, Test\\. We\u2019ll reply by ' + DAY + '\\.$')
 SUCCESS_REPLY = {'enquiry': REPLIED, 'pension-trace': REPLIED,
                  'fee-check': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
                  'ask-result': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
-                 'year-end-reminder': re.compile('^(We\u2019ll remind you on \\d{1,2} [A-Z][a-z]+ \\d{4}|Year end is close\\. We\u2019ll email you by ' + DAY + ')\\.$'),
+                 'year-end-reminder': re.compile('^(We\u2019ll remind you on \\d{1,2} [A-Z][a-z]+ \\d{4}, and every year after|Year end is close\\. Check your email)\\.$'),
                  'job-change': re.compile('^We\u2019ll email you by ' + DAY + '\\.$'),
                  'callback': re.compile('^We\u2019ll call ' + DAY + ', in the morning\\.$')}
 
@@ -326,7 +326,7 @@ def main():
                 eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
             got = lambda *ks: [fields.get(k, [''])[0] for k in ks]
             if name == 'fee-check':
-                eq('%s: the three figures, and what the fee costs' % tag, got('pot', 'fee', 'age', 'cost'), ['100000', '1', '40', '\u20ac81,765'])
+                eq('%s: the three figures, and what the fee costs' % tag, got('pot', 'fee', 'age', 'cost'), ['100000', '1', '40', '\u20ac104,616'])
             if name == 'year-end-reminder':
                 eq('%s: the month, and the reminder day' % tag,
                    (got('year_end')[0], bool(re.match(r'^(\d{1,2} [A-Z][a-z]+ \d{4}|As soon as possible)$', got('remind_on')[0]))), ('March', True))

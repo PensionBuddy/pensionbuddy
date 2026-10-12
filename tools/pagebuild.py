@@ -328,7 +328,7 @@ PAGES = {
         desc="What changed for company directors: executive pensions set up before April 2021, and a company's payments into a PRSA. Information, not advice.",
         modules=['assets/js/director-topics.js', 'assets/js/pb-dr-motion.js', 'assets/js/pb-guide-scene.js'],
         keep=[],
-        nav='director-pension-rules.html',
+        nav=None,   # Run 54: reached from director.html, not the nav
         reviewed=True,
         checks=(('id="drForm"', 'the four questions'),
                 ('Rules as at 8 October 2026', 'the date the rules were checked'),
@@ -554,7 +554,8 @@ def build(page):
 #
 # The two rules. The nav item for the page itself carries class="lnk active"
 # and aria-current="page"; only pages that are plain nav targets mark
-# themselves, so index.html, which the nav reaches by fragment, marks none.
+# themselves (since 11 October 2026 the nav opens on Home, so index.html
+# marks itself as well).
 # And on index.html the nav's own-page fragments are same-page anchors, so
 # the countdown chip and About scroll instead of reloading whichever URL the
 # home page was served as. The footer keeps the absolute index.html#story on
@@ -1065,6 +1066,8 @@ WARN_PAGES = {
     'pension-fees-calculator.html': 1,  # the pot with and without the charges
     'pia.html': 1,                      # the three take-home figures
     'starter.html': 3,                  # the cost-of-waiting chart and the two growth charts
+    'index.html': 1,                    # the home calculator's pot and income at 66 (11 October 2026)
+    'director.html': 1,                 # the director page's pot at 66 (Run 54, 11 October 2026)
 }
 
 

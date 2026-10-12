@@ -63,7 +63,7 @@ BLOCKS = {
 ANCHORS = {
     ('ask', 'index.html'): ('<section class="expect"><div class="wrap faq-grid">', 'before'),
     ('ask', 'starter.html'): ('<div class="final-band">', 'before'),
-    ('ask', 'director.html'): ('<div class="final-band">', 'before'),
+    ('ask', 'director.html'): ('<section class="pb-bleed pb-wash pb-magnetband"', 'before'),
     ('ask', 'booking.html'): ('\n</main>', 'before'),
     ('jobs', 'tracker.html'): ('</div></header>\n', 'after'),
     ('fee', 'index.html'): ('<!-- LEAD:ask:BEGIN', 'before'),

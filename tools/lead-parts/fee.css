@@ -37,7 +37,8 @@ html:not(.pb-js) .pbf-chart,html:not(.pb-js) .pbf-key{display:none}
 .pbf-key span{display:inline-flex;align-items:center;gap:6px}
 .pbf-key i{width:14px;height:3px;border-radius:2px;background:var(--teal)}
 .pbf-key i.k1{background:none;border-top:2px dashed var(--ink-3)}
-.pbf-at{margin-left:auto}
+.pbf-at{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+.pbf-out .pb-past{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
 
 .pbf-ask{margin-top:30px;padding-top:24px;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
 .pbf-check{white-space:nowrap}
@@ -48,5 +49,4 @@ html:not(.pb-js) .pbf-check{display:none}
 
 @media(max-width:860px){
   .pbf-grid{grid-template-columns:1fr;gap:28px}
-  .pbf-at{margin-left:0}
 }

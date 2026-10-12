@@ -1,8 +1,8 @@
 /* The fee check on the home page (tools/lead-parts/fee.html).
 
    Three sliders: the pension, its yearly fee, the reader's age. One number:
-   what the fee takes by 66, from assets/js/pension-fees.js (5% growth, no
-   more paid in), with the pot's path with no fee and with this one drawn
+   what the fee takes by 66, from assets/js/pension-fees.js (6% growth, the
+   most a projection may assume; no more paid in), with the pot's path with no fee and with this one drawn
    under it and the gap between them filled. "Get it checked" opens one
    field, the email, and posts the three figures and the number to Netlify
    as "fee-check" through assets/js/pb-kit.js.
@@ -12,7 +12,7 @@
   'use strict';
   var form = document.getElementById('pbfForm');
   if (!form || !window.PBFees || !window.PBKit) return;
-  var K = window.PBKit, GROWTH = 0.05, AT = 66;
+  var K = window.PBKit, GROWTH = 0.06, AT = 66;   // the most a pension projection may assume
   function $(id) { return document.getElementById(id); }
 
   var pot = $('pbfPot'), fee = $('pbfFee'), age = $('pbfAge');

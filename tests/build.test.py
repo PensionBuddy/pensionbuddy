@@ -135,11 +135,13 @@ def run():
     eq('8. the shared chrome matches the skeleton on every page', findings(pagebuild.chrome_drift(sources)), [])
     skel_nav = pagebuild.chrome_for(sources['pension-calculator.html'], 'terms.html')[0]
     # Run 29: the dropdowns put every page a reader can reach in the nav, so
-    # every one of them marks itself; the three held pages stay out of it
-    eq('8. the pages that mark themselves current are derived from the nav, and are these nineteen',
+    # every one of them marks itself; the three held pages stay out of it.
+    # Since 11 October 2026 the nav opens on Home, so the home page marks itself too.
+    # Since Run 54 "Directors" is one link: the director page marks itself, the
+    # full calculator, the 2026 rules and the checklist are reached from it.
+    eq('8. the pages that mark themselves current are derived from the nav, and are these seventeen',
        sorted(pagebuild.nav_targets(skel_nav)),
-       ['broker-vs-autoenrolment.html', 'director-calculator.html', 'director-pension-rules.html',
-        'director-year-end-checklist.html', 'director.html', 'glossary.html', 'my-pensions.html',
+       ['broker-vs-autoenrolment.html', 'director.html', 'glossary.html', 'index.html', 'my-pensions.html',
         'old-pension-checklist.html', 'pension-calculator.html', 'pension-fees-calculator.html',
         'pensions-over-50.html', 'pia.html', 'self-employed-pensions.html', 'standard-fund-threshold.html',
         'starter.html', 'state-pension-entitlement.html', 'state-pension-reality-check.html', 'tracker.html',
@@ -338,17 +340,17 @@ def run():
         eq('12. %s: named, on that page only' % label, sorted(set(findings(pagebuild.trust_drift(m)))), [(page, kind)])
 
     # ----------------------------------------------------------------- 13
-    # Run 26. The home page's gap chart: its markup is the finished chart, so
-    # a reader without JavaScript sees the real figures, and the script never
-    # writes a euro zero. tests/gap-band.py proves the rest on real frames.
+    # Run 26, rewritten 11 October 2026 (the simpler gap). The home page's gap
+    # chart: its markup is the finished chart for Modest, one person, so a
+    # reader without JavaScript sees the real figures; the script takes every
+    # figure from the two modules, never from a number typed into it.
     home = sources['index.html']
-    chart = home[home.index('id="pbGap"'):home.index('class="pb-src', home.index('id="pbGap"'))]
+    chart = home[home.index('id="pbG2Chart"'):home.index('class="pb-src', home.index('id="pbG2Chart"'))]
     eq('13. the gap chart carries its three figures in the markup',
-       re.findall(r'data-pb-count="(\d+)">&euro;([\d,]+)<', chart),
-       [('40860', '40,860'), ('25296', '25,296'), ('15564', '15,564')])
-    script = home[home.index('/* the gap: bars grow'):home.index('/* the gap, your own')]
-    eq('13. the count-up script never writes a zero figure', 'fmt(0)' in script, False)
-    eq('13. and arms the bars without a transition', "classList.add('pb-still','pb-armed')" in script, True)
+       re.findall(r'&euro;([\d,]+)', chart), ['19,200', '3,636', '15,564'])
+    gscript = read('assets/js/pb-home-gap.js')
+    eq('13. the gap script reads the living standards and the State Pension rate from their modules',
+       ['LS.standard(' in gscript, 'MAX_WEEKLY_CENTS' in gscript, '19200' in gscript or '15564' in gscript], [True, True, False])
 
     # ----------------------------------------------------------------- 14
     # Run 27: the lead forms, as Netlify reads them at deploy. Netlify finds a
@@ -800,7 +802,7 @@ def run():
              '<div class="legal reveal">'),
             ('a legal notice revealed whole', 'terms.html', '<div class="legal pb-caveat">',
              '<div class="legal pb-caveat reveal">'),
-            ('the product caveat revealed', 'index.html', '<figcaption class="pb-product-cap">', '<figcaption class="pb-product-cap reveal">')):
+            ('the calculator caveat revealed', 'index.html', '<p class="gap-note pb-c2-note">', '<p class="gap-note pb-c2-note reveal">')):
         m = dict(sources)
         assert find in m[page], (label, find)
         m[page] = m[page].replace(find, repl, 1)
@@ -1079,7 +1081,12 @@ def run():
     consent_js = open(os.path.join(ROOT, 'assets/js/pb-consent.js')).read()
     WORDS = '<p>May we use cookies for analytics and ads? <a href="privacy.html#cookies">Privacy Notice</a></p>'
     eq('28. the cookie bar says the approved line, and only it', (consent_js.count(WORDS), 'never sold' in consent_js), (1, False))
-    HEROES = ('index.html', 'director.html', 'starter.html', 'tracker.html')
+    # 11 October 2026 (Damian's brief): the home page's hero is the gap alone; its
+    # lockup moved to Damian's own section, under his name (the footer's
+    # disclosure names the regulation on every page, as before)
+    # Run 54 (11 October 2026): the director page's hero is its picture alone, as the
+    # home page's is; its one lockup sits with the booking button (.dr-ask)
+    HEROES = ('starter.html', 'tracker.html')
     def lockups(src):
         # the hero's container, its two copies, where each sits, and whether they say the same
         i = src.find('<div class="pb-hero-copy">') if '<div class="pb-hero-copy">' in src else src.find('<div class="hero-copy pb-hero-copy">')
@@ -1099,11 +1106,22 @@ def run():
         if ' '.join(top.group(1).split()) != ' '.join(tail.group(1).split()):
             return 'the two copies differ'
         return None
-    eq('28. the four heroes: a lockup straight after the eyebrow and one last, saying the same, in a .pb-hero-copy container',
+    eq('28. the two heroes: a lockup straight after the eyebrow and one last, saying the same, in a .pb-hero-copy container',
        {n: lockups(sources[n]) for n in HEROES if lockups(sources[n])}, {})
+    hx = sources['index.html']
+    dam = hx[hx.find('<section id="damian"'):hx.find('</section>', hx.find('<section id="damian"'))]
+    eq('28. the home page: no lockup in the hero, one under Damian\'s name',
+       [hx[:hx.find('</header>')].count('class="pb-reg'), dam.count('<div class="pb-reg">'), dam.find('<h2>Damian Condon</h2>') < dam.find('<div class="pb-reg">')],
+       [0, 1, True])
+    dx = sources['director.html']
+    ask = dx[dx.find('<div class="dr-ask">'):dx.find('</div>\n  <details', dx.find('<div class="dr-ask">'))]
+    eq('28. the director page: no lockup in the hero, one with the booking button, before it',
+       [dx[:dx.find('</header>')].count('<div class="pb-reg'), dx.count('<div class="pb-reg'), ask.count('<div class="pb-reg">'),
+        0 <= ask.find('<div class="pb-reg">') < ask.find('href="booking.html"')],
+       [0, 1, 1, True])
     eq('28. and no other page carries the lockup in a hero', sorted(n for n, t in sources.items()
        if '<div class="pb-reg' in t and n not in HEROES and t.find('<div class="pb-reg') < t.find('</header>')), [])
-    dr = sources['director.html']
+    dr = sources['starter.html']
     for label, mut, want in (
             ('the class dropped from a hero', dr.replace('<div class="pb-hero-copy">', '<div>', 1), 'no .pb-hero-copy container'),
             ('the copy under the eyebrow dropped', re.sub(r'\n\s*<div class="pb-reg pb-reg-top">.*?\n\s*</div>(?=\n)', '', dr, count=1, flags=re.S),
@@ -1382,14 +1400,13 @@ def run():
 
     def learn_faults(ix):
         f = []
-        # one comment at most between the two, and never a span across others
-        # (Run 37: with a comment earlier on the page, `<!--.*?-->` reached
-        # from there to this one); since 7 October 2026 the provider logos
-        # (their comment, mount and still row) may sit between, and nothing else
-        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*<div data-pb-providers hidden></div>\s*<noscript><div class="pb-prov-ns">(?:(?!</noscript>).)*</div></noscript>\s*)?(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>\s*<section id="calc"', ix, re.S)
-        gap = ix.find('<section class="pb-changed" id="changed" aria-labelledby="pbChangedH">')
-        if not m or gap < 0 or not (gap < m.start() < ix.find('<section id="calc"')) or ix.find('<section', gap + 1) != ix.find('<section class="pb-learn"'):
-            return ['the section is not straight after "What\'s changed?" and before the calculator band']
+        # since 11 October 2026 (Damian's brief) the games follow the home
+        # page's inflation stacks (#inflation), with at most one comment
+        # between, never a span across others (Run 37)
+        m = re.search(r'</section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        infl = ix.find('<section class="pb-i2" id="inflation"')
+        if not m or infl < 0 or ix.rfind('<section', 0, m.start() + len('</section>') + 1) != infl or ix.find('<section', infl + 1) != ix.find('<section class="pb-learn"'):
+            return ['the section is not straight after the inflation stacks']
         box = m.group(1)
         if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
@@ -1427,7 +1444,7 @@ def run():
         "'jargon-battle': {'page': 'games/jargon-battle.html'" in shots), ([], True, True))
     ix = sources['index.html']
     for label, find, repl, want in (
-            ('the section moved below the calculator band', None, None, 'straight after'),
+            ('the section moved above the calculator', None, None, 'straight after'),
             ('a card with no play link', 'href="games/jargon-battle.html">Play Jargon Battle', 'href="games/jargon-battle.html">Try it', 'whole cards'),
             ('a card pointing at the other game', 'href="games/buddys-run.html">Play Buddy', 'href="games/jargon-battle.html">Play Buddy', 'the link is not'),
             ('the picture\'s height not its own', 'jpg?v=', None, 'width and height'),
@@ -1436,13 +1453,13 @@ def run():
             ('a reward on offer', '<span class="kicker">Learn it the fun way</span>',
              '<span class="kicker">Learn it the fun way, and win a prize</span>', 'offers something to win')):
         if find is None:
-            # take the section out and put it back after the calculator band
+            # take the section out and put it back above the calculator
             s0 = ix.find('<!-- JUST HERE TO LEARN?')
-            s1 = ix.find('<section id="calc"')
+            s1 = ix.find('<!-- YOUR PENSION THROUGH LIFE')
             sec = ix[s0:s1]
             rest = ix[:s0] + ix[s1:]
-            c1 = rest.find('</div></section>', rest.find('<section id="calc"')) + len('</div></section>\n')
-            mut = rest[:c1] + '\n' + sec + rest[c1:]
+            c1 = rest.find('<!-- THE CALCULATOR')
+            mut = rest[:c1] + sec + rest[c1:]
         elif repl is None:
             mut = re.sub(r'(product-buddys-run\.jpg\?v=[0-9a-f]+" width="2400" height=")1350', r'\g<1>1400', ix, count=1)
         else:
@@ -1451,75 +1468,37 @@ def run():
         eq('32. %s is caught' % label, any(want in x for x in learn_faults(mut)), True)
 
     # ----------------------------------------------------------------- 33
-    # Run 37, item 1: "What's changed?" on the home page. Since Run 42 it sits
-    # straight after the way-of-life band (#life), which follows the hero, and
-    # before the provider logos and the games (logos moved 7 October 2026). Six plain links, one per change in
-    # a life, each to the live page that already covers it; each link's name
-    # starts with its visible words and then names the page as the nav does
-    # (WCAG 2.5.3). Nothing runs and nothing is stored: no script mentions
-    # it, and its rules change colours only.
-    CHANGED = [('New job', 'broker-vs-autoenrolment.html'),
-               ('Left a job', 'tracker.html'),
-               ('Started a company', 'director.html'),
-               ('Turning 50', 'pensions-over-50.html'),
-               ('Had a baby or a career break', 'state-pension-entitlement.html'),
-               ('Moved from the UK', 'uk-pensions-in-ireland.html')]
-    skel_nav = sources['pension-calculator.html']
-    nav_label = dict((h, re.sub(r'<[^>]+>', '', l).strip()) for h, l in
-                     re.findall(r'<a class="lnk(?: active)?" href="([^"#]+)"(?: aria-current="page")?>(.*?)</a>', skel_nav))
+    # 11 October 2026 (Damian's brief), replacing Run 37's "What's changed?",
+    # which is gone. The home page reads in one line: the welcome, the gap
+    # (the page's one hero), the providers we hold agencies with, the
+    # calculator, the inflation baskets, then the games; "What's changed?",
+    # the way-of-life band and the three situations under the hero are gone.
+    ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
+             '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
+             '<section class="pb-i2" id="inflation"', '<section class="pb-learn" id="learn">',
+             '<section class="pb-tl-sec" id="through-life">', '<section class="tickband" id="deadline">', '<section id="story">']
 
-    def changed_faults(ix):
-        f = []
-        life = ix.find('</section>', ix.find('<section class="pb-gap-more" id="life">'))
-        m = re.search(r'<section class="pb-changed" id="changed" aria-labelledby="pbChangedH"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        if not m or life < 0 or not (life < m.start() < ix.find('<section class="pb-learn"')) or re.search(r'<(?:section|div|header)\b', ix[life + len('</section>'):m.start()]):
-            return ['the section is not straight after the way-of-life band, before the games']
-        box = m.group(1)
-        if '<h2 class="pb-changed-h" id="pbChangedH">What&rsquo;s changed?</h2>' not in box:
-            f.append('the heading')
-        links = re.findall(r'<li><a class="pb-changed-chip" href="([^"]+)" aria-label="([^"]+)">([^<]+)</a></li>', box)
-        if len(links) != 6 or box.count('<li') != 6 or box.count('<a ') != 6:
-            f.append('%d links, expected 6' % len(links))
-        for (label, page), (href, name, text) in zip(CHANGED, links):
-            if (text, href) != (label, page):
-                f.append('%s: goes to %s, expected %s' % (text, href, page))
-            if name != '%s: %s' % (text, nav_label.get(href, '?')):
-                f.append('%s: its name does not start with its words and name the page as the nav does' % text)
-            target = os.path.join(ROOT, href)
-            if not os.path.isfile(target) or pagebuild.NOINDEX in read(href):
-                f.append('%s: %s is not a live page' % (text, href))
-        css = re.search(r'/\* Run 37, item 1: "What\'s changed\?".*?\*/(.*?)@media\(prefers-reduced-motion:reduce\)\{\.pb-changed-chip\{transition:none\}\}', ix, re.S)
-        scripts = ''.join(re.findall(r'<script\b[^>]*>(.*?)</script>', ix, re.S))
-        if not css or re.search(r'transform|animation|@keyframes|translate', css.group(1)) or re.search(r'pb-changed|#changed|getElementById\(.changed', scripts):
-            f.append('the section moves, or a script touches it')
+    def order_faults(ix):
+        at = [ix.find(o) for o in ORDER]
+        f = ['missing: ' + o for o, i in zip(ORDER, at) if i < 0]
+        if not f and at != sorted(at):
+            f.append('out of order')
+        for gone in ('id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths'):
+            if gone in ix:
+                f.append('back: ' + gone)
         return f
 
-    eq('33. "What\'s changed?": after the way-of-life band, six links to the live pages that cover each change, named for where they go, still',
-       changed_faults(sources['index.html']), [])
+    eq('33. the home page: welcome, the gap, the providers, the calculator, inflation, then the games',
+       order_faults(sources['index.html']), [])
     ix = sources['index.html']
-    for label, find, repl, want in (
-            ('the section moved above the provider logos', None, None, 'straight after'),
-            ('a link to a held page', 'href="tracker.html" aria-label="Left a job: Find a pension"',
-             'href="find-my-pension.html" aria-label="Left a job: Find a pension"', 'not a live page'),
-            ('a name that does not start with the words', 'aria-label="Turning 50: Pensions after 50"',
-             'aria-label="Pensions after 50"', 'its name'),
-            ('a hover that lifts', '.pb-changed-chip:hover{border-color:var(--teal);',
-             '.pb-changed-chip:hover{transform:translateY(-2px);border-color:var(--teal);', 'moves'),
-            ('a seventh link', '<li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html"',
-             '<li><a class="pb-changed-chip" href="glossary.html" aria-label="Other: Pension jargon buster">Other</a></li>\n    <li><a class="pb-changed-chip" href="uk-pensions-in-ireland.html"', 'links, expected 6'),
-            ('a script that stores the choice', '</body>',
-             '<script>document.querySelector(\'#changed\').addEventListener(\'click\',function(){localStorage.x=1})</script></body>', 'a script touches it')):
-        if find is None:
-            s0 = ix.find("<!-- WHAT'S CHANGED?")
-            s1 = ix.find('<!-- JUST HERE TO LEARN?')
-            sec = ix[s0:s1]
-            rest = ix[:s0] + ix[s1:]
-            tk = rest.find('<!-- PROVIDER TICKER')
-            mut = rest[:tk] + sec + rest[tk:]
-        else:
-            mut = ix.replace(find, repl, 1)
+    c0, c1 = ix.find('<!-- THE CALCULATOR'), ix.find('<!-- INFLATION (11 October 2026')
+    b1 = ix.find('<!-- JUST HERE TO LEARN?')
+    swapped = ix[:c0] + ix[c1:b1] + ix[c0:c1] + ix[b1:]
+    for label, mut, want in (
+            ('inflation above the calculator', swapped, 'out of order'),
+            ('"What\'s changed?" put back', ix.replace('<div data-pb-providers hidden></div>', '<section class="pb-changed" id="changed"></section>\n<div data-pb-providers hidden></div>', 1), 'back: id="changed"')):
         assert mut != ix, label
-        eq('33. %s is caught' % label, any(want in x for x in changed_faults(mut)), True)
+        eq('33. %s is caught' % label, want in order_faults(mut), True)
 
     # ----------------------------------------------------------------- 34
     # Run 37, item 2: the jargon buster's words at the first use of each term.
@@ -1660,11 +1639,12 @@ def run():
     # and the mark move, never for a reader who asks for less motion.
     def timeline_faults(ix, srcs, js):
         f = []
-        aud = ix.find('<section id="calc" ')
+        # since 11 October 2026 straight after the games (#learn)
+        aud = ix.find('<section class="pb-learn" id="learn">')
         dl = ix.find('<section class="tickband" id="deadline">')
         m = re.search(r'<section class="pb-tl-sec" id="through-life"><div class="wrap">(.*?)</div></section>', ix, re.S)
-        if not m or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
-            return ['the section is not straight after the calculator band and before the deadline']
+        if not m or aud < 0 or not (aud < m.start() < dl) or ix.find('<section', aud + 1) != m.start():
+            return ['the section is not straight after the games and before the deadline']
         box = m.group(1)
         if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
             f.append('the kicker or the heading')
@@ -1701,7 +1681,7 @@ def run():
     import html
     tl_js = read('assets/js/pb-timeline.js')
     ix = sources['index.html']
-    eq('36. "Your pension through life": after the calculator band, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
+    eq('36. "Your pension through life": after the games, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
        timeline_faults(ix, sources, tl_js), [])
     for label, target, find, repl, want in (
             ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
@@ -2298,8 +2278,9 @@ def run():
         'tracker.html': ('Book a free 20-minute call with us', ('id="pbTrace"',),
                          '</div></section>\n\n<section style="padding-top:0"><div class="wrap">\n'
                          '  <div class="callout pb-bleed pb-dark pb-split">'),
-        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', '<p class="pb-lad-note">'),
-                          '</div></section>\n\n<section class="coverband pb-bleed pb-wash">'),
+        # Run 54: the director page asks after its own numbers, with its one lockup
+        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potToday"', '<!-- WARN:END -->', '<div class="pb-reg">'),
+                          '  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b>'),
     }
 
     def moved_block(words):
@@ -2313,7 +2294,7 @@ def run():
         hero = src[h:end]
         if h < 0 or end < 0 or 'href="booking.html"' in hero:
             return 'the hero asks before the page gives'
-        if '<a class="btn btn-ghost"' not in hero:
+        if '<a class="btn btn-ghost"' not in hero and '<a class="pb-g2-go"' not in hero:
             return 'the hero lost its second button'
         block = moved_block(words)
         if src.count(block) != 1:
@@ -2330,8 +2311,8 @@ def run():
     sblock = moved_block('Book a free 20-minute call with us')
     for label, name, mut, want in (
             ('the button put back in a hero', 'director.html',
-             dr.replace('<a class="btn btn-ghost" href="director-calculator.html">',
-                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="btn btn-ghost" href="director-calculator.html">', 1),
+             dr.replace('<a class="pb-g2-go" href="#drCalc">',
+                        '<a class="btn btn-acc" href="booking.html">Book a call</a>\n      <a class="pb-g2-go" href="#drCalc">', 1),
              'the hero asks before the page gives'),
             ('the button above the chart', 'starter.html',
              st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
@@ -2357,7 +2338,7 @@ def run():
     # hold --slate (chrome_drift holds every other page
     # to the skeleton's tokens).
     not_state = (
-        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-life-n', '.pb-life-rows i',
+        ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-g2-rows i', '.pb-c2-k-you i', '.pb-c2-l-you i',
                         '.pb-tl-step.pb-on::after')),
         ('starter.html', ('.pb-sa-fill', '.pb-lad-you')),
         ('director.html', ('.pb-stat-n', '.pb-lad-you')),
@@ -2590,11 +2571,13 @@ def run():
     eq('52. a filled button to another page is caught', loud_links(m52), ['starter.html: broker-vs-autoenrolment.html'])
     home = sources['index.html']
     hero = home[home.find('<header class="hero'):home.find('</header>')]
-    eq('52. the home page hero: the three situations, and no button and no booking link',
-       (re.findall(r'<a class="pb-chip-hero" href="([a-z]+)\.html"', hero), 'class="btn' in hero, 'booking.html' in hero),
-       (['starter', 'tracker', 'director'], False, False))
-    life = home[home.find('<section class="pb-gap-more" id="life">'):home.find('</section>', home.find('id="life"'))]
-    eq('52. the booking ask after the way-of-life picker stands alone', re.findall(r'<a class="btn [^"]*" href="([^"]+)"', life), ['booking.html'])
+    # 11 October 2026 (Damian's brief): the hero gives the gap and points to the
+    # calculator below it; no button, no booking link, no situations
+    eq('52. the home page hero: no button and no booking link, and its one way on is the calculator',
+       ('class="btn' in hero, 'booking.html' in hero, re.findall(r'<a class="pb-g2-go" href="([^"]+)"', hero)),
+       (False, False, ['#calc']))
+    faq = home[home.find('<div class="faq-ask">'):home.find('</div>', home.find('<div class="faq-ask">'))]
+    eq('52. the home page\'s one booking ask is after the questions, filled', re.findall(r'<a class="btn ([^"]*)" href="([^"]+)"', faq), [('btn-primary', 'booking.html')])
 
     # Damian, 8 October 2026: "One primary CTA per page; others secondary",
     # and every booking button reads "Book a free 20-minute call with us".
@@ -2642,8 +2625,8 @@ def run():
     eq('52. the phone bar and the Ask Buddy panel say it too',
        ['>%s</a>' % STD_ASK in read(j) for j in ('assets/js/pb-bookbar.js', 'assets/js/pb-buddy.js')], [True, True])
     for label, page, find, repl, want in (
-            ('a second filled booking button', 'index.html', '<a class="btn btn-ghost" href="booking.html">' + STD_ASK,
-             '<a class="btn btn-light" href="booking.html">' + STD_ASK, 'index.html: 2 filled'),
+            ('a second filled booking button', 'index.html', '<section class="pb-c2" id="calc"',
+             '<a class="btn btn-light" href="booking.html">' + STD_ASK + '</a>\n<section class="pb-c2" id="calc"', 'index.html: 2 filled'),
             ('an old wording back', 'starter.html', '<a class="btn btn-acc" href="booking.html">' + STD_ASK,
              '<a class="btn btn-acc" href="booking.html">Help me get started', 'starter.html: "Help me get started"'),
             ('the nav\'s button reworded', 'terms.html', '<a class="btn btn-primary" href="booking.html">' + STD_ASK,
@@ -2665,7 +2648,7 @@ def run():
     eq('53. pagebuild.WARN is the two sentences, word for word, each bold, in one pb-warn box',
        pagebuild.WARN, '<div class="pb-warn"><p><b>%s</b></p><p><b>%s</b></p></div>' % SENT)
     eq('53. the pages with projected figures, and their boxes',
-       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('pension-calculator.html', 1),
+       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('director.html', 1), ('index.html', 1), ('pension-calculator.html', 1),
                                               ('pension-fees-calculator.html', 1), ('pia.html', 1), ('starter.html', 3)])
     eq('53. every page carries exactly its warnings, word for word, from pagebuild.WARN, and no other page one',
        findings(pagebuild.warn_drift(sources)), [])

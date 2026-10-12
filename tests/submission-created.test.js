@@ -209,25 +209,32 @@ eq('60. what they typed is escaped', /<script>x|<b>Eve/.test(ae.html + E.alert('
 eq('60. a day is our shape or nothing', [E.replyDay('Monday 12 October'), E.replyDay('Sunday 11 October'), E.replyDay('Monday 32 October')], ['Monday 12 October', '', '']);
 
 group('THE TOOLS: FEE CHECK, YEAR-END REMINDER, CHANGING JOBS, CALL BACK');
-E.clock.now = function () { return new Date('2026-10-11T10:00:00Z'); };
+E.clock.now = function () { return new Date('2026-10-12T10:00:00Z'); };
 var fc = E.plan('fee-check', { pot: '100000', fee: '1', age: '40', cost: '€1', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {});
 eq('63. fee check: a copy to the sender', [fc.send, fc.message.subject], [true, 'We have your fee check']);
-has('63. the cost worked out again here, not taken from the page', fc.message.text, 'Fees by 66: €81,765');
+has('63. the cost worked out again here at 6%, not taken from the page', fc.message.text, 'Fees by 66: €104,616');
 eq('63. figures that are not figures are left out', E.plan('fee-check', { pot: 'x', fee: '1', age: '40', email: 'a@b.ie' }, {}).message.text.indexOf('Fees by 66'), -1);
 eq('63. fee check alert subject', E.alert('fee-check', { pot: '100000', fee: '1', age: '40', email: 'mary@example.com' }, {}).message.subject, 'Fee check: €100,000 at 1.00%, from mary@example.com');
-eq('64. year end: March from 11 October 2026 is 31 March 2027, reminder 17 February',
+eq('64. year end: March from 12 October 2026 is 31 March 2027, reminder 17 February',
    [E.yearEnd('March', E.clock.now()).end.toISOString().slice(0, 10), E.yearEnd('March', E.clock.now()).rem.toISOString().slice(0, 10)], ['2027-03-31', '2027-02-17']);
-eq('64. October: the end of this month, too close, so today', [E.yearEnd('October', E.clock.now()).close, E.yearEnd('October', E.clock.now()).days], [true, 20]);
+eq('64. October: the end of this month, too close, so today', [E.yearEnd('October', E.clock.now()).close, E.yearEnd('October', E.clock.now()).days], [true, 19]);
 eq('64. September: already past, so next year', E.yearEnd('September', E.clock.now()).end.toISOString().slice(0, 10), '2027-09-30');
 eq('64. not a month: nothing', E.yearEnd('Smarch', E.clock.now()), null);
 var yc = E.plan('year-end-reminder', { year_end: 'March', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {});
-eq('65. year end: the copy says the day', [yc.message.subject, /We’ll remind you on 17 February 2027\./.test(yc.message.text)], ['Your year-end reminder is set', true]);
-has('65. close: by the next working day', E.plan('year-end-reminder', { year_end: 'October', email: 'a@b.ie', reply_by: 'Monday 12 October' }, {}).message.text, 'Year end is close. We’ll email you by Monday 12 October.');
+eq('65. year end: the copy says the day, and every year', [yc.message.subject, /We\u2019ll remind you on 17 February 2027, and every year after\./.test(yc.message.text)], ['Your year-end reminder is set', true]);
+var yclose = E.plan('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message;
+eq('65. close: the copy is the reminder itself', [yclose.subject, /year end is 31 October 2026\./.test(yclose.text), /counts against this year/.test(yclose.text)], ['Your year end is close', true, true]);
 var ya = E.alert('year-end-reminder', { year_end: 'March', email: 'mary@example.com' }, {}).message;
-eq('66. the alert carries the reminder as a calendar file', [ya.attachments.length, ya.attachments[0].filename], [1, 'year-end-reminder.ics']);
-has('66. on the reminder day', Buffer.from(ya.attachments[0].content, 'base64').toString(), 'DTSTART;VALUE=DATE:20270217');
-eq('66. close: no calendar file, and the subject says how close', [!!E.alert('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message.attachments,
-   E.alert('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message.subject], [false, 'Year end in 20 days: a@b.ie']);
+eq('66. the alert: no calendar file, it goes by itself', ['attachments' in ya, /every year after, by itself/.test(ya.text)], [false, true]);
+eq('66. close: the subject says how close', E.alert('year-end-reminder', { year_end: 'October', email: 'a@b.ie' }, {}).message.subject, 'Year end in 19 days: a@b.ie');
+eq('66. due: six weeks before the end of the month, any year', [E.reminderDue('March', new Date('2027-02-17T07:00:00Z')).toISOString().slice(0, 10),
+   E.reminderDue('March', new Date('2028-02-18T07:00:00Z')) && E.reminderDue('March', new Date('2028-02-18T07:00:00Z')).toISOString().slice(0, 10),
+   E.reminderDue('March', new Date('2027-02-18T07:00:00Z')), E.reminderDue('December', new Date('2026-11-19T07:00:00Z')).toISOString().slice(0, 10)],
+   ['2027-03-31', '2028-03-31', null, '2026-12-31']);
+var rm = E.reminder({ email: 'mary@example.com', year_end: 'March' }, new Date(Date.UTC(2027, 2, 31)), {});
+eq('66. the reminder: to them, from us, the date and the line', [rm.to, rm.subject, /year end is 31 March 2027\./.test(rm.text), /Reply to stop them/.test(rm.text)],
+   [['mary@example.com'], 'Your year end is six weeks away', true, true]);
+eq('66. no address, or the honeypot: no reminder', [E.reminder({ email: 'x' }, new Date(), {}), E.reminder({ email: 'a@b.ie', 'bot-field': 'x' }, new Date(), {})], [null, null]);
 var jc = E.plan('job-change', { change: 'Leaving a job', when: 'This month', email: 'mary@example.com', reply_by: 'Monday 12 October' }, {}).message;
 eq('67. changing jobs: subject', jc.subject, 'Changing jobs: first steps');
 has('67. leaving: its first steps', jc.text, 'Keep your leaving statement.');
@@ -310,10 +317,31 @@ function event(form, data) { return { body: JSON.stringify({ payload: { id: 'sub
   loud();
   eq('62. no valid address: the alert still goes, no copy', [r.body, calls.length], ['sent', 1]);
 
+  /* the daily reminders: Netlify's API stood in for, and Resend */
+  var Y = await import('../netlify/functions/year-end-reminders.mjs');
+  calls = [];
+  var subs = [{ id: 's1', data: { year_end: 'March', email: 'mary@example.com' } }, { id: 's2', data: { year_end: 'June', email: 'joe@example.com' } },
+              { id: 's3', data: { year_end: 'March', email: 'not an address' } }];
+  function api(url, opts) {
+    calls.push({ url: url, opts: opts || {} });
+    if (/\/sites\/site1\/forms$/.test(url)) return Promise.resolve({ ok: true, json: function () { return Promise.resolve([{ id: 'f9', name: 'year-end-reminder' }]); } });
+    if (/\/forms\/f9\/submissions/.test(url)) return Promise.resolve({ ok: true, json: function () { return Promise.resolve(/page=1$/.test(url) ? subs : []); } });
+    return Promise.resolve({ ok: true, status: 200 });
+  }
+  quiet();
+  var y1 = await Y.run({ env: { NETLIFY_API_TOKEN: 't', EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date('2027-02-17T07:00:00Z') });
+  loud();
+  var mails = calls.filter(function (c) { return c.url === 'https://api.resend.com/emails'; });
+  eq('70. the day: only March\u2019s reminder with an address goes', [y1.sent, mails.map(function (c) { return JSON.parse(c.opts.body).to[0]; })], [1, ['mary@example.com']]);
+  eq('70. once per submission per year', mails[0].opts.headers['Idempotency-Key'], 'reminder-s1-2027-03-31');
+  eq('70. no address in the log', logs.join(' ').indexOf('mary@example.com'), -1);
   calls = [];
   quiet();
-  r = await F._handler(event('year-end-reminder', { year_end: 'March', email: 'mary@example.com' }), {}, { env: { EMAIL_API_KEY: 'k' }, fetch: okFetch });
+  var y2 = await Y.run({ env: { NETLIFY_API_TOKEN: 't', EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date('2027-02-18T07:00:00Z') });
   loud();
-  eq('70. year end: the alert sent with its calendar file, then the copy', calls.map(function (c) { var b = JSON.parse(c.opts.body); return [b.to[0], !!b.attachments]; }),
-     [['hello@pensionbuddy.ie', true], ['mary@example.com', false]]);
+  eq('70. the day after: nothing', y2.sent, 0);
+  quiet();
+  var y3 = await Y.run({ env: { EMAIL_API_KEY: 'k' }, site: 'site1', fetch: api, now: new Date() });
+  loud();
+  eq('70. no token: nothing, logged', [y3.sent, /NETLIFY_API_TOKEN/.test(logs.join(' '))], [0, true]);
 })();
