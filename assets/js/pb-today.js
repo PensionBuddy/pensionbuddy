@@ -35,7 +35,8 @@
     box.innerHTML =
       '<label class="pb-today-sw"><input type="checkbox" id="pbTodayOn" checked> <span>Show in today’s money</span></label>' +
       '<p class="pb-today-note">Prices rise about ' + A.inflation.pct + ' a year, so future money buys less.</p>' +
-      '<p class="pb-today-cash" id="pbTodayCash"></p>';
+      '<p class="pb-today-cash" id="pbTodayCash"></p>' +
+      '<p class="pb-today-note"><a href="index.html#inflation">See what rising prices do to cash</a></p>';
     after.parentNode.insertBefore(box, after.nextSibling);
     sw = doc.getElementById('pbTodayOn');
     sw.addEventListener('change', function () {
