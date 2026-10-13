@@ -12,7 +12,12 @@
    ------------------------------------------------------------------------
 
    Contract: docs/CALC-SPEC.md. Tests: tests/compare-calc.test.js.
-   Loads as a plain script (window.PBCompare) or via require() in node. */
+   Loads as a plain script (window.PBCompare) or via require() in node.
+
+   13 October 2026: the page asks only what you put in a month and your tax
+   rate, and works through monthly() at the foot of this file. The yearly,
+   salary-based functions above it stay, unchanged and tested: the starter
+   page uses autoEnrolment() and AE_PHASES. */
 (function (root, factory) {
   var relief = (typeof module === 'object' && module.exports)
     ? require('./pension-tax-relief.js')
@@ -284,10 +289,94 @@
     return { years: years, autoEnrolment: ae, extra: extra, total: ae + extra };
   }
 
+  /* ======================================================================
+     A MONTH, FROM YOUR OWN POCKET (13 October 2026). What the page now
+     asks, and all it asks. Damian: "Why are we choosing an arbitrary
+     figure? We should be able to compare apples for apples. If you want to
+     put in more, you can, and show clearly that the personal pension is
+     better after 80k." And: "anything that doesn't need to be in the
+     calculator, like income: just use contributions instead."
+
+     Two inputs: what the reader puts in each month from their own pocket,
+     and the rate their income tax tops out at. No salary: under
+     auto-enrolment the contribution IS a share of pay, so pay is what the
+     contribution means (payFor), never something to ask for.
+
+       auto-enrolment    you X; your employer the same; the State a third
+                         of X (the 3 : 3 : 1 of every phase). All three on
+                         pay up to AE_SALARY_CAP, so X can be at most the
+                         phase's rate on AE_SALARY_CAP, a month:
+                         monthlyLimit(), EUR 100 in 2026. Past it the scheme
+                         takes nothing more, from anyone.
+       personal pension  your X, with tax relief at your rate:
+                         X / (1 - rate). No employer money unless the
+                         employer agrees to pay (none here), no State money.
+       best of both      auto-enrolment up to its limit, a personal pension
+                         for the rest. The same cost to you as the other two.
+
+     Relief is at the rate given on all of it, and assumed inside Revenue's
+     age-related limit: with no age or pay there is nothing to apply that
+     limit to, and the page says so. Euros a month, exact; the page rounds.
+     ====================================================================== */
+  function monthlyLimit(year) {
+    return phaseForYear(year).employee * AE_SALARY_CAP / 12;
+  }
+
+  /* the pay a month's contribution from you is that phase's rate of, a year */
+  function payFor(monthlyYou, year) {
+    return monthlyYou * 12 / phaseForYear(year).employee;
+  }
+
+  function monthly(opts) {
+    var year = opts.year || 1;
+    var p = phaseForYear(year);
+    var you = Math.max(0, +opts.you || 0);
+    var rate = (+opts.taxRate || 0) / 100;
+    var limit = p.employee * AE_SALARY_CAP / 12;
+    var inAe = Math.min(you, limit), rest = you - inAe;
+    function withRelief(net) { return net / (1 - rate); }
+
+    var ae = {
+      you: inAe,                                   // what the scheme takes from you
+      employer: inAe * p.employer / p.employee,    // the same again
+      state: inAe * p.state / p.employee,          // a third of yours
+      notTaken: rest,                              // past the limit: stays in your pay
+      capped: you > limit
+    };
+    ae.total = ae.you + ae.employer + ae.state;
+
+    var personal = { you: you, relief: withRelief(you) - you, employer: 0, total: withRelief(you) };
+    var top = { you: rest, relief: withRelief(rest) - rest, total: withRelief(rest) };
+    var diff = personal.total - ae.total;
+
+    return {
+      phase: p.phase,
+      years: p.years,
+      rates: { employee: p.employee, employer: p.employer, state: p.state },
+      you: you,
+      taxRate: rate,
+      limit: limit,
+      pay: payFor(inAe, year),                     // the pay that is, capped at AE_SALARY_CAP
+      autoEnrolment: ae,
+      personal: personal,
+      best: { autoEnrolment: ae.total, personal: top, total: ae.total + top.total },
+      /* what each euro from you becomes, below the limit and above it */
+      perEuro: {
+        autoEnrolment: (p.employee + p.employer + p.state) / p.employee,
+        personal: withRelief(1),
+        aboveLimit: 0
+      },
+      larger: Math.abs(diff) < 0.005 ? 'equal' : (diff > 0 ? 'personal' : 'autoEnrolment')
+    };
+  }
+
   return {
     AE_SALARY_CAP: AE_SALARY_CAP,
     AE_PHASES: AE_PHASES,
     phaseForYear: phaseForYear,
+    monthlyLimit: monthlyLimit,
+    payFor: payFor,
+    monthly: monthly,
     autoEnrolment: autoEnrolment,
     personalPension: personalPension,
     matchedGross: matchedGross,

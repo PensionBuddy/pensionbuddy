@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Copy the shared chrome, the nav, the footer's link columns and (Run 29)
 the NAV block of CSS that styles the nav, from the skeleton to every
-hand-written page.
+hand-written page. (Since then every shared block of CSS in
+pagebuild.SHARED_CSS, the related pages, and, since 13 October 2026, the
+footer's FOOT block and the script that moves the end of every page,
+assets/js/pb-chrome-motion.js, loaded straight before pb-alive.js.)
 
     python3 tools/sync-chrome.py
     python3 tools/sync-chrome.py --check     # report, change nothing, exit 1 if stale

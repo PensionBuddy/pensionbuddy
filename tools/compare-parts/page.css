@@ -1,106 +1,136 @@
 /* ============================================================
    AUTO-ENROLMENT OR A PERSONAL PENSION (broker-vs-autoenrolment.html).
-   12 October 2026, Damian: "simplify all the calculators", "drastically
-   improved", "motion design". Two questions, one panel of three or four
-   controls, and one picture per question: who puts the money in, as a
-   bar per path on one scale, every figure in its key. The colours say
-   whose money it is, nothing else: you ink, your employer light slate,
-   the State teal (teal is only ever the State's), Revenue's relief amber.
-   Motion (assets/js/pb-cmp-motion.js) only ever moves these bars to their
-   true widths; with motion off they simply are those widths.
+   13 October 2026, Damian: "compare apples for apples", "show clearly
+   that the personal pension is better after 80k", "just use
+   contributions instead". One slider (what you put in, a month) and one
+   switch (your tax rate). Two cards side by side, the same cost to you;
+   past auto-enrolment's limit a third line, the best of both. The
+   colours say whose money it is, nothing else: you ink, your employer
+   light slate, the State teal (teal is only ever the State's), tax
+   relief amber. Every bar sits on one euro scale, so lengths compare
+   across the cards and the best-of-both line.
+   Motion (assets/js/pb-cmp-motion.js, and the rules at the foot of this
+   block) only ever under html.pb-motion; without it everything simply
+   is where it ends.
    ============================================================ */
-.calc-wrap .modebar{grid-column:1 / -1;margin-bottom:4px}
-.modebar .modeseg{max-width:560px}
-.modepanel{display:flex;flex-direction:column;gap:18px}
-.modepanel[hidden]{display:none}
-@media(max-width:560px){.modebar .modeseg{max-width:none}.modebar .seg button{font-size:1rem;padding:11px 4px}}
-/* a three-way segmented control: the skeleton's .seg is two columns with a
-   half-width indicator, so a third option needs its own grid and a
-   third-width indicator */
-.seg.seg-3{grid-template-columns:repeat(3,1fr)}
-.seg.seg-3 .ind{width:calc(33.333% - 2.667px)}
-.seg.seg-3 button{line-height:1.25;padding:10px 4px}
 .cmp-tax-l{font-weight:600;font-size:1rem;color:var(--ink)}
 
-/* the hero: one line, then a bar per path */
-[data-pb-calc] .res-hero.cmp-hero{display:block;padding:26px 28px 22px}
-.cmp-lead{margin:0 0 6px;font-size:18px;line-height:1.45;font-weight:600;color:var(--ink);text-wrap:pretty}
-.cmp-lane{margin-top:20px}
-.cmp-lane-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
-.cmp-hero .cmp-lane-h .rl{margin:0;font-size:1rem;font-weight:600;color:var(--ink)}
-.cmp-hero .big{font-size:clamp(26px,3vw,34px)}
-.cmp-figs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
-.cmp-figs .rl{font-size:1rem}
-.cmp-bar{position:relative;display:flex;gap:2px;height:20px;border-radius:6px;overflow:hidden;background:rgba(11,31,28,.06)}
-.cmp-s{display:block;flex:none;height:100%;min-width:0;cursor:default}
+/* ---- the slider, with auto-enrolment's limit marked on its rail ---- */
+/* the mark sits just clear of the thumb, under the track's centre (--trk, set by the page) */
+.cmp-rail{position:relative;padding-bottom:20px}
+.cmp-rail .slider-wrap{z-index:1}
+.cmp-lim{position:absolute;top:calc(var(--trk,26px) + 16px);left:calc(11px + (100% - 22px) * var(--limf,.1579));z-index:0;display:flex;flex-direction:column;align-items:center;transform:translateX(-50%);pointer-events:none}
+.cmp-lim i{display:block;width:2px;height:7px;border-radius:1px;background:var(--ink-3)}
+.cmp-lim b{margin-top:3px;font-size:1rem;font-weight:600;line-height:1.2;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.cmp-lim.cmp-lim-l{align-items:flex-start;transform:translateX(-1px)}
+.cmp-rail.is-over .cmp-lim i{background:var(--ink)}
+.cmp-rail.is-over .cmp-lim b{color:var(--ink)}
+
+/* what that amount means, or, past the limit, the notice. Two boxes in one
+   cell, each as tall as the taller, so the panel keeps its height and its
+   shape whichever shows. */
+.cmp-say{display:grid;margin-top:6px}
+.cmp-say>p{grid-area:1 / 1;align-self:stretch;margin:0;padding:11px 13px;border-radius:10px;font-size:1rem;line-height:1.5}
+.cmp-pay{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.cmp-note{display:flex;gap:10px;align-items:flex-start;background:var(--amber-soft);border:1px solid #F2D58F;color:var(--ink);font-weight:600;visibility:hidden;opacity:0}
+.cmp-note-a{flex:none;width:20px;height:20px;margin-top:2px;fill:none;stroke:var(--ink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.cmp-say.is-over .cmp-pay{visibility:hidden;opacity:0}
+.cmp-say.is-over .cmp-note{visibility:visible;opacity:1}
+/* the tax rate: its label and its two buttons on one line */
+.cmp-tax-f{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,190px);align-items:center;column-gap:12px;margin-bottom:0}
+.cmp-tax-f .row{margin:0}
+.cmp-tax-f .seg{grid-column:2}
+.cmp-tax-h{grid-column:1 / -1;margin:10px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+
+/* ---- the result: a line, then the two cards ---- */
+[data-pb-calc] .res-hero.cmp-hero{display:block;padding:24px 24px 20px}
+.cmp-lead{margin:0 0 18px;font-size:clamp(18px,1.55vw,20px);line-height:1.45;font-weight:600;color:var(--ink);text-wrap:pretty}
+.cmp-lead b{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cmp-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cmp-card{min-width:0;padding:16px 16px 14px;border:1px solid var(--line-2);border-radius:12px;background:var(--surface)}
+.cmp-top{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"rl rl" "big per";align-items:baseline;column-gap:8px;row-gap:4px}
+.cmp-hero .cmp-top .rl{grid-area:rl;margin:0;font-size:1rem;font-weight:700;color:var(--ink)}
+.cmp-top .big{grid-area:big}
+.cmp-hero .big{font-size:clamp(30px,2.7vw,36px)}
+.cmp-per{grid-area:per;font-size:1rem;color:var(--ink-2)}
+/* "At its limit": a badge on the card's top edge, so it never takes a line or moves one */
+.cmp-card{position:relative}
+.cmp-tag{position:absolute;top:-12px;right:10px;padding:1px 10px;border-radius:99px;background:var(--ink);color:#fff;font-size:1rem;font-weight:600;line-height:1.4;white-space:nowrap;box-shadow:0 0 0 3px var(--surface)}
+.cmp-tag:empty{display:none}
+
+/* one bar per card: its parts in the order the money arrives */
+.cmp-track{position:relative;height:14px;margin:14px 0 14px}
+.cmp-fill{position:absolute;inset:0;display:flex;gap:2px;border-radius:7px;overflow:hidden;background:var(--surface-2)}
+.cmp-s{display:block;flex:none;height:100%;min-width:0}
 .cmp-s-you,.cmp-key [data-part="you"] i{background:#2C3B38}
-.cmp-s-you2,.cmp-key [data-part="extra"] i{background:repeating-linear-gradient(135deg,#2C3B38 0 3px,#56625F 3px 6px)}
+.cmp-s-you2,.cmp-key [data-part="extra"] i{background:repeating-linear-gradient(135deg,#2C3B38 0 3px,#5E6B68 3px 6px)}
 .cmp-s-emp,.cmp-key [data-part="emp"] i{background:#A9B4C2}
 .cmp-s-state,.cmp-key [data-part="state"] i{background:var(--teal)}
 .cmp-s-rev,.cmp-key [data-part="rev"] i{background:var(--amber)}
-.cmp-bar-lab{display:flex;margin-top:6px;font-size:1rem;color:var(--ink-2)}
-.cmp-bar-lab span{display:block;flex:none;min-width:0;padding-left:2px;border-left:2px solid rgba(11,31,28,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cmp-bar-lab span:empty{border:0}
-/* on a phone "Auto-enrolment" no longer fits its part of the bar once the extra
-   grows; the key under it names both parts, so the labels step aside */
-@media(max-width:520px){.cmp-bar-lab{display:none}}
-.cmp-key{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:1rem;color:var(--ink-2)}
-.cmp-key li{display:inline-flex;align-items:center;gap:8px;padding:2px 0}
-.cmp-key li[hidden]{display:none}
-.cmp-key i{display:block;width:12px;height:12px;border-radius:3px;flex:none}
-.cmp-key b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
-/* point at a source and it lights in every bar; the rest step back */
-.cmp-hero[data-hl] .cmp-s:not(.cmp-on),.cmp-hero[data-hl] .cmp-key li:not(.cmp-on){opacity:.28}
-.cmp-hero .foot{margin-top:2px;font-size:1rem}
-.cmp-hero .divline{margin:20px 0 14px}
-.cmp-cap{margin:0;padding:14px 18px;border:1px solid var(--line-2);border-left:3px solid var(--amber);border-radius:var(--r-lg);background:var(--surface);font-size:1rem;line-height:1.55;color:var(--ink)}
-.cmp-cap[hidden]{display:none}
-.cmp-cap b{font-variant-numeric:tabular-nums}
+.cmp-key [data-part="ae"] i{background:linear-gradient(90deg,#2C3B38 0 43%,#A9B4C2 43% 86%,var(--teal) 86%)}
+/* where auto-enrolment stops: a quiet mark until the bar reaches it */
+.cmp-cap{position:absolute;top:-5px;bottom:-5px;left:var(--cap,92.59%);width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.45}
+.cmp-card.is-capped .cmp-cap{background:var(--ink);opacity:1}
 
-/* ---- everything paid in, by 66 ---- */
-.pb-my-card{border:1px solid var(--line-2);border-radius:12px;background:var(--surface);padding:22px 24px}
-.pb-my-card h3{margin:0 0 4px}
-.pb-my-sub{font-size:1rem;line-height:1.55;color:var(--ink-2);margin:0 0 16px}
-.pb-my-lane{display:grid;grid-template-columns:10em minmax(0,1fr) 7em;gap:12px;align-items:center;margin-bottom:12px}
-.pb-my-lab{font-size:1rem;font-weight:600;color:var(--ink)}
-.pb-my-track{position:relative;display:block;height:14px;border-radius:5px;background:var(--surface-2);overflow:hidden}
-.pb-my-bar{position:absolute;left:0;top:0;bottom:0;display:block;width:0;border-radius:5px}
-#pbMyAeBar{background:var(--slate)}
-#pbMyPpBar{background:var(--slate)}
-#pbMyAeBar2{background:var(--slate)}
-#pbMyCBar{background:var(--slate)}
-.pb-my-fig{font-size:17px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
-.pb-my-note{font-size:1rem;line-height:1.55;color:var(--ink-2);margin:14px 0 0}
-.pb-my-card .pb-warn{margin-top:16px}
+.cmp-key{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.cmp-key li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;column-gap:9px;font-size:1rem;line-height:1.35;color:var(--ink-2)}
+.cmp-key li i{display:block;width:12px;height:12px;border-radius:3px}
+.cmp-key b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.cmp-small{margin:10px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+/* point at a source, in a bar or in its key, and it lights everywhere on the result */
+.results[data-hl] .cmp-s:not(.cmp-on),.results[data-hl] .cmp-key li:not(.cmp-on){opacity:.3}
+.cmp-hero .divline{height:1px;margin:18px 0 12px;background:rgba(11,31,28,.12)}
+.cmp-hero .foot{font-size:1rem;line-height:1.55}
+
+/* ---- the best of both: past the limit only ---- */
+.cmp-best-w{display:grid;grid-template-rows:1fr}
+.cmp-best-w[hidden]{display:none}
+.cmp-best-c{min-height:0}
+[data-pb-calc] .res-hero.cmp-best{min-height:0;padding:20px 24px 18px;background:var(--surface);border:2px solid var(--ink)}
+.cmp-best-l{margin:6px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.cmp-key-2{grid-template-columns:repeat(2,minmax(0,max-content));column-gap:28px}
+
+/* on a phone the cards stack, each total on its title's line, right-aligned,
+   so the totals read down one edge and the bars along the other */
 @media(max-width:560px){
-  [data-pb-calc] .res-hero.cmp-hero{padding:22px 18px 18px}
-  .cmp-lead{font-size:17px}
-  .pb-my-card{padding:20px 18px}
-  .pb-my-lane{grid-template-columns:minmax(0,1fr) auto;row-gap:5px}
-  .pb-my-lab{grid-column:1;grid-row:1}
-  .pb-my-fig{grid-column:2;grid-row:1}
-  .pb-my-track{grid-column:1 / -1;grid-row:2}
+  [data-pb-calc] .res-hero.cmp-hero{padding:18px 14px 14px}
+  [data-pb-calc] .res-hero.cmp-best{padding:16px 14px 14px}
+  .cmp-lead{font-size:18px;margin:0 2px 16px}
+  .cmp-pair{grid-template-columns:minmax(0,1fr);gap:14px}
+  .cmp-card{padding:14px 14px 12px}
+  .cmp-top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"rl big" "rl per";align-items:center;row-gap:2px}
+  .cmp-hero .big{font-size:28px;justify-self:end}
+  .cmp-per{justify-self:end;line-height:1.2}
+  .cmp-track{margin:10px 0 12px}
+  .cmp-key-2{grid-template-columns:minmax(0,1fr)}
+  .cmp-tax-f{grid-template-columns:minmax(0,1fr) minmax(0,150px)}
 }
 
-/* ---- motion: bars reach their widths; the first time, one source at a time ---- */
-:root.pb-motion .cmp-s{transition:width var(--pb-d-4) var(--pb-ease-out),opacity var(--pb-d-2) var(--pb-ease-move)}
-:root.pb-motion .cmp-key li{transition:opacity var(--pb-d-2) var(--pb-ease-move)}
-:root.pb-motion .pb-my-bar{transition:width var(--pb-d-5) var(--pb-ease-out)}
-:root.pb-motion .cmp-bar-lab span{transition:width var(--pb-d-4) var(--pb-ease-out)}
-:root.pb-motion .cmp-pre .cmp-s,:root.pb-motion .cmp-pre .pb-my-bar{width:0!important;transition:none}
-:root.pb-motion .cmp-intro .cmp-s:nth-child(2){transition-delay:90ms}
-:root.pb-motion .cmp-intro .cmp-s:nth-child(3){transition-delay:180ms}
-:root.pb-motion .cmp-intro .cmp-s:nth-child(4){transition-delay:240ms}
-:root.pb-motion .cmp-intro .cmp-s:nth-child(5){transition-delay:300ms}
-:root.pb-motion .cmp-intro [data-lane="pp"] .cmp-s:nth-child(1){transition-delay:60ms}
-:root.pb-motion .cmp-intro [data-lane="pp"] .cmp-s:nth-child(2){transition-delay:150ms}
-:root.pb-motion .cmp-intro .pb-my-lane + .pb-my-lane .pb-my-bar{transition-delay:90ms}
+/* ---- motion: only ever under html.pb-motion ---- */
+:root{--cmp-spring:linear(0, 0.0612, 0.1992, 0.3637, 0.5244, 0.6651, 0.7792, 0.8662, 0.9286, 0.9706, 0.9968, 1.0115, 1.0183, 1.0199, 1.0186, 1.0158, 1.0125, 1.0093, 1.0066, 1.0043, 1.0026, 1.0014, 1.0006, 1, 1)}
+@supports not (transition-timing-function:linear(0, 1)){:root{--cmp-spring:var(--pb-ease-out)}}
+/* the line under the slider gives way to the notice: the one rises out, the other springs in */
+:root.pb-motion .cmp-say>p{transition:opacity var(--pb-d-2) var(--pb-ease-move),transform 620ms var(--cmp-spring),visibility 0s linear var(--pb-d-2)}
+:root.pb-motion .cmp-say:not(.is-over) .cmp-note{transform:translateY(10px)}
+:root.pb-motion .cmp-say.is-over .cmp-pay{transform:translateY(-8px)}
+:root.pb-motion .cmp-say.is-over .cmp-note,:root.pb-motion .cmp-say:not(.is-over) .cmp-pay{transition-delay:0s}
+/* and its arrow draws itself */
+:root.pb-motion .cmp-note-a path{stroke-dasharray:16;stroke-dashoffset:0;transition:stroke-dashoffset var(--pb-d-5) var(--pb-ease-out) 140ms}
+:root.pb-motion .cmp-say:not(.is-over) .cmp-note-a path{stroke-dashoffset:16;transition:none}
+:root.pb-motion .cmp-lim i,:root.pb-motion .cmp-lim b,:root.pb-motion .cmp-cap{transition:background-color var(--pb-d-3) var(--pb-ease-move),color var(--pb-d-3) var(--pb-ease-move),opacity var(--pb-d-3) var(--pb-ease-move)}
+:root.pb-motion .cmp-s,:root.pb-motion .cmp-key li{transition:opacity var(--pb-d-2) var(--pb-ease-move)}
+/* the best of both opens: the space grows, the card springs up into it */
+:root.pb-motion .cmp-best-w{grid-template-rows:0fr;transition:grid-template-rows var(--pb-d-4) var(--pb-ease-out)}
+:root.pb-motion .cmp-best-w.cmp-in{grid-template-rows:1fr}
+:root.pb-motion .cmp-best-w:not(.cmp-open) .cmp-best-c{overflow:hidden}
+:root.pb-motion .cmp-best-w .cmp-best{opacity:0;transform:translateY(-10px) scale(.985);transition:opacity var(--pb-d-3) var(--pb-ease-move),transform 620ms var(--cmp-spring)}
+:root.pb-motion .cmp-best-w.cmp-in .cmp-best{opacity:1;transform:none}
 
 /* THE PHASE STAIRCASE (.pb-stair), in the assumptions. Auto-enrolment's
    four phases from PBCompare.AE_PHASES, each column as tall as its total
-   rate and stacked you, your employer, the State (always 3 : 3 : 1). The
-   page tags this year's phase. */
-.pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:560px}
+   rate and stacked you, your employer, the State (always 3 : 3 : 1), with
+   the most it takes from you a month. The page tags this year's phase. */
+.pb-stair{list-style:none;margin:14px 0 6px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:600px}
 @media(max-width:420px){.pb-stair{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:18px}}
 .pb-stair-col{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
 .assume .pb-stair li{padding-left:0;line-height:1.4}

@@ -81,8 +81,8 @@ ASK_RESULT = {'pension-calculator.html': ' | Your age: ', 'state-pension-reality
 JOBS = (sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps) +
         [(p, 'ask-result') for p in sorted(ASK_RESULT)])
 
-# Job 4: the calculators whose headline is a projection, so it is also shown
-# in today's money
+# Job 4: the calculators whose headline is a projection. Since 13 October
+# 2026 it goes in future euros only: no today's-money figure, no inflation row
 PROJECTED = ('pension-calculator.html', 'director-calculator.html', 'pension-fees-calculator.html', 'pia.html')
 SUMMARIES = {}
 
@@ -357,9 +357,9 @@ def main():
                        (bool((sm.get('head') or {}).get('value')), [g['title'] for g in sm.get('groups', [])][:1]), (True, ['You']))
                 if page in PROJECTED:
                     rows = [r for g in sm.get('groups', []) for r in g['rows']]
-                    eq('%s: the headline in today\'s money' % tag, (sm.get('head') or {}).get('today', '').startswith('\u20ac'), True)
-                    eq('%s: inflation among the assumptions, as a %%' % tag,
-                       [r['value'] for r in rows if r['label'].startswith('Prices rise')], ['2%'])
+                    eq('%s: the headline in future euros, no today\'s-money figure' % tag, 'today' in (sm.get('head') or {}), False)
+                    eq('%s: no inflation row among the assumptions' % tag,
+                       [r['value'] for r in rows if r['label'].startswith('Prices rise')], [])
                 if mode == 'ok' and os.environ.get('PB_SUMMARIES_OUT'):
                     SUMMARIES[page] = fields.get('summary', [''])[0]
             if name == 'enquiry':

@@ -189,9 +189,9 @@ PAGES = {
         title='Auto-enrolment or a broker pension, Pensionbuddy',
         desc='Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension through a broker. An illustration, not advice.',
         modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js', 'assets/js/pb-cmp-motion.js'],
-        # every range here is a primary control for one mode or the other, and
-        # the tax status alone is not folded: a fold of one control saves nothing
-        keep=['age', 'salary', 'extra'],
+        # one control since 13 October 2026, what you put in a month; the tax
+        # switch alone is not folded: a fold of one control saves nothing
+        keep=['extra'],
         floor16=True,
         reviewed=True,
         checks=(('vs-card', 'comparison component'),),
@@ -608,11 +608,44 @@ HREF_PAT = re.compile(r'href="([^"]+)"')
 # and their next step, and (Run 37's item 10, built in Run 39) the bar a
 # waiting figure shows, and (Run 45) give then ask: the block after a
 # calculator's result, the quiet buttons and the phone booking bar, and
-# (Run 46) the type weights.
+# (Run 46) the type weights, and (13 October 2026) the footer's link columns.
 SHARED_CSS = (('NAV', 'nav-css'), ('CLICK', 'click-css'), ('FONTS', 'fonts-css'), ('MOTION', 'motion-css'),
               ('BUDDY', 'buddy-css'), ('FIRSTSCREEN', 'firstscreen-css'), ('QUALS', 'quals-css'),
               ('RELATED', 'related-css'), ('POP', 'pop-css'), ('GUIDE', 'guide-css'),
-              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'), ('ALIVE', 'alive-css'))
+              ('WAIT', 'wait-css'), ('CTA', 'cta-css'), ('TYPE', 'type-css'), ('ALIVE', 'alive-css'),
+              ('FOOT', 'foot-css'))
+
+
+# 13 October 2026: the script that moves the end of every page, the related
+# cards and the footer's links (assets/js/pb-chrome-motion.js), loaded once by
+# every page, straight before assets/js/pb-alive.js. sync_blocks() puts it
+# there on the hand-written pages, the built pages inherit the skeleton's, and
+# chrome_drift() reports a page without it (kind chrome-js). A tag already
+# there keeps its stamp; tools/stamp-images.py keeps that current.
+CHROME_JS = 'assets/js/pb-chrome-motion.js'
+CHROME_JS_PAT = re.compile(r'<script src="assets/js/pb-chrome-motion\.js(?:\?v=[0-9a-f]+)?"></script>\n')
+ALIVE_JS_PAT = re.compile(r'<script src="assets/js/pb-alive\.js(?:\?v=[0-9a-f]+)?"></script>')
+
+
+def chrome_js_ok(text):
+    """True when the page loads CHROME_JS once, on the line before pb-alive.js."""
+    tags, alive = list(CHROME_JS_PAT.finditer(text)), list(ALIVE_JS_PAT.finditer(text))
+    return len(tags) == 1 and len(alive) == 1 and tags[0].end() == alive[0].start()
+
+
+def with_chrome_js(text):
+    """text loading CHROME_JS once, on the line before pb-alive.js; a page
+    without pb-alive.js is left as it is (chrome_drift() names it)."""
+    if chrome_js_ok(text):
+        return text
+    alive = list(ALIVE_JS_PAT.finditer(text))
+    if len(alive) != 1:
+        return text
+    tags = list(CHROME_JS_PAT.finditer(text))
+    tag = tags[0].group(0) if tags else '<script src="%s"></script>\n' % versioned(CHROME_JS)
+    text = CHROME_JS_PAT.sub('', text)
+    k = ALIVE_JS_PAT.search(text).start()
+    return text[:k] + tag + text[k:]
 
 
 def _once(text, marker):
@@ -760,7 +793,8 @@ def _describe(got, want):
     gh, wh = HREF_PAT.findall(got), HREF_PAT.findall(want)
     if gh != wh:
         return 'hrefs %s, expected %s' % ([h for h in gh if h not in wh] or gh[:4], [h for h in wh if h not in gh] or wh[:4])
-    gl, wl = re.findall(r'>([^<>]+)</a>', got), re.findall(r'>([^<>]+)</a>', want)
+    label = lambda s: [re.sub(r'<[^>]+>', '', x) for x in re.findall(r'<a\b[^>]*>(.*?)</a>', s, re.S)]
+    gl, wl = label(got), label(want)
     if gl != wl:
         return 'labels %s, expected %s' % ([l for l in gl if l not in wl], [l for l in wl if l not in gl])
     for a, b in zip(got.split('\n'), want.split('\n')):
@@ -780,7 +814,8 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
     Kinds: structure, nav (the block, marker neutralised), active (which item
     is current), active-markup (both halves of the marker), foot-top, banner
     (the announce bar and the skip link), regulatory, tokens, and one kind
-    per shared block of CSS, byte for byte: nav-css, click-css."""
+    per shared block of CSS, byte for byte: nav-css, click-css, and
+    chrome-js (the end of the page's script, CHROME_JS, missing or misplaced)."""
     out = {}
 
     def add(page, kind, detail):
@@ -828,6 +863,8 @@ def chrome_drift(sources, skeleton=os.path.basename(SKELETON)):
             c = css_span(text, name)
             if skel_css[name] is None or c is None or text[c[0]:c[1]] != skel_css[name]:
                 add(page, kind, 'the %s block of CSS is missing or differs from the skeleton\'s' % name)
+        if not chrome_js_ok(text):
+            add(page, 'chrome-js', '%s is not loaded once, straight before pb-alive.js' % CHROME_JS)
         got = {
             'banner: announce': _line_holding(text, ANNOUNCE_OPEN),
             'banner: skip link': _line_holding(text, SKIP_LINK),
@@ -870,6 +907,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
             if len(HEAD_LINE.findall(sources[page])) != 1:
                 raise ValueError('%s has no single motion script after its viewport meta' % page)
             new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, sources[page], count=1)
+            new = with_chrome_js(new)
             new = with_related(new, page)
             new = with_after(new, page)
             new = with_warn(new)
@@ -901,6 +939,7 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
         if len(heads) != 1:
             raise ValueError('%s has no single motion script after its viewport meta' % page)
         new = HEAD_LINE.sub(lambda m: m.group(1) + MOTION_HEAD, new, count=1)
+        new = with_chrome_js(new)
         new = with_related(new, page)
         new = with_after(new, page)
         new = with_warn(new)
@@ -918,6 +957,16 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 # assemble() for the built ones; related_drift() is the guard (verify.py and
 # tests/build.test.py check 39). Styled by the RELATED block of CSS.
 #
+# 13 October 2026 (Damian: the cards were "boring"): each card carries a small
+# drawing of the page it leads to (ART, below: a growing chart for the
+# calculator, two bars for the comparison, a PRSI record for the State Pension
+# check...), drawn in the markup, so it is whole without JavaScript and still
+# with reduced motion. assets/js/pb-chrome-motion.js, with motion on, builds
+# each drawing as its card arrives and replays it under the pointer or the
+# keyboard; its inner wrap carries pb-al-skip so assets/js/pb-alive.js leaves
+# it to that script. And every line was made plain, the clearest sentence the
+# page itself has.
+#
 # Not on: the home page (it is the map, and ends on its own call), booking and
 # the thank-you page (one job each), the 404 (its own six places, item 8), the
 # pages held back, and the games.
@@ -925,11 +974,10 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 # Every word on a card is already on the site. CARDS says where: a title is
 # the page's name in the nav, or in the home page's "Six places to begin"
 # where it is one of them (since 6 October 2026, the 404's six places, which
-# the home page no longer carries); a line is the one beside it there, or the first
-# sentence of the page's own description, or, where that sentence carries an
-# initialism a page might not have spelled out, a sentence from the page's
-# own introduction. Check 39 finds each line on its page, word for word.
-# ============================================================================
+# the home page no longer carries); a line is the one beside it there, or a
+# sentence the page itself has: its heading, its introduction or its own
+# description. Check 39 finds each line on its page, word for word (as text:
+# a highlight's tags inside a heading do not count).
 RELATED = {
     'starter.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
     'tracker.html': ('my-pensions.html', 'pension-fees-calculator.html', 'uk-pensions-in-ireland.html'),
@@ -955,26 +1003,240 @@ RELATED = {
 }
 # page: (title, line, where the line is written, word for word)
 CARDS = {
-    'pension-calculator.html': ('Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.', '404.html'),
-    'starter.html': ('Start a pension', 'For a first pension. It&rsquo;s never too late to begin.', '404.html'),
+    'pension-calculator.html': ('Pension calculator', 'What your pension could pay you a month, with tax relief.', '404.html'),
+    'starter.html': ('Start a pension', 'Start your first pension, with tax relief at any age.', '404.html'),
     'tracker.html': ('Track down old pensions', 'Find pensions from old jobs, and what they are worth.', '404.html'),
-    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension leaves you to find.', '404.html'),
-    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.', '404.html'),
+    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension actually pays you.', '404.html'),
+    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund or a personal pension: which puts in more?', '404.html'),
     'my-pensions.html': ('All your pensions in one view', 'Add each pension and see your total, how it is split and what the fees cost you each year.', 'my-pensions.html'),
-    'pension-fees-calculator.html': ('Pension charges calculator', 'What an annual management charge and a charge on each payment take out of a pension pot by retirement.', 'pension-fees-calculator.html'),
-    'director-calculator.html': ('Director calculator', 'See how much your company could contribute to your pension, the corporation tax it could save, and salary versus pension compared.', 'director-calculator.html'),
-    'director-pension-rules.html': ('What changed for directors in 2026', 'Three things changed in the last two years. Four questions show which apply to you.', 'director-pension-rules.html'),
-    'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine things for company directors to check before the company&rsquo;s year end and the October tax deadline.', 'director-year-end-checklist.html'),
+    'pension-fees-calculator.html': ('Pension charges calculator', 'What your pension&rsquo;s charges cost you by retirement.', 'pension-fees-calculator.html'),
+    'director-calculator.html': ('Director calculator', 'What your company could pay into your pension.', 'director-calculator.html'),
+    'director-pension-rules.html': ('What changed for directors in 2026', 'Four questions show which apply to you.', 'director-pension-rules.html'),
+    'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine checks before two deadlines.', 'director-year-end-checklist.html'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
-    'state-pension-entitlement.html': ('State Pension check', 'What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.', 'state-pension-entitlement.html'),
+    'state-pension-entitlement.html': ('State Pension check', 'How much State Pension you may get, from your PRSI record.', 'state-pension-entitlement.html'),
     'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
-    'self-employed-pensions.html': ('Pensions when you are self-employed', 'Auto-enrolment does not cover the self-employed.', 'self-employed-pensions.html'),
+    'self-employed-pensions.html': ('Pensions when you are self-employed', 'Nobody starts a pension for you.', 'self-employed-pensions.html'),
     'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'You may have a UK workplace or personal pension, and a UK State Pension.', 'uk-pensions-in-ireland.html'),
     'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.', 'glossary.html'),
     'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
     'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),
-    'complaints.html': ('Complaints', 'How to make a complaint to Pensionbuddy and your right to the Financial Services and Pensions Ombudsman.', 'complaints.html'),
+    'complaints.html': ('Complaints', 'If something has gone wrong, we want to know.', 'complaints.html'),
 }
+# ART (13 October 2026). page: (tone, the inside of its drawing), on a 160 x 96
+# canvas. The tone is the panel behind it: t teal (the tools), a amber (money),
+# s slate (rules and paperwork). Each moving part names how it arrives, by
+# class, and in what order inside its drawing, by --o; the RELATED block of
+# CSS and assets/js/pb-chrome-motion.js read them:
+#   pr-d drawn along its length (it carries pathLength="1"), pr-g grows up from
+#   the floor, pr-x grows from its left end, pr-p pops from its centre (or the
+#   origin it names), pr-f fades in, pr-s slides in from the right, pr-y drops
+#   in from above, pr-r swings in about the origin it names, from --r0.
+# Under the pointer (pb-chrome-motion.js) a drawing plays again; pr-spin turns
+# once, pr-wave flutters, pr-fly crosses its pr-route, pr-dot bounces.
+# The 404's six places carry the same drawings (tests/build.test.py check 40).
+_T7, _T, _MINT, _T1, _T5 = '#08655A', '#0C8175', '#14CBB1', '#CBEBE4', '#E8F6F3'
+_AMB, _AMBD, _AMBS, _SL, _GAP, _RED, _W = '#F4B740', '#C98A16', '#FCEFCF', '#586B85', '#FADCD3', '#A4291D', '#fff'
+
+ART = {}
+
+# a growing chart: yearly bars, the line drawn over them, the dot it reaches
+ART['pension-calculator.html'] = ('t',
+    f'<path d="M18 82H142" stroke="{_T1}" stroke-width="2"/>'
+    + ''.join(f'<rect class="pr-g" style="--o:{i}" x="{26 + i * 22}" y="{74 - h}" width="12" height="{h}" rx="3" fill="{_T1}"/>'
+              for i, h in enumerate((8, 15, 24, 35, 48)))
+    + f'<path class="pr-d" style="--o:2" pathLength="1" d="M22 70C44 66 60 58 78 47S112 26 134 16" stroke="{_T7}" stroke-width="3.5"/>'
+    + f'<circle class="pr-p" style="--o:6" cx="134" cy="16" r="7" fill="{_MINT}" stroke="{_W}" stroke-width="3"/>')
+
+# a seedling out of a mound, two leaves, a coin of a sun
+ART['starter.html'] = ('t',
+    f'<path d="M34 82H126" stroke="{_T1}" stroke-width="2"/>'
+    f'<path d="M54 82C60 70 100 70 106 82Z" fill="{_T1}"/>'
+    f'<path class="pr-d" style="--o:0" pathLength="1" d="M80 76C80 64 80 52 81 38" stroke="{_T7}" stroke-width="3.5"/>'
+    f'<path class="pr-p" style="--o:3;transform-origin:100% 100%" d="M80 58C69 58 59 52 56 40C68 40 78 46 80 58Z" fill="{_MINT}"/>'
+    f'<path class="pr-p" style="--o:4;transform-origin:0 100%" d="M81 46C92 46 102 38 104 26C92 26 83 34 81 46Z" fill="{_T}"/>'
+    f'<circle class="pr-p" style="--o:6" cx="124" cy="24" r="9" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+# two statements and a magnifier going over them
+ART['tracker.html'] = ('s',
+    f'<rect x="34" y="20" width="50" height="62" rx="6" fill="{_W}" stroke="{_T1}" stroke-width="2" transform="rotate(-7 59 51)"/>'
+    f'<rect x="50" y="14" width="54" height="66" rx="6" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    + ''.join(f'<path class="pr-x" style="--o:{i}" d="M60 {30 + i * 11}H{94 - i * 5}" stroke="{_T1}" stroke-width="3.5"/>' for i in range(4))
+    + f'<g class="pr-s" style="--o:4"><circle cx="110" cy="52" r="15" fill="rgba(20,203,177,.16)" stroke="{_T7}" stroke-width="3.5"/>'
+    f'<path d="M121 63L133 75" stroke="{_T7}" stroke-width="6"/></g>')
+
+# a gauge: how much of the way the State Pension takes you
+ART['state-pension-reality-check.html'] = ('a',
+    f'<path d="M38 78A42 42 0 0 1 122 78" stroke="{_AMBS}" stroke-width="11"/>'
+    f'<path class="pr-d" style="--o:0" pathLength="1" d="M38 78A42 42 0 0 1 73.4 36.5" stroke="{_T}" stroke-width="11"/>'
+    + ''.join(f'<path d="M{80 + 52 * c:.1f} {78 - 52 * s:.1f}L{80 + 58 * c:.1f} {78 - 58 * s:.1f}" stroke="{_T1}" stroke-width="2.5"/>'
+              for c, s in ((-1, 0), (-0.7071, 0.7071), (0, 1), (0.7071, 0.7071), (1, 0)))
+    + f'<g class="pr-r" style="--o:2;--r0:-81deg;transform-origin:80px 78px"><path d="M80 78L75.1 47.4" stroke="{_T7}" stroke-width="4"/></g>'
+    f'<circle cx="80" cy="78" r="6" fill="{_T7}"/>'
+    f'<circle class="pr-p" style="--o:4" cx="122" cy="78" r="5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+# two bars side by side
+ART['broker-vs-autoenrolment.html'] = ('t',
+    f'<path d="M30 82H130" stroke="{_T1}" stroke-width="2"/>'
+    f'<rect class="pr-g" style="--o:0" x="48" y="44" width="26" height="38" rx="5" fill="{_T1}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<rect class="pr-g" style="--o:2" x="86" y="22" width="26" height="60" rx="5" fill="{_MINT}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<circle class="pr-p" style="--o:4" cx="61" cy="33" r="5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>'
+    f'<circle class="pr-p" style="--o:6" cx="99" cy="11" r="5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+
+def _arc(cx, cy, r, a0, a1):
+    import math
+    p = lambda a: (cx + r * math.sin(math.radians(a)), cy - r * math.cos(math.radians(a)))
+    (x0, y0), (x1, y1) = p(a0), p(a1)
+    return 'M%.1f %.1fA%d %d 0 %d 1 %.1f %.1f' % (x0, y0, r, r, 1 if a1 - a0 > 180 else 0, x1, y1)
+
+
+# three pots flowing into one round view
+ART['my-pensions.html'] = ('t',
+    ''.join(f'<rect class="pr-p" style="--o:{i}" x="20" y="{16 + i * 24}" width="22" height="16" rx="5" fill="{c}" stroke="{_T7}" stroke-width="2"/>'
+            for i, c in enumerate((_T1, _MINT, _AMB)))
+    + ''.join(f'<path class="pr-d" style="--o:{2 + i}" pathLength="1" d="M46 {24 + i * 24}C64 {24 + i * 24} 70 48 84 48" stroke="{_T1}" stroke-width="2.5"/>'
+              for i in range(3))
+    + f'<g class="pr-spin">'
+    + f'<path class="pr-d" style="--o:4" pathLength="1" d="{_arc(112, 48, 22, 0, 160)}" stroke="{_T}" stroke-width="11"/>'
+    + f'<path class="pr-d" style="--o:5" pathLength="1" d="{_arc(112, 48, 22, 166, 270)}" stroke="{_MINT}" stroke-width="11"/>'
+    + f'<path class="pr-d" style="--o:6" pathLength="1" d="{_arc(112, 48, 22, 276, 354)}" stroke="{_AMB}" stroke-width="11"/></g>')
+
+# growth with and without charges, the gap between them
+ART['pension-fees-calculator.html'] = ('a',
+    f'<path d="M18 82H142" stroke="{_T1}" stroke-width="2"/>'
+    f'<path class="pr-f" style="--o:3" d="M22 74C58 66 94 42 136 16L136 36C96 54 60 70 22 74Z" fill="{_GAP}"/>'
+    f'<path class="pr-d" style="--o:0" pathLength="1" d="M22 74C58 66 94 42 136 16" stroke="{_T1}" stroke-width="3.5"/>'
+    f'<path class="pr-d" style="--o:1" pathLength="1" d="M22 74C60 70 96 54 136 36" stroke="{_T7}" stroke-width="3.5"/>'
+    f'<g class="pr-p" style="--o:5"><rect x="44" y="18" width="34" height="24" rx="12" fill="{_W}" stroke="{_RED}" stroke-width="2.5"/>'
+    f'<path d="M66 24L56 36" stroke="{_RED}" stroke-width="2.5"/><circle cx="55.5" cy="25.5" r="2.6" fill="{_RED}"/><circle cx="66.5" cy="34.5" r="2.6" fill="{_RED}"/></g>')
+
+# a company, an arrow, a stack of coins landing
+ART['director-calculator.html'] = ('a',
+    f'<path d="M14 82H146" stroke="{_T1}" stroke-width="2"/>'
+    f'<path d="M22 82V30H56V82" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    + ''.join(f'<rect class="pr-f" style="--o:{(i + j) % 3}" x="{29 + i * 13}" y="{38 + j * 12}" width="7" height="7" rx="1.5" fill="{_MINT}"/>'
+              for i in range(2) for j in range(3))
+    + f'<path class="pr-d" style="--o:2" pathLength="1" d="M62 46C78 30 96 30 106 42" stroke="{_T}" stroke-width="3"/>'
+    f'<path class="pr-p" style="--o:4" d="M100 42L107 44L108 37" stroke="{_T}" stroke-width="3"/>'
+    + ''.join(f'<rect class="pr-y" style="--o:{3 + i}" x="104" y="{72 - i * 10}" width="36" height="10" rx="5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>'
+              for i in range(4)))
+
+# directors (the 404's six places): a company and its pension pot
+ART['director.html'] = ('a',
+    f'<path d="M14 82H146" stroke="{_T1}" stroke-width="2"/>'
+    f'<path d="M28 82V24H70V82" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    + ''.join(f'<rect class="pr-f" style="--o:{(i + j) % 3}" x="{36 + i * 15}" y="{32 + j * 13}" width="9" height="8" rx="1.5" fill="{_MINT}"/>'
+              for i in range(2) for j in range(3))
+    + f'<path d="M92 50H132L128 82H96Z" fill="{_T5}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path d="M90 50H134" stroke="{_T7}" stroke-width="3"/>'
+    + ''.join(f'<circle class="pr-y" style="--o:{2 + i}" cx="{102 + i * 10}" cy="{40 - (i % 2) * 6}" r="5.5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>'
+              for i in range(3)))
+
+# a rule book, one line marked, a turn of the year
+ART['director-pension-rules.html'] = ('s',
+    f'<rect x="40" y="12" width="62" height="74" rx="7" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<rect class="pr-x" style="--o:2" x="48" y="40" width="46" height="11" rx="3" fill="{_AMBS}"/>'
+    + ''.join(f'<path class="pr-x" style="--o:{i}" d="M52 {28 + i * 17}H{90 - (i % 2) * 8}" stroke="{_T1 if i != 1 else _T7}" stroke-width="3.5"/>' for i in range(3))
+    + f'<g class="pr-p pr-spin" style="--o:4"><circle cx="112" cy="26" r="15" fill="{_MINT}"/>'
+    f'<path d="M105 23A8 8 0 0 1 119 22M119 29A8 8 0 0 1 105 30" stroke="{_W}" stroke-width="2.5"/>'
+    f'<path d="M119 16V22H113M105 36V30H111" stroke="{_W}" stroke-width="2.5"/></g>')
+
+# a checklist, ticked one by one
+ART['director-year-end-checklist.html'] = ('s',
+    f'<rect x="44" y="14" width="72" height="72" rx="8" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<rect x="66" y="8" width="28" height="11" rx="4" fill="{_T1}" stroke="{_T7}" stroke-width="2"/>'
+    + ''.join(f'<rect x="54" y="{28 + i * 18}" width="12" height="12" rx="3.5" fill="{_T5}" stroke="{_T7}" stroke-width="2"/>'
+              f'<path class="pr-d" style="--o:{i * 2}" pathLength="1" d="M56.5 {34 + i * 18}L59.5 {37 + i * 18}L65.5 {30.5 + i * 18}" stroke="{_MINT}" stroke-width="3.5"/>'
+              f'<path class="pr-x" style="--o:{i * 2 + 1}" d="M74 {34 + i * 18}H{104 - i * 6}" stroke="{_T1}" stroke-width="3.5"/>' for i in range(3)))
+
+# a pot filling toward a line, a flag on the line
+ART['standard-fund-threshold.html'] = ('a',
+    f'<path d="M46 82H114" stroke="{_T1}" stroke-width="2"/>'
+    f'<rect x="62" y="16" width="36" height="66" rx="10" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<rect class="pr-g" style="--o:0" x="67" y="38" width="26" height="39" rx="6" fill="{_MINT}"/>'
+    f'<path class="pr-x" style="--o:2" d="M44 30H122" stroke="{_SL}" stroke-width="2.5" stroke-dasharray="5 5"/>'
+    f'<path d="M122 30V12" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path class="pr-p pr-wave" style="--o:4;transform-origin:0 50%" d="M122 12H138L133 17.5L138 23H122Z" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+# a PRSI record: a card of weeks paid, filling in
+_cells = []
+for r in range(3):
+    for c in range(7):
+        k = r * 7 + c
+        on = k not in (12, 13, 20)
+        _cells.append(f'<circle class="pr-p" style="--o:{k // 3}" cx="{40 + c * 13.3:.1f}" cy="{43 + r * 13}" r="4.6" fill="{_MINT if on else _W}" stroke="{_T if on else _T1}" stroke-width="1.8"/>')
+ART['state-pension-entitlement.html'] = ('t',
+    f'<rect x="26" y="12" width="108" height="72" rx="9" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path d="M35 13.25H125A7.75 7.75 0 0 1 132.75 21V28H27.25V21A7.75 7.75 0 0 1 35 13.25Z" fill="{_T5}"/>'
+    f'<path class="pr-x" style="--o:0" d="M36 21H74" stroke="{_T7}" stroke-width="3.5"/>'
+    f'<path class="pr-x" style="--o:1" d="M106 21H124" stroke="{_T1}" stroke-width="3.5"/>'
+    + ''.join(_cells))
+
+# steps up, a flag at the top
+ART['pensions-over-50.html'] = ('a',
+    f'<path d="M22 82H138" stroke="{_T1}" stroke-width="2"/>'
+    + ''.join(f'<rect class="pr-g" style="--o:{i}" x="{30 + i * 32}" y="{64 - i * 16}" width="30" height="{18 + i * 16}" rx="4" fill="{c}" stroke="{_T7}" stroke-width="2"/>'
+              for i, c in enumerate((_T5, _T1, _MINT)))
+    + f'<path class="pr-d" style="--o:3" pathLength="1" d="M109 32V8" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path class="pr-p pr-wave" style="--o:5;transform-origin:0 50%" d="M109 8H127L122 14L127 20H109Z" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+# a laptop, a chart on it, a coin of your own
+ART['self-employed-pensions.html'] = ('t',
+    f'<rect x="42" y="20" width="76" height="50" rx="6" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path d="M30 76H130L124 84H36Z" fill="{_T1}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path class="pr-d" style="--o:0" pathLength="1" d="M52 60L66 50L78 54L94 38L108 32" stroke="{_T}" stroke-width="3"/>'
+    f'<circle class="pr-p" style="--o:2" cx="108" cy="32" r="3.5" fill="{_MINT}"/>'
+    f'<circle class="pr-y" style="--o:4" cx="132" cy="22" r="10" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>'
+    f'<path class="pr-y" style="--o:4" d="M135.5 18.5A5 5 0 1 0 135.5 25.5M126 21H133M126 23.5H133" stroke="{_AMBD}" stroke-width="1.8"/>')
+
+# two places, one arc between them, a coin that crosses and lands
+ART['uk-pensions-in-ireland.html'] = ('s',
+    f'<path d="M18 82H142" stroke="{_T1}" stroke-width="2"/>'
+    f'<path class="pr-d pr-route" style="--o:1" pathLength="1" d="M38 36C58 -2 102 -2 122 36" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<g class="pr-p" style="--o:0;transform-origin:50% 100%"><path d="M38 78C30 68 26 62 26 56A12 12 0 0 1 50 56C50 62 46 68 38 78Z" fill="{_SL}"/>'
+    f'<circle cx="38" cy="56" r="4.5" fill="{_W}"/></g>'
+    f'<g class="pr-p" style="--o:3;transform-origin:50% 100%"><path d="M122 78C114 68 110 62 110 56A12 12 0 0 1 134 56C134 62 130 68 122 78Z" fill="{_T}"/>'
+    f'<circle cx="122" cy="56" r="4.5" fill="{_W}"/></g>'
+    f'<circle class="pr-p pr-fly" style="--o:5" cx="122" cy="36" r="6.5" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/>')
+
+# an open book, its lines written in, one word marked
+ART['glossary.html'] = ('t',
+    f'<path d="M80 26C68 19 50 17 32 21V78C50 74 68 76 80 82Z" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path d="M80 26C92 19 110 17 128 21V78C110 74 92 76 80 82Z" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<rect class="pr-x" style="--o:3" x="88" y="40" width="30" height="10" rx="3" fill="{_AMBS}"/>'
+    + ''.join(f'<path class="pr-x" style="--o:{i}" d="M40 {34 + i * 11}H{70 - (i % 2) * 6}" stroke="{_T1}" stroke-width="3"/>' for i in range(4))
+    + ''.join(f'<path class="pr-x" style="--o:{i + 2}" d="M90 {34 + i * 11}H{120 - ((i + 1) % 2) * 6}" stroke="{_T7 if i == 1 else _T1}" stroke-width="3"/>' for i in range(4)))
+
+# a shield, a tick drawn in it
+ART['privacy.html'] = ('s',
+    f'<path class="pr-p" style="--o:0" d="M80 12L108 22V44C108 62 96 74 80 84C64 74 52 62 52 44V22Z" fill="{_T5}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path class="pr-d" style="--o:2" pathLength="1" d="M68 47L77 56L94 38" stroke="{_MINT}" stroke-width="5"/>')
+
+# terms: a page, a signature written along its foot
+ART['terms.html'] = ('s',
+    f'<rect x="42" y="12" width="64" height="74" rx="7" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    + ''.join(f'<path class="pr-x" style="--o:{i}" d="M52 {26 + i * 10}H{96 - (i % 2) * 8}" stroke="{_T1}" stroke-width="3"/>' for i in range(3))
+    + f'<path class="pr-d" style="--o:3" pathLength="1" d="M52 68C55 59 60 58 60 64C60 71 65 70 68 62C70 57 72 60 72 64C73 69 78 67 82 62L94 62" stroke="{_T}" stroke-width="2.5"/>'
+    f'<g class="pr-s" style="--o:5"><path d="M108 46L122 32L128 38L114 52L106 54Z" fill="{_AMB}" stroke="{_AMBD}" stroke-width="2"/></g>')
+
+# complaints: you speak, we answer
+ART['complaints.html'] = ('s',
+    f'<path class="pr-p" style="--o:0;transform-origin:20% 100%" d="M30 16H86A8 8 0 0 1 94 24V48A8 8 0 0 1 86 56H54L40 67V56H30A8 8 0 0 1 22 48V24A8 8 0 0 1 30 16Z" fill="{_W}" stroke="{_T7}" stroke-width="2.5"/>'
+    f'<path class="pr-d" style="--o:2" pathLength="1" d="M58 25V39" stroke="{_RED}" stroke-width="4.5"/>'
+    f'<circle class="pr-p" style="--o:3" cx="58" cy="47" r="2.8" fill="{_RED}"/>'
+    f'<path class="pr-p" style="--o:4;transform-origin:80% 100%" d="M78 40H130A8 8 0 0 1 138 48V68A8 8 0 0 1 130 76H122V86L108 76H78A8 8 0 0 1 70 68V48A8 8 0 0 1 78 40Z" fill="{_MINT}"/>'
+    + ''.join(f'<circle class="pr-p pr-dot" style="--o:{5 + i}" cx="{92 + i * 12}" cy="58" r="3.5" fill="{_W}"/>' for i in range(3)))
+
+
+def related_art(page):
+    """The drawing for page, whole: a panel in its tone holding the SVG,
+    hidden from assistive technology (the card's name and line say it)."""
+    tone, inner = ART[page]
+    return ('<span class="pb-related-art pb-tone-%s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" '
+            'fill="none" stroke-linecap="round" stroke-linejoin="round">%s</svg></span>' % (tone, inner))
+
+
 RELATED_OPEN = '<!-- RELATED:BEGIN'
 RELATED_CLOSE = '<!-- RELATED:END -->\n'
 
@@ -983,14 +1245,14 @@ def related_block(page):
     """The block for page, or '' for a page that carries none."""
     if page not in RELATED:
         return ''
-    missing = [t for t in RELATED[page] if t not in CARDS]
+    missing = [t for t in RELATED[page] if t not in CARDS or t not in ART]
     if missing:
-        raise ValueError('no card in CARDS for %s' % ', '.join(missing))
+        raise ValueError('no card in CARDS, or no drawing in ART, for %s' % ', '.join(missing))
     cards = ''.join(
-        '    <li><a class="pb-related-card pb-card-link" href="%s"><span class="pb-related-t">%s</span>'
-        '<span class="pb-related-d">%s</span></a></li>\n' % (t, CARDS[t][0], CARDS[t][1]) for t in RELATED[page])
+        '    <li><a class="pb-related-card pb-card-link" href="%s">%s<span class="pb-related-t">%s</span>'
+        '<span class="pb-related-d">%s</span></a></li>\n' % (t, related_art(t), CARDS[t][0], CARDS[t][1]) for t in RELATED[page])
     return ('<!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->\n'
-            '<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap">\n'
+            '<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">\n'
             '  <p class="pb-related-h" id="pbRelatedH">Related pages</p>\n'
             '  <ul class="pb-related-list">\n' + cards +
             '  </ul>\n</div></section>\n' + RELATED_CLOSE)
@@ -1098,11 +1360,10 @@ WARN_PAT = re.compile(re.escape(WARN_OPEN) + r'(.*?)' + re.escape(WARN_CLOSE))
 WARN_PAGES = {
     'pension-calculator.html': 1,       # the projected pot
     'director-calculator.html': 1,      # the projected pot
-    'broker-vs-autoenrolment.html': 2,  # "Everything paid in, by 66", once in each mode
     'pension-fees-calculator.html': 1,  # the pot with and without the charges
     'pia.html': 1,                      # the three take-home figures
     'starter.html': 3,                  # one per cost-of-waiting tab
-    'index.html': 1,                    # the home calculator's pot and income at 66 (11 October 2026)
+    'index.html': 2,                    # the home calculator's pot and income at 66, and the cost of waiting's two pots (13 October 2026)
     'director.html': 1,                 # the director page's pot at 66 (Run 54, 11 October 2026)
 }
 

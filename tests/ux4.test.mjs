@@ -276,7 +276,8 @@ if (has('404.html', 'class="pb-nf-six"')) {
 
 /* ---- 9. slider feel (Run 37, built in Run 39) ---- */
 if (has('pension-calculator.html', 'data-pb-ticks=')) {
-  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]], ['broker-vs-autoenrolment.html', 'age', [30, 40, 50, 55, 60]]]) {
+  /* (13 October 2026: the comparison has no age slider now; it asks only what you put in a month) */
+  for (const [page, id, want] of [['pension-calculator.html', 'age', [30, 40, 50, 55, 60]]]) {
     await open(page, 1440);
     const before = await ev(`document.getElementById('potOut') ? document.getElementById('potOut').textContent : document.body.innerText.length`);
     const t = await ev(`(function(){var r=document.getElementById(${JSON.stringify(id)});var w=r.closest('.slider-wrap');var ts=[].slice.call(w.querySelectorAll('.pb-tick'));

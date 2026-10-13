@@ -107,8 +107,8 @@
     }
     if (file === 'broker-vs-autoenrolment.html') {
       return { states: [
-        { when: 'mode1Results', items: [['Auto-enrolment', '#aeTotal'], ['Personal pension', '#ppTotal']] },
-        { when: 'mode2Results', items: [['Into your pension, combined', '#cTotal']] }
+        { when: 'cmpBestW', items: [['Auto-enrolment', '#aeTotal'], ['Best of both', '#bestTotal']] },
+        { items: [['Auto-enrolment', '#aeTotal'], ['Personal pension', '#ppTotal']] }
       ] };
     }
     if (file === 'state-pension-reality-check.html') {

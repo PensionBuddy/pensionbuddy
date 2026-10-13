@@ -48,7 +48,7 @@
   var calc = after.getAttribute('data-pb-from') || '';
   var link = after.querySelector('a[href^="booking.html"]');
   var root = document.documentElement, moved = false, armed = 0, completed = false;
-  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin, .pb-today';
+  var NOT = '.pb-guess, .pb-ab, .pb-share, .pb-after, .pb-after-not, .pb-optin';
 
   function track(name, fields) {
     if (window.PBCta) { window.PBCta.track(name, fields); } else if (window.PBTrack) { window.PBTrack(name, fields); }
@@ -175,32 +175,29 @@
   }
   /* THE SUMMARY (Job 4): the same figures, laid out for the email. One
      record per calculator: the headline result, the other results, and each
-     input under You, Your pension or Assumptions, with a plain label. A
-     projected figure also carries its value in today's money, worked out
-     here with PBAssume (assets/js/pb-assumptions.js): the ECB's 2% a year,
-     over the years to the date the figure is for. netlify/lib/emails.js
-     lays it out; this file only reads what the page shows. */
+     input under You, Your pension or Assumptions, with a plain label.
+     Figures go as the page shows them, in future euros, before inflation
+     (Damian, 13 October 2026: no inflation-adjusted figures).
+     netlify/lib/emails.js lays it out; this file only reads what the page
+     shows. */
   var SUMMARY = {
     'pension-calculator': { head: 'potOut', more: ['incOut'], years: function () { return num('ret') - num('age'); },
-      projected: ['potOut', 'incOut'],
       labels: { potOut: 'Your pension pot when you stop work', incOut: 'Income it could pay, each month' },
       you: { age: 'Your age now', ret: 'Age you stop work' },
       pension: { pot: 'Saved in your pension so far', mine: 'You pay in each month', emp: 'Your employer pays in each month' },
       assume: { growth: 'Growth each year' } },
     'director-calculator': { head: 'potOut', more: ['taxOut'], years: function () { return num('ret') - num('age'); },
-      projected: ['potOut'],
       labels: { potOut: 'Your pension pot when you stop work', taxOut: 'Company tax saved, all years added up' },
       you: { age: 'Your age now', ret: 'Age you stop work' },
       pension: { pot: 'Saved in your pension so far', contrib: 'Your company pays in each year', split: 'Share of that money put in your pension' },
       assume: { risk: 'Growth each year' } },
-    /* two questions, one shown at a time: the head is the first of these on screen */
-    'broker-vs-autoenrolment': { head: ['aeTotal', 'cTotal'], more: ['ppTotal', 'cNet'],
-      labels: { aeTotal: 'Paid into your pension in one year, auto-enrolment', ppTotal: 'Paid into your pension in one year, your own pension',
-                cTotal: 'Paid into your pension in one year, auto-enrolment and your extra', cNet: 'From you, in one year' },
-      you: { age: 'Your age now', salary: 'Your salary in a year', taxStatus: 'How you are taxed' },
-      pension: { extra: 'Extra you save each month' } },
+    /* 13 October 2026: one amount a month and a tax rate; the best of both only past auto-enrolment's limit */
+    'broker-vs-autoenrolment': { head: 'aeTotal', more: ['ppTotal', 'bestTotal'],
+      labels: { aeTotal: 'Paid into your pension each month, auto-enrolment', ppTotal: 'Paid into your pension each month, a personal pension',
+                bestTotal: 'Paid in each month, auto-enrolment up to its limit and a personal pension for the rest' },
+      you: { taxRate: 'Your income tax rate' },
+      pension: { extra: 'You put in, a month' } },
     'pension-fees-calculator': { head: 'potA', more: ['potB'], years: function () { return num('years'); },
-      projected: ['potA', 'potB'],
       labels: { potA: 'Your plan, when you stop work', potB: 'The other plan, when you stop work' },
       you: { years: 'Years until you stop work' },
       pension: { pot: 'Saved in your pension so far', monthly: 'Paid in each month', amcA: 'Yearly charge, your plan', feeA: 'Charge on each payment, your plan',
@@ -218,23 +215,16 @@
       you: { year: 'Year you take your pensions' },
       pension: { total: 'All your pensions added up', lump: 'Lump sum you take' } },
     'pia': { head: 'penOut', more: ['piaOut', 'etfOut'], years: function () { return num('years'); },
-      projected: ['penOut', 'piaOut', 'etfOut'],
       labels: { penOut: 'In a pension, at the end', piaOut: 'In a PIA (proposed), at the end', etfOut: 'In a fund outside a pension, at the end' },
       you: { amount: 'You put in each month', years: 'Years you put money in', taxRate: 'Your income tax rate' },
       assume: { growth: 'Growth each year, before tax', piaRate: 'PIA tax rate', piaThreshold: 'PIA tax-free amount' } }
   };
   function num(id) { var el = document.getElementById(id); return el ? +el.value : 0; }
   function euroOf(v) { return '€' + Math.round(v).toLocaleString('en-IE'); }
-  function money(t) { var m = /^€([\d,]+(?:\.\d+)?)$/.exec(t); return m ? +m[1].replace(/,/g, '') : null; }
   function figure(cfg, id, years) {
     var el = document.getElementById(id), lab = el && el.parentNode && el.parentNode.querySelector('.rl');
     if (!el || !shown(el) || !text(el)) { return null; }
-    var row = { label: (cfg.labels && cfg.labels[id]) || text(lab), value: clean(text(el)) };
-    var v = money(row.value);
-    if (years > 0 && v !== null && (cfg.projected || []).indexOf(id) >= 0 && window.PBAssume) {
-      row.today = euroOf(window.PBAssume.today(v, years));
-    }
-    return row;
+    return { label: (cfg.labels && cfg.labels[id]) || text(lab), value: clean(text(el)) };
   }
   function rows(map) {
     return Object.keys(map || {}).map(function (id) {
@@ -254,10 +244,7 @@
     var out = { v: 1, calc: calc, head: head, more: [], groups: [] };
     (cfg.more || []).forEach(function (id) { var r = figure(cfg, id, years); if (r) { out.more.push(r); } });
     var assume = rows(cfg.assume);
-    if (years > 0 && cfg.projected && window.PBAssume) {
-      out.years = years;
-      assume.push({ label: 'Prices rise each year (inflation)', value: window.PBAssume.inflation.pct });
-    }
+    if (years > 0) { out.years = years; }
     [['You', rows(cfg.you)], ['Your pension', rows(cfg.pension)], ['Assumptions', assume]].forEach(function (g) {
       if (g[1].length) { out.groups.push({ title: g[0], rows: g[1] }); }
     });

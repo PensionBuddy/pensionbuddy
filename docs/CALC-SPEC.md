@@ -3,6 +3,72 @@
 The contract for the side-by-side comparison calculator. Written before any
 UI. Every formula here is asserted by `tests/compare-calc.test.js`.
 
+## 13 October 2026: the page now works a month, from your own pocket
+
+Damian: "Why are we choosing an arbitrary figure? We should be able to
+compare apples for apples. If you want to put in more, you can, and show
+clearly that the personal pension is better after 80k." And: "anything that
+doesn't need to be in the calculator, like income: just use contributions
+instead."
+
+**Why it was "not changing".** The old page worked the amount from you out of
+salary (1.5% of it), so above €80,000 of salary every figure froze at €1,200
+from you against €2,000 into a personal pension; age moved nothing above the
+fold; and the tax status moved nothing below the 40% band.
+
+**Inputs, all of them.** "You put in, a month" (slider, €25 to €500, step €5,
+default €50; a typed amount may go higher) and "Your income tax rate" (20% or
+40%, default 20%). No salary, no age. The scheme year is today's (2026 is year
+1). Under auto-enrolment the contribution *is* a share of pay, so the page
+says what pay it means ("€50 a month is 1.5% of €40,000 pay") rather than
+asking for it. €25 is 1.5% of €20,000.
+
+**Formulas** (`PBCompare.monthly({ you, taxRate, year })`, euros a month):
+
+```
+limit    = employeeRate x 80000 / 12        // monthlyLimit(year): €100, €200, €300, €400 by phase
+inAe     = min(you, limit)
+AE       = inAe (you) + inAe (employer) + inAe / 3 (State)   // 3 : 3 : 1 in every phase
+personal = you / (1 - rate)                 // with tax relief; no employer unless they agree
+best     = AE + (you - inAe) / (1 - rate)   // auto-enrolment up to its limit, a personal pension for the rest
+pay      = inAe x 12 / employeeRate         // payFor(): what the amount means, at most €80,000
+```
+
+So each €1 becomes €2.33 in auto-enrolment and €1.25 (20%) or €1.67 (40%) in
+a personal pension, up to the limit; past it, each €1 more becomes €0 in
+auto-enrolment and the same €1.25 or €1.67 in a personal pension. A personal
+pension alone overtakes auto-enrolment at `limit x 7/3 x (1 - rate)`: €140 a
+month at 40%, €186.67 at 20%. The best of both is never less than either.
+
+**What the page shows.** Two cards side by side, the same cost to you:
+auto-enrolment (you put in, your employer adds, the State adds) and a personal
+pension (you put in, with tax relief; your employer adds nothing unless they
+agree). Every bar sits on one euro scale. Past the limit: the notice "Past
+€100 a month, auto-enrolment takes no more. A personal pension takes the
+rest, with tax relief." under the slider, the auto-enrolment card "At its
+limit", and a third line, the best of both. The line at the top says what each
+€1 becomes. The foot names this year's rates and the limit as it rises: €200
+a month from 2029, €300 from 2032, €400 from 2035. Each part is rounded to the
+euro and each total is the sum of its rounded parts, so the screen always adds
+up.
+
+**Assumed and said on the page:** relief at the rate picked on all of it, and
+inside Revenue's age-related limit (nothing to apply it to without age or
+pay); no growth, no charges; eligibility not checked. "Everything paid in, by
+66" went with age: nothing on the page is projected, so it carries no
+prescribed warning.
+
+Acceptance: Cases 23 to 31 in `tests/compare-calc.test.js` (€50 at 20% and
+40%; €100, the limit itself; €150 past it at 40% and 20%; the crossover;
+the limit by phase; agreement with the yearly functions; and every amount from
+€25 to €1,000 at both rates in every phase). The page itself, in real Chrome:
+`tests/compare-page.test.mjs` (every control moves every figure; what shows
+adds up; the notice, the cap and the best of both past the limit only; one
+euro scale for the bars; nothing in the panel moves; a typed amount; the
+markup without JavaScript). Its static markup: `tests/build.test.py` check 18.
+The yearly functions below are unchanged and still tested: the starter page
+uses `autoEnrolment()` and `AE_PHASES`.
+
 > **Source status, checked 2026-09-10 against gov.ie.** Confirmed at source:
 > the 2026 rates (employee 1.5%, employer 1.5%, State 0.5%), and that
 > contributions "will not be levied on any gross pay over €80,000", which

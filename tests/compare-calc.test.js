@@ -367,6 +367,116 @@
   eq('two years: together 5,337.50 + 4,100', k2.total, 9437.5);
   eq('no years left: nothing', Compare.cumulativeCombined({ salary: 50000, srcop: 44000, firstYear: 1, age: 66, retireAge: 66, growth: 0.05, extraMonthly: 100 }).total, 0);
 
+  // ================================================== A MONTH, FROM YOUR POCKET
+  // 13 October 2026: what the page asks now. What you put in a month, and
+  // your tax rate; no salary. Auto-enrolment is you X, your employer X and
+  // the State X/3, up to the phase's rate on EUR 80,000 a month (EUR 100 in
+  // 2026); a personal pension is X / (1 - rate); the best of both is
+  // auto-enrolment up to the limit and a personal pension for the rest.
+  function near(a, b) { return Math.abs(a - b) < 0.005; }
+
+  group('CASE 23  EUR 50 a month, 20%, year 1: under the limit');
+  var n23 = Compare.monthly({ you: 50, taxRate: 20, year: 1 });
+  eq('the limit, 1.5% of 80,000 a month', n23.limit, 100);
+  eq('the pay it means: 50 a month is 1.5% of 40,000', n23.pay, 40000);
+  eq('auto-enrolment: you', n23.autoEnrolment.you, 50);
+  eq('auto-enrolment: your employer, the same', n23.autoEnrolment.employer, 50);
+  eq('auto-enrolment: the State, a third of yours', n23.autoEnrolment.state, 50 / 3);
+  eq('auto-enrolment: in all', n23.autoEnrolment.total, 350 / 3);
+  eq('auto-enrolment takes all of it', n23.autoEnrolment.notTaken, 0);
+  eq('not capped', n23.autoEnrolment.capped ? 1 : 0, 0);
+  eq('personal pension: relief at 20%', n23.personal.relief, 12.5);
+  eq('personal pension: in all, 50 / 0.8', n23.personal.total, 62.5);
+  eq('personal pension: no employer unless they agree', n23.personal.employer, 0);
+  eq('best of both is all auto-enrolment here', n23.best.total, n23.autoEnrolment.total);
+  eq('and nothing left for a personal pension', n23.best.personal.total, 0);
+  eq('each EUR 1 becomes 2.33 in auto-enrolment', n23.perEuro.autoEnrolment, 7 / 3);
+  eq('and 1.25 in a personal pension at 20%', n23.perEuro.personal, 1.25);
+  eq('and nothing past the limit', n23.perEuro.aboveLimit, 0);
+  eq('auto-enrolment is larger here', n23.larger === 'autoEnrolment' ? 1 : 0, 1);
+
+  group('CASE 24  the same at 40%');
+  var n24 = Compare.monthly({ you: 50, taxRate: 40, year: 1 });
+  eq('relief at 40%', n24.personal.relief, 100 / 3);
+  eq('in all, 50 / 0.6', n24.personal.total, 250 / 3);
+  eq('auto-enrolment does not move with the tax rate', n24.autoEnrolment.total, n23.autoEnrolment.total);
+
+  group('CASE 25  EUR 100 a month, 40%: exactly the limit');
+  var n25 = Compare.monthly({ you: 100, taxRate: 40, year: 1 });
+  eq('auto-enrolment takes all 100', n25.autoEnrolment.you, 100);
+  eq('in all, 100 + 100 + 33.33', n25.autoEnrolment.total, 700 / 3);
+  eq('not capped at the limit itself', n25.autoEnrolment.capped ? 1 : 0, 0);
+  eq('the pay it means is the cap', n25.pay, 80000);
+
+  group('CASE 26  EUR 150 a month, 40%: past the limit');
+  var n26 = Compare.monthly({ you: 150, taxRate: 40, year: 1 });
+  eq('auto-enrolment takes 100 of it', n26.autoEnrolment.you, 100);
+  eq('and not the other 50', n26.autoEnrolment.notTaken, 50);
+  eq('capped', n26.autoEnrolment.capped ? 1 : 0, 1);
+  eq('your employer stops at the limit too', n26.autoEnrolment.employer, 100);
+  eq('and the State', n26.autoEnrolment.state, 100 / 3);
+  eq('auto-enrolment in all, held at 233.33', n26.autoEnrolment.total, 700 / 3);
+  eq('the pay stays at the cap', n26.pay, 80000);
+  eq('a personal pension takes all 150: 150 / 0.6', n26.personal.total, 250);
+  eq('a personal pension alone now puts in more', n26.larger === 'personal' ? 1 : 0, 1);
+  eq('best of both: the other 50 in a personal pension, 50 / 0.6', n26.best.personal.total, 250 / 3);
+  eq('best of both: its relief', n26.best.personal.relief, 100 / 3);
+  eq('best of both in all, 233.33 + 83.33', n26.best.total, 950 / 3);
+
+  group('CASE 27  EUR 150 a month, 20%: past the limit, auto-enrolment alone still larger');
+  var n27 = Compare.monthly({ you: 150, taxRate: 20, year: 1 });
+  eq('a personal pension: 150 / 0.8', n27.personal.total, 187.5);
+  eq('auto-enrolment alone is larger at 20%', n27.larger === 'autoEnrolment' ? 1 : 0, 1);
+  eq('best of both: 233.33 + 62.50', n27.best.total, 700 / 3 + 62.5);
+
+  group('CASE 28  where a personal pension alone overtakes: limit x 7/3 x (1 - rate)');
+  eq('at 40%, EUR 140 a month: the two are level', Compare.monthly({ you: 140, taxRate: 40, year: 1 }).larger === 'equal' ? 1 : 0, 1);
+  eq('at 20%, EUR 190 a month: a personal pension is larger', Compare.monthly({ you: 190, taxRate: 20, year: 1 }).larger === 'personal' ? 1 : 0, 1);
+  eq('at 20%, EUR 185 a month: auto-enrolment still is', Compare.monthly({ you: 185, taxRate: 20, year: 1 }).larger === 'autoEnrolment' ? 1 : 0, 1);
+
+  group('CASE 29  the limit rises with the rates');
+  eq('2026 to 2028: EUR 100 a month', Compare.monthlyLimit(1), 100);
+  eq('2029 to 2031: EUR 200', Compare.monthlyLimit(4), 200);
+  eq('2032 to 2034: EUR 300', Compare.monthlyLimit(7), 300);
+  eq('2035 on: EUR 400', Compare.monthlyLimit(10), 400);
+  eq('2035: EUR 50 a month is 6% of EUR 10,000', Compare.payFor(50, 10), 10000);
+  var n29 = Compare.monthly({ you: 300, taxRate: 40, year: 10 });
+  eq('2035: EUR 300 a month is under its limit', n29.autoEnrolment.capped ? 1 : 0, 0);
+  eq('2035: 300 + 300 + 100', n29.autoEnrolment.total, 700);
+  eq('2035: the ratio is the same, so each EUR 1 still becomes 2.33', n29.perEuro.autoEnrolment, 7 / 3);
+
+  group('CASE 30  a month agrees with the yearly functions');
+  eq('auto-enrolment at EUR 50,000 a year, over 12, is EUR 62.50 a month in',
+     Compare.monthly({ you: 62.5, taxRate: 20, year: 1 }).autoEnrolment.total, Compare.autoEnrolment(50000, 1).totalIn / 12);
+  eq('capped the same way: EUR 100,000 a year, over 12, is EUR 200 a month in',
+     Compare.monthly({ you: 200, taxRate: 20, year: 1 }).autoEnrolment.total, Compare.autoEnrolment(100000, 1).totalIn / 12);
+  eq('a personal pension: EUR 600 a year net at 40% is EUR 1,000, over 12',
+     Compare.monthly({ you: 50, taxRate: 40, year: 1 }).personal.total, Relief.grossForNetCost(600, 35, 50000, 40) / 12);
+
+  group('CASE 31  every amount, both rates, every phase');
+  var ok31 = { aeShape: true, bestTop: true, sameCost: true, below: true, flat: true }, prevAe = -1;
+  [20, 40].forEach(function (rate) {
+    [1, 4, 7, 10].forEach(function (year) {
+      prevAe = -1;
+      for (var x = 25; x <= 1000; x += 5) {
+        var m = Compare.monthly({ you: x, taxRate: rate, year: year }), L = Compare.monthlyLimit(year);
+        if (!near(m.autoEnrolment.total, 7 / 3 * Math.min(x, L))) ok31.aeShape = false;
+        if (m.best.total + 1e-9 < Math.max(m.autoEnrolment.total, m.personal.total)) ok31.bestTop = false;
+        if (!near(m.autoEnrolment.you + m.autoEnrolment.notTaken, x) || !near(m.best.personal.you + m.autoEnrolment.you, x)) ok31.sameCost = false;
+        if (x <= L && (m.larger !== 'autoEnrolment' || !near(m.best.total, m.autoEnrolment.total))) ok31.below = false;
+        if (x > L && prevAe >= 0 && !near(m.autoEnrolment.total, prevAe)) ok31.flat = false;
+        prevAe = m.autoEnrolment.total;
+      }
+    });
+  });
+  eq('auto-enrolment is 7/3 of what it takes, and takes at most the limit', ok31.aeShape ? 1 : 0, 1);
+  eq('the best of both is never less than either alone', ok31.bestTop ? 1 : 0, 1);
+  eq('all three cost you the same: what auto-enrolment takes plus what it leaves', ok31.sameCost ? 1 : 0, 1);
+  eq('up to the limit auto-enrolment puts in more, and is the best of both', ok31.below ? 1 : 0, 1);
+  eq('past the limit auto-enrolment stands still', ok31.flat ? 1 : 0, 1);
+  eq('nothing from you, nothing in', Compare.monthly({ you: 0, taxRate: 40, year: 1 }).best.total, 0);
+  eq('a negative amount is nothing', Compare.monthly({ you: -50, taxRate: 40, year: 1 }).personal.total, 0);
+
   // ------------------------------------------------------------ relief bands
   group('EXTRA B  age bands match pension-calculator.html');
   eq('under 30', Relief.reliefBand(29), 0.15);

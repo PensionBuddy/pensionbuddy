@@ -1,121 +1,88 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <h1>Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p>What goes into your pension each year, both ways. It does not pick for you.</p>
+  <h1>Auto-enrolment or a personal pension: <span class="hl">which puts in more?</span></h1>
+  <p>The same money from you, each month, both ways.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
 <script src="assets/js/pb-deadline.js"></script>
 
-    <div class="modebar">
-      <div class="seg modeseg" role="tablist" aria-label="Which question to answer">
-        <span class="ind" id="modeInd"></span>
-        <button id="m1" class="on" role="tab" aria-selected="true" aria-controls="mode1Results" type="button" onclick="setMode(1)">Instead of auto-enrolment</button>
-        <button id="m2" role="tab" aria-selected="false" aria-controls="mode2Results" tabindex="-1" type="button" onclick="setMode(2)">On top of auto-enrolment</button>
-      </div>
-    </div>
-
-    <div class="panel">
+  <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a figure to type it.</p>
-    <div class="field"><div class="row"><label for="salary">Your salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"></div>
-    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="65" value="35"></div>
-    <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you save, a month</label><span class="val" id="extraV">€100</span></div><input type="range" id="extra" min="0" max="2000" step="25" value="100"></div>
-    <div class="field" style="margin-bottom:0">
-      <div class="row"><span class="cmp-tax-l" id="statusLabel">How you are taxed</span></div>
-      <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">Married, 1 income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Married, 2 incomes</button></div>
-      <input type="hidden" id="taxStatus" value="Single" data-pb-label="How you are taxed">
+    <div class="field cmp-you-f">
+      <div class="row"><label for="extra">You put in, a month</label><span class="val" id="extraV">€50</span></div>
+      <div class="cmp-rail" id="cmpRail" style="--limf:.1579">
+        <input type="range" id="extra" min="25" max="500" step="5" value="50" aria-describedby="cmpSay">
+        <span class="cmp-lim" id="cmpLim" aria-hidden="true"><i></i><b id="cmpLimV">€100 limit</b></span>
+      </div>
+      <div class="cmp-say" id="cmpSay">
+        <p class="cmp-pay" id="cmpPay">€50 a month is 1.5% of €40,000 pay. Auto-enrolment takes up to €100.</p>
+        <p class="cmp-note" id="cmpNote"><svg class="cmp-note-a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span id="cmpNoteT">Past €100 a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.</span></p>
+      </div>
+    </div>
+    <div class="field cmp-tax-f">
+      <div class="row"><span class="cmp-tax-l" id="taxLabel">Your tax rate</span></div>
+      <div class="seg" role="group" aria-labelledby="taxLabel"><span class="ind" id="segInd"></span><button id="tx20" class="on" aria-pressed="true" type="button" onclick="setRate(20)">20%</button><button id="tx40" aria-pressed="false" type="button" onclick="setRate(40)">40%</button></div>
+      <input type="hidden" id="taxRate" value="20%" data-pb-label="Your income tax rate">
+      <p class="cmp-tax-h" id="taxHint">Your top rate is 40% if you earn over €44,000 (single).</p>
     </div>
   </div>
 
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
 
-    <!-- ============ MODE 1: the same money from you, either way ============ -->
-    <div class="modepanel" id="mode1Results" role="tabpanel" aria-labelledby="m1">
-      <div class="res-hero cmp-hero" id="cmpHero1">
-        <p class="cmp-lead" id="leadOut">For the same €750 a year from you, auto-enrolment puts €1,750 into your pension. A personal pension puts €1,250.</p>
-        <div class="cmp-lane" data-lane="ae">
-          <div class="cmp-lane-h"><span class="rl">Auto-enrolment</span><span class="big" id="aeTotal">€1,750</span></div>
-          <div class="cmp-bar" aria-hidden="true"><i class="cmp-s cmp-s-you" data-part="you" id="aeBarYou" style="width:42.86%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="aeBarEmp" style="width:42.86%"></i><i class="cmp-s cmp-s-state" data-part="state" id="aeBarState" style="width:14.29%"></i></div>
+    <div class="res-hero cmp-hero" id="cmpHero">
+      <p class="cmp-lead" id="leadOut">Each <b>€1</b> you put in becomes <b>€2.33</b> in auto-enrolment, <b>€1.25</b> in a personal pension.</p>
+      <div class="cmp-pair">
+        <section class="cmp-card" data-card="ae" aria-label="Auto-enrolment">
+          <div class="cmp-top">
+            <span class="rl">Auto-enrolment<span class="tk-sr">, a month</span></span>
+            <span class="cmp-tag" id="aeTag" aria-hidden="true"></span>
+            <span class="big" id="aeTotal">€117</span>
+            <span class="cmp-per" aria-hidden="true">a month</span>
+          </div>
+          <div class="cmp-track" id="aeTrack" style="--cap:92.593%" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="aeBarYou" style="width:19.870%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="aeBarEmp" style="width:19.870%"></i><i class="cmp-s cmp-s-state" data-part="state" id="aeBarState" style="width:6.756%"></i></span><span class="cmp-cap"></span></div>
           <ul class="cmp-key">
-            <li data-part="you"><i aria-hidden="true"></i>You <b id="aeNet">€750</b></li>
-            <li data-part="emp"><i aria-hidden="true"></i>Your employer <b id="aeEmployer">€750</b></li>
-            <li data-part="state"><i aria-hidden="true"></i>The State <b id="aeState">€250</b></li>
+            <li data-part="you"><i aria-hidden="true"></i><span>You put in</span> <b id="aeYou">€50</b></li>
+            <li data-part="emp"><i aria-hidden="true"></i><span>Your employer adds</span> <b id="aeEmp">€50</b></li>
+            <li data-part="state"><i aria-hidden="true"></i><span>The State adds</span> <b id="aeState">€17</b></li>
           </ul>
-        </div>
-        <div class="cmp-lane" data-lane="pp">
-          <div class="cmp-lane-h"><span class="rl">Personal pension</span><span class="big" id="ppTotal">€1,250</span></div>
-          <div class="cmp-bar" aria-hidden="true"><i class="cmp-s cmp-s-you" data-part="you" id="ppBarYou" style="width:42.86%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="ppBarRev" style="width:28.57%"></i></div>
+          <p class="cmp-small" id="aeLeft">The State adds €1 for every €3 you put in.</p>
+        </section>
+        <section class="cmp-card" data-card="pp" aria-label="Personal pension">
+          <div class="cmp-top">
+            <span class="rl">Personal pension<span class="tk-sr">, a month</span></span>
+            <span class="big" id="ppTotal">€63</span>
+            <span class="cmp-per" aria-hidden="true">a month</span>
+          </div>
+          <div class="cmp-track" id="ppTrack" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="ppBarYou" style="width:19.870%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="ppBarRev" style="width:5.166%"></i></span></div>
           <ul class="cmp-key">
-            <li data-part="you"><i aria-hidden="true"></i>You <b id="ppNet">€750</b></li>
-            <li data-part="rev"><i aria-hidden="true"></i>Tax relief <b id="ppRelief">€500</b></li>
+            <li data-part="you"><i aria-hidden="true"></i><span>You put in</span> <b id="ppYou">€50</b></li>
+            <li data-part="rev"><i aria-hidden="true"></i><span>With tax relief</span> <b id="ppRel">+€13</b></li>
           </ul>
-        </div>
-        <div class="divline"></div>
-        <div class="foot" id="phaseLine">2026 is year 1 of auto-enrolment: 1.5% of salary from you, 1.5% from your employer, 0.5% from the State. Into a personal pension, your employer pays only if they agree to.</div>
+          <p class="cmp-small" id="ppLeft">Your employer adds nothing, unless they agree to.</p>
+        </section>
       </div>
-      <p class="cmp-cap" id="capCard" hidden></p>
-
-      <div class="pb-my-card" id="pbMyCard">
-        <h3>Everything paid in, by 66</h3>
-        <p class="pb-my-sub" id="pbMySub">The same cost to you every year, grown at 5% a year.</p>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Auto-enrolment</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar" style="width:100%"></i></span>
-          <span class="pb-my-fig" id="pbMyAe">€376,942</span>
-        </div>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Personal pension</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyPpBar" style="width:71.429%"></i></span>
-          <span class="pb-my-fig" id="pbMyPp">€269,245</span>
-        </div>
-        <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-        <p class="pb-my-note">Your salary stays as it is. Auto-enrolment&rsquo;s rate rises in steps to 2035. No charges or inflation.</p>
-      </div>
+      <div class="divline"></div>
+      <div class="foot" id="phaseLine">2026 rates: 1.5% of pay from you, 1.5% from your employer, 0.5% from the State, on pay up to €80,000. The limit rises with the rates: €200 a month from 2029, €300 from 2032, €400 from 2035.</div>
     </div>
 
-    <!-- ============ MODE 2: auto-enrolment, plus extra through a personal pension ============ -->
-    <div class="modepanel" id="mode2Results" role="tabpanel" aria-labelledby="m2" hidden>
-      <div class="res-hero cmp-hero" id="cmpHero2">
-        <p class="cmp-lead" id="leadOut2">Auto-enrolment puts €1,750 in. Your extra €100 a month becomes €2,000 with tax relief: €3,750 a year, for €1,950 from you.</p>
-        <div class="cmp-figs">
-          <div><div class="rl">Into your pension, a year</div><div class="big" id="cTotal">€3,750</div></div>
-          <div><div class="rl">From you</div><div class="big cmp-big-you" id="cNet">€1,950</div></div>
+    <div class="cmp-best-w" id="cmpBestW" hidden><div class="cmp-best-c">
+      <div class="res-hero cmp-hero cmp-best" id="cmpBest">
+        <div class="cmp-top">
+          <span class="rl">Best of both<span class="tk-sr">, a month</span></span>
+          <span class="big" id="bestTotal">€0</span>
+          <span class="cmp-per" aria-hidden="true">a month</span>
         </div>
-        <div class="cmp-lane" data-lane="both">
-          <div class="cmp-bar cmp-bar-2" aria-hidden="true"><i class="cmp-s cmp-s-you" data-part="you" id="cBarYou" style="width:20%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="cBarEmp" style="width:20%"></i><i class="cmp-s cmp-s-state" data-part="state" id="cBarState" style="width:6.667%"></i><i class="cmp-s cmp-s-you2" data-part="extra" id="cBarExtra" style="width:32%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="cBarRev" style="width:21.333%"></i></div>
-          <div class="cmp-bar-lab" aria-hidden="true"><span id="cLabAe" style="width:46.667%">Auto-enrolment</span><span id="cLabTop" style="width:53.333%">Your extra</span></div>
-          <ul class="cmp-key">
-            <li data-part="you"><i aria-hidden="true"></i>You, auto-enrolment <b id="cAeNet">€750</b></li>
-            <li data-part="emp"><i aria-hidden="true"></i>Your employer <b id="cEmp">€750</b></li>
-            <li data-part="state"><i aria-hidden="true"></i>The State <b id="cState">€250</b></li>
-            <li data-part="extra"><i aria-hidden="true"></i>You, your extra <b id="cExtraNet">€1,200</b></li>
-            <li data-part="rev"><i aria-hidden="true"></i>Tax relief on it <b id="cRelief">€800</b></li>
-          </ul>
-        </div>
-        <div class="divline"></div>
-        <div class="foot" id="cFoot">My Future Fund takes nothing above its set rate, so the extra goes into a personal pension.</div>
+        <p class="cmp-best-l" id="bestLine">Auto-enrolment up to its limit, a personal pension for the rest.</p>
+        <div class="cmp-track" id="bestTrack" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="bBarYou" style="width:0%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="bBarEmp" style="width:0%"></i><i class="cmp-s cmp-s-state" data-part="state" id="bBarState" style="width:0%"></i><i class="cmp-s cmp-s-you2" data-part="extra" id="bBarTop" style="width:0%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="bBarRev" style="width:0%"></i></span></div>
+        <ul class="cmp-key cmp-key-2">
+          <li data-part="ae"><i aria-hidden="true"></i><span>Auto-enrolment</span> <b id="bAe">€0</b></li>
+          <li data-part="extra"><i aria-hidden="true"></i><span id="bTopL">Personal pension, for the rest</span> <b id="bTop">€0</b></li>
+        </ul>
       </div>
-
-      <div class="pb-my-card" id="pbMyCard2">
-        <h3>Everything paid in, by 66</h3>
-        <p class="pb-my-sub" id="pbMySub2">Auto-enrolment, and the same extra each month, grown at 5% a year.</p>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">Auto-enrolment alone</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyAeBar2" style="width:72.704%"></i></span>
-          <span class="pb-my-fig" id="pbMyAe2">€376,942</span>
-        </div>
-        <div class="pb-my-lane">
-          <span class="pb-my-lab">With your extra</span>
-          <span class="pb-my-track" aria-hidden="true"><i class="pb-my-bar" id="pbMyCBar" style="width:100%"></i></span>
-          <span class="pb-my-fig" id="pbMyC">€518,464</span>
-        </div>
-        <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-        <p class="pb-my-note">Your salary and your extra stay as they are. Auto-enrolment&rsquo;s rate rises in steps to 2035. No charges or inflation.</p>
-      </div>
-    </div>
-    <!-- ============ SHARED: under both questions ============ -->
+    </div></div>
     <!-- AFTER -->
   </div>
 </div></div>
@@ -130,20 +97,19 @@
 <section class="assume"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
-    <li>Not included: your old pensions, product charges, your employer&rsquo;s own scheme. Eligibility and opting out depend on your age, earnings and any workplace scheme; this tool does not check them.</li>
-    <li>Auto-enrolment is worked out on salary up to €80,000, for you, your employer and the State alike. It comes out of take-home pay, with no tax relief. The rates rise in three-year steps, always 3 from you, 3 from your employer, 1 from the State:
+    <li>&ldquo;You put in&rdquo; is what leaves your own pocket each month. Under auto-enrolment it is a share of your pay, so it says what your pay is; we do not ask.</li>
+    <li>Auto-enrolment (My Future Fund) comes out of take-home pay, with no tax relief: the State adds €1 for every €3 you put in instead. You, your employer and the State pay a share of pay up to €80,000, so what you put in stops at that share of €80,000. The rates rise in three-year steps, always 3 from you, 3 from your employer, 1 from the State, and the limit rises with them:
     <ol class="pb-stair">
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair3" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:75.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2032 to 2034</span><span class="pb-stair-r">4.5%, 4.5%, 1.5%</span></li>
-      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair1">This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:25.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2026 to 2028</span><span class="pb-stair-r">1.5%, 1.5%, 0.5%</span><span class="pb-stair-r">Up to €100 a month</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair2" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:50.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2029 to 2031</span><span class="pb-stair-r">3%, 3%, 1%</span><span class="pb-stair-r">Up to €200 a month</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair3" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:75.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2032 to 2034</span><span class="pb-stair-r">4.5%, 4.5%, 1.5%</span><span class="pb-stair-r">Up to €300 a month</span></li>
+      <li class="pb-stair-col"><span class="pb-stair-you" id="pbStair4" hidden>This year</span><span class="pb-stair-bar" aria-hidden="true"><span class="pb-stair-stack" style="height:100.0000%"><i class="pb-stair-st" style="height:14.2857%"></i><i class="pb-stair-er" style="height:42.8571%"></i><i class="pb-stair-ee" style="height:42.8571%"></i></span></span><span class="pb-stair-yr">2035 onward</span><span class="pb-stair-r">6%, 6%, 2%</span><span class="pb-stair-r">Up to €400 a month</span></li>
     </ol>
     <p class="pb-stair-key"><span><i class="pb-stair-sw pb-stair-ee"></i>You</span><span><i class="pb-stair-sw pb-stair-er"></i>Your employer</span><span><i class="pb-stair-sw pb-stair-st"></i>The State</span></p></li>
-    <li>Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them. Payroll stops the deduction after the pay period in which salary passes €80,000, so a little can be paid above it; a yearly figure ignores that.</li>
-    <li>A personal pension or Personal Retirement Savings Account (PRSA) gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at 40% on the part of your salary above your standard rate cut-off point, and 20% below it. Revenue&rsquo;s 2026 cut-off points: single, €44,000; married or civil partners with one income, €53,000; with two incomes, up to €88,000, where the lower earner has at least €35,000 of their own. Relief is limited to an age-related share of earnings: 15% under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. Above that limit a payment still goes in, without relief. Pay-Related Social Insurance (PRSI) and the Universal Social Charge (USC) are not modelled.</li>
-    <li>&ldquo;Instead of&rdquo;: the personal pension is whatever costs you the same as auto-enrolment that year. A personal pension has no automatic employer or State payment. It is not a suggestion to leave or reduce auto-enrolment.</li>
-    <li>&ldquo;On top of&rdquo;: My Future Fund takes nothing above its set rate, as of September 2026, so the extra is a separate personal pension payment. If that changes, so does this.</li>
-    <li>By 66: every year from your age to 66, at that year&rsquo;s rates and your age that year, grown at 5% a year (risk level 4 of 7, about half shares and half bonds). Real returns differ and can be negative.</li>
+    <li>Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them. Payroll stops the deduction after the pay period in which pay passes €80,000, so a little can be paid above it; a monthly figure ignores that.</li>
+    <li>A personal pension or Personal Retirement Savings Account (PRSA) gets <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a> at your top rate of income tax: each €1 in costs you 80c at 20%, 60c at 40%. We assume all of it gets relief at the rate you pick. Relief is limited to an age-related share of earnings: 15% under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. Above that limit a payment still goes in, without relief. Pay-Related Social Insurance (PRSI) and the Universal Social Charge (USC) are not modelled. Your employer pays in only if they agree to.</li>
+    <li>Best of both: My Future Fund takes nothing above its set rate, as of September 2026, so anything more you put in goes to a personal pension. If that changes, so does this. Nothing here suggests leaving or reducing auto-enrolment.</li>
+    <li>Not included: growth, product charges, your old pensions, your employer&rsquo;s own scheme. Who is auto-enrolled, and opting out, depend on your age, earnings and any workplace scheme; this tool does not check them.</li>
     <li>A personal pension or PRSA has wider fund choice than My Future Fund, from the provider&rsquo;s set menu.</li>
   </ul>
   </details>

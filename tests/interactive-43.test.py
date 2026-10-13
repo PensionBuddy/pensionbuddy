@@ -29,12 +29,15 @@ C4c (INTERACTIVE-PROPOSALS-42 ranks 6, 15 and 9):
                                the age slider over the relief ladder (LD1-LD5)
                                (director.html's went in Run 54: the new page shows the
                                reader's own limit in its calculator instead)
-  starter.html                 the auto-enrolment phases, one button each, and their caveat (A1-A7)
+  starter.html                 the auto-enrolment phases, one button each, and their caveat (A1-A7);
+                               since 13 October 2026 over what the reader puts in a month, with the
+                               personal pension beside it and the note past the most (A8, A9)
 
 Not part of tests/run-tests.py: one Chrome launch per scenario. Exit 0 or 1.
 """
 import http.server
 import json
+import math
 import os
 import re
 import socketserver
@@ -267,12 +270,16 @@ PROBE = r"""<script>
       rows:[].map.call(root.querySelectorAll('.pb-lad-row'),rect)};
   }
   function ae(){
-    var ph=$('aePh'), note=$('aePhNote');
+    var ph=$('aePh'), note=$('aePhNote'), box=$('pbAe'), max=$('aeMax'), amt=$('aeAmt'), a=max?max.querySelector('a'):null;
     return {shown:!!ph&&ph.getClientRects().length>0, hidden:ph?ph.hidden:null,
       pressed:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return b.getAttribute('aria-pressed'); }):null,
       labels:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return txt(b); }):null,
       figs:['aeYou','aeEmp','aeState'].map(function(i){ return txt($(i)); }),
-      widths:[].map.call(document.querySelectorAll('.pb-ae .pb-sa-fill'),function(f){ return f.style.width; }),
+      sums:['aeAll','aeMost','aePp','aePp40'].map(function(i){ return txt($(i)); }),
+      widths:[].map.call(document.querySelectorAll('.pb-ae .pb-ae-fill'),function(f){ return f.style.width; }),
+      amt:amt?[amt.value,amt.getAttribute('aria-valuetext'),txt($('aeAmtV')),amt.getClientRects().length>0&&cs(amt).visibility==='visible']:null,
+      over:box?box.classList.contains('pb-ae-over'):null,
+      max:max?[cs(max).visibility,txt(max).replace(/\s+/g,' ').trim(),a?a.getAttribute('href'):null]:null,
       years:txt($('aeYears')), rates:txt($('aeRates')),
       trans:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return cs(b).transitionDuration; }):null,
       note:note?[note.getClientRects().length>0&&cs(note).display!=='none',note.previousElementSibling?note.previousElementSibling.id:null,seen(note)]:null,
@@ -280,12 +287,15 @@ PROBE = r"""<script>
   }
   async function ladder(){
     var r={}, root=document.querySelector('.pb-lad[data-pb-age]');
-    /* the starter page has no ladder since 12 October 2026: its phases alone */
+    /* the starter page has no ladder since 12 October 2026: its phases alone;
+       since 13 October 2026 over what the reader puts in a month (#aeAmt) */
     if(!root){
       if($('aePh')) r.A1=ae();
       if(nojs||!$('aePh')) return r;
       $('aePh2').click(); await frames(); r.A2=ae();
-      $('aePh4').click(); setv('aeSalary',100000); await frames(); r.A3=ae();
+      $('aePh4').click(); setv('aeAmt',450); await frames(); r.A3=ae();
+      $('aePh1').click(); setv('aeAmt',150); await frames(); await wait(700); r.A8=ae();
+      setv('aeAmt',100); await frames(); await wait(700); r.A9=ae();
       return r;
     }
     r.LD1=lad();
@@ -297,7 +307,7 @@ PROBE = r"""<script>
     setv('ladAge',d); await frames(); r.LDback=lad();
     if($('aePh')){
       $('aePh2').click(); await frames(); r.A2=ae();
-      $('aePh4').click(); setv('aeSalary',100000); await frames(); r.A3=ae();
+      $('aePh4').click(); setv('aeAmt',450); await frames(); r.A3=ae();
     }
     return r;
   }
@@ -409,7 +419,7 @@ def run_all():
 run_all()
 
 GAP, INK, WHITE, SLATE = 'rgb(250, 220, 211)', 'rgb(11, 31, 28)', 'rgb(255, 255, 255)', 'rgb(88, 107, 133)'
-NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl|pb-lad|ladAge|aePh|pb-ae-ph')
+NEW_PARTS = re.compile(r'sftLim|sft-lim|sftLb|sft-lb|fee-gap|fee-l-b-edge|fee-k-gap|ptCharges|pbGapWhy|pb-gap-why|pbTl|pb-tl|pb-lad|ladAge|aePh|pbAe|pb-ae')
 
 
 def near(a, b, tol):
@@ -663,10 +673,28 @@ def check_ladder(sid, kind, r, nojs):
     eq('LD1 %s: no layout shift has a source in the ladder' % sid, bad, [])
 
 
-def ae_figs(i, salary):
+def ae_euro(v):
+    # the page's euro(): Math.round, which takes a half up (Python's round() would take it to even)
+    return '€{:,}'.format(int(math.floor(v + 0.5)))
+
+
+def ae_figs(i, amount):
+    # 13 October 2026: a month, from what the reader puts in. The scheme takes
+    # it up to its rate on the €80,000 pay cap; the employer the same, the State a third
     e, st = AE_RATES[i]
-    c = min(salary, 80000)
-    return [fmt(e * c), fmt(e * c), fmt(st * c)]
+    you = min(amount, e * 80000 / 12)
+    return [ae_euro(you), ae_euro(you), ae_euro(you * st / e)]
+
+
+def ae_sums(i, amount):
+    # in all; the most it takes; the same amount into a personal pension at 20% and at 40%
+    e, st = AE_RATES[i]
+    most = e * 80000 / 12
+    you = min(amount, most)
+    return [ae_euro(2 * you + you * st / e), ae_euro(most), ae_euro(amount / (1 - 0.2)), ae_euro(amount / (1 - 0.4))]
+
+
+AE_MAX = 'That’s the most auto-enrolment takes. A personal pension takes more, with tax relief. Compare the two'
 
 
 def check_ae(sid, r, nojs):
@@ -674,25 +702,33 @@ def check_ae(sid, r, nojs):
     eq('A7 %s: the caveat displayed, directly after #aeNote, word for word' % sid, a['note'], [True, 'aeNote', AE_NOTE])
     eq('A7 %s: no jargon chip or term in the caveat (the authority\'s name stays whole)' % sid, a['chips'], 0)
     if nojs:
-        eq('A5 %s: no JavaScript: the phase buttons hidden, the rows at the markup\'s 2026 figures' % sid,
-           [a['shown'], a['hidden'], a['figs']], [False, True, ['€750', '€750', '€250']])
+        eq('A5 %s: no JavaScript: the phase buttons and the slider hidden, the rows at the markup\'s €50 a month' % sid,
+           [a['shown'], a['hidden'], a['amt'][3], a['figs'], a['sums']], [False, True, False, ae_figs(0, 50), ae_sums(0, 50)])
+        eq('A9 %s: no JavaScript: the note past the most not shown' % sid, [a['over'], a['max'][0]], [False, 'hidden'])
         return
     now = ae_phase_now()
     eq('A1 %s: the buttons shown, the current phase pressed alone' % sid,
        [a['shown'], a['labels'], a['pressed']], [True, AE_LABELS, ['true' if i == now else 'false' for i in range(4)]])
-    eq('A1 %s: the rows at this phase\'s rates on €50,000' % sid, [a['figs'], a['years']], [ae_figs(now, 50000), AE_LABELS[now]])
+    eq('A1 %s: the slider, €50 a month, and the rows at this phase\'s rates' % sid,
+       [a['amt'], a['figs'], a['sums'], a['years']], [['50', '€50 a month', '€50', True], ae_figs(now, 50), ae_sums(now, 50), AE_LABELS[now]])
     a2 = r['A2']
-    eq('A2 %s: 2029 to 2031 pressed alone: the figures, the years and the rates' % sid,
-       [a2['figs'], a2['years'], a2['rates'], a2['pressed']],
-       [['€1,500', '€1,500', '€500'], '2029 to 2031', '3% of salary each from you and your employer, and 1% from the State',
-        ['false', 'true', 'false', 'false']])
+    eq('A2 %s: 2029 to 2031 pressed alone: the same €50, the most €200, the years and the rates' % sid,
+       [a2['figs'], a2['sums'], a2['years'], a2['rates'], a2['pressed']],
+       [['€50', '€50', '€17'], ['€117', '€200', '€63', '€83'], '2029 to 2031',
+        '3% of pay from you, the same from your employer and 1% from the State', ['false', 'true', 'false', 'false']])
     a3 = r['A3']
-    eq('A3 %s: 2035 onward at €100,000: capped at €80,000' % sid, [a3['figs'], a3['years'], a3['pressed']],
-       [['€4,800', '€4,800', '€1,600'], '2035 onward', ['false', 'false', 'false', 'true']])
-    # the script writes (v / top * 100).toFixed(4) + '%'; the browser reads "100.0000%" back as "100%"
-    eq('A4 %s: the widths stay 3 : 3 : 1' % sid, [a['widths'], a2['widths'], a3['widths']], [['100%', '100%', '33.3333%']] * 3)
+    eq('A3 %s: 2035 onward at €450 a month: the scheme takes its most, €400' % sid, [a3['figs'], a3['sums'], a3['years'], a3['pressed'], a3['over']],
+       [['€400', '€400', '€133'], ['€933', '€400', '€563', '€750'], '2035 onward', ['false', 'false', 'false', 'true'], True])
+    # the script writes (v / 500 * 100).toFixed(4) + '%' on the slider's €500 scale; the browser reads "10.0000%" back as "10%"
+    eq('A4 %s: the widths on the slider\'s scale, 3 : 3 : 1' % sid, [a['widths'], a2['widths'], a3['widths']],
+       [['10%', '10%', '3.3333%'], ['10%', '10%', '3.3333%'], ['80%', '80%', '26.6667%']])
     eq('A6 %s: no transition on the buttons' % sid, sorted(set(a['trans'])), ['0s'])
     eq('A7 %s: the caveat still there after the presses' % sid, a3['note'], [True, 'aeNote', AE_NOTE])
+    a8, a9 = r['A8'], r['A9']
+    eq('A8 %s: under the most, no note; past it (2026 to 2028, €150) the note, word for word, to the comparison' % sid,
+       [a['over'], a['max'][0], a8['over'], a8['max'], a8['figs'], a8['sums']],
+       [False, 'hidden', True, ['visible', AE_MAX, 'broker-vs-autoenrolment.html'], ['€100', '€100', '€33'], ['€233', '€100', '€188', '€250']])
+    eq('A9 %s: at the most exactly (€100) the note goes again' % sid, [a9['over'], a9['max'][0], a9['figs']], [False, 'hidden', ['€100', '€100', '€33']])
 
 
 def r_shifts(sid):

@@ -167,6 +167,11 @@ def run():
         assert find in text[i:j], '%s: %r not in its foot-top' % (page, find)
         return text[:i] + text[i:j].replace(find, repl, 1) + text[j:]
 
+    def foot_link(page, href):
+        """The footer link to href, as the page writes it (its drawing and its name)."""
+        i, j = pagebuild.foot_top_span(sources[page])
+        return re.search(r'<a href="%s">.*?</a>' % re.escape(href), sources[page][i:j]).group(0)
+
     def after(page, marker, find, repl):
         text = sources[page]
         i = text.index(marker)
@@ -193,8 +198,10 @@ def run():
         ('the home page nav reverting to absolute anchors', 'index.html', 'nav',
          nav_only('index.html', 'href="#story"', 'href="index.html#story"')),
         ('two footer links swapped', 'booking.html', 'foot-top',
-         foot_only('booking.html', '<a href="tracker.html">Track old pensions</a><a href="starter.html">Start a pension</a>',
-                   '<a href="starter.html">Start a pension</a><a href="tracker.html">Track old pensions</a>')),
+         foot_only('booking.html', foot_link('booking.html', 'tracker.html') + foot_link('booking.html', 'starter.html'),
+                   foot_link('booking.html', 'starter.html') + foot_link('booking.html', 'tracker.html'))),
+        ('a footer link relabelled', 'privacy.html', 'foot-top',
+         foot_only('privacy.html', '<span class="foot-l">Over 50</span>', '<span class="foot-l">Fifty plus</span>')),
         ('a footer column heading changed', '404.html', 'foot-top',
          foot_only('404.html', '<h2>Tools</h2>', '<h2>Calculators</h2>')),
         ('the Central Bank sentence changed', 'complaints.html', 'regulatory',
@@ -233,6 +240,14 @@ def run():
          after('director-year-end-checklist.html', '/* CTA:BEGIN', '.pb-bookbar.pb-bookbar-on{transform:none}', '.pb-bookbar.pb-bookbar-on{transform:translateY(0)}')),
         ('the CTA block of CSS missing', 'privacy.html', 'cta-css',
          sources['privacy.html'].replace('/* CTA:END */', '/* CTA-END */', 1)),
+        ('the FOOT block of CSS changed', 'terms.html', 'foot-css',
+         after('terms.html', '/* FOOT:BEGIN', 'footer .foot-col{columns:2;column-gap:12px}', 'footer .foot-col{columns:1;column-gap:12px}')),
+        ('the FOOT block of CSS missing', 'complaints.html', 'foot-css',
+         sources['complaints.html'].replace('/* FOOT:END */', '/* FOOT-END */', 1)),
+        ('the end of the page\'s script missing', 'glossary.html', 'chrome-js',
+         pagebuild.CHROME_JS_PAT.sub('', sources['glossary.html'])),
+        ('the end of the page\'s script after pb-alive.js', 'how-we-work.html', 'chrome-js',
+         pagebuild.CHROME_JS_PAT.sub('', sources['how-we-work.html']).replace('</body>', pagebuild.CHROME_JS_PAT.search(sources['how-we-work.html']).group(0) + '</body>', 1)),
         ('a second nav', 'thank-you.html', 'structure',
          sources['thank-you.html'].replace('</footer>', '</footer><nav id="nav"></nav>', 1)),
     ]
@@ -351,6 +366,24 @@ def run():
     gscript = read('assets/js/pb-home-gap.js')
     eq('13. the gap script reads the living standards and the State Pension rate from their modules',
        ['LS.standard(' in gscript, 'MAX_WEEKLY_CENTS' in gscript, '19200' in gscript or '15564' in gscript], [True, True, False])
+    # 13 October 2026 (Damian: "What the State Pension leaves you to find"
+    # made no sense; and no income inputs). The starter page's floor chart
+    # asks its question in plain words, says the figure is the most and that
+    # yours depends on your PRSI record, and links to the entitlement check;
+    # its auto-enrolment split asks only what you put in a month, with the
+    # personal pension beside it and the note past the most, to the comparison.
+    st13 = sources['starter.html']
+    floor = st13[st13.index('<h2>The State Pension pays'):st13.index('class="pb-src', st13.index('<h2>The State Pension pays'))]
+    eq('13. the starter\'s floor chart: the question, the most, the PRSI record, the way to your own figure, the three totals',
+       ['Is that enough?' in floor, 'That&rsquo;s the most.' in floor, 'PRSI record' in floor,
+        'href="state-pension-entitlement.html"' in floor, re.findall(r'&euro;([\d,]+)</span>', floor)],
+       [True, True, True, True, ['15,564', '19,200', '33,600']])
+    split = st13[st13.index('id="pbAe"'):st13.index('id="aePhNote"')]
+    eq('13. the starter\'s auto-enrolment split: a month from you and no pay asked; the personal pension beside it; past the most, the note to the comparison',
+       ['<label class="pb-ae-name" for="aeAmt">You put in, a month</label>' in split, 'aeSalary' in st13, 'salary' in split.lower(),
+        'Into a personal pension' in split, 'That&rsquo;s the most auto-enrolment takes.</b> A personal pension takes more, with tax relief.' in split,
+        'href="broker-vs-autoenrolment.html"' in split],
+       [True, False, False, True, True, True])
 
     # ----------------------------------------------------------------- 14
     # Run 27: the lead forms, as Netlify reads them at deploy. Netlify finds a
@@ -568,69 +601,50 @@ def run():
         eq('17. %s is caught' % label, [k for n, k in prsi_findings(m) if n == page], [want])
 
     # ----------------------------------------------------------------- 18
-    from html.parser import HTMLParser as HTMLParser18
-    VOID18 = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
-    # Run 32: the comparison page shows its warning box in both modes. The
-    # first mode's sits under its "Everything paid in, by 66" projection; the
-    # second mode hides that panel, so it carries the same box under its own
-    # figures. Mutants: either copy removed.
-    WARN = ('<div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a '
-            'reliable guide to the future performance of your investment.</b></p><p><b>Warning: The '
-            'value of your investment may go down as well as up.</b></p></div>')
+    # 13 October 2026 (Damian: "compare apples for apples", "just use
+    # contributions instead"): the comparison asks two things, what you put
+    # in a month and your tax rate, and projects nothing ("Everything paid in,
+    # by 66" went with age), so it carries no warning box; Run 32's two boxes,
+    # one per mode, went with the modes. Its markup, as a reader without
+    # JavaScript gets it, holds the default's true figures (EUR 50 at 20%,
+    # docs/CALC-SPEC.md) and the notice past auto-enrolment's limit word for
+    # word. Mutants: a salary slider back, a box back, a stale figure, the
+    # notice reworded.
+    CMP_NOTICE = 'Past €100 a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.'
+    CMP_FIGS = (('aeTotal', '€117'), ('aeYou', '€50'), ('aeEmp', '€50'), ('aeState', '€17'),
+                ('ppTotal', '€63'), ('ppYou', '€50'), ('ppRel', '+€13'), ('extraV', '€50'))
 
-    def modes_warned(src):
-        a, b = src.find('id="mode1Results"'), src.find('id="mode2Results"')
-        c = src.find('<!-- ============ SHARED', b)
-        if min(a, b, c) < 0:
-            return None
-        return [WARN in src[a:b], WARN in src[b:c]]
-
-    class Boxes(HTMLParser18):
-        """every .pb-warn: the mode panel it is in, and whether anything
-        between that panel and the box (the box included) is hidden or
-        belongs to the other mode"""
-        def __init__(self):
-            super().__init__(convert_charrefs=True)
-            self.stack, self.out = [], []
-
-        def handle_starttag(self, tag, attrs):
-            a = dict(attrs)
-            if tag in VOID18:
-                return
-            self.stack.append((tag, a))
-            if 'pb-warn' in (a.get('class') or '').split():
-                ids = [x.get('id') for _, x in self.stack]
-                panel = next((i for i in reversed(ids) if i in ('mode1Results', 'mode2Results')), None)
-                n = str(panel[4]) if panel else None
-                below = self.stack[ids.index(panel) + 1:] if panel else self.stack
-                bad = [t for t, x in below if 'hidden' in x or x.get('data-mode') not in (None, n)]
-                self.out.append((panel, bad))
-
-        def handle_endtag(self, tag):
-            for i in range(len(self.stack) - 1, -1, -1):
-                if self.stack[i][0] == tag:
-                    del self.stack[i:]
-                    break
-
-    def boxes(src):
-        p = Boxes(); p.feed(src)
-        return sorted((panel, bool(bad)) for panel, bad in p.out)
+    def cmp_faults(src):
+        f = []
+        ranges = re.findall(r'<input type="range" id="([^"]+)"', src)
+        if ranges != ['extra']:
+            f.append('sliders %s' % ranges)
+        if not re.search(r'id="tx20"[^>]*>20%<', src) or not re.search(r'id="tx40"[^>]*>40%<', src):
+            f.append('no 20% or 40% button')
+        if 'class="pb-warn"' in src:
+            f.append('a warning box, with nothing projected')
+        if re.search(r'id="(?:salary|age|mode1Results|mode2Results|pbMyCard)"', src):
+            f.append('an old control or panel')
+        for k, v in CMP_FIGS:
+            m = re.search(r'id="%s"[^>]*>([^<]*)<' % k, src)
+            if not m or m.group(1) != v:
+                f.append('%s shows %s, not %s' % (k, m and m.group(1), v))
+        if CMP_NOTICE not in src:
+            f.append('the notice past the limit')
+        return f
 
     cmp_src = sources['broker-vs-autoenrolment.html']
-    eq('18. the comparison shows its warning in both modes', modes_warned(cmp_src), [True, True])
-    eq('18. one box in each mode panel, and nothing between panel and box hides it or ties it to the other mode',
-       boxes(cmp_src), [('mode1Results', False), ('mode2Results', False)])
-    m2 = cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
-    for label, repl in (('the second mode\'s box hidden', '<div class="pb-warn" hidden>'),
-                        ('the second mode\'s box tied to the first mode', '<div class="pb-warn" data-mode="1">')):
-        mut = cmp_src[:m2] + WARN.replace('<div class="pb-warn">', repl, 1) + cmp_src[m2 + len(WARN):]
-        eq('18. %s is caught' % label, boxes(mut), [('mode1Results', False), ('mode2Results', True)])
-    eq('18. and the parts it is built from say the same',
-       modes_warned(read('tools/compare-parts/main.html') + '<!-- ============ SHARED'), [True, True])
-    first, second = cmp_src.find(WARN), cmp_src.find(WARN, cmp_src.find('id="mode2Results"'))
-    for label, cut, want in (('the second mode\'s copy removed', second, [True, False]),
-                             ('the first mode\'s copy removed', first, [False, True])):
-        eq('18. %s is caught' % label, modes_warned(cmp_src[:cut] + cmp_src[cut + len(WARN):]), want)
+    eq('18. the comparison: one slider, a 20% or 40% switch, nothing projected and no box, the default\'s figures and the notice in its markup',
+       cmp_faults(cmp_src), [])
+    eq('18. and the parts it is built from say the same', cmp_faults(read('tools/compare-parts/main.html')), [])
+    for label, find, repl, want in (
+            ('a salary slider back', '<input type="range" id="extra"', '<input type="range" id="salary" min="20000" max="250000" value="50000"><input type="range" id="extra"', 'sliders'),
+            ('a warning box back', '<div class="foot" id="phaseLine">', '<div class="pb-warn"><p><b>Warning</b></p></div><div class="foot" id="phaseLine">', 'a warning box'),
+            ('a stale figure', 'id="aeTotal">\u20ac117<', 'id="aeTotal">\u20ac116<', 'aeTotal shows'),
+            ('the notice reworded', CMP_NOTICE, CMP_NOTICE.replace('takes no more', 'stops'), 'the notice')):
+        mut = cmp_src.replace(find, repl, 1)
+        assert mut != cmp_src, label
+        eq('18. %s is caught' % label, any(x.startswith(want) for x in cmp_faults(mut)), True)
 
     # ----------------------------------------------------------------- 19
     # Run 32: the regulator line and the QFA line are there from the first
@@ -1834,10 +1848,18 @@ def run():
                 if tgt not in srcs or pagebuild.NOINDEX in srcs[tgt]:
                     f.append('%s: %s is not a live page' % (page, tgt))
         raw = lambda x: html.unescape(x).replace('\u2019', "'")
+        # (13 October 2026) the text as read: tags out, spaces collapsed, so a
+        # heading's highlight (<span class="hl">) does not split its words
+        flat = lambda x: re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', x))).replace('\u2019', "'")
         for tgt, (title, line, where) in sorted(pagebuild.CARDS.items()):
             # in the page's text, or its own description
-            if plain(line).strip() not in plain(srcs.get(where, '')) and raw(line) not in raw(srcs.get(where, '')):
+            if (plain(line).strip() not in plain(srcs.get(where, '')) and raw(line) not in raw(srcs.get(where, ''))
+                    and flat(line).strip() not in flat(srcs.get(where, ''))):
                 f.append('%s: its line is not on %s' % (tgt, where))
+        # (13 October 2026) every card target has its drawing
+        for tgt in sorted({t for ts in pagebuild.RELATED.values() for t in ts}):
+            if tgt not in pagebuild.ART:
+                f.append('%s: no drawing in ART' % tgt)
         return f
 
     import html
@@ -1873,12 +1895,15 @@ def run():
     # count, the list), drawn only with JavaScript, which it needs; and the
     # home page's "Six places to begin", the same six places, names and lines
     # word for word, in the same order. The page stays noindex.
+    # 13 October 2026 (Damian: make every line plain): the lines are the
+    # related cards' (pagebuild.CARDS, which names the 404 as where they are
+    # written), and each place carries its drawing, pagebuild.ART's, exactly.
     NF_SIX = [('tracker.html', 'Track down old pensions', 'Find pensions from old jobs, and what they are worth.'),
-              ('starter.html', 'Start a pension', 'For a first pension. It&rsquo;s never too late to begin.'),
+              ('starter.html', 'Start a pension', 'Start your first pension, with tax relief at any age.'),
               ('director.html', 'Company directors', 'Your company can fund your pension beyond personal limits.'),
-              ('pension-calculator.html', 'Pension calculator', 'Your projection, with Revenue&rsquo;s tax relief.'),
-              ('state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension leaves you to find.'),
-              ('broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'My Future Fund and a personal pension, side by side.')]
+              ('pension-calculator.html', 'Pension calculator', 'What your pension could pay you a month, with tax relief.'),
+              ('state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension actually pays you.'),
+              ('broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'My Future Fund or a personal pension: which puts in more?')]
 
     def nf_faults(nf, ix):
         f = []
@@ -1890,9 +1915,13 @@ def run():
             if want not in nf:
                 f.append('the search box: %s' % want[:40])
         home = NF_SIX
-        here = re.findall(r'<li><a href="([^"]+)"><b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six">'):])
+        cards = re.findall(r'<li class="pb-al-skip"><a class="pb-related-card pb-card-link" href="([^"]+)">(<span class="pb-related-art[^"]*" aria-hidden="true">.*?</span>)'
+                           r'<b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six'):])
+        here = [(h, b, s) for h, art, b, s in cards]
         if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
             f.append('not the six places to begin')
+        if any(art != pagebuild.related_art(h) for h, art, b, s in cards[:6] if h in pagebuild.ART) or len(cards) < 6:
+            f.append('a place\'s drawing is not its drawing in pagebuild.ART')
         if pagebuild.NOINDEX not in nf:
             f.append('the 404 is indexable')
         if len(re.findall(r'<script src="assets/js/pb-search\.js\?v=[0-9a-f]+" type="text/pb-late"></script>', nf)) != 1:
@@ -1903,7 +1932,8 @@ def run():
     eq('40. the 404: Buddy, the search box drawn with JavaScript, and its six places to begin word for word; still noindex',
        nf_faults(nf, ix), [])
     for label, find, repl, want in (
-            ('a place missing', '<li><a href="director.html"><b>Company directors</b>', '<li><a href="director.html"><b>Directors</b>', 'six places'),
+            ('a place missing', '<b>Company directors</b>', '<b>Directors</b>', 'six places'),
+            ('a drawing edited by hand', 'pb-related-art pb-tone-s', 'pb-related-art pb-tone-t', 'drawing'),
             ('the box drawn without JavaScript', 'html:not(.pb-js) .pb-nf-search{display:none}', '', 'search box'),
             ('Buddy with no words', 'alt="Buddy, the Pensionbuddy dog"', 'alt=""', 'Buddy')):
         mut = nf.replace(find, repl, 1)
@@ -2364,7 +2394,9 @@ def run():
     not_state = (
         ('index.html', ('.pb-tl-age', '.pb-tl-fill', '.pb-tl-mark', '.pb-g2-rows i', '.pb-c2-k-you i', '.pb-c2-l-you i',
                         '.pb-tl-step.pb-on::after')),
-        ('starter.html', ('.pb-sa-fill', '.pb-lad-you')),
+        # 13 October 2026: the 3 : 3 : 1 split by the month, its bars and the
+        # personal pension's card lit past the most, none of them the State's teal
+        ('starter.html', ('.pb-sa-fill', '.pb-lad-you', '.pb-ae-fill', '.pb-ae-fill.pb-ae-you', '.pb-ae-over .pb-ae-pp')),
         ('director.html', ('.pb-stat-n', '.pb-lad-you')),
         ('glossary.html', ('.pb-risk li', '.pb-risk li:nth-child(n+3)', '.pb-risk li:nth-child(n+5)', '.pb-lad-you')),
         ('pension-calculator.html', ('.dotk', '.boost-card', '.boost-card .bt', '.pb-lad-you',
@@ -2373,7 +2405,7 @@ def run():
                                       '#chart svg path:not([stroke])', '#chart svg path[stroke="#0B7A6E"]')),
         # 12 October 2026: the compare bars; the State's slice (.cmp-s-state) is teal on purpose
         ('broker-vs-autoenrolment.html', ('.cmp-key [data-part="you"] i', '.cmp-key [data-part="emp"] i', '.cmp-key [data-part="rev"] i',
-                                          '#pbMyAeBar', '#pbMyPpBar', '#pbMyAeBar2', '#pbMyCBar', '.pb-stair-you')),
+                                          '.cmp-key [data-part="extra"] i', '.cmp-cap', '.cmp-lim i', '.cmp-tag', '.pb-stair-you')),
         ('pension-fees-calculator.html', ('.fee-chart .fee-l-b', '.fee-key .fee-k-b')),
         ('my-pensions.html', ('.pt-seg', '.pt-key i', '.pt-dot')),
         ('pension-readiness-check.html', ('.rd-b-onway', '.rd-b-good')),
@@ -2686,7 +2718,7 @@ def run():
     eq('53. pagebuild.WARN is the two sentences, word for word, each bold, in one pb-warn box',
        pagebuild.WARN, '<div class="pb-warn"><p><b>%s</b></p><p><b>%s</b></p></div>' % SENT)
     eq('53. the pages with projected figures, and their boxes',
-       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('director.html', 1), ('index.html', 2), ('pension-calculator.html', 1),
+       sorted(pagebuild.WARN_PAGES.items()), [('director-calculator.html', 1), ('director.html', 1), ('index.html', 2), ('pension-calculator.html', 1),
                                               ('pension-fees-calculator.html', 1), ('pia.html', 1), ('starter.html', 3)])
     eq('53. every page carries exactly its warnings, word for word, from pagebuild.WARN, and no other page one',
        findings(pagebuild.warn_drift(sources)), [])
