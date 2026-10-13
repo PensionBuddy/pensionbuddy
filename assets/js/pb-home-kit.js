@@ -26,7 +26,15 @@
                               Comfortable, and it is their figure, not ours
      PBKit.tax                { rate }: 0.2 or 0.4, the relief rate, shared by
                               the calculator and the inflation section
-     PBKit.setTax(r, by)      changes it and tells the page ('pb:tax') */
+     PBKit.setTax(r, by)      changes it and tells the page ('pb:tax')
+     PBKit.plan               { age, mine, emp, saved, set }: the calculator's
+                              age, what you and your employer put in a month and
+                              what is saved (13 October 2026); set once the
+                              reader has moved the age or a monthly amount. The
+                              cost of waiting follows it; the inflation section
+                              reads the reader's own money once it is set
+     PBKit.setPlan(p, by)     the calculator writes it and tells the page
+                              ('pb:plan') */
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -154,5 +162,15 @@
     try { document.dispatchEvent(new CustomEvent('pb:tax', { detail: { rate: r, by: by } })); } catch (e) { /* each part keeps its own */ }
   }
 
-  window.PBKit = { fmt: fmt, motion: motion, Spring: Spring, Roll: Roll, seg: seg, aim: aim, setAim: setAim, setOwn: setOwn, life: life, OWN: OWN, tax: tax, setTax: setTax };
+  /* the calculator's starting values, until the reader moves them */
+  var plan = { age: 35, mine: 100, emp: 0, saved: 10000, set: false };
+  function setPlan(p, by) {
+    var moved = false;
+    ['age', 'mine', 'emp', 'saved'].forEach(function (k) { if (p[k] != null && +p[k] !== plan[k]) { plan[k] = +p[k]; moved = true; } });
+    if (p.set && !plan.set) { plan.set = true; moved = true; }
+    if (!moved) { return; }
+    try { document.dispatchEvent(new CustomEvent('pb:plan', { detail: { age: plan.age, mine: plan.mine, emp: plan.emp, saved: plan.saved, set: plan.set, by: by } })); } catch (e) { /* each part keeps its own */ }
+  }
+
+  window.PBKit = { fmt: fmt, motion: motion, Spring: Spring, Roll: Roll, seg: seg, aim: aim, setAim: setAim, setOwn: setOwn, life: life, OWN: OWN, tax: tax, setTax: setTax, plan: plan, setPlan: setPlan };
 }());

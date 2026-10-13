@@ -46,6 +46,16 @@
     new MutationObserver(function () { roll(el); }).observe(el, { childList: true, characterData: true, subtree: true });
   }
   watchRoll(document.getElementById('pbTlAge'));
+  /* the card's age and line (13 October 2026): a short lift as they change, never a slide */
+  function watchSwap(el) {
+    if (!el) { return; }
+    var was = el.textContent;
+    new MutationObserver(function () {
+      if (el.textContent === was) { return; }
+      was = el.textContent; el.classList.remove('pb-tl-swap'); void el.offsetWidth; el.classList.add('pb-tl-swap');
+    }).observe(el, { childList: true, characterData: true, subtree: true });
+  }
+  watchSwap(document.getElementById('pbTlWhat')); watchSwap(document.getElementById('pbTlLine'));
   var nowB = document.getElementById('pbTlNow');
   if (nowB) {
     new MutationObserver(function () { var b = nowB.querySelector('b'); if (b && !b.querySelector('.pb-roll')) { roll(b); } })

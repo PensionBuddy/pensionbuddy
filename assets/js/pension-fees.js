@@ -5,9 +5,13 @@
    SOURCES, checked 2026-09-24 (Run 20, #3):
      5% of each contribution and 1% a year of the fund are the maximum
      charges on a Standard PRSA, Pensions Act 1990 s.104(5) and (6); the
-     Pensions Authority's own pension calculator assumes the same two. They
-     are the page's defaults for "your plan", as an example, never as a
-     claim about any provider.
+     Pensions Authority's own pension calculator assumes the same two. The
+     page names them as that ceiling.
+   THE PAGE'S DEFAULTS, 13 October 2026 (Damian: Irish pension charges are
+     low, "basis points", not the 2-3% seen in Germany): your plan 0.75% a
+     year and nothing on payments, the other plan 0.4% a year; examples,
+     never a claim about any provider. They live in the page's sliders
+     (tools/fees-parts/main.html), not here.
    ------------------------------------------------------------------------
 
    The month runs in one order: growth, then the annual management charge

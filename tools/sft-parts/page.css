@@ -134,3 +134,17 @@
 .sft-lb-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
 .sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+
+/* MOTION-13:BEGIN (13 October 2026, Damian: "numbers that roll", "gentle
+   springs", never jumpy). assets/js/pb-sft-motion.js sets :root.pb-sft-alive
+   and wraps a headline figure's changed characters in .pb-roll, only while
+   motion is allowed and nothing is being dragged; every rule here is also
+   behind :root.pb-motion. The limit bar and the lump-sum bar keep still
+   (Run 43). The card that says what is over the threshold, and the
+   headroom line, arrive softly each time they appear. */
+:root.pb-motion.pb-sft-alive .pb-roll{display:inline-block;animation:pbSftRoll .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSftRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
+@keyframes pbSftArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+:root.pb-motion .sft-over:not([hidden]){animation:pbSftArrive .5s cubic-bezier(.2,1.2,.35,1) backwards}
+:root.pb-motion .sft-hero .pb-say:not([hidden]){animation:pbSftArrive .4s var(--pb-ease-out) backwards}
+/* MOTION-13:END */

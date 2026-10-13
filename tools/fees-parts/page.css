@@ -12,7 +12,6 @@
 .fee-other > summary{flex-wrap:wrap;row-gap:0}
 .fee-other-l{font-weight:700;color:var(--ink)}
 .fee-other-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
-[data-pb-calc="pension-fees-calculator"] .pb-today-v{font-size:1rem}
 .fee-sub{margin:0 0 6px;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 .chart-card.fee-chart-card{min-height:0}
 .fee-plot{position:relative}

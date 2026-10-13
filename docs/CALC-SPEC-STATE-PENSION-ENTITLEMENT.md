@@ -24,6 +24,15 @@ Vocabulary: `CONTEXT.md`. The terms below are used exactly as defined there.
 
 One question: **what would the State Pension actually pay me?**
 
+> **13 October 2026 (Damian): the purpose in the first line.** The headline
+> is **"How much State Pension you may get, from your PRSI record."** (60px
+> on a wide screen, so the whole sentence holds two lines), and under it,
+> simply: **"Many people get less than the maximum, €299.30 a week."** The
+> figure is static markup held to `PBStatePension.MAX_WEEKLY_CENTS` by
+> `tests/page-probe.js`; with motion its digits roll into place, as on the
+> reality check, whose lead now sends the reader here with "Work out what
+> you'd get".
+
 The reality check deliberately computes Method 1 only and says every partial
 figure is a floor. This page does the other half: it works the rate out both
 ways the Department does during the transition, Method 1 and Method 2, and

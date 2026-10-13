@@ -1,8 +1,18 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <h1>If the State Pension is <span class="hl">all you have</span>.</h1>
-  <p>What it pays, next to what retirement in Ireland costs.</p>
+  <h1>What does the State Pension <span class="hl">actually pay?</span></h1>
+  <!-- 13 October 2026 (Damian): the question, answered at once, then the way
+       to the reader's own figure. The two figures are the module's maximum
+       (PBStatePension.statePension(2080)); tests/page-probe.js holds them to
+       it, so a Budget that moves the rate cannot leave this line behind.
+       With motion, assets/js/pb-sp-motion.js rolls each figure's digits into
+       place over the real text, which is never rewritten. -->
+  <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year.</p>
+  <p class="sp-less">You may get less. It depends on your PRSI record.</p>
+  <a class="sp-go" id="spGo" href="state-pension-entitlement.html"><span>Work out what you&rsquo;d get</span><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a>
 </div></div>
+
+<div class="wrap sp-q2"><h2>Is it enough to live on?</h2></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-reality-check">
   <div class="panel">

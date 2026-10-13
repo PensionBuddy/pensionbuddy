@@ -2559,17 +2559,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
-.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-today-v[hidden]{display:none}
-.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
-.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
-.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
-.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
-/* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
    line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
@@ -2601,6 +2590,60 @@ main h1{font-weight:800}
 @keyframes pbGapFlash{0%{filter:brightness(1.2) saturate(1.6)}100%{filter:none}}
 :root.pb-calc-alive.pb-motion .rv-you,:root.pb-calc-alive.pb-motion .rv-tax{transition:width .7s cubic-bezier(.34,1.56,.64,1)}
 /* MOTION-4 CALCULATOR:END */
+
+/* LEAD:BEGIN (13 October 2026, Damian: "What does the State Pension
+   actually pay?", answered at once, then the way to your own figure).
+   The same block is in tools/state-pension-entitlement-parts/page.css; the
+   two pages share the lead's classes and assets/js/pb-sp-motion.js.
+   Static first: every line is plain text and stays put without motion or
+   JavaScript. With motion (:root.pb-motion) the answer, the caveat and the
+   way on rise in after the headline's words, one after another; the
+   figures' digits roll into place (pb-sp-motion.js lays a reel over each
+   figure and takes it away once it lands, so the real text is never
+   rewritten); the way on lands on a gentle spring and its arrow nudges
+   twice, then rests. */
+.phead .sp-ans{margin:2px 0 0;max-width:none;font-size:clamp(1.18rem,2vw,1.5rem);line-height:1.45;color:var(--ink)}
+.sp-fig{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:1.5em;line-height:1.1;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.phead .sp-less{margin:10px 0 0}
+.sp-go{display:inline-flex;align-items:center;gap:14px;min-height:56px;margin:24px 0 0;padding:0 22px 0 26px;
+  border-radius:var(--r-pill);background:var(--aqua);color:#04302A;font-weight:800;font-size:17px;line-height:1.25;
+  text-decoration:none;box-shadow:0 12px 28px rgba(20,203,177,.32)}
+.sp-go svg{flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.sp-go:hover{background:#2BD6BE;color:#04302A}
+.sp-go:focus-visible{outline:3px solid var(--teal-700);outline-offset:3px}
+@media(max-width:560px){.sp-go{display:flex;justify-content:space-between;align-self:stretch;width:100%}}
+/* the odometer: the real figure holds the space and is what is read */
+.pb-odo-on{position:relative;color:transparent !important}
+.pb-odo{position:absolute;left:0;top:0;white-space:nowrap;pointer-events:none}
+/* each window is one line high; a digit fades in the last sliver at its
+   top and bottom edges, clear of where a landed digit's ink sits, so a
+   rolling digit arrives and leaves softly instead of at a cut edge */
+.pb-odo-win{display:inline-block;height:1.1em;overflow:hidden;vertical-align:top;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 .15em,#000 .95em,transparent 1.1em);
+  mask-image:linear-gradient(to bottom,transparent 0,#000 .15em,#000 .95em,transparent 1.1em)}
+.pb-odo-reel{display:block;white-space:pre;line-height:1.1em}
+:root.pb-motion .pb-odo-reel{animation:pbOdo 1.15s cubic-bezier(.16,1,.3,1) both}
+@keyframes pbOdo{from{transform:translateY(0)}to{transform:translateY(calc(var(--to) * -1.1em))}}
+/* forced colours repaint transparent text, so there the reel stands aside */
+@media(forced-colors:active){.pb-odo{display:none}.pb-odo-on{color:inherit !important}}
+@keyframes spLeadIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes spGoIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes spNudge{0%,100%{transform:none}45%{transform:translateX(6px)}}
+:root.pb-motion .phead .sp-ans{animation:spLeadIn .7s var(--pb-ease-out) .3s backwards}
+:root.pb-motion .phead .sp-less{animation:spLeadIn .7s var(--pb-ease-out) .62s backwards}
+:root.pb-motion .sp-go{animation:spGoIn .9s cubic-bezier(.2,1.3,.35,1) .86s backwards;
+  transition:transform var(--pb-t-press),box-shadow .25s ease,background-color .25s ease}
+:root.pb-motion .sp-go svg{animation:spNudge 1s cubic-bezier(.45,0,.2,1) 1.9s 2;transition:transform .3s var(--pb-ease-out)}
+:root.pb-motion .sp-go:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(20,203,177,.42)}
+:root.pb-motion .sp-go:hover svg{transform:translateX(4px)}
+:root.pb-motion .sp-go:active{transform:translateY(0) scale(.98)}
+/* LEAD:END */
+
+/* the calculator's own question, under the lead */
+.sp-q2{padding-top:44px}
+.sp-q2 h2{margin:0;font-size:clamp(1.5rem,2.6vw,2rem);font-weight:800;letter-spacing:-.025em}
+.sp-q2 + .wrap > .calc-wrap{padding-top:20px}
 
 /* ---- the record: forty dots, this page only ----
    One dot per 52 reckonable contributions, filling from the bottom row up:
@@ -2744,10 +2787,20 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <h1>If the State Pension is <span class="hl">all you have</span>.</h1>
-  <p>What it pays, next to what retirement in Ireland costs.</p>
+  <h1>What does the State Pension <span class="hl">actually pay?</span></h1>
+  <!-- 13 October 2026 (Damian): the question, answered at once, then the way
+       to the reader's own figure. The two figures are the module's maximum
+       (PBStatePension.statePension(2080)); tests/page-probe.js holds them to
+       it, so a Budget that moves the rate cannot leave this line behind.
+       With motion, assets/js/pb-sp-motion.js rolls each figure's digits into
+       place over the real text, which is never rewritten. -->
+  <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year.</p>
+  <p class="sp-less">You may get less. It depends on your PRSI record.</p>
+  <a class="sp-go" id="spGo" href="state-pension-entitlement.html"><span>Work out what you&rsquo;d get</span><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
+
+<div class="wrap sp-q2"><h2>Is it enough to live on?</h2></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-reality-check">
   <div class="panel">
@@ -2920,11 +2973,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
-<script src="assets/js/pb-sp-motion.js?v=2f2b1c82"></script>
+<script src="assets/js/pb-sp-motion.js?v=5e1528cf"></script>
 <script>
 /* state-pension-reality-check.html
 

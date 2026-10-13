@@ -2426,6 +2426,77 @@ main h1{font-weight:800}
 .dr-ye-range{position:absolute;left:0;right:0;bottom:0;width:100%;height:44px;margin:0;opacity:0;pointer-events:none}
 .dr-ye-range[hidden]{display:none}
 .dr-card .pb-src{margin:0;font-size:13px}
+/* the order (13 October 2026, Damian: "I don't know what it means"): who the company pays, and in
+   what order, as a list you can see. The business, the staff and the bills are paid; the pension,
+   last, gets nothing. Turned round, the pension goes first, a business expense. Two radios (#drQLast,
+   #drQFirst) hold the order and the CSS draws it, so it works without JavaScript; pb-dir-why.js
+   moves it, only under html.pb-motion. */
+.dr-q-top{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:28px 56px;align-items:center;margin:0 0 26px}
+.dr-why .dr-q-copy h2{margin:0 0 18px}
+.dr-q-lead{margin:0;max-width:26em;font-size:clamp(19px,1.75vw,22px);line-height:1.4;font-weight:600;color:var(--ink)}
+.dr-q-fix{margin:14px 0 0;max-width:30em;font-size:clamp(16.5px,1.45vw,18.5px);line-height:1.5;color:var(--ink-2)}
+.dr-q-fix b{font-weight:800;color:var(--ink)}
+.dr-q-copy .pb-src{margin:12px 0 0;font-size:13px}
+.dr-q{position:relative;min-width:0;margin:0;padding:18px 18px 20px;border:1px solid var(--line,#E7EBE9);border-radius:28px;background:#fff;box-shadow:0 24px 60px rgba(11,31,28,.07)}
+.dr-q-r{position:absolute;top:0;left:0;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.dr-q-seg{position:relative;display:grid;grid-template-columns:1fr 1fr;margin:0 0 16px;padding:4px;border-radius:999px;background:#EDF1F0;box-shadow:inset 0 1px 2px rgba(11,31,28,.06)}
+.dr-q-seg label{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 10px;border-radius:999px;font-size:15px;font-weight:700;color:#5D6C67;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .25s}
+.dr-q-seg label:hover,#drQLast:checked ~ .dr-q-seg label[for="drQLast"],#drQFirst:checked ~ .dr-q-seg label[for="drQFirst"]{color:var(--ink)}
+#drQLast:focus-visible ~ .dr-q-seg label[for="drQLast"],#drQFirst:focus-visible ~ .dr-q-seg label[for="drQFirst"]{outline:3px solid #14CBB1;outline-offset:1px}
+.dr-q-pill{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:#fff;box-shadow:0 2px 8px rgba(11,31,28,.12),0 0 0 1px rgba(11,31,28,.04)}
+#drQFirst:checked ~ .dr-q-seg .dr-q-pill{transform:translateX(100%)}
+.dr-q-list{position:relative;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.dr-q-list::before{content:"";position:absolute;top:22px;bottom:22px;left:26px;width:2px;margin-left:-1px;border-radius:2px;background:#E1E7E5}
+.dr-q-row{--lift:0;position:relative;z-index:1;display:flex;align-items:center;gap:12px;min-height:56px;padding:7px 14px 7px 12px;border-radius:18px;background:#F4F7F6;font-size:16.5px;font-weight:700;color:var(--ink);box-shadow:0 calc(var(--lift) * 16px) calc(var(--lift) * 34px) rgba(11,31,28,calc(var(--lift) * .2))}
+.dr-q-pen{z-index:2}
+.pb-js .dr-q-pen{cursor:pointer}
+#drQFirst:checked ~ .dr-q-list .dr-q-pen{order:-1;background:#EEF2F9}
+#drQLast:checked ~ .dr-q-list .dr-q-pen{background:#fff}
+.dr-q-pen::before,.dr-q-pen::after{content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;pointer-events:none}
+.dr-q-pen::before{border:1.5px dashed rgba(212,87,61,.55)}
+.dr-q-pen::after{box-shadow:inset 0 0 0 1.5px #C9D5EA}
+#drQLast:checked ~ .dr-q-list .dr-q-pen::before,#drQFirst:checked ~ .dr-q-list .dr-q-pen::after{opacity:1}
+.dr-q-n{flex:0 0 auto;width:28px;height:28px;overflow:hidden;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1.5px #DCE3E1;font-size:14px;font-weight:800;line-height:28px;text-align:center;color:var(--ink);font-variant-numeric:tabular-nums}
+.dr-q-nn{display:flex;flex-direction:column}
+.dr-q-nn>span{display:block;height:28px}
+#drQFirst:checked ~ .dr-q-list .dr-q-nn{transform:translateY(-50%)}
+#drQLast:checked ~ .dr-q-list .dr-q-pen .dr-q-n{color:#B8432B;box-shadow:inset 0 0 0 1.5px rgba(212,87,61,.6)}
+#drQFirst:checked ~ .dr-q-list .dr-q-pen .dr-q-n{background:#586B85;color:#fff;box-shadow:none}
+.dr-q-ic{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:var(--ink-2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dr-q-t{display:flex;flex:1 1 auto;flex-wrap:wrap;align-items:center;gap:2px 10px;min-width:0}
+#drQLast:checked ~ .dr-q-list .dr-q-pen .dr-q-l{color:var(--ink-2)}
+.dr-q-tags{display:grid}
+.dr-q-tags>span{grid-area:1/1;align-self:center;justify-self:start;white-space:nowrap}
+.dr-q-none{font-size:13.5px;font-weight:800;color:#B8432B}
+.dr-q-exp{padding:3px 10px;border-radius:99px;background:#fff;box-shadow:inset 0 0 0 1px #C9D5EA;font-size:12.5px;font-weight:800;color:#3E5374}
+#drQFirst:checked ~ .dr-q-list .dr-q-none,#drQLast:checked ~ .dr-q-list .dr-q-exp{opacity:0}
+.dr-q-slot{position:relative;flex:0 0 auto;width:30px;height:30px;margin-left:auto;perspective:260px}
+.dr-q-slot::before{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(84,99,95,.35);background:rgba(84,99,95,.04)}
+#drQLast:checked ~ .dr-q-list .dr-q-pen .dr-q-slot::before{border-color:rgba(212,87,61,.8);background:rgba(212,87,61,.08)}
+.dr-q-coin{position:absolute;inset:0;transform-style:preserve-3d}
+.dr-q-pen .dr-q-coin{transform:rotateY(180deg)}
+#drQLast:checked ~ .dr-q-list .dr-q-pen .dr-q-coin{opacity:0}
+.dr-q-coin>i{position:absolute;inset:0;border-radius:50%;background-size:100% 100%;box-shadow:0 2px 4px rgba(11,31,28,.18);-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.dr-q-fb{background-image:linear-gradient(150deg,#F5F8FD 0%,#C8D6EE 52%,#8BA3C9 100%)}
+.dr-q-fs{background-image:linear-gradient(150deg,#FBFCFC 0%,#D8DFDE 52%,#9EAAA7 100%);transform:rotateY(180deg)}
+.dr-q-coin>i::after{content:"\20AC";position:absolute;inset:3px;display:flex;align-items:center;justify-content:center;border-radius:50%;box-shadow:inset 1px 1px 2px rgba(48,68,108,.3),inset -1px -1px 1px rgba(255,255,255,.6);font-size:14px;font-weight:700;font-style:normal;color:rgba(48,68,108,.45)}
+.dr-q-fs::after{color:rgba(62,78,74,.45)}
+.dr-q-spr .dr-q-coin>i::after{content:none}
+.dr-q-ring{position:absolute;inset:-1px;border-radius:50%;border:2px solid rgba(88,107,133,.55);pointer-events:none}
+.dr-q-sheen{position:absolute;z-index:-1;inset:0;overflow:hidden;border-radius:inherit;pointer-events:none}
+.dr-q-sheen>i{position:absolute;top:0;bottom:0;left:0;width:40%;background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.95) 50%,rgba(255,255,255,0))}
+.pb-motion .dr-q-pill{transition:transform .55s cubic-bezier(.3,1.35,.45,1)}
+.pb-motion .dr-q-list::before{transition:opacity .8s .2s}
+.pb-motion .dr-q-pre .dr-q-list::before{opacity:0}
+.pb-motion .dr-q-row{transition:background-color .45s .1s,transform .3s cubic-bezier(.3,1.5,.5,1)}
+.pb-motion .dr-q-pen::before,.pb-motion .dr-q-pen::after{transition:opacity .4s .1s}
+.pb-motion .dr-q-n{transition:background-color .35s .25s,color .35s .25s,box-shadow .35s .25s}
+.pb-motion .dr-q-l{transition:color .4s}
+.pb-motion .dr-q-slot::before{transition:border-color .4s,background-color .4s}
+.pb-motion .dr-q-copy.dr-q-wait .dr-q-lead,.pb-motion .dr-q-copy.dr-q-wait .dr-q-fix{opacity:0;transform:translateY(16px)}
+.pb-motion .dr-q-copy .dr-q-lead,.pb-motion .dr-q-copy .dr-q-fix{transition:opacity .6s ease .32s,transform .95s cubic-bezier(.2,1.15,.3,1) .32s}
+.pb-motion .dr-q-copy .dr-q-fix{transition-delay:.5s}
+@media(hover:hover) and (pointer:fine){.pb-motion .dr-q-row:hover{transform:translateY(-2px)}}
 /* the calculator */
 .dr-calc{padding:84px 0}
 .dr-calc-card{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.08);overflow:hidden;overflow:clip}
@@ -2485,6 +2556,7 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
   .dr-hero-cta{margin-top:18px}
   .dr-why,.dr-calc{padding:56px 0}
   .dr-why-grid{grid-template-columns:1fr}
+  .dr-q-top{grid-template-columns:1fr;gap:22px;margin-bottom:22px}
   .dr-calc-card{grid-template-columns:1fr}
   .dr-calc-panel{border-left:0;border-top:1px solid var(--line,#E7EBE9);padding:22px 20px}
   .dr-calc-stage{padding:20px 18px 14px}
@@ -2500,6 +2572,13 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
   .dr3-base i{font-size:11.5px}
   .dr-card{padding:20px 18px 18px}
   .dr-ring-stage{height:300px}
+  .dr-q{padding:14px 12px;border-radius:24px}
+  .dr-q-seg{margin-bottom:12px}
+  .dr-q-seg label{font-size:14px}
+  .dr-q-row{gap:10px;min-height:52px;padding:6px 12px 6px 10px;border-radius:16px;font-size:15.5px}
+  .dr-q-list::before{left:24px}
+  .dr-q-slot{width:26px;height:26px}
+  .dr-q-coin>i::after{font-size:12px}
 }
 /* DIRECTORS:END */
 /* LEAD:kit:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/kit.css) */
@@ -2871,10 +2950,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <main id="main" tabindex="-1">
 <!-- DIRECTORS (Run 54, 11 October 2026, Damian's brief: "one unified director's landing page; at the
      very top, as simply as possible, why a director is different; then the pain; then a simpler
-     calculator; super interactive; no unnecessary text"). Four parts, each a stage drawn by its own
-     script: the hero's three stacks (assets/js/pb-dir-three.js), the coverage rows and the year-end
-     ring (pb-dir-why.js), the calculator's tower (pb-dir-calc.js) and the executive-pension row
-     (in pb-dir-why.js). The markup is the finished answer at its defaults: without JavaScript every
+     calculator; super interactive; no unnecessary text"). Five parts, each a stage moved by its own
+     script: the hero's three stacks (assets/js/pb-dir-three.js), the order (#drQ: who the company
+     pays first; the radios and the CSS draw it, pb-dir-why.js moves it), the coverage rows and the
+     year-end ring (pb-dir-why.js), the calculator's tower (pb-dir-calc.js) and the executive-pension
+     row (in pb-dir-why.js). The markup is the finished answer at its defaults: without JavaScript every
      figure still reads. The full calculator, the 2026 rules and the checklist stay live, linked
      below and from Related pages. 12 October 2026 (Damian: "the form up at the top"): the year-end
      reminder and "Ask us" sit straight after the first section, before the calculator; the ring
@@ -2904,7 +2984,27 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></header>
 
 <section class="dr-why" id="drWhy" aria-labelledby="drWhyH"><div class="wrap">
-  <h2 id="drWhyH">The company comes first. The pension comes last.</h2>
+  <div class="dr-q-top">
+    <div class="dr-q-copy">
+      <h2 id="drWhyH">Everyone gets paid before your pension.</h2>
+      <p class="dr-q-lead">The business, the staff, the bills. Your pension gets what&rsquo;s left: often nothing.</p>
+      <p class="dr-q-fix"><b>Turn it round.</b> The company pays into your pension, as a business expense. It cuts the company&rsquo;s tax, and you pay no income tax, USC or PRSI on it going in.</p>
+      <p class="pb-src">Within Revenue&rsquo;s limits. The pension is taxed when you take it.</p>
+    </div>
+    <fieldset class="dr-q" id="drQ">
+      <legend class="tk-sr">Your pension: paid last, or first?</legend>
+      <input class="dr-q-r" type="radio" name="dr-q-order" id="drQLast" value="last" autocomplete="off">
+      <input class="dr-q-r" type="radio" name="dr-q-order" id="drQFirst" value="first" autocomplete="off" checked>
+      <div class="dr-q-seg"><span class="dr-q-pill" aria-hidden="true"></span><label for="drQLast">Pension last</label><label for="drQFirst">Pension first</label></div>
+      <ol class="dr-q-list" aria-hidden="true">
+        <li class="dr-q-row"><b class="dr-q-n"><span class="dr-q-nn"><span>1</span><span>2</span></span></b><svg class="dr-q-ic" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/><path d="M10 21v-3h4v3"/></svg><span class="dr-q-t"><span class="dr-q-l">The business</span></span><span class="dr-q-slot"><i class="dr-q-coin"><i class="dr-q-fb"></i></i></span></li>
+        <li class="dr-q-row"><b class="dr-q-n"><span class="dr-q-nn"><span>2</span><span>3</span></span></b><svg class="dr-q-ic" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.5-5.6 5.5-5.6s5.5 2.3 5.5 5.6"/><circle cx="17" cy="9.2" r="2.6"/><path d="M16.4 14.4c2.5.2 4.4 2.3 4.4 5.2"/></svg><span class="dr-q-t"><span class="dr-q-l">The staff</span></span><span class="dr-q-slot"><i class="dr-q-coin"><i class="dr-q-fb"></i></i></span></li>
+        <li class="dr-q-row"><b class="dr-q-n"><span class="dr-q-nn"><span>3</span><span>4</span></span></b><svg class="dr-q-ic" viewBox="0 0 24 24"><path d="M6 2.8h12v18.4l-3-1.9-3 1.9-3-1.9-3 1.9z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span class="dr-q-t"><span class="dr-q-l">The bills</span></span><span class="dr-q-slot"><i class="dr-q-coin"><i class="dr-q-fb"></i></i></span></li>
+        <li class="dr-q-row dr-q-pen"><b class="dr-q-n"><span class="dr-q-nn"><span>4</span><span>1</span></span></b><svg class="dr-q-ic" viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 14c0-4 3-7 9-7 0 4-3 7-9 7z"/></svg><span class="dr-q-t"><span class="dr-q-l">Your pension</span><span class="dr-q-tags"><span class="dr-q-none">Nothing left</span><span class="dr-q-exp">Business expense</span></span></span><span class="dr-q-slot"><i class="dr-q-coin"><i class="dr-q-fb"></i><i class="dr-q-fs"></i></i></span></li>
+      </ol>
+      <p class="tk-sr" id="drQSr" aria-live="polite">Your pension first: the company pays into it as a business expense, then the business, the staff and the bills.</p>
+    </fieldset>
+  </div>
   <div class="dr-why-grid">
     <div class="dr-card dr-cov">
       <p class="dr-stat"><b class="pb-stat-n" id="drS1">57%</b> of the self-employed have a pension. <b class="pb-stat-n" id="drS2">68%</b> of employees do.</p>

@@ -2646,17 +2646,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
-.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-today-v[hidden]{display:none}
-.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
-.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
-.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
-.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
-/* TODAY:END */
 /* DIRECTOR-CALC:BEGIN (12 October 2026, Damian: "simplify the calculator
    as much as possible ... we don't need to know their income ... a bit more
    interactive ... motion design"). Four sliders; growth is a stated
@@ -2670,10 +2659,8 @@ main h1{font-weight:800}
 .pb-chart-key span{display:inline-flex;align-items:center;gap:6px}
 .pb-chart-key span[hidden]{display:none}
 .pb-chart-key i{display:inline-block;width:18px;height:0;border-top:3px solid var(--slate)}
-.pb-chart-key i.pb-k-today{border-top:2.5px dashed #8A97A8}
 .pb-chart-key i.pb-k-cash{border-top:2px dotted #B7791F}
 [data-pb-calc="director-calculator"] .res-hero{gap:18px 24px}
-[data-pb-calc="director-calculator"] .pb-today-v{font-size:1rem}
 /* the pot in three parts, as on the pension calculator */
 .pc-mix{grid-column:1/-1;min-width:0}
 .pc-bar{display:flex;height:16px;border-radius:99px;overflow:hidden;background:rgba(11,31,28,.07)}
@@ -2695,11 +2682,11 @@ main h1{font-weight:800}
 :root.pb-motion .pc-mix.pc-intro .pc-b-paid{transition-delay:.12s}
 :root.pb-motion .pc-mix.pc-intro .pc-b-grow{transition-delay:.24s}
 .pc-sub{margin:0 0 4px;font-size:1rem;color:var(--ink-2)}
-/* the cost of waiting, as two bars and the gap, in today's money */
+/* the cost of waiting, as two bars and the gap, in euro at the time
+   (13 October 2026, Damian: no inflation-adjusted figures in the results) */
 .dc-wait-bars{display:flex;flex-direction:column;gap:10px;margin:2px 0 14px}
 .dc-wait-bars[hidden]{display:none}
 .dc-wait-bar{display:grid;grid-template-columns:5.4em minmax(0,1fr) auto;align-items:center;gap:10px;font-size:1rem}
-.dc-wait-cap{margin:0;font-size:1rem;color:var(--ink-2)}
 .dc-wait-l{color:var(--ink-2)}
 .dc-wait-bar b{min-width:6.6em;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 #waitYearsV{white-space:nowrap}
@@ -2833,18 +2820,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">Salary would be deductible for the company too.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
+    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
 
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
       <div class="field pb-wait-f"><div class="row"><label for="waitYears">Start the company payments</label><span class="val" id="waitYearsV">in 1 year</span></div><input type="range" id="waitYears" min="1" max="10" step="1" value="1" style="--fill:0.00%"></div>
       <div class="dc-wait-bars" id="dcWaitBars">
-        <p class="dc-wait-cap">In today&rsquo;s money</p>
-        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l">Start now</span><span class="dc-wait-track"><i class="dc-wait-now"></i></span><b id="dcWaitNow">€1,058,535</b></div>
-        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l" id="dcWaitLL">In 1 year</span><span class="dc-wait-track"><i class="dc-wait-late" id="dcWaitLate" style="width:93.8%"></i><i class="dc-wait-gap" id="dcWaitGap" style="left:93.8%;width:6.2%"></i></span><b id="dcWaitLateV">€992,886</b></div>
+        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l">Start now</span><span class="dc-wait-track"><i class="dc-wait-now"></i></span><b id="dcWaitNow">€1,511,849</b></div>
+        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l" id="dcWaitLL">In 1 year</span><span class="dc-wait-track"><i class="dc-wait-late" id="dcWaitLate" style="width:93.8%"></i><i class="dc-wait-gap" id="dcWaitGap" style="left:93.8%;width:6.2%"></i></span><b id="dcWaitLateV">€1,418,086</b></div>
       </div>
-      <div class="wtext" id="waitOut">Wait 1 year: about <b>€65,649</b> less at 66.</div>
+      <div class="wtext" id="waitOut">Wait 1 year: about <b>€93,763</b> less at 66.</div>
     </div>
 
     <div class="vs-card pb-split" id="splitCard">
@@ -2869,7 +2855,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <h3>How your pot could grow</h3>
       <p class="pc-sub">At <span id="riskV">5% a year</span>, before charges.</p>
       <div id="chart"></div>
-      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span><span><i class="pb-k-cash"></i>Kept as cash, in today&rsquo;s money</span></p>
+      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span><i class="pb-k-cash"></i>The same payments kept as cash</span></p>
     </div>
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
@@ -2927,7 +2913,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Maximum funding (a pension of up to two-thirds of salary) needs enough years of service and an actuary&rsquo;s calculation. This tool does not do that calculation.</li>
     <li>A Standard Fund Threshold caps the fund eligible for full <a class="gref" href="glossary.html#tax-relief" title="See this in the jargon buster">tax relief</a>: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Figures ignore product charges.</li>
     <li>Growth: 5% a year, before charges: about half shares and half bonds, a mix we chose for illustration. It is not a fund. Its rate uses the most a pension projection may assume for each, before charges: shares 6.65%, bonds 3.40%, cash 2.65%, and 6% in all (the Pensions Authority, projection assumptions guidance, version 1.2, from 1 January 2025).</li>
-    <li>Today&rsquo;s money: prices rise 2% a year, the European Central Bank&rsquo;s target. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland).</li>
+    <li>Figures are in euro at the time, before inflation. Cash: 0.15% a year, the average rate on household overnight deposits in July 2026 (Central Bank of Ireland).</li>
     <li>The salary and pension split leaves out employer PRSI on salary and the lower income tax and USC bands.</li>
   </ul>
   </details>
@@ -2962,7 +2948,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/director-calc.js?v=9a107886"></script>
-<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/pb-prsi.js?v=fc12215a"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script>
@@ -2992,8 +2977,9 @@ var PRSI = PRSI_NOW.rate;
 var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
 
 /* Job 5: the arithmetic is assets/js/director-calc.js (PBDirector), the rates
-   assets/js/pb-assumptions.js (PBAssume), today's money assets/js/pb-today.js
-   (PBToday). This script reads the sliders and writes what they give.
+   assets/js/pb-assumptions.js (PBAssume). This script reads the sliders and
+   writes what they give. 13 October 2026 (Damian): every figure is in euro at
+   the time, before inflation; nothing here is in today's money.
    12 October 2026 (Damian: "simplify ... we don't need to know their
    income"): no salary and no risk slider. Growth is risk level 4, about half
    shares and half bonds; #risk holds the level for pb-after.js. Revenue's
@@ -3020,12 +3006,12 @@ function step(){
   rafId=active?requestAnimationFrame(step):null;
 }
 
-/* persistent morphing chart: the pot, the pot in today's money, and the same
-   payments kept as cash in today's money. Only the pot's line is drawn in the
-   colours the slate rules select (tests/build.test.py check 47). */
+/* persistent morphing chart: the pot, and the same payments kept as cash at
+   PBAssume's deposit rate, both in euro at the time. Only the pot's line is
+   drawn in the colours the slate rules select (tests/build.test.py check 47). */
 const chart={
   N:48,inited:false,W:620,H:250,padL:6,padR:6,padT:14,padB:30,
-  cur:{v:[],t:[],c:[],max:1},tgt:{v:[],t:[],c:[],max:1},els:{},
+  cur:{v:[],c:[],max:1},tgt:{v:[],c:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -3037,24 +3023,23 @@ const chart={
     const mk=(t,at)=>{const e=document.createElementNS(NS,t);for(const k in at)e.setAttribute(k,at[k]);svg.appendChild(e);return e;};
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.line=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
     this.els.cash=mk('path',{class:'pb-ch-cash',fill:'none',stroke:'#B7791F','stroke-width':'2','stroke-dasharray':'2 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(v,t,c,ageS,ageE){
+  setTarget(v,c,ageS,ageE){
     if(!this.inited)this.init();
-    this.tgt.v=v;this.tgt.t=t;this.tgt.c=c;this.tgt.max=Math.max(...v,1)*1.08;
+    this.tgt.v=v;this.tgt.c=c;this.tgt.max=Math.max(...v,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),t:t.slice(),c:c.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.v.length||REDUCE){this.cur={v:v.slice(),c:c.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
     if(!this.inited)return false;
     let active=false;
-    for(const k of ['v','t','c']){const T=this.tgt[k],C=this.cur[k];
+    for(const k of ['v','c']){const T=this.tgt[k],C=this.cur[k];
       for(let i=0;i<T.length;i++){const d=T[i]-C[i];
         if(Math.abs(d)>Math.max(0.5,Math.abs(T[i])*0.0004)){C[i]+=d*f;active=true;}else C[i]=T[i];}}
     const dm=this.tgt.max-this.cur.max;
@@ -3075,8 +3060,6 @@ const chart={
     const X=i=>this.padL+(i/(n-1))*(this.W-this.padL-this.padR);
     this.els.line.setAttribute('d',d);
     this.els.area.setAttribute('d',d+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0).toFixed(1)+' '+(this.H-this.padB)+' Z');
-    const on=!window.PBToday||PBToday.on();
-    this.els.today.setAttribute('d',on?this.path(this.cur.t):'');
     this.els.cash.setAttribute('d',this.path(this.cur.c));
     this.els.mx.textContent=euroK(this.cur.max);
   }
@@ -3119,21 +3102,19 @@ function calc(){
   const mRate=D.monthlyRate(g);
   const monthly=contrib/12;
   const p018=project(months,pot,monthly,mRate);
-  const p018Today=A.today(p018,yearsToRet);
   tween('potOut',p018,euro);
-  if(window.PBToday){PBToday.set('potOut',p018,yearsToRet);}
 
   /* the cost of waiting: the company payments start later, the pot already
-     there still grows. In today's money, as two bars and the gap. */
+     there still grows. In euro at the time, as two bars and the gap, the
+     figures rolling to their values. */
   const wy=+$('waitYears').value;
   $('waitYearsV').textContent=VALTEXT.waitYears(wy);
   const bars=$('dcWaitBars');
   if(contrib>0&&yearsToRet>wy){
-    const w=D.waiting({pot:pot,yearly:contrib,years:yearsToRet,delay:wy,rate:g,today:A.today});
-    const nowT=A.today(w.now,yearsToRet), lateT=A.today(w.later,yearsToRet), k=nowT>0?lateT/nowT:1;
-    $('waitOut').innerHTML='Wait '+wy+(wy===1?' year':' years')+': about <b>'+euro(w.gapToday)+'</b> less at '+ret+'.';
+    const w=D.waiting({pot:pot,yearly:contrib,years:yearsToRet,delay:wy,rate:g}), k=w.now>0?w.later/w.now:1;
+    $('waitOut').innerHTML='Wait '+wy+(wy===1?' year':' years')+': about <b>'+euro(w.gap)+'</b> less at '+ret+'.';
     $('dcWaitLL').textContent='In '+wy+(wy===1?' year':' years');
-    $('dcWaitNow').textContent=euro(nowT);$('dcWaitLateV').textContent=euro(lateT);
+    tween('dcWaitNow',w.now,euro);tween('dcWaitLateV',w.later,euro);
     $('dcWaitLate').style.width=(k*100).toFixed(2)+'%';
     $('dcWaitGap').style.left=(k*100).toFixed(2)+'%';$('dcWaitGap').style.width=((1-k)*100).toFixed(2)+'%';
     bars.hidden=false;
@@ -3151,7 +3132,6 @@ function calc(){
     '<li>Built up already <b>'+euro(pot)+'</b></li>'+
     '<li>Growth at '+A.pct(g)+' a year <b>'+euro(grown)+'</b></li>'+
     '<li>Your pot at '+ret+' <b>'+euro(p018)+'</b></li>'+
-    '<li>In today&rsquo;s money, prices rising '+A.inflation.pct+' a year for '+yearsToRet+' years <b>'+euro(p018Today)+'</b></li>'+
     '<li>Company tax: '+euro(contrib)+' &times; 12.5% = '+euro(contrib*D.CT)+' a year, for '+yearsToRet+' years <b>'+euro(taxSaved)+'</b></li>';
   mix(pot,paidIn,grown,p018);
 
@@ -3174,18 +3154,17 @@ function calc(){
     '<li>Tax saved: '+cut+'% of the '+euro(S.toPension)+' in your pension = <b>'+euro(S.taxSaved)+'</b>, not paid now.</li>'+
     '<li>Company tax: salary and pension payments are both costs the company can deduct, so it saves 12.5% of '+euro(contrib)+' = <b>'+euro(S.companyTax)+'</b> either way.</li>';
 
-  const v=[],t=[],c=[],cm=D.monthlyRate(A.cash.rate);
+  const v=[],c=[],cm=D.monthlyRate(A.cash.rate);
   for(let i=0;i<chart.N;i++){const m=months*i/(chart.N-1);
-    const pv=project(m,pot,monthly,mRate);v.push(pv);t.push(A.today(pv,m/12));
-    c.push(A.today(project(m,pot,monthly,cm),m/12));}
-  chart.setTarget(v,t,c,age,ret);
-  $('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
+    v.push(project(m,pot,monthly,mRate));
+    c.push(project(m,pot,monthly,cm));}
+  chart.setTarget(v,c,age,ret);
   ['age','ret','pot','contrib','split','waitYears'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=p018>SFT, sftNote=$('sftNote');
   if(sftNote) sftNote.hidden=!overSFT;
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
-  announce('Your pot at '+ret+' '+euro(p018)+', about '+euro(p018Today)+' in today’s money. Company tax saved '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
+  announce('Your pot at '+ret+' '+euro(p018)+'. Company tax saved '+euro(taxSaved)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
 
 wireRanges(VALTEXT,calc);
@@ -3219,9 +3198,9 @@ calc();
 })();
 
 /* The chart, by hand. Run a pointer or a finger along it and a line follows,
-   snapped to a whole year, with the pot at that age and in today's money:
-   the page's own project() on the page's own sliders, nothing new worked
-   out. A reading aid, so it works with motion off too; it is hidden from
+   snapped to a whole year, with the pot at that age and the same payments
+   kept as cash: the page's own project() on the page's own sliders, nothing
+   new worked out. A reading aid, so it works with motion off too; it is hidden from
    screen readers, whose figures are in the hero and the workings. */
 (function(){
   const host=$('chart'),NS='http://www.w3.org/2000/svg';
@@ -3242,9 +3221,10 @@ calc();
     if(!ensure())return;
     const age=+$('age').value,ret=+$('ret').value,years=ret-age,y=Math.round(Math.min(1,Math.max(0,f))*years),m=y*12;
     const v=project(m,+$('pot').value,+$('contrib').value/12,D.monthlyRate(LEVEL.rate)),max=chart.tgt.max||1;
+    const cv=project(m,+$('pot').value,+$('contrib').value/12,D.monthlyRate(A.cash.rate));
     const x=chart.padL+(years?y/years:0)*(chart.W-chart.padL-chart.padR),yy=chart.padT+(1-v/max)*(chart.H-chart.padT-chart.padB);
     vl.setAttribute('x1',x);vl.setAttribute('x2',x);dot.setAttribute('cx',x);dot.setAttribute('cy',yy);g.style.opacity=1;
-    tip.innerHTML='<b>At '+(age+y)+': '+euro(v)+'</b><span>'+euro(A.today(v,y))+' in today&rsquo;s money</span>';
+    tip.innerHTML='<b>At '+(age+y)+': '+euro(v)+'</b><span>Kept as cash: '+euro(cv)+'</span>';
     tip.hidden=false;
     const hb=host.getBoundingClientRect(),px=x/chart.W*hb.width,py=yy/chart.H*hb.height,tw=tip.offsetWidth;
     tip.style.left=Math.min(Math.max(0,px-tw/2),hb.width-tw)+'px';

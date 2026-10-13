@@ -66,7 +66,7 @@ REPLY_FORMS = {
     'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
                 'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
-    'fee-check': ['index.html'],
+    # the fee check ("fee-check") left the home page on 13 October 2026, for the cost of waiting: on no page now
     'year-end-reminder': ['director.html'],
     'job-change': ['tracker.html'],
     'callback': ['booking.html'],
@@ -131,10 +131,8 @@ PROBE = r"""<script>
     return;
   }
 
-  var OKS={'fee-check':'pbfOk','year-end-reminder':'pbyOk','job-change':'pbmOk','callback':'pbcOk','ask-result':'pbrOk'};
-  if(fname==='fee-check'){
-    $('pbfCheck').click(); set('pbfEmail','test@example.com');
-  }else if(fname==='year-end-reminder'){
+  var OKS={'year-end-reminder':'pbyOk','job-change':'pbmOk','callback':'pbcOk','ask-result':'pbrOk'};
+  if(fname==='year-end-reminder'){
     $('pbyForm').querySelector('input[name="year_end"][value="March"]').click(); set('pbyEmail','test@example.com');
   }else if(fname==='job-change'){
     $('pbmForm').querySelector('input[name="change"][value="Leaving a job"]').click();
@@ -281,7 +279,6 @@ SUCCESS_RESULT = 'Thanks, Test. Because you ticked the box, this result is email
 DAY = '[A-Z][a-z]+day \\d{1,2} [A-Z][a-z]+'
 REPLIED = re.compile('^Thanks, Test\\. We\u2019ll reply by ' + DAY + '\\.$')
 SUCCESS_REPLY = {'enquiry': REPLIED, 'pension-trace': REPLIED,
-                 'fee-check': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
                  'ask-result': re.compile('^We\u2019ll reply by ' + DAY + '\\.$'),
                  'year-end-reminder': re.compile('^(We\u2019ll remind you on \\d{1,2} [A-Z][a-z]+ \\d{4}, and every year after|Year end is close\\. Check your email)\\.$'),
                  'job-change': re.compile('^We\u2019ll email you by ' + DAY + '\\.$'),
@@ -334,8 +331,6 @@ def main():
             if name != 'callback':
                 eq('%s: the email as typed' % tag, fields.get('email'), ['test@example.com'])
             got = lambda *ks: [fields.get(k, [''])[0] for k in ks]
-            if name == 'fee-check':
-                eq('%s: the three figures, and what the fee costs' % tag, got('pot', 'fee', 'age', 'cost'), ['100000', '1', '40', '\u20ac104,616'])
             if name == 'year-end-reminder':
                 eq('%s: the month, and the reminder day' % tag,
                    (got('year_end')[0], bool(re.match(r'^(\d{1,2} [A-Z][a-z]+ \d{4}|As soon as possible)$', got('remind_on')[0]))), ('March', True))

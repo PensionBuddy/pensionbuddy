@@ -2559,17 +2559,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
-.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-today-v[hidden]{display:none}
-.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
-.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
-.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
-.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
-/* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
    line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
@@ -2738,6 +2727,20 @@ main h1{font-weight:800}
 .sft-lb-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
 .sft-lb,.sft-lb *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media(min-width:601px){.sft-card .sft-lb-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+
+/* MOTION-13:BEGIN (13 October 2026, Damian: "numbers that roll", "gentle
+   springs", never jumpy). assets/js/pb-sft-motion.js sets :root.pb-sft-alive
+   and wraps a headline figure's changed characters in .pb-roll, only while
+   motion is allowed and nothing is being dragged; every rule here is also
+   behind :root.pb-motion. The limit bar and the lump-sum bar keep still
+   (Run 43). The card that says what is over the threshold, and the
+   headroom line, arrive softly each time they appear. */
+:root.pb-motion.pb-sft-alive .pb-roll{display:inline-block;animation:pbSftRoll .36s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pbSftRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
+@keyframes pbSftArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+:root.pb-motion .sft-over:not([hidden]){animation:pbSftArrive .5s cubic-bezier(.2,1.2,.35,1) backwards}
+:root.pb-motion .sft-hero .pb-say:not([hidden]){animation:pbSftArrive .4s var(--pb-ease-out) backwards}
+/* MOTION-13:END */
 </style>
 
 <script>
@@ -2840,7 +2843,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="sft-card sft-over" id="sftOver" hidden>
       <h3>Over the threshold</h3>
       <p id="sftOverText"></p>
-      <p class="sft-small">Income tax on the rest takes the combined rate up to 68.8%, or 71.2% with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
+      <p class="sft-small">What is left is taxed again as income when you draw it: up to 68.8% in all, and more with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
     </div>
 
     <div class="chart-card sft-strip-card">
@@ -2955,11 +2958,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
-<script src="assets/js/sft.js?v=b0329bc2"></script>
-<script src="assets/js/pb-sft-motion.js?v=9f4400eb"></script>
+<script src="assets/js/sft.js?v=d35ecfcb"></script>
+<script src="assets/js/pb-sft-motion.js?v=747678d4"></script>
 <script>
 /* standard-fund-threshold.html (Run 20 #7; simplified 12 October 2026).
 

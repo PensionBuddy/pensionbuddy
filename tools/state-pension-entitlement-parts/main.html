@@ -1,7 +1,11 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <h1>What the State Pension would <span class="hl">pay</span> you.</h1>
-  <p>From your social insurance (PRSI) record, worked out both ways the Department does.</p>
+  <h1>How much State Pension <span class="hl">you may get</span>, from your PRSI record.</h1>
+  <!-- 13 October 2026 (Damian): the page's purpose in its first line, and
+       plainly that many get less. The figure is the module's maximum
+       (PBStatePension.MAX_WEEKLY_CENTS), held to it by tests/page-probe.js; with
+       motion its digits roll into place (assets/js/pb-sp-motion.js). -->
+  <p class="sp-less">Many people get less than the maximum, <b class="sp-fig sp-fig-in">&euro;299.30</b> a week.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-entitlement">

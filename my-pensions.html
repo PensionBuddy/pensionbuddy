@@ -2371,17 +2371,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
-.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-today-v[hidden]{display:none}
-.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
-.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
-.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
-.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
-/* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
    line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
@@ -2672,7 +2661,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/pots.js?v=7ab7e05d"></script>

@@ -14,8 +14,26 @@ Every formula here is asserted by `tests/state-pension.test.js`.
 
 ## S0. What this page answers
 
-One question: **if the State Pension is all you have, what does retirement
-actually look like?**
+> **13 October 2026 (Damian): the page leads with the plain question.** The
+> headline is **"What does the State Pension actually pay?"**, answered at
+> once, under it: **"At most €299.30 a week, €15,564 a year."**, then
+> **"You may get less. It depends on your PRSI record."**, then the way to the
+> reader's own figure, a link drawn as a prominent aqua pill (not a `btn`: a
+> filled button on this site is the booking ask, tests/build.test.py 52):
+> **"Work out what you'd get"**, to `state-pension-entitlement.html`. The
+> calculator follows under its own question, **"Is it enough to live on?"**.
+> The two figures are static markup, so `tests/page-probe.js` (the lead's
+> six assertions) holds them to `statePension(FULL_CONTRIBUTIONS)` and fails
+> on a Budget that moves the rate before the page can show a stale maximum.
+> With motion (`html.pb-motion`) the answer, the caveat and the link rise in
+> after the headline's words, one after another; each figure's digits roll up
+> to their value (`assets/js/pb-sp-motion.js` lays an aria-hidden reel over
+> the real figure and removes it once it lands, so the text is never
+> rewritten); the link lands on a gentle spring and its arrow nudges twice.
+> Without motion or JavaScript every line is plain and in place.
+
+The calculator's question: **if the State Pension is all you have, what does
+retirement actually look like?**
 
 The page puts the maximum State Pension next to the three Retirement Living
 Standards published by the Pensions Council, and states the difference. It

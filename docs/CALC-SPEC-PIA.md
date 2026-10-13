@@ -88,7 +88,10 @@ drawing a pension over years rather than all at the end. Since 12 October
 2026 the page also assumes the pension payments are within Revenue's
 age-related limit (it no longer asks for age or earnings), and shows the
 reader's own growth only: `scenarios().lower` and `.fall` stay in the module
-and its tests but are not on the page.
+and its tests but are not on the page. Since 13 October 2026 (Damian: no
+inflation-adjusted figures in any calculator's results) every figure is in
+euro at the time, before inflation, and the page offers no "today's money"
+view; inflation stays among what is left out.
 
 ## P6. Worked examples (asserted)
 

@@ -49,8 +49,10 @@
   eq('4. and all 240 payments counted as paid in', cOnly.paidIn, 48000);
 
   group('5  what charges cost is more than what they took, because a charge stops growing');
+  /* the page's defaults since 13 October 2026 (Irish charges: basis points):
+     your plan 0.75% a year and nothing on payments, the other plan 0.4% */
   var c = F.compare({ pot: 50000, monthly: 200, years: 25, growth: 0.05,
-                      a: { amc: 0.01, contribution: 0.05 }, b: { amc: 0.005, contribution: 0 } });
+                      a: { amc: 0.0075, contribution: 0 }, b: { amc: 0.004, contribution: 0 } });
   eq('5. costA is the no-charge pot less plan A', c.costA, c.none.pot - c.a.pot);
   eq('5. costB likewise', c.costB, c.none.pot - c.b.pot);
   eq('5. the difference is B less A', c.difference, c.b.pot - c.a.pot);
@@ -58,15 +60,15 @@
   yes('5. so did plan B', c.costB > c.b.amcPaid + c.b.contributionPaid);
   yes('5. the dearer plan ends lower', c.a.pot < c.b.pot && c.b.pot < c.none.pot);
 
-  group('6  the page\'s default, to the euro (worked out separately)');
-  eq('6. plan A: 1% and 5%', Math.round(c.a.pot), 227710);
-  eq('6. plan B: 0.5% and none', Math.round(c.b.pot), 258137);
+  group('6  the page\'s default, to the euro (worked out separately, 13 October 2026)');
+  eq('6. plan A: 0.75% and none', Math.round(c.a.pot), 245101);
+  eq('6. plan B: 0.4% and none', Math.round(c.b.pot), 263556);
   eq('6. no charges', Math.round(c.none.pot), 286465);
-  eq('6. what plan A\'s charges cost', Math.round(c.costA), 58754);
-  eq('6. what plan B\'s cost', Math.round(c.costB), 28327);
-  eq('6. the difference', Math.round(c.difference), 30427);
-  eq('6. plan A\'s annual charges, in euro at the time', Math.round(c.a.amcPaid), 31380);
-  eq('6. plan A\'s contribution charges', Math.round(c.a.contributionPaid), 3000);
+  eq('6. what plan A\'s charges cost', Math.round(c.costA), 41364);
+  eq('6. what plan B\'s cost', Math.round(c.costB), 22909);
+  eq('6. the difference', Math.round(c.difference), 18455);
+  eq('6. plan A\'s annual charges, in euro at the time', Math.round(c.a.amcPaid), 24699);
+  eq('6. plan A\'s contribution charges: none', Math.round(c.a.contributionPaid), 0);
 
   group('7  the year-by-year line the chart draws');
   eq('7. one point a year and the start', c.a.yearly.length, 26);

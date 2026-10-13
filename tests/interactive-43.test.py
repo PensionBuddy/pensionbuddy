@@ -21,7 +21,8 @@ C4a (INTERACTIVE-PROPOSALS-42 ranks 7, 2, 4 and 1):
 C4b (INTERACTIVE-PROPOSALS-42 rank 14), index.html:
   (rank 3, the hero figures as toggles, H1-H14, went with the old gap chart
   on 11 October 2026)
-  the phone slider in "What changes, and when." picking the relief step (T1-T8)
+  the phone slider in "Key dates for your pension." picking the relief step (T1-T8)
+  (13 October 2026: the line under it gives the step's age and its plain first sentence)
 
 C4c (INTERACTIVE-PROPOSALS-42 ranks 6, 15 and 9):
   starter.html, pensions-over-50.html, self-employed-pensions.html
@@ -533,9 +534,9 @@ def check_fees(sid, r, nojs):
     if SCEN[sid][1] == 1440:
         label, cost = r['F4']
         eq('F4 %s: the spoken label names the red area' % sid,
-           label.endswith(' The red area is what your plan’s charges take: €58,754 by retirement.'), True)
-        eq('F4 %s: its figure is #costA' % sid, cost, '€58,754')
-    # Job 5: a fifth item follows it, "Your plan in today's money"
+           label.endswith(' The red area is what your plan’s charges take: €41,364 by retirement.'), True)
+        eq('F4 %s: its figure is #costA' % sid, cost, '€41,364')
+    # (13 October 2026: nothing on the page is in today's money, so no fifth item)
     eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [4, 'What your plan’s charges take', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])
     if SCEN[sid][1] == 500:
@@ -573,10 +574,11 @@ def check_home(sid, rep, r, nojs, reduce):
         check_t1(sid, r)
         t = r['T2']
         eq('T2 %s: 62 picks From 60, not From 61' % sid,
-           [t['picked'], t['now'], t['valuetext'], t['v'], t['fill']], [['60'], '40% From 60', '62: 40%, From 60', '62', '77.19%'])
-        eq('T3 %s: 18 picks Under 30' % sid, [r['T3']['picked'], r['T3']['now']], [['18'], '15% Under 30'])
-        eq('T4 %s: 61 picks From 60' % sid, [r['T4']['picked'], r['T4']['now']], [['60'], '40% From 60'])
-        eq('T5 %s: 75 picks From 60' % sid, [r['T5']['picked'], r['T5']['now']], [['60'], '40% From 60'])
+           [t['picked'], t['now'], t['valuetext'], t['v'], t['fill']],
+           [['60'], 'From 60: Tax relief on up to 40% of your pay, the most there is.', '62: From 60, tax relief on up to 40% of your pay, the most there is.', '62', '77.19%'])
+        eq('T3 %s: 18 picks Under 30' % sid, [r['T3']['picked'], r['T3']['now']], [['18'], 'Under 30: Tax relief on up to 15% of your pay.'])
+        eq('T4 %s: 61 picks From 60' % sid, [r['T4']['picked'], r['T4']['now']], [['60'], 'From 60: Tax relief on up to 40% of your pay, the most there is.'])
+        eq('T5 %s: 75 picks From 60' % sid, [r['T5']['picked'], r['T5']['now']], [['60'], 'From 60: Tax relief on up to 40% of your pay, the most there is.'])
         li0, li1, back = r['T1b']
         eq('T1 %s: no step moves when the slider does (62, then 40)' % sid, [r['T2']['li'], li1], [li0, li0])
         eq('T1 %s: back at 40, as at load' % sid, back, r['T1'])
@@ -590,7 +592,7 @@ def check_t1(sid, r):
     t = r['T1']
     eq('T1 %s: the slider drawn, at 40, From 40 picked alone' % sid,
        [t['shown'], t['value'], t['picked'], t['now'], t['valuetext'], t['nowHidden']],
-       [True, '40', ['40'], '25% From 40', '40: 25%, From 40', 'true'])
+       [True, '40', ['40'], 'From 40: Tax relief on up to 25% of your pay.', '40: From 40, tax relief on up to 25% of your pay.', 'true'])
     eq('T1 %s: the picked step on --surface-2, its dot and ring slate' % sid, [t['pickedBg'], t['pickedDot'], t['pickedRing']], [r['surface2'], r['slate'], r['slate']])
     bad = [x for x in r_shifts(sid) if any('pbTl' in p or 'pb-tl' in p for p in x.get('sources', []))]
     eq('T1 %s: no layout shift has a source in the timeline' % sid, bad, [])

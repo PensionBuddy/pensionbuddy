@@ -2559,17 +2559,6 @@ main h1{font-weight:800}
 [data-pb-calc] :is(.big,.amt,.bv,.rbig b,[data-pb-wait]),#ptTotal,.pb-peek-v{font-weight:700;font-variant-numeric:tabular-nums}
 @media(max-width:920px){html{font-size:106.25%}}
 /* TYPE:END */
-/* TODAY:BEGIN (Job 5: assets/js/pb-today.js, "Show in today's money") */
-.pb-today-v{margin-top:6px;font-size:14px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pb-today-v[hidden]{display:none}
-.pb-preveil .pb-today-v,.pb-today-v.pb-veiled{filter:blur(13px)}
-.pb-today{margin:16px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px}
-.pb-today-sw{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;cursor:pointer}
-.pb-today-sw input{width:20px;height:20px;accent-color:var(--slate);margin:0}
-.pb-today-note,.pb-today-cash{margin:10px 0 0;font-size:14px;line-height:1.55;color:var(--ink-2)}
-.chart-legend i.pb-k-today{display:inline-block;width:18px;height:0;border-top:2.5px dashed #8A97A8;background:none}
-#chartKeyToday[hidden]{display:none}
-/* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
    line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
@@ -2702,7 +2691,50 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 :root.pb-calc-alive .waitcard:has(.pb-wait:not([hidden])) #waitOut{display:none}
 .pc-sub{margin:0;font-size:1rem;color:var(--ink-2)}
 [data-pb-calc="pension-calculator"] .chart-legend .dashk{padding:0;margin:0}
-[data-pb-calc="pension-calculator"] .pb-today-v,:root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar{font-size:1rem}
+:root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar{font-size:1rem}
+/* the State Pension on a line of its own (13 October 2026, Damian: no
+   inflation-adjusted figures in the results). It is today's rate, so it is
+   never added to a pot in future euro. Teal, because it is the State's. */
+.pc-k-state{display:inline-block;width:10px;height:10px;margin-right:9px;border-radius:50%;background:var(--teal);vertical-align:0}
+[data-pb-calc="pension-calculator"] .res-hero .pb-sp-top b{font-weight:700;font-variant-numeric:tabular-nums}
+/* WHAT IT WILL BUY (13 October 2026, Damian: "below the results, a separate
+   small calculator ... the only place inflation appears"). The pot at
+   retirement next to the same money kept in a bank, each in what it buys at
+   today's prices, from the sliders above. Two bars on one scale: slate for
+   the pension, grey for the bank, and between them the coral of money
+   missing (the cost of waiting's own hatch). The bars are drawn with
+   clip-path, so a bar of any length keeps its round ends; the page script
+   sets them. With motion (html.pb-motion) they grow in once, one after the
+   other, the coral draws itself after them and the figures roll; after that
+   they follow the sliders on a gentle spring. Without motion, or without
+   JavaScript, everything sits at its value. */
+.pc-buy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 22px;box-shadow:var(--sh-sm)}
+.pc-buy h3{margin:0 0 4px}
+.pc-buy-rows{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:16px}
+.pc-buy-row{margin:0;padding:0;min-width:0}
+.pc-buy-row::before{content:none;display:none}
+.pc-buy-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;flex-wrap:wrap;font-size:1rem;color:var(--ink-2)}
+.pc-buy-h b{font-size:clamp(1.35rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.03em;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
+.pc-buy-track{position:relative;height:14px;margin-top:8px;border-radius:99px;background:rgba(11,31,28,.07)}
+.pc-buy-fill{position:absolute;inset:0;border-radius:99px}
+.pc-buy-pen{background:var(--slate)}
+.pc-buy-bank{background:#97A3B4}
+.pc-buy-gap{background:repeating-linear-gradient(-45deg,#F2B8A8 0 6px,#FADCD3 6px 12px)}
+.pc-buy-say{margin:18px 0 0;font-size:1.05rem;line-height:1.5;color:var(--ink)}
+.pc-buy-say b{font-weight:700;font-variant-numeric:tabular-nums}
+.pc-buy-note{margin:6px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
+/* the cost of waiting on a phone: each bar on its own line, under its label
+   and figure, so the bars are long enough to compare */
+@media(max-width:520px){
+  :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l v" "t t";row-gap:6px}
+  :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-l{grid-area:l}
+  :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar b{grid-area:v;min-width:0}
+  :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-track{grid-area:t}
+}
+.pc-buy-fill{will-change:clip-path}
+:root.pb-motion .pc-buy.pc-buy-pre .pc-buy-say{opacity:0;transform:translateY(var(--pb-nudge))}
+:root.pb-motion .pc-buy.pc-buy-in .pc-buy-say{transition:opacity var(--pb-d-3) var(--pb-ease-out) .62s,transform var(--pb-d-4) var(--pb-ease-out) .62s}
+@media print{.pc-buy .pc-buy-say{opacity:1!important;transform:none!important}}
 /* what Revenue adds, with the one switch it needs */
 .pc-rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:14px}
 .relief-card .pc-rhead .rt{margin:0}
@@ -2741,7 +2773,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€269,666</b></li>
         </ul>
       </div>
-      <p class="pb-say pb-sp-top" id="pbSpTop">With the full State Pension from 66: about €2,213 a month in today&rsquo;s money.</p>
+      <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: <b>€1,297</b> a month at today&rsquo;s rate.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration.</div>
@@ -2770,8 +2802,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="chart-card">
       <h3>How your pot could grow</h3>
       <p class="pc-sub">At <span id="growthV">5%</span> a year, before charges.</p>
-      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With €100 more a month</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span></div>
+      <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With €100 more a month</span></div>
       <div id="chart"></div>
+    </div>
+    <div class="pc-buy" id="pcBuy">
+      <h3 id="pcBuyH">What it will buy</h3>
+      <p class="pc-sub">At <span id="buyAt">66</span>, in today&rsquo;s prices.</p>
+      <ul class="pc-buy-rows" aria-hidden="true">
+        <li class="pc-buy-row"><div class="pc-buy-h"><span>Your pension</span><b id="buyPen">€274,926</b></div><div class="pc-buy-track"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
+        <li class="pc-buy-row"><div class="pc-buy-h"><span>In a bank instead</span><b id="buyBank">€116,617</b></div><div class="pc-buy-track"><i class="pc-buy-fill pc-buy-gap" id="buyGapBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i><i class="pc-buy-fill pc-buy-bank" id="buyBankBar" style="clip-path:inset(0 57.58% 0 0 round 99px)"></i></div></li>
+      </ul>
+      <p class="tk-sr" id="buySr">At 66, in today&rsquo;s prices: your pension €274,926; the same money in a bank instead, €116,617.</p>
+      <p class="pc-buy-say" id="buySay">Kept in a bank, the same money would buy <b>€158,308</b> less.</p>
+      <p class="pc-buy-note">Prices rising 2% a year; the bank paying 0.15%.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="pension-calculator">
@@ -2825,7 +2868,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
     <li>Not included: product charges, the tax on your income when you draw it.</li>
     <li>Tax relief is at the rate you choose, on your own payments only. Revenue&rsquo;s limit is 15% of earnings under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. We do not ask what you earn, so the figure assumes your earnings cover your payments.</li>
-    <li>Today&rsquo;s money: prices rising 2% a year, the European Central Bank&rsquo;s target. Nothing is guaranteed.</li>
+    <li>The figures above are in euro at the time, before inflation. Only &ldquo;What it will buy&rdquo; adjusts for it: prices rising 2% a year, the European Central Bank&rsquo;s target, and the same money in a bank account at 0.15% a year, the average on household overnight deposits in July 2026 (Central Bank of Ireland). Nothing is guaranteed.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year in 2026, and €16,084 from January 2027 (Budget 2027). Check gov.ie for the current rate.</li>
   </ul>
   </details>
@@ -2862,7 +2905,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></footer>
 
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
-<script src="assets/js/pb-today.js?v=ba75f10f"></script>
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script>
@@ -2917,7 +2959,7 @@ function step(){
 /* ---- persistent morphing chart ---- */
 const chart={
   N:48,inited:false,W:620,H:270,padL:6,padR:6,padT:14,padB:30,
-  cur:{b:[],u:[],t:[],max:1},tgt:{b:[],u:[],t:[],max:1},els:{},
+  cur:{b:[],u:[],max:1},tgt:{b:[],u:[],max:1},els:{},
   init(){
     const NS='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(NS,'svg');
@@ -2930,18 +2972,16 @@ const chart={
     this.els.area=mk('path',{fill:'rgba(11,122,110,0.12)'});
     this.els.boost=mk('path',{fill:'none',stroke:'#F4B740','stroke-width':'2.5','stroke-dasharray':'6 5','stroke-linecap':'round','stroke-linejoin':'round'});
     this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
-    /* Job 5: the plan in today's money (assets/js/pb-today.js) */
-    this.els.today=mk('path',{class:'pb-ch-today',fill:'none',stroke:'#8A97A8','stroke-width':'2.5','stroke-dasharray':'7 5','stroke-linecap':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     $('chart').appendChild(svg);this.inited=true;
   },
-  setTarget(b,u,ageS,ageE,t){
+  setTarget(b,u,ageS,ageE){
     if(!this.inited)this.init();
-    this.tgt.b=b;this.tgt.u=u;this.tgt.t=t||[];this.tgt.max=Math.max(...u,1)*1.08;
+    this.tgt.b=b;this.tgt.u=u;this.tgt.max=Math.max(...u,1)*1.08;
     this.els.a0.textContent='Age '+ageS;this.els.a1.textContent='Age '+ageE;
-    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),t:this.tgt.t.slice(),max:this.tgt.max};this.render();}
+    if(!this.cur.b.length||REDUCE){this.cur={b:b.slice(),u:u.slice(),max:this.tgt.max};this.render();}
     startLoop();
   },
   lerp(f){
@@ -2949,7 +2989,7 @@ const chart={
     let active=false;
     const L=(c,t)=>{for(let i=0;i<t.length;i++){const d=t[i]-c[i];
       if(Math.abs(d)>Math.max(0.5,Math.abs(t[i])*0.0004)){c[i]+=d*f;active=true;}else c[i]=t[i];}};
-    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);L(this.cur.t,this.tgt.t);
+    L(this.cur.b,this.tgt.b);L(this.cur.u,this.tgt.u);
     const dm=this.tgt.max-this.cur.max;
     if(Math.abs(dm)>this.tgt.max*0.0004){this.cur.max+=dm*f;active=true;}else this.cur.max=this.tgt.max;
     this.render();return active;
@@ -2965,14 +3005,107 @@ const chart={
     for(let i=1;i<n;i++)dU+=' L '+X(i).toFixed(1)+' '+Y(this.cur.u[i]).toFixed(1);
     this.els.base.setAttribute('d',dB);
     this.els.boost.setAttribute('d',dU);
-    let dT='';
-    if(this.cur.t.length===n&&(!window.PBToday||PBToday.on())){dT='M '+X(0)+' '+Y(this.cur.t[0]).toFixed(1);
-      for(let i=1;i<n;i++)dT+=' L '+X(i).toFixed(1)+' '+Y(this.cur.t[i]).toFixed(1);}
-    this.els.today.setAttribute('d',dT);
     this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
     this.els.mx.textContent=euro(max);
   }
 };
+
+/* ---- what it will buy (13 October 2026) ----
+   The card under the results: two bars on one scale and three figures, set
+   by calc() through buy.set(pension, bank, age), both already in today's
+   prices. Everything it shows comes from calc(); this only draws it.
+   Motion only under html.pb-motion: the first time the card is half in
+   view, the pension's bar grows from nothing, the bank's a beat later, and
+   the coral between them draws itself out from the bank's end; the figures
+   roll up with them and the sentence settles in under them. After that a
+   slider moves the bars on a gentle spring (a touch under critical, so they
+   land with the faintest give) and rolls the figures from where they are.
+   Without motion everything is written at its value at once. */
+const buy=(function(){
+  const box=$('pcBuy');
+  if(!box)return {set(){}};
+  const root=document.documentElement,motion=()=>root.classList.contains('pb-motion');
+  const bar={pen:$('buyPenBar'),bank:$('buyBankBar'),gap:$('buyGapBar')};
+  const fig={pen:$('buyPen'),bank:$('buyBank')};
+  const K=110,C=19;                         /* the spring: stiffness, damping (just under critical) */
+  const DELAY={pen:0,bank:110,gap:470};     /* ms into the first reveal */
+  const S={pen:{x:0,v:0,t:0},bank:{x:0,v:0,t:0},gap:{x:0,v:0,t:0}};
+  const R={pen:{x:0,from:0,t:0,t0:0},bank:{x:0,from:0,t:0,t0:0}};
+  let seen=false,start=0,last=0,raf=0;
+  const clip=w=>'inset(0 '+((1-Math.max(0,Math.min(1,w)))*100).toFixed(2)+'% 0 0 round 99px)';
+  function paint(){
+    for(const k in S)bar[k].style.clipPath=clip(S[k].x);
+    for(const k in R)fig[k].textContent=euro(R[k].x);
+  }
+  function frame(){
+    raf=0;
+    const now=performance.now(),dt=last?Math.min(0.034,(now-last)/1000):1/60,age=now-start;last=now;
+    let busy=false;
+    for(const k in S){const s=S[k];
+      if(age<DELAY[k]){busy=true;
+        /* the coral waits at the bank bar's end, so it draws out from there */
+        if(k==='gap'){s.x=Math.min(S.bank.x,s.t);s.v=0;}
+        continue;}
+      s.v+=(K*(s.t-s.x)-C*s.v)*dt;s.x+=s.v*dt;
+      if(Math.abs(s.t-s.x)>0.0006||Math.abs(s.v)>0.003)busy=true;else{s.x=s.t;s.v=0;}}
+    for(const k in R){const r=R[k],u=(now-r.t0)/(age>900?520:700);
+      if(u<1){busy=true;r.x=u<=0?r.from:r.from+(r.t-r.from)*(1-Math.pow(1-u,4));}else r.x=r.t;}
+    paint();
+    if(busy)raf=requestAnimationFrame(frame);else last=0;
+  }
+  function go(){if(!raf){last=0;raf=requestAnimationFrame(frame);}}
+  /* every bar and figure straight to its value */
+  function snap(){
+    if(!want)return;
+    S.pen.t=S.pen.x=want.w.pen;S.bank.t=S.bank.x=want.w.bank;S.gap.t=S.gap.x=want.w.pen;
+    for(const k in S)S[k].v=0;
+    for(const k in R)R[k].x=R[k].from=R[k].t=want.v[k];
+    if(raf){cancelAnimationFrame(raf);raf=0;}
+    paint();
+  }
+  function aim(w,v){
+    S.pen.t=w.pen;S.bank.t=w.bank;S.gap.t=w.pen;
+    const now=performance.now();
+    for(const k in R){const r=R[k];r.from=r.x;r.t=v[k];r.t0=now+(start&&now-start<DELAY[k]?start+DELAY[k]-now:0);}
+  }
+  let want=null;
+  const io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
+    if(!es[0].isIntersecting||es[0].intersectionRatio<0.45)return;
+    io.disconnect();seen=true;
+    if(!motion()||!want){box.classList.remove('pc-buy-pre');if(want)set(want.v.pen,want.v.bank,want.at);return;}
+    start=performance.now();
+    box.classList.add('pc-buy-in');box.classList.remove('pc-buy-pre');
+    aim(want.w,want.v);go();
+    setTimeout(function(){box.classList.remove('pc-buy-in');},1600);
+  },{threshold:[0,0.45,0.8]}):null;
+  if(motion()&&io){box.classList.add('pc-buy-pre');io.observe(box);}else seen=true;
+  /* motion switched off part way: straight to the values */
+  document.addEventListener('pb:motion',function(e){
+    if(e.detail&&!e.detail.motion){if(io)io.disconnect();seen=true;box.classList.remove('pc-buy-pre','pc-buy-in');
+      /* a fade still waiting on its delay jumps to its end */
+      if(box.getAnimations)box.getAnimations({subtree:true}).forEach(function(a){try{a.finish();}catch(x){}});
+      if(want)set(want.v.pen,want.v.bank,want.at);}});
+  function set(pen,bank,at){
+    const top=Math.max(pen,bank,1),gap=Math.max(0,pen-bank);
+    want={w:{pen:pen/top,bank:bank/top},v:{pen:pen,bank:bank},at:at};
+    $('buyAt').textContent=at;
+    $('buySay').innerHTML=pen>=0.5||bank>=0.5
+      ?(gap>=0.5?'Kept in a bank, the same money would buy <b>'+euro(gap)+'</b> less.':'Kept in a bank, the same money would buy about the same.')
+      :'Add what you have saved, or pay in, to see what it buys.';
+    $('buySr').textContent='At '+at+', in today\u2019s prices: your pension '+euro(pen)+'; the same money in a bank instead, '+euro(bank)+'.';
+    if(!seen)return;                          /* armed: the reveal starts it */
+    if(!motion()){snap();return;}
+    aim(want.w,want.v);go();
+  }
+  /* printed before it was ever seen, or part way through: at its values */
+  addEventListener('beforeprint',function(){
+    if(!seen){if(io)io.disconnect();seen=true;box.classList.remove('pc-buy-pre');}
+    snap();
+  });
+  /* armed and out of sight: empty bars and noughts, for the reveal to fill */
+  if(!seen){S.pen.x=S.bank.x=S.gap.x=0;paint();}
+  return {set:set};
+})();
 
 /* ---- slider fill paint ---- */
 /* aria-valuetext (D4): assistive tech announces the formatted value ("€50,000", "40 years"), not the raw number.
@@ -3016,16 +3149,15 @@ function calc(){
 
   tween('potOut',base,euro);
   tween('incOut',base*0.04/12,euro);
-  if(window.PBToday){PBToday.set('potOut',base,ret-age);PBToday.set('incOut',base*0.04/12,ret-age);}
-  /* #11: the same monthly income with the State Pension (Contributory) at its
-     maximum rate on top, from 66, the pension age. The rate is the reality
-     check's module's, a year over twelve, and is today's; so the income is
-     taken back to today's money before the two are added. */
+  /* #11, 13 October 2026 (Damian: no inflation-adjusted figures in the
+     results): the State Pension (Contributory) at its maximum rate, from 66,
+     the pension age, on a line of its own. The rate is the reality check's
+     module's, a year over twelve, and it is today's rate, so it is never
+     added to the pension above, which is in euro at the time. */
   if(window.PBStatePension){
     const SPm=PBStatePension.MAX_WEEKLY_CENTS*PBStatePension.WEEKS_PER_YEAR/100/12;
-    const incT=window.PBAssume?PBAssume.today(base*0.04/12,ret-age):base*0.04/12;
-    $('pbSpTop').textContent='With the full State Pension from '+PBStatePension.PENSION_AGE+
-      ': about '+euro(incT+SPm)+' a month in today\u2019s money.';
+    $('pbSpTop').innerHTML='<i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from '+PBStatePension.PENSION_AGE+
+      ': <b>'+euro(SPm)+'</b> a month at today\u2019s rate.';
   }
 
   /* #29: the workings, from the same values: what went in, what was there
@@ -3086,15 +3218,22 @@ function calc(){
     $('reliefViz').style.opacity='.45';
   }
 
-  const b=[],u=[],t=[];
+  const b=[],u=[];
   for(let i=0;i<chart.N;i++){
     const m=months*i/(chart.N-1);
     b.push(project(m,pot,monthly,mRate));
     u.push(project(m,pot,monthly+100,mRate));
-    t.push(window.PBAssume?PBAssume.today(b[i],m/12):b[i]);
   }
-  chart.setTarget(b,u,age,ret,t);
-  if($('chartKeyToday'))$('chartKeyToday').hidden=!(!window.PBToday||PBToday.on());
+  chart.setTarget(b,u,age,ret);
+
+  /* what it will buy: the pot, and the same money (what is saved and every
+     payment) kept in a bank at PBAssume's deposit rate, the same project();
+     each taken back to today's prices at PBAssume's 2% a year */
+  const A=window.PBAssume, yrs=ret-age;
+  const cRate=Math.pow(1+(A?A.cash.rate:0),1/12)-1;
+  const bank=project(months,pot,monthly,cRate);
+  const penT=A?A.today(base,yrs):base, bankT=A?A.today(bank,yrs):bank;
+  buy.set(penT,bankT,ret);
   ['age','ret','pot','mine','emp'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
   /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
   const overSFT=base>SFT, sftNote=$('sftNote');

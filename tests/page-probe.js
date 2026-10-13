@@ -60,6 +60,15 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var text = function (id) { var el = $(id); return el ? el.textContent : undefined; };
+  /* An element's words as a reader gets them: what an aria-hidden layer lays
+     over it (the lead's rolling digits, pb-sp-motion.js) is left out, and
+     white space is folded, as the headline's word-by-word rise splits it. */
+  function words(el) {
+    if (!el) return undefined;
+    var c = el.cloneNode(true);
+    [].forEach.call(c.querySelectorAll('[aria-hidden="true"]'), function (h) { h.parentNode.removeChild(h); });
+    return c.textContent.replace(/\s+/g, ' ').trim();
+  }
 
   /* Set a slider the way a reader does: value, then a real input event, one
      per slider, birth before entry on the entitlement page because entry's
@@ -102,6 +111,27 @@
     if (pinned) t.eq('clock: the page read the pinned year ' + pinned, YEAR, pinned);
     t.eq('one control: the contributions slider is the only slider, and there is no age slider',
          [document.querySelectorAll('[data-pb-calc] input[type=range]').length, $('age') === null].join('/'), '1/true');
+
+    /* THE LEAD (13 October 2026, Damian): the page's question, answered at
+       once with the maximum, a plain "you may get less", and the way to the
+       reader's own figure. The figures are static markup, so this is what
+       holds them to the module: a Budget that moves the rate fails here
+       rather than leaving the first thing a reader sees behind. */
+    var maxRes = SP.statePension(SP.FULL_CONTRIBUTIONS);
+    var lead = document.querySelector('.phead');
+    t.eq('lead: the headline is the plain question', words(lead && lead.querySelector('h1')),
+         'What does the State Pension actually pay?');
+    t.eq('lead: its two figures are the module\'s maximum, a week and a year',
+         [].map.call(lead.querySelectorAll('.sp-fig'), words).join(' | '), euro2(maxRes.weekly) + ' | ' + euro(maxRes.annual));
+    t.eq('lead: the answer, at once, in words', words($('spAns')),
+         'At most ' + euro2(maxRes.weekly) + ' a week, ' + euro(maxRes.annual) + ' a year.');
+    t.eq('lead: then, plainly, that you may get less', words(lead.querySelector('.sp-less')),
+         'You may get less. It depends on your PRSI record.');
+    t.eq('lead: the way to your own figure goes to the entitlement check, and says so',
+         [$('spGo') && $('spGo').getAttribute('href'), words($('spGo'))].join(' | '),
+         'state-pension-entitlement.html | Work out what you’d get');
+    t.eq('lead: the way there is a link drawn as itself, not a booking button',
+         $('spGo') ? [$('spGo').tagName, /\bbtn\b/.test($('spGo').className)].join('/') : null, 'A/false');
 
     /* S9 rows. `drive` rows carry the figures the spec states, typed in by
        hand; the rest of what the page shows is checked against the module.
@@ -252,6 +282,16 @@
       // the pin is only observable through a bound the page derives from it
       t.eq('clock: the birth floor follows the pinned year', +$('birth').min, pinned - AGE);
     }
+
+    /* THE LEAD (13 October 2026, Damian): the page's purpose in its first
+       line, and that many people get less than the maximum, whose figure is
+       static markup held here to the module. */
+    var lead = document.querySelector('.phead');
+    t.eq('lead: the first line says what the page is for', words(lead && lead.querySelector('h1')),
+         'How much State Pension you may get, from your PRSI record.');
+    t.eq('lead: many get less than the maximum, and the maximum is the module\'s',
+         words(lead && lead.querySelector('.sp-less')),
+         'Many people get less than the maximum, ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
 
     var bandLabel = function (b) { return b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max; };
 

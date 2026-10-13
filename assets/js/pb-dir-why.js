@@ -1,4 +1,5 @@
-/* Why directors leave it (#drWhy) and the executive pension (#drExec),
+/* Why directors leave it (#drWhy: the order, the coverage rows, the year-end
+   ring) and the executive pension (#drExec),
    11 October 2026, Damian's brief: "super motion design, super simple,
    super interactive; as fluid as the welcome".
 
@@ -47,7 +48,27 @@
    reader's month: a settled choice on the ring (a tap, the end of a drag, a
    key) ticks the same month in the form, which draws its own line and asks
    only for the email. Once the reader picks a month in the form, the ring
-   leaves it alone. */
+   leaves it alone.
+
+   13 October 2026 (Damian: "I don't know what it means", of "The company
+   comes first. The pension comes last."): the section now opens on the
+   order itself (#drQ), "Everyone gets paid before your pension." Four rows,
+   who the company pays and in what order: the business, the staff, the
+   bills, your pension. Two radios hold the order (#drQLast, #drQFirst) and
+   the page's CSS draws it, so it reads and works without JavaScript; this
+   file only moves it. The first look (45% on screen): the rows rise in, the
+   company pays the business, the staff and the bills a blue coin each, in
+   turn, and comes to the pension with nothing: its empty place shakes and
+   "Nothing left" appears. A pause, then the order turns round: the pension
+   is picked up and carried over the others to the top while they step down
+   out of its way, every number rolls on, and a coin drops in and comes
+   round silver (the company's money, now yours) with a ring and a light
+   along the row: "Business expense". The reader turns it back and forth
+   with the two buttons (or a tap on the pension row); a tap on a paid row
+   hops its coin. The facts are the page's own: the company's payment is a
+   cost it deducts (assets/js/director-calc.js, PBDirector.split), with no
+   income tax, USC or PRSI for the director going in, within Revenue's
+   limits. With motion off it is drawn once, by the CSS. */
 (function () {
   'use strict';
   var K = window.PBKit, C = window.PBCoins;
@@ -714,5 +735,292 @@
       st.kick();
     });
     cv.addEventListener('pointercancel', function () { press = null; ptr.in = false; st.kick(); });
+  }());
+
+  /* ========================================================= D. the order -- */
+  (function () {
+    var box = $('drQ'), rL = $('drQLast'), rF = $('drQFirst'), list = box && box.querySelector('.dr-q-list');
+    if (!list || !rL || !rF) { return; }
+    var sr = $('drQSr'), copy = box.parentNode.querySelector('.dr-q-copy');
+    var SAY = {
+      last: 'Your pension last: the business, the staff and the bills are paid first, and nothing is left for it.',
+      first: 'Your pension first: the company pays into it as a business expense, then the business, the staff and the bills.'
+    };
+    var rows = [].map.call(list.querySelectorAll('.dr-q-row'), function (el) {
+      var pen = el.classList.contains('dr-q-pen'), rest = pen ? 180 : 0;
+      return {
+        el: el, pen: pen, slot: el.querySelector('.dr-q-slot'), coin: el.querySelector('.dr-q-coin'),
+        nn: el.querySelector('.dr-q-nn'), badge: el.querySelector('.dr-q-n'),
+        y: S(0), y0: 0, hold: 0, nod: S(0), lift: S(0), lt: 0, a: 1, sh: -1, dirty: false,
+        /* its coin: a drop under gravity, a squash as it lands, a turn (the
+           pension's comes round silver: the company's money, now yours) */
+        c: { ph: '', t: 0, y: 0, vy: 0, op: 1, hit: false, turn: false, hide: false, sq: S(0), rot: S(rest), rt: rest, rest: rest, dirty: false }
+      };
+    });
+    var pen = rows.filter(function (r) { return r.pen; })[0];
+    if (!pen || rows.some(function (r) { return !r.slot || !r.coin || !r.nn || !r.badge; })) { return; }
+    var none = pen.el.querySelector('.dr-q-none'), exp = pen.el.querySelector('.dr-q-exp');
+    var raf = 0, last = 0, T = 0, plan = [], seen = false, playing = false, turn = null;
+    function ease(k) { return 1 - Math.pow(1 - k, 3); }
+    function at(t, fn) { plan.push({ t: T + t, fn: fn }); plan.sort(function (a, b) { return a.t - b.t; }); }
+    function kick() { if (!raf && K.motion()) { last = clock(); raf = requestAnimationFrame(frame); } }
+    function frame(ms) {
+      raf = 0;
+      var now = ms / 1000, dt = Math.min(1 / 30, Math.max(0, now - last)); last = now;
+      var moving = step(dt);
+      paint();
+      if (moving && K.motion()) { raf = requestAnimationFrame(frame); }
+    }
+    function anim(el, kf, o) { if (el && el.animate) { try { return el.animate(kf, o); } catch (e) { /* fine */ } } return null; }
+    function stop(el) { if (el && el.getAnimations) { el.getAnimations().forEach(function (a) { a.cancel(); }); } }
+
+    function step(dt) {
+      var moving = false;
+      T += dt;
+      while (plan.length && plan[0].t <= T) { plan.shift().fn(); }
+      if (plan.length) { moving = true; }
+      rows.forEach(function (r) {
+        if (r.hold > 0) { r.hold -= dt; moving = true; }
+        else {
+          if (r.a < 1) { r.a = Math.min(1, r.a + dt / 0.38); moving = true; }
+          if (spring(r.y, 0, r.pen ? 125 : 190, r.pen ? 15.5 : 21, dt, 0.04)) { moving = true; } else { r.y0 = 0; }
+        }
+        /* the pension is picked up for the journey and set down as it arrives */
+        if (r.pen) { r.lt = r.y0 && (r.hold > 0 || 1 - r.y.x / r.y0 < 0.62) ? 1 : 0; }
+        if (spring(r.lift, r.lt, 240, 22, dt, 0.002)) { moving = true; }
+        if (spring(r.nod, 0, 620, 20, dt, 0.02)) { moving = true; }
+        if (r.sh >= 0) { r.sh += dt; moving = true; if (r.sh > 0.7) { r.sh = -1; } }
+        var c = r.c;
+        if (c.ph === 'drop') {
+          moving = true; c.t += dt; c.vy += 2600 * dt; c.y += c.vy * dt; c.op = Math.min(1, c.t / 0.09);
+          if (c.y >= 0) {
+            c.y = 0;
+            if (!c.hit) { c.hit = true; landed(r, c.vy); }
+            if (c.vy > 170) { c.vy = -c.vy * 0.26; } else { c.vy = 0; c.ph = ''; }
+          }
+        } else if (c.ph === 'out') {
+          moving = true; c.t += dt;
+          var k = clamp(c.t / 0.26, 0, 1);
+          c.y = -26 * k * k; c.op = 1 - k;
+          /* gone: the CSS of "last" hides it from here */
+          if (k >= 1) { c.ph = ''; c.y = 0; c.op = 1; }
+        }
+        if (spring(c.sq, 0, 560, 15, dt, 0.002)) { moving = true; }
+        if (spring(c.rot, c.rt, 150, 14, dt, 0.2)) { moving = true; }
+      });
+      return moving;
+    }
+    function paint() {
+      rows.forEach(function (r) {
+        var s = r.el.style, p = r.y0 ? 1 - r.y.x / r.y0 : 1;
+        /* on its way the pension swings out to the right, as if carried */
+        var ax = r.pen && r.y0 ? 9 * Math.sin(Math.PI * clamp(p, 0, 1)) : 0, ty = r.y.x + r.nod.x;
+        if (Math.abs(ty) < 0.05 && Math.abs(ax) < 0.05 && r.lift.x < 0.003 && r.a >= 1) {
+          if (r.dirty) { s.translate = ''; s.scale = ''; s.opacity = ''; s.removeProperty('--lift'); r.dirty = false; }
+        } else {
+          s.translate = ax.toFixed(2) + 'px ' + ty.toFixed(2) + 'px';
+          s.scale = r.lift.x > 0.003 ? (1 + 0.025 * r.lift.x).toFixed(4) : '';
+          s.opacity = r.a < 1 ? ease(r.a).toFixed(3) : '';
+          s.setProperty('--lift', r.lift.x.toFixed(3));
+          r.dirty = true;
+        }
+        r.slot.style.translate = r.sh >= 0 ? (5.5 * Math.exp(-6.5 * r.sh) * Math.sin(TAU * 6.5 * r.sh)).toFixed(2) + 'px 0' : '';
+        var c = r.c, cs = r.coin.style;
+        if (c.hide) { cs.opacity = '0'; cs.transform = ''; c.dirty = true; }
+        else if (c.ph || Math.abs(c.sq.x) > 0.002 || Math.abs(c.rot.x - c.rest) > 0.2) {
+          cs.transform = 'translateY(' + c.y.toFixed(2) + 'px) rotateY(' + c.rot.x.toFixed(1) + 'deg) scale(' + (1 + c.sq.x).toFixed(3) + ',' + (1 - c.sq.x).toFixed(3) + ')';
+          cs.opacity = c.op < 1 ? c.op.toFixed(3) : '';
+          c.dirty = true;
+        } else if (c.dirty) { cs.transform = ''; cs.opacity = ''; c.dirty = false; }
+      });
+    }
+
+    /* a coin drops into a row: the row dips, its number pops */
+    function drop(r, silver) {
+      var c = r.c;
+      c.hide = false; c.ph = 'drop'; c.t = 0; c.y = -38; c.vy = 0; c.op = 0; c.hit = false; c.turn = !!silver;
+      if (r.pen) { c.rot.x = 0; c.rot.v = 0; c.rt = 0; }
+      kick();
+    }
+    function landed(r, v) {
+      r.c.sq.x = Math.min(0.22, v / 1500); r.c.sq.v = 0;
+      r.nod.v += Math.min(120, v * 0.1);
+      anim(r.badge, [{ transform: 'scale(1)' }, { transform: 'scale(1.22)', offset: 0.35 }, { transform: 'scale(1)' }], { duration: 420, easing: 'ease-out' });
+      if (r.c.turn) {
+        r.c.rt = r.c.rest;
+        at(0.2, function () { ring(r); sheen(r); });
+      }
+    }
+    /* the coin comes round silver: a ring spreads off it, a light runs along the row */
+    function ring(r) {
+      var e = document.createElement('i'); e.className = 'dr-q-ring'; r.slot.appendChild(e);
+      var a = anim(e, [{ transform: 'scale(.8)', opacity: 0.7 }, { transform: 'scale(2.1)', opacity: 0 }], { duration: 700, easing: 'cubic-bezier(.2,.7,.3,1)' });
+      setTimeout(function () { if (e.parentNode) { e.parentNode.removeChild(e); } }, a ? 720 : 0);
+    }
+    function sheen(r) {
+      var e = document.createElement('i'), b = document.createElement('i');
+      e.className = 'dr-q-sheen'; e.appendChild(b); r.el.appendChild(e);
+      var a = anim(b, [{ transform: 'translateX(-110%)' }, { transform: 'translateX(260%)' }], { duration: 900, easing: 'cubic-bezier(.4,0,.2,1)' });
+      setTimeout(function () { if (e.parentNode) { e.parentNode.removeChild(e); } }, a ? 920 : 0);
+    }
+    /* the pension's turn, and nothing comes: its empty place shakes its head */
+    function nothing() {
+      pen.sh = 0;
+      if (none) {
+        none.style.opacity = '';
+        anim(none, [{ opacity: 0, transform: 'translateX(-10px)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.2,1.3,.4,1)' });
+      }
+      anim(pen.badge, [{ transform: 'scale(1)' }, { transform: 'scale(1.18)', offset: 0.35 }, { transform: 'scale(1)' }], { duration: 420, easing: 'ease-out' });
+      kick();
+    }
+
+    /* The order changes: each row is where it was, on the screen, and springs
+       to its new place; the pension lifts and swings round the others, which
+       step aside one after another, nearest first; every number rolls on.
+       The radios hold the order and the CSS draws it, so this only moves the
+       parts from where they were to where the CSS now puts them. */
+    function flip(first, auto) {
+      plan = []; turn = null; playing = false; T = 0; box.classList.remove('dr-q-pre');
+      rows.forEach(function (r) { r.hold = 0; if (!r.pen && r.c.hide) { r.c.hide = false; } });
+      (first ? rL : rF).checked = true;
+      rows.forEach(function (r) { r.vis = r.el.offsetTop + r.y.x; r.nf = getComputedStyle(r.nn).transform; });
+      var tf = [none, exp].map(function (t) { return t ? +getComputedStyle(t).opacity : 0; });
+      (first ? rF : rL).checked = true;
+      if (sr && !auto) { sr.textContent = first ? SAY.first : SAY.last; }
+      if (!K.motion()) { settle(); return; }
+      rows.forEach(function (r) { var d = r.vis - r.el.offsetTop; r.y.x = d; r.y0 = Math.abs(d) > 1 ? d : 0; });
+      anim(box.querySelector('.dr-q-pill'), [{ scale: '1' }, { scale: '1.06 .9', offset: 0.4 }, { scale: '1' }], { duration: 460, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+      /* a beat to pick it up while the others make way, the one in the place
+         it is going to first */
+      var to = pen.el.offsetTop;
+      pen.hold = 0.1;
+      rows.filter(function (r) { return !r.pen; })
+        .sort(function (a, b) { return Math.abs(a.vis - to) - Math.abs(b.vis - to); })
+        .forEach(function (r, i) { r.hold = 0.035 * i; });
+      rows.forEach(function (r, i) {
+        stop(r.nn);
+        anim(r.nn, [{ transform: r.nf && r.nf !== 'none' ? r.nf : 'translateY(0)' }, { transform: first ? 'translateY(-50%)' : 'translateY(0)' }],
+          { duration: 620, delay: (r.pen ? 0.16 : 0.2 + 0.05 * i) * 1000, easing: 'cubic-bezier(.34,1.56,.64,1)', fill: 'backwards' });
+      });
+      stop(none); stop(exp);
+      if (first) {
+        if (none) { none.style.opacity = ''; anim(none, [{ opacity: tf[0] }, { opacity: 0 }], { duration: 160 }); }
+        if (exp) { exp.style.opacity = '0'; }
+        pen.c.ph = ''; pen.c.hide = true; pen.sh = -1;
+        at(0.5, function () { drop(pen, true); });
+        at(0.78, function () {
+          if (!exp) { return; }
+          exp.style.opacity = '';
+          anim(exp, [{ opacity: 0, transform: 'scale(.55)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.3,1.6,.5,1)' });
+        });
+      } else {
+        if (exp) { exp.style.opacity = ''; anim(exp, [{ opacity: tf[1] }, { opacity: 0 }], { duration: 160 }); }
+        if (none) { none.style.opacity = '0'; }
+        /* its coin goes up and away, turning as it goes */
+        var c = pen.c;
+        c.rt = c.rest;
+        if (c.hide) { c.ph = ''; c.hide = false; c.rot.x = c.rest; c.rot.v = 0; } else { c.ph = 'out'; c.t = 0; c.y = 0; c.vy = 0; c.op = 1; }
+        at(0.8, nothing);
+      }
+      paint(); kick();
+    }
+    /* everything where the CSS puts it, at once */
+    function settle() {
+      plan = []; turn = null; playing = false; box.classList.remove('dr-q-pre');
+      rows.forEach(function (r) {
+        r.y.x = r.y.v = 0; r.y0 = 0; r.hold = 0; r.nod.x = r.nod.v = 0; r.lift.x = r.lift.v = 0; r.lt = 0; r.a = 1; r.sh = -1; r.dirty = true;
+        var c = r.c;
+        c.ph = ''; c.hide = false; c.y = 0; c.vy = 0; c.op = 1; c.sq.x = c.sq.v = 0; c.rot.x = c.rt = c.rest; c.rot.v = 0; c.dirty = true;
+      });
+      [none, exp].forEach(function (t) { if (t) { t.style.opacity = ''; } });
+      [].forEach.call(box.querySelectorAll('*'), stop);
+      [].forEach.call(box.querySelectorAll('.dr-q-ring,.dr-q-sheen'), function (e) { e.parentNode.removeChild(e); });
+      paint();
+    }
+
+    /* The first look: the order most directors run. The rows rise in, the
+       company pays the business, the staff and the bills a coin each, in
+       turn, and comes to the pension with nothing left. A pause, then the
+       order turns round: the pension goes first. */
+    function pre() {
+      rL.checked = true; box.classList.add('dr-q-pre');
+      rows.forEach(function (r) { r.a = 0; r.y.x = 22; r.c.hide = !r.pen; });
+      if (none) { none.style.opacity = '0'; }
+      paint();
+    }
+    function intro(own) {
+      plan = []; T = 0; playing = true; box.classList.remove('dr-q-pre');
+      rows.forEach(function (r, i) { r.hold = 0.07 * i; r.a = 0; r.y.x = 22; r.y.v = 0; r.y0 = 0; });
+      var k = 0;
+      rows.forEach(function (r) { if (!r.pen) { at(0.62 + 0.3 * k++, function () { drop(r, false); }); } });
+      at(0.62 + 0.3 * k + 0.12, nothing);
+      /* the turn is ours to make only while the reader has not touched the buttons */
+      if (!own) { turn = function () { turn = null; flip(true, true); }; at(3.5, turn); }
+      kick();
+    }
+    /* a press on the buttons before the turn, even on the one already chosen: the reader has it now */
+    function mine() {
+      if (sr) { sr.textContent = rF.checked ? SAY.first : SAY.last; }
+      if (!K.motion()) { return; }
+      if (!seen) { seen = true; intro(true); return; }
+      if (turn) { var t = turn; turn = null; plan = plan.filter(function (q) { return q.fn !== t; }); }
+    }
+    rL.addEventListener('click', mine);
+    rF.addEventListener('click', mine);
+
+    /* the coins: the page's own metal (PBCoins), drawn once per size */
+    var spr = '';
+    function coins() {
+      var w = pen.slot.offsetWidth, d = Math.min(window.devicePixelRatio || 1, 2), key = w + '/' + d;
+      if (!(w > 4) || key === spr) { return; }
+      var url = {};
+      ['blue', 'silver'].forEach(function (k) {
+        var c = document.createElement('canvas'), x;
+        c.width = c.height = Math.ceil(w * d); x = c.getContext && c.getContext('2d');
+        if (!x) { return; }
+        x.scale(d, d); C.face(x, w / 2, w / 2, w / 2 - 0.5, k);
+        try { url[k] = c.toDataURL(); } catch (e) { /* the CSS coin stays */ }
+      });
+      if (!url.blue || !url.silver) { return; }
+      spr = key;
+      [].forEach.call(box.querySelectorAll('.dr-q-fb'), function (e) { e.style.backgroundImage = 'url(' + url.blue + ')'; });
+      [].forEach.call(box.querySelectorAll('.dr-q-fs'), function (e) { e.style.backgroundImage = 'url(' + url.silver + ')'; });
+      box.classList.add('dr-q-spr');
+    }
+    coins();
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { spr = ''; coins(); }); }
+    var rz = 0;
+    window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(coins, 150); });
+
+    function chose() { seen = true; flip(rF.checked, false); }
+    rL.addEventListener('change', chose);
+    rF.addEventListener('change', chose);
+    /* a tap on the pension turns the order round; a tap on a paid row checks its coin is there */
+    list.addEventListener('click', function (e) {
+      var li = e.target.closest ? e.target.closest('.dr-q-row') : null, r = null;
+      rows.forEach(function (x) { if (x.el === li) { r = x; } });
+      if (!r) { return; }
+      if (r.pen) { (rF.checked ? rL : rF).click(); return; }
+      if (K.motion() && !r.c.hide && !r.c.ph) { var c = r.c; c.ph = 'drop'; c.t = 1; c.y = -0.01; c.vy = -330; c.op = 1; c.hit = false; c.turn = false; kick(); }
+    });
+
+    if (K.motion() && LIVE) {
+      pre();
+      new IntersectionObserver(function (es, o) {
+        var e = es[es.length - 1];
+        if (seen) { o.disconnect(); return; }
+        if (e.isIntersecting && e.intersectionRatio >= 0.45) { seen = true; o.disconnect(); if (K.motion()) { intro(); } else { rF.checked = true; settle(); } }
+      }, { threshold: [0, 0.45] }).observe(list);
+      if (copy) {
+        copy.classList.add('dr-q-wait');
+        new IntersectionObserver(function (es, o) {
+          if (es[es.length - 1].isIntersecting) { o.disconnect(); copy.classList.remove('dr-q-wait'); }
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }).observe(copy.querySelector('h2') || copy);
+      }
+    }
+    /* motion turned off, or the page printed, before the end: the finished order */
+    function done() { if (copy) { copy.classList.remove('dr-q-wait'); } if (!seen || playing) { seen = true; rF.checked = true; } settle(); }
+    document.addEventListener('pb:motion', function () { if (!K.motion()) { done(); } });
+    window.addEventListener('beforeprint', done);
   }());
 }());

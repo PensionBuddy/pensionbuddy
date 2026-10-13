@@ -8,12 +8,30 @@
    your monthly amount to what covers it.
 
    The sums are the pension calculator's own (pension-calculator.html):
-   monthly compounding, 4% of the pot a year as income, all in today's
-   money at the ECB's 2% (assets/js/pb-assumptions.js), level
+   monthly compounding, 4% of the pot a year as income, level
    contributions, retirement at 66. Growth (Damian, 11 October 2026: "use
    six percent"): 6% a year before charges, the most the Pensions
    Authority lets a projection assume (PBAssume.assets.cap); the full
    calculator's own default is its Level 4, 5%.
+   Future euros (Damian, 13 October 2026: "every figure the actual future
+   euro figure, before inflation"): the pot and its income are what they
+   would be in euros at 66, and the two things they are measured against,
+   the way of life and the State Pension, rise at the ECB's 2% a year
+   (PBAssume.inflation) to 66, so future euros meet future euros. The
+   verdict is the same as it was in today's money: every side moves by the
+   same factor. Every figure shown is a whole euro, and the total is the
+   sum of the two parts as shown.
+
+   THE LABELS (13 October 2026, "unmistakable"): "Your pension pot" with its
+   figure, and the line that is enough, each written onto the pot with an
+   arrow drawn as if by hand (.pb-c2-anno: HTML and an SVG over the canvas,
+   placed from the pot's own geometry). They write themselves on once, as
+   the pot comes into view; with motion off they are simply there.
+
+   THE PLAN: every change is told to the page (PBKit.setPlan): the cost of
+   waiting follows the age, the savings and the monthly amounts, and the
+   inflation section reads the reader's own money once they have moved the
+   age or a monthly amount.
 
    THE POT. A glass pot of coins: the pot you would have at 66. Silver coins
    are yours, gold are Revenue's (the tax relief), blue are your employer's,
@@ -44,14 +62,15 @@
   function mr() { return Math.pow(1 + GROW, 1 / 12) - 1; }
   function project(a, p, m, e) {
     var n = Math.max(1, AT - a), months = n * 12, r = mr(), g = Math.pow(1 + r, months), A = (g - 1) / r;
-    var fv = p * g + (m + e) * A, defl = Math.pow(1 + INF, n);
+    var fv = p * g + (m + e) * A;
     var shares = fv > 0 ? { gold: m * tax * A / fv, blue: e * A / fv } : { gold: 0, blue: 0 };
-    return { n: n, fv: fv, today: fv / defl, month: fv / defl * DRAW / 12, shares: shares };
+    /* up: what prices do by 66, for the target and the State Pension */
+    return { n: n, fv: fv, up: Math.pow(1 + INF, n), month: fv * DRAW / 12, shares: shares };
   }
-  /* the level amount of your own a month that brings the income to `want` a month, in today's money */
+  /* the level amount of your own a month that brings the pot's income to `want` a month at 66, future euros */
   function needed(a, p, e, want) {
     var n = Math.max(1, AT - a), months = n * 12, r = mr(), g = Math.pow(1 + r, months);
-    var potNom = want * 12 / DRAW * Math.pow(1 + INF, n), rest = potNom - p * g - e * (g - 1) / r;
+    var rest = want * 12 / DRAW - p * g - e * (g - 1) / r;
     return Math.max(0, rest / ((g - 1) / r));
   }
   function statePerMonth(hh) { return (hh === 'couple' ? 2 : 1) * ONE / 12; }
@@ -60,14 +79,18 @@
   function fill(r) { r.style.setProperty('--fill', ((r.value - r.min) / (r.max - r.min) * 100) + '%'); }
   var VT = { pbC2Age: function (v) { return v + ' years old'; }, pbC2Pot: function (v) { return fmt(v); }, pbC2Mine: function (v) { return fmt(v) + ' a month'; }, pbC2Emp: function (v) { return fmt(v) + ' a month'; } };
   var rTotal = new K.Roll($('pbC2Total'));
-  var S = {}, srT = 0;
+  var rPot = $('pbC2PotN') ? new K.Roll($('pbC2PotN')) : null;
+  var S = {}, srT = 0, userSet = false;
   function calc(fromUser) {
     var a = +age.value, p = +pot.value, m = +mine.value, e = emp ? +emp.value : 0, aim = K.aim;
-    var pr = project(a, p, m, e), st = statePerMonth(aim.hh), std = K.life(aim.level, aim.hh);
-    var need = std.monthly, total = st + pr.month, short = need - total;
+    var pr = project(a, p, m, e), std = K.life(aim.level, aim.hh);
+    /* whole euros, so what is shown adds up: the parts make the total, the total meets the need */
+    var st = Math.round(statePerMonth(aim.hh) * pr.up), yours = Math.round(pr.month), need = Math.round(std.monthly * pr.up);
+    var total = st + yours, short = need - total;
     var targetPot = Math.max(0, need - st) * 12 / DRAW;
     var was = S.covered;
-    S = { a: a, p: p, m: m, e: e, pr: pr, st: st, need: need, total: total, short: short, covered: short <= 0.5, targetPot: targetPot, label: std.label, own: std.own, two: aim.hh === 'couple' };
+    S = { a: a, p: p, m: m, e: e, pr: pr, st: st, yours: yours, need: need, total: total, short: short, covered: short <= 0, targetPot: targetPot, label: std.label, own: std.own, two: aim.hh === 'couple' };
+    if (K.setPlan) { K.setPlan({ age: a, mine: m, emp: e, saved: p, set: userSet }, 'calc'); }
 
     [age, pot, mine, emp].forEach(function (r) { if (r) { fill(r); r.setAttribute('aria-valuetext', VT[r.id](+r.value)); } });
     $('pbC2AgeV').textContent = a; $('pbC2PotV').textContent = fmt(p); $('pbC2MineV').textContent = fmt(m);
@@ -77,13 +100,15 @@
     var lr = $('pbC2LRev'); if (lr) { lr.hidden = !(m > 0); }
 
     rTotal.set(fmt(total));
+    if (rPot) { rPot.set(fmt(pr.fv)); }
     $('pbC2Parts').innerHTML = '<span class="pb-c2-k-sp"><i aria-hidden="true"></i>' + (S.two ? 'Two State Pensions ' : 'State Pension ') + '<b>' + fmt(st) + '</b></span>' +
-      '<span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>' + fmt(pr.month) + '</b></span>';
-    var life = std.phrase;
+      '<span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>' + fmt(yours) + '</b></span>';
+    var life = std.phrase, needEl = $('pbC2Need');
+    if (needEl) { needEl.innerHTML = (std.own ? 'Your figure' + (S.two ? ' for two' : '') : life.charAt(0).toUpperCase() + life.slice(1)) + ' at ' + AT + ': <b>' + fmt(need) + '</b> a month.'; }
     var v = $('pbC2Verdict'), close = $('pbC2Close');
     var up = higher();
     if (S.covered) {
-      v.innerHTML = '<span class="pb-c2-yes">Covered.</span> ' + fmt(-short) + ' a month to spare.';
+      v.innerHTML = '<span class="pb-c2-yes">Covered.</span>' + (short < 0 ? ' ' + fmt(-short) + ' a month to spare.' : '');
       close.hidden = !up; close.setAttribute('data-act', 'up');
       if (up) { close.querySelector('span').textContent = 'Aim higher: ' + K.life(up, aim.hh).label; }
     } else {
@@ -94,9 +119,11 @@
     sec.classList.toggle('pb-c2-is-ok', S.covered);
     $('pbC2MiniN').textContent = fmt(total);
     $('pbC2MiniV').textContent = S.covered ? 'Covered' : fmt(short) + ' short';
-    var said = 'At ' + AT + ', in today’s money: about ' + fmt(total) + ' a month. ' + (S.covered ? 'That covers ' + life + '.' : fmt(short) + ' a month short of ' + life + '.');
+    var said = 'Your income at ' + AT + ': about ' + fmt(total) + ' a month, from a pension pot of ' + fmt(pr.fv) + '. ' +
+      (S.covered ? 'That covers ' + life + ', ' + fmt(need) + ' a month.' : fmt(short) + ' a month short of ' + life + ', ' + fmt(need) + ' a month.');
     clearTimeout(srT); srT = setTimeout(function () { $('pbC2Sr').textContent = said; }, fromUser ? 700 : 0);
     ownRow();
+    annoText();
     potSync(fromUser, was === false && S.covered);
   }
   /* the next way of life up: Modest, Moderate, Comfortable, then your own figure if it is higher */
@@ -126,7 +153,7 @@
   var coins = [], queue = 0, lastSpawn = 0, nextIdx = 0;
   var body = { ox: new K.Spring(0, 140, 7), tilt: new K.Spring(0, 160, 8), sq: new K.Spring(0, 260, 9) };
   var lid = { y: new K.Spring(0, 170, 11), a: new K.Spring(0, 150, 10), open: 0, spin: 0 };
-  var shown = new K.Spring(0, 60, 14), line = { flash: 0 };
+  var line = { flash: 0 };
   var ptr = { in: false, x: 0, y: 0, down: false, sx: 0, sy: 0, shaking: false, moved: 0, t: 0 };
 
   function size() {
@@ -141,6 +168,7 @@
     while (y > g.top && acc < want) { acc += 2 * Math.max(0, halfW(y)) * dy; y -= dy; }
     g.line = y;
     coins.forEach(function (c) { c.r = r; });
+    annoLayout();
   }
   /* the inside's half width at height y, in the pot's own frame */
   function halfW(y) {
@@ -237,7 +265,7 @@
   function wanted() {
     if (!S.pr) { return 0; }
     var unit = Math.max(S.targetPot, 40000) / TARGET;
-    return Math.max(0, Math.min(MAXC, Math.round(S.pr.today / unit)));
+    return Math.max(0, Math.min(MAXC, Math.round(S.pr.fv / unit)));
   }
   function spawn(i) {
     var w = g.n * 0.55, x = g.cx + body.ox.x + (Math.random() * 2 - 1) * w, y = g.top - 30 - Math.random() * 30;
@@ -279,6 +307,7 @@
   }
   function cheer() {
     line.flash = 1;
+    if (anno) { anno.classList.remove('pb-c2-cheer'); void anno.offsetWidth; anno.classList.add('pb-c2-cheer'); }
     coins.forEach(function (c) { if (!c.out) { c.py = c.y + 3 + Math.random() * 4; } });
     body.sq.v -= 9; lid.y.v -= 900; lid.a.v += 14;
     if (fx) { var top = toWorld(g.cx, g.top); fx.paws(top.x, top.y - 10, 12); fx.spark(top.x, top.y - 10, 18); }
@@ -306,11 +335,6 @@
     for (y = g.bottom; y >= g.top; y -= step) { cx.lineTo(g.cx + halfW(y) + t, y); }
     cx.lineTo(g.cx + g.n + t, g.top);
   }
-  function text(s, x, y, size, weight, color, align, base) {
-    cx.font = weight + ' ' + size + 'px Figtree, system-ui, sans-serif'; cx.fillStyle = color; cx.textAlign = align || 'left'; cx.textBaseline = base || 'middle'; cx.fillText(s, x, y);
-  }
-  function pill(x, y, w, h, fillC, strokeC) { rr(x, y, w, h, h / 2); cx.fillStyle = fillC; cx.fill(); if (strokeC) { cx.lineWidth = 1.5; cx.strokeStyle = strokeC; cx.stroke(); } }
-  function heapTop() { var t = g.bottom; coins.forEach(function (c) { if (!c.out && !(c.wait > 0)) { var L = toLocal(c.x, c.y); if (L.y > g.top && L.y - c.r < t && Math.abs(c.x - c.px) + Math.abs(c.y - c.py) < 1.5) { t = L.y - c.r; } } }); return t; }
   function draw(now) {
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
     var a = body.tilt.x, ox = body.ox.x, sq = body.sq.x;
@@ -367,40 +391,52 @@
     cx.fillStyle = 'rgba(255,255,255,.65)'; rr(-lwid / 2 + 8, -9, lwid * 0.35, 3, 1.5); cx.fill();
     cx.restore();
     cx.restore();
-    /* the words: the pot, and the line */
-    label(now);
     if (fx) { fx.draw(cx); }
   }
-  function label(now) {
-    var covered = S.covered, top = heapTop(), Lw = toWorld(g.cx, g.line);
-    var potY = Math.max(g.top + 10, Math.min(g.bottom - 16, top)), PW = toWorld(g.cx - halfW(potY), potY);
-    var val = fmt(shown.x), sm = g.wide ? 13 : 12, big = g.wide ? 20 : 17;
-    if (g.wide) {
-      cx.font = '800 ' + big + 'px Figtree, system-ui, sans-serif';
-      var lx = Math.max(cx.measureText(val).width + 10, PW.x - 26);
-      text('Your pot', lx, PW.y - 12, sm, 700, '#54635F', 'right'); text(val, lx, PW.y + 9, big, 800, '#0B1F1C', 'right');
-      cx.strokeStyle = 'rgba(84,99,95,.45)'; cx.lineWidth = 1.5; cx.beginPath(); cx.moveTo(lx + 6, PW.y); cx.lineTo(Math.max(lx + 8, PW.x + 8), PW.y); cx.stroke();
-    } else {
-      cx.font = '800 ' + big + 'px Figtree, system-ui, sans-serif'; var tw = Math.max(cx.measureText(val).width, 60) + 22;
-      pill(8, 8, tw, 46, 'rgba(255,255,255,.94)', 'rgba(11,31,28,.08)');
-      text('Your pot', 19, 21, sm, 700, '#54635F'); text(val, 19, 40, big, 800, '#0B1F1C');
-    }
-    if (S.targetPot > 0) {
-      var right = toWorld(g.cx + halfW(g.line) + g.t, g.line), msg1 = covered ? '✓ Enough' : 'Enough for', msg2 = S.own ? (covered ? 'for your figure' : 'your figure') : (covered ? 'for a ' : 'a ') + S.label.toLowerCase() + ' life';
-      var fl = line.flash, col = covered ? '#0B7A6E' : '#0B1F1C';
-      if (g.wide) {
-        cx.font = '800 ' + sm + 'px Figtree, system-ui, sans-serif';
-        var tw2 = Math.max(cx.measureText(msg1).width, cx.measureText(msg2).width), rx = Math.min(right.x + 16, W - tw2 - 10);
-        if (fl > 0) { cx.globalAlpha = fl; pill(rx - 10, right.y - 22, tw2 + 20, 44, 'rgba(20,203,177,.22)'); cx.globalAlpha = 1; }
-        text(msg1, rx, right.y - 9, sm, 800, col); text(msg2, rx, right.y + 9, sm, 700, col);
-      } else {
-        cx.font = '800 ' + sm + 'px Figtree, system-ui, sans-serif'; var w2 = Math.max(cx.measureText(msg1).width, cx.measureText(msg2).width) + 20;
-        var bx = W - w2 - 8, by = Math.max(60, Math.min(H - 52, right.y - 20));
-        pill(bx, by, w2, 40, covered ? 'rgba(231,250,246,.96)' : 'rgba(255,255,255,.94)', covered ? 'rgba(15,168,143,.35)' : 'rgba(11,31,28,.1)');
-        text(msg1, bx + 10, by + 13, sm, 800, col); text(msg2, bx + 10, by + 28, sm, 700, col);
-        cx.strokeStyle = covered ? 'rgba(15,168,143,.6)' : 'rgba(11,31,28,.35)'; cx.lineWidth = 1.2; cx.beginPath(); cx.moveTo(bx, by + 20); cx.lineTo(right.x - 4, right.y); cx.stroke();
-      }
-    }
+  /* ---------------------------------------------- the hand-drawn labels -- */
+  /* "Your pension pot" over the top left of the pot, and "Enough for ..." beside the line (on
+     a phone, over the top right), each with an arrow that bows the way a hand draws one: a
+     curve from the words to the coins or the line, and a two-stroke head, a little uneven.
+     Placed from the pot's geometry whenever it is sized; the words are HTML, the strokes SVG. */
+  var anno = sec.querySelector('.pb-c2-anno'), ink = anno ? anno.querySelector('.pb-c2-ink') : null;
+  var labPot = anno ? anno.querySelector('.pb-c2-lab-pot') : null, labNeed = anno ? anno.querySelector('.pb-c2-lab-need') : null;
+  var inks = ink ? ink.querySelectorAll('path') : [];
+  function n1(v) { return (Math.round(v * 10) / 10).toString(); }
+  function stroke(a, b, bow, pShaft, pHead, flip) {
+    var dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy) || 1, nx = -dy / L * bow, ny = dx / L * bow;
+    var c1 = { x: a.x + dx * 0.25 + nx, y: a.y + dy * 0.25 + ny }, c2 = { x: a.x + dx * 0.72 + nx * 0.7, y: a.y + dy * 0.72 + ny * 0.7 };
+    pShaft.setAttribute('d', 'M' + n1(a.x) + ' ' + n1(a.y) + 'C' + n1(c1.x) + ' ' + n1(c1.y) + ' ' + n1(c2.x) + ' ' + n1(c2.y) + ' ' + n1(b.x) + ' ' + n1(b.y));
+    var tx = b.x - c2.x, ty = b.y - c2.y, tl = Math.sqrt(tx * tx + ty * ty) || 1;
+    tx /= tl; ty /= tl;
+    function back(deg, len) { var r = deg * Math.PI / 180, c = Math.cos(r), s = Math.sin(r); return { x: b.x - (tx * c - ty * s) * len, y: b.y - (tx * s + ty * c) * len }; }
+    var h1 = back(flip ? -29 : 29, 12), h2 = back(flip ? 34 : -34, 10);
+    pHead.setAttribute('d', 'M' + n1(h1.x) + ' ' + n1(h1.y) + 'L' + n1(b.x) + ' ' + n1(b.y) + 'L' + n1(h2.x) + ' ' + n1(h2.y));
+  }
+  function place(el, x, y) { el.style.setProperty('--x', n1(x) + 'px'); el.style.setProperty('--y', n1(y) + 'px'); }
+  function annoLayout() {
+    if (!anno || !g || !inks.length) { return; }
+    var pw = labPot.offsetWidth, ph = labPot.offsetHeight, nw = labNeed.offsetWidth, nh = labNeed.offsetHeight;
+    if (!pw) { return; }
+    var lineX = g.cx + halfW(g.line) + g.t, lid = g.n + g.t + 9;
+    /* the pot's label, top left, clear of the lid; its arrow into the coins at the left of the heap */
+    var px = g.wide ? Math.max(6, Math.min(g.cx - g.B - pw * 0.55, g.cx - lid - 12 - pw)) : 6, py = g.wide ? 10 : 4;
+    place(labPot, px, py);
+    var a = { x: px + Math.min(pw * 0.42, 64), y: py + ph + 7 }, b = { x: g.cx - g.B * 0.5, y: g.cy + g.Hb * 0.36 };
+    stroke(a, b, g.wide ? -26 : -18, inks[0], inks[1], false);
+    /* the line's label, top right; its arrow down to the line's end */
+    var qx = W - nw - (g.wide ? 10 : 4), qy = g.wide ? 12 : 4;
+    var c = { x: qx + nw * 0.55, y: qy + nh + 7 }, d = { x: lineX + 5, y: g.line - 4 };
+    stroke(c, d, g.wide ? 22 : 16, inks[2], inks[3], true);
+    place(labNeed, qx, qy);
+  }
+  /* the line's label says what the line is, and turns when it is reached */
+  var needT = $('pbC2NeedT'), needWas = '';
+  function annoText() {
+    if (!needT) { return; }
+    var w = (S.covered ? '✓ ' : '') + 'Enough for ' + (S.own ? 'your figure' : 'a ' + S.label.toLowerCase() + ' life') + (S.two ? ' for two' : '');
+    if (w !== needWas) { needWas = w; needT.textContent = w; }
+    annoLayout();
+    if (anno) { anno.classList.toggle('pb-c2-anno-ok', !!S.covered); anno.classList.toggle('pb-c2-anno-noline', !(S.targetPot > 0)); }
   }
 
   /* -------------------------------------------------------------- loop -- */
@@ -435,7 +471,6 @@
       if (speed() > 0.05) { moving = true; }
       if (fx) { fx.step(dt); if (fx.busy()) { moving = true; } }
     }
-    shown.t = S.pr ? S.pr.today : 0; shown.step(dt); if (!shown.done()) { moving = true; }
     draw(now);
     calm = moving ? 0 : calm + dt;
     if (K.motion() && onScreen && !document.hidden && (calm < 0.5 || ptr.in)) { raf = requestAnimationFrame(frame); }
@@ -479,7 +514,7 @@
   }
 
   /* ------------------------------------------------------ the controls -- */
-  [age, pot, mine, emp].forEach(function (r) { if (r) { r.addEventListener('input', function () { calc(true); }); } });
+  [age, pot, mine, emp].forEach(function (r) { if (r) { r.addEventListener('input', function () { if (r !== pot) { userSet = true; } calc(true); }); } });
   var taxSeg = sec.querySelector('.pb-c2-tax');
   var taxS = null;
   if (taxSeg) { taxS = K.seg(taxSeg, function (b) { tax = +b.getAttribute('data-rate') / 100; if (K.setTax) { K.setTax(tax, 'calc'); } calc(true); }); }
@@ -505,6 +540,7 @@
     if (this.getAttribute('data-act') === 'up') { var up = higher(); if (up) { K.setAim(up, K.aim.hh, 'button'); } return; }
     var step = +mine.step || 10, want = Math.min(+mine.max, Math.ceil(needed(S.a, S.p, S.e, S.need - S.st) / step) * step);
     var from = +mine.value, t0 = performance.now(), dur = K.motion() ? 1200 : 0;
+    userSet = true;
     cancelAnimationFrame(tw);
     (function go(ms) {
       var k = dur ? Math.min(1, (ms - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
@@ -516,7 +552,7 @@
 
   /* ---------------------------------------------------- housekeeping -- */
   window.addEventListener('resize', function () { if (!cx) { return; } var old = g; W = 0; size(); if (old) { coins.forEach(function (c) { c.x = g.cx + (c.x - old.cx) * g.B / old.B; c.y = g.bottom - (old.bottom - c.y) * g.B / old.B; c.px = c.x; c.py = c.y; }); } kick(); });
-  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(kick); }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { annoLayout(); kick(); }); }
   document.addEventListener('visibilitychange', kick);
   document.addEventListener('pb:motion', function () { if (g && !K.motion()) { settleNow(); } kick(); });
   $('pbC2Live').hidden = false;
@@ -528,10 +564,11 @@
       onScreen = es[es.length - 1].isIntersecting;
       if (onScreen && !seen) {
         seen = true;
-        /* the first look: empty the pot and pour */
+        /* the first look: empty the pot and pour; the labels write themselves on as it fills */
         if (K.motion()) { coins = []; queue = wanted(); setTimeout(function () { if (hint && !hinted) { hint.classList.add('pb-on'); } }, 2600); }
+        if (anno) { setTimeout(function () { anno.classList.add('pb-on'); }, K.motion() ? 650 : 0); }
       }
       if (onScreen) { kick(); }
     }, { threshold: 0.3 }).observe(cv);
-  } else { seen = true; }
+  } else { seen = true; if (anno) { anno.classList.add('pb-on'); } }
 }());

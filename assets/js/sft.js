@@ -2,7 +2,9 @@
    retirement lump sum (Run 20 #7).
 
    ------------------------------------------------------------------------
-   SOURCES, checked 2026-09-24. Re-check after Budget 2027 (6 October 2026).
+   SOURCES, checked 2026-09-24, and again 2026-10-13 after Budget 2027
+   (6 October 2026): every figure below still stands. Next check: the
+   Finance (No. 2) Bill 2026, when it is published.
 
      SFT by year         Finance Act 2024 s.13(a)(ii), substituting the
                          definition in TCA 1997 s.787O(1): EUR 2,000,000 for
@@ -28,11 +30,43 @@
      Credit              tax paid on the 20% slice of a lump sum can be set
                          against CET: at most 20% of 300,000, EUR 60,000
                          (Revenue's CET page; ch. 27 para 9).
-     Up to about 71%     what is left of an excess after CET is taxed again
+     Up to 68.8%         what is left of an excess after CET is taxed again
                          as income when drawn. The Department of Finance's
                          independent examination of the SFT (de Buitleir,
                          September 2024, section 4.2) puts the combined rate
-                         at up to 68.8%, or 71.2% with PRSI: 40% + 60% x 52%.
+                         at up to 68.8% (40% + 60% x 48%, income tax and
+                         USC), or 71.2% with PRSI at its 2024 rate of 4%. PRSI
+                         is 4.35% from 1 October 2026, so the page quotes the
+                         68.8% and says only that PRSI adds more: the 71.2%
+                         is no longer a current figure, and a recomputed one
+                         would be ours, not the Department's.
+     Budget 2027         the Department of Finance's Budget 2027 Tax Policy
+     (6 October 2026)    Changes and the Minister's Budget statement: the
+                         threshold's path is unchanged (EUR 2.4m in 2027);
+                         the age-related factors that value a defined benefit
+                         pension against it are to be revised from 1 January
+                         2027 by the Finance (No. 2) Bill 2026, which was not
+                         published at 13 October 2026, so this module and the
+                         page do not use them. No Budget 2027 change was found
+                         to the lump sum bands, the credit or the CET rate;
+                         the enacted figures stand.
+
+   Read 2026-10-13. revenue.ie, gov.ie and irishstatutebook.ie refuse this
+   build environment's fetches, so each was read through search extracts of
+   the page itself:
+     irishstatutebook.ie/eli/2024/act/43/section/13/enacted/en/html
+       (Finance Act 2024 s.13: the steps to 2029 and the 2030 formula)
+     revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx
+       (the four steps; CET ring-fenced; the lump sum credit)
+     revenue.ie/en/tax-professionals/tdm/pensions/chapter-32.pdf
+       (EUR 2.2m from 1 January 2026; CET at 40%)
+     revenue.ie/en/tax-professionals/tdm/pensions/chapter-27.pdf
+       (EUR 200,000 tax-free; 20% to EUR 500,000, fixed since 1 January 2025)
+     assets.gov.ie/static/documents/c6792805/Budget_2027_Tax_Policy_Changes_v2.pdf
+     gov.ie/en/department-of-finance/speeches/statement-by-minister-harris-on-budget-2027/
+       (the defined benefit factors, from 1 January 2027)
+     kpmg.com/ie/en/insights/tax/budget-2027/tax-rates-and-credits.html
+       (PRSI 4.35% from 1 October 2026)
    ------------------------------------------------------------------------
 
    Contract: this header and tests/sft.test.js.

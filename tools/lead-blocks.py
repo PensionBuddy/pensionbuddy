@@ -8,7 +8,9 @@
                the home, starter, directors', booking and glossary pages,
                and the middle of five guides (at their <!-- ASK-HERE --> line)
     jobs       the old jobs timeline ("pension-trace"): tracker.html
-    fee        the fee check ("fee-check"): index.html
+    fee        the fee check ("fee-check"): on no page since 13 October 2026
+               (Damian: fees are low in Ireland; the charges calculator stays
+               under Tools). Its parts and script are kept
     yearend    the year-end reminder ("year-end-reminder"): director.html
     move       changing jobs ("job-change"): tracker.html
     callback   call me back ("callback"): booking.html
@@ -49,7 +51,7 @@ BLOCKS = {
             'js': [FORMS, 'assets/js/pb-ask.js']},
     'jobs': {'pages': ['tracker.html'], 'parts': ['css', 'html'],
              'js': [FORMS, 'assets/js/pb-jobs.js']},
-    'fee': {'pages': ['index.html'], 'parts': ['css', 'html'],
+    'fee': {'pages': [], 'parts': ['css', 'html'],
             'js': [FORMS, 'assets/js/pension-fees.js', KIT, 'assets/js/pb-fee.js']},
     'yearend': {'pages': ['director.html'], 'parts': ['css', 'html'],
                 'js': [FORMS, KIT, 'assets/js/pb-yearend.js']},
@@ -78,7 +80,6 @@ ANCHORS = {
     # the glossary: under the two games, before the terms (12 October 2026: a form on every page)
     ('ask', 'glossary.html'): ('<section style="padding-top:36px"><div class="wrap">\n  <div class="pb-tix-scope">', 'before'),
     ('jobs', 'tracker.html'): ('</div></header>\n', 'after'),
-    ('fee', 'index.html'): ('<section class="pb-learn" id="learn">', 'before'),
     ('yearend', 'director.html'): ('<!-- LEAD:ask:BEGIN', 'before'),
     ('move', 'tracker.html'): ('<section style="padding-top:0"><div class="wrap">\n  <div class="infoadvice">', 'before'),
     ('callback', 'booking.html'): ('<!-- LEAD:ask:BEGIN', 'before'),

@@ -139,7 +139,7 @@
 
   function sentence(c, n) {
     var first = c.costA >= 0.5
-      ? 'Over ' + years(n) + ', your plan’s charges would take about ' + euro(c.costA) + ' out of your pot.'
+      ? 'Over ' + years(n) + ', your plan’s charges would leave your pot about ' + euro(c.costA) + ' smaller than with no charges.'
       : 'Over ' + years(n) + ', with no charges on your plan, nothing would be taken out of your pot.';
     var second = c.difference >= 0.5
       ? 'With the other plan’s charges, you would have about ' + euro(c.difference) + ' more at retirement.'
@@ -156,8 +156,11 @@
     $('yearsV').textContent = n;
     ['amcA', 'feeA', 'amcB', 'feeB'].forEach(function (id) { $(id + 'V').textContent = pc(+$(id).value); });
     $('feeOtherV').textContent = pc(+$('amcB').value) + ' a year, ' + pc(+$('feeB').value) + ' on payments';
-    $('potA').textContent = euro(c.a.pot);
-    $('potB').textContent = euro(c.b.pot);
+    /* the two figures roll to their new values (assets/js/pb-fee-motion.js,
+       only with motion on); without it they are written as they are */
+    var roll = window.PBFeeMotion ? window.PBFeeMotion.figure : function (el, v) { el.textContent = euro(v); };
+    roll($('potA'), c.a.pot);
+    roll($('potB'), c.b.pot);
     var say = sentence(c, n);
     $('pbSay').textContent = say;
     $('amcPaidA').textContent = euro(c.a.amcPaid);
@@ -167,7 +170,6 @@
     $('costA').textContent = euro(c.costA);
     $('costB').textContent = euro(c.costB);
     $('nonePot').textContent = euro(c.none.pot);
-    if (window.PBToday) { PBToday.set('potA', c.a.pot, n); PBToday.set('potB', c.b.pot, n); }
     chart(c, n);
     P.announce('Your plan at retirement ' + euro(c.a.pot) + '. The other plan ' + euro(c.b.pot) + '. ' + say);
   }

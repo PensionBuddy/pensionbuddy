@@ -4,9 +4,11 @@
    beside it. Clear as day; as fluid as the welcome."
 
    Three stacks of coins; one coin is €100 of today's shopping.
-     Cash      €1,000 that buys less every year: 1,000 / 1.02^n in today's
-               money (the ECB's 2% target). A faint outline keeps the €1,000
-               it was, so the loss is a hole you can see.
+     Deposit   €1,000 that buys less every year: on deposit at the Central
+               Bank's latest rate for household overnight deposits
+               (PBAssume.cash, 0.15%), in today's money at the ECB's 2%
+               target: 1,000 x 1.0015^n / 1.02^n. A faint outline keeps the
+               €1,000 it was, so the loss is a hole you can see.
      Pension   the same €1,000 growing at 6% a year before charges, the
                most the Pensions Authority lets a projection assume
                (PBAssume.assets.cap, as the calculator above): 1,000 x
@@ -16,6 +18,17 @@
                every €60 you put in (2/3 of yours), at 20% €20 for every €80
                (1/4). The rate is shared with the calculator (PBKit.tax).
    Not guaranteed; the note says so.
+
+   The reader's own money (13 October 2026, Damian: "your money in a pension
+   against the same money left on deposit, in what it buys"): once the reader
+   has moved the calculator's age or a monthly amount (PBKit.plan.set), the
+   section takes what goes in a month (theirs and their employer's) and the
+   years to 66: that amount every month, on deposit or in a pension, grown
+   month by month and put in today's prices. The outline is what was paid in,
+   and one coin is a tenth of what is paid in by 66, so the outline is ten
+   coins at 66 as the €1,000 is. The amount going into the pension already
+   holds the tax relief (the calculator's "Revenue adds"), so the
+   government's own stack stands down; the sentence about it stays.
 
    Motion: the first time it is seen the three stacks build, then the years
    run from 1 to 30 by themselves: cash coins fade into the outline while
@@ -31,25 +44,34 @@
   var $ = function (id) { return document.getElementById(id); };
   var yrs = $('pbI2Yrs'), cv = sec.querySelector('.pb-i2-cv');
   if (!yrs) { return; }
-  var PA = window.PBAssume, fmt = K.fmt, INF = 0.02, GROW = (PA && PA.assets && PA.assets.cap) || 0.06, PER = 100, BASE = 1000 / PER;
+  var PA = window.PBAssume, fmt = K.fmt, INF = (PA && PA.inflation && PA.inflation.rate) || 0.02, GROW = (PA && PA.assets && PA.assets.cap) || 0.06, PER = 100, BASE = 1000 / PER;
+  var DEP = PA && PA.cash ? PA.cash.rate : 0.0015, AT = 66;
+  /* the reader's own money: null until the calculator is set, then { m: a month, n: years to 66, per: one coin } */
+  var own = null;
   var rCash = new K.Roll($('pbI2Cash')), rPen = new K.Roll($('pbI2Pen'));
   var tags = { cash: $('pbI2TCash'), pen: $('pbI2TPen'), gov: $('pbI2TGov') }, rT = {};
   Object.keys(tags).forEach(function (k) { if (tags[k]) { rT[k] = new K.Roll(tags[k].querySelector('b')); } });
   var hint = sec.querySelector('.pb-i2-hint');
   function rate() { return K.tax ? K.tax.rate : 0.4; }
 
-  function cashOf(n) { return 1000 / Math.pow(1 + INF, n); }
-  function penOf(n) { return 1000 * Math.pow((1 + GROW) / (1 + INF), n); }
-  function govOf(n) { var r = rate(); return penOf(n) * r / (1 - r); }
+  /* a monthly amount m paid for n years at a yearly rate y, grown month by month (the calculator's project()) */
+  function monthly(m, n, y) { var r = Math.pow(1 + y, 1 / 12) - 1, k = n * 12; return r > 0 ? m * (Math.pow(1 + r, k) - 1) / r : m * k; }
+  function cashOf(n) { return own ? monthly(own.m, n, DEP) / Math.pow(1 + INF, n) : 1000 * Math.pow((1 + DEP) / (1 + INF), n); }
+  function penOf(n) { return own ? monthly(own.m, n, GROW) / Math.pow(1 + INF, n) : 1000 * Math.pow((1 + GROW) / (1 + INF), n); }
+  function govOf(n) { var r = rate(); return own ? 0 : penOf(n) * r / (1 - r); }
+  /* what was paid in, in coins: the outline */
+  function paidCoins(n) { return own ? own.m * 12 * n / own.per : BASE; }
+  function per() { return own ? own.per : PER; }
   function words() {
     var n = +yrs.value, r = rate();
     yrs.style.setProperty('--fill', ((n - yrs.min) / (yrs.max - yrs.min) * 100) + '%');
     yrs.setAttribute('aria-valuetext', n + (n === 1 ? ' year' : ' years'));
     $('pbI2YrsV').textContent = n;
     $('pbI2Y').textContent = n === 1 ? '1 year' : n + ' years';
+    var what = $('pbI2What'); if (what) { what.textContent = own ? 'your ' + fmt(own.m) + ' a month' : '€1,000'; }
     rCash.set(fmt(cashOf(n))); rPen.set(fmt(penOf(n)));
     $('pbI2Put').textContent = fmt(100 * (1 - r)); $('pbI2Add').textContent = fmt(100 * r);
-    if (rT.cash) { rT.cash.set(fmt(cashOf(n))); rT.pen.set(fmt(penOf(n))); rT.gov.set('+' + fmt(govOf(n))); }
+    if (rT.cash) { rT.cash.set(fmt(cashOf(n))); rT.pen.set(fmt(penOf(n))); if (!own) { rT.gov.set('+' + fmt(govOf(n))); } }
   }
 
   /* --------------------------------------------------------- the stacks -- */
@@ -71,7 +93,8 @@
     var base = H - 44, w = Math.max(40, Math.min(104, W * 0.17, (base - 128) / (0.105 * FIT + 0.3)));
     var h = C.sliceH(Math.round(w));
     g = { w: Math.round(w), e: h.e, ry: h.ry, base: base };
-    S.cash.x = W * 0.21; S.pen.x = W * 0.56; S.gov.x = S.pen.x + g.w * 1.14;
+    /* with the reader's own money there are two stacks, so they move to the middle */
+    S.cash.x = W * (own ? 0.3 : 0.21); S.pen.x = W * (own ? 0.68 : 0.56); S.gov.x = S.pen.x + g.w * 1.14;
   }
   function slot(i) { return g.base - g.ry - g.e - i * g.e; }
   /* each coin's own small offset, so a stack is a stack and not a cylinder */
@@ -161,12 +184,13 @@
       cx.restore();
     });
     cx.fillStyle = 'rgba(84,99,95,.85)'; cx.font = '600 12px Figtree, system-ui, sans-serif'; cx.textAlign = 'left'; cx.textBaseline = 'alphabetic';
-    cx.fillText('One coin = €100 of today’s shopping', 18, H - 14);
+    cx.fillText('One coin = ' + fmt(per()) + ' of today’s shopping', 18, H - 14);
     place();
   }
   /* the €1,000 the cash was: a faint outline of ten coins */
   function ghost() {
-    var x = S.cash.x, rx = g.w / 2 + 1, ry = g.ry + 1, top = slot(BASE - 1), bot = g.base - g.ry;
+    var paid = Math.max(1, paidCoins(+yrs.value));
+    var x = S.cash.x, rx = g.w / 2 + 1, ry = g.ry + 1, top = slot(paid - 1), bot = g.base - g.ry;
     var n = S.cash.coins.length, solid = n ? slot(n - 1) : g.base;
     cx.save();
     /* only above the coins that are left: the outline is the part that went */
@@ -189,7 +213,7 @@
     var z = zoom();
     function Zy(y) { return g.base + (y - g.base) * z; }
     function topOf(s) { return Zy(slot(Math.max(0, Math.ceil(s.n.x - 0.001) - 1)) - g.ry) - 10; }
-    var yc = Zy(slot(BASE - 1) - g.ry) - 12, yg = Math.max(84, topOf(S.gov)), yp = Math.max(80, topOf(S.pen));
+    var yc = Zy(slot(Math.max(1, paidCoins(+yrs.value)) - 1) - g.ry) - 12, yg = Math.max(84, topOf(S.gov)), yp = Math.max(80, topOf(S.pen));
     /* the relief's figure keeps clear of the pension's coins and of the edge */
     var gw = tags.gov.offsetWidth, xg = Math.min(W - gw / 2 - 8, Math.max(shown('gov') + 6, S.pen.x + g.w / 2 * z + gw / 2 + 6));
     /* side by side when they fit, else the pension's rises clear of the relief's */
@@ -201,8 +225,8 @@
 
   /* ----------------------------------------------------- the reader's time -- */
   function target() {
-    var n = +yrs.value;
-    S.cash.n.t = cashOf(n) / PER; S.pen.n.t = penOf(n) / PER; S.gov.n.t = govOf(n) / PER;
+    var n = +yrs.value, u = per();
+    S.cash.n.t = cashOf(n) / u; S.pen.n.t = penOf(n) / u; S.gov.n.t = govOf(n) / u;
     if (!K.motion() || !seen) { for (var s in S) { S[s].n.x = S[s].n.t; } }
     kick();
   }
@@ -247,13 +271,35 @@
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
   }
 
+  /* ------------------------------------------------- the reader's money -- */
+  /* from the calculator, once the reader has set it: their monthly amount to 66 */
+  function fromPlan() {
+    var p = K.plan;
+    if (!p || !p.set) { return false; }
+    var m = (+p.mine || 0) + (+p.emp || 0), n = Math.max(1, AT - (+p.age || 35));
+    /* nothing going in a month: back to the €1,000 */
+    if (!(m > 0)) { if (!own) { return false; } own = null; sec.classList.remove('pb-i2-own'); W = 0; g = null; return true; }
+    var was = own, k = m + '/' + n;
+    if (was && was.k === k) { return false; }
+    own = { m: m, n: n, per: m * 12 * n / BASE, k: k };
+    sec.classList.add('pb-i2-own');
+    W = 0; g = null;
+    if (+yrs.max < n) { yrs.max = n; }
+    yrs.value = n;
+    return true;
+  }
+  document.addEventListener('pb:plan', function () { if (fromPlan()) { touch(); words(); target(); } });
+
   /* ------------------------------------------------------ housekeeping -- */
   window.addEventListener('resize', function () { W = 0; g = null; kick(); });
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { W = 0; g = null; kick(); }); }
   document.addEventListener('visibilitychange', kick);
   document.addEventListener('pb:motion', kick);
   $('pbI2Ctl').hidden = false;
+  var dep = $('pbI2Dep');
+  if (dep && PA && PA.cash) { dep.textContent = PA.cash.pct + ' a year, the Central Bank’s average for household overnight deposits in ' + PA.cash.month; }
   pressTax(true);
+  fromPlan();
   words(); target();
   if (!cx || !C) { return; }
   sec.classList.add('pb-i2-on');
@@ -265,7 +311,7 @@
         if (K.motion()) {
           /* the first look: the stacks build, then time runs from next year to the slider's year */
           var to = +yrs.value, from = +yrs.min; yrs.value = from; words();
-          S.cash.n.x = S.cash.n.t = cashOf(from) / PER; S.pen.n.x = S.pen.n.t = penOf(from) / PER; S.gov.n.x = S.gov.n.t = govOf(from) / PER;
+          S.cash.n.x = S.cash.n.t = cashOf(from) / per(); S.pen.n.x = S.pen.n.t = penOf(from) / per(); S.gov.n.x = S.gov.n.t = govOf(from) / per();
           if (!g) { size(); }
           ['cash', 'pen', 'gov'].forEach(function (k, j) {
             S[k].coins = [];

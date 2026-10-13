@@ -19,7 +19,7 @@ worth more than a charge saved, and the page says so beside the figures.
 
 | | Source |
 |---|---|
-| 5% of each contribution, 1% a year of the fund | the Standard PRSA maximums: Pensions Act 1990 s.104(5) and (6) (consolidated to 13 May 2026); the Pensions Authority's own pension calculator uses the same two as its charge assumptions |
+| 5% of each contribution, 1% a year of the fund | the Standard PRSA maximums: Pensions Act 1990 s.104(5) and (6) (consolidated to 13 May 2026); the Pensions Authority's own pension calculator uses the same two as its charge assumptions. Named on the page as the ceiling, no longer the defaults (F4) |
 | the kinds of charge | CCPC, "Pension costs, fees and charges in Ireland": set-up fee, allocation rate, annual management charge, exit and switching charges, early encashment, policy fee |
 | 5% growth | the site's own default, the pension calculator's |
 
@@ -61,12 +61,26 @@ contribution} }`, percentages as fractions. Output:
 
 ## F4. The page
 
+13 October 2026 (Damian): Irish pension charges are low, counted in basis
+points, not the 2-3% seen in Germany, so the defaults and the ranges are
+Irish ones, and the comparison is not to exaggerate.
+
 - Sliders: the pot now, the monthly payment, years to retirement; plan A's
-  annual charge and contribution charge (defaults 1% and 5%), plan B's
-  (defaults 0.5% and 0%); growth, 5% by default, folded under More options.
-- Figures: each plan's pot at retirement, what the charges cost each plan by
-  then, the difference between the two, and a line chart of both pots and the
-  no-charge line, year by year.
+  annual charge and contribution charge (defaults 0.75% and 0%), plan B's
+  (defaults 0.4% and 0%). The yearly charge runs 0% to 2% in 0.05 steps; the
+  charge on each payment 0% to 5% in 0.5 steps. The defaults are examples,
+  not any provider's charges. Growth is fixed at 5% a year before charges
+  (risk level 4 of `assets/js/pb-assumptions.js`), stated, not a slider.
+- Figures: each plan's pot at retirement, in euro at the time (no figure is
+  in today's money), what the charges cost each plan by then, the difference
+  between the two, and a line chart of both pots and the no-charge line, year
+  by year. The sentence says how much smaller the charges leave the pot than
+  no charges would ("leave your pot about EUR 41,364 smaller"), not that they
+  take that much: the workings show what was charged in euro at the time
+  (EUR 24,699 at the defaults) and why the cost by retirement is larger.
+- At the defaults (EUR 50,000 now, EUR 200 a month, 25 years): your plan EUR
+  245,101, the other EUR 263,556, no charges EUR 286,465; asserted in
+  `tests/pension-fees.test.js` section 6.
 - Beside the figures: the prescribed warnings (Regs 372 and 392), and the
   other side: a lower charge is not the only thing that matters, and moving a
   pension can mean giving up terms worth more than the charge saved.

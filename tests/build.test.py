@@ -1401,11 +1401,12 @@ def run():
     def learn_faults(ix):
         f = []
         # since 12 October 2026 (Damian's brief: how a call works, then the
-        # forms, then the jargon buster) the games follow the fee check's
-        # block, with at most one comment between (Run 37)
-        m = re.search(r'<!-- LEAD:fee:END -->\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        # forms, then the jargon buster) the games follow the forms, with at
+        # most one comment between (Run 37); since 13 October 2026 the cost of
+        # waiting stands between, in the fee check's place
+        m = re.search(r'<section class="pb-w2" id="wait".*?</div></section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
         if not m:
-            return ['the section is not straight after the forms']
+            return ['the section is not straight after the cost of waiting']
         box = m.group(1)
         if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
@@ -1475,11 +1476,13 @@ def run():
     # 12 October 2026 (Damian's brief): under "Are you a director?", how a
     # call works, the forms, then the jargon buster; "Your pension through
     # life" last; "Who you are dealing with" and "Questions before you
-    # call" gone.
+    # call" gone. 13 October 2026 (Damian's brief): the fee check gone (the
+    # charges calculator stays under Tools); the cost of waiting straight
+    # under the Ask form, in its place.
     ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
              '<section class="pb-i2" id="inflation"', '<section class="expect" id="call">',
-             '<section class="pb-ask" id="ask"', '<section class="pbk pbf" id="fees"', '<section class="pb-learn" id="learn">',
+             '<section class="pb-ask" id="ask"', '<section class="pb-w2" id="wait"', '<section class="pb-learn" id="learn">',
              '<section class="tickband" id="deadline">', '<section id="story">', '<section class="pb-tl-sec" id="through-life">']
 
     def order_faults(ix):
@@ -1488,7 +1491,8 @@ def run():
         if not f and at != sorted(at):
             f.append('out of order')
         for gone in ('id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
-                     'Who you are dealing with', 'Questions before you call', 'check that for yourself'):
+                     'Who you are dealing with', 'Questions before you call', 'check that for yourself',
+                     'name="fee-check"', 'LEAD:fee:', 'assets/js/pb-fee.js'):
             if gone in ix:
                 f.append('back: ' + gone)
         return f
@@ -1501,7 +1505,8 @@ def run():
     swapped = ix[:c0] + ix[c1:b1] + ix[c0:c1] + ix[b1:]
     for label, mut, want in (
             ('inflation above the calculator', swapped, 'out of order'),
-            ('"What\'s changed?" put back', ix.replace('<div data-pb-providers hidden></div>', '<section class="pb-changed" id="changed"></section>\n<div data-pb-providers hidden></div>', 1), 'back: id="changed"')):
+            ('"What\'s changed?" put back', ix.replace('<div data-pb-providers hidden></div>', '<section class="pb-changed" id="changed"></section>\n<div data-pb-providers hidden></div>', 1), 'back: id="changed"'),
+            ('the fee check put back', ix.replace('<section class="pb-w2" id="wait"', '<form name="fee-check"></form>\n<section class="pb-w2" id="wait"', 1), 'back: name="fee-check"')):
         assert mut != ix, label
         eq('33. %s is caught' % label, want in order_faults(mut), True)
 
@@ -1649,7 +1654,7 @@ def run():
         if not m or ix[m.end():ix.find('</main>')].strip():
             return ['the section is not last in the page']
         box = m.group(1)
-        if '<span class="kicker">Your pension through life</span>' not in box or '<h2>What changes, and when.</h2>' not in box:
+        if '<span class="kicker">Your pension through life</span>' not in box or '<h2>Key dates for your pension.</h2>' not in box:
             f.append('the kicker or the heading')
         if '<div class="pb-tl-stage" aria-hidden="true">' not in box:
             f.append('the card is not aria-hidden')
@@ -1687,7 +1692,7 @@ def run():
     eq('36. "Your pension through life": last on the page, ages 18 to 75 in order, each a link to a live page that states its figures; none at 75; the card hidden from screen readers; the date; nothing scrolls, nothing stored',
        timeline_faults(ix, sources, tl_js), [])
     for label, target, find, repl, want in (
-            ('a figure the linked page does not state', 'ix', '<p>25% from 40 to 49.</p>', '<p>26% from 40 to 49.</p>', 'is not on'),
+            ('a figure the linked page does not state', 'ix', '<p>Tax relief on up to 25% of your pay.</p>', '<p>Tax relief on up to 26% of your pay.</p>', 'is not on'),
             ('a step at 75', 'ix', 'data-age="71"', 'data-age="75"', 'at 75'),
             ('a step to a held page', 'ix', '<h3><a href="state-pension-reality-check.html">At 66</a>', '<h3><a href="how-we-work.html">At 66</a>', 'not a live page'),
             ('a card screen readers hear', 'ix', '<div class="pb-tl-stage" aria-hidden="true">', '<div class="pb-tl-stage">', 'aria-hidden'),
@@ -2681,7 +2686,7 @@ def run():
     eq('53. pagebuild.WARN is the two sentences, word for word, each bold, in one pb-warn box',
        pagebuild.WARN, '<div class="pb-warn"><p><b>%s</b></p><p><b>%s</b></p></div>' % SENT)
     eq('53. the pages with projected figures, and their boxes',
-       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('director.html', 1), ('index.html', 1), ('pension-calculator.html', 1),
+       sorted(pagebuild.WARN_PAGES.items()), [('broker-vs-autoenrolment.html', 2), ('director-calculator.html', 1), ('director.html', 1), ('index.html', 2), ('pension-calculator.html', 1),
                                               ('pension-fees-calculator.html', 1), ('pia.html', 1), ('starter.html', 3)])
     eq('53. every page carries exactly its warnings, word for word, from pagebuild.WARN, and no other page one',
        findings(pagebuild.warn_drift(sources)), [])
@@ -2740,7 +2745,7 @@ REPLY_FORMS = {
     'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
                 'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
-    'fee-check': ['index.html'],
+    # 'fee-check' left the home page on 13 October 2026 (the cost of waiting took its place): on no page now
     'year-end-reminder': ['director.html'],
     'job-change': ['tracker.html'],
     'callback': ['booking.html'],
