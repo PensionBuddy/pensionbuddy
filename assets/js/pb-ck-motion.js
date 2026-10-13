@@ -7,8 +7,7 @@
    - Each group's heading carries a dot for each of its checks, in the
      group's colour (ink for company payments, teal for your own): ticking
      fills the next dot. A group done gets a ring round its dots.
-   - All nine ticked: a line under the list says so, and a small burst comes
-     out of the last box ticked.
+   - All nine ticked: a line under the list says so.
 
    The checkboxes stay real checkboxes (keyboard, screen reader and print
    behave as before); nothing is stored or sent. The boxes and dots are
@@ -25,7 +24,7 @@
   lists.forEach(function (ul) { all = all.concat(boxesIn(ul)); });
   if (!all.length) { return; }
   pages.forEach(function (p) { p.classList.add('pb-ck'); });
-  var done = document.getElementById('ckDone'), wasAll = false;
+  var done = document.getElementById('ckDone');
 
   /* the hand-drawn box after each checkbox */
   all.forEach(function (inp) {
@@ -62,13 +61,8 @@
         var box = inp.nextSibling;
         if (inp.checked && motion()) { box.classList.remove('pb-ck-pop'); void box.offsetWidth; box.classList.add('pb-ck-pop'); }
         paint(g, inp.checked ? count(g.boxes) - 1 : -1);
-        var k = count(all), every = k === all.length;
+        var every = count(all) === all.length;
         if (done) { done.textContent = every ? 'All ' + (all.length === 9 ? 'nine' : all.length) + ' checked.' : ''; }
-        if (every && !wasAll && motion() && window.PBAlive && window.PBAlive.confetti) {
-          var r = box.getBoundingClientRect();
-          window.PBAlive.confetti(r.left + r.width / 2, r.top + r.height / 2, 16, 520);
-        }
-        wasAll = every;
       });
     });
   });

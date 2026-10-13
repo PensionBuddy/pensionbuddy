@@ -10,12 +10,9 @@
    - The cost of waiting: a handle under the sentence. Drag it and see what
      putting it off for one to ten years costs, as two bars and a gap: the
      page's own sum ("put this off for twelve months"), with more months.
-   - The pot: it bounces when it moves, and when it passes €100,000,
-     €250,000, €500,000 or €1 million going up, it bursts with coins.
 
    Without motion the chart line and the waiting handle still work (they are
-   reading aids, and nothing moves by itself); the bounce, the sweep and the
-   coins are left out. */
+   reading aids, and nothing moves by itself); the sweep is left out. */
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
@@ -152,58 +149,8 @@
   }
   if (wr) { wr.addEventListener('input', function () { waitPaint(); if (motion()) { W.classList.remove('pb-wait-tick'); void W.offsetWidth; W.classList.add('pb-wait-tick'); } }); }
 
-  /* ==================================== 3. the pot: bounce, and milestones == */
-  var potEl = $('potOut'), MILES = [100000, 250000, 500000, 1000000], lastBase = null;
-  var party = null, pcx = null, bits = [], praf = 0, plast = 0;
-  function burst(x, y) {
-    if (!party) {
-      party = document.createElement('canvas'); party.className = 'pb-party'; party.setAttribute('aria-hidden', 'true');
-      document.body.appendChild(party); pcx = party.getContext('2d');
-    }
-    var d = Math.min(window.devicePixelRatio || 1, 2);
-    party.width = Math.round(window.innerWidth * d); party.height = Math.round(window.innerHeight * d);
-    for (var i = 0; i < 36; i++) {
-      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.6, v = 500 + Math.random() * 600;
-      bits.push({ x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: 6 + Math.random() * 6, ph: Math.random() * 6, age: 0, life: 1.6 + Math.random() * 0.8,
-        c: ['#F4B740', '#586B85', '#0B1F1C', '#8A97A8'][i % 4] });
-    }
-    if (!praf) { plast = performance.now() / 1000; praf = requestAnimationFrame(pstep); }
-  }
-  function pstep(ms) {
-    praf = 0;
-    var now = ms / 1000, dt = Math.min(1 / 30, now - plast), d = Math.min(window.devicePixelRatio || 1, 2); plast = now;
-    pcx.setTransform(d, 0, 0, d, 0, 0); pcx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    bits = bits.filter(function (b) {
-      b.age += dt; b.vy += 1100 * dt; b.vx *= Math.pow(0.4, dt); b.x += b.vx * dt; b.y += b.vy * dt;
-      if (b.age > b.life) { return false; }
-      pcx.save(); pcx.globalAlpha = 1 - Math.max(0, (b.age - b.life + 0.5) / 0.5); pcx.translate(b.x, b.y); pcx.scale(Math.cos(b.ph + b.age * 8), 1);
-      pcx.fillStyle = b.c; pcx.beginPath(); pcx.arc(0, 0, b.r, 0, Math.PI * 2); pcx.fill();
-      pcx.strokeStyle = 'rgba(255,255,255,.55)'; pcx.lineWidth = 1.5; pcx.beginPath(); pcx.arc(0, 0, b.r * 0.62, 0, Math.PI * 2); pcx.stroke();
-      pcx.restore(); return true;
-    });
-    if (bits.length) { praf = requestAnimationFrame(pstep); } else { pcx.clearRect(0, 0, window.innerWidth, window.innerHeight); }
-  }
-  function badge(text) {
-    var b = document.createElement('span'); b.className = 'pb-mile'; b.setAttribute('aria-hidden', 'true'); b.textContent = text;
-    potEl.parentNode.style.position = 'relative'; potEl.parentNode.appendChild(b);
-    setTimeout(function () { if (b.parentNode) { b.parentNode.removeChild(b); } }, 2200);
-  }
-  function potPaint() {
-    var I = inputs(), base = at(I, I.months);
-    if (lastBase !== null && motion()) {
-      if (Math.abs(base - lastBase) > 1) { potEl.classList.remove('pb-pot-bump'); void potEl.offsetWidth; potEl.classList.add('pb-pot-bump'); }
-      MILES.forEach(function (m) {
-        if (lastBase < m && base >= m) {
-          var r = potEl.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2);
-          badge('Past ' + (m >= 1000000 ? '€1 million' : euro(m)));
-        }
-      });
-    }
-    lastBase = base;
-  }
-
   /* after the page's own handlers: every slider, and the tax-rate buttons */
-  function update() { waitPaint(); potPaint(); }
+  function update() { waitPaint(); }
   document.addEventListener('input', function (e) { if (e.target && e.target.id !== 'pbWaitY') { update(); } });
   ['t20', 't40'].forEach(function (id) { var b = $(id); if (b) { b.addEventListener('click', update); } });
   update();

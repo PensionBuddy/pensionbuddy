@@ -148,6 +148,8 @@ def page_record(name, src):
     desc = _attr(re.search(r'<meta name="description"[^>]*>', src).group(0), 'content') or ''
     i, j = src.find('<main'), src.find('</main>')
     main = re.sub(r'<script\b.*?</script>|<style\b.*?</style>|<noscript\b.*?</noscript>', '', src[i:j], flags=re.S)
+    # a section switched off (hidden) is not on the page: no result for it
+    main = re.sub(r'<section\b[^>]*\bhidden\b[^>]*>.*?</section>', '', main, flags=re.S)
     h1 = re.search(r'<h1\b[^>]*>(.*?)</h1>', main, re.S)
     secs = []
     for m in re.finditer(r'<h2\b([^>]*)>(.*?)</h2>', main, re.S):

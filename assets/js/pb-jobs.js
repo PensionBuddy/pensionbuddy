@@ -36,6 +36,7 @@
   var jobsBox = $('pbjJobs');
   var by = window.PBForms && PBForms.replyBy ? PBForms.replyBy() : '';
   var jobs = [], seq = 0;
+  var flagged = null;   // the field the message is about
 
   /* ------------------------------------------------------------- storage */
 
@@ -66,12 +67,15 @@
 
   function bad(el, text, where) {
     (where || err).textContent = text;
+    flagged = el;
     var f = el.closest('.ffield') || el;
     f.classList.remove('is-bad'); void f.offsetWidth; f.classList.add('is-bad');
     setTimeout(function () { f.classList.remove('is-bad'); }, 450);
     el.focus();
     return false;
   }
+  /* the message goes as soon as its field is put right */
+  function fixed(el, good) { if (good && el === flagged) { err.textContent = err2.textContent = ''; flagged = null; } }
 
   function add() {
     var n = emp.value.trim().replace(/\s+/g, ' '), f = year(from.value), t = year(to.value, true);
@@ -98,8 +102,12 @@
   [emp, from, to, prov].forEach(function (el) {
     el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } });
   });
+  emp.addEventListener('input', function () { fixed(emp, !!emp.value.trim()); });
   /* a four-digit start year moves on to the end year */
-  from.addEventListener('input', function () { if (year(from.value) != null && !to.value) to.focus(); });
+  from.addEventListener('input', function () {
+    fixed(from, year(from.value) != null);
+    if (year(from.value) != null && !to.value) to.focus();
+  });
 
   /* "Now": the job is the current one */
   var nowBtn = $('pbjNow');
@@ -108,9 +116,14 @@
     var on = nowBtn.getAttribute('aria-pressed') !== 'true';
     to.value = on ? 'Now' : '';
     nowOn(on);
+    fixed(to, on);
     if (on) addBtn.focus(); else to.focus();
   });
-  to.addEventListener('input', function () { nowOn(/^now$/i.test(to.value.trim())); });
+  to.addEventListener('input', function () {
+    var t = year(to.value, true), f = year(from.value);
+    nowOn(/^now$/i.test(to.value.trim()));
+    fixed(to, t != null && (f == null || t >= f));
+  });
 
   provBox.querySelector('.ffield').inert = true;
   provBtn.addEventListener('click', function () {
@@ -277,8 +290,8 @@
   /* ---------------------------------------------------------------- send */
 
   function okField(el, good) { el.closest('.ffield').classList.toggle('is-ok', good); }
-  emailEl.addEventListener('input', function () { okField(emailEl, EMAIL.test(emailEl.value.trim())); });
-  nameEl.addEventListener('input', function () { okField(nameEl, nameEl.value.trim().length > 1); });
+  emailEl.addEventListener('input', function () { var good = EMAIL.test(emailEl.value.trim()); okField(emailEl, good); fixed(emailEl, good); });
+  nameEl.addEventListener('input', function () { okField(nameEl, nameEl.value.trim().length > 1); fixed(nameEl, !!nameEl.value.trim()); });
 
   function text() {
     return sorted().map(function (j) {

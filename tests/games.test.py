@@ -27,7 +27,8 @@ fastest world speed, and that pause() really stops the simulation.
 Jargon Battle: the question bank's shape and copy, that shuffle is a pure,
 deterministic permutation, that a battle draws eight distinct questions, and the
 whole hit/heart/win/lose state machine, plus a real click-through of the page's
-own buttons to prove the best score reaches localStorage.
+own buttons to prove the best score reaches localStorage and, at a phone's
+width, that the board holds still from a question to its answer and on.
 
 Static checks apply to the files as they ship: no em dash, every link carries
 target="_top" (the games are shown inside an iframe on glossary.html), and the
@@ -110,9 +111,10 @@ def serve():
     return srv, port
 
 
-def dump(url, budget=BUDGET):
+def dump(url, budget=BUDGET, size=None):
     p = subprocess.run([CHROME, '--headless=new', '--disable-gpu', '--no-sandbox',
-                        '--virtual-time-budget=%d' % budget, '--dump-dom', url],
+                        '--virtual-time-budget=%d' % budget, '--dump-dom']
+                       + (['--window-size=' + size] if size else []) + [url],
                        capture_output=True, timeout=180)
     return p.stdout.decode('utf-8', 'replace')
 
@@ -178,10 +180,10 @@ def probe(name, body):
     return path
 
 
-def run_probe(port, name, body):
+def run_probe(port, name, body, size=None):
     path = probe(name, body)
     try:
-        dom = dump('http://127.0.0.1:%d/games/__probe_%s.html' % (port, name))
+        dom = dump('http://127.0.0.1:%d/games/__probe_%s.html' % (port, name), size=size)
     finally:
         if os.path.exists(path):
             os.remove(path)
@@ -939,6 +941,34 @@ __boot(function () {
   var opts = document.getElementById('menu').querySelectorAll('.opt');
   R.dom = { buttons: !!(startBtn && nextBtn) && opts.length === 4 };
   if (R.dom.buttons) {
+    /* the board holds still (Damian, 12 October 2026: "all the different
+       terms coming up ... all over the place"): from a question to its
+       answer and on to the next question, the speech box, Buddy's line and
+       the four answers keep their place and size, and Next its place */
+    var place = function (e) {
+      var x = 0, y = 0, n = e;
+      while (n) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      return [x, y, e.offsetWidth, e.offsetHeight];
+    };
+    var board = function () {
+      return JSON.stringify([document.getElementById('dlg'), document.getElementById('why')]
+        .concat([].slice.call(opts)).map(function (e) { return e && place(e); }));
+    };
+    var why = document.getElementById('why');
+    startBtn.click();
+    var b0 = board(), q0 = J.state();
+    opts[(q0.current.correctIndex + 1) % 4].click();
+    var b1 = board(), n1 = JSON.stringify(place(nextBtn));
+    R.dom.wrongBox = document.getElementById('dlg').textContent;
+    R.dom.wrongWhy = why ? why.textContent : null;
+    R.dom.wrongCorrect = q0.current.options[q0.current.correctIndex];
+    R.dom.wrongSays = q0.current.buddySays;
+    nextBtn.click();
+    var b2 = board(), q1 = J.state();
+    opts[q1.current.correctIndex].click();
+    var b3 = board(), n3 = JSON.stringify(place(nextBtn));
+    R.dom.still = [b1 === b0, b2 === b0, b3 === b0, n3 === n1];
+
     startBtn.click();
     nextBtn.click();          /* clear the 'a wild Jargon Blob appears' beat */
     var played = 0;
@@ -1124,6 +1154,11 @@ def check_jargon_battle(data):
            % dom.get('best'), dom.get('best') is not None)
         eq('17. and it is the hits landed', dom.get('best'), str(dom.get('hits')))
         eq('17. the panel shows the same best', dom.get('endBest'), '8 of 8')
+        eq('16. the speech box, Buddy\'s line and the four answers hold still from question '
+           'to answer to the next question, and Next lands in one place', dom.get('still'), [True] * 4)
+        ok('16. after a wrong pick the box does not repeat the right answer, which shows in green',
+           dom.get('wrongCorrect') and dom.get('wrongCorrect') not in (dom.get('wrongBox') or ''))
+        eq('16. and Buddy\'s word on it sits under the answers', dom.get('wrongWhy'), dom.get('wrongSays'))
 
 
 # ------------------------------------------------------------ static checks
@@ -1199,7 +1234,8 @@ def main():
     srv, port = serve()
     try:
         run = run_probe(port, 'buddys-run', RUN_PROBE)
-        battle = run_probe(port, 'jargon-battle', BATTLE_PROBE)
+        # a phone's width, where the words wrap the most
+        battle = run_probe(port, 'jargon-battle', BATTLE_PROBE, size='375,667')
     finally:
         srv.shutdown()
     check_buddys_run(run)

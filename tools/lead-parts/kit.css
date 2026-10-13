@@ -16,6 +16,10 @@
 .pbk-send .ffield{flex:1}
 .pbk-send .btn{white-space:nowrap}
 
+/* a tool and the Ask form back to back read as one stop: one width, close together */
+.pb-ask + .pbk .pbk-card,.pbk:has(+ .pb-ask) .pbk-card{max-width:none}
+.pb-ask + .pbk,.pbk:has(+ .pb-ask) + .pb-ask{padding-top:8px}
+
 /* chips: radios drawn as pills */
 .pbk-chips{display:flex;flex-wrap:wrap;gap:8px}
 .pbk-chip{position:relative;display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:var(--r-pill);background:var(--surface-2);border:1.5px solid transparent;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}

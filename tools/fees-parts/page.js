@@ -110,7 +110,7 @@
     var tip = $('feeTip');
     tip.innerHTML = '<span class="fee-tip-y">' + (i === 0 ? 'Now' : 'In ' + years(i)) + '</span>' +
       '<span class="fee-tip-r">Your plan <b>' + euro(c.a.yearly[i]) + '</b></span>' +
-      '<span class="fee-tip-r">Another plan <b>' + euro(c.b.yearly[i]) + '</b></span>' +
+      '<span class="fee-tip-r">Other plan <b>' + euro(c.b.yearly[i]) + '</b></span>' +
       '<span class="fee-tip-r">No charges <b>' + euro(c.none.yearly[i]) + '</b></span>' +
       '<span class="fee-tip-r fee-tip-take">Your charges have taken <b>' + euro(c.none.yearly[i] - c.a.yearly[i]) + '</b></span>';
     tip.hidden = false;

@@ -79,6 +79,14 @@
   font-size:12px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
 .yal-you[hidden]{display:none}
 .yal-note{font-size:13px;line-height:1.6;color:var(--ink-3);margin:12px 0 0}
+/* a wide screen: the reader's tag goes under its band's name, inside the
+   name's own column, and the row lines up on that name's line */
+@media(min-width:621px){
+  .yal-row{align-items:start}
+  .yal-range{display:flex;flex-direction:column;align-items:flex-start}
+  .yal-you{margin:4px 0 0;max-width:100%}
+  .yal-track{margin-top:5px}
+}
 @media(max-width:620px){
   .yal-row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px;padding:8px 0}
   .yal-range{grid-column:1;grid-row:1}
@@ -164,7 +172,7 @@
 @keyframes pbSpRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
 :root.pb-motion.pb-sp-alive .mbar-fill{transition:width .6s cubic-bezier(.22,.61,.36,1),background-color .35s ease}
 :root.pb-motion.pb-sp-alive .mbar-gap{transition:left .6s cubic-bezier(.22,.61,.36,1),width .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
-:root.pb-motion.pb-sp-alive .mbar-lab{transition:left .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
+:root.pb-motion.pb-sp-alive .mbar-lab{transition:left .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1),opacity .35s ease .5s}
 :root.pb-motion.pb-sp-alive .mrow{transition:background-color .35s ease,border-color .35s ease}
 :root.pb-motion.pb-sp-alive .pb-rec-track i{transition:width .5s cubic-bezier(.22,.61,.36,1),left .5s cubic-bezier(.22,.61,.36,1)}
 :root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-fill{width:0 !important}
@@ -172,3 +180,5 @@
 :root.pb-motion.pb-sp-alive .pb-sp-pre .mbar-lab{opacity:0}
 :root.pb-motion.pb-sp-alive #m2Row .mbar-fill{transition-delay:.08s}
 /* MOTION-6:END */
+/* the heading breaks evenly, not one word alone */
+.phead h1{text-wrap:balance}

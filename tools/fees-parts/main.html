@@ -12,14 +12,14 @@
     <div class="field"><div class="row"><label for="monthly">Paid in, a month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
     <div class="field"><div class="row"><label for="years">Years to retirement</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
 
-    <p class="fee-grp">Its charges</p>
-    <div class="field"><div class="row"><label for="amcA">A year, of the fund<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">The annual (or fund) management charge.</p></div>
+    <p class="fee-grp">Charges</p>
+    <div class="field"><div class="row"><label for="amcA">A year<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">The annual management charge (AMC).</p></div>
     <div class="field"><div class="row"><label for="feeA">On each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">95% allocated means a 5% charge.</p></div>
 
     <details class="adv fee-other" id="feeOther">
-      <summary><span class="fee-other-l">Compared with</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
+      <summary><span class="fee-other-l">Other plan</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
       <div class="adv-in">
-        <div class="field"><div class="row"><label for="amcB">A year, of the fund<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
+        <div class="field"><div class="row"><label for="amcB">A year<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
         <div class="field" style="margin-bottom:0"><div class="row"><label for="feeB">On each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
       </div>
     </details>
@@ -30,7 +30,7 @@
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero">
       <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
-      <div><div class="rl">Another plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
+      <div><div class="rl">Other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
       <div class="divline"></div>
       <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms. The growth assumed may not happen.</div>
@@ -46,7 +46,7 @@
       </div>
       <ul class="fee-key" aria-hidden="true">
         <li><i class="fee-k-none"></i>No charges</li>
-        <li><i class="fee-k-b"></i>Another plan</li>
+        <li><i class="fee-k-b"></i>Other plan</li>
         <li><i class="fee-k-a"></i>Your plan</li>
         <li><i class="fee-k-gap"></i>What your plan&rsquo;s charges take</li>
       </ul>
@@ -56,7 +56,7 @@
       <summary>How we got this</summary>
       <table class="fee-t">
         <caption class="tk-sr">What the charges take, for each plan</caption>
-        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Another plan</th></tr></thead>
+        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Other plan</th></tr></thead>
         <tbody>
           <tr><th scope="row">Yearly charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
           <tr><th scope="row">Charges on payments</th><td id="feePaidA">€3,000</td><td id="feePaidB">€0</td></tr>

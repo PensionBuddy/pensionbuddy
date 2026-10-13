@@ -1,9 +1,8 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Proposed, not yet law</span>
+  <span class="eyebrow"><span class="pip"></span>Proposed, not yet law · 8 October 2026</span>
   <h1>The Personal Investment Account (PIA), <span class="hl">next to a pension.</span></h1>
   <p>The same money in a PIA, a pension and an exchange-traded fund (ETF), after tax.</p>
-  <p class="pia-asat">Proposed · as at 8 October 2026, after Budget 2027. It becomes law only when the Finance (No. 2) Bill 2026 is passed.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="pia">
@@ -13,7 +12,8 @@
     <div class="field"><div class="row"><label for="amount">Each month, from take-home pay</label><span class="val" id="amountV">€200</span></div><input type="range" id="amount" min="25" max="1000" step="25" value="200"><p class="subnote">Up to &euro;1,000: the PIA&rsquo;s &euro;12,000 a year.</p></div>
     <div class="field"><div class="row"><label for="years">For how many years</label><span class="val" id="yearsV">10</span></div><input type="range" id="years" min="1" max="40" step="1" value="10"></div>
     <div class="field pia-taxrate" role="group" aria-labelledby="taxL"><div class="row"><span class="pia-lbl" id="taxL">Your income tax rate</span></div>
-      <div class="pia-seg"><button type="button" id="r20" aria-pressed="false">20%</button><button type="button" id="r40" class="on" aria-pressed="true">40%</button></div></div>
+      <div class="pia-seg"><button type="button" id="r20" aria-pressed="false">20%</button><button type="button" id="r40" class="on" aria-pressed="true">40%</button></div>
+      <input type="hidden" id="taxRate" value="40%" data-pb-label="Your income tax rate"></div>
 
     <details class="adv pia-adv" id="piaAdv">
       <summary><span class="pia-adv-l">Assumptions</span> <span class="pia-adv-v" id="advV">5% growth, PIA 1% above €50,000</span></summary>
@@ -36,7 +36,7 @@
           <p class="pia-note" id="penNote">€15,436 tax · normally from 60</p>
         </li>
         <li class="pia-row" id="rowPia" style="--row:1">
-          <div class="pia-rh"><span class="rl">PIA, proposed</span><span class="big" id="piaOut" data-v="30873">€30,873</span></div>
+          <div class="pia-rh"><span class="rl">PIA</span><span class="big" id="piaOut" data-v="30873">€30,873</span></div>
           <div class="pia-track" aria-hidden="true"><i class="pia-s pia-s-in" style="left:0%;width:46.64%"></i><i class="pia-s pia-s-rel" style="left:46.64%;width:0%"></i><i class="pia-s pia-s-grow" style="left:46.64%;width:13.36%"></i><i class="pia-s pia-s-tax pia-zero" style="left:60%;width:0%"></i></div>
           <p class="pia-note" id="piaNote">€0 tax · any time</p>
         </li>
@@ -63,7 +63,7 @@
           <tr><th scope="row">Your money</th><td id="paidPen">€24,000</td><td id="paidPia">€24,000</td><td id="paidEtf">€24,000</td></tr>
           <tr><th scope="row">Tax relief</th><td id="relPen">€16,000</td><td>€0</td><td>€0</td></tr>
           <tr><th scope="row">Growth</th><td id="growPen">€11,454</td><td id="growPia">€6,873</td><td id="growEtf">€6,834</td></tr>
-          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€15,436</td><td id="taxPia">&minus;€0</td><td id="taxEtf">&minus;€2,392</td></tr>
+          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€15,436</td><td id="taxPia">€0</td><td id="taxEtf">&minus;€2,392</td></tr>
           <tr><th scope="row">Left after tax</th><td id="endPen">€36,018</td><td id="endPia">€30,873</td><td id="endEtf">€28,442</td></tr>
         </tbody>
       </table>
@@ -75,51 +75,12 @@
 
 <section class="pia-sec" id="brief"><div class="wrap">
   <h2>The PIA in brief</h2>
-  <p class="pia-asat">Proposed · as at 8 October 2026</p>
   <ul class="pia-facts">
-    <li><b>1% a year</b><span>on the average daily value above &euro;50,000, due even in a falling year</span></li>
+    <li><b>1% a year</b><span>on the average daily value above &euro;50,000, due even in a falling year. The provider pays it.</span></li>
     <li><b>&euro;12,000 a year</b><span>the most that can go in</span></li>
-    <li><b>No tax relief</b><span>on what goes in</span></li>
-    <li><b>No exit tax</b><span>and no deemed disposal or Capital Gains Tax inside it. The provider pays the tax.</span></li>
-    <li><b>Any time</b><span>to take your money out</span></li>
     <li><b>1 July 2027</b><span>it opens. One each, for Irish tax residents aged 18 or over.</span></li>
   </ul>
   <p class="pia-src">Holds listed shares, bonds, funds, ETFs and insurance-based investments. Not a deposit: values can fall. Still to come: the law itself, and the providers and their fees.</p>
-  <p class="pia-src">Also called the Investment Account, the Irish Investment Account and the Savings and Investment Account. Sources: Department of Finance, <a href="https://assets.gov.ie/static/documents/c6792805/Budget_2027_-_Tax_Policy_Changes_-_Publication_Version.pdf" rel="noopener">Budget 2027: Tax Policy Changes</a>, 6 October 2026, and the <a href="https://www.gov.ie/en/department-of-finance/press-releases/t%C3%A1naiste-simon-harris-and-minister-of-state-robert-troy-publish-roadmap-for-the-taxation-of-retail-investment/" rel="noopener">Roadmap for the Taxation of Retail Investment</a>, 31 August 2026.</p>
-</div></section>
-
-<section class="pia-sec" id="compare"><div class="wrap">
-  <h2>Side by side</h2>
-  <p class="pia-asat">The PIA column is proposed · as at 8 October 2026</p>
-  <div class="pia-tablewrap">
-    <table class="pia-t">
-      <caption class="tk-sr">PIA, pension and ETF compared</caption>
-      <thead><tr><th scope="col"><span class="tk-sr">Compared on</span></th><th scope="col">PIA, proposed</th><th scope="col">Pension</th><th scope="col">ETF</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Going in</th>
-          <td data-l="PIA, proposed">No tax relief</td>
-          <td data-l="Pension">Tax relief at 20% or 40%, within age-related limits</td>
-          <td data-l="ETF">No tax relief</td></tr>
-        <tr><th scope="row">While it grows</th>
-          <td data-l="PIA, proposed">1% a year on the value above &euro;50,000</td>
-          <td data-l="Pension">No tax</td>
-          <td data-l="ETF">35% of the gain every eight years (deemed disposal)</td></tr>
-        <tr><th scope="row">Coming out</th>
-          <td data-l="PIA, proposed">No tax</td>
-          <td data-l="Pension">Usually up to 25% as a lump sum, the first &euro;200,000 tax-free. The rest taxed as income</td>
-          <td data-l="ETF">35% exit tax on the gain, less tax already paid</td></tr>
-        <tr><th scope="row">When you can take it</th>
-          <td data-l="PIA, proposed">Any time</td>
-          <td data-l="Pension">Normally from 60</td>
-          <td data-l="ETF">Any time</td></tr>
-        <tr><th scope="row">Employer money</th>
-          <td data-l="PIA, proposed">Not in the proposals</td>
-          <td data-l="Pension">Yes, if your employer pays in</td>
-          <td data-l="ETF">None</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="pia-src">ETF: 35% from 1 January 2027 (38% before). Source: Revenue, <a href="https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-27/27-01a-02.pdf" rel="noopener">Tax and Duty Manual Part 27-01A-02</a>.</p>
 </div></section>
 
 <section style="padding:40px 0 0"><div class="wrap">
@@ -135,8 +96,9 @@
     <li>The same take-home amount goes into each at every month end. All three grow at the same rate.</li>
     <li>Pension: tax relief at your rate, assuming your payments are within Revenue&rsquo;s age-related limit. Taken at the end in one go: a quarter as a lump sum in Revenue&rsquo;s bands, the rest taxed as income at your rate. In practice most is drawn over years.</li>
     <li>PIA: the rate on the average value above the tax-free amount, taken at each year end. The real tax uses daily values; this uses month-end values.</li>
-    <li>ETF: accumulating, with a deemed disposal of each month&rsquo;s purchase every eight years and exit tax at the end, both at 35%.</li>
+    <li>ETF: accumulating, with a deemed disposal of each month&rsquo;s purchase every eight years and exit tax at the end, both at 35% (38% before 1 January 2027). Revenue, <a href="https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-27/27-01a-02.pdf" rel="noopener">Tax and Duty Manual Part 27-01A-02</a>.</li>
     <li>Not included: fees and charges, inflation, employer money.</li>
+    <li>The PIA is proposed in Budget 2027. It becomes law only when the Finance (No. 2) Bill 2026 is passed. Department of Finance, <a href="https://assets.gov.ie/static/documents/c6792805/Budget_2027_-_Tax_Policy_Changes_-_Publication_Version.pdf" rel="noopener">Budget 2027: Tax Policy Changes</a>, 6 October 2026, and the <a href="https://www.gov.ie/en/department-of-finance/press-releases/t%C3%A1naiste-simon-harris-and-minister-of-state-robert-troy-publish-roadmap-for-the-taxation-of-retail-investment/" rel="noopener">Roadmap for the Taxation of Retail Investment</a>, 31 August 2026.</li>
   </ul>
   </details>
 </div></section>

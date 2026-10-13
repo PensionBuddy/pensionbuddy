@@ -100,10 +100,10 @@
      ------------------------------------------------------------------ */
   function views(file) {
     if (file === 'pension-calculator.html') {
-      return { states: [{ items: [['Projected pot', '#potOut'], ['Income, per month', '#incOut']] }] };
+      return { states: [{ items: [['A month, from 66', '#incOut'], ['Your pot at 66', '#potOut']] }] };
     }
     if (file === 'director-calculator.html') {
-      return { states: [{ items: [['Projected pot', '#potOut'], ['Corporation tax relief', '#taxOut']] }] };
+      return { states: [{ items: [['Your pot at 66', '#potOut'], ['Company tax saved', '#taxOut']] }] };
     }
     if (file === 'broker-vs-autoenrolment.html') {
       return { states: [

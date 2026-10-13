@@ -6,9 +6,11 @@
    - Figures. When a figure changes, only the characters that changed rise
      into place. The text is never rewritten to an in-between value, so what
      a screen reader, the results bar or a test reads is always the page's.
-   - The forty dots (reality check). A year that is added fills its socket,
-     one after another in the order the record grows; a year taken away
-     empties, from the top down. A whole change takes under half a second.
+   - The forty dots (reality check). The first time they are seen they fill
+     once, in order. After that the page script sets each change's order
+     before it moves a class (paintJar in tools/state-pension-parts/page.js):
+     a year added fills its socket in the order the record grows, a year
+     taken away empties from the top down, all in under half a second.
    - Bars. The first time a card comes into view its bars grow from nothing;
      after that they ease to each new width.
 
@@ -61,25 +63,6 @@
   /* --------------------------------------------------- the forty dots -- */
   var grid = document.querySelector('.pb-jar-dots');
   var dots = grid ? [].slice.call(grid.querySelectorAll('.pb-jar-dot')) : [];
-  var lit = dots.map(function (d) { return d.classList.contains('pb-on'); });
-  function stagger(list, most) {
-    var step = list.length > 1 ? Math.min(22, most / list.length) : 0;
-    list.forEach(function (i, k) { dots[i].style.setProperty('--pb-d', Math.round(k * step) + 'ms'); });
-  }
-  if (grid) {
-    /* one callback for a whole change, however many dots it touched: the
-       delays are set before the next frame, so each transition starts on its
-       own beat */
-    new MutationObserver(function () {
-      var on = [], off = [];
-      dots.forEach(function (d, i) {
-        var now = d.classList.contains('pb-on');
-        if (now !== lit[i]) { (now ? on : off).push(i); lit[i] = now; }
-      });
-      stagger(on, 420);
-      stagger(off.reverse(), 300);
-    }).observe(grid, { subtree: true, attributes: true, attributeFilter: ['class'] });
-  }
 
   /* ---------------------------------------------- first sight of a card -- */
   function reveal(el, before) {
@@ -97,7 +80,9 @@
   }
   /* the dots fill once, in order, the first time they are seen */
   reveal(grid && grid.closest('.pb-jar'), function () {
-    stagger(dots.map(function (d, i) { return i; }).filter(function (i) { return lit[i]; }), 560);
+    var lit = dots.filter(function (d) { return d.classList.contains('pb-on'); });
+    var step = lit.length > 1 ? Math.min(22, 560 / lit.length) : 0;
+    lit.forEach(function (d, k) { d.style.setProperty('--pb-d', Math.round(k * step) + 'ms'); });
   });
   reveal(document.querySelector('.vs-card'));
   reveal(document.querySelector('.bothcard'));

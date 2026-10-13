@@ -11,7 +11,10 @@ Tracks every code in `docs/ISSUES.md`. Verified with `python3 tools/verify.py`
 Kept current at the top of this file. The runs below say how each item got
 here.
 
-## Live: 26 pages, all indexable and all in `sitemap.xml`
+## Live: 25 pages, all indexable and all in `sitemap.xml`
+
+12 October 2026: `old-pension-checklist.html` withdrawn; its address 301s
+to `tracker.html`.
 
 - **Home and the audiences:** `index.html`, `starter.html`, `tracker.html`,
   `director.html`, `booking.html`.
@@ -22,9 +25,8 @@ here.
   `standard-fund-threshold.html`, `pia.html`.
 - **Guides:** `director-pension-rules.html`, `pensions-over-50.html`,
   `self-employed-pensions.html`, `uk-pensions-in-ireland.html`,
-  `old-pension-checklist.html`, `director-year-end-checklist.html`,
-  `glossary.html`, and the two games, `games/buddys-run.html` and
-  `games/jargon-battle.html`.
+  `director-year-end-checklist.html`, `glossary.html`, and the two games,
+  `games/buddys-run.html` and `games/jargon-battle.html`.
 - **Legal:** `privacy.html`, `terms.html`, `complaints.html`.
 
 `python3 tools/sitemap.py` rewrites the sitemap from the pages themselves

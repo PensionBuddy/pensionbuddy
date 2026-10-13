@@ -1621,7 +1621,7 @@ button{font-family:inherit}
 }
 
 /* ============================================================
-   v4 - WHAT TIME DOES. The same monthly amount, started at three
+   v4 - 30, 40, 50 TAB. The same monthly amount, started at three
    ages, on one scale. Slate is what the reader would have at 66
    (teal until Run 43: teal is only what the State pays);
    red is what starting later costs (amber until Run 42), which is the site's colour
@@ -1664,16 +1664,17 @@ button{font-family:inherit}
 .pb-warn p{margin:0;font-size:1rem;line-height:1.5;font-weight:700}
 .pb-warn p+p{margin-top:6px}
 .pb-sa .pb-warn{max-width:760px;margin:22px 0 0}
-/* IF YOU WAIT (.pb-wait, #8 in Run 20). The chart above, turned to the
-   reader's own age: the same monthly amount started now or after a wait,
+/* START LATER TAB (.pb-wait, #8 in Run 20). The 30, 40, 50 tab, turned to
+   the reader's own age: the same monthly amount started now or after a wait,
    and what the later start would need each month to catch up. The rows
-   and the note are the chart's own; the maths is assets/js/cost-of-waiting.js,
-   which the chart above now reads too. The name column is wider than the
-   chart's because "In 10 years, at 40" is. The markup carries the default. */
+   and the note are the 30, 40, 50 tab's own; the maths is assets/js/cost-of-waiting.js,
+   which that tab reads too. All three tabs share one name column, wide
+   enough for "In 10 years, at 40", so the bars keep their place as the tabs
+   switch. The markup carries the default. */
 .pb-wait{margin-top:56px;padding-top:40px;border-top:1px solid var(--line)}
 .pb-wait-ctls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;max-width:760px}
 .pb-wait-ctls .pb-sa-ctl{max-width:none}
-.pb-wait .pb-sa-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em 7.2em}
+.pb-cw-p .pb-sa-row{grid-template-columns:10.4em minmax(0,1fr) 6.4em 7.2em}
 .pb-wait-say{margin:22px 0 0;font-size:1rem;line-height:1.6;color:var(--ink);max-width:60ch}
 .pb-wait-say b{font-weight:700;font-variant-numeric:tabular-nums}
 /* one spoken summary once the reader stops dragging, the calculators' 700ms
@@ -1681,9 +1682,9 @@ button{font-family:inherit}
 .pb-wait-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:700px){
   .pb-wait-ctls{grid-template-columns:1fr}
-  /* the chart's phone layout, restated: the wider name column above
-     outranks the chart's own media rule by specificity */
-  .pb-wait .pb-sa-row{grid-template-columns:minmax(0,1fr) auto}
+  /* the phone layout, restated: the wider name column above
+     outranks the rows' own media rule by specificity */
+  .pb-cw-p .pb-sa-row{grid-template-columns:minmax(0,1fr) auto}
 }
 /* THE 3 : 3 : 1 SPLIT (.pb-ae). The start-age chart's rows, three bars on
    one scale: what you pay in, what your employer adds, what the State adds,
@@ -2480,6 +2481,9 @@ main h1{font-weight:800}
 .pb-scene h1.pb-words-done .hl{background-size:100% .18em}
 .pb-scene-hint{position:absolute;left:50%;top:auto;bottom:calc(250px - 58px);z-index:1;margin:0;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.85);color:var(--ink-2);font-size:15px;white-space:nowrap;transform:translate(-50%,8px);opacity:0;transition:opacity .5s,transform .5s;pointer-events:none}
 .pb-scene-hint.pb-on{opacity:1;transform:translate(-50%,0)}
+/* starter: the Ask form starts on the first screen (as the tracker's jobs form does);
+   on a wide screen the coins land in a shorter band under the words, the hint just above them */
+@media(min-width:601px){.aud-hero.pb-scene-starter{min-height:0;padding-bottom:96px}.pb-scene-starter .pb-scene-hint{bottom:46px}}
 @media(max-width:600px){.aud-hero.pb-scene{padding-bottom:270px}.pb-scene-hint{bottom:calc(270px - 58px);font-size:14px;white-space:normal;width:max-content;max-width:calc(100% - 32px);text-align:center}}
 @media print{.pb-scene-cv,.pb-scene-hint{display:none}}
 /* SCENE:END */
@@ -2712,6 +2716,7 @@ main h1{font-weight:800}
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -2790,9 +2795,12 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}
 /* LEAD:ask:END */
 </style>
 
@@ -2857,6 +2865,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <h1>No pension yet. Tax relief is there at <span class="hl">any age</span>.</h1>
     <p class="lede">For people with no pension, or a workplace scheme they've never looked at.</p>
     <div class="hero-cta">
+      <a class="btn btn-acc" href="#ask">Ask us <svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></a>
       <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
     </div>
       <div class="pb-reg">
@@ -2965,7 +2974,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="pb-sa">
     <div class="pb-sa-ctl pb-cw-amt">
       <div class="pb-sa-row0"><label for="saMonthly">Paid in each month</label><span class="pb-sa-val" id="saMonthlyV">€300</span></div>
-      <input type="range" id="saMonthly" min="50" max="1000" step="25" value="300" aria-valuetext="€300 a month">
+      <input type="range" id="saMonthly" min="50" max="1000" step="25" value="300" aria-valuetext="€300 a month" style="--fill:26.32%">
     </div>
     <div class="pb-cw-tabs" role="tablist" aria-label="The cost of waiting" hidden>
       <span class="pb-cw-pill" aria-hidden="true"></span>
@@ -2996,18 +3005,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         </div>
       </div>
       <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-      <p class="pb-sa-note">Illustration only. Assumes 5% growth a year, paying in from that age to 66, and no pension to start. Ignores charges and inflation.</p>
+      <p class="pb-sa-note">Illustration only. Assumes 5% growth a year, paying in from that age to 66, and no pension to start. Ignores charges, inflation and tax relief.</p>
     </div>
     <div class="pb-cw-p pb-wait" id="pbWait" role="tabpanel" aria-labelledby="cwTab2">
       <h3 class="pb-cw-h">Start later.</h3>
       <div class="pb-wait-ctls">
         <div class="pb-sa-ctl">
           <div class="pb-sa-row0"><label for="pbWaitAge">Your age now</label><span class="pb-sa-val" id="pbWaitAgeV">30</span></div>
-          <input type="range" id="pbWaitAge" min="18" max="60" step="1" value="30" aria-valuetext="30 years old">
+          <input type="range" id="pbWaitAge" min="18" max="60" step="1" value="30" aria-valuetext="30 years old" style="--fill:28.57%">
         </div>
         <div class="pb-sa-ctl">
           <div class="pb-sa-row0"><label for="pbWaitYrs">If you start in</label><span class="pb-sa-val" id="pbWaitYrsV">5 years</span></div>
-          <input type="range" id="pbWaitYrs" min="1" max="10" step="1" value="5" aria-valuetext="5 years">
+          <input type="range" id="pbWaitYrs" min="1" max="10" step="1" value="5" aria-valuetext="5 years" style="--fill:44.44%">
         </div>
       </div>
       <div class="pb-sa-rows">
@@ -3034,11 +3043,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="pb-wait-ctls">
         <div class="pb-sa-ctl">
           <div class="pb-sa-row0"><label for="pbBrAge">The break starts at</label><span class="pb-sa-val" id="pbBrAgeV">32</span></div>
-          <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old">
+          <input type="range" id="pbBrAge" min="30" max="65" step="1" value="32" aria-valuetext="32 years old" style="--fill:5.71%">
         </div>
         <div class="pb-sa-ctl">
           <div class="pb-sa-row0"><label for="pbBrYrs">Years out</label><span class="pb-sa-val" id="pbBrYrsV">3 years</span></div>
-          <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years">
+          <input type="range" id="pbBrYrs" min="1" max="10" step="1" value="3" aria-valuetext="3 years" style="--fill:22.22%">
         </div>
       </div>
       <div class="pb-sa-rows">
@@ -3088,19 +3097,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <p class="pb-wait-sr" id="rvSr" aria-live="polite" aria-atomic="true"></p>
       <p class="pb-sa-note">Relief is at your rate of income tax, within Revenue&rsquo;s limit: 15% of earnings under 30, rising with age to 40% from 60, on earnings up to &euro;115,000.</p>
-      <a class="pb-rv-link" id="rvLink" href="pension-calculator.html">See it for your age and salary <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="pb-rv-link" id="rvLink" href="pension-calculator.html">See it for your age <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
     </div>
   </div>
 </div></section>
 <section style="padding-top:0"><div class="wrap">
   <div class="sec-head">
-    <h2>Auto-enrolment. <span class="pb-soft">Three pay&nbsp;in.</span></h2>
+    <h2>Auto-enrolment. <span class="pb-soft">Three&nbsp;pay&nbsp;in.</span></h2>
   </div>
   <div class="pb-sa pb-ae">
     <div class="pb-ae-ph" id="aePh" role="group" aria-label="Auto-enrolment rates, by years" hidden><button type="button" id="aePh1" aria-pressed="true">2026 to 2028</button><button type="button" id="aePh2" aria-pressed="false">2029 to 2031</button><button type="button" id="aePh3" aria-pressed="false">2032 to 2034</button><button type="button" id="aePh4" aria-pressed="false">2035 onward</button></div>
     <div class="pb-sa-ctl">
       <div class="pb-sa-row0"><label for="aeSalary">Your gross salary</label><span class="pb-sa-val" id="aeSalaryV">€50,000</span></div>
-      <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year">
+      <input type="range" id="aeSalary" min="20000" max="250000" step="1000" value="50000" aria-valuetext="€50,000 a year" style="--fill:13.04%">
     </div>
     <div class="pb-sa-rows">
       <div class="pb-sa-row pb-ae-row">
@@ -3122,7 +3131,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="pb-sa-note" id="aeNote">A year, at the <span id="aeYears">2026 to 2028</span> rates: <span id="aeRates">1.5% of salary each from you and your employer, and 0.5% from the State</span>, on salary up to €80,000.</p>
     <p class="pb-sa-note pb-caveat pb-noterms" id="aePhNote">Rates from 2029 come from summaries, not the law itself. Check gov.ie before relying on them.</p>
   </div>
-  <a class="btn btn-ghost" href="broker-vs-autoenrolment.html">Compare it with a personal pension <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+  <a class="btn btn-ghost pb-btn-long" href="broker-vs-autoenrolment.html">Compare it with a personal pension <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></section>
 
 <section style="padding-top:0"><div class="wrap">
@@ -3349,11 +3358,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3388,12 +3397,12 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-bars.js?v=1504d494"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script>
-/* WHAT TIME DOES. One slider, one variable: the same monthly amount started
+/* 30, 40, 50 TAB. One slider, one variable: the same monthly amount started
    at three ages, projected to 66. The compound growth is the pension
    calculator's own project() and its monthly rate, Math.pow(1 + g/100, 1/12)
    - 1, at the calculator's default 5% a year. Both used to be copied inline
    here; since Run 20 they come from assets/js/cost-of-waiting.js, which the
-   "If you wait" card below needs as well, so the page holds one copy. The
+   Start later and Take a break tabs need as well, so the page holds one copy. The
    arithmetic is the same operations in the same order, and the figures were
    compared for every value of the slider before and after. The calculators
    keep their own copy, held byte-identical by tests/render-diff. Nothing
@@ -3428,16 +3437,16 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   paint();
 })();
 
-/* IF YOU WAIT (#8, Run 20). The chart above at the reader's own age: the
+/* START LATER TAB (#8, Run 20). The 30, 40, 50 tab at the reader's own age: the
    same monthly amount started now, or after a wait of one to ten years, and
    what the later start would need each month to reach the same pot. All of
    it is PBWaiting.costOfWaiting(); this only paints. The monthly amount is
-   the chart's slider, so one amount drives both. Once the later start is at
-   or past 66 there are no months left to pay in, and the card says so rather
-   than printing a figure. Its two sliders are wired on their own, like the
-   3 : 3 : 1 split's: wireRanges() above already took every slider on the
-   page with the chart's wording, and these listeners run after it, so each
-   slider ends with its own. */
+   the tabs' one slider, so one amount drives all three. The wait stops at a
+   start of 65 (cap()), so the later start always has a year to pay in. Its
+   two sliders are wired on their own, like the 3 : 3 : 1 split's:
+   wireRanges() above already took every slider on the page with the
+   amount's wording, and these listeners run after it, so each slider ends
+   with its own. */
 (function () {
   var W = window.PBWaiting, P = window.PBPage;
   var age = document.getElementById('pbWaitAge'), yrs = document.getElementById('pbWaitYrs');
@@ -3479,17 +3488,26 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
     }, 700);
   }
 
+  /* the latest start is 65: the wait shrinks as the age grows */
+  function cap() {
+    var mx = Math.max(1, Math.min(10, W.PENSION_AGE - 1 - (+age.value)));
+    yrs.max = mx;
+    if (+yrs.value > mx) { yrs.value = mx; }
+    P.paintSlider(yrs, vt);
+  }
+
   [age, yrs].forEach(function (el) {
-    el.addEventListener('input', function () { P.paintSlider(el, vt); paint(true); });
+    el.addEventListener('input', function () { if (el === age) { cap(); } P.paintSlider(el, vt); paint(true); });
     P.paintSlider(el, vt);
   });
   monthly.addEventListener('input', function () { paint(true); });
+  cap();
   paint(false);
 })();
 
-/* TIME OUT (#15, Run 20). The chart's monthly amount paid from 30 to 66,
+/* TAKE A BREAK TAB (#15, Run 20). The tabs' monthly amount paid from 30 to 66,
    with and without a break of one to ten years. All of it is
-   PBWaiting.withBreak(); this only paints, as the card above does, and its
+   PBWaiting.withBreak(); this only paints, as the Start later tab does, and its
    sliders are wired on their own for the same reason. A break that would run
    past 66 stops there, so the second row names the years actually out. */
 (function () {
@@ -3683,7 +3701,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-steps.js?v=ba4653cc"></script>
 <script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
+<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
 </body>
 </html>

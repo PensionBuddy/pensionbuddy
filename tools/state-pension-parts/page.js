@@ -42,8 +42,7 @@ function render() {
     const pctOfMax = Math.round(res.fraction * 100);
     $('spFoot').innerHTML = res.fraction === 1
       ? 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.'
-      : num(contribs) + ' contributions is ' + years + (years === 1 ? ' year' : ' years') +
-        ', <b>' + pctOfMax + '%</b> of a full record, so the rate is ' + pctOfMax + '% of the maximum.';
+      : '<b>' + pctOfMax + '%</b> of a full record, so ' + pctOfMax + '% of the maximum.';
   } else {
     $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
       (years === 1 ? ' year' : ' years') + '. <b>' + num(res.shortBy) +
@@ -84,8 +83,15 @@ render();
    line inside render(), so render() stays the page's whole calculation.
 
    WRITES ARE GUARDED BY AN EXPLICIT READ, so a drag frame that changes
-   nothing writes nothing (and assets/js/pb-sp-motion.js, which watches the
-   dots' classes, sees only real changes). */
+   nothing writes nothing.
+
+   THE ORDER OF A CHANGE is set here, before any class moves: each dot that
+   fills gets its delay in the order the record grows, each that empties in
+   reverse, from the top down, and a whole change takes under half a second.
+   Set any later (a watcher on the classes, say) and a press on the dots,
+   which reads the layout as it fires the slider's input, starts the
+   transitions with the old delays. Only a reader who allows motion sees
+   them: the transition is behind :root.pb-motion (pb-sp-motion.js). */
 function paintJar() {
   var jar = $('pbJar');
   var slider = $('contribs');
@@ -100,10 +106,18 @@ function paintJar() {
   if (v > max) v = max;
   var lit = Math.floor(v / 52);
 
-  for (var i = 0; i < dots.length; i++) {
+  var on = [], off = [], i;
+  for (i = 0; i < dots.length; i++) {
     var want = i < lit;
-    if (dots[i].classList.contains('pb-on') !== want) dots[i].classList.toggle('pb-on', want);
+    if (dots[i].classList.contains('pb-on') !== want) (want ? on : off).push(dots[i]);
   }
+  off.reverse();
+  [[on, 420], [off, 300]].forEach(function (g) {
+    var step = g[0].length > 1 ? Math.min(22, g[1] / g[0].length) : 0;
+    g[0].forEach(function (d, k) { d.style.setProperty('--pb-d', Math.round(k * step) + 'ms'); });
+  });
+  on.forEach(function (d) { d.classList.add('pb-on'); });
+  off.forEach(function (d) { d.classList.remove('pb-on'); });
 
   var full = lit >= dots.length;
   if (jar.classList.contains('pb-full') !== full) jar.classList.toggle('pb-full', full);

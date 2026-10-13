@@ -46,19 +46,17 @@
     $('sftLimOver').style.setProperty('--w', at(u.excess));
     $('sftLimMark').style.setProperty('--at', at(u.threshold));
     $('sftLimYou').textContent = euro(total);
-    $('sftLimThrL').textContent = 'The threshold for ' + yearWord(year);
-    $('sftLimThr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
     $('sftLimOvK').hidden = !(u.excess > 0);
     $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
-    var when = year >= 2030 ? 'from 2030' : 'in ' + year;
-    var say;
-    if (u.excess > 0) {
-      say = euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + (u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold') + '.';
-    } else {
-      say = euro(total) + ' taken ' + when + ' uses ' + pc + '% of ' + (u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold') +
-        ', leaving ' + euro(u.headroom) + ' of headroom.';
-    }
-    $('pbSay').textContent = say;
+    /* the headline gives the threshold and the share, the key what is over:
+       this line says only what is left, and is away when nothing is */
+    $('pbSay').hidden = u.excess > 0;
+    $('pbSay').textContent = (u.atLeast ? 'At least ' : '') + euro(u.headroom) + ' of headroom.';
+    /* spoken whole, once: the bar and its key are aria-hidden */
+    var when = year >= 2030 ? 'from 2030' : 'in ' + year, of = u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold';
+    var say = u.excess > 0
+      ? euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + of + '.'
+      : euro(total) + ' taken ' + when + ' uses ' + pc + '% of ' + of + ', leaving ' + euro(u.headroom) + ' of headroom.';
 
     /* the columns: every year on one scale, your pensions one line across them */
     var scale = held || Math.max(TOP_YEAR * 1.05, total * 1.08);

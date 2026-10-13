@@ -3,8 +3,9 @@
    Which topics apply is assets/js/director-topics.js, covered by
    tests/director-topics.test.js; this file reads the four answers and lists
    what the module returns. Topics only, never a recommendation. Nothing is
-   sent or stored unless the reader asks for the list by email ("Email me this
-   result", pagebuild.after_block and assets/js/pb-after.js, Run 45). */
+   sent or stored unless the reader sends the list, with a question ("Ask us
+   about this") or by email ("Email me this result"), both
+   pagebuild.after_block's. */
 (function () {
   'use strict';
   var D = window.PBDirectorTopics;

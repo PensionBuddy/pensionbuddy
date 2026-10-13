@@ -47,6 +47,7 @@
 
   form.addEventListener('change', function (e) {
     if (e.target.name !== 'year_end') return;
+    if (!plan) err.textContent = '';   // "Pick a month." goes with the pick
     plan = work(MONTHS.indexOf(e.target.value));
     var span = plan.end - plan.t || 1, x1 = Math.max(4, Math.min(96, (plan.rem - plan.t) / span * 100));
     nodes[0].style.setProperty('--x', '0%');
@@ -60,7 +61,7 @@
     days.querySelector('span').textContent = plan.days === 1 ? 'day to year end' : 'days to year end';
     setTimeout(function () { K.reveal(box, true); }, K.motion() ? 450 : 0);
   });
-  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim())); });
+  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim()), err); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();

@@ -41,6 +41,9 @@
 .cmp-bar-lab{display:flex;margin-top:6px;font-size:1rem;color:var(--ink-2)}
 .cmp-bar-lab span{display:block;flex:none;min-width:0;padding-left:2px;border-left:2px solid rgba(11,31,28,.18);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cmp-bar-lab span:empty{border:0}
+/* on a phone "Auto-enrolment" no longer fits its part of the bar once the extra
+   grows; the key under it names both parts, so the labels step aside */
+@media(max-width:520px){.cmp-bar-lab{display:none}}
 .cmp-key{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:1rem;color:var(--ink-2)}
 .cmp-key li{display:inline-flex;align-items:center;gap:8px;padding:2px 0}
 .cmp-key li[hidden]{display:none}

@@ -36,13 +36,17 @@
   });
   window.addEventListener('resize', place);
 
-  nameEl.addEventListener('input', function () { K.okField(nameEl, nameEl.value.trim().length > 1); });
-  phone.addEventListener('input', function () { K.okField(phone, digits(phone.value) >= 7); });
+  /* a message is about one field, and goes as soon as that field is put right */
+  var flagged = null;
+  function flag(el, text) { err.textContent = text; flagged = el; K.shake(el.closest('.ffield')); el.focus(); }
+  function fixed(el, good) { if (good && el === flagged) { err.textContent = ''; flagged = null; } }
+  nameEl.addEventListener('input', function () { K.okField(nameEl, nameEl.value.trim().length > 1); fixed(nameEl, !!nameEl.value.trim()); });
+  phone.addEventListener('input', function () { K.okField(phone, digits(phone.value) >= 7); fixed(phone, digits(phone.value) >= 7); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!nameEl.value.trim()) { err.textContent = 'Add your first name.'; K.shake(nameEl.closest('.ffield')); nameEl.focus(); return; }
-    if (digits(phone.value) < 7) { err.textContent = 'Add your phone number.'; K.shake(phone.closest('.ffield')); phone.focus(); return; }
+    if (!nameEl.value.trim()) { flag(nameEl, 'Add your first name.'); return; }
+    if (digits(phone.value) < 7) { flag(phone, 'Add your phone number.'); return; }
     err.textContent = '';
     var by = K.replyBy(), time = form.elements.time.value || 'Morning';
     K.send(form, { page: location.href.split('#')[0], reply_by: by }, go, {

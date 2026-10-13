@@ -389,6 +389,7 @@ def run():
         want_forms.setdefault(n, []).append(p)
     for n, ps in REPLY_FORMS.items():
         want_forms.setdefault(n, []).extend(ps)
+    want_forms['enquiry'].extend(pagebuild.AFTER)   # "Ask us about this", under every result
     eq('14. the lead form names, each on its own pages', sorted((n, sorted(p for p, _ in v)) for n, v in netlify.items()),
        sorted((n, sorted(ps)) for n, ps in want_forms.items()))
     for form_name, where in sorted(netlify.items()):
@@ -411,8 +412,10 @@ def run():
        sorted(set(f for _, form in netlify.get('calculator-results', []) for f in form['fields'] if f[0] == 'checkbox')),
        [('checkbox', 'consent', 'yes')])
     eq('14. and no form stands in front of the booking calendar (Run 45)', 'booking' in netlify, False)
+    # (a radio group once: the topics are radios on the Ask form, one hidden
+    # topic under a result)
     eq('14. enquiry: every page declares the same fields, in the same order',
-       len(set(tuple(f[1] for f in form['fields']) for _, form in netlify.get('enquiry', []))), 1)
+       len(set(tuple(dict.fromkeys(f[1] for f in form['fields'])) for _, form in netlify.get('enquiry', []))), 1)
     import importlib.util
     spec = importlib.util.spec_from_file_location('lead_blocks', os.path.join(ROOT, 'tools', 'lead-blocks.py'))
     lead_blocks = importlib.util.module_from_spec(spec); spec.loader.exec_module(lead_blocks)
@@ -1041,12 +1044,12 @@ def run():
     # drives it from the relief figure, and nothing on it moves or fills:
     # no --pb-t level, no data-pb-state, no amber or red (Run 42), no rotation or transition
     # beyond the dial's fixed cross, and no script that writes #pbSafe.
+    # 13 October 2026 (review calc-main-12): the safe itself has gone, and its
+    # rules with it; a safe put back must still be still.
     def safe(src):
         out = []
         css = re.sub(r'(?s)/\*.*?\*/', '', ' '.join(re.findall(r'(?is)<style[^>]*>(.*?)</style>', src)))
         rules = [(' '.join(sel.split()), b) for sel, b in re.findall(r'([^{}]*)\{([^{}]*)\}', css) if 'pb-safe' in sel]
-        if not rules:
-            out.append('no safe')
         for sel, b in rules:
             if re.search(r'var\(--pb-t\b(?!-)|--amber|--red|transition|animation|rotateY|perspective', b):
                 out.append('moves: ' + sel)
@@ -1058,9 +1061,9 @@ def run():
             out.append('scripted')
         return out
     dc = sources['director-calculator.html']
-    eq('27. the director safe is still, the same for every figure', safe(dc), [])
+    eq('27. no director safe moves, fills or is driven by a figure', safe(dc), [])
     for label, find, repl, want in (
-            ('the door swing put back', '.pb-safe-door{position:absolute;', '.pb-safe-door{transform:rotateY(calc(var(--pb-t,0)*74deg));position:absolute;', 'moves: .pb-safe-door'),
+            ('the door swing put back', '</style>', '.pb-safe-door{transform:rotateY(calc(var(--pb-t,0)*74deg));position:absolute}\n</style>', 'moves: .pb-safe-door'),
             ('the amber fill put back', '</style>', '.pb-safe-fill{background:var(--amber)}\n</style>', 'moves: .pb-safe-fill'),
             ('the red fill put back', '</style>', '.pb-safe-fill{background:var(--red)}\n</style>', 'moves: .pb-safe-fill'),
             ('the driver put back', '</body>', "<script>var el=document.getElementById('pbSafe');el.style.setProperty('--pb-t','0.5');</script>\n</body>", 'scripted')):
@@ -1913,8 +1916,10 @@ def run():
     # proves the page scripts' writes), and adds no datalist, so the browser
     # never snaps. It loads after the "slider polish" script that draws the
     # bubble it signs on.
-    MARKED = {'pension-calculator.html': {'age': 'relief-age'},
-              'broker-vs-autoenrolment.html': {'age': 'relief-age', 'salary': 'relief-cap'}}
+    # 13 October 2026 (review calc-main-10): no slider is marked now. The relief
+    # ladders that said what the marks meant are gone, and a mark with no
+    # words is noise, so the table is empty and any mark back is caught.
+    MARKED = {}
 
     def feel_faults(srcs, js):
         f = []
@@ -1948,7 +1953,7 @@ def run():
             ('a slider that snaps', 'pension-calculator.html', '<input type="range" id="age"', '<input type="range" list="ageMarks" id="age"', 'datalist'),
             ('the slider set by the marks', 'js', "    r.addEventListener('input', function () { mark(true); });", "    r.addEventListener('input', function () { mark(true); r.value = r.value; });", 'moves a slider'),
             ('marks on a slider with no meaning for them', 'director-calculator.html', '<input type="range" id="age"', '<input type="range" id="age" data-pb-ticks="relief-age"', 'marks on'),
-            ('the marks loading before the bubble', 'pension-calculator.html', '/* fintech slider polish: wrap each range', '/* the bubble: wrap each range', 'before the bubble')):
+            ('the age marks back with nothing to explain them', 'pension-calculator.html', '<input type="range" id="age"', '<input type="range" id="age" data-pb-ticks="relief-age"', 'marks on')):
         srcs, j2 = dict(sources), feel_js
         if target == 'js':
             j2 = feel_js.replace(find, repl, 1)
@@ -2422,12 +2427,14 @@ def run():
     # on every page that carries it and on no other (after_drift): what it does
     # not show (each names only what the page's own assumptions say it leaves
     # out), then the booking button in wording A (its line under it, "Free.
-    # No obligation. No pressure.", cut on 8 October 2026), then "Email me this result", hidden until the script shows
-    # it, and its form: name, email, a box never ticked for the reader, and
-    # the line on what is stored, why and where it goes. my-pensions sends
-    # nothing, so it has no form. No other booking link sits in the results
-    # before the block (the comparison's #riskCard is exempt only while it is
-    # hidden).
+    # No obligation. No pressure.", cut on 8 October 2026), then (13 October
+    # 2026) "Ask us about this", the question form posting as enquiry, then
+    # "Email me this result" and its form: name, email, a box never ticked
+    # for the reader, and the line on what is stored, why and where it goes;
+    # both forms hidden until the script shows them. my-pensions sends its
+    # list only with a question, so it has no "Email me this result". No
+    # other booking link sits in the results before the block (the
+    # comparison's #riskCard is exempt only while it is hidden).
     eq('49. the block after the result is the shared one, on every page that carries it and on no other',
        findings(pagebuild.after_drift(sources)), [])
     eq('49. on the nine calculators and the directors\' rules',
@@ -2452,17 +2459,22 @@ def run():
             y = blk.find('<p class="pb-after-why">%s</p>' % pagebuild.AFTER_WHY) if pagebuild.AFTER_WHY else w
             if not (0 <= b < w <= y) or (not_line and not 0 <= n < b):
                 f.append('%s: not in order: what it does not show, the button and its words, its line' % page)
+            a = blk.find('<form class="pbr" id="pbrForm" name="enquiry"')
+            if not y < a:
+                f.append('%s: "Ask us about this" is not after the button' % page)
+            elif not re.match(r'<form [^>]*\shidden>', blk[a:]):
+                f.append('%s: "Ask us about this" is not hidden until the script shows it' % page)
             if mail:
                 m, fm = blk.find('id="ecMore"'), blk.find('<form id="ecForm" name="calculator-results"')
-                if not (y < m < fm):
-                    f.append('%s: the email offer is not after the button' % page)
+                if not (a < m < fm):
+                    f.append('%s: the email offer is not after the button and the question' % page)
                 if ('aria-controls="ecCap" hidden>Email me this result</button>' not in blk or
                         '<div class="pb-after-mail" id="ecCap" hidden>' not in blk):
                     f.append('%s: the email offer is not hidden until the script shows it' % page)
                 if re.search(r'<input[^>]*type="checkbox"[^>]*\schecked', blk):
                     f.append('%s: the box is ticked for the reader' % page)
-            elif '<form' in blk:
-                f.append('%s: a form on a page that says nothing leaves it' % page)
+            elif 'name="calculator-results"' in blk:
+                f.append('%s: the email offer on a page that emails no result' % page)
             res = {'my-pensions.html': 'id="ptSum"', 'director-pension-rules.html': 'id="drOut"'}.get(page, '<div class="results">')
             r = s.find(res)
             seg = re.sub(r'<div class="chart-card" id="riskCard" hidden>.*?</a>(?:<p class="pb-why">[^<]*</p>)?</div>', '',
@@ -2474,16 +2486,19 @@ def run():
             f.append('booking.html: the old line is back')
         return f
 
-    eq('49. each block: what it does not show, the button, its line, then the email offer hidden until the script shows it, the box unticked; no booking link in the results before it; and no "seen your number" line on the booking page',
+    eq('49. each block: what it does not show, the button, its line, then the question and the email offer, each hidden until the script shows it, the box unticked; no booking link in the results before it; and no "seen your number" line on the booking page',
        after_faults(sources), [])
     dc, bk, fc = sources['director-calculator.html'], sources['booking.html'], sources['pension-fees-calculator.html']
     for label, page, mut, want in (
             ('the box ticked for the reader', 'pension-fees-calculator.html',
              fc.replace('id="ecConsent" name="consent" value="yes"', 'id="ecConsent" name="consent" value="yes" checked', 1),
              'pension-fees-calculator.html: the box is ticked for the reader'),
+            ('the question form shown without script', 'pension-fees-calculator.html',
+             fc.replace('aria-labelledby="pbrH" novalidate hidden>', 'aria-labelledby="pbrH" novalidate>', 1),
+             'pension-fees-calculator.html: "Ask us about this" is not hidden until the script shows it'),
             ('the cost of waiting asking again', 'director-calculator.html',
-             dc.replace('<div class="wtext" id="waitOut">Move the sliders to see it.</div>',
-                        '<div class="wtext" id="waitOut">Move the sliders to see it.</div><a class="wlink" href="booking.html">Book</a>', 1),
+             dc.replace('<div class="wtext" id="waitOut">',
+                        '<a class="wlink" href="booking.html">Book</a><div class="wtext" id="waitOut">', 1),
              'director-calculator.html: a booking link in the results before the block'),
             ('the old line put back on the booking page', 'booking.html',
              bk.replace('<h1>', '<p class="pb-from" id="pbFrom" hidden>You&rsquo;ve seen your number.</p>\n    <h1>', 1),
@@ -2580,8 +2595,8 @@ def run():
         return out
     eq('52. every link drawn as a filled button leads to booking', loud_links(sources), [])
     m52 = dict(sources)
-    m52['starter.html'] = sources['starter.html'].replace('<a class="btn btn-ghost" href="broker-vs-autoenrolment.html">',
-                                                         '<a class="btn btn-primary" href="broker-vs-autoenrolment.html">', 1)
+    m52['starter.html'] = sources['starter.html'].replace('<a class="btn btn-ghost pb-btn-long" href="broker-vs-autoenrolment.html">',
+                                                         '<a class="btn btn-primary pb-btn-long" href="broker-vs-autoenrolment.html">', 1)
     assert m52['starter.html'] != sources['starter.html']
     eq('52. a filled button to another page is caught', loud_links(m52), ['starter.html: broker-vs-autoenrolment.html'])
     home = sources['index.html']
@@ -2719,10 +2734,11 @@ LEAD_FORMS = {
 
 # The forms that ask us to reply (tools/lead-blocks.py), on pages that may
 # carry another form too, so by form name. "Ask us about this" under each
-# calculator's result posts as enquiry from a form its script builds.
+# calculator's result (pagebuild.after_block) posts as enquiry too, on every
+# page in pagebuild.AFTER, check 14 adds.
 REPLY_FORMS = {
-    'enquiry': ['booking.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html', 'index.html',
-                'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
+    'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
+                'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     'fee-check': ['index.html'],
     'year-end-reminder': ['director.html'],

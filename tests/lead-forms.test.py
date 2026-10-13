@@ -63,18 +63,23 @@ LEAD_FORMS = {
 
 # the forms that ask Damian to reply (tools/lead-blocks.py), by form name
 REPLY_FORMS = {
-    'enquiry': ['booking.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html', 'index.html',
-                'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
+    'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
+                'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     'fee-check': ['index.html'],
     'year-end-reminder': ['director.html'],
     'job-change': ['tracker.html'],
     'callback': ['booking.html'],
 }
-# "Ask us about this" under a result: its script builds the form, which
-# posts as enquiry with the fields the enquiry form declares on index.html
-ASK_RESULT = ('pension-calculator.html', 'ask-result')
-JOBS = (sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps) + [ASK_RESULT])
+# "Ask us about this" under a result (pagebuild.after_block, on every page
+# in pagebuild.AFTER): a form in the page that posts as enquiry, with the
+# fields the Ask form declares. Here on the skeleton, a built calculator and
+# the two lists, each with what it sends that the others do not.
+ASK_RESULT = {'pension-calculator.html': ' | Your age: ', 'state-pension-reality-check.html': ' | PRSI contributions by 66: ',
+              'my-pensions.html': ' | Your list: 1 pension, \u20ac40,000 | Pension 1: Irish Life, \u20ac40,000',
+              'director-pension-rules.html': ' | Your list: '}
+JOBS = (sorted(LEAD_FORMS.items()) + sorted((p, n) for n, ps in REPLY_FORMS.items() for p in ps) +
+        [(p, 'ask-result') for p in sorted(ASK_RESULT)])
 
 # Job 4: the calculators whose headline is a projection, so it is also shown
 # in today's money
@@ -137,7 +142,10 @@ PROBE = r"""<script>
   }else if(fname==='callback'){
     set('pbcName','Test Person'); set('pbcPhone','087 123 4567');
   }else if(fname==='ask-result'){
-    document.querySelector('.pbr-btn').click(); set('pbrMsg','What does this mean?'); set('pbrEmail','test@example.com');
+    /* a result first: the directors' four answers, or one pension listed */
+    if($('drForm')){['drExec','drMore','drAge','drBig'].forEach(function(n){document.querySelector('input[name="'+n+'"][value="yes"]').click();});$('drForm').requestSubmit();}
+    if($('ptName0')){set('ptName0','Irish Life');set('ptValue0','40000');}
+    set('pbrMsg','What does this mean?'); set('pbrEmail','test@example.com');
   }else if(fname==='enquiry'){
     $('askForm').querySelector('input[name="topic"][value="Check my pension"]').click();
     $('askForm').querySelector('.pb-ask-step.on .pb-ask-next').click();
@@ -304,7 +312,7 @@ def main():
 
     for page, name in JOBS:
         posted = 'enquiry' if name == 'ask-result' else name
-        d = Declared(posted); d.feed(open(os.path.join(ROOT, 'index.html' if name == 'ask-result' else page), encoding='utf-8').read())
+        d = Declared(posted); d.feed(open(os.path.join(ROOT, page), encoding='utf-8').read())
         eq('%s: the static form is "%s"' % (page, name), d.form, posted)
         for mode in ('ok', 'fail'):
             r = results.get((page, mode, name))
@@ -337,7 +345,7 @@ def main():
                 eq('%s: the name, the number and the time' % tag, got('name', 'phone', 'time'), ['Test Person', '087 123 4567', 'Morning'])
             if name == 'ask-result':
                 eq('%s: about a result, its rows, the question' % tag,
-                   (got('topic')[0], got('details')[0].startswith('Calculator: '), ' | Your age' in got('details')[0], got('message', 'contact_by')),
+                   (got('topic')[0], got('details')[0].startswith('Calculator: '), ASK_RESULT[page] in got('details')[0], got('message', 'contact_by')),
                    ('About a result', True, True, ['What does this mean?', 'Email']))
             if name == 'calculator-results':
                 eq('%s: the name as typed, and the box ticked' % tag, (fields.get('name'), fields.get('consent')), (['Test Person'], ['yes']))

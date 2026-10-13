@@ -51,35 +51,35 @@
 
     <div id="spHas">
       <div class="res-hero">
-        <div><div class="rl">State Pension, a week</div><div class="big" id="spWeekly">€280.86</div></div>
+        <div><div class="rl">A week</div><div class="big" id="spWeekly">€280.86</div></div>
         <div><div class="rl">A year</div><div class="big" id="spAnnual">€14,605</div></div>
         <div class="divline"></div>
-        <div class="foot" id="spFoot">Worked out under the Yearly Average blend, for a pension starting in 2028.</div>
+        <div class="foot" id="spFoot">For a pension from 2028.</div>
         <p class="pb-sp27">2026 rates. From January 2027 the maximum is &euro;309.30 a week (Budget 2027); the new band rates are not yet published.</p>
       </div>
 
       <div class="bothcard">
         <h3>Two ways to work it out</h3>
-        <p class="sub" id="bothSub">Until the end of 2033 the Department works the rate out both ways and pays the higher.</p>
+        <p class="sub" id="bothSub">Until the end of 2033 the higher of the two is paid.</p>
 
         <div class="mrow" id="m1Row">
           <div class="mhead"><span class="mname">Method 1: your total weeks</span><span class="mrate" id="m1Rate">€261.89 a week</span></div>
           <div class="mbar" aria-hidden="true">
             <div class="mbar-track"><i class="mbar-fill" id="m1Fill" style="width:87.5008%"></i><i class="mbar-gap" id="m1Gap" style="left:87.5008%;width:6.3381%"></i></div>
-            <span class="mbar-lab" id="m1Lab" style="left:90.6699%">€18.97</span>
+            <span class="mbar-lab" id="m1Lab" style="left:90.6699%;transform:translateX(-100%)">+€18.97</span>
           </div>
           <p class="mnote" id="m1Cap" hidden></p>
         </div>
 
-        <div class="mrow" id="m2Row">
+        <div class="mrow is-paid" id="m2Row">
           <div class="mhead"><span class="mname">Method 2: your yearly average</span><span class="mrate" id="m2Rate">€280.86 a week</span></div>
           <div class="mbar" aria-hidden="true">
             <div class="mbar-track"><i class="mbar-fill" id="m2Fill" style="width:93.8390%"></i><i class="mbar-gap" id="m2Gap" hidden></i></div>
-            <span class="mbar-lab" id="m2Lab" style="left:93.8390%">Paid</span>
+            <span class="mbar-lab" id="m2Lab" style="left:93.8390%;transform:translateX(-100%)">Paid</span>
           </div>
         </div>
 
-        <p class="mclose" id="mClose">The Department pays the higher. That is <b>€280.86</b>, <b>€18.97 a week</b> more than the Total Contributions Approach alone.</p>
+        <p class="mclose" id="mClose">Method 2 is paid: <b>€18.97 a week</b> more than Method 1.</p>
         <p class="mclose" id="mWhy" hidden></p>
         <details class="pb-fold pb-fold-in"><summary>Show the working</summary>
           <p class="mdetail" id="m1Detail"><b>1,820</b> reckonable contributions, <b>87.5%</b> of a full record of 2,080.</p>
@@ -87,7 +87,7 @@
             <div class="pb-rec-track" aria-hidden="true"><i class="pb-rec-paid" id="pbRecPaid" style="width:75%"></i><i class="pb-rec-extra" id="pbRecExtra" style="width:12.5%"></i><i class="pb-rec-over" id="pbRecOver" style="width:0%"></i><i class="pb-rec-full" id="pbRecFull" style="left:100%"></i></div>
             <p class="pb-rec-key"><span><i class="pb-rec-sw pb-rec-paid"></i>Paid <b id="pbRecPaidN">1,560</b></span><span><i class="pb-rec-sw pb-rec-extra"></i>Credits and caring counted <b id="pbRecExtraN">260</b></span><span id="pbRecOverK" hidden><i class="pb-rec-sw pb-rec-over"></i>Over the caps <b id="pbRecOverN">0</b></span></p>
           </div>
-          <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Total Contributions Approach rate.</p>
+          <p class="mdetail" id="m2Detail">A yearly average of <b>42</b> over <b>43</b> years, 1985 to 2027, falls in the 40 to 47 band at €293.50 a week. For a pension starting in 2028 the mix is <b>60%</b> of that rate and <b>40%</b> of the Method 1 rate.</p>
         <p class="mbar-scale" id="mScale">Both bars are on the same scale. The maximum personal rate is €299.30 a week.</p>
         </details>
       </div>
@@ -106,7 +106,7 @@
       <div class="res-hero">
         <div style="grid-column:1 / -1"><div class="rl">State Pension (Contributory)</div><div class="big" style="font-size:clamp(24px,3.4vw,34px)">Check the details</div></div>
         <div class="divline"></div>
-        <div class="foot" id="spUnfitFoot">These details don't fit together. Check the contribution year you first paid PRSI.</div>
+        <div class="foot" id="spUnfitFoot">Check the year you first paid PRSI.</div>
       </div>
     </div>
 

@@ -130,7 +130,7 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend{display:flex;gap:6px 18px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:8px}
 .dotk{width:14px;height:4px;border-radius:2px;background:var(--slate);display:inline-block}
 /* the growth chart (Run 43): the script draws "Your plan" #0B7A6E and its shading
@@ -1299,10 +1299,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   font-family:var(--font);font-size:.75rem;font-weight:500;
   color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
 .adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
 .adv > summary:hover{color:var(--ink)}
 .adv .adv-in{padding-top:4px;padding-bottom:6px}
 
@@ -1405,17 +1401,17 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    All three are this one mark now, and this block is its only
    owner - nothing above restyles it and nothing below needs to.
    ============================================================ */
-summary .pm,.pb-b-q .pm,.adv > summary::after{
+summary .pm,.pb-b-q .pm,.adv > summary::after,.pb-work > summary::after{
   width:26px;height:26px;border-radius:8px;box-sizing:border-box;
   background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
   display:flex;align-items:center;justify-content:center;
   font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
-  flex-shrink:0;margin-left:auto;
+  flex-shrink:0;margin-left:auto;transform:none;
   transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
              border-color .25s ease,color .25s ease}
-details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after,.pb-work[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
-summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after,.pb-work > summary:hover::after{border-color:var(--ink-2)}
 
 /* ============================================================
    F5 - "Take a guess first", and the veil it puts over the one
@@ -1653,9 +1649,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* ============================================================
    RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
    contributions that get tax relief, six steps from 15% under 30 to 40% at
-   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
-   calculator and the comparison page assets/js/pb-ladder.js marks the
-   reader's step and says their limit in euro. Relief is money that comes
+   60 and over, from PBRelief.reliefBand(). Static markup; on the guides
+   that load assets/js/pb-ladder.js (over 50, self-employed) it marks the
+   reader's step. No calculator carries it now. Relief is money that comes
    back, so the fills are amber (Run 42). Byte-identical wherever it appears.
    ============================================================ */
 .pb-lad{max-width:560px}
@@ -1687,6 +1683,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    veil, the summary names nothing. Byte-identical on both calculators. */
 .pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
 .pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+/* the site's one disclosure mark (the "ONE icon set" block), not the browser's triangle */
+.pb-work > summary{display:flex;align-items:center;gap:12px;list-style:none}
+.pb-work > summary::-webkit-details-marker{display:none}
+.pb-work > summary::after{content:"+"}
 .pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
 .pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
 .pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
@@ -2571,8 +2571,7 @@ main h1{font-weight:800}
 #chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
-   line, the waiting handle, the pot's bounce and milestones
-   (assets/js/pb-calc-motion.js adds every element and class here, and
+   line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
    these rules but never match them). */
 :root.pb-calc-alive #chart{cursor:crosshair;touch-action:pan-y}
@@ -2600,11 +2599,6 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-wait-out{margin:12px 0 0;font-size:1rem}
 :root.pb-calc-alive .pb-wait-tick .pb-wait-gap{animation:pbGapFlash .5s}
 @keyframes pbGapFlash{0%{filter:brightness(1.2) saturate(1.6)}100%{filter:none}}
-:root.pb-calc-alive #potOut.pb-pot-bump{animation:pbBump .45s cubic-bezier(.3,1.6,.5,1);transform-origin:0 70%}
-@keyframes pbBump{35%{transform:scale(1.06)}100%{transform:none}}
-:root.pb-calc-alive .pb-mile{position:absolute;left:0;top:-8px;padding:5px 11px;border-radius:999px;background:#F4B740;color:#3A2A00;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;animation:pbMile 2.2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes pbMile{0%{transform:translateY(10px) scale(.6);opacity:0}15%{transform:translateY(-14px) scale(1.08);opacity:1}70%{transform:translateY(-22px);opacity:1}100%{transform:translateY(-40px);opacity:0}}
-.pb-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
 :root.pb-calc-alive.pb-motion .rv-you,:root.pb-calc-alive.pb-motion .rv-tax{transition:width .7s cubic-bezier(.34,1.56,.64,1)}
 /* MOTION-4 CALCULATOR:END */
 
@@ -2744,19 +2738,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="panel">
     <h2>Your pension</h2>
     <p class="hint">Slide, or tap a figure to type it.</p>
-    <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000"></div>
-    <div class="field"><div class="row"><label for="monthly">Paid in, a month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200"></div>
-    <div class="field"><div class="row"><label for="years">Years to retirement</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25"></div>
+    <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1000000" step="1000" value="50000" style="--fill:5.00%"></div>
+    <div class="field"><div class="row"><label for="monthly">Paid in, a month</label><span class="val" id="monthlyV">€200</span></div><input type="range" id="monthly" min="0" max="3000" step="25" value="200" style="--fill:6.67%"></div>
+    <div class="field"><div class="row"><label for="years">Years to retirement</label><span class="val" id="yearsV">25</span></div><input type="range" id="years" min="1" max="45" step="1" value="25" style="--fill:54.55%"></div>
 
-    <p class="fee-grp">Its charges</p>
-    <div class="field"><div class="row"><label for="amcA">A year, of the fund<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1"><p class="subnote">The annual (or fund) management charge.</p></div>
-    <div class="field"><div class="row"><label for="feeA">On each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5"><p class="subnote">95% allocated means a 5% charge.</p></div>
+    <p class="fee-grp">Charges</p>
+    <div class="field"><div class="row"><label for="amcA">A year<span class="tk-sr">, your plan</span></label><span class="val" id="amcAV">1%</span></div><input type="range" id="amcA" min="0" max="3" step="0.05" value="1" style="--fill:33.33%"><p class="subnote">The annual management charge (AMC).</p></div>
+    <div class="field"><div class="row"><label for="feeA">On each payment<span class="tk-sr">, your plan</span></label><span class="val" id="feeAV">5%</span></div><input type="range" id="feeA" min="0" max="10" step="0.5" value="5" style="--fill:50.00%"><p class="subnote">95% allocated means a 5% charge.</p></div>
 
     <details class="adv fee-other" id="feeOther">
-      <summary><span class="fee-other-l">Compared with</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
+      <summary><span class="fee-other-l">Other plan</span> <span class="fee-other-v" id="feeOtherV">0.5% a year, 0% on payments</span></summary>
       <div class="adv-in">
-        <div class="field"><div class="row"><label for="amcB">A year, of the fund<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5"></div>
-        <div class="field" style="margin-bottom:0"><div class="row"><label for="feeB">On each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0"></div>
+        <div class="field"><div class="row"><label for="amcB">A year<span class="tk-sr">, the other plan</span></label><span class="val" id="amcBV">0.5%</span></div><input type="range" id="amcB" min="0" max="3" step="0.05" value="0.5" style="--fill:16.67%"></div>
+        <div class="field" style="margin-bottom:0"><div class="row"><label for="feeB">On each payment<span class="tk-sr">, the other plan</span></label><span class="val" id="feeBV">0%</span></div><input type="range" id="feeB" min="0" max="10" step="0.5" value="0" style="--fill:0.00%"></div>
       </div>
     </details>
     <input type="hidden" id="growth" value="5">
@@ -2766,7 +2760,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero">
       <div><div class="rl">Your plan, at retirement</div><div class="big" id="potA">€227,710</div></div>
-      <div><div class="rl">Another plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
+      <div><div class="rl">Other plan, at retirement</div><div class="big" id="potB">€258,137</div></div>
       <p class="pb-say" id="pbSay">Over 25 years, your plan&rsquo;s charges would take about €58,754 out of your pot. With the other plan&rsquo;s charges, you would have about €30,427 more at retirement.</p>
       <div class="divline"></div>
       <div class="foot">Illustration only. Charges depend on your plan&rsquo;s terms. The growth assumed may not happen.</div>
@@ -2782,7 +2776,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <ul class="fee-key" aria-hidden="true">
         <li><i class="fee-k-none"></i>No charges</li>
-        <li><i class="fee-k-b"></i>Another plan</li>
+        <li><i class="fee-k-b"></i>Other plan</li>
         <li><i class="fee-k-a"></i>Your plan</li>
         <li><i class="fee-k-gap"></i>What your plan&rsquo;s charges take</li>
       </ul>
@@ -2792,7 +2786,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <summary>How we got this</summary>
       <table class="fee-t">
         <caption class="tk-sr">What the charges take, for each plan</caption>
-        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Another plan</th></tr></thead>
+        <thead><tr><th scope="col"><span class="tk-sr">Charge</span></th><th scope="col">Your plan</th><th scope="col">Other plan</th></tr></thead>
         <tbody>
           <tr><th scope="row">Yearly charges, in euro at the time</th><td id="amcPaidA">€31,380</td><td id="amcPaidB">€16,996</td></tr>
           <tr><th scope="row">Charges on payments</th><td id="feePaidA">€3,000</td><td id="feePaidB">€0</td></tr>
@@ -2806,6 +2800,20 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="pension-fees-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
+        <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="hidden" name="topic" value="About a result">
+        <h2 class="pbr-h" id="pbrH">Ask us about this</h2>
+        <p class="pbr-att" id="pbrAtt"><svg class="pbr-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span id="pbrAttL"></span><b id="pbrAttV"></b></p>
+        <p class="pbr-f"><label for="pbrMsg">Your question <span class="pbr-opt">(optional)</span></label><textarea id="pbrMsg" name="message" rows="2" maxlength="1500"></textarea></p>
+        <input type="hidden" name="name">
+        <p class="pbr-f"><label for="pbrEmail">Your email</label><span class="pbr-send"><input id="pbrEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" aria-describedby="pbrErr"><button type="submit" class="btn btn-ghost pbr-go">Send</button></span></p>
+        <input type="hidden" name="contact_by" value="Email"><input type="hidden" name="phone">
+        <p class="pbr-err" id="pbrErr" role="alert"></p>
+        <p class="pbr-note">Your figures are sent with it. <a href="privacy.html">Privacy Notice</a></p>
+      </form>
+      <p class="pbr-ok" id="pbrOk" role="status" tabindex="-1" hidden><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span><b>Sent.</b> <span id="pbrOkText" data-ok-text></span></span></p>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
       <div class="pb-after-mail" id="ecCap" hidden>
         <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -2991,7 +2999,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     var tip = $('feeTip');
     tip.innerHTML = '<span class="fee-tip-y">' + (i === 0 ? 'Now' : 'In ' + years(i)) + '</span>' +
       '<span class="fee-tip-r">Your plan <b>' + euro(c.a.yearly[i]) + '</b></span>' +
-      '<span class="fee-tip-r">Another plan <b>' + euro(c.b.yearly[i]) + '</b></span>' +
+      '<span class="fee-tip-r">Other plan <b>' + euro(c.b.yearly[i]) + '</b></span>' +
       '<span class="fee-tip-r">No charges <b>' + euro(c.none.yearly[i]) + '</b></span>' +
       '<span class="fee-tip-r fee-tip-take">Your charges have taken <b>' + euro(c.none.yearly[i] - c.a.yearly[i]) + '</b></span>';
     tip.hidden = false;
@@ -3146,7 +3154,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   }).observe(watch,{childList:true,characterData:true,subtree:true});
 })();
 </script>
-<script src="assets/js/pb-slider-feel.js?v=3d06a155"></script>
 
 
 <script>
@@ -3267,11 +3274,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3304,8 +3311,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script>
 /* Progressive disclosure (Hick's Law).
-   The four controls that drive the headline figure stay visible. The rest
-   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   The controls that drive the headline figure stay visible. The rest refine
+   it and open on request, but never one alone: a fold that hides a single
+   control costs a tap and saves nothing. The field nodes are MOVED, not rebuilt, so
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
@@ -3322,7 +3330,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   var seg = panel.querySelector('.seg');
   var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
   if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
-  if(!extra.length) return;
+  if(extra.length < 2) return;
 
   var d = document.createElement('details');
   d.className = 'adv';
@@ -3372,13 +3380,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
 })();
 </script>
-<script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
-<script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
+<script src="assets/js/pb-peek.js?v=156e3797"></script>
+<script src="assets/js/pb-after.js?v=17f9a45b"></script>
+<script src="assets/js/pb-calc-motion.js?v=0ab7c99c"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-kit.js?v=f2ab740a"></script>
-<script src="assets/js/pb-askresult.js?v=389dddb3"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
+<script src="assets/js/pb-kit.js?v=7681cfbc"></script>
+<script src="assets/js/pb-askresult.js?v=065b81d6"></script>
 </body>
 </html>

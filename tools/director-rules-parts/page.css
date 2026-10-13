@@ -5,7 +5,9 @@
    The list is topics, never a recommendation, and says so.
    ============================================================ */
 .dr-asat{margin-top:10px;font-size:.92rem;font-weight:600;color:var(--ink-2)}
-.dr-wrap{max-width:780px;padding:12px 0 8px}
+/* the column keeps .wrap's side gutters and starts at the header's left edge */
+.dr-wrap{padding-top:12px;padding-bottom:8px}
+.dr-wrap>.dr-sec{max-width:780px}
 .dr-sec{padding:28px 0;border-top:1px solid var(--line)}
 .dr-sec:first-child{border-top:0;padding-top:8px}
 .dr-sec h2{margin:0 0 12px}
@@ -116,7 +118,7 @@ html.pb-js .pb-gx-seg{display:inline-flex}
 .pb-gx-arm.pb-gx-in .pb-gx-sink{animation:pbGxSink calc(var(--pb-d-5) * 1.4) calc(var(--pb-beat-gap) * 2) both}
 @keyframes pbGxSink{
   0%,30%{transform:none;opacity:1;animation-timing-function:cubic-bezier(.4,0,1,1)}
-  100%{transform:translate(-24px,30px) rotate(-12deg);opacity:0}}
+  100%{transform:translateY(4px) scale(.94);opacity:0}}
 .pb-gx-drop i{position:absolute;left:calc(36% + 14px);top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--slate)}
 .pb-gx-drop{transition:transform var(--pb-d-5) var(--pb-ease-move)}
 .pb-gx-drop:nth-child(2){transform:translateX(24%)}

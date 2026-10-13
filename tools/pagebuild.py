@@ -189,9 +189,9 @@ PAGES = {
         title='Auto-enrolment or a broker pension, Pensionbuddy',
         desc='Compare what goes into your pension under My Future Fund auto-enrolment against a personal pension through a broker. An illustration, not advice.',
         modules=['assets/js/pension-tax-relief.js', 'assets/js/autoenrolment.js', 'assets/js/pb-cmp-motion.js'],
-        # every range here is a primary control for one mode or the other; only
-        # the tax-rate segment folds into "More options", as on the other calculators
-        keep=['age', 'salary', 'gross', 'match', 'extra', 'tmatch'],
+        # every range here is a primary control for one mode or the other, and
+        # the tax status alone is not folded: a fold of one control saves nothing
+        keep=['age', 'salary', 'extra'],
         floor16=True,
         reviewed=True,
         checks=(('vs-card', 'comparison component'),),
@@ -203,8 +203,8 @@ PAGES = {
         desc=('What the State Pension actually pays, next to what retirement in Ireland '
               'costs according to the Pensions Council. An illustration, not advice.'),
         modules=['assets/js/state-pension.js', 'assets/js/pb-sp-motion.js'],
-        # both controls are primary, so nothing folds into "More options"
-        keep=['contribs', 'age'],
+        # one control, the PRSI record, so nothing folds into "More options"
+        keep=['contribs'],
         floor16=True,
         reviewed=True,
         nav='state-pension-reality-check.html',
@@ -221,7 +221,8 @@ PAGES = {
         # order matters: the entitlement module throws if state-pension.js is
         # not already on the page
         modules=['assets/js/state-pension.js', 'assets/js/state-pension-entitlement.js', 'assets/js/pb-sp-motion.js'],
-        # all five controls are primary, so nothing folds into "More options"
+        # three primary controls; credited and caring fold into the part's
+        # own #pbMore ("Credits and caring"), so all five stay out of "More options"
         keep=['birth', 'entry', 'paid', 'credited', 'homecaring'],
         floor16=True,
         reviewed=True,
@@ -263,10 +264,10 @@ PAGES = {
                 ('id="pfPhoneOk"', 'phone consent is its own box'),
                 ('id="pfOptin"', 'email consent is its own box')),
     ),
-    # Run 20 #3. A calculator like the other five: panel, results, the
-    # shared runtime, the share row and the saved report. Growth folds under
-    # More options; the pot, the payments, the years and both plans' charges
-    # stay out.
+    # Run 20 #3. A calculator like the other five: panel, results and the
+    # shared runtime. Growth is a fixed 5%; the other plan's two charges fold
+    # under the part's own "Other plan" (#feeOther), so nothing folds into
+    # More options.
     'fees': Page(
         out='pension-fees-calculator.html',
         parts='fees-parts',
@@ -352,9 +353,10 @@ PAGES = {
     ),
     # Run 23. The proposed Personal Investment Account: a dated guide and the
     # same take-home cost in a pension, the PIA and an ETF. The PIA's rate and
-    # threshold are the reader's inputs, never defaults; docs/PIA-BUDGET-DAY.md
-    # lists what changes on 6 October 2026. The tax-rate buttons are not a
-    # .seg, so they stay out of More options; age and earnings fold into it.
+    # threshold start at Budget 2027's, 1% above €50,000, and fold with growth
+    # into the part's own "Assumptions" (#piaAdv), so all four ranges stay out
+    # of More options; the tax-rate buttons are not a .seg. No age or earnings
+    # since 12 October 2026.
     'pia': Page(
         out='pia.html',
         parts='pia-parts',
@@ -365,7 +367,7 @@ PAGES = {
         floor16=True,
         reviewed=True,
         nav='pia.html',
-        checks=(('Proposed · as at 8 October 2026', 'the date the proposal was checked'),
+        checks=(('Proposed, not yet law · 8 October 2026', 'the date the proposal was checked'),
                 ('class="pb-warn"', 'the prescribed warnings'),
                 ('Budget 2027', 'the Budget named'),
                 ('Finance (No. 2) Bill 2026', 'said to be a proposal until the Bill passes'),
@@ -446,6 +448,7 @@ def assemble(page):
     # Run 47: the prescribed warnings, from pagebuild.WARN (below)
     body = with_warn(body)
     body = with_calendly(body)
+    body = with_fill(body)
     if page.reviewed:
         # the last line of the page header, whatever the part put above it
         body, n = re.subn(r'(<div class="phead"><div class="wrap">.*?)(\n</div></div>)',
@@ -461,10 +464,23 @@ def assemble(page):
                             r'(?:<script src="assets/js/pb-cta\.js(?:\?v=[0-9a-f]+)?"></script>\n)?', tail)
         assert consent, 'no consent script to put the deadline script after'
         tail = tail[:consent.end()] + '\n<script src="%s"></script>\n' % DEADLINE_JS + tail[consent.end():]
+    # 13 October 2026: the reply forms tools/lead-blocks.py writes (the
+    # directors' rules page's "Ask us"), written here too, so that a rebuild
+    # and lead-blocks.py agree on the page
+    text = lead_blocks().build(page.out, head + body + tail)
     # Run 34: the search and sharing tags (canonical, Open Graph, Twitter,
     # JSON-LD) are tools/seo.py's, from the page's own title and description
     import seo
-    return seo.apply(page.out, stamp_html(head + body + tail))
+    return seo.apply(page.out, stamp_html(text))
+
+
+def lead_blocks():
+    """tools/lead-blocks.py as a module (its name is not one import takes)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('lead_blocks', os.path.join(ROOT, 'tools', 'lead-blocks.py'))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
 
 
 def check(html, page):
@@ -931,7 +947,7 @@ RELATED = {
     'director-year-end-checklist.html': ('director-calculator.html', 'director-pension-rules.html', 'standard-fund-threshold.html'),
     'pensions-over-50.html': ('standard-fund-threshold.html', 'state-pension-reality-check.html', 'glossary.html'),
     'self-employed-pensions.html': ('broker-vs-autoenrolment.html', 'pensions-over-50.html', 'glossary.html'),
-    'uk-pensions-in-ireland.html': ('state-pension-entitlement.html', 'tracker.html', 'glossary.html'),
+    'uk-pensions-in-ireland.html': ('state-pension-entitlement.html', 'pensions-over-50.html', 'glossary.html'),
     'glossary.html': ('pension-calculator.html', 'starter.html', 'pensions-over-50.html'),
     'privacy.html': ('terms.html', 'complaints.html'),
     'terms.html': ('privacy.html', 'complaints.html'),
@@ -1054,6 +1070,28 @@ def with_calendly(text):
     return CALENDLY_PAT.sub(CALENDLY, text)
 
 
+# 13 October 2026 (review calc-other-8): a slider's teal fill is drawn from
+# var(--fill,50%), which only assets/js/calc-page.js sets, so without
+# JavaScript every slider was half filled wherever its thumb sat. Each one
+# now carries its own fill from its value, as index.html's do; the script
+# repaints it at load. A part that writes its own style keeps it.
+RANGE_PAT = re.compile(r'<input type="range"[^>]*>')
+
+
+def with_fill(text):
+    """text with every slider carrying style="--fill:X%" for its value"""
+    def one(m):
+        tag = m.group(0)
+        a = dict(re.findall(r'\b(min|max|value)="([^"]*)"', tag))
+        if 'style=' in tag or 'value' not in a:
+            return tag
+        lo, hi, v = float(a.get('min', 0)), float(a.get('max', 100)), float(a['value'])
+        if hi <= lo:
+            return tag
+        return tag[:-1] + ' style="--fill:%.2f%%">' % ((min(max(v, lo), hi) - lo) / (hi - lo) * 100)
+    return RANGE_PAT.sub(one, text)
+
+
 WARN_OPEN, WARN_CLOSE = '<!-- WARN:BEGIN (pagebuild.WARN) -->', '<!-- WARN:END -->'
 WARN_PAT = re.compile(re.escape(WARN_OPEN) + r'(.*?)' + re.escape(WARN_CLOSE))
 # every page with projected figures, and how many boxes it shows them under
@@ -1063,7 +1101,7 @@ WARN_PAGES = {
     'broker-vs-autoenrolment.html': 2,  # "Everything paid in, by 66", once in each mode
     'pension-fees-calculator.html': 1,  # the pot with and without the charges
     'pia.html': 1,                      # the three take-home figures
-    'starter.html': 3,                  # the cost-of-waiting chart and the two growth charts
+    'starter.html': 3,                  # one per cost-of-waiting tab
     'index.html': 1,                    # the home calculator's pot and income at 66 (11 October 2026)
     'director.html': 1,                 # the director page's pot at 66 (Run 54, 11 October 2026)
 }
@@ -1099,23 +1137,30 @@ def warn_drift(sources):
 # in place of the <!-- AFTER --> line in their part, and by
 # tools/sync-chrome.py for the two hand-written calculators. after_drift() is
 # the guard (verify.py and tests/build.test.py check 49). Styled by the CTA
-# block of CSS; assets/js/pb-after.js and assets/js/pb-cta.js make it work.
+# block of CSS; assets/js/pb-after.js and assets/js/pb-cta.js make it work,
+# and assets/js/pb-askresult.js the question form, which it styles and shows.
 #
 # In this order: what the page does not show (its own words, a caveat, Run
 # 43); then one block: the booking button, wording A here (pb-cta.js shows
-# half the visitors wording B), and under it AFTER_WHY; then, on a page that
-# sends anything at all, "Email me this result", a small link that opens a
-# form: name, email, a box to tick (never ticked for the reader) and one line
-# saying what is stored, why and where it goes. The result above stays on
-# screen whether or not the form is used, and nothing is sent until it is.
-# Without JavaScript the link and the form stay hidden (a form that cannot
-# carry the figures would be a promise this page cannot keep); the button
-# and its line do not.
+# half the visitors wording B), and under it AFTER_WHY; then (13 October
+# 2026, "the form everywhere") "Ask us about this", a form in plain sight: a
+# question, optional, an email and Send. It posts as "enquiry", the form
+# "Ask us. We reply by email." declares (tools/lead-parts/ask.html), with the
+# same fields, so the result goes with it as its details
+# (assets/js/pb-askresult.js); ASK_WORDS gives a page its own heading and
+# line. Then, on a page that offers it, "Email me this result", a small link
+# that opens a form: name, email, a box to tick (never ticked for the reader)
+# and one line saying what is stored, why and where it goes. The result
+# above stays on screen whether or not either form is used, and nothing is
+# sent until one is. Without JavaScript both forms and the link stay hidden
+# (a form that cannot carry the figures would be a promise this page cannot
+# keep); the button and its line do not.
 #
-# my-pensions sends nothing typed, so it has no form, and (since 8 October
-# 2026) no "doesn't show" line: it is a list of today's values, not a
-# projection. The directors' rules page has none either: its list already
-# says "Topics to discuss, not advice."
+# my-pensions sends its list only with a question, so it has no "Email me
+# this result", and (since 8 October 2026) no "doesn't show" line: it is a
+# list of today's values, not a projection. Its block sits in the summary
+# column, under the total. The directors' rules page has no "doesn't show"
+# line either: its list already says "Topics to discuss, not advice."
 # ============================================================================
 AFTER = {  # page: (its name for #from= and the events, what it does not show or None, the email offer)
     'pension-calculator.html': ('pension-calculator', None, True),
@@ -1141,6 +1186,15 @@ _ARROW = ('<svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2=
 _TICK = '<svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
 # the fields the shared form declares, in order: Netlify stores only these
 AFTER_FIELDS = ('form-name', 'results', 'inputs', 'summary', 'link', 'page', 'bot-field', 'name', 'email', 'consent')
+# "Ask us about this": its heading and the line saying what goes with it,
+# where a page's differ from the first entry's
+ASK_WORDS = {
+    None: ('Ask us about this', 'Your figures are sent with it.'),
+    'my-pensions.html': ('Want us to look at these?', 'Your list is sent with it.'),
+    'director-pension-rules.html': ('Ask us about this', 'Your list is sent with it.'),
+}
+_CLIP = ('<svg class="pbr-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2'
+         'a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg>')
 
 
 def after_block(page, indent='    '):
@@ -1159,6 +1213,28 @@ def after_block(page, indent='    '):
     ]
     if AFTER_WHY:
         lines.append('  <p class="pb-after-why">%s</p>' % AFTER_WHY)
+    head, sent = ASK_WORDS.get(page, ASK_WORDS[None])
+    lines += [
+        '  <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>',
+        '    <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details">'
+        '<input type="hidden" name="page"><input type="hidden" name="reply_by">',
+        '    <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>',
+        '    <input type="hidden" name="topic" value="About a result">',
+        '    <h2 class="pbr-h" id="pbrH">%s</h2>' % head,
+        '    <p class="pbr-att" id="pbrAtt">%s<span id="pbrAttL"></span><b id="pbrAttV"></b></p>' % _CLIP,
+        '    <p class="pbr-f"><label for="pbrMsg">Your question <span class="pbr-opt">(optional)</span></label>'
+        '<textarea id="pbrMsg" name="message" rows="2" maxlength="1500"></textarea></p>',
+        '    <input type="hidden" name="name">',
+        '    <p class="pbr-f"><label for="pbrEmail">Your email</label><span class="pbr-send">'
+        '<input id="pbrEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" aria-describedby="pbrErr">'
+        '<button type="submit" class="btn btn-ghost pbr-go">Send</button></span></p>',
+        '    <input type="hidden" name="contact_by" value="Email"><input type="hidden" name="phone">',
+        '    <p class="pbr-err" id="pbrErr" role="alert"></p>',
+        '    <p class="pbr-note">%s <a href="privacy.html">Privacy Notice</a></p>' % sent,
+        '  </form>',
+        '  <p class="pbr-ok" id="pbrOk" role="status" tabindex="-1" hidden>%s<span><b>Sent.</b> '
+        '<span id="pbrOkText" data-ok-text></span></span></p>' % _TICK,
+    ]
     if mail:
         lines += [
             '  <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>',

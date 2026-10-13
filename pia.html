@@ -130,7 +130,7 @@ input[type=range]:focus-visible{box-shadow:0 0 0 4px var(--ring)}
 
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
-.chart-legend{display:flex;gap:22px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.chart-legend{display:flex;gap:6px 18px;margin:12px 0 8px;font-size:13px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:8px}
 .dotk{width:14px;height:4px;border-radius:2px;background:var(--slate);display:inline-block}
 /* the growth chart (Run 43): the script draws "Your plan" #0B7A6E and its shading
@@ -1299,10 +1299,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   font-family:var(--font);font-size:.75rem;font-weight:500;
   color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
 .adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
 .adv > summary:hover{color:var(--ink)}
 .adv .adv-in{padding-top:4px;padding-bottom:6px}
 
@@ -1405,17 +1401,17 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    All three are this one mark now, and this block is its only
    owner - nothing above restyles it and nothing below needs to.
    ============================================================ */
-summary .pm,.pb-b-q .pm,.adv > summary::after{
+summary .pm,.pb-b-q .pm,.adv > summary::after,.pb-work > summary::after{
   width:26px;height:26px;border-radius:8px;box-sizing:border-box;
   background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
   display:flex;align-items:center;justify-content:center;
   font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
-  flex-shrink:0;margin-left:auto;
+  flex-shrink:0;margin-left:auto;transform:none;
   transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
              border-color .25s ease,color .25s ease}
-details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after,.pb-work[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
-summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after,.pb-work > summary:hover::after{border-color:var(--ink-2)}
 
 /* ============================================================
    F5 - "Take a guess first", and the veil it puts over the one
@@ -1653,9 +1649,9 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 /* ============================================================
    RELIEF LIMIT LADDER (.pb-lad). Revenue's age-related limit on the
    contributions that get tax relief, six steps from 15% under 30 to 40% at
-   60 and over, from PBRelief.reliefBand(). Static markup; on the pension
-   calculator and the comparison page assets/js/pb-ladder.js marks the
-   reader's step and says their limit in euro. Relief is money that comes
+   60 and over, from PBRelief.reliefBand(). Static markup; on the guides
+   that load assets/js/pb-ladder.js (over 50, self-employed) it marks the
+   reader's step. No calculator carries it now. Relief is money that comes
    back, so the fills are amber (Run 42). Byte-identical wherever it appears.
    ============================================================ */
 .pb-lad{max-width:560px}
@@ -1687,6 +1683,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    veil, the summary names nothing. Byte-identical on both calculators. */
 .pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
 .pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+/* the site's one disclosure mark (the "ONE icon set" block), not the browser's triangle */
+.pb-work > summary{display:flex;align-items:center;gap:12px;list-style:none}
+.pb-work > summary::-webkit-details-marker{display:none}
+.pb-work > summary::after{content:"+"}
 .pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
 .pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
 .pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
@@ -2571,8 +2571,7 @@ main h1{font-weight:800}
 #chartKeyToday[hidden]{display:none}
 /* TODAY:END */
 /* MOTION-4 CALCULATOR:BEGIN (8 October 2026, Damian's brief): the chart
-   line, the waiting handle, the pot's bounce and milestones
-   (assets/js/pb-calc-motion.js adds every element and class here, and
+   line and the waiting handle (assets/js/pb-calc-motion.js adds every element and class here, and
    :root.pb-calc-alive, so the pages built on this one as a skeleton carry
    these rules but never match them). */
 :root.pb-calc-alive #chart{cursor:crosshair;touch-action:pan-y}
@@ -2600,11 +2599,6 @@ main h1{font-weight:800}
 :root.pb-calc-alive .pb-wait-out{margin:12px 0 0;font-size:1rem}
 :root.pb-calc-alive .pb-wait-tick .pb-wait-gap{animation:pbGapFlash .5s}
 @keyframes pbGapFlash{0%{filter:brightness(1.2) saturate(1.6)}100%{filter:none}}
-:root.pb-calc-alive #potOut.pb-pot-bump{animation:pbBump .45s cubic-bezier(.3,1.6,.5,1);transform-origin:0 70%}
-@keyframes pbBump{35%{transform:scale(1.06)}100%{transform:none}}
-:root.pb-calc-alive .pb-mile{position:absolute;left:0;top:-8px;padding:5px 11px;border-radius:999px;background:#F4B740;color:#3A2A00;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;animation:pbMile 2.2s cubic-bezier(.2,.8,.2,1) forwards}
-@keyframes pbMile{0%{transform:translateY(10px) scale(.6);opacity:0}15%{transform:translateY(-14px) scale(1.08);opacity:1}70%{transform:translateY(-22px);opacity:1}100%{transform:translateY(-40px);opacity:0}}
-.pb-party{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:80}
 :root.pb-calc-alive.pb-motion .rv-you,:root.pb-calc-alive.pb-motion .rv-tax{transition:width .7s cubic-bezier(.34,1.56,.64,1)}
 /* MOTION-4 CALCULATOR:END */
 
@@ -2612,19 +2606,17 @@ main h1{font-weight:800}
    THE PERSONAL INVESTMENT ACCOUNT (pia.html). Simplified on
    12 October 2026 (the owner: "PIA needs to be simplified
    greatly"): the calculator first, one comparison (three bars on
-   one scale), then the proposal in brief and a short table.
+   one scale), then the proposal in three facts. The sources sit in
+   "How we worked this out".
    Every figure is from assets/js/pia.js. No text here is under
    1rem: the page is a calculator and keeps the 16px floor.
    ============================================================ */
-.pia-asat{margin:10px 0 0;font-size:1rem;font-weight:600;color:var(--ink-2)}
-.phead .pia-asat{max-width:760px}
 .pia-sec{padding:56px 0 8px}
 .pia-sec h2{margin:0}
 .pia-src{margin:14px 0 0;max-width:760px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
 /* inline links in a line of prose (WCAG 2.5.8's inline exception): the
    site's 44px reach rule makes them inline blocks, which breaks the line */
 .pia-sec p.pia-src a:not(.btn){display:inline;padding:0;margin:0;line-height:inherit;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
-.pia-t td a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
 
 /* ---- the inputs ---- */
 .pia-lbl{font-weight:600;color:var(--ink)}
@@ -2637,6 +2629,8 @@ main h1{font-weight:800}
 .pia-adv > summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:4px}
 .pia-adv-l{font-weight:700;color:var(--ink)}
 .pia-adv-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+/* a phone: the mark stays on the label's row and the figures run underneath */
+@media(max-width:600px){.pia-adv-l{flex:1}.pia-adv-v{order:1;flex-basis:100%}}
 .pia-euro{display:flex;align-items:center;gap:8px;margin-top:8px;border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:0 12px;background:var(--surface)}
 .pia-euro span{font-weight:600;color:var(--ink-2)}
 .pia-euro input{flex:1;min-width:0;border:0;background:none;font:600 1.05rem var(--font);color:var(--ink);padding:12px 0;font-variant-numeric:tabular-nums}
@@ -2695,26 +2689,8 @@ main h1{font-weight:800}
 .pia-facts b{display:block;font-size:1.3rem;line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
 .pia-facts span{display:block;margin-top:6px;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 
-/* ---- side by side ---- */
-.pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
-.pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
-.pia-t th,.pia-t td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.pia-t thead th{background:var(--surface-2);font-weight:700;color:var(--ink)}
-.pia-t tbody th{font-weight:600;color:var(--ink);width:19%}
-.pia-t tbody tr:last-child th,.pia-t tbody tr:last-child td{border-bottom:0}
-
-@media(max-width:900px){
-  .pia-facts{grid-template-columns:1fr 1fr}
-}
 @media(max-width:700px){
   .pia-facts li{padding:16px}
-  /* the table becomes one card per row, each cell labelled */
-  .pia-t thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .pia-t,.pia-t tbody,.pia-t tr,.pia-t th,.pia-t td{display:block;width:auto}
-  .pia-t tbody th{width:auto;background:var(--surface-2);padding:12px 16px}
-  .pia-t td{padding:8px 16px;border-bottom:0}
-  .pia-t td:last-child{padding-bottom:14px}
-  .pia-t td::before{content:attr(data-l) ": ";font-weight:700;color:var(--ink)}
   .pia-st th,.pia-st td{padding:9px 4px}
 }
 /* a phone: one card, a row a fact */
@@ -2800,10 +2776,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Proposed, not yet law</span>
+  <span class="eyebrow"><span class="pip"></span>Proposed, not yet law · 8 October 2026</span>
   <h1>The Personal Investment Account (PIA), <span class="hl">next to a pension.</span></h1>
   <p>The same money in a PIA, a pension and an exchange-traded fund (ETF), after tax.</p>
-  <p class="pia-asat">Proposed · as at 8 October 2026, after Budget 2027. It becomes law only when the Finance (No. 2) Bill 2026 is passed.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2811,16 +2786,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="panel">
     <h2>Your money</h2>
     <p class="hint">Slide, or tap a figure to type it.</p>
-    <div class="field"><div class="row"><label for="amount">Each month, from take-home pay</label><span class="val" id="amountV">€200</span></div><input type="range" id="amount" min="25" max="1000" step="25" value="200"><p class="subnote">Up to &euro;1,000: the PIA&rsquo;s &euro;12,000 a year.</p></div>
-    <div class="field"><div class="row"><label for="years">For how many years</label><span class="val" id="yearsV">10</span></div><input type="range" id="years" min="1" max="40" step="1" value="10"></div>
+    <div class="field"><div class="row"><label for="amount">Each month, from take-home pay</label><span class="val" id="amountV">€200</span></div><input type="range" id="amount" min="25" max="1000" step="25" value="200" style="--fill:17.95%"><p class="subnote">Up to &euro;1,000: the PIA&rsquo;s &euro;12,000 a year.</p></div>
+    <div class="field"><div class="row"><label for="years">For how many years</label><span class="val" id="yearsV">10</span></div><input type="range" id="years" min="1" max="40" step="1" value="10" style="--fill:23.08%"></div>
     <div class="field pia-taxrate" role="group" aria-labelledby="taxL"><div class="row"><span class="pia-lbl" id="taxL">Your income tax rate</span></div>
-      <div class="pia-seg"><button type="button" id="r20" aria-pressed="false">20%</button><button type="button" id="r40" class="on" aria-pressed="true">40%</button></div></div>
+      <div class="pia-seg"><button type="button" id="r20" aria-pressed="false">20%</button><button type="button" id="r40" class="on" aria-pressed="true">40%</button></div>
+      <input type="hidden" id="taxRate" value="40%" data-pb-label="Your income tax rate"></div>
 
     <details class="adv pia-adv" id="piaAdv">
       <summary><span class="pia-adv-l">Assumptions</span> <span class="pia-adv-v" id="advV">5% growth, PIA 1% above €50,000</span></summary>
       <div class="adv-in">
-        <div class="field"><div class="row"><label for="growth">Growth a year, before tax</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="0" max="8" step="0.5" value="5"></div>
-        <div class="field"><div class="row"><label for="piaRate">PIA tax rate</label><span class="val" id="piaRateV">1%</span></div><input type="range" id="piaRate" min="0" max="5" step="0.05" value="1"><p class="subnote">Budget 2027: 1% a year.</p></div>
+        <div class="field"><div class="row"><label for="growth">Growth a year, before tax</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="0" max="8" step="0.5" value="5" style="--fill:62.50%"></div>
+        <div class="field"><div class="row"><label for="piaRate">PIA tax rate</label><span class="val" id="piaRateV">1%</span></div><input type="range" id="piaRate" min="0" max="5" step="0.05" value="1" style="--fill:20.00%"><p class="subnote">Budget 2027: 1% a year.</p></div>
         <div class="field" style="margin-bottom:0"><div class="row"><label for="piaThreshold">PIA tax-free amount</label></div><div class="pia-euro"><span aria-hidden="true">€</span><input type="text" id="piaThreshold" inputmode="numeric" autocomplete="off" value="50,000" aria-describedby="piaThrNote"></div><p class="subnote" id="piaThrNote">Budget 2027: &euro;50,000.</p></div>
       </div>
     </details>
@@ -2837,7 +2813,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <p class="pia-note" id="penNote">€15,436 tax · normally from 60</p>
         </li>
         <li class="pia-row" id="rowPia" style="--row:1">
-          <div class="pia-rh"><span class="rl">PIA, proposed</span><span class="big" id="piaOut" data-v="30873">€30,873</span></div>
+          <div class="pia-rh"><span class="rl">PIA</span><span class="big" id="piaOut" data-v="30873">€30,873</span></div>
           <div class="pia-track" aria-hidden="true"><i class="pia-s pia-s-in" style="left:0%;width:46.64%"></i><i class="pia-s pia-s-rel" style="left:46.64%;width:0%"></i><i class="pia-s pia-s-grow" style="left:46.64%;width:13.36%"></i><i class="pia-s pia-s-tax pia-zero" style="left:60%;width:0%"></i></div>
           <p class="pia-note" id="piaNote">€0 tax · any time</p>
         </li>
@@ -2864,7 +2840,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <tr><th scope="row">Your money</th><td id="paidPen">€24,000</td><td id="paidPia">€24,000</td><td id="paidEtf">€24,000</td></tr>
           <tr><th scope="row">Tax relief</th><td id="relPen">€16,000</td><td>€0</td><td>€0</td></tr>
           <tr><th scope="row">Growth</th><td id="growPen">€11,454</td><td id="growPia">€6,873</td><td id="growEtf">€6,834</td></tr>
-          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€15,436</td><td id="taxPia">&minus;€0</td><td id="taxEtf">&minus;€2,392</td></tr>
+          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€15,436</td><td id="taxPia">€0</td><td id="taxEtf">&minus;€2,392</td></tr>
           <tr><th scope="row">Left after tax</th><td id="endPen">€36,018</td><td id="endPia">€30,873</td><td id="endEtf">€28,442</td></tr>
         </tbody>
       </table>
@@ -2873,6 +2849,20 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="pia">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
+        <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="hidden" name="topic" value="About a result">
+        <h2 class="pbr-h" id="pbrH">Ask us about this</h2>
+        <p class="pbr-att" id="pbrAtt"><svg class="pbr-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span id="pbrAttL"></span><b id="pbrAttV"></b></p>
+        <p class="pbr-f"><label for="pbrMsg">Your question <span class="pbr-opt">(optional)</span></label><textarea id="pbrMsg" name="message" rows="2" maxlength="1500"></textarea></p>
+        <input type="hidden" name="name">
+        <p class="pbr-f"><label for="pbrEmail">Your email</label><span class="pbr-send"><input id="pbrEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" aria-describedby="pbrErr"><button type="submit" class="btn btn-ghost pbr-go">Send</button></span></p>
+        <input type="hidden" name="contact_by" value="Email"><input type="hidden" name="phone">
+        <p class="pbr-err" id="pbrErr" role="alert"></p>
+        <p class="pbr-note">Your figures are sent with it. <a href="privacy.html">Privacy Notice</a></p>
+      </form>
+      <p class="pbr-ok" id="pbrOk" role="status" tabindex="-1" hidden><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span><b>Sent.</b> <span id="pbrOkText" data-ok-text></span></span></p>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
       <div class="pb-after-mail" id="ecCap" hidden>
         <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -2896,51 +2886,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <section class="pia-sec" id="brief"><div class="wrap">
   <h2>The PIA in brief</h2>
-  <p class="pia-asat">Proposed · as at 8 October 2026</p>
   <ul class="pia-facts">
-    <li><b>1% a year</b><span>on the average daily value above &euro;50,000, due even in a falling year</span></li>
+    <li><b>1% a year</b><span>on the average daily value above &euro;50,000, due even in a falling year. The provider pays it.</span></li>
     <li><b>&euro;12,000 a year</b><span>the most that can go in</span></li>
-    <li><b>No tax relief</b><span>on what goes in</span></li>
-    <li><b>No exit tax</b><span>and no deemed disposal or Capital Gains Tax inside it. The provider pays the tax.</span></li>
-    <li><b>Any time</b><span>to take your money out</span></li>
     <li><b>1 July 2027</b><span>it opens. One each, for Irish tax residents aged 18 or over.</span></li>
   </ul>
   <p class="pia-src">Holds listed shares, bonds, funds, ETFs and insurance-based investments. Not a deposit: values can fall. Still to come: the law itself, and the providers and their fees.</p>
-  <p class="pia-src">Also called the Investment Account, the Irish Investment Account and the Savings and Investment Account. Sources: Department of Finance, <a href="https://assets.gov.ie/static/documents/c6792805/Budget_2027_-_Tax_Policy_Changes_-_Publication_Version.pdf" rel="noopener">Budget 2027: Tax Policy Changes</a>, 6 October 2026, and the <a href="https://www.gov.ie/en/department-of-finance/press-releases/t%C3%A1naiste-simon-harris-and-minister-of-state-robert-troy-publish-roadmap-for-the-taxation-of-retail-investment/" rel="noopener">Roadmap for the Taxation of Retail Investment</a>, 31 August 2026.</p>
-</div></section>
-
-<section class="pia-sec" id="compare"><div class="wrap">
-  <h2>Side by side</h2>
-  <p class="pia-asat">The PIA column is proposed · as at 8 October 2026</p>
-  <div class="pia-tablewrap">
-    <table class="pia-t">
-      <caption class="tk-sr">PIA, pension and ETF compared</caption>
-      <thead><tr><th scope="col"><span class="tk-sr">Compared on</span></th><th scope="col">PIA, proposed</th><th scope="col">Pension</th><th scope="col">ETF</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Going in</th>
-          <td data-l="PIA, proposed">No tax relief</td>
-          <td data-l="Pension">Tax relief at 20% or 40%, within age-related limits</td>
-          <td data-l="ETF">No tax relief</td></tr>
-        <tr><th scope="row">While it grows</th>
-          <td data-l="PIA, proposed">1% a year on the value above &euro;50,000</td>
-          <td data-l="Pension">No tax</td>
-          <td data-l="ETF">35% of the gain every eight years (deemed disposal)</td></tr>
-        <tr><th scope="row">Coming out</th>
-          <td data-l="PIA, proposed">No tax</td>
-          <td data-l="Pension">Usually up to 25% as a lump sum, the first &euro;200,000 tax-free. The rest taxed as income</td>
-          <td data-l="ETF">35% exit tax on the gain, less tax already paid</td></tr>
-        <tr><th scope="row">When you can take it</th>
-          <td data-l="PIA, proposed">Any time</td>
-          <td data-l="Pension">Normally from 60</td>
-          <td data-l="ETF">Any time</td></tr>
-        <tr><th scope="row">Employer money</th>
-          <td data-l="PIA, proposed">Not in the proposals</td>
-          <td data-l="Pension">Yes, if your employer pays in</td>
-          <td data-l="ETF">None</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="pia-src">ETF: 35% from 1 January 2027 (38% before). Source: Revenue, <a href="https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-27/27-01a-02.pdf" rel="noopener">Tax and Duty Manual Part 27-01A-02</a>.</p>
 </div></section>
 
 <section style="padding:40px 0 0"><div class="wrap">
@@ -2956,8 +2907,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>The same take-home amount goes into each at every month end. All three grow at the same rate.</li>
     <li>Pension: tax relief at your rate, assuming your payments are within Revenue&rsquo;s age-related limit. Taken at the end in one go: a quarter as a lump sum in Revenue&rsquo;s bands, the rest taxed as income at your rate. In practice most is drawn over years.</li>
     <li>PIA: the rate on the average value above the tax-free amount, taken at each year end. The real tax uses daily values; this uses month-end values.</li>
-    <li>ETF: accumulating, with a deemed disposal of each month&rsquo;s purchase every eight years and exit tax at the end, both at 35%.</li>
+    <li>ETF: accumulating, with a deemed disposal of each month&rsquo;s purchase every eight years and exit tax at the end, both at 35% (38% before 1 January 2027). Revenue, <a href="https://www.revenue.ie/en/tax-professionals/tdm/income-tax-capital-gains-tax-corporation-tax/part-27/27-01a-02.pdf" rel="noopener">Tax and Duty Manual Part 27-01A-02</a>.</li>
     <li>Not included: fees and charges, inflation, employer money.</li>
+    <li>The PIA is proposed in Budget 2027. It becomes law only when the Finance (No. 2) Bill 2026 is passed. Department of Finance, <a href="https://assets.gov.ie/static/documents/c6792805/Budget_2027_-_Tax_Policy_Changes_-_Publication_Version.pdf" rel="noopener">Budget 2027: Tax Policy Changes</a>, 6 October 2026, and the <a href="https://www.gov.ie/en/department-of-finance/press-releases/t%C3%A1naiste-simon-harris-and-minister-of-state-robert-troy-publish-roadmap-for-the-taxation-of-retail-investment/" rel="noopener">Roadmap for the Taxation of Retail Investment</a>, 31 August 2026.</li>
   </ul>
   </details>
 </div></section>
@@ -3028,6 +2980,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   var taxRate = 40;
   var pc = function (v) { return (Math.round(v * 100) / 100).toLocaleString('en-IE') + '%'; };
   var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var less = function (v) { return v >= 0.5 ? '−' + euro(v) : euro(0); };   /* no minus on €0 */
   var NONE = 'No figure yet';
   var VALTEXT = {
     amount: function (v) { return euro(v) + ' a month'; },
@@ -3114,9 +3067,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('growPen').textContent = euro(pen.grow);
     $('growPia').textContent = has ? euro(pia.grow) : NONE;
     $('growEtf').textContent = euro(etf.grow);
-    $('taxPen').textContent = '−' + euro(pen.tax);
-    $('taxPia').textContent = has ? '−' + euro(pia.tax) : NONE;
-    $('taxEtf').textContent = '−' + euro(etf.tax);
+    $('taxPen').textContent = less(pen.tax);
+    $('taxPia').textContent = has ? less(pia.tax) : NONE;
+    $('taxEtf').textContent = less(etf.tax);
     $('endPen').textContent = euro(pen.after);
     $('endPia').textContent = has ? euro(pia.after) : NONE;
     $('endEtf').textContent = euro(etf.after);
@@ -3134,6 +3087,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('r40').setAttribute('aria-pressed', v === 40 ? 'true' : 'false');
     $('r20').classList.toggle('on', v === 20);
     $('r40').classList.toggle('on', v === 40);
+    $('taxRate').value = v + '%';   /* what the emailed result says (assets/js/pb-after.js) */
     render();
   }
   $('r20').addEventListener('click', function () { setTax(20); });
@@ -3229,7 +3183,6 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   }).observe(watch,{childList:true,characterData:true,subtree:true});
 })();
 </script>
-<script src="assets/js/pb-slider-feel.js?v=3d06a155"></script>
 
 
 <script>
@@ -3350,11 +3303,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3387,8 +3340,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script>
 /* Progressive disclosure (Hick's Law).
-   The four controls that drive the headline figure stay visible. The rest
-   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   The controls that drive the headline figure stay visible. The rest refine
+   it and open on request, but never one alone: a fold that hides a single
+   control costs a tap and saves nothing. The field nodes are MOVED, not rebuilt, so
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
@@ -3405,7 +3359,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   var seg = panel.querySelector('.seg');
   var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
   if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
-  if(!extra.length) return;
+  if(extra.length < 2) return;
 
   var d = document.createElement('details');
   d.className = 'adv';
@@ -3455,13 +3409,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   });
 })();
 </script>
-<script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
-<script src="assets/js/pb-calc-motion.js?v=ae5afac6"></script>
+<script src="assets/js/pb-peek.js?v=156e3797"></script>
+<script src="assets/js/pb-after.js?v=17f9a45b"></script>
+<script src="assets/js/pb-calc-motion.js?v=0ab7c99c"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-kit.js?v=f2ab740a"></script>
-<script src="assets/js/pb-askresult.js?v=389dddb3"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
+<script src="assets/js/pb-kit.js?v=7681cfbc"></script>
+<script src="assets/js/pb-askresult.js?v=065b81d6"></script>
 </body>
 </html>

@@ -88,6 +88,7 @@ function setStatus(i) {
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
   }
   $('segInd').style.transform = 'translateX(' + (i * 100) + '%)';
+  $('taxStatus').value = $('st' + i).getAttribute('aria-label');   /* what the emailed result says (assets/js/pb-after.js) */
   calc();
 }
 

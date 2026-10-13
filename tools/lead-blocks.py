@@ -6,7 +6,7 @@
 
     ask        "Ask us. We reply by email." (Netlify form "enquiry"):
                the home, starter, directors', booking and glossary pages,
-               and the middle of four guides (at their <!-- ASK-HERE --> line)
+               and the middle of five guides (at their <!-- ASK-HERE --> line)
     jobs       the old jobs timeline ("pension-trace"): tracker.html
     fee        the fee check ("fee-check"): index.html
     yearend    the year-end reminder ("year-end-reminder"): director.html
@@ -44,7 +44,7 @@ BLOCKS = {
             'js': [FORMS, KIT]},
     'ask': {'pages': ['index.html', 'starter.html', 'director.html', 'booking.html', 'pensions-over-50.html',
                       'uk-pensions-in-ireland.html', 'self-employed-pensions.html', 'director-year-end-checklist.html',
-                      'glossary.html'],
+                      'glossary.html', 'director-pension-rules.html'],
             'parts': ['css', 'html'],
             'js': [FORMS, 'assets/js/pb-ask.js']},
     'jobs': {'pages': ['tracker.html'], 'parts': ['css', 'html'],
@@ -74,6 +74,7 @@ ANCHORS = {
     ('ask', 'uk-pensions-in-ireland.html'): ('<!-- ASK-HERE -->\n', 'after'),
     ('ask', 'self-employed-pensions.html'): ('<!-- ASK-HERE -->\n', 'after'),
     ('ask', 'director-year-end-checklist.html'): ('<!-- ASK-HERE -->\n', 'after'),
+    ('ask', 'director-pension-rules.html'): ('<!-- ASK-HERE -->\n', 'after'),
     # the glossary: under the two games, before the terms (12 October 2026: a form on every page)
     ('ask', 'glossary.html'): ('<section style="padding-top:36px"><div class="wrap">\n  <div class="pb-tix-scope">', 'before'),
     ('jobs', 'tracker.html'): ('</div></header>\n', 'after'),

@@ -71,7 +71,7 @@
   background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
 .sft-open .sft-col-fill{border-top:2px dashed var(--slate);border-radius:0 0 2px 2px}
 .sft-strip b{display:block;font-size:1rem;font-weight:600;color:var(--ink-2)}
-.sft-strip li>span:last-child{display:block;font-size:1rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.25}
+.sft-strip li>span:last-child{display:block;font-size:1rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.25}
 .sft-strip li:hover .sft-col-fill{background:#AEB8C6}
 .sft-strip li.sft-on .sft-col-fill{background:var(--slate)}
 .sft-strip li.sft-on b{color:var(--ink)}
@@ -89,6 +89,18 @@
   .sft-strip{gap:6px}
   .sft-cols{--colh:160px}
   .sft-strip li>span:last-child{font-size:1rem}
+}
+/* a phone: the amounts keep to their columns. The last one's "+" steps
+   aside; its dashed top and its year, 2030+, say it is open-ended. Its
+   chip, the one with the longest label, takes a little more of the row. */
+@media(max-width:420px){
+  .sft-plus{display:none}
+  .sft-chips{grid-template-columns:repeat(4,minmax(0,1fr)) minmax(0,1.3fr)}
+}
+/* the narrowest phones: three chips a row, and the amounts may wrap */
+@media(max-width:360px){
+  .sft-chips{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sft-strip li>span:last-child{white-space:normal;overflow-wrap:anywhere}
 }
 :root.pb-motion .sft-col-fill{transition:height var(--pb-t-fill),background-color var(--pb-t-swap)}
 :root.pb-motion .sft-col-over{transition:height var(--pb-t-fill),bottom var(--pb-t-fill)}

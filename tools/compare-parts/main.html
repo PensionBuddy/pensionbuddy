@@ -1,7 +1,7 @@
 <main id="main" tabindex="-1">
 <div class="phead"><div class="wrap">
   <h1>Auto-enrolment gets no tax relief. A pension <span class="hl">through a broker</span> does.</h1>
-  <p>What goes into your pension each year, both ways, for your salary. It does not pick for you.</p>
+  <p>What goes into your pension each year, both ways. It does not pick for you.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="broker-vs-autoenrolment">
@@ -18,12 +18,13 @@
     <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a figure to type it.</p>
-    <div class="field"><div class="row"><label for="salary">Your salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000" data-pb-ticks="relief-cap"></div>
-    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="65" value="35" data-pb-ticks="relief-age"></div>
+    <div class="field"><div class="row"><label for="salary">Your salary</label><span class="val" id="salaryV">€50,000</span></div><input type="range" id="salary" min="20000" max="250000" step="1000" value="50000"></div>
+    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">35</span></div><input type="range" id="age" min="18" max="65" value="35"></div>
     <div class="field" data-mode="2" hidden><div class="row"><label for="extra">Extra you save, a month</label><span class="val" id="extraV">€100</span></div><input type="range" id="extra" min="0" max="2000" step="25" value="100"></div>
     <div class="field" style="margin-bottom:0">
       <div class="row"><span class="cmp-tax-l" id="statusLabel">How you are taxed</span></div>
       <div class="seg seg-3" role="group" aria-labelledby="statusLabel"><span class="ind" id="segInd"></span><button id="st0" class="on" aria-pressed="true" aria-label="Single" onclick="setStatus(0)" type="button">Single</button><button id="st1" aria-pressed="false" aria-label="Married or civil partners, one income" onclick="setStatus(1)" type="button">Married, 1 income</button><button id="st2" aria-pressed="false" aria-label="Married or civil partners, two incomes" onclick="setStatus(2)" type="button">Married, 2 incomes</button></div>
+      <input type="hidden" id="taxStatus" value="Single" data-pb-label="How you are taxed">
     </div>
   </div>
 

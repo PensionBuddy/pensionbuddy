@@ -15,9 +15,11 @@
 
   K.reveal(box, false);
   form.addEventListener('change', function (e) {
-    if (e.target.name === 'change' && !box.classList.contains('on')) setTimeout(function () { K.reveal(box, true); }, K.motion() ? 380 : 0);
+    if (e.target.name !== 'change' || box.classList.contains('on')) return;
+    err.textContent = '';   // "Pick one." goes with the pick
+    setTimeout(function () { K.reveal(box, true); }, K.motion() ? 380 : 0);
   });
-  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim())); });
+  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim()), err); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();

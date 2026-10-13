@@ -589,7 +589,7 @@ written against; Run 10 added 25 when the transition window moved into
    and its sentence were removed from the page on Damian's decision; the
    module's `floorStatus` stays and is still tested, and the probe still
    checks it against the spec rows.* The reality check
-   keeps its age slider, and age alone cannot fix the year of the 66th
+   kept an age slider then (removed 2026-10-12, Damian's decision), and age alone cannot fix the year of the 66th
    birthday: at age *a* it is either `currentYear + 65 − a` or one later. So
    the card never names the year, and it uses the **earlier** candidate to
    decide, so that the "not a floor" wording can never be shown to someone

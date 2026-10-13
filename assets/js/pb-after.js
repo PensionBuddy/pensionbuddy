@@ -38,8 +38,9 @@
       name, email or figure goes with the event. A refusal opens a
       pre-filled email to Damian instead, as the forms always have.
 
-   Classic script; its one global, window.PBAfter, lends results() and
-   inputs() to assets/js/pb-askresult.js. */
+   Classic script; its one global, window.PBAfter, lends results(), inputs()
+   and pensions() to assets/js/pb-askresult.js, which works "Ask us about
+   this", the form between the button and "Email me this result". */
 (function () {
   'use strict';
   var after = document.getElementById('pbAfter');
@@ -101,7 +102,7 @@
   }
 
   /* what assets/js/pb-askresult.js sends with "Ask us about this" */
-  window.PBAfter = { results: results, inputs: inputs };
+  window.PBAfter = { results: results, inputs: inputs, pensions: pensions };
 
   var more = document.getElementById('ecMore'), cap = document.getElementById('ecCap');
   var form = document.getElementById('ecForm');
@@ -120,8 +121,7 @@
 
   function text(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
   function results() {
-    var parts = [], lead = document.getElementById('leadOut');
-    if (text(lead)) { parts.push(text(lead)); }
+    var parts = [];
     [].forEach.call(document.querySelectorAll('.results .res-hero, [data-pb-result]'), function (h) {
       if (shown(h) && text(h)) { parts.push(text(h)); }
     });
@@ -132,6 +132,7 @@
      which is how netlify/lib/emails.js lists them in the email */
   function clean(s) { return String(s).replace(/\|/g, '/').replace(/\s+/g, ' ').trim(); }
   function labelOf(el) {
+    if (el.getAttribute('data-pb-label')) { return el.getAttribute('data-pb-label'); }
     var set = el.type === 'radio' && el.closest('fieldset'), lg = set && set.querySelector('legend');
     if (lg) { return text(lg); }
     var l = el.id && document.querySelector('label[for="' + el.id + '"]');
@@ -142,15 +143,35 @@
   function valueOf(el) {
     if (el.type === 'checkbox') { return el.checked ? 'yes' : 'no'; }
     if (el.type === 'radio') { return text(el.closest('label')) || el.value; }
-    var shown = el.id && document.getElementById(el.id + 'V');
-    return (shown && text(shown)) || el.value;
+    var shown = el.id && document.getElementById(el.id + 'V'), v = (shown && text(shown)) || el.value;
+    var unit = el.type === 'text' && el.previousElementSibling;
+    return v && unit && text(unit) === '€' ? '€' + v : v;
   }
+  /* a control the page has put away for the other question (the comparison's
+     data-mode fields) is not one the reader filled in */
+  function away(el) { return !!el.closest('[data-mode][hidden]'); }
+  /* only what the reader can see filled in, and the buttons pressed that a
+     hidden input stands for (data-pb-label); on my-pensions, one entry per
+     pension listed, "Pension 1: Irish Life, €40,000, 1%" */
   function inputs() {
+    if (calc === 'my-pensions') { return pensions().join(' | ').slice(0, 2000); }
     return [].slice.call(document.querySelectorAll('[data-pb-calc] input[type=range], [data-pb-calc] input[type=text], ' +
-      '[data-pb-calc] input[type=checkbox], [data-pb-calc] input[type=radio]:checked'))
-      .filter(function (el) { return (el.id || el.name) && el.id !== 'pbGuessRange' && !el.closest(NOT); })
-      .map(function (el) { return clean(labelOf(el)) + ': ' + clean(valueOf(el)); })
+      '[data-pb-calc] input[type=checkbox], [data-pb-calc] input[type=radio]:checked, [data-pb-calc] input[type=hidden][data-pb-label]'))
+      .filter(function (el) { return (el.id || el.name) && el.id !== 'pbGuessRange' && !el.closest(NOT) && !away(el); })
+      .map(function (el) { return [clean(labelOf(el)), clean(valueOf(el))]; })
+      .filter(function (p) { return p[1]; })
+      .map(function (p) { return p[0] + ': ' + p[1]; })
       .join(' | ').slice(0, 2000);
+  }
+  function pensions() {
+    var P = window.PBPots;
+    return [].map.call(document.querySelectorAll('#ptRows .pt-row'), function (row) {
+      function field(pre) { var el = row.querySelector('[id^="' + pre + '"]'); return el ? clean(el.value) : ''; }
+      var name = field('ptName'), v = field('ptValue'), fee = field('ptAmc');
+      var n = P && v ? P.amount(v) : null, r = P && fee ? P.rate(fee) : null;   // a number, or null, or NaN: pots.js
+      var bits = [name, n !== null && isFinite(n) ? euroOf(n) : v, r !== null && isFinite(r) ? r + '%' : fee].filter(Boolean);
+      return bits.length ? clean(text(row.querySelector('legend'))) + ': ' + bits.join(', ') : '';
+    }).filter(Boolean);
   }
   /* THE SUMMARY (Job 4): the same figures, laid out for the email. One
      record per calculator: the headline result, the other results, and each
@@ -171,10 +192,12 @@
       labels: { potOut: 'Your pension pot when you stop work', taxOut: 'Company tax saved, all years added up' },
       you: { age: 'Your age now', ret: 'Age you stop work' },
       pension: { pot: 'Saved in your pension so far', contrib: 'Your company pays in each year', split: 'Share of that money put in your pension' },
-      assume: { risk: 'Growth each year, at this risk level (1 lowest, 7 highest)' } },
-    'broker-vs-autoenrolment': { head: 'aeTotal', more: ['ppTotal'],
-      labels: { aeTotal: 'Paid into your pension in one year, auto-enrolment', ppTotal: 'Paid into your pension in one year, your own pension' },
-      you: { age: 'Your age now', salary: 'Your salary in a year' },
+      assume: { risk: 'Growth each year' } },
+    /* two questions, one shown at a time: the head is the first of these on screen */
+    'broker-vs-autoenrolment': { head: ['aeTotal', 'cTotal'], more: ['ppTotal', 'cNet'],
+      labels: { aeTotal: 'Paid into your pension in one year, auto-enrolment', ppTotal: 'Paid into your pension in one year, your own pension',
+                cTotal: 'Paid into your pension in one year, auto-enrolment and your extra', cNet: 'From you, in one year' },
+      you: { age: 'Your age now', salary: 'Your salary in a year', taxStatus: 'How you are taxed' },
       pension: { extra: 'Extra you save each month' } },
     'pension-fees-calculator': { head: 'potA', more: ['potB'], years: function () { return num('years'); },
       projected: ['potA', 'potB'],
@@ -197,7 +220,7 @@
     'pia': { head: 'penOut', more: ['piaOut', 'etfOut'], years: function () { return num('years'); },
       projected: ['penOut', 'piaOut', 'etfOut'],
       labels: { penOut: 'In a pension, at the end', piaOut: 'In a PIA (proposed), at the end', etfOut: 'In a fund outside a pension, at the end' },
-      you: { amount: 'You put in each month', years: 'Years you put money in' },
+      you: { amount: 'You put in each month', years: 'Years you put money in', taxRate: 'Your income tax rate' },
       assume: { growth: 'Growth each year, before tax', piaRate: 'PIA tax rate', piaThreshold: 'PIA tax-free amount' } }
   };
   function num(id) { var el = document.getElementById(id); return el ? +el.value : 0; }
@@ -216,7 +239,7 @@
   function rows(map) {
     return Object.keys(map || {}).map(function (id) {
       var el = document.getElementById(id);
-      if (!el) { return null; }
+      if (!el || away(el)) { return null; }
       return { label: map[id], value: clean(valueOf(el)) };
     }).filter(function (r) { return r && r.value; });
   }
@@ -227,7 +250,8 @@
       return JSON.stringify({ v: 1, calc: calc, notes: list.slice(0, 12) }).slice(0, 4000);
     }
     var years = cfg.years ? cfg.years() : 0;
-    var out = { v: 1, calc: calc, head: figure(cfg, cfg.head, years), more: [], groups: [] };
+    var head = [].concat(cfg.head).map(function (id) { return figure(cfg, id, years); }).filter(Boolean)[0] || null;
+    var out = { v: 1, calc: calc, head: head, more: [], groups: [] };
     (cfg.more || []).forEach(function (id) { var r = figure(cfg, id, years); if (r) { out.more.push(r); } });
     var assume = rows(cfg.assume);
     if (years > 0 && cfg.projected && window.PBAssume) {

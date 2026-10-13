@@ -17,18 +17,6 @@ window.PBGlossary = [
   ]
  },
  {
-  "id": "tax-relief",
-  "name": "Tax relief",
-  "def": "Tax you do not pay on pension contributions, within Revenue\u2019s age-related limits. At the higher rate, \u20ac100 in can cost about \u20ac60, with around \u20ac40 back.",
-  "tip": true,
-  "pats": [
-   [
-    "Tax relief",
-    false
-   ]
-  ]
- },
- {
   "id": "avc",
   "name": "Additional Voluntary Contribution (AVC)",
   "def": "Extra payments into a workplace pension, usually with tax relief.",
@@ -41,6 +29,18 @@ window.PBGlossary = [
    [
     "AVC",
     true
+   ]
+  ]
+ },
+ {
+  "id": "tax-relief",
+  "name": "Tax relief",
+  "def": "Tax you do not pay on pension contributions, within Revenue\u2019s age-related limits.",
+  "tip": true,
+  "pats": [
+   [
+    "Tax relief",
+    false
    ]
   ]
  },

@@ -2,19 +2,17 @@
    THE PERSONAL INVESTMENT ACCOUNT (pia.html). Simplified on
    12 October 2026 (the owner: "PIA needs to be simplified
    greatly"): the calculator first, one comparison (three bars on
-   one scale), then the proposal in brief and a short table.
+   one scale), then the proposal in three facts. The sources sit in
+   "How we worked this out".
    Every figure is from assets/js/pia.js. No text here is under
    1rem: the page is a calculator and keeps the 16px floor.
    ============================================================ */
-.pia-asat{margin:10px 0 0;font-size:1rem;font-weight:600;color:var(--ink-2)}
-.phead .pia-asat{max-width:760px}
 .pia-sec{padding:56px 0 8px}
 .pia-sec h2{margin:0}
 .pia-src{margin:14px 0 0;max-width:760px;font-size:1rem;line-height:1.55;color:var(--ink-2)}
 /* inline links in a line of prose (WCAG 2.5.8's inline exception): the
    site's 44px reach rule makes them inline blocks, which breaks the line */
 .pia-sec p.pia-src a:not(.btn){display:inline;padding:0;margin:0;line-height:inherit;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
-.pia-t td a{display:inline;padding:0;margin:0;color:var(--teal-700);text-decoration:underline;text-underline-offset:2px}
 
 /* ---- the inputs ---- */
 .pia-lbl{font-weight:600;color:var(--ink)}
@@ -27,6 +25,8 @@
 .pia-adv > summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:4px}
 .pia-adv-l{font-weight:700;color:var(--ink)}
 .pia-adv-v{font-weight:500;color:var(--ink-2);font-variant-numeric:tabular-nums}
+/* a phone: the mark stays on the label's row and the figures run underneath */
+@media(max-width:600px){.pia-adv-l{flex:1}.pia-adv-v{order:1;flex-basis:100%}}
 .pia-euro{display:flex;align-items:center;gap:8px;margin-top:8px;border:1.5px solid var(--line-2);border-radius:var(--r-md);padding:0 12px;background:var(--surface)}
 .pia-euro span{font-weight:600;color:var(--ink-2)}
 .pia-euro input{flex:1;min-width:0;border:0;background:none;font:600 1.05rem var(--font);color:var(--ink);padding:12px 0;font-variant-numeric:tabular-nums}
@@ -85,26 +85,8 @@
 .pia-facts b{display:block;font-size:1.3rem;line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
 .pia-facts span{display:block;margin-top:6px;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 
-/* ---- side by side ---- */
-.pia-tablewrap{margin-top:22px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);overflow:hidden}
-.pia-t{width:100%;border-collapse:collapse;font-size:1rem;line-height:1.5}
-.pia-t th,.pia-t td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.pia-t thead th{background:var(--surface-2);font-weight:700;color:var(--ink)}
-.pia-t tbody th{font-weight:600;color:var(--ink);width:19%}
-.pia-t tbody tr:last-child th,.pia-t tbody tr:last-child td{border-bottom:0}
-
-@media(max-width:900px){
-  .pia-facts{grid-template-columns:1fr 1fr}
-}
 @media(max-width:700px){
   .pia-facts li{padding:16px}
-  /* the table becomes one card per row, each cell labelled */
-  .pia-t thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .pia-t,.pia-t tbody,.pia-t tr,.pia-t th,.pia-t td{display:block;width:auto}
-  .pia-t tbody th{width:auto;background:var(--surface-2);padding:12px 16px}
-  .pia-t td{padding:8px 16px;border-bottom:0}
-  .pia-t td:last-child{padding-bottom:14px}
-  .pia-t td::before{content:attr(data-l) ": ";font-weight:700;color:var(--ink)}
   .pia-st th,.pia-st td{padding:9px 4px}
 }
 /* a phone: one card, a row a fact */

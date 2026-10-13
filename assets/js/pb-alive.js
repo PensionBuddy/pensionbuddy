@@ -90,7 +90,8 @@
 
   /* ------------------------------------------------- words out of a mask -- */
   /* the words of a heading, each in a mask it rises out of; a full stop
-     after a highlight keeps to its line, as on the audience heroes */
+     after a highlight keeps to its line, as on the audience heroes, and
+     words joined by a no-break space (&nbsp;) share one mask */
   function split(h) {
     if (h.classList.contains('pb-al-split') || h.classList.contains('pb-words')) { return 0; }
     var n = 0;
@@ -103,9 +104,9 @@
             if (last) { last.textContent += lead[0]; c.textContent = c.textContent.slice(lead[0].length); }
           }
           var frag = document.createDocumentFragment();
-          c.textContent.split(/(\s+)/).forEach(function (w) {
+          c.textContent.split(/([ \t\n\r\f]+)/).forEach(function (w) {
             if (!w) { return; }
-            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            if (/^[ \t\n\r\f]+$/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
             var m = document.createElement('span'); m.className = 'pb-al-m';
             var s = document.createElement('span'); s.className = 'pb-al-w'; s.style.setProperty('--i', n++); s.textContent = w;
             m.appendChild(s); frag.appendChild(m);

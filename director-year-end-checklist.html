@@ -1702,8 +1702,8 @@ a.assure:hover{border-color:var(--teal)}
    stored or sent. assets/js/pb-ck-tools.js unhides and fills the picker,
    the line and the age bars; assets/js/pb-ck-motion.js draws the boxes and
    the group dots. Company payments are ink, your own teal, throughout.
-   Print hides the site's chrome, the picker and the button, and prints the
-   dates and the list with its boxes. */
+   Print hides the site's chrome, the picker, the button and the related
+   pages, and prints the dates and the list with its boxes. */
 .legal.ck{padding-bottom:20px}
 .legal.ck-more{padding-top:0}
 .legal.ck .intro{margin-bottom:0}
@@ -1807,7 +1807,7 @@ html:not(.pb-js) .ck-due-n{display:none}
   .ck-bars{gap:5px}
 }
 @media print{
-  nav,footer,.announce,.skip,.ck-print-row,.pb-b-btn,.pb-b-panel,.pb-consent,.pb-bookbar,.ck-ye,.ck-line,.ck-bars,.ck-dots{display:none!important}
+  nav,footer,.announce,.skip,.ck-print-row,.pb-b-btn,.pb-b-panel,.pb-consent,.pb-bookbar,.ck-ye,.ck-line,.ck-bars,.ck-dots,.pb-related{display:none!important}
   body{background:#fff!important}
   .legal{padding:0}
   .ck-list input{accent-color:#000}
@@ -2400,6 +2400,7 @@ main h1{font-weight:800}
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -2478,9 +2479,12 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}
 /* LEAD:ask:END */
 </style>
 </head>
@@ -2790,11 +2794,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -2831,9 +2835,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-ck-tools.js?v=e09d2483"></script>
-<script src="assets/js/pb-ck-motion.js?v=9c903247"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
+<script src="assets/js/pb-ck-motion.js?v=55c5dc89"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
-<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
+<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
 </body>
 </html>

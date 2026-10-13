@@ -97,9 +97,12 @@
     if (top < 70 || top > innerHeight - 120) ok.scrollIntoView({ block: 'center', behavior: motion() ? 'smooth' : 'auto' });
   }
 
-  function okField(input, good) {
+  /* the tick on a field that is right; given the form's message, that goes
+     as soon as the field is put right */
+  function okField(input, good, err) {
     var f = input.closest('.ffield');
     if (f) f.classList.toggle('is-ok', !!good);
+    if (good && err) err.textContent = '';
   }
 
   window.PBKit = { motion: motion, shake: shake, euro: euro, count: count, reveal: reveal, replyBy: replyBy,

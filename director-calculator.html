@@ -464,11 +464,6 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 .vsmark{font-size:13px;font-weight:700;color:var(--ink-3);background:var(--surface);border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .chart-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 18px;box-shadow:var(--sh-sm)}
 .chart-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.max-card{background:var(--surface-2);border-radius:var(--r-lg);padding:24px 28px}
-.max-card .mt{font-size:13px;font-weight:700;color:var(--ink-3);margin-bottom:9px}
-.max-card .mbig{font-size:19px;color:var(--ink);line-height:1.5;font-weight:500;letter-spacing:-0.01em}
-.max-card .mbig b{font-weight:700;color:var(--ink)}
-.max-card .mnote{font-size:12.5px;color:var(--ink-2);margin-top:12px;line-height:1.6}
 .cta-band{padding:64px 0 8px}
 .cta-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:36px 40px;box-shadow:var(--sh-md);display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;position:relative;overflow:hidden}
 .cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 100% 0,var(--teal-50),transparent 55%);pointer-events:none}
@@ -647,7 +642,7 @@ nav.nav-hidden{transform:translateY(-100%)}
 }
 
 /* CLS LOCKS, measured bounding boxes so recalculation never shifts layout */
-@media(min-width:921px){.res-hero{min-height:282px}.chart-card{min-height:287px}.vs-card{min-height:308px}.max-card{min-height:267px}.email-cap{min-height:187px}}
+@media(min-width:921px){.res-hero{min-height:282px}.chart-card{min-height:287px}.vs-card{min-height:308px}.email-cap{min-height:187px}}
 
 /* ---- Ask Buddy widget ---- */
 .pb-b-btn{position:fixed;right:18px;bottom:18px;z-index:240;display:flex;align-items:center;gap:10px;padding:8px 18px 8px 8px;background:var(--ink);color:#FBF7EF;border:1px solid rgba(255,255,255,.14);border-radius:999px;box-shadow:var(--sh-lg);cursor:pointer;font:inherit;font-weight:700;font-size:15px;letter-spacing:-.01em;transition:transform .18s ease,box-shadow .18s ease}
@@ -920,10 +915,7 @@ a.btn{font-weight:600}
 /* `.relief-card .rt` is (0,2,0) and outranked the pass-7 fix at (0,1,0) */
 .relief-card .rt,.boost-card .rt,.panel .rt,.rt{color:#8C6010}
 
-/* `.max-card .mt` mirrored `.relief-card .rt` on the director calculator - the
-   same amber label - until Run 42 made the card neutral: a funding ceiling is
-   neither money missing nor money back. */
-.max-card .mt,.mt{color:var(--ink-3)}
+.mt{color:var(--ink-3)}
 
 /* ============================================================
    PB-SONA pass 9 - radius discipline + one tier of elevation
@@ -933,7 +925,7 @@ a.btn{font-weight:600}
 /* --- radius: 4 / 6 / 8, nothing else (true circles excepted) --- */
 :root{--r-sm:4px; --r-md:6px; --r-lg:8px; --r-xl:8px}
 
-.btn,details,.tcard,.panel,.magnet,.pains,.callbox,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,.email-cap input,.field input,.ffield input,.nav-links.open,.hero-card,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
+.btn,details,.tcard,.panel,.magnet,.pains,.callbox,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.email-cap input,.field input,.ffield input,.nav-links.open,.hero-card,.about-port,.pb-b-panel,.pb-b-btn{border-radius:8px}
 
 .step .sx,.logo-mark,.boost-ico,.gterm .abbr,.hc-pill,.hc-badge,.about-port .badge,.tag,.pb-consent .pb-c-yes,.pb-consent .pb-c-no,.seg,.ec-row{border-radius:6px}
 
@@ -1410,7 +1402,7 @@ input[type=range]::-moz-range-thumb{background:var(--aqua);border:3px solid #fff
 .hc-figure .hc-flabel,.hero-card .hc-flabel{color:var(--ink-2)}
 
 /* --- softer shapes: square corners read formal --- */
-.btn,.hero-card,.about-port,.tcard,.panel,.magnet,.pains,.proofs,.cover,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.max-card,.waitcard,.deadline,details,.email-cap input,.field input,.ffield input,.nav-links.open{border-radius:12px}
+.btn,.hero-card,.about-port,.tcard,.panel,.magnet,.pains,.proofs,.cover,.chart-card,.relief-card,.boost-card,.cta-card,.book-card,.waitcard,.deadline,details,.email-cap input,.field input,.ffield input,.nav-links.open{border-radius:12px}
 .step .sx,.logo-mark,.boost-ico,.tag,.dl-tag,.hc-pill,.hc-badge,.nav-links a.lnk,.nav-tick,.seg button,.ec-row{border-radius:8px}
 .hc-bars i,.rv-bar i{border-radius:5px 5px 0 0}
 
@@ -1437,10 +1429,6 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
   font-family:var(--font);font-size:.75rem;font-weight:500;
   color:var(--ink-2);cursor:pointer;list-style:none;padding:15px 0}
 .adv > summary::-webkit-details-marker{display:none}
-.adv > summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-4px 0 0 auto;
-  transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.adv[open] > summary::after{transform:rotate(-135deg);margin-top:2px}
 .adv > summary:hover{color:var(--ink)}
 .adv .adv-in{padding-top:4px;padding-bottom:6px}
 
@@ -1543,50 +1531,17 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    All three are this one mark now, and this block is its only
    owner - nothing above restyles it and nothing below needs to.
    ============================================================ */
-summary .pm,.pb-b-q .pm,.adv > summary::after{
+summary .pm,.pb-b-q .pm,.adv > summary::after,.pb-work > summary::after{
   width:26px;height:26px;border-radius:8px;box-sizing:border-box;
   background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
   display:flex;align-items:center;justify-content:center;
   font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
-  flex-shrink:0;margin-left:auto;
+  flex-shrink:0;margin-left:auto;transform:none;
   transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
              border-color .25s ease,color .25s ease}
-details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after,.pb-work[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
-summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
-
-/* ============================================================
-   F4 - the corporation tax relief safe, a still picture.
-
-   A drawn safe beside the caption "Corporation tax saved", under the
-   two figures in .res-hero. Decorative only: it states nothing, it
-   is aria-hidden in full, and the figure and its .rsub carry the
-   meaning for a screen reader.
-
-   It is the same for every figure (Run 32, docs/UX-MOTION-AUDIT.md
-   5a, D19: a neutral reveal, no reward). It used to unlock as the
-   relief rose, the dial turning, the door swinging and the cavity
-   filling with amber on a capped log scale: a reward for a bigger
-   contribution, drawn in the gap's colour, showing proportions the
-   money does not have (€900 filled 45%, €90,000 76%). No
-   script drives it now, and nothing on it moves.
-
-   Tones are the dark panel's own: the mint it already uses for
-   accents and the two white washes behind .res-hero .rbar i and
-   .divline. No image, no SVG, no canvas.
-   ============================================================ */
-.pb-safe-row{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:14px}
-.pb-safe{position:relative;width:104px;height:104px;flex:0 0 auto}
-.pb-safe-shell{position:absolute;inset:0;border-radius:12px;background:var(--surface);border:1px solid var(--teal-100)}
-.pb-safe-door{position:absolute;inset:6px;border-radius:10px;border:1px solid var(--teal-100);
-  background:var(--teal-50);
-  display:flex;align-items:center;justify-content:center}
-.pb-safe-dial{width:34px;height:34px;border-radius:50%;border:2px solid var(--teal);position:relative}
-.pb-safe-dial::before,.pb-safe-dial::after{content:"";position:absolute;left:50%;top:50%;width:2px;height:22px;
-  margin:-11px 0 0 -1px;background:var(--teal);border-radius:1px}
-.pb-safe-dial::after{transform:rotate(90deg)}
-.pb-safe-handle{position:absolute;right:7px;top:50%;width:4px;height:24px;margin-top:-12px;border-radius:2px;background:var(--ink-3)}
-.pb-safe-cap{flex:1 1 180px;min-width:0;font-size:12.5px;color:var(--ink-2);line-height:1.5}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after,.pb-work > summary:hover::after{border-color:var(--ink-2)}
 
 /* ============================================================
    F5 - "Take a guess first", and the veil it puts over the one
@@ -1652,7 +1607,7 @@ summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var
 .tcard .who b,.foot-col h2,.step .sx,.tl .tt,.tl .tn,.assure .at,.rt,.mt,.wt,
 .tk-l,.nt-l,.dl-tag,.tag,
 .phone-role,.arc-now,.modebar .modelab,.qfield label,.qpersona legend,
-.promise .pt,.letterhead span,.relief-card .rt,.max-card .mt,.vs-col .vt,
+.promise .pt,.letterhead span,.relief-card .rt,.vs-col .vt,
 .pb-scale-title,.tmember .trole,.adv > summary,.strip-item{
   font-family:var(--font);text-transform:none;letter-spacing:0;font-weight:600}
 .eyebrow{font-size:.85rem;font-weight:600;gap:0}
@@ -1842,6 +1797,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    veil, the summary names nothing. Byte-identical on both calculators. */
 .pb-work{margin:14px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px}
 .pb-work summary{cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+/* the site's one disclosure mark (the "ONE icon set" block), not the browser's triangle */
+.pb-work > summary{display:flex;align-items:center;gap:12px;list-style:none}
+.pb-work > summary::-webkit-details-marker{display:none}
+.pb-work > summary::after{content:"+"}
 .pb-work summary:focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:4px}
 .pb-work ul{margin:10px 0 2px;padding:0;list-style:none}
 .pb-work li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--ink-2);font-variant-numeric:tabular-nums}
@@ -2132,8 +2091,6 @@ main .infoadvice p,
 main .lsrow .lsgap,
 main .lsrow .lsname,
 main .lsrow .lstarget,
-main .max-card .mnote,
-main .max-card .mt,
 main .mbar-lab,
 main .mbar-scale,
 main .mclose,
@@ -2174,7 +2131,6 @@ main .pb-paw-note,
 main .pb-peek-guess,
 main .pb-peek-lab,
 main .pb-rec-key,
-main .pb-safe-cap,
 main .pb-scale-lab,
 main .pb-scale-sub,
 main .pb-scale-title,
@@ -2743,8 +2699,11 @@ main h1{font-weight:800}
 .dc-wait-bars{display:flex;flex-direction:column;gap:10px;margin:2px 0 14px}
 .dc-wait-bars[hidden]{display:none}
 .dc-wait-bar{display:grid;grid-template-columns:5.4em minmax(0,1fr) auto;align-items:center;gap:10px;font-size:1rem}
+.dc-wait-cap{margin:0;font-size:1rem;color:var(--ink-2)}
 .dc-wait-l{color:var(--ink-2)}
 .dc-wait-bar b{min-width:6.6em;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+#waitYearsV{white-space:nowrap}
+@media(max-width:420px){.dc-wait-bar{grid-template-columns:4.6em minmax(0,1fr) auto}.dc-wait-bar b{min-width:0}}
 .dc-wait-track{position:relative;height:14px;overflow:hidden;border-radius:99px;background:rgba(11,31,28,.07)}
 .dc-wait-now,.dc-wait-late{position:absolute;left:0;top:0;bottom:0;background:var(--slate)}
 .dc-wait-now{width:100%;border-radius:99px}
@@ -2850,17 +2809,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="panel">
     <h2>Your details</h2>
     <p class="hint">Slide, or tap a figure to type it.</p>
-    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48"></div>
-    <div class="field"><div class="row"><label for="ret">Retire at</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66"><p class="subnote" id="retNote">Retiring early? Generally, a director with at least 20% interest in a company must first cut all links with it, shares included (Revenue).</p></div>
-    <div class="field"><div class="row"><label for="pot">In pensions now</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000"></div>
-    <div class="field" style="margin-bottom:0"><div class="row"><label for="contrib">The company pays in, a year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000"></div>
+    <div class="field"><div class="row"><label for="age">Your age</label><span class="val" id="ageV">48</span></div><input type="range" id="age" min="25" max="69" value="48" style="--fill:52.27%"></div>
+    <div class="field"><div class="row"><label for="ret">Retire at</label><span class="val" id="retV">66</span></div><input type="range" id="ret" min="50" max="70" value="66" style="--fill:80.00%"><p class="subnote" id="retNote" hidden>Before 60, a director with at least 20% interest in a company must first cut all ties with it, shares included (Revenue).</p></div>
+    <div class="field"><div class="row"><label for="pot">In pensions now</label><span class="val" id="potV">€150,000</span></div><input type="range" id="pot" min="0" max="3000000" step="10000" value="150000" style="--fill:5.00%"></div>
+    <div class="field" style="margin-bottom:0"><div class="row"><label for="contrib">The company pays in, a year</label><span class="val" id="contribV">€40,000</span></div><input type="range" id="contrib" min="0" max="500000" step="2500" value="40000" style="--fill:8.00%"></div>
     <input type="hidden" id="risk" value="4">
   </div>
 
   <div class="results">
     <div class="res-hero">
-      <div><div class="rl">Your pot at <span id="pcAtPot">66</span></div><div class="big" id="potOut" data-pb-wait>€0</div></div>
-      <div><div class="rl">Company tax saved</div><div class="big" id="taxOut" data-pb-wait>€0</div><div class="rsub">12.5% of each payment, to <span id="pcAtTax">66</span></div></div>
+      <div><div class="rl">Your pot at <span id="pcAtPot">66</span></div><div class="big" id="potOut">€1,511,849</div></div>
+      <div><div class="rl">Company tax saved</div><div class="big" id="taxOut">€90,000</div><div class="rsub">12.5% of each payment, to <span id="pcAtTax">66</span></div></div>
       <div class="pc-mix" id="pcMix">
         <div class="pc-bar" aria-hidden="true"><i class="pc-b-saved" id="pcBarSaved" style="width:9.92%"></i><i class="pc-b-paid" id="pcBarPaid" style="width:47.62%"></i><i class="pc-b-grow" id="pcBarGrow" style="width:42.45%"></i></div>
         <ul class="pc-key">
@@ -2874,17 +2833,18 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">Salary would be deductible for the company too.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <details class="pb-work"><summary>How we worked this out</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
+    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in by the company, €40,000 a year to 66 <b>€720,000</b></li><li>Built up already <b>€150,000</b></li><li>Growth at 5% a year <b>€641,849</b></li><li>Your pot at 66 <b>€1,511,849</b></li><li>In today&rsquo;s money, prices rising 2% a year for 18 years <b>€1,058,535</b></li><li>Company tax: €40,000 &times; 12.5% = €5,000 a year, for 18 years <b>€90,000</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> &mdash; the cap on the total pension fund that gets full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed on drawdown, so the practical ceiling is lower than this illustration. Damian will work out your exact figures.</p>
 
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
-      <div class="field pb-wait-f"><div class="row"><label for="waitYears">Start the company payments</label><span class="val" id="waitYearsV">in 1 year</span></div><input type="range" id="waitYears" min="1" max="10" step="1" value="1"></div>
-      <div class="dc-wait-bars" id="dcWaitBars" aria-hidden="true">
-        <div class="dc-wait-bar"><span class="dc-wait-l">Start now</span><span class="dc-wait-track"><i class="dc-wait-now"></i></span><b id="dcWaitNow">€1,058,535</b></div>
-        <div class="dc-wait-bar"><span class="dc-wait-l" id="dcWaitLL">In 1 year</span><span class="dc-wait-track"><i class="dc-wait-late" id="dcWaitLate" style="width:93.8%"></i><i class="dc-wait-gap" id="dcWaitGap" style="left:93.8%;width:6.2%"></i></span><b id="dcWaitLateV">€992,886</b></div>
+      <div class="field pb-wait-f"><div class="row"><label for="waitYears">Start the company payments</label><span class="val" id="waitYearsV">in 1 year</span></div><input type="range" id="waitYears" min="1" max="10" step="1" value="1" style="--fill:0.00%"></div>
+      <div class="dc-wait-bars" id="dcWaitBars">
+        <p class="dc-wait-cap">In today&rsquo;s money</p>
+        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l">Start now</span><span class="dc-wait-track"><i class="dc-wait-now"></i></span><b id="dcWaitNow">€1,058,535</b></div>
+        <div class="dc-wait-bar" aria-hidden="true"><span class="dc-wait-l" id="dcWaitLL">In 1 year</span><span class="dc-wait-track"><i class="dc-wait-late" id="dcWaitLate" style="width:93.8%"></i><i class="dc-wait-gap" id="dcWaitGap" style="left:93.8%;width:6.2%"></i></span><b id="dcWaitLateV">€992,886</b></div>
       </div>
-      <div class="wtext" id="waitOut">Move the sliders to see it.</div>
+      <div class="wtext" id="waitOut">Wait 1 year: about <b>€65,649</b> less at 66.</div>
     </div>
 
     <div class="vs-card pb-split" id="splitCard">
@@ -2892,7 +2852,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="sub" id="vsSub">The company&rsquo;s €40,000, split two ways.</p>
       <div class="vs-split">
         <div class="vs-split-head"><label for="split">Into your pension</label><span class="vs-split-val" id="splitV">50%</span></div>
-        <input type="range" id="split" min="0" max="100" step="10" value="50" aria-valuetext="50% into your pension">
+        <input type="range" id="split" min="0" max="100" step="10" value="50" aria-valuetext="50% into your pension" style="--fill:50.00%">
       </div>
       <p class="vs-split-out" id="splitOut">Put 50% in your pension: you keep <b>€9,530</b> now, your pension gets <b>€20,000</b>.</p>
       <div class="dc-sbar" aria-hidden="true"><i class="dc-s-pen" id="dcBarPen" style="width:50%"></i><span class="dc-s-sal" id="dcBarSal" style="width:50%"><i class="dc-s-home" style="width:47.65%" id="dcBarHome"></i><i class="pb-cut-it" style="width:40%"></i><i class="pb-cut-usc" style="width:8%"></i><i class="pb-cut-prsi" id="pbCutPrsi" style="width:4.35%"></i></span></div>
@@ -2902,19 +2862,33 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li><i class="dc-k-tax" aria-hidden="true"></i><span>40% income tax, 8% USC, <b id="pbCutPrsiN">4.35%</b> PRSI</span></li>
       </ul>
       <p class="dc-saved">Tax saved now: <b id="taxNow">€10,470</b>. A pension is taxed when you take it.</p>
-      <details class="pb-work"><summary>How we worked this out</summary><ol id="splitWork"><li>The company pays out €40,000 either way.</li><li>Into your pension: 50% of €40,000 = <b>€20,000</b>. It goes in whole.</li><li>As salary: the other €20,000. Income tax 40%, USC 8% and PRSI 4.35% take 52.35%, so you keep 47.65% = <b>€9,530</b>.</li><li>Tax saved: 52.35% of the €20,000 in your pension = <b>€10,470</b>, not paid now.</li><li>Company tax: salary and pension payments are both costs the company can deduct, so it saves 12.5% of €40,000 = <b>€5,000</b> either way.</li></ol><p class="pb-steps-note">Left out: employer PRSI on salary, the lower tax and USC bands, and tax on the pension when you take it.</p></details>
+      <details class="pb-work"><summary>The split, step by step</summary><ol id="splitWork"><li>The company pays out €40,000 either way.</li><li>Into your pension: 50% of €40,000 = <b>€20,000</b>. It goes in whole.</li><li>As salary: the other €20,000. Income tax 40%, USC 8% and PRSI 4.35% take 52.35%, so you keep 47.65% = <b>€9,530</b>.</li><li>Tax saved: 52.35% of the €20,000 in your pension = <b>€10,470</b>, not paid now.</li><li>Company tax: salary and pension payments are both costs the company can deduct, so it saves 12.5% of €40,000 = <b>€5,000</b> either way.</li></ol><p class="pb-steps-note">Left out: employer PRSI on salary, the lower tax and USC bands, and tax on the pension when you take it.</p></details>
     </div>
 
     <div class="chart-card">
       <h3>How your pot could grow</h3>
       <p class="pc-sub">At <span id="riskV">5% a year</span>, before charges.</p>
       <div id="chart"></div>
-      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span><span><i class="pb-k-cash"></i>The same payments kept as cash, in today&rsquo;s money</span></p>
+      <p class="pb-chart-key" id="chartKey"><span><i class="pb-k-pot"></i>Your pot</span><span id="chartKeyToday"><i class="pb-k-today"></i>In today&rsquo;s money</span><span><i class="pb-k-cash"></i>Kept as cash, in today&rsquo;s money</span></p>
     </div>
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="director-calculator">
       <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
+        <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
+        <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="hidden" name="topic" value="About a result">
+        <h2 class="pbr-h" id="pbrH">Ask us about this</h2>
+        <p class="pbr-att" id="pbrAtt"><svg class="pbr-clip" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 11.1l-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg><span id="pbrAttL"></span><b id="pbrAttV"></b></p>
+        <p class="pbr-f"><label for="pbrMsg">Your question <span class="pbr-opt">(optional)</span></label><textarea id="pbrMsg" name="message" rows="2" maxlength="1500"></textarea></p>
+        <input type="hidden" name="name">
+        <p class="pbr-f"><label for="pbrEmail">Your email</label><span class="pbr-send"><input id="pbrEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" aria-describedby="pbrErr"><button type="submit" class="btn btn-ghost pbr-go">Send</button></span></p>
+        <input type="hidden" name="contact_by" value="Email"><input type="hidden" name="phone">
+        <p class="pbr-err" id="pbrErr" role="alert"></p>
+        <p class="pbr-note">Your figures are sent with it. <a href="privacy.html">Privacy Notice</a></p>
+      </form>
+      <p class="pbr-ok" id="pbrOk" role="status" tabindex="-1" hidden><svg class="ico pb-ok-tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span><b>Sent.</b> <span id="pbrOkText" data-ok-text></span></span></p>
       <button type="button" class="pb-after-more" id="ecMore" aria-expanded="false" aria-controls="ecCap" hidden>Email me this result</button>
       <div class="pb-after-mail" id="ecCap" hidden>
         <form id="ecForm" name="calculator-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -3138,6 +3112,7 @@ function calc(){
   $('potV').textContent=euro(pot);
   $('contribV').textContent=euro(contrib);
   $('pcAtPot').textContent=ret;$('pcAtTax').textContent=ret;
+  $('retNote').hidden=ret>=60;
 
   const yearsToRet=ret-age;
   const months=yearsToRet*12;
@@ -3156,8 +3131,7 @@ function calc(){
   if(contrib>0&&yearsToRet>wy){
     const w=D.waiting({pot:pot,yearly:contrib,years:yearsToRet,delay:wy,rate:g,today:A.today});
     const nowT=A.today(w.now,yearsToRet), lateT=A.today(w.later,yearsToRet), k=nowT>0?lateT/nowT:1;
-    $('waitOut').innerHTML='Wait '+wy+(wy===1?' year':' years')+' and your pot at '+ret+
-      ' is about <b>'+euro(w.gapToday)+'</b> smaller, in today&rsquo;s money: the payments not made, and their growth.';
+    $('waitOut').innerHTML='Wait '+wy+(wy===1?' year':' years')+': about <b>'+euro(w.gapToday)+'</b> less at '+ret+'.';
     $('dcWaitLL').textContent='In '+wy+(wy===1?' year':' years');
     $('dcWaitNow').textContent=euro(nowT);$('dcWaitLateV').textContent=euro(lateT);
     $('dcWaitLate').style.width=(k*100).toFixed(2)+'%';
@@ -3493,11 +3467,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3528,8 +3502,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script>
 /* Progressive disclosure (Hick's Law).
-   The four controls that drive the headline figure stay visible. The rest
-   refine it and open on request. The field nodes are MOVED, not rebuilt, so
+   The controls that drive the headline figure stay visible. The rest refine
+   it and open on request, but never one alone: a fold that hides a single
+   control costs a tap and saves nothing. The field nodes are MOVED, not rebuilt, so
    every id, listener and slider-fill binding is preserved - which is why this
    runs after the calculator's own script rather than replacing markup. */
 (function(){
@@ -3546,7 +3521,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   var seg = panel.querySelector('.seg');
   var segField = seg ? (seg.closest('.field') || seg.parentElement) : null;
   if(segField && extra.indexOf(segField) === -1 && !segField.classList.contains('panel')) extra.push(segField);
-  if(!extra.length) return;
+  if(extra.length < 2) return;
 
   var d = document.createElement('details');
   d.className = 'adv';
@@ -3596,12 +3571,12 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-peek.js?v=efdc6d8b"></script>
-<script src="assets/js/pb-after.js?v=d66f0f1b"></script>
+<script src="assets/js/pb-peek.js?v=156e3797"></script>
+<script src="assets/js/pb-after.js?v=17f9a45b"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-kit.js?v=f2ab740a"></script>
-<script src="assets/js/pb-askresult.js?v=389dddb3"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
+<script src="assets/js/pb-kit.js?v=7681cfbc"></script>
+<script src="assets/js/pb-askresult.js?v=065b81d6"></script>
 </body>
 </html>

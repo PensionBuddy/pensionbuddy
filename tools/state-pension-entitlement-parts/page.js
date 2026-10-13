@@ -186,24 +186,21 @@ function render() {
 
   } else if (res.state === 'inconsistent') {
     show('spUnfit');
+    const span = entryYear === drawdown - 1 ? 'in ' + yr(entryYear) : 'from ' + yr(entryYear) + ' to ' + yr(drawdown - 1);
     const fit = num(res.entered) + ' paid and credited contributions is more than the ' + num(res.maxForYears) +
-      ' that fit between ' + yr(entryYear) + ' and the end of ' + yr(drawdown - 1) + ' at 52 a year.';
-    $('spUnfitFoot').innerHTML = 'These details don\'t fit together. ' + fit +
-      ' Check the contribution year you first paid PRSI.';
-    sr = 'These details do not fit together. ' + fit + ' Check the contribution year you first paid PRSI.';
+      ' that fit ' + span + '.';
+    $('spUnfitFoot').innerHTML = fit + ' Check the year you first paid PRSI.';
+    sr = 'These details do not fit together. ' + fit + ' Check the year you first paid PRSI.';
 
   } else {
     show('spHas');
     const tca = res.tca, ya = res.yearlyAverage, m2 = res.method2, award = res.award;
     const basis = award.basis;
-    const starting = 'for a pension starting in ' + yr(res.drawdownYear);
 
     $('spWeekly').textContent = euro2(award.weekly);
     $('spAnnual').textContent = euro(award.annual);
-    $('spFoot').textContent = basis === 'tie'
-      ? 'Both calculations give this figure, ' + starting + '.'
-      : 'Worked out under the ' + (basis === 'method2' ? 'Yearly Average blend' : 'Total Contributions Approach') +
-        ', ' + starting + '.';
+    /* which method is paid is the card's to say, once (mClose) */
+    $('spFoot').textContent = 'For a pension from ' + yr(res.drawdownYear) + '.';
 
     /* The two bars, on one scale: the maximum personal rate. Each fill is
        that method's own rate, and the LOWER of the two carries an amber tail
@@ -235,7 +232,7 @@ function render() {
         gap.style.width = ((highCents - lowCents) / SP.MAX_WEEKLY_CENTS * 100).toFixed(4) + '%';
         lab.hidden = false;
         lab.style.left = scale(lowCents + (highCents - lowCents) / 2);
-        lab.textContent = euro2c(highCents - lowCents);
+        lab.textContent = '+' + euro2c(highCents - lowCents);
       } else if (paidOn[m]) {
         lab.hidden = false;
         lab.style.left = scale(m === 'm1' ? tca.weeklyCents : res.method2.weeklyCents);
@@ -243,6 +240,9 @@ function render() {
       } else {
         lab.hidden = true;
       }
+      /* centred on its point, but never past either end of the bar */
+      const at = parseFloat(lab.style.left);
+      lab.style.transform = at > 88 ? 'translateX(-100%)' : at < 12 ? 'none' : '';
     });
 
     // Method 1 row
@@ -278,47 +278,47 @@ function render() {
 
     if (hasM2) {
       $('m2Fill').style.width = scale(m2.weeklyCents);
-      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.';
+      $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the higher of the two is paid.';
       const band = bandLabel(ya.band);
       $('m2Rate').textContent = euro2(m2.weekly) + ' a week';
       $('m2Detail').innerHTML = 'A yearly average of <b>' + ya.average + '</b> over <b>' + ya.years + '</b> years, ' +
         yr(res.entryYear) + ' to ' + yr(res.drawdownYear - 1) + ', falls in the ' + band + ' band at ' +
         euro2c(ya.band.weeklyCents) + ' a week. For a pension starting in ' + yr(res.drawdownYear) + ' the mix is <b>' +
-        m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Total Contributions Approach rate.';
+        m2.yaShare + '%</b> of that rate and <b>' + m2.tcaShare + '%</b> of the Method 1 rate.';
 
+      /* the card names the methods one way: Method 1 and Method 2 (their
+         full names are in "How the two methods work") */
       if (basis === 'method2') {
-        $('mClose').innerHTML = 'The Department pays the higher. That is <b>' + euro2(award.weekly) + '</b>, <b>' +
-          euro2(award.gain) + ' a week</b> more than the Total Contributions Approach alone.';
+        $('mClose').innerHTML = 'Method 2 is paid: <b>' + euro2(award.gain) + ' a week</b> more than Method 1.';
       } else if (basis === 'tie') {
-        $('mClose').innerHTML = 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.';
+        $('mClose').innerHTML = 'Both give the same figure. At a full record Method 1 already gives the maximum.';
       } else if (res.homeCaring > 0) {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.';
+        $('mClose').innerHTML = 'Method 1 is paid. Your HomeCaring Periods count under it and not in the yearly average.';
       } else {
-        $('mClose').innerHTML = 'The Department pays the higher. That is the Total Contributions Approach figure. A yearly average of ' +
-          ya.average + ' over ' + ya.years + ' years falls in the ' + band +
-          ' band, and the blend of that band\'s rate with the TCA rate comes to less.';
+        $('mClose').innerHTML = 'Method 1 is paid. A yearly average of ' + ya.average + ' over ' + ya.years +
+          ' years falls in the ' + band + ' band, and Method 2&rsquo;s blend comes to less.';
       }
 
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ' +
         (basis === 'tie'
-          ? 'and both calculations give this figure.'
+          ? 'and both methods give this figure.'
           : basis === 'method2'
-            ? 'under the Yearly Average blend. The Total Contributions Approach alone gives ' + euro2(tca.weekly) + '.'
-            : 'under the Total Contributions Approach. The Yearly Average blend gives ' + euro2(m2.weekly) + '.');
+            ? 'under Method 2. Method 1 alone gives ' + euro2(tca.weekly) + '.'
+            : 'under Method 1. Method 2 gives ' + euro2(m2.weekly) + '.');
     } else {
       $('bothSub').textContent = 'Only one calculation applies to these details.';
       $('mWhy').textContent = m2.reason === 'after-transition'
-        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
-        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing, so the Total Contributions Approach figure is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
+        ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only Method 1 applies, so on the contributions entered this is your rate.'
+        : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the yearly average gives nothing, so Method 1 is paid. The Homemaker\'s Scheme, which this page leaves out, can shorten the years and bring the average back above 10.';
       sr = 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) +
-        ' a year. Only the Total Contributions Approach applies.';
+        ' a year. Only Method 1 applies.';
     }
   }
 
   LADDER_MINS.forEach(function (min, i) {
     const you = $('yal' + i + 'You');
     you.hidden = i !== hereIdx;
-    if (i === hereIdx) you.textContent = 'Your average, ' + res.yearlyAverage.average;
+    if (i === hereIdx) you.textContent = 'You: ' + res.yearlyAverage.average;
   });
 
   /* One spoken summary rather than a dozen fragments, so a screen reader gets

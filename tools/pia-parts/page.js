@@ -29,6 +29,7 @@
   var taxRate = 40;
   var pc = function (v) { return (Math.round(v * 100) / 100).toLocaleString('en-IE') + '%'; };
   var years = function (n) { return n + (n === 1 ? ' year' : ' years'); };
+  var less = function (v) { return v >= 0.5 ? '−' + euro(v) : euro(0); };   /* no minus on €0 */
   var NONE = 'No figure yet';
   var VALTEXT = {
     amount: function (v) { return euro(v) + ' a month'; },
@@ -115,9 +116,9 @@
     $('growPen').textContent = euro(pen.grow);
     $('growPia').textContent = has ? euro(pia.grow) : NONE;
     $('growEtf').textContent = euro(etf.grow);
-    $('taxPen').textContent = '−' + euro(pen.tax);
-    $('taxPia').textContent = has ? '−' + euro(pia.tax) : NONE;
-    $('taxEtf').textContent = '−' + euro(etf.tax);
+    $('taxPen').textContent = less(pen.tax);
+    $('taxPia').textContent = has ? less(pia.tax) : NONE;
+    $('taxEtf').textContent = less(etf.tax);
     $('endPen').textContent = euro(pen.after);
     $('endPia').textContent = has ? euro(pia.after) : NONE;
     $('endEtf').textContent = euro(etf.after);
@@ -135,6 +136,7 @@
     $('r40').setAttribute('aria-pressed', v === 40 ? 'true' : 'false');
     $('r20').classList.toggle('on', v === 20);
     $('r40').classList.toggle('on', v === 40);
+    $('taxRate').value = v + '%';   /* what the emailed result says (assets/js/pb-after.js) */
     render();
   }
   $('r20').addEventListener('click', function () { setTax(20); });

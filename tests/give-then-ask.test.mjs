@@ -34,13 +34,15 @@
      G4b nor is an input event a script fires later
      G5  the reality check's jar: a trusted press on it is the reader's move
      G6  the reality check showing no figure ("No entitlement"): no #from=
-     G7  in page order: the line, the button, then "Email me this result";
-         no other booking link in the results; my-pensions: no form at all,
-         and printed, the line stays and the block does not
+     G7  in page order: the line, the button, "Ask us about this" (its
+         form in sight, shown by the script, 13 October 2026), then "Email
+         me this result"; no other booking link in the results; my-pensions:
+         the question form only, and printed, the line stays and the block
+         does not
      G8  the comparison: the line follows the card holding its rates caveat
      G9  the waitcards hold no booking link
      G10 without JavaScript: the line and the button (plain booking.html);
-         "Email me this result" and its form stay hidden
+         "Ask us about this", "Email me this result" and its form stay hidden
      G11 booking.html: "Book a call with us" and one line, no "seen your
          number" line for any #from=; the calendar at once, with no form before it; the tags taken off the
          address and handed to the calendar, utm_term saying the situation
@@ -234,7 +236,7 @@ const PARTS = `(() => {
   const shown = e => e.getClientRects().length && getComputedStyle(e).visibility === 'visible';
   const stray = res ? [...res.querySelectorAll('a[href^="booking.html"]')].filter(a => shown(a) && !a.closest('#pbAfter')).map(a => t(a)) : ['no results'];
   const prev = not[0] ? not[0].previousElementSibling : null;
-  const more = document.getElementById('ecMore');
+  const more = document.getElementById('ecMore'), ask = document.getElementById('pbrForm');
   return {
     nots: not.length, notText: t(not[0]), notCaveat: !!not[0] && not[0].classList.contains('pb-caveat'),
     blocks: blk.length, from: b ? b.getAttribute('data-pb-from') : null,
@@ -244,6 +246,7 @@ const PARTS = `(() => {
     order: (not[0] ? before(not[0], links[0]) : true) && before(links[0], more) && before(more, document.getElementById('ecForm')),
     more: more ? [t(more), more.hidden, getComputedStyle(more).display !== 'none'] : null,
     form: !!document.getElementById('ecForm'),
+    ask: ask ? [getComputedStyle(ask).display !== 'none', before(links[0], ask), !more || before(ask, more)] : null,
     stray,
     prevCaveat: !!prev && prev.classList.contains('chart-card') && !!prev.querySelector('.srcwarn'),
     waitLinks: document.querySelectorAll('.waitcard a.wlink, .waitcard a[href^="booking"]').length,
@@ -271,7 +274,7 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
     eq(`G2. ${page}: pointed at, it carries the four tags, and no #from=`, await hrefOnPoint(), 'booking.html?' + tags(page, p.variant));
   }
   if (page === 'my-pensions.html') {
-    eq(`G7. ${page}: no form, and no "Email me this result"`, [p.form, p.more], [false, null]);
+    eq(`G7. ${page}: no "Email me this result", and no form for it`, [p.form, p.more], [false, null]);
     const RM = [{ name: 'prefers-reduced-motion', value: 'reduce' }];
     await send('Emulation.setEmulatedMedia', { media: 'print', features: RM });
     const printed = await ev(`getComputedStyle(document.getElementById('pbAfter')).display`);
@@ -280,6 +283,7 @@ for (const [page, [from, loop, mail]] of Object.entries(AFTER)) {
   } else {
     eq(`G7. ${page}: the line, the button, then "Email me this result", shown by the script`, [p.order, p.more], [true, ['Email me this result', false, true]]);
   }
+  eq(`G7. ${page}: "Ask us about this" in sight, after the button and before "Email me this result"`, p.ask, [true, true, true]);
   eq(`G7. ${page}: no other booking link in the results`, p.stray, []);
   /* broker-vs-autoenrolment.html: its lead line sits in the result card, no waitcard (12 October 2026) */
   if (['pension-calculator.html', 'director-calculator.html'].includes(page))
@@ -351,8 +355,8 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
   eq(`G10. ${page} without JavaScript: no "doesn${RSQ}t show" line`, p.nots, 0);
   eq(`G10. ${page} without JavaScript: the button, wording A, plain booking.html, and its line`,
      [p.blocks, p.from, p.links, p.words, p.href, p.why], [1, from, 1, WORDS.A, 'booking.html', WHY]);
-  eq(`G10. ${page} without JavaScript: "Email me this result" and its form stay hidden`,
-     [p.more && p.more[2], await ev(`getComputedStyle(document.getElementById('ecCap')).display`)], [false, 'none']);
+  eq(`G10. ${page} without JavaScript: "Ask us about this", "Email me this result" and its form stay hidden`,
+     [p.ask && p.ask[0], p.more && p.more[2], await ev(`getComputedStyle(document.getElementById('ecCap')).display`)], [false, false, 'none']);
 }
 
 /* G11: the booking page */

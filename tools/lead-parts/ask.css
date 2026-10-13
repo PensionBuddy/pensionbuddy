@@ -82,6 +82,7 @@
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -160,6 +161,9 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}

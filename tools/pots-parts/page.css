@@ -5,9 +5,12 @@
    they type: a ring split by pension with the total in its middle, a
    key, and the yearly fees in euro. The arcs glide to their new shares
    (assets/js/pb-pots-motion.js).
-   Nothing is stored; the print button keeps a copy.
+   Nothing is stored, and nothing sent but with a question ("Want us to
+   look at these?", under the total); the print button keeps a copy.
    ============================================================ */
 .pt-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start;padding:8px 0 24px}
+/* as far under the review line as the calculators' panels (52px) */
+@media(min-width:921px){.pt-wrap{margin-top:32px}}
 .pt-panel{position:static;top:auto}
 .pt-row{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 4px;margin:0 0 14px;min-width:0}
 .pt-row legend{font-size:.95rem;font-weight:700;color:var(--ink);padding:0 6px}
@@ -55,6 +58,9 @@
 /* fees: money taken from the pot, the coral fill with ink on it */
 .pt-charges.pt-fee{background:var(--gap);color:var(--ink);border-radius:var(--r-lg);padding:12px 14px}
 .pt-charges b{font-weight:700;color:var(--ink);font-size:1.15rem}
+/* the ask under the total (pagebuild.after_block): part of the summary, no box of its own */
+.pt-sum .pb-after{margin:0 0 20px;padding:0;border:0;border-radius:0;background:none}
+.pt-sum .pb-after .btn.pb-after-btn{width:100%}
 .pt-actions{margin:0 0 12px}
 .pt-next{margin:0;font-size:.95rem}
 .pt-next a{color:var(--teal-700);font-weight:600}

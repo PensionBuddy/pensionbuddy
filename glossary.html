@@ -370,6 +370,9 @@ body.acc-rust{--ac:#0A332E;--ac-700:#0A332E;--ac-50:#EDF4F2;--ac-100:#D6EAE5;--a
 
 /* glossary */
 .gloss{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;padding-bottom:24px}
+/* the four terms with a working example take a whole row, so no short card
+   stands beside a tall one with a box of white under it */
+#tax-relief,#drawdown,#inflation,#risk-rating{grid-column:1/-1}
 .gterm{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px;box-shadow:var(--sh-sm)}
 .gterm h2{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;color:var(--ink)}
 .gterm .abbr{font-size:13px;font-weight:600;color:var(--teal-700);background:var(--teal-50);padding:3px 9px;border-radius:var(--r-pill);margin-left:8px;vertical-align:middle}
@@ -1382,8 +1385,7 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    ============================================================ */
 .arcade{padding:48px 0 4px}
 .arc-head{max-width:660px;margin-bottom:26px}
-.arc-head h2{letter-spacing:-.012em;margin:14px 0 0}
-.arc-head p{font-size:1.02rem;line-height:1.62;color:var(--ink-2);margin-top:12px}
+.arc-head h2{letter-spacing:-.012em}
 .arc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .arc-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line-2);border-radius:8px;overflow:hidden;transition:border-color .25s ease,background .25s ease}
 .arc-card:hover{border-color:var(--teal);background:var(--teal-50)}
@@ -2394,6 +2396,7 @@ main h1{font-weight:800}
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -2472,9 +2475,12 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}
 /* LEAD:ask:END */
 </style>
 </head>
@@ -2519,16 +2525,13 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 </div></nav>
 <main id="main" tabindex="-1">
 <div class="page-head"><div class="wrap">
-  <span class="eyebrow"><span class="pip"></span>Plain English, always</span>
-  <h1 class="legal" style="padding:0;margin:14px 0 12px;max-width:none">The pension jargon buster.</h1>
+  <h1 class="legal" style="padding:0;margin:0 0 12px;max-width:none">The pension jargon buster.</h1>
   <p style="font-size:18px;color:var(--ink-2);max-width:620px">Pension terms in plain words.</p>
 </div></div>
 
 <section class="arcade" id="games"><div class="wrap">
   <div class="arc-head">
-    <span class="eyebrow"><span class="pip"></span>Learn it the fun way</span>
     <h2>Two ways to learn the lingo.</h2>
-    <p>Pick a game.</p>
   </div>
   <div class="arc-grid">
     <a class="arc-card" href="games/buddys-run.html" data-game="Buddy&rsquo;s Run">
@@ -2637,8 +2640,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   <div class="pb-tix" role="navigation" aria-label="Terms on this page">
     <ul>
       <li><a href="#pension">Pension</a></li>
-      <li><a href="#tax-relief">Tax relief</a></li>
       <li><a href="#avc">Additional Voluntary Contribution (AVC)</a></li>
+      <li><a href="#tax-relief">Tax relief</a></li>
       <li><a href="#arf">Approved Retirement Fund (ARF)</a></li>
       <li><a href="#annuity">Annuity</a></li>
       <li><a href="#drawdown">Drawdown</a></li>
@@ -2662,12 +2665,13 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
   <div class="gloss">
     <div class="gterm" id="pension"><h2>Pension</h2><p>A long-term, invested savings pot for retirement.</p></div>
-    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Tax you do not pay on pension contributions, within Revenue&rsquo;s age-related limits. At the higher rate, €100 in can cost about €60, with around €40 back.</p>
+    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments into a workplace pension, usually with tax relief.</p></div>
+    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Tax you do not pay on pension contributions, within Revenue&rsquo;s age-related limits.</p>
 <div class="pb-rw">
   <div class="pb-rw-row"><label for="rwAmt1">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
   <input type="range" id="rwAmt1" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
   <p class="pb-rw-out">It could cost you about <b class="pb-rw-hi">€60</b> at the higher rate of tax, or <b class="pb-rw-lo">€80</b> at the standard rate, within Revenue&rsquo;s age-related limits.</p>
-  <a class="pb-rw-link" href="pension-calculator.html">See it for your age and salary</a>
+  <a class="pb-rw-link" href="pension-calculator.html">See it for your age</a>
 </div>
   <div class="pb-lad">
     <p class="pb-lad-cap">Relief limit by age, as a share of earnings.</p>
@@ -2680,7 +2684,6 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <p class="pb-lad-note">Earnings count up to €115,000.</p>
   </div>
 </div>
-    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments into a workplace pension, usually with tax relief.</p></div>
     <div class="gterm" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.</p></div>
     <div class="gterm" id="annuity"><h2>Annuity</h2><p>A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.</p></div>
     <div class="gterm" id="drawdown"><h2>Drawdown</h2><p>Taking money from your pension in retirement. Our calculator&rsquo;s 4% a year is an illustration, not a recommendation.</p>
@@ -2724,7 +2727,6 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 
 <div class="final-band"><div class="wrap"><div class="final">
   <div class="paw-bg"><svg fill='#fff' viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg></div>
-  <span class="eyebrow"><span class="pip"></span>Questions</span>
   <h2>Ask a real person.</h2>
   <a class="btn btn-light" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div></div></div>
@@ -2893,9 +2895,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3028,8 +3030,8 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 <script src="assets/js/pb-gl-motion.js?v=aed225bd"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
-<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
+<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
 </body>
 </html>

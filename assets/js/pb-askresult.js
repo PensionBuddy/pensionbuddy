@@ -1,111 +1,69 @@
-/* "Ask us about this", under every calculator's result (#pbAfter, the block
-   tools/pagebuild.py after_block() writes).
+/* "Ask us about this", under every calculator's result: the form
+   tools/pagebuild.py after_block() writes into #pbAfter, under the booking
+   button. It is in the markup so that Netlify reads it at deploy, and hidden
+   there; this shows it, so a reader without JavaScript never meets a form
+   that could not carry the figures.
 
-   A press opens a sheet. The result's headline number lifts off the page
-   and flies into it, as the note's attachment; under it, a question and an
-   email. Sending posts as "enquiry", the form "Ask us. We reply by email."
-   declares (tools/lead-parts/ask.html), with the topic "About a result" and
-   the calculator's results and inputs as the details, through
-   assets/js/pb-kit.js. The sheet is a <dialog>: Escape, the backdrop and
-   the close button shut it, and focus goes back to the button.
+   On it, the result goes with the question as its attachment: the headline
+   figure and its label, as the page shows them (on my-pensions, how many
+   pensions are listed and their total), kept up to date while the reader
+   works the calculator, and fading in when it changes. Sending posts as
+   "enquiry", the form "Ask us. We reply by email." declares
+   (tools/lead-parts/ask.html), with the topic "About a result" and the
+   calculator's results and inputs as the details, through
+   assets/js/pb-kit.js. The question is optional; the email is not.
 
-   Its CSS is here, not in the pages: nothing of it exists without script.
+   Its CSS is here, not in the pages: nothing of it shows without script.
    Classic script, no globals. */
 (function () {
   'use strict';
-  var after = document.getElementById('pbAfter');
-  if (!after || !window.PBKit || !window.HTMLDialogElement) return;
+  var form = document.getElementById('pbrForm');
+  if (!form || !window.PBKit) return;
   var K = window.PBKit;
 
   var CSS = [
-    '.pbr-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 0 18px;padding:0;border:0;background:none;font:400 1rem var(--font);color:var(--teal-700);text-decoration:underline;text-underline-offset:3px;cursor:pointer}',
-    '.pbr-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}',
-    '.pbr-btn:hover svg{transform:translateY(-2px) rotate(-6deg)}',
-    '.pb-after-more[hidden]+.pbr-btn{margin-left:0}',
-    '.pbr{width:min(520px,calc(100% - 32px));max-height:calc(100% - 32px);margin:auto;padding:0;border:0;border-radius:16px;background:var(--surface,#fff);color:var(--ink);box-shadow:0 30px 80px -20px rgba(11,31,28,.45);overflow:visible;opacity:0}',
-    '.pbr::backdrop{background:rgba(11,31,28,.38);opacity:0}',
-    '.pbr.is-in,.pbr.is-in::backdrop{opacity:1}',
-    ':root.pb-motion .pbr{transform:translateY(28px) scale(.97);transition:opacity .3s ease,transform .45s cubic-bezier(.34,1.3,.64,1)}',
-    ':root.pb-motion .pbr.is-in{transform:none}',
-    ':root.pb-motion .pbr::backdrop{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:opacity .3s ease}',
-    '.pbr-in{padding:26px 26px 24px}',
-    '.pbr-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}',
-    '.pbr-head h2{margin:0;font-size:20px;line-height:1.2}',
-    '.pbr-x{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:0;border-radius:50%;background:var(--surface-2);color:var(--ink-2);cursor:pointer;transition:background-color .2s,transform .3s cubic-bezier(.34,1.56,.64,1)}',
-    '.pbr-x:hover{background:var(--line);transform:rotate(90deg)}',
-    '.pbr-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}',
-    '.pbr-att{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-items:center;padding:14px 16px;margin-bottom:14px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}',
-    '.pbr-att::before{content:"";grid-row:1 / 3;width:4px;align-self:stretch;border-radius:4px;background:var(--teal)}',
-    '.pbr-att small{font-size:12.5px;font-weight:600;color:var(--ink-3)}',
-    '.pbr-att b{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}',
+    '.pb-after .pbr{margin:20px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}',
+    '.pb-after .pbr-h{margin:0 0 12px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}',
+    '.pb-after p.pbr-att{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;max-width:none;margin:0 0 14px;padding:10px 14px;border-radius:8px;border-left:4px solid var(--teal);background:var(--surface-2);font-size:1rem;line-height:1.4;color:var(--ink-2)}',
+    '.pbr-clip{flex:none;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}',
+    '.pbr-att span{flex:1 1 8em;min-width:0}',
+    '.pbr-att b{flex:none;margin-left:auto;font-size:1.15rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}',
     '.pbr-att b:empty{display:none}',
-    '.pbr-att.is-wait b{opacity:0}',
-    ':root.pb-motion .pbr-att b{transition:opacity .2s}',
-    '.pbr textarea{display:block;width:100%;min-height:96px;margin:0 0 10px;padding:13px 16px;font:15px/1.5 var(--font);color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;resize:vertical;transition:border-color .2s,background-color .2s,box-shadow .2s}',
-    '.pbr textarea:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--teal-50)}',
-    '.pbr .pbk-send{display:flex;gap:10px}',
-    '.pbr .ffield{flex:1}',
-    '.pbr .ffield input{width:100%;font-family:var(--font);font-size:15px;color:var(--ink);background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;transition:border-color .2s,background-color .2s,box-shadow .2s}',
-    '.pbr .ffield input:focus{outline:none;border-color:var(--teal);background:#fff;box-shadow:0 0 0 4px var(--teal-50)}',
-    '.pbr-err{color:var(--red);font-size:13.5px;font-weight:600;margin:10px 0 0}',
-    '.pbr-err:empty{display:none}',
-    '.pbr-ok{padding:34px 26px 26px;text-align:center}',
+    '.pb-after p.pbr-f{display:flex;flex-direction:column;gap:6px;max-width:none;margin:0 0 12px}',
+    '.pbr-f label{font-size:1rem;font-weight:600;color:var(--ink)}',
+    '.pbr-opt{font-weight:400;color:var(--ink-2)}',
+    '.pbr textarea,.pbr input[type=email]{width:100%;min-width:0;margin:0;padding:11px 14px;font-family:var(--font);font-size:1rem;line-height:1.5;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-2);border-radius:8px;box-shadow:none;transition:border-color .2s,box-shadow .2s}',
+    '.pbr textarea{display:block;min-height:76px;resize:vertical}',
+    '.pbr input[type=email]{min-height:48px}',
+    '.pbr textarea:focus,.pbr input[type=email]:focus{outline:none;border-color:var(--teal-700);box-shadow:0 0 0 3px var(--ring)}',
+    '.pbr input[aria-invalid="true"]{border-color:var(--red)}',
+    '.pbr-send{display:flex;gap:10px}',
+    '.pb-after .pbr .btn.pbr-go{flex:none;width:auto;min-height:48px;margin:0}',
+    '.pbr-go.is-sending{opacity:.6;cursor:progress}',
+    '.pb-after p.pbr-err{max-width:none;margin:0 0 10px;font-size:1rem;font-weight:600;line-height:1.5;color:var(--red)}',
+    '.pb-after p.pbr-err:empty{display:none}',
+    '.pb-after p.pbr-note{max-width:none;margin:0;font-size:1rem;line-height:1.5;color:var(--ink-2)}',
+    '.pbr-note a{color:var(--teal-700);font-weight:600}',
+    '.pb-after p.pbr-ok{display:flex;gap:12px;align-items:flex-start;max-width:none;margin:20px 0 0;padding:18px 0 0;border-top:1px solid var(--line);font-size:1rem;line-height:1.5;color:var(--ink)}',
     '.pbr-ok:focus{outline:none}',
-    '.pbr-tick{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:50%;background:var(--teal);color:#fff}',
-    '.pbr-tick svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24 24}',
-    '.pbr-ok h3{margin:14px 0 6px}',
-    '.pbr-ok p{margin:0 0 18px;color:var(--ink-2)}',
-    ':root.pb-motion .pbr-ok.show .pbr-tick{animation:pbrPop .5s cubic-bezier(.34,1.56,.64,1) both}',
-    ':root.pb-motion .pbr-ok.show .pbr-tick svg{animation:pbrDraw .4s cubic-bezier(.22,.61,.36,1) .22s backwards}',
-    ':root.pb-motion .pbr-ok.show h3,:root.pb-motion .pbr-ok.show p,:root.pb-motion .pbr-ok.show .btn{animation:pbrIn .45s cubic-bezier(.22,.61,.36,1) .15s both}',
+    '.pbr-ok .ico{flex:none;width:28px;height:28px;padding:6px;margin:-2px 0 0;border-radius:50%;background:var(--teal);color:#fff;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24 24}',
+    ':root.pb-motion .pbr-ok.show .ico{animation:pbrPop .5s cubic-bezier(.34,1.56,.64,1) both}',
+    ':root.pb-motion .pbr-ok.show .ico path{animation:pbrDraw .4s cubic-bezier(.22,.61,.36,1) .2s backwards}',
+    ':root.pb-motion .pbr-ok.show>span{animation:pbrIn .45s cubic-bezier(.22,.61,.36,1) .12s both}',
     ':root.pb-motion .pbr .is-bad{animation:pbrShake .42s cubic-bezier(.36,.07,.19,.97)}',
-    '.pbr-ghost{position:fixed;z-index:2;margin:0;pointer-events:none;font-weight:800;letter-spacing:-.03em;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;transform-origin:0 0}',
     '@keyframes pbrPop{from{transform:scale(0)}}',
     '@keyframes pbrDraw{from{stroke-dashoffset:-23}}',
-    '@keyframes pbrIn{from{opacity:0;transform:translateY(8px)}}',
+    '@keyframes pbrIn{from{opacity:0;transform:translateY(6px)}}',
     '@keyframes pbrShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}',
-    '@media(max-width:600px){.pbr{width:100%;max-width:100%;margin:auto 0 0;border-radius:18px 18px 0 0}',
-    ':root.pb-motion .pbr{transform:translateY(100%)}:root.pb-motion .pbr.is-in{transform:none}.pbr .pbk-send{flex-direction:column}}'
+    '@media(max-width:400px){.pbr-send{flex-direction:column}.pb-after .pbr .btn.pbr-go{width:100%}}'
   ].join('\n');
   var style = document.createElement('style');
   style.textContent = CSS;
   document.head.appendChild(style);
 
-  var ICON_ASK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
-  var ICON_X = '<svg viewBox="0 0 24 24" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
-
-  /* the button, beside "Email me this result" */
-  var btn = document.createElement('button');
-  btn.type = 'button'; btn.className = 'pbr-btn'; btn.setAttribute('aria-haspopup', 'dialog');
-  btn.innerHTML = ICON_ASK + '<span>Ask us about this</span>';
-  var more = document.getElementById('ecMore');
-  if (more) more.insertAdjacentElement('afterend', btn); else after.appendChild(btn);
-
-  /* the sheet: the fields "enquiry" declares, the ones read from the page hidden */
-  var dlg = document.createElement('dialog');
-  dlg.className = 'pbr';
-  dlg.setAttribute('aria-labelledby', 'pbrH');
-  dlg.innerHTML =
-    '<form class="pbr-in" id="pbrForm" novalidate>' +
-      '<input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="topic" value="About a result">' +
-      '<input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">' +
-      '<input type="hidden" name="name"><input type="hidden" name="contact_by" value="Email"><input type="hidden" name="phone">' +
-      '<p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>' +
-      '<div class="pbr-head"><h2 id="pbrH">Ask us about this</h2><button type="button" class="pbr-x" aria-label="Close">' + ICON_X + '</button></div>' +
-      '<div class="pbr-att"><small></small><b></b></div>' +
-      '<textarea id="pbrMsg" name="message" maxlength="1500" aria-label="Your question" placeholder="Your question"></textarea>' +
-      '<div class="pbk-send"><span class="ffield"><input id="pbrEmail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder=" " aria-describedby="pbrErr"><label class="flabel" for="pbrEmail">Email</label></span>' +
-      '<button type="submit" class="btn btn-primary pbr-go">Send</button></div>' +
-      '<p class="pbr-err" id="pbrErr" role="alert"></p>' +
-    '</form>' +
-    '<div class="pbr-ok" id="pbrOk" role="status" tabindex="-1" hidden>' +
-      '<span class="pbr-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>' +
-      '<h3>Sent.</h3><p id="pbrOkText"></p><button type="button" class="btn btn-ghost pbr-close">Close</button>' +
-    '</div>';
-  document.body.appendChild(dlg);
-
-  var form = dlg.querySelector('form'), att = dlg.querySelector('.pbr-att'), okBox = dlg.querySelector('.pbr-ok');
-  var email = dlg.querySelector('#pbrEmail'), msg = dlg.querySelector('#pbrMsg'), err = dlg.querySelector('#pbrErr'), go = dlg.querySelector('.pbr-go');
+  var $ = function (id) { return document.getElementById(id); };
+  var attL = $('pbrAttL'), attV = $('pbrAttV'), email = $('pbrEmail'), msg = $('pbrMsg'), err = $('pbrErr'), okBox = $('pbrOk');
+  var go = form.querySelector('.pbr-go');
   var calc = document.title.split(',')[0].trim();
 
   function text(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
@@ -113,103 +71,97 @@
     return el.getClientRects().length > 0 && !el.closest('.pb-veiled') && !document.documentElement.classList.contains('pb-preveil') &&
       getComputedStyle(el).visibility === 'visible';
   }
-  /* the headline: the first figure on screen, with its label */
-  function headline() {
-    var els = document.querySelectorAll('.results .res-hero .big, #ptTotal, [data-pb-result] li');
+  function plural(n, one) { return n + ' ' + one + (n === 1 ? '' : 's'); }
+  /* what goes with the question, as the form shows it: the first figure on
+     screen with its label; a list, as how many are on it */
+  function attachment() {
+    if ($('ptTotal')) {
+      /* the total from what is typed, not the ring's, which counts up to it */
+      var n = window.PBAfter ? PBAfter.pensions().length : 0, sum = window.PBPots ? PBPots.summarise(
+        [].map.call(document.querySelectorAll('#ptRows input[id^="ptValue"]'), function (el) { return { value: el.value }; })).total : 0;
+      return n ? { label: 'Your list', value: plural(n, 'pension') + (sum ? ', ' + K.euro(sum) : '') } : { label: 'Nothing listed yet', value: '' };
+    }
+    var list = document.querySelector('[data-pb-result]');
+    if (list) {
+      var k = list.querySelectorAll('li').length;
+      return k ? { label: 'Your list', value: plural(k, 'topic') } : { label: 'Nothing listed yet', value: '' };
+    }
+    var els = document.querySelectorAll('.results .res-hero .big');
     for (var i = 0; i < els.length; i++) {
       var el = els[i], v = text(el);
-      if (visible(el) && /[1-9]/.test(v)) {
+      if (visible(el) && /[1-9]/.test(v) && v.length <= 40) {
         var rl = el.parentElement && el.parentElement.querySelector('.rl');
-        return { el: el, value: v.length > 40 ? '' : v, label: text(rl) || calc };
+        return { label: text(rl) || calc, value: v };
       }
     }
-    return { el: null, value: '', label: calc };
+    return { label: calc, value: '' };
   }
-  function details(h) {
+  function details(a) {
     var rows = ['Calculator: ' + calc];
     [].forEach.call(document.querySelectorAll('.results .res-hero .big'), function (b) {
       var rl = b.parentElement && b.parentElement.querySelector('.rl');
       if (visible(b) && text(b)) rows.push((text(rl) || 'Result') + ': ' + text(b));
     });
-    if (rows.length === 1 && h.value) rows.push(h.label + ': ' + h.value);
+    if (rows.length === 1 && a.value) rows.push(a.label + ': ' + a.value);
     if (window.PBAfter) { var ins = PBAfter.inputs(); if (ins) rows.push(ins); }
     return rows.join(' | ').slice(0, 2000);
   }
 
-  /* the number lifts off the page and lands in the sheet */
-  function fly(h) {
-    var target = att.querySelector('b');
-    if (!h.el || !h.value || !K.motion() || !h.el.animate) { att.classList.remove('is-wait'); return; }
-    var from = h.el.getBoundingClientRect(), to = target.getBoundingClientRect();
-    /* scrolled away: it lifts off the button that was pressed instead */
-    var seen = from.bottom > 0 && from.top < innerHeight;
-    if (!seen) from = btn.getBoundingClientRect();
-    var ghost = document.createElement('span'), cs = getComputedStyle(h.el);
-    ghost.className = 'pbr-ghost'; ghost.textContent = h.value;
-    ghost.style.left = to.left + 'px'; ghost.style.top = to.top + 'px';
-    ghost.style.fontSize = getComputedStyle(target).fontSize;
-    dlg.appendChild(ghost);
-    var k = seen ? parseFloat(cs.fontSize) / parseFloat(getComputedStyle(target).fontSize) || 1 : 0.6;
-    ghost.animate([
-      { transform: 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px) scale(' + k + ')', opacity: seen ? 1 : 0 },
-      { transform: 'translate(' + (from.left - to.left) * 0.4 + 'px,' + ((from.top - to.top) * 0.4 - 40) + 'px) scale(' + (1 + (k - 1) * 0.4) + ')', opacity: 1, offset: .55 },
-      { transform: 'none', opacity: 1 }
-    ], { duration: 720, easing: 'cubic-bezier(.45,0,.2,1)' }).onfinish = function () {
-      att.classList.remove('is-wait');
-      ghost.remove();
-    };
+  /* the attachment follows the result: once the page has settled after a
+     change (a figure that counts up is read when it lands), never more
+     often than a beat */
+  var shown = null, timer = 0, since = 0;
+  function paint() {
+    timer = 0;
+    var a = attachment();
+    if (shown && a.label === shown.label && a.value === shown.value) return;
+    var fade = shown && a.value && a.value !== shown.value && K.motion() && attV.animate;
+    shown = a;
+    attL.textContent = a.label;
+    attV.textContent = a.value;
+    if (fade) attV.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+                           { duration: 320, easing: 'cubic-bezier(.22,.61,.36,1)' });
   }
+  function later() {
+    var now = Date.now();
+    if (!timer) since = now;
+    clearTimeout(timer);
+    timer = setTimeout(paint, now - since > 700 ? 0 : 180);
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(function (recs) {
+      for (var i = 0; i < recs.length; i++) {
+        if (!form.contains(recs[i].target)) { later(); return; }
+      }
+    }).observe(form.closest('main') || document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class', 'hidden'] });
+    new MutationObserver(later).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  }
+  document.addEventListener('input', function (e) { if (!form.contains(e.target)) later(); }, true);
+  form.hidden = false;
+  paint();
 
-  var opener = null;
-  function open() {
-    opener = document.activeElement;
-    var h = headline();
-    att.querySelector('small').textContent = h.value ? h.label : calc;
-    att.querySelector('b').textContent = h.value;
-    att.classList.toggle('is-wait', !!h.value && K.motion());
-    form.hidden = false; okBox.hidden = true; okBox.classList.remove('show');
-    err.textContent = '';
-    form.elements.details.value = details(h);
-    dlg.showModal();
-    requestAnimationFrame(function () { dlg.classList.add('is-in'); });
-    setTimeout(function () { fly(h); }, K.motion() ? 470 : 0);   // once the sheet has settled: no transform, so the ghost's fixed box is the screen's
-    setTimeout(function () { msg.focus({ preventScroll: true }); }, K.motion() ? 120 : 0);
-  }
-  function close() {
-    if (!dlg.open) return;
-    dlg.classList.remove('is-in');
-    setTimeout(function () {
-      dlg.close();
-      if (opener && opener.focus) opener.focus({ preventScroll: true });
-    }, K.motion() ? 280 : 0);
-  }
-
-  btn.addEventListener('click', open);
-  dlg.querySelector('.pbr-x').addEventListener('click', close);
-  dlg.querySelector('.pbr-close').addEventListener('click', close);
-  dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
-  dlg.addEventListener('click', function (e) {
-    if (e.target !== dlg) return;
-    var r = dlg.getBoundingClientRect();
-    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+  email.addEventListener('input', function () {
+    if (K.EMAIL.test(email.value.trim())) { email.removeAttribute('aria-invalid'); err.textContent = ''; }
   });
-  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim())); });
-
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!K.EMAIL.test(email.value.trim())) { err.textContent = 'Enter a valid email.'; K.shake(email.closest('.ffield')); email.focus(); return; }
+    if (!K.EMAIL.test(email.value.trim())) {
+      err.textContent = 'Enter a valid email.';
+      email.setAttribute('aria-invalid', 'true');
+      K.shake(email);
+      email.focus();
+      return;
+    }
     err.textContent = '';
-    var by = K.replyBy();
-    K.send(form, { details: form.elements.details.value, page: location.href.split('#')[0], reply_by: by }, go, {
+    paint();
+    var d = details(shown), by = K.replyBy(), q = msg.value.trim();
+    K.send(form, { details: d, page: location.href.split('#')[0], reply_by: by }, go, {
       subject: 'About my result: ' + calc,
-      body: form.elements.details.value.replace(/ \| /g, '\n') + (msg.value.trim() ? '\n\n' + msg.value.trim() : '')
+      body: d.replace(/ \| /g, '\n') + (q ? '\n\n' + q : '')
     }).then(function (how) {
       if (!how) return;
-      dlg.querySelector('#pbrOkText').textContent = how === 'sent' ? 'We’ll reply ' + (by ? 'by ' + by : 'within one working day') + '.' : K.MAIL_SAID;
-      okBox.querySelector('h3').textContent = how === 'sent' ? 'Sent.' : K.MAIL_H;
-      form.hidden = true; okBox.hidden = false;
-      okBox.classList.remove('show'); void okBox.offsetWidth; okBox.classList.add('show');
-      okBox.focus({ preventScroll: true });
+      okBox.querySelector('b').textContent = how === 'sent' ? 'Sent.' : K.MAIL_H;
+      K.done(form, okBox, how === 'sent' ? 'We’ll reply ' + (by ? 'by ' + by : 'within one working day') + '.' : K.MAIL_SAID);
     });
   });
 })();

@@ -196,9 +196,13 @@ At the maximum rate, the arithmetic is:
 | Input | Control | Range | Default | What it drives |
 |---|---|---|---|---|
 | Reckonable PRSI contributions expected by 66, including credits and HomeCaring Periods | slider | 0 to 2,080, step 52 (one year) | **2,080** | The whole calculation. Defaults to the maximum so the headline case is the best case. |
-| Age now | slider | 18 to 66 | 40 | **Nothing in the pension figure.** See below. |
+| ~~Age now~~ | ~~slider~~ | ~~18 to 66~~ | ~~40~~ | **Removed 2026-10-12** (Damian's decision): the page has one control, the PRSI record. |
 
 ### What age is for
+
+> **2026-10-12:** the age slider is gone from the page (Damian's decision),
+> which settles the decision below: dropped. What follows is kept as the
+> record of why it was there.
 
 The brief lists age as an input without saying what it changes. It changes
 **nothing** in the State Pension calculation, which depends only on

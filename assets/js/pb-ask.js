@@ -1,6 +1,5 @@
 /* "Ask us. We reply by email.": the enquiry form (tools/lead-parts/ask.html,
-   written into the home, starter, directors' and booking pages by
-   tools/lead-blocks.py).
+   written by tools/lead-blocks.py into the pages its BLOCKS table lists).
 
    Three steps in one card: a topic, a few taps of detail, then where to
    reply. Beside them a draft of the note fills in as the reader goes. The
@@ -63,6 +62,7 @@
   var phoneBox = $('[data-ask-phone]');
   var by = window.PBForms && PBForms.replyBy ? PBForms.replyBy() : '';
   var at = 0, topic = '', answers = {}, lastPointer = 0;
+  var flagged = null;   // the box the message is about
 
   /* ---------------------------------------------------------------- steps */
 
@@ -162,6 +162,7 @@
     $$('label', how).forEach(function (l) { l.classList.toggle('is-on', l.querySelector('input').checked); });
     phoneBox.classList.toggle('on', phone);
     phoneBox.querySelector('.ffield').inert = !phone;
+    if (!phone) fixed(phoneEl, true);
     measureHow();
     draw();
   }
@@ -179,7 +180,7 @@
   window.addEventListener('resize', measureHow);
   syncHow();
 
-  function okField(el, good) { el.closest('.ffield').classList.toggle('is-ok', good); }
+  function okField(el, good) { el.closest('.ffield').classList.toggle('is-ok', good); fixed(el, good); }
   emailEl.addEventListener('input', function () { okField(emailEl, EMAIL.test(emailEl.value.trim())); draw(); });
   phoneEl.addEventListener('input', function () { okField(phoneEl, digits(phoneEl.value) >= 7); draw(); });
   nameEl.addEventListener('input', draw);
@@ -189,11 +190,15 @@
 
   function say(text, el) {
     err.textContent = text;
+    flagged = el || null;
     if (el) {
       el.classList.remove('is-bad'); void el.offsetWidth; el.classList.add('is-bad');
       setTimeout(function () { el.classList.remove('is-bad'); }, 450);
     }
   }
+
+  /* the message goes as soon as its field is put right */
+  function fixed(el, good) { if (good && flagged === el.closest('.ffield')) say(''); }
 
   function check() {
     var e = emailEl.value.trim();

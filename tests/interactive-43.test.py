@@ -153,7 +153,7 @@ PROBE = r"""<script>
       mark:(m.getBoundingClientRect().left+1-tr.left)/tw,
       ovHidden:$('sftLimOvK').hidden, ovShown:$('sftLimOvK').getClientRects().length>0,
       key:seen(document.querySelector('.sft-lim-k')),
-      thrL:txt($('sftLimThrL')), thr:txt($('sftLimThr')), ov:txt($('sftLimOv')), you:txt($('sftLimYou')),
+      thrL:txt($('thrL')), thr:txt($('thr')), ov:txt($('sftLimOv')), you:txt($('sftLimYou')),
       trans:[trans(f),trans(o)]
     };
   }
@@ -444,7 +444,10 @@ def check_pots(sid, r, nojs):
 
 
 # ---------------------------------------------------------------- the threshold
-LOAD_KEY = 'Your pensions €1,650,000 The threshold for 2026 €2,200,000'
+# 13 October 2026 (review calc-other-13): the headline names the year's
+# threshold, so the key marks it without saying it again; S5 reads the words
+# from the headline
+LOAD_KEY = 'Your pensions €1,650,000 Threshold'
 
 
 def check_s2(sid, s):
@@ -487,7 +490,7 @@ def check_sft(sid, r, nojs, reduce):
     s = r['S6']
     eq('S6 %s: total 0: no fill, "€0", over hidden' % sid,
        [near(s['fill'], 0, 0.001), s['you'], s['ovHidden'], s['key']],
-       [True, '€0', True, 'Your pensions €0 The threshold for 2026 €2,200,000'])
+       [True, '€0', True, 'Your pensions €0 Threshold'])
     s = r['S7']
     eq('S7 %s: 4,000,000 in 2026: mark 0.55, over 0.45, "€1,800,000"' % sid,
        [near(s['mark'], 0.55, 0.005), near(s['over'], 0.45, 0.005), s['ov']], [True, True, '€1,800,000'])

@@ -1381,17 +1381,17 @@ h1 .hl,h2 .hl,.hero h1 .hl,.phead h1 .hl{color:#0D9488}
    All three are this one mark now, and this block is its only
    owner - nothing above restyles it and nothing below needs to.
    ============================================================ */
-summary .pm,.pb-b-q .pm,.adv > summary::after{
+summary .pm,.pb-b-q .pm,.adv > summary::after,.pb-work > summary::after{
   width:26px;height:26px;border-radius:8px;box-sizing:border-box;
   background:transparent;border:1px solid var(--line-2);color:var(--ink-2);
   display:flex;align-items:center;justify-content:center;
   font-family:var(--font);font-size:20px;font-weight:400;line-height:1;
-  flex-shrink:0;margin-left:auto;
+  flex-shrink:0;margin-left:auto;transform:none;
   transition:transform .25s cubic-bezier(.16,1,.3,1),background .25s ease,
              border-color .25s ease,color .25s ease}
-details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after{
+details[open] summary .pm,.pb-b-item.open .pm,.adv[open] > summary::after,.pb-work[open] > summary::after{
   transform:rotate(45deg);background:var(--ink);border-color:var(--ink);color:#fff}
-summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after{border-color:var(--ink-2)}
+summary:hover .pm,.pb-b-q:hover .pm,.adv > summary:hover::after,.pb-work > summary:hover::after{border-color:var(--ink-2)}
 
 /* ============================================================
    v3 - the hero is ONE centre-stacked column: headline, one line of
@@ -2459,6 +2459,9 @@ html.pb-js .dr-eg{display:none}
 .dr-ask .pb-reg{margin:0;text-align:left;align-items:flex-start;justify-content:flex-start}
 .dr-ia{margin:14px 0 0;font-size:15px;color:var(--ink-2)}
 .dr-work{margin:22px 0 0;max-width:62em}
+.pb-work > summary{display:flex;align-items:center;gap:12px;list-style:none;cursor:pointer;font-weight:600}
+.pb-work > summary::-webkit-details-marker{display:none}
+.pb-work > summary::after{content:"+"}
 .dr-work ul{margin:10px 0 0;padding-left:20px;display:grid;gap:6px;font-size:14px;color:var(--ink-2)}
 /* the executive-pension row */
 .dr-exec{padding:44px 0;background:#fff;border-top:1px solid var(--line,#E7EBE9)}
@@ -2517,6 +2520,10 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
 .pbk-send{display:flex;gap:10px;align-items:stretch}
 .pbk-send .ffield{flex:1}
 .pbk-send .btn{white-space:nowrap}
+
+/* a tool and the Ask form back to back read as one stop: one width, close together */
+.pb-ask + .pbk .pbk-card,.pbk:has(+ .pb-ask) .pbk-card{max-width:none}
+.pb-ask + .pbk,.pbk:has(+ .pb-ask) + .pb-ask{padding-top:8px}
 
 /* chips: radios drawn as pills */
 .pbk-chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -2661,6 +2668,7 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -2739,9 +2747,12 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}
 /* LEAD:ask:END */
 /* LEAD:yearend:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/yearend.css) */
 /* YEAR-END REMINDER (tools/lead-parts/yearend.css; tools/lead-blocks.py
@@ -3275,11 +3286,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3342,9 +3353,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-dir-why.js?v=e462b0cb"></script>
 <script src="assets/js/sft.js?v=b0329bc2"></script>
 <script src="assets/js/pb-dir-calc.js?v=f9390e8e"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
-<script src="assets/js/pb-kit.js?v=f2ab740a"></script>
-<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
-<script src="assets/js/pb-yearend.js?v=3e915fe4"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
+<script src="assets/js/pb-kit.js?v=7681cfbc"></script>
+<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
+<script src="assets/js/pb-yearend.js?v=ef3ec59b"></script>
 </body>
 </html>

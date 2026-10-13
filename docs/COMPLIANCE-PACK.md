@@ -146,6 +146,9 @@ privacy notes, every figure, date and source, and calculator labels and
 logic. What changed, page by page: docs/COPY-CUT-2026-10-06.md. The new
 wording has not been reviewed by compliance.
 
+Updated 12 October 2026: the old pension checklist (Appendix A.8) is
+withdrawn. Its address redirects to the tracker page.
+
 This pack collects everything on the Pensionbuddy website that needs
 compliance review: the open questions, the full wording of the draft Letter
 of Authority, the sentences for the Privacy Notice, a brief on the readiness
@@ -1749,9 +1752,10 @@ New guides and checklists
   everyone: one gives certainty, the other flexibility and the risk that
   comes with it." and "There is no general answer, and this page does not
   give one.". Footer links "Over 50", "Self-employed", "Worked in the UK".
-- The old pension checklist (old-pension-checklist.html) and the director's
-  year-end checklist (director-year-end-checklist.html): each whole
-  (Appendix A), and the button "Print or save this checklist".
+- The old pension checklist (old-pension-checklist.html; withdrawn 12
+  October 2026) and the director's year-end checklist
+  (director-year-end-checklist.html): each whole (Appendix A), and the
+  button "Print or save this checklist".
 
 New sections on existing pages (Appendix B)
 -------------------------------------------
@@ -1796,11 +1800,12 @@ Changed wording on existing pages
   old pensions instead: the charges calculator, "If you have lost track of a
   plan, we can help you find it."; the pensions list, "Lost track of one? We
   can help you find it."; the UK guide, "For pensions from Irish jobs, we
-  can help you find them."; the old pension checklist, "We can do the asking
-  for you: see how we help you find old pensions.". The readiness check's
-  steps read "Track down the pensions you have lost sight of." with "How we
-  help you find them" and "Ask each provider for a current value, or have us
-  ask for you." with "How we help".
+  can help you find them."; the old pension checklist (withdrawn 12 October
+  2026), "We can do the asking for you: see how we help you find old
+  pensions.". The readiness check's steps read "Track down the pensions you
+  have lost sight of." with "How we help you find them" and "Ask each
+  provider for a current value, or have us ask for you." with "How we
+  help".
 - The paw-print badges: at four of four, the line "4/4 paws." and nothing
   after it.
 - Initialisms spelled out at first use on every page, for example
@@ -2218,8 +2223,6 @@ Good to know
 - Worked in the UK? The UK government’s Pension Tracing Service finds
   contact details for UK schemes, free.
 - You can withdraw the letter at any time, in writing, and we stop asking.
-- Prefer to start on paper? The old pension hunt checklist sets out the
-  steps, and prints.
 - Once a pension is found, its charges are worth knowing. The pension
   charges calculator shows what they can take out of a pot by retirement.
 This is a search, not advice. We gather what your old providers hold and
@@ -2677,6 +2680,9 @@ consultation with Damian.
 
 A.8 The old pension checklist
 -----------------------------
+
+Withdrawn 12 October 2026; the address redirects to tracker.html. The
+text below is as it was.
 
 Address: https://pensionbuddy.ie/old-pension-checklist.html
 

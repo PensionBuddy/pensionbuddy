@@ -201,8 +201,10 @@
           t.has(label + ': spFoot names the full record', text('spFoot'), 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.');
         } else {
           var pctOfMax = Math.round(res.fraction * 100);
-          t.has(label + ': spFoot carries the count', text('spFoot'), num(row.contribs) + ' contributions is ' + years + ' years');
-          t.has(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so the rate is ' + pctOfMax + '% of the maximum');
+          /* 13 October 2026 (review calc-other-14): the years are the dots'
+             caption's to say, above it; the foot says only the share */
+          t.has(label + ': the caption carries the years', text('pbJarCap'), Math.min(40, Math.floor(row.contribs / 52)) + ' of 40 years');
+          t.eq(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so ' + pctOfMax + '% of the maximum.');
         }
         // exact, floor or rate is still the module's decision and the spec rows
         // still carry it; the page stopped wording it on 2026-09-20
@@ -418,7 +420,7 @@
       if (res.state === 'inconsistent') {
         var uf = text('spUnfitFoot');
         var fit = num(res.entered) + ' paid and credited contributions is more than the ' + num(res.maxForYears) +
-                  ' that fit between ' + yr(row.entry) + ' and the end of ' + yr(drawdown - 1) + ' at 52 a year.';
+                  ' that fit ' + (row.entry === drawdown - 1 ? 'in ' + yr(row.entry) : 'from ' + yr(row.entry) + ' to ' + yr(drawdown - 1)) + '.';
         t.has(label + ': spUnfitFoot says what does not fit', uf, fit);
         if (row.maxForYears) t.has(label + ': the spec maximum for the years', uf, 'more than the ' + row.maxForYears + ' that fit');
         t.has(label + ': srSummary', text('srSummary'), 'These details do not fit together. ' + fit);
@@ -438,10 +440,9 @@
       t.eq(label + ': weekly is the award', text('spWeekly'), euro2(award.weekly));
       t.eq(label + ': annual is the award', text('spAnnual'), euro(award.annual));
       t.eq(label + ': Method 1 is the module\'s', text('m1Rate'), euro2(tca.weekly) + ' a week');
-      var starting = 'for a pension starting in ' + yr(res.drawdownYear);
-      t.has(label + ': spFoot names the basis', text('spFoot'),
-            award.basis === 'tie' ? 'Both calculations give this figure, ' + starting + '.'
-            : 'Worked out under the ' + (award.basis === 'method2' ? 'Yearly Average blend' : 'Total Contributions Approach') + ', ' + starting + '.');
+      /* 13 October 2026 (review calc-other-12): the foot gives the start year;
+         which method is paid is said once, by the closing sentence */
+      t.eq(label + ': spFoot names the start year', text('spFoot'), 'For a pension from ' + yr(res.drawdownYear) + '.');
       if (tca.capped) {
         t.has(label + ': m1Detail says the record is over a full one', text('m1Detail'),
               num(tca.reckonable) + ' reckonable contributions, more than a full record of 2,080, so the maximum rate.');
@@ -494,7 +495,7 @@
         t.eq(label + ': the ladder tag is on the ' + bandLabel(b) + ' rung only when that is the reader\'s band',
              !you.hidden, b.min === hereMin);
         if (b.min === hereMin) {
-          t.eq(label + ': the tag names the reader\'s own average', text('yal' + i + 'You'), 'Your average, ' + ya.average);
+          t.eq(label + ': the tag names the reader\'s own average', text('yal' + i + 'You'), 'You: ' + ya.average);
         }
       });
 
@@ -508,7 +509,7 @@
           t.eq(label + ': the tail spans the difference between the two',
                near(widthPct(m + 'Gap'), onScale(highC - lowC)), true);
           t.eq(label + ': the tail is labelled with that difference',
-               text(m + 'Lab'), euro2c(highC - lowC));
+               text(m + 'Lab'), '+' + euro2c(highC - lowC));
         } else if (paidRow[m]) {
           t.eq(label + ': ' + m + ' is labelled as the one the Department pays',
                text(m + 'Lab'), 'Paid');
@@ -528,43 +529,43 @@
 
       if (hasM2) {
         t.has(label + ': bothSub names the last year of both calculations', text('bothSub'),
-              'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the Department works the rate out both ways and pays the higher.');
+              'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the higher of the two is paid.');
         t.eq(label + ': Method 2 is the module\'s', text('m2Rate'), euro2(m2.weekly) + ' a week');
         var d = text('m2Detail');
         t.has(label + ': m2Detail carries the average over the years', d,
               'A yearly average of ' + ya.average + ' over ' + ya.years + ' years, ' + yr(res.entryYear) + ' to ' + yr(res.drawdownYear - 1));
         t.has(label + ': m2Detail carries the band and its rate', d,
               'falls in the ' + bandLabel(ya.band) + ' band at ' + euro2c(ya.band.weeklyCents) + ' a week.');
-        t.has(label + ': m2Detail carries the mix', d, 'the mix is ' + m2.yaShare + '% of that rate and ' + m2.tcaShare + '% of the Total Contributions Approach rate.');
+        t.has(label + ': m2Detail carries the mix', d, 'the mix is ' + m2.yaShare + '% of that rate and ' + m2.tcaShare + '% of the Method 1 rate.');
         if (row.band) t.has(label + ': the spec band', d, 'the ' + row.band + ' band at ' + row.bandRate + ' a week');
         if (row.mix) t.has(label + ': the spec mix', d, 'the mix is ' + row.mix[0] + '% of that rate and ' + row.mix[1] + '%');
         var close = text('mClose');
         if (award.basis === 'method2') {
           t.has(label + ': mClose names the gain', close,
-                'The Department pays the higher. That is ' + euro2(award.weekly) + ', ' + euro2(award.gain) + ' a week more than the Total Contributions Approach alone.');
+                'Method 2 is paid: ' + euro2(award.gain) + ' a week more than Method 1.');
           if (row.gain) t.has(label + ': the spec gain', close, row.gain + ' a week more');
         } else if (award.basis === 'tie') {
-          t.has(label + ': mClose says both give the same figure', close, 'Both calculations give the same figure. At a full record the Total Contributions Approach already gives the maximum.');
+          t.has(label + ': mClose says both give the same figure', close, 'Both give the same figure. At a full record Method 1 already gives the maximum.');
         } else if (res.homeCaring > 0) {
-          t.has(label + ': mClose explains HomeCaring under TCA only', close, 'That is the Total Contributions Approach figure. Your HomeCaring Periods count under it and not under Yearly Average.');
+          t.has(label + ': mClose explains HomeCaring under TCA only', close, 'Method 1 is paid. Your HomeCaring Periods count under it and not in the yearly average.');
         } else {
           t.has(label + ': mClose explains the lower blend', close,
-                'A yearly average of ' + ya.average + ' over ' + ya.years + ' years falls in the ' + bandLabel(ya.band) + ' band, and the blend of that band\'s rate with the TCA rate comes to less.');
+                'Method 1 is paid. A yearly average of ' + ya.average + ' over ' + ya.years + ' years falls in the ' + bandLabel(ya.band) + ' band, and Method 2\u2019s blend comes to less.');
         }
         var sr = text('srSummary');
         t.has(label + ': srSummary carries the award', sr, 'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year, ');
         t.has(label + ': srSummary names the other figure', sr,
-              award.basis === 'tie' ? 'and both calculations give this figure.'
-              : award.basis === 'method2' ? 'under the Yearly Average blend. The Total Contributions Approach alone gives ' + euro2(tca.weekly) + '.'
-              : 'under the Total Contributions Approach. The Yearly Average blend gives ' + euro2(m2.weekly) + '.');
+              award.basis === 'tie' ? 'and both methods give this figure.'
+              : award.basis === 'method2' ? 'under Method 2. Method 1 alone gives ' + euro2(tca.weekly) + '.'
+              : 'under Method 1. Method 2 gives ' + euro2(m2.weekly) + '.');
       } else {
         t.has(label + ': bothSub says one calculation applies', text('bothSub'), 'Only one calculation applies to these details.');
         t.has(label + ': mWhy gives the reason', text('mWhy'),
               m2.reason === 'after-transition'
-                ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only the Total Contributions Approach applies, so on the contributions entered this is your rate.'
-                : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the Yearly Average method gives nothing');
+                ? 'You reach 66 in ' + yr(res.drawdownYear) + ', after the transition ends in ' + yr(SP.TRANSITION_LAST) + '. Only Method 1 applies, so on the contributions entered this is your rate.'
+                : 'Your yearly average is ' + ya.average + ' over ' + ya.years + ' years. Below 10 the yearly average gives nothing');
         t.has(label + ': srSummary says only the TCA applies', text('srSummary'),
-              'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year. Only the Total Contributions Approach applies.');
+              'State Pension (Contributory) ' + euro2(award.weekly) + ' a week, ' + euro(award.annual) + ' a year. Only Method 1 applies.');
       }
     }
 

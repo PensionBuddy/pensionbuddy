@@ -81,7 +81,7 @@
     K.reveal(box, true);
     setTimeout(function () { email.focus({ preventScroll: true }); }, K.motion() ? 120 : 0);
   });
-  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim())); });
+  email.addEventListener('input', function () { K.okField(email, K.EMAIL.test(email.value.trim()), err); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();

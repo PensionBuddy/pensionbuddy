@@ -1700,6 +1700,11 @@ a.assure:hover{border-color:var(--teal)}
    dated, sourced at the foot, every risk in the main text at the size of
    the benefit it goes with. */
 .legal .ck-note{font-size:.9rem;color:var(--ink-2)}
+/* the Ask form sits between the article's two halves, outside .legal so the
+   article's styles stay out of it; spaced as on the year-end checklist */
+.wrap:has(+ .pb-ask) > .legal{padding-bottom:20px}
+.pb-ask + .wrap > .legal{padding-top:0}
+.pb-ask + .wrap > .legal > h2:first-child{margin-top:40px}
 /* TRUST:BEGIN (Run 26). Two shared components, each one string in
    tools/pagebuild.py (REVIEWED, REASON) and this one recipe, which every
    page carries byte for byte; pagebuild.trust_drift() is the guard.
@@ -2214,13 +2219,13 @@ html.pb-js .pb-gx-seg{display:inline-flex}
 .pb-gx-r3 .pb-gx-car{transition-delay:calc(var(--pb-beat-gap) * 2)}
 .pb-gx-r3 .pb-gx-pot{background:linear-gradient(90deg,var(--slate) 0 60%,transparent 60%)}
 .pb-gx-cut{position:absolute;right:0;top:0;bottom:0;width:40%;border:1.5px dashed #D4573D;border-radius:5px;background:rgba(250,220,211,.35)}
-/* the 40% lost on the move: it drops off as the pot crosses, and its outline goes on */
+/* the 40% lost on the move: it fades as the pot crosses, and its outline stays */
 .pb-gx-sink{position:absolute;right:0;top:0;bottom:0;width:40%;border:1.5px solid #D4573D;border-radius:5px;background:#FADCD3;opacity:0}
 .pb-gx-arm .pb-gx-sink{opacity:1}
 .pb-gx-arm.pb-gx-in .pb-gx-sink{animation:pbGxSink calc(var(--pb-d-5) * 1.4) calc(var(--pb-beat-gap) * 2) both}
 @keyframes pbGxSink{
   0%,30%{transform:none;opacity:1;animation-timing-function:cubic-bezier(.4,0,1,1)}
-  100%{transform:translate(-24px,30px) rotate(-12deg);opacity:0}}
+  100%{transform:translateY(4px) scale(.94);opacity:0}}
 .pb-gx-drop i{position:absolute;left:calc(36% + 14px);top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--slate)}
 .pb-gx-drop{transition:transform var(--pb-d-5) var(--pb-ease-move)}
 .pb-gx-drop:nth-child(2){transform:translateX(24%)}
@@ -2355,6 +2360,7 @@ html.pb-js .pb-lad[data-pb-age]:not([data-pb-earn]) .pb-lad-row:has(.pb-lad-you:
 :root.pb-motion .pb-ask-q{animation:pbAskIn .4s cubic-bezier(.22,.61,.36,1) both}
 :root.pb-motion .pb-ask-q:nth-child(2){animation-delay:.08s}
 .pb-ask-tip{display:flex;gap:12px;align-items:center;background:var(--amber-soft,#FCEFCF);border-radius:var(--r-lg);padding:12px 14px;font-size:14px;line-height:1.45;color:var(--ink);margin:2px 0 4px}
+.pb-ask-tip[hidden]{display:none}
 .pb-ask-tip svg{flex:0 0 auto;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pb-ask-tip a{color:var(--teal-700);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
@@ -2433,9 +2439,12 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pb-ask-topics,.pb-ask-two{grid-template-columns:1fr}
   .pb-ask-topic:last-child:nth-child(odd){grid-column:auto}
   .pb-ask-nav .btn{flex:1;justify-content:center}
+  .pb-ask-nav > span:empty{display:none}
   .pb-ask-how{display:flex}
   .pb-ask-how label{flex:1;justify-content:center;padding:0 10px;text-align:center}
 }
+/* a printout is the page, not the form */
+@media print{.pb-ask{display:none !important}}
 /* LEAD:ask:END */
 </style>
 </head>
@@ -2494,13 +2503,14 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <ol class="pb-gx-routes">
       <li class="pb-gx-r pb-gx-r1"><span class="pb-gx-lane" aria-hidden="true"><span class="pb-gx-car"><i class="pb-gx-pot"></i></span><span class="pb-gx-drop"><i></i></span><span class="pb-gx-drop"><i></i></span><span class="pb-gx-drop"><i></i></span></span><p class="pb-gx-p"><b>Leave it in the UK.</b> It is paid from there, and generally taxed in Ireland if you live here.</p></li>
       <li class="pb-gx-r pb-gx-r2"><span class="pb-gx-lane" aria-hidden="true"><span class="pb-gx-car"><i class="pb-gx-pot"></i></span></span><p class="pb-gx-p"><b>Move it to a QROPS in Ireland.</b> It usually arrives whole.</p></li>
-      <li class="pb-gx-r pb-gx-r3"><span class="pb-gx-lane" aria-hidden="true"><span class="pb-gx-car"><i class="pb-gx-pot"><i class="pb-gx-cut"></i><i class="pb-gx-sink"></i></i></span></span><p class="pb-gx-p"><b>Move it anywhere else.</b> The move is taxed at 40% or more.</p></li>
+      <li class="pb-gx-r pb-gx-r3"><span class="pb-gx-lane" aria-hidden="true"><span class="pb-gx-car"><i class="pb-gx-pot"><i class="pb-gx-cut"></i><i class="pb-gx-sink"></i></i></span></span><p class="pb-gx-p"><b>Move it to any other scheme.</b> The move is taxed at 40% or more.</p></li>
     </ol>
     <button type="button" class="pb-gx-replay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/></svg>Play it again</button>
   </figure>
 
   <h2 id="state">UK State Pension</h2>
   <p>It is claimed from and paid by the UK, if you paid enough National Insurance. It can be paid into an Irish bank account. It rises each year while you live in Ireland or elsewhere in the European Economic Area (EEA). It cannot move to a QROPS.</p>
+</div></div>
 
 <!-- ASK-HERE -->
 <!-- LEAD:ask:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/ask.html) -->
@@ -2576,6 +2586,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 </div></section>
 <!-- LEAD:ask:END -->
 
+<div class="wrap"><div class="legal">
   <h2 id="tax">How Ireland taxes it</h2>
   <p>If you live in Ireland, a UK pension is generally taxed here, under the two countries&rsquo; tax treaty. Income tax and the Universal Social Charge (USC) apply, not Pay-Related Social Insurance (PRSI). A State pension is not liable to USC. A UK government service pension is usually taxed only in the UK, unless you are an Irish citizen and not also British.</p>
 
@@ -2592,7 +2603,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
     <li><a class="pb-related-card pb-card-link" href="state-pension-entitlement.html"><span class="pb-related-t">State Pension check</span><span class="pb-related-d">What the State Pension would pay, worked out both ways the Department does until the end of 2033, and which one is paid.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="tracker.html"><span class="pb-related-t">Track down old pensions</span><span class="pb-related-d">Find pensions from old jobs, and what they are worth.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pensions-over-50.html"><span class="pb-related-t">Pensions after 50</span><span class="pb-related-d">Three things change as you pass 50.</span></a></li>
     <li><a class="pb-related-card pb-card-link" href="glossary.html"><span class="pb-related-t">Pension jargon buster</span><span class="pb-related-d">Pension terms in plain words.</span></a></li>
   </ul>
 </div></section>
@@ -2685,11 +2696,11 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=9fd568c7" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=d46a0b3c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=69a00d43" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=8dfebf78" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -2722,8 +2733,8 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-guide.js?v=6cc2dca8"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-guide-scene.js?v=ce3e6bfd"></script>
-<script src="assets/js/pb-alive.js?v=2e6d5569"></script>
+<script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
-<script src="assets/js/pb-ask.js?v=9226fdb1"></script>
+<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
 </body>
 </html>
