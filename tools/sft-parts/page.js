@@ -26,6 +26,25 @@
   var TOP_YEAR = S.threshold(S.LAST_KNOWN).value;
   var held = 0;   // the columns' scale, held while the line is dragged so it stays under the finger
 
+  /* THE LUMP SUM IS PART OF THE PENSIONS, never more than all of them
+     (13 October 2026 review, SP-10: a €400,000 lump sum on €300,000 of
+     pensions was taxed as if it could be). Below €1 million of pensions the
+     lump-sum slider runs to the total, so its thumb cannot pass it. The
+     amount the reader chose is kept (lumpWanted) and comes back as the
+     total rises again; it changes only when the lump-sum slider itself is
+     moved. A typed amount beyond the slider's own scale stands, the shared
+     click-to-type rule, as long as the pensions cover it. */
+  var LUMP_TOP = +$('lump').max;
+  var lumpWanted = +$('lump').value;
+  function fitLump() {
+    var el = $('lump'), total = Math.max(0, +$('total').value);
+    var top = Math.max(+el.min, Math.min(Math.max(LUMP_TOP, lumpWanted), total));
+    if (+el.max !== top) el.max = top;
+    var v = Math.min(lumpWanted, top);
+    if (+el.value !== v) el.value = v;
+    P.paintSlider(el, VALTEXT);
+  }
+
   function short(v) { return '€' + (Math.round(v / 10000) / 100).toLocaleString('en-IE') + 'm'; }
 
   function render() {
@@ -35,8 +54,11 @@
     chips.forEach(function (c) { c.checked = +c.value === year; });
     $('totalV').textContent = euro(total);
     $('lumpV').textContent = euro(lump);
-    $('thrL').textContent = 'The threshold for ' + yearWord(year);
-    $('thr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
+    /* from 2030 the threshold is a floor and so the share a ceiling: the
+       labels say so, and the figures keep the width of every other year's */
+    $('thrL').textContent = u.atLeast ? 'The threshold from 2030, at least' : 'The threshold for ' + year;
+    $('thr').textContent = euro(u.threshold);
+    $('shareL').textContent = u.atLeast ? 'Share used, at most' : 'Share used';
     $('share').textContent = pc + '%';
     /* the limit bar (Run 43): the year's threshold against the total, on one scale,
        the larger of the two; it follows the sliders in the same frame */
@@ -48,14 +70,23 @@
     $('sftLimYou').textContent = euro(total);
     $('sftLimOvK').hidden = !(u.excess > 0);
     $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
-    /* the headline gives the threshold and the share, the key what is over:
-       this line says only what is left, and is away when nothing is */
-    $('pbSay').hidden = u.excess > 0;
-    $('pbSay').textContent = (u.atLeast ? 'At least ' : '') + euro(u.headroom) + ' of headroom.';
+    /* Chargeable excess tax, net of the lump sum's (review SP-7): the 20%
+       tax paid on the lump sum, at most EUR 60,000, is set against it, so
+       the page takes it off rather than leave the reader to. From 2030 the
+       excess is at most what is shown, and so is the tax. */
+    var credit = Math.min(l.standardTax, S.CREDIT_MAX), offset = Math.min(credit, u.cet), toPay = u.cet - offset;
+    var most = u.atLeast ? 'at most ' : '';
+    /* one line under the bar, both ways, swapping its words in place: what
+       is left under the threshold, or what is over and the tax to pay */
+    $('pbSay').textContent = u.excess > 0
+      ? (u.atLeast ? 'Up to ' : '') + euro(u.excess) + ' over: ' +
+        (toPay > 0 ? most + euro(toPay) + ' tax to pay.' : 'nothing more to pay.')
+      : (u.atLeast ? 'At least ' : '') + euro(u.headroom) + ' of headroom.';
+    $('pbSay').setAttribute('data-state', u.excess > 0 ? 'over' : 'under');
     /* spoken whole, once: the bar and its key are aria-hidden */
     var when = year >= 2030 ? 'from 2030' : 'in ' + year, of = u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold';
     var say = u.excess > 0
-      ? euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + of + '.'
+      ? euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + of + '. Tax to pay on it, after the lump sum’s: ' + most + euro(toPay) + '.'
       : euro(total) + ' taken ' + when + ' uses ' + pc + '% of ' + of + ', leaving ' + euro(u.headroom) + ' of headroom.';
 
     /* the columns: every year on one scale, your pensions one line across them */
@@ -72,15 +103,15 @@
     $('sftLine').style.setProperty('--f', f(total).toFixed(4));
     $('sftLineV').textContent = total >= 1e6 ? short(total) : euro(total);
 
-    $('sftOver').hidden = !(u.excess > 0);
+    $('sftOverSlot').classList.toggle('is-open', u.excess > 0);
     if (u.excess > 0) {
-      /* from 2030 the threshold is only known to be at least 2.8m, so the
-         excess, and the tax on it, can only be said to be at most this */
-      $('sftOverText').textContent = u.atLeast
-        ? 'Chargeable excess tax at 40% on up to ' + euro(u.excess) + ' over would be at most ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.'
-        : 'Chargeable excess tax at 40% on the ' + euro(u.excess) + ' over is ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.';
+      /* the working of the hero's line, in the order it is done */
+      var first = 'Tax on ' + (u.atLeast ? 'up to ' : 'the ') + euro(u.excess) + ' over: ' + most + euro(u.cet) + ' (40%). ';
+      $('sftOverText').textContent = first + (offset <= 0
+        ? 'All of it to pay: a lump sum of ' + euro(S.TAX_FREE) + ' or less pays no tax to take off it.'
+        : toPay > 0
+          ? 'Less the ' + euro(offset) + ' tax on your lump sum: ' + most + euro(toPay) + ' to pay.'
+          : 'The ' + euro(credit) + ' tax on your lump sum covers it: nothing more to pay.');
     }
     /* the lump-sum bar (Run 43): the lump sum on one bar, split by Revenue's bands,
        each part as wide as its euro (flex-grow), a part with nothing in it not drawn */
@@ -120,7 +151,13 @@
       drag.moved = true;
     }
     cols.addEventListener('pointerdown', function (e) {
-      if (Math.abs(e.clientY - lineY()) > 18) return;
+      /* a finger takes the line only by its grip or its figure (page.css
+         gives those touch-action:none and the rest of the chart pan-y), so
+         a swipe that starts on the chart scrolls the page (review SP-6);
+         a mouse takes it anywhere within 18px of it */
+      if (e.pointerType && e.pointerType !== 'mouse') {
+        if (!(e.target && e.target.closest && e.target.closest('.sft-grip,.sft-hit,.sft-line-v'))) return;
+      } else if (Math.abs(e.clientY - lineY()) > 18) return;
       e.preventDefault();
       held = Math.max(TOP_YEAR * 1.05, +$('total').value * 1.08);
       drag = { moved: false };
@@ -142,6 +179,11 @@
     });
   })();
 
-  P.wireRanges(VALTEXT, render);
+  P.wireRanges(VALTEXT, function (el) {
+    if (el && el.id === 'lump') lumpWanted = +el.value;
+    if (el && (el.id === 'lump' || el.id === 'total')) fitLump();
+    render();
+  });
+  fitLump();
   render();
 })();

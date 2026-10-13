@@ -11,8 +11,11 @@
                                    comes into view, then fill in the order
                                    the money arrives: you, then your
                                    employer or the tax relief, then the State
-     PBCmpMotion.open(wrap, on)    a hidden block opens (or closes) into its
-                                   space; its bars fill as it arrives
+     PBCmpMotion.open(wrap, on, now)
+                                   a hidden block opens (or closes) into its
+                                   space; its bars fill as it arrives (now:
+                                   it is simply there, as at load, when the
+                                   page opens past the limit from a link)
      PBCmpMotion.pop(el)           a tag springs in
      PBCmpMotion.nudge(el)         a mark just passed lifts and settles, either way
      PBCmpMotion.swap(el)          a sentence just rewritten settles in
@@ -145,13 +148,13 @@
   }
 
   /* ---- a block that opens into its space ---- */
-  function open(wrap, on) {
+  function open(wrap, on, now) {
     if (!wrap) { return; }
     var st = wrap._pbO || (wrap._pbO = { on: !wrap.hidden, t: 0 });
     if (st.on === on) { return; }
     st.on = on;
     clearTimeout(st.t);
-    if (!motion()) {
+    if (now || !motion()) {
       wrap.hidden = !on;
       wrap.classList.toggle('cmp-in', on);
       wrap.classList.toggle('cmp-open', on);

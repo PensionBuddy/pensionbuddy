@@ -121,12 +121,12 @@
 .pb-more[open]>summary{margin-bottom:6px}
 .pb-more .field{margin-bottom:18px}
 
-/* #27: the "between 1 January and 5 April" box under the entry year, the
-   comparison page's checkbox row */
+/* #27: the "between 1 January and 5 April" box, the comparison page's
+   checkbox row; since 13 October 2026 the last row of "More details" */
 .tog{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45;padding:2px 0}
 .tog input{appearance:auto;-webkit-appearance:checkbox;width:24px;height:24px;min-height:0;margin:-1px 0 0;accent-color:var(--teal);flex:none;cursor:pointer}
 .tog input:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
-.pb-april{margin-top:10px}
+.pb-april{margin:0 0 18px}
 .pb-april[hidden]{display:none}
 
 /* THE TRANSITION GLIDE (.pb-glide). Ten columns, 2025 to 2034: the Yearly
@@ -190,15 +190,26 @@
    pages share the lead's classes and assets/js/pb-sp-motion.js.
    Static first: every line is plain text and stays put without motion or
    JavaScript. With motion (:root.pb-motion) the answer, the caveat and the
-   way on rise in after the headline's words, one after another; the
-   figures' digits roll into place (pb-sp-motion.js lays a reel over each
-   figure and takes it away once it lands, so the real text is never
-   rewritten); the way on lands on a gentle spring and its arrow nudges
-   twice, then rests. */
+   way on rise in after the headline's words, one after another, and the way
+   on lands on a gentle spring and its arrow nudges twice, then rests. The
+   figures are the real text from the first frame and rise with their line:
+   the answer is read at once (13 October 2026 review, SP-2, took away the
+   digit roll that showed wrong amounts first).
+   QUESTION, THEN ANSWER. The lines take their cue from the headline itself:
+   assets/js/pb-alive.js puts .pb-al-on on it as its words begin to rise,
+   and the lines follow from that moment. They used to start on their own
+   clock, which ran ahead of the headline's script, so the answer appeared
+   before its question. Until the headline starts they wait unseen, for
+   two seconds at most: if its script has not come by then they simply
+   appear (the headline's own fallback, pbAlHold in the ALIVE block, is
+   1.2s; the lines wait longer so that a headline that starts late, as on
+   a slow first load, still comes first and nothing shows twice). */
 .phead .sp-ans{margin:2px 0 0;max-width:none;font-size:clamp(1.18rem,2vw,1.5rem);line-height:1.45;color:var(--ink)}
 .sp-fig{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:1.5em;line-height:1.1;
   letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
 .phead .sp-less{margin:10px 0 0}
+/* the next rate, under the answer: its own short line, a step quieter */
+.phead .sp-next{margin:6px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 /* a figure inside a sentence: the sentence's own size, bold */
 .sp-fig-in{font-family:inherit;font-size:1em;font-weight:700;letter-spacing:0}
 .sp-go{display:inline-flex;align-items:center;gap:14px;min-height:56px;margin:24px 0 0;padding:0 22px 0 26px;
@@ -208,29 +219,34 @@
 .sp-go:hover{background:#2BD6BE;color:#04302A}
 .sp-go:focus-visible{outline:3px solid var(--teal-700);outline-offset:3px}
 @media(max-width:560px){.sp-go{display:flex;justify-content:space-between;align-self:stretch;width:100%}}
-/* the odometer: the real figure holds the space and is what is read */
-.pb-odo-on{position:relative;color:transparent !important}
-.pb-odo{position:absolute;left:0;top:0;white-space:nowrap;pointer-events:none}
-/* each window is one line high; a digit fades in the last sliver at its
-   top and bottom edges, clear of where a landed digit's ink sits, so a
-   rolling digit arrives and leaves softly instead of at a cut edge */
-.pb-odo-win{display:inline-block;height:1.1em;overflow:hidden;vertical-align:top;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 .15em,#000 .95em,transparent 1.1em);
-  mask-image:linear-gradient(to bottom,transparent 0,#000 .15em,#000 .95em,transparent 1.1em)}
-.pb-odo-reel{display:block;white-space:pre;line-height:1.1em}
-:root.pb-motion .pb-odo-reel{animation:pbOdo 1.15s cubic-bezier(.16,1,.3,1) both}
-@keyframes pbOdo{from{transform:translateY(0)}to{transform:translateY(calc(var(--to) * -1.1em))}}
-/* forced colours repaint transparent text, so there the reel stands aside */
-@media(forced-colors:active){.pb-odo{display:none}.pb-odo-on{color:inherit !important}}
+@keyframes spLeadHold{0%,99%{opacity:0}100%{opacity:1}}
 @keyframes spLeadIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes spGoIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
 @keyframes spNudge{0%,100%{transform:none}45%{transform:translateX(6px)}}
-:root.pb-motion .phead .sp-ans{animation:spLeadIn .7s var(--pb-ease-out) .3s backwards}
-:root.pb-motion .phead .sp-less{animation:spLeadIn .7s var(--pb-ease-out) .62s backwards}
-:root.pb-motion .sp-go{animation:spGoIn .9s cubic-bezier(.2,1.3,.35,1) .86s backwards;
-  transition:transform var(--pb-t-press),box-shadow .25s ease,background-color .25s ease}
-:root.pb-motion .sp-go svg{animation:spNudge 1s cubic-bezier(.45,0,.2,1) 1.9s 2;transition:transform .3s var(--pb-ease-out)}
+:root.pb-motion .phead h1:not(.pb-al-on) ~ :is(.sp-ans,.sp-next,.sp-less,.sp-go){animation:spLeadHold 2s linear both}
+:root.pb-motion .phead h1.pb-al-on ~ .sp-ans{animation:spLeadIn .7s var(--pb-ease-out) .3s backwards}
+:root.pb-motion .phead h1.pb-al-on ~ .sp-next{animation:spLeadIn .7s var(--pb-ease-out) .42s backwards}
+:root.pb-motion .phead h1.pb-al-on ~ .sp-less{animation:spLeadIn .7s var(--pb-ease-out) .54s backwards}
+:root.pb-motion .phead h1.pb-al-on ~ .sp-go{animation:spGoIn .9s cubic-bezier(.2,1.3,.35,1) .74s backwards}
+:root.pb-motion .phead h1.pb-al-on ~ .sp-go svg{animation:spNudge 1s cubic-bezier(.45,0,.2,1) 1.8s 2}
+:root.pb-motion .sp-go{transition:transform var(--pb-t-press),box-shadow .25s ease,background-color .25s ease}
+:root.pb-motion .sp-go svg{transition:transform .3s var(--pb-ease-out)}
 :root.pb-motion .sp-go:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(20,203,177,.42)}
 :root.pb-motion .sp-go:hover svg{transform:translateX(4px)}
 :root.pb-motion .sp-go:active{transform:translateY(0) scale(.98)}
 /* LEAD:END */
+/* here the caveat is the lead's one line under the headline, so it follows
+   the headline at the answer's beat */
+:root.pb-motion .phead h1.pb-al-on ~ .sp-less{animation-delay:.4s}
+
+/* THE FIRST LINE ON A PHONE IS THE PAGE'S OWN (13 October 2026 review,
+   SP-14). The shared FIRSTSCREEN block draws the review line first on a
+   phone, so it is on the first screen (tests/consent.test.py check 9). On
+   this page, held upright, the headline comes first and the review line
+   straight under it, as a byline: still on the first screen, and the page
+   opens with its own question. Held sideways the screen is too short for
+   that, and the shared order stands. */
+@media(max-width:560px){
+  .phead > .wrap:has(> .pb-reviewed) > h1{order:-2}
+  .phead > .wrap:has(> .pb-reviewed) > p.pb-reviewed{margin:0 0 10px}
+}

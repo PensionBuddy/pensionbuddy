@@ -10,6 +10,10 @@
      then its tax slides back over the end. One bar after another, calm, in
      under two and a half seconds (the timings are the MOTION block of
      tools/pia-parts/page.css). The figure above each bar counts up with it.
+     Until then the figures wait unseen (the armed rules in page.css), so a
+     figure is never on screen at its value and then run back to nought for
+     the count (review, 13 October 2026). It starts as the bars come into
+     view, a fifth of them on screen.
    - After that, a change to any input slides the bars to their new lengths
      (CSS) and each figure glides from the old number to the new.
 
@@ -90,8 +94,8 @@
 
   bars.classList.add('pia-armed');
   var io = new IntersectionObserver(function (es) {
-    if (es[0].isIntersecting && es[0].intersectionRatio >= 0.3) { io.disconnect(); play(); }
-  }, { threshold: [0, 0.3, 0.6] });
+    if (es[0].isIntersecting && es[0].intersectionRatio >= 0.2) { io.disconnect(); play(); }
+  }, { threshold: [0, 0.2, 0.6] });
   io.observe(bars);
 
   /* motion switched off part way: straight to the end, and stay there */

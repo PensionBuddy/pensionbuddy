@@ -29,6 +29,19 @@
 .sft-small{margin:10px 0 0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
 .sft-card p.sft-small{font-size:1rem;color:var(--ink-2);margin:0}
 .sft-over{border-left:3px solid var(--slate)}
+/* "Over the threshold", last in the column (review SP-9). Without motion it
+   is simply there or not; with motion it opens and closes on its own height
+   (0fr to 1fr), so what follows it glides instead of jumping, and the
+   column's 18px gap closes with it. Its words are the page's at every
+   moment; only the space they take moves. */
+.sft-over-slot:not(.is-open){display:none}
+.sft-over-clip{min-height:0;overflow:hidden}
+:root.pb-motion .sft-over-slot{display:grid;grid-template-rows:1fr;margin-top:0;visibility:visible;
+  transition:grid-template-rows .45s var(--pb-ease-out),margin-top .45s var(--pb-ease-out),visibility 0s linear 0s}
+:root.pb-motion .sft-over-slot:not(.is-open){grid-template-rows:0fr;margin-top:-18px;visibility:hidden;
+  transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1),margin-top .32s cubic-bezier(.4,0,.2,1),visibility 0s linear .32s}
+:root.pb-motion .sft-over-slot .sft-over{transition:opacity .35s ease .08s}
+:root.pb-motion .sft-over-slot:not(.is-open) .sft-over{opacity:0;transition:opacity .2s ease}
 .sft-lump-tax{margin:14px 0 0!important}
 .sft-lump-tax b{font-variant-numeric:tabular-nums}
 .sft-lump-tax span[hidden]{display:none}
@@ -44,8 +57,11 @@
 .sft-lim-fill{left:0;width:var(--w);background:var(--slate);border-radius:4px 0 0 4px}
 .sft-lim-over{left:var(--from);width:var(--w);background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
 .sft-lim-mark{position:absolute;top:-5px;bottom:-5px;left:var(--at);margin-left:-1px;border-left:2px solid var(--ink)}
-.sft-lim-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
-.sft-lim-k>span{display:block}
+/* the key runs as one wrapping line at every width: its third item, what is
+   over, then joins the threshold's line instead of adding one, so the hero
+   keeps its height as the total crosses the threshold (review SP-9) */
+.sft-lim-k{display:flex;flex-wrap:wrap;gap:4px 14px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lim-k>span{display:block;white-space:nowrap}
 .sft-lim-k>span[hidden]{display:none}
 .sft-lim-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .sft-lim-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
@@ -53,7 +69,11 @@
 .sft-lim-k-thr i{width:0;height:14px;border-radius:0;vertical-align:-2px;border-left:2px solid var(--ink)}
 .sft-lim-k-ov i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
 .sft-lim,.sft-lim *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@media(min-width:601px){.sft-lim-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+@media(min-width:601px){.sft-lim-k{gap:6px 16px}}
+/* the line under the bar keeps two lines' room on a phone, where what is
+   over and its tax take two and the headroom one: the hero, and the chart
+   under it, stay put as the total crosses the threshold (review SP-9) */
+@media(max-width:600px){.sft-hero .pb-say{min-height:3.1em}}
 
 /* YEAR BY YEAR: a column for each year, as tall as its threshold, on one
    scale; your pensions one line across them all. A column the line clears
@@ -77,10 +97,16 @@
 .sft-strip li.sft-on b{color:var(--ink)}
 .sft-strip li.sft-on{color:var(--ink)}
 /* the line: your pensions, across every column, with its figure and a grip */
-.sft-line{position:absolute;left:-4px;right:-4px;top:calc(6px + var(--colh) * (1 - var(--f, .5)));height:0;border-top:2px dashed var(--ink);z-index:2;cursor:ns-resize;touch-action:none}
+/* a finger takes the line by its grip or its figure only: a swipe that
+   starts anywhere else on the chart, the line's band included, scrolls the
+   page (review SP-6). A mouse takes it anywhere along the band. */
+.sft-line{position:absolute;left:-4px;right:-4px;top:calc(6px + var(--colh) * (1 - var(--f, .5)));height:0;border-top:2px dashed var(--ink);z-index:2;cursor:ns-resize;touch-action:pan-y}
+.sft-grip,.sft-line-v,.sft-hit{touch-action:none}
 .sft-line::before{content:"";position:absolute;left:0;right:0;top:-14px;height:28px}
 .sft-line-v{position:absolute;right:0;bottom:6px;padding:2px 8px;border-radius:6px;background:var(--ink);color:#fff;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .sft-grip{position:absolute;left:-6px;top:-13px;width:24px;height:24px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink);box-shadow:0 2px 6px rgba(11,31,28,.2)}
+/* a finger's target round the grip: 44px, drawn as nothing */
+.sft-hit{position:absolute;left:-16px;top:-23px;width:44px;height:44px;touch-action:none}
 .sft-grip::before,.sft-grip::after{content:"";position:absolute;left:50%;width:0;height:0;margin-left:-4px;border:4px solid transparent}
 .sft-grip::before{top:-1px;border-bottom-color:var(--ink)}
 .sft-grip::after{bottom:-1px;border-top-color:var(--ink)}
@@ -140,11 +166,27 @@
    and wraps a headline figure's changed characters in .pb-roll, only while
    motion is allowed and nothing is being dragged; every rule here is also
    behind :root.pb-motion. The limit bar and the lump-sum bar keep still
-   (Run 43). The card that says what is over the threshold, and the
-   headroom line, arrive softly each time they appear. */
+   (Run 43). The hero's line says the headroom or what is over; when it
+   turns from one to the other it settles in softly, never from nothing
+   (its data-state changes the animation's name, which replays it). The
+   card that works out the tax opens on its own height (.sft-over-slot,
+   above). */
 :root.pb-motion.pb-sft-alive .pb-roll{display:inline-block;animation:pbSftRoll .36s cubic-bezier(.2,.7,.2,1) both}
 @keyframes pbSftRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
-@keyframes pbSftArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-:root.pb-motion .sft-over:not([hidden]){animation:pbSftArrive .5s cubic-bezier(.2,1.2,.35,1) backwards}
-:root.pb-motion .sft-hero .pb-say:not([hidden]){animation:pbSftArrive .4s var(--pb-ease-out) backwards}
+:root.pb-motion .sft-hero .pb-say[data-state="under"]{animation:pbSftSayA .4s var(--pb-ease-out) backwards}
+:root.pb-motion .sft-hero .pb-say[data-state="over"]{animation:pbSftSayB .4s var(--pb-ease-out) backwards}
+@keyframes pbSftSayA{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes pbSftSayB{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
 /* MOTION-13:END */
+
+/* THE FIRST LINE ON A PHONE IS THE PAGE'S OWN (13 October 2026 review,
+   SP-14). The shared FIRSTSCREEN block draws the review line first on a
+   phone, so it is on the first screen (tests/consent.test.py check 9). On
+   this page, held upright, the headline comes first and the review line
+   straight under it, as a byline: still on the first screen, and the page
+   opens with its own question. Held sideways the screen is too short for
+   that, and the shared order stands. */
+@media(max-width:560px){
+  .phead > .wrap:has(> .pb-reviewed) > h1{order:-2}
+  .phead > .wrap:has(> .pb-reviewed) > p.pb-reviewed{margin:0 0 10px}
+}

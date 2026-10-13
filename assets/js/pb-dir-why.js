@@ -1,16 +1,12 @@
-/* Why directors leave it (#drWhy: the order, the coverage rows, the year-end
-   ring) and the executive pension (#drExec),
+/* Why directors leave it (#drWhy: the order and the year-end ring) and the
+   executive pension (#drExec),
    11 October 2026, Damian's brief: "super motion design, super simple,
    super interactive; as fluid as the welcome".
 
-   Three small stages, each a picture over words that already say it all.
-
-   The coverage rows. Two rows of ten coins, one coin for one in ten
-   people: employees 6.8 coins lit (68%), the self-employed 5.7 (57%). On
-   the self-employed's row the 1.1 coins between the two are a coral
-   outline: the gap. The percentages are read from the sentence above the
-   rows (#drS1, #drS2: Central Statistics Office, Pension Coverage, Quarter
-   3 2025), so the picture and the words can never disagree.
+   Each a picture over words that already say it all. (13 October 2026:
+   the coverage rows went, the Central Statistics Office's self-employed
+   against employees; "not a figure for company directors", so a third
+   idea in a section that must explain one.)
 
    The year-end ring. A year round a clock, January at the top, each month
    an equal twelfth. The ink dot is today, the blue coin is the company's
@@ -28,13 +24,10 @@
    Authority: 141,500 one-member arrangements in January 2023, 40,644 on
    1 September 2026): 14 x 40,644 / 141,500 = 4.0.
 
-   Motion: the first time each is seen (35% on screen), the coins pop in
-   left to right on springs that overshoot while the percentages roll up
-   from 0, and the coral gap pulses once; the arc draws round from today
-   while the days roll up, then the coin lands on the year end with a ring;
-   ten of the fourteen roll out to the right with a hop, leaving dashed
-   outlines. Then the reader plays. Coins near the pointer lift like piano
-   keys and a tap sends a hop wave out from where it landed. The coin on the
+   Motion: the first time each is seen (35% on screen), the arc draws round
+   from today while the days roll up, then the coin lands on the year end
+   with a ring; ten of the fourteen roll out to the right with a hop,
+   leaving dashed outlines. Then the reader plays. The coin on the
    ring drags round and springs to the nearest month end; a tap on a month
    sends it there; dragged back past today it knocks against today's dot,
    then rolls the long way round to next year. The slider under the ring
@@ -56,19 +49,30 @@
    who the company pays and in what order: the business, the staff, the
    bills, your pension. Two radios hold the order (#drQLast, #drQFirst) and
    the page's CSS draws it, so it reads and works without JavaScript; this
-   file only moves it. The first look (45% on screen): the rows rise in, the
-   company pays the business, the staff and the bills a blue coin each, in
-   turn, and comes to the pension with nothing: its empty place shakes and
-   "Nothing left" appears. A pause, then the order turns round: the pension
-   is picked up and carried over the others to the top while they step down
-   out of its way, every number rolls on, and a coin drops in and comes
-   round silver (the company's money, now yours) with a ring and a light
-   along the row: "Business expense". The reader turns it back and forth
-   with the two buttons (or a tap on the pension row); a tap on a paid row
-   hops its coin. The facts are the page's own: the company's payment is a
-   cost it deducts (assets/js/director-calc.js, PBDirector.split), with no
-   income tax, USC or PRSI for the director going in, within Revenue's
-   limits. With motion off it is drawn once, by the CSS. */
+   file only moves it. The first look: the rows rise in as the list comes
+   on screen, so the card is never empty in view; the company pays the
+   business, the staff and the bills a blue coin each, in turn, and comes
+   to the pension with nothing: its empty place shakes and "Nothing left"
+   appears. A pause, then the order turns round. Each beat waits for its
+   own row to be wholly on
+   screen (clear of the nav at the top and of the bottom tenth, where the
+   booking bar and Ask Buddy sit; the turn, for all four rows), then plays
+   a moment after it arrives, so nothing plays to no one: a reader who
+   stops with the pension row below the fold finds it waiting, and one
+   back to it after a look away gets a beat on "Nothing left" before the
+   turn (1.2s). In the turn the pension is picked up and carried over the
+   others to the top while they step down out of its way, every number
+   rolls on, and a coin drops in and comes round silver (the company's
+   money, now yours) with a ring and a light along the row: "Business
+   expense". The reader turns it back and forth with the two buttons (or a
+   tap on the pension row); a tap on a paid row hops its coin. The facts
+   are the page's own: the company's payment is a cost it deducts
+   (assets/js/director-calc.js, PBDirector.split), with no income tax, USC
+   or PRSI for the director going in, within Revenue's limits. The two
+   paragraphs beside it rise in each as it comes on screen, or are simply
+   there if the page opens on or below them, so neither is ever blank in
+   view. With motion off it is drawn once, by the CSS, and the words are
+   simply there. */
 (function () {
   'use strict';
   var K = window.PBKit, C = window.PBCoins;
@@ -76,7 +80,7 @@
   var $ = function (id) { return document.getElementById(id); };
   var TAU = Math.PI * 2, FONT = 'Figtree, system-ui, sans-serif';
   var INK = '#0B1F1C', INK2 = '#54635F', TRACK = '#E7EBE9';
-  var GREY = 'rgba(84,99,95,', CORAL = 'rgba(212,87,61,', TEAL = 'rgba(20,203,177,', BLUE = 'rgba(75,97,135,';
+  var TEAL = 'rgba(20,203,177,', BLUE = 'rgba(75,97,135,';
   var LIVE = 'IntersectionObserver' in window;
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -170,205 +174,7 @@
     return st;
   }
 
-  /* ================================================ A. the coverage rows -- */
-  (function () {
-    var sec = $('drWhy'), cv = sec && sec.querySelector('.drw-rows'), eSe = $('drS1'), eEmp = $('drS2');
-    if (!cv || !eSe || !eEmp) { return; }
-    function num(t) { var m = /(\d+(?:\.\d+)?)/.exec(t); return m ? +m[1] : NaN; }
-    var tSe = eSe.textContent.trim(), tEmp = eEmp.textContent.trim(), vSe = num(tSe) / 10, vEmp = num(tEmp) / 10;
-    if (!(vSe >= 0 && vSe <= 10 && vEmp >= 0 && vEmp <= 10)) { return; }
-    var rows = [{ label: 'Employees', v: vEmp, c: [] }, { label: 'Self-employed', v: vSe, gap: vEmp > vSe ? vEmp : 0, c: [] }];
-    rows.forEach(function (row) { for (var i = 0; i < 10; i++) { row.c.push({ sp: S(1), li: S(0), d: 0, h: 0, vh: 0, hd: -1, hv: 0 }); } });
-    function lit(row, i) { return clamp(row.v - i, 0, 1); }
-    function gapOf(row, i) { if (!row.gap) { return null; } var a = clamp(row.v - i, 0, 1), b = clamp(row.gap - i, 0, 1); return b > a ? [a, b] : null; }
-
-    /* the figures roll up from 0 as the sentence comes into view; screen
-       readers hear the real figure all along */
-    var rSe = new K.Roll(eSe), rEmp = new K.Roll(eEmp), rolled = true;
-    function zero(t) { return t.replace(/\d+(?:\.\d+)?/, '0'); }
-    function roll() { if (rolled) { return; } rolled = true; var q = !K.motion(); rSe.set(tSe, q); rEmp.set(tEmp, q); }
-    var G = null, ptr = { in: false, x: 0, y: 0 }, press = null, rip = new Ripples(), gapA = 1, pulse = -1, pulseAt = -1, intro = null;
-
-    function layout(W, H, cx) {
-      var g = { wide: W >= 430, fs: W >= 430 ? 13.5 : 12.5 }, r, p;
-      cx.font = '600 ' + g.fs + 'px ' + FONT;
-      var lw = Math.ceil(Math.max(cx.measureText(rows[0].label).width, cx.measureText(rows[1].label).width));
-      if (H >= 230 && W >= 430) {
-        /* a tall stage: each label over its row, bigger coins across the width */
-        g.wide = false; g.fs = 14;
-        r = Math.min(20, (W - 60) / 10 / 2.36); p = r * 2.36;
-        g.x0 = (W - 9 * p) / 2; g.lx = g.x0 - r;
-        var tt = (H - (2 * (g.fs + 10 + 2 * r) + 34)) / 2;
-        g.y = [tt + g.fs + 10 + r, tt + 2 * (g.fs + 10) + 3 * r + 34];
-      } else if (g.wide) {
-        /* the labels in a column at the left, the coins beside them, the whole centred */
-        r = clamp((W - lw - 26 - 80) / 23.3, 11, 15); p = r * 2.36;
-        g.lx = Math.round((W - (lw + 26 + 9 * p + 2 * r)) / 2); g.x0 = g.lx + lw + 26 + r;
-        g.y = [H / 2 - r - 11, H / 2 + r + 11];
-      } else {
-        /* a phone: each label sits over its row, the coins take the width */
-        p = Math.min(34, (W - 36) / 10); r = Math.min(14, p / 2.3);
-        g.x0 = (W - 9 * p) / 2; g.lx = g.x0 - r;
-        var top = (H - (2 * (g.fs + 8 + 2 * r) + 18)) / 2;
-        g.y = [top + g.fs + 8 + r, top + 2 * (g.fs + 8) + 3 * r + 18];
-      }
-      g.r = r; g.p = p;
-      /* the middle of the gap, where its pulse starts */
-      var a = Math.floor(vSe), b = Math.max(a, Math.ceil(vEmp) - 1);
-      g.gx = g.x0 + (a + b) / 2 * p;
-      G = g;
-    }
-    function pre() { rows.forEach(function (row) { row.c.forEach(function (c) { c.sp.x = 0; c.sp.v = 0; }); }); gapA = 0; }
-    function first() {
-      roll();
-      var lastPop = 0;
-      rows.forEach(function (row, ri) {
-        row.c.forEach(function (c, i) { c.sp.x = 0; c.sp.v = 0; c.d = 0.12 + 0.06 * i + 0.05 * ri; if (lit(row, i) > 0) { lastPop = Math.max(lastPop, c.d); } });
-      });
-      gapA = 0; intro = { t: 0, gap: lastPop + 0.3 };
-    }
-    function finish() {
-      if (!intro) { return; }
-      intro = null; gapA = 1; pulseAt = -1;
-      rows.forEach(function (row) { row.c.forEach(function (c) { if (c.sp.x < 1) { c.sp.x = 1; c.sp.v = 0; } }); });
-    }
-    function settle() {
-      roll(); finish(); pulse = -1; pulseAt = -1; gapA = 1; rip.clear();
-      rows.forEach(function (row) { row.c.forEach(function (c) { c.sp.x = 1; c.sp.v = 0; c.li.x = 0; c.li.v = 0; c.h = 0; c.vh = 0; c.hd = -1; }); });
-    }
-    function step(dt) {
-      var moving = false, g = G, sg = g.p * 0.8;
-      if (intro) {
-        intro.t += dt; moving = true;
-        if (intro.t >= intro.gap) { gapA = Math.min(1, gapA + dt * 3.5); if (!intro.pulsed) { intro.pulsed = true; pulseAt = 0.15; } }
-        if (intro.t > intro.gap + 1.2) { intro = null; }
-      }
-      if (pulseAt >= 0) { pulseAt -= dt; if (pulseAt < 0) { pulse = 0; } moving = true; }
-      if (pulse >= 0) { pulse += dt; if (pulse > 0.8) { pulse = -1; } moving = true; }
-      rows.forEach(function (row, ri) {
-        var y = g.y[ri];
-        row.c.forEach(function (c, i) {
-          var x = g.x0 + i * g.p, on = lit(row, i) > 0;
-          if (intro && intro.t < c.d) { moving = true; } else if (spring(c.sp, 1, 340, 12.5, dt, 0.002)) { moving = true; }
-          /* piano keys: the coins nearest the pointer lift, up to 4px */
-          var lt = 0;
-          if (ptr.in && on) { var dx = ptr.x - x, dy = (ptr.y - y) * 1.25; lt = 4 * Math.exp(-(dx * dx + dy * dy) / (2 * sg * sg)); }
-          if (spring(c.li, lt, 260, 17, dt, 0.02)) { moving = true; }
-          if (c.hd >= 0) { c.hd -= dt; if (c.hd < 0) { c.vh = -c.hv; } moving = true; }
-          if (c.vh || c.h) {
-            c.vh += 2400 * dt; c.h += c.vh * dt;
-            if (c.h > 0) { c.h = 0; c.vh = Math.abs(c.vh) > 110 ? -c.vh * 0.22 : 0; }
-            moving = true;
-          }
-        });
-      });
-      if (rip.step(dt)) { moving = true; }
-      return moving;
-    }
-    /* a tap: a ring spreads from it at 600px a second, and each coin hops as it passes */
-    function wave(p) {
-      var g = G, top = Math.sqrt(2400 * g.r);
-      rip.add(p.x, p.y, { v: 600, life: 0.6, a: 0.45 });
-      rows.forEach(function (row, ri) {
-        row.c.forEach(function (c, i) {
-          if (lit(row, i) <= 0) { return; }
-          var d = dist(p, { x: g.x0 + i * g.p, y: g.y[ri] });
-          c.hd = d / 600; c.hv = top - Math.min(70, d * 0.12);
-        });
-      });
-      if (rows[1].gap) { pulseAt = dist(p, { x: g.gx, y: g.y[1] }) / 600; }
-    }
-    /* a strip of a coin's width, from fraction a to fraction b of it */
-    function band(cx, x, y, r, a, b) {
-      var L = a <= 0 ? x - r - 8 : x - r + 2 * r * a, R = b >= 1 ? x + r + 8 : x - r + 2 * r * b;
-      cx.rect(L, y - r - 40, R - L, 2 * r + 80);
-    }
-    function draw(cx) {
-      var g = G; if (!g) { return; }
-      var r = g.r, pb = pulse >= 0 ? Math.sin(Math.PI * clamp(pulse / 0.8, 0, 1)) : 0;
-      cx.font = '600 ' + g.fs + 'px ' + FONT; cx.fillStyle = INK2; cx.textAlign = 'left';
-      rows.forEach(function (row, ri) {
-        var y = g.y[ri];
-        if (g.wide) { cx.textBaseline = 'middle'; cx.fillText(row.label, g.lx, y + 0.5); }
-        else { cx.textBaseline = 'alphabetic'; cx.fillText(row.label, g.lx, y - r - (g.fs > 13 ? 10 : 8)); }
-        for (var i = 0; i < 10; i++) {
-          var c = row.c[i], x = g.x0 + i * g.p, f = lit(row, i), gp = gapOf(row, i), g0 = gp ? gp[1] : f;
-          /* the empty place, grey: where no coin is and the gap is not. Under
-             a coin only while it pops in, so a coin that lifts or hops leaves
-             its floor clean, not a second dashed rim */
-          if (g0 < 1) {
-            cx.save();
-            if (g0 > 0) { cx.beginPath(); band(cx, x, y, r, g0, 1); cx.clip(); }
-            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
-            cx.restore();
-          }
-          if (f > 0 && c.sp.x < 1) {
-            cx.save(); cx.globalAlpha = 1 - clamp(c.sp.x, 0, 1);
-            if (f < 1) { cx.beginPath(); band(cx, x, y, r, 0, f); cx.clip(); }
-            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
-            cx.restore();
-          }
-          /* the gap: coral, a faint fill; it swells once as it pulses (grey until it arrives) */
-          if (gp && gapA < 1) {
-            cx.save(); cx.globalAlpha = 1 - gapA;
-            cx.beginPath(); band(cx, x, y, r, gp[0], gp[1]); cx.clip();
-            dashed(cx, x, y, r - 0.7, GREY + '.4)', GREY + '.04)');
-            cx.restore();
-          }
-          if (gp && gapA > 0) {
-            var sc = 1 + 0.12 * pb;
-            cx.save(); cx.globalAlpha = gapA;
-            cx.translate(x, y); cx.scale(sc, sc); cx.translate(-x, -y);
-            cx.beginPath(); band(cx, x, y, r, gp[0], gp[1]); cx.clip();
-            dashed(cx, x, y, r - 0.7, CORAL + (0.75 + 0.25 * pb).toFixed(3) + ')', CORAL + (0.12 + 0.13 * pb).toFixed(3) + ')', pulse >= 0 ? -pulse * 14 : 0);
-            cx.restore();
-          }
-          /* the coin, lit as far as the figure goes */
-          if (f > 0 && c.sp.x > 0.02) {
-            var s = c.sp.x, rs = r * s, yy = y - c.li.x + c.h;
-            cx.save();
-            if (f < 1) { cx.beginPath(); band(cx, x, y, rs, 0, f); cx.clip(); }
-            shadow(cx, x, y + r * 0.96, r * 0.92, Math.min(1, s) * (1 - clamp((y - yy) / 16, 0, 0.75)));
-            C.face(cx, x, yy, rs, 'silver');
-            cx.restore();
-          }
-        }
-      });
-      rip.draw(cx);
-    }
-
-    var st = stage(cv, { layout: layout, step: step, settle: settle, draw: draw, first: first });
-    if (!st) { return; }
-    if (K.motion() && LIVE) {
-      rolled = false; pre();
-      rSe.set(zero(tSe), true); rEmp.set(zero(tEmp), true); rSe.sr.textContent = tSe; rEmp.sr.textContent = tEmp;
-      var stat = eSe.closest ? eSe.closest('.dr-stat') : null;
-      if (stat) {
-        new IntersectionObserver(function (es, o) {
-          var e = es[es.length - 1];
-          if (e.isIntersecting && e.intersectionRatio >= 0.95) { roll(); o.disconnect(); }
-        }, { threshold: [0, 0.95, 1] }).observe(stat);
-      }
-      /* printed before it was ever seen: the figures, not 0% */
-      window.addEventListener('beforeprint', function () { if (!rolled) { rolled = true; rSe.set(tSe, true); rEmp.set(tEmp, true); } });
-    }
-    cv.addEventListener('pointermove', function (e) {
-      var p = st.local(e);
-      ptr.x = p.x; ptr.y = p.y; ptr.in = e.pointerType === 'mouse' || !!press;
-      if (press && (Math.abs(p.x - press.x) > 6 || Math.abs(p.y - press.y) > 6)) { press.moved = true; }
-      st.kick();
-    });
-    cv.addEventListener('pointerleave', function () { ptr.in = false; st.kick(); });
-    cv.addEventListener('pointerdown', function (e) { var p = st.local(e); press = { x: p.x, y: p.y, moved: false }; finish(); st.kick(); });
-    cv.addEventListener('pointerup', function (e) {
-      if (press && !press.moved && G && K.motion()) { wave(st.local(e)); }
-      press = null; if (e.pointerType !== 'mouse') { ptr.in = false; }
-      st.kick();
-    });
-    cv.addEventListener('pointercancel', function () { press = null; ptr.in = false; st.kick(); });
-  }());
-
-  /* ================================================== B. the year-end ring -- */
+  /* ================================================== A. the year-end ring -- */
   (function () {
     var sec = $('drWhy'), cv = sec && sec.querySelector('.drw-ring'), rng = $('drYe');
     if (!cv || !rng) { return; }
@@ -624,7 +430,7 @@
     rng.addEventListener('blur', st.kick);
   }());
 
-  /* ======================================= C. the executive-pension row -- */
+  /* ======================================= B. the executive-pension row -- */
   (function () {
     var sec = $('drExec'), cv = sec && sec.querySelector('.dre-cv');
     if (!cv) { return; }
@@ -737,7 +543,7 @@
     cv.addEventListener('pointercancel', function () { press = null; ptr.in = false; st.kick(); });
   }());
 
-  /* ========================================================= D. the order -- */
+  /* ========================================================= C. the order -- */
   (function () {
     var box = $('drQ'), rL = $('drQLast'), rF = $('drQFirst'), list = box && box.querySelector('.dr-q-list');
     if (!list || !rL || !rF) { return; }
@@ -751,7 +557,7 @@
       return {
         el: el, pen: pen, slot: el.querySelector('.dr-q-slot'), coin: el.querySelector('.dr-q-coin'),
         nn: el.querySelector('.dr-q-nn'), badge: el.querySelector('.dr-q-n'),
-        y: S(0), y0: 0, hold: 0, nod: S(0), lift: S(0), lt: 0, a: 1, sh: -1, dirty: false,
+        y: S(0), y0: 0, hold: 0, nod: S(0), lift: S(0), lt: 0, a: 1, sh: -1, dirty: false, near: false,
         /* its coin: a drop under gravity, a squash as it lands, a turn (the
            pension's comes round silver: the company's money, now yours) */
         c: { ph: '', t: 0, y: 0, vy: 0, op: 1, hit: false, turn: false, hide: false, sq: S(0), rot: S(rest), rt: rest, rest: rest, dirty: false }
@@ -761,8 +567,28 @@
     if (!pen || rows.some(function (r) { return !r.slot || !r.coin || !r.nn || !r.badge; })) { return; }
     var none = pen.el.querySelector('.dr-q-none'), exp = pen.el.querySelector('.dr-q-exp');
     var raf = 0, last = 0, T = 0, plan = [], seen = false, playing = false, turn = null;
+    /* The story's beats wait for their subjects: a beat with a need (rows)
+       holds the clock until each of them is wholly on screen, then plays a
+       moment (grace) after they arrive, the beats after it keeping their
+       spacing. A reader's own presses need nothing: the reader is looking. */
+    var held = false, nav = $('nav');
     function ease(k) { return 1 - Math.pow(1 - k, 3); }
-    function at(t, fn) { plan.push({ t: T + t, fn: fn }); plan.sort(function (a, b) { return a.t - b.t; }); }
+    function at(t, fn, need, grace) {
+      plan.push({ t: T + t, fn: fn, need: need || null, grace: grace || 0 });
+      plan.sort(function (a, b) { return a.t - b.t; });
+    }
+    /* wholly on screen: below the nav while it shows (it hides as the page
+       goes down and slides back as it comes up) and above the bottom tenth,
+       where the booking bar and Ask Buddy sit */
+    function inBand(r) {
+      var b = r.el.getBoundingClientRect(), n = nav ? nav.getBoundingClientRect() : null;
+      return b.top >= (n && n.bottom > 0 ? n.bottom : 0) && b.bottom <= (window.innerHeight || 0) * 0.9;
+    }
+    function ready(q) {
+      if (!q.need || q.need.every(inBand)) { return true; }
+      /* a screen too short to hold all four: the pension's own row will do */
+      return q.need.length > 1 && inBand(pen) && list.offsetHeight > (window.innerHeight || 0) * 0.82;
+    }
     function kick() { if (!raf && K.motion()) { last = clock(); raf = requestAnimationFrame(frame); } }
     function frame(ms) {
       raf = 0;
@@ -775,10 +601,18 @@
     function stop(el) { if (el && el.getAnimations) { el.getAnimations().forEach(function (a) { a.cancel(); }); } }
 
     function step(dt) {
-      var moving = false;
-      T += dt;
-      while (plan.length && plan[0].t <= T) { plan.shift().fn(); }
-      if (plan.length) { moving = true; }
+      var moving = false, nx = plan[0];
+      if (nx && !ready(nx)) {
+        /* held: still looking while any of its rows is on screen at all
+           (the observer at the end wakes it when one comes back) */
+        held = true;
+        if (nx.need.some(function (r) { return r.near; })) { moving = true; }
+      } else {
+        if (held && nx) { T = nx.t - nx.grace; }
+        held = false; T += dt;
+        while (plan.length && plan[0].t <= T && ready(plan[0])) { plan.shift().fn(); }
+        if (plan.length) { moving = true; }
+      }
       rows.forEach(function (r) {
         if (r.hold > 0) { r.hold -= dt; moving = true; }
         else {
@@ -880,7 +714,7 @@
        The radios hold the order and the CSS draws it, so this only moves the
        parts from where they were to where the CSS now puts them. */
     function flip(first, auto) {
-      plan = []; turn = null; playing = false; T = 0; box.classList.remove('dr-q-pre');
+      plan = []; turn = null; playing = false; T = 0; held = false; box.classList.remove('dr-q-pre');
       rows.forEach(function (r) { r.hold = 0; if (!r.pen && r.c.hide) { r.c.hide = false; } });
       (first ? rL : rF).checked = true;
       rows.forEach(function (r) { r.vis = r.el.offsetTop + r.y.x; r.nf = getComputedStyle(r.nn).transform; });
@@ -907,12 +741,14 @@
         if (none) { none.style.opacity = ''; anim(none, [{ opacity: tf[0] }, { opacity: 0 }], { duration: 160 }); }
         if (exp) { exp.style.opacity = '0'; }
         pen.c.ph = ''; pen.c.hide = true; pen.sh = -1;
-        at(0.5, function () { drop(pen, true); });
+        /* the story's own turn: the coin and its tag wait for the pension row, now at the top */
+        var want = auto ? [pen] : null;
+        at(0.5, function () { drop(pen, true); }, want, 0.2);
         at(0.78, function () {
           if (!exp) { return; }
           exp.style.opacity = '';
           anim(exp, [{ opacity: 0, transform: 'scale(.55)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.3,1.6,.5,1)' });
-        });
+        }, want, 0.2);
       } else {
         if (exp) { exp.style.opacity = ''; anim(exp, [{ opacity: tf[1] }, { opacity: 0 }], { duration: 160 }); }
         if (none) { none.style.opacity = '0'; }
@@ -926,7 +762,7 @@
     }
     /* everything where the CSS puts it, at once */
     function settle() {
-      plan = []; turn = null; playing = false; box.classList.remove('dr-q-pre');
+      plan = []; turn = null; playing = false; held = false; box.classList.remove('dr-q-pre');
       rows.forEach(function (r) {
         r.y.x = r.y.v = 0; r.y0 = 0; r.hold = 0; r.nod.x = r.nod.v = 0; r.lift.x = r.lift.v = 0; r.lt = 0; r.a = 1; r.sh = -1; r.dirty = true;
         var c = r.c;
@@ -949,13 +785,17 @@
       paint();
     }
     function intro(own) {
-      plan = []; T = 0; playing = true; box.classList.remove('dr-q-pre');
+      plan = []; T = 0; playing = true; held = false; box.classList.remove('dr-q-pre');
       rows.forEach(function (r, i) { r.hold = 0.07 * i; r.a = 0; r.y.x = 22; r.y.v = 0; r.y0 = 0; });
+      /* each coin as its row is on screen, "Nothing left" as the pension's is */
       var k = 0;
-      rows.forEach(function (r) { if (!r.pen) { at(0.62 + 0.3 * k++, function () { drop(r, false); }); } });
-      at(0.62 + 0.3 * k + 0.12, nothing);
-      /* the turn is ours to make only while the reader has not touched the buttons */
-      if (!own) { turn = function () { turn = null; flip(true, true); }; at(3.5, turn); }
+      rows.forEach(function (r) { if (!r.pen) { at(0.62 + 0.3 * k++, function () { drop(r, false); }, [r], 0.25); } });
+      var tNone = 0.62 + 0.3 * k + 0.12;
+      at(tNone, nothing, [pen], 0.3);
+      /* the turn is ours to make only while the reader has not touched the
+         buttons: 1.5s on "Nothing left", with all four rows in view; back to
+         it after a look away, a reader gets 1.2s on "Nothing left" first */
+      if (!own) { turn = function () { turn = null; flip(true, true); }; at(tNone + 1.5, turn, rows, 1.2); }
       kick();
     }
     /* a press on the buttons before the turn, even on the one already chosen: the reader has it now */
@@ -1004,22 +844,40 @@
       if (K.motion() && !r.c.hide && !r.c.ph) { var c = r.c; c.ph = 'drop'; c.t = 1; c.y = -0.01; c.vy = -330; c.op = 1; c.hit = false; c.turn = false; kick(); }
     });
 
+    var words = copy ? [].slice.call(copy.querySelectorAll('.dr-q-lead,.dr-q-fix')) : [];
     if (K.motion() && LIVE) {
       pre();
+      /* the rows rise in as the list comes on screen at all, so the card is
+         never empty in view; the beats then wait for their rows */
       new IntersectionObserver(function (es, o) {
         var e = es[es.length - 1];
         if (seen) { o.disconnect(); return; }
-        if (e.isIntersecting && e.intersectionRatio >= 0.45) { seen = true; o.disconnect(); if (K.motion()) { intro(); } else { rF.checked = true; settle(); } }
-      }, { threshold: [0, 0.45] }).observe(list);
-      if (copy) {
-        copy.classList.add('dr-q-wait');
-        new IntersectionObserver(function (es, o) {
-          if (es[es.length - 1].isIntersecting) { o.disconnect(); copy.classList.remove('dr-q-wait'); }
-        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }).observe(copy.querySelector('h2') || copy);
+        if (e.isIntersecting) { seen = true; o.disconnect(); if (K.motion()) { intro(); } else { rF.checked = true; settle(); } }
+      }).observe(list);
+      /* each row on screen at all or not: a held beat looks for its rows
+         only while one of them is, and wakes when one comes back */
+      var rio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { rows.forEach(function (r) { if (r.el === e.target) { r.near = e.isIntersecting; } }); });
+        if (plan.length) { kick(); }
+      });
+      rows.forEach(function (r) { rio.observe(r.el); });
+      /* the words beside it rise in, each as it comes on screen at all. Only
+         one still below the screen waits; one on it or above it (a reload
+         lower down, a link to further on) is simply there */
+      if (words.length) {
+        var wio = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting || e.boundingClientRect.bottom <= 0) { wio.unobserve(e.target); e.target.classList.remove('dr-q-wait'); }
+          });
+        });
+        words.forEach(function (w) {
+          if (w.getBoundingClientRect().top < (window.innerHeight || document.documentElement.clientHeight)) { return; }
+          w.classList.add('dr-q-wait'); wio.observe(w);
+        });
       }
     }
     /* motion turned off, or the page printed, before the end: the finished order */
-    function done() { if (copy) { copy.classList.remove('dr-q-wait'); } if (!seen || playing) { seen = true; rF.checked = true; } settle(); }
+    function done() { words.forEach(function (w) { w.classList.remove('dr-q-wait'); }); if (!seen || playing) { seen = true; rF.checked = true; } settle(); }
     document.addEventListener('pb:motion', function () { if (!K.motion()) { done(); } });
     window.addEventListener('beforeprint', done);
   }());

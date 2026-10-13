@@ -7,7 +7,15 @@
 
    One fixed canvas over the page that never takes a click: links and the
    search work as ever; only a press on the paw itself is caught. With motion
-   turned off nothing is drawn. */
+   turned off nothing is drawn.
+
+   It never walks over the words on its own. A wide screen has an empty side
+   beside them, and the paw roams that, on the glass. Where there is no such
+   side (a phone, a tablet, a small laptop) its home is the empty band beside
+   Buddy's picture, above the heading: it lives on the page there, so it
+   scrolls away with the band and is back when the reader is, and it fades
+   under the nav rather than over it. Only the reader takes it elsewhere, by
+   a tap or by carrying it, and it trots home after. */
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -17,10 +25,22 @@
   var cv = document.createElement('canvas'); cv.className = 'pb-lost'; cv.setAttribute('aria-hidden', 'true');
   document.body.appendChild(cv);
   var cx = cv.getContext('2d'); if (!cx) { return; }
-  var W = 0, H = 0, dpr = 1;
-  function size() { W = innerWidth; H = innerHeight; dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  var W = 0, H = 0, dpr = 1, narrow = false;
+  var nf = document.querySelector('.pb-nf'), pic = document.querySelector('.pb-nf .pb-nf-buddy'), bar = document.getElementById('nav');
+  function size() {
+    W = innerWidth; H = innerHeight; dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    /* is there an empty side beside the words, 260px or more? */
+    var right = nf ? Math.min(nf.getBoundingClientRect().left + 780, W) : W;
+    narrow = W - right <= 260 && !!pic;
+  }
   size(); window.addEventListener('resize', size);
   function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
+  /* narrow: the band beside Buddy's picture, where the paw's middle may go
+     (room above it for its "Lost?"), in screen coordinates now */
+  function band() {
+    var r = pic.getBoundingClientRect(), x0 = r.right + S / 2 + 22, x1 = W - S / 2 - 14;
+    return { x0: x0, x1: Math.max(x0, x1), y0: r.top + S / 2 + 18, y1: Math.max(r.top + S / 2 + 18, r.bottom - S / 2 + 12) };
+  }
 
   var PAD = window.Path2D ? new Path2D('M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z') : null;
   var TOE = [[23.2, 17.6, 6.1, 8.3, -9], [40.8, 17.6, 6.1, 8.3, 9], [9.8, 28.6, 5.5, 7.4, -31], [54.2, 28.6, 5.5, 7.4, 31]];
@@ -33,15 +53,28 @@
   function rr(x, y, w, h, r) { cx.beginPath(); cx.moveTo(x + r, y); cx.arcTo(x + w, y, x + w, y + h, r); cx.arcTo(x + w, y + h, x, y + h, r); cx.arcTo(x, y + h, x, y, r); cx.arcTo(x, y, x + w, y, r); cx.closePath(); }
 
   /* the paw, in screen coordinates */
+  var S = 46;
   var P = { x: W > 1000 ? W * 0.78 : W * 0.72, y: H * 0.45, vx: 0, vy: 0, tx: W * 0.7, ty: H * 0.4, face: 0, held: null, gone: 0, born: 0, side: 1, lx: 0, ly: 0 };
-  var prints = [], bits = [], now = 0, nextWander = 0, ptr = null, lastClick = -9, homeAt = 0, S = 46;
+  if (narrow) { var b0 = band(); P.x = P.tx = (b0.x0 + b0.x1) / 2; P.y = P.ty = (b0.y0 + b0.y1) / 2; }
+  var prints = [], bits = [], now = 0, nextWander = 0, ptr = null, lastClick = -9, homeAt = 0, sy = scrollY;
   function wander() {
-    /* somewhere on the screen, kept off the edges; on a wide screen, in the
-       empty side beside the words rather than across them */
-    var nf = document.querySelector('.pb-nf'), right = nf ? Math.min(nf.getBoundingClientRect().left + 780, W) : 0;
-    var x0 = W - right > 260 ? right + 40 : 60;
-    P.tx = x0 + Math.random() * (W - 60 - x0); P.ty = 110 + Math.random() * (H - 200);
+    /* on a wide screen, somewhere in the empty side beside the words, kept
+       off the edges; elsewhere, somewhere in its band beside Buddy */
+    if (narrow) {
+      var b = band();
+      P.tx = b.x0 + Math.random() * (b.x1 - b.x0); P.ty = b.y0 + Math.random() * (b.y1 - b.y0);
+    } else {
+      var x0 = Math.min(nf.getBoundingClientRect().left + 780, W) + 40;
+      P.tx = x0 + Math.random() * (W - 60 - x0); P.ty = 110 + Math.random() * (H - 200);
+    }
     nextWander = now + 2.5 + Math.random() * 2.5;
+  }
+  /* narrow: the paw, its prints and its bits live on the page, so they move with it */
+  function scrolled() {
+    var d = scrollY - sy; sy = scrollY;
+    if (!narrow || !d || P.held) { return; }
+    P.y -= d; P.ty -= d; P.ly -= d;
+    prints.forEach(function (p) { p.y -= d; }); bits.forEach(function (b) { b.y -= d; });
   }
   function inHome(x, y) {
     var r = home.getBoundingClientRect();
@@ -54,14 +87,17 @@
   function frame(ms) {
     raf = 0; now = ms / 1000;
     var dt = clamp(now - last, 0, 1 / 30); last = now;
+    scrolled();
     if (!P.gone) {
       if (P.held) {
         P.x += (P.held.x - P.x) * Math.min(1, dt * 18); P.y += (P.held.y - P.y) * Math.min(1, dt * 18);
         home.classList.toggle('pb-lost-near', inHome(P.x, P.y));
       } else {
-        /* curious: a pointer close by, and it trots over and sits beside it */
+        /* curious: a pointer close by, and it trots over and sits beside it
+           (on a narrow screen, as near as its band allows) */
         if (ptr && now - ptr.t < 2 && Math.hypot(ptr.x - P.x, ptr.y - P.y) < 260 && now - lastClick > 1.5) {
           var d = Math.hypot(ptr.x - P.x, ptr.y - P.y) || 1; P.tx = ptr.x - (ptr.x - P.x) / d * 64; P.ty = ptr.y - (ptr.y - P.y) / d * 64;
+          if (narrow) { var bb = band(); P.tx = clamp(P.tx, bb.x0, bb.x1); P.ty = clamp(P.ty, bb.y0, bb.y1); }
         } else if (now > nextWander && now - lastClick > 2.2) { wander(); }
         var k = 7, c = 4.2;
         P.vx += (k * (P.tx - P.x) - c * P.vx) * dt; P.vy += (k * (P.ty - P.y) - c * P.vy) * dt;
@@ -78,21 +114,24 @@
       }
     }
     cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
-    prints = prints.filter(function (p) { var age = now - p.born; if (age > 3.2) { return false; } paw(p.x, p.y, 15, p.a, '#0B7A6E', 0.32 * (1 - age / 3.2)); return true; });
+    /* under the nav, not over it: what reaches the nav's foot fades */
+    var top = bar ? bar.getBoundingClientRect().bottom : 0, under = function (y, h) { return clamp((y - h - top) / 20, 0, 1); };
+    prints = prints.filter(function (p) { var age = now - p.born; if (age > 3.2) { return false; } paw(p.x, p.y, 15, p.a, '#0B7A6E', 0.32 * (1 - age / 3.2) * under(p.y, 8)); return true; });
     /* the paw itself: the mark, bobbing as it walks, swinging when carried */
     if (!P.gone || now - P.gone < 0.5) {
       var g = P.gone ? 1 - (now - P.gone) / 0.5 : 1, hr = P.gone ? home.getBoundingClientRect() : null;
       var x = P.gone ? P.x + (hr.left + hr.width / 2 - P.x) * (1 - g) : P.x, y = P.gone ? P.y + (hr.top + hr.height / 2 - P.y) * (1 - g) : P.y;
       var spd = Math.hypot(P.vx, P.vy), bob = P.held ? 0 : Math.abs(Math.sin(now * 12)) * Math.min(1, spd / 200) * 6;
       var tilt = P.held ? Math.sin(now * 9) * 0.25 : clamp(P.vx / 1200, -0.25, 0.25), s = S * g * (P.held ? 1.12 : 1);
-      cx.save(); cx.translate(x, y - bob); cx.rotate(tilt);
+      var fade = P.held ? 1 : under(y, s / 2);
+      cx.save(); cx.globalAlpha = fade; cx.translate(x, y - bob); cx.rotate(tilt);
       cx.shadowColor = 'rgba(11,31,28,.25)'; cx.shadowBlur = P.held ? 26 : 14; cx.shadowOffsetY = P.held ? 14 : 6;
       rr(-s / 2, -s / 2, s, s, s * 0.27); cx.fillStyle = '#14CBB1'; cx.fill(); cx.shadowColor = 'transparent';
       cx.restore();
-      cx.save(); cx.translate(x, y - bob); cx.rotate(tilt); paw(0, 2, s * 0.58, 0, '#fff', 1); cx.restore();
+      cx.save(); cx.translate(x, y - bob); cx.rotate(tilt); paw(0, 2, s * 0.58, 0, '#fff', fade); cx.restore();
       if (!P.held && !P.gone && !homeAt) {
         /* a little thought, now and then */
-        var q = (now % 7) < 2.2 ? Math.min(1, (now % 7) / 0.3, (2.2 - now % 7) / 0.3) : 0;
+        var q = (now % 7) < 2.2 ? Math.min(1, (now % 7) / 0.3, (2.2 - now % 7) / 0.3) * under(y, S / 2 + 30) : 0;
         if (q > 0) { cx.save(); cx.globalAlpha = q; cx.fillStyle = '#0B1F1C'; cx.font = '800 15px Figtree, system-ui, sans-serif'; cx.textAlign = 'center'; cx.fillText('Lost?', x, y - S / 2 - 12); cx.restore(); }
       }
     }
@@ -142,10 +181,14 @@
   document.addEventListener('touchmove', function (e) { if (P.held) { e.preventDefault(); } }, { passive: false });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { wake(); } });
 
-  /* the line under the button: a hint first, then the happy ending */
-  var said = document.createElement('p'); said.className = 'pb-lost-said'; said.setAttribute('aria-hidden', 'true');
-  said.textContent = 'A paw got lost too. Carry it to the button.';
-  var row = home.parentNode; row.parentNode.insertBefore(said, row.nextSibling);
+  /* the line under the button: a hint first, then the happy ending (in the
+     markup, its room kept from the first paint; made here only if missing) */
+  var said = document.querySelector('.pb-nf .pb-lost-said');
+  if (!said) {
+    said = document.createElement('p'); said.className = 'pb-lost-said'; said.setAttribute('aria-hidden', 'true');
+    said.textContent = 'A paw got lost too. Carry it to the button.';
+    var row = home.parentNode; row.parentNode.insertBefore(said, row.nextSibling);
+  }
   setTimeout(function () { said.classList.add('pb-on'); }, 2200);
   function hintOff() { if (!homeAt) { said.classList.remove('pb-on'); } }
   P.lx = P.x; P.ly = P.y;

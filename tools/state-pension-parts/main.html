@@ -3,16 +3,22 @@
   <h1>What does the State Pension <span class="hl">actually pay?</span></h1>
   <!-- 13 October 2026 (Damian): the question, answered at once, then the way
        to the reader's own figure. The two figures are the module's maximum
-       (PBStatePension.statePension(2080)); tests/page-probe.js holds them to
-       it, so a Budget that moves the rate cannot leave this line behind.
-       With motion, assets/js/pb-sp-motion.js rolls each figure's digits into
-       place over the real text, which is never rewritten. -->
-  <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year.</p>
+       (PBStatePension.statePension(2080)) and the year they are paid in;
+       tests/page-probe.js holds them to it, so a Budget that moves the rate
+       cannot leave this line behind. The next line is January's new rate
+       (Budget 2027), so the maximum is never read without its year. Plain
+       text from the first frame: with motion each line only rises in. -->
+  <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year, in 2026.</p>
+  <p class="sp-next" id="spNext">From January 2027: &euro;309.30 a week.</p>
   <p class="sp-less">You may get less. It depends on your PRSI record.</p>
   <a class="sp-go" id="spGo" href="state-pension-entitlement.html"><span>Work out what you&rsquo;d get</span><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="4" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a>
 </div></div>
 
-<div class="wrap sp-q2"><h2>Is it enough to live on?</h2></div>
+<!-- the calculator's own question, answered on the line under it from the
+     reader's own record (page.js), so a phone shows the answer beside the
+     dots, not a screen further down -->
+<div class="wrap sp-q2"><h2>Is it enough to live on?</h2>
+  <p class="sp-enough" id="spEnough">Not on its own: it covers <b>81%</b> of a modest retirement.</p></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-reality-check">
   <div class="panel">
@@ -56,9 +62,12 @@
 
     <div id="spHas">
       <div class="res-hero">
-        <div><div class="rl">A week</div><div class="big" id="spWeekly">€299.30</div></div>
-        <div><div class="rl">A year</div><div class="big" id="spAnnual">€15,564</div></div>
+        <div><div class="rl" id="spWeeklyL">A week</div><div class="big" id="spWeekly">€299.30</div></div>
+        <div><div class="rl" id="spAnnualL">A year</div><div class="big" id="spAnnual">€15,564</div></div>
         <div class="divline"></div>
+        <!-- below a full record the figure is Method 1 alone, a floor: the
+             labels say "at least" and this line points to the check that
+             works out both methods (13 October 2026 review, SP-3) -->
         <div class="foot" id="spFoot">The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.</div>
         <p class="pb-sp27">2026 rates. From January 2027 the maximum is &euro;309.30 a week (Budget 2027).</p>
       </div>

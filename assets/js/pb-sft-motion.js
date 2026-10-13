@@ -17,10 +17,14 @@
    in-between value, so what a screen reader, the results bar or a test reads
    is always the page's. While a slider or the line is being dragged the
    figures simply follow, unrolled, so nothing flickers under a finger; the
-   roll is for a change you make in one go: a year, a tap, a key.
+   roll is for a change you make in one go: a year, a tap, a key (a key held
+   down, repeating, changes the figures plainly after its first step).
    The limit bar and the lump-sum bar stay still on purpose (Run 43: they
-   follow the sliders in the same frame); the card that says what is over
-   the threshold arrives softly when it appears (page.css). */
+   follow the sliders in the same frame). The line under the limit bar
+   settles in softly when it turns from headroom to what is over, and the
+   card that works out the tax opens and closes on its own height, last in
+   the column, so nothing above it moves (page.css; 13 October 2026 review,
+   SP-9). */
 (function () {
   'use strict';
   var root = document.documentElement, cols = document.getElementById('sftCols');
@@ -57,12 +61,17 @@
   document.addEventListener('pointerup', letGo, true);
   document.addEventListener('pointercancel', letGo, true);
 
-  function roll(el) {
+  var now = function () { return window.performance && performance.now ? performance.now() : Date.now(); };
+  function roll(el, last) {
     var t = el.textContent;
     if (el.getAttribute('data-roll') === t) { return; }
     var old = el.getAttribute('data-roll') || '';
     el.setAttribute('data-roll', t);
-    if (held || !root.classList.contains('pb-motion')) { return; }
+    /* and a figure that changed under a quarter of a second ago changes
+       plainly, so a held arrow key reads as one steady count */
+    var at = now(), quiet = at - last.t >= 250;
+    last.t = at;
+    if (held || !quiet || !root.classList.contains('pb-motion')) { return; }
     /* what is new is what lies between the longest common start and the
        longest common end: EUR 2,200,000 to 2,400,000 moves one digit, and
        "The threshold for 2027" to "... 2030 or later" moves only the words
@@ -88,11 +97,12 @@
     el.textContent = '';
     el.appendChild(frag);
   }
-  ['thr', 'thrL', 'share'].forEach(function (id) {
+  ['thr', 'thrL', 'shareL', 'share'].forEach(function (id) {
     var el = document.getElementById(id);
     if (!el) { return; }
     el.setAttribute('data-roll', el.textContent);
-    new MutationObserver(function () { roll(el); })
+    var last = { t: -1e9 };
+    new MutationObserver(function () { roll(el, last); })
       .observe(el, { childList: true, characterData: true, subtree: true });
   });
 }());

@@ -68,9 +68,17 @@ const paint = el => paintSlider(el, VALTEXT);
 
 /* The entry-year bounds move with the birth year. When a change of birth year
    pushes the entry year outside them it is clamped to the nearest bound and
-   the subnote says so until the entry slider is next touched, so nothing
-   changes silently. Spec S2, coupled bounds. */
+   the subnote says so, so nothing changes silently. Spec S2, coupled bounds.
+
+   THE READER'S OWN YEAR IS KEPT (13 October 2026 review, SP-4). The year
+   the reader chose (entryWanted) changes only when the entry slider itself
+   is moved; a clamp is drawn from it every time the birth year moves, and
+   lasts only while the bounds force it. So sliding the birth year to 2008
+   and back brings 1985 back with it, and the note goes when the year is
+   the reader's again. Before, the clamped year stayed for good and the
+   result turned into "Check the details" that the reader never caused. */
 let entryMoved = null;
+let entryWanted = null;
 
 function entryBounds(birthYear) {
   return {
@@ -82,17 +90,16 @@ function entryBounds(birthYear) {
 function syncEntryBounds() {
   const entry = $('entry');
   const b = entryBounds(+$('birth').value);
-  // read the value before the bounds move: the browser re-clamps a range
-  // input's value the moment min or max changes, and the note needs to know
-  // whether that happened
-  const was = +entry.value;
-  // the note describes this change only; an earlier clamp is old news once
-  // the birth year has moved again
+  // the year the reader chose, not the slider's value: the slider may hold a
+  // clamp from an earlier birth year (and the browser re-clamps a range
+  // input's value the moment min or max changes)
+  const want = entryWanted === null ? +entry.value : entryWanted;
   entryMoved = null;
   entry.min = b.min;
   entry.max = b.max;
-  if (was < b.min) { entry.value = b.min; entryMoved = { year: b.min, which: 'earliest' }; }
-  else if (was > b.max) { entry.value = b.max; entryMoved = { year: b.max, which: 'latest' }; }
+  if (want < b.min) { entry.value = b.min; entryMoved = { year: b.min, which: 'earliest' }; }
+  else if (want > b.max) { entry.value = b.max; entryMoved = { year: b.max, which: 'latest' }; }
+  else entry.value = want;
   paint(entry);
 }
 
@@ -138,8 +145,19 @@ function render() {
   $('paidV').textContent = num(paid);
   $('creditedV').textContent = num(credited);
   $('homecaringV').textContent = num(homeCaring);
+  // A first payment between 1 January and 5 April of a year up to 2001 fell
+  // in the contribution year that began the April before: the module gets
+  // that year. It changes only the yearly average, so the box shows only
+  // where it can apply: a year up to 2001, and a pension that starts while
+  // Method 2 is still worked out (SP-15). Hidden, it counts for nothing.
+  const aprilApplies = entryYear <= APRIL_LAST && SP.transition(drawdown) !== 'after';
+  $('pbAprilRow').hidden = !aprilApplies;
+  const aprilOn = aprilApplies && $('aprilOn').checked;
+  const effectiveEntry = aprilOn ? entryYear - 1 : entryYear;
+
   /* the folded refinements say what they hold while closed */
-  $('pbMoreSum').textContent = num(credited) + ' credited, ' + num(homeCaring) + ' caring';
+  $('pbMoreSum').textContent = num(credited) + ' credited, ' + num(homeCaring) + ' caring' +
+    (aprilOn ? ', first paid before 6 April' : '');
 
   // Which side of the transition window the drawdown year falls on. Asked of
   // the shared module by name, so 'after' cannot be confused with 'before':
@@ -161,13 +179,6 @@ function render() {
     ? 'Moved to <b>' + yr(entryMoved.year) + '</b>, the ' + entryMoved.which + ' it can be for that birth year.'
     : '';
   $('entryNote').hidden = !entryMoved;
-
-  // A first payment between 1 January and 5 April of a year up to 2001 fell
-  // in the contribution year that began the April before: the module gets
-  // that year. Nothing else changes; the box shows only where it can apply.
-  const aprilApplies = entryYear <= APRIL_LAST;
-  $('pbAprilRow').hidden = !aprilApplies;
-  const effectiveEntry = aprilApplies && $('aprilOn').checked ? entryYear - 1 : entryYear;
 
   const res = ENT.entitlement({
     paid: paid, credited: credited, homeCaring: homeCaring,
@@ -276,6 +287,13 @@ function render() {
     $('mClose').hidden = !hasM2;
     $('mWhy').hidden = hasM2;
 
+    /* with one calculation there is one bar and no Method 2 to show the
+       working of: its sentence and the "both bars" scale go, and the card
+       is named for what it now holds (SP-5) */
+    $('m2Detail').hidden = !hasM2;
+    $('mScale').hidden = !hasM2;
+    $('bothH').textContent = hasM2 ? 'Two ways to work it out' : 'How it\u2019s worked out';
+
     if (hasM2) {
       $('m2Fill').style.width = scale(m2.weeklyCents);
       $('bothSub').textContent = 'Until the end of ' + yr(SP.TRANSITION_LAST) + ' the higher of the two is paid.';
@@ -338,11 +356,12 @@ function render() {
   entry.min = b.min;
   entry.max = b.max;
   entry.value = BIRTH_DEFAULT + ENTRY_DEFAULT_AFTER_BIRTH;
+  entryWanted = +entry.value;
 })();
 
 wireRanges(VALTEXT, el => {
   if (el.id === 'birth') syncEntryBounds();
-  if (el.id === 'entry') entryMoved = null;
+  if (el.id === 'entry') { entryMoved = null; entryWanted = +el.value; }
   render();
 });
 $('aprilOn').addEventListener('change', render);

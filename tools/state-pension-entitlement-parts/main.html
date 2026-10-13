@@ -3,9 +3,11 @@
   <h1>How much State Pension <span class="hl">you may get</span>, from your PRSI record.</h1>
   <!-- 13 October 2026 (Damian): the page's purpose in its first line, and
        plainly that many get less. The figure is the module's maximum
-       (PBStatePension.MAX_WEEKLY_CENTS), held to it by tests/page-probe.js; with
-       motion its digits roll into place (assets/js/pb-sp-motion.js). -->
-  <p class="sp-less">Many people get less than the maximum, <b class="sp-fig sp-fig-in">&euro;299.30</b> a week.</p>
+       (PBStatePension.MAX_WEEKLY_CENTS), held to it by tests/page-probe.js,
+       with January's new rate beside it (Budget 2027), so the maximum is
+       never read without its year. Plain text from the first frame: with
+       motion the line only rises in. -->
+  <p class="sp-less">Many people get less than the maximum, <b class="sp-fig sp-fig-in">&euro;299.30</b> a week (&euro;309.30 from January 2027).</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="state-pension-entitlement">
@@ -23,7 +25,6 @@
       <div class="row"><label for="entry">Year you first paid PRSI</label><span class="val" id="entryV">1985</span></div>
       <input type="range" id="entry" min="1978" max="2026" step="1" value="1985">
       <p class="subnote" id="entryNote" hidden></p>
-      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first PRSI payment was between 1 January and 5 April</span></label>
     </div>
 
     <div class="field">
@@ -32,10 +33,14 @@
       <p class="subnote" id="paidNote">To the year before you turn 66. 52 is a year; you need 520. Yours is on <a href="https://www.mywelfare.ie" rel="noopener">MyWelfare.ie</a>.</p>
     </div>
 
-    <!-- 12 October 2026 (Damian: fewer inputs): the two refinements fold
-         away, their values on the closed summary so nothing counts unseen -->
+    <!-- 12 October 2026 (Damian: fewer inputs): the refinements fold away,
+         their values on the closed summary so nothing counts unseen. 13
+         October 2026 (review SP-15): the April box joins them, last. It
+         matters only for a first payment up to 2001 and while Method 2 can
+         be paid (a pension starting by 2033), so it shows only then, and in
+         here a row that comes and goes moves nothing in the form above. -->
     <details class="pb-fold pb-more" id="pbMore">
-      <summary><span class="pb-more-t">Credits and caring<span class="pb-more-v" id="pbMoreSum">260 credited, 0 caring</span></span></summary>
+      <summary><span class="pb-more-t">More details<span class="pb-more-v" id="pbMoreSum">260 credited, 0 caring</span></span></summary>
       <div class="field">
         <div class="row"><label for="credited">Credited weeks</label><span class="val" id="creditedV">260</span></div>
         <input type="range" id="credited" min="0" max="1040" step="52" value="260">
@@ -47,6 +52,7 @@
         <input type="range" id="homecaring" min="0" max="1040" step="52" value="0">
         <p class="subnote">Caring for a child or someone who needed care.</p>
       </div>
+      <label class="tog pb-april" id="pbAprilRow"><input type="checkbox" id="aprilOn"><span>My first PRSI payment was between 1 January and 5 April</span></label>
     </details>
   </div>
 
@@ -63,7 +69,7 @@
       </div>
 
       <div class="bothcard">
-        <h3>Two ways to work it out</h3>
+        <h3 id="bothH">Two ways to work it out</h3>
         <p class="sub" id="bothSub">Until the end of 2033 the higher of the two is paid.</p>
 
         <div class="mrow" id="m1Row">

@@ -2365,10 +2365,15 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    label is a paragraph that names the section, not a heading: a heading here
    would be a fourth size on most pages. Byte for byte on every page, like the
    blocks above. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the cards rise in one after another as they arrive and
-   each drawing builds itself; under the pointer or the keyboard a card lifts
-   and its drawing plays again. A phone has the drawing beside the words. */
+   adds the classes) each card rises in as it comes on screen, cards that
+   come on screen together one after another, and its drawing builds itself;
+   under the pointer or the keyboard a card lifts and its drawing plays again
+   from where it stands. A phone has the drawing beside the words. */
 .pb-related{padding:48px 0 8px}
+/* the footer keeps clear of the cards on every page: the hand-written pages'
+   footers had no top margin, which left 8px, and the footer's walking strip
+   (assets/js/pb-alive.js, 26px above it) ran over the last card's edge */
+main:has(> .pb-related) + footer{margin-top:56px}
 .pb-related .pb-related-h{display:flex;align-items:center;gap:14px;margin:0 0 16px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .pb-related .pb-related-h::after{content:"";flex:1;height:1px;background:var(--line-2);transform-origin:0 50%}
 .pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:0;padding:0;list-style:none}
@@ -2385,7 +2390,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art svg{display:block;width:auto;height:108px;max-width:100%;overflow:visible}
 .pb-related .pb-related-t,.pb-related .pb-related-d{padding:0 10px}
 .pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
-.pb-related-t::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
+/* the arrow rides on the name's last word (pagebuild.related_title), so it
+   never wraps onto a line of its own; the 404's six places carry it too */
+.pb-rt-end{white-space:nowrap}
+.pb-rt-end::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
 /* where each part of a drawing grows from */
 .pb-related-art :is(.pr-g,.pr-x,.pr-p,.pr-s,.pr-y,.pr-spin,.pr-wave,.pr-fly,.pr-dot){transform-box:fill-box;transform-origin:50% 50%}
@@ -2393,8 +2401,6 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art .pr-x{transform-origin:0 50%}
 .pb-related-art .pr-r{transform-box:view-box}
 .pb-related-art *{--pd:calc(var(--ci,0) * 130ms + 320ms + var(--o,0) * 85ms)}
-.pb-related-list li:nth-child(2) .pb-related-card{--ci:1}
-.pb-related-list li:nth-child(3) .pb-related-card{--ci:2}
 @media(max-width:560px){
   .pb-related .pb-related-card{display:grid;grid-template-columns:108px minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start;column-gap:14px;row-gap:4px;padding:10px 14px 10px 10px}
   .pb-related-art{grid-row:1 / span 2;height:84px;margin:0;border-radius:10px}
@@ -2413,18 +2419,21 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 html.pb-motion .pb-related-card{transition:translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-related-card::after{content:"";position:absolute;left:0;right:0;top:100%;height:0}
 html.pb-motion .pb-related-art svg{transition:scale .6s cubic-bezier(.3,1.45,.45,1)}
-html.pb-motion .pb-related-t::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
+html.pb-motion .pb-rt-end::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
 @media (hover:hover) and (pointer:fine){
   html.pb-motion .pb-related-card:hover{translate:0 -6px}
   html.pb-motion .pb-related-card:hover::after{height:8px}
   html.pb-motion .pb-related-card:hover .pb-related-art svg{scale:1.06}
-  html.pb-motion .pb-related-card:hover .pb-related-t::after{translate:5px 0}
+  html.pb-motion .pb-related-card:hover .pb-rt-end::after{translate:5px 0}
 }
 html.pb-motion .pb-related-card:focus-visible{translate:0 -6px}
 html.pb-motion .pb-related-card:focus-visible .pb-related-art svg{scale:1.06}
-html.pb-motion .pb-related-card:focus-visible .pb-related-t::after{translate:5px 0}
-/* arriving: armed only while the section is still below the screen */
-html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-h::after{transform:scaleX(0)}
+html.pb-motion .pb-related-card:focus-visible .pb-rt-end::after{translate:5px 0}
+/* arriving: the label's rule and each card on its own, armed only while
+   wholly below the screen and let go as it comes into view; cards that come
+   into view together step in one after another (--ci, which the script sets) */
+html.pb-motion .pb-related-h.pb-rel-armed:not(.pb-rel-in)::after{transform:scaleX(0)}
+html.pb-motion .pb-related-h.pb-rel-in::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-card{opacity:0;transform:translateY(36px) scale(.96)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-d{stroke-dasharray:1 2;stroke-dashoffset:1.01}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-g{transform:scaleY(0)}
@@ -2435,7 +2444,6 @@ html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-s{opacity:0;transform:translate
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-y{opacity:0;transform:translateY(-18px)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-r{transform:rotate(var(--r0,-60deg))}
 html.pb-motion .pb-rel-in .pr-d{stroke-dasharray:1 2}
-html.pb-motion .pb-rel-in .pb-related-h::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
 html.pb-motion .pb-rel-in .pb-related-card{transition:opacity .55s ease calc(var(--ci,0) * 130ms),transform 1s cubic-bezier(.2,1.12,.3,1) calc(var(--ci,0) * 130ms),
   translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-rel-in .pr-d{transition:stroke-dashoffset .95s cubic-bezier(.55,0,.2,1) var(--pd)}
@@ -2638,12 +2646,15 @@ main h1{font-weight:800}
    drawing tips, and the name steps along. A phone or a tablet lays each
    column's links in two columns (CSS columns, so each still reads top to
    bottom).
+   On a phone the Tools column, whose names are the longest, keeps one link
+   to a line.
    The brand (the logo, its line, Damian's qualifications) and the disclosure
    under it never move. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the links arrive one after another as the footer comes
-   into view, each drawing drawn, and the wordmark at the foot catches the
-   light as it arrives and under the pointer. */
-footer .foot-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto 1fr;
+   adds the classes) each column arrives as it comes into view, its links one
+   after another, each drawing drawn (columns that come into view together
+   step in one after another: --fc, which the script sets), and the wordmark
+   at the foot catches the light as it arrives and under the pointer. */
+footer .foot-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto 1fr;
   gap:30px 32px;margin-bottom:44px}
 /* Company and Legal share the last column, one over the other */
 footer .foot-top > :is(.foot-brand,.foot-col:nth-child(2),.foot-col:nth-child(3)){grid-row:span 2}
@@ -2676,6 +2687,8 @@ footer .foot-col a[href="booking.html"] .foot-ic{background:var(--teal);color:#f
   footer .foot-col:nth-child(4){columns:auto}
 }
 @media(max-width:600px){
+  /* Tools' names are too long for two columns here: one link to a line */
+  footer .foot-col:nth-child(3){columns:auto}
   footer .foot-col a{gap:8px;padding-right:2px;font-size:14.5px;line-height:1.25}
   footer .foot-ic{width:28px;height:28px;border-radius:8px}
   footer .foot-ic svg{width:16px;height:16px}
@@ -2689,26 +2702,23 @@ html.pb-motion footer .foot-l{transition:translate .45s cubic-bezier(.3,1.5,.45,
 }
 html.pb-motion footer .foot-col a:focus-visible .foot-ic{transform:rotate(-9deg) scale(1.12)}
 html.pb-motion footer .foot-col a:focus-visible .foot-l{translate:4px 0}
-footer .foot-col:nth-child(3){--fc:1}
-footer .foot-col:nth-child(4){--fc:2}
-footer .foot-col:nth-child(5){--fc:3}
 footer .foot-col a:nth-of-type(2){--fi:1}footer .foot-col a:nth-of-type(3){--fi:2}footer .foot-col a:nth-of-type(4){--fi:3}
 footer .foot-col a:nth-of-type(5){--fi:4}footer .foot-col a:nth-of-type(6){--fi:5}footer .foot-col a:nth-of-type(7){--fi:6}
 footer .foot-col a:nth-of-type(8){--fi:7}footer .foot-col a:nth-of-type(9){--fi:8}
 footer .foot-col *{--fd:calc(var(--fc,0) * 120ms + var(--fi,0) * 50ms)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2{opacity:0;transform:translateY(10px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2::before{transform:scaleX(0)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col a{opacity:0;transform:translateY(14px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2{opacity:0;transform:translateY(10px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2::before{transform:scaleX(0)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) a{opacity:0;transform:translateY(14px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
+html.pb-motion footer .foot-col.pb-ft-in h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
+html.pb-motion footer .foot-col.pb-ft-in h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
+html.pb-motion footer .foot-col.pb-ft-in a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
 html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-background-clip:text;background-clip:text;
   background-image:radial-gradient(300px circle at var(--wx,-400px) var(--wy,50%),rgba(20,203,177,.6),rgba(20,203,177,0) 70%),linear-gradient(rgba(11,31,28,.07),rgba(11,31,28,.07))}
 @media print{footer .foot-ic{display:none}}
@@ -2779,10 +2789,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <ul class="nav-dd-panel" id="navTools">
         <li><a class="lnk active" href="pension-calculator.html" aria-current="page">Pension calculator</a></li>
         <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
-        <li><a class="lnk" href="state-pension-entitlement.html">State Pension check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">How much State Pension you may get</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
         <li><a class="lnk" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
-        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-reality-check.html">What the State Pension pays</a></li>
         <li><a class="lnk" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
       </ul>
     </div>
@@ -2790,8 +2800,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
-        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
-        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Self-employed pensions</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">UK pensions in Ireland</a></li>
         <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
         <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
@@ -2839,6 +2849,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 :root.pb-motion .pc-mix.pc-pre .pc-bar i{width:0!important;transition:none}
 :root.pb-motion .pc-mix.pc-intro .pc-b-paid{transition-delay:.12s}
 :root.pb-motion .pc-mix.pc-intro .pc-b-grow{transition-delay:.24s}
+/* the first frames, before the page's script has armed anything (html.pb-motion
+   but not yet .pb-ready): the pot's bar and the buy card already wait as they
+   will when armed, so they are never seen drawn, then emptied, then drawn
+   again for their entrance (review, 13 October 2026: the hero's bar showed
+   for a quarter of a second at load, then vanished and grew) */
+:root.pb-motion:not(.pb-ready) .pc-mix .pc-bar i{width:0!important;transition:none}
+:root.pb-motion:not(.pb-ready) .pc-buy .pc-buy-t,:root.pb-motion:not(.pb-ready) .pc-buy .pc-buy-say{opacity:0}
+:root.pb-motion:not(.pb-ready) .pc-buy .pc-buy-fill{clip-path:inset(0 100% 0 0 round 99px)!important}
 [data-pb-calc="pension-calculator"] .res-hero .pb-sp-top{margin:0;font-size:1rem}
 /* the cost of waiting: once assets/js/pb-calc-motion.js has drawn its handle
    and bars, they carry the figure, so the sentence is not said twice */
@@ -2847,34 +2865,43 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 [data-pb-calc="pension-calculator"] .chart-legend .dashk{padding:0;margin:0}
 :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar{font-size:1rem}
 /* the State Pension on a line of its own (13 October 2026, Damian: no
-   inflation-adjusted figures in the results). It is today's rate, so it is
-   never added to a pot in future euro. Teal, because it is the State's. */
+   inflation-adjusted figures in the results). Like the pot, it is in euro
+   at the time: today's full rate grown 2% a year to 66, as the home page's
+   calculator does, so the two sit side by side in the same euros. Teal,
+   because it is the State's. */
 .pc-k-state{display:inline-block;width:10px;height:10px;margin-right:9px;border-radius:50%;background:var(--teal);vertical-align:0}
 [data-pb-calc="pension-calculator"] .res-hero .pb-sp-top b{font-weight:700;font-variant-numeric:tabular-nums}
 /* WHAT IT WILL BUY (13 October 2026, Damian: "below the results, a separate
    small calculator ... the only place inflation appears"). The pot at
-   retirement next to the same money kept in a bank, each in what it buys at
-   today's prices, from the sliders above. Two bars on one scale: slate for
-   the pension, grey for the bank, and between them the coral of money
-   missing (the cost of waiting's own hatch). The bars are drawn with
-   clip-path, so a bar of any length keeps its round ends; the page script
-   sets them. With motion (html.pb-motion) they grow in once, one after the
-   other, the coral draws itself after them and the figures roll; after that
-   they follow the sliders on a gentle spring. Without motion, or without
-   JavaScript, everything sits at its value. */
+   retirement next to the same money kept in a bank, each said the home
+   page's way: "your EUR 460,066 pot will buy what EUR 274,926 buys today",
+   so the smaller figure is never read as the pot (review, 13 October). Two
+   bars on one scale: slate for the pension, grey for the bank, and between
+   them the coral of money missing (the cost of waiting's own hatch). The
+   bars are drawn with clip-path, so a bar of any length keeps its round
+   ends; the page script sets them.
+   Motion (html.pb-motion only): the card waits with its two sentences and
+   the line under them faded out and its bars empty. As it comes into view
+   each sentence settles in, at its own value, and its bar grows under it,
+   one after the other; the coral draws itself out from the bank's bar; then
+   the line under them. No figure ever counts up from nothing or shows a
+   nought it does not mean. After that the bars follow the sliders on a
+   gentle spring and the figures roll from where they are. Without motion,
+   or without JavaScript, everything sits at its value. */
 .pc-buy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);padding:26px 26px 22px;box-shadow:var(--sh-sm)}
-.pc-buy h3{margin:0 0 4px}
-.pc-buy-rows{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:16px}
+.pc-buy h3{margin:0}
+.pc-buy-rows{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:18px}
 .pc-buy-row{margin:0;padding:0;min-width:0}
 .pc-buy-row::before{content:none;display:none}
-.pc-buy-h{display:flex;justify-content:space-between;align-items:baseline;gap:2px 12px;flex-wrap:wrap;font-size:1rem;color:var(--ink-2)}
-.pc-buy-h b{font-size:clamp(1.35rem,2.4vw,1.6rem);font-weight:600;letter-spacing:-.03em;line-height:1.15;color:var(--ink);font-variant-numeric:tabular-nums}
-.pc-buy-track{position:relative;height:14px;margin-top:8px;border-radius:99px;background:rgba(11,31,28,.07)}
+.pc-buy-t{margin:0;font-size:1.05rem;line-height:1.55;color:var(--ink-2)}
+.pc-buy-t span{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pc-buy-t b{display:inline-block;font-size:clamp(1.3rem,2.3vw,1.5rem);font-weight:600;letter-spacing:-.025em;line-height:1.2;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pc-buy-track{position:relative;height:14px;margin-top:10px;border-radius:99px;background:rgba(11,31,28,.07)}
 .pc-buy-fill{position:absolute;inset:0;border-radius:99px}
 .pc-buy-pen{background:var(--slate)}
 .pc-buy-bank{background:#97A3B4}
 .pc-buy-gap{background:repeating-linear-gradient(-45deg,#F2B8A8 0 6px,#FADCD3 6px 12px)}
-.pc-buy-say{margin:18px 0 0;font-size:1.05rem;line-height:1.5;color:var(--ink)}
+.pc-buy-say{margin:18px 0 0;font-size:1.1rem;line-height:1.5;font-weight:600;color:var(--ink)}
 .pc-buy-say b{font-weight:700;font-variant-numeric:tabular-nums}
 .pc-buy-note{margin:6px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 /* the cost of waiting on a phone: each bar on its own line, under its label
@@ -2884,11 +2911,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-l{grid-area:l}
   :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-bar b{grid-area:v;min-width:0}
   :root.pb-calc-alive [data-pb-calc="pension-calculator"] .pb-wait-track{grid-area:t}
+  .pc-buy{padding:22px 20px 20px}
 }
 .pc-buy-fill{will-change:clip-path}
-:root.pb-motion .pc-buy.pc-buy-pre .pc-buy-say{opacity:0;transform:translateY(var(--pb-nudge))}
+:root.pb-motion .pc-buy.pc-buy-pre .pc-buy-t,:root.pb-motion .pc-buy.pc-buy-pre .pc-buy-say{opacity:0;transform:translateY(var(--pb-nudge))}
+:root.pb-motion .pc-buy.pc-buy-in .pc-buy-t{transition:opacity var(--pb-d-3) var(--pb-ease-out),transform var(--pb-d-4) var(--pb-ease-out)}
+:root.pb-motion .pc-buy.pc-buy-in .pc-buy-row+.pc-buy-row .pc-buy-t{transition-delay:.11s}
 :root.pb-motion .pc-buy.pc-buy-in .pc-buy-say{transition:opacity var(--pb-d-3) var(--pb-ease-out) .62s,transform var(--pb-d-4) var(--pb-ease-out) .62s}
-@media print{.pc-buy .pc-buy-say{opacity:1!important;transform:none!important}}
+@media print{.pc-buy .pc-buy-t,.pc-buy .pc-buy-say{opacity:1!important;transform:none!important}}
+/* without JavaScript nothing draws the growth chart, so its card, which
+   would be a heading over an empty box, is not shown (review, 13 October) */
+:root:not(.pb-js) [data-pb-calc="pension-calculator"] .chart-card{display:none}
 /* what Revenue adds, with the one switch it needs */
 .pc-rhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;margin-bottom:14px}
 .relief-card .pc-rhead .rt{margin:0}
@@ -2927,14 +2960,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€269,666</b></li>
         </ul>
       </div>
-      <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: <b>€1,297</b> a month at today&rsquo;s rate.</p>
+      <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: about <b>€2,170</b> a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
     <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
-    <p class="sft-note" id="sftNote" hidden>This projection is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a>. That is the cap on funds with full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed on drawdown. The real ceiling is lower.</p>
+    <p class="sft-note" id="sftNote" hidden>Your pot is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> for <span id="sftYear">2052</span>: <span id="sftCap">at least &euro;2.8 million</span>. Anything above it is taxed when you draw it. The threshold rises from &euro;2.2 million in 2026 to &euro;2.8 million in 2029.</p>
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
       <div class="wtext" id="waitOut">Put this off for a year and you retire with roughly <b>€18,702</b> less: the payments you never made, and the growth they never earned.</div>
@@ -2961,13 +2994,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="pc-buy" id="pcBuy">
       <h3 id="pcBuyH">What it will buy</h3>
-      <p class="pc-sub">At <span id="buyAt">66</span>, in today&rsquo;s prices.</p>
-      <ul class="pc-buy-rows" aria-hidden="true">
-        <li class="pc-buy-row"><div class="pc-buy-h"><span>Your pension</span><b id="buyPen">€274,926</b></div><div class="pc-buy-track"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
-        <li class="pc-buy-row"><div class="pc-buy-h"><span>In a bank instead</span><b id="buyBank">€116,617</b></div><div class="pc-buy-track"><i class="pc-buy-fill pc-buy-gap" id="buyGapBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i><i class="pc-buy-fill pc-buy-bank" id="buyBankBar" style="clip-path:inset(0 57.58% 0 0 round 99px)"></i></div></li>
+      <ul class="pc-buy-rows">
+        <li class="pc-buy-row"><p class="pc-buy-t">At <span id="buyAt">66</span>, your <span id="buyPot">€460,066</span> pot will buy what <b id="buyPen">€274,926</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
+        <li class="pc-buy-row"><p class="pc-buy-t">The same money in a bank (<span id="buyCash">€195,150</span>) will buy what <b id="buyBank">€116,617</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-gap" id="buyGapBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i><i class="pc-buy-fill pc-buy-bank" id="buyBankBar" style="clip-path:inset(0 57.58% 0 0 round 99px)"></i></div></li>
       </ul>
-      <p class="tk-sr" id="buySr">At 66, in today&rsquo;s prices: your pension €274,926; the same money in a bank instead, €116,617.</p>
-      <p class="pc-buy-say" id="buySay">Kept in a bank, the same money would buy <b>€158,308</b> less.</p>
+      <p class="pc-buy-say" id="buySay">That&rsquo;s <b>€158,309</b> less.</p>
       <p class="pc-buy-note">Prices rising 2% a year; the bank paying 0.15%.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
@@ -3023,20 +3054,21 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Not included: product charges, the tax on your income when you draw it.</li>
     <li>Tax relief is at the rate you choose, on your own payments only. Revenue&rsquo;s limit is 15% of earnings under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. We do not ask what you earn, so the figure assumes your earnings cover your payments.</li>
     <li>The figures above are in euro at the time, before inflation. Only &ldquo;What it will buy&rdquo; adjusts for it: prices rising 2% a year, the European Central Bank&rsquo;s target, and the same money in a bank account at 0.15% a year, the average on household overnight deposits in July 2026 (Central Bank of Ireland). Nothing is guaranteed.</li>
-    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top. The full rate is €15,564 a year in 2026, and €16,084 from January 2027 (Budget 2027). Check gov.ie for the current rate.</li>
+    <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top, from 66. The full rate is €15,564 a year in 2026, and €16,084 from January 2027 (Budget 2027). The figure above assumes it rises with prices, 2% a year, to 66. Check gov.ie for the current rate.</li>
   </ul>
   </details>
 </div></section>
 
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/state-pension.js?v=0aef6ee1"></script>
+<script src="assets/js/sft.js?v=d35ecfcb"></script>
 <!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 82H142" stroke="#CBEBE4" stroke-width="2"/><path class="pr-f" style="--o:3" d="M22 74C58 66 94 42 136 16L136 36C96 54 60 70 22 74Z" fill="#FADCD3"/><path class="pr-d" style="--o:0" pathLength="1" d="M22 74C58 66 94 42 136 16" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-d" style="--o:1" pathLength="1" d="M22 74C60 70 96 54 136 36" stroke="#08655A" stroke-width="3.5"/><g class="pr-p" style="--o:5"><rect x="44" y="18" width="34" height="24" rx="12" fill="#fff" stroke="#A4291D" stroke-width="2.5"/><path d="M66 24L56 36" stroke="#A4291D" stroke-width="2.5"/><circle cx="55.5" cy="25.5" r="2.6" fill="#A4291D"/><circle cx="66.5" cy="34.5" r="2.6" fill="#A4291D"/></g></svg></span><span class="pb-related-t">Pension charges calculator</span><span class="pb-related-d">What your pension&rsquo;s charges cost you by retirement.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="state-pension-reality-check.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M38 78A42 42 0 0 1 122 78" stroke="#FCEFCF" stroke-width="11"/><path class="pr-d" style="--o:0" pathLength="1" d="M38 78A42 42 0 0 1 73.4 36.5" stroke="#0C8175" stroke-width="11"/><path d="M28.0 78.0L22.0 78.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M43.2 41.2L39.0 37.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M80.0 26.0L80.0 20.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M116.8 41.2L121.0 37.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M132.0 78.0L138.0 78.0" stroke="#CBEBE4" stroke-width="2.5"/><g class="pr-r" style="--o:2;--r0:-81deg;transform-origin:80px 78px"><path d="M80 78L75.1 47.4" stroke="#08655A" stroke-width="4"/></g><circle cx="80" cy="78" r="6" fill="#08655A"/><circle class="pr-p" style="--o:4" cx="122" cy="78" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">State Pension reality check</span><span class="pb-related-d">What the State Pension actually pays you.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="broker-vs-autoenrolment.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M30 82H130" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="48" y="44" width="26" height="38" rx="5" fill="#CBEBE4" stroke="#08655A" stroke-width="2.5"/><rect class="pr-g" style="--o:2" x="86" y="22" width="26" height="60" rx="5" fill="#14CBB1" stroke="#08655A" stroke-width="2.5"/><circle class="pr-p" style="--o:4" cx="61" cy="33" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><circle class="pr-p" style="--o:6" cx="99" cy="11" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Auto-enrolment comparison</span><span class="pb-related-d">My Future Fund or a personal pension: which puts in more?</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pension-fees-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 82H142" stroke="#CBEBE4" stroke-width="2"/><path class="pr-f" style="--o:3" d="M22 74C58 66 94 42 136 16L136 36C96 54 60 70 22 74Z" fill="#FADCD3"/><path class="pr-d" style="--o:0" pathLength="1" d="M22 74C58 66 94 42 136 16" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-d" style="--o:1" pathLength="1" d="M22 74C60 70 96 54 136 36" stroke="#08655A" stroke-width="3.5"/><g class="pr-p" style="--o:5"><rect x="44" y="18" width="34" height="24" rx="12" fill="#fff" stroke="#A4291D" stroke-width="2.5"/><path d="M66 24L56 36" stroke="#A4291D" stroke-width="2.5"/><circle cx="55.5" cy="25.5" r="2.6" fill="#A4291D"/><circle cx="66.5" cy="34.5" r="2.6" fill="#A4291D"/></g></svg></span><span class="pb-related-t">Pension charges <span class="pb-rt-end">calculator</span></span><span class="pb-related-d">What your pension&rsquo;s charges cost you by retirement.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="state-pension-reality-check.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M38 78A42 42 0 0 1 122 78" stroke="#FCEFCF" stroke-width="11"/><path class="pr-d" style="--o:0" pathLength="1" d="M38 78A42 42 0 0 1 73.4 36.5" stroke="#0C8175" stroke-width="11"/><path d="M28.0 78.0L22.0 78.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M43.2 41.2L39.0 37.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M80.0 26.0L80.0 20.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M116.8 41.2L121.0 37.0" stroke="#CBEBE4" stroke-width="2.5"/><path d="M132.0 78.0L138.0 78.0" stroke="#CBEBE4" stroke-width="2.5"/><g class="pr-r" style="--o:2;--r0:-81deg;transform-origin:80px 78px"><path d="M80 78L75.1 47.4" stroke="#08655A" stroke-width="4"/></g><circle cx="80" cy="78" r="6" fill="#08655A"/><circle class="pr-p" style="--o:4" cx="122" cy="78" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">What the State Pension <span class="pb-rt-end">pays</span></span><span class="pb-related-d">See if it is enough to live on.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="broker-vs-autoenrolment.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M30 82H130" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="48" y="44" width="26" height="38" rx="5" fill="#CBEBE4" stroke="#08655A" stroke-width="2.5"/><rect class="pr-g" style="--o:2" x="86" y="22" width="26" height="60" rx="5" fill="#14CBB1" stroke="#08655A" stroke-width="2.5"/><circle class="pr-p" style="--o:4" cx="61" cy="33" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><circle class="pr-p" style="--o:6" cx="99" cy="11" r="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Auto-enrolment <span class="pb-rt-end">comparison</span></span><span class="pb-related-d">Auto-enrolment or a personal pension: which puts in more?</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3045,7 +3077,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="10.5" cy="10.5" r="6"/><path pathLength="1" d="M15 15l5 5"/></svg></span><span class="foot-l">Track old pensions</span></a><a href="starter.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 20.5v-9"/><path pathLength="1" d="M12 13C12 9 9.5 6.5 5 6.5 5 10.5 7.5 13 12 13z"/><path pathLength="1" d="M12 15.5c0-3.4 2.2-6 6.5-6 0 3.4-2.2 6-6.5 6z"/></svg></span><span class="foot-l">Start a pension</span></a><a href="director.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path pathLength="1" d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path pathLength="1" d="M3.5 12.5h17"/></svg></span><span class="foot-l">Company directors</span></a><a href="pensions-over-50.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M3.5 18.5h17"/><path pathLength="1" d="M7 18.5a5 5 0 0 1 10 0"/><path pathLength="1" d="M12 5.5v3"/><path pathLength="1" d="M5.3 9.3l2 2"/><path pathLength="1" d="M18.7 9.3l-2 2"/></svg></span><span class="foot-l">Over 50</span></a><a href="self-employed-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="5.5" width="14" height="10" rx="1.5"/><path pathLength="1" d="M3 19h18"/></svg></span><span class="foot-l">Self-employed</span></a><a href="uk-pensions-in-ireland.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M4 12h16"/><path pathLength="1" d="M12 4c2.3 2.3 3.4 5 3.4 8s-1.1 5.7-3.4 8c-2.3-2.3-3.4-5-3.4-8S9.7 6.3 12 4z"/></svg></span><span class="foot-l">Worked in the UK</span></a></div>
-    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">State Pension reality check</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">State Pension check</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">What the State Pension pays</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">How much State Pension you may get</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse class="fi-dot" cx="8.9" cy="6.6" rx="2" ry="2.6" transform="rotate(-9 8.9 6.6)"/><ellipse class="fi-dot" cx="15.1" cy="6.6" rx="2" ry="2.6" transform="rotate(9 15.1 6.6)"/><ellipse class="fi-dot" cx="4.7" cy="10.8" rx="1.8" ry="2.3" transform="rotate(-31 4.7 10.8)"/><ellipse class="fi-dot" cx="19.3" cy="10.8" rx="1.8" ry="2.3" transform="rotate(31 19.3 10.8)"/><path class="fi-dot" d="M12 11.2c-3.3 0-5.5 2.4-5.5 5 0 2.2 1.9 3.5 5.5 3.5s5.5-1.3 5.5-3.5c0-2.6-2.2-5-5.5-5z"/></svg></span><span class="foot-l">About</span></a><a href="booking.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M6.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 5.7 5.7L16 13l4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4.5 6a2 2 0 0 1 2-2z"/></svg></span><span class="foot-l">Book a call</span></a><a href="mailto:hello@pensionbuddy.ie"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="5.5" width="17" height="13" rx="2"/><path pathLength="1" d="M4.5 7l7.5 6 7.5-6"/></svg></span><span class="foot-l">hello@<wbr>pensionbuddy.ie</span></a></div>
     <div class="foot-col"><h2>Legal</h2><a href="privacy.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 3.5l7 2.8v5c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2v-5z"/><path pathLength="1" d="M9 12l2.2 2.2 3.8-4"/></svg></span><span class="foot-l">Privacy Notice</span></a><a href="privacy.html#cookies"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M20 12.5A8 8 0 1 1 11.5 4a3 3 0 0 0 3.5 3.5 3 3 0 0 0 3.5 3.5 3 3 0 0 0 1.5 1.5z"/><circle class="fi-dot" cx="9" cy="10" r="1"/><circle class="fi-dot" cx="14.5" cy="15" r="1"/><circle class="fi-dot" cx="9.5" cy="15.5" r="1"/></svg></span><span class="foot-l">Cookies</span></a><a href="terms.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path pathLength="1" d="M14 3.5V8h4"/><path pathLength="1" d="M8.5 12.5h7"/><path pathLength="1" d="M8.5 16h5"/></svg></span><span class="foot-l">Terms of Business</span></a><a href="complaints.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-9l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path pathLength="1" d="M12 8.5V12"/><circle class="fi-dot" cx="12" cy="14.6" r="1"/></svg></span><span class="foot-l">Complaints</span></a></div>
   </div>
@@ -3076,7 +3108,16 @@ let taxRate=40;
    out on what you pay, up to the most the limit allows at your age on any
    earnings (band x EARN_CAP), and the card says the earnings that takes. */
 const EARN_CAP=115000;
-var SFT = 2200000; /* Standard Fund Threshold for 2026 under Finance Act 2024 (rises in steps to 2029) — confirm annually with Damian */
+/* The Standard Fund Threshold for the year the pot is reached, from
+   assets/js/sft.js (Finance Act 2024: EUR 2.2m in 2026, rising to 2.8m in
+   2029, at least that after). A pot in 2052 was being held against 2026's
+   EUR 2.2m (review, 13 October 2026); the module carries the sources. */
+const SFT_NOW=new Date().getFullYear();
+function sftFor(years){
+  const T=window.PBSft?PBSft.threshold(SFT_NOW+years):{value:2200000,atLeast:false};
+  return {year:SFT_NOW+years,value:T.value,atLeast:T.atLeast};
+}
+const millions=v=>'\u20ac'+(v/1e6).toLocaleString('en-IE',{maximumFractionDigits:2})+' million';
 function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
 /* Growth is no longer a slider: risk level 4 of assets/js/pb-assumptions.js,
    about half shares and half bonds, 5% a year before charges. #growth holds
@@ -3129,7 +3170,9 @@ const chart={
     this.els.base=mk('path',{fill:'none',stroke:'#0B7A6E','stroke-width':'3','stroke-linecap':'round','stroke-linejoin':'round'});
     this.els.a0=mk('text',{x:this.padL,y:this.H-8,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
     this.els.a1=mk('text',{x:this.W-this.padR,y:this.H-8,'text-anchor':'end','font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
-    this.els.mx=mk('text',{x:this.padL,y:this.padT-2,'font-family':'Plus Jakarta Sans, sans-serif','font-size':'12',fill:'#7C8A86'});
+    /* no figure at the top of the axis: it was the scale's 108% of the
+       highest line, a number nobody chose that read like a result (review,
+       13 October 2026). Point at the chart for any age's figures. */
     $('chart').appendChild(svg);this.inited=true;
   },
   setTarget(b,u,ageS,ageE){
@@ -3161,21 +3204,26 @@ const chart={
     this.els.base.setAttribute('d',dB);
     this.els.boost.setAttribute('d',dU);
     this.els.area.setAttribute('d',dB+' L '+X(n-1).toFixed(1)+' '+(this.H-this.padB)+' L '+X(0)+' '+(this.H-this.padB)+' Z');
-    this.els.mx.textContent=euro(max);
   }
 };
 
 /* ---- what it will buy (13 October 2026) ----
-   The card under the results: two bars on one scale and three figures, set
-   by calc() through buy.set(pension, bank, age), both already in today's
-   prices. Everything it shows comes from calc(); this only draws it.
-   Motion only under html.pb-motion: the first time the card is half in
-   view, the pension's bar grows from nothing, the bank's a beat later, and
-   the coral between them draws itself out from the bank's end; the figures
-   roll up with them and the sentence settles in under them. After that a
-   slider moves the bars on a gentle spring (a touch under critical, so they
-   land with the faintest give) and rolls the figures from where they are.
-   Without motion everything is written at its value at once. */
+   The card under the results: two sentences, each over its bar, on one
+   scale, and the difference under them, set by calc() through
+   buy.set(pension, bank, age, pot, cash): the first two already in today's
+   prices, the last two in euro at the time. Everything it shows comes from
+   calc(); this only draws it. The difference is worked from the two figures
+   as shown, so the sum on the page adds up to the euro.
+   Motion only under html.pb-motion: the card waits faded and empty (the
+   .pc-buy-pre rules), and as soon as it is coming into view (15% of it) the
+   sentences settle in at their values while the pension's bar grows from
+   nothing, the bank's a beat later, and the coral between them draws itself
+   out from the bank's end; then the line under them. No figure counts up
+   from nothing: a figure that had been on screen and then ran back to
+   nought would read as a loss. After that a slider moves the bars on a
+   gentle spring (a touch under critical, so they land with the faintest
+   give) and rolls the figures from where they are. Without motion
+   everything is written at its value at once. */
 const buy=(function(){
   const box=$('pcBuy');
   if(!box)return {set(){}};
@@ -3183,10 +3231,10 @@ const buy=(function(){
   const bar={pen:$('buyPenBar'),bank:$('buyBankBar'),gap:$('buyGapBar')};
   const fig={pen:$('buyPen'),bank:$('buyBank')};
   const K=110,C=19;                         /* the spring: stiffness, damping (just under critical) */
-  const DELAY={pen:0,bank:110,gap:470};     /* ms into the first reveal */
+  const DELAY={pen:60,bank:170,gap:520};    /* ms into the first reveal, after its sentence starts to settle */
   const S={pen:{x:0,v:0,t:0},bank:{x:0,v:0,t:0},gap:{x:0,v:0,t:0}};
   const R={pen:{x:0,from:0,t:0,t0:0},bank:{x:0,from:0,t:0,t0:0}};
-  let seen=false,start=0,last=0,raf=0;
+  let seen=false,start=0,last=0,raf=0,want=null;
   const clip=w=>'inset(0 '+((1-Math.max(0,Math.min(1,w)))*100).toFixed(2)+'% 0 0 round 99px)';
   function paint(){
     for(const k in S)bar[k].style.clipPath=clip(S[k].x);
@@ -3203,7 +3251,7 @@ const buy=(function(){
         continue;}
       s.v+=(K*(s.t-s.x)-C*s.v)*dt;s.x+=s.v*dt;
       if(Math.abs(s.t-s.x)>0.0006||Math.abs(s.v)>0.003)busy=true;else{s.x=s.t;s.v=0;}}
-    for(const k in R){const r=R[k],u=(now-r.t0)/(age>900?520:700);
+    for(const k in R){const r=R[k],u=(now-r.t0)/520;
       if(u<1){busy=true;r.x=u<=0?r.from:r.from+(r.t-r.from)*(1-Math.pow(1-u,4));}else r.x=r.t;}
     paint();
     if(busy)raf=requestAnimationFrame(frame);else last=0;
@@ -3218,47 +3266,55 @@ const buy=(function(){
     if(raf){cancelAnimationFrame(raf);raf=0;}
     paint();
   }
-  function aim(w,v){
-    S.pen.t=w.pen;S.bank.t=w.bank;S.gap.t=w.pen;
+  /* the bars to their new lengths on the spring, the figures rolling from where they are */
+  function aim(){
+    S.pen.t=want.w.pen;S.bank.t=want.w.bank;S.gap.t=want.w.pen;
     const now=performance.now();
-    for(const k in R){const r=R[k];r.from=r.x;r.t=v[k];r.t0=now+(start&&now-start<DELAY[k]?start+DELAY[k]-now:0);}
+    for(const k in R){const r=R[k];r.from=r.x;r.t=want.v[k];r.t0=now;}
+    go();
   }
-  let want=null;
-  const io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
-    if(!es[0].isIntersecting||es[0].intersectionRatio<0.45)return;
-    io.disconnect();seen=true;
-    if(!motion()||!want){box.classList.remove('pc-buy-pre');if(want)set(want.v.pen,want.v.bank,want.at);return;}
+  /* the first view: the figures are already at their values (they arrive
+     with their sentences); only the bars grow, from nothing */
+  function reveal(){
+    seen=true;
+    if(!motion()||!want){box.classList.remove('pc-buy-pre');snap();return;}
     start=performance.now();
+    for(const k in R)R[k].x=R[k].from=R[k].t=want.v[k];
+    S.pen.t=want.w.pen;S.bank.t=want.w.bank;S.gap.t=want.w.pen;
     box.classList.add('pc-buy-in');box.classList.remove('pc-buy-pre');
-    aim(want.w,want.v);go();
-    setTimeout(function(){box.classList.remove('pc-buy-in');},1600);
-  },{threshold:[0,0.45,0.8]}):null;
+    paint();go();
+    setTimeout(function(){box.classList.remove('pc-buy-in');},1700);
+  }
+  const io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
+    if(!es[0].isIntersecting||es[0].intersectionRatio<0.15)return;
+    io.disconnect();reveal();
+  },{threshold:[0,0.15,0.5]}):null;
   if(motion()&&io){box.classList.add('pc-buy-pre');io.observe(box);}else seen=true;
   /* motion switched off part way: straight to the values */
   document.addEventListener('pb:motion',function(e){
     if(e.detail&&!e.detail.motion){if(io)io.disconnect();seen=true;box.classList.remove('pc-buy-pre','pc-buy-in');
       /* a fade still waiting on its delay jumps to its end */
       if(box.getAnimations)box.getAnimations({subtree:true}).forEach(function(a){try{a.finish();}catch(x){}});
-      if(want)set(want.v.pen,want.v.bank,want.at);}});
-  function set(pen,bank,at){
-    const top=Math.max(pen,bank,1),gap=Math.max(0,pen-bank);
-    want={w:{pen:pen/top,bank:bank/top},v:{pen:pen,bank:bank},at:at};
-    $('buyAt').textContent=at;
-    $('buySay').innerHTML=pen>=0.5||bank>=0.5
-      ?(gap>=0.5?'Kept in a bank, the same money would buy <b>'+euro(gap)+'</b> less.':'Kept in a bank, the same money would buy about the same.')
+      snap();}});
+  function set(pen,bank,at,pot,cash){
+    /* the figures as shown, whole euros, and the difference between them */
+    const P=Math.round(Math.max(0,pen)),B=Math.round(Math.max(0,bank)),top=Math.max(P,B,1),gap=Math.max(0,P-B);
+    want={w:{pen:P/top,bank:B/top},v:{pen:P,bank:B}};
+    $('buyAt').textContent=at;$('buyPot').textContent=euro(pot);$('buyCash').textContent=euro(cash);
+    $('buySay').innerHTML=P>0||B>0
+      ?(gap>0?'That’s <b>'+euro(gap)+'</b> less.':'About the same.')
       :'Add what you have saved, or pay in, to see what it buys.';
-    $('buySr').textContent='At '+at+', in today\u2019s prices: your pension '+euro(pen)+'; the same money in a bank instead, '+euro(bank)+'.';
-    if(!seen)return;                          /* armed: the reveal starts it */
+    if(!seen){for(const k in R)fig[k].textContent=euro(want.v[k]);return;}   /* armed: at its value, faded, for the reveal */
     if(!motion()){snap();return;}
-    aim(want.w,want.v);go();
+    aim();
   }
   /* printed before it was ever seen, or part way through: at its values */
   addEventListener('beforeprint',function(){
     if(!seen){if(io)io.disconnect();seen=true;box.classList.remove('pc-buy-pre');}
     snap();
   });
-  /* armed and out of sight: empty bars and noughts, for the reveal to fill */
-  if(!seen){S.pen.x=S.bank.x=S.gap.x=0;paint();}
+  /* armed and out of sight: the bars empty, for the reveal to grow */
+  if(!seen){S.pen.x=S.bank.x=S.gap.x=0;for(const k in S)bar[k].style.clipPath=clip(0);}
   return {set:set};
 })();
 
@@ -3307,12 +3363,16 @@ function calc(){
   /* #11, 13 October 2026 (Damian: no inflation-adjusted figures in the
      results): the State Pension (Contributory) at its maximum rate, from 66,
      the pension age, on a line of its own. The rate is the reality check's
-     module's, a year over twelve, and it is today's rate, so it is never
-     added to the pension above, which is in euro at the time. */
+     module's, a year over twelve, grown at PBAssume's 2% a year to 66, as
+     the home page's calculator does: euro at the time, like the pot above
+     it (it was today's rate beside future euros until the review of
+     13 October 2026). Not added to the pot: it is paid from 66, whatever
+     the age the pot is drawn. */
   if(window.PBStatePension){
-    const SPm=PBStatePension.MAX_WEEKLY_CENTS*PBStatePension.WEEKS_PER_YEAR/100/12;
-    $('pbSpTop').innerHTML='<i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from '+PBStatePension.PENSION_AGE+
-      ': <b>'+euro(SPm)+'</b> a month at today\u2019s rate.';
+    const SP=PBStatePension, INF=window.PBAssume?PBAssume.inflation.rate:0.02;
+    const SPm=SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100/12*Math.pow(1+INF,Math.max(0,SP.PENSION_AGE-age));
+    $('pbSpTop').innerHTML='<i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from '+SP.PENSION_AGE+
+      ': about <b>'+euro(SPm)+'</b> a month.';
   }
 
   /* #29: the workings, from the same values: what went in, what was there
@@ -3388,11 +3448,15 @@ function calc(){
   const cRate=Math.pow(1+(A?A.cash.rate:0),1/12)-1;
   const bank=project(months,pot,monthly,cRate);
   const penT=A?A.today(base,yrs):base, bankT=A?A.today(bank,yrs):bank;
-  buy.set(penT,bankT,ret);
+  buy.set(penT,bankT,ret,base,bank);
   ['age','ret','pot','mine','emp'].forEach(function(id){paint($(id));});  /* keep all fills in sync */
-  /* E2: flag a projection above the Standard Fund Threshold (no figure shown; the glossary explains it) */
-  const overSFT=base>SFT, sftNote=$('sftNote');
-  if(sftNote) sftNote.hidden=!overSFT;
+  /* E2: flag a pot above the Standard Fund Threshold for the year it is
+     reached, with that year's threshold (the glossary explains the term) */
+  const T=sftFor(yrs), overSFT=base>T.value, sftNote=$('sftNote');
+  if(sftNote){
+    sftNote.hidden=!overSFT;
+    if(overSFT){$('sftYear').textContent=T.year;$('sftCap').textContent=(T.atLeast?'at least ':'')+millions(T.value);}
+  }
   /* announce the settled headline figures once per change (the tweened numbers themselves are not live) */
   announce('About '+euro(base*0.04/12)+' a month from '+ret+', from a pot of '+euro(base)+'.'+(overSFT?' Above the Standard Fund Threshold.':''));
 }
@@ -3649,7 +3713,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bc0eea8d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3753,10 +3817,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-peek.js?v=7d945b40"></script>
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
-<script src="assets/js/pb-calc-motion.js?v=0ab7c99c"></script>
+<script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-chrome-motion.js?v=3dd0f2e6"></script>
+<script src="assets/js/pb-chrome-motion.js?v=e090c2e4"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>
 <script src="assets/js/pb-askresult.js?v=065b81d6"></script>

@@ -36,13 +36,22 @@ function render() {
 
   const annualCents = res.eligible ? res.annualCents : 0;
 
+  /* Below a full record this page's figure is Method 1 alone. Until the end
+     of 2033 the Department pays the higher of two calculations, so the
+     figure is the least that record pays: the labels say "at least" and the
+     foot sends the reader to the check that works out both (13 October 2026
+     review, SP-3; the spec's S6 item 2). At a full record it is exact. */
+  const floor = res.eligible && res.fraction < 1;
+  const pctOfMax = Math.round(res.fraction * 100);
   if (res.eligible) {
     $('spWeekly').textContent = euro2(res.weekly);
     $('spAnnual').textContent = euro(res.annual);
-    const pctOfMax = Math.round(res.fraction * 100);
-    $('spFoot').innerHTML = res.fraction === 1
-      ? 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.'
-      : '<b>' + pctOfMax + '%</b> of a full record, so ' + pctOfMax + '% of the maximum.';
+    $('spWeeklyL').textContent = floor ? 'A week, at least' : 'A week';
+    $('spAnnualL').textContent = floor ? 'A year, at least' : 'A year';
+    $('spFoot').innerHTML = floor
+      ? '<b>' + pctOfMax + '%</b> of a full record, so at least ' + pctOfMax + '% of the maximum. ' +
+        'You may get more: <a href="state-pension-entitlement.html">work out your own figure</a>.'
+      : 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.';
   } else {
     $('spNoneFoot').innerHTML = num(contribs) + ' contributions is ' + years +
       (years === 1 ? ' year' : ' years') + '. <b>' + num(res.shortBy) +
@@ -61,12 +70,21 @@ function render() {
     row.classList.toggle('is-covered', g.covered && res.eligible);
   });
 
+  /* The calculator's question, answered under it: the modest standard is
+     the first bar, and no record reaches it (the maximum is below every
+     standard, spec row 12), so the answer is always "not on its own". */
+  const modestShare = Math.round(Math.max(0, Math.min(1, annualCents / gaps[0].targetCents)) * 100);
+  $('spEnough').innerHTML = res.eligible
+    ? 'Not on its own: it covers <b>' + (floor ? 'at least ' : '') + modestShare + '%</b> of a modest retirement.'
+    : 'No: below 520 contributions it pays nothing.';
+
   /* One spoken summary rather than eight fragments. */
   $('srSummary').textContent = res.eligible
     ? 'State Pension ' + euro2(res.weekly) + ' a week, ' + euro(res.annual) +
       ' a year. Against a modest standard of living that is ' + euro(gaps[0].gapAnnual) +
       ' a year short, moderate ' + euro(gaps[1].gapAnnual) + ' short, comfortable ' +
-      euro(gaps[2].gapAnnual) + ' short.'
+      euro(gaps[2].gapAnnual) + ' short.' +
+      (floor ? ' On part of a record this is the least it pays: you may get more.' : '')
     : 'With ' + num(contribs) + ' reckonable contributions there is no State Pension (Contributory) entitlement. ' +
       num(res.shortBy) + ' more contributions would bring the total to 520. Qualifying needs 520 paid contributions.';
 }
@@ -139,6 +157,15 @@ function paintJar() {
    second, pointer-only way to reach the same value, which is why it sets the
    slider and lets the slider's own input event do everything else.
 
+   A FINGER (or a pen) IS NOT A MOUSE. On a phone the dots fill most of the
+   screen's width, so a thumb starting a scroll often starts on them; until
+   13 October 2026 that swipe changed the record and the page did not move
+   (review SP-6). Now the dots take a finger only when it means them: a tap
+   (it lifts within 10px of where it landed) sets the record on lifting, and
+   a drag that is clearly sideways runs along it. A swipe up or down is the
+   browser's (touch-action: pan-y, page.css): the page scrolls and the record
+   stays as it was. A mouse presses and drags as before.
+
    With a mouse, hovering previews the record the press would set: the dots up
    to the pointer take a slate ring (the reader's own mark, not the State's
    teal). Everything is behind feature checks, so a DOM without layout or
@@ -196,19 +223,46 @@ function initJarPointer() {
     }
   }
 
+  /* a finger on the dots: where it landed, and whether it has become a
+     sideways drag; null when no finger is down, or the browser took it for
+     a scroll (pointercancel) */
+  var finger = null;
+  var TAP = 10;   // px a tap may wander before it is a gesture
+
   body.addEventListener('pointerdown', function (e) {
     if (e.button && e.button !== 0) return;
-    try { body.setPointerCapture(e.pointerId); } catch (err) {}
     peekN = -1; peek(0);
+    if (e.pointerType && e.pointerType !== 'mouse') {
+      /* nothing changes yet and nothing is prevented, so a scroll can start */
+      finger = { id: e.pointerId, x: e.clientX, y: e.clientY, drag: false };
+      return;
+    }
+    try { body.setPointerCapture(e.pointerId); } catch (err) {}
     apply(e, true);
     e.preventDefault();
   });
   body.addEventListener('pointermove', function (e) {
+    if (finger && e.pointerId === finger.id) {
+      var dx = Math.abs(e.clientX - finger.x), dy = Math.abs(e.clientY - finger.y);
+      if (!finger.drag && dx > TAP && dx > dy * 1.5) {
+        finger.drag = true;
+        try { body.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      if (finger.drag) apply(e, false);
+      return;
+    }
     if (body.hasPointerCapture && body.hasPointerCapture(e.pointerId)) { apply(e, false); return; }
     if (e.pointerType === 'mouse') peek(countAt(e) || 0);
   });
   body.addEventListener('pointerleave', function () { peek(0); });
-  body.addEventListener('pointerup', function () { peekN = -1; peek(0); });
+  body.addEventListener('pointerup', function (e) {
+    if (finger && e.pointerId === finger.id) {
+      if (!finger.drag && Math.abs(e.clientX - finger.x) <= TAP && Math.abs(e.clientY - finger.y) <= TAP) apply(e, true);
+      finger = null;
+    }
+    peekN = -1; peek(0);
+  });
+  body.addEventListener('pointercancel', function () { finger = null; peekN = -1; peek(0); });
 }
 
 function initJar() {

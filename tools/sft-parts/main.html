@@ -2,7 +2,7 @@
 <div class="phead"><div class="wrap">
   <h1>The <span class="hl">Standard Fund Threshold</span></h1>
   <p>Revenue caps the pension savings that get full tax relief: €2.2 million in 2026, and €2.4 million from 1 January 2027.</p>
-  <p class="sft-asat">Rules as at 8 October 2026.</p>
+  <p class="sft-asat">Rules as at 8 October 2026. Budget 2027 left these figures as they were.</p>
 </div></div>
 
 <div class="wrap"><div class="calc-wrap" data-pb-calc="standard-fund-threshold">
@@ -27,28 +27,28 @@
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero sft-hero">
+      <!-- from 2030 the threshold is only known to be at least EUR 2.8m: the
+           labels carry "at least" and "at most", so the figures keep their
+           width and the line under them never moves (review SP-13) -->
       <div><div class="rl" id="thrL">The threshold for 2026</div><div class="big" id="thr">€2,200,000</div></div>
-      <div><div class="rl">Share used</div><div class="big" id="share">75%</div></div>
+      <div><div class="rl" id="shareL">Share used</div><div class="big" id="share">75%</div></div>
       <div class="sft-lim" id="sftLim" aria-hidden="true">
         <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
         <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i>Threshold</span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
       </div>
+      <!-- one line, both ways: the headroom, or what is over and the tax to
+           pay on it. It swaps its words in place, so crossing the threshold
+           moves nothing on the page (review SP-9) -->
       <p class="pb-say" id="pbSay">€550,000 of headroom.</p>
       <div class="divline"></div>
       <div class="foot">A Personal Fund Threshold, if you hold one, replaces this.</div>
-    </div>
-
-    <div class="sft-card sft-over" id="sftOver" hidden>
-      <h3>Over the threshold</h3>
-      <p id="sftOverText"></p>
-      <p class="sft-small">What is left is taxed again as income when you draw it: up to 68.8% in all, and more with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
     </div>
 
     <div class="chart-card sft-strip-card">
       <h3>Year by year</h3>
       <p class="sft-sub">Each column is a year&rsquo;s threshold; the line is your pensions. Drag the line, or tap a year.</p>
       <div class="sft-cols" id="sftCols" aria-hidden="true">
-        <div class="sft-line" id="sftLine" style="--f:0.5612"><span class="sft-line-v" id="sftLineV">€1.65m</span><span class="sft-grip"></span></div>
+        <div class="sft-line" id="sftLine" style="--f:0.5612"><span class="sft-line-v" id="sftLineV">€1.65m</span><span class="sft-hit"></span><span class="sft-grip"></span></div>
         <ol class="sft-strip" id="sftStrip">
           <li data-y="2026" class="sft-on"><span class="sft-col"><i class="sft-col-fill" style="height:74.83%"></i><i class="sft-col-over" style="bottom:74.83%;height:0%"></i></span><b>2026</b><span>€2.2m</span></li>
           <li data-y="2027"><span class="sft-col"><i class="sft-col-fill" style="height:81.63%"></i><i class="sft-col-over" style="bottom:81.63%;height:0%"></i></span><b>2027</b><span>€2.4m</span></li>
@@ -67,6 +67,21 @@
         <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
       </div>
       <p class="sft-lump-tax">Tax at 20%: <b id="lumpTax">€40,000</b>.<span id="lumpIncLine" hidden> On the <b id="lumpInc">€0</b> above €500,000, income tax at your marginal rate, usually 40%, plus the Universal Social Charge (USC).</span></p>
+    </div>
+
+    <!-- Over the threshold: the working of the tax the hero's line names,
+         after the lump sum, whose tax it takes off (review SP-7). Last in
+         the column, so its arrival moves nothing above it; with motion it
+         opens and closes smoothly (.sft-over-slot, page.css; review SP-9).
+         Closed at the shipped default, which is under the threshold. -->
+    <div class="sft-over-slot" id="sftOverSlot">
+      <div class="sft-over-clip">
+        <div class="sft-card sft-over" id="sftOver">
+          <h3>Over the threshold</h3>
+          <p id="sftOverText"></p>
+          <p class="sft-small">What is left is taxed again as income when you draw it: up to 68.8% in all.</p>
+        </div>
+      </div>
     </div>
     <!-- AFTER -->
   </div>
@@ -87,7 +102,8 @@
     <li>Finance Act 2024, section 13, sets the threshold. It was €2 million from 2014 to 2025. From 2030 it tracks Central Statistics Office average weekly earnings and cannot fall.</li>
     <li>Budget 2027 keeps the threshold&rsquo;s path (&euro;2.4 million in 2027). It also revises the factors that value a defined benefit pension against it, from 1 January 2027; the new factors are due in the Finance (No. 2) Bill 2026, and this page does not use them yet.</li>
     <li>Each benefit is tested against all taken since 7 December 2005. Here, all are taken in one year.</li>
-    <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it.</li>
+    <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it. This page takes off the 20% tax on the lump sum you set.</li>
+    <li>What is left of an excess is taxed again as income when drawn: up to 68.8% in all, and more with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</li>
     <li>Lump sum: the €500,000 has been fixed since 1 January 2025 (Revenue Pensions Manual, chapter 27). Above it, a lump sum is taxed as income.</li>
     <li>Figures are illustrations, not a guarantee.</li>
   </ul>

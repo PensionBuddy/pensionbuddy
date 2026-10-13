@@ -60,9 +60,11 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var text = function (id) { var el = $(id); return el ? el.textContent : undefined; };
-  /* An element's words as a reader gets them: what an aria-hidden layer lays
-     over it (the lead's rolling digits, pb-sp-motion.js) is left out, and
-     white space is folded, as the headline's word-by-word rise splits it. */
+  /* An element's words as a reader gets them: anything aria-hidden inside it
+     is left out (the lead's figures had a rolling layer laid over them until
+     the 13 October 2026 review took it away; nothing may come back to sit
+     on top of the words), and white space is folded, as the headline's
+     word-by-word rise splits it. */
   function words(el) {
     if (!el) return undefined;
     var c = el.cloneNode(true);
@@ -123,10 +125,17 @@
          'What does the State Pension actually pay?');
     t.eq('lead: its two figures are the module\'s maximum, a week and a year',
          [].map.call(lead.querySelectorAll('.sp-fig'), words).join(' | '), euro2(maxRes.weekly) + ' | ' + euro(maxRes.annual));
-    t.eq('lead: the answer, at once, in words', words($('spAns')),
-         'At most ' + euro2(maxRes.weekly) + ' a week, ' + euro(maxRes.annual) + ' a year.');
+    /* the maximum with the year it is paid in, then January's rate (Budget
+       2027): a maximum read without its year was the review's SP-11. When
+       the module's rate moves, these three lines move with it, by hand. */
+    t.eq('lead: the answer, at once, in words, with its year', words($('spAns')),
+         'At most ' + euro2(maxRes.weekly) + ' a week, ' + euro(maxRes.annual) + ' a year, in 2026.');
+    t.eq('lead: then January\'s rate, on its own line', words($('spNext')),
+         'From January 2027: €309.30 a week.');
     t.eq('lead: then, plainly, that you may get less', words(lead.querySelector('.sp-less')),
          'You may get less. It depends on your PRSI record.');
+    t.eq('lead: the figures are the words themselves, nothing laid over them',
+         lead.querySelectorAll('[aria-hidden="true"]').length, lead.querySelectorAll('.sp-go svg[aria-hidden="true"]').length);
     t.eq('lead: the way to your own figure goes to the entitlement check, and says so',
          [$('spGo') && $('spGo').getAttribute('href'), words($('spGo'))].join(' | '),
          'state-pension-entitlement.html | Work out what you’d get');
@@ -197,6 +206,13 @@
       t.eq(label + ': the no-entitlement panel shows iff not', !$('spNone').hidden, !res.eligible);
 
       var gaps = SP.gaps(res.eligible ? res.annualCents : 0);
+      /* B. "Is it enough to live on?", answered under it from the modest bar's
+         own share: "at least" below a full record, where the figure is a
+         floor (13 October 2026 review, SP-16 and SP-3) */
+      var modest = Math.round(Math.max(0, Math.min(1, (res.eligible ? res.annualCents : 0) / gaps[0].targetCents)) * 100);
+      t.eq(label + ': the question is answered under it', words($('spEnough')), !res.eligible
+        ? 'No: below 520 contributions it pays nothing.'
+        : 'Not on its own: it covers ' + (res.fraction < 1 ? 'at least ' : '') + modest + '% of a modest retirement.');
       gaps.forEach(function (g) {
         var rowEl = document.querySelector('.lsrow[data-std="' + g.standard + '"]');
         var covered = Math.max(0, Math.min(1, (res.eligible ? res.annualCents : 0) / g.targetCents));
@@ -229,12 +245,21 @@
         t.eq(label + ': annual is the module figure', text('spAnnual'), euro(res.annual));
         if (res.fraction === 1) {
           t.has(label + ': spFoot names the full record', text('spFoot'), 'The maximum rate, which takes a full 2,080 reckonable contributions, or forty years.');
+          t.eq(label + ': at a full record the figures are plain, exact', [text('spWeeklyL'), text('spAnnualL')].join(' | '), 'A week | A year');
         } else {
           var pctOfMax = Math.round(res.fraction * 100);
           /* 13 October 2026 (review calc-other-14): the years are the dots'
              caption's to say, above it; the foot says only the share */
           t.has(label + ': the caption carries the years', text('pbJarCap'), Math.min(40, Math.floor(row.contribs / 52)) + ' of 40 years');
-          t.eq(label + ': spFoot carries the percentage', text('spFoot'), pctOfMax + '% of a full record, so ' + pctOfMax + '% of the maximum.');
+          /* (review SP-3) below a full record this is Method 1 alone, a
+             floor: the labels say so, and the foot says you may get more and
+             links the check that works out both methods */
+          t.eq(label + ': below a full record the figures say "at least"', [text('spWeeklyL'), text('spAnnualL')].join(' | '), 'A week, at least | A year, at least');
+          t.eq(label + ': spFoot carries the percentage, as a floor, and the way to your own figure', text('spFoot'),
+               pctOfMax + '% of a full record, so at least ' + pctOfMax + '% of the maximum. You may get more: work out your own figure.');
+          var more = $('spFoot').querySelector('a');
+          t.eq(label + ': and that way is the State Pension check', more && more.getAttribute('href'), 'state-pension-entitlement.html');
+          t.has(label + ': srSummary says it is the least it pays', text('srSummary'), 'On part of a record this is the least it pays: you may get more.');
         }
         // exact, floor or rate is still the module's decision and the spec rows
         // still carry it; the page stopped wording it on 2026-09-20
@@ -289,9 +314,9 @@
     var lead = document.querySelector('.phead');
     t.eq('lead: the first line says what the page is for', words(lead && lead.querySelector('h1')),
          'How much State Pension you may get, from your PRSI record.');
-    t.eq('lead: many get less than the maximum, and the maximum is the module\'s',
+    t.eq('lead: many get less than the maximum, and the maximum is the module\'s, with January\'s rate',
          words(lead && lead.querySelector('.sp-less')),
-         'Many people get less than the maximum, ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
+         'Many people get less than the maximum, ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week (€309.30 from January 2027).');
 
     var bandLabel = function (b) { return b.max === null ? b.min + ' or over' : b.min + ' to ' + b.max; };
 
@@ -439,6 +464,12 @@
       }
       t.eq(label + ': entryNote is hidden unless the year was moved', $('entryNote').hidden, true);
       t.eq(label + ': entryNote reports no clamp when entry was set last', text('entryNote').indexOf('Moved to'), -1);
+      /* the April box (in "More details" since review SP-15) shows only
+         where it can change something: a first year up to 2001, and a
+         pension that starts while Method 2 is still worked out */
+      t.eq(label + ': the April box shows iff the year is up to 2001 and Method 2 can apply',
+           !$('pbAprilRow').hidden, row.entry <= 2001 && SP.transition(drawdown) !== 'after');
+      t.eq(label + ': the April box sits in "More details"', !!$('pbAprilRow').closest('#pbMore'), true);
 
       // C. exactly one panel
       var shown = ['spHas', 'spNone', 'spUnfit'].filter(function (id) { return !$(id).hidden; });
@@ -564,6 +595,12 @@
             'The maximum personal rate is ' + euro2c(SP.MAX_WEEKLY_CENTS) + ' a week.');
       t.eq(label + ': the closing sentence shows with it', !$('mClose').hidden, hasM2);
       t.eq(label + ': the reason shows instead when there is none', !$('mWhy').hidden, !hasM2);
+      /* (review SP-5) with one calculation the working shows only its own:
+         no Method 2 sentence, no "both bars" scale, and the card is named
+         for what it holds */
+      t.eq(label + ': the Method 2 working shows iff there is a Method 2', !$('m2Detail').hidden, hasM2);
+      t.eq(label + ': the "both bars" scale shows iff there are two bars', !$('mScale').hidden, hasM2);
+      t.eq(label + ': the card\'s heading', text('bothH'), hasM2 ? 'Two ways to work it out' : 'How it\u2019s worked out');
       if (row.after) t.eq(label + ': the spec expects no Method 2, after the transition', m2.reason, 'after-transition');
       if (row.below10) t.eq(label + ': the spec expects no Method 2, average below 10', m2.reason, 'yearly-average-below-10');
 
@@ -628,6 +665,23 @@
       setRange('birth', 1960);
       t.eq('clamp: entry was pulled down to the latest year for a 1960 birth', +$('entry').value, 2025);
       t.has('clamp: entryNote says it moved to the latest', text('entryNote'), 'Moved to 2025, the latest it can be for that birth year.');
+      /* (review SP-4) the reader's own year comes back: a birth year moved
+         to the far end and back leaves the first PRSI year as the reader
+         set it, and the note goes with the clamp */
+      if (inRange('birth', 1962)) {
+        setRange('birth', 1962); setRange('entry', 1985);
+        setRange('birth', 2008);
+        t.eq('round trip: at 2008 the year is held at its earliest', [+$('entry').value, $('entryNote').hidden].join('/'), '2024/false');
+        setRange('birth', 1990);
+        t.eq('round trip: on the way back it is still held, at that birth year\'s earliest', [+$('entry').value, $('entryNote').hidden].join('/'), '2006/false');
+        setRange('birth', 1962);
+        t.eq('round trip: back at 1962 it is the reader\'s 1985 again, and the note has gone',
+             [+$('entry').value, text('entryV'), $('entryNote').hidden].join('/'), '1985/1985/true');
+        t.eq('round trip: and the result is a figure again, not "Check the details"',
+             ['spHas', 'spNone', 'spUnfit'].filter(function (id) { return !$(id).hidden; }).join('+'), 'spHas');
+      } else {
+        t.skip('round trip: birth 1962 on the slider', 'the slider runs ' + $('birth').min + ' to ' + $('birth').max);
+      }
     } else {
       t.skip('clamp: birth 1960 and 2008 both on the slider', 'the slider runs ' + $('birth').min + ' to ' + $('birth').max);
     }

@@ -6,9 +6,12 @@
 
    - A life track from 18 to 75: a paw walks it, leaving footprints behind
      it, with a tick at every age on the list that lights when it is passed.
-   - On a wide screen the paw follows the page: scroll, and it walks from age
-     to age between the steps. Grab it (or anywhere on the track) and drag,
-     and the page scrolls with you to that age.
+   - On a wide screen the paw follows the page: scroll, and it walks through
+     the ages. Where it is comes from the same rule as the card
+     (PBTimeline.place(), 13 October 2026): the paw reaches 40 just as the
+     card turns to "From 40", so the card never names a step the paw has not
+     reached. Grab it (or anywhere on the track) and drag, and the page
+     scrolls with you to that age (PBTimeline.yFor()).
    - On a narrow screen the track sits over the "Your age" slider: drag either.
    - The card's big figure rolls in, digit by digit, when it changes, and the
      step that comes into the middle of the screen pings its dot; the steps
@@ -25,16 +28,18 @@
   var AGES = steps.map(function (s) { return +s.getAttribute('data-age'); });
   var LO = 18, HI = 75;
   function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
-  function lerp(a, b, t) { return a + (b - a) * t; }
   var wideQ = window.matchMedia('(min-width: 921px)');
 
   /* ------------------------------------------------- the rolling figure -- */
+  /* each character rolls in, in its own inline-block; a space stays plain text between them,
+     so it keeps its width ("From 40:", never "From40:") and the line can still break there */
   function roll(el) {
     var t = el.textContent;
     if (el.getAttribute('data-roll') === t) { return; }
     el.setAttribute('data-roll', t);
     var frag = document.createDocumentFragment();
     t.split('').forEach(function (c, i) {
+      if (/\s/.test(c)) { frag.appendChild(document.createTextNode(c)); return; }
       var s = document.createElement('span'); s.className = 'pb-roll'; s.style.animationDelay = (i * 45) + 'ms';
       s.textContent = c; frag.appendChild(s);
     });
@@ -158,23 +163,14 @@
     });
     box.classList.add('pb-tl-alive');
   }
-  function centres() { return steps.map(function (s) { var b = s.getBoundingClientRect(); return b.top + b.height / 2; }); }
-  /* the age the middle of the screen is at, between the two steps either side */
-  function ageFromScroll() {
-    var c = centres(), mid = window.innerHeight / 2;
-    if (mid <= c[0]) { return AGES[0]; }
-    for (var i = 0; i < c.length - 1; i++) {
-      if (mid <= c[i + 1]) { return lerp(AGES[i], AGES[i + 1], (mid - c[i]) / (c[i + 1] - c[i])); }
-    }
-    return AGES[AGES.length - 1];
-  }
+  var TL = window.PBTimeline;
+  /* the age the middle of the screen has reached: the card's own rule */
+  function ageFromScroll() { return TL ? TL.place().age : AGES[0]; }
+  /* the step the paw is in: the last whose age it has reached */
+  function stepAt(a) { var li = steps[0]; steps.forEach(function (s, i) { if (AGES[i] <= a) { li = s; } }); return li; }
   function scrollFor(a) {
-    var c = centres(), mid = window.innerHeight / 2, y0 = window.scrollY;
-    a = clamp(a, AGES[0], AGES[AGES.length - 1]);
-    for (var i = 0; i < AGES.length - 1; i++) {
-      if (a <= AGES[i + 1]) { var f = (a - AGES[i]) / (AGES[i + 1] - AGES[i]); return y0 + lerp(c[i], c[i + 1], f) - mid; }
-    }
-    return y0 + c[c.length - 1] - mid;
+    if (!TL) { return null; }
+    return TL.yFor(clamp(a, AGES[0], HI)) - TL.mid();
   }
   /* the steps nearer the middle stand forward */
   function focus() {
@@ -199,26 +195,49 @@
   }
 
   /* --------------------------------------------------------- the loop -- */
-  var raf = 0, last = 0, onScreen = false, lastStep = null;
+  var raf = 0, last = 0, onScreen = false, lastStep = null, asleep = false;
+  if (TL && TL.drive && wideT) { TL.drive(true); }
   function frame(ms) {
     raf = 0;
+    if (asleep) { return; }
     var now = ms / 1000, dt = clamp(now - last, 0, 1 / 30); last = now;
     var wide = wideQ.matches, T = wide ? wideT : smallT;
     if (wide && wideT) { if (!wideT.t.drag) { wideT.t.want = ageFromScroll(); } focus(); }
     else { clearFocus(); }
     if (!wide && smallT && pickR) { smallT.t.want = +pickR.value; }
     if (T) {
-      var t = T.t, k = t.drag ? 600 : 90, c = t.drag ? 45 : 14;
-      var acc = k * (t.want - t.age) - c * t.v; t.v += acc * dt; t.age += t.v * dt;
+      /* a close follow, critically damped: the paw keeps up with the page and settles without a wobble */
+      var t = T.t, k = t.drag ? 600 : 320, c = t.drag ? 45 : 36, ns = Math.max(1, Math.ceil(dt * 120)), h = dt / ns;
+      /* in steps of at most 1/120 s, so a slow frame never makes it jitter */
+      for (var j = 0; j < ns; j++) { t.v += (k * (t.want - t.age) - c * t.v) * h; t.age += t.v * h; }
       /* a ping as each age is passed */
       AGES.forEach(function (a) { if (Math.abs(t.age - a) < 0.4 && (!t.pings[a] || now - t.pings[a] > 1.2)) { t.pings[a] = now; } });
       T.draw(now);
+      /* the card turns as the paw reaches each step, never before */
+      if (wide && TL && TL.show) { TL.show(stepAt(Math.round(t.age))); }
     }
     var on = steps.filter(function (s) { return s.classList.contains('pb-on') || s.classList.contains('pb-tl-picked'); })[0];
     if (on && on !== lastStep) { lastStep = on; on.classList.remove('pb-tl-ping'); void on.offsetWidth; on.classList.add('pb-tl-ping'); }
     if (onScreen) { raf = requestAnimationFrame(frame); }
   }
-  function start() { if (!raf && onScreen) { last = performance.now() / 1000; raf = requestAnimationFrame(frame); } }
+  function start() { if (!raf && onScreen && !asleep) { last = performance.now() / 1000; raf = requestAnimationFrame(frame); } }
+  /* motion turned off part way: the track and the walker go, the card and its ruler follow the
+     page by themselves again; turned back on, they return */
+  function sleep() {
+    asleep = true; if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    clearFocus();
+    [wideT, smallT].forEach(function (T) { if (T) { T.el.style.display = 'none'; } });
+    box.classList.remove('pb-tl-alive'); if (pick) { pick.classList.remove('pb-tl-alive'); }
+    if (TL && TL.drive) { TL.drive(false); }
+  }
+  function wake() {
+    asleep = false;
+    [wideT, smallT].forEach(function (T) { if (T) { T.el.style.display = ''; T.size(); } });
+    if (wideT) { box.classList.add('pb-tl-alive'); if (TL && TL.drive) { TL.drive(true); } }
+    if (smallT && pick) { pick.classList.add('pb-tl-alive'); }
+    start();
+  }
+  document.addEventListener('pb:motion', function () { if (motion() && asleep) { wake(); } else if (!motion() && !asleep) { sleep(); } });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) { onScreen = es[0].isIntersecting; if (onScreen) { start(); } else { clearFocus(); } }).observe(box);
   } else { onScreen = true; start(); }

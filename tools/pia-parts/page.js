@@ -19,6 +19,14 @@
    prompt, not a number. Still a proposal until the Finance (No. 2) Bill 2026
    passes: docs/PIA-BUDGET-DAY.md.
 
+   THE LIMIT. A PIA takes at most EUR 12,000 a year (Budget 2027), so the
+   monthly amount stops at EUR 1,000: the slider's end, and a typed figure
+   above it (the shared click-to-edit lets a money figure run past its
+   slider) is set back to EUR 1,000 with a line that says why. Before the
+   review of 13 October 2026 a typed EUR 1,500 went into the PIA in full.
+   The same amount goes into all three, so the comparison stays like for
+   like.
+
    TONE: the figures do the work. No product is called better. */
 (function () {
   'use strict';
@@ -37,6 +45,26 @@
     growth: function (v) { return pc(v) + ' a year'; },
     piaRate: function (v) { return pc(v) + ' a year' + (+v === 1 ? ', the Budget 2027 rate' : ', a figure you are trying'); }
   };
+
+  /* the PIA's limit, a month; and whether the last figure typed was over it */
+  var MAX = 1000, capped = false, lastAmount = null;
+  var NOTE = 'Up to €1,000: the PIA’s €12,000 a year.', CAPPED = 'The PIA takes at most €1,000 a month.';
+  function cap() {
+    var r = $('amount');
+    if (+r.value > MAX) {
+      r.max = MAX; r.step = r.dataset.defstep || 25; r.value = MAX;
+      P.paintSlider(r, VALTEXT);
+      capped = true;
+    } else if (lastAmount !== null && +r.value !== lastAmount) {
+      capped = false;   /* moved since: the usual line again */
+    }
+    lastAmount = +r.value;
+    var note = $('amountNote');
+    if (note) {
+      note.textContent = capped ? CAPPED : NOTE;
+      note.classList.toggle('pia-capped', capped);
+    }
+  }
 
   /* the threshold as typed: digits only, empty means none yet */
   function threshold() {
@@ -82,6 +110,7 @@
   }
 
   function render() {
+    cap();
     var o = read(), n = o.years;
     o.path = Pia.steady(o.growth, n);       /* the reader's growth, every year */
     var c = Pia.compare(o);
@@ -125,7 +154,7 @@
 
     if (window.PBPiaMotion) window.PBPiaMotion.update();
 
-    P.announce('After ' + years(n) + ', after tax: pension ' + euro(pen.after) + '. PIA ' +
+    P.announce((capped ? CAPPED + ' ' : '') + 'After ' + years(n) + ', after tax: pension ' + euro(pen.after) + '. PIA ' +
       (has ? euro(pia.after) : 'no figure until you type a tax-free amount') +
       '. ETF ' + euro(etf.after) + '.');
   }

@@ -378,12 +378,26 @@ def run():
        ['Is that enough?' in floor, 'That&rsquo;s the most.' in floor, 'PRSI record' in floor,
         'href="state-pension-entitlement.html"' in floor, re.findall(r'&euro;([\d,]+)</span>', floor)],
        [True, True, True, True, ['15,564', '19,200', '33,600']])
+    # the 13 October review (Damian: "Can you close the gap? What does that
+    # mean?"): what is missing is said in plain words, a year, never "the gap"
+    eq('13. the starter\'s floor chart says "Short by", a year, and never "the gap"',
+       [len(re.findall(r'Short by <b[^>]*>&euro;[\d,]+</b> a year', floor)), 'gap' in re.sub(r'<[^>]+>|--?gap|gapsw', '', floor).lower()],
+       [2, False])
     split = st13[st13.index('id="pbAe"'):st13.index('id="aePhNote"')]
     eq('13. the starter\'s auto-enrolment split: a month from you and no pay asked; the personal pension beside it; past the most, the note to the comparison',
        ['<label class="pb-ae-name" for="aeAmt">You put in, a month</label>' in split, 'aeSalary' in st13, 'salary' in split.lower(),
-        'Into a personal pension' in split, 'That&rsquo;s the most auto-enrolment takes.</b> A personal pension takes more, with tax relief.' in split,
+        'Into a personal pension' in split,
+        'Auto-enrolment stops at <span id="aeMaxMost">&euro;100</span> a month.</b> A personal pension can take the rest, with tax relief.' in split,
         'href="broker-vs-autoenrolment.html"' in split],
        [True, False, False, True, True, True])
+    # the 13 October review: past the most the comparison stays like for like.
+    # The first row is what auto-enrolment takes, the years have a name, and
+    # the card has a line for both together, shut until the script opens it
+    eq('13. the starter\'s split names what auto-enrolment takes, names the years, and carries both together',
+       ['<span class="pb-ae-name">Taken from you</span>' in split, '>Rates in</p>' in split,
+        bool(re.search(r'<p class="pb-ae-both-p" id="aeBothP">Both together: <b id="aeBoth">', split)),
+        'You put in</span>' in split],
+       [True, True, True, False])
 
     # ----------------------------------------------------------------- 14
     # Run 27: the lead forms, as Netlify reads them at deploy. Netlify finds a
@@ -610,7 +624,7 @@ def run():
     # docs/CALC-SPEC.md) and the notice past auto-enrolment's limit word for
     # word. Mutants: a salary slider back, a box back, a stale figure, the
     # notice reworded.
-    CMP_NOTICE = 'Past €100 a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.'
+    CMP_NOTICE = 'Past €100 a month (pay over €80,000), auto-enrolment takes no more. A personal pension takes the rest.'
     CMP_FIGS = (('aeTotal', '€117'), ('aeYou', '€50'), ('aeEmp', '€50'), ('aeState', '€17'),
                 ('ppTotal', '€63'), ('ppYou', '€50'), ('ppRel', '+€13'), ('extraV', '€50'))
 
@@ -1710,7 +1724,7 @@ def run():
             ('a step at 75', 'ix', 'data-age="71"', 'data-age="75"', 'at 75'),
             ('a step to a held page', 'ix', '<h3><a href="state-pension-reality-check.html">At 66</a>', '<h3><a href="how-we-work.html">At 66</a>', 'not a live page'),
             ('a card screen readers hear', 'ix', '<div class="pb-tl-stage" aria-hidden="true">', '<div class="pb-tl-stage">', 'aria-hidden'),
-            ('a script that scrolls', 'js', "steps.forEach(function (s) { io.observe(s); });", "steps.forEach(function (s) { io.observe(s); }); window.scrollTo(0, 0);", 'scrolls'),
+            ('a script that scrolls', 'js', "window.addEventListener('resize', soon);", "window.addEventListener('resize', soon); window.scrollTo(0, 0);", 'scrolls'),
             ('a card that bounces', 'ix', '.pb-tl-mark{position:absolute;', '.pb-tl-mark{animation:pbBounce 1s infinite;position:absolute;', 'moves')):
         mix, mjs = ix, tl_js
         if target == 'ix':
@@ -1833,9 +1847,13 @@ def run():
     # Run 37, item 7: related pages. Every page's block is the one the
     # RELATED table gives it (sync-chrome and pagebuild write them; a page
     # edited by hand fails here), last in <main>; every card goes to a live
-    # page other than its own, and its line is on the site word for word
-    # (on the page CARDS names); the table leaves out the home page,
+    # page other than its own; the table leaves out the home page,
     # booking, the thank-you page, the 404, the held pages and the games.
+    # 13 October 2026 (the review after Damian's "obscenely clear and
+    # obscenely concise"): a card's line says what its page does for the
+    # reader, ten words or fewer, a sentence or a question, and never its
+    # title again. (Until then each line was a sentence lifted word for word
+    # from its page, and read as a teaser out of its place.)
     def related_faults(srcs):
         f = [p + ': ' + d for p, ks in sorted(pagebuild.related_drift(srcs).items()) for k, d in ks]
         plain = lambda x: html.unescape(re.sub(r'<[^>]+>', ' ', x)).replace('’', "'")
@@ -1847,15 +1865,14 @@ def run():
             for tgt in targets:
                 if tgt not in srcs or pagebuild.NOINDEX in srcs[tgt]:
                     f.append('%s: %s is not a live page' % (page, tgt))
-        raw = lambda x: html.unescape(x).replace('\u2019', "'")
-        # (13 October 2026) the text as read: tags out, spaces collapsed, so a
-        # heading's highlight (<span class="hl">) does not split its words
-        flat = lambda x: re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', x))).replace('\u2019', "'")
-        for tgt, (title, line, where) in sorted(pagebuild.CARDS.items()):
-            # in the page's text, or its own description
-            if (plain(line).strip() not in plain(srcs.get(where, '')) and raw(line) not in raw(srcs.get(where, ''))
-                    and flat(line).strip() not in flat(srcs.get(where, ''))):
-                f.append('%s: its line is not on %s' % (tgt, where))
+        for tgt, (title, line) in sorted(pagebuild.CARDS.items()):
+            words = plain(line).split()
+            if len(words) > 10:
+                f.append('%s: its line is more than ten words (%d)' % (tgt, len(words)))
+            if not plain(line).strip().endswith(('.', '?')):
+                f.append('%s: its line is not a sentence or a question' % tgt)
+            if plain(title).strip().lower() in plain(line).lower():
+                f.append('%s: its line repeats its title' % tgt)
         # (13 October 2026) every card target has its drawing
         for tgt in sorted({t for ts in pagebuild.RELATED.values() for t in ts}):
             if tgt not in pagebuild.ART:
@@ -1863,10 +1880,11 @@ def run():
         return f
 
     import html
-    eq('39. related pages: every page\'s block is the table\'s, last in <main>; two or three live pages each, never itself; every line on the site word for word; none on the home page, booking, thank-you, the 404 or a held page',
+    eq('39. related pages: every page\'s block is the table\'s, last in <main>; two or three live pages each, never itself; every line ten words or fewer, never the title again; none on the home page, booking, thank-you, the 404 or a held page',
        related_faults(sources), [])
     for label, target, find, repl, want in (
-            ('a card edited by hand', 'terms.html', '<span class="pb-related-t">Privacy Notice</span>', '<span class="pb-related-t">Our privacy</span>', 'not the table'),
+            ('a card edited by hand', 'terms.html', '<span class="pb-related-t">Privacy <span class="pb-rt-end">Notice</span></span>', '<span class="pb-related-t">Our <span class="pb-rt-end">privacy</span></span>', 'not the table'),
+            ('an arrow let go of its word', 'terms.html', 'Privacy <span class="pb-rt-end">Notice</span>', 'Privacy Notice', 'not the table'),
             ('a block moved out of <main>', 'complaints.html', None, None, 'outside'),
             ('a block half lost', 'glossary.html', '<!-- RELATED:BEGIN', '<!-- RELATED:GONE', 'broken')):
         srcs = dict(sources)
@@ -1883,7 +1901,8 @@ def run():
     saved = (dict(pagebuild.RELATED), dict(pagebuild.CARDS))
     for label, mut, want in (
             ('a card to a held page', lambda: pagebuild.RELATED.__setitem__('terms.html', ('privacy.html', 'how-we-work.html')), 'not a live page'),
-            ('a line the site does not have', lambda: pagebuild.CARDS.__setitem__('complaints.html', ('Complaints', 'We always put things right.', 'complaints.html')), 'not on'),
+            ('a line of more than ten words', lambda: pagebuild.CARDS.__setitem__('complaints.html', ('Complaints', 'If something has gone wrong with us, here is how to tell us.')), 'more than ten words'),
+            ('a line that is the title again', lambda: pagebuild.CARDS.__setitem__('glossary.html', ('Pension jargon buster', 'The pension jargon buster, in plain words.')), 'repeats its title'),
             ('related pages on the home page', lambda: pagebuild.RELATED.__setitem__('index.html', ('starter.html', 'tracker.html')), 'should carry none')):
         mut()
         eq('39. %s is caught' % label, any(want in x for x in related_faults(sources)), True)
@@ -1895,15 +1914,13 @@ def run():
     # count, the list), drawn only with JavaScript, which it needs; and the
     # home page's "Six places to begin", the same six places, names and lines
     # word for word, in the same order. The page stays noindex.
-    # 13 October 2026 (Damian: make every line plain): the lines are the
-    # related cards' (pagebuild.CARDS, which names the 404 as where they are
-    # written), and each place carries its drawing, pagebuild.ART's, exactly.
-    NF_SIX = [('tracker.html', 'Track down old pensions', 'Find pensions from old jobs, and what they are worth.'),
-              ('starter.html', 'Start a pension', 'Start your first pension, with tax relief at any age.'),
-              ('director.html', 'Company directors', 'Your company can fund your pension beyond personal limits.'),
-              ('pension-calculator.html', 'Pension calculator', 'What your pension could pay you a month, with tax relief.'),
-              ('state-pension-reality-check.html', 'State Pension reality check', 'What the State Pension actually pays you.'),
-              ('broker-vs-autoenrolment.html', 'Auto-enrolment comparison', 'My Future Fund or a personal pension: which puts in more?')]
+    # 13 October 2026 (Damian: make every line plain): the names and lines
+    # are the related cards' (pagebuild.CARDS), each name's last word held
+    # to its arrow as on a card (pagebuild.related_title), and each place
+    # carries its drawing, pagebuild.ART's, exactly.
+    NF_SIX = [(h, pagebuild.related_title(pagebuild.CARDS[h][0]), pagebuild.CARDS[h][1])
+              for h in ('tracker.html', 'starter.html', 'director.html', 'pension-calculator.html',
+                        'state-pension-reality-check.html', 'broker-vs-autoenrolment.html')]
 
     def nf_faults(nf, ix):
         f = []
@@ -1916,7 +1933,7 @@ def run():
                 f.append('the search box: %s' % want[:40])
         home = NF_SIX
         cards = re.findall(r'<li class="pb-al-skip"><a class="pb-related-card pb-card-link" href="([^"]+)">(<span class="pb-related-art[^"]*" aria-hidden="true">.*?</span>)'
-                           r'<b>([^<]+)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six'):])
+                           r'<b>(.*?)</b><span>([^<]+)</span></a></li>', nf[nf.find('<ul class="pb-nf-six'):])
         here = [(h, b, s) for h, art, b, s in cards]
         if '<h2 class="pb-nf-h">Six places to begin.</h2>' not in nf or len(home) != 6 or here[:6] != home:
             f.append('not the six places to begin')
@@ -1932,7 +1949,8 @@ def run():
     eq('40. the 404: Buddy, the search box drawn with JavaScript, and its six places to begin word for word; still noindex',
        nf_faults(nf, ix), [])
     for label, find, repl, want in (
-            ('a place missing', '<b>Company directors</b>', '<b>Directors</b>', 'six places'),
+            ('a place missing', '<b>Company <span class="pb-rt-end">directors</span></b>', '<b><span class="pb-rt-end">Directors</span></b>', 'six places'),
+            ('an arrow let go of its word', '<b>Start a <span class="pb-rt-end">pension</span></b>', '<b>Start a pension</b>', 'six places'),
             ('a drawing edited by hand', 'pb-related-art pb-tone-s', 'pb-related-art pb-tone-t', 'drawing'),
             ('the box drawn without JavaScript', 'html:not(.pb-js) .pb-nf-search{display:none}', '', 'search box'),
             ('Buddy with no words', 'alt="Buddy, the Pensionbuddy dog"', 'alt=""', 'Buddy')):
@@ -2319,8 +2337,8 @@ def run():
     # link (the chat pictures were cut in October 2026); the booking button
     # (its reason line cut on 8 October 2026) stands, moved word for word, after the page's
     # first figures: the starter page's 30, 40 and 50 chart with its
-    # warnings and note, the director page's €1,000 example and relief
-    # ladder with its note; the tracker page gives no figure, so after its
+    # warnings and note, the director page's €1,000 example and its
+    # calculator's pot at 66 with its note; the tracker page gives no figure, so after its
     # tick list (docs/GIVE-BEFORE-ASK-42.md S1, T1, D1).
     ARROW = (' <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/>'
              '<polyline points="12 5 19 12 12 19"/></svg></a>')
@@ -2331,7 +2349,7 @@ def run():
         # the tracker's tick list and its button are gone (Damian, 12 October
         # 2026): its ask is the old jobs form under the hero; only its hero is held
         # Run 54: the director page asks after its own numbers, with its one lockup
-        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potToday"', '<!-- WARN:END -->', '<div class="pb-reg">'),
+        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potOut"', '<!-- WARN:END -->', '<div class="pb-reg">'),
                           '  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b>'),
     }
 

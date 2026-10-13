@@ -16,7 +16,7 @@ which is better, and the page frames every persona as "it depends on".
 | | Source |
 |---|---|
 | The PIA: no relief in; a flat yearly tax on the average value above a tax-free threshold, due in a falling year too; no deemed disposal, exit tax or CGT inside; provider pays; no lock-in | Department of Finance, Roadmap for the Taxation of Retail Investment, 31 August 2026. **Proposed, not yet law** |
-| The PIA's rate, threshold and annual limit | not announced: due 6 October 2026. **The module holds none of them.** The rate and threshold are the reader's inputs; no limit is applied |
+| The PIA's rate, threshold and annual limit | Budget 2027 (6 October 2026): 1% a year above EUR 50,000, at most EUR 12,000 a year in. **The module holds none of them.** The rate and threshold are the reader's inputs, starting at the Budget's; the page keeps the limit (P5) |
 | ETF: 35% exit tax from 1 January 2027 (Budget 2027; 38% before), deemed disposal every eight years | Revenue, Budget 2027 |
 | Pension tax relief | `assets/js/pension-tax-relief.js`, `grossForNetCost` (flat marginal rate, age-related limit, €115,000 earnings cap) |
 | Pension lump sum bands | `assets/js/sft.js`, `lumpSum` (first €200,000 tax-free, next €300,000 at 20%, the rest as income) |
@@ -59,7 +59,7 @@ threshold. Each year: the twelve month-end values are averaged; tax is
 never more than the account holds. A year whose end value (before tax) is
 below its start value plus the year's payments is a loss year; the tax paid
 in loss years is counted separately so the page can say it is still due.
-No annual limit. No tax on the way out. The twelve-month-end average is this
+No annual limit in the module: the page keeps it (P5). No tax on the way out. The twelve-month-end average is this
 illustration's assumption: the valuation method has not been published.
 
 **ETF outside a wrapper.** Each month's purchase is a lot with a base (its
@@ -83,8 +83,14 @@ PIA `taxes` (per year), `lossYears`, `taxedLossYears`, `lossYearTax`; the ETF
 ## P5. Left out, and said on the page
 
 Fees and charges (the PIA's are unknown), inflation, the Universal Social
-Charge and PRSI, employer contributions, the PIA's annual limit, and
-drawing a pension over years rather than all at the end. Since 12 October
+Charge and PRSI, employer contributions, and drawing a pension over years
+rather than all at the end. The PIA's annual limit is kept by the page, not
+the module: EUR 12,000 a year is EUR 1,000 a month, the slider's end, and a
+figure typed above it (the shared click-to-edit lets a money figure pass its
+slider) is set back to EUR 1,000 with the line "The PIA takes at most
+EUR 1,000 a month." (review, 13 October 2026: a typed EUR 1,500 had gone
+into the PIA in full). The same amount goes into all three, so the
+comparison stays like for like. Since 12 October
 2026 the page also assumes the pension payments are within Revenue's
 age-related limit (it no longer asks for age or earnings), and shows the
 reader's own growth only: `scenarios().lower` and `.fall` stay in the module

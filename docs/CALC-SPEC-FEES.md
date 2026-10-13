@@ -8,8 +8,11 @@ asserted by `tests/pension-fees.test.js`.
 
 "What do my plan's charges take out of my pot by the time I retire, and how
 would that compare with lower charges?" One pot, one monthly amount, one
-period, one growth assumption, and two sets of charges side by side, with a
-third line, no charges at all, as the yardstick for what charges take.
+period, one growth assumption, and two sets of charges side by side. The
+module also works out a third pot, no charges at all, the yardstick for what
+each plan's charges cost; since the review of 13 October 2026 the page shows
+it in the workings only, because no pension has no charges and a result set
+against none exaggerates what charges cost (F4).
 
 It does not name a provider, does not say anyone's charges are too high, and
 does not say moving is better: a transfer can mean giving up terms that are
@@ -72,12 +75,20 @@ Irish ones, and the comparison is not to exaggerate.
   not any provider's charges. Growth is fixed at 5% a year before charges
   (risk level 4 of `assets/js/pb-assumptions.js`), stated, not a slider.
 - Figures: each plan's pot at retirement, in euro at the time (no figure is
-  in today's money), what the charges cost each plan by then, the difference
-  between the two, and a line chart of both pots and the no-charge line, year
-  by year. The sentence says how much smaller the charges leave the pot than
-  no charges would ("leave your pot about EUR 41,364 smaller"), not that they
-  take that much: the workings show what was charged in euro at the time
-  (EUR 24,699 at the defaults) and why the cost by retirement is larger.
+  in today's money), and the difference between the two. Plan against plan
+  (review, 13 October 2026): the plan you compare with is named by its
+  charges wherever it appears ("A plan at 0.4% a year"; "Compare with" on
+  its fold), and the one sentence is the difference, worked from the two
+  figures as shown: "At 0.4% a year, you would have EUR 18,455 more" (or
+  "less"; "Both leave you the same" when they match). The line chart shows
+  the two pots year by year and the difference between them as a coral
+  area; pointing at it gives that year's two pots and their difference. No
+  figure sits at the top of its axis.
+- Workings, folded under "How we got this": what each plan charged in euro
+  at the time (EUR 24,699 at the defaults), its charges on payments, and
+  what its charges cost by retirement against no charges at all (EUR 41,364),
+  with the no-charge pot (EUR 286,465) and why the cost is larger than what
+  was charged: every euro a charge takes stops growing.
 - At the defaults (EUR 50,000 now, EUR 200 a month, 25 years): your plan EUR
   245,101, the other EUR 263,556, no charges EUR 286,465; asserted in
   `tests/pension-fees.test.js` section 6.

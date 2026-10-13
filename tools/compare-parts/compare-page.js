@@ -39,8 +39,11 @@ const LIMIT = PBCompare.monthlyLimit(YEAR);          // the most auto-enrolment 
 const R = Math.round;
 /* auto-enrolment's most, a month, as the card shows it (each part rounded, then added) */
 const AE_MOST = R(LIMIT) + R(LIMIT * PHASE.employer / PHASE.employee) + R(LIMIT * PHASE.state / PHASE.employee);
-/* the bars' euro scale: auto-enrolment at its most sits just short of the end */
-const S0 = AE_MOST * 1.08;
+/* the top rate of income tax the switch offers: the bars' scale is set at it */
+const TOP_RATE = 40;
+
+/* the limit, and the pay it stands for: Damian's "better after 80k" */
+const PAST = 'Past ' + euro(LIMIT) + ' a month (pay over ' + euro(PBCompare.AE_SALARY_CAP) + '), auto-enrolment takes no more.';
 
 let rate = 20;
 const VALTEXT = { extra: v => euro(v) + ' a month' };
@@ -68,25 +71,34 @@ function measure() {
   const rr = $('cmpRail').getBoundingClientRect(), sr = $('extra').getBoundingClientRect();
   if (sr.height) geo.trk = sr.top - rr.top + sr.height / 2;
   geo.w = $('aeTrack').offsetWidth;
-  geo.w2 = $('cmpBestW').hidden ? 0 : $('bestTrack').offsetWidth;
+  /* the best of both's track, measured even while it is away: shown for the
+     length of one read, in the same task, so it is never painted; then read
+     away again, so its next arrival starts from nothing rather than from the
+     shut state this read saw (which would glide it open at load) */
+  const wrap = $('cmpBestW'), away = wrap.hidden;
+  if (away) wrap.hidden = false;
+  geo.w2 = $('bestTrack').offsetWidth;
+  if (away) { wrap.hidden = true; void wrap.offsetHeight; }
 }
 
-let wasOver = null, wasLead = '';
-function calc() {
-  const slider = $('extra');
-  const you = +slider.value;
-  const m = PBCompare.monthly({ you, taxRate: rate, year: YEAR });
-  const over = m.autoEnrolment.capped;
-
-  /* every figure as it shows, each part rounded and the totals their sums,
-     so what is on screen always adds up */
+/* every figure as it shows, each part rounded and the totals their sums,
+   so what is on screen always adds up */
+function figures(you, taxRate) {
+  const m = PBCompare.monthly({ you, taxRate, year: YEAR });
   const A = { you: R(m.autoEnrolment.you), emp: R(m.autoEnrolment.employer), state: R(m.autoEnrolment.state) };
   A.total = A.you + A.emp + A.state;
   const P = { you: R(m.personal.you), rel: R(m.personal.relief) };
   P.total = P.you + P.rel;
   const T = { you: R(m.best.personal.you), rel: R(m.best.personal.relief) };
   T.total = T.you + T.rel;
-  const B = A.total + T.total;
+  return { m, A, P, T, B: A.total + T.total, over: m.autoEnrolment.capped };
+}
+
+let wasOver = null, wasLead = '';
+function calc() {
+  const slider = $('extra');
+  const you = +slider.value;
+  const { m, A, P, T, B, over } = figures(you, rate);
 
   /* ---- the slider: what it means, and the limit on its rail ---- */
   put($('extraV'), euro(you));
@@ -134,8 +146,7 @@ function calc() {
 
   /* ---- past the limit: the best of both ---- */
   const wrap = $('cmpBestW');
-  M.open(wrap, over);
-  if (over && !geo.w2) geo.w2 = $('bestTrack').offsetWidth;   // just opened: measured once
+  M.open(wrap, over, wasOver === null);   // at load (an amount from the link) it is simply there
   /* while it is away, and as it arrives, its figures are simply right: they
      roll only once it is there to watch */
   const settled = over && wasOver === true;
@@ -145,9 +156,16 @@ function calc() {
   put($('bTopL'), 'Personal pension, the other ' + euro(T.you));
   wasOver = over;
 
-  /* ---- the bars: one euro scale for all three ---- */
+  /* ---- the bars: one euro scale for all three, and it holds still ----
+     Set by the most the slider reaches, at the top rate of tax, so neither
+     a slide nor the tax switch rescales it: a bar moves only when its own
+     figure does, and auto-enrolment's stops at its mark while the personal
+     pension's goes on. k is the cards' track over the best of both's, which
+     is wider on a wide screen, so a euro is as long on every bar. An amount
+     typed past the slider's end widens the slider, and the scale with it. */
   const k = geo.w > 0 && geo.w2 > 0 ? geo.w / geo.w2 : 1;
-  const S = Math.max(S0, A.total, P.total, over ? B * k : 0);
+  const top = figures(Math.max(+slider.max, you), TOP_RATE);
+  const S = Math.max(AE_MOST, top.P.total, top.B * k) * 1.04;
   const at = v => v / S * 100;
   M.width($('aeBarYou'), at(A.you));
   M.width($('aeBarEmp'), at(A.emp));
@@ -163,7 +181,7 @@ function calc() {
 
   announce('For ' + euro(you) + ' a month from you: auto-enrolment puts in ' + euro(A.total)
     + ', a personal pension ' + euro(P.total) + '.'
-    + (over ? ' Past ' + euro(LIMIT) + ' a month, auto-enrolment takes no more. Best of both: ' + euro(B) + ' a month.' : ''));
+    + (over ? ' ' + PAST + ' Best of both: ' + euro(B) + ' a month.' : ''));
 }
 
 /* the year's rates, and the limit as it rises with them, from the module */
@@ -177,7 +195,7 @@ function calc() {
                     : 'Its limit is now at its highest: ' + euro(LIMIT) + ' a month.');
   for (let i = 1; i <= 4; i++) { const t = $('pbStair' + i); if (t) t.hidden = PHASE.phase !== i; }
   $('cmpLimV').textContent = euro(LIMIT) + ' limit';
-  $('cmpNoteT').textContent = 'Past ' + euro(LIMIT) + ' a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.';
+  $('cmpNoteT').textContent = PAST + ' A personal pension takes the rest.';
   $('taxHint').textContent = 'Your top rate is 40% if you earn over ' + euro(PBRelief.SRCOP.single) + ' (single).';
 }());
 
@@ -208,7 +226,22 @@ if (window.ResizeObserver) {
   ro.observe($('cmpRail'));
 }
 
+/* An amount handed over in the link's fragment (#you=200), by the starter
+   page's auto-enrolment block, so the page opens at the reader's own
+   figure. Read once, before the first paint, rounded to the slider's step
+   and held inside it; the fragment never reaches a server. With no
+   fragment the page opens at its default, €50. */
+(function () {
+  const q = /(?:^#|&)you=(\d+)(?:&|$)/.exec(location.hash || '');
+  const s = $('extra'), v = q ? +q[1] : 0;
+  if (!(v > 0)) return;
+  const step = +s.step || 5;
+  s.value = String(Math.min(+s.max, Math.max(+s.min, Math.round(v / step) * step)));
+}());
+
 wireRanges(VALTEXT, calc);
 measure();
 setRate(20);
 M.arm($('cmpHero'));
+/* open at load (an amount from the link): its bars fill when it is seen, like the cards' */
+if (!$('cmpBestW').hidden) M.arm($('cmpBest'));

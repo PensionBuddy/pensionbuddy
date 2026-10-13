@@ -4,65 +4,105 @@
    on every page, tools/pagebuild.py SHARED_CSS); loaded by every page straight
    before assets/js/pb-alive.js (tools/pagebuild.py CHROME_JS).
 
-   - Related pages (and the 404's six places): while still below the screen
-     the cards wait; as they arrive they rise in one after another and each
-     card's drawing builds itself, its lines drawn, its bars grown, its coins
-     dropped. Under the pointer or the keyboard a card lifts (CSS) and its
-     drawing plays again: lines redraw, bars bounce, the magnifier sweeps, the
-     gauge's needle wobbles, a coin flies from the UK to Ireland.
-   - The footer: its links arrive column by column as it comes into view,
-     each little drawing drawn in its tile; the big wordmark at the foot
-     catches a passing light, and the light follows the pointer near it.
+   - Related pages (and the 404's six places): each card waits while it is
+     wholly below the screen and rises in as it comes into view, cards that
+     come into view together one after another, and its drawing builds
+     itself, its lines drawn, its bars grown, its coins dropped. Under the
+     pointer or the keyboard a card lifts (CSS) and its drawing plays again
+     from where it stands: lines run out and draw themselves back, bars
+     bounce, the magnifier sweeps, the gauge's needle wobbles, a coin flies
+     from the UK to Ireland. Nothing blinks out.
+   - The footer: each column arrives as it comes into view, its links one
+     after another, each little drawing drawn in its tile; the big wordmark at
+     the foot catches a passing light, and the light follows the pointer near
+     it.
 
-   Never: anything before the reader can see it (a part armed is one still
-   below the screen, and it shows as soon as it is reached, focused or
-   printed), the brand, Damian's qualifications or the disclosure (nothing
-   here touches them or anything that holds them), or any motion at all
-   without html.pb-motion: then, and without JavaScript, every card and link
-   stands whole and still. */
+   Never: anything the reader cannot see (a part is armed only while wholly
+   below the screen, so one already peeking in at load stays whole; it
+   arrives once it is well in view, or 0.6 s after it first shows if the
+   reader stops with it just in view; it shows at once when it is focused,
+   printed or scrolled past), the brand, Damian's qualifications or the
+   disclosure (nothing here touches them or anything that holds them), or any
+   motion at all without html.pb-motion: then, and without JavaScript, every
+   card and link stands whole and still. */
 (function () {
   'use strict';
   var root = document.documentElement;
   if (!root.classList.contains('pb-motion') || !window.requestAnimationFrame || !('IntersectionObserver' in window)) { return; }
   function on() { return root.classList.contains('pb-motion'); }
-  function below(el) { return el.getBoundingClientRect().top > innerHeight * 0.92; }
+  function below(el) { return el.getBoundingClientRect().top >= innerHeight; }
   var canAnimate = typeof Element !== 'undefined' && !!Element.prototype.animate;
 
   /* -------------------------------------------- a part, arriving once -- */
-  var waiting = [];
-  function arrive(el, armed, inn, settle) {
+  /* A part: the related pages' label, a card, a footer column. Parts that
+     arrive in the same frame step in one after another in page order: each
+     one's place is set as a custom property (step: --ci for a card, --fc for
+     a column), which the CSS delays read, and taken off again once it has
+     settled. */
+  var parts = [], queue = [], qf = 0;
+  var seen = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting && e.target._pbPart) { go(e.target._pbPart); } });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+  var near = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var p = e.target._pbPart;
+      if (!p || p.done) { return; }
+      clearTimeout(p.t);
+      if (e.isIntersecting) { p.t = setTimeout(function () { go(p); }, 600); }
+    });
+  }, { threshold: 0 });
+  function arm(el, armed, inn, settle, step, gap) {
     if (!below(el)) { return; }
+    var p = { el: el, armed: armed, inn: inn, settle: settle, step: step, gap: gap, done: false, t: 0 };
+    el._pbPart = p; parts.push(p);
     el.classList.add(armed);
-    var done = false;
-    function go() {
-      if (done) { return; }
-      done = true; io.unobserve(el);
-      if (waiting.indexOf(go) >= 0) { waiting.splice(waiting.indexOf(go), 1); }
-      el.classList.add(inn);
-      /* once arrived it lets go of its transitions, so hover answers at once */
-      setTimeout(function () { el.classList.remove(armed, inn); }, settle);
-    }
-    el._pbGo = go; waiting.push(go);
-    io.observe(el);
-    el.addEventListener('focusin', go);
+    seen.observe(el); near.observe(el);
+    /* a keyboard reaching it: there at once, under the focus ring */
+    el.addEventListener('focusin', function () { whole(p); });
   }
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting && e.target._pbGo) { e.target._pbGo(); } });
-  }, { rootMargin: '0px 0px -6% 0px', threshold: 0.12 });
-  /* a page restored part-way down, or a fast scroll past: whatever is on or above the screen shows */
+  function release(p) {
+    p.done = true; clearTimeout(p.t);
+    seen.unobserve(p.el); near.unobserve(p.el);
+  }
+  function go(p, now) {
+    if (p.done) { return; }
+    release(p); queue.push(p);
+    if (now) { flush(); } else if (!qf) { qf = requestAnimationFrame(flush); }
+  }
+  /* shown as it is, no motion: printed, or scrolled past unseen */
+  function whole(p) {
+    if (p.done) { return; }
+    release(p); p.el.classList.remove(p.armed);
+  }
+  function flush() {
+    if (qf) { cancelAnimationFrame(qf); qf = 0; }
+    var batch = queue.splice(0), n = {};
+    batch.sort(function (a, b) { return a.el.compareDocumentPosition(b.el) & 4 ? -1 : 1; });
+    batch.forEach(function (p) {
+      var k = 0;
+      if (p.step) { k = n[p.step] = p.step in n ? n[p.step] + 1 : 0; p.el.style.setProperty(p.step, k); }
+      p.el.classList.add(p.inn);
+      /* once arrived it lets go of its transitions, so hover answers at once */
+      setTimeout(function () {
+        p.el.classList.remove(p.armed, p.inn);
+        if (p.step) { p.el.style.removeProperty(p.step); }
+      }, p.settle + k * p.gap);
+    });
+  }
+  /* a fast scroll, or a page restored part-way down: what is wholly above the screen is simply there */
   var cq = 0;
   function catchUp() {
     cq = 0;
-    [].slice.call(document.querySelectorAll('.pb-rel-armed:not(.pb-rel-in),.pb-ft-armed:not(.pb-ft-in)')).forEach(function (el) {
-      if (el.getBoundingClientRect().top < innerHeight && el._pbGo) { el._pbGo(); }
-    });
+    parts.forEach(function (p) { if (!p.done && p.el.getBoundingClientRect().bottom <= 0) { whole(p); } });
   }
   addEventListener('scroll', function () { if (!cq) { cq = requestAnimationFrame(catchUp); } }, { passive: true });
-  addEventListener('beforeprint', function () { waiting.slice().forEach(function (go) { go(); }); });
+  addEventListener('beforeprint', function () { parts.forEach(whole); });
 
   /* ------------------------------------------- the drawings, played -- */
-  /* how each part plays again, by its class (tools/pagebuild.py ART) */
+  /* how each part plays again under the pointer, by its class (tools/pagebuild.py
+     ART); every replay starts and ends on the drawing as it stands */
   var SPRING = 'cubic-bezier(.3,1.3,.5,1)', SMOOTH = 'cubic-bezier(.55,0,.2,1)';
+  var LEAVE = 'cubic-bezier(.5,0,.85,.45)', BACK = 'cubic-bezier(.15,.55,.3,1)';
   var PLAY = [
     ['pr-fly', fly],
     ['pr-spin', function () { return { k: [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }], d: 1000, e: SMOOTH }; }],
@@ -70,36 +110,48 @@
     ['pr-dot', function () { return { k: [{ transform: 'none' }, { transform: 'translateY(-5px)', offset: 0.4 }, { transform: 'none' }], d: 480, e: 'ease-in-out' }; }],
     ['pr-r', function () { return { k: [{ transform: 'none' }, { transform: 'rotate(-18deg)', offset: 0.3 }, { transform: 'rotate(10deg)', offset: 0.6 }, { transform: 'rotate(-3deg)', offset: 0.85 }, { transform: 'none' }], d: 1100, e: 'ease-out' }; }],
     ['pr-s', function () { return { k: [{ transform: 'none' }, { transform: 'translateX(-32px)', offset: 0.45 }, { transform: 'translateX(5px)', offset: 0.8 }, { transform: 'none' }], d: 1100, e: 'ease-in-out' }; }],
-    ['pr-d', function () { return { k: [{ strokeDasharray: '1 2', strokeDashoffset: 1.01 }, { strokeDasharray: '1 2', strokeDashoffset: 0 }], d: 800, e: SMOOTH }; }],
+    /* a line runs out along its length and draws itself back from its start,
+       in one movement of its dash (offset 0 to -3, the pattern's length, is
+       whole to whole): never gone at once. Inside a part that spins, the
+       spin is the replay. */
+    ['pr-d', function (el) {
+      if (el.parentNode && el.parentNode.closest && el.parentNode.closest('.pr-spin')) { return null; }
+      return { k: [{ strokeDasharray: '1 2', strokeDashoffset: 0, easing: LEAVE }, { strokeDasharray: '1 2', strokeDashoffset: -1, offset: 0.36, easing: 'linear' },
+        { strokeDasharray: '1 2', strokeDashoffset: -2, offset: 0.4, easing: BACK }, { strokeDasharray: '1 2', strokeDashoffset: -3 }], d: 1150, e: 'linear' };
+    }],
     ['pr-g', function () { return { k: [{ transform: 'scaleY(1)' }, { transform: 'scaleY(.45)', offset: 0.3 }, { transform: 'scaleY(1.08)', offset: 0.72 }, { transform: 'scaleY(1)' }], d: 760, e: 'ease-in-out' }; }],
-    ['pr-x', function () { return { k: [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], d: 650, e: SPRING }; }],
+    /* a bar draws back to a stub and out again */
+    ['pr-x', function () { return { k: [{ transform: 'scaleX(1)', easing: LEAVE }, { transform: 'scaleX(.12)', offset: 0.32, easing: SPRING }, { transform: 'scaleX(1)' }], d: 820, e: 'linear' }; }],
     ['pr-y', function () { return { k: [{ transform: 'none' }, { transform: 'translateY(-9px)', offset: 0.4 }, { transform: 'none' }], d: 560, e: 'ease-in-out' }; }],
     ['pr-p', function () { return { k: [{ transform: 'scale(1)' }, { transform: 'scale(1.24)', offset: 0.35 }, { transform: 'scale(.94)', offset: 0.7 }, { transform: 'scale(1)' }], d: 620, e: 'ease-in-out' }; }]
   ];
-  /* a coin crossing its route, which ends where the coin rests: the route's
-     points as offsets from there, then a little landing bounce */
+  /* a coin crossing its route, which ends where the coin rests: it shrinks
+     away where it rests, grows at the route's start, follows the route's
+     points (as offsets from its rest), then lands with a little bounce */
   function fly(el) {
     var route = el.ownerSVGElement && el.ownerSVGElement.querySelector('.pr-route');
     if (!route || !route.getTotalLength) { return null; }
-    var cx = parseFloat(el.getAttribute('cx')) || 0, cy = parseFloat(el.getAttribute('cy')) || 0, len, k = [], i, n = 16;
-    try { len = route.getTotalLength(); } catch (e) { return null; }
-    for (i = 0; i <= n; i++) {
-      var pt = route.getPointAtLength(len * i / n);
-      k.push({ transform: 'translate(' + (pt.x - cx).toFixed(2) + 'px,' + (pt.y - cy).toFixed(2) + 'px)', offset: 0.84 * i / n });
+    var cx = parseFloat(el.getAttribute('cx')) || 0, cy = parseFloat(el.getAttribute('cy')) || 0, len, k = [], i, n = 16, pt;
+    var at = function (x, y, s, o) { return { transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + s + ')', offset: o }; };
+    try { len = route.getTotalLength(); pt = route.getPointAtLength(0); } catch (e) { return null; }
+    k.push(at(0, 0, 1, 0), at(0, 0, 0, 0.1), at(pt.x - cx, pt.y - cy, 0, 0.12), at(pt.x - cx, pt.y - cy, 1, 0.22));
+    for (i = 1; i <= n; i++) {
+      pt = route.getPointAtLength(len * i / n);
+      k.push(at(pt.x - cx, pt.y - cy, 1, 0.22 + 0.64 * i / n));
     }
-    k.push({ transform: 'scale(1.25,.8)', offset: 0.92 }, { transform: 'none', offset: 1 });
-    return { k: k, d: 1500, e: 'linear' };
+    k.push(at(0, 0, '1.25,.8', 0.93), at(0, 0, 1, 1));
+    return { k: k, d: 1700, e: 'linear' };
   }
   function play(card) {
-    /* not while the cards are still arriving: their transitions hold the same properties */
+    /* not while the card is still arriving: its transitions hold the same properties */
     if (!canAnimate || !on() || card._pbBusy || card.closest('.pb-rel-armed')) { return; }
     var longest = 0;
     [].slice.call(card.querySelectorAll('.pb-related-art svg [class*="pr-"]')).forEach(function (el) {
       var spec = null;
-      for (var i = 0; i < PLAY.length && !spec; i++) { if (el.classList.contains(PLAY[i][0])) { spec = PLAY[i][1](el); } }
+      for (var i = 0; i < PLAY.length && !spec; i++) { if (el.classList.contains(PLAY[i][0])) { spec = PLAY[i][1](el); if (!spec && PLAY[i][0] === 'pr-d') { break; } } }
       if (!spec) { return; }
       var delay = (parseFloat(el.style.getPropertyValue('--o')) || 0) * 55;
-      try { el.animate(spec.k, { duration: spec.d, delay: delay, easing: spec.e, fill: 'backwards' }); } catch (e) { return; }
+      try { el.animate(spec.k, { duration: spec.d, delay: delay, easing: spec.e }); } catch (e) { return; }
       longest = Math.max(longest, delay + spec.d);
     });
     card._pbBusy = true;
@@ -108,9 +160,12 @@
 
   /* ---------------------------------------- the related cards -- */
   [].slice.call(document.querySelectorAll('.pb-related, .pb-nf-six')).forEach(function (box) {
-    arrive(box, 'pb-rel-armed', 'pb-rel-in', 2900);
+    var label = box.querySelector('.pb-related-h');
+    if (label) { arm(label, 'pb-rel-armed', 'pb-rel-in', 1200, null, 0); }
     [].slice.call(box.querySelectorAll('a')).forEach(function (card) {
       if (!card.querySelector('.pb-related-art')) { return; }
+      var li = card.closest('li');
+      if (li) { arm(li, 'pb-rel-armed', 'pb-rel-in', 2400, '--ci', 130); }
       card.addEventListener('pointerenter', function () { play(card); });
       card.addEventListener('focus', function () { var kb = true; try { kb = card.matches(':focus-visible'); } catch (e) {} if (kb) { play(card); } });
     });
@@ -118,8 +173,9 @@
 
   /* --------------------------------------------------- the footer -- */
   var foot = document.querySelector('footer');
-  var top = foot && foot.querySelector('.foot-top');
-  if (top) { arrive(top, 'pb-ft-armed', 'pb-ft-in', 2600); }
+  if (foot) {
+    [].slice.call(foot.querySelectorAll('.foot-top > .foot-col')).forEach(function (col) { arm(col, 'pb-ft-armed', 'pb-ft-in', 1700, '--fc', 120); });
+  }
 
   /* the wordmark: a light passes once as it arrives, then follows the pointer near it */
   var mark = foot && foot.querySelector('.pb-wordmark');

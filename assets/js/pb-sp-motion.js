@@ -3,9 +3,16 @@
    tools/pagebuild.py, loaded before each page's own script. It watches what
    the page scripts write and never writes a figure or a word itself.
 
-   - Figures. When a figure changes, only the characters that changed rise
-     into place. The text is never rewritten to an in-between value, so what
-     a screen reader, the results bar or a test reads is always the page's.
+   - Figures. When a figure changes in one go (a tap, a key, a typed value),
+     only the characters that changed rise into place. The text is never
+     rewritten to an in-between value, so what a screen reader, the results
+     bar or a test reads is always the page's.
+     WHILE A SLIDER OR THE DOTS ARE UNDER A POINTER the figures simply follow,
+     unrolled: a roll starts each changed digit from nothing, so rolling on
+     every step of a drag left the figures half blank under the reader's
+     finger (13 October 2026 review, SP-1). For the same reason a figure that
+     changed less than a quarter of a second ago changes plainly too, so a
+     held arrow key reads as one steady count, not a flicker.
    - The forty dots (reality check). The first time they are seen they fill
      once, in order. After that the page script sets each change's order
      before it moves a class (paintJar in tools/state-pension-parts/page.js):
@@ -13,8 +20,11 @@
      taken away empties from the top down, all in under half a second.
    - Bars. The first time a card comes into view its bars grow from nothing;
      after that they ease to each new width.
-   - The lead (13 October 2026). The figures in the answer under each
-     headline roll their digits into place, over the real text.
+   - The lead (13 October 2026). Its lines rise in after the headline's
+     words (page.css); its figures are plain text from the first frame. The
+     digit-by-digit roll they had until the review (SP-2) showed wrong
+     amounts for over a second before the real answer, which has to be read
+     at once.
 
    Nothing bounces, flashes or celebrates; the one overshoot is the lead's
    link, which lands on a gentle spring (page.css, 13 October 2026: Damian
@@ -29,11 +39,28 @@
   root.classList.add('pb-sp-alive');
 
   /* ------------------------------------------------------------ figures -- */
-  function roll(el) {
+  /* a slider or the dots are under a pointer: set before the page script
+     hears the press (capture phase), cleared when the pointer lets go */
+  var held = false;
+  document.addEventListener('pointerdown', function (e) {
+    var t = e.target;
+    held = !!(t && t.closest && t.closest('input[type="range"],.pb-jar-body'));
+  }, true);
+  function letGo() { held = false; }
+  document.addEventListener('pointerup', letGo, true);
+  document.addEventListener('pointercancel', letGo, true);
+  var now = function () { return window.performance && performance.now ? performance.now() : Date.now(); };
+
+  function roll(el, last) {
     var t = el.textContent;
     if (el.getAttribute('data-roll') === t) { return; }
     var old = el.getAttribute('data-roll') || '';
     el.setAttribute('data-roll', t);
+    /* a drag, a burst of key repeats, or motion turned off mid-visit: the
+       page's own plain text stands, whole, as written */
+    var at = now(), quiet = at - last.t >= 250;
+    last.t = at;
+    if (held || !quiet || !root.classList.contains('pb-motion')) { return; }
     var frag = document.createDocumentFragment(), k = 0, shift = t.length - old.length, word = null;
     t.split('').forEach(function (c, i) {
       /* a space stays a plain space: an inline-block holding one collapses */
@@ -56,63 +83,17 @@
   }
   function watchFigure(el, settled) {
     if (!el) { return; }
-    /* a settled figure moves only when it changes; the headline figures
-       also rise into place once as the page opens */
+    /* a settled figure moves only when it changes; the result figures also
+       rise into place once, with the page's first render */
     if (settled) { el.setAttribute('data-roll', el.textContent); }
-    new MutationObserver(function () { roll(el); })
+    var last = { t: -1e9 };
+    new MutationObserver(function () { roll(el, last); })
       .observe(el, { childList: true, characterData: true, subtree: true });
   }
   ['spWeekly', 'spAnnual', 'm1Rate', 'm2Rate'].forEach(function (id) {
     watchFigure(document.getElementById(id), false);
   });
   [].forEach.call(document.querySelectorAll('#pbJarCap,.lspct,.lsmon'), function (el) { watchFigure(el, true); });
-
-  /* ------------------------------------------- the lead's figures roll -- */
-  /* 13 October 2026. The answer under each page's headline: each digit of a
-     figure rolls up from nought to its own value, a full turn and a bit,
-     left to right, and lands. The reel is a layer laid over the real figure
-     (aria-hidden), which keeps its place and its words throughout and is
-     uncovered, unchanged, once the last digit has landed. */
-  function odometer(el, delay) {
-    var text = el.textContent;
-    if (!/[0-9]/.test(text)) { return; }
-    var over = document.createElement('span');
-    over.className = 'pb-odo';
-    over.setAttribute('aria-hidden', 'true');
-    over.style.color = getComputedStyle(el).color;
-    var k = 0;
-    text.split('').forEach(function (c) {
-      if (c < '0' || c > '9') { over.appendChild(document.createTextNode(c)); return; }
-      var to = 10 + (+c), lines = [];
-      for (var i = 0; i <= to; i++) { lines.push(i % 10); }
-      var win = document.createElement('span'), reel = document.createElement('span');
-      win.className = 'pb-odo-win';
-      reel.className = 'pb-odo-reel';
-      reel.textContent = lines.join('\n');
-      reel.style.setProperty('--to', String(to));
-      reel.style.animationDelay = (delay + k++ * 50) + 'ms';
-      win.appendChild(reel);
-      over.appendChild(win);
-    });
-    el.appendChild(over);
-    el.classList.add('pb-odo-on');
-    var gone = false;
-    function done() {
-      if (gone) { return; }
-      gone = true;
-      if (over.parentNode) { over.parentNode.removeChild(over); }
-      el.classList.remove('pb-odo-on');
-    }
-    setTimeout(done, delay + k * 50 + 1300);
-    document.addEventListener('pb:motion', function (e) { if (!(e.detail && e.detail.motion)) { done(); } });
-  }
-  /* each figure starts as its own line starts to rise (page.css staggers the
-     lines), and a second figure on a line a beat after the first */
-  [].forEach.call(document.querySelectorAll('.phead .sp-fig'), function (el) {
-    var line = el.parentNode, rise = parseFloat(getComputedStyle(line).animationDelay) || 0;
-    var nth = [].indexOf.call(line.querySelectorAll('.sp-fig'), el);
-    odometer(el, Math.round(rise * 1000) + 80 + nth * 170);
-  });
 
   /* --------------------------------------------------- the forty dots -- */
   var grid = document.querySelector('.pb-jar-dots');

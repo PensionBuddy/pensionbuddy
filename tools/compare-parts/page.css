@@ -8,7 +8,10 @@
    colours say whose money it is, nothing else: you ink, your employer
    light slate, the State teal (teal is only ever the State's), tax
    relief amber. Every bar sits on one euro scale, so lengths compare
-   across the cards and the best-of-both line.
+   across the cards and the best-of-both line, and the scale holds still
+   (13 October review): set by the most the slider reaches, at 40%, so a
+   bar moves only when its own figure does. The markup's widths are the
+   wide layout's at the default, €50 at 20%.
    Motion (assets/js/pb-cmp-motion.js, and the rules at the foot of this
    block) only ever under html.pb-motion; without it everything simply
    is where it ends.
@@ -69,14 +72,24 @@
 .cmp-s-rev,.cmp-key [data-part="rev"] i{background:var(--amber)}
 .cmp-key [data-part="ae"] i{background:linear-gradient(90deg,#2C3B38 0 43%,#A9B4C2 43% 86%,var(--teal) 86%)}
 /* where auto-enrolment stops: a quiet mark until the bar reaches it */
-.cmp-cap{position:absolute;top:-5px;bottom:-5px;left:var(--cap,92.59%);width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.45}
+.cmp-cap{position:absolute;top:-5px;bottom:-5px;left:var(--cap,26.9%);width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.45}
 .cmp-card.is-capped .cmp-cap{background:var(--ink);opacity:1}
 
 .cmp-key{list-style:none;margin:0;padding:0;display:grid;gap:5px}
-.cmp-key li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;column-gap:9px;font-size:1rem;line-height:1.35;color:var(--ink-2)}
+/* each figure's column is as wide as its card's widest figure from the
+   slider ("€100"; the personal pension's "+€333"), so a name's line
+   never breaks differently as a figure gains a digit */
+.cmp-key li{display:grid;grid-template-columns:12px minmax(0,1fr) minmax(var(--cmp-amt,2.7em),max-content);align-items:center;column-gap:9px;font-size:1rem;line-height:1.35;color:var(--ink-2)}
+.cmp-card[data-card="pp"] .cmp-key{--cmp-amt:3.4em}
 .cmp-key li i{display:block;width:12px;height:12px;border-radius:3px}
 .cmp-key b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .cmp-small{margin:10px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+/* side by side, the two cards share a row, and auto-enrolment's line under
+   its key takes two lines or three as the figures in it grow ("It takes
+   €100 of your €120. The other €20 stays in your pay."): three are
+   kept for it, so the result never bobs while the slider moves */
+@media(min-width:561px){.cmp-pair .cmp-small{min-height:calc(3 * 1.45em)}}
+@media(max-width:560px){.cmp-pair .cmp-small{min-height:calc(2 * 1.45em)}}
 /* point at a source, in a bar or in its key, and it lights everywhere on the result */
 .results[data-hl] .cmp-s:not(.cmp-on),.results[data-hl] .cmp-key li:not(.cmp-on){opacity:.3}
 .cmp-hero .divline{height:1px;margin:18px 0 12px;background:rgba(11,31,28,.12)}
@@ -88,7 +101,9 @@
 .cmp-best-c{min-height:0}
 [data-pb-calc] .res-hero.cmp-best{min-height:0;padding:20px 24px 18px;background:var(--surface);border:2px solid var(--ink)}
 .cmp-best-l{margin:6px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
-.cmp-key-2{grid-template-columns:repeat(2,minmax(0,max-content));column-gap:28px}
+/* its key one line under the other at every width: side by side, the
+   second wrapped as its figure grew, and the card under it bobbed */
+.cmp-key-2{grid-template-columns:minmax(0,1fr)}
 
 /* on a phone the cards stack, each total on its title's line, right-aligned,
    so the totals read down one edge and the bars along the other */
@@ -102,7 +117,8 @@
   .cmp-hero .big{font-size:28px;justify-self:end}
   .cmp-per{justify-self:end;line-height:1.2}
   .cmp-track{margin:10px 0 12px}
-  .cmp-key-2{grid-template-columns:minmax(0,1fr)}
+  /* "Personal pension, the other €200": two lines kept, for the day it needs them */
+  #bTopL{min-height:calc(2 * 1.35em)}
   .cmp-tax-f{grid-template-columns:minmax(0,1fr) minmax(0,150px)}
 }
 
@@ -119,9 +135,12 @@
 :root.pb-motion .cmp-say:not(.is-over) .cmp-note-a path{stroke-dashoffset:16;transition:none}
 :root.pb-motion .cmp-lim i,:root.pb-motion .cmp-lim b,:root.pb-motion .cmp-cap{transition:background-color var(--pb-d-3) var(--pb-ease-move),color var(--pb-d-3) var(--pb-ease-move),opacity var(--pb-d-3) var(--pb-ease-move)}
 :root.pb-motion .cmp-s,:root.pb-motion .cmp-key li{transition:opacity var(--pb-d-2) var(--pb-ease-move)}
-/* the best of both opens: the space grows, the card springs up into it */
-:root.pb-motion .cmp-best-w{grid-template-rows:0fr;transition:grid-template-rows var(--pb-d-4) var(--pb-ease-out)}
-:root.pb-motion .cmp-best-w.cmp-in{grid-template-rows:1fr}
+/* the best of both opens: the space grows, the card springs up into it. The
+   results' 18px gap above it grows with it (the negative margin takes the
+   gap back while it is shut), so nothing under it jumps on the way in or
+   snaps on the way out */
+:root.pb-motion .cmp-best-w{grid-template-rows:0fr;margin-top:-18px;transition:grid-template-rows var(--pb-d-4) var(--pb-ease-out),margin-top var(--pb-d-4) var(--pb-ease-out)}
+:root.pb-motion .cmp-best-w.cmp-in{grid-template-rows:1fr;margin-top:0}
 :root.pb-motion .cmp-best-w:not(.cmp-open) .cmp-best-c{overflow:hidden}
 :root.pb-motion .cmp-best-w .cmp-best{opacity:0;transform:translateY(-10px) scale(.985);transition:opacity var(--pb-d-3) var(--pb-ease-move),transform 620ms var(--cmp-spring)}
 :root.pb-motion .cmp-best-w.cmp-in .cmp-best{opacity:1;transform:none}

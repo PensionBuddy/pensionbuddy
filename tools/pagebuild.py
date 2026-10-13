@@ -964,20 +964,21 @@ def sync_blocks(sources, skeleton=os.path.basename(SKELETON)):
 # with reduced motion. assets/js/pb-chrome-motion.js, with motion on, builds
 # each drawing as its card arrives and replays it under the pointer or the
 # keyboard; its inner wrap carries pb-al-skip so assets/js/pb-alive.js leaves
-# it to that script. And every line was made plain, the clearest sentence the
-# page itself has.
+# it to that script.
 #
 # Not on: the home page (it is the map, and ends on its own call), booking and
 # the thank-you page (one job each), the 404 (its own six places, item 8), the
 # pages held back, and the games.
 #
-# Every word on a card is already on the site. CARDS says where: a title is
-# the page's name in the nav, or in the home page's "Six places to begin"
-# where it is one of them (since 6 October 2026, the 404's six places, which
-# the home page no longer carries); a line is the one beside it there, or a
-# sentence the page itself has: its heading, its introduction or its own
-# description. Check 39 finds each line on its page, word for word (as text:
-# a highlight's tags inside a heading do not count).
+# The words (13 October 2026, the review after Damian's "obscenely clear and
+# obscenely concise"): a card's title is the page's name, and its line says
+# what the page does for the reader, in ten words or fewer, never the title
+# again. They were sentences lifted from each page until then ("Three things
+# change as you pass 50.", "Nine checks before two deadlines."), which read
+# as teasers out of their place, so each line is now written for its card.
+# The 404's six places carry the same names and lines (check 40); check 39
+# holds each line to ten words. A guide's next step leads its row (the
+# reader's next page, first), so a guide needs no box of its own above it.
 RELATED = {
     'starter.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'glossary.html'),
     'tracker.html': ('my-pensions.html', 'pension-fees-calculator.html', 'uk-pensions-in-ireland.html'),
@@ -991,37 +992,39 @@ RELATED = {
     'state-pension-reality-check.html': ('state-pension-entitlement.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
     'state-pension-entitlement.html': ('state-pension-reality-check.html', 'pension-calculator.html', 'uk-pensions-in-ireland.html'),
     'pia.html': ('broker-vs-autoenrolment.html', 'glossary.html'),
-    'director-pension-rules.html': ('director-year-end-checklist.html', 'standard-fund-threshold.html'),
+    'director-pension-rules.html': ('director-calculator.html', 'director-year-end-checklist.html', 'standard-fund-threshold.html'),
     'director-year-end-checklist.html': ('director-calculator.html', 'director-pension-rules.html', 'standard-fund-threshold.html'),
-    'pensions-over-50.html': ('standard-fund-threshold.html', 'state-pension-reality-check.html', 'glossary.html'),
-    'self-employed-pensions.html': ('broker-vs-autoenrolment.html', 'pensions-over-50.html', 'glossary.html'),
-    'uk-pensions-in-ireland.html': ('state-pension-entitlement.html', 'pensions-over-50.html', 'glossary.html'),
+    'pensions-over-50.html': ('pension-calculator.html', 'standard-fund-threshold.html', 'state-pension-reality-check.html'),
+    'self-employed-pensions.html': ('pension-calculator.html', 'broker-vs-autoenrolment.html', 'pensions-over-50.html'),
+    'uk-pensions-in-ireland.html': ('tracker.html', 'state-pension-entitlement.html', 'pensions-over-50.html'),
     'glossary.html': ('pension-calculator.html', 'starter.html', 'pensions-over-50.html'),
     'privacy.html': ('terms.html', 'complaints.html'),
     'terms.html': ('privacy.html', 'complaints.html'),
     'complaints.html': ('terms.html', 'privacy.html'),
 }
-# page: (title, line, where the line is written, word for word)
+# page: (its name, what it does for you). The name is the page's name in the
+# nav where the nav has it; director.html is here for the 404's six places.
 CARDS = {
-    'pension-calculator.html': ('Pension calculator', 'What your pension could pay you a month, with tax relief.', '404.html'),
-    'starter.html': ('Start a pension', 'Start your first pension, with tax relief at any age.', '404.html'),
-    'tracker.html': ('Track down old pensions', 'Find pensions from old jobs, and what they are worth.', '404.html'),
-    'state-pension-reality-check.html': ('State Pension reality check', 'What the State Pension actually pays you.', '404.html'),
-    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'My Future Fund or a personal pension: which puts in more?', '404.html'),
-    'my-pensions.html': ('All your pensions in one view', 'Add each pension and see your total, how it is split and what the fees cost you each year.', 'my-pensions.html'),
-    'pension-fees-calculator.html': ('Pension charges calculator', 'What your pension&rsquo;s charges cost you by retirement.', 'pension-fees-calculator.html'),
-    'director-calculator.html': ('Director calculator', 'What your company could pay into your pension.', 'director-calculator.html'),
-    'director-pension-rules.html': ('What changed for directors in 2026', 'Four questions show which apply to you.', 'director-pension-rules.html'),
-    'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine checks before two deadlines.', 'director-year-end-checklist.html'),
-    'standard-fund-threshold.html': ('The Standard Fund Threshold', 'The Standard Fund Threshold, how much of it your pensions would use, and how a retirement lump sum is taxed.', 'standard-fund-threshold.html'),
-    'state-pension-entitlement.html': ('State Pension check', 'How much State Pension you may get, from your PRSI record.', 'state-pension-entitlement.html'),
-    'pensions-over-50.html': ('Pensions after 50', 'Three things change as you pass 50.', 'pensions-over-50.html'),
-    'self-employed-pensions.html': ('Pensions when you are self-employed', 'Nobody starts a pension for you.', 'self-employed-pensions.html'),
-    'uk-pensions-in-ireland.html': ('A UK pension, and living in Ireland', 'You may have a UK workplace or personal pension, and a UK State Pension.', 'uk-pensions-in-ireland.html'),
-    'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.', 'glossary.html'),
-    'privacy.html': ('Privacy Notice', 'How Pensionbuddy collects, uses and protects your personal information.', 'privacy.html'),
-    'terms.html': ('Terms of Business', 'Who we are, what we do, and how we are paid.', 'terms.html'),
-    'complaints.html': ('Complaints', 'If something has gone wrong, we want to know.', 'complaints.html'),
+    'pension-calculator.html': ('Pension calculator', 'See what your pension could pay you each month.'),
+    'starter.html': ('Start a pension', 'No pension yet? Start one, with tax relief.'),
+    'tracker.html': ('Track down old pensions', 'List your old jobs. We find the pensions.'),
+    'director.html': ('Company directors', 'Your company can pay into your pension, and save tax.'),
+    'state-pension-reality-check.html': ('What the State Pension pays', 'See if it is enough to live on.'),
+    'broker-vs-autoenrolment.html': ('Auto-enrolment comparison', 'Auto-enrolment or a personal pension: which puts in more?'),
+    'my-pensions.html': ('All your pensions in one view', 'Add each pension. See your total.'),
+    'pension-fees-calculator.html': ('Pension charges calculator', 'What your pension&rsquo;s charges cost you by retirement.'),
+    'director-calculator.html': ('Director calculator', 'What your company could pay into your pension.'),
+    'director-pension-rules.html': ('What changed for directors in 2026', 'Four questions show which changes apply to you.'),
+    'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine checks before your company year end and tax deadline.'),
+    'standard-fund-threshold.html': ('The Standard Fund Threshold', 'Revenue&rsquo;s cap on pension savings, and how close you are.'),
+    'state-pension-entitlement.html': ('How much State Pension you may get', 'Work it out from your PRSI record.'),
+    'pensions-over-50.html': ('Pensions after 50', 'Pay in more with tax relief, and plan your retirement.'),
+    'self-employed-pensions.html': ('Self-employed pensions', 'Set up your own pension, with tax relief.'),
+    'uk-pensions-in-ireland.html': ('UK pensions in Ireland', 'Moving a UK pension here, and how Ireland taxes it.'),
+    'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.'),
+    'privacy.html': ('Privacy Notice', 'How we use and protect your information.'),
+    'terms.html': ('Terms of Business', 'What we do, and how we are paid.'),
+    'complaints.html': ('Complaints', 'How to tell us if something has gone wrong.'),
 }
 # ART (13 October 2026). page: (tone, the inside of its drawing), on a 160 x 96
 # canvas. The tone is the panel behind it: t teal (the tools), a amber (money),
@@ -1241,6 +1244,14 @@ RELATED_OPEN = '<!-- RELATED:BEGIN'
 RELATED_CLOSE = '<!-- RELATED:END -->\n'
 
 
+def related_title(title):
+    """A card's name, its last word held to the arrow after it (the RELATED
+    block of CSS draws the arrow on .pb-rt-end), so a narrow card never
+    leaves the arrow alone on a line. The 404's six places carry the same."""
+    head, _, last = title.rpartition(' ')
+    return '%s<span class="pb-rt-end">%s</span>' % (head + ' ' if head else '', last)
+
+
 def related_block(page):
     """The block for page, or '' for a page that carries none."""
     if page not in RELATED:
@@ -1250,7 +1261,7 @@ def related_block(page):
         raise ValueError('no card in CARDS, or no drawing in ART, for %s' % ', '.join(missing))
     cards = ''.join(
         '    <li><a class="pb-related-card pb-card-link" href="%s">%s<span class="pb-related-t">%s</span>'
-        '<span class="pb-related-d">%s</span></a></li>\n' % (t, related_art(t), CARDS[t][0], CARDS[t][1]) for t in RELATED[page])
+        '<span class="pb-related-d">%s</span></a></li>\n' % (t, related_art(t), related_title(CARDS[t][0]), CARDS[t][1]) for t in RELATED[page])
     return ('<!-- RELATED:BEGIN (Run 37: tools/pagebuild.py RELATED writes this; edit the table there) -->\n'
             '<section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">\n'
             '  <p class="pb-related-h" id="pbRelatedH">Related pages</p>\n'

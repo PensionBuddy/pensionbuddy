@@ -21,6 +21,11 @@
 .pia-seg button.on{background:var(--surface);color:var(--teal-700);box-shadow:0 0 0 1px var(--line-2)}
 .pia-seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .pia-taxrate{margin-bottom:6px}
+/* the PIA's limit: a typed amount over EUR 1,000 a month is set back to it,
+   and the line under the slider says why, in ink until the slider moves */
+.pia-amt-note.pia-capped{color:var(--ink);font-weight:600}
+:root.pb-motion .pia-amt-note.pia-capped{animation:piaCap var(--pb-d-4) var(--pb-ease-out)}
+@keyframes piaCap{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .pia-adv > summary{flex-wrap:wrap;row-gap:0}
 .pia-adv > summary:focus-visible{outline:3px solid var(--ring);outline-offset:2px;border-radius:4px}
 .pia-adv-l{font-weight:700;color:var(--ink)}
@@ -102,13 +107,24 @@
    .pia-armed, then .pia-in once they are on screen: each bar builds in the
    order the money arrives (yours, then the relief, then the growth), then
    its tax slides back over the end, one bar after another; the figure
-   above counts up with it. After that a change of input slides the bars
-   to their new lengths. With motion off none of this applies: the bars
-   are drawn at once, as they are. */
+   above counts up with it. While armed the figures and the lines under
+   them wait unseen, so a figure is never on screen at its value and then
+   run back to nought for the count (review, 13 October 2026); each fades
+   in with its own bar. After that a change of input slides the bars to
+   their new lengths. With motion off none of this applies: the bars are
+   drawn at once, as they are. */
 :root.pb-motion .pia-bars.pia-armed:not(.pia-in) .pia-s{transform:scaleX(0);transition:none}
+/* the first frames, before the module has armed the bars (html.pb-motion but
+   not yet .pb-ready): they already wait as armed, so at load they are never
+   seen drawn, then emptied, then built */
+:root.pb-motion:not(.pb-ready) .pia-bars:not(.pia-in) .pia-s{transform:scaleX(0);transition:none}
+:root.pb-motion:not(.pb-ready) .pia-bars:not(.pia-in) .pia-rh .big,:root.pb-motion:not(.pb-ready) .pia-bars:not(.pia-in) .pia-note{opacity:0}
+:root.pb-motion .pia-bars.pia-armed:not(.pia-in) .pia-rh .big,:root.pb-motion .pia-bars.pia-armed:not(.pia-in) .pia-note{opacity:0}
+:root.pb-motion .pia-bars.pia-in .pia-rh .big{transition:opacity var(--pb-d-3) var(--pb-ease-out) calc(var(--row) * .14s)}
+:root.pb-motion .pia-bars.pia-in .pia-note{transition:opacity var(--pb-d-4) var(--pb-ease-out) calc(var(--row) * .14s + 1.45s)}
 :root.pb-motion .pia-bars.pia-in .pia-s{transition:left .55s var(--pb-ease-out),width .55s var(--pb-ease-out),transform .75s var(--pb-ease-out)}
 :root.pb-motion .pia-bars.pia-in .pia-s-in{transition-delay:0s,0s,calc(var(--row) * .14s)}
 :root.pb-motion .pia-bars.pia-in .pia-s-rel{transition-delay:0s,0s,calc(var(--row) * .14s + .5s)}
 :root.pb-motion .pia-bars.pia-in .pia-s-grow{transition-delay:0s,0s,calc(var(--row) * .14s + .9s)}
 :root.pb-motion .pia-bars.pia-in .pia-s-tax{transition-delay:0s,0s,calc(var(--row) * .14s + 1.45s)}
-@media print{.pia-bars.pia-armed .pia-s{transform:none!important}}
+@media print{.pia-bars.pia-armed .pia-s{transform:none!important}.pia-bars.pia-armed .pia-rh .big,.pia-bars.pia-armed .pia-note{opacity:1!important}}

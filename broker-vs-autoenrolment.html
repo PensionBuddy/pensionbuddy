@@ -2365,10 +2365,15 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    label is a paragraph that names the section, not a heading: a heading here
    would be a fourth size on most pages. Byte for byte on every page, like the
    blocks above. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the cards rise in one after another as they arrive and
-   each drawing builds itself; under the pointer or the keyboard a card lifts
-   and its drawing plays again. A phone has the drawing beside the words. */
+   adds the classes) each card rises in as it comes on screen, cards that
+   come on screen together one after another, and its drawing builds itself;
+   under the pointer or the keyboard a card lifts and its drawing plays again
+   from where it stands. A phone has the drawing beside the words. */
 .pb-related{padding:48px 0 8px}
+/* the footer keeps clear of the cards on every page: the hand-written pages'
+   footers had no top margin, which left 8px, and the footer's walking strip
+   (assets/js/pb-alive.js, 26px above it) ran over the last card's edge */
+main:has(> .pb-related) + footer{margin-top:56px}
 .pb-related .pb-related-h{display:flex;align-items:center;gap:14px;margin:0 0 16px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .pb-related .pb-related-h::after{content:"";flex:1;height:1px;background:var(--line-2);transform-origin:0 50%}
 .pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:0;padding:0;list-style:none}
@@ -2385,7 +2390,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art svg{display:block;width:auto;height:108px;max-width:100%;overflow:visible}
 .pb-related .pb-related-t,.pb-related .pb-related-d{padding:0 10px}
 .pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
-.pb-related-t::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
+/* the arrow rides on the name's last word (pagebuild.related_title), so it
+   never wraps onto a line of its own; the 404's six places carry it too */
+.pb-rt-end{white-space:nowrap}
+.pb-rt-end::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
 /* where each part of a drawing grows from */
 .pb-related-art :is(.pr-g,.pr-x,.pr-p,.pr-s,.pr-y,.pr-spin,.pr-wave,.pr-fly,.pr-dot){transform-box:fill-box;transform-origin:50% 50%}
@@ -2393,8 +2401,6 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art .pr-x{transform-origin:0 50%}
 .pb-related-art .pr-r{transform-box:view-box}
 .pb-related-art *{--pd:calc(var(--ci,0) * 130ms + 320ms + var(--o,0) * 85ms)}
-.pb-related-list li:nth-child(2) .pb-related-card{--ci:1}
-.pb-related-list li:nth-child(3) .pb-related-card{--ci:2}
 @media(max-width:560px){
   .pb-related .pb-related-card{display:grid;grid-template-columns:108px minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start;column-gap:14px;row-gap:4px;padding:10px 14px 10px 10px}
   .pb-related-art{grid-row:1 / span 2;height:84px;margin:0;border-radius:10px}
@@ -2413,18 +2419,21 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 html.pb-motion .pb-related-card{transition:translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-related-card::after{content:"";position:absolute;left:0;right:0;top:100%;height:0}
 html.pb-motion .pb-related-art svg{transition:scale .6s cubic-bezier(.3,1.45,.45,1)}
-html.pb-motion .pb-related-t::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
+html.pb-motion .pb-rt-end::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
 @media (hover:hover) and (pointer:fine){
   html.pb-motion .pb-related-card:hover{translate:0 -6px}
   html.pb-motion .pb-related-card:hover::after{height:8px}
   html.pb-motion .pb-related-card:hover .pb-related-art svg{scale:1.06}
-  html.pb-motion .pb-related-card:hover .pb-related-t::after{translate:5px 0}
+  html.pb-motion .pb-related-card:hover .pb-rt-end::after{translate:5px 0}
 }
 html.pb-motion .pb-related-card:focus-visible{translate:0 -6px}
 html.pb-motion .pb-related-card:focus-visible .pb-related-art svg{scale:1.06}
-html.pb-motion .pb-related-card:focus-visible .pb-related-t::after{translate:5px 0}
-/* arriving: armed only while the section is still below the screen */
-html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-h::after{transform:scaleX(0)}
+html.pb-motion .pb-related-card:focus-visible .pb-rt-end::after{translate:5px 0}
+/* arriving: the label's rule and each card on its own, armed only while
+   wholly below the screen and let go as it comes into view; cards that come
+   into view together step in one after another (--ci, which the script sets) */
+html.pb-motion .pb-related-h.pb-rel-armed:not(.pb-rel-in)::after{transform:scaleX(0)}
+html.pb-motion .pb-related-h.pb-rel-in::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-card{opacity:0;transform:translateY(36px) scale(.96)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-d{stroke-dasharray:1 2;stroke-dashoffset:1.01}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-g{transform:scaleY(0)}
@@ -2435,7 +2444,6 @@ html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-s{opacity:0;transform:translate
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-y{opacity:0;transform:translateY(-18px)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-r{transform:rotate(var(--r0,-60deg))}
 html.pb-motion .pb-rel-in .pr-d{stroke-dasharray:1 2}
-html.pb-motion .pb-rel-in .pb-related-h::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
 html.pb-motion .pb-rel-in .pb-related-card{transition:opacity .55s ease calc(var(--ci,0) * 130ms),transform 1s cubic-bezier(.2,1.12,.3,1) calc(var(--ci,0) * 130ms),
   translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-rel-in .pr-d{transition:stroke-dashoffset .95s cubic-bezier(.55,0,.2,1) var(--pd)}
@@ -2638,12 +2646,15 @@ main h1{font-weight:800}
    drawing tips, and the name steps along. A phone or a tablet lays each
    column's links in two columns (CSS columns, so each still reads top to
    bottom).
+   On a phone the Tools column, whose names are the longest, keeps one link
+   to a line.
    The brand (the logo, its line, Damian's qualifications) and the disclosure
    under it never move. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the links arrive one after another as the footer comes
-   into view, each drawing drawn, and the wordmark at the foot catches the
-   light as it arrives and under the pointer. */
-footer .foot-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto 1fr;
+   adds the classes) each column arrives as it comes into view, its links one
+   after another, each drawing drawn (columns that come into view together
+   step in one after another: --fc, which the script sets), and the wordmark
+   at the foot catches the light as it arrives and under the pointer. */
+footer .foot-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto 1fr;
   gap:30px 32px;margin-bottom:44px}
 /* Company and Legal share the last column, one over the other */
 footer .foot-top > :is(.foot-brand,.foot-col:nth-child(2),.foot-col:nth-child(3)){grid-row:span 2}
@@ -2676,6 +2687,8 @@ footer .foot-col a[href="booking.html"] .foot-ic{background:var(--teal);color:#f
   footer .foot-col:nth-child(4){columns:auto}
 }
 @media(max-width:600px){
+  /* Tools' names are too long for two columns here: one link to a line */
+  footer .foot-col:nth-child(3){columns:auto}
   footer .foot-col a{gap:8px;padding-right:2px;font-size:14.5px;line-height:1.25}
   footer .foot-ic{width:28px;height:28px;border-radius:8px}
   footer .foot-ic svg{width:16px;height:16px}
@@ -2689,26 +2702,23 @@ html.pb-motion footer .foot-l{transition:translate .45s cubic-bezier(.3,1.5,.45,
 }
 html.pb-motion footer .foot-col a:focus-visible .foot-ic{transform:rotate(-9deg) scale(1.12)}
 html.pb-motion footer .foot-col a:focus-visible .foot-l{translate:4px 0}
-footer .foot-col:nth-child(3){--fc:1}
-footer .foot-col:nth-child(4){--fc:2}
-footer .foot-col:nth-child(5){--fc:3}
 footer .foot-col a:nth-of-type(2){--fi:1}footer .foot-col a:nth-of-type(3){--fi:2}footer .foot-col a:nth-of-type(4){--fi:3}
 footer .foot-col a:nth-of-type(5){--fi:4}footer .foot-col a:nth-of-type(6){--fi:5}footer .foot-col a:nth-of-type(7){--fi:6}
 footer .foot-col a:nth-of-type(8){--fi:7}footer .foot-col a:nth-of-type(9){--fi:8}
 footer .foot-col *{--fd:calc(var(--fc,0) * 120ms + var(--fi,0) * 50ms)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2{opacity:0;transform:translateY(10px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2::before{transform:scaleX(0)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col a{opacity:0;transform:translateY(14px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2{opacity:0;transform:translateY(10px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2::before{transform:scaleX(0)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) a{opacity:0;transform:translateY(14px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
+html.pb-motion footer .foot-col.pb-ft-in h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
+html.pb-motion footer .foot-col.pb-ft-in h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
+html.pb-motion footer .foot-col.pb-ft-in a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
 html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-background-clip:text;background-clip:text;
   background-image:radial-gradient(300px circle at var(--wx,-400px) var(--wy,50%),rgba(20,203,177,.6),rgba(20,203,177,0) 70%),linear-gradient(rgba(11,31,28,.07),rgba(11,31,28,.07))}
 @media print{footer .foot-ic{display:none}}
@@ -2755,7 +2765,10 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
    colours say whose money it is, nothing else: you ink, your employer
    light slate, the State teal (teal is only ever the State's), tax
    relief amber. Every bar sits on one euro scale, so lengths compare
-   across the cards and the best-of-both line.
+   across the cards and the best-of-both line, and the scale holds still
+   (13 October review): set by the most the slider reaches, at 40%, so a
+   bar moves only when its own figure does. The markup's widths are the
+   wide layout's at the default, €50 at 20%.
    Motion (assets/js/pb-cmp-motion.js, and the rules at the foot of this
    block) only ever under html.pb-motion; without it everything simply
    is where it ends.
@@ -2816,14 +2829,24 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .cmp-s-rev,.cmp-key [data-part="rev"] i{background:var(--amber)}
 .cmp-key [data-part="ae"] i{background:linear-gradient(90deg,#2C3B38 0 43%,#A9B4C2 43% 86%,var(--teal) 86%)}
 /* where auto-enrolment stops: a quiet mark until the bar reaches it */
-.cmp-cap{position:absolute;top:-5px;bottom:-5px;left:var(--cap,92.59%);width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.45}
+.cmp-cap{position:absolute;top:-5px;bottom:-5px;left:var(--cap,26.9%);width:2px;margin-left:-1px;border-radius:1px;background:var(--ink-3);opacity:.45}
 .cmp-card.is-capped .cmp-cap{background:var(--ink);opacity:1}
 
 .cmp-key{list-style:none;margin:0;padding:0;display:grid;gap:5px}
-.cmp-key li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;column-gap:9px;font-size:1rem;line-height:1.35;color:var(--ink-2)}
+/* each figure's column is as wide as its card's widest figure from the
+   slider ("€100"; the personal pension's "+€333"), so a name's line
+   never breaks differently as a figure gains a digit */
+.cmp-key li{display:grid;grid-template-columns:12px minmax(0,1fr) minmax(var(--cmp-amt,2.7em),max-content);align-items:center;column-gap:9px;font-size:1rem;line-height:1.35;color:var(--ink-2)}
+.cmp-card[data-card="pp"] .cmp-key{--cmp-amt:3.4em}
 .cmp-key li i{display:block;width:12px;height:12px;border-radius:3px}
 .cmp-key b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .cmp-small{margin:10px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2);text-wrap:pretty}
+/* side by side, the two cards share a row, and auto-enrolment's line under
+   its key takes two lines or three as the figures in it grow ("It takes
+   €100 of your €120. The other €20 stays in your pay."): three are
+   kept for it, so the result never bobs while the slider moves */
+@media(min-width:561px){.cmp-pair .cmp-small{min-height:calc(3 * 1.45em)}}
+@media(max-width:560px){.cmp-pair .cmp-small{min-height:calc(2 * 1.45em)}}
 /* point at a source, in a bar or in its key, and it lights everywhere on the result */
 .results[data-hl] .cmp-s:not(.cmp-on),.results[data-hl] .cmp-key li:not(.cmp-on){opacity:.3}
 .cmp-hero .divline{height:1px;margin:18px 0 12px;background:rgba(11,31,28,.12)}
@@ -2835,7 +2858,9 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .cmp-best-c{min-height:0}
 [data-pb-calc] .res-hero.cmp-best{min-height:0;padding:20px 24px 18px;background:var(--surface);border:2px solid var(--ink)}
 .cmp-best-l{margin:6px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
-.cmp-key-2{grid-template-columns:repeat(2,minmax(0,max-content));column-gap:28px}
+/* its key one line under the other at every width: side by side, the
+   second wrapped as its figure grew, and the card under it bobbed */
+.cmp-key-2{grid-template-columns:minmax(0,1fr)}
 
 /* on a phone the cards stack, each total on its title's line, right-aligned,
    so the totals read down one edge and the bars along the other */
@@ -2849,7 +2874,8 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
   .cmp-hero .big{font-size:28px;justify-self:end}
   .cmp-per{justify-self:end;line-height:1.2}
   .cmp-track{margin:10px 0 12px}
-  .cmp-key-2{grid-template-columns:minmax(0,1fr)}
+  /* "Personal pension, the other €200": two lines kept, for the day it needs them */
+  #bTopL{min-height:calc(2 * 1.35em)}
   .cmp-tax-f{grid-template-columns:minmax(0,1fr) minmax(0,150px)}
 }
 
@@ -2866,9 +2892,12 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 :root.pb-motion .cmp-say:not(.is-over) .cmp-note-a path{stroke-dashoffset:16;transition:none}
 :root.pb-motion .cmp-lim i,:root.pb-motion .cmp-lim b,:root.pb-motion .cmp-cap{transition:background-color var(--pb-d-3) var(--pb-ease-move),color var(--pb-d-3) var(--pb-ease-move),opacity var(--pb-d-3) var(--pb-ease-move)}
 :root.pb-motion .cmp-s,:root.pb-motion .cmp-key li{transition:opacity var(--pb-d-2) var(--pb-ease-move)}
-/* the best of both opens: the space grows, the card springs up into it */
-:root.pb-motion .cmp-best-w{grid-template-rows:0fr;transition:grid-template-rows var(--pb-d-4) var(--pb-ease-out)}
-:root.pb-motion .cmp-best-w.cmp-in{grid-template-rows:1fr}
+/* the best of both opens: the space grows, the card springs up into it. The
+   results' 18px gap above it grows with it (the negative margin takes the
+   gap back while it is shut), so nothing under it jumps on the way in or
+   snaps on the way out */
+:root.pb-motion .cmp-best-w{grid-template-rows:0fr;margin-top:-18px;transition:grid-template-rows var(--pb-d-4) var(--pb-ease-out),margin-top var(--pb-d-4) var(--pb-ease-out)}
+:root.pb-motion .cmp-best-w.cmp-in{grid-template-rows:1fr;margin-top:0}
 :root.pb-motion .cmp-best-w:not(.cmp-open) .cmp-best-c{overflow:hidden}
 :root.pb-motion .cmp-best-w .cmp-best{opacity:0;transform:translateY(-10px) scale(.985);transition:opacity var(--pb-d-3) var(--pb-ease-move),transform 620ms var(--cmp-spring)}
 :root.pb-motion .cmp-best-w.cmp-in .cmp-best{opacity:1;transform:none}
@@ -2929,10 +2958,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <ul class="nav-dd-panel" id="navTools">
         <li><a class="lnk" href="pension-calculator.html">Pension calculator</a></li>
         <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
-        <li><a class="lnk" href="state-pension-entitlement.html">State Pension check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">How much State Pension you may get</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
         <li><a class="lnk active" aria-current="page" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
-        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-reality-check.html">What the State Pension pays</a></li>
         <li><a class="lnk" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
       </ul>
     </div>
@@ -2940,8 +2969,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
-        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
-        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Self-employed pensions</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">UK pensions in Ireland</a></li>
         <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
         <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
@@ -2973,7 +3002,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       </div>
       <div class="cmp-say" id="cmpSay">
         <p class="cmp-pay" id="cmpPay">€50 a month is 1.5% of €40,000 pay. Auto-enrolment takes up to €100.</p>
-        <p class="cmp-note" id="cmpNote"><svg class="cmp-note-a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span id="cmpNoteT">Past €100 a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.</span></p>
+        <p class="cmp-note" id="cmpNote"><svg class="cmp-note-a" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span id="cmpNoteT">Past €100 a month (pay over €80,000), auto-enrolment takes no more. A personal pension takes the rest.</span></p>
       </div>
     </div>
     <div class="field cmp-tax-f">
@@ -2997,11 +3026,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
             <span class="big" id="aeTotal">€117</span>
             <span class="cmp-per" aria-hidden="true">a month</span>
           </div>
-          <div class="cmp-track" id="aeTrack" style="--cap:92.593%" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="aeBarYou" style="width:19.870%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="aeBarEmp" style="width:19.870%"></i><i class="cmp-s cmp-s-state" data-part="state" id="aeBarState" style="width:6.756%"></i></span><span class="cmp-cap"></span></div>
+          <div class="cmp-track" id="aeTrack" style="--cap:26.895%" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="aeBarYou" style="width:5.772%"></i><i class="cmp-s cmp-s-emp" data-part="emp" id="aeBarEmp" style="width:5.772%"></i><i class="cmp-s cmp-s-state" data-part="state" id="aeBarState" style="width:1.962%"></i></span><span class="cmp-cap"></span></div>
           <ul class="cmp-key">
-            <li data-part="you"><i aria-hidden="true"></i><span>You put in</span> <b id="aeYou">€50</b></li>
-            <li data-part="emp"><i aria-hidden="true"></i><span>Your employer adds</span> <b id="aeEmp">€50</b></li>
-            <li data-part="state"><i aria-hidden="true"></i><span>The State adds</span> <b id="aeState">€17</b></li>
+            <li data-part="you"><i aria-hidden="true"></i><span>From you</span> <b id="aeYou">€50</b></li>
+            <li data-part="emp"><i aria-hidden="true"></i><span>Your employer</span> <b id="aeEmp">€50</b></li>
+            <li data-part="state"><i aria-hidden="true"></i><span>The State</span> <b id="aeState">€17</b></li>
           </ul>
           <p class="cmp-small" id="aeLeft">The State adds €1 for every €3 you put in.</p>
         </section>
@@ -3011,10 +3040,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
             <span class="big" id="ppTotal">€63</span>
             <span class="cmp-per" aria-hidden="true">a month</span>
           </div>
-          <div class="cmp-track" id="ppTrack" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="ppBarYou" style="width:19.870%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="ppBarRev" style="width:5.166%"></i></span></div>
+          <div class="cmp-track" id="ppTrack" aria-hidden="true"><span class="cmp-fill"><i class="cmp-s cmp-s-you" data-part="you" id="ppBarYou" style="width:5.772%"></i><i class="cmp-s cmp-s-rev" data-part="rev" id="ppBarRev" style="width:1.501%"></i></span></div>
           <ul class="cmp-key">
-            <li data-part="you"><i aria-hidden="true"></i><span>You put in</span> <b id="ppYou">€50</b></li>
-            <li data-part="rev"><i aria-hidden="true"></i><span>With tax relief</span> <b id="ppRel">+€13</b></li>
+            <li data-part="you"><i aria-hidden="true"></i><span>From you</span> <b id="ppYou">€50</b></li>
+            <li data-part="rev"><i aria-hidden="true"></i><span>Tax relief</span> <b id="ppRel">+€13</b></li>
           </ul>
           <p class="cmp-small" id="ppLeft">Your employer adds nothing, unless they agree to.</p>
         </section>
@@ -3107,9 +3136,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 82H142" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="26" y="66" width="12" height="8" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:1" x="48" y="59" width="12" height="15" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:2" x="70" y="50" width="12" height="24" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:3" x="92" y="39" width="12" height="35" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:4" x="114" y="26" width="12" height="48" rx="3" fill="#CBEBE4"/><path class="pr-d" style="--o:2" pathLength="1" d="M22 70C44 66 60 58 78 47S112 26 134 16" stroke="#08655A" stroke-width="3.5"/><circle class="pr-p" style="--o:6" cx="134" cy="16" r="7" fill="#14CBB1" stroke="#fff" stroke-width="3"/></svg></span><span class="pb-related-t">Pension calculator</span><span class="pb-related-d">What your pension could pay you a month, with tax relief.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="starter.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M34 82H126" stroke="#CBEBE4" stroke-width="2"/><path d="M54 82C60 70 100 70 106 82Z" fill="#CBEBE4"/><path class="pr-d" style="--o:0" pathLength="1" d="M80 76C80 64 80 52 81 38" stroke="#08655A" stroke-width="3.5"/><path class="pr-p" style="--o:3;transform-origin:100% 100%" d="M80 58C69 58 59 52 56 40C68 40 78 46 80 58Z" fill="#14CBB1"/><path class="pr-p" style="--o:4;transform-origin:0 100%" d="M81 46C92 46 102 38 104 26C92 26 83 34 81 46Z" fill="#0C8175"/><circle class="pr-p" style="--o:6" cx="124" cy="24" r="9" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Start a pension</span><span class="pb-related-d">Start your first pension, with tax relief at any age.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="self-employed-pensions.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="42" y="20" width="76" height="50" rx="6" fill="#fff" stroke="#08655A" stroke-width="2.5"/><path d="M30 76H130L124 84H36Z" fill="#CBEBE4" stroke="#08655A" stroke-width="2.5"/><path class="pr-d" style="--o:0" pathLength="1" d="M52 60L66 50L78 54L94 38L108 32" stroke="#0C8175" stroke-width="3"/><circle class="pr-p" style="--o:2" cx="108" cy="32" r="3.5" fill="#14CBB1"/><circle class="pr-y" style="--o:4" cx="132" cy="22" r="10" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><path class="pr-y" style="--o:4" d="M135.5 18.5A5 5 0 1 0 135.5 25.5M126 21H133M126 23.5H133" stroke="#C98A16" stroke-width="1.8"/></svg></span><span class="pb-related-t">Pensions when you are self-employed</span><span class="pb-related-d">Nobody starts a pension for you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pension-calculator.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 82H142" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="26" y="66" width="12" height="8" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:1" x="48" y="59" width="12" height="15" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:2" x="70" y="50" width="12" height="24" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:3" x="92" y="39" width="12" height="35" rx="3" fill="#CBEBE4"/><rect class="pr-g" style="--o:4" x="114" y="26" width="12" height="48" rx="3" fill="#CBEBE4"/><path class="pr-d" style="--o:2" pathLength="1" d="M22 70C44 66 60 58 78 47S112 26 134 16" stroke="#08655A" stroke-width="3.5"/><circle class="pr-p" style="--o:6" cx="134" cy="16" r="7" fill="#14CBB1" stroke="#fff" stroke-width="3"/></svg></span><span class="pb-related-t">Pension <span class="pb-rt-end">calculator</span></span><span class="pb-related-d">See what your pension could pay you each month.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="starter.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M34 82H126" stroke="#CBEBE4" stroke-width="2"/><path d="M54 82C60 70 100 70 106 82Z" fill="#CBEBE4"/><path class="pr-d" style="--o:0" pathLength="1" d="M80 76C80 64 80 52 81 38" stroke="#08655A" stroke-width="3.5"/><path class="pr-p" style="--o:3;transform-origin:100% 100%" d="M80 58C69 58 59 52 56 40C68 40 78 46 80 58Z" fill="#14CBB1"/><path class="pr-p" style="--o:4;transform-origin:0 100%" d="M81 46C92 46 102 38 104 26C92 26 83 34 81 46Z" fill="#0C8175"/><circle class="pr-p" style="--o:6" cx="124" cy="24" r="9" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Start a <span class="pb-rt-end">pension</span></span><span class="pb-related-d">No pension yet? Start one, with tax relief.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="self-employed-pensions.html"><span class="pb-related-art pb-tone-t" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="42" y="20" width="76" height="50" rx="6" fill="#fff" stroke="#08655A" stroke-width="2.5"/><path d="M30 76H130L124 84H36Z" fill="#CBEBE4" stroke="#08655A" stroke-width="2.5"/><path class="pr-d" style="--o:0" pathLength="1" d="M52 60L66 50L78 54L94 38L108 32" stroke="#0C8175" stroke-width="3"/><circle class="pr-p" style="--o:2" cx="108" cy="32" r="3.5" fill="#14CBB1"/><circle class="pr-y" style="--o:4" cx="132" cy="22" r="10" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><path class="pr-y" style="--o:4" d="M135.5 18.5A5 5 0 1 0 135.5 25.5M126 21H133M126 23.5H133" stroke="#C98A16" stroke-width="1.8"/></svg></span><span class="pb-related-t">Self-employed <span class="pb-rt-end">pensions</span></span><span class="pb-related-d">Set up your own pension, with tax relief.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3118,7 +3147,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="10.5" cy="10.5" r="6"/><path pathLength="1" d="M15 15l5 5"/></svg></span><span class="foot-l">Track old pensions</span></a><a href="starter.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 20.5v-9"/><path pathLength="1" d="M12 13C12 9 9.5 6.5 5 6.5 5 10.5 7.5 13 12 13z"/><path pathLength="1" d="M12 15.5c0-3.4 2.2-6 6.5-6 0 3.4-2.2 6-6.5 6z"/></svg></span><span class="foot-l">Start a pension</span></a><a href="director.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path pathLength="1" d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path pathLength="1" d="M3.5 12.5h17"/></svg></span><span class="foot-l">Company directors</span></a><a href="pensions-over-50.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M3.5 18.5h17"/><path pathLength="1" d="M7 18.5a5 5 0 0 1 10 0"/><path pathLength="1" d="M12 5.5v3"/><path pathLength="1" d="M5.3 9.3l2 2"/><path pathLength="1" d="M18.7 9.3l-2 2"/></svg></span><span class="foot-l">Over 50</span></a><a href="self-employed-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="5.5" width="14" height="10" rx="1.5"/><path pathLength="1" d="M3 19h18"/></svg></span><span class="foot-l">Self-employed</span></a><a href="uk-pensions-in-ireland.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M4 12h16"/><path pathLength="1" d="M12 4c2.3 2.3 3.4 5 3.4 8s-1.1 5.7-3.4 8c-2.3-2.3-3.4-5-3.4-8S9.7 6.3 12 4z"/></svg></span><span class="foot-l">Worked in the UK</span></a></div>
-    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">State Pension reality check</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">State Pension check</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">What the State Pension pays</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">How much State Pension you may get</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse class="fi-dot" cx="8.9" cy="6.6" rx="2" ry="2.6" transform="rotate(-9 8.9 6.6)"/><ellipse class="fi-dot" cx="15.1" cy="6.6" rx="2" ry="2.6" transform="rotate(9 15.1 6.6)"/><ellipse class="fi-dot" cx="4.7" cy="10.8" rx="1.8" ry="2.3" transform="rotate(-31 4.7 10.8)"/><ellipse class="fi-dot" cx="19.3" cy="10.8" rx="1.8" ry="2.3" transform="rotate(31 19.3 10.8)"/><path class="fi-dot" d="M12 11.2c-3.3 0-5.5 2.4-5.5 5 0 2.2 1.9 3.5 5.5 3.5s5.5-1.3 5.5-3.5c0-2.6-2.2-5-5.5-5z"/></svg></span><span class="foot-l">About</span></a><a href="booking.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M6.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 5.7 5.7L16 13l4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4.5 6a2 2 0 0 1 2-2z"/></svg></span><span class="foot-l">Book a call</span></a><a href="mailto:hello@pensionbuddy.ie"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="5.5" width="17" height="13" rx="2"/><path pathLength="1" d="M4.5 7l7.5 6 7.5-6"/></svg></span><span class="foot-l">hello@<wbr>pensionbuddy.ie</span></a></div>
     <div class="foot-col"><h2>Legal</h2><a href="privacy.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 3.5l7 2.8v5c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2v-5z"/><path pathLength="1" d="M9 12l2.2 2.2 3.8-4"/></svg></span><span class="foot-l">Privacy Notice</span></a><a href="privacy.html#cookies"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M20 12.5A8 8 0 1 1 11.5 4a3 3 0 0 0 3.5 3.5 3 3 0 0 0 3.5 3.5 3 3 0 0 0 1.5 1.5z"/><circle class="fi-dot" cx="9" cy="10" r="1"/><circle class="fi-dot" cx="14.5" cy="15" r="1"/><circle class="fi-dot" cx="9.5" cy="15.5" r="1"/></svg></span><span class="foot-l">Cookies</span></a><a href="terms.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path pathLength="1" d="M14 3.5V8h4"/><path pathLength="1" d="M8.5 12.5h7"/><path pathLength="1" d="M8.5 16h5"/></svg></span><span class="foot-l">Terms of Business</span></a><a href="complaints.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-9l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path pathLength="1" d="M12 8.5V12"/><circle class="fi-dot" cx="12" cy="14.6" r="1"/></svg></span><span class="foot-l">Complaints</span></a></div>
   </div>
@@ -3137,7 +3166,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/autoenrolment.js?v=dab8373a"></script>
-<script src="assets/js/pb-cmp-motion.js?v=41d7c043"></script>
+<script src="assets/js/pb-cmp-motion.js?v=e7cd5b20"></script>
 <script>
 /* broker-vs-autoenrolment.html (13 October 2026).
    The maths is assets/js/autoenrolment.js, PBCompare.monthly(), covered by
@@ -3180,8 +3209,11 @@ const LIMIT = PBCompare.monthlyLimit(YEAR);          // the most auto-enrolment 
 const R = Math.round;
 /* auto-enrolment's most, a month, as the card shows it (each part rounded, then added) */
 const AE_MOST = R(LIMIT) + R(LIMIT * PHASE.employer / PHASE.employee) + R(LIMIT * PHASE.state / PHASE.employee);
-/* the bars' euro scale: auto-enrolment at its most sits just short of the end */
-const S0 = AE_MOST * 1.08;
+/* the top rate of income tax the switch offers: the bars' scale is set at it */
+const TOP_RATE = 40;
+
+/* the limit, and the pay it stands for: Damian's "better after 80k" */
+const PAST = 'Past ' + euro(LIMIT) + ' a month (pay over ' + euro(PBCompare.AE_SALARY_CAP) + '), auto-enrolment takes no more.';
 
 let rate = 20;
 const VALTEXT = { extra: v => euro(v) + ' a month' };
@@ -3209,25 +3241,34 @@ function measure() {
   const rr = $('cmpRail').getBoundingClientRect(), sr = $('extra').getBoundingClientRect();
   if (sr.height) geo.trk = sr.top - rr.top + sr.height / 2;
   geo.w = $('aeTrack').offsetWidth;
-  geo.w2 = $('cmpBestW').hidden ? 0 : $('bestTrack').offsetWidth;
+  /* the best of both's track, measured even while it is away: shown for the
+     length of one read, in the same task, so it is never painted; then read
+     away again, so its next arrival starts from nothing rather than from the
+     shut state this read saw (which would glide it open at load) */
+  const wrap = $('cmpBestW'), away = wrap.hidden;
+  if (away) wrap.hidden = false;
+  geo.w2 = $('bestTrack').offsetWidth;
+  if (away) { wrap.hidden = true; void wrap.offsetHeight; }
 }
 
-let wasOver = null, wasLead = '';
-function calc() {
-  const slider = $('extra');
-  const you = +slider.value;
-  const m = PBCompare.monthly({ you, taxRate: rate, year: YEAR });
-  const over = m.autoEnrolment.capped;
-
-  /* every figure as it shows, each part rounded and the totals their sums,
-     so what is on screen always adds up */
+/* every figure as it shows, each part rounded and the totals their sums,
+   so what is on screen always adds up */
+function figures(you, taxRate) {
+  const m = PBCompare.monthly({ you, taxRate, year: YEAR });
   const A = { you: R(m.autoEnrolment.you), emp: R(m.autoEnrolment.employer), state: R(m.autoEnrolment.state) };
   A.total = A.you + A.emp + A.state;
   const P = { you: R(m.personal.you), rel: R(m.personal.relief) };
   P.total = P.you + P.rel;
   const T = { you: R(m.best.personal.you), rel: R(m.best.personal.relief) };
   T.total = T.you + T.rel;
-  const B = A.total + T.total;
+  return { m, A, P, T, B: A.total + T.total, over: m.autoEnrolment.capped };
+}
+
+let wasOver = null, wasLead = '';
+function calc() {
+  const slider = $('extra');
+  const you = +slider.value;
+  const { m, A, P, T, B, over } = figures(you, rate);
 
   /* ---- the slider: what it means, and the limit on its rail ---- */
   put($('extraV'), euro(you));
@@ -3275,8 +3316,7 @@ function calc() {
 
   /* ---- past the limit: the best of both ---- */
   const wrap = $('cmpBestW');
-  M.open(wrap, over);
-  if (over && !geo.w2) geo.w2 = $('bestTrack').offsetWidth;   // just opened: measured once
+  M.open(wrap, over, wasOver === null);   // at load (an amount from the link) it is simply there
   /* while it is away, and as it arrives, its figures are simply right: they
      roll only once it is there to watch */
   const settled = over && wasOver === true;
@@ -3286,9 +3326,16 @@ function calc() {
   put($('bTopL'), 'Personal pension, the other ' + euro(T.you));
   wasOver = over;
 
-  /* ---- the bars: one euro scale for all three ---- */
+  /* ---- the bars: one euro scale for all three, and it holds still ----
+     Set by the most the slider reaches, at the top rate of tax, so neither
+     a slide nor the tax switch rescales it: a bar moves only when its own
+     figure does, and auto-enrolment's stops at its mark while the personal
+     pension's goes on. k is the cards' track over the best of both's, which
+     is wider on a wide screen, so a euro is as long on every bar. An amount
+     typed past the slider's end widens the slider, and the scale with it. */
   const k = geo.w > 0 && geo.w2 > 0 ? geo.w / geo.w2 : 1;
-  const S = Math.max(S0, A.total, P.total, over ? B * k : 0);
+  const top = figures(Math.max(+slider.max, you), TOP_RATE);
+  const S = Math.max(AE_MOST, top.P.total, top.B * k) * 1.04;
   const at = v => v / S * 100;
   M.width($('aeBarYou'), at(A.you));
   M.width($('aeBarEmp'), at(A.emp));
@@ -3304,7 +3351,7 @@ function calc() {
 
   announce('For ' + euro(you) + ' a month from you: auto-enrolment puts in ' + euro(A.total)
     + ', a personal pension ' + euro(P.total) + '.'
-    + (over ? ' Past ' + euro(LIMIT) + ' a month, auto-enrolment takes no more. Best of both: ' + euro(B) + ' a month.' : ''));
+    + (over ? ' ' + PAST + ' Best of both: ' + euro(B) + ' a month.' : ''));
 }
 
 /* the year's rates, and the limit as it rises with them, from the module */
@@ -3318,7 +3365,7 @@ function calc() {
                     : 'Its limit is now at its highest: ' + euro(LIMIT) + ' a month.');
   for (let i = 1; i <= 4; i++) { const t = $('pbStair' + i); if (t) t.hidden = PHASE.phase !== i; }
   $('cmpLimV').textContent = euro(LIMIT) + ' limit';
-  $('cmpNoteT').textContent = 'Past ' + euro(LIMIT) + ' a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.';
+  $('cmpNoteT').textContent = PAST + ' A personal pension takes the rest.';
   $('taxHint').textContent = 'Your top rate is 40% if you earn over ' + euro(PBRelief.SRCOP.single) + ' (single).';
 }());
 
@@ -3349,10 +3396,25 @@ if (window.ResizeObserver) {
   ro.observe($('cmpRail'));
 }
 
+/* An amount handed over in the link's fragment (#you=200), by the starter
+   page's auto-enrolment block, so the page opens at the reader's own
+   figure. Read once, before the first paint, rounded to the slider's step
+   and held inside it; the fragment never reaches a server. With no
+   fragment the page opens at its default, €50. */
+(function () {
+  const q = /(?:^#|&)you=(\d+)(?:&|$)/.exec(location.hash || '');
+  const s = $('extra'), v = q ? +q[1] : 0;
+  if (!(v > 0)) return;
+  const step = +s.step || 5;
+  s.value = String(Math.min(+s.max, Math.max(+s.min, Math.round(v / step) * step)));
+}());
+
 wireRanges(VALTEXT, calc);
 measure();
 setRate(20);
 M.arm($('cmpHero'));
+/* open at load (an amount from the link): its bars fill when it is seen, like the cards' */
+if (!$('cmpBestW').hidden) M.arm($('cmpBest'));
 </script>
 
 <script>
@@ -3561,7 +3623,7 @@ M.arm($('cmpHero'));
 
 <script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bc0eea8d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3665,10 +3727,10 @@ M.arm($('cmpHero'));
 </script>
 <script src="assets/js/pb-peek.js?v=7d945b40"></script>
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
-<script src="assets/js/pb-calc-motion.js?v=0ab7c99c"></script>
+<script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-chrome-motion.js?v=3dd0f2e6"></script>
+<script src="assets/js/pb-chrome-motion.js?v=e090c2e4"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>
 <script src="assets/js/pb-askresult.js?v=065b81d6"></script>

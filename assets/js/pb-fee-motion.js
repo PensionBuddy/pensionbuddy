@@ -5,9 +5,14 @@
    and writes no figure the page did not hand it.
 
    - The chart. The first time "How your pot could grow" comes into view, it
-     unrolls from now to retirement: the three lines and the coral area
-     between them are revealed left to right together, once, in the house
-     curve. After that the chart follows the sliders at once, as the page
+     unrolls from now to retirement: the two lines and the coral area
+     between them are revealed left to right together, once, on the house
+     move curve, so the years are seen to pass. A chart still below the fold when the page opens waits hidden
+     (.fee-pre on #feeChart, so it holds across the page's redraws) and
+     starts to unroll as it enters, a tenth of it in view; one already on
+     screen, even partly, is left drawn and does not unroll, so the chart is
+     never seen drawn, wiped to nothing and drawn again (review, 13 October
+     2026). After that the chart follows the sliders at once, as the page
      draws it; nothing on it animates on input, so a drag is never behind
      the hand.
    - The figures. PBFeeMotion.figure(el, value) is how the page writes its
@@ -64,15 +69,26 @@
   function arm() {
     var box = document.getElementById('feeChart');
     if (!box) { return; }
+    var r = box.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+    if (r.top < vh && r.bottom >= 0) { return; }   /* on screen already: drawn, and left drawn */
+    box.classList.add('fee-pre');
+    function show() { box.classList.remove('fee-pre'); }
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) { return; }
       io.disconnect();
       var svg = box.querySelector('svg');
-      if (!svg || !motion()) { return; }
-      svg.animate([{ clipPath: 'inset(-12px 100% -12px 0)' }, { clipPath: 'inset(-12px 0% -12px 0)' }],
-        { duration: 640, easing: 'cubic-bezier(.16,1,.3,1)' });
-    }, { threshold: 0.45 });
+      /* the clip moves from the class to the animation in one frame: its
+         first keyframe is the hidden state, so nothing shows in between */
+      if (svg && motion()) {
+        svg.animate([{ clipPath: 'inset(-12px 100% -12px 0)' }, { clipPath: 'inset(-12px 0% -12px 0)' }],
+          { duration: 900, easing: 'cubic-bezier(.4,0,.2,1)' });   /* the house move: eases in, draws, settles */
+      }
+      show();
+    }, { threshold: 0.1 });
     io.observe(box);
+    /* printed, or motion switched off, before it was seen: drawn at once */
+    addEventListener('beforeprint', function () { io.disconnect(); show(); });
+    document.addEventListener('pb:motion', function (e) { if (e.detail && !e.detail.motion) { io.disconnect(); show(); } });
   }
   if (document.getElementById('feeChart')) { arm(); } else { document.addEventListener('DOMContentLoaded', arm); }
 }());

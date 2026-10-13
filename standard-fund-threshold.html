@@ -2365,10 +2365,15 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    label is a paragraph that names the section, not a heading: a heading here
    would be a fourth size on most pages. Byte for byte on every page, like the
    blocks above. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the cards rise in one after another as they arrive and
-   each drawing builds itself; under the pointer or the keyboard a card lifts
-   and its drawing plays again. A phone has the drawing beside the words. */
+   adds the classes) each card rises in as it comes on screen, cards that
+   come on screen together one after another, and its drawing builds itself;
+   under the pointer or the keyboard a card lifts and its drawing plays again
+   from where it stands. A phone has the drawing beside the words. */
 .pb-related{padding:48px 0 8px}
+/* the footer keeps clear of the cards on every page: the hand-written pages'
+   footers had no top margin, which left 8px, and the footer's walking strip
+   (assets/js/pb-alive.js, 26px above it) ran over the last card's edge */
+main:has(> .pb-related) + footer{margin-top:56px}
 .pb-related .pb-related-h{display:flex;align-items:center;gap:14px;margin:0 0 16px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .pb-related .pb-related-h::after{content:"";flex:1;height:1px;background:var(--line-2);transform-origin:0 50%}
 .pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:0;padding:0;list-style:none}
@@ -2385,7 +2390,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art svg{display:block;width:auto;height:108px;max-width:100%;overflow:visible}
 .pb-related .pb-related-t,.pb-related .pb-related-d{padding:0 10px}
 .pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
-.pb-related-t::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
+/* the arrow rides on the name's last word (pagebuild.related_title), so it
+   never wraps onto a line of its own; the 404's six places carry it too */
+.pb-rt-end{white-space:nowrap}
+.pb-rt-end::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
 /* where each part of a drawing grows from */
 .pb-related-art :is(.pr-g,.pr-x,.pr-p,.pr-s,.pr-y,.pr-spin,.pr-wave,.pr-fly,.pr-dot){transform-box:fill-box;transform-origin:50% 50%}
@@ -2393,8 +2401,6 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art .pr-x{transform-origin:0 50%}
 .pb-related-art .pr-r{transform-box:view-box}
 .pb-related-art *{--pd:calc(var(--ci,0) * 130ms + 320ms + var(--o,0) * 85ms)}
-.pb-related-list li:nth-child(2) .pb-related-card{--ci:1}
-.pb-related-list li:nth-child(3) .pb-related-card{--ci:2}
 @media(max-width:560px){
   .pb-related .pb-related-card{display:grid;grid-template-columns:108px minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start;column-gap:14px;row-gap:4px;padding:10px 14px 10px 10px}
   .pb-related-art{grid-row:1 / span 2;height:84px;margin:0;border-radius:10px}
@@ -2413,18 +2419,21 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 html.pb-motion .pb-related-card{transition:translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-related-card::after{content:"";position:absolute;left:0;right:0;top:100%;height:0}
 html.pb-motion .pb-related-art svg{transition:scale .6s cubic-bezier(.3,1.45,.45,1)}
-html.pb-motion .pb-related-t::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
+html.pb-motion .pb-rt-end::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
 @media (hover:hover) and (pointer:fine){
   html.pb-motion .pb-related-card:hover{translate:0 -6px}
   html.pb-motion .pb-related-card:hover::after{height:8px}
   html.pb-motion .pb-related-card:hover .pb-related-art svg{scale:1.06}
-  html.pb-motion .pb-related-card:hover .pb-related-t::after{translate:5px 0}
+  html.pb-motion .pb-related-card:hover .pb-rt-end::after{translate:5px 0}
 }
 html.pb-motion .pb-related-card:focus-visible{translate:0 -6px}
 html.pb-motion .pb-related-card:focus-visible .pb-related-art svg{scale:1.06}
-html.pb-motion .pb-related-card:focus-visible .pb-related-t::after{translate:5px 0}
-/* arriving: armed only while the section is still below the screen */
-html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-h::after{transform:scaleX(0)}
+html.pb-motion .pb-related-card:focus-visible .pb-rt-end::after{translate:5px 0}
+/* arriving: the label's rule and each card on its own, armed only while
+   wholly below the screen and let go as it comes into view; cards that come
+   into view together step in one after another (--ci, which the script sets) */
+html.pb-motion .pb-related-h.pb-rel-armed:not(.pb-rel-in)::after{transform:scaleX(0)}
+html.pb-motion .pb-related-h.pb-rel-in::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-card{opacity:0;transform:translateY(36px) scale(.96)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-d{stroke-dasharray:1 2;stroke-dashoffset:1.01}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-g{transform:scaleY(0)}
@@ -2435,7 +2444,6 @@ html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-s{opacity:0;transform:translate
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-y{opacity:0;transform:translateY(-18px)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-r{transform:rotate(var(--r0,-60deg))}
 html.pb-motion .pb-rel-in .pr-d{stroke-dasharray:1 2}
-html.pb-motion .pb-rel-in .pb-related-h::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
 html.pb-motion .pb-rel-in .pb-related-card{transition:opacity .55s ease calc(var(--ci,0) * 130ms),transform 1s cubic-bezier(.2,1.12,.3,1) calc(var(--ci,0) * 130ms),
   translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-rel-in .pr-d{transition:stroke-dashoffset .95s cubic-bezier(.55,0,.2,1) var(--pd)}
@@ -2638,12 +2646,15 @@ main h1{font-weight:800}
    drawing tips, and the name steps along. A phone or a tablet lays each
    column's links in two columns (CSS columns, so each still reads top to
    bottom).
+   On a phone the Tools column, whose names are the longest, keeps one link
+   to a line.
    The brand (the logo, its line, Damian's qualifications) and the disclosure
    under it never move. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the links arrive one after another as the footer comes
-   into view, each drawing drawn, and the wordmark at the foot catches the
-   light as it arrives and under the pointer. */
-footer .foot-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto 1fr;
+   adds the classes) each column arrives as it comes into view, its links one
+   after another, each drawing drawn (columns that come into view together
+   step in one after another: --fc, which the script sets), and the wordmark
+   at the foot catches the light as it arrives and under the pointer. */
+footer .foot-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto 1fr;
   gap:30px 32px;margin-bottom:44px}
 /* Company and Legal share the last column, one over the other */
 footer .foot-top > :is(.foot-brand,.foot-col:nth-child(2),.foot-col:nth-child(3)){grid-row:span 2}
@@ -2676,6 +2687,8 @@ footer .foot-col a[href="booking.html"] .foot-ic{background:var(--teal);color:#f
   footer .foot-col:nth-child(4){columns:auto}
 }
 @media(max-width:600px){
+  /* Tools' names are too long for two columns here: one link to a line */
+  footer .foot-col:nth-child(3){columns:auto}
   footer .foot-col a{gap:8px;padding-right:2px;font-size:14.5px;line-height:1.25}
   footer .foot-ic{width:28px;height:28px;border-radius:8px}
   footer .foot-ic svg{width:16px;height:16px}
@@ -2689,26 +2702,23 @@ html.pb-motion footer .foot-l{transition:translate .45s cubic-bezier(.3,1.5,.45,
 }
 html.pb-motion footer .foot-col a:focus-visible .foot-ic{transform:rotate(-9deg) scale(1.12)}
 html.pb-motion footer .foot-col a:focus-visible .foot-l{translate:4px 0}
-footer .foot-col:nth-child(3){--fc:1}
-footer .foot-col:nth-child(4){--fc:2}
-footer .foot-col:nth-child(5){--fc:3}
 footer .foot-col a:nth-of-type(2){--fi:1}footer .foot-col a:nth-of-type(3){--fi:2}footer .foot-col a:nth-of-type(4){--fi:3}
 footer .foot-col a:nth-of-type(5){--fi:4}footer .foot-col a:nth-of-type(6){--fi:5}footer .foot-col a:nth-of-type(7){--fi:6}
 footer .foot-col a:nth-of-type(8){--fi:7}footer .foot-col a:nth-of-type(9){--fi:8}
 footer .foot-col *{--fd:calc(var(--fc,0) * 120ms + var(--fi,0) * 50ms)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2{opacity:0;transform:translateY(10px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2::before{transform:scaleX(0)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col a{opacity:0;transform:translateY(14px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2{opacity:0;transform:translateY(10px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2::before{transform:scaleX(0)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) a{opacity:0;transform:translateY(14px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
+html.pb-motion footer .foot-col.pb-ft-in h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
+html.pb-motion footer .foot-col.pb-ft-in h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
+html.pb-motion footer .foot-col.pb-ft-in a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
 html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-background-clip:text;background-clip:text;
   background-image:radial-gradient(300px circle at var(--wx,-400px) var(--wy,50%),rgba(20,203,177,.6),rgba(20,203,177,0) 70%),linear-gradient(rgba(11,31,28,.07),rgba(11,31,28,.07))}
 @media print{footer .foot-ic{display:none}}
@@ -2776,6 +2786,19 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .sft-small{margin:10px 0 0;font-size:1rem;line-height:1.55;color:var(--ink-2)}
 .sft-card p.sft-small{font-size:1rem;color:var(--ink-2);margin:0}
 .sft-over{border-left:3px solid var(--slate)}
+/* "Over the threshold", last in the column (review SP-9). Without motion it
+   is simply there or not; with motion it opens and closes on its own height
+   (0fr to 1fr), so what follows it glides instead of jumping, and the
+   column's 18px gap closes with it. Its words are the page's at every
+   moment; only the space they take moves. */
+.sft-over-slot:not(.is-open){display:none}
+.sft-over-clip{min-height:0;overflow:hidden}
+:root.pb-motion .sft-over-slot{display:grid;grid-template-rows:1fr;margin-top:0;visibility:visible;
+  transition:grid-template-rows .45s var(--pb-ease-out),margin-top .45s var(--pb-ease-out),visibility 0s linear 0s}
+:root.pb-motion .sft-over-slot:not(.is-open){grid-template-rows:0fr;margin-top:-18px;visibility:hidden;
+  transition:grid-template-rows .32s cubic-bezier(.4,0,.2,1),margin-top .32s cubic-bezier(.4,0,.2,1),visibility 0s linear .32s}
+:root.pb-motion .sft-over-slot .sft-over{transition:opacity .35s ease .08s}
+:root.pb-motion .sft-over-slot:not(.is-open) .sft-over{opacity:0;transition:opacity .2s ease}
 .sft-lump-tax{margin:14px 0 0!important}
 .sft-lump-tax b{font-variant-numeric:tabular-nums}
 .sft-lump-tax span[hidden]{display:none}
@@ -2791,8 +2814,11 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .sft-lim-fill{left:0;width:var(--w);background:var(--slate);border-radius:4px 0 0 4px}
 .sft-lim-over{left:var(--from);width:var(--w);background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
 .sft-lim-mark{position:absolute;top:-5px;bottom:-5px;left:var(--at);margin-left:-1px;border-left:2px solid var(--ink)}
-.sft-lim-k{display:grid;gap:4px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
-.sft-lim-k>span{display:block}
+/* the key runs as one wrapping line at every width: its third item, what is
+   over, then joins the threshold's line instead of adding one, so the hero
+   keeps its height as the total crosses the threshold (review SP-9) */
+.sft-lim-k{display:flex;flex-wrap:wrap;gap:4px 14px;margin:12px 0 0;font-size:1rem;line-height:1.45;color:var(--ink-2)}
+.sft-lim-k>span{display:block;white-space:nowrap}
 .sft-lim-k>span[hidden]{display:none}
 .sft-lim-k b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .sft-lim-k i{display:inline-block;vertical-align:0;margin-right:8px;width:14px;height:10px;border-radius:2px}
@@ -2800,7 +2826,11 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .sft-lim-k-thr i{width:0;height:14px;border-radius:0;vertical-align:-2px;border-left:2px solid var(--ink)}
 .sft-lim-k-ov i{background:repeating-linear-gradient(135deg,var(--slate) 0 2px,var(--surface) 2px 6px);box-shadow:inset 0 0 0 1.5px var(--slate)}
 .sft-lim,.sft-lim *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@media(min-width:601px){.sft-lim-k{display:flex;flex-wrap:wrap;gap:6px 22px}}
+@media(min-width:601px){.sft-lim-k{gap:6px 16px}}
+/* the line under the bar keeps two lines' room on a phone, where what is
+   over and its tax take two and the headroom one: the hero, and the chart
+   under it, stay put as the total crosses the threshold (review SP-9) */
+@media(max-width:600px){.sft-hero .pb-say{min-height:3.1em}}
 
 /* YEAR BY YEAR: a column for each year, as tall as its threshold, on one
    scale; your pensions one line across them all. A column the line clears
@@ -2824,10 +2854,16 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .sft-strip li.sft-on b{color:var(--ink)}
 .sft-strip li.sft-on{color:var(--ink)}
 /* the line: your pensions, across every column, with its figure and a grip */
-.sft-line{position:absolute;left:-4px;right:-4px;top:calc(6px + var(--colh) * (1 - var(--f, .5)));height:0;border-top:2px dashed var(--ink);z-index:2;cursor:ns-resize;touch-action:none}
+/* a finger takes the line by its grip or its figure only: a swipe that
+   starts anywhere else on the chart, the line's band included, scrolls the
+   page (review SP-6). A mouse takes it anywhere along the band. */
+.sft-line{position:absolute;left:-4px;right:-4px;top:calc(6px + var(--colh) * (1 - var(--f, .5)));height:0;border-top:2px dashed var(--ink);z-index:2;cursor:ns-resize;touch-action:pan-y}
+.sft-grip,.sft-line-v,.sft-hit{touch-action:none}
 .sft-line::before{content:"";position:absolute;left:0;right:0;top:-14px;height:28px}
 .sft-line-v{position:absolute;right:0;bottom:6px;padding:2px 8px;border-radius:6px;background:var(--ink);color:#fff;font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .sft-grip{position:absolute;left:-6px;top:-13px;width:24px;height:24px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink);box-shadow:0 2px 6px rgba(11,31,28,.2)}
+/* a finger's target round the grip: 44px, drawn as nothing */
+.sft-hit{position:absolute;left:-16px;top:-23px;width:44px;height:44px;touch-action:none}
 .sft-grip::before,.sft-grip::after{content:"";position:absolute;left:50%;width:0;height:0;margin-left:-4px;border:4px solid transparent}
 .sft-grip::before{top:-1px;border-bottom-color:var(--ink)}
 .sft-grip::after{bottom:-1px;border-top-color:var(--ink)}
@@ -2887,14 +2923,30 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
    and wraps a headline figure's changed characters in .pb-roll, only while
    motion is allowed and nothing is being dragged; every rule here is also
    behind :root.pb-motion. The limit bar and the lump-sum bar keep still
-   (Run 43). The card that says what is over the threshold, and the
-   headroom line, arrive softly each time they appear. */
+   (Run 43). The hero's line says the headroom or what is over; when it
+   turns from one to the other it settles in softly, never from nothing
+   (its data-state changes the animation's name, which replays it). The
+   card that works out the tax opens on its own height (.sft-over-slot,
+   above). */
 :root.pb-motion.pb-sft-alive .pb-roll{display:inline-block;animation:pbSftRoll .36s cubic-bezier(.2,.7,.2,1) both}
 @keyframes pbSftRoll{from{transform:translateY(.38em);opacity:0}to{transform:none;opacity:1}}
-@keyframes pbSftArrive{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-:root.pb-motion .sft-over:not([hidden]){animation:pbSftArrive .5s cubic-bezier(.2,1.2,.35,1) backwards}
-:root.pb-motion .sft-hero .pb-say:not([hidden]){animation:pbSftArrive .4s var(--pb-ease-out) backwards}
+:root.pb-motion .sft-hero .pb-say[data-state="under"]{animation:pbSftSayA .4s var(--pb-ease-out) backwards}
+:root.pb-motion .sft-hero .pb-say[data-state="over"]{animation:pbSftSayB .4s var(--pb-ease-out) backwards}
+@keyframes pbSftSayA{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes pbSftSayB{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
 /* MOTION-13:END */
+
+/* THE FIRST LINE ON A PHONE IS THE PAGE'S OWN (13 October 2026 review,
+   SP-14). The shared FIRSTSCREEN block draws the review line first on a
+   phone, so it is on the first screen (tests/consent.test.py check 9). On
+   this page, held upright, the headline comes first and the review line
+   straight under it, as a byline: still on the first screen, and the page
+   opens with its own question. Held sideways the screen is too short for
+   that, and the shared order stands. */
+@media(max-width:560px){
+  .phead > .wrap:has(> .pb-reviewed) > h1{order:-2}
+  .phead > .wrap:has(> .pb-reviewed) > p.pb-reviewed{margin:0 0 10px}
+}
 </style>
 
 <script>
@@ -2930,10 +2982,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <ul class="nav-dd-panel" id="navTools">
         <li><a class="lnk" href="pension-calculator.html">Pension calculator</a></li>
         <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
-        <li><a class="lnk" href="state-pension-entitlement.html">State Pension check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">How much State Pension you may get</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
         <li><a class="lnk" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
-        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-reality-check.html">What the State Pension pays</a></li>
         <li><a class="lnk active" aria-current="page" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
       </ul>
     </div>
@@ -2941,8 +2993,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
-        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
-        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Self-employed pensions</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">UK pensions in Ireland</a></li>
         <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
         <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
@@ -2957,7 +3009,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="phead"><div class="wrap">
   <h1>The <span class="hl">Standard Fund Threshold</span></h1>
   <p>Revenue caps the pension savings that get full tax relief: €2.2 million in 2026, and €2.4 million from 1 January 2027.</p>
-  <p class="sft-asat">Rules as at 8 October 2026.</p>
+  <p class="sft-asat">Rules as at 8 October 2026. Budget 2027 left these figures as they were.</p>
   <p class="pb-reviewed">Reviewed by Damian Condon, Qualified Financial Adviser (QFA) · Last reviewed September 2026</p>
 </div></div>
 
@@ -2983,28 +3035,28 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="results">
     <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
     <div class="res-hero sft-hero">
+      <!-- from 2030 the threshold is only known to be at least EUR 2.8m: the
+           labels carry "at least" and "at most", so the figures keep their
+           width and the line under them never moves (review SP-13) -->
       <div><div class="rl" id="thrL">The threshold for 2026</div><div class="big" id="thr">€2,200,000</div></div>
-      <div><div class="rl">Share used</div><div class="big" id="share">75%</div></div>
+      <div><div class="rl" id="shareL">Share used</div><div class="big" id="share">75%</div></div>
       <div class="sft-lim" id="sftLim" aria-hidden="true">
         <div class="sft-lim-track"><i class="sft-lim-fill" id="sftLimFill" style="--w:75.00%"></i><i class="sft-lim-over" id="sftLimOver" style="--from:100.00%;--w:0.00%"></i><i class="sft-lim-mark" id="sftLimMark" style="--at:100.00%"></i></div>
         <p class="sft-lim-k"><span class="sft-lim-k-you"><i></i>Your pensions <b id="sftLimYou">&euro;1,650,000</b></span> <span class="sft-lim-k-thr"><i></i>Threshold</span> <span class="sft-lim-k-ov" id="sftLimOvK" hidden><i></i><b id="sftLimOv">&euro;0</b> over</span></p>
       </div>
+      <!-- one line, both ways: the headroom, or what is over and the tax to
+           pay on it. It swaps its words in place, so crossing the threshold
+           moves nothing on the page (review SP-9) -->
       <p class="pb-say" id="pbSay">€550,000 of headroom.</p>
       <div class="divline"></div>
       <div class="foot">A Personal Fund Threshold, if you hold one, replaces this.</div>
-    </div>
-
-    <div class="sft-card sft-over" id="sftOver" hidden>
-      <h3>Over the threshold</h3>
-      <p id="sftOverText"></p>
-      <p class="sft-small">What is left is taxed again as income when you draw it: up to 68.8% in all, and more with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</p>
     </div>
 
     <div class="chart-card sft-strip-card">
       <h3>Year by year</h3>
       <p class="sft-sub">Each column is a year&rsquo;s threshold; the line is your pensions. Drag the line, or tap a year.</p>
       <div class="sft-cols" id="sftCols" aria-hidden="true">
-        <div class="sft-line" id="sftLine" style="--f:0.5612"><span class="sft-line-v" id="sftLineV">€1.65m</span><span class="sft-grip"></span></div>
+        <div class="sft-line" id="sftLine" style="--f:0.5612"><span class="sft-line-v" id="sftLineV">€1.65m</span><span class="sft-hit"></span><span class="sft-grip"></span></div>
         <ol class="sft-strip" id="sftStrip">
           <li data-y="2026" class="sft-on"><span class="sft-col"><i class="sft-col-fill" style="height:74.83%"></i><i class="sft-col-over" style="bottom:74.83%;height:0%"></i></span><b>2026</b><span>€2.2m</span></li>
           <li data-y="2027"><span class="sft-col"><i class="sft-col-fill" style="height:81.63%"></i><i class="sft-col-over" style="bottom:81.63%;height:0%"></i></span><b>2027</b><span>€2.4m</span></li>
@@ -3023,6 +3075,21 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <p class="sft-lb-k"><span class="sft-lb-k-free"><i></i>Tax-free <b id="sftLbFreeN">&euro;200,000</b></span> <span class="sft-lb-k-std"><i></i>In the 20% band <b id="sftLbStdN">&euro;200,000</b></span> <span class="sft-lb-k-inc" id="sftLbIncK" hidden><i></i>Taxed as income <b id="sftLbIncN">&euro;0</b></span></p>
       </div>
       <p class="sft-lump-tax">Tax at 20%: <b id="lumpTax">€40,000</b>.<span id="lumpIncLine" hidden> On the <b id="lumpInc">€0</b> above €500,000, income tax at your marginal rate, usually 40%, plus the Universal Social Charge (USC).</span></p>
+    </div>
+
+    <!-- Over the threshold: the working of the tax the hero's line names,
+         after the lump sum, whose tax it takes off (review SP-7). Last in
+         the column, so its arrival moves nothing above it; with motion it
+         opens and closes smoothly (.sft-over-slot, page.css; review SP-9).
+         Closed at the shipped default, which is under the threshold. -->
+    <div class="sft-over-slot" id="sftOverSlot">
+      <div class="sft-over-clip">
+        <div class="sft-card sft-over" id="sftOver">
+          <h3>Over the threshold</h3>
+          <p id="sftOverText"></p>
+          <p class="sft-small">What is left is taxed again as income when you draw it: up to 68.8% in all.</p>
+        </div>
+      </div>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="standard-fund-threshold">
@@ -3077,7 +3144,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Finance Act 2024, section 13, sets the threshold. It was €2 million from 2014 to 2025. From 2030 it tracks Central Statistics Office average weekly earnings and cannot fall.</li>
     <li>Budget 2027 keeps the threshold&rsquo;s path (&euro;2.4 million in 2027). It also revises the factors that value a defined benefit pension against it, from 1 January 2027; the new factors are due in the Finance (No. 2) Bill 2026, and this page does not use them yet.</li>
     <li>Each benefit is tested against all taken since 7 December 2005. Here, all are taken in one year.</li>
-    <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it.</li>
+    <li>Chargeable excess tax: any excess is taxed at 40% when taken, with no reliefs (<a href="https://www.revenue.ie/en/jobs-and-pensions/pension/private/chargeable-excess-tax.aspx" rel="noopener">Revenue</a>). Up to €60,000 of 20% lump sum tax can be set against it. This page takes off the 20% tax on the lump sum you set.</li>
+    <li>What is left of an excess is taxed again as income when drawn: up to 68.8% in all, and more with Pay-Related Social Insurance (PRSI) (Department of Finance, independent examination of the threshold, 2024).</li>
     <li>Lump sum: the €500,000 has been fixed since 1 January 2025 (Revenue Pensions Manual, chapter 27). Above it, a lump sum is taxed as income.</li>
     <li>Figures are illustrations, not a guarantee.</li>
   </ul>
@@ -3087,9 +3155,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="12" width="62" height="74" rx="7" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-x" style="--o:2" x="48" y="40" width="46" height="11" rx="3" fill="#FCEFCF"/><path class="pr-x" style="--o:0" d="M52 28H90" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M52 45H82" stroke="#08655A" stroke-width="3.5"/><path class="pr-x" style="--o:2" d="M52 62H90" stroke="#CBEBE4" stroke-width="3.5"/><g class="pr-p pr-spin" style="--o:4"><circle cx="112" cy="26" r="15" fill="#14CBB1"/><path d="M105 23A8 8 0 0 1 119 22M119 29A8 8 0 0 1 105 30" stroke="#fff" stroke-width="2.5"/><path d="M119 16V22H113M105 36V30H111" stroke="#fff" stroke-width="2.5"/></g></svg></span><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Four questions show which apply to you.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="pensions-over-50.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 82H138" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="30" y="64" width="30" height="18" rx="4" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><rect class="pr-g" style="--o:1" x="62" y="48" width="30" height="34" rx="4" fill="#CBEBE4" stroke="#08655A" stroke-width="2"/><rect class="pr-g" style="--o:2" x="94" y="32" width="30" height="50" rx="4" fill="#14CBB1" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:3" pathLength="1" d="M109 32V8" stroke="#08655A" stroke-width="2.5"/><path class="pr-p pr-wave" style="--o:5;transform-origin:0 50%" d="M109 8H127L122 14L127 20H109Z" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Pensions after 50</span><span class="pb-related-d">Three things change as you pass 50.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 82H146" stroke="#CBEBE4" stroke-width="2"/><path d="M22 82V30H56V82" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-f" style="--o:0" x="29" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="29" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="29" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="42" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="42" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:0" x="42" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><path class="pr-d" style="--o:2" pathLength="1" d="M62 46C78 30 96 30 106 42" stroke="#0C8175" stroke-width="3"/><path class="pr-p" style="--o:4" d="M100 42L107 44L108 37" stroke="#0C8175" stroke-width="3"/><rect class="pr-y" style="--o:3" x="104" y="72" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:4" x="104" y="62" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:5" x="104" y="52" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:6" x="104" y="42" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Director calculator</span><span class="pb-related-d">What your company could pay into your pension.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="12" width="62" height="74" rx="7" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-x" style="--o:2" x="48" y="40" width="46" height="11" rx="3" fill="#FCEFCF"/><path class="pr-x" style="--o:0" d="M52 28H90" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M52 45H82" stroke="#08655A" stroke-width="3.5"/><path class="pr-x" style="--o:2" d="M52 62H90" stroke="#CBEBE4" stroke-width="3.5"/><g class="pr-p pr-spin" style="--o:4"><circle cx="112" cy="26" r="15" fill="#14CBB1"/><path d="M105 23A8 8 0 0 1 119 22M119 29A8 8 0 0 1 105 30" stroke="#fff" stroke-width="2.5"/><path d="M119 16V22H113M105 36V30H111" stroke="#fff" stroke-width="2.5"/></g></svg></span><span class="pb-related-t">What changed for directors in <span class="pb-rt-end">2026</span></span><span class="pb-related-d">Four questions show which changes apply to you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="pensions-over-50.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 82H138" stroke="#CBEBE4" stroke-width="2"/><rect class="pr-g" style="--o:0" x="30" y="64" width="30" height="18" rx="4" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><rect class="pr-g" style="--o:1" x="62" y="48" width="30" height="34" rx="4" fill="#CBEBE4" stroke="#08655A" stroke-width="2"/><rect class="pr-g" style="--o:2" x="94" y="32" width="30" height="50" rx="4" fill="#14CBB1" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:3" pathLength="1" d="M109 32V8" stroke="#08655A" stroke-width="2.5"/><path class="pr-p pr-wave" style="--o:5;transform-origin:0 50%" d="M109 8H127L122 14L127 20H109Z" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Pensions after <span class="pb-rt-end">50</span></span><span class="pb-related-d">Pay in more with tax relief, and plan your retirement.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 82H146" stroke="#CBEBE4" stroke-width="2"/><path d="M22 82V30H56V82" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-f" style="--o:0" x="29" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="29" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="29" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="42" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="42" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:0" x="42" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><path class="pr-d" style="--o:2" pathLength="1" d="M62 46C78 30 96 30 106 42" stroke="#0C8175" stroke-width="3"/><path class="pr-p" style="--o:4" d="M100 42L107 44L108 37" stroke="#0C8175" stroke-width="3"/><rect class="pr-y" style="--o:3" x="104" y="72" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:4" x="104" y="62" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:5" x="104" y="52" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:6" x="104" y="42" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Director <span class="pb-rt-end">calculator</span></span><span class="pb-related-d">What your company could pay into your pension.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3098,7 +3166,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="10.5" cy="10.5" r="6"/><path pathLength="1" d="M15 15l5 5"/></svg></span><span class="foot-l">Track old pensions</span></a><a href="starter.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 20.5v-9"/><path pathLength="1" d="M12 13C12 9 9.5 6.5 5 6.5 5 10.5 7.5 13 12 13z"/><path pathLength="1" d="M12 15.5c0-3.4 2.2-6 6.5-6 0 3.4-2.2 6-6.5 6z"/></svg></span><span class="foot-l">Start a pension</span></a><a href="director.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path pathLength="1" d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path pathLength="1" d="M3.5 12.5h17"/></svg></span><span class="foot-l">Company directors</span></a><a href="pensions-over-50.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M3.5 18.5h17"/><path pathLength="1" d="M7 18.5a5 5 0 0 1 10 0"/><path pathLength="1" d="M12 5.5v3"/><path pathLength="1" d="M5.3 9.3l2 2"/><path pathLength="1" d="M18.7 9.3l-2 2"/></svg></span><span class="foot-l">Over 50</span></a><a href="self-employed-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="5.5" width="14" height="10" rx="1.5"/><path pathLength="1" d="M3 19h18"/></svg></span><span class="foot-l">Self-employed</span></a><a href="uk-pensions-in-ireland.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M4 12h16"/><path pathLength="1" d="M12 4c2.3 2.3 3.4 5 3.4 8s-1.1 5.7-3.4 8c-2.3-2.3-3.4-5-3.4-8S9.7 6.3 12 4z"/></svg></span><span class="foot-l">Worked in the UK</span></a></div>
-    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">State Pension reality check</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">State Pension check</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">What the State Pension pays</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">How much State Pension you may get</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse class="fi-dot" cx="8.9" cy="6.6" rx="2" ry="2.6" transform="rotate(-9 8.9 6.6)"/><ellipse class="fi-dot" cx="15.1" cy="6.6" rx="2" ry="2.6" transform="rotate(9 15.1 6.6)"/><ellipse class="fi-dot" cx="4.7" cy="10.8" rx="1.8" ry="2.3" transform="rotate(-31 4.7 10.8)"/><ellipse class="fi-dot" cx="19.3" cy="10.8" rx="1.8" ry="2.3" transform="rotate(31 19.3 10.8)"/><path class="fi-dot" d="M12 11.2c-3.3 0-5.5 2.4-5.5 5 0 2.2 1.9 3.5 5.5 3.5s5.5-1.3 5.5-3.5c0-2.6-2.2-5-5.5-5z"/></svg></span><span class="foot-l">About</span></a><a href="booking.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M6.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 5.7 5.7L16 13l4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4.5 6a2 2 0 0 1 2-2z"/></svg></span><span class="foot-l">Book a call</span></a><a href="mailto:hello@pensionbuddy.ie"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="5.5" width="17" height="13" rx="2"/><path pathLength="1" d="M4.5 7l7.5 6 7.5-6"/></svg></span><span class="foot-l">hello@<wbr>pensionbuddy.ie</span></a></div>
     <div class="foot-col"><h2>Legal</h2><a href="privacy.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 3.5l7 2.8v5c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2v-5z"/><path pathLength="1" d="M9 12l2.2 2.2 3.8-4"/></svg></span><span class="foot-l">Privacy Notice</span></a><a href="privacy.html#cookies"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M20 12.5A8 8 0 1 1 11.5 4a3 3 0 0 0 3.5 3.5 3 3 0 0 0 3.5 3.5 3 3 0 0 0 1.5 1.5z"/><circle class="fi-dot" cx="9" cy="10" r="1"/><circle class="fi-dot" cx="14.5" cy="15" r="1"/><circle class="fi-dot" cx="9.5" cy="15.5" r="1"/></svg></span><span class="foot-l">Cookies</span></a><a href="terms.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path pathLength="1" d="M14 3.5V8h4"/><path pathLength="1" d="M8.5 12.5h7"/><path pathLength="1" d="M8.5 16h5"/></svg></span><span class="foot-l">Terms of Business</span></a><a href="complaints.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-9l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path pathLength="1" d="M12 8.5V12"/><circle class="fi-dot" cx="12" cy="14.6" r="1"/></svg></span><span class="foot-l">Complaints</span></a></div>
   </div>
@@ -3116,7 +3184,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/calc-page.js?v=4a0ae3ce"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/sft.js?v=d35ecfcb"></script>
-<script src="assets/js/pb-sft-motion.js?v=747678d4"></script>
+<script src="assets/js/pb-sft-motion.js?v=c9b4a779"></script>
 <script>
 /* standard-fund-threshold.html (Run 20 #7; simplified 12 October 2026).
 
@@ -3146,6 +3214,25 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   var TOP_YEAR = S.threshold(S.LAST_KNOWN).value;
   var held = 0;   // the columns' scale, held while the line is dragged so it stays under the finger
 
+  /* THE LUMP SUM IS PART OF THE PENSIONS, never more than all of them
+     (13 October 2026 review, SP-10: a €400,000 lump sum on €300,000 of
+     pensions was taxed as if it could be). Below €1 million of pensions the
+     lump-sum slider runs to the total, so its thumb cannot pass it. The
+     amount the reader chose is kept (lumpWanted) and comes back as the
+     total rises again; it changes only when the lump-sum slider itself is
+     moved. A typed amount beyond the slider's own scale stands, the shared
+     click-to-type rule, as long as the pensions cover it. */
+  var LUMP_TOP = +$('lump').max;
+  var lumpWanted = +$('lump').value;
+  function fitLump() {
+    var el = $('lump'), total = Math.max(0, +$('total').value);
+    var top = Math.max(+el.min, Math.min(Math.max(LUMP_TOP, lumpWanted), total));
+    if (+el.max !== top) el.max = top;
+    var v = Math.min(lumpWanted, top);
+    if (+el.value !== v) el.value = v;
+    P.paintSlider(el, VALTEXT);
+  }
+
   function short(v) { return '€' + (Math.round(v / 10000) / 100).toLocaleString('en-IE') + 'm'; }
 
   function render() {
@@ -3155,8 +3242,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     chips.forEach(function (c) { c.checked = +c.value === year; });
     $('totalV').textContent = euro(total);
     $('lumpV').textContent = euro(lump);
-    $('thrL').textContent = 'The threshold for ' + yearWord(year);
-    $('thr').textContent = (u.atLeast ? 'At least ' : '') + euro(u.threshold);
+    /* from 2030 the threshold is a floor and so the share a ceiling: the
+       labels say so, and the figures keep the width of every other year's */
+    $('thrL').textContent = u.atLeast ? 'The threshold from 2030, at least' : 'The threshold for ' + year;
+    $('thr').textContent = euro(u.threshold);
+    $('shareL').textContent = u.atLeast ? 'Share used, at most' : 'Share used';
     $('share').textContent = pc + '%';
     /* the limit bar (Run 43): the year's threshold against the total, on one scale,
        the larger of the two; it follows the sliders in the same frame */
@@ -3168,14 +3258,23 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('sftLimYou').textContent = euro(total);
     $('sftLimOvK').hidden = !(u.excess > 0);
     $('sftLimOv').textContent = (u.atLeast ? 'Up to ' : '') + euro(u.excess);
-    /* the headline gives the threshold and the share, the key what is over:
-       this line says only what is left, and is away when nothing is */
-    $('pbSay').hidden = u.excess > 0;
-    $('pbSay').textContent = (u.atLeast ? 'At least ' : '') + euro(u.headroom) + ' of headroom.';
+    /* Chargeable excess tax, net of the lump sum's (review SP-7): the 20%
+       tax paid on the lump sum, at most EUR 60,000, is set against it, so
+       the page takes it off rather than leave the reader to. From 2030 the
+       excess is at most what is shown, and so is the tax. */
+    var credit = Math.min(l.standardTax, S.CREDIT_MAX), offset = Math.min(credit, u.cet), toPay = u.cet - offset;
+    var most = u.atLeast ? 'at most ' : '';
+    /* one line under the bar, both ways, swapping its words in place: what
+       is left under the threshold, or what is over and the tax to pay */
+    $('pbSay').textContent = u.excess > 0
+      ? (u.atLeast ? 'Up to ' : '') + euro(u.excess) + ' over: ' +
+        (toPay > 0 ? most + euro(toPay) + ' tax to pay.' : 'nothing more to pay.')
+      : (u.atLeast ? 'At least ' : '') + euro(u.headroom) + ' of headroom.';
+    $('pbSay').setAttribute('data-state', u.excess > 0 ? 'over' : 'under');
     /* spoken whole, once: the bar and its key are aria-hidden */
     var when = year >= 2030 ? 'from 2030' : 'in ' + year, of = u.atLeast ? 'the least the threshold can then be' : 'that year’s threshold';
     var say = u.excess > 0
-      ? euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + of + '.'
+      ? euro(total) + ' taken ' + when + ' is ' + euro(u.excess) + ' over ' + of + '. Tax to pay on it, after the lump sum’s: ' + most + euro(toPay) + '.'
       : euro(total) + ' taken ' + when + ' uses ' + pc + '% of ' + of + ', leaving ' + euro(u.headroom) + ' of headroom.';
 
     /* the columns: every year on one scale, your pensions one line across them */
@@ -3192,15 +3291,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     $('sftLine').style.setProperty('--f', f(total).toFixed(4));
     $('sftLineV').textContent = total >= 1e6 ? short(total) : euro(total);
 
-    $('sftOver').hidden = !(u.excess > 0);
+    $('sftOverSlot').classList.toggle('is-open', u.excess > 0);
     if (u.excess > 0) {
-      /* from 2030 the threshold is only known to be at least 2.8m, so the
-         excess, and the tax on it, can only be said to be at most this */
-      $('sftOverText').textContent = u.atLeast
-        ? 'Chargeable excess tax at 40% on up to ' + euro(u.excess) + ' over would be at most ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.'
-        : 'Chargeable excess tax at 40% on the ' + euro(u.excess) + ' over is ' + euro(u.cet) +
-          ', taken when the benefit is taken. Tax paid at 20% on a lump sum, up to ' + euro(S.CREDIT_MAX) + ', can be set against it.';
+      /* the working of the hero's line, in the order it is done */
+      var first = 'Tax on ' + (u.atLeast ? 'up to ' : 'the ') + euro(u.excess) + ' over: ' + most + euro(u.cet) + ' (40%). ';
+      $('sftOverText').textContent = first + (offset <= 0
+        ? 'All of it to pay: a lump sum of ' + euro(S.TAX_FREE) + ' or less pays no tax to take off it.'
+        : toPay > 0
+          ? 'Less the ' + euro(offset) + ' tax on your lump sum: ' + most + euro(toPay) + ' to pay.'
+          : 'The ' + euro(credit) + ' tax on your lump sum covers it: nothing more to pay.');
     }
     /* the lump-sum bar (Run 43): the lump sum on one bar, split by Revenue's bands,
        each part as wide as its euro (flex-grow), a part with nothing in it not drawn */
@@ -3240,7 +3339,13 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       drag.moved = true;
     }
     cols.addEventListener('pointerdown', function (e) {
-      if (Math.abs(e.clientY - lineY()) > 18) return;
+      /* a finger takes the line only by its grip or its figure (page.css
+         gives those touch-action:none and the rest of the chart pan-y), so
+         a swipe that starts on the chart scrolls the page (review SP-6);
+         a mouse takes it anywhere within 18px of it */
+      if (e.pointerType && e.pointerType !== 'mouse') {
+        if (!(e.target && e.target.closest && e.target.closest('.sft-grip,.sft-hit,.sft-line-v'))) return;
+      } else if (Math.abs(e.clientY - lineY()) > 18) return;
       e.preventDefault();
       held = Math.max(TOP_YEAR * 1.05, +$('total').value * 1.08);
       drag = { moved: false };
@@ -3262,7 +3367,12 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     });
   })();
 
-  P.wireRanges(VALTEXT, render);
+  P.wireRanges(VALTEXT, function (el) {
+    if (el && el.id === 'lump') lumpWanted = +el.value;
+    if (el && (el.id === 'lump' || el.id === 'total')) fitLump();
+    render();
+  });
+  fitLump();
   render();
 })();
 </script>
@@ -3473,7 +3583,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
 <script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bc0eea8d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3579,10 +3689,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 <script src="assets/js/pb-peek.js?v=7d945b40"></script>
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
-<script src="assets/js/pb-calc-motion.js?v=0ab7c99c"></script>
+<script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
 <script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-chrome-motion.js?v=3dd0f2e6"></script>
+<script src="assets/js/pb-chrome-motion.js?v=e090c2e4"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>
 <script src="assets/js/pb-askresult.js?v=065b81d6"></script>

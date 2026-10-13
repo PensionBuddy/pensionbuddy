@@ -41,16 +41,39 @@ pension alone overtakes auto-enrolment at `limit x 7/3 x (1 - rate)`: €140 a
 month at 40%, €186.67 at 20%. The best of both is never less than either.
 
 **What the page shows.** Two cards side by side, the same cost to you:
-auto-enrolment (you put in, your employer adds, the State adds) and a personal
-pension (you put in, with tax relief; your employer adds nothing unless they
-agree). Every bar sits on one euro scale. Past the limit: the notice "Past
-€100 a month, auto-enrolment takes no more. A personal pension takes the
-rest, with tax relief." under the slider, the auto-enrolment card "At its
+auto-enrolment (from you, your employer, the State) and a personal pension
+(from you, tax relief; your employer adds nothing unless they agree). Every
+bar sits on one euro scale. Past the limit: the notice "Past €100 a month
+(pay over €80,000), auto-enrolment takes no more. A personal pension takes the
+rest." under the slider, the auto-enrolment card "At its
 limit", and a third line, the best of both. The line at the top says what each
 €1 becomes. The foot names this year's rates and the limit as it rises: €200
 a month from 2029, €300 from 2032, €400 from 2035. Each part is rounded to the
 euro and each total is the sum of its rounded parts, so the screen always adds
 up.
+
+**The 13 October review.** The bars' scale holds still: it is set by the
+most the slider reaches (€500, or an amount typed past it) at the top rate,
+40%, so neither a slide nor the tax switch rescales it. Auto-enrolment's bar
+stops at its mark at €233 while the personal pension's goes on; it used to
+shrink as the personal pension grew, which read as auto-enrolment getting
+worse. Nothing bobs while the slider moves, at any width: the line under
+auto-enrolment's key keeps room for three lines, each figure in a key keeps
+the width of its card's widest figure from the slider, and the best of
+both's key stands one line under the other. The best of both opens and shuts
+with the gap above it, so nothing under it jumps or snaps. An amount handed
+over in the link's fragment, `#you=200` (the starter page's auto-enrolment
+block sends one), opens the page at that amount, rounded to the slider's
+step and held inside it; the fragment never reaches a server.
+
+The starter page's block (`starter.html`, `#pbAe`) says the same in fewer
+words: up to the most, the same amount into a personal pension instead; past
+it, the first row is what auto-enrolment takes ("Taken from you"), the line
+under the rows says the rest stays in your pay, and the card beside it holds
+that rest, into a personal pension, with "Both together" under it, this
+page's best of both. The note past the most: "Auto-enrolment stops at €100 a
+month. A personal pension can take the rest, with tax relief. Compare the
+two", to this page at the reader's amount.
 
 **Assumed and said on the page:** relief at the rate picked on all of it, and
 inside Revenue's age-related limit (nothing to apply it to without age or
@@ -64,8 +87,11 @@ the limit by phase; agreement with the yearly functions; and every amount from
 €25 to €1,000 at both rates in every phase). The page itself, in real Chrome:
 `tests/compare-page.test.mjs` (every control moves every figure; what shows
 adds up; the notice, the cap and the best of both past the limit only; one
-euro scale for the bars; nothing in the panel moves; a typed amount; the
-markup without JavaScript). Its static markup: `tests/build.test.py` check 18.
+euro scale for the bars, and it holds still; nothing in the panel moves, and
+nothing bobs while sliding; a typed amount; the best of both opening and
+shutting smoothly; `#you=`; the markup without JavaScript). Its static
+markup: `tests/build.test.py` check 18. The starter's block:
+`tests/interactive-43.test.py` (A1 to A10) and `tests/build.test.py` check 13.
 The yearly functions below are unchanged and still tested: the starter page
 uses `autoEnrolment()` and `AE_PHASES`.
 

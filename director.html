@@ -2142,10 +2142,15 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
    label is a paragraph that names the section, not a heading: a heading here
    would be a fourth size on most pages. Byte for byte on every page, like the
    blocks above. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the cards rise in one after another as they arrive and
-   each drawing builds itself; under the pointer or the keyboard a card lifts
-   and its drawing plays again. A phone has the drawing beside the words. */
+   adds the classes) each card rises in as it comes on screen, cards that
+   come on screen together one after another, and its drawing builds itself;
+   under the pointer or the keyboard a card lifts and its drawing plays again
+   from where it stands. A phone has the drawing beside the words. */
 .pb-related{padding:48px 0 8px}
+/* the footer keeps clear of the cards on every page: the hand-written pages'
+   footers had no top margin, which left 8px, and the footer's walking strip
+   (assets/js/pb-alive.js, 26px above it) ran over the last card's edge */
+main:has(> .pb-related) + footer{margin-top:56px}
 .pb-related .pb-related-h{display:flex;align-items:center;gap:14px;margin:0 0 16px;font-size:20px;font-weight:700;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
 .pb-related .pb-related-h::after{content:"";flex:1;height:1px;background:var(--line-2);transform-origin:0 50%}
 .pb-related .pb-related-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;margin:0;padding:0;list-style:none}
@@ -2162,7 +2167,10 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art svg{display:block;width:auto;height:108px;max-width:100%;overflow:visible}
 .pb-related .pb-related-t,.pb-related .pb-related-d{padding:0 10px}
 .pb-related-t{font-size:17px;font-weight:700;line-height:1.3;color:var(--ink)}
-.pb-related-t::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
+/* the arrow rides on the name's last word (pagebuild.related_title), so it
+   never wraps onto a line of its own; the 404's six places carry it too */
+.pb-rt-end{white-space:nowrap}
+.pb-rt-end::after{content:"\2192";content:"\2192" / "";display:inline-block;margin-left:.35em;color:var(--teal)}
 .pb-related-d{font-size:16px;font-weight:400;line-height:1.5;color:var(--ink-2)}
 /* where each part of a drawing grows from */
 .pb-related-art :is(.pr-g,.pr-x,.pr-p,.pr-s,.pr-y,.pr-spin,.pr-wave,.pr-fly,.pr-dot){transform-box:fill-box;transform-origin:50% 50%}
@@ -2170,8 +2178,6 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 .pb-related-art .pr-x{transform-origin:0 50%}
 .pb-related-art .pr-r{transform-box:view-box}
 .pb-related-art *{--pd:calc(var(--ci,0) * 130ms + 320ms + var(--o,0) * 85ms)}
-.pb-related-list li:nth-child(2) .pb-related-card{--ci:1}
-.pb-related-list li:nth-child(3) .pb-related-card{--ci:2}
 @media(max-width:560px){
   .pb-related .pb-related-card{display:grid;grid-template-columns:108px minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start;column-gap:14px;row-gap:4px;padding:10px 14px 10px 10px}
   .pb-related-art{grid-row:1 / span 2;height:84px;margin:0;border-radius:10px}
@@ -2190,18 +2196,21 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
 html.pb-motion .pb-related-card{transition:translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-related-card::after{content:"";position:absolute;left:0;right:0;top:100%;height:0}
 html.pb-motion .pb-related-art svg{transition:scale .6s cubic-bezier(.3,1.45,.45,1)}
-html.pb-motion .pb-related-t::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
+html.pb-motion .pb-rt-end::after{transition:translate .45s cubic-bezier(.3,1.5,.45,1)}
 @media (hover:hover) and (pointer:fine){
   html.pb-motion .pb-related-card:hover{translate:0 -6px}
   html.pb-motion .pb-related-card:hover::after{height:8px}
   html.pb-motion .pb-related-card:hover .pb-related-art svg{scale:1.06}
-  html.pb-motion .pb-related-card:hover .pb-related-t::after{translate:5px 0}
+  html.pb-motion .pb-related-card:hover .pb-rt-end::after{translate:5px 0}
 }
 html.pb-motion .pb-related-card:focus-visible{translate:0 -6px}
 html.pb-motion .pb-related-card:focus-visible .pb-related-art svg{scale:1.06}
-html.pb-motion .pb-related-card:focus-visible .pb-related-t::after{translate:5px 0}
-/* arriving: armed only while the section is still below the screen */
-html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-h::after{transform:scaleX(0)}
+html.pb-motion .pb-related-card:focus-visible .pb-rt-end::after{translate:5px 0}
+/* arriving: the label's rule and each card on its own, armed only while
+   wholly below the screen and let go as it comes into view; cards that come
+   into view together step in one after another (--ci, which the script sets) */
+html.pb-motion .pb-related-h.pb-rel-armed:not(.pb-rel-in)::after{transform:scaleX(0)}
+html.pb-motion .pb-related-h.pb-rel-in::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pb-related-card{opacity:0;transform:translateY(36px) scale(.96)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-d{stroke-dasharray:1 2;stroke-dashoffset:1.01}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-g{transform:scaleY(0)}
@@ -2212,7 +2221,6 @@ html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-s{opacity:0;transform:translate
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-y{opacity:0;transform:translateY(-18px)}
 html.pb-motion .pb-rel-armed:not(.pb-rel-in) .pr-r{transform:rotate(var(--r0,-60deg))}
 html.pb-motion .pb-rel-in .pr-d{stroke-dasharray:1 2}
-html.pb-motion .pb-rel-in .pb-related-h::after{transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
 html.pb-motion .pb-rel-in .pb-related-card{transition:opacity .55s ease calc(var(--ci,0) * 130ms),transform 1s cubic-bezier(.2,1.12,.3,1) calc(var(--ci,0) * 130ms),
   translate .5s cubic-bezier(.3,1.45,.45,1),border-color .2s ease,background-color .2s ease}
 html.pb-motion .pb-rel-in .pr-d{transition:stroke-dashoffset .95s cubic-bezier(.55,0,.2,1) var(--pd)}
@@ -2415,12 +2423,15 @@ main h1{font-weight:800}
    drawing tips, and the name steps along. A phone or a tablet lays each
    column's links in two columns (CSS columns, so each still reads top to
    bottom).
+   On a phone the Tools column, whose names are the longest, keeps one link
+   to a line.
    The brand (the logo, its line, Damian's qualifications) and the disclosure
    under it never move. With motion (html.pb-motion; assets/js/pb-chrome-motion.js
-   adds the classes) the links arrive one after another as the footer comes
-   into view, each drawing drawn, and the wordmark at the foot catches the
-   light as it arrives and under the pointer. */
-footer .foot-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.95fr) minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto 1fr;
+   adds the classes) each column arrives as it comes into view, its links one
+   after another, each drawing drawn (columns that come into view together
+   step in one after another: --fc, which the script sets), and the wordmark
+   at the foot catches the light as it arrives and under the pointer. */
+footer .foot-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr) minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto 1fr;
   gap:30px 32px;margin-bottom:44px}
 /* Company and Legal share the last column, one over the other */
 footer .foot-top > :is(.foot-brand,.foot-col:nth-child(2),.foot-col:nth-child(3)){grid-row:span 2}
@@ -2453,6 +2464,8 @@ footer .foot-col a[href="booking.html"] .foot-ic{background:var(--teal);color:#f
   footer .foot-col:nth-child(4){columns:auto}
 }
 @media(max-width:600px){
+  /* Tools' names are too long for two columns here: one link to a line */
+  footer .foot-col:nth-child(3){columns:auto}
   footer .foot-col a{gap:8px;padding-right:2px;font-size:14.5px;line-height:1.25}
   footer .foot-ic{width:28px;height:28px;border-radius:8px}
   footer .foot-ic svg{width:16px;height:16px}
@@ -2466,26 +2479,23 @@ html.pb-motion footer .foot-l{transition:translate .45s cubic-bezier(.3,1.5,.45,
 }
 html.pb-motion footer .foot-col a:focus-visible .foot-ic{transform:rotate(-9deg) scale(1.12)}
 html.pb-motion footer .foot-col a:focus-visible .foot-l{translate:4px 0}
-footer .foot-col:nth-child(3){--fc:1}
-footer .foot-col:nth-child(4){--fc:2}
-footer .foot-col:nth-child(5){--fc:3}
 footer .foot-col a:nth-of-type(2){--fi:1}footer .foot-col a:nth-of-type(3){--fi:2}footer .foot-col a:nth-of-type(4){--fi:3}
 footer .foot-col a:nth-of-type(5){--fi:4}footer .foot-col a:nth-of-type(6){--fi:5}footer .foot-col a:nth-of-type(7){--fi:6}
 footer .foot-col a:nth-of-type(8){--fi:7}footer .foot-col a:nth-of-type(9){--fi:8}
 footer .foot-col *{--fd:calc(var(--fc,0) * 120ms + var(--fi,0) * 50ms)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2{opacity:0;transform:translateY(10px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col h2::before{transform:scaleX(0)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-col a{opacity:0;transform:translateY(14px)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
-html.pb-motion .foot-top.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-col a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
-html.pb-motion .foot-top.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2{opacity:0;transform:translateY(10px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) h2::before{transform:scaleX(0)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) a{opacity:0;transform:translateY(14px)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic{transform:scale(.4)}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2;stroke-dashoffset:1.01}
+html.pb-motion footer .foot-col.pb-ft-armed:not(.pb-ft-in) .foot-ic .fi-dot{opacity:0}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){stroke-dasharray:1 2}
+html.pb-motion footer .foot-col.pb-ft-in h2{transition:opacity .5s ease calc(var(--fc,0) * 120ms),transform .8s cubic-bezier(.2,1.2,.3,1) calc(var(--fc,0) * 120ms)}
+html.pb-motion footer .foot-col.pb-ft-in h2::before{transition:transform .8s cubic-bezier(.2,.8,.2,1) calc(var(--fc,0) * 120ms + 150ms)}
+html.pb-motion footer .foot-col.pb-ft-in a{transition:opacity .45s ease calc(var(--fd) + 80ms),transform .75s cubic-bezier(.2,1.25,.3,1) calc(var(--fd) + 80ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic{transition:background-color .25s ease,color .25s ease,transform .7s cubic-bezier(.3,1.6,.5,1) calc(var(--fd) + 140ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic svg > :not(.fi-dot){transition:stroke-dashoffset .8s cubic-bezier(.55,0,.2,1) calc(var(--fd) + 220ms)}
+html.pb-motion footer .foot-col.pb-ft-in .foot-ic .fi-dot{transition:opacity .3s ease calc(var(--fd) + 600ms)}
 html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-background-clip:text;background-clip:text;
   background-image:radial-gradient(300px circle at var(--wx,-400px) var(--wy,50%),rgba(20,203,177,.6),rgba(20,203,177,0) 70%),linear-gradient(rgba(11,31,28,.07),rgba(11,31,28,.07))}
 @media print{footer .foot-ic{display:none}}
@@ -2561,15 +2571,14 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 /* why directors leave it */
 .dr-why{padding:84px 0;background:#F3F5F4}
 .dr-why h2,.dr-calc h2{margin:0 0 28px;font-size:clamp(32px,4vw,50px);line-height:1.04;letter-spacing:-.04em;max-width:16em}
-.dr-why-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:22px;align-items:stretch}
-.dr-card{display:flex;flex-direction:column;gap:14px;padding:26px 26px 22px;border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 18px 44px rgba(11,31,28,.05)}
-.dr-stat{margin:0;font-size:clamp(18px,1.7vw,21px);line-height:1.35;font-weight:600;color:var(--ink)}
-.dr-stat .pb-stat-n{font-size:1.5em;font-weight:800;letter-spacing:-.02em;color:var(--slate,#586B85);font-variant-numeric:tabular-nums}
-.dr-card .dr-stage{border-radius:20px;box-shadow:none}
-.dr-rows-stage{height:170px}
-.dr-cov .dr-rows-stage{flex:1 0 auto}
-.drw-rows,.dre-cv{cursor:pointer}
-.dr-stat .pb-stat-n:not(.pb-odo){display:inline}
+/* the year end, on its own row (13 October 2026: the coverage card went, "not a figure for company
+   directors"): the words at the left and the ring at the right, in the order's columns above, so the
+   section reads in one rhythm and the ring sits straight over the reminder it fills in */
+.dr-ye{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:20px 56px;align-items:center;margin:34px 0 0}
+.dr-ye-h{margin:0;max-width:17em;font-size:clamp(22px,2.3vw,30px);line-height:1.25;letter-spacing:-.02em;font-weight:700;color:var(--ink)}
+.dr-ye-h b{font-weight:800}
+.dr-ye-copy .pb-src{margin:12px 0 0;font-size:13px}
+.dre-cv{cursor:pointer}
 .dr-ring-stage{height:300px}
 .drw-ring{touch-action:pan-y;cursor:pointer}
 .dr-ring-mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none;text-align:center}
@@ -2579,7 +2588,6 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .dr-ring-mid em[hidden]{display:none}
 .dr-ye-range{position:absolute;left:0;right:0;bottom:0;width:100%;height:44px;margin:0;opacity:0;pointer-events:none}
 .dr-ye-range[hidden]{display:none}
-.dr-card .pb-src{margin:0;font-size:13px}
 /* the order (13 October 2026, Damian: "I don't know what it means"): who the company pays, and in
    what order, as a list you can see. The business, the staff and the bills are paid; the pension,
    last, gets nothing. Turned round, the pension goes first, a business expense. Two radios (#drQLast,
@@ -2647,9 +2655,11 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pb-motion .dr-q-n{transition:background-color .35s .25s,color .35s .25s,box-shadow .35s .25s}
 .pb-motion .dr-q-l{transition:color .4s}
 .pb-motion .dr-q-slot::before{transition:border-color .4s,background-color .4s}
-.pb-motion .dr-q-copy.dr-q-wait .dr-q-lead,.pb-motion .dr-q-copy.dr-q-wait .dr-q-fix{opacity:0;transform:translateY(16px)}
-.pb-motion .dr-q-copy .dr-q-lead,.pb-motion .dr-q-copy .dr-q-fix{transition:opacity .6s ease .32s,transform .95s cubic-bezier(.2,1.15,.3,1) .32s}
-.pb-motion .dr-q-copy .dr-q-fix{transition-delay:.5s}
+/* the two paragraphs rise in, each as it comes on screen (pb-dir-why.js sets .dr-q-wait only on one
+   still below the screen, and takes it off at the first pixel in view) */
+.pb-motion .dr-q-copy .dr-q-wait{opacity:0;transform:translateY(14px)}
+.pb-motion .dr-q-copy .dr-q-lead,.pb-motion .dr-q-copy .dr-q-fix{transition:opacity .55s ease .08s,transform .85s cubic-bezier(.2,1.1,.3,1) .08s}
+.pb-motion .dr-q-copy .dr-q-fix{transition-delay:.2s}
 @media(hover:hover) and (pointer:fine){.pb-motion .dr-q-row:hover{transform:translateY(-2px)}}
 /* the calculator */
 .dr-calc{padding:84px 0}
@@ -2657,7 +2667,6 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .dr-calc-stage{padding:24px 26px 26px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(70% 60% at 50% 40%,#E6F9F5 0%,rgba(230,249,245,0) 70%),#fff}
 .dr-res-k{margin:0;font-size:15px;font-weight:700;color:var(--ink-2)}
 .dr-res-big{margin:2px 0 0;font-size:clamp(44px,5vw,64px);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
-.dr-res-sub{margin:6px 0 0;font-size:15px;color:var(--ink-2)}
 .dr-calc-stage .dr-stage{height:380px;border-radius:20px;box-shadow:none;background:transparent;border:0}
 .drc-cv{cursor:ew-resize}
 .dr-calc-panel{padding:28px 30px;display:flex;flex-direction:column;gap:18px;border-left:1px solid var(--line,#E7EBE9)}
@@ -2695,7 +2704,8 @@ html.pb-js .dr-eg{display:none}
 .dr-exec-h{margin:0;font-size:18px;font-weight:700;color:var(--ink)}
 .dr-exec-copy .pb-src{margin:4px 0 0;font-size:13px}
 /* no script, no motion, print */
-html:not(.pb-js) .dr3-stage,html:not(.pb-js) .dr-rows-stage,html:not(.pb-js) .dr-ring-stage,html:not(.pb-js) .drc-stage,html:not(.pb-js) .dr-exec-stage{display:none}
+html:not(.pb-js) .dr3-stage,html:not(.pb-js) .dr-ring-stage,html:not(.pb-js) .drc-stage,html:not(.pb-js) .dr-exec-stage{display:none}
+html:not(.pb-js) .dr-ye{display:block}
 html:not(.pb-js) .dr3-base li{cursor:default}
 html:not(.pb-js) .dr-calc-stage{justify-content:center}
 /* the payment slider's notch: where the reader's own tax-relief limit sits (pb-dir-calc.js sets --dr-lim) */
@@ -2709,7 +2719,7 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
   .dr3-stage{height:300px}
   .dr-hero-cta{margin-top:18px}
   .dr-why,.dr-calc{padding:56px 0}
-  .dr-why-grid{grid-template-columns:1fr}
+  .dr-ye{grid-template-columns:1fr;gap:18px;margin-top:30px}
   .dr-q-top{grid-template-columns:1fr;gap:22px;margin-bottom:22px}
   .dr-calc-card{grid-template-columns:1fr}
   .dr-calc-panel{border-left:0;border-top:1px solid var(--line,#E7EBE9);padding:22px 20px}
@@ -2724,7 +2734,6 @@ html:not(.pb-js) .dr-calc-stage{justify-content:center}
   .dr3-base li{padding:10px 4px}
   .dr3-base li>span{font-size:12px}
   .dr3-base i{font-size:11.5px}
-  .dr-card{padding:20px 18px 18px}
   .dr-ring-stage{height:300px}
   .dr-q{padding:14px 12px;border-radius:24px}
   .dr-q-seg{margin-bottom:12px}
@@ -3078,10 +3087,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <ul class="nav-dd-panel" id="navTools">
         <li><a class="lnk" href="pension-calculator.html">Pension calculator</a></li>
         <li><a class="lnk" href="my-pensions.html">All your pensions in one view</a></li>
-        <li><a class="lnk" href="state-pension-entitlement.html">State Pension check</a></li>
+        <li><a class="lnk" href="state-pension-entitlement.html">How much State Pension you may get</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="pension-fees-calculator.html">Pension charges calculator</a></li>
         <li><a class="lnk" href="broker-vs-autoenrolment.html">Auto-enrolment comparison</a></li>
-        <li><a class="lnk" href="state-pension-reality-check.html">State Pension reality check</a></li>
+        <li><a class="lnk" href="state-pension-reality-check.html">What the State Pension pays</a></li>
         <li><a class="lnk" href="standard-fund-threshold.html">The Standard Fund Threshold</a></li>
       </ul>
     </div>
@@ -3089,8 +3098,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <button class="nav-dd-btn" type="button" aria-expanded="false" aria-controls="navGuides">Guides<svg class="nav-chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <ul class="nav-dd-panel" id="navGuides">
         <li><a class="lnk" href="pensions-over-50.html">Pensions after 50</a></li>
-        <li><a class="lnk" href="self-employed-pensions.html">Pensions when you are self-employed</a></li>
-        <li><a class="lnk" href="uk-pensions-in-ireland.html">A UK pension, and living in Ireland</a></li>
+        <li><a class="lnk" href="self-employed-pensions.html">Self-employed pensions</a></li>
+        <li><a class="lnk" href="uk-pensions-in-ireland.html">UK pensions in Ireland</a></li>
         <li><a class="lnk" href="pia.html">Personal Investment Account (PIA)</a></li>
         <li><a class="lnk" href="glossary.html">Pension jargon buster</a></li>
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
@@ -3106,8 +3115,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
      very top, as simply as possible, why a director is different; then the pain; then a simpler
      calculator; super interactive; no unnecessary text"). Five parts, each a stage moved by its own
      script: the hero's three stacks (assets/js/pb-dir-three.js), the order (#drQ: who the company
-     pays first; the radios and the CSS draw it, pb-dir-why.js moves it), the coverage rows and the
-     year-end ring (pb-dir-why.js), the calculator's tower (pb-dir-calc.js) and the executive-pension
+     pays first; the radios and the CSS draw it, pb-dir-why.js moves it), the year-end ring
+     (pb-dir-why.js), the calculator's tower (pb-dir-calc.js) and the executive-pension
      row (in pb-dir-why.js). The markup is the finished answer at its defaults: without JavaScript every
      figure still reads. The full calculator, the 2026 rules and the checklist stay live, linked
      below and from Related pages. 12 October 2026 (Damian: "the form up at the top"): the year-end
@@ -3159,21 +3168,16 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <p class="tk-sr" id="drQSr" aria-live="polite">Your pension first: the company pays into it as a business expense, then the business, the staff and the bills.</p>
     </fieldset>
   </div>
-  <div class="dr-why-grid">
-    <div class="dr-card dr-cov">
-      <p class="dr-stat"><b class="pb-stat-n" id="drS1">57%</b> of the self-employed have a pension. <b class="pb-stat-n" id="drS2">68%</b> of employees do.</p>
-      <div class="dr-stage dr-rows-stage pb-al-skip"><canvas class="dr-cv drw-rows" aria-hidden="true"></canvas></div>
-      <p class="pb-src">Central Statistics Office (CSO), Pension Coverage, Quarter 3 2025: the self-employed and assisting relatives. Not a figure for company directors.</p>
-    </div>
-    <div class="dr-card dr-ye">
-      <p class="dr-stat">Company payments count in the year they&rsquo;re paid. <b>No backdating.</b></p>
-      <div class="dr-stage dr-ring-stage pb-al-skip">
-        <canvas class="dr-cv drw-ring" aria-hidden="true"></canvas>
-        <div class="dr-ring-mid" aria-hidden="true"><b id="drYeDays">81</b><span>days to <span id="drYeOn">31 December</span></span><em id="drYeNext" hidden>next year</em></div>
-        <input type="range" class="dr-ye-range" id="drYe" min="1" max="12" step="1" value="12" aria-label="Your company&rsquo;s year end" hidden>
-        <p class="dr-hint" id="drYeHint" aria-hidden="true">Drag the coin to your year end.</p>
-      </div>
+  <div class="dr-ye">
+    <div class="dr-ye-copy">
+      <p class="dr-ye-h">Company payments count in the year they&rsquo;re paid. <b>No backdating.</b></p>
       <p class="pb-src">The year is the company&rsquo;s accounting period. Revenue Pensions Manual, chapters 4 and 24.</p>
+    </div>
+    <div class="dr-stage dr-ring-stage pb-al-skip">
+      <canvas class="dr-cv drw-ring" aria-hidden="true"></canvas>
+      <div class="dr-ring-mid" aria-hidden="true"><b id="drYeDays">81</b><span>days to <span id="drYeOn">31 December</span></span><em id="drYeNext" hidden>next year</em></div>
+      <input type="range" class="dr-ye-range" id="drYe" min="1" max="12" step="1" value="12" aria-label="Your company&rsquo;s year end" hidden>
+      <p class="dr-hint" id="drYeHint" aria-hidden="true">Drag the coin to your year end.</p>
     </div>
   </div>
 </div></section>
@@ -3300,9 +3304,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="dr-calc-card pb-al-skip" data-pb-calc="director">
     <div class="dr-calc-stage">
       <div class="dr-res" id="drRes">
-        <p class="dr-res-k">At <span id="drAt">66</span>, in today&rsquo;s money</p>
-        <p class="dr-res-big"><span id="potToday">&euro;989,032</span></p>
-        <p class="dr-res-sub"><span id="potOut">&euro;1,412,582</span> before inflation</p>
+        <p class="dr-res-k">Your pension pot at <span id="drAt">66</span></p>
+        <p class="dr-res-big"><span id="potOut">&euro;1,412,582</span></p>
       </div>
       <div class="dr-stage drc-stage"><canvas class="dr-cv drc-cv" aria-hidden="true"></canvas><p class="dr-hint" id="drcHint" aria-hidden="true">Drag to run the years.</p></div>
     </div>
@@ -3314,7 +3317,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="drStartL">Start</span><div class="pb-seg pb-seg-sm dr-start" role="group" aria-labelledby="drStartL"><button type="button" data-start="0" aria-pressed="true">This year</button><button type="button" data-start="1" aria-pressed="false">A year later</button></div></div>
       </div>
       <p class="dr-eg" id="drEg">Example: age 48, &euro;50,000 in pensions now, the company pays &euro;40,000 a year from now to 66.</p>
-      <p class="dr-wait" id="drWait">Start a year later: about <b id="drWaitV">&euro;77,467</b> less at 66, in today&rsquo;s money.</p>
+      <p class="dr-wait" id="drWait">Start a year later: about <b id="drWaitV">&euro;110,642</b> less at 66.</p>
       <p class="dr-yr-h">Each year, the company&rsquo;s <span id="drYrPay">&euro;40,000</span> could go one of three ways:</p>
       <ul class="dr-yr" id="drYr">
         <li class="dr-yr-pen"><i aria-hidden="true"></i>Into your pension <b id="drYrPen">&euro;40,000</b></li>
@@ -3328,7 +3331,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <div class="dr-fine-wrap">
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note dr-note">In today&rsquo;s money. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. 2% inflation, paid in monthly to 66. Before tax: the pension is taxed when you take it. Each payment assumed within Revenue&rsquo;s limits. <a href="director-calculator.html">The full director calculator</a></p>
+    <p class="gap-note dr-note">Future euros, before inflation. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. Paid in monthly to 66. Before tax: the pension is taxed when you take it. Each payment assumed within Revenue&rsquo;s limits. <a href="director-calculator.html">The full director calculator</a></p>
     <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
   </div>
   <div class="dr-ask">
@@ -3343,7 +3346,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   </div>
   <details class="pb-work dr-work"><summary>How we worked this out</summary><ul>
     <li>The company pays the same amount every year, monthly, from now to 66. What you have in pensions now grows at the same rate.</li>
-    <li>Growth: 6% a year before charges, the most the Pensions Authority&rsquo;s guidance lets a projection assume. Today&rsquo;s money: prices up 2% a year, the European Central Bank&rsquo;s target.</li>
+    <li>Growth: 6% a year before charges, the most the Pensions Authority&rsquo;s guidance lets a projection assume. The figures are in euro at the time, before inflation.</li>
     <li>A year later: the same yearly payment, starting a year late and still stopping at 66: one year&rsquo;s payments fewer, and their growth.</li>
     <li>As salary: 40% income tax, 8% Universal Social Charge (USC) and <span data-pb-prsi>4.35%</span> Pay-Related Social Insurance (PRSI), as for someone already paying the top rates. Employer PRSI left out.</li>
     <li>Left as profit: corporation tax at 12.5%, the trading rate.</li>
@@ -3352,7 +3355,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>A company scheme such as a master trust: not held to the 100% test. Revenue&rsquo;s maximum funding rules limit it, by salary, service and age; an actuary works it out.</li>
     <li>Left out: charges, and the tax when you take the pension.</li>
     <li>Standard Fund Threshold: &euro;2.2 million in 2026, rising &euro;200,000 a year to &euro;2.8 million in 2029, then with earnings; any excess is taxed at 40% when taken.</li>
-    <li>Sources: Revenue, tax rates and bands, USC and Corporation Tax rates (Taxes Consolidation Act 1997, section 21A); Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, sections 12 and 13; the Pensions Authority; the European Central Bank; the Department of Social Protection, SW14.</li>
+    <li>Sources: Revenue, tax rates and bands, USC and Corporation Tax rates (Taxes Consolidation Act 1997, section 21A); Revenue Pensions Manual, chapters 4 and 24; Finance Act 2024, sections 12 and 13; the Pensions Authority; the Department of Social Protection, SW14.</li>
   </ul></details>
 </div></section>
 
@@ -3394,9 +3397,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="pb-related" aria-labelledby="pbRelatedH"><div class="wrap pb-al-skip">
   <p class="pb-related-h" id="pbRelatedH">Related pages</p>
   <ul class="pb-related-list">
-    <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 82H146" stroke="#CBEBE4" stroke-width="2"/><path d="M22 82V30H56V82" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-f" style="--o:0" x="29" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="29" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="29" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="42" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="42" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:0" x="42" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><path class="pr-d" style="--o:2" pathLength="1" d="M62 46C78 30 96 30 106 42" stroke="#0C8175" stroke-width="3"/><path class="pr-p" style="--o:4" d="M100 42L107 44L108 37" stroke="#0C8175" stroke-width="3"/><rect class="pr-y" style="--o:3" x="104" y="72" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:4" x="104" y="62" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:5" x="104" y="52" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:6" x="104" y="42" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Director calculator</span><span class="pb-related-d">What your company could pay into your pension.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="12" width="62" height="74" rx="7" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-x" style="--o:2" x="48" y="40" width="46" height="11" rx="3" fill="#FCEFCF"/><path class="pr-x" style="--o:0" d="M52 28H90" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M52 45H82" stroke="#08655A" stroke-width="3.5"/><path class="pr-x" style="--o:2" d="M52 62H90" stroke="#CBEBE4" stroke-width="3.5"/><g class="pr-p pr-spin" style="--o:4"><circle cx="112" cy="26" r="15" fill="#14CBB1"/><path d="M105 23A8 8 0 0 1 119 22M119 29A8 8 0 0 1 105 30" stroke="#fff" stroke-width="2.5"/><path d="M119 16V22H113M105 36V30H111" stroke="#fff" stroke-width="2.5"/></g></svg></span><span class="pb-related-t">What changed for directors in 2026</span><span class="pb-related-d">Four questions show which apply to you.</span></a></li>
-    <li><a class="pb-related-card pb-card-link" href="director-year-end-checklist.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="44" y="14" width="72" height="72" rx="8" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect x="66" y="8" width="28" height="11" rx="4" fill="#CBEBE4" stroke="#08655A" stroke-width="2"/><rect x="54" y="28" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:0" pathLength="1" d="M56.5 34L59.5 37L65.5 30.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M74 34H104" stroke="#CBEBE4" stroke-width="3.5"/><rect x="54" y="46" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:2" pathLength="1" d="M56.5 52L59.5 55L65.5 48.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:3" d="M74 52H98" stroke="#CBEBE4" stroke-width="3.5"/><rect x="54" y="64" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:4" pathLength="1" d="M56.5 70L59.5 73L65.5 66.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:5" d="M74 70H92" stroke="#CBEBE4" stroke-width="3.5"/></svg></span><span class="pb-related-t">Year-end pension checklist</span><span class="pb-related-d">Nine checks before two deadlines.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-calculator.html"><span class="pb-related-art pb-tone-a" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 82H146" stroke="#CBEBE4" stroke-width="2"/><path d="M22 82V30H56V82" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-f" style="--o:0" x="29" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="29" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="29" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:1" x="42" y="38" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:2" x="42" y="50" width="7" height="7" rx="1.5" fill="#14CBB1"/><rect class="pr-f" style="--o:0" x="42" y="62" width="7" height="7" rx="1.5" fill="#14CBB1"/><path class="pr-d" style="--o:2" pathLength="1" d="M62 46C78 30 96 30 106 42" stroke="#0C8175" stroke-width="3"/><path class="pr-p" style="--o:4" d="M100 42L107 44L108 37" stroke="#0C8175" stroke-width="3"/><rect class="pr-y" style="--o:3" x="104" y="72" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:4" x="104" y="62" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:5" x="104" y="52" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/><rect class="pr-y" style="--o:6" x="104" y="42" width="36" height="10" rx="5" fill="#F4B740" stroke="#C98A16" stroke-width="2"/></svg></span><span class="pb-related-t">Director <span class="pb-rt-end">calculator</span></span><span class="pb-related-d">What your company could pay into your pension.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-pension-rules.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="40" y="12" width="62" height="74" rx="7" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect class="pr-x" style="--o:2" x="48" y="40" width="46" height="11" rx="3" fill="#FCEFCF"/><path class="pr-x" style="--o:0" d="M52 28H90" stroke="#CBEBE4" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M52 45H82" stroke="#08655A" stroke-width="3.5"/><path class="pr-x" style="--o:2" d="M52 62H90" stroke="#CBEBE4" stroke-width="3.5"/><g class="pr-p pr-spin" style="--o:4"><circle cx="112" cy="26" r="15" fill="#14CBB1"/><path d="M105 23A8 8 0 0 1 119 22M119 29A8 8 0 0 1 105 30" stroke="#fff" stroke-width="2.5"/><path d="M119 16V22H113M105 36V30H111" stroke="#fff" stroke-width="2.5"/></g></svg></span><span class="pb-related-t">What changed for directors in <span class="pb-rt-end">2026</span></span><span class="pb-related-d">Four questions show which changes apply to you.</span></a></li>
+    <li><a class="pb-related-card pb-card-link" href="director-year-end-checklist.html"><span class="pb-related-art pb-tone-s" aria-hidden="true"><svg viewBox="0 0 160 96" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="44" y="14" width="72" height="72" rx="8" fill="#fff" stroke="#08655A" stroke-width="2.5"/><rect x="66" y="8" width="28" height="11" rx="4" fill="#CBEBE4" stroke="#08655A" stroke-width="2"/><rect x="54" y="28" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:0" pathLength="1" d="M56.5 34L59.5 37L65.5 30.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:1" d="M74 34H104" stroke="#CBEBE4" stroke-width="3.5"/><rect x="54" y="46" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:2" pathLength="1" d="M56.5 52L59.5 55L65.5 48.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:3" d="M74 52H98" stroke="#CBEBE4" stroke-width="3.5"/><rect x="54" y="64" width="12" height="12" rx="3.5" fill="#E8F6F3" stroke="#08655A" stroke-width="2"/><path class="pr-d" style="--o:4" pathLength="1" d="M56.5 70L59.5 73L65.5 66.5" stroke="#14CBB1" stroke-width="3.5"/><path class="pr-x" style="--o:5" d="M74 70H92" stroke="#CBEBE4" stroke-width="3.5"/></svg></span><span class="pb-related-t">Year-end pension <span class="pb-rt-end">checklist</span></span><span class="pb-related-d">Nine checks before your company year end and tax deadline.</span></a></li>
   </ul>
 </div></section>
 <!-- RELATED:END -->
@@ -3405,7 +3408,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   <div class="foot-top">
     <div class="foot-brand"><a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a><p>Pensions made friendly. A brand of Gresham Wealth Management, Dublin.</p><div class="pb-quals pb-quals-sm"><p class="pb-quals-label" id="pbQualsFoot">Damian&rsquo;s qualifications and memberships</p><ul class="pb-quals-list" aria-labelledby="pbQualsFoot"><li>Qualified Financial Adviser (QFA)</li><li>Life Insurance Association (LIA)</li></ul></div></div>
     <div class="foot-col"><h2>Who we help</h2><a href="tracker.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="10.5" cy="10.5" r="6"/><path pathLength="1" d="M15 15l5 5"/></svg></span><span class="foot-l">Track old pensions</span></a><a href="starter.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 20.5v-9"/><path pathLength="1" d="M12 13C12 9 9.5 6.5 5 6.5 5 10.5 7.5 13 12 13z"/><path pathLength="1" d="M12 15.5c0-3.4 2.2-6 6.5-6 0 3.4-2.2 6-6.5 6z"/></svg></span><span class="foot-l">Start a pension</span></a><a href="director.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path pathLength="1" d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path pathLength="1" d="M3.5 12.5h17"/></svg></span><span class="foot-l">Company directors</span></a><a href="pensions-over-50.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M3.5 18.5h17"/><path pathLength="1" d="M7 18.5a5 5 0 0 1 10 0"/><path pathLength="1" d="M12 5.5v3"/><path pathLength="1" d="M5.3 9.3l2 2"/><path pathLength="1" d="M18.7 9.3l-2 2"/></svg></span><span class="foot-l">Over 50</span></a><a href="self-employed-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="5.5" width="14" height="10" rx="1.5"/><path pathLength="1" d="M3 19h18"/></svg></span><span class="foot-l">Self-employed</span></a><a href="uk-pensions-in-ireland.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M4 12h16"/><path pathLength="1" d="M12 4c2.3 2.3 3.4 5 3.4 8s-1.1 5.7-3.4 8c-2.3-2.3-3.4-5-3.4-8S9.7 6.3 12 4z"/></svg></span><span class="foot-l">Worked in the UK</span></a></div>
-    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">State Pension reality check</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">State Pension check</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
+    <div class="foot-col"><h2>Tools</h2><a href="pension-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 19.5h16"/><path pathLength="1" d="M5 15.5l4.5-4.5 3.5 3 6-6.5"/><path pathLength="1" d="M14.5 7.5H19V12"/></svg></span><span class="foot-l">Pension calculator</span></a><a href="director-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse pathLength="1" cx="12" cy="6.5" rx="6.5" ry="2.5"/><path pathLength="1" d="M5.5 6.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/><path pathLength="1" d="M5.5 11.5v5c0 1.4 2.9 2.5 6.5 2.5s6.5-1.1 6.5-2.5v-5"/></svg></span><span class="foot-l">Director calculator</span></a><a href="pension-fees-calculator.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M18 6L6 18"/><circle pathLength="1" cx="7.5" cy="7.5" r="2.4"/><circle pathLength="1" cx="16.5" cy="16.5" r="2.4"/></svg></span><span class="foot-l">Pension charges calculator</span></a><a href="broker-vs-autoenrolment.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="5" y="10.5" width="5" height="8.5" rx="1.2"/><rect pathLength="1" x="14" y="5" width="5" height="14" rx="1.2"/><path pathLength="1" d="M3 19.5h18"/></svg></span><span class="foot-l">Auto-enrolment comparison</span></a><a href="state-pension-reality-check.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4.5 16.5a7.5 7.5 0 1 1 15 0"/><path pathLength="1" d="M12 16.5L9 12"/><circle class="fi-dot" cx="12" cy="16.5" r="1.3"/></svg></span><span class="foot-l">What the State Pension pays</span></a><a href="state-pension-entitlement.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="4" y="5" width="16" height="15" rx="2.5"/><path pathLength="1" d="M4 9.5h16"/><path pathLength="1" d="M8.5 3v4"/><path pathLength="1" d="M15.5 3v4"/><path pathLength="1" d="M9 14.5l2 2 4-4"/></svg></span><span class="foot-l">How much State Pension you may get</span></a><a href="my-pensions.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8"/><path pathLength="1" d="M12 4v8l5.7 5.7"/></svg></span><span class="foot-l">All your pensions in one view</span></a><a href="pia.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="7" width="17" height="12.5" rx="2.5"/><path pathLength="1" d="M16 13.25h4.5"/><path pathLength="1" d="M6 7l9-3.5 1.2 3.5"/></svg></span><span class="foot-l">Personal Investment Account (PIA)</span></a><a href="glossary.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M4 5.5c2.7-1 5.3-1 8 .5 2.7-1.5 5.3-1.5 8-.5v13c-2.7-1-5.3-1-8 .5-2.7-1.5-5.3-1.5-8-.5z"/><path pathLength="1" d="M12 6v13"/></svg></span><span class="foot-l">Pension jargon buster</span></a></div>
     <div class="foot-col"><h2>Company</h2><a href="index.html#story"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><ellipse class="fi-dot" cx="8.9" cy="6.6" rx="2" ry="2.6" transform="rotate(-9 8.9 6.6)"/><ellipse class="fi-dot" cx="15.1" cy="6.6" rx="2" ry="2.6" transform="rotate(9 15.1 6.6)"/><ellipse class="fi-dot" cx="4.7" cy="10.8" rx="1.8" ry="2.3" transform="rotate(-31 4.7 10.8)"/><ellipse class="fi-dot" cx="19.3" cy="10.8" rx="1.8" ry="2.3" transform="rotate(31 19.3 10.8)"/><path class="fi-dot" d="M12 11.2c-3.3 0-5.5 2.4-5.5 5 0 2.2 1.9 3.5 5.5 3.5s5.5-1.3 5.5-3.5c0-2.6-2.2-5-5.5-5z"/></svg></span><span class="foot-l">About</span></a><a href="booking.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M6.5 4h3l1.5 4-2 1.3a10.5 10.5 0 0 0 5.7 5.7L16 13l4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4.5 6a2 2 0 0 1 2-2z"/></svg></span><span class="foot-l">Book a call</span></a><a href="mailto:hello@pensionbuddy.ie"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect pathLength="1" x="3.5" y="5.5" width="17" height="13" rx="2"/><path pathLength="1" d="M4.5 7l7.5 6 7.5-6"/></svg></span><span class="foot-l">hello@<wbr>pensionbuddy.ie</span></a></div>
     <div class="foot-col"><h2>Legal</h2><a href="privacy.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M12 3.5l7 2.8v5c0 4.5-3 7.6-7 9.2-4-1.6-7-4.7-7-9.2v-5z"/><path pathLength="1" d="M9 12l2.2 2.2 3.8-4"/></svg></span><span class="foot-l">Privacy Notice</span></a><a href="privacy.html#cookies"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M20 12.5A8 8 0 1 1 11.5 4a3 3 0 0 0 3.5 3.5 3 3 0 0 0 3.5 3.5 3 3 0 0 0 1.5 1.5z"/><circle class="fi-dot" cx="9" cy="10" r="1"/><circle class="fi-dot" cx="14.5" cy="15" r="1"/><circle class="fi-dot" cx="9.5" cy="15.5" r="1"/></svg></span><span class="foot-l">Cookies</span></a><a href="terms.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M7 3.5h7l4 4V19a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5z"/><path pathLength="1" d="M14 3.5V8h4"/><path pathLength="1" d="M8.5 12.5h7"/><path pathLength="1" d="M8.5 16h5"/></svg></span><span class="foot-l">Terms of Business</span></a><a href="complaints.html"><span class="foot-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 19 17h-9l-4.5 3.5V17H5a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 5 5z"/><path pathLength="1" d="M12 8.5V12"/><circle class="fi-dot" cx="12" cy="14.6" r="1"/></svg></span><span class="foot-l">Complaints</span></a></div>
   </div>
@@ -3543,7 +3546,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=bc0eea8d" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
@@ -3605,10 +3608,10 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-dir-three.js?v=34372856"></script>
-<script src="assets/js/pb-dir-why.js?v=b10d4f20"></script>
+<script src="assets/js/pb-dir-why.js?v=d1db8449"></script>
 <script src="assets/js/sft.js?v=d35ecfcb"></script>
 <script src="assets/js/pb-dir-calc.js?v=f9390e8e"></script>
-<script src="assets/js/pb-chrome-motion.js?v=3dd0f2e6"></script>
+<script src="assets/js/pb-chrome-motion.js?v=e090c2e4"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>
 <script src="assets/js/pb-ask.js?v=3aeff5d5"></script>

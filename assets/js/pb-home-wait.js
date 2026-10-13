@@ -40,10 +40,13 @@
     return { age: +p.age || 35, monthly: m > 0 ? m : 100, saved: +p.saved || 0, own: m > 0 };
   }
   function years(n) { return n + (n === 1 ? ' year' : ' years'); }
+  /* the wait the reader picked: only the slider sets it. An age near 66 holds the slider to the
+     years left, for now; a younger age gives the reader's own wait back */
+  var chosen = +yrs.value || 5;
   function paint() {
     var p = plan(), max = Math.max(1, Math.min(20, AT - 1 - p.age));
     if (+yrs.max !== max) { yrs.max = max; }
-    var w = Math.max(1, Math.min(max, +yrs.value));
+    var w = Math.max(1, Math.min(max, chosen));
     if (+yrs.value !== w) { yrs.value = w; }
     var c = W.costOfWaiting({ age: p.age, wait: w, monthly: p.monthly, growth: G });
     var kept = W.project((AT - p.age) * 12, p.saved, 0, W.monthlyRate(G));
@@ -81,7 +84,7 @@
     setTimeout(function () { cols.forEach(function (s) { s.style.transition = ''; }); }, delay + 2000 + n * 70);
   }
 
-  yrs.addEventListener('input', paint);
+  yrs.addEventListener('input', function () { chosen = +yrs.value; paint(); });
   document.addEventListener('pb:plan', paint);
   $('pbW2Ctl').hidden = false;
   paint();

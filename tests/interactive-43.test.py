@@ -16,7 +16,8 @@ gets. Reduced-motion scenarios add --force-prefers-reduced-motion.
 C4a (INTERACTIVE-PROPOSALS-42 ranks 7, 2, 4 and 1):
   my-pensions.html             the known charges' euro figure in red (P1-P8)
   standard-fund-threshold.html the limit bar (S1-S9), the lump-sum bar (L1-L10)
-  pension-fees-calculator.html the red area for what your plan's charges take (F1-F9)
+  pension-fees-calculator.html the coral area for the difference between the two plans (F1-F9;
+                               plan against plan since the 13 October review, never against no charges)
 
 C4b (INTERACTIVE-PROPOSALS-42 rank 14), index.html:
   (rank 3, the hero figures as toggles, H1-H14, went with the old gap chart
@@ -31,7 +32,10 @@ C4c (INTERACTIVE-PROPOSALS-42 ranks 6, 15 and 9):
                                reader's own limit in its calculator instead)
   starter.html                 the auto-enrolment phases, one button each, and their caveat (A1-A7);
                                since 13 October 2026 over what the reader puts in a month, with the
-                               personal pension beside it and the note past the most (A8, A9)
+                               personal pension beside it and the note past the most (A8, A9);
+                               since the 13 October review, the buttons named ("Rates in"), and past
+                               the most the rest: what stays in your pay, that rest into a personal
+                               pension, both together, and links that carry the amount (A8, A10)
 
 Not part of tests/run-tests.py: one Chrome launch per scenario. Exit 0 or 1.
 """
@@ -210,18 +214,19 @@ PROBE = r"""<script>
     var svg=box.querySelector('svg'), kids=[].slice.call(svg.children), polys=box.querySelectorAll('polygon.fee-gap');
     var g=polys[0], firstLine=kids.findIndex(function(k){ return k.tagName==='polyline'; });
     r.F1=[polys.length,kids.indexOf(g)<firstLine,g?cs(g).fill:null];
-    var none=box.querySelector('.fee-l-none').getAttribute('points'), a=box.querySelector('.fee-l-a').getAttribute('points');
-    r.F2=g.getAttribute('points')===none+' '+a.split(' ').reverse().join(' ');
+    /* 13 October 2026 review: plan against plan; no no-charge line on the chart */
+    var bp=box.querySelector('.fee-l-b').getAttribute('points'), a=box.querySelector('.fee-l-a').getAttribute('points');
+    r.F2=[g.getAttribute('points')===bp+' '+a.split(' ').reverse().join(' '),box.querySelectorAll('.fee-l-none').length];
     var e=box.querySelector('.fee-l-b-edge'), b=box.querySelector('.fee-l-b');
     r.F3=[!!e&&e.nextElementSibling===b,!!e&&e.getAttribute('points')===b.getAttribute('points'),e?cs(e).stroke:null,e?cs(e).strokeWidth:null];
     r.F4=[box.getAttribute('aria-label'),txt($('costA'))];
     var li=document.querySelectorAll('.fee-key li');
-    r.F6=[li.length,li[3]?seen(li[3]):null,li[3]&&li[3].querySelector('i.fee-k-gap')?cs(li[3].querySelector('i')).backgroundColor:null];
+    r.F6=[li.length,li[2]?seen(li[2]):null,li[2]&&li[2].querySelector('i.fee-k-gap')?cs(li[2].querySelector('i')).backgroundColor:null];
     r.F7=trans(g);
     /* the plot is the viewBox's 250 less its top and bottom margins (26 and 28) */
     var bb=svg.getBoundingClientRect();
     r.F8=[box.querySelectorAll('polygon.fee-gap').length,+bb.height.toFixed(1),+(bb.width*250/600).toFixed(1),+(bb.height*196/250).toFixed(1)];
-    setv('amcA',0); setv('feeA',0); await frames();
+    setv('amcA',0.4); setv('feeA',0); await frames();
     var g2=box.querySelector('polygon.fee-gap');
     r.F5=[g2?area(pts(g2.getAttribute('points'))):null,box.getAttribute('aria-label'),txt($('pbSay'))];
     return r;
@@ -281,6 +286,10 @@ PROBE = r"""<script>
       over:box?box.classList.contains('pb-ae-over'):null,
       max:max?[cs(max).visibility,txt(max).replace(/\s+/g,' ').trim(),a?a.getAttribute('href'):null]:null,
       years:txt($('aeYears')), rates:txt($('aeRates')),
+      hint:seen($('aeHint')), who:txt($('aePpWho')),
+      both:$('aeBothP')?[cs($('aeBothP')).visibility,txt($('aeBoth'))]:null,
+      cmp:box&&box.nextElementSibling&&box.nextElementSibling.tagName==='A'?box.nextElementSibling.getAttribute('href'):null,
+      phl:$('aePhL')?[$('aePhL').getClientRects().length>0&&cs($('aePhL')).display!=='none',txt($('aePhL'))]:null,
       trans:ph?[].map.call(ph.querySelectorAll('button'),function(b){ return cs(b).transitionDuration; }):null,
       note:note?[note.getClientRects().length>0&&cs(note).display!=='none',note.previousElementSibling?note.previousElementSibling.id:null,seen(note)]:null,
       chips:note?note.querySelectorAll('.pb-chip,.pb-term').length:null};
@@ -495,8 +504,10 @@ def check_sft(sid, r, nojs, reduce):
     eq('L10 %s: the bar follows the qualifier, in the same card' % sid, r['L10'], ['p.sft-small', True])
     check_s4(sid, r['S4'])
     s = r['S5']
+    # (13 October 2026 review, SP-13: "at least" moved from the figure to its
+    # label, so the figure keeps the width of every other year's)
     eq('S5 %s: 2030 and 3,000,000: the words' % sid, [s['thrL'], s['thr'], s['ov']],
-       ['The threshold for 2030 or later', 'At least €2,800,000', 'Up to €200,000'])
+       ['The threshold from 2030, at least', '€2,800,000', 'Up to €200,000'])
     eq('S5 %s: the mark at 0.9333' % sid, near(s['mark'], 2.8 / 3, 0.005), True)
     s = r['S6']
     eq('S6 %s: total 0: no fill, "€0", over hidden' % sid,
@@ -539,15 +550,15 @@ def check_fees(sid, r, nojs):
         eq('F9 %s: no JavaScript, #feeChart is empty' % sid, r['F9'], '')
         return
     eq('F1 %s: one blush-coral area, before every line' % sid, r['F1'], [1, True, GAP])
-    eq('F2 %s: its points: the no-charge line, then your plan\'s reversed' % sid, r['F2'], True)
+    eq('F2 %s: its points: the other plan\'s line, then yours reversed; no no-charge line' % sid, r['F2'], [True, 0])
     eq('F3 %s: the white edge right before the other plan\'s line, same points' % sid, r['F3'], [True, True, WHITE, '7.5px'])
     if SCEN[sid][1] == 1440:
         label, cost = r['F4']
-        eq('F4 %s: the spoken label names the red area' % sid,
-           label.endswith(' The red area is what your plan’s charges take: €41,364 by retirement.'), True)
-        eq('F4 %s: its figure is #costA' % sid, cost, '€41,364')
+        eq('F4 %s: the spoken label names the shaded area, the difference between the two plans' % sid,
+           label.endswith(' The shaded area between them is the difference: €18,455.'), True)
+        eq('F4 %s: what your plan\'s charges cost against none stays in the workings, #costA' % sid, cost, '€41,364')
     # (13 October 2026: nothing on the page is in today's money, so no fifth item)
-    eq('F6 %s: the key\'s fourth item, a blush-coral swatch' % sid, r['F6'], [4, 'What your plan’s charges take', GAP])
+    eq('F6 %s: the key\'s third item, a blush-coral swatch' % sid, r['F6'], [3, 'The difference', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])
     if SCEN[sid][1] == 500:
         # the plan said "the chart under 140px tall"; at 500 the whole chart is 600:250 of its
@@ -557,9 +568,9 @@ def check_fees(sid, r, nojs):
         eq('F8 %s: the area present, the plot under 140px, the chart no taller than its viewBox' % sid,
            [n, plot < 140, abs(h - want) <= 1], [1, True, True])
     a, label, say = r['F5']
-    eq('F5 %s: no charges: the area is nothing' % sid, a is not None and a < 1, True)
-    eq('F5 %s: no charges: no "red area" sentence' % sid, 'red area' in label, False)
-    eq('F5 %s: no charges: the sentence says so' % sid, say.startswith('Over 25 years, with no charges on your plan'), True)
+    eq('F5 %s: the same charges on both: the area is nothing' % sid, a is not None and a < 1, True)
+    eq('F5 %s: the same charges on both: no "shaded area" sentence' % sid, 'shaded area' in label, False)
+    eq('F5 %s: the same charges on both: the sentence says so' % sid, say, 'Both leave you the same.')
 
 
 # ---------------------------------------------------------------- the home page
@@ -687,14 +698,16 @@ def ae_figs(i, amount):
 
 
 def ae_sums(i, amount):
-    # in all; the most it takes; the same amount into a personal pension at 20% and at 40%
+    # in all; the most it takes; into a personal pension at 20% and at 40%: up to the
+    # most the same amount instead, past it (the 13 October review) the rest beside it
     e, st = AE_RATES[i]
     most = e * 80000 / 12
     you = min(amount, most)
-    return [ae_euro(2 * you + you * st / e), ae_euro(most), ae_euro(amount / (1 - 0.2)), ae_euro(amount / (1 - 0.4))]
+    pp = amount - most if amount > most else amount
+    return [ae_euro(2 * you + you * st / e), ae_euro(most), ae_euro(pp / (1 - 0.2)), ae_euro(pp / (1 - 0.4))]
 
 
-AE_MAX = 'That’s the most auto-enrolment takes. A personal pension takes more, with tax relief. Compare the two'
+AE_MAX = 'Auto-enrolment stops at €100 a month. A personal pension can take the rest, with tax relief. Compare the two'
 
 
 def check_ae(sid, r, nojs):
@@ -705,10 +718,12 @@ def check_ae(sid, r, nojs):
         eq('A5 %s: no JavaScript: the phase buttons and the slider hidden, the rows at the markup\'s €50 a month' % sid,
            [a['shown'], a['hidden'], a['amt'][3], a['figs'], a['sums']], [False, True, False, ae_figs(0, 50), ae_sums(0, 50)])
         eq('A9 %s: no JavaScript: the note past the most not shown' % sid, [a['over'], a['max'][0]], [False, 'hidden'])
+        eq('A10 %s: no JavaScript: no "Rates in" without its buttons, both together shut, the links plain' % sid,
+           [a['phl'], a['both'][0], a['max'][2], a['cmp']], [[False, 'Rates in'], 'hidden', 'broker-vs-autoenrolment.html', 'broker-vs-autoenrolment.html'])
         return
     now = ae_phase_now()
-    eq('A1 %s: the buttons shown, the current phase pressed alone' % sid,
-       [a['shown'], a['labels'], a['pressed']], [True, AE_LABELS, ['true' if i == now else 'false' for i in range(4)]])
+    eq('A1 %s: the buttons shown, named "Rates in", the current phase pressed alone' % sid,
+       [a['shown'], a['phl'], a['labels'], a['pressed']], [True, [True, 'Rates in'], AE_LABELS, ['true' if i == now else 'false' for i in range(4)]])
     eq('A1 %s: the slider, €50 a month, and the rows at this phase\'s rates' % sid,
        [a['amt'], a['figs'], a['sums'], a['years']], [['50', '€50 a month', '€50', True], ae_figs(now, 50), ae_sums(now, 50), AE_LABELS[now]])
     a2 = r['A2']
@@ -717,18 +732,28 @@ def check_ae(sid, r, nojs):
        [['€50', '€50', '€17'], ['€117', '€200', '€63', '€83'], '2029 to 2031',
         '3% of pay from you, the same from your employer and 1% from the State', ['false', 'true', 'false', 'false']])
     a3 = r['A3']
-    eq('A3 %s: 2035 onward at €450 a month: the scheme takes its most, €400' % sid, [a3['figs'], a3['sums'], a3['years'], a3['pressed'], a3['over']],
-       [['€400', '€400', '€133'], ['€933', '€400', '€563', '€750'], '2035 onward', ['false', 'false', 'false', 'true'], True])
+    eq('A3 %s: 2035 onward at €450 a month: the scheme takes its most, €400; the other €50 into a personal pension' % sid,
+       [a3['figs'], a3['sums'], a3['years'], a3['pressed'], a3['over'], a3['who'], a3['both']],
+       [['€400', '€400', '€133'], ['€933', '€400', '€63', '€83'], '2035 onward', ['false', 'false', 'false', 'true'], True, 'The other', ['visible', '€996']])
     # the script writes (v / 500 * 100).toFixed(4) + '%' on the slider's €500 scale; the browser reads "10.0000%" back as "10%"
     eq('A4 %s: the widths on the slider\'s scale, 3 : 3 : 1' % sid, [a['widths'], a2['widths'], a3['widths']],
        [['10%', '10%', '3.3333%'], ['10%', '10%', '3.3333%'], ['80%', '80%', '26.6667%']])
     eq('A6 %s: no transition on the buttons' % sid, sorted(set(a['trans'])), ['0s'])
     eq('A7 %s: the caveat still there after the presses' % sid, a3['note'], [True, 'aeNote', AE_NOTE])
     a8, a9 = r['A8'], r['A9']
-    eq('A8 %s: under the most, no note; past it (2026 to 2028, €150) the note, word for word, to the comparison' % sid,
+    eq('A8 %s: under the most, no note; past it (2026 to 2028, €150) the note, word for word, to the comparison at €150' % sid,
        [a['over'], a['max'][0], a8['over'], a8['max'], a8['figs'], a8['sums']],
-       [False, 'hidden', True, ['visible', AE_MAX, 'broker-vs-autoenrolment.html'], ['€100', '€100', '€33'], ['€233', '€100', '€188', '€250']])
-    eq('A9 %s: at the most exactly (€100) the note goes again' % sid, [a9['over'], a9['max'][0], a9['figs']], [False, 'hidden', ['€100', '€100', '€33']])
+       [False, 'hidden', True, ['visible', AE_MAX, 'broker-vs-autoenrolment.html#you=150'], ['€100', '€100', '€33'], ['€233', '€100', '€63', '€83']])
+    eq('A8 %s: past the most, the rest: it stays in your pay, the card holds it, both together €296, the button carries the amount' % sid,
+       [a8['hint'], a8['who'], a8['both'], a8['cmp']],
+       ['Auto-enrolment takes €100 of your €150. The other €50 stays in your pay.', 'The other', ['visible', '€296'],
+        'broker-vs-autoenrolment.html#you=150'])
+    eq('A1 %s: under the most, the whole amount: the line says the most, the card "Your", both together shut' % sid,
+       [a['hint'], a['who'], a['both'][0]], ['Auto-enrolment takes up to €100 a month from you.' if now == 0 else a['hint'], 'Your', 'hidden'])
+    eq('A9 %s: at the most exactly (€100) the note goes again, and the rest with it' % sid,
+       [a9['over'], a9['max'][0], a9['figs'], a9['hint'], a9['who'], a9['both'][0], a9['cmp']],
+       [False, 'hidden', ['€100', '€100', '€33'], 'Auto-enrolment takes up to €100 a month from you.', 'Your', 'hidden',
+        'broker-vs-autoenrolment.html#you=100'])
 
 
 def r_shifts(sid):

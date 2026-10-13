@@ -149,9 +149,14 @@
   }
   if (wr) { wr.addEventListener('input', function () { waitPaint(); if (motion()) { W.classList.remove('pb-wait-tick'); void W.offsetWidth; W.classList.add('pb-wait-tick'); } }); }
 
-  /* after the page's own handlers: every slider, and the tax-rate buttons */
+  /* every slider, and the tax-rate buttons. Heard in the capture phase: a
+     figure typed into a slider's value (the page's click-to-edit) arrives as
+     an input event that does not bubble, and a listener here in the bubble
+     phase never heard it, so the card kept the old inputs' figures (review,
+     13 October 2026). waitPaint() reads only the sliders' own values, so it
+     need not wait for the page's calc(). */
   function update() { waitPaint(); }
-  document.addEventListener('input', function (e) { if (e.target && e.target.id !== 'pbWaitY') { update(); } });
+  document.addEventListener('input', function (e) { if (e.target && e.target.id !== 'pbWaitY') { update(); } }, true);
   ['t20', 't40'].forEach(function (id) { var b = $(id); if (b) { b.addEventListener('click', update); } });
   update();
 }());

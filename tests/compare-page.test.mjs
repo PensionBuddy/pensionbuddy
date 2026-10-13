@@ -24,6 +24,16 @@
      C6  an amount typed past the slider's end is taken, and the figures follow
      C7  without JavaScript: the default's figures, its bars, no notice and no
          best of both, nothing sideways
+     C8  the scale holds still: auto-enrolment's bar is as long at EUR 105 as
+         at EUR 500, and at 20% as at 40%, while the personal pension's grows
+     C9  the result never bobs: from EUR 25 to EUR 500, at both rates, the
+         result and the best of both keep their heights except where the
+         best of both comes or goes
+     C10 an amount handed over in the link (#you=200, from the starter page)
+         opens the page at it, the best of both showing
+     C11 with motion, the best of both opens and shuts smoothly: nothing
+         under it moves in the same frame as the slider, and nothing snaps
+         once it has shut
    Exit 0 or 1. */
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -36,7 +46,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(process.argv[2] || join(HERE, '..'));
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PAGE = 'broker-vs-autoenrolment.html';
-const NOTICE = 'Past €100 a month, auto-enrolment takes no more. A personal pension takes the rest, with tax relief.';
+const NOTICE = 'Past €100 a month (pay over €80,000), auto-enrolment takes no more. A personal pension takes the rest.';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let passed = 0, failed = 0;
 const eq = (label, got, want) => {
@@ -103,7 +113,7 @@ async function open(w, reduce, q = '') {
   loaded = once('Page.loadEventFired', 30000);
   await send('Page.navigate', { url: ORIGIN + '/' + PAGE + q }); await loaded;
   await sleep(500);
-  if (!q) await ev(`scrollTo(0, document.querySelector('.calc-wrap').getBoundingClientRect().top + scrollY - 80)`);
+  if (!q.startsWith('?')) await ev(`scrollTo(0, document.querySelector('.calc-wrap').getBoundingClientRect().top + scrollY - 80)`);
   await sleep(reduce ? 200 : 1300);
 }
 /* a trusted press at the centre of the element */
@@ -168,6 +178,64 @@ for (const [w, reduce] of [[1440, false], [375, false], [1440, true], [375, true
   r = await ev(READ);
   eq(`C6. ${tag}: EUR 1,000 typed: taken, and the figures follow`, [r.you, r.shown, r.marks], [1000, r.want, [true, 'At its limit', true]]);
   eq(`C1. ${tag}: no script error`, r.errs, []);
+}
+
+/* C8 and C9, with motion off so every step is where it ends */
+const GEO = `(() => {
+  const h = id => Math.round(document.getElementById(id).getBoundingClientRect().height);
+  const w = ids => Math.round(ids.reduce((a, id) => a + document.getElementById(id).getBoundingClientRect().width, 0));
+  return { hero: h('cmpHero'), best: document.getElementById('cmpBestW').hidden ? 0 : h('cmpBestW'),
+    ae: w(['aeBarYou', 'aeBarEmp', 'aeBarState']), pp: w(['ppBarYou', 'ppBarRev']) };
+})()`;
+for (const w of [1440, 1360, 1100, 375]) {
+  await open(w, true);
+  const seen = {};
+  const bob = [];
+  for (const rate of [20, 40]) {
+    await press(`#tx${rate}`);
+    let prev = null;
+    for (let v = 25; v <= 500; v += 5) {
+      await set(v);
+      const g = await ev(GEO);
+      seen[rate + ':' + v] = g;
+      if (prev && (prev.best > 0) === (g.best > 0) && (g.hero !== prev.hero || g.best !== prev.best))
+        bob.push(`${rate}% EUR ${v - 5} to ${v}: result ${prev.hero} to ${g.hero}, best of both ${prev.best} to ${g.best}`);
+      prev = g;
+    }
+  }
+  eq(`C8. ${w}: auto-enrolment's bar the same length at EUR 105 and EUR 500, at 20% and at 40%`,
+     [seen['20:105'].ae, seen['20:500'].ae, seen['40:105'].ae, seen['40:500'].ae].every(x => Math.abs(x - seen['20:105'].ae) <= 1), true);
+  eq(`C8. ${w}: and the personal pension's grows`, seen['20:500'].pp > seen['20:105'].pp * 3 && seen['40:500'].pp > seen['20:500'].pp, true);
+  eq(`C9. ${w}: sliding EUR 25 to EUR 500 at both rates, nothing bobs`, bob, []);
+}
+
+/* C11: with motion, the best of both opening and shutting, frame by frame */
+const GLIDE = to => `new Promise(res => {
+  const after = document.querySelector('.calc-wrap .results > .pb-after') || document.querySelector('.infoadvice');
+  const y = () => after.getBoundingClientRect().top, rows = [], t0 = performance.now(), y0 = y();
+  const s = document.getElementById('extra'); s.value = '${to}'; s.dispatchEvent(new Event('input', { bubbles: true }));
+  const same = y();
+  (function f() { rows.push([performance.now() - t0, y()]); if (performance.now() - t0 < 1000) requestAnimationFrame(f); else res({ y0, same, rows }); })();
+})`;
+for (const w of [1440, 375]) {
+  await open(w, false);
+  await set(90); await sleep(1200);
+  const up = await ev(GLIDE(150), true);
+  await sleep(300);
+  const down = await ev(GLIDE(90), true);
+  const lateStep = r => r.rows.filter(([t]) => t > 560).reduce((m, [, v], i, a) => i ? Math.max(m, Math.abs(v - a[i - 1][1])) : m, 0);
+  eq(`C11. ${w}: opening, nothing under it moves in the slider's own frame; it glides down`,
+     [Math.abs(up.same - up.y0) < 0.5, up.rows[up.rows.length - 1][1] - up.y0 > 100], [true, true]);
+  eq(`C11. ${w}: shutting, nothing moves in the slider's own frame, nothing snaps at the end, and it ends where it began`,
+     [Math.abs(down.same - down.y0) < 0.5, lateStep(down) < 0.5, Math.abs(down.rows[down.rows.length - 1][1] - up.y0) < 0.5], [true, true, true]);
+}
+
+/* C10: the starter's link hands over its amount */
+for (const w of [1440, 375]) {
+  await open(w, true, '#you=200');
+  const r = await ev(READ);
+  eq(`C10. ${w}: #you=200 opens at EUR 200, the module's figures, past the limit with the best of both`,
+     [r.you, r.shown, r.marks], [200, r.want, [true, 'At its limit', true]]);
 }
 
 /* C7: without JavaScript */

@@ -106,6 +106,28 @@ Left for Damian: the footer's "You can check our authorisation on the
 Central Bank's register" line (kept; it is not the cut sentence), and
 dead FAQ CSS and scripts still carried by 27 pages (harmless).
 
+## 13 October 2026: clearer calculators, future euros (Damian's list)
+
+- **Home:** "Pension calculator. Can you close the gap?" with drawn labels
+  on the pot; every figure in future euros (the target and the State
+  Pension grow 2% a year to 66); the cost of waiting replaces the fee
+  check; the inflation section works on the reader's own money; "Key
+  dates for your pension" in plain words.
+- **Calculators:** no today's-money figures in results or emails; the
+  pension calculator's "What it will buy" card is the one place inflation
+  shows; fees at Irish levels (0.75% against 0.4% a year by default).
+- **Auto-enrolment:** one input, what you put in a month, like for like
+  with a personal pension; past the limit (€100 a month today, the
+  €80,000 pay cap) a note slides in and the best of both shows. The
+  starter page carries a small version beside its auto-enrolment block.
+- **State Pension:** "What does the State Pension actually pay?", answered
+  at once, "you may get less", and a clear way to the entitlement check.
+  Standard Fund Threshold checked against the law as at 13 October 2026.
+- **Directors:** "Everyone gets paid before your pension", shown as an
+  order that turns round; the page's calculator in future euros.
+- **Every page:** related cards with a drawing of the page they lead to;
+  a redesigned footer.
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |
