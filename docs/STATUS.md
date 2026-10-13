@@ -75,6 +75,37 @@ and under each calculator's results what it doesn't show, "Email me my
 results" and one booking link; merged once its docs commit passes the
 gate.
 
+## 12–13 October 2026: the restructure (Damian's brief)
+
+- **A form near the top or middle of every page.** "Ask us. We reply by
+  email." (`enquiry`) on the home, starter, directors', booking and
+  glossary pages and in the middle of five guides; the trace form under
+  the tracker's hero; under every calculator's result a visible "Ask us
+  about this" form (written by `pagebuild.after_block()`); on My pensions
+  it sits in the summary column. Ask Buddy, on every page, is now a
+  question and an email (its "before you call" answers are gone).
+- **Home:** gap, calculator, inflation ("Are you a director?"), how a call
+  works and its one booking button, the two forms, the jargon buster, then
+  the rest; "What changes, and when" last. The FAQ, "Questions before you
+  call", "Who you are dealing with" and "check that for yourself" are gone.
+- **Tracker and starter:** the three steps animate once
+  (`assets/js/pb-steps.js`); the heroes are shorter on wide screens so the
+  form starts on the first screen; checklist, hill photograph, FAQs and
+  "What builds up and when" are gone.
+- **Calculators:** no earnings input except the auto-enrolment comparison
+  (auto-enrolment is a share of gross pay). The pension calculator caps
+  relief at the age band on €115,000; its State Pension line is in today's
+  money. The reality check lost its age slider; the PIA page is a short
+  calculator.
+- **Guides:** `old-pension-checklist.html` is deleted (`_redirects` sends
+  it to the tracker). The over-50, UK, self-employed and director figures
+  are static SVG scenes driven by `assets/js/pb-guide-scene.js`.
+- **Jargon buster:** one layout at every width; the answers never move.
+
+Left for Damian: the footer's "You can check our authorisation on the
+Central Bank's register" line (kept; it is not the cut sentence), and
+dead FAQ CSS and scripts still carried by 27 pages (harmless).
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |
