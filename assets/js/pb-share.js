@@ -22,6 +22,14 @@
    (assets/js/pb-after.js). The email form's marketing opt-in (.pb-optin)
    and its consent box are never in a link: that choice is the reader's own.
 
+   HIDE MY NUMBERS (14 October 2026). A switch beside the button, for a
+   reader who wants to show the answer, or send the calculator, without
+   their euros. On, every figure in the calculator blurs on the screen, so a
+   screenshot shows the answer's shape and words but no amounts; the caveats,
+   the controls and this row stay sharp. And the link it sends carries no
+   figures: it opens the calculator at its own starting values. Nothing is
+   stored; a reload shows the numbers again.
+
    window.PBShare.link() is the one definition of a link to these figures
    (assets/js/pb-after.js puts it in "Email me this result"); PBShare.send()
    is the button's action. Without script there is no button. Vanilla JS. */
@@ -37,6 +45,9 @@
     '.pb-share-btn:hover{background:var(--teal-50,#E6FBF7)}',
     '.pb-share-btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring,rgba(20,203,177,.4))}',
     '.pb-share-said{font-size:14px;line-height:1.4;color:var(--ink-2,#3D4F4B)}',
+    '.pb-share-hide{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14.5px;font-weight:600;color:var(--ink-2,#3D4F4B);cursor:pointer}',
+    '.pb-share-hide input{width:18px;height:18px;margin:0;accent-color:#0B7A6E;cursor:pointer}',
+    '.pb-nums-hidden .pb-num-x,.pb-nums-hidden .pb-scrub-tip span{filter:blur(.34em)}',
     '.pb-share-said:empty{display:none}',
     '@media (prefers-reduced-motion:no-preference){',
     '  :root.pb-motion .pb-share-btn{transition:background-color var(--pb-t-swap),transform var(--pb-t-press)}',
@@ -44,6 +55,7 @@
     '  :root.pb-motion .pb-share-btn svg{transition:transform var(--pb-t-swap)}',
     '  :root.pb-motion .pb-share-btn:hover svg,:root.pb-motion .pb-share-btn:focus-visible svg{transform:translateY(calc(-1 * var(--pb-lift)))}',
     '  :root.pb-motion .pb-share-said:not(:empty){animation:pbShareIn var(--pb-d-3) var(--pb-ease-out) both}',
+    '  :root.pb-motion .pb-num-x{transition:filter var(--pb-t-swap)}',
     '}',
     '@keyframes pbShareIn{from{opacity:0;transform:translateY(var(--pb-nudge))}}'
   ].join('\n');
@@ -182,7 +194,46 @@
   var r = row('Send to my partner');
   if (root === home) { at.parentNode.insertBefore(r, at.nextSibling); } else { at.appendChild(r); }
   var said = r.querySelector('.pb-share-said');
+
+  /* hide my numbers: what is a figure is any element whose own text has a
+     digit in it, inside the calculator, but not in a caveat, a form field or
+     this row; marked again while the switch is on, as the figures change */
+  var KEEP = '.pb-warn,.pb-caveat,.gap-note,.pb-src,.infoadvice,.disclosure,.pb-share,.foot,input,select,textarea,option,.seg,.pb-seg,[role="tab"]';
+  var hide = document.createElement('label'); hide.className = 'pb-share-hide';
+  hide.innerHTML = '<input type="checkbox" role="switch"> Hide my numbers';
+  r.insertBefore(hide, said);
+  var sw = hide.querySelector('input'), mo = null, raf = 0;
+  function own(el) { var t = ''; for (var n = el.firstChild; n; n = n.nextSibling) { if (n.nodeType === 3) { t += n.nodeValue; } } return t; }
+  function mark() {
+    raf = 0;
+    if (!sw.checked) { return; }
+    [].forEach.call(root.querySelectorAll('*'), function (el) {
+      var is = /\d/.test(own(el)) && !el.closest(KEEP);
+      if (is !== el.classList.contains('pb-num-x')) { el.classList.toggle('pb-num-x', is); }
+    });
+  }
+  sw.addEventListener('change', function () {
+    var on = sw.checked;
+    root.classList.toggle('pb-nums-hidden', on);
+    if (on) {
+      mark();
+      if (window.MutationObserver && !mo) {
+        mo = new MutationObserver(function () { if (!raf) { raf = requestAnimationFrame(mark); } });
+      }
+      if (mo) { mo.observe(root, { subtree: true, childList: true, characterData: true }); }
+      said.textContent = 'Your figures are hidden. The link leaves them out too.';
+    } else {
+      if (mo) { mo.disconnect(); }
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      [].forEach.call(root.querySelectorAll('.pb-num-x'), function (el) { el.classList.remove('pb-num-x'); });
+      said.textContent = '';
+    }
+  });
   r.querySelector('button').addEventListener('click', function () {
-    send({ url: link(), text: 'My pension figures on Pensionbuddy. Try yours:', title: document.title, said: said });
+    if (sw.checked) {
+      send({ url: location.href.split('#')[0], text: 'Try this pension calculator on Pensionbuddy:', title: document.title, said: said });
+    } else {
+      send({ url: link(), text: 'My pension figures on Pensionbuddy. Try yours:', title: document.title, said: said });
+    }
   });
 })();
