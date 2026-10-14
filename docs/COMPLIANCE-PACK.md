@@ -1323,6 +1323,16 @@ figures or a guide" (the booking page has no form), after a new sentence:
 page the link was on and which wording of the booking button you saw." The
 notice's "Last updated" date is now 5 October 2026.
 
+14 October 2026 (on the site, proposed): the last sentence on the
+calculators described a button removed on 8 October ("“Email them to
+yourself” opens your own email app and sends us nothing."). It now
+describes the button that replaced it: "“Send to my partner” puts the
+figures in a link and sends us nothing: the link goes only to the people
+you send it to. “Hide my numbers” leaves the figures out of the link." The
+figures ride in the link's fragment (after the #), which a browser never
+sends to a server, and the button reports nothing to analytics. The
+notice's "Last updated" date is now 14 October 2026.
+
 3.4 Cookies (on the site, proposed)
 -----------------------------------
 

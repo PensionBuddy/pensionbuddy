@@ -1907,6 +1907,12 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
      together on the house curve, so on a phone they read as one move */
   html.pb-motion .pb-b-btn.pb-b-aside:not(.pb-b-away){transition:translate var(--pb-t-exit),transform var(--pb-t-press),padding var(--pb-t-state),gap var(--pb-t-state),visibility 0s}
   html.pb-motion nav.nav-hidden{transition:transform var(--pb-t-exit)}
+  /* the phone's booking bar joins them while the reader reads
+     (pb-bookbar.js): away on the exit, back on the menu bar's own curve;
+     stepping down for a caveat is an exit too */
+  html.pb-motion .pb-bookbar{transition:transform var(--pb-t-exit)}
+  html.pb-motion .pb-bookbar.pb-bookbar-on{transition:transform var(--pb-d-3) var(--pb-ease-out)}
+  html.pb-motion.pb-bookbar-yield .pb-bookbar.pb-bookbar-on{transition:transform var(--pb-t-exit)}
   /* tucking is one move, not a jump: the name narrows away and fades as the
      pill closes round the photo. Width to and from auto needs
      interpolate-size (Chrome 129 on); elsewhere it tucks at once, as before */
@@ -2397,7 +2403,7 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 <main id="main" tabindex="-1">
 <div class="wrap"><div class="legal pb-caveat">
   <h1>Privacy Notice</h1>
-  <p class="updated">Last updated: 8 October 2026</p>
+  <p class="updated">Last updated: 14 October 2026</p>
   <p class="intro">This notice explains what personal information Pensionbuddy collects, why we collect it, and what your rights are. We keep it in plain English, the same as everything else here.</p>
 
   <h2>Who we are</h2>
@@ -2409,7 +2415,7 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
     <li>Anything you choose to tell us about your situation when you get in touch.</li>
     <li>Basic, non-identifying information about how the site is used, where you have agreed to cookies or analytics.</li>
   </ul>
-  <p>The pension calculators on this site run entirely in your browser. The figures you enter into them are not sent to us or stored, unless you ask us to email you the result and tick the box to agree: then your name, your email address, what the calculator shows and the figures you chose reach us through a form on this website, and we use them only to send you that result. &ldquo;Email them to yourself&rdquo; opens your own email app and sends us nothing.</p>
+  <p>The pension calculators on this site run entirely in your browser. The figures you enter into them are not sent to us or stored, unless you ask us to email you the result and tick the box to agree: then your name, your email address, what the calculator shows and the figures you chose reach us through a form on this website, and we use them only to send you that result. &ldquo;Send to my partner&rdquo; puts the figures in a link and sends us nothing: the link goes only to the people you send it to. &ldquo;Hide my numbers&rdquo; leaves the figures out of the link.</p>
 
   <h2>How we use it</h2>
   <ul>

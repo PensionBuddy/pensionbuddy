@@ -29,6 +29,14 @@
    so the bar is gone before the last line above a stop can slide behind
    it. IntersectionObservers, no scroll handler.
 
+   WHILE READING (14 October 2026, the owner: "yes, hide it while
+   reading"). It leaves with the menu bar as the reader scrolls down
+   (nav.nav-hidden, the page's own scroll script) and comes back with it on
+   the way up, the way Ask Buddy does: the screen is the reader's while they
+   read, and the ask is there the moment they look back up. A
+   MutationObserver on #nav sees it. The BUDDY block of CSS times the three
+   as one move: away on --pb-t-exit, back on the menu bar's own curve.
+
    IT NEVER SITS ON TOP OF ANYTHING THAT IS THE READER'S.
      - The cookie choice bar (.pb-consent, key 'pb-consent'): while it is up
        the booking bar is display:none, and it comes back only once the
@@ -105,6 +113,8 @@
   if (window.PBCta) window.PBCta.watch(bar.firstChild);
 
   var pastHero = false, near = [], typing = false, focusIn = false, shown = false, lastFocus = null;
+  var navBar = doc.getElementById('nav');
+  function reading() { return !!navBar && navBar.classList.contains('nav-hidden'); }
   var watch = 'MutationObserver' in window ? new MutationObserver(function () { update(); }) : null;
 
   function consentUp() {
@@ -133,7 +143,7 @@
     if (closed) return;
     var held = consentUp() || buddyOpen() || html.classList.contains('pb-peek-on');
     bar.classList.toggle('pb-bookbar-held', held);
-    var show = !held && phone.matches && (focusIn || (pastHero && !near.length && !typing));
+    var show = !held && phone.matches && (focusIn || (pastHero && !near.length && !typing && !reading()));
     if (show === shown) return;
     shown = show;
     /* reading the height here also settles the tucked position first, so
@@ -165,6 +175,8 @@
   if (watch) watch.observe(body, { childList: true, attributes: true, attributeFilter: ['class'] });
   /* the results peek bar comes and goes on <html> (pb-peek-on) */
   if (watch) watch.observe(html, { attributes: true, attributeFilter: ['class'] });
+  /* the menu bar leaves as the reader scrolls down, and the bar with it */
+  if (watch && navBar) watch.observe(navBar, { attributes: true, attributeFilter: ['class'] });
 
   /* STEPPING DOWN (Run 32, docs/UX-MOTION-AUDIT.md part 3b). While a caveat
      (a warning, a source, "information, not advice", the disclosure:

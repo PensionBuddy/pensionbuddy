@@ -2036,6 +2036,12 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
      together on the house curve, so on a phone they read as one move */
   html.pb-motion .pb-b-btn.pb-b-aside:not(.pb-b-away){transition:translate var(--pb-t-exit),transform var(--pb-t-press),padding var(--pb-t-state),gap var(--pb-t-state),visibility 0s}
   html.pb-motion nav.nav-hidden{transition:transform var(--pb-t-exit)}
+  /* the phone's booking bar joins them while the reader reads
+     (pb-bookbar.js): away on the exit, back on the menu bar's own curve;
+     stepping down for a caveat is an exit too */
+  html.pb-motion .pb-bookbar{transition:transform var(--pb-t-exit)}
+  html.pb-motion .pb-bookbar.pb-bookbar-on{transition:transform var(--pb-d-3) var(--pb-ease-out)}
+  html.pb-motion.pb-bookbar-yield .pb-bookbar.pb-bookbar-on{transition:transform var(--pb-t-exit)}
   /* tucking is one move, not a jump: the name narrows away and fades as the
      pill closes round the photo. Width to and from auto needs
      interpolate-size (Chrome 129 on); elsewhere it tucks at once, as before */
@@ -3121,7 +3127,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
   });
 })();
 </script>
-<script src="assets/js/pb-bookbar.js?v=87c34a81"></script>
+<script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
 <script>
 /* the term index: held under the nav (whose height changes as it scrolls),
    and the term in view marked */
