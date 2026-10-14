@@ -7,7 +7,7 @@ window.PBGlossary = [
  {
   "id": "pension",
   "name": "Pension",
-  "def": "A long-term, invested savings pot for retirement.",
+  "def": "A savings pot for retirement. It is invested for the long term.",
   "tip": false,
   "pats": [
    [
@@ -19,7 +19,7 @@ window.PBGlossary = [
  {
   "id": "avc",
   "name": "Additional Voluntary Contribution (AVC)",
-  "def": "Extra payments into a workplace pension, usually with tax relief.",
+  "def": "Extra payments into a workplace pension. They usually get tax relief.",
   "tip": true,
   "pats": [
    [
@@ -35,7 +35,7 @@ window.PBGlossary = [
  {
   "id": "tax-relief",
   "name": "Tax relief",
-  "def": "Tax you do not pay on pension contributions, within Revenue\u2019s age-related limits.",
+  "def": "Tax you do not pay on money paid into a pension. Revenue\u2019s limits on it depend on your age.",
   "tip": true,
   "pats": [
    [
@@ -47,7 +47,7 @@ window.PBGlossary = [
  {
   "id": "arf",
   "name": "Approved Retirement Fund (ARF)",
-  "def": "Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.",
+  "def": "Your pot stays invested at retirement. You draw from it. It can grow, fall, or run out if you draw too much.",
   "tip": true,
   "pats": [
    [
@@ -63,7 +63,7 @@ window.PBGlossary = [
  {
   "id": "annuity",
   "name": "Annuity",
-  "def": "A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.",
+  "def": "A guaranteed income for life. You buy it from an insurer with your pot. It usually cannot change.",
   "tip": true,
   "pats": [
    [
@@ -75,7 +75,7 @@ window.PBGlossary = [
  {
   "id": "drawdown",
   "name": "Drawdown",
-  "def": "Taking money from your pension in retirement. Our calculator\u2019s 4% a year is an illustration, not a recommendation.",
+  "def": "Taking money from your pension in retirement. Our calculator\u2019s 4% a year is an illustration. It is not a recommendation.",
   "tip": true,
   "pats": [
    [
@@ -87,7 +87,7 @@ window.PBGlossary = [
  {
   "id": "defined-contribution",
   "name": "Defined Contribution",
-  "def": "A pension whose value depends on what was paid in and how the investments did. It is not guaranteed.",
+  "def": "A pension whose value depends on what was paid in. It also depends on how the investments did. It is not guaranteed.",
   "tip": true,
   "pats": [
    [
@@ -99,7 +99,7 @@ window.PBGlossary = [
  {
   "id": "defined-benefit",
   "name": "Defined Benefit",
-  "def": "An older workplace pension promising a set income, usually based on salary and years of service. These can be valuable.",
+  "def": "An older workplace pension that promises a set income. The income is usually based on salary and years of service. These can be worth a lot.",
   "tip": true,
   "pats": [
    [
@@ -111,7 +111,7 @@ window.PBGlossary = [
  {
   "id": "lump-sum",
   "name": "Lump sum",
-  "def": "Tax-free cash you can usually take at retirement, within Revenue\u2019s limits.",
+  "def": "Tax-free cash you can usually take at retirement. It is within Revenue\u2019s limits.",
   "tip": true,
   "pats": [
    [
@@ -123,7 +123,7 @@ window.PBGlossary = [
  {
   "id": "fund-investment-growth",
   "name": "Fund / investment growth",
-  "def": "The rise in your pension\u2019s funds over time. It is never guaranteed. Some years can be negative.",
+  "def": "The rise in your pension\u2019s funds over time. It is never guaranteed. In some years, the funds can fall.",
   "tip": true,
   "pats": [
    [
@@ -135,7 +135,7 @@ window.PBGlossary = [
  {
   "id": "inflation",
   "name": "Inflation",
-  "def": "The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today\u2019s. The European Central Bank aims for inflation of 2% a year over the medium term.",
+  "def": "The rise in prices over time. So the same euro buys less later. It matters for a pension. That is because the figures on this site are in future euro, not today\u2019s. The European Central Bank aims for inflation of 2% a year over the medium term.",
   "tip": true,
   "pats": [
    [
@@ -147,7 +147,7 @@ window.PBGlossary = [
  {
   "id": "risk-rating",
   "name": "Risk rating",
-  "def": "A number from 1, the lowest, to 7, the highest, on a fund\u2019s key information document. Higher means bigger swings in value, not a better or worse fund.",
+  "def": "A number from 1, the lowest, to 7, the highest. It is on a fund\u2019s key information document. Higher means bigger swings in value. It does not mean a better or worse fund.",
   "tip": true,
   "pats": [
    [
@@ -159,7 +159,7 @@ window.PBGlossary = [
  {
   "id": "state-pension",
   "name": "State Pension",
-  "def": "A government pension for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.",
+  "def": "A government pension. It is for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.",
   "tip": true,
   "pats": [
    [
@@ -199,7 +199,7 @@ window.PBGlossary = [
  {
   "id": "personal-retirement-bond",
   "name": "Personal Retirement Bond",
-  "def": "A policy in your name holding a pension from a job you left, bought by that scheme\u2019s trustees. It follows that scheme\u2019s rules, and cannot move to or from a PRSA.",
+  "def": "A policy in your name. It holds a pension from a job you left. That scheme\u2019s trustees bought it. It follows that scheme\u2019s rules. It cannot move to or from a PRSA.",
   "tip": true,
   "pats": [
    [
@@ -211,7 +211,7 @@ window.PBGlossary = [
  {
   "id": "pension-adjustment-order",
   "name": "Pension adjustment order",
-  "def": "A court order giving part of a pension to a former partner, or for a dependent child. It follows a judicial separation, a divorce, or the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
+  "def": "A court order. It gives part of a pension to a former partner, or for a dependent child. It follows a judicial separation or a divorce. Or it follows the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
   "tip": true,
   "pats": [
    [
@@ -223,7 +223,7 @@ window.PBGlossary = [
  {
   "id": "employer-contribution",
   "name": "Employer contribution",
-  "def": "Money your employer pays into your pension, effectively part of your pay.",
+  "def": "Money your employer pays into your pension. In effect, it is part of your pay.",
   "tip": true,
   "pats": [
    [
@@ -235,7 +235,7 @@ window.PBGlossary = [
  {
   "id": "corporation-tax-relief",
   "name": "Corporation tax relief",
-  "def": "Company pension contributions for a director usually count against company profits, cutting corporation tax.",
+  "def": "Company payments into a director\u2019s pension usually count against company profits. This cuts corporation tax.",
   "tip": true,
   "pats": [
    [
@@ -247,7 +247,7 @@ window.PBGlossary = [
  {
   "id": "standard-fund-threshold",
   "name": "Standard Fund Threshold",
-  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief: \u20ac2.2 million in 2026, and \u20ac2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its legislated rise from 2026 to 2029.",
+  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. It is \u20ac2.2 million in 2026. It is \u20ac2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its rise from 2026 to 2029, set by law.",
   "tip": true,
   "pats": [
    [
@@ -259,7 +259,7 @@ window.PBGlossary = [
  {
   "id": "pia",
   "name": "Personal Investment Account (PIA)",
-  "def": "A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, up to \u20ac12,000 a year in, and 1% a year on its value above \u20ac50,000, even in a year it falls. Announced in Budget 2027 to open on 1 July 2027; not yet law as at 8 October 2026. See it next to a pension.",
+  "def": "A proposed account for listed shares, bonds and funds. It is also called the Savings and Investment Account (SIA). It is not a pension. No tax relief. Up to \u20ac12,000 a year in. And 1% a year on its value above \u20ac50,000, even in a year it falls. Announced in Budget 2027 to open on 1 July 2027; not yet law as at 8 October 2026. See it next to a pension.",
   "tip": true,
   "pats": [
    [
@@ -275,7 +275,7 @@ window.PBGlossary = [
  {
   "id": "qfa",
   "name": "Qualified Financial Adviser (QFA)",
-  "def": "An Irish qualification showing a financial adviser meets the standard to give regulated advice.",
+  "def": "An Irish qualification. It shows a financial adviser meets the standard to give regulated advice.",
   "tip": true,
   "pats": [
    [

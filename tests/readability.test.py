@@ -112,11 +112,10 @@ BAR = 10.0
 
 # Each must come down. The reading age when this list was made (14 October
 # 2026), rounded up to one decimal. A page leaves the list when it reads at
-# 10 or under; nothing is ever added to it.
-ABOVE_TODAY = {
-    'director-pension-rules.html': 10.9,   # 10.88
-    'glossary.html': 10.8,                 # 10.71
-}
+# 10 or under; nothing is ever added to it. Both pages it held came off the
+# same day, rewritten: director-pension-rules.html (10.88 to 9.91) and
+# glossary.html (10.71 to 9.84). The list is empty.
+ABOVE_TODAY = {}
 
 # Fixed wording: legal pages, and caveats wherever they are.
 LEGAL_PAGES = ('privacy.html', 'terms.html', 'complaints.html')

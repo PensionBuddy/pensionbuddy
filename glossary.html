@@ -2864,9 +2864,9 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     </ul>
   </div>
   <div class="gloss">
-    <div class="gterm" id="pension"><h2>Pension</h2><p>A long-term, invested savings pot for retirement.</p></div>
-    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments into a workplace pension, usually with tax relief.</p></div>
-    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Tax you do not pay on pension contributions, within Revenue&rsquo;s age-related limits.</p>
+    <div class="gterm" id="pension"><h2>Pension</h2><p>A savings pot for retirement. It is invested for the long term.</p></div>
+    <div class="gterm" id="avc"><h2>AVC<span class="abbr">Additional Voluntary Contribution</span></h2><p>Extra payments into a workplace pension. They usually get tax relief.</p></div>
+    <div class="gterm" id="tax-relief"><h2>Tax relief</h2><p>Tax you do not pay on money paid into a pension. Revenue&rsquo;s limits on it depend on your age.</p>
 <div class="pb-rw">
   <div class="pb-rw-row"><label for="rwAmt1">If you put in</label><span class="pb-rw-v">€100 a month</span></div>
   <input type="range" id="rwAmt1" min="25" max="1000" step="25" value="100" aria-valuetext="€100 a month" hidden>
@@ -2884,19 +2884,19 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <p class="pb-lad-note">Earnings count up to €115,000.</p>
   </div>
 </div>
-    <div class="gterm" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>Your pot stays invested at retirement and you draw from it. It can grow, fall, or run out if you draw too much.</p></div>
-    <div class="gterm" id="annuity"><h2>Annuity</h2><p>A guaranteed income for life, bought from an insurer with your pot. It usually cannot change.</p></div>
-    <div class="gterm" id="drawdown"><h2>Drawdown</h2><p>Taking money from your pension in retirement. Our calculator&rsquo;s 4% a year is an illustration, not a recommendation.</p>
+    <div class="gterm" id="arf"><h2>ARF<span class="abbr">Approved Retirement Fund</span></h2><p>Your pot stays invested at retirement. You draw from it. It can grow, fall, or run out if you draw too much.</p></div>
+    <div class="gterm" id="annuity"><h2>Annuity</h2><p>A guaranteed income for life. You buy it from an insurer with your pot. It usually cannot change.</p></div>
+    <div class="gterm" id="drawdown"><h2>Drawdown</h2><p>Taking money from your pension in retirement. Our calculator&rsquo;s 4% a year is an illustration. It is not a recommendation.</p>
 <div class="pb-dd" id="pbDd">
   <div class="pb-dd-row"><label for="pbDdPot">A pot of</label><span class="pb-dd-v" id="pbDdPotV">€50,000</span></div>
   <input type="range" id="pbDdPot" min="5000" max="1500000" step="5000" value="50000" aria-valuetext="€50,000" hidden>
   <p class="pb-dd-out">Drawing 4% a year from it is about <b id="pbDdOut">€167</b> a month.</p>
 </div></div>
-    <div class="gterm" id="defined-contribution"><h2>Defined Contribution<span class="abbr">DC</span></h2><p>A pension whose value depends on what was paid in and how the investments did. It is not guaranteed.</p></div>
-    <div class="gterm" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older workplace pension promising a set income, usually based on salary and years of service. These can be valuable.</p></div>
-    <div class="gterm" id="lump-sum"><h2>Lump sum</h2><p>Tax-free cash you can usually take at retirement, within Revenue&rsquo;s limits.</p></div>
-    <div class="gterm" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>The rise in your pension&rsquo;s funds over time. It is never guaranteed. Some years can be negative.</p></div>
-    <div class="gterm" id="inflation"><h2>Inflation</h2><p>The rise in prices over time, so the same euro buys less later. It matters for a pension because the figures on this site are in future euro, not today&rsquo;s. The European Central Bank aims for inflation of 2% a year over the medium term.</p>
+    <div class="gterm" id="defined-contribution"><h2>Defined Contribution<span class="abbr">DC</span></h2><p>A pension whose value depends on what was paid in. It also depends on how the investments did. It is not guaranteed.</p></div>
+    <div class="gterm" id="defined-benefit"><h2>Defined Benefit<span class="abbr">DB</span></h2><p>An older workplace pension that promises a set income. The income is usually based on salary and years of service. These can be worth a lot.</p></div>
+    <div class="gterm" id="lump-sum"><h2>Lump sum</h2><p>Tax-free cash you can usually take at retirement. It is within Revenue&rsquo;s limits.</p></div>
+    <div class="gterm" id="fund-investment-growth"><h2>Fund / investment growth</h2><p>The rise in your pension&rsquo;s funds over time. It is never guaranteed. In some years, the funds can fall.</p></div>
+    <div class="gterm" id="inflation"><h2>Inflation</h2><p>The rise in prices over time. So the same euro buys less later. It matters for a pension. That is because the figures on this site are in future euro, not today&rsquo;s. The European Central Bank aims for inflation of 2% a year over the medium term.</p>
 <div class="pb-infl" id="pbInfl">
   <div class="pb-dd-row"><label for="pbInflYrs">Years from now</label><span class="pb-dd-v" id="pbInflYrsV">30 years</span></div>
   <input type="range" id="pbInflYrs" min="1" max="45" step="1" value="30" aria-valuetext="30 years" hidden>
@@ -2904,19 +2904,19 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   <input type="range" id="pbInflRate" min="1" max="5" step="0.5" value="2" aria-valuetext="2% a year" hidden>
   <p class="pb-dd-out" id="pbInflOut">At 2% a year, what &euro;1,000 buys today would cost about <b>&euro;1,811</b> in 30 years. The other way round, &euro;1,000 then buys what <b>&euro;552</b> buys today.</p>
 </div></div>
-    <div class="gterm" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest, on a fund&rsquo;s key information document. Higher means bigger swings in value, not a better or worse fund.</p>
+    <div class="gterm" id="risk-rating"><h2>Risk rating<span class="abbr">1 to 7</span></h2><p>A number from 1, the lowest, to 7, the highest. It is on a fund&rsquo;s key information document. Higher means bigger swings in value. It does not mean a better or worse fund.</p>
 <ol class="pb-risk" aria-hidden="true"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li></ol>
-<p>Scales differ, so a 4 on one is not a 4 on another. Ratings change as markets move.</p></div>
-    <div class="gterm" id="state-pension"><h2>State Pension</h2><p>A government pension for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.</p></div>
+<p>Scales differ. So a 4 on one is not a 4 on another. Ratings change as markets move.</p></div>
+    <div class="gterm" id="state-pension"><h2>State Pension</h2><p>A government pension. It is for people with enough Pay-Related Social Insurance (PRSI) contributions. For most people it is not enough alone.</p></div>
     <div class="gterm" id="prsa"><h2>PRSA<span class="abbr">Personal Retirement Savings Account</span></h2><p>A flexible personal pension you own, which moves with you between jobs.</p></div>
     <div class="gterm" id="consolidation"><h2>Consolidation</h2><p>Bringing old pensions into one plan. Some older ones carry guarantees worth keeping.</p></div>
-    <div class="gterm" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your name holding a pension from a job you left, bought by that scheme&rsquo;s trustees. It follows that scheme&rsquo;s rules, and cannot move to or from a PRSA.</p></div>
-    <div class="gterm" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>A court order giving part of a pension to a former partner, or for a dependent child. It follows a judicial separation, a divorce, or the end of a civil partnership or qualified cohabitants&rsquo; relationship. A separation agreement cannot do this.</p></div>
-    <div class="gterm" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension, effectively part of your pay.</p></div>
-    <div class="gterm" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>Company pension contributions for a director usually count against company profits, cutting corporation tax.</p></div>
-    <div class="gterm" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that gets full tax relief: &euro;2.2 million in 2026, and &euro;2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows its legislated rise from 2026 to 2029.</p></div>
-    <div class="gterm" id="pia"><h2>PIA<span class="abbr">Personal Investment Account</span></h2><p>A proposed account for listed shares, bonds and funds, also called the Savings and Investment Account (SIA). It is not a pension: no tax relief, up to &euro;12,000 a year in, and 1% a year on its value above &euro;50,000, even in a year it falls. Announced in Budget 2027 to open on 1 July 2027; not yet law as at 8 October 2026. <a href="pia.html">See it next to a pension</a>.</p></div>
-    <div class="gterm" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>An Irish qualification showing a financial adviser meets the standard to give regulated advice.</p></div>
+    <div class="gterm" id="personal-retirement-bond"><h2>Personal Retirement Bond<span class="abbr">PRB, or buy-out bond</span></h2><p>A policy in your name. It holds a pension from a job you left. That scheme&rsquo;s trustees bought it. It follows that scheme&rsquo;s rules. It cannot move to or from a PRSA.</p></div>
+    <div class="gterm" id="pension-adjustment-order"><h2>Pension adjustment order<span class="abbr">PAO</span></h2><p>A court order. It gives part of a pension to a former partner, or for a dependent child. It follows a judicial separation or a divorce. Or it follows the end of a civil partnership or qualified cohabitants&rsquo; relationship. A separation agreement cannot do this.</p></div>
+    <div class="gterm" id="employer-contribution"><h2>Employer contribution</h2><p>Money your employer pays into your pension. In effect, it is part of your pay.</p></div>
+    <div class="gterm" id="corporation-tax-relief"><h2>Corporation tax relief</h2><p>Company payments into a director&rsquo;s pension usually count against company profits. This cuts corporation tax.</p></div>
+    <div class="gterm" id="standard-fund-threshold"><h2>Standard Fund Threshold<span class="abbr">SFT</span></h2><p>Revenue&rsquo;s cap on the total pension fund that gets full tax relief. It is &euro;2.2 million in 2026. It is &euro;2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The <a href="standard-fund-threshold.html">Standard Fund Threshold check</a> shows its rise from 2026 to 2029, set by law.</p></div>
+    <div class="gterm" id="pia"><h2>PIA<span class="abbr">Personal Investment Account</span></h2><p>A proposed account for listed shares, bonds and funds. It is also called the Savings and Investment Account (SIA). It is not a pension. No tax relief. Up to &euro;12,000 a year in. And 1% a year on its value above &euro;50,000, even in a year it falls. Announced in Budget 2027 to open on 1 July 2027; not yet law as at 8 October 2026. <a href="pia.html">See it next to a pension</a>.</p></div>
+    <div class="gterm" id="qfa"><h2>QFA<span class="abbr">Qualified Financial Adviser</span></h2><p>An Irish qualification. It shows a financial adviser meets the standard to give regulated advice.</p></div>
   </div>
   </div>
   <div class="infoadvice" style="margin-top:8px">
@@ -3098,7 +3098,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=19aff2d1" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=aa313a67" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
