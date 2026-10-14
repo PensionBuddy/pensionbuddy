@@ -3006,7 +3006,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="sft-note" id="sftNote" hidden>Your pot is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> for <span id="sftYear">2052</span>: <span id="sftCap">at least &euro;2.8 million</span>. Anything above it is taxed when you draw it. The threshold rises from &euro;2.2 million in 2026 to &euro;2.8 million in 2029.</p>
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Put this off for a year and you retire with roughly <b>€18,702</b> less: the payments you never made, and the growth they never earned.</div>
+      <div class="wtext" id="waitOut">Start now, not in a year, and you retire with roughly <b>€18,702</b> more: a year of payments, and the growth they earn.</div>
     </div>
     <div class="relief-card">
       <div class="pc-rhead">
@@ -3427,7 +3427,9 @@ function calc(){
   if(months>12){
     const later=project(months-12,pot*Math.pow(1+mRate,12),monthly,mRate);
     const gap=Math.max(0,base-later);
-    $('waitOut').innerHTML='Put this off for a year and you retire with roughly <b>'+euro(gap)+'</b> less: the payments you never made, and the growth they never earned.';
+    /* the gain first, the loss second (docs/WRITING-RULES.md, rule 6): the
+       handle under it says what waiting costs */
+    $('waitOut').innerHTML='Start now, not in a year, and you retire with roughly <b>'+euro(gap)+'</b> more: a year of payments, and the growth they earn.';
   }else{
     $('waitOut').innerHTML='With a year or less to go, what matters now is how you draw the pot down.';
   }

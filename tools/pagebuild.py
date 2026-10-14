@@ -1018,7 +1018,7 @@ CARDS = {
     'director-year-end-checklist.html': ('Year-end pension checklist', 'Nine checks before your company year end and tax deadline.'),
     'standard-fund-threshold.html': ('The Standard Fund Threshold', 'Revenue&rsquo;s cap on pension savings, and how close you are.'),
     'state-pension-entitlement.html': ('How much State Pension you may get', 'Work it out from your PRSI record.'),
-    'pensions-over-50.html': ('Pensions after 50', 'Pay in more with tax relief, and plan your retirement.'),
+    'pensions-over-50.html': ('Pensions after 50', 'Tax relief: 30% of earnings at 50, 40% at 60.'),
     'self-employed-pensions.html': ('Self-employed pensions', 'Set up your own pension, with tax relief.'),
     'uk-pensions-in-ireland.html': ('UK pensions in Ireland', 'Moving a UK pension here, and how Ireland taxes it.'),
     'glossary.html': ('Pension jargon buster', 'Pension terms in plain words.'),

@@ -19,7 +19,7 @@ Why: a long sentence makes the reader hold too much at once.
 - Before (director.html, 30 words): "Into your pension, all €1,000 goes in,
   within Revenue’s limits; it is taxed when you take it, usually from 60,
   apart from a lump sum that is tax-free within limits."
-- After: "All €1,000 goes into your pension, within Revenue’s limits. You
+- Done: "All €1,000 goes into your pension, within Revenue’s limits. You
   pay tax when you take it out, usually from 60. A lump sum is tax-free,
   within limits."
 
@@ -30,7 +30,7 @@ Why: a number is clear. "Big" makes the reader guess.
 
 - Before (the "Pensions after 50" card): "Pay in more with tax relief, and
   plan your retirement."
-- After: "From 50, tax relief on up to 30% of your pay. From 60, 40%."
+- Done: "Tax relief: 30% of earnings at 50, 40% at 60."
 
 ## 3. The reader first.
 
@@ -71,6 +71,8 @@ Why: fear makes people stop. A gain makes them act.
 
 - Done (index.html): "In 30 years, €1,000 in a pension could buy what
   €3,171 buys today." The deposit line comes second.
+- Done (pension-calculator.html): "Start now, not in a year, and you retire
+  with roughly €18,702 more." The handle under it says what waiting costs.
 - Before (index.html headline): "€1,000 buys less every year."
 - After: "A pension can keep up with prices."
 
