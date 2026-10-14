@@ -3,10 +3,12 @@
 The one page a client leaves the free 20-minute call with. It shows what we
 found, what it charges, the gap, and one next step.
 
-## Open question for the owner
+## The owner's answer
 
-Does Damian give clients anything written after the call? If yes, make this
-match it. If no, this is the proposal.
+Does Damian give clients anything written after the call? Not yet (14
+October 2026). So the template is the proposal, and the sample stays off
+the site (the `sample_report` flag in `shared/site-flags.json`) until he
+does.
 
 ## The files
 

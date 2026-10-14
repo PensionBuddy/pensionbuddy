@@ -297,7 +297,13 @@ const bar = await ev(`(async () => {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const c = document.querySelector('.tk-who'), R = document.documentElement.classList;
   if (!c) return { found: 'no .tk-who' };
-  scrollTo({ top: Math.round(c.getBoundingClientRect().top + scrollY - innerHeight + 40), behavior: 'instant' });
+  /* since 14 October 2026 the bar leaves with the menu bar on the way down
+     and comes back with it on the way up: so land 40px below the stop, then
+     come back up to it, as a reader who looks back up does */
+  const t = Math.round(c.getBoundingClientRect().top + scrollY - innerHeight + 40);
+  scrollTo({ top: t + 40, behavior: 'instant' });
+  await sleep(300);
+  scrollTo({ top: t, behavior: 'instant' });
   await sleep(900);
   const before = { on: R.contains('pb-bookbar-on'), yielded: R.contains('pb-bookbar-yield') };
   const a = document.querySelector('.pb-bookbar a');

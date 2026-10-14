@@ -235,6 +235,35 @@ From the review against the two "bibles" (Founders and Marketing):
   director-pension-rules.html (10.9) and glossary.html (10.7, listed at
   10.8). `--table` lists the longest sentences, where to cut first.
 
+## 14 October 2026: the owner's answers, and more from the review
+
+- **Sample report:** Damian gives clients nothing written yet. The
+  template (docs/report/) is the proposal; the sample stays off
+  (sample_report).
+- **Booking bar on phones:** it now leaves with the menu bar as the reader
+  scrolls down and comes back with it on the way up (pb-bookbar.js; the
+  BUDDY block times the menu bar, Ask Buddy and the bar as one move).
+- **Privacy Notice:** the last calculator sentence named a button removed
+  on 8 October; it now names "Send to my partner" and "Hide my numbers".
+  For compliance to confirm (pack, 14 October entry).
+- **The writing rules, applied:** the pension calculator's cost of waiting
+  opens on the gain; director.html's 30-word sentence is three; the "Pensions
+  after 50" card has its numbers.
+- **Search results:** the home and starter descriptions name the reward
+  with a number ("Is the State Pension enough? See your gap and what closes
+  it…"; "No pension yet? At the 20% tax rate, you pay EUR 80 and Revenue
+  adds EUR 20…"), in place of "Pensions made friendly… relaxed" and
+  "simpler than you think". Compliance pack, 14 October entry.
+- **floating-chrome check 4** lands 40px below the deadline band's caveat
+  and scrolls back up to it, since the booking bar now comes back only on
+  the way up.
+- **Not done, and why:** fades between pages (the warnings would fade with
+  the page; rule 2); a "guess first" State Pension quiz (Damian's 13 October
+  brief: the question is answered at once); "Remind me before 18 November"
+  (a new automatic email: the owner sees its words first); the "We talk / We
+  trace" step names (Damian set them on 12 October); the six initialism
+  findings (legal wording, on main before today).
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

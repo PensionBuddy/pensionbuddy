@@ -833,6 +833,21 @@ page):
   consultation with a QFA." (was "How company directors can fund a pension
   through their business, fund beyond personal limits and cut corporation
   tax. Free plain-English consultation with a QFA.")
+- 14 October 2026 (on the site, proposed; the marketing review: a search
+  result names the reward, with a number, not an adjective):
+  - index.html, description: "Is the State Pension enough? See your gap
+    and what closes it. Free, no sign-up. Then a free 20-minute call.
+    Regulated by the Central Bank of Ireland." (was "Pensions made
+    friendly. Understand and grow your pension over a relaxed, jargon-free
+    chat. Regulated by the Central Bank of Ireland.")
+  - starter.html, description: "No pension yet? At the 20% tax rate, you
+    pay €80 and Revenue adds €20. A free 20-minute call with a Qualified
+    Financial Adviser." (was "No pension yet, or one you've never looked
+    at? Starting is simpler than you think. Free plain-English
+    consultation with a QFA in Ireland."), the page's new headline with
+    its rate.
+  The share tags (og:description, twitter:description) follow, written by
+  tools/seo.py.
 - terms.html, description: "Who we are, what we do, and how we are paid.
   Terms of Business for Damian Condon T/A Gresham Wealth Management,
   regulated by the Central Bank of Ireland." (was "Who we are, what we do,
