@@ -2709,6 +2709,16 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pb-g2-big-n .pb-odo-c,.pb-g2-big-n .pb-odo-x{margin-right:-.03em}
 .pb-g2-big-w{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:-.01em;color:var(--ink-2)}
 .pb-g2-month{margin:8px 0 0;font-size:17px;color:var(--ink-2)}
+/* 14 October 2026: what closes the gap, in green, under it (the calculator's own
+   sums, pb-home-gap.js); and the site's address, small, so a screenshot of the
+   answer says where it came from */
+.pb-g2-fix{margin:16px 0 0;font-size:clamp(19px,1.9vw,23px);font-weight:700;line-height:1.3;letter-spacing:-.01em;color:#0B7A6E}
+.pb-g2-fix b{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pb-g2-fix[hidden],.pb-g2-from[hidden]{display:none}
+.pb-g2-from{margin:6px 0 0;font-size:15px;line-height:1.45;color:var(--ink-2)}
+.pb-g2-from a{color:#0B7A6E;font-weight:700;white-space:nowrap}
+.pb-shot{display:flex;align-items:center;gap:6px;margin:14px 0 0;font-size:13px;font-weight:700;letter-spacing:.01em;color:var(--ink-3)}
+.pb-shot svg{width:14px;height:14px;fill:#14CBB1}
 .pb-motion .pb-g2-stamp .pb-g2-no{animation:pbG2Stamp .55s cubic-bezier(.3,1.5,.45,1) both}
 @keyframes pbG2Stamp{0%{transform:scale(1.9) rotate(-10deg);opacity:0}55%{transform:scale(.92) rotate(-2deg);opacity:1}100%{transform:none}}
 .pb-motion .pb-g2-stamp .pb-g2-big{animation:pbG2Shake .5s .18s cubic-bezier(.36,.07,.19,.97) both}
@@ -2757,6 +2767,10 @@ html:not(.pb-js) .pb-g2-chart{height:auto}
   .pb-g2-grid > *,.pb-g2-copy > *{order:9}
   .pb-g2-chartwrap{display:contents}
   .pb-g2 h1{order:1}.pb-g2-pick{order:2;margin-top:22px}.pb-g2-what,.pb-g2-own{order:3}.pb-g2-chart{order:4;margin-top:10px}.pb-g2-ans{order:5;margin-top:14px}.pb-g2-acts{order:6}.pb-g2-chartwrap .pb-src{order:7;margin-top:22px}
+  /* 14 October 2026 (one screen, one answer): on a phone the answer comes
+     straight under the question, so the two fit one screen and one
+     screenshot; the choices and the tower follow, to change it and see it */
+  .pb-g2-ans{order:2;margin-top:18px}.pb-g2-pick{order:3}.pb-g2-what,.pb-g2-own{order:4}.pb-g2-chart{order:5}
   .pb-g2-chart{height:330px}
   .pb-g2-rows{grid-template-columns:1fr}
   .pb-g2-split{padding:20px}
@@ -2812,6 +2826,15 @@ html:not(.pb-js) .pb-c2-potbox,html:not(.pb-js) .pb-c2-legend{display:none}
 .pb-c2 .pb-c2-verdict{margin:6px 0 0;font-size:20px;font-weight:700;line-height:1.35;color:var(--ink)}
 .pb-c2-verdict .pb-c2-no{color:#D4573D}
 .pb-c2-verdict .pb-c2-yes{color:#0FA88F}
+/* 14 October 2026 (the gain first, the loss second; end on a win): the fix in
+   green over the shortfall, and Buddy under a covered answer (pb-home-calc.js) */
+.pb-c2-verdict .pb-c2-fix{display:block;color:#0B7A6E}
+.pb-c2-verdict .pb-c2-fix + .pb-c2-no{display:block;margin-top:2px;font-size:17px;font-weight:600}
+.pb-c2-pup{display:block;width:72px;height:52px;margin:10px 0 0;transform-origin:50% 100%}
+.pb-c2-pup[hidden]{display:none}
+.pb-c2-pup canvas{display:block;width:72px;height:52px;image-rendering:pixelated}
+:root.pb-motion .pb-c2-pup.pb-c2-hop{animation:pbPupHop .9s var(--pb-ease-out) both}
+@keyframes pbPupHop{0%{transform:translateY(10px) scale(.6);opacity:0}25%{transform:translateY(-14px) scale(1);opacity:1}45%{transform:translateY(0) scale(1.06,.94)}65%{transform:translateY(-9px)}85%{transform:translateY(0) scale(1.03,.97)}100%{transform:none}}
 .pb-c2 .pb-c2-take{margin:8px 0 0;font-size:16px;line-height:1.5;color:var(--ink)}
 .pb-c2-take[hidden]{display:none}
 .pb-c2-take b{font-variant-numeric:tabular-nums}
@@ -3381,6 +3404,9 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
         <p class="pb-g2-no" id="pbG2No">No.</p>
         <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
         <p class="pb-g2-month" id="pbG2Month">&euro;303 a month. &euro;72,720 over 20 years.</p>
+        <p class="pb-g2-fix" id="pbG2Fix">Close it with <b>&euro;110 a month</b>. Revenue pays <b>&euro;44</b> of that.</p>
+        <p class="pb-g2-from" id="pbG2From">From age 35, with &euro;10,000 saved. <a href="#calc">Try your own figures</a></p>
+        <p class="pb-shot" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg>pensionbuddy.ie</p>
       </div>
       <div class="pb-g2-acts">
         <a class="pb-g2-go" href="#calc">Try the pension calculator <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
@@ -3450,9 +3476,10 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
         <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;2,396</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;551</b></span></p>
         <p class="pb-c2-rise" id="pbC2Rise">Prices and the State Pension rise 2% a year.</p>
         <p class="pb-c2-need" id="pbC2Need">A modest life at 66: <b>&euro;2,956</b> a month.</p>
-        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-no">&euro;9 a month short.</span></p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-fix">Add &euro;10 a month and you&rsquo;re there.</span> <span class="pb-c2-no">&euro;9 a month short.</span></p>
         <p class="pb-c2-take" id="pbC2Take" hidden></p>
-        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close"><span>Show what I need to put in</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
+        <span class="pb-c2-pup" id="pbC2Pup" aria-hidden="true" hidden><canvas width="72" height="52"></canvas></span>
+        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close"><span>Make it &euro;110 a month</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
         <p class="tk-sr" id="pbC2Sr" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
@@ -3900,8 +3927,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
-<script src="assets/js/pb-home-gap.js?v=a47f96cf"></script>
-<script src="assets/js/pb-home-calc.js?v=1cea65da"></script>
+<script src="assets/js/pb-home-gap.js?v=28a61008"></script>
+<script src="assets/js/pb-home-calc.js?v=42d0e55e"></script>
 <script src="assets/js/pb-home-infl.js?v=d045614e"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script src="assets/js/pb-home-wait.js?v=79cb85b4"></script>

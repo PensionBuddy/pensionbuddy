@@ -137,10 +137,16 @@
       close.hidden = !up; close.setAttribute('data-act', 'up');
       if (up) { say(close, 'Aim higher: ' + K.life(up, aim.hh).phrase); }
     } else {
-      v.innerHTML = '<span class="pb-c2-no">' + fmt(short) + ' a month short.</span>';
+      /* 14 October 2026 (the gain first, the loss second): the fix is said, not
+         kept behind the button; the button puts it in */
+      v.innerHTML = (S.far ? '' : '<span class="pb-c2-fix">' + (m > 0 ? 'Add ' + fmt(reach - m) : 'Put in ' + fmt(reach)) + ' a month and you’re there.</span> ') +
+        '<span class="pb-c2-no">' + fmt(short) + ' a month short.</span>';
       close.hidden = S.far; close.setAttribute('data-act', 'close');
-      say(close, 'Show what I need to put in');
+      say(close, 'Make it ' + fmt(reach) + ' a month');
     }
+    pup(S.covered, was === false && S.covered && fromUser === true);
+    /* the gap section above says what closes its gap: these sums, not a second copy of them */
+    try { document.dispatchEvent(new CustomEvent('pb:calc', { detail: { age: a, saved: p, mine: m, emp: e, tax: tax, reach: reach, covered: S.covered, far: S.far } })); } catch (er) { /* an old browser keeps the markup's line */ }
     if (take) {
       var t = S.far ? 'To cover it, you’d put in <b>' + fmt(reach) + ' a month</b>. Too much? <a href="booking.html">Book a free 20-minute call with us</a>.' : '';
       if (take.innerHTML !== t) { take.innerHTML = t; }
@@ -153,12 +159,53 @@
     $('pbC2MiniV').textContent = S.covered ? 'Covered' : fmt(short) + ' short';
     var said = 'Your income at ' + AT + ', in ' + yr + ' euros: about ' + fmt(total) + ' a month, from a pension pot of ' + fmt(pr.fv) + '. ' +
       (S.covered ? 'That covers ' + life + ', ' + fmt(need) + ' a month.'
-        : fmt(short) + ' a month short of ' + life + ', ' + fmt(need) + ' a month.' + (S.far ? ' To cover it, you’d put in ' + fmt(reach) + ' a month.' : ''));
+        : fmt(short) + ' a month short of ' + life + ', ' + fmt(need) + ' a month. ' + (S.far ? 'To cover it, you’d put in ' + fmt(reach) + ' a month.' : fmt(reach) + ' a month covers it.'));
     clearTimeout(srT); srT = setTimeout(function () { $('pbC2Sr').textContent = said; }, fromUser ? 700 : 0);
     ownRow();
     annoText();
     potSync(fromUser, was === false && S.covered);
   }
+  /* Buddy, delighted (14 October 2026: end on a win). When the pot reaches the
+     line Buddy comes up under the answer: the games' own pixel Buddy
+     (games/buddy-sprites.js, fetched the first time he is needed). Reached by
+     the reader's own move, he hops for joy; then he stays, wagging, while the
+     plan covers it, and goes when it does not. Under reduced motion he is
+     simply there, still. aria-hidden: the answer already says "Covered." */
+  var pupBox = $('pbC2Pup'), pupCv = pupBox && pupBox.querySelector('canvas'), pupCx = pupCv && pupCv.getContext ? pupCv.getContext('2d') : null;
+  var pupT = 0, pupF = 0, pupWant = false, pupLoad = null;
+  function sprites() {
+    if (window.PBSprites) { return Promise.resolve(true); }
+    if (!pupLoad) {
+      pupLoad = new Promise(function (res) {
+        var sc = document.createElement('script'); sc.src = 'games/buddy-sprites.js';
+        sc.onload = function () { res(!!window.PBSprites); }; sc.onerror = function () { res(false); };
+        document.head.appendChild(sc);
+      });
+    }
+    return pupLoad;
+  }
+  function pupDraw() {
+    if (!pupCx || !window.PBSprites) { return; }
+    var B = window.PBSprites.buddy, fr = (B.happy && B.happy.length ? B.happy : B.idle);
+    pupCx.clearRect(0, 0, pupCv.width, pupCv.height);
+    window.PBSprites.draw(pupCx, fr[pupF % fr.length], 0, 0, 2, false);
+  }
+  function pup(on, hop) {
+    if (!pupBox || !pupCx) { return; }
+    pupWant = on;
+    if (!on) { pupBox.hidden = true; pupBox.classList.remove('pb-c2-hop'); clearInterval(pupT); pupT = 0; return; }
+    sprites().then(function (ok) {
+      if (!ok || !pupWant) { return; }
+      pupBox.hidden = false; pupF = 0; pupDraw();
+      if (!K.motion()) { return; }
+      if (hop) { pupBox.classList.remove('pb-c2-hop'); void pupBox.offsetWidth; pupBox.classList.add('pb-c2-hop'); }
+      clearInterval(pupT);
+      /* the wag: fast while he hops, then slow */
+      var n = 0;
+      pupT = setInterval(function () { if (!pupWant) { clearInterval(pupT); pupT = 0; return; } n++; if (n > 12 && n % 3) { return; } pupF++; pupDraw(); }, 160);
+    });
+  }
+
   /* the next way of life up: Modest, Moderate, Comfortable, then your own figure if it is higher */
   function higher() {
     var a = K.aim, i = ['modest', 'moderate', 'comfortable'].indexOf(a.level);

@@ -72,7 +72,30 @@
     }
     ownRow();
     split();
+    fix();
   }
+
+  /* what closes it (14 October 2026: the gain under the loss, in green): the
+     calculator's own sums for its plan, sent with each answer as 'pb:calc'
+     (pb-home-calc.js), so the two never disagree. Until the calculator has
+     spoken, the markup's line stands: its starting plan, 35, EUR 10,000 saved. */
+  var fixEl = $('pbG2Fix'), fromEl = $('pbG2From'), plan = null;
+  function fix() {
+    if (!fixEl || !plan) { return; }
+    var f = figures(), d = plan, r = d.tax, off = f.gap <= 0;
+    fixEl.hidden = off; if (fromEl) { fromEl.hidden = off; }
+    if (off) { return; }
+    var t = d.covered
+      ? (d.mine > 0 ? 'Your <b>' + fmt(d.mine) + ' a month</b> closes it. Revenue pays <b>' + fmt(d.mine * r) + '</b> of that.' : 'What you have saved closes it.')
+      : 'Close it with <b>' + fmt(d.reach) + ' a month</b>. Revenue pays <b>' + fmt(d.reach * r) + '</b> of that.';
+    if (fixEl.innerHTML !== t) { fixEl.innerHTML = t; }
+    if (fromEl) {
+      var w = 'From age ' + d.age + (d.saved > 0 ? ', with ' + fmt(d.saved) + ' saved' : '') +
+        (d.emp > 0 ? ' and ' + fmt(d.emp) + ' a month from your employer' : '') + '. <a href="#calc">Try your own figures</a>';
+      if (fromEl.innerHTML !== w) { fromEl.innerHTML = w; }
+    }
+  }
+  document.addEventListener('pb:calc', function (e) { plan = e.detail || null; fix(); });
 
   /* your own figure: a slider, shown only with "Your own" */
   var own = $('pbG2Own'), ownR = $('pbG2OwnR'), ownV = $('pbG2OwnV');
