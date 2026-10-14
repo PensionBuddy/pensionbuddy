@@ -374,6 +374,9 @@
   }
   function cheer() {
     line.flash = 1;
+    /* 14 October 2026: on a phone that can, a small double tick under the
+       finger as the pot reaches the line (Android; iPhones have no web haptics) */
+    if (navigator.vibrate && window.matchMedia && matchMedia('(pointer:coarse)').matches) { try { navigator.vibrate([10, 60, 16]); } catch (e) { /* a nicety */ } }
     if (anno) { anno.classList.remove('pb-c2-cheer'); void anno.offsetWidth; anno.classList.add('pb-c2-cheer'); }
     coins.forEach(function (c) { if (solid(c)) { c.py = c.y + 3 + Math.random() * 4; } });
     body.sq.v -= 9; pop(0.8);

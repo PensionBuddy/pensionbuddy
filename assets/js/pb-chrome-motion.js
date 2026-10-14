@@ -25,6 +25,10 @@
    disclosure (nothing here touches them or anything that holds them), or any
    motion at all without html.pb-motion: then, and without JavaScript, every
    card and link stands whole and still. */
+/* 14 October 2026: Safari paints a button's :active state (the CLICK block's
+   press on a touch screen) only once the page listens for touches. A passive
+   listener that does nothing: no scroll waits on it. */
+if (window.addEventListener) { document.addEventListener('touchstart', function () {}, { passive: true }); }
 (function () {
   'use strict';
   var root = document.documentElement;

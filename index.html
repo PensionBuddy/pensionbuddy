@@ -1845,6 +1845,15 @@ a.assure:hover{border-color:var(--teal)}
   a.assure:hover{transform:none}
   .pb-offer-item:hover .pb-offer-name::after,.pb-offer-item:focus-visible .pb-offer-name::after{transform:none}
 }
+/* 14 October 2026: a press you can feel on a touch screen. A finger hides
+   what it presses, so the button answers by sinking a little, at once
+   (--pb-t-press), and springs back on its own transition; the grey flash a
+   phone paints instead goes. Safari applies :active only once the page
+   listens for touches: assets/js/pb-chrome-motion.js does, passively. */
+:is(.btn,.pb-seg button,.pb-g2-go,.pb-c2-close,.pb-w-go,.pb-share-btn,.pb-c2-aimchg,.pb-after-more,.nav-toggle,.nav-search,.pb-bookbar a){-webkit-tap-highlight-color:transparent}
+@media (hover:none) and (prefers-reduced-motion:no-preference){
+  html.pb-motion :is(.btn,.pb-seg button,.pb-g2-go,.pb-c2-close,.pb-w-go,.pb-share-btn,.pb-c2-aimchg,.nav-toggle,.nav-search,.pb-bookbar a):active{transform:scale(.96);transition:transform var(--pb-t-press)}
+}
 /* CLICK:END */
 /* FONTS:BEGIN (Run 32; served from the site since Run 34; Figtree for
    every word, wordmark included, since 8 Oct 2026). Figtree comes from
@@ -2055,8 +2064,19 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
 /* off screen while the analytics choice is open, and out of the tab order */
 .pb-b-btn.pb-b-away{visibility:hidden}
 @media (prefers-reduced-motion:no-preference){
-  html.pb-motion .pb-b-btn{transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s linear var(--pb-d-3)}
-  html.pb-motion .pb-b-btn:not(.pb-b-away){transition:translate var(--pb-t-state),transform var(--pb-t-press),visibility 0s}
+  html.pb-motion .pb-b-btn{transition:translate var(--pb-t-state),transform var(--pb-t-press),padding var(--pb-t-state),gap var(--pb-t-state),visibility 0s linear var(--pb-d-3)}
+  html.pb-motion .pb-b-btn:not(.pb-b-away){transition:translate var(--pb-d-3) var(--pb-ease-out),transform var(--pb-t-press),padding var(--pb-t-state),gap var(--pb-t-state),visibility 0s}
+  /* 14 October 2026: the floating chrome on one clock. The menu bar and Ask
+     Buddy leave together, quicker than they come (--pb-t-exit), and come back
+     together on the house curve, so on a phone they read as one move */
+  html.pb-motion .pb-b-btn.pb-b-aside:not(.pb-b-away){transition:translate var(--pb-t-exit),transform var(--pb-t-press),padding var(--pb-t-state),gap var(--pb-t-state),visibility 0s}
+  html.pb-motion nav.nav-hidden{transition:transform var(--pb-t-exit)}
+  /* tucking is one move, not a jump: the name narrows away and fades as the
+     pill closes round the photo. Width to and from auto needs
+     interpolate-size (Chrome 129 on); elsewhere it tucks at once, as before */
+  html.pb-motion .pb-b-btn{interpolate-size:allow-keywords}
+  html.pb-motion .pb-b-btn .pb-b-label{transition:width var(--pb-t-state),opacity var(--pb-t-swap)}
+  html.pb-motion.pb-b-tucked .pb-b-btn .pb-b-label{opacity:0}
 }
 @media(max-width:920px){
   /* stepping down while a caveat passes behind */
@@ -2842,7 +2862,9 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
   .pb-c2-mini::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:#fff;box-shadow:0 10px 26px rgba(11,31,28,.16),0 0 0 1px rgba(11,31,28,.05)}
   .pb-c2-mini::before{content:"";position:absolute;z-index:-2;left:-16px;right:-16px;top:-160px;bottom:-16px;background:linear-gradient(#FBFCFC calc(100% - 16px),rgba(251,252,252,0));opacity:0;pointer-events:none}
   .pb-c2-mini.pb-c2-stuck::before{opacity:1}
-  :root.pb-motion .pb-c2-mini::before{transition:opacity .2s}
+  :root.pb-motion .pb-c2-mini::before{transition:opacity var(--pb-t-swap)}
+  :root.pb-motion .pb-c2-aim.pb-c2-aim-open > :is(#pbC2AimL,.pb-c2-aims){animation:pbAimOpen var(--pb-d-3) var(--pb-ease-out) both}
+  :root.pb-motion .pb-c2-aim.pb-c2-aim-open > .pb-c2-aims{animation-delay:var(--pb-stagger)}
   /* "Aiming for", one line: the pills open from it */
   .pb-c2-aimsum{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px;line-height:1.4;color:var(--ink-2)}
   .pb-c2-aimsum b{color:var(--ink)}
@@ -2851,6 +2873,7 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
 }
 .pb-c2-aimsum{display:none}
 @media(max-width:920px){.pb-c2-aimsum{display:flex}}
+@keyframes pbAimOpen{from{opacity:0;transform:translateY(calc(-1 * var(--pb-nudge)))}}
 
 /* ------------------------------------------------------------- INFLATION */
 .pb-i2{padding:84px 0}
@@ -3878,11 +3901,11 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-home-gap.js?v=a47f96cf"></script>
-<script src="assets/js/pb-home-calc.js?v=10354cfe"></script>
+<script src="assets/js/pb-home-calc.js?v=1cea65da"></script>
 <script src="assets/js/pb-home-infl.js?v=d045614e"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script src="assets/js/pb-home-wait.js?v=79cb85b4"></script>
-<script src="assets/js/pb-share.js?v=d621d12f"></script>
+<script src="assets/js/pb-share.js?v=28f13004"></script>
 <script src="assets/js/pb-home-dband.js?v=fd50eb2a"></script>
 <script>
 /* sticky nav shadow */
@@ -3963,7 +3986,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-tl-motion.js?v=840d4049"></script>
 <script src="assets/js/pb-home-call.js?v=37c26d93"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
-<script src="assets/js/pb-buddy.js?v=d9adb5ad" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=a7f374f2" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
@@ -3979,7 +4002,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-providers.js?v=d29ad6be"></script>
 <script src="assets/js/pb-relief-widget.js?v=9b0d9b93"></script>
 <script src="assets/js/pb-tickband.js?v=8820d919"></script>
-<script src="assets/js/pb-chrome-motion.js?v=e090c2e4"></script>
+<script src="assets/js/pb-chrome-motion.js?v=9fb1f86d"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-forms.js?v=0649104a"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>

@@ -124,8 +124,9 @@
          October 2026): it leaves with the menu bar when the reader scrolls
          down (nav.nav-hidden) and comes back with it on the way up, and on
          the home page it waits while the welcome screen is in view. Coming
-         back with the menu bar it waits 120ms, not 600ms, and 400ms after
-         its last move, not a second: the menu bar sets the pace.
+         back with the menu bar it does not wait the 600ms, only 250ms after
+         its last move, not a second: the menu bar sets the pace, and the
+         BUDDY block of CSS moves both on one clock.
      Under reduced motion the positions are the same and the moves instant.
      Without IntersectionObserver it stays where it is, as before. */
   function giveWay(){
@@ -167,17 +168,17 @@
       var want=(held||rd)&&panel.hidden&&!focusIn();
       if(want){
         clearTimeout(clearT);clearT=null;
-        /* aside for the menu bar alone: it comes back at the menu bar's pace */
-        readAside=aside?readAside&&!held:!held;
+        /* aside for the menu bar alone, now: it comes back at the menu bar's pace */
+        readAside=!held;
         if(!aside){aside=true;last=Date.now();place();}
       }else if(aside&&!clearT){
         clearT=setTimeout(function again(){
           clearT=null;
           if((hits.length>0||covered||reading())&&!focusIn())return;
-          var wait=(readAside?400:1000)-(Date.now()-last);
+          var wait=(readAside?250:1000)-(Date.now()-last);
           if(wait>0){clearT=setTimeout(again,wait);return;}
           aside=false;readAside=false;last=Date.now();place();
-        },readAside?120:600);
+        },readAside?0:600);
       }
     }
     function watch(){

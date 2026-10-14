@@ -173,6 +173,28 @@ dead FAQ CSS and scripts still carried by 27 pages (harmless).
   one line on share links ("the link carries your figures and goes only
   where you send it"). Legal wording, so not changed here.
 
+## 14 October 2026: motion, on the house tokens
+
+- **The floating chrome on one clock.** The menu bar and Ask Buddy leave
+  together, quicker than they come (--pb-t-exit, 200ms), and come back
+  together on the house curve (320ms); on a phone Buddy no longer lags the
+  menu bar (BUDDY block; `assets/js/pb-buddy.js`).
+- **Ask Buddy tucks in one move:** the name narrows away and fades as the
+  pill closes round the photo (interpolate-size, Chrome 129 on; elsewhere at
+  once, as before).
+- **A press you can feel on a touch screen:** buttons, pills and the menu
+  buttons sink a little under the finger (--pb-t-press), the grey tap flash
+  goes, and Safari is told to paint :active (CLICK block;
+  `assets/js/pb-chrome-motion.js`).
+- **Home calculator:** "Change" opens the "Aiming for" pills with a short
+  rise; the stuck pill's band fades on the house timing; a small double
+  haptic tick on an Android phone as the pot reaches the line (the cheer).
+- **Share:** the button and its "Link copied" line move on the tokens.
+- **Not done, needs Damian:** page-to-page transitions (a crossfade between
+  pages would fade the caveats, which the motion system says never fade);
+  hiding the phone booking bar while reading, as the menu bar does (more
+  room to read, but it is the main ask).
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

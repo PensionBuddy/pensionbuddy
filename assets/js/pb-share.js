@@ -39,13 +39,13 @@
     '.pb-share-said{font-size:14px;line-height:1.4;color:var(--ink-2,#3D4F4B)}',
     '.pb-share-said:empty{display:none}',
     '@media (prefers-reduced-motion:no-preference){',
-    '  :root.pb-motion .pb-share-btn{transition:background-color .2s,transform .12s}',
-    '  :root.pb-motion .pb-share-btn:active{transform:scale(.97)}',
-    '  :root.pb-motion .pb-share-btn svg{transition:transform .25s cubic-bezier(.34,1.56,.64,1)}',
-    '  :root.pb-motion .pb-share-btn:hover svg{transform:translateY(-2px)}',
-    '  :root.pb-motion .pb-share-said:not(:empty){animation:pbShareIn .3s cubic-bezier(.22,.61,.36,1) both}',
+    '  :root.pb-motion .pb-share-btn{transition:background-color var(--pb-t-swap),transform var(--pb-t-press)}',
+    '  :root.pb-motion .pb-share-btn:active{transform:scale(.96)}',
+    '  :root.pb-motion .pb-share-btn svg{transition:transform var(--pb-t-swap)}',
+    '  :root.pb-motion .pb-share-btn:hover svg,:root.pb-motion .pb-share-btn:focus-visible svg{transform:translateY(calc(-1 * var(--pb-lift)))}',
+    '  :root.pb-motion .pb-share-said:not(:empty){animation:pbShareIn var(--pb-d-3) var(--pb-ease-out) both}',
     '}',
-    '@keyframes pbShareIn{from{opacity:0;transform:translateY(4px)}}'
+    '@keyframes pbShareIn{from{opacity:0;transform:translateY(var(--pb-nudge))}}'
   ].join('\n');
 
   function copyOld(text) {
