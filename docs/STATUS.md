@@ -142,6 +142,23 @@ dead FAQ CSS and scripts still carried by 27 pages (harmless).
   hidden for want of room). Measured at 961 to 1600px on every page family:
   it fits the row (NAV block; `tests/deadline.test.py` checks 1, 2 and 6).
 
+## 14 October 2026: the phone, less fiddly
+
+- **Ask Buddy on a phone** (560px wide or less, or 500px tall or less)
+  leaves with the menu bar when the reader scrolls down and comes back with
+  it on the way up; on the home page it also waits while the welcome screen
+  is in view. It no longer sits on the text being read
+  (`assets/js/pb-buddy.js`; `tests/floating-chrome.test.mjs` checks 1, 2b
+  and 3 and `tests/consent.test.py` check 8 follow the rule).
+- **Welcome screen on a phone:** shorter than the screen, so "Is the State
+  Pension enough?" shows under it.
+- **Home calculator on a phone (920px or less):** the stuck result pill sits
+  on a band of the panel's colour, so a control passes behind it whole; and
+  "Aiming for", already asked in the gap section above, is one line, "Aiming
+  for a modest life, for one", with "Change" opening the pills.
+- **The gap's coin tower** builds once 60% of it is in view, not 25%, so the
+  reader sees it rise, not a coin caught in mid-air.
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

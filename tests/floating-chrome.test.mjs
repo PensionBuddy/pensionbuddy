@@ -24,11 +24,13 @@
         and the pension calculator at 1440: no caveat
         (PBMotion.CAVEATS, pagebuild's list) and no form field lies under
         Ask Buddy's button, no caveat under the booking bar, no warning box
-        under the results bar; and nothing scrolls sideways
+        under the results bar; and nothing scrolls sideways (at 375 each stop
+        is probed again 120px back up, where Ask Buddy is back with the menu
+        bar, 14 October 2026)
      2. focusing every control in order (the tab walk), on the director
         rules, booking and the home page at 375: none lies under the button
-        or a bar; 2b, the home page's product tabs moved through with
-        ArrowRight, as a keyboard reaches them
+        or a bar; 2b, the home page's "Aiming for" pills, opened from their
+        line, moved through with Tab, as a keyboard reaches them
      3. a click on page text, which focuses <main tabindex="-1">, does not
         send Ask Buddy away while nothing lies under it
      4. focus in the booking bar while it has stepped down for a caveat
@@ -167,6 +169,17 @@ for (const [page, w, layers] of COVER) {
     r.covered.forEach(c => bad.push('at ' + r.y + ': ' + c));
     if (r.sideways) sideways.push(r.y);
     for (const k in r.seen) if (r.seen[k]) seen[k] = true;
+    /* 14 October 2026: on a phone Ask Buddy leaves with the menu bar on the
+       way down and comes back with it on the way up, so each stop is also
+       probed a little way back up, where he is back in his corner */
+    if (w <= 560 && y > 0) {
+      await ev(`window.scrollTo({ top: ${Math.max(0, y - 120)}, behavior: 'instant' })`);
+      await sleep(1100);
+      const u = await ev(PROBE);
+      u.covered.forEach(c => bad.push('at ' + u.y + ', on the way up: ' + c));
+      if (u.sideways) sideways.push(u.y);
+      for (const k in u.seen) if (u.seen[k]) seen[k] = true;
+    }
     if (y >= max) break;
   }
   eq(`1. ${page} at ${w}px: the floating chrome under test was on screen (${layers.join(', ')})`, layers.filter(k => !seen[k]), []);
@@ -207,12 +220,18 @@ for (const page of ['director-pension-rules.html', 'booking.html', 'index.html']
   eq(`2. ${page} at 375px: no control, focused in order (${r.n}), lies under the floating chrome`, r.bad, []);
 }
 
-/* 2b: the calculator's "Aiming for" pills on the home page at 375 (since
+/* 2b: the calculator's "Aiming for" pills on the home page (since
    11 October 2026; the product tabs this walked went with the product
    band), the way a keyboard moves through them: the first focused, then Tab
    to each of the others, each checked where it lands. The pill under Buddy's
-   column is brought level with his place first, so a stuck Buddy would cover it. */
+   column is brought level with his place first, so a stuck Buddy would cover it.
+   14 October 2026: up to 920px the pills open from the "Aiming for" line
+   ("Change"), so it is pressed first; and at 560px or less Buddy leaves with
+   the menu bar on the way down, so the levelling ends on a scroll up, which
+   brings him back to his corner. */
 await open('index.html', 375);
+await ev(`(() => { const c = document.querySelector('.pb-c2-aimchg'); if (c && c.getAttribute('aria-expanded') !== 'true') c.click(); return 1; })()`);
+await sleep(300);
 const PILLS = `[].slice.call(document.querySelectorAll('.pb-c2-lv button, .pb-c2-hh button'))`;
 /* the pill under Buddy's column: the first after the first whose span meets the button's */
 const AT = `(() => { const b = document.getElementById('pbBuddyBtn').getBoundingClientRect();
@@ -254,7 +273,9 @@ const spot = await ev(`(async () => {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const b = document.getElementById('pbBuddyBtn');
   for (let y = 900; y < document.documentElement.scrollHeight - innerHeight; y += 150) {
-    scrollTo({ top: y, behavior: 'instant' }); await sleep(900);
+    /* arriving from below, so the menu bar, and Buddy with it, are up (14 October 2026) */
+    scrollTo({ top: y + 60, behavior: 'instant' }); await sleep(50);
+    scrollTo({ top: y, behavior: 'instant' }); await sleep(1100);
     if (b.classList.contains('pb-b-aside')) continue;
     const br = b.getBoundingClientRect();
     const p = [...document.querySelectorAll('main p')].find(e => { const r = e.getBoundingClientRect();

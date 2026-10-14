@@ -315,9 +315,14 @@
   document.addEventListener('visibilitychange', kick);
   document.addEventListener('pb:motion', kick);
   if ('IntersectionObserver' in window) {
+    /* 14 October 2026: it draws as soon as any of it shows, but builds only
+       once most of it is in view (60%, or 60% of a short screen), so the
+       reader sees the tower rise, not a coin caught in mid-air */
     new IntersectionObserver(function (es) {
-      onScreen = es[es.length - 1].isIntersecting;
-      if (onScreen && !seen) {
+      var e = es[es.length - 1];
+      onScreen = e.isIntersecting;
+      var most = e.intersectionRatio >= 0.6 || e.intersectionRect.height >= innerHeight * 0.6;
+      if (onScreen && most && !seen) {
         seen = true; size();
         /* the first look: the tower builds itself, unless it was on screen
            before the page settled (then it is simply there) */
@@ -327,7 +332,7 @@
         }
       }
       if (onScreen) { W = 0; kick(); }
-    }, { threshold: 0.25 }).observe(chart);
+    }, { threshold: [0, 0.25, 0.6, 0.9] }).observe(chart);
   } else { seen = true; size(); sync(false); }
   /* below the fold at load: build it when it arrives */
   function settle() { var r = chart.getBoundingClientRect(); built = !(r.top < innerHeight && r.bottom > 0); }

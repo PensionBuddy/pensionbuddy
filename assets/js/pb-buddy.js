@@ -119,6 +119,13 @@
        - Away: while the analytics choice or the phone menu is open it waits
          off screen and out of the tab order, so it covers neither the choice,
          the menu nor the page. The menu opening shuts the panel.
+       - On a phone (560px wide or less, or 500px tall or less: the screens
+         of the FIRSTSCREEN block) it keeps off the text being read (14
+         October 2026): it leaves with the menu bar when the reader scrolls
+         down (nav.nav-hidden) and comes back with it on the way up, and on
+         the home page it waits while the welcome screen is in view. Coming
+         back with the menu bar it waits 120ms, not 600ms, and 400ms after
+         its last move, not a second: the menu bar sets the pace.
      Under reduced motion the positions are the same and the moves instant.
      Without IntersectionObserver it stays where it is, as before. */
   function giveWay(){
@@ -128,6 +135,10 @@
     var FIELDS='input:not([type=hidden]),select,textarea,#calEmbed,#calStage';
     var CHROME='.pb-bookbar,.pb-peek,.pb-consent,#pbBuddyPanel,#pbBuddyBtn';
     var hx=0,hy=0,aside=false,covered=false,last=0,clearT=null,io=null,hits=[];
+    var PHONE=window.matchMedia?matchMedia('(max-width:560px),(max-height:500px)'):null;
+    var bar0=document.getElementById('nav'),welcome=document.querySelector('.pb-welcome'),inWelcome=false,readAside=false;
+    if(welcome){var wr=welcome.getBoundingClientRect();inWelcome=wr.bottom>0&&wr.top<window.innerHeight;}
+    function reading(){return !!PHONE&&PHONE.matches&&((!!bar0&&bar0.classList.contains('nav-hidden'))||inWelcome);}
     function has(c){return root.classList.contains(c);}
     var nav=document.getElementById('navLinks');
     function menu(){return !!nav&&nav.classList.contains('open');}
@@ -152,18 +163,21 @@
       btn.style.setProperty('--pb-b-y',hy+'px');
     }
     function decide(){
-      var want=(hits.length>0||covered)&&panel.hidden&&!focusIn();
+      var held=hits.length>0||covered,rd=reading();
+      var want=(held||rd)&&panel.hidden&&!focusIn();
       if(want){
         clearTimeout(clearT);clearT=null;
+        /* aside for the menu bar alone: it comes back at the menu bar's pace */
+        readAside=aside?readAside&&!held:!held;
         if(!aside){aside=true;last=Date.now();place();}
       }else if(aside&&!clearT){
         clearT=setTimeout(function again(){
           clearT=null;
-          if((hits.length>0||covered)&&!focusIn())return;
-          var wait=1000-(Date.now()-last);
+          if((hits.length>0||covered||reading())&&!focusIn())return;
+          var wait=(readAside?400:1000)-(Date.now()-last);
           if(wait>0){clearT=setTimeout(again,wait);return;}
-          aside=false;last=Date.now();place();
-        },600);
+          aside=false;readAside=false;last=Date.now();place();
+        },readAside?120:600);
       }
     }
     function watch(){
@@ -227,7 +241,14 @@
     }).observe(nav,{attributes:true,attributeFilter:['class']});
     /* the panel open or shut: it opens where the button is, never aside */
     new MutationObserver(function(){if(!panel.hidden){aside=false;clearTimeout(clearT);clearT=null;}place();watch();}).observe(panel,{attributes:true,attributeFilter:['hidden']});
-    tuck();place();watch();
+    /* the phone rule: the menu bar's class, the welcome screen, the screen's size */
+    if(bar0)new MutationObserver(decide).observe(bar0,{attributes:true,attributeFilter:['class']});
+    if(welcome)new IntersectionObserver(function(es){inWelcome=es[es.length-1].isIntersecting;decide();}).observe(welcome);
+    if(PHONE){if(PHONE.addEventListener)PHONE.addEventListener('change',decide);else if(PHONE.addListener)PHONE.addListener(decide);}
+    /* the first place is taken without a slide: off the welcome screen from the start */
+    btn.style.transition='none';
+    tuck();place();watch();decide();
+    void btn.offsetWidth;btn.style.transition='';
   }
   /* after the page's own scripts have run (the bars); PBMotion is the head script's */
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',giveWay);

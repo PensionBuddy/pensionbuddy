@@ -374,6 +374,12 @@ def main():
                 # (whether the observer has reported it yet varies under virtual time)
                 back = r['after']['shown'] and r['after']['barTop'] is None and (
                     (not r['after']['aside'] and r['after']['inView']) or (r['after']['aside'] and r['after']['under']))
+                if page == 'index.html' and w <= 560:
+                    # 14 October 2026: on a phone Ask Buddy waits aside while the
+                    # home page's welcome screen is in view (assets/js/pb-buddy.js)
+                    eq('8. %s at %dpx: once it is made, Ask Buddy waits aside, off the welcome screen' % (page, w),
+                       (r['after']['shown'], r['after']['barTop'], r['after']['aside']), (True, None, True))
+                    continue
                 eq('8. %s at %dpx: once it is made, Ask Buddy is back in its corner, or aside for a caveat there' % (page, w),
                    back, True)
     # 9

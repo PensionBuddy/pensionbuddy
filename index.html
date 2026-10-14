@@ -2565,7 +2565,11 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pb-w-armed:not(.pb-w-run) .pb-w-toe,.pb-w-armed:not(.pb-w-run) .pb-w-line{animation:pbWSafeT 0s 2.5s forwards}
 @keyframes pbWSafe{to{opacity:1;transform:none}}
 @keyframes pbWSafeT{to{transform:none}}
-@media(max-width:560px){.pb-w-in{padding:40px 0 120px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
+/* 14 October 2026: on a phone the welcome is shorter than the screen, so the
+   first question ("Is the State Pension enough?") shows under it and the
+   thumb knows to scroll. Ask Buddy waits off the welcome screen on a phone
+   (assets/js/pb-buddy.js), so the bottom keeps no room for him. */
+@media(max-width:560px){.pb-welcome{min-height:calc(100svh - 212px)}.pb-w-in{padding:32px 0 40px}.pb-w-title{margin-top:26px}.pb-w-l2{font-size:14.4vw}.pb-w-hint{position:static;margin-top:22px;padding:0 16px}}
 /* WELCOME:END */
 /* MOTION-3:BEGIN (8 October 2026, Damian's brief). The relief jar beside
    Revenue's deadline and the countdown's flipping digits
@@ -2828,7 +2832,25 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
   .pb-c2-mini b{font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
   .pb-c2-mini span{margin-left:auto;font-weight:800;color:#B8432B}
   .pb-c2-is-ok .pb-c2-mini span{color:#0B7A6E}
+  /* 14 October 2026 (assets/js/pb-home-calc.js, "the phone panel"): the pill
+     is drawn by ::after, and once stuck a band of the panel's colour, ::before,
+     fills the panel's width from above the pill to just under it, so the
+     controls pass behind it whole. .pb-c2-pin marks where the pill starts. */
+  .pb-c2-panel{position:relative}
+  .pb-c2-pin{position:absolute;left:0;top:16px;width:1px;height:1px;visibility:hidden;pointer-events:none}
+  .pb-c2-mini{background:none;box-shadow:none}
+  .pb-c2-mini::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:#fff;box-shadow:0 10px 26px rgba(11,31,28,.16),0 0 0 1px rgba(11,31,28,.05)}
+  .pb-c2-mini::before{content:"";position:absolute;z-index:-2;left:-16px;right:-16px;top:-160px;bottom:-16px;background:linear-gradient(#FBFCFC calc(100% - 16px),rgba(251,252,252,0));opacity:0;pointer-events:none}
+  .pb-c2-mini.pb-c2-stuck::before{opacity:1}
+  :root.pb-motion .pb-c2-mini::before{transition:opacity .2s}
+  /* "Aiming for", one line: the pills open from it */
+  .pb-c2-aimsum{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:15px;line-height:1.4;color:var(--ink-2)}
+  .pb-c2-aimsum b{color:var(--ink)}
+  .pb-c2-aimchg{flex:0 0 auto;min-height:44px;padding:0 4px;border:0;background:none;font:inherit;font-weight:700;color:#0B7A6E;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .pb-c2-aim:not(.pb-c2-aim-open) > #pbC2AimL,.pb-c2-aim:not(.pb-c2-aim-open) > .pb-c2-aims,.pb-c2-aim:not(.pb-c2-aim-open) > .pb-c2-own{display:none}
 }
+.pb-c2-aimsum{display:none}
+@media(max-width:920px){.pb-c2-aimsum{display:flex}}
 
 /* ------------------------------------------------------------- INFLATION */
 .pb-i2{padding:84px 0}
@@ -3855,8 +3877,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
-<script src="assets/js/pb-home-gap.js?v=532e2b32"></script>
-<script src="assets/js/pb-home-calc.js?v=c3837314"></script>
+<script src="assets/js/pb-home-gap.js?v=a47f96cf"></script>
+<script src="assets/js/pb-home-calc.js?v=10354cfe"></script>
 <script src="assets/js/pb-home-infl.js?v=d045614e"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script src="assets/js/pb-home-wait.js?v=79cb85b4"></script>
@@ -3940,7 +3962,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-tl-motion.js?v=840d4049"></script>
 <script src="assets/js/pb-home-call.js?v=37c26d93"></script>
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
-<script src="assets/js/pb-buddy.js?v=30eb7b05" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=d9adb5ad" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
 <script src="assets/js/pb-search-index.js?v=3e4902af" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>

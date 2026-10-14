@@ -670,6 +670,46 @@
     }(t0));
   });
 
+  /* ------------------------------------------------ the phone panel -- */
+  /* 14 October 2026. Where the result follows the controls as a pill (920px
+     wide or less), the pill sits on a band of the panel's own colour once it
+     is stuck, so a control passes behind it whole, not half under it. And
+     "Aiming for", asked just above in the gap section (the two share K.aim),
+     is one line there, with a button that opens the pills. */
+  var mini = sec.querySelector('.pb-c2-mini'), live = $('pbC2Live');
+  if (mini && live && 'IntersectionObserver' in window) {
+    var pin = document.createElement('i'); pin.className = 'pb-c2-pin'; pin.setAttribute('aria-hidden', 'true');
+    live.appendChild(pin);
+    new IntersectionObserver(function (es) {
+      var e = es[es.length - 1];
+      mini.classList.toggle('pb-c2-stuck', !e.isIntersecting && e.boundingClientRect.top < 83);
+    }, { rootMargin: '-83px 0px 0px 0px', threshold: 0 }).observe(pin);
+  }
+  var aimBox = sec.querySelector('.pb-c2-aim'), aims = aimBox && aimBox.querySelector('.pb-c2-aims');
+  if (aimBox && aims) {
+    aims.id = aims.id || 'pbC2Aims';
+    var sum = document.createElement('div'); sum.className = 'pb-c2-aimsum';
+    sum.innerHTML = '<span id="pbC2AimSum"></span><button type="button" class="pb-c2-aimchg" aria-expanded="false" aria-controls="' + aims.id + '">Change</button>';
+    aimBox.insertBefore(sum, aimBox.firstChild);
+    var chg = sum.querySelector('button'), said = sum.querySelector('span');
+    var aimSay = function () {
+      var a = K.aim, two = a.hh === 'couple';
+      said.innerHTML = 'Aiming for <b>' + (a.level === 'own' ? 'your own figure' : 'a ' + K.life(a.level, a.hh).label.toLowerCase() + ' life') + '</b>' + (two ? ', for two' : ', for one');
+    };
+    chg.addEventListener('click', function () {
+      var open = !aimBox.classList.contains('pb-c2-aim-open');
+      aimBox.classList.toggle('pb-c2-aim-open', open);
+      chg.setAttribute('aria-expanded', open ? 'true' : 'false');
+      chg.textContent = open ? 'Done' : 'Change';
+      if (open) {
+        if (lv) { lv.place(true); } if (hh) { hh.place(true); }
+        var on = aims.querySelector('[aria-pressed="true"]'); if (on) { on.focus({ preventScroll: true }); }
+      }
+    });
+    document.addEventListener('pb:aim', aimSay);
+    aimSay();
+  }
+
   /* ---------------------------------------------------- housekeeping -- */
   window.addEventListener('resize', function () { if (!cx) { return; } var old = g; W = 0; size(); if (old) { coins.forEach(function (c) { c.x = g.cx + (c.x - old.cx) * g.B / old.B; c.y = g.bottom - (old.bottom - c.y) * g.B / old.B; c.px = c.x; c.py = c.y; }); } kick(); });
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { annoLayout(); kick(); }); }
