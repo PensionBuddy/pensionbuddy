@@ -227,6 +227,13 @@ From the review against the two "bibles" (Founders and Marketing):
   clients a written snapshot (tests/flags.test.py checks 8 to 12).
   Compliance signs off its footer and wording first. Real stories: none
   until a client says yes.
+- **Writing rules:** docs/WRITING-RULES.md, ten rules in plain words, each
+  with a before and after from the site. Rule 10 is the owner's: say the
+  main point again, people forget. tests/readability.test.py gives each
+  page a reading age (Flesch-Kincaid grade plus 5) and fails above 10.
+  Two pages read above 10 today and may only come down (ABOVE_TODAY):
+  director-pension-rules.html (10.9) and glossary.html (10.7, listed at
+  10.8). `--table` lists the longest sentences, where to cut first.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 

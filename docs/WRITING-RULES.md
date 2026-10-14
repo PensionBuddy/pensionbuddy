@@ -49,7 +49,8 @@ Why: many readers stop at the headline. Give them a reason to read on.
 - Before (index.html): "Revenue’s deadline is 18 November if you pay and
   file online."
 - After: "Cut last year’s tax: pay in before Revenue’s deadline."
-- Good now (starter.html): "No pension yet. Tax relief is there at any age."
+- Good now (starter.html): "You pay €80. Revenue adds €20." The reward, in
+  six words.
 
 ## 5. Every line answers "So what for me?"
 
@@ -68,10 +69,8 @@ coral: see `CONTEXT.md`). Do not frighten the reader about the future.
 Show what they can do now.
 Why: fear makes people stop. A gain makes them act.
 
-- Before (index.html): "In 30 years, €1,000 on deposit will buy what €577
-  buys today. In a pension, it could buy what €3,171 buys today."
-- After: "In 30 years, €1,000 in a pension could buy what €3,171 buys
-  today. On deposit: what €577 buys."
+- Done (index.html): "In 30 years, €1,000 in a pension could buy what
+  €3,171 buys today." The deposit line comes second.
 - Before (index.html headline): "€1,000 buys less every year."
 - After: "A pension can keep up with prices."
 
@@ -110,6 +109,16 @@ Why: one false claim breaks trust. A regulated adviser must not mislead.
 - Never: "Trusted by thousands." "Offer ends Friday."
 - Good now (index.html): "I founded Gresham Wealth Management in 2012 and
   still lead it." It is true, and a reader can check it.
+
+## 10. Say the main point again. People forget.
+
+People forget that other people forget. Say the one main point more than
+once, in a new place each time. Repeat the point, not the detail.
+Why: a reader skims. The second time is often the first time they see it.
+
+- Good now (index.html): the calculator's own figures come back in the gap,
+  and again in Prices, Time and Tax.
+- Not this: three figures in one line (rule 8).
 
 ## Before you publish
 
