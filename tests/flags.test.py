@@ -31,6 +31,21 @@ for page, form in FORMS.items():
     eq('4. %s: the form is still in the page' % page, 'name="%s"' % form in text, True)
     eq('5. %s: the page matches tools/flags.py' % page, flags.apply(text, FLAGS), text)
 
+# 14 October 2026: the sample one-page snapshot (docs/report/), folded under
+# "See what you leave with" on the home, booking and thank-you pages, off until
+# Damian confirms he gives clients a written snapshot after the call
+eq('8. the sample report flag is off', FLAGS.get('sample_report'), False)
+for page in ('index.html', 'booking.html', 'thank-you.html'):
+    text = open(os.path.join(ROOT, page), encoding='utf-8').read()
+    tags = re.findall(r'<details[^>]*data-flag="sample_report"[^>]*>', text)
+    eq('9. %s: one flagged sample' % page, len(tags), 1)
+    if tags:
+        eq('10. %s: hidden matches the flag' % page, ' hidden' in tags[0], not FLAGS['sample_report'])
+    eq('11. %s: the sample says it is made up, and the page matches tools/flags.py' % page,
+       (text.count('<figcaption>Sample. Made-up names and figures.</figcaption>'), flags.apply(text, FLAGS) == text), (1, True))
+eq('12. the sample picture is there, as PNG and WebP',
+   [os.path.isfile(os.path.join(ROOT, 'assets/img/sample-pension-snapshot.' + x)) for x in ('png', 'webp')], [True, True])
+
 # switching the flag back on removes hidden, and off puts it back
 sample = '<section class="x" data-flag="guide_forms" hidden><p>'
 eq('6. on removes hidden', flags.apply(sample, {'guide_forms': True}), '<section class="x" data-flag="guide_forms"><p>')

@@ -45,9 +45,8 @@ font.
 - Compliance signs off the footer and any advice wording: the gap section,
   the next step, and anything Damian types in. A comment in each file says so.
   The footer cannot be edited in the browser.
-- The sample's banner says "Sample. Names and figures changed." The figures
-  are made up, not changed from a real client. If no real case sits behind
-  it, "Sample. Made-up names and figures." says it more exactly.
+- The sample's banner says "Sample. Made-up names and figures." No real
+  client sits behind it, so it does not say "changed".
 
 ## Figures to check after each Budget
 

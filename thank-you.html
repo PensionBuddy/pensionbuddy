@@ -1475,6 +1475,15 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Figtree',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
+/* THE SAMPLE SNAPSHOT (14 October 2026): what a client leaves the call with, folded under
+   "See what you leave with". Behind the sample_report flag (shared/site-flags.json, tools/flags.py),
+   off until Damian confirms he gives clients a written snapshot; the page is docs/report/. */
+.pb-sample{margin:18px 0 0}
+.pb-sample > summary{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:#0B7A6E;cursor:pointer;text-decoration:underline;text-underline-offset:3px;list-style:none}
+.pb-sample > summary::-webkit-details-marker{display:none}
+.pb-sample-fig{margin:12px 0 0;max-width:460px}
+.pb-sample-fig img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line-2,#D8DFDC);box-shadow:0 12px 30px rgba(11,31,28,.10)}
+.pb-sample-fig figcaption{margin:8px 0 0;font-size:13px;color:var(--ink-3,#5D6C67)}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -2403,6 +2412,11 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
         </div>
       </div>
     </div>
+
+    <details class="pb-sample" data-flag="sample_report" hidden>
+      <summary>See what you leave with</summary>
+      <figure class="pb-sample-fig"><picture><source type="image/webp" srcset="assets/img/sample-pension-snapshot.webp?v=36af0bda"><img src="assets/img/sample-pension-snapshot.png?v=58121626" width="900" height="1273" loading="lazy" alt="A sample one-page pension snapshot: each pension found, what it is worth and what it charges a year; the total; the gap; and one next step. Made-up names and figures."></picture><figcaption>Sample. Made-up names and figures.</figcaption></figure>
+    </details>
 
     <div class="book-head">
       <h2>While you are waiting</h2>

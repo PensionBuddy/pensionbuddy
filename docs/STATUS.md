@@ -219,10 +219,14 @@ From the review against the two "bibles" (Founders and Marketing):
 - **Sharing and screenshots:** the gap's answer comes straight under its
   question on a phone, with pensionbuddy.ie small under both answers; a
   "Hide my numbers" switch beside "Send to my partner".
-- **Sample report:** being built (docs/report/). The sample_report flag
-  is ready in shared/site-flags.json, off, for its place on the home,
-  booking and thank-you pages, until Damian confirms he gives clients a
-  written snapshot. Real stories: none until a client says yes.
+- **Sample report:** built (docs/report/: the one-page template Damian
+  fills in and prints, and a sample with made-up names and figures; its
+  picture is assets/img/sample-pension-snapshot.png and .webp). On the
+  home, booking and thank-you pages under "See what you leave with",
+  behind the sample_report flag, off until Damian confirms he gives
+  clients a written snapshot (tests/flags.test.py checks 8 to 12).
+  Compliance signs off its footer and wording first. Real stories: none
+  until a client says yes.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 

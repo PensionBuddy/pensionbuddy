@@ -1677,6 +1677,15 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 .pb-story-shots figure{margin:0;aspect-ratio:3/2;overflow:hidden;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2)}
 .pb-story-shots img{width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:700px){.pb-story-shots{grid-template-columns:1fr;gap:12px}}
+/* THE SAMPLE SNAPSHOT (14 October 2026): what a client leaves the call with, folded under
+   "See what you leave with". Behind the sample_report flag (shared/site-flags.json, tools/flags.py),
+   off until Damian confirms he gives clients a written snapshot; the page is docs/report/. */
+.pb-sample{margin:18px 0 0}
+.pb-sample > summary{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:#0B7A6E;cursor:pointer;text-decoration:underline;text-underline-offset:3px;list-style:none}
+.pb-sample > summary::-webkit-details-marker{display:none}
+.pb-sample-fig{margin:12px 0 0;max-width:460px}
+.pb-sample-fig img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line-2,#D8DFDC);box-shadow:0 12px 30px rgba(11,31,28,.10)}
+.pb-sample-fig figcaption{margin:8px 0 0;font-size:13px;color:var(--ink-3,#5D6C67)}
 /* NAV:BEGIN (Run 29). The nav's own rules, last in every page's stylesheet
    so they win over the layers above (PB-NAV, C6, F5, the booking-button
    trade-off), and byte for byte the skeleton's on every page:
@@ -3742,6 +3751,10 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-trace.webp?v=5c0e5334"><img src="assets/img/step-trace.jpg?v=bc7a9f6e" width="1280" height="720" loading="lazy" alt="A pension statement on the desk, read line by line with a pen."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-trace.webp?v=5c0e5334" width="1280" height="720" data-pb-video><source src="assets/video/step-trace.webm" type="video/webm"><source src="assets/video/step-trace.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="We trace" data-state="paused" aria-label="Play video: We trace"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">2</div><h3>We trace</h3><p>We find your old pensions and read what they charge.</p></div>
     <div class="step"><div class="pb-step-media"><picture><source type="image/webp" srcset="assets/img/step-decide.webp?v=d491156f"><img src="assets/img/step-decide.jpg?v=b9be07e7" width="1280" height="720" loading="lazy" alt="A 2026 diary and a pen on the desk, ready to sign."></picture><video class="pb-step-vid" muted loop playsinline preload="none" aria-hidden="true" disablepictureinpicture data-poster="assets/img/step-decide.webp?v=d491156f" width="1280" height="720" data-pb-video><source src="assets/video/step-decide.webm" type="video/webm"><source src="assets/video/step-decide.mp4" type="video/mp4"></video><button type="button" class="pb-vid-btn" data-pb-video-btn data-name="You decide" data-state="paused" aria-label="Play video: You decide"><svg class="pb-vid-i pb-vid-i-play" viewBox="0 0 24 24" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg><svg class="pb-vid-i pb-vid-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button></div><div class="sx">3</div><h3>You decide</h3><p>You leave with a next step. If we're not the right fit, we say so.</p></div>
   </div>
+  <details class="pb-sample" data-flag="sample_report" hidden>
+    <summary>See what you leave with</summary>
+    <figure class="pb-sample-fig"><picture><source type="image/webp" srcset="assets/img/sample-pension-snapshot.webp?v=36af0bda"><img src="assets/img/sample-pension-snapshot.png?v=58121626" width="900" height="1273" loading="lazy" alt="A sample one-page pension snapshot: each pension found, what it is worth and what it charges a year; the total; the gap; and one next step. Made-up names and figures."></picture><figcaption>Sample. Made-up names and figures.</figcaption></figure>
+  </details>
   <!-- the page's one booking ask in its content, filled: under how a call works -->
   <div class="call-ask">
     <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
