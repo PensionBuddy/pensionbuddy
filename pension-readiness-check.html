@@ -1870,6 +1870,12 @@ html.pb-js #navSearch{display:inline-flex}
   #navTick{order:3;margin-left:10px}
   #navSearch{order:4}
 }
+/* 14 October 2026: the chip says what it counts, "35d 07h 52m to tax
+   deadline", wherever it is drawn (561px and wider). The label had been
+   hidden for want of room; "to tax deadline" is shorter than the old "to
+   Revenue's deadline", and measured in Chrome at 961 to 1600px it fits the
+   row on every page family, the search button keeping its 24px margin. */
+html.pb-js #navTick .nt-l.nt-on{display:inline}
 /* NAV:END */
 /* CLICK:BEGIN (Run 29). Everything clickable looks clickable. One block, byte
    for byte the skeleton's on every page, copied by tools/sync-chrome.py and
@@ -2112,13 +2118,15 @@ html.pb-b-tucked .pb-b-btn .pb-b-label{width:0;overflow:hidden}
      and two buttons of equal width, 44px tall; one row on a wider screen.
      While it is up, keyboard focus is scrolled clear of it (the script puts
      html.pb-consent-open and its height, --pb-consent-h, on <html>).
-   - The lockup (.pb-reg): the home, director, starter and tracker heroes
-     end with it, below the first screen on a phone. They carry a second
-     copy straight after the eyebrow (.pb-reg-top), shown on a phone or a
-     phone held sideways (560px wide or less, or 500px tall or less up to
-     1000px wide) in place of the one at the end. Each copy is display:none
-     where the other shows, so a keyboard and a screen reader meet exactly
-     one, in the order it is drawn: it holds a link.
+   - The lockup (.pb-reg): the starter and tracker heroes end with it,
+     under the buttons, so the reader meets the benefit first and the proof
+     after it (14 October 2026). There it is on the first screen of every
+     phone held upright from 375px wide, above the cookie bar. Where it is
+     not (340px wide or less, or a phone held sideways: 500px tall or less
+     up to 1000px wide), a second copy straight after the eyebrow
+     (.pb-reg-top) is shown in its place. Each copy is display:none where
+     the other shows, so a keyboard and a screen reader meet exactly one, in
+     the order it is drawn: it holds a link.
    - The review line (.pb-reviewed, "Reviewed by Damian Condon, Qualified
      Financial Adviser (QFA)", the last line of the page header on ten
      pages) is drawn under the eyebrow on the same screens. It holds no
@@ -2131,9 +2139,11 @@ html.pb-consent-open{scroll-padding-bottom:calc(var(--pb-consent-h, 96px) + 8px)
   .pb-consent p{flex:1 1 100%;font-size:12px}
   .pb-consent .pb-c-yes,.pb-consent .pb-c-no{flex:1 1 0;min-height:44px;padding:9px 12px}
 }
-@media(max-width:560px),(max-height:500px) and (max-width:1000px){
+@media(max-width:340px),(max-height:500px) and (max-width:1000px){
   .pb-hero-copy > .pb-reg-top{display:flex}
   .pb-hero-copy > .pb-reg:not(.pb-reg-top){display:none}
+}
+@media(max-width:560px),(max-height:500px) and (max-width:1000px){
   .phead > .wrap:has(> .pb-reviewed){display:flex;flex-direction:column}
   .phead > .wrap:has(> .pb-reviewed) > .eyebrow{order:-2;align-self:flex-start}
   .phead > .wrap:has(> .pb-reviewed) > .pb-reviewed{order:-1}
@@ -2669,7 +2679,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <div class="announce"><span>Regulated by the Central Bank of Ireland</span><span class="sep"></span><span><b>Free</b> first consultation</span></div>
 <nav id="nav"><div class="wrap nav-in">
   <a href="index.html" class="logo"><span class="logo-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)" fill="#fff"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)" fill="#fff"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)" fill="#fff"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)" fill="#fff"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z" fill="#fff"/></svg></span>Pensionbuddy</a>
-  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true" data-pb-wait>--</span><span class="nt-l nt-on" aria-hidden="true">to Revenue&rsquo;s deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
+  <a class="nav-tick" id="navTick" href="index.html#deadline" aria-label="18 November 2026, Revenue&rsquo;s deadline for the 2025 tax year if you pay and file online through the Revenue Online Service. Opens the full explanation."><span class="nt-dot" aria-hidden="true"></span><span class="nt-n nt-on" id="ntVal" aria-hidden="true" data-pb-wait>--</span><span class="nt-l nt-on" aria-hidden="true">to tax deadline</span><span class="nt-n nt-off" aria-hidden="true">18 Nov 2026<span class="nt-more">, online</span></span></a>
   <div class="nav-links" id="navLinks">
     <a class="lnk" href="index.html">Home</a>
     <a class="lnk" href="tracker.html">Find a pension</a>
@@ -3082,7 +3092,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
 
-<script src="assets/js/pb-deadline.js?v=7f738a3d"></script>
+<script src="assets/js/pb-deadline.js?v=0e6abecc"></script>
 
 
 <script>

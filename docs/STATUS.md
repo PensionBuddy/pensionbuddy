@@ -128,6 +128,20 @@ dead FAQ CSS and scripts still carried by 27 pages (harmless).
 - **Every page:** related cards with a drawing of the page they lead to;
   a redesigned footer.
 
+## 14 October 2026: proof after the benefit, a chip that says what it counts
+
+- **Starter and tracker heroes on a phone:** the regulator and QFA lockup
+  is drawn under the buttons, not above the headline, so the reader meets
+  the benefit first. It is still on the first screen, above the cookie
+  bar, on every phone held upright from 375px wide. At 340px wide or less,
+  and on a phone held sideways, the copy under the eyebrow still shows,
+  because under the buttons it would fall off the first screen there
+  (FIRSTSCREEN block; `tests/consent.test.py` check 9).
+- **The nav's deadline chip** shows its label on every screen that draws
+  the chip: "35d 07h 11m to tax deadline" (was "to Revenue's deadline",
+  hidden for want of room). Measured at 961 to 1600px on every page family:
+  it fits the row (NAV block; `tests/deadline.test.py` checks 1, 2 and 6).
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

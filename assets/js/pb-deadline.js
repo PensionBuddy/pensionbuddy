@@ -48,7 +48,7 @@
    only while <html> lacks pb-js, the class the
    script in <head> sets before anything paints. With JavaScript the chip
    shows its live spans (.nt-on) as before. The chip's
-   live label and the band's eyebrow, "to Revenue's deadline" and "Revenue's
+   live label and the band's eyebrow, "to tax deadline" and "Revenue's
    deadline", never change and are markup only. PBDeadline.at(date) is the
    arithmetic alone, for tests/deadline.test.py. */
 (function () {

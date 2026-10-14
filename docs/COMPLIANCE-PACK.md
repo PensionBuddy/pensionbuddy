@@ -1887,7 +1887,8 @@ Changed wording on existing pages
 - Every page, the deadline countdown (26 September 2026): it counts to
   Revenue's online deadline, and the site no longer mentions a cut-off
   date of our own. The chip beside the logo reads "[days]d [hours]h
-  [minutes]m to Revenue's deadline", and a screen reader hears "About
+  [minutes]m to tax deadline" (until 14 October 2026, "to Revenue's
+  deadline", hidden beside the links for want of room), and a screen reader hears "About
   [n] days left until 18 November, Revenue's deadline for the 2025 tax
   year if you pay and file online through the Revenue Online Service."
   The home page's band: "Revenue's deadline" over "Revenue's deadline is

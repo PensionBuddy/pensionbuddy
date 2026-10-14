@@ -391,10 +391,14 @@ def main():
                 continue
             L, T, Rt, B = r['box']
             if hero:
+                # 14 October 2026: the copy at the end, under the buttons (proof after
+                # the benefit), on every screen it fits; the one under the eyebrow only
+                # where it would not: 340px wide or less, and a phone held sideways
+                top = (w, h) in SIDEWAYS or w <= 340
                 eq('9. %s at %dx%d: one of the lockup\'s two copies is drawn, the %s, and keyboard order is drawing order'
-                   % (page, w, h, 'one under the eyebrow' if (w, h) not in WIDE else 'one at the end'),
+                   % (page, w, h, 'one under the eyebrow' if top else 'one at the end'),
                    (r['regs'], r['regsDrawn'], r['line'], r['beforeH1']),
-                   (2, 1, 'pb-reg pb-reg-top', True) if (w, h) not in WIDE else (2, 1, 'pb-reg', False))
+                   (2, 1, 'pb-reg pb-reg-top', True) if top else (2, 1, 'pb-reg', False))
             if (w, h) in WIDE:
                 continue
             eq('9. %s at %dx%d: the %s is on the first screen, whole, and the cookie bar is below it' % (page, w, h, what),

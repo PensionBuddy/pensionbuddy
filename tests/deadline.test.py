@@ -13,7 +13,7 @@ What it proves:
      it replaced; the chip counts to the end of 18 November, Revenue's online
      deadline in days, hours and minutes ("54d 12h 59m"), says so to a
      screen reader in days with
-     the tax year, and its label reads "to Revenue's deadline"
+     the tax year, and its label reads "to tax deadline"
   2. the home page's band: eyebrow "Revenue's deadline", heading "Revenue's
      deadline is 18 November if you pay and file online.", its clock
      days, hours and minutes and no seconds, 31 October as the second line,
@@ -258,7 +258,7 @@ def main():
         # the clocks go back on 25 October, so the count has an hour more in it
         eq('1. %s: the chip counts days, hours and minutes to the end of 18 November' % page, r['chip'], '54d 12h 59m')
         eq('1. %s: and says so to a screen reader' % page, r['label'], LEFT + ' Opens the full explanation.')
-        eq('1. %s: its label names Revenue\'s deadline' % page, r['chipLab'], 'to Revenue’s deadline')
+        eq('1. %s: its label names the tax deadline' % page, r['chipLab'], 'to tax deadline')
         eq('1. %s: no script error' % page, r['errors'], [])
     # 2
     r = R[('index.html', NOW)]
@@ -287,8 +287,8 @@ def main():
        all('id="%s"' % i in clock.group(2) for i in ('tkD', 'tkH', 'tkM')) and 'id="tkS"' not in src and
        'html:not(.pb-js) .tk-clock{display:none}' in src, True)
     chip = re.search(r'<a class="nav-tick" id="navTick"[^>]*>.*?</a>', flat)
-    eq('2. the chip\'s live label names Revenue\'s deadline',
-       bool(chip) and '<span class="nt-l nt-on" aria-hidden="true">to Revenue’s deadline</span>' in chip.group(0), True)
+    eq('2. the chip\'s live label names the tax deadline',
+       bool(chip) and '<span class="nt-l nt-on" aria-hidden="true">to tax deadline</span>' in chip.group(0), True)
     # 3
     for page in CALCS:
         r = R[(page, NOW)]
@@ -358,7 +358,7 @@ def main():
                  re.findall(r'<span class="(nt-[^"]*)"[^>]*>((?:[^<]|<span class="nt-more">[^<]*</span>)*)</span>', m.group(2))]
         more = re.search(r'<span class="nt-n nt-off"[^>]*>[^<]*<span class="nt-more">([^<]*)</span></span>', m.group(2))
         return m.group(1), spans, more.group(1) if more else None
-    LIVE = [('nt-dot', ''), ('nt-n nt-on', '--'), ('nt-l nt-on', 'to Revenue’s deadline')]
+    LIVE = [('nt-dot', ''), ('nt-n nt-on', '--'), ('nt-l nt-on', 'to tax deadline')]
     WANT = (S['chipName'], LIVE + [('nt-n nt-off', S['chipDate'] + S['chipMore'])], S['chipMore'] or None)
     eq('6. every page: the chip carries today\'s date and a name that says so, for a reader without JavaScript',
        {pg: chip_off(open(os.path.join(ROOT, pg), encoding='utf-8').read()) for pg in pages
@@ -372,8 +372,9 @@ def main():
     for page in pages:
         r = R.get((page, NOW))
         if r:
+            # 14 October 2026: the live label, "to tax deadline", shows too
             eq('6. %s: with JavaScript only the live spans show' % page,
-               (r['pbjs'], r['chipShown'], r['shown']), (True, True, ['nt-dot', 'nt-n nt-on']))
+               (r['pbjs'], r['chipShown'], r['shown']), (True, True, ['nt-dot', 'nt-n nt-on', 'nt-l nt-on']))
     plain = re.sub(r'<[^>]+>', '', S['row'])
     for page in NOJS:
         for w in NOJS_W:
