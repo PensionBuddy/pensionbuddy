@@ -5,8 +5,9 @@ guides, forms and emails. The test is simple: a ten-year-old can follow it.
 Write like Hemingway's iceberg. Show the tip. The reader can work out the rest.
 
 The measure is `tests/readability.test.py`. It gives each page a reading
-age. The bar is 10 or under. Two pages are above it today:
-`director-pension-rules.html` and `glossary.html`. They must come down.
+age. The bar is 10 or under, and every page meets it (14 October 2026:
+`director-pension-rules.html` came down from 10.9 and `glossary.html`
+from 10.7).
 `--table` shows each page, and the longest sentences on the site. The test
 does not score warnings, sources or legal text. That wording is fixed. Do
 not change it to meet these rules.
@@ -87,7 +88,7 @@ Why: one word the reader does not know can stop them.
 
 - Before (director-pension-rules.html): "Above 100%, the excess is a
   taxable benefit-in-kind for you."
-- After: "Above 100%, you pay tax on the extra, as on your pay. Revenue calls
+- Done: "Above 100%, you pay tax on the extra, as on your pay. Revenue calls
   it a benefit-in-kind."
 
 ## 8. Leave out what the reader can work out.

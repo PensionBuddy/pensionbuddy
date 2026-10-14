@@ -113,8 +113,8 @@ BAR = 10.0
 # Each must come down. The reading age when this list was made (14 October
 # 2026), rounded up to one decimal. A page leaves the list when it reads at
 # 10 or under; nothing is ever added to it. Both pages it held came off the
-# same day, rewritten: director-pension-rules.html (10.88 to 9.91) and
-# glossary.html (10.71 to 9.84). The list is empty.
+# same day, rewritten: director-pension-rules.html (10.88 to 9.95) and
+# glossary.html (10.71 to 9.82). The list is empty.
 ABOVE_TODAY = {}
 
 # Fixed wording: legal pages, and caveats wherever they are.

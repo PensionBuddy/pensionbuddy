@@ -248,7 +248,10 @@ From the review against the two "bibles" (Founders and Marketing):
   For compliance to confirm (pack, 14 October entry).
 - **The writing rules, applied:** the pension calculator's cost of waiting
   opens on the gain; director.html's 30-word sentence is three; the "Pensions
-  after 50" card has its numbers.
+  after 50" card has its numbers. Every page now reads at age 10 or under:
+  director-pension-rules.html (10.88 to 9.95; tools/director-rules-parts/
+  main.html too) and glossary.html (10.71 to 9.82) were rewritten in short
+  sentences, every fact, figure, date and link kept; ABOVE_TODAY is empty.
 - **Search results:** the home and starter descriptions name the reward
   with a number ("Is the State Pension enough? See your gap and what closes
   it…"; "No pension yet? At the 20% tax rate, you pay EUR 80 and Revenue

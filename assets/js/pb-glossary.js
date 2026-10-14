@@ -111,7 +111,7 @@ window.PBGlossary = [
  {
   "id": "lump-sum",
   "name": "Lump sum",
-  "def": "Tax-free cash you can usually take at retirement. It is within Revenue\u2019s limits.",
+  "def": "Tax-free cash you can usually take at retirement. Revenue sets the limits.",
   "tip": true,
   "pats": [
    [
