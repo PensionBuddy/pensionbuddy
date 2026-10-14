@@ -43,8 +43,9 @@ WHAT IS LEFT OUT, and why: fixed wording the owner cannot simplify.
     left. A legal block's "as at" line, notes and call box (.legal .updated,
     .ck-note, .callbox) are caveats and are left out.
   - The legal pages: privacy.html, terms.html, complaints.html.
-  - A page with no sentence left after that (how-we-work.html: its whole
-    body is a caveat). 404.html is read: it has prose ("This page is gone.").
+  - A page with no full sentence left after that (how-we-work.html: its
+    whole body is a caveat). 404.html is read: it has prose ("This page is
+    gone.").
   - The two games in games/: they are not root pages, and they draw on a
     canvas.
 
@@ -397,7 +398,8 @@ def run():
     eq('1. 404.html has prose, so it is read', '404.html' in read_pages, True)
     for guide in ('pensions-over-50.html', 'self-employed-pensions.html', 'uk-pensions-in-ireland.html',
                   'director-year-end-checklist.html'):
-        eq('1. %s: the guide inside .legal is read (over 300 words)' % guide, found[guide]['words'] > 300, True)
+        eq('1. %s: the guide inside .legal is read (over 300 words)' % guide,
+           found.get(guide, {}).get('words', 0) > 300, True)
     eq('1. ABOVE_TODAY names only pages that are read', sorted(set(ABOVE_TODAY) - set(read_pages)), [])
     eq('1. ABOVE_TODAY figures are to one decimal', [p for p, v in ABOVE_TODAY.items() if round(v, 1) != v], [])
 
@@ -465,17 +467,18 @@ def run():
     eq('4. on the longest page not listed, %s, a paragraph of five of them is caught' % longest,
        verdict(longest, measure(inject(longest, '<p>%s</p>' % ' '.join([jargon] * 5)))['age'])
        .startswith('reads at'), True)
-    # the ratchet on a real page, listed at today's figure whether or not it
-    # is in ABOVE_TODAY: one more such sentence is caught by (b) alone (no
-    # bar), and a page of short sentences must come off the list by (c)
-    listed = {'glossary.html': up1(found['glossary.html']['age'])}
-    eq('4. (b) glossary.html, listed at today\'s figure: one more such sentence is caught',
-       verdict('glossary.html', measure(inject('glossary.html', '<p>%s</p>' % jargon))['age'], listed, bar=0)
+    # the ratchet on the hardest page, listed at today's figure whether or
+    # not it is in ABOVE_TODAY: one more such sentence is caught by (b)
+    # alone (no bar), and with a page of short sentences added it must come
+    # off the list by (c)
+    top = max(read_pages, key=lambda p: found[p]['age'])
+    listed = {top: up1(found[top]['age'])}
+    eq('4. (b) %s, the hardest page, listed at today\'s figure: one more such sentence is caught' % top,
+       verdict(top, measure(inject(top, '<p>%s</p>' % jargon))['age'], listed, bar=0)
        .endswith('in ABOVE_TODAY'), True)
-    eq('4. (c) glossary.html, listed, with 120 short sentences added would have to come off the list',
-       verdict('glossary.html', measure(inject('glossary.html', '<p>%s</p>' % (
-           'You pay in. The State adds. Your pot grows. ' * 40)))['age'], listed)
-       .endswith('take it off ABOVE_TODAY'), True)
+    eq('4. (c) %s, listed, with 120 short sentences added would have to come off the list' % top,
+       verdict(top, measure(inject(top, '<p>%s</p>' % ('You pay in. The State adds. Your pot grows. ' * 40)))['age'],
+               listed).endswith('take it off ABOVE_TODAY'), True)
     nothing = (0, 0, 0)
     left_out = [('a caveat, .%s' % c, '<p class="%s">%s</p>' % (c, jargon), nothing) for c in sorted(
         ('pb-warn', 'pb-caveat', 'pb-reg', 'pb-reviewed', 'infoadvice', 'disclosure', 'gap-note', 'pb-src',
