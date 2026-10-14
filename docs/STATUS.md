@@ -195,6 +195,35 @@ dead FAQ CSS and scripts still carried by 27 pages (harmless).
   hiding the phone booking bar while reading, as the menu bar does (more
   room to read, but it is the main ask).
 
+## 14 October 2026: the marketing review, run (the owner's list)
+
+From the review against the two "bibles" (Founders and Marketing):
+
+- **Losses into wins.** The gap's answer has its fix in green under it
+  ("Close it with EUR 110 a month. Revenue pays EUR 44 of that."), from the
+  calculator's own sums (pb:calc). The calculator says its fix ("Add EUR
+  10 a month and you're there.") instead of hiding it behind the button,
+  which now names the amount. Covered: the games' pixel Buddy hops under
+  the answer.
+- **One money story.** Under the calculator, "Why a pension, and why
+  now." (#money): Prices (#inflation, the pension first now), Time
+  (#wait, with two lines about now) and Tax (#relief, new), on three tabs,
+  all on the calculator's figures. "Are you a director?" under it; the
+  games follow the Ask form again (build checks 32, 33).
+- **Starter headline:** "You pay EUR 80. Revenue adds EUR 20." with the
+  20% rate in the line under it; the share card keeps a figure-free line
+  of the same hero (tools/og-images.py, CARDS line).
+- **Proof:** the Ask form and Ask Buddy say "Answers within one working
+  day." The painting of Buddy, the gifts and the review link wait on the
+  owner (docs/PROOF.md).
+- **Sharing and screenshots:** the gap's answer comes straight under its
+  question on a phone, with pensionbuddy.ie small under both answers; a
+  "Hide my numbers" switch beside "Send to my partner".
+- **Sample report:** being built (docs/report/). The sample_report flag
+  is ready in shared/site-flags.json, off, for its place on the home,
+  booking and thank-you pages, until Damian confirms he gives clients a
+  written snapshot. Real stories: none until a client says yes.
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

@@ -11,6 +11,10 @@ reads the form at deploy and switching back on is one value and one run.
 
     guide_forms   the "email me the guide" form on director.html,
                   starter.html and tracker.html
+    sample_report the sample one-page pension snapshot ("See what you leave
+                  with") on index.html, booking.html and thank-you.html;
+                  off until Damian confirms he gives clients a written
+                  snapshot after the call (14 October 2026, docs/report/)
 """
 import json
 import os
@@ -19,7 +23,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FLAGS = os.path.join(ROOT, 'shared', 'site-flags.json')
-PAGES = ['director.html', 'starter.html', 'tracker.html']
+PAGES = ['director.html', 'starter.html', 'tracker.html', 'index.html', 'booking.html', 'thank-you.html']
 TAG = re.compile(r'<(\w+)([^>]*?)\sdata-flag="([a-z_]+)"(\s+hidden)?([^>]*)>')
 
 
