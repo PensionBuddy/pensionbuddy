@@ -1740,9 +1740,23 @@ def run():
     # card, the share row and the paw prints: fewer things on each page.
     eq('37. Save as A, the guess card, the share row and the paw prints are gone',
        sorted(n for n, t in sources.items() if any(x in t for x in (
-           'id="pbAbSave"', '<script src="assets/js/pb-guess.js', '<script src="assets/js/pb-share.js',
+           'id="pbAbSave"', '<script src="assets/js/pb-guess.js',
            '<script src="assets/js/pb-report.js', '<script src="assets/js/pb-scenario.js',
            '<script src="assets/js/pb-badges.js', 'data-pb-badges="strip"', "classList.add('pb-preveil')"))), [])
+    # 14 October 2026 (Damian: everything can be shared): sharing is back as one
+    # button, "Send to my partner" (assets/js/pb-share.js), not the old row of
+    # three: once on every calculator page and the home page, and "Challenge a
+    # friend" on the two games' score screens. The old row's words stay gone.
+    share_js = read('assets/js/pb-share.js')
+    games = {g: read('games/%s.html' % g) for g in ('buddys-run', 'jargon-battle')}
+    eq('37. the share script once on every calculator page and the home page; the games\' own button and the script once each',
+       ([n for n, t in sorted(sources.items()) if ('class="calc-wrap' in t or n == 'index.html') and t.count('<script src="assets/js/pb-share.js') != 1],
+        [g for g, t in sorted(games.items()) if t.count('<script src="../assets/js/pb-share.js') != 1 or t.count('id="pbShareBtn"') != 1]),
+       ([], []))
+    eq('37. one button, "Send to my partner"; no copy-link, print or email row',
+       ('Send to my partner' in share_js, [x for x in ('Copy a link to these figures', 'Save or print these figures')
+                                           if x in share_js or any(x in t for t in sources.values())]),
+       (True, []))
 
     # ----------------------------------------------------------------- 38
     # Run 37, item 6: the six long guides. Each carries one "On this page"

@@ -159,6 +159,20 @@ dead FAQ CSS and scripts still carried by 27 pages (harmless).
 - **The gap's coin tower** builds once 60% of it is in view, not 25%, so the
   reader sees it rise, not a coin caught in mid-air.
 
+## 14 October 2026: share
+
+- **"Send to my partner"** under every calculator's result (the end of the
+  block after it) and under the home page's calculator; **"Challenge a
+  friend"** on the two games' score screens. One button
+  (`assets/js/pb-share.js`), not the row of three cut on 8 October. On a
+  phone it opens the phone's own share sheet; elsewhere it copies the words
+  and the link. A calculator's link carries its inputs after the #, so it
+  opens on the same figures; nothing reaches us. Build check 37 holds it.
+- **Needs Damian:** the Privacy Notice still says "Email them to yourself"
+  opens your own email app; that button went on 8 October. It may also want
+  one line on share links ("the link carries your figures and goes only
+  where you send it"). Legal wording, so not changed here.
+
 ## Held back (noindex, unlinked, out of the sitemap), and why
 
 | Page | Why | Comes back when |

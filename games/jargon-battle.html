@@ -132,6 +132,9 @@ main{max-width:1000px;margin:0 auto;padding:20px}
 @media (prefers-reduced-motion: reduce){ .opt{transition:none} .opt:active:not(:disabled){transform:none} }
 
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* 14 October 2026: "Challenge a friend" (assets/js/pb-share.js) says here that the link is copied */
+.share-said{margin:8px 0 0;font-size:14px;color:var(--ink-2)}
+.share-said:empty{display:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;border:3px solid var(--ink);border-radius:4px;background:var(--amber);font-weight:700;font-size:15px;cursor:pointer;box-shadow:3px 3px 0 var(--line-2)}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line-2)}
 .btn.cta{background:var(--teal);color:#fff;border-color:var(--pine)}
@@ -295,8 +298,10 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
       </div>
       <div class="row">
         <button class="btn" type="button" id="againBtn">Play again</button>
+        <button class="btn ghost" type="button" id="pbShareBtn" data-pb-share="I busted {endHits} pension terms in Jargon Battle. Beat me:" hidden>Challenge a friend</button>
         <a class="backlink" href="../glossary.html" target="_top">Back to the jargon buster</a>
       </div>
+      <p class="share-said" id="pbShareSaid" role="status"></p>
       <p class="lead">Damian explains these for a living.</p>
       <a class="btn cta" href="../booking.html" target="_top">Book a free 20-minute call with us</a>
     </div>
@@ -319,6 +324,7 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 </footer>
 
 <script src="buddy-sprites.js"></script>
+<script src="../assets/js/pb-share.js"></script>
 <script src="../assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script>
 (function (global) {
