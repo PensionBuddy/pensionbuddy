@@ -44,7 +44,7 @@
   var panel=document.createElement('div');
   panel.className='pb-b-panel';panel.id='pbBuddyPanel';panel.hidden=true;
   panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Ask Buddy: ask us a question');
-  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" width="96" height="96" alt=""><div><div class="t">Ask Buddy</div><div class="s">Ask us anything. We reply by email.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
+  panel.innerHTML='<div class="pb-b-head"><img src="'+AV+'" width="96" height="96" alt=""><div><div class="t">Ask Buddy</div><div class="s">Ask us anything. Answers within one working day.</div></div><button type="button" class="pb-b-close" aria-label="Close">\u00d7</button></div>'
     +'<form class="pb-b-form" novalidate>'
     +'<input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="topic" value="Ask Buddy">'
     +'<input type="hidden" name="page"><input type="hidden" name="reply_by"><input type="hidden" name="details">'

@@ -4,7 +4,7 @@
     python3 tools/lead-blocks.py            # write the pages
     python3 tools/lead-blocks.py --check    # report, change nothing, exit 1 if stale
 
-    ask        "Ask us. We reply by email." (Netlify form "enquiry"):
+    ask        "Ask us. Answers within one working day." (until 14 October 2026, "Ask us. We reply by email.") (Netlify form "enquiry"):
                the home, starter, directors', booking and glossary pages,
                and the middle of five guides (at their <!-- ASK-HERE --> line)
     jobs       the old jobs timeline ("pension-trace"): tracker.html
