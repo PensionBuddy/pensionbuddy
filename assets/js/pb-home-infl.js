@@ -95,17 +95,19 @@
       yrs.setAttribute('aria-valuetext', 'At ' + v);
       if (head) { head.textContent = 'What your money will buy.'; }
       if (yrsL) { yrsL.textContent = 'At age'; }
-      if (cashW) { cashW.textContent = 'At ' + v + ', your ' + money() + ' on deposit will buy what'; }
-      if (penW) { penW.textContent = 'In your pension, a pot of ' + fmt(grown(n, GROW)) + ' could buy what'; }
+      /* 14 October 2026: the pension first, the deposit second */
+      if (penW) { penW.textContent = 'At ' + v + ', your ' + money() + ' in your pension, a pot of ' + fmt(grown(n, GROW)) + ', could buy what'; }
+      if (cashW) { cashW.textContent = 'On deposit, the same money would buy what'; }
     } else {
       yrs.setAttribute('aria-valuetext', n + (n === 1 ? ' year' : ' years'));
       if (head) { head.textContent = '€1,000 buys less every year.'; }
       if (yrsL) { yrsL.textContent = 'Years'; }
-      if (cashW) { cashW.textContent = 'In ' + (n === 1 ? '1 year' : n + ' years') + ', €1,000 on deposit will buy what'; }
-      if (penW) { penW.textContent = 'In a pension, it could buy what'; }
+      if (penW) { penW.textContent = 'In ' + (n === 1 ? '1 year' : n + ' years') + ', €1,000 in a pension could buy what'; }
+      if (cashW) { cashW.textContent = 'On deposit, it would buy what'; }
     }
     rCash.set(fmt(cashOf(n))); rPen.set(fmt(penOf(n)));
-    $('pbI2Put').textContent = fmt(100 * (1 - r)); $('pbI2Add').textContent = fmt(100 * r);
+    /* what Revenue adds is the Tax panel's now (14 October 2026); a page that still says it here gets it */
+    if ($('pbI2Put')) { $('pbI2Put').textContent = fmt(100 * (1 - r)); $('pbI2Add').textContent = fmt(100 * r); }
     if (rT.cash) { rT.cash.set(fmt(cashOf(n))); rT.pen.set(fmt(penOf(n))); if (!own) { rT.gov.set('+' + fmt(govOf(n))); } }
   }
 
@@ -129,7 +131,8 @@
     var h = C.sliceH(Math.round(w));
     g = { w: Math.round(w), e: h.e, ry: h.ry, base: base };
     /* with the reader's own money there are two stacks, so they move to the middle */
-    S.cash.x = W * (own ? 0.3 : 0.21); S.pen.x = W * (own ? 0.68 : 0.56); S.gov.x = S.pen.x + g.w * 1.14;
+    /* 14 October 2026: the pension's stack first, on the left, the deposit's on the right */
+    S.pen.x = W * (own ? 0.32 : 0.2); S.gov.x = S.pen.x + g.w * 1.14; S.cash.x = W * (own ? 0.7 : 0.76);
   }
   function slot(i) { return g.base - g.ry - g.e - i * g.e; }
   /* each coin's own small offset, so a stack is a stack and not a cylinder */

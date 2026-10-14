@@ -1431,11 +1431,13 @@ def run():
         f = []
         # since 12 October 2026 (Damian's brief: how a call works, then the
         # forms, then the jargon buster) the games follow the forms, with at
-        # most one comment between (Run 37); since 13 October 2026 the cost of
-        # waiting stands between, in the fee check's place
-        m = re.search(r'<section class="pb-w2" id="wait".*?</div></section>\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
+        # most one comment between (Run 37); from 13 October 2026 the cost of
+        # waiting stood between, in the fee check's place; since 14 October
+        # 2026 it is a panel of "Why a pension, and why now." (#money), under
+        # the calculator, and the games are straight after the Ask form again
+        m = re.search(r'<!-- LEAD:ask:END -->\s*(?:<!--(?:(?!-->).)*-->\s*)?<section class="pb-learn" id="learn"><div class="wrap">(.*?)</div></section>', ix, re.S)
         if not m:
-            return ['the section is not straight after the cost of waiting']
+            return ['the section is not straight after the Ask form']
         box = m.group(1)
         if '<h2>Play the jargon buster.</h2>' not in box:
             f.append('the heading')
@@ -1508,10 +1510,16 @@ def run():
     # call" gone. 13 October 2026 (Damian's brief): the fee check gone (the
     # charges calculator stays under Tools); the cost of waiting straight
     # under the Ask form, in its place.
+    # 14 October 2026 (the owner: keep all three, beside each other): under the
+    # calculator one card, "Why a pension, and why now." (#money), holds three
+    # panels on three tabs, the inflation baskets, the cost of waiting and Tax,
+    # in that order; "Are you a director?" under it; then how a call works, the
+    # forms and the games.
     ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
-             '<section class="pb-i2" id="inflation"', '<section class="expect" id="call">',
-             '<section class="pb-ask" id="ask"', '<section class="pb-w2" id="wait"', '<section class="pb-learn" id="learn">',
+             '<section class="pb-ms" id="money"', '<section class="pb-i2" id="inflation"', '<section class="pb-w2" id="wait"',
+             '<section class="pb-x2" id="relief"', 'id="pbDrb"', '<section class="expect" id="call">',
+             '<section class="pb-ask" id="ask"', '<section class="pb-learn" id="learn">',
              '<section class="tickband" id="deadline">', '<section id="story">', '<section class="pb-tl-sec" id="through-life">']
 
     def order_faults(ix):
@@ -1526,14 +1534,14 @@ def run():
                 f.append('back: ' + gone)
         return f
 
-    eq('33. the home page: welcome, the gap, the providers, the calculator, inflation, then the games',
+    eq('33. the home page: welcome, the gap, the providers, the calculator, the three panels, then the games',
        order_faults(sources['index.html']), [])
     ix = sources['index.html']
-    c0, c1 = ix.find('<!-- THE CALCULATOR'), ix.find('<!-- INFLATION (11 October 2026')
-    b1 = ix.find('<!-- JUST HERE TO LEARN?')
+    c0, c1 = ix.find('<!-- THE CALCULATOR'), ix.find('<!-- WHY A PENSION, AND WHY NOW')
+    b1 = ix.find('<!-- ARE YOU A DIRECTOR?')
     swapped = ix[:c0] + ix[c1:b1] + ix[c0:c1] + ix[b1:]
     for label, mut, want in (
-            ('inflation above the calculator', swapped, 'out of order'),
+            ('the three panels above the calculator', swapped, 'out of order'),
             ('"What\'s changed?" put back', ix.replace('<div data-pb-providers hidden></div>', '<section class="pb-changed" id="changed"></section>\n<div data-pb-providers hidden></div>', 1), 'back: id="changed"'),
             ('the fee check put back', ix.replace('<section class="pb-w2" id="wait"', '<form name="fee-check"></form>\n<section class="pb-w2" id="wait"', 1), 'back: name="fee-check"')):
         assert mut != ix, label

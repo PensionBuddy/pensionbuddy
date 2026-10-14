@@ -2901,7 +2901,7 @@ html:not(.pb-js) .pb-c2-panel,html:not(.pb-js) .pb-c2-close{display:none}
 /* ------------------------------------------------------------- INFLATION */
 .pb-i2{padding:84px 0}
 .pb-i2-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:36px 56px;align-items:center}
-.pb-i2 h2{margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
+.pb-i2 :is(h2,h3){margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
 .pb-i2-out{margin:22px 0 0;font-size:clamp(21px,2.1vw,26px);line-height:1.3;letter-spacing:-.015em;color:var(--ink);font-weight:500}
 .pb-i2-out b{font-weight:800;font-variant-numeric:tabular-nums}
 .pb-i2-cash b{color:#D4573D}
@@ -2934,7 +2934,7 @@ html:not(.pb-js) .pb-i2-stage{display:none}
   /* on a phone the picture comes straight after the words, the controls under it */
   .pb-i2-copy{display:contents}
   .pb-i2-grid{gap:0}
-  .pb-i2 h2{order:1}.pb-i2-out{order:2}.pb-i2-why{order:3}.pb-i2-gov{order:4}
+  .pb-i2 :is(h2,h3){order:1}.pb-i2-out{order:2}.pb-i2-why{order:3}.pb-i2-gov{order:4}
   .pb-i2-stage{height:360px;order:5;margin-top:24px}
   .pb-i2-ctl{order:6}.pb-i2-note{order:7}
   .pb-i2-tag b{font-size:21px}
@@ -3004,7 +3004,7 @@ html.pb-motion .pb-c2-anno.pb-c2-cheer .pb-c2-lab-need .pb-c2-lab-t{display:inli
 .pb-w2{padding:12px 0 84px}
 .pb-w2-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:36px 64px;align-items:center;padding:48px 52px;border-radius:28px;
   background:radial-gradient(60% 70% at 0% 100%,#FDF1EE 0%,rgba(253,241,238,0) 70%),#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.08)}
-.pb-w2 h2{margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
+.pb-w2 :is(h2,h3){margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
 .pb-w2 .pb-w2-lede{margin:14px 0 0;font-size:clamp(18px,1.7vw,21px);line-height:1.4;font-weight:600;color:var(--ink-2)}
 .pb-w2-lede b{color:var(--ink);font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pb-w2-ctl{margin:26px 0 0;max-width:440px}
@@ -3056,6 +3056,84 @@ html.pb-motion .pb-w2-go:not(.pb-w2-live) .pb-w2-less span{transition-delay:1.5s
   .pb-w2-track{height:42px;border-radius:12px}
 }
 @media print{.pb-w2-armed .pb-w2-fill{transform:scaleX(var(--w,1))!important}.pb-w2-armed .pb-w2-gap,.pb-w2-armed .pb-w2-less span{opacity:1!important;translate:none!important}.pb-w2-armed .pb-w2-less::before{transform:none!important}}
+
+/* WHY A PENSION, AND WHY NOW (#money, 14 October 2026): one card under the calculator, three
+   panels on three tabs (assets/js/pb-home-money.js). Without JavaScript (no .pb-ms-on) the tabs
+   stay hidden and the panels stand one under another, a rule between each. In the card the
+   inflation and waiting sections lose their own section padding and frame, and their headings
+   step down to the card's size. The tab pill is the site's segmented control; the chosen tab
+   is aria-selected, not aria-pressed. */
+.pb-ms{padding:84px 0 8px}
+.pb-ms-head{max-width:760px}
+.pb-ms h2{margin:0;font-size:clamp(34px,4.2vw,52px);line-height:1.02;letter-spacing:-.04em}
+.pb-ms .pb-ms-lede{margin:12px 0 0;font-size:clamp(18px,1.7vw,21px);line-height:1.4;font-weight:600;color:var(--ink-2)}
+.pb-ms-tabs{margin:24px 0 0}
+.pb-ms-tabs[hidden]{display:none}
+.pb-ms-tabs button{min-height:48px;padding:0 26px;font-size:16.5px}
+.pb-ms-tabs button[aria-selected="true"]{color:var(--ink)}
+.pb-ms-card{margin:22px 0 0;padding:44px 48px;border-radius:28px;background:#fff;border:1px solid var(--line,#E7EBE9);box-shadow:0 24px 60px rgba(11,31,28,.08)}
+.pb-ms-card > section + section{margin-top:52px;padding-top:44px;border-top:1px solid var(--line,#E7EBE9)}
+.pb-ms-on .pb-ms-card > section + section{margin-top:0;padding-top:0;border-top:0}
+.pb-ms-card > section[hidden]{display:none}
+.pb-ms-card > section:focus-visible{outline:3px solid #14CBB1;outline-offset:12px;border-radius:12px}
+.pb-ms .pb-i2,.pb-ms .pb-w2{padding:0}
+.pb-ms .pb-w2-card{padding:0;border:0;border-radius:0;box-shadow:none;background:none}
+.pb-ms :is(.pb-i2,.pb-w2,.pb-x2) h3{margin:0;font-size:clamp(28px,3.1vw,40px);line-height:1.05;letter-spacing:-.035em}
+/* the waiting panel, about now: the gain, then the loss; and a start at 25 */
+.pb-w2 .pb-w2-year{margin:16px 0 0;font-size:17px;line-height:1.45;color:var(--ink-2)}
+.pb-w2-year b{color:#0B7A6E;font-weight:800}
+.pb-w2-year b span{font-variant-numeric:tabular-nums}
+.pb-w2-year-r{color:#BF4A30;font-weight:700}
+.pb-w2-year[hidden],.pb-w2-then[hidden]{display:none}
+.pb-w2-then{font-size:16.5px;line-height:1.45;color:var(--ink-2)}
+.pb-w2-then b{color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+/* the Tax panel */
+.pb-x2-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:36px 64px;align-items:center}
+.pb-x2 .pb-x2-big{margin:18px 0 0;font-size:clamp(26px,2.8vw,36px);line-height:1.2;font-weight:800;letter-spacing:-.025em;color:var(--ink)}
+.pb-x2-big b{font-variant-numeric:tabular-nums}
+.pb-x2-rev{white-space:nowrap}
+.pb-x2-rev b{padding:0 .16em;border-radius:.2em;background:#FCEFCF;color:#7A5200}
+.pb-x2 .pb-x2-lede{margin:12px 0 0;font-size:18px;line-height:1.45;color:var(--ink-2)}
+.pb-x2-lede b{color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pb-x2-taxrow{margin:18px 0 0;max-width:340px}
+.pb-x2-taxrow[hidden],.pb-x2-now[hidden]{display:none}
+.pb-x2 .pb-x2-now{margin:16px 0 0;font-size:16.5px;font-weight:700;line-height:1.45;color:#0B7A6E}
+.pb-x2-now a{color:#0B7A6E;white-space:nowrap}
+.pb-x2 .pb-x2-note{margin:14px 0 0;font-size:13px;line-height:1.55;color:var(--ink-3)}
+.pb-x2-chart{display:flex;flex-direction:column;gap:30px;min-width:0}
+.pb-x2-head{display:flex;align-items:baseline;justify-content:space-between;gap:4px 16px;flex-wrap:wrap;margin:0 0 10px}
+.pb-x2-name{font-size:17px;font-weight:700;color:var(--ink)}
+.pb-x2-fig{font-size:clamp(22px,2.2vw,28px);font-weight:800;letter-spacing:-.025em;color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-x2-bar{display:flex;height:48px;border-radius:14px;overflow:hidden;background:#EEF2F1}
+.pb-x2-b-you{flex:0 0 auto;width:calc(var(--you,.6) * 100%);background:linear-gradient(90deg,#A3B0C1,#8292A9)}
+.pb-x2-b-rev{flex:1 1 auto;background:linear-gradient(90deg,#F7D27A,#F4B740)}
+.pb-x2-key{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;font-size:15px;color:var(--ink-2)}
+.pb-x2-key i{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:50%;vertical-align:0}
+.pb-x2-k-you i{background:#8292A9}
+.pb-x2-k-rev i{background:#F4B740}
+.pb-x2-key b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pb-x2-total{padding:22px 24px;border-radius:20px;background:#FFF8E8;border:1px solid #F6E3B4}
+.pb-x2 .pb-x2-tk{margin:0;font-size:17px;font-weight:700;color:#7A5200}
+.pb-x2 .pb-x2-tbig{margin:4px 0 0;font-size:clamp(44px,5vw,64px);font-weight:800;line-height:1;letter-spacing:-.05em;color:#7A5200;font-variant-numeric:tabular-nums}
+.pb-x2 .pb-x2-tsub{margin:10px 0 0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+@media (prefers-reduced-motion:no-preference){
+  html.pb-motion .pb-x2-b-you{transition:width var(--pb-t-fill)}
+}
+@media(max-width:920px){
+  .pb-ms{padding:52px 0 4px}
+  .pb-ms-card{padding:26px 20px 24px;border-radius:22px}
+  .pb-ms-tabs{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
+  .pb-ms-tabs button{padding:0 8px}
+  .pb-ms :is(.pb-i2,.pb-w2,.pb-x2) h3{font-size:clamp(26px,7vw,34px)}
+  .pb-ms .pb-w2-card{gap:26px}
+  .pb-x2-in{grid-template-columns:1fr;gap:26px}
+  .pb-x2-bar{height:42px;border-radius:12px}
+  .pb-x2-name{font-size:15.5px}
+  .pb-x2-fig{font-size:21px}
+  .pb-x2-total{padding:18px 18px}
+}
+.pb-drb-band{padding:0 0 84px}
+@media(max-width:920px){.pb-drb-band{padding:0 0 52px}}
 
 /* INFLATION, the reader's own money (13 October 2026): with the calculator set, the deposit and
    the pension hold the reader's monthly amount; the government's share is inside the pension,
@@ -3507,6 +3585,24 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
 </div></section>
 
+<!-- WHY A PENSION, AND WHY NOW (14 October 2026, the owner: "repeat yourself, people forget; keep
+     all three, but smoother, beside each other"). One card under the calculator, three panels on
+     three tabs, one angle each: Prices (#inflation), Time (#wait) and Tax (#relief). All three
+     follow the calculator's figures (PBKit.plan, PBKit.tax), so the reader sets them once. Without
+     JavaScript the tabs are hidden and the three panels stand one under the other. The tabs move
+     nothing on the page: a panel is swapped at once, never faded, since its caveats are furniture;
+     only the pill under the tabs slides. assets/js/pb-home-money.js. -->
+<section class="pb-ms" id="money" aria-labelledby="pbMsH"><div class="wrap">
+  <div class="pb-ms-head">
+    <h2 id="pbMsH">Why a pension, and why now.</h2>
+    <p class="pb-ms-lede">Three ways to see it, with the figures in the calculator above.</p>
+    <div class="pb-seg pb-ms-tabs" role="tablist" aria-label="Three ways to see it" hidden>
+      <button type="button" role="tab" id="pbMsTabP" aria-controls="inflation" aria-selected="true">Prices</button>
+      <button type="button" role="tab" id="pbMsTabT" aria-controls="wait" aria-selected="false" tabindex="-1">Time</button>
+      <button type="button" role="tab" id="pbMsTabX" aria-controls="relief" aria-selected="false" tabindex="-1">Tax</button>
+    </div>
+  </div>
+  <div class="pb-ms-card">
 <!-- INFLATION (11 October 2026, Damian's brief: "€1,000 buys less every year; why a pension; the
      government adds to it"). Three stacks of coins: money on deposit, which buys less each year;
      the same money in a pension, which grows; and, dim beside it, what the government adds in tax
@@ -3515,14 +3611,15 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
      calculator's 6%; the relief at 20% or 40%, shared with the calculator. 13 October 2026 (Damian:
      the one place for what money buys): once the reader sets the calculator's age or monthly
      amount, the section reads their money: that amount every month to 66, on deposit against in
-     a pension, in what it buys at today's prices. The markup is the €1,000 version. -->
-<section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="wrap pb-i2-grid">
+     a pension, in what it buys at today's prices. The markup is the €1,000 version. 14 October 2026:
+     the first of the three panels of "Why a pension, and why now." (#money), the pension first and
+     the deposit second; what Revenue adds went to the third panel, Tax. -->
+<section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="pb-i2-grid">
   <div class="pb-i2-copy">
-    <h2 id="pbI2H">&euro;1,000 buys less every year.</h2>
-    <p class="pb-i2-out pb-i2-cash"><span id="pbI2CashW">In 30 years, &euro;1,000 on deposit will buy what</span> <span class="pb-nw"><b id="pbI2Cash">&euro;577</b> buys today.</span></p>
-    <p class="pb-i2-out pb-i2-pen"><span id="pbI2PenW">In a pension, it could buy what</span> <span class="pb-nw"><b id="pbI2Pen">&euro;3,171</b> buys today.</span></p>
+    <h3 id="pbI2H">&euro;1,000 buys less every year.</h3>
+    <p class="pb-i2-out pb-i2-pen"><span id="pbI2PenW">In 30 years, &euro;1,000 in a pension could buy what</span> <span class="pb-nw"><b id="pbI2Pen">&euro;3,171</b> buys today.</span></p>
+    <p class="pb-i2-out pb-i2-cash"><span id="pbI2CashW">On deposit, it would buy what</span> <span class="pb-nw"><b id="pbI2Cash">&euro;577</b> buys today.</span></p>
     <p class="pb-i2-why">A deposit can&rsquo;t keep up with prices. A pension can.</p>
-    <p class="pb-i2-gov">And for every <b id="pbI2Put">&euro;60</b> you put in, the government <span class="pb-nw">adds <b id="pbI2Add">&euro;40</b>.</span></p>
     <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
       <div class="pb-c2-row"><label for="pbI2Yrs" id="pbI2YrsL">Years</label><span class="pb-c2-v" id="pbI2YrsV">30</span></div>
       <input type="range" id="pbI2Yrs" min="1" max="40" step="1" value="30">
@@ -3539,10 +3636,88 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
   </div>
 </div>
-  <!-- ARE YOU A DIRECTOR? (Run 54, Damian's brief: "underneath, in big bold writing: are you a
-       director? This differs for you. Click here"). One link to director.html; three company coins
-       (blue) turn into yours (silver) as it comes into view (assets/js/pb-home-dband.js). Inside the
-       inflation section on purpose: the section after it is "How a call works", then the forms. -->
+</section>
+<!-- THE COST OF WAITING (13 October 2026, Damian's brief: "the clearest pain on the page; simple,
+     visual, animated"), straight under the Ask form, in place of the fee check (fees are low in
+     Ireland; the charges calculator stays under Tools). Start now against wait: the calculator's
+     own age, savings and monthly amount (yours and your employer's), and a slider for the years you
+     wait. The big figure is what waiting costs at 66; the two bars are the two pots. Future euros,
+     before inflation, at the calculator's 6%. The sums are assets/js/cost-of-waiting.js
+     (PBWaiting.costOfWaiting and project); assets/js/pb-home-wait.js paints and moves it. The
+     markup is the answer at the calculator's starting values: 35, &euro;10,000 saved, &euro;100 a
+     month, a 5-year wait. 14 October 2026: the second panel of "Why a pension, and why now."
+     (#money), with two lines about now: what Revenue adds in the first year, and what a start at
+     25 would hold by now. -->
+<section class="pb-w2" id="wait" aria-labelledby="pbW2H"><div class="pb-w2-in">
+  <div class="pb-w2-card">
+    <div class="pb-w2-copy">
+      <h3 id="pbW2H">The cost of waiting.</h3>
+      <p class="pb-w2-lede"><span id="pbW2Same">Same</span> <b id="pbW2M">&euro;100 a month</b> into your pension. Start now, at <b id="pbW2Age">35</b>, or wait.</p>
+      <p class="pb-w2-year" id="pbW2Year"><b>Start now: Revenue adds <span id="pbW2YearN">&euro;480</span> in your first year.</b> <span class="pb-w2-year-r">Wait a year and you miss it.</span></p>
+      <div class="pb-w2-ctl" id="pbW2Ctl" hidden>
+        <div class="pb-c2-row"><label for="pbW2Yrs">Years you wait</label><span class="pb-c2-v" id="pbW2YrsV">5</span></div>
+        <input type="range" id="pbW2Yrs" min="1" max="20" step="1" value="5">
+      </div>
+      <div class="pb-w2-ans" aria-live="polite" aria-atomic="true">
+        <p class="pb-w2-k" id="pbW2K">Wait 5 years and you have</p>
+        <p class="pb-w2-big"><span id="pbW2Lost">&euro;31,612</span></p>
+        <p class="pb-w2-at">less at 66.</p>
+      </div>
+    </div>
+    <div class="pb-w2-chart">
+      <div class="pb-w2-row pb-w2-now">
+        <div class="pb-w2-head"><span class="pb-w2-name" id="pbW2NowL">Start now, at 35</span><b class="pb-w2-fig" id="pbW2Now">&euro;165,412</b></div>
+        <div class="pb-w2-track" aria-hidden="true"><i class="pb-w2-fill"></i></div>
+      </div>
+      <div class="pb-w2-row pb-w2-later" id="pbW2LaterRow" style="--w:.8089">
+        <div class="pb-w2-head"><span class="pb-w2-name" id="pbW2LaterL">Wait 5 years, start at 40</span><b class="pb-w2-fig" id="pbW2Later">&euro;133,800</b></div>
+        <div class="pb-w2-track" aria-hidden="true"><i class="pb-w2-gap"></i><i class="pb-w2-fill"></i></div>
+        <div class="pb-w2-less" aria-hidden="true"><span id="pbW2Less">&euro;31,612 less</span></div>
+      </div>
+      <div class="pb-w2-catch" id="pbW2Catch">To catch up from 40: <b>&euro;143 a month</b>, not &euro;100.</div>
+      <div class="pb-w2-then" id="pbW2Then">Started at 25? You&rsquo;d have about <b>&euro;16,247</b> by now.</div>
+    </div>
+  </div>
+  <div class="pb-w2-fine">
+    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
+    <p class="gap-note pb-w2-note">Your pot at 66: what you have saved, plus the same monthly payment from now or from later. Future euros, before inflation. 6% growth a year before charges, the most a pension projection may assume. Charges not taken off. &ldquo;By now&rdquo; is the same monthly payment from 25, at the same 6%. Your first year&rsquo;s relief is at your tax rate, within Revenue&rsquo;s limits.</p>
+  </div>
+</div></section>
+<!-- TAX (14 October 2026): the third panel of "Why a pension, and why now." (#money). What
+     Revenue adds to what you put in, from the calculator's own monthly amount and tax rate
+     (PBKit.plan, PBKit.tax): a month, and to 66 if the rate and the payments stay the same. Plain
+     sums, no growth, so no projection. Before Revenue's deadline, one line says it can count
+     against last year's tax (PBDeadline). assets/js/pb-home-money.js. The markup is the answer at
+     the calculator's starting values: 35, &euro;100 a month, 40%. -->
+<section class="pb-x2" id="relief" aria-labelledby="pbX2H"><div class="pb-x2-in">
+  <div class="pb-x2-copy">
+    <h3 id="pbX2H">Revenue pays part of it.</h3>
+    <p class="pb-x2-big"><span class="pb-x2-you">You pay <b id="pbX2You">&euro;60</b>.</span> <span class="pb-x2-rev">Revenue adds <b id="pbX2Rev">&euro;40</b>.</span></p>
+    <p class="pb-x2-lede">That&rsquo;s <b id="pbX2M">&euro;100 a month</b> in your pension, at the <b id="pbX2Rate">40%</b> tax rate.</p>
+    <div class="pb-c2-taxrow pb-x2-taxrow" hidden><span class="pb-c2-taxl" id="pbX2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-x2-tax" role="group" aria-labelledby="pbX2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
+    <p class="pb-x2-now" id="pbX2Now" hidden></p>
+    <p class="pb-x2-note pb-caveat">Relief is at your rate of income tax, within Revenue&rsquo;s limit: 15% of earnings under 30, rising with age to 40% from 60, on earnings up to &euro;115,000. To 66: if your rate and payments stay the same.</p>
+  </div>
+  <div class="pb-x2-chart">
+    <div class="pb-x2-row">
+      <div class="pb-x2-head"><span class="pb-x2-name">Each month</span><b class="pb-x2-fig" id="pbX2MonthT">&euro;100</b></div>
+      <div class="pb-x2-bar" id="pbX2Bar" style="--you:.6" aria-hidden="true"><i class="pb-x2-b-you"></i><i class="pb-x2-b-rev"></i></div>
+      <p class="pb-x2-key"><span class="pb-x2-k-you"><i aria-hidden="true"></i>You <b id="pbX2KYou">&euro;60</b></span><span class="pb-x2-k-rev"><i aria-hidden="true"></i>Revenue <b id="pbX2KRev">&euro;40</b></span></p>
+    </div>
+    <div class="pb-x2-total">
+      <p class="pb-x2-tk" id="pbX2ToL">To 66, Revenue adds</p>
+      <p class="pb-x2-tbig"><span id="pbX2ToRev">&euro;14,880</span></p>
+      <p class="pb-x2-tsub" id="pbX2ToSub">You put in &euro;22,320 over 31 years.</p>
+    </div>
+  </div>
+</div></section>
+  </div>
+</div></section>
+<!-- ARE YOU A DIRECTOR? (Run 54, Damian's brief: "underneath, in big bold writing: are you a
+     director? This differs for you. Click here"). One link to director.html; three company coins
+     (blue) turn into yours (silver) as it comes into view (assets/js/pb-home-dband.js). Under the
+     money card since 14 October 2026; the section after it is "How a call works", then the forms. -->
+<div class="pb-drb-band">
   <div class="wrap pb-drb" id="pbDrb">
     <a class="pb-drb-in" href="director.html">
       <canvas class="pb-drb-cv" aria-hidden="true"></canvas>
@@ -3550,7 +3725,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
       <span class="pb-g2-go pb-drb-go">See how <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
     </a>
   </div>
-</section>
+</div>
 
 <!-- "How a call works" (12 October 2026, Damian's brief: how a call works, then the forms,
      then the games, straight under "Are you a director?"). The three filmed clips (talk, trace,
@@ -3644,48 +3819,6 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 </div>
 </div></section>
 <!-- LEAD:ask:END -->
-<!-- THE COST OF WAITING (13 October 2026, Damian's brief: "the clearest pain on the page; simple,
-     visual, animated"), straight under the Ask form, in place of the fee check (fees are low in
-     Ireland; the charges calculator stays under Tools). Start now against wait: the calculator's
-     own age, savings and monthly amount (yours and your employer's), and a slider for the years you
-     wait. The big figure is what waiting costs at 66; the two bars are the two pots. Future euros,
-     before inflation, at the calculator's 6%. The sums are assets/js/cost-of-waiting.js
-     (PBWaiting.costOfWaiting and project); assets/js/pb-home-wait.js paints and moves it. The
-     markup is the answer at the calculator's starting values: 35, &euro;10,000 saved, &euro;100 a
-     month, a 5-year wait. -->
-<section class="pb-w2" id="wait" aria-labelledby="pbW2H"><div class="wrap">
-  <div class="pb-w2-card">
-    <div class="pb-w2-copy">
-      <h2 id="pbW2H">The cost of waiting.</h2>
-      <p class="pb-w2-lede"><span id="pbW2Same">Same</span> <b id="pbW2M">&euro;100 a month</b> into your pension. Start now, at <b id="pbW2Age">35</b>, or wait.</p>
-      <div class="pb-w2-ctl" id="pbW2Ctl" hidden>
-        <div class="pb-c2-row"><label for="pbW2Yrs">Years you wait</label><span class="pb-c2-v" id="pbW2YrsV">5</span></div>
-        <input type="range" id="pbW2Yrs" min="1" max="20" step="1" value="5">
-      </div>
-      <div class="pb-w2-ans" aria-live="polite" aria-atomic="true">
-        <p class="pb-w2-k" id="pbW2K">Wait 5 years and you have</p>
-        <p class="pb-w2-big"><span id="pbW2Lost">&euro;31,612</span></p>
-        <p class="pb-w2-at">less at 66.</p>
-      </div>
-    </div>
-    <div class="pb-w2-chart">
-      <div class="pb-w2-row pb-w2-now">
-        <div class="pb-w2-head"><span class="pb-w2-name" id="pbW2NowL">Start now, at 35</span><b class="pb-w2-fig" id="pbW2Now">&euro;165,412</b></div>
-        <div class="pb-w2-track" aria-hidden="true"><i class="pb-w2-fill"></i></div>
-      </div>
-      <div class="pb-w2-row pb-w2-later" id="pbW2LaterRow" style="--w:.8089">
-        <div class="pb-w2-head"><span class="pb-w2-name" id="pbW2LaterL">Wait 5 years, start at 40</span><b class="pb-w2-fig" id="pbW2Later">&euro;133,800</b></div>
-        <div class="pb-w2-track" aria-hidden="true"><i class="pb-w2-gap"></i><i class="pb-w2-fill"></i></div>
-        <div class="pb-w2-less" aria-hidden="true"><span id="pbW2Less">&euro;31,612 less</span></div>
-      </div>
-      <div class="pb-w2-catch" id="pbW2Catch">To catch up from 40: <b>&euro;143 a month</b>, not &euro;100.</div>
-    </div>
-  </div>
-  <div class="pb-w2-fine">
-    <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note pb-w2-note">Your pot at 66: what you have saved, plus the same monthly payment from now or from later. Future euros, before inflation. 6% growth a year before charges, the most a pension projection may assume. Charges not taken off.</p>
-  </div>
-</div></section>
 
 <!-- JUST HERE TO LEARN? (Run 35): the two games, each a still photograph of the real game mid-play
      (tools/shoot-product.py buddys-run jargon-battle), a line and a play link. Static by design. -->
@@ -3929,9 +4062,10 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-home-gap.js?v=28a61008"></script>
 <script src="assets/js/pb-home-calc.js?v=42d0e55e"></script>
-<script src="assets/js/pb-home-infl.js?v=d045614e"></script>
+<script src="assets/js/pb-home-infl.js?v=2912a7f3"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
-<script src="assets/js/pb-home-wait.js?v=79cb85b4"></script>
+<script src="assets/js/pb-home-wait.js?v=bb638473"></script>
+<script src="assets/js/pb-home-money.js?v=7ac13dd5"></script>
 <script src="assets/js/pb-share.js?v=28f13004"></script>
 <script src="assets/js/pb-home-dband.js?v=fd50eb2a"></script>
 <script>
@@ -4015,7 +4149,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=a7f374f2" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=b812e8e9" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=6ded5a70" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=145d4149" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

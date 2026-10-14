@@ -68,6 +68,23 @@
     $('pbW2Less').textContent = lost + ' less';
     $('pbW2Catch').innerHTML = c.tooLate ? 'Start at ' + AT + ' and there is no time left to catch up.'
       : 'To catch up from ' + c.startLater + ': <b>' + fmt(c.catchUpMonthly) + ' a month</b>, not ' + fmt(p.monthly) + '.';
+    aboutNow(p);
+  }
+  /* about now (14 October 2026): what Revenue adds in a first year, on the reader's
+     own monthly amount at the calculator's rate (the gain, then the loss), and what
+     the same amount from 25 would hold by now, at the same growth */
+  function aboutNow(p) {
+    var yr = $('pbW2Year'), then = $('pbW2Then'), plan = K.plan || {}, mine = +plan.mine > 0 ? +plan.mine : (p.own ? 0 : p.monthly);
+    var r = K.tax ? K.tax.rate : 0.4;
+    if (yr) {
+      yr.hidden = !(mine > 0);
+      if (mine > 0) { $('pbW2YearN').textContent = fmt(mine * 12 * r); }
+    }
+    if (then) {
+      var y = p.age - 25;
+      then.hidden = y < 2;
+      if (y >= 2) { then.innerHTML = 'Started at 25? You&rsquo;d have about <b>' + fmt(W.project(y * 12, 0, p.monthly, W.monthlyRate(G))) + '</b> by now.'; }
+    }
   }
 
   /* the figures roll up from nought: each digit's column back to 0, then on to its place, the
@@ -86,6 +103,7 @@
 
   yrs.addEventListener('input', function () { chosen = +yrs.value; paint(); });
   document.addEventListener('pb:plan', paint);
+  document.addEventListener('pb:tax', paint);
   $('pbW2Ctl').hidden = false;
   paint();
 
