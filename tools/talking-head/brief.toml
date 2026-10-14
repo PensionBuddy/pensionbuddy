@@ -1,0 +1,155 @@
+# Pensionbuddy short-form edit brief.
+# pb_edit.py reads this file. Change the brief here, not in the code.
+# Paths may start with ~. "{work}" means the work folder below.
+
+[paths]
+source = "~/Downloads"                       # read only: originals are never moved, renamed or changed
+work   = "~/Downloads/pensionbuddy-edit"
+finals = "~/Downloads/pensionbuddy-finals"
+
+[shoot]
+extensions = [".mp4", ".mov", ".mts", ".m2ts", ".mxf"]
+gap_hours  = 3      # files further apart than this belong to different shoots
+max_depth  = 6      # how deep to look inside the source folder
+
+[whisper]
+bin   = ""          # empty: find whisper-cli (Homebrew whisper-cpp) on PATH
+model = "{work}/models/ggml-large-v3-turbo.bin"
+second_model = ""   # optional second opinion for the final check, e.g. "{work}/models/ggml-medium.en.bin"
+language = "en"
+threads  = 0        # 0: all cores
+# The fillers make whisper write "um" and restarts instead of tidying them away.
+prompt = "Um, so, uh, I mean. Pensionbuddy, My Future Fund, PRSA, Revenue Online Service, pensionbuddy.ie, 40%, €1,000."
+
+[face]
+model = "{work}/models/face_detection_yunet_2023mar.onnx"   # missing model: centre crop, no eye check
+
+[style]
+# Brief: Geist bold. Note: the site and the logo use Figtree (assets/brand/README.md).
+# To match the site, set font to the Figtree file and font_weight = 700.
+font        = "{work}/fonts/Geist-Bold.ttf"
+font_weight = 0     # for a variable font only, e.g. 700
+# Colours from the site's tokens (index.html) and assets/brand/README.md.
+ink   = "#0B1F1C"
+paper = "#FAFAF9"
+white = "#FFFFFF"
+# Brand teal #14CBB1 is a graphic colour, not a text colour, and on the site
+# teal means the State Pension. Text here is ink and white only.
+caption_text = "#FFFFFF"
+caption_box  = "#0B1F1C"
+caption_box_opacity = 0.88
+title_text = "#0B1F1C"
+title_box  = "#FFFFFF"
+title_box_opacity = 1.0
+caption_size = 0.059   # of frame width: 64 px at 1080
+title_size   = 0.066   # 71 px at 1080
+line_height  = 1.18
+box_radius   = 0.018
+box_pad_x    = 0.026
+box_pad_y    = 0.014
+caption_max_lines = 2
+# Reading time for on-screen text, from tools/launch-video: max(2.0 s, 1.0 s + 0.3 s a word)
+read_base = 1.0
+read_per_word = 0.3
+read_min = 2.0
+
+[captions]
+min_words = 2
+max_words = 5
+max_chars = 30
+
+# Safe zones, as fractions of the frame. Brief: keep text out of the bottom 20 %
+# and the right 15 %. The 9:16 top and bottom match tools/launch-video
+# (250 px top, 440 px bottom, clear of the Reels and TikTok interface).
+[safe.9x16]
+top = 0.130
+bottom = 0.229
+left = 0.111
+right = 0.150
+
+[safe.4x5]
+top = 0.060
+bottom = 0.200
+left = 0.111
+right = 0.150
+
+[edit]
+lead_in       = 0.08   # before the first sound of line 1 (brief: line 1 starts within 0.5 s)
+pre_roll      = 0.08   # before the first sound of every line
+post_roll     = 0.12   # after the last sound of every line
+max_pause     = 0.30   # brief: cut silences and breaths over 0.3 s
+pause_phrase  = 0.20   # what a cut pause becomes inside a sentence
+pause_sentence = 0.27  # what a cut pause becomes between sentences
+live_tail_max = 1.5    # end hold: live footage first, then a still frame
+fps = 30
+crf = 18
+
+[audio]
+channel = "auto"       # auto | left | right | mix
+highpass_hz = 80
+noise_reduction_db = 10   # light: afftdn nr
+lufs = -14.0
+true_peak = -2.0          # ceiling before AAC, which adds a little; the check fails above -1.0 dBTP
+
+[regulator]
+# DRAFT in the form Regulation 71(4) prescribes (docs/COMPLIANCE-PACK.md 5.1).
+# Gresham compliance must confirm the exact words, then set approved = true.
+text = "Damian Condon, trading as Gresham Wealth Management and Pensionbuddy, is regulated by the Central Bank of Ireland."
+approved = false
+hold_seconds = 2.0     # brief: the last 2 s. The check warns if that is shorter than the reading time.
+
+# How names are spelled in captions. Captions show what is said, spelled the brand way.
+[display]
+"my future fund" = "My Future Fund"
+"myfuturefund" = "My Future Fund"
+"pension buddy" = "Pensionbuddy"
+"pensionbuddy" = "Pensionbuddy"
+"pension buddy dot ie" = "pensionbuddy.ie"
+"pensionbuddy dot ie" = "pensionbuddy.ie"
+"pensionbuddy.ie" = "pensionbuddy.ie"
+"prsa" = "PRSA"
+"ros" = "ROS"
+"revenue online service" = "Revenue Online Service"
+
+# ---------------------------------------------------------------- videos
+
+[[video]]
+n = 1
+title = "Video 1"
+enabled = false        # no script yet: the brief says [PASTE]
+frame1_text = ""
+lines = []
+
+[[video]]
+n = 2
+title = "My Future Fund at 40%"
+enabled = true
+frame1_text = "40% taxpayer in My Future Fund?"
+lines = [
+  "In My Future Fund and paying 40% tax? There's a catch.",
+  "My Future Fund gives you no tax relief. The State adds €1 for every €3 you put in.",
+  "And you can't pay in more. The rate is fixed.",
+  "A pension with tax relief works differently. At 40%, €60 from you becomes €100. And you can choose how much to pay in.",
+  "But don't just switch. My Future Fund also gets your employer's match.",
+  "Good news: your employer may be able to pay into a company pension or PRSA instead. Ask them.",
+  "Compare both for free at pensionbuddy.ie.",
+]
+
+[[video]]
+n = 3
+title = "Tax deadline"
+enabled = true
+frame1_text = "Cut your 2025 tax bill"
+lines = [
+  "Self-employed or a director? You can still cut your 2025 tax bill.",
+  "Pay into a pension before the deadline, and claim the relief against 2025.",
+  "Pay in €1,000 at the 40% rate, and your income tax drops by €400.",
+  "Pay and file on Revenue Online Service? The deadline is 18 November. If not, it's 31 October.",
+  "Miss it, and it can't go against 2025.",
+  "How much you can claim depends on your age and earnings.",
+  "Book a free 20-minute call, or use the free tools at pensionbuddy.ie.",
+]
+
+[[video.overlay]]
+line = 4
+text = "Revenue Online Service (ROS): 18 Nov · Otherwise: 31 Oct"
