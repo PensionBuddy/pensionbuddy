@@ -33,13 +33,18 @@ CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacO
 OUT = os.path.join(ROOT, 'assets', 'brand', 'og')
 W, H = 1200, 630
 
-# name -> (page, eyebrow). The eyebrow is the page's own hero eyebrow; the
+# name -> (page, eyebrow[, line]). The eyebrow is the page's own hero eyebrow; the
 # three guides have none, so theirs is the footer's "Who we help" label. The
 # home page lost its eyebrow on 11 October 2026 (Damian's brief: the gap opens
 # on its headline alone); its card keeps the line it was drawn with.
+# line: since 14 October 2026 the starter headline is a worked example with
+# figures ("You pay EUR 80. Revenue adds EUR 20."), true at the 20% tax rate
+# that the line under it states. A card travels without that line, so it
+# carries another sentence of the same hero instead, word for word; words()
+# holds it to the page.
 CARDS = {
     'home': ('index.html', 'Pensions, in plain English'),
-    'starter': ('starter.html', None),
+    'starter': ('starter.html', None, 'Tax relief is there at <span class="hl">any age</span>.'),
     'tracker': ('tracker.html', None),
     'director': ('director.html', None),
     'over-50': ('pensions-over-50.html', 'Over 50'),
@@ -55,11 +60,18 @@ PAW = ('<ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2
        'C48.2 37.6 41.8 31 32 31Z"/>')
 
 
-def words(page, eyebrow):
-    """The page's eyebrow and headline, as the page has them."""
+def words(page, eyebrow, line=None):
+    """The page's eyebrow and headline, as the page has them (or, given a
+    line, that sentence of the hero instead: see CARDS)."""
     src = open(os.path.join(ROOT, page), encoding='utf-8').read()
     body = src[src.index('<main'):]
     h1 = re.search(r'<h1[^>]*>(.*?)</h1>', body, re.S).group(1)
+    if line:
+        hero = body[:body.find('</header>')]
+        said = re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', hero))).replace(' .', '.')
+        assert re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', line))).replace(' .', '.').strip() in said, \
+            '%s: the card line is not in the hero' % page
+        h1 = line
     h1 = re.sub(r'\s+', ' ', h1).strip()
     # keep only the teal spans and line breaks the headline carries
     h1 = re.sub(r'<(?!/?span\b|br\b)[^>]+>', '', h1)
@@ -119,10 +131,10 @@ def main():
     port = srv.server_address[1]
     try:
         from PIL import Image
-        for name, (page, eb) in CARDS.items():
+        for name, (page, eb, *line) in CARDS.items():
             if only and name not in only:
                 continue
-            eyebrow, h1, plain = words(page, eb)
+            eyebrow, h1, plain = words(page, eb, *line)
             f = os.path.join(tmp, name + '.html')
             open(f, 'w', encoding='utf-8').write(card_html(eyebrow, h1))
             png = os.path.join(OUT, 'og-%s.png' % name)

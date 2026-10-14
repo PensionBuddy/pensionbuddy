@@ -114,8 +114,8 @@ def _og_images():
 def card_alt(page):
     og = _og_images()
     name = CARD[page]
-    p, eb = og.CARDS[name]
-    eyebrow, _, plain = og.words(p, eb)
+    p, eb, *line = og.CARDS[name]
+    eyebrow, _, plain = og.words(p, eb, *line)
     return 'Pensionbuddy. %s: %s' % (eyebrow, plain)
 
 

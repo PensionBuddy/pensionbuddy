@@ -369,13 +369,14 @@ def run():
     # 13 October 2026 (Damian: "What the State Pension leaves you to find"
     # made no sense; and no income inputs). The starter page's floor chart
     # asks its question in plain words, says the figure is the most and that
-    # yours depends on your PRSI record, and links to the entitlement check;
+    # yours depends on your PRSI record (spelled out there, its first use on
+    # the page, 14 October 2026), and links to the entitlement check;
     # its auto-enrolment split asks only what you put in a month, with the
     # personal pension beside it and the note past the most, to the comparison.
     st13 = sources['starter.html']
     floor = st13[st13.index('<h2>The State Pension pays'):st13.index('class="pb-src', st13.index('<h2>The State Pension pays'))]
     eq('13. the starter\'s floor chart: the question, the most, the PRSI record, the way to your own figure, the three totals',
-       ['Is that enough?' in floor, 'That&rsquo;s the most.' in floor, 'PRSI record' in floor,
+       ['Is that enough?' in floor, 'That&rsquo;s the most.' in floor, 'Pay Related Social Insurance (PRSI) record' in floor,
         'href="state-pension-entitlement.html"' in floor, re.findall(r'&euro;([\d,]+)</span>', floor)],
        [True, True, True, True, ['15,564', '19,200', '33,600']])
     # the 13 October review (Damian: "Can you close the gap? What does that
