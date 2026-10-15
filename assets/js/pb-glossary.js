@@ -211,7 +211,7 @@ window.PBGlossary = [
  {
   "id": "pension-adjustment-order",
   "name": "Pension adjustment order",
-  "def": "A court order. It gives part of a pension to a former partner, or for a dependent child. It follows a judicial separation or a divorce. Or it follows the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
+  "def": "A court order. It gives part of a pension to a former partner. Or it can be for a dependent child. It follows a judicial separation or a divorce. Or it follows the end of a civil partnership or qualified cohabitants\u2019 relationship. A separation agreement cannot do this.",
   "tip": true,
   "pats": [
    [
@@ -247,7 +247,7 @@ window.PBGlossary = [
  {
   "id": "standard-fund-threshold",
   "name": "Standard Fund Threshold",
-  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. It is \u20ac2.2 million in 2026. It is \u20ac2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its rise from 2026 to 2029, set by law.",
+  "def": "Revenue\u2019s cap on the total pension fund that gets full tax relief. It is \u20ac2.2 million in 2026. It is \u20ac2.4 million from 1 January 2027. Anything above it is taxed when drawn down. The Standard Fund Threshold check shows its rise from 2026 to 2029. The law sets it.",
   "tip": true,
   "pats": [
    [

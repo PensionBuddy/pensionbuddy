@@ -843,7 +843,11 @@ def run():
     # calendar. No form in front of it, and none of the old reassurance. The
     # enquiry form ("Rather email than call?", tools/lead-blocks.py) comes
     # after the calendar, never before it.
-    BOOK_H1, BOOK_LINE = 'Book a call with us', 'Free. 20 minutes.'
+    # The founders audit (2026-10-15), Q4, Damian's go-ahead: before the
+    # calendar the heading, its line, who you will talk to (Damian's portrait
+    # and a caption: the second <p>) and what to have ready (a list). Still no
+    # form and none of the old filler.
+    BOOK_H1, BOOK_LINE = 'Talk to Damian. <span class="hl">Twenty minutes, free.</span>', 'Leave knowing what you have, and one next step. No obligation.'
     FILLER = ('That is the lot.', 'We do not ask what you earn', 'none of it is needed to book a chat',
               'this site gives information, not advice', 'The house promise', 'class="timeline"',
               'class="lead-more"', 'class="qnote"', 'id="pbFrom"')
@@ -855,8 +859,8 @@ def run():
             out.append('a form')
         if not 0 <= h1 < line < stage:
             out.append('order')
-        if len(re.findall(r'<p\b', main[:stage])) != 1:
-            out.append('more than one line before the calendar')
+        if len(re.findall(r'<p\b', main[:stage])) != 2 or 'class="pb-bk-who"' not in main[:stage]:
+            out.append('more than the line and Damian\'s caption before the calendar')
         out += [w for w in FILLER if w in main]
         return out
     bk = sources['booking.html']
@@ -2303,9 +2307,10 @@ def run():
     HOME_STEPS = [('We talk', 'Twenty minutes, by phone or video. Pick a time that suits you.'),
                   ('We trace', 'We find your old pensions and read what they charge.'),
                   ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
-    BOOK_STEPS = [('You reach out', 'Pick a time that suits you.'),
-                  ('We talk it through', 'Twenty minutes, by phone or video.'),
-                  ('You decide', "You leave with a next step. If we're not the right fit, we say so.")]
+    # The founders audit (2026-10-15), Q4, Damian's go-ahead): the booking
+    # page tells the home page's three steps, "We trace" among them, in place
+    # of its own "You reach out / We talk it through"
+    BOOK_STEPS = HOME_STEPS
     CLIPS = ['talk', 'trace', 'decide']
 
     def call_faults(html, opening, want, clips):
@@ -2345,7 +2350,7 @@ def run():
             ('a home step reworded', cix, HOME_OPEN, HOME_STEPS, CLIPS, "We find your old pensions", "We find all your pensions", 'not the three'),
             ('a home clip swapped', cix, HOME_OPEN, HOME_STEPS, CLIPS, 'step-trace.webm', 'step-decide.webm', 'a clip'),
             ('a booking step reworded', cbk, BOOK_OPEN, BOOK_STEPS, None, "If we're not the right fit, we say so.", "If we're not the right fit, we tell you.", 'not the three'),
-            ('"No forms." back on booking', cbk, BOOK_OPEN, BOOK_STEPS, None, '<p>Pick a time that suits you.</p>', '<p>Pick a time that suits you. No forms.</p>', 'No forms'),
+            ('"No forms." back on booking', cbk, BOOK_OPEN, BOOK_STEPS, None, 'Pick a time that suits you.</p>', 'Pick a time that suits you. No forms.</p>', 'No forms'),
             ('the old heading back', cix, HOME_OPEN, HOME_STEPS, CLIPS, '<h2>How a call works.</h2>', '<h2>Three steps.</h2>', 'the heading'),
             ('a picture on booking', cbk, BOOK_OPEN, BOOK_STEPS, None, '<div class="step"><div class="sx">2</div>',
              '<div class="step"><picture><img src="x.jpg" alt=""></picture><div class="sx">2</div>', 'a picture')):
@@ -2416,8 +2421,8 @@ def run():
              'the moved button and its reason are missing, doubled or reworded'),
             ('a booking link put under the lede', 'tracker.html',
              sources['tracker.html'].replace(
-                 'have pension money somewhere.</p>\n',
-                 'have pension money somewhere.</p>\n    <p><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
+                 'you may be owed a refund.</p>\n',
+                 'you may be owed a refund.</p>\n    <p><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
@@ -2815,8 +2820,9 @@ LEAD_FORMS = {
 # calculator's result (pagebuild.after_block) posts as enquiry too, on every
 # page in pagebuild.AFTER, check 14 adds.
 REPLY_FORMS = {
-    'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
-                'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
+    # The founders audit (2026-10-15), Q6: the in-page Ask form is on the home
+    # and starter pages only; Ask Buddy carries the question everywhere else
+    'enquiry': ['index.html', 'starter.html'],
     'pension-trace': ['tracker.html'],
     # 'fee-check' left the home page on 13 October 2026 (the cost of waiting took its place): on no page now
     'year-end-reminder': ['director.html'],
