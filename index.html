@@ -3703,6 +3703,41 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 </div></section>
   </div>
 </div></section>
+<!-- PRICES (2026-10-15, Damian: "a separate inflation box ... it has nothing to do with the
+     calculator"): what EUR 1,000 buys in future years, on deposit and in a pension, on its own,
+     below the calculator and its two panels. The figures are the box's own (assets/js/pb-home-infl.js);
+     every calculator on the site stays at 6% with nothing taken off for prices. -->
+<section class="pb-ms pb-ms-prices" id="prices" aria-labelledby="pbPrH"><div class="wrap">
+  <div class="pb-ms-head">
+    <h2 id="pbPrH">Why your money needs to grow.</h2>
+  </div>
+  <div class="pb-ms-card">
+<section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="pb-i2-grid">
+  <div class="pb-i2-copy">
+    <h3 id="pbI2H">&euro;1,000 buys less every year.</h3>
+    <p class="pb-i2-out pb-i2-pen"><span id="pbI2PenW">In 30 years, &euro;1,000 in a pension could buy what</span> <span class="pb-nw"><b id="pbI2Pen">&euro;3,171</b> buys today.</span></p>
+    <p class="pb-i2-out pb-i2-cash"><span id="pbI2CashW">On deposit, it would buy what</span> <span class="pb-nw"><b id="pbI2Cash">&euro;577</b> buys today.</span></p>
+    <p class="pb-i2-why">A deposit can&rsquo;t keep up with prices. A pension can.</p>
+    <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
+      <div class="pb-c2-row"><label for="pbI2Yrs" id="pbI2YrsL">Years</label><span class="pb-c2-v" id="pbI2YrsV">30</span></div>
+      <input type="range" id="pbI2Yrs" min="1" max="40" step="1" value="30">
+      <div class="pb-c2-taxrow pb-i2-taxrow"><span class="pb-c2-taxl" id="pbI2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-i2-tax" role="group" aria-labelledby="pbI2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
+    </div>
+    <p class="pb-i2-note">What it buys at today&rsquo;s prices, with prices up 2% a year. A deposit earns <span id="pbI2Dep">0.15% a year, the Central Bank&rsquo;s average for household overnight deposits in July 2026</span>. A pension grows 6% a year before charges, the most a pension projection may assume. Historically, shares have often done better. Not guaranteed.</p>
+    <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
+  </div>
+  <div class="pb-i2-stage">
+    <canvas class="pb-i2-cv" aria-hidden="true"></canvas>
+    <span class="pb-i2-tag pb-i2-tag-cash" id="pbI2TCash" aria-hidden="true"><b>&euro;577</b><i>Deposit</i></span>
+    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;3,171</b><i>Pension</i></span>
+    <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;2,114</b><i>Government</i></span>
+    <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
+  </div>
+</div>
+</section>
+  </div>
+</div></section>
+
 <!-- ARE YOU A DIRECTOR? (Run 54, Damian's brief: "underneath, in big bold writing: are you a
      director? This differs for you. Click here"). One link to director.html; three company coins
      (blue) turn into yours (silver) as it comes into view (assets/js/pb-home-dband.js). Under the
@@ -4058,6 +4093,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-home-gap.js?v=ed433a1f"></script>
 <script src="assets/js/pb-home-calc.js?v=6c02fae2"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
+<script src="assets/js/pb-home-infl.js?v=f88183ce"></script>
 <script src="assets/js/pb-home-wait.js?v=bb638473"></script>
 <script src="assets/js/pb-home-money.js?v=7ac13dd5"></script>
 <script src="assets/js/pb-share.js?v=b4da6488"></script>
@@ -4143,7 +4179,7 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=2024ec4c" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=ea90e1fa" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>

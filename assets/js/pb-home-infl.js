@@ -63,7 +63,11 @@
   Object.keys(tags).forEach(function (k) { if (tags[k]) { rT[k] = new K.Roll(tags[k].querySelector('b')); } });
   var hint = sec.querySelector('.pb-i2-hint');
   var head = $('pbI2H'), cashW = $('pbI2CashW'), penW = $('pbI2PenW'), yrsL = $('pbI2YrsL');
-  function rate() { return K.tax ? K.tax.rate : 0.4; }
+  /* 2026-10-15 (Damian: the inflation box "has nothing to do with the
+     calculator"): its own tax switch, its own EUR 1,000; it no longer follows
+     the calculator's rate or money */
+  var LOCAL = 0.4;
+  function rate() { return LOCAL; }
 
   /* a monthly amount m paid for n years at a yearly rate y, grown month by month (the calculator's project()) */
   function monthly(m, n, y) { var r = Math.pow(1 + y, 1 / 12) - 1, k = n * 12; return r > 0 ? m * (Math.pow(1 + r, k) - 1) / r : m * k; }
@@ -289,8 +293,7 @@
   yrs.addEventListener('input', function () { touch(); words(); target(); });
   var taxSeg = sec.querySelector('.pb-i2-tax'), taxS = null;
   function pressTax(quiet) { if (taxS) { taxS.press(function (b) { return +b.getAttribute('data-rate') / 100 === rate(); }, quiet); } }
-  if (taxSeg) { taxS = K.seg(taxSeg, function (b) { if (K.setTax) { K.setTax(+b.getAttribute('data-rate') / 100, 'infl'); } touch(); words(); target(); }); }
-  document.addEventListener('pb:tax', function (e) { if ((e.detail || {}).by !== 'infl') { pressTax(true); words(); target(); } });
+  if (taxSeg) { taxS = K.seg(taxSeg, function (b) { LOCAL = +b.getAttribute('data-rate') / 100; touch(); words(); target(); }); }
   function local(e) { var b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
   if (cx) {
     cv.addEventListener('pointermove', function (e) {
@@ -351,7 +354,7 @@
     yrs.value = was >= wasMax ? AT : Math.max(a + 1, Math.min(AT, was));
     return true;
   }
-  document.addEventListener('pb:plan', function () { if (fromPlan()) { if (seen) { touch(); } words(); target(); } });
+  /* standalone since 2026-10-15: the calculator's plan is not read (fromPlan stays for the record) */
 
   /* ------------------------------------------------------ housekeeping -- */
   window.addEventListener('resize', function () { W = 0; g = null; kick(); });
@@ -362,7 +365,6 @@
   var dep = $('pbI2Dep');
   if (dep && PA && PA.cash) { dep.textContent = PA.cash.pct + ' a year, the Central Bank’s average for household overnight deposits in ' + PA.cash.month; }
   pressTax(true);
-  fromPlan();
   words(); target();
   if (!cx || !C) { return; }
   sec.classList.add('pb-i2-on');

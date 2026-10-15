@@ -299,8 +299,14 @@ Audit"), after Damian saw the demo and cut it back the same day.
   the director page's pot and "start a year later" gap are the actual
   figures; the home page's Prices tab (what EUR 1,000 buys later) is gone,
   leaving Time and Tax; every "future euros / euro at the time / before
-  inflation" label is gone. An inflation explainer may come later as its own
-  thing. The glossary's Inflation entry and its slider stay.
+  inflation" label is gone. The glossary's Inflation entry and its slider
+  stay. Damian, later: "everything's 6%, forget the 2% prices" (a today's-
+  money rate was tried and thrown away, never shipped).
+- **The inflation box** (#prices, below "Why a pension, and why now."):
+  the old Prices panel on its own, "Why your money needs to grow.", what
+  EUR 1,000 buys later on deposit and in a pension. It no longer follows the
+  calculator's money or tax rate (pb-home-infl.js: its own EUR 1,000 and its
+  own 20% / 40% switch). Nothing else on the site touches inflation.
 - **Known effect, told to Damian:** at the home defaults (35, EUR 10,000,
   EUR 100 a month) the calculator now says "Covered. EUR 248 a month to
   spare" (it said EUR 9 short), because a pot in 2057 euros now meets today's

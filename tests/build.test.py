@@ -1522,7 +1522,7 @@ def run():
     ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
              '<section class="pb-ms" id="money"', '<section class="pb-w2" id="wait"',
-             '<section class="pb-x2" id="relief"', 'id="pbDrb"', '<section class="expect" id="call">',
+             '<section class="pb-x2" id="relief"', '<section class="pb-ms pb-ms-prices" id="prices"', '<section class="pb-i2" id="inflation"', 'id="pbDrb"', '<section class="expect" id="call">',
              '<section class="pb-ask" id="ask"', '<section class="pb-learn" id="learn">',
              '<section class="tickband" id="deadline">', '<section id="story">', '<section class="pb-tl-sec" id="through-life">']
 
@@ -1531,9 +1531,9 @@ def run():
         f = ['missing: ' + o for o, i in zip(ORDER, at) if i < 0]
         if not f and at != sorted(at):
             f.append('out of order')
-        # 2026-10-15 (Damian: no future or today's money): the inflation
-        # baskets (#inflation, the Prices tab) are gone; Time and Tax remain
-        for gone in ('id="inflation"', 'assets/js/pb-home-infl.js', 'id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
+        # 2026-10-15 (Damian): the inflation baskets are no longer a tab of
+        # #money; they stand alone in #prices, below it, apart from the calculator
+        for gone in ('aria-controls="inflation"', 'id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
                      'Who you are dealing with', 'Questions before you call', 'check that for yourself',
                      'name="fee-check"', 'LEAD:fee:', 'assets/js/pb-fee.js'):
             if gone in ix:
