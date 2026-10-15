@@ -118,7 +118,7 @@
     [age, pot, mine, emp].forEach(function (r) { if (r) { fill(r); r.setAttribute('aria-valuetext', VT[r.id](+r.value)); } });
     $('pbC2AgeV').textContent = a; $('pbC2PotV').textContent = fmt(p); $('pbC2MineV').textContent = fmt(m);
     if (emp) { $('pbC2EmpV').textContent = fmt(e); }
-    $('pbC2Relief').innerHTML = m > 0 ? 'Costs you <b>' + fmt(m * (1 - tax)) + '</b>. <b class="pb-c2-rev-t">Revenue adds ' + fmt(m * tax) + '</b>.' : 'Revenue adds tax relief to what you put in.';
+    $('pbC2Relief').innerHTML = m > 0 ? 'You pay <b>' + fmt(m * (1 - tax)) + '</b>. <b class="pb-c2-rev-t">Revenue adds ' + fmt(m * tax) + '</b>.' : 'Revenue adds tax relief to what you put in.';
     var le = $('pbC2LEmp'); if (le) { le.hidden = !(e > 0); }
     var lr = $('pbC2LRev'); if (lr) { lr.hidden = !(m > 0); }
 
@@ -139,8 +139,11 @@
     } else {
       /* 14 October 2026 (the gain first, the loss second): the fix is said, not
          kept behind the button; the button puts it in */
-      v.innerHTML = (S.far ? '' : '<span class="pb-c2-fix">' + (m > 0 ? 'Add ' + fmt(reach - m) : 'Put in ' + fmt(reach)) + ' a month and you’re there.</span> ') +
-        '<span class="pb-c2-no">' + fmt(short) + ' a month short.</span>';
+      /* The founders audit (2026-10-15), Q3): the same figure as the gap's
+         answer above ("Close it with EUR 110 a month"), so the two read as one
+         story: the whole monthly amount first, then where today's leaves you */
+      v.innerHTML = (S.far ? '' : '<span class="pb-c2-fix">' + fmt(reach) + ' a month and you’re there.</span> ') +
+        '<span class="pb-c2-no">' + (m > 0 ? 'Putting in ' + fmt(m) + ', you’re ' : '') + fmt(short) + ' a month short.</span>';
       close.hidden = S.far; close.setAttribute('data-act', 'close');
       say(close, 'Make it ' + fmt(reach) + ' a month');
     }

@@ -53,7 +53,7 @@
     else { rBig.set(fmt(f.gap)); bigW.textContent = 'a year short.'; }
     $('pbG2Month').textContent = covered
       ? (f.two ? 'Two full State Pensions cover it.' : 'The full State Pension covers it.')
-      : fmt(f.gap / 12) + ' a month. ' + fmt(f.gap * YEARS) + ' over ' + YEARS + ' years.';
+      : fmt(f.gap / 12) + ' a month, on the State Pension alone. ' + fmt(f.gap * YEARS) + ' over ' + YEARS + ' years.';
     if (kl.need) {
       kl.need.textContent = (f.own ? 'Your figure' : 'A ' + f.label.toLowerCase() + ' life') + (f.two ? ' for two' : '');
       kv.need.set(fmt(f.need));
@@ -86,8 +86,8 @@
     fixEl.hidden = off; if (fromEl) { fromEl.hidden = off; }
     if (off) { return; }
     var t = d.covered
-      ? (d.mine > 0 ? 'Your <b>' + fmt(d.mine) + ' a month</b> closes it. Revenue pays <b>' + fmt(d.mine * r) + '</b> of that.' : 'What you have saved closes it.')
-      : 'Close it with <b>' + fmt(d.reach) + ' a month</b>. Revenue pays <b>' + fmt(d.reach * r) + '</b> of that.';
+      ? (d.mine > 0 ? 'Your <b>' + fmt(d.mine) + ' a month</b> closes it. You pay ' + fmt(d.mine * (1 - r)) + '. <b>Revenue adds ' + fmt(d.mine * r) + '</b>.' : 'What you have saved closes it.')
+      : 'Close it with <b>' + fmt(d.reach) + ' a month</b>. You pay ' + fmt(d.reach * (1 - r)) + '. <b>Revenue adds ' + fmt(d.reach * r) + '</b>.';
     if (fixEl.innerHTML !== t) { fixEl.innerHTML = t; }
     if (fromEl) {
       var w = 'From age ' + d.age + (d.saved > 0 ? ', with ' + fmt(d.saved) + ' saved' : '') +

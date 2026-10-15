@@ -2581,7 +2581,16 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pb-w-l2{display:inline-block;margin-top:.1em;font-size:clamp(46px,12vw,176px);font-weight:800;letter-spacing:-.045em;white-space:nowrap;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .pb-w-ch{display:inline-block;transform-origin:50% 80%}
 .pb-w-line{display:block;height:clamp(7px,.85vw,13px);margin:.14em .02em 0;border-radius:99px;background:#14CBB1;transform-origin:0 50%}
-.pb-w-sub{margin:28px 0 0;font-size:clamp(18px,1.7vw,23px);color:var(--ink-2)}
+.pb-w-sub{margin:28px 0 0;font-size:clamp(18px,1.7vw,23px);color:var(--ink-2);max-width:30em;padding:0 16px;min-height:3em}
+/* The founders audit (2026-10-15), Q1): the welcome names a reward, and the
+   paw turns up the next fact (assets/js/pb-welcome.js). The first fact is the
+   markup, so without the script the line still says something to the reader. */
+.pb-w-sub b{color:var(--ink);font-weight:800}
+.pb-w-sub a{color:var(--ink);font-weight:700}
+.pb-w-fact{display:inline-block}
+.pb-w-flip{animation:pbWFlip .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes pbWFlip{0%{opacity:0;transform:translateY(10px) rotateX(70deg)}100%{opacity:1;transform:none}}
+.pb-w-mark:focus-visible{outline:3px solid var(--ink);outline-offset:6px;border-radius:30px}
 .pb-w-go{margin-top:30px;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:13px 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:17px;text-decoration:none;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s}
 .pb-w-go:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
 .pb-w-go svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -3460,14 +3469,15 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <section class="pb-welcome" id="welcome" aria-labelledby="pbWelcomeT">
   <canvas class="pb-w-fx" aria-hidden="true"></canvas>
   <div class="wrap pb-w-in">
-    <div class="pb-w-mark" aria-hidden="true"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
+    <div class="pb-w-mark" role="button" tabindex="0" aria-label="Show another pension fact" aria-controls="pbWSub"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
     <p class="pb-w-title" id="pbWelcomeT"><span class="pb-w-sr">Welcome to Pensionbuddy</span><span class="pb-w-l1" aria-hidden="true"><span class="pb-w-word">Welcome</span> <span class="pb-w-word">to</span></span><span class="pb-w-l2" aria-hidden="true"><span class="pb-w-ch">P</span><span class="pb-w-ch">e</span><span class="pb-w-ch">n</span><span class="pb-w-ch">s</span><span class="pb-w-ch">i</span><span class="pb-w-ch">o</span><span class="pb-w-ch">n</span><span class="pb-w-ch">b</span><span class="pb-w-ch">u</span><span class="pb-w-ch">d</span><span class="pb-w-ch">d</span><span class="pb-w-ch">y</span><span class="pb-w-line"></span></span></p>
-    <a class="pb-w-go" href="#gap">Start here <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
+    <p class="pb-w-sub" id="pbWSub" aria-live="polite"><span class="pb-w-fact"><b>You pay &euro;60. Revenue adds &euro;40.</b> At the 40% tax rate.</span></p>
+    <a class="pb-w-go" href="#gap">Show me my gap <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
     <p class="pb-w-hint" aria-hidden="true"></p>
   </div>
 </section>
 <script>(function(){var s=document.getElementById('welcome');if(s&&document.documentElement.classList.contains('pb-motion'))s.classList.add('pb-w-armed');})();</script>
-<script src="assets/js/pb-welcome.js?v=054270da"></script>
+<script src="assets/js/pb-welcome.js?v=3a3fff89"></script>
 
 <!-- THE GAP (11 October 2026, Damian's brief: "Hemingway; here's the gap, clear as day; as
      interactive as the welcome"). One question, one answer, one tower of coins: the whole tower is
@@ -3497,8 +3507,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
       <div class="pb-g2-ans" id="pbG2Ans" aria-live="polite">
         <p class="pb-g2-no" id="pbG2No">No.</p>
         <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
-        <p class="pb-g2-month" id="pbG2Month">&euro;303 a month. &euro;72,720 over 20 years.</p>
-        <p class="pb-g2-fix" id="pbG2Fix">Close it with <b>&euro;110 a month</b>. Revenue pays <b>&euro;44</b> of that.</p>
+        <p class="pb-g2-month" id="pbG2Month">&euro;303 a month, on the State Pension alone. &euro;72,720 over 20 years.</p>
+        <p class="pb-g2-fix" id="pbG2Fix">Close it with <b>&euro;110 a month</b>. You pay &euro;66. <b>Revenue adds &euro;44</b>.</p>
         <p class="pb-g2-from" id="pbG2From">From age 35, with &euro;10,000 saved. <a href="#calc">Try your own figures</a></p>
         <p class="pb-shot" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg>pensionbuddy.ie</p>
       </div>
@@ -3570,7 +3580,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
         <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;2,396</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;551</b></span></p>
         <p class="pb-c2-rise" id="pbC2Rise">Prices and the State Pension rise 2% a year.</p>
         <p class="pb-c2-need" id="pbC2Need">A modest life at 66: <b>&euro;2,956</b> a month.</p>
-        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-fix">Add &euro;10 a month and you&rsquo;re there.</span> <span class="pb-c2-no">&euro;9 a month short.</span></p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-fix">&euro;110 a month and you&rsquo;re there.</span> <span class="pb-c2-no">Putting in &euro;100, you&rsquo;re &euro;9 a month short.</span></p>
         <p class="pb-c2-take" id="pbC2Take" hidden></p>
         <span class="pb-c2-pup" id="pbC2Pup" aria-hidden="true" hidden><canvas width="72" height="52"></canvas></span>
         <p class="pb-shot" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg>pensionbuddy.ie</p>
@@ -3583,7 +3593,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Age">Your age</label><span class="pb-c2-v" id="pbC2AgeV">35</span></div><input type="range" id="pbC2Age" min="18" max="65" step="1" value="35"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">Saved so far</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">You put in a month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
-        <p class="pb-c2-relief" id="pbC2Relief">Costs you <b>&euro;60</b>. <b class="pb-c2-rev-t">Revenue adds &euro;40</b>.</p></div>
+        <p class="pb-c2-relief" id="pbC2Relief">You pay <b>&euro;60</b>. <b class="pb-c2-rev-t">Revenue adds &euro;40</b>.</p></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Emp">Your employer puts in</label><span class="pb-c2-v" id="pbC2EmpV">&euro;0</span></div><input type="range" id="pbC2Emp" min="0" max="1000" step="10" value="0"></div>
       <div class="pb-c2-taxrow"><span class="pb-c2-taxl" id="pbC2TaxL">Tax rate</span><div class="pb-seg pb-seg-sm pb-c2-tax" role="group" aria-labelledby="pbC2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
       <div class="pb-c2-aim"><span class="pb-c2-taxl" id="pbC2AimL">Aiming for</span>
@@ -3937,9 +3947,9 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
       <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
       <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years' experience</span></span>
     </div>
-    <p class="pullquote">I&rsquo;ve spent thirty years explaining how money can serve real people. Clarity is the whole point.</p>
+    <p class="pullquote">Hardly anyone is bad with money. They have never had it explained in words they felt free to question.</p>
+    <p class="bio">I&rsquo;ve spent thirty years explaining how money can serve real people. Clarity is the whole point.</p>
     <p class="bio">After graduating from Maynooth, I moved from Bank of Ireland to Ulster Bank, then to St. George Private Bank in Sydney. I founded Gresham Wealth Management in 2012 and still lead it.</p>
-    <p class="bio">That work left me one firm opinion. Hardly anyone is bad with money. They have never had it explained in words they felt free to question.</p>
         <span class="sig">Damian</span>
     <div class="pb-quals">
       <p class="pb-quals-label" id="pbQualsDamian">Damian&rsquo;s qualifications and memberships</p>
@@ -4082,8 +4092,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-assumptions.js?v=c4c105f8"></script>
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
-<script src="assets/js/pb-home-gap.js?v=28a61008"></script>
-<script src="assets/js/pb-home-calc.js?v=42d0e55e"></script>
+<script src="assets/js/pb-home-gap.js?v=ed433a1f"></script>
+<script src="assets/js/pb-home-calc.js?v=deb036d4"></script>
 <script src="assets/js/pb-home-infl.js?v=2912a7f3"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script src="assets/js/pb-home-wait.js?v=bb638473"></script>
@@ -4171,9 +4181,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=4ced620f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=b02e366f" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=0e4cc122" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=0629792e" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>

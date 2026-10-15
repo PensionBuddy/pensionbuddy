@@ -154,6 +154,40 @@
     wake();
   });
 
+  /* ---------------------------------------------------------- the facts -- */
+  /* The founders audit (2026-10-15), Q1): the paw turns up the next fact,
+     each one about the reader and each with somewhere to go. The first is the
+     markup's own line. The State Pension figure is the module's, read when the
+     paw is pressed (state-pension.js loads after this script). Works with
+     motion off too: only the flip is motion. */
+  var sub = document.getElementById('pbWSub'), factI = 0;
+  function eur(cents) { return '€' + (cents / 100).toLocaleString('en-IE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  var FACTS = [
+    function () { return null; },   /* the markup's line */
+    function () {
+      var sp = window.PBStatePension, w = sp && sp.MAX_WEEKLY_CENTS;
+      return w ? '<b>The State Pension pays ' + eur(w) + ' a week, at most.</b> <a href="#gap">Is that enough?</a>' : null;
+    },
+    function () { return '<b>Changed jobs? There may be a pension with your name on it.</b> <a href="tracker.html">Find it</a>'; },
+    function () { return '<b>Money in a pension grows free of tax until you take it.</b> <a href="#calc">See yours grow</a>'; }
+  ];
+  var firstFact = sub ? sub.innerHTML : '';
+  function nextFact() {
+    if (!sub) { return; }
+    for (var k = 0; k < FACTS.length; k++) {
+      factI = (factI + 1) % FACTS.length;
+      var h = factI === 0 ? firstFact : FACTS[factI]();
+      if (h) { break; }
+    }
+    sub.innerHTML = factI === 0 ? firstFact : '<span class="pb-w-fact">' + h + '</span>';
+    var f = sub.querySelector('.pb-w-fact');
+    if (f && motion()) { f.classList.add('pb-w-flip'); }
+  }
+  mark.addEventListener('click', function () { nextFact(); });
+  mark.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextFact(); if (motion()) { MK.vs = -9; wake(); } }
+  });
+
   /* ---------------------------------------------------------- the loop -- */
   var now = 0, last = 0, t0 = 0, running = false, visible = true, raf = 0;
   var INTRO = { words: 0.12, chars: 0.34, per: 0.045, mark: 0.0, toes: 0.28, line: 0, fade: 0 };
@@ -284,7 +318,7 @@
     if (!motion()) { still(); return; }
     t0 = performance.now() / 1000;
     sec.classList.add('pb-w-run');
-    if (hint) { hint.textContent = window.matchMedia && matchMedia('(pointer: coarse)').matches ? 'Drag across the name. Tap the paw.' : 'Run your mouse over the name. Click the paw.'; }
+    if (hint) { hint.textContent = window.matchMedia && matchMedia('(pointer: coarse)').matches ? 'Tap the paw for another.' : 'Click the paw for another.'; }
     start();
   }
 
