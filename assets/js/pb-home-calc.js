@@ -70,7 +70,11 @@
   if (!age || !pot || !mine) { return; }
   var fmt = K.fmt;
   var PA = window.PBAssume, GROW = (PA && PA.assets && PA.assets.cap) || 0.06, DRAW = 0.04, AT = (SP && SP.PENSION_AGE) || 66;
-  var INF = (window.PBAssume && window.PBAssume.inflation && window.PBAssume.inflation.rate) || 0.02;
+  /* 2026-10-15 (Damian: "get rid of the future and today's money, just have
+     the actual figure ... don't just automatically assume"): no inflation.
+     The way of life and the State Pension are today's actual figures; the
+     pot grows at 6%, and nothing is grown or shrunk for prices. */
+  var INF = 0;
   var ONE = SP ? SP.MAX_WEEKLY_CENTS * SP.WEEKS_PER_YEAR / 100 : 15563.6;
   /* this year: the year you turn 66 is this year plus the years to go */
   var YEAR = Math.max(2026, new Date().getFullYear());
@@ -122,9 +126,7 @@
     var le = $('pbC2LEmp'); if (le) { le.hidden = !(e > 0); }
     var lr = $('pbC2LRev'); if (lr) { lr.hidden = !(m > 0); }
 
-    /* the euros these are: the year you turn 66 */
-    var k = $('pbC2K'); if (k) { k.textContent = 'Your income at ' + AT + ', in ' + yr + ' euros'; }
-    var rise = $('pbC2Rise'); if (rise) { rise.textContent = 'Prices and the State Pension rise ' + Math.round(INF * 100) + '% a year.'; }
+    var k = $('pbC2K'); if (k) { k.textContent = 'Your income at ' + AT + ', a month'; }
     rTotal.set(fmt(total));
     if (rPot) { rPot.set(fmt(pr.fv)); }
     $('pbC2Parts').innerHTML = '<span class="pb-c2-k-sp"><i aria-hidden="true"></i>' + (S.two ? 'Two State Pensions ' : 'State Pension ') + '<b>' + fmt(st) + '</b></span>' +
@@ -139,7 +141,7 @@
     } else {
       /* 14 October 2026 (the gain first, the loss second): the fix is said, not
          kept behind the button; the button puts it in */
-      /* The founders audit (2026-10-15), Q3): the same figure as the gap's
+      /* The founders audit (2026-10-15), Q3: the same figure as the gap's
          answer above ("Close it with EUR 110 a month"), so the two read as one
          story: the whole monthly amount first, then where today's leaves you */
       v.innerHTML = (S.far ? '' : '<span class="pb-c2-fix">' + fmt(reach) + ' a month and you’re there.</span> ') +
@@ -160,7 +162,7 @@
     sec.classList.toggle('pb-c2-is-ok', S.covered);
     $('pbC2MiniN').textContent = fmt(total);
     $('pbC2MiniV').textContent = S.covered ? 'Covered' : fmt(short) + ' short';
-    var said = 'Your income at ' + AT + ', in ' + yr + ' euros: about ' + fmt(total) + ' a month, from a pension pot of ' + fmt(pr.fv) + '. ' +
+    var said = 'Your income at ' + AT + ': about ' + fmt(total) + ' a month, from a pension pot of ' + fmt(pr.fv) + '. ' +
       (S.covered ? 'That covers ' + life + ', ' + fmt(need) + ' a month.'
         : fmt(short) + ' a month short of ' + life + ', ' + fmt(need) + ' a month. ' + (S.far ? 'To cover it, you’d put in ' + fmt(reach) + ' a month.' : fmt(reach) + ' a month covers it.'));
     clearTimeout(srT); srT = setTimeout(function () { $('pbC2Sr').textContent = said; }, fromUser ? 700 : 0);

@@ -360,8 +360,7 @@ for (const page of ['pension-calculator.html', 'pia.html']) {
 }
 
 /* G11: the booking page */
-// the founders audit (2026-10-15), Q4: the heading names Damian; the embed
-// alone also carries Calendly's hide_gdpr_banner (its cookie banner covered the days)
+// the founders audit (2026-10-15), Q4: the heading names Damian
 const H1 = 'Talk to Damian. Twenty minutes, free.', SUB = 'Leave knowing what you have, and one next step. No obligation.';
 for (const [q, hash, shows, term] of [
     ['', '#from=pension-calculator', true, ''], ['', '#from=nope', false, ''], ['', '', false, ''],
@@ -381,7 +380,7 @@ for (const [q, hash, shows, term] of [
   const want = CALENDLY + '?' +
     (q ? 'utm_source=site&utm_medium=cta&utm_campaign=director-calculator&utm_content=B' : 'utm_source=pensionbuddy&utm_medium=booking-page') +
     (term ? '&utm_term=' + term : '');
-  eq(`G11. ${label}: the calendar, and its fallback link, carry the tags`, [b.url, b.open], [want + '&hide_gdpr_banner=1', want]);
+  eq(`G11. ${label}: the calendar, and its fallback link, carry the tags`, [b.url, b.open], [want, want]);
   if (q) eq(`G11. ${label}: the tags are off the address, the fragment kept`, [b.search, b.hash], ['', hash]);
 }
 

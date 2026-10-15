@@ -92,8 +92,10 @@
   /* the pot at age a, for the reader's age and payment: { now, today, nom, gap } */
   function pot(a, ag, py, later) {
     var n = Math.max(0, Math.min(AT, a) - ag);
-    var nom = PD.project(12 * n, Hv(), py / 12, MR), today = PA.today(nom, n);
-    var w = PD.waiting({ pot: Hv(), yearly: py, years: n, delay: 1, rate: GROW, today: PA.today });
+    /* 2026-10-15 (Damian: no future or today's money): nothing is put into
+       today's prices; "today" is the actual figure, the same as nom */
+    var nom = PD.project(12 * n, Hv(), py / 12, MR), today = nom;
+    var w = PD.waiting({ pot: Hv(), yearly: py, years: n, delay: 1, rate: GROW });
     return { now: today, today: later ? today - w.gapToday : today, nom: later ? w.later : nom, gap: w.gapToday };
   }
   /* one coin: the first size that keeps this year's pot at 66 within 28 coins */
@@ -157,7 +159,7 @@
     srT = setTimeout(function () {
       var ag = A(), py = P(), e = pot(AT, ag, py, st.later), t = sft(new Date().getFullYear() + AT - ag);
       sr.textContent = 'Age ' + ag + ', ' + fmt(Hv()) + ' in pensions now, the company paying ' + fmt(py) + ' a year' + (st.later ? ', starting a year later' : '') +
-        ': about ' + fmt(e.today) + ' at ' + AT + ' in today’s money, ' + fmt(e.nom) + ' before inflation. ' +
+        ': about ' + fmt(e.nom) + ' at ' + AT + '. ' +
         (st.later ? fmt(e.gap) + ' less than starting this year.' : 'Starting a year later: about ' + fmt(e.gap) + ' less.') +
         (e.nom > t.value ? ' That could pass the Standard Fund Threshold.' : '');
     }, 600);

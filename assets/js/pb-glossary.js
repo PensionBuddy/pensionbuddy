@@ -135,7 +135,7 @@ window.PBGlossary = [
  {
   "id": "inflation",
   "name": "Inflation",
-  "def": "The rise in prices over time. So the same euro buys less later. It matters for a pension. That is because the figures on this site are in future euro, not today\u2019s. The European Central Bank aims for inflation of 2% a year over the medium term.",
+  "def": "The rise in prices over time. So the same euro buys less later. It matters for a pension. The European Central Bank aims for inflation of 2% a year over the medium term.",
   "tip": true,
   "pats": [
    [

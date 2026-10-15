@@ -2581,16 +2581,7 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pb-w-l2{display:inline-block;margin-top:.1em;font-size:clamp(46px,12vw,176px);font-weight:800;letter-spacing:-.045em;white-space:nowrap;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .pb-w-ch{display:inline-block;transform-origin:50% 80%}
 .pb-w-line{display:block;height:clamp(7px,.85vw,13px);margin:.14em .02em 0;border-radius:99px;background:#14CBB1;transform-origin:0 50%}
-.pb-w-sub{margin:28px 0 0;font-size:clamp(18px,1.7vw,23px);color:var(--ink-2);max-width:30em;padding:0 16px;min-height:3em}
-/* The founders audit (2026-10-15), Q1): the welcome names a reward, and the
-   paw turns up the next fact (assets/js/pb-welcome.js). The first fact is the
-   markup, so without the script the line still says something to the reader. */
-.pb-w-sub b{color:var(--ink);font-weight:800}
-.pb-w-sub a{color:var(--ink);font-weight:700}
-.pb-w-fact{display:inline-block}
-.pb-w-flip{animation:pbWFlip .42s cubic-bezier(.2,.8,.2,1)}
-@keyframes pbWFlip{0%{opacity:0;transform:translateY(10px) rotateX(70deg)}100%{opacity:1;transform:none}}
-.pb-w-mark:focus-visible{outline:3px solid var(--ink);outline-offset:6px;border-radius:30px}
+.pb-w-sub{margin:28px 0 0;font-size:clamp(18px,1.7vw,23px);color:var(--ink-2)}
 .pb-w-go{margin-top:30px;display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:13px 24px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:17px;text-decoration:none;box-shadow:0 10px 24px rgba(11,31,28,.18);transition:transform .2s,box-shadow .2s}
 .pb-w-go:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(11,31,28,.24)}
 .pb-w-go svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -3469,15 +3460,14 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <section class="pb-welcome" id="welcome" aria-labelledby="pbWelcomeT">
   <canvas class="pb-w-fx" aria-hidden="true"></canvas>
   <div class="wrap pb-w-in">
-    <div class="pb-w-mark" role="button" tabindex="0" aria-label="Show another pension fact" aria-controls="pbWSub"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
+    <div class="pb-w-mark" aria-hidden="true"><svg viewBox="0 0 104 104" aria-hidden="true" focusable="false"><rect width="104" height="104" rx="28" fill="#14CBB1"/><g transform="translate(22 22) scale(0.9375)" fill="#fff"><g class="pb-w-toe"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/></g><g class="pb-w-toe"><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/></g><g class="pb-w-toe"><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/></g><g class="pb-w-toe"><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/></g><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></g></svg></div>
     <p class="pb-w-title" id="pbWelcomeT"><span class="pb-w-sr">Welcome to Pensionbuddy</span><span class="pb-w-l1" aria-hidden="true"><span class="pb-w-word">Welcome</span> <span class="pb-w-word">to</span></span><span class="pb-w-l2" aria-hidden="true"><span class="pb-w-ch">P</span><span class="pb-w-ch">e</span><span class="pb-w-ch">n</span><span class="pb-w-ch">s</span><span class="pb-w-ch">i</span><span class="pb-w-ch">o</span><span class="pb-w-ch">n</span><span class="pb-w-ch">b</span><span class="pb-w-ch">u</span><span class="pb-w-ch">d</span><span class="pb-w-ch">d</span><span class="pb-w-ch">y</span><span class="pb-w-line"></span></span></p>
-    <p class="pb-w-sub" id="pbWSub" aria-live="polite"><span class="pb-w-fact"><b>You pay &euro;60. Revenue adds &euro;40.</b> At the 40% tax rate.</span></p>
-    <a class="pb-w-go" href="#gap">Show me my gap <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
+    <a class="pb-w-go" href="#gap">Start here <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="6 13 12 19 18 13"/></svg></a>
     <p class="pb-w-hint" aria-hidden="true"></p>
   </div>
 </section>
 <script>(function(){var s=document.getElementById('welcome');if(s&&document.documentElement.classList.contains('pb-motion'))s.classList.add('pb-w-armed');})();</script>
-<script src="assets/js/pb-welcome.js?v=3a3fff89"></script>
+<script src="assets/js/pb-welcome.js?v=054270da"></script>
 
 <!-- THE GAP (11 October 2026, Damian's brief: "Hemingway; here's the gap, clear as day; as
      interactive as the welcome"). One question, one answer, one tower of coins: the whole tower is
@@ -3508,7 +3498,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
         <p class="pb-g2-no" id="pbG2No">No.</p>
         <p class="pb-g2-big" id="pbG2Big"><span class="pb-g2-big-n">&euro;3,636</span> <span class="pb-g2-big-w">a year short.</span></p>
         <p class="pb-g2-month" id="pbG2Month">&euro;303 a month, on the State Pension alone. &euro;72,720 over 20 years.</p>
-        <p class="pb-g2-fix" id="pbG2Fix">Close it with <b>&euro;110 a month</b>. You pay &euro;66. <b>Revenue adds &euro;44</b>.</p>
+        <p class="pb-g2-fix" id="pbG2Fix">Your <b>&euro;100 a month</b> closes it. You pay &euro;60. <b>Revenue adds &euro;40</b>.</p>
         <p class="pb-g2-from" id="pbG2From">From age 35, with &euro;10,000 saved. <a href="#calc">Try your own figures</a></p>
         <p class="pb-shot" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg>pensionbuddy.ie</p>
       </div>
@@ -3552,9 +3542,9 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 
 <!-- THE CALCULATOR (11 October 2026, Damian's brief: "a pot and coins, as interactive as the welcome;
      bare minimum"; 13 October 2026: "it must be unmistakable that this is a PENSION CALCULATOR", and
-     every figure the actual future euro figure, before inflation). Four sliders and the tax rate; one
-     answer, your income a month at 66, against the way of life picked above. Future euros on both
-     sides: the target and the State Pension rise 2% a year to 66, so like is compared with like.
+     every figure the actual future euro figure, before inflation; 2026-10-15: no inflation at all,
+     the actual figures). Four sliders and the tax rate; one answer, your income a month at 66,
+     against the way of life picked above, at today's figures for it and the State Pension.
      assets/js/pb-home-calc.js runs the sums (the pension calculator's own), the pot, and the two
      hand-drawn labels that write themselves onto it (.pb-c2-anno: "Your pension pot" and the line
      that is enough). The markup is the answer at its starting values: 35, &euro;10,000 saved,
@@ -3575,21 +3565,20 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
         <p class="pb-c2-hint" aria-hidden="true">Stir the coins. Grab the pot and shake it.</p></div>
       <p class="pb-c2-legend" aria-hidden="true"><span class="pb-c2-l-you"><i></i>You</span><span class="pb-c2-l-rev" id="pbC2LRev"><i></i>Revenue</span><span class="pb-c2-l-emp" id="pbC2LEmp" hidden><i></i>Your employer</span></p>
       <div class="pb-c2-res">
-        <p class="pb-c2-k" id="pbC2K">Your income at 66, in 2057 euros</p>
+        <p class="pb-c2-k" id="pbC2K">Your income at 66, a month</p>
         <p class="pb-c2-big"><span id="pbC2Total">&euro;2,947</span></p>
-        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;2,396</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;551</b></span></p>
-        <p class="pb-c2-rise" id="pbC2Rise">Prices and the State Pension rise 2% a year.</p>
-        <p class="pb-c2-need" id="pbC2Need">A modest life at 66: <b>&euro;2,956</b> a month.</p>
-        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-fix">&euro;110 a month and you&rsquo;re there.</span> <span class="pb-c2-no">Putting in &euro;100, you&rsquo;re &euro;9 a month short.</span></p>
+        <p class="pb-c2-parts" id="pbC2Parts"><span class="pb-c2-k-sp"><i aria-hidden="true"></i>State Pension <b>&euro;1,297</b></span><span class="pb-c2-k-you"><i aria-hidden="true"></i>Your pension <b>&euro;551</b></span></p>
+        <p class="pb-c2-need" id="pbC2Need">A modest life at 66: <b>&euro;1,600</b> a month.</p>
+        <p class="pb-c2-verdict" id="pbC2Verdict"><span class="pb-c2-yes">Covered.</span> &euro;248 a month to spare.</p>
         <p class="pb-c2-take" id="pbC2Take" hidden></p>
         <span class="pb-c2-pup" id="pbC2Pup" aria-hidden="true" hidden><canvas width="72" height="52"></canvas></span>
         <p class="pb-shot" aria-hidden="true"><svg viewBox="0 0 64 64"><ellipse cx="23.2" cy="17.6" rx="6.1" ry="8.3" transform="rotate(-9 23.2 17.6)"/><ellipse cx="40.8" cy="17.6" rx="6.1" ry="8.3" transform="rotate(9 40.8 17.6)"/><ellipse cx="9.8" cy="28.6" rx="5.5" ry="7.4" transform="rotate(-31 9.8 28.6)"/><ellipse cx="54.2" cy="28.6" rx="5.5" ry="7.4" transform="rotate(31 54.2 28.6)"/><path d="M32 31C22.2 31 15.8 37.6 15.8 45.1C15.8 51.7 21.4 55.6 32 55.6C42.6 55.6 48.2 51.7 48.2 45.1C48.2 37.6 41.8 31 32 31Z"/></svg>pensionbuddy.ie</p>
-        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="close"><span>Make it &euro;110 a month</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
+        <button type="button" class="pb-c2-close" id="pbC2Close" data-act="up"><span>Aim higher: a moderate life</span> <svg class="pb-c2-i-close" viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12 10 17 19 7"/></svg><svg class="pb-c2-i-up" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="6 11 12 5 18 11"/></svg></button>
         <p class="tk-sr" id="pbC2Sr" aria-live="polite" aria-atomic="true"></p>
       </div>
     </div>
     <div class="pb-c2-panel" id="pbC2Live" hidden>
-      <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;2,947</b> a month <span id="pbC2MiniV">&euro;9 short</span></p>
+      <p class="pb-c2-mini" aria-hidden="true"><b id="pbC2MiniN">&euro;1,848</b> a month <span id="pbC2MiniV">Covered</span></p>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Age">Your age</label><span class="pb-c2-v" id="pbC2AgeV">35</span></div><input type="range" id="pbC2Age" min="18" max="65" step="1" value="35"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Pot">Saved so far</label><span class="pb-c2-v" id="pbC2PotV">&euro;10,000</span></div><input type="range" id="pbC2Pot" min="0" max="500000" step="1000" value="10000"></div>
       <div class="pb-c2-f"><div class="pb-c2-row"><label for="pbC2Mine">You put in a month</label><span class="pb-c2-v" id="pbC2MineV">&euro;100</span></div><input type="range" id="pbC2Mine" min="0" max="2000" step="10" value="100">
@@ -3607,7 +3596,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
   <div class="pb-c2-fine">
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note pb-c2-note">Every figure is in euros of the year you turn 66: your target and the State Pension rise 2% a year until then. 6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. Retiring at 66, 4% of the pot a year as income. <a href="pension-calculator.html">The full calculator</a></p>
+    <p class="gap-note pb-c2-note">6% growth a year before charges, the most a pension projection may assume. Historically, shares have often done better. Retiring at 66, 4% of the pot a year as income. <a href="pension-calculator.html">The full calculator</a></p>
     <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
   </div>
 </div></section>
@@ -3622,48 +3611,16 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <section class="pb-ms" id="money" aria-labelledby="pbMsH"><div class="wrap">
   <div class="pb-ms-head">
     <h2 id="pbMsH">Why a pension, and why now.</h2>
-    <p class="pb-ms-lede">Three ways to see it, with the figures in the calculator above.</p>
-    <div class="pb-seg pb-ms-tabs" role="tablist" aria-label="Three ways to see it" hidden>
-      <button type="button" role="tab" id="pbMsTabP" aria-controls="inflation" aria-selected="true">Prices</button>
-      <button type="button" role="tab" id="pbMsTabT" aria-controls="wait" aria-selected="false" tabindex="-1">Time</button>
+    <p class="pb-ms-lede">Two ways to see it, with the figures in the calculator above.</p>
+    <div class="pb-seg pb-ms-tabs" role="tablist" aria-label="Two ways to see it" hidden>
+      <button type="button" role="tab" id="pbMsTabT" aria-controls="wait" aria-selected="true">Time</button>
       <button type="button" role="tab" id="pbMsTabX" aria-controls="relief" aria-selected="false" tabindex="-1">Tax</button>
     </div>
   </div>
   <div class="pb-ms-card">
-<!-- INFLATION (11 October 2026, Damian's brief: "€1,000 buys less every year; why a pension; the
-     government adds to it"). Three stacks of coins: money on deposit, which buys less each year;
-     the same money in a pension, which grows; and, dim beside it, what the government adds in tax
-     relief. assets/js/pb-home-infl.js. Prices up 2% a year (the glossary's inflation widget's sum),
-     the deposit at the Central Bank's latest household rate (PBAssume.cash), the pension at the
-     calculator's 6%; the relief at 20% or 40%, shared with the calculator. 13 October 2026 (Damian:
-     the one place for what money buys): once the reader sets the calculator's age or monthly
-     amount, the section reads their money: that amount every month to 66, on deposit against in
-     a pension, in what it buys at today's prices. The markup is the €1,000 version. 14 October 2026:
-     the first of the three panels of "Why a pension, and why now." (#money), the pension first and
-     the deposit second; what Revenue adds went to the third panel, Tax. -->
-<section class="pb-i2" id="inflation" aria-labelledby="pbI2H"><div class="pb-i2-grid">
-  <div class="pb-i2-copy">
-    <h3 id="pbI2H">&euro;1,000 buys less every year.</h3>
-    <p class="pb-i2-out pb-i2-pen"><span id="pbI2PenW">In 30 years, &euro;1,000 in a pension could buy what</span> <span class="pb-nw"><b id="pbI2Pen">&euro;3,171</b> buys today.</span></p>
-    <p class="pb-i2-out pb-i2-cash"><span id="pbI2CashW">On deposit, it would buy what</span> <span class="pb-nw"><b id="pbI2Cash">&euro;577</b> buys today.</span></p>
-    <p class="pb-i2-why">A deposit can&rsquo;t keep up with prices. A pension can.</p>
-    <div class="pb-i2-ctl" id="pbI2Ctl" hidden>
-      <div class="pb-c2-row"><label for="pbI2Yrs" id="pbI2YrsL">Years</label><span class="pb-c2-v" id="pbI2YrsV">30</span></div>
-      <input type="range" id="pbI2Yrs" min="1" max="40" step="1" value="30">
-      <div class="pb-c2-taxrow pb-i2-taxrow"><span class="pb-c2-taxl" id="pbI2TaxL">Your tax rate</span><div class="pb-seg pb-seg-sm pb-i2-tax" role="group" aria-labelledby="pbI2TaxL"><button type="button" data-rate="20" aria-pressed="false">20%</button><button type="button" data-rate="40" aria-pressed="true">40%</button></div></div>
-    </div>
-    <p class="pb-i2-note">What it buys at today&rsquo;s prices, with prices up 2% a year. A deposit earns <span id="pbI2Dep">0.15% a year, the Central Bank&rsquo;s average for household overnight deposits in July 2026</span>. A pension grows 6% a year before charges, the most a pension projection may assume. Historically, shares have often done better. Not guaranteed.</p>
-    <p class="pb-past pb-caveat"><b>Warning: Past performance is not a reliable guide to future performance.</b></p>
-  </div>
-  <div class="pb-i2-stage">
-    <canvas class="pb-i2-cv" aria-hidden="true"></canvas>
-    <span class="pb-i2-tag pb-i2-tag-cash" id="pbI2TCash" aria-hidden="true"><b>&euro;577</b><i>Deposit</i></span>
-    <span class="pb-i2-tag pb-i2-tag-pen" id="pbI2TPen" aria-hidden="true"><b>&euro;3,171</b><i>Pension</i></span>
-    <span class="pb-i2-tag pb-i2-tag-gov" id="pbI2TGov" aria-hidden="true"><b>+&euro;2,114</b><i>Government</i></span>
-    <p class="pb-i2-hint" aria-hidden="true">Drag across to move through the years.</p>
-  </div>
-</div>
-</section>
+<!-- 2026-10-15 (Damian: no future or today's money on the site; an inflation
+     explainer may come later as its own thing): the Prices panel, what EUR 1,000
+     buys in future years, is gone; Time and Tax remain. -->
 <!-- THE COST OF WAITING (13 October 2026, Damian's brief: "the clearest pain on the page; simple,
      visual, animated"), straight under the Ask form, in place of the fee check (fees are low in
      Ireland; the charges calculator stays under Tools). Start now against wait: the calculator's
@@ -3707,9 +3664,15 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
   <div class="pb-w2-fine">
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <p class="gap-note pb-w2-note">Your pot at 66: what you have saved, plus the same monthly payment from now or from later. Future euros, before inflation. 6% growth a year before charges, the most a pension projection may assume. Charges not taken off. &ldquo;By now&rdquo; is the same monthly payment from 25, at the same 6%. Your first year&rsquo;s relief is at your tax rate, within Revenue&rsquo;s limits.</p>
+    <p class="gap-note pb-w2-note">Your pot at 66: what you have saved, plus the same monthly payment from now or from later. 6% growth a year before charges, the most a pension projection may assume. Charges not taken off. &ldquo;By now&rdquo; is the same monthly payment from 25, at the same 6%. Your first year&rsquo;s relief is at your tax rate, within Revenue&rsquo;s limits.</p>
   </div>
 </div></section>
+<!-- TAX (14 October 2026): the third panel of "Why a pension, and why now." (#money). What
+     Revenue adds to what you put in, from the calculator's own monthly amount and tax rate
+     (PBKit.plan, PBKit.tax): a month, and to 66 if the rate and the payments stay the same. Plain
+     sums, no growth, so no projection. Before Revenue's deadline, one line says it can count
+     against last year's tax (PBDeadline). assets/js/pb-home-money.js. The markup is the answer at
+     the calculator's starting values: 35, &euro;100 a month, 40%. -->
 <!-- TAX (14 October 2026): the third panel of "Why a pension, and why now." (#money). What
      Revenue adds to what you put in, from the calculator's own monthly amount and tax rate
      (PBKit.plan, PBKit.tax): a month, and to 66 if the rate and the payments stay the same. Plain
@@ -4093,8 +4056,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 <script src="assets/js/pb-home-kit.js?v=8c520346"></script>
 <script src="assets/js/pb-coins.js?v=d4dca700"></script>
 <script src="assets/js/pb-home-gap.js?v=ed433a1f"></script>
-<script src="assets/js/pb-home-calc.js?v=deb036d4"></script>
-<script src="assets/js/pb-home-infl.js?v=2912a7f3"></script>
+<script src="assets/js/pb-home-calc.js?v=6c02fae2"></script>
 <script src="assets/js/cost-of-waiting.js?v=24cb364a"></script>
 <script src="assets/js/pb-home-wait.js?v=bb638473"></script>
 <script src="assets/js/pb-home-money.js?v=7ac13dd5"></script>
@@ -4181,9 +4143,9 @@ addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>8));
 <script src="assets/js/pb-video.js?v=c59c887d" type="text/pb-late"></script>
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=b02e366f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=2024ec4c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=0629792e" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>

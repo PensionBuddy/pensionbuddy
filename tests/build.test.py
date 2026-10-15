@@ -1521,7 +1521,7 @@ def run():
     # forms and the games.
     ORDER = ['<section class="pb-welcome" id="welcome"', '<header class="hero pb-g2" id="gap">',
              '<div data-pb-providers hidden></div>', '<section class="pb-c2" id="calc"',
-             '<section class="pb-ms" id="money"', '<section class="pb-i2" id="inflation"', '<section class="pb-w2" id="wait"',
+             '<section class="pb-ms" id="money"', '<section class="pb-w2" id="wait"',
              '<section class="pb-x2" id="relief"', 'id="pbDrb"', '<section class="expect" id="call">',
              '<section class="pb-ask" id="ask"', '<section class="pb-learn" id="learn">',
              '<section class="tickband" id="deadline">', '<section id="story">', '<section class="pb-tl-sec" id="through-life">']
@@ -1531,7 +1531,9 @@ def run():
         f = ['missing: ' + o for o, i in zip(ORDER, at) if i < 0]
         if not f and at != sorted(at):
             f.append('out of order')
-        for gone in ('id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
+        # 2026-10-15 (Damian: no future or today's money): the inflation
+        # baskets (#inflation, the Prices tab) are gone; Time and Tax remain
+        for gone in ('id="inflation"', 'assets/js/pb-home-infl.js', 'id="changed"', 'id="life"', 'pb-chip-hero', 'id="pbNeed"', 'pb-hero-paths',
                      'Who you are dealing with', 'Questions before you call', 'check that for yourself',
                      'name="fee-check"', 'LEAD:fee:', 'assets/js/pb-fee.js'):
             if gone in ix:
@@ -2820,9 +2822,8 @@ LEAD_FORMS = {
 # calculator's result (pagebuild.after_block) posts as enquiry too, on every
 # page in pagebuild.AFTER, check 14 adds.
 REPLY_FORMS = {
-    # The founders audit (2026-10-15), Q6: the in-page Ask form is on the home
-    # and starter pages only; Ask Buddy carries the question everywhere else
-    'enquiry': ['index.html', 'starter.html'],
+    'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
+                'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     # 'fee-check' left the home page on 13 October 2026 (the cost of waiting took its place): on no page now
     'year-end-reminder': ['director.html'],

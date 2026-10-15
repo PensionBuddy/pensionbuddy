@@ -267,78 +267,46 @@ From the review against the two "bibles" (Founders and Marketing):
   trace" step names (Damian set them on 12 October); the six initialism
   findings (legal wording, on main before today).
 
-## 15 October 2026: the founders audit, first batch (Q1-Q4, Q6-Q8)
+## 15 October 2026: the founders audit, first batch, as shipped
 
-From the audit against the two bibles with compliance set aside (the
-artifact "Pensionbuddy Founders Audit"; its ideas bank keeps Damian's picks).
-On `claude/founders-batch`, not merged or pushed.
+From the audit against the two bibles (the artifact "Pensionbuddy Founders
+Audit"), after Damian saw the demo and cut it back the same day.
 
-- **Q1, the welcome pays out.** Under the name: "You pay EUR 60. Revenue adds
-  EUR 40. At the 40% tax rate." The paw is a button now (tap, click, Enter or
-  Space) and turns up the next fact, each with a link: the State Pension's
-  maximum weekly rate (read from `PBStatePension` when pressed), an old
-  pension from a past job (to the tracker), and tax-free growth (to the
-  calculator). "Start here" is "Show me my gap". Hint: "Tap the paw for
-  another." (`assets/js/pb-welcome.js`, WELCOME block.)
-- **Q2, one core line.** "You pay EUR X. Revenue adds EUR Y." in the
-  welcome, the gap's fix ("Close it with EUR 110 a month. You pay EUR 66.
-  Revenue adds EUR 44."), and the calculator ("You pay EUR 60. Revenue adds
-  EUR 40."). Damian's bio opens on his belief, "Hardly anyone is bad with
-  money...", his own words reordered ("That work left me one firm opinion."
-  went). The result emails are not changed: they carry no relief figure.
-- **Q3, one gap story.** The gap's month line says what it is measured
-  against ("EUR 303 a month, on the State Pension alone."); the home
-  calculator says the same total as the gap's fix ("EUR 110 a month and
-  you're there. Putting in EUR 100, you're EUR 9 a month short."). The pension
-  calculator's State Pension line adds today's money ("about EUR 2,170 a
-  month, or EUR 1,297 in today's money"): a deliberate change on a
-  render-diff page.
-- **Q4, booking.** Headline "Talk to Damian. Twenty minutes, free.", "Leave
-  knowing what you have, and one next step. No obligation.", Damian's
-  portrait and title, a placeholder for his own line (Q4-voice), what to have
-  ready (from the thank-you page), the home page's three steps (We talk / We
-  trace / You decide) and a line on what happens after booking. Calendly's
-  own cookie banner is off the embed (`hide_gdpr_banner=1`); the new-tab link
-  keeps Calendly's page as it is.
-- **Q6, one ask, after the give.** The in-page Ask form is off the director,
-  booking, glossary, year-end checklist, directors' rules and the three
-  guides (`tools/lead-blocks.py`); Ask Buddy stays on every page. On the
-  starter page it moved under the tools, and the hero's "Ask us" is "Show me
-  my EUR 20" (to the relief band, now `#relief`).
-- **Q7, the tracker says what you get.** Lede: "2 years or more in a job with a
-  pension? Your share is usually still there. Under 2, you may be owed a
-  refund." (short enough for the lockup to stay on a 375x667 first screen) Second button "What you get back" to a
-  new `#getback` list (time and cost are placeholders). The form's heading is
-  "List your old jobs. Find what they left you."; the steps read "Your old
-  pensions, found and valued" and "Your options, explained". The torch scene
-  shows a faint ghost of every pot before the torch reaches it. The UK page
-  points to the tracker, behind a placeholder until Damian says he traces UK
-  pensions.
-- **Q8, self-employed.** Headline "Self-employed? A pension payment now can
-  cut last year's tax.", then the deadline (a live day count from
-  `PBDeadline`; the markup gives both 2026 dates, so it needs a new year's
-  dates after 18 November) and the EUR 60 / EUR 40 figure, moved up from Tax
-  relief. "October deadline" is "The deadline".
-- **Reading age:** taking the Ask form off raised four pages above 10 (its
-  short labels had been read as copy): the UK page, the year-end checklist,
-  the directors' rules and the glossary. Their longest sentences are split,
-  every fact, figure and date kept; all four read at 10 or under again.
-- **Placeholders (NEEDS DAMIAN):** Q4-voice (booking: one line in Damian's
-  words on what he does in the 20 minutes), Q7-time (how long a trace takes),
-  Q7-cost (free, or what a trace costs), Q7-uk (whether he traces UK
-  pensions). Each is a yellow `needs-input` span; verify.py lists them.
-- **6% everywhere (Damian, 15 October 2026: "use 6%").** The full pension
-  calculator, the director calculator, the charges calculator, the PIA page
-  (its slider now starts at 6%) and the starter page's three cost-of-waiting
-  tabs grow at PBAssume.assets.cap, 6% a year before charges, as the home
-  page and director.html already did (Run 53). Their sentences say so ("the
-  most a pension projection may assume"; "risk level 4, about half shares"
-  is gone), and every default figure in their markup is the one the script
-  now draws (the 5% figures went: the calculator's EUR 460,066 is EUR 555,606,
-  the director's EUR 1,511,849 is EUR 1,698,016, the starter's EUR 352,848 is
-  EUR 440,504). cost-of-waiting.js keeps its tested default of 5%; the
-  starter page passes 6. The specs (docs/CALC-SPEC*.md) still describe the
-  modules at 5%, which their tests feed in; the pages now feed in 6.
+- **Kept from the batch:** the gap's month line says "on the State Pension
+  alone"; "You pay EUR X. Revenue adds EUR Y." in the gap's fix and the
+  calculator; Damian's bio opens on his belief (his words reordered); the
+  booking page's heading ("Talk to Damian. Twenty minutes, free."), his
+  portrait, his line ("We'll help you make sense of it."), what to have
+  ready and the home page's three steps; the tracker's lede (the refund
+  hook), its step names and the faint pots before the torch; the
+  self-employed page opens on the deadline ("34 days until 18 November.",
+  counted by PBDeadline) and the EUR 60 / EUR 40 figure.
+- **Undone by Damian the same day:** the welcome band is main's again
+  ("Welcome to Pensionbuddy"); the Ask form is back on all ten pages (it
+  gives leads); no "What you get back" box on the tracker; no placeholders;
+  Calendly's own cookie pop-up shows again.
+- **6% everywhere** ("use 6%"): the pension, director, charges and PIA
+  calculators and the starter page's cost-of-waiting tabs grow at
+  PBAssume.assets.cap, as the home page and director.html did; default
+  figures in the markup are the script's. cost-of-waiting.js keeps its
+  tested 5% default; the starter page passes 6.
+- **No future or today's money** (Damian: "just have the actual figure ...
+  don't just automatically assume"): nothing on the site is grown or shrunk
+  for prices. The home calculator compares the pot's income with today's
+  way-of-life figures and today's State Pension (INF = 0 in
+  pb-home-calc.js); the pension calculator's State Pension line is today's
+  rate (about EUR 1,297 a month) and its "What it will buy" card is hidden;
+  the director page's pot and "start a year later" gap are the actual
+  figures; the home page's Prices tab (what EUR 1,000 buys later) is gone,
+  leaving Time and Tax; every "future euros / euro at the time / before
+  inflation" label is gone. An inflation explainer may come later as its own
+  thing. The glossary's Inflation entry and its slider stay.
+- **Known effect, told to Damian:** at the home defaults (35, EUR 10,000,
+  EUR 100 a month) the calculator now says "Covered. EUR 248 a month to
+  spare" (it said EUR 9 short), because a pot in 2057 euros now meets today's
+  costs.
+- **Reading age:** splits on the UK page, the year-end checklist, the
+  directors' rules and the glossary stay (all four read at 10 or under).
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 

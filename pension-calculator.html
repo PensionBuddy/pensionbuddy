@@ -2996,7 +2996,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€365,206</b></li>
         </ul>
       </div>
-      <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: about <b>€2,170</b> a month, or €1,297 in today’s money.</p>
+      <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: about <b>€1,297</b> a month.</p>
       <p id="srSummary" class="tk-sr" aria-live="polite" aria-atomic="true"></p>
       <div class="divline"></div>
       <div class="foot">An illustration.</div>
@@ -3028,7 +3028,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With €100 more a month</span></div>
       <div id="chart"></div>
     </div>
-    <div class="pc-buy" id="pcBuy">
+    <!-- 2026-10-15 (Damian: no future or today's money): "What it will buy" put the pot into
+         today's prices; it is hidden, its script left running against it -->
+    <div class="pc-buy" id="pcBuy" hidden>
       <h3 id="pcBuyH">What it will buy</h3>
       <ul class="pc-buy-rows">
         <li class="pc-buy-row"><p class="pc-buy-t">At <span id="buyAt">66</span>, your <span id="buyPot">€555,606</span> pot will buy what <b id="buyPen">€332,019</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
@@ -3089,7 +3091,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
     <li>Not included: product charges, the tax on your income when you draw it.</li>
     <li>Tax relief is at the rate you choose, on your own payments only. Revenue&rsquo;s limit is 15% of earnings under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. We do not ask what you earn, so the figure assumes your earnings cover your payments.</li>
-    <li>The figures above are in euro at the time, before inflation. Only &ldquo;What it will buy&rdquo; adjusts for it: prices rising 2% a year, the European Central Bank&rsquo;s target, and the same money in a bank account at 0.15% a year, the average on household overnight deposits in July 2026 (Central Bank of Ireland). Nothing is guaranteed.</li>
+    <li>Nothing is guaranteed.</li>
     <li>The <a class="gref" href="glossary.html#state-pension" title="See this in the jargon buster">State Pension</a> (Contributory) may be paid on top, from 66. The full rate is €15,564 a year in 2026, and €16,084 from January 2027 (Budget 2027). The figure above assumes it rises with prices, 2% a year, to 66. Check gov.ie for the current rate.</li>
   </ul>
   </details>
@@ -3407,13 +3409,12 @@ function calc(){
      13 October 2026). Not added to the pot: it is paid from 66, whatever
      the age the pot is drawn. */
   if(window.PBStatePension){
-    const SP=PBStatePension, INF=window.PBAssume?PBAssume.inflation.rate:0.02;
-    const SPm=SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100/12*Math.pow(1+INF,Math.max(0,SP.PENSION_AGE-age));
-    /* The founders audit (2026-10-15), Q3): the future figure reads as a
-       mistake to a reader who knows the weekly rate, so today's money follows it */
-    const SPnow=SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100/12;
+    /* 2026-10-15 (Damian: "just have the actual figure"): the rate as it is
+       now, not grown for prices */
+    const SP=PBStatePension;
+    const SPm=SP.MAX_WEEKLY_CENTS*SP.WEEKS_PER_YEAR/100/12;
     $('pbSpTop').innerHTML='<i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from '+SP.PENSION_AGE+
-      ': about <b>'+euro(SPm)+'</b> a month'+(age<SP.PENSION_AGE?', or '+euro(SPnow)+' in today’s money':'')+'.';
+      ': about <b>'+euro(SPm)+'</b> a month.';
   }
 
   /* #29: the workings, from the same values: what went in, what was there
@@ -3756,9 +3757,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=b02e366f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=2024ec4c" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=0629792e" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>

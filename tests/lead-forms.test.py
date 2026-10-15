@@ -63,8 +63,8 @@ LEAD_FORMS = {
 
 # the forms that ask Damian to reply (tools/lead-blocks.py), by form name
 REPLY_FORMS = {
-    # the founders audit (2026-10-15), Q6: the in-page Ask form on two pages only
-    'enquiry': ['index.html', 'starter.html'],
+    'enquiry': ['booking.html', 'director-pension-rules.html', 'director-year-end-checklist.html', 'director.html', 'glossary.html',
+                'index.html', 'pensions-over-50.html', 'self-employed-pensions.html', 'starter.html', 'uk-pensions-in-ireland.html'],
     'pension-trace': ['tracker.html'],
     # the fee check ("fee-check") left the home page on 13 October 2026, for the cost of waiting: on no page now
     'year-end-reminder': ['director.html'],
