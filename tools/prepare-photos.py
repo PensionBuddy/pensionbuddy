@@ -87,12 +87,13 @@ CAP_SHOOT = [
     # Our story: "Father, son, dog." 1:1, shown up to ~560px wide.
     {'source': 'cap-shoot/trio-studio.jpg', 'slug': 'cap-trio-studio',
      'size': (1000, 1000), 'quality': 80},
-    # Buddy's profile: .about-port is 4:5, same size as the two portraits.
+    # Buddy's profile (Damian's pick): over Adam's shoulder, looking straight at
+    # the camera. .about-port is 4:5, same size as the two portraits.
+    {'source': 'cap-shoot/buddy-shoulder-tall.jpg', 'slug': 'cap-buddy-shoulder',
+     'size': (800, 1000), 'quality': 82},
+    # Thank-you page, under the timeline: the patio close-up, 4:5.
     {'source': 'cap-shoot/buddy-closeup.jpg', 'slug': 'cap-buddy-closeup',
      'size': (800, 1000), 'quality': 82},
-    # Thank-you page, beside "While you are waiting". 1:1.
-    {'source': 'cap-shoot/buddy-shoulder-square.jpg', 'slug': 'cap-buddy-shoulder',
-     'size': (800, 800), 'quality': 80},
     # Booking page band: 16:9, subjects on the right, plain backdrop on the left.
     {'source': 'cap-shoot/buddy-shoulder-wide.jpg', 'slug': 'cap-buddy-shoulder-wide',
      'size': (1600, 900), 'quality': 78},
