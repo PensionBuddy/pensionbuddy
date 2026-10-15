@@ -79,6 +79,25 @@ PORTRAITS = [
 # pattern expects, derived from the JPEG that is already in assets/img.
 DERIVE_WEBP = [('buddy-beach.jpg', 80)]
 
+# The cap shoot, October 2026: studio and patio photos, already clean exports
+# (no screenshot chrome), so each is just resized for its job. The sources sit in
+# "PensionBuddy Photos/cap-shoot/" under plain names. Run with --cap-shoot to
+# write only these and leave every other asset's bytes alone.
+CAP_SHOOT = [
+    # Our story: "Father, son, dog." 1:1, shown up to ~560px wide.
+    {'source': 'cap-shoot/trio-studio.jpg', 'slug': 'cap-trio-studio',
+     'size': (1000, 1000), 'quality': 80},
+    # Buddy's profile: .about-port is 4:5, same size as the two portraits.
+    {'source': 'cap-shoot/buddy-closeup.jpg', 'slug': 'cap-buddy-closeup',
+     'size': (800, 1000), 'quality': 82},
+    # Thank-you page, beside "While you are waiting". 1:1.
+    {'source': 'cap-shoot/buddy-shoulder-square.jpg', 'slug': 'cap-buddy-shoulder',
+     'size': (800, 800), 'quality': 80},
+    # Booking page band: 16:9, subjects on the right, plain backdrop on the left.
+    {'source': 'cap-shoot/buddy-shoulder-wide.jpg', 'slug': 'cap-buddy-shoulder-wide',
+     'size': (1600, 900), 'quality': 78},
+]
+
 
 def photo_band(im):
     """Rows of the screenshot that hold the photo rather than black bars or UI.
@@ -134,8 +153,22 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--preview', action='store_true',
                     help='write crops to the scratchpad instead of assets/img')
+    ap.add_argument('--cap-shoot', action='store_true',
+                    help='write only the cap-shoot photos')
     args = ap.parse_args()
     out_dir = os.environ.get('PREVIEW_DIR', '/tmp/photo-preview') if args.preview else OUT
+
+    for c in CAP_SHOOT:
+        if not os.path.isfile(os.path.join(SRC, c['source'])):
+            print('cap %-26s source missing, skipped' % c['slug'])
+            continue
+        im = Image.open(os.path.join(SRC, c['source'])).convert('RGB')
+        im = im.resize(c['size'], Image.LANCZOS)
+        jpg, webp, jb, wb = save_pair(im, c['slug'], out_dir, c['quality'])
+        print('cap %-26s %9d %9s  (%dx%d)' % (c['slug'], jb, wb if wb else 'skipped',
+                                             c['size'][0], c['size'][1]))
+    if args.cap_shoot:
+        return
 
     total_w = total_j = 0
     print('%-30s %-11s %-16s %9s %9s' % ('source', 'band', 'slug', 'jpg', 'webp'))

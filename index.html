@@ -1673,10 +1673,11 @@ nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
    and ink at 7% (translucent, so no reader is asked to read it). */
 .pb-wordmark{margin:40px 0 -6px;font-family:'Figtree',var(--font);font-weight:800;letter-spacing:-0.035em;
   line-height:.82;font-size:min(12.6vw,160px);color:rgba(11,31,28,.07);white-space:nowrap;overflow:hidden;user-select:none;pointer-events:none}
-.pb-story-shots{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:-8px}
+.pb-story-shots{display:grid;grid-template-columns:4fr 3fr;gap:16px;margin-top:-8px}
 .pb-story-shots figure{margin:0;aspect-ratio:3/2;overflow:hidden;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2)}
+.pb-story-shots .pb-story-lead{grid-row:span 2;aspect-ratio:auto}
 .pb-story-shots img{width:100%;height:100%;object-fit:cover;display:block}
-@media(max-width:700px){.pb-story-shots{grid-template-columns:1fr;gap:12px}}
+@media(max-width:700px){.pb-story-shots{grid-template-columns:1fr;gap:12px}.pb-story-shots .pb-story-lead{grid-row:auto;aspect-ratio:1/1}}
 /* THE SAMPLE SNAPSHOT (14 October 2026): what a client leaves the call with, folded under
    "See what you leave with". Behind the sample_report flag (shared/site-flags.json, tools/flags.py),
    off until Damian confirms he gives clients a written snapshot; the page is docs/report/. */
@@ -3918,6 +3919,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
     <p>Pensionbuddy started as a father-son conversation. Damian kept seeing people ignore their pension, or think about it only when auto-enrolment came in. Adam saw the same gap from the other side. So they built Pensionbuddy together.</p>
   </div>
   <div class="pb-story-shots">
+    <figure class="pb-story-lead"><picture><source type="image/webp" srcset="assets/img/cap-trio-studio.webp?v=6383bef0"><img src="assets/img/cap-trio-studio.jpg?v=8101700c" width="1000" height="1000" alt="Adam, Buddy and Damian in white Pensionbuddy caps and a beanie, Buddy in the middle" loading="lazy" decoding="async"></picture></figure>
     <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-screen.webp?v=04aef3f5"><img src="assets/img/damian-at-desk-screen.jpg?v=675b5c57" width="1200" height="800" alt="Damian at his desk with Pensionbuddy&rsquo;s State Pension entitlement page on screen" loading="lazy" decoding="async"></picture></figure>
     <figure><picture><source type="image/webp" srcset="assets/img/damian-at-desk-notes.webp?v=7e0a733b"><img src="assets/img/damian-at-desk-notes.jpg?v=b3c11604" width="1200" height="800" alt="Damian at his desk going through paperwork, pen in hand" loading="lazy" decoding="async"></picture></figure>
   </div>
@@ -3961,7 +3963,7 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
 
 <section id="buddy" style="padding-top:8px"><div class="wrap about-grid">
   <div class="about-port">
-    <img src="assets/img/buddy-beach.jpg?v=4aed90ed" width="440" height="550" alt="Buddy, the boxer dog Pensionbuddy is named after, sitting on a beach" loading="lazy">
+    <picture><source type="image/webp" srcset="assets/img/cap-buddy-closeup.webp?v=c53986ce"><img src="assets/img/cap-buddy-closeup.jpg?v=1f5235b6" width="800" height="1000" alt="Buddy, the boxer Pensionbuddy is named after, in a white Pensionbuddy cap" loading="lazy" decoding="async"></picture>
   </div>
   <div class="about">
     <span class="kicker">Chief Napping Officer</span>

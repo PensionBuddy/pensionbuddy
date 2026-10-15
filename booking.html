@@ -2649,6 +2649,11 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   .pbc-row{grid-template-columns:1fr}
 }
 /* LEAD:callback:END */
+/* The cap shoot (October 2026): Buddy over Adam's shoulder, between the calendar and how a call works.
+   The backdrop is plain on the left, so a wide crop keeps both caps and Buddy's face. */
+.pb-cap-wide{max-width:960px;margin:0 auto 8px;aspect-ratio:21/9;overflow:hidden;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-2)}
+.pb-cap-wide img{width:100%;height:100%;object-fit:cover;object-position:60% 40%;display:block}
+@media(max-width:700px){.pb-cap-wide{aspect-ratio:4/3}.pb-cap-wide img{object-position:68% 40%}}
 </style>
 </head>
 <body>
@@ -2727,6 +2732,8 @@ html:not(.pb-js) .pb-ask-how label:has(input:checked){color:#fff;background:var(
   </div>
 
 </div></div>
+<div class="wrap"><figure class="pb-cap-wide"><picture><source type="image/webp" srcset="assets/img/cap-buddy-shoulder-wide.webp?v=d3d84ee2"><img src="assets/img/cap-buddy-shoulder-wide.jpg?v=8fbfc7f3" width="1600" height="900" alt="Buddy in a Pensionbuddy cap, carried over Adam&rsquo;s shoulder" loading="lazy" decoding="async"></picture></figure></div>
+
 <section class="pb-book-how" id="call" aria-labelledby="pbBookHow"><div class="wrap">
   <h2 id="pbBookHow">How a call works.</h2>
   <div class="steps">
