@@ -185,7 +185,10 @@
       light.x += light.vx * dt; light.y += light.vy * dt;
       var LR = W < 600 ? 110 : 150;
       pots.forEach(function (p) {
-        var d = Math.hypot(p.x - light.x, p.y - light.y), want = p.found ? 1 : clamp((LR - d) / (LR * 0.55), 0, 1);
+        /* The founders audit (2026-10-15), Q7): a faint ghost of every pot
+           shows before the torch reaches it, so the hero never reads as empty
+           on a phone; the torch still has to light a pot before it can be found */
+        var d = Math.hypot(p.x - light.x, p.y - light.y), want = p.found ? 1 : Math.max(0.16, clamp((LR - d) / (LR * 0.55), 0, 1));
         p.a += (want - p.a) * Math.min(1, dt * 10);
       });
     },

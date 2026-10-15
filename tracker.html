@@ -2852,6 +2852,14 @@ html:not(.pb-js) .pbj-now{display:none}
   .pbm-ic{width:44px;height:44px}
 }
 /* LEAD:move:END */
+/* The founders audit (2026-10-15), Q7): what you get back */
+.pb-getback{padding-top:8px}
+.pb-gb-list{list-style:none;margin:0 auto;padding:0;display:grid;gap:12px;max-width:640px}
+.pb-gb-list li{position:relative;padding:16px 18px 16px 50px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);font-size:17px;line-height:1.5;color:var(--ink-2)}
+.pb-gb-list li::before{content:"";position:absolute;left:20px;top:22px;width:13px;height:8px;border-left:3px solid var(--teal-700);border-bottom:3px solid var(--teal-700);transform:rotate(-45deg)}
+.pb-gb-list b{color:var(--ink)}
+.pb-gb-go{text-align:center;margin:22px 0 0}
+.needs-input{background:#FFF3C4;color:#5A4500;border-radius:4px;padding:1px 4px}
 </style>
 
 <script>
@@ -2913,10 +2921,10 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
     </div>
     <h1>The statements went in the bin. <span class="hl">The pension didn't.</span></h1>
-    <p class="lede">Most people who changed jobs have pension money somewhere.</p>
+    <p class="lede">2 years or more in a job with a pension? Your share is usually still there. Under 2, you may be owed a refund.</p>
     <div class="hero-cta">
       <a class="btn btn-acc" href="#trace">List your old jobs <svg class="ico" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></a>
-      <a class="btn btn-ghost" href="pension-calculator.html">Try the calculator</a>
+      <a class="btn btn-ghost" href="#getback">What you get back</a>
     </div>
       <div class="pb-reg">
         <a href="https://registers.centralbank.ie/" rel="noopener" aria-label="Regulated by the Central Bank of Ireland: check the Central Bank's register at registers.centralbank.ie">Regulated by the Central Bank of Ireland</a>
@@ -2928,7 +2936,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <!-- LEAD:jobs:BEGIN (tools/lead-blocks.py writes this; edit tools/lead-parts/jobs.html) -->
 <section class="pbj" id="trace" aria-labelledby="pbjH"><div class="wrap">
   <div class="sec-head ctr">
-    <h2 id="pbjH">List your old jobs. <span class="hl">We find the pensions.</span></h2>
+    <h2 id="pbjH">List your old jobs. <span class="hl">Find what they left you.</span></h2>
     <p class="pbj-lede">Names and rough years are enough.</p>
   </div>
   <div class="pbj-card">
@@ -2992,6 +3000,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </div></section>
 <!-- LEAD:jobs:END -->
 
+<!-- The founders audit (2026-10-15), Q7): what tracing gives the reader,
+     said before the steps. The time and the cost are Damian's to fill in. -->
+<section class="pb-getback" id="getback" aria-labelledby="pbGbH"><div class="wrap">
+  <div class="sec-head ctr"><h2 id="pbGbH">What you get back.</h2></div>
+  <ul class="pb-gb-list">
+    <li><b>Every pension we find.</b> What it is worth, and what it charges a year.</li>
+    <li><b>No chasing for you.</b> We write to the old employers and the pension companies.</li>
+    <li><b>In about <span class="needs-input" data-issue="Q7-time">[how many weeks a trace takes: to be confirmed]</span>.</b> We tell you as each one replies.</li>
+    <li><b><span class="needs-input" data-issue="Q7-cost">[Free, or what a trace costs: to be confirmed]</span></b> No obligation to move anything.</li>
+  </ul>
+  <p class="pb-gb-go"><a class="btn btn-acc" href="#trace">List your old jobs</a></p>
+</div></section>
+
 <section><div class="wrap">
   <div class="sec-head ctr"><h2>How it works.</h2></div>
   <ol class="pbs" data-pb-steps>
@@ -3001,11 +3022,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </li>
     <li class="pbs-step">
       <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M6.5 3.5h10l5 5v9"/><path class="pbs-d" style="--k:1" pathLength="1" d="M6.5 3.5v24h6"/><path class="pbs-d" style="--k:1" pathLength="1" d="M16.5 3.5v5h5"/><path class="pbs-d" style="--k:2" pathLength="1" d="M10 12.5h5M10 16.5h3"/><g class="pbs-a pbs-a-sweep" style="--k:1"><path class="pbs-k" d="M26.5 22a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/><path class="pbs-k" d="M25 26l4 4"/></g><path class="pbs-k pbs-d pbs-a pbs-a-tick" style="--k:3" pathLength="1" d="M18.4 22.1l1.7 1.7 3.4-3.5"/></svg><span class="pbs-n">2</span></span>
-      <div class="pbs-txt"><h3>We trace and value them</h3></div>
+      <div class="pbs-txt"><h3>Your old pensions, found and valued</h3></div>
     </li>
     <li class="pbs-step">
       <span class="pbs-node" aria-hidden="true"><svg class="pbs-ico" viewBox="0 0 32 32"><path class="pbs-d" pathLength="1" d="M16 30v-9"/><path class="pbs-d" style="--k:1" pathLength="1" d="M16 21l-7.3-8.2M16 21V9.2M16 21l7.3-8.2"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:1" d="M9.8 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:2" d="M18.6 6.4a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/><path class="pbs-k pbs-a pbs-a-pop" style="--k:3" d="M27.4 10.3a2.6 2.6 0 1 1-5.2 0 2.6 2.6 0 0 1 5.2 0z"/></svg><span class="pbs-n">3</span></span>
-      <div class="pbs-txt"><h3>We explain your options</h3></div>
+      <div class="pbs-txt"><h3>Your options, explained</h3></div>
     </li>
   </ol>
 </div></section>
@@ -3231,9 +3252,9 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 
 <script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=4ced620f" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=b02e366f" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
-<script src="assets/js/pb-glossary.js?v=0e4cc122" type="text/pb-late"></script>
+<script src="assets/js/pb-glossary.js?v=0629792e" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
 <script src="assets/js/pb-cta.js?v=03610d23"></script>
@@ -3267,7 +3288,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-jargon-chips.js?v=7bb8e78f"></script>
 <script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
-<script src="assets/js/pb-hero-scene.js?v=c611d8da"></script>
+<script src="assets/js/pb-hero-scene.js?v=9ffdc589"></script>
 <script src="assets/js/pb-steps.js?v=ba4653cc"></script>
 <script src="assets/js/pb-chrome-motion.js?v=9fb1f86d"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
