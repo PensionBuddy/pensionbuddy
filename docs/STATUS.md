@@ -327,10 +327,18 @@ On `claude/founders-batch`, not merged or pushed.
   words on what he does in the 20 minutes), Q7-time (how long a trace takes),
   Q7-cost (free, or what a trace costs), Q7-uk (whether he traces UK
   pensions). Each is a yellow `needs-input` span; verify.py lists them.
-- **A call for Damian, not made here:** the home page grows at 6% (Run 53),
-  the full calculator, starter, fees and PIA at 5%. The same inputs give a
-  different pot on the home calculator and on "The full calculator". The
-  audit's Q3 said one rate; which one is his call.
+- **6% everywhere (Damian, 15 October 2026: "use 6%").** The full pension
+  calculator, the director calculator, the charges calculator, the PIA page
+  (its slider now starts at 6%) and the starter page's three cost-of-waiting
+  tabs grow at PBAssume.assets.cap, 6% a year before charges, as the home
+  page and director.html already did (Run 53). Their sentences say so ("the
+  most a pension projection may assume"; "risk level 4, about half shares"
+  is gone), and every default figure in their markup is the one the script
+  now draws (the 5% figures went: the calculator's EUR 460,066 is EUR 555,606,
+  the director's EUR 1,511,849 is EUR 1,698,016, the starter's EUR 352,848 is
+  EUR 440,504). cost-of-waiting.js keeps its tested default of 5%; the
+  starter page passes 6. The specs (docs/CALC-SPEC*.md) still describe the
+  modules at 5%, which their tests feed in; the pages now feed in 6.
 
 ## Held back (noindex, unlinked, out of the sitemap), and why
 

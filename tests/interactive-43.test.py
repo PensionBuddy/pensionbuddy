@@ -555,8 +555,8 @@ def check_fees(sid, r, nojs):
     if SCEN[sid][1] == 1440:
         label, cost = r['F4']
         eq('F4 %s: the spoken label names the shaded area, the difference between the two plans' % sid,
-           label.endswith(' The shaded area between them is the difference: €18,455.'), True)
-        eq('F4 %s: what your plan\'s charges cost against none stays in the workings, #costA' % sid, cost, '€41,364')
+           label.endswith(' The shaded area between them is the difference: €22,948.'), True)   # at 6% since 2026-10-15 (was €18,455 at 5%)
+        eq('F4 %s: what your plan\'s charges cost against none stays in the workings, #costA' % sid, cost, '€51,451')   # at 6% (was €41,364 at 5%)
     # (13 October 2026: nothing on the page is in today's money, so no fifth item)
     eq('F6 %s: the key\'s third item, a blush-coral swatch' % sid, r['F6'], [3, 'The difference', GAP])
     eq('F7 %s: no transition, no animation' % sid, r['F7'], ['0s', 'none'])

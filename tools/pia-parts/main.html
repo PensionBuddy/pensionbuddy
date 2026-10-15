@@ -16,9 +16,9 @@
       <input type="hidden" id="taxRate" value="40%" data-pb-label="Your income tax rate"></div>
 
     <details class="adv pia-adv" id="piaAdv">
-      <summary><span class="pia-adv-l">Assumptions</span> <span class="pia-adv-v" id="advV">5% growth, PIA 1% above €50,000</span></summary>
+      <summary><span class="pia-adv-l">Assumptions</span> <span class="pia-adv-v" id="advV">6% growth, PIA 1% above €50,000</span></summary>
       <div class="adv-in">
-        <div class="field"><div class="row"><label for="growth">Growth a year, before tax</label><span class="val" id="growthV">5%</span></div><input type="range" id="growth" min="0" max="8" step="0.5" value="5"></div>
+        <div class="field"><div class="row"><label for="growth">Growth a year, before tax</label><span class="val" id="growthV">6%</span></div><input type="range" id="growth" min="0" max="8" step="0.5" value="6"></div>
         <div class="field"><div class="row"><label for="piaRate">PIA tax rate</label><span class="val" id="piaRateV">1%</span></div><input type="range" id="piaRate" min="0" max="5" step="0.05" value="1"><p class="subnote">Budget 2027: 1% a year.</p></div>
         <div class="field" style="margin-bottom:0"><div class="row"><label for="piaThreshold">PIA tax-free amount</label></div><div class="pia-euro"><span aria-hidden="true">€</span><input type="text" id="piaThreshold" inputmode="numeric" autocomplete="off" value="50,000" aria-describedby="piaThrNote"></div><p class="subnote" id="piaThrNote">Budget 2027: &euro;50,000.</p></div>
       </div>
@@ -31,19 +31,19 @@
       <div class="rl pia-hl" id="heroL">After 10 years, after tax</div>
       <ul class="pia-bars" id="piaBars">
         <li class="pia-row" id="rowPen" style="--row:0">
-          <div class="pia-rh"><span class="rl">Pension</span><span class="big" id="penOut" data-v="36018">€36,018</span></div>
+          <div class="pia-rh"><span class="rl">Pension</span><span class="big" id="penOut" data-v="36018">€37,910</span></div>
           <div class="pia-track" aria-hidden="true"><i class="pia-s pia-s-in" style="left:0%;width:46.64%"></i><i class="pia-s pia-s-rel" style="left:46.64%;width:31.1%"></i><i class="pia-s pia-s-grow" style="left:77.74%;width:22.26%"></i><i class="pia-s pia-s-tax" style="left:70%;width:30%"></i></div>
-          <p class="pia-note" id="penNote">€15,436 tax · normally from 60</p>
+          <p class="pia-note" id="penNote">€16,247 tax · normally from 60</p>
         </li>
         <li class="pia-row" id="rowPia" style="--row:1">
-          <div class="pia-rh"><span class="rl">PIA</span><span class="big" id="piaOut" data-v="30873">€30,873</span></div>
+          <div class="pia-rh"><span class="rl">PIA</span><span class="big" id="piaOut" data-v="30873">€32,495</span></div>
           <div class="pia-track" aria-hidden="true"><i class="pia-s pia-s-in" style="left:0%;width:46.64%"></i><i class="pia-s pia-s-rel" style="left:46.64%;width:0%"></i><i class="pia-s pia-s-grow" style="left:46.64%;width:13.36%"></i><i class="pia-s pia-s-tax pia-zero" style="left:60%;width:0%"></i></div>
           <p class="pia-note" id="piaNote">€0 tax · any time</p>
         </li>
         <li class="pia-row" id="rowEtf" style="--row:2">
-          <div class="pia-rh"><span class="rl">ETF</span><span class="big" id="etfOut" data-v="28442">€28,442</span></div>
+          <div class="pia-rh"><span class="rl">ETF</span><span class="big" id="etfOut" data-v="28442">€29,484</span></div>
           <div class="pia-track" aria-hidden="true"><i class="pia-s pia-s-in" style="left:0%;width:46.64%"></i><i class="pia-s pia-s-rel" style="left:46.64%;width:0%"></i><i class="pia-s pia-s-grow" style="left:46.64%;width:13.28%"></i><i class="pia-s pia-s-tax" style="left:55.28%;width:4.65%"></i></div>
-          <p class="pia-note" id="etfNote">€2,392 tax · any time</p>
+          <p class="pia-note" id="etfNote">€2,953 tax · any time</p>
         </li>
       </ul>
       <ul class="pia-key" aria-hidden="true"><li><i class="pia-k-in"></i>Your money</li><li><i class="pia-k-rel"></i>Tax relief</li><li><i class="pia-k-grow"></i>Growth</li><li><i class="pia-k-tax"></i>Tax</li></ul>
@@ -62,9 +62,9 @@
         <tbody>
           <tr><th scope="row">Your money</th><td id="paidPen">€24,000</td><td id="paidPia">€24,000</td><td id="paidEtf">€24,000</td></tr>
           <tr><th scope="row">Tax relief</th><td id="relPen">€16,000</td><td>€0</td><td>€0</td></tr>
-          <tr><th scope="row">Growth</th><td id="growPen">€11,454</td><td id="growPia">€6,873</td><td id="growEtf">€6,834</td></tr>
-          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€15,436</td><td id="taxPia">€0</td><td id="taxEtf">&minus;€2,392</td></tr>
-          <tr><th scope="row">Left after tax</th><td id="endPen">€36,018</td><td id="endPia">€30,873</td><td id="endEtf">€28,442</td></tr>
+          <tr><th scope="row">Growth</th><td id="growPen">€14,158</td><td id="growPia">€8,495</td><td id="growEtf">€8,437</td></tr>
+          <tr><th scope="row">Tax</th><td id="taxPen">&minus;€16,247</td><td id="taxPia">€0</td><td id="taxEtf">&minus;€2,953</td></tr>
+          <tr><th scope="row">Left after tax</th><td id="endPen">€37,910</td><td id="endPia">€32,495</td><td id="endEtf">€29,484</td></tr>
         </tbody>
       </table>
       </div>

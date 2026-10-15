@@ -5,8 +5,9 @@
    tests/pension-fees.test.js. This file reads the sliders, hands the module
    fractions (the sliders are in percent), and paints what comes back: the
    two pots, the sentence, the chart, the workings and one spoken summary.
-   Growth is no longer a slider: risk level 4 of assets/js/pb-assumptions.js,
-   5% a year before charges, the pension calculator's own figure; #growth
+   Growth is no longer a slider: Since 2026-10-15 the most a projection
+   may assume, 6% a year before charges (PBAssume.assets.cap), the pension
+   calculator's own figure; #growth
    holds it for the scripts that read it (pb-after.js).
 
    Point at the chart, or drag a finger along it, and a line follows with
@@ -28,7 +29,7 @@
   var Fees = window.PBFees, P = window.PBPage;
   if (!Fees || !P) return;
   var $ = P.$, euro = P.euro;
-  var GROWTH = window.PBAssume ? Math.round(PBAssume.level(4).rate * 1000) / 10 : 5;
+  var GROWTH = window.PBAssume ? Math.round(PBAssume.assets.cap * 1000) / 10 : 6;   /* 2026-10-15: 6%, as every calculator */
   $('growth').value = GROWTH;
   $('growthV').textContent = GROWTH + '%';
 

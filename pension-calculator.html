@@ -2981,19 +2981,19 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <div class="field"><div class="row"><label for="pot">Saved so far</label><span class="val" id="potV">€50,000</span></div><input type="range" id="pot" min="0" max="1500000" step="5000" value="50000" style="--fill:3.33%"></div>
     <div class="field"><div class="row"><label for="mine">You pay in, a month</label><span class="val" id="mineV">€300</span></div><input type="range" id="mine" min="0" max="5000" step="25" value="300" style="--fill:6.00%"></div>
     <div class="field" style="margin-bottom:0"><div class="row"><label for="emp">Your employer pays in, a month</label><span class="val" id="empV">€150</span></div><input type="range" id="emp" min="0" max="5000" step="25" value="150" style="--fill:3.00%"></div>
-    <input type="hidden" id="growth" value="5">
+    <input type="hidden" id="growth" value="6">
   </div>
 
   <div class="results">
     <div class="res-hero">
-      <div><div class="rl">A month, from <span id="pcAtInc">66</span></div><div class="big" id="incOut">€1,534</div></div>
-      <div><div class="rl">Your pot at <span id="pcAtPot">66</span></div><div class="big" id="potOut">€460,066</div></div>
+      <div><div class="rl">A month, from <span id="pcAtInc">66</span></div><div class="big" id="incOut">€1,852</div></div>
+      <div><div class="rl">Your pot at <span id="pcAtPot">66</span></div><div class="big" id="potOut">€555,606</div></div>
       <div class="pc-mix" id="pcMix">
         <div class="pc-bar" aria-hidden="true"><i class="pc-b-saved" id="pcBarSaved" style="width:10.87%"></i><i class="pc-b-paid" id="pcBarPaid" style="width:30.52%"></i><i class="pc-b-grow" id="pcBarGrow" style="width:58.61%"></i></div>
         <ul class="pc-key">
           <li><i class="pc-k-saved" aria-hidden="true"></i>Saved <b id="pcSaved">€50,000</b></li>
           <li><i class="pc-k-paid" aria-hidden="true"></i>Paid in <b id="pcPaid">€140,400</b></li>
-          <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€269,666</b></li>
+          <li><i class="pc-k-grow" aria-hidden="true"></i>Growth <b id="pcGrow">€365,206</b></li>
         </ul>
       </div>
       <p class="pb-say pb-sp-top" id="pbSpTop"><i class="pc-k-state" aria-hidden="true"></i>Plus the State Pension from 66: about <b>€2,170</b> a month, or €1,297 in today’s money.</p>
@@ -3002,11 +3002,11 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
       <div class="foot">An illustration.</div>
     </div>
     <!-- WARN:BEGIN (pagebuild.WARN) --><div class="pb-warn"><p><b>Warning: These figures are estimates only. They are not a reliable guide to the future performance of your investment.</b></p><p><b>Warning: The value of your investment may go down as well as up.</b></p></div><!-- WARN:END -->
-    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 5% a year <b>€269,666</b></li><li>Your pot at 66 <b>€460,066</b></li><li>4% of it a year, over twelve months <b>€1,534</b></li></ul></details>
+    <details class="pb-work"><summary>How we got this</summary><ul id="pbWork"><li>Paid in, €450 a month to 66 <b>€140,400</b></li><li>Saved already <b>€50,000</b></li><li>Growth at 6% a year <b>€365,206</b></li><li>Your pot at 66 <b>€555,606</b></li><li>4% of it a year, over twelve months <b>€1,852</b></li></ul></details>
     <p class="sft-note" id="sftNote" hidden>Your pot is above the <a class="gref" href="glossary.html#standard-fund-threshold" title="See this in the jargon buster">Standard Fund Threshold</a> for <span id="sftYear">2052</span>: <span id="sftCap">at least &euro;2.8 million</span>. Anything above it is taxed when you draw it. The threshold rises from &euro;2.2 million in 2026 to &euro;2.8 million in 2029.</p>
     <div class="waitcard">
       <div class="wt">The cost of waiting</div>
-      <div class="wtext" id="waitOut">Start now, not in a year, and you retire with roughly <b>€18,702</b> more: a year of payments, and the growth they earn.</div>
+      <div class="wtext" id="waitOut">Start now, not in a year, and you retire with roughly <b>€23,807</b> more: a year of payments, and the growth they earn.</div>
     </div>
     <div class="relief-card">
       <div class="pc-rhead">
@@ -3024,17 +3024,17 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <div class="chart-card">
       <h3>How your pot could grow</h3>
-      <p class="pc-sub">At <span id="growthV">5%</span> a year, before charges.</p>
+      <p class="pc-sub">At <span id="growthV">6%</span> a year, before charges.</p>
       <div class="chart-legend"><span><i class="dotk"></i>Your plan</span><span><i class="dashk"></i>With €100 more a month</span></div>
       <div id="chart"></div>
     </div>
     <div class="pc-buy" id="pcBuy">
       <h3 id="pcBuyH">What it will buy</h3>
       <ul class="pc-buy-rows">
-        <li class="pc-buy-row"><p class="pc-buy-t">At <span id="buyAt">66</span>, your <span id="buyPot">€460,066</span> pot will buy what <b id="buyPen">€274,926</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
+        <li class="pc-buy-row"><p class="pc-buy-t">At <span id="buyAt">66</span>, your <span id="buyPot">€555,606</span> pot will buy what <b id="buyPen">€332,019</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-pen" id="buyPenBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i></div></li>
         <li class="pc-buy-row"><p class="pc-buy-t">The same money in a bank (<span id="buyCash">€195,150</span>) will buy what <b id="buyBank">€116,617</b> buys today.</p><div class="pc-buy-track" aria-hidden="true"><i class="pc-buy-fill pc-buy-gap" id="buyGapBar" style="clip-path:inset(0 0% 0 0 round 99px)"></i><i class="pc-buy-fill pc-buy-bank" id="buyBankBar" style="clip-path:inset(0 57.58% 0 0 round 99px)"></i></div></li>
       </ul>
-      <p class="pc-buy-say" id="buySay">That&rsquo;s <b>€158,309</b> less.</p>
+      <p class="pc-buy-say" id="buySay">That&rsquo;s <b>€215,402</b> less.</p>
       <p class="pc-buy-note">Prices rising 2% a year; the bank paying 0.15%.</p>
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
@@ -3085,7 +3085,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <section class="assume"><div class="wrap">
   <details class="pb-fold"><summary>How we worked this out</summary>
   <ul>
-    <li>Growth: 5% a year, before charges, every year. That is about half shares and half bonds, a mix we chose for illustration (the Pensions Authority&rsquo;s guidance allows a projection 6% at most). Real returns will differ and can be negative.</li>
+    <li>Growth: 6% a year, before charges, every year: the most the Pensions Authority&rsquo;s guidance lets a projection assume. Historically, shares have often done better. Real returns will differ and can be negative.</li>
     <li>Monthly income assumes you draw 4% of the fund a year. This is not a recommended strategy.</li>
     <li>Not included: product charges, the tax on your income when you draw it.</li>
     <li>Tax relief is at the rate you choose, on your own payments only. Revenue&rsquo;s limit is 15% of earnings under 30, rising in steps to 40% at 60 and over, on earnings up to €115,000. We do not ask what you earn, so the figure assumes your earnings cover your payments.</li>
@@ -3155,10 +3155,12 @@ function sftFor(years){
 }
 const millions=v=>'\u20ac'+(v/1e6).toLocaleString('en-IE',{maximumFractionDigits:2})+' million';
 function reliefBand(age){return age<30?0.15:age<40?0.20:age<50?0.25:age<55?0.30:age<60?0.35:0.40;}
-/* Growth is no longer a slider: risk level 4 of assets/js/pb-assumptions.js,
-   about half shares and half bonds, 5% a year before charges. #growth holds
-   it for the scripts that read it (pb-calc-motion.js, pb-after.js). */
-const GROWTH=window.PBAssume?Math.round(PBAssume.level(4).rate*1000)/10:5;
+/* Growth is no longer a slider. Since 2026-10-15 (Damian: "use 6%")
+   it is the home page's figure, PBAssume.assets.cap: 6% a year before
+   charges, the most a pension projection may assume. Until then it was risk
+   level 4, 5%. #growth holds it for the scripts that read it
+   (pb-calc-motion.js, pb-after.js). */
+const GROWTH=window.PBAssume?Math.round(PBAssume.assets.cap*1000)/10:6;
 $('growth').value=GROWTH;$('growthV').textContent=GROWTH+'%';
 
 function setTax(r){taxRate=r;
