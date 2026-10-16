@@ -1570,7 +1570,7 @@ button{font-family:inherit}
 nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
 /* ---- the nav, once the booking button says the whole sentence ----
-   "Book a free 20-minute call with us" is 283px against the 165px the old
+   "Book your free 20-minute call" is 283px against the 165px the old
    "Book a free call" took. The nav had no 118px spare: it already carried the
    logo, the deadline chip and seven links, and run 11 recorded that an eighth
    text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
@@ -2954,6 +2954,9 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 @media(max-width:920px){#spHas .res-hero{grid-template-columns:1fr 1fr;gap:18px 16px;padding:24px 22px;align-items:end}
   #spHas .res-hero>.foot,#spHas .res-hero>.pb-sp27{align-self:start}}
 
+/* the gap to the full rate (Marketing Bible A6) */
+.sp-gap{grid-column:1 / -1;margin:0;font-size:1.05rem;font-weight:700;line-height:1.45;color:var(--ink)}
+
 /* Budget 2027: the next year's rate, beside this year's */
 .pb-sp27{grid-column:1 / -1;margin:-8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 /* MOTION-6:BEGIN (12 October 2026, Damian's brief: calm and clear).
@@ -3096,7 +3099,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
       </ul>
     </div>
-    <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book your free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -3169,6 +3172,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <div><div class="rl">A year</div><div class="big" id="spAnnual">€14,605</div></div>
         <div class="divline"></div>
         <div class="foot" id="spFoot">For a pension from 2028.</div>
+        <p class="sp-gap" id="spGap">&euro;18.44 a week under the full rate: &euro;959 a year.</p>
         <p class="pb-sp27">2026 rates. From January 2027 the maximum is &euro;309.30 a week (Budget 2027); the new band rates are not yet published.</p>
       </div>
 
@@ -3226,7 +3230,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="state-pension-entitlement">
-      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book your free 20-minute call</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
         <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
         <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -3600,6 +3604,10 @@ function render() {
 
     $('spWeekly').textContent = euro2(award.weekly);
     $('spAnnual').textContent = euro(award.annual);
+    /* Marketing Bible A6, specific beats general: the reader's own gap to the
+       full rate, a week and a year, in place of "many people get less" */
+    const gapC = SP.MAX_WEEKLY_CENTS - Math.round(award.weekly * 100);
+    $('spGap').textContent = gapC > 0 ? euro2c(gapC) + ' a week under the full rate: ' + euro(gapC * SP.WEEKS_PER_YEAR / 100) + ' a year.' : 'The full rate.';
     /* which method is paid is the card's to say, once (mClose) */
     $('spFoot').textContent = 'For a pension from ' + yr(res.drawdownYear) + '.';
 
@@ -3963,14 +3971,14 @@ render();
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=a0185d22" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=ea90e1fa" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=66bc07b3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
-<script src="assets/js/pb-cta.js?v=03610d23"></script>
+<script src="assets/js/pb-cta.js?v=794812de"></script>
 
 <script src="assets/js/pb-deadline.js?v=0e6abecc"></script>
 
@@ -4073,7 +4081,7 @@ render();
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
 <script src="assets/js/pb-share.js?v=b4da6488"></script>
 <script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
-<script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
+<script src="assets/js/pb-bookbar.js?v=8533d87e"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-chrome-motion.js?v=9fb1f86d"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>

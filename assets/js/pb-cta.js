@@ -53,7 +53,7 @@
 (function () {
   'use strict';
   var KEY = 'pb-ab-cta';   /* Run 45's button test, ended: only ever deleted now */
-  var WORDS = { A: 'Book a free 20-minute call with us' };
+  var WORDS = { A: 'Book your free 20-minute call' };
   var UTM = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
   var doc = document;
 

@@ -22,6 +22,16 @@
 .sp-fig{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:1.5em;line-height:1.1;
   letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
 .phead .sp-less{margin:10px 0 0}
+/* guess first (Marketing Bible, Hopkins on curiosity): the answer waits for one tap */
+.sp-guess{margin:18px 0 0}
+.sp-guess-q{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--ink)}
+.sp-guess-opts{display:flex;flex-wrap:wrap;gap:10px}
+.sp-guess-opts button{min-height:48px;padding:0 22px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);font:inherit;font-size:1.05rem;font-weight:700;color:var(--ink);cursor:pointer}
+.sp-guess-opts button:hover{border-color:var(--teal-700)}
+.sp-guess-skip{margin:14px 0 0;padding:6px 0;min-height:44px;border:0;background:none;font:inherit;font-size:1rem;color:var(--ink-2);text-decoration:underline;cursor:pointer}
+.sp-guess-r{margin:14px 0 0;font-size:1.15rem;font-weight:800;color:var(--teal-700)}
+.sp-guess-r:empty{display:none}
+.phead.sp-guessing :is(.sp-ans,.sp-next,.sp-less,.sp-go){display:none}
 /* the next rate, under the answer: its own short line, a step quieter */
 .phead .sp-next{margin:6px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 .sp-go{display:inline-flex;align-items:center;gap:14px;min-height:56px;margin:24px 0 0;padding:0 22px 0 26px;

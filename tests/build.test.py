@@ -2374,12 +2374,12 @@ def run():
              '<polyline points="12 5 19 12 12 19"/></svg></a>')
     GIVE_FIRST = {  # page: (the button's words, what comes before it, what follows it at once)
         # 12 October 2026: the cost of waiting is one card now, so the button follows the whole card
-        'starter.html': ('Book a free 20-minute call with us', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
+        'starter.html': ('Book your free 20-minute call', ('id="sa50Less"', '<div class="pb-warn">', '<p class="pb-sa-note">'),
                          '</div></section>\n'),
         # the tracker's tick list and its button are gone (Damian, 12 October
         # 2026): its ask is the old jobs form under the hero; only its hero is held
         # Run 54: the director page asks after its own numbers, with its one lockup
-        'director.html': ('Book a free 20-minute call with us', ('id="pbTwoOut"', 'id="potOut"', '<!-- WARN:END -->', '<div class="pb-reg">'),
+        'director.html': ('Book your free 20-minute call', ('id="pbTwoOut"', 'id="potOut"', '<!-- WARN:END -->', '<div class="pb-reg">'),
                           '  <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b>'),
     }
 
@@ -2410,7 +2410,7 @@ def run():
     eq('46. the starter, tracker and director heroes give before they ask: the button and its reason after the first figures (the tracker: its tick list)',
        {n: gives_first(n, sources[n]) for n in list(GIVE_FIRST) + ['tracker.html'] if gives_first(n, sources[n])}, {})
     st, dr = sources['starter.html'], sources['director.html']
-    sblock = moved_block('Book a free 20-minute call with us')
+    sblock = moved_block('Book your free 20-minute call')
     for label, name, mut, want in (
             ('the button put back in a hero', 'director.html',
              dr.replace('<a class="pb-g2-go" href="#drCalc">',
@@ -2419,12 +2419,12 @@ def run():
             ('the button above the chart', 'starter.html',
              st.replace(sblock, '', 1).replace('<div class="pb-sa">', sblock + '  <div class="pb-sa">', 1),
              'the button comes before the first figures'),
-            ('its words reworded', 'starter.html', st.replace(sblock, sblock.replace('Book a free 20-minute call with us', 'Book a call'), 1),
+            ('its words reworded', 'starter.html', st.replace(sblock, sblock.replace('Book your free 20-minute call', 'Book a call'), 1),
              'the moved button and its reason are missing, doubled or reworded'),
             ('a booking link put under the lede', 'tracker.html',
              sources['tracker.html'].replace(
                  'you may be owed a refund.</p>\n',
-                 'you may be owed a refund.</p>\n    <p><a href="booking.html">Book a free 20-minute call with us</a></p>\n', 1),
+                 'you may be owed a refund.</p>\n    <p><a href="booking.html">Book your free 20-minute call</a></p>\n', 1),
              'the hero asks before the page gives')):
         assert mut != sources[name], label
         eq('46. %s is caught' % label, gives_first(name, mut), want)
@@ -2619,7 +2619,7 @@ def run():
     m50['terms.html'] = re.sub(r'<script src="assets/js/pb-cta\.js\?v=[0-9a-f]+"></script>\n', '', sources['terms.html'], count=1)
     eq('50. a page without it is caught', cta_missing(m50), ['terms.html'])
     # the button test ended on 8 October 2026 (Damian: every booking button
-    # says "Book a free 20-minute call with us"): one wording, the markup's,
+    # says "Book your free 20-minute call"): one wording, the markup's,
     # every visitor 'A', nothing stored, and the test's old key deleted
     eq('50. one wording, the markup\'s; no second wording; every visitor A',
        ("WORDS = { A: '%s' }" % pagebuild.AFTER_WORDS in cta_js, "B: '" in cta_js, "var variant = 'A';" in cta_js,
@@ -2636,7 +2636,7 @@ def run():
        [e for e in ("'calculator_complete'", "'email_result_submit'") if e not in read('assets/js/pb-after.js')], [])
 
     # ----------------------------------------------------------------- 51
-    # Run 45: the phone booking bar, "Book a free 20-minute call with us", on the home
+    # Run 45: the phone booking bar, "Book your free 20-minute call", on the home
     # page, the audience pages, the glossary, every page built from the
     # skeleton and the director calculator, and the five guides; never on
     # booking, the legal pages, the 404, the thank-you page or how we work.
@@ -2650,7 +2650,7 @@ def run():
     eq('51. the phone booking bar on the content pages, the calculators and tools and the guides, and nowhere else',
        sorted(p for p, t in sources.items() if re.search(r'<script src="assets/js/pb-bookbar\.js\?v=[0-9a-f]+"></script>', t)), BAR)
     eq('51. its words, and no reason line in it (the words carry it)',
-       ('>Book a free 20-minute call with us</a>' in bar_js, 'pb-why' in bar_js), (True, False))
+       ('>Book your free 20-minute call</a>' in bar_js, 'pb-why' in bar_js), (True, False))
     eq('51. it stops on a page kept out of search', "meta[name=\"robots\"][content*=\"noindex\"]" in bar_js, True)
     eq('51. it stands aside for a calculator\'s inputs, the block after the result and every booking link in the page',
        [x for x in ("main a[href^=\"booking.html\"]", '#pbAfter', '.calc-wrap .panel', 'form[data-pb-calc]', "'pb-peek-on'") if x not in bar_js], [])
@@ -2696,14 +2696,14 @@ def run():
     eq('52. the home page\'s one booking ask is under how a call works, filled', re.findall(r'<a class="btn ([^"]*)" href="([^"]+)"', ask), [('btn-primary', 'booking.html')])
 
     # Damian, 8 October 2026: "One primary CTA per page; others secondary",
-    # and every booking button reads "Book a free 20-minute call with us".
+    # and every booking button reads "Book your free 20-minute call".
     # In a page's <main> (a game's <body>) at most one booking link is drawn
     # as a filled button; the nav's is an outline on every page (PB-AUDIT),
     # the phone bar only shows while no booking link is on screen, and the
     # 404's one filled button is the way home. Every booking link drawn as a
     # button, the nav's included, says the one wording; links inside a
     # sentence and the footer's "Book a call" are not buttons.
-    STD_ASK = 'Book a free 20-minute call with us'
+    STD_ASK = 'Book your free 20-minute call'
     FILLED_ASK = FILLED | {'btn-pine', 'cta'}
 
     def booking_buttons(text):

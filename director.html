@@ -1602,7 +1602,7 @@ button{font-family:inherit}
 nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
 /* ---- the nav, once the booking button says the whole sentence ----
-   "Book a free 20-minute call with us" is 283px against the 165px the old
+   "Book your free 20-minute call" is 283px against the 165px the old
    "Book a free call" took. The nav had no 118px spare: it already carried the
    logo, the deadline chip and seven links, and run 11 recorded that an eighth
    text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
@@ -3141,7 +3141,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
       </ul>
     </div>
-    <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book your free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -3304,7 +3304,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <span class="pb-reg-who"><b>Damian Condon, Qualified Financial Adviser (QFA)</b><span class="pb-reg-sep"> &middot; </span><span class="pb-reg-yrs">30 years in financial services</span></span>
       </div>
   <div class="hero-cta" style="margin-top:22px">
-      <a class="btn btn-acc" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-acc" href="booking.html">Book your free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <p class="dr-ia pb-caveat"><b>This page is information, not advice.</b> Rules as at 11 October 2026.</p>
   </div>
@@ -3360,6 +3360,9 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
           <label class="pb-ask-topic"><input type="radio" name="topic" value="Start a pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 14c0-4 3-7 9-7 0 4-3 7-9 7z"/></svg></span><b>Start a pension</b></label>
           <label class="pb-ask-topic"><input type="radio" name="topic" value="Find an old pension"><span class="ti"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><b>Find an old pension</b></label>
           <label class="pb-ask-topic"><input type="radio" name="topic" value="Company pension"><span class="ti"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/><path d="M10 21v-3h4v3"/></svg></span><b>I run a company</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Self-employed"><span class="ti"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg></span><b>I&rsquo;m self-employed</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="UK pension"><span class="ti"><svg viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M15 5l7 7-7 7"/></svg></span><b>Worked in the UK</b></label>
+          <label class="pb-ask-topic"><input type="radio" name="topic" value="Over 50"><span class="ti"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span><b>I&rsquo;m over 50</b></label>
           <label class="pb-ask-topic"><input type="radio" name="topic" value="Something else"><span class="ti"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>Something else</b></label>
         </div>
         <div class="pb-ask-nav"><span></span><button type="button" class="btn btn-primary pb-ask-next">Next <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
@@ -3495,7 +3498,7 @@ function sendMagnet(){
       '?subject='+encodeURIComponent('Guide request')+'&body='+body;
     /* nothing has been sent by this page, so the panel must not say "on its way" */
     done('Your email app should have opened with the request ready to send. '+
-         'If it didn\'t, <a href="booking.html">book a free 20-minute call with us</a> and Damian will walk you through it.', true, 'One more step.');
+         'If it didn\'t, <a href="booking.html">book your free 20-minute call</a> and Damian will walk you through it.', true, 'One more step.');
   };
   var form=document.getElementById('mForm');
   if(!window.PBForms){ viaEmail(); return; }
@@ -3580,14 +3583,14 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late" data-first-answer="short"></script>
+<script src="assets/js/pb-buddy.js?v=a0185d22" type="text/pb-late" data-first-answer="short"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=ea90e1fa" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=66bc07b3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
-<script src="assets/js/pb-cta.js?v=03610d23"></script>
+<script src="assets/js/pb-cta.js?v=794812de"></script>
 
 <script src="assets/js/pb-deadline.js?v=0e6abecc"></script>
 
@@ -3616,7 +3619,7 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 </script>
 <script src="assets/js/pb-jargon-bank.js?v=79e43d9c"></script>
 <script src="assets/js/pb-jargon-chips.js?v=7bb8e78f"></script>
-<script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
+<script src="assets/js/pb-bookbar.js?v=8533d87e"></script>
 <script src="assets/js/pension-tax-relief.js?v=d321b47e"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-prsi.js?v=fc12215a"></script>
@@ -3651,6 +3654,6 @@ const nav=document.getElementById('nav');addEventListener('scroll',()=>nav.class
 <script src="assets/js/pb-alive.js?v=045fe050"></script>
 <script src="assets/js/pb-kit.js?v=7681cfbc"></script>
 <script src="assets/js/pb-yearend.js?v=ef3ec59b"></script>
-<script src="assets/js/pb-ask.js?v=3aeff5d5"></script>
+<script src="assets/js/pb-ask.js?v=ec412afe"></script>
 </body>
 </html>

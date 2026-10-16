@@ -1570,7 +1570,7 @@ button{font-family:inherit}
 nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
 /* ---- the nav, once the booking button says the whole sentence ----
-   "Book a free 20-minute call with us" is 283px against the 165px the old
+   "Book your free 20-minute call" is 283px against the 165px the old
    "Book a free call" took. The nav had no 118px spare: it already carried the
    logo, the deadline chip and seven links, and run 11 recorded that an eighth
    text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
@@ -2671,6 +2671,10 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .pt-next a{color:var(--teal-700);font-weight:600}
 .pt-next a::after{content:" \2192"}
 .pt-empty .pt-actions,.pt-empty .pt-key{display:none}
+/* the example (Marketing Bible A7): greyed, and nothing to print */
+.pt-example .pt-actions{display:none}
+.pt-example .pt-ring,.pt-example .pt-key,.pt-example .pt-charges{opacity:.55}
+.pt-example .pt-total-c{font-weight:700;color:var(--ink)}
 /* each row's dot matches its arc and its swatch in the key */
 .pt-dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--slate);opacity:var(--o,1);margin-right:8px;vertical-align:-1px}
 /* the phone's running total: sticky under the nav while the ring is out of view */
@@ -2765,7 +2769,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
       </ul>
     </div>
-    <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book your free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -2804,7 +2808,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     <p class="pt-charges" id="ptCharges"></p>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="my-pensions">
-      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book your free 20-minute call</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
         <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
         <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -2959,14 +2963,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   function shade(i) { return SHADES[i % SHADES.length]; }
   var NS = 'http://www.w3.org/2000/svg', R = 48, C = 2 * Math.PI * R;
   var reduce = !document.documentElement.classList.contains('pb-motion');
-  var shown = 0, raf = 0;
+  var shown = 0, raf = 0, painted = false;
 
   // The total counts to its new figure; with motion off it is simply there
   function count(to) {
     var el = $('ptTotal'), from = shown, t0 = 0;
     cancelAnimationFrame(raf);
     shown = to;
-    if (reduce || from === to) { el.textContent = euro(to); return; }
+    /* the first paint (the example, at load) is simply there: nothing counts before the reader acts */
+    if (reduce || from === to || !painted) { el.textContent = euro(to); return; }
     raf = requestAnimationFrame(function step(t) {
       if (!t0) t0 = t;
       var k = Math.min(1, (t - t0) / 450), e = 1 - Math.pow(1 - k, 3);
@@ -2984,8 +2989,8 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 
   /* The arcs: for each kept pension, its length round the ring and where it
      starts, keyed by its row. Drawn here, or glided by the motion module. */
-  function ring(s) {
-    var at = 0, idx = keptRows(), gap = s.rows.length > 1 ? 1.6 : 0, want = [];
+  function ring(s, ex) {
+    var at = 0, idx = ex ? s.rows.map(function (r, k) { return k; }) : keptRows(), gap = s.rows.length > 1 ? 1.6 : 0, want = [];
     s.rows.forEach(function (r, k) {
       var len = r.share * C;
       want.push({ row: idx[k], len: Math.max(0, len - gap), off: -at, o: shade(idx[k]) });
@@ -3020,26 +3025,30 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   list.addEventListener('focusin', function (e) { var r = e.target.closest('.pt-row'); light(r ? rows().indexOf(r) : -1); });
   list.addEventListener('focusout', function () { light(-1); });
 
+  /* Marketing Bible A7 (show, give samples): until the reader types a value,
+     the summary shows two example pensions, marked as examples, so the ring,
+     the total and the fee line are there from the first look */
+  var EXAMPLE = [{ name: 'Example: old job', value: '18,000', amc: '1.2' }, { name: 'Example: personal pension', value: '32,000', amc: '0.8' }];
   function paint(spoken) {
-    var s = Pots.summarise(read());
+    var real = Pots.summarise(read()), ex = real.count === 0, s = ex ? Pots.summarise(EXAMPLE) : real;
     rows().forEach(function (r, i) {
       flag($('ptValue' + i), unread(Pots.amount($('ptValue' + i).value)), 'Not counted: enter an amount in euro, like 40,000.');
       flag($('ptAmc' + i), unread(Pots.rate($('ptAmc' + i).value)), 'Not read: enter a percentage, like 1 or 0.75.');
     });
     count(s.total);
-    $('ptCount').textContent = s.count === 0 ? 'Add a pension to start'
+    $('ptCount').textContent = ex ? 'An example. Add yours.'
       : 'across ' + s.count + (s.count === 1 ? ' pension' : ' pensions');
-    $('ptSum').classList.toggle('pt-empty', s.count === 0);
+    $('ptSum').classList.toggle('pt-example', ex);
     // on a phone the ring is below the form: a small total and split stay in view while typing
-    $('ptMini').hidden = s.count === 0;
+    $('ptMini').hidden = ex;
     $('ptMiniN').textContent = euro(s.total);
-    var mb = $('ptMiniBar'), kr = keptRows(); mb.textContent = '';
+    var mb = $('ptMiniBar'), kr = ex ? [0, 1] : keptRows(); mb.textContent = '';
     s.rows.forEach(function (r, k) {
       var seg = document.createElement('i');
       seg.style.flexGrow = r.share; seg.style.setProperty('--o', shade(kr[k]));
       mb.appendChild(seg);
     });
-    var idx = ring(s), key = $('ptKey'); key.textContent = '';
+    var idx = ring(s, ex), key = $('ptKey'); key.textContent = '';
     s.rows.forEach(function (r, k) {
       var li = document.createElement('li'); li.setAttribute('data-row', idx[k]);
       var sw = document.createElement('i'); sw.setAttribute('aria-hidden', 'true'); sw.style.setProperty('--o', shade(idx[k]));
@@ -3077,6 +3086,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
   $('ptPrint').addEventListener('click', function () { window.print(); });
   renumber();
   paint(false);
+  painted = true;
 })();
 </script>
 
@@ -3284,14 +3294,14 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=a0185d22" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=ea90e1fa" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=66bc07b3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
-<script src="assets/js/pb-cta.js?v=03610d23"></script>
+<script src="assets/js/pb-cta.js?v=794812de"></script>
 
 <script src="assets/js/pb-deadline.js?v=0e6abecc"></script>
 
@@ -3394,7 +3404,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
 <script src="assets/js/pb-share.js?v=b4da6488"></script>
 <script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
-<script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
+<script src="assets/js/pb-bookbar.js?v=8533d87e"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-chrome-motion.js?v=9fb1f86d"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>

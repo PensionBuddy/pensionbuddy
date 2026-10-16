@@ -180,6 +180,9 @@
     $('feePaidA').textContent = euro(c.a.contributionPaid);
     $('feePaidB').textContent = euro(c.b.contributionPaid);
     $('costA').textContent = euro(c.costA);
+    /* the headline (Marketing Bible A12, the truth nobody says): the yearly
+       charge, and what it costs by retirement against no charges at all */
+    if ($('h1Amc')) { $('h1Amc').textContent = pc(+$('amcA').value); $('h1Cost').textContent = euro(c.costA); }
     $('costB').textContent = euro(c.costB);
     $('nonePot').textContent = euro(c.none.pot);
     chart(c, n, o, Math.abs(gap));

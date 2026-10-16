@@ -18,7 +18,7 @@
      G1  on each calculator and tool with a result: its "What this doesn't
          show" line, word for word, where it has one, and one block: one
          booking button, in the wording pb-cta.js picked for this visit
-         (A "Book a free 20-minute call with us" or B "See what this
+         (A "Book your free 20-minute call" or B "See what this
          means for you - free 20-min call"), and nothing under it (its
          line, "Free. No obligation. No pressure.", cut on 8 October 2026)
      G2  at load the button is plain booking.html, as in the markup (no tag
@@ -51,7 +51,7 @@
          and the box, never ticked for the reader, and sends nothing without
          them; its post refused, a pre-filled email to Damian, and it says so
      G13 one wording (the button test ended 8 October 2026): every visit is
-         'A' and the button says "Book a free 20-minute call with us",
+         'A' and the button says "Book your free 20-minute call",
          before and after "That's fine"; nothing is stored, and a
          'pb-ab-cta' key the test left behind is deleted on load
      G14 what is counted, after "That's fine": calculator_complete once,
@@ -81,7 +81,7 @@ const eq = (label, got, want) => {
 
 
 const RSQ = '’';
-const WORDS = { A: 'Book a free 20-minute call with us' };
+const WORDS = { A: 'Book your free 20-minute call' };
 const WHY = [];   // the line under the button, cut on 8 October 2026
 /* page: [data-pb-from, what it does not show (null: no line), the email offer] */
 const AFTER = {

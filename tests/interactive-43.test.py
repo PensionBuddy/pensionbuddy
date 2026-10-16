@@ -450,7 +450,9 @@ def check_pots(sid, r, nojs):
     if nojs:
         eq('P8 %s: no JavaScript, #ptCharges is empty' % sid, r['P1'], '')
         return
-    eq('P1 %s: at load #ptCharges is empty' % sid, r['P1'], '')
+    # 2026-10-15 (Marketing Bible A7): until the reader types, the two example
+    # pensions fill the summary, the fee line with them
+    eq('P1 %s: at load #ptCharges is the example\'s line' % sid, r['P1'], 'Fees take about <b>€472</b> a year.')
     eq('P2 %s: the charges sentence, word for word' % sid, r['P2'],
        'Fees take about €400 a year.')
     eq('P3 %s: one <b>, the euro figure' % sid, r['P3'], [1, '€400'])

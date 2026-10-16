@@ -274,3 +274,20 @@ function initJar() {
 }
 
 initJar();
+
+/* Guess first (2026-10-15, the Marketing Bible: Hopkins, "curiosity is one of
+   the strongest human incentives"): the reader guesses the weekly rate, then
+   sees it. The answer is the module's maximum; "Just show me" skips. */
+(function () {
+  const box = document.getElementById('spGuess'), head = box && box.closest('.phead');
+  if (!box || !head || !SP) return;
+  const max = SP.MAX_WEEKLY_CENTS / 100, r = document.getElementById('spGuessR');
+  head.classList.add('sp-guessing'); box.hidden = false;
+  function reveal(g) {
+    head.classList.remove('sp-guessing'); box.hidden = true;
+    if (g == null) return;
+    r.textContent = Math.abs(g - max) <= 10 ? 'Spot on.' : g < max ? 'More than you guessed.' : 'Less than you guessed.';
+  }
+  box.querySelectorAll('[data-g]').forEach(function (b) { b.addEventListener('click', function () { reveal(+b.getAttribute('data-g')); }); });
+  document.getElementById('spGuessSkip').addEventListener('click', function () { reveal(null); });
+})();

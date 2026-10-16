@@ -153,7 +153,7 @@
     /* the gap section above says what closes its gap: these sums, not a second copy of them */
     try { document.dispatchEvent(new CustomEvent('pb:calc', { detail: { age: a, saved: p, mine: m, emp: e, tax: tax, reach: reach, covered: S.covered, far: S.far } })); } catch (er) { /* an old browser keeps the markup's line */ }
     if (take) {
-      var t = S.far ? 'To cover it, you’d put in <b>' + fmt(reach) + ' a month</b>. Too much? <a href="booking.html">Book a free 20-minute call with us</a>.' : '';
+      var t = S.far ? 'To cover it, you’d put in <b>' + fmt(reach) + ' a month</b>. Too much? <a href="booking.html">Book your free 20-minute call</a>.' : '';
       if (take.innerHTML !== t) { take.innerHTML = t; }
       take.hidden = !S.far;
       /* the button went from under the reader's finger: the line that took its place has the focus */

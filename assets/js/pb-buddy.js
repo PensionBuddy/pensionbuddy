@@ -56,7 +56,7 @@
     +'<p class="pb-b-err" id="pbBErr" role="alert"></p>'
     +'</form>'
     +'<div class="pb-b-ok" role="status" tabindex="-1" hidden><b>Sent.</b><p></p></div>'
-    +(BOOKING?'':'<div class="pb-b-foot"><a class="btn btn-ghost" href="booking.html">Book a free 20-minute call with us</a></div>');
+    +(BOOKING?'':'<div class="pb-b-foot"><a class="btn btn-ghost" href="booking.html">Book your free 20-minute call</a></div>');
   document.body.appendChild(btn);document.body.appendChild(panel);
 
   function open(){panel.hidden=false;btn.setAttribute('aria-expanded','true');var f=form.hidden?panel.querySelector('.pb-b-close'):msg;if(f)f.focus();}

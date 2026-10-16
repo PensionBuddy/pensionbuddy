@@ -1186,7 +1186,7 @@ def check_static():
             ok('20. %s: the call to action points at ../booking.html' % rel,
                bool(ctas) and 'href="../booking.html"' in ctas[0])
             ok('20. %s uses the agreed button words' % rel,
-               'Book a free 20-minute call with us' in src)
+               'Book your free 20-minute call' in src)
         placeholders = [t for t in ('TODO', 'FIXME', 'lorem', 'XXX', '[to be confirmed]')
                         if t in src]
         eq('21. %s has no placeholder tokens' % rel, placeholders, [])

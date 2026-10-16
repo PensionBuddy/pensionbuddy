@@ -8,6 +8,15 @@
        cannot leave this line behind. The next line is January's new rate
        (Budget 2027), so the maximum is never read without its year. Plain
        text from the first frame: with motion each line only rises in. -->
+  <!-- Hopkins on curiosity (the Marketing Bible, 2026-10-15): a guess before
+       the answer, with the answer one tap away. With no script it stays
+       hidden and the answer shows at once, as before. -->
+  <div class="sp-guess" id="spGuess" hidden>
+    <p class="sp-guess-q">Guess first. What does it pay a week?</p>
+    <div class="sp-guess-opts"><button type="button" data-g="200">&euro;200</button><button type="button" data-g="250">&euro;250</button><button type="button" data-g="300">&euro;300</button><button type="button" data-g="350">&euro;350</button></div>
+    <button type="button" class="sp-guess-skip" id="spGuessSkip">Just show me</button>
+  </div>
+  <p class="sp-guess-r" id="spGuessR" aria-live="polite"></p>
   <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year, in 2026.</p>
   <p class="sp-next" id="spNext">From January 2027: &euro;309.30 a week.</p>
   <p class="sp-less">You may get less. It depends on your PRSI record.</p>

@@ -40,8 +40,23 @@
     'Company pension': {
       qs: [{ k: 'Company pays in now', q: 'Does the company pay in now?', a: ['Yes', 'No', 'Not sure'] }]
     },
+    /* Marketing Bible A11, pick out your reader (2026-10-15): the three guide
+       readers each have a topic, picked for them on their own page */
+    'Self-employed': {
+      qs: [{ k: 'Pension now', q: 'Do you have a pension now?', a: ['Yes', 'No', 'Not sure'] }]
+    },
+    'UK pension': {
+      qs: [{ k: 'In the UK', q: 'What do you have in the UK?', a: ['A workplace pension', 'A personal pension', 'UK State Pension', 'Not sure'] }]
+    },
+    'Over 50': {
+      qs: [{ k: 'Age', q: 'Your age', a: ['50 to 54', '55 to 59', '60 to 65', '66 or over'] }]
+    },
     'Something else': { qs: [] }
   };
+  /* the topic this page's reader most likely has, already picked (they can change it) */
+  var PAGE_TOPIC = { 'self-employed-pensions': 'Self-employed', 'uk-pensions-in-ireland': 'UK pension', 'pensions-over-50': 'Over 50',
+                     'director': 'Company pension', 'director-pension-rules': 'Company pension', 'director-year-end-checklist': 'Company pension',
+                     'starter': 'Start a pension' };
 
   function motion() { return root.classList.contains('pb-motion'); }
   function $(sel, el) { return (el || card).querySelector(sel); }
@@ -245,6 +260,9 @@
     draft.classList.toggle('is-live', !!topic);
   }
   if (by) { byEl.textContent = by; }
+  var pre = PAGE_TOPIC[(location.pathname.split('/').pop() || '').replace(/\.html$/, '')];
+  var preIn = pre && form.querySelector('input[name="topic"][value="' + pre + '"]');
+  if (preIn) { preIn.checked = true; topic = pre; preIn.closest('.pb-ask-topic').classList.add('is-on'); buildQs(); }
   draw();
 
   /* ---------------------------------------------------------------- send */

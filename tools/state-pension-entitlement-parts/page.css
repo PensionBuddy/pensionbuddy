@@ -161,6 +161,9 @@
 @media(max-width:920px){#spHas .res-hero{grid-template-columns:1fr 1fr;gap:18px 16px;padding:24px 22px;align-items:end}
   #spHas .res-hero>.foot,#spHas .res-hero>.pb-sp27{align-self:start}}
 
+/* the gap to the full rate (Marketing Bible A6) */
+.sp-gap{grid-column:1 / -1;margin:0;font-size:1.05rem;font-weight:700;line-height:1.45;color:var(--ink)}
+
 /* Budget 2027: the next year's rate, beside this year's */
 .pb-sp27{grid-column:1 / -1;margin:-8px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 /* MOTION-6:BEGIN (12 October 2026, Damian's brief: calm and clear).

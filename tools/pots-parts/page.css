@@ -66,6 +66,10 @@
 .pt-next a{color:var(--teal-700);font-weight:600}
 .pt-next a::after{content:" \2192"}
 .pt-empty .pt-actions,.pt-empty .pt-key{display:none}
+/* the example (Marketing Bible A7): greyed, and nothing to print */
+.pt-example .pt-actions{display:none}
+.pt-example .pt-ring,.pt-example .pt-key,.pt-example .pt-charges{opacity:.55}
+.pt-example .pt-total-c{font-weight:700;color:var(--ink)}
 /* each row's dot matches its arc and its swatch in the key */
 .pt-dot{display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--slate);opacity:var(--o,1);margin-right:8px;vertical-align:-1px}
 /* the phone's running total: sticky under the nav while the ring is out of view */

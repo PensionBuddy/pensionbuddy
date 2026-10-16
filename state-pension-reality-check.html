@@ -1570,7 +1570,7 @@ button{font-family:inherit}
 nav.scrolled .logo-mark{width:var(--pb-logo-h);height:var(--pb-logo-h)}
 
 /* ---- the nav, once the booking button says the whole sentence ----
-   "Book a free 20-minute call with us" is 283px against the 165px the old
+   "Book your free 20-minute call" is 283px against the 165px the old
    "Book a free call" took. The nav had no 118px spare: it already carried the
    logo, the deadline chip and seven links, and run 11 recorded that an eighth
    text item overflowed at 1200px. Unchanged, the bar ran past the viewport by
@@ -2815,6 +2815,16 @@ html.pb-motion footer .pb-wordmark.pb-wm-live{color:transparent;-webkit-backgrou
 .sp-fig{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:1.5em;line-height:1.1;
   letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
 .phead .sp-less{margin:10px 0 0}
+/* guess first (Marketing Bible, Hopkins on curiosity): the answer waits for one tap */
+.sp-guess{margin:18px 0 0}
+.sp-guess-q{margin:0 0 12px;font-size:1.15rem;font-weight:700;color:var(--ink)}
+.sp-guess-opts{display:flex;flex-wrap:wrap;gap:10px}
+.sp-guess-opts button{min-height:48px;padding:0 22px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);font:inherit;font-size:1.05rem;font-weight:700;color:var(--ink);cursor:pointer}
+.sp-guess-opts button:hover{border-color:var(--teal-700)}
+.sp-guess-skip{margin:14px 0 0;padding:6px 0;min-height:44px;border:0;background:none;font:inherit;font-size:1rem;color:var(--ink-2);text-decoration:underline;cursor:pointer}
+.sp-guess-r{margin:14px 0 0;font-size:1.15rem;font-weight:800;color:var(--teal-700)}
+.sp-guess-r:empty{display:none}
+.phead.sp-guessing :is(.sp-ans,.sp-next,.sp-less,.sp-go){display:none}
 /* the next rate, under the answer: its own short line, a step quieter */
 .phead .sp-next{margin:6px 0 0;font-size:1rem;line-height:1.5;color:var(--ink-2)}
 .sp-go{display:inline-flex;align-items:center;gap:14px;min-height:56px;margin:24px 0 0;padding:0 22px 0 26px;
@@ -3004,7 +3014,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
         <li class="nav-dd-sep"><a class="lnk" href="index.html#story">About Pensionbuddy</a></li>
       </ul>
     </div>
-    <a class="btn btn-primary" href="booking.html">Book a free 20-minute call with us <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <a class="btn btn-primary" href="booking.html">Book your free 20-minute call <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
   <button class="nav-search" id="navSearch" type="button" aria-label="Search" aria-haspopup="dialog" aria-keyshortcuts="/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/></svg></button>
   <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg></button>
@@ -3019,6 +3029,15 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
        cannot leave this line behind. The next line is January's new rate
        (Budget 2027), so the maximum is never read without its year. Plain
        text from the first frame: with motion each line only rises in. -->
+  <!-- Hopkins on curiosity (the Marketing Bible, 2026-10-15): a guess before
+       the answer, with the answer one tap away. With no script it stays
+       hidden and the answer shows at once, as before. -->
+  <div class="sp-guess" id="spGuess" hidden>
+    <p class="sp-guess-q">Guess first. What does it pay a week?</p>
+    <div class="sp-guess-opts"><button type="button" data-g="200">&euro;200</button><button type="button" data-g="250">&euro;250</button><button type="button" data-g="300">&euro;300</button><button type="button" data-g="350">&euro;350</button></div>
+    <button type="button" class="sp-guess-skip" id="spGuessSkip">Just show me</button>
+  </div>
+  <p class="sp-guess-r" id="spGuessR" aria-live="polite"></p>
   <p class="sp-ans" id="spAns">At most <b class="sp-fig">&euro;299.30</b> a week, <b class="sp-fig">&euro;15,564</b> a year, in 2026.</p>
   <p class="sp-next" id="spNext">From January 2027: &euro;309.30 a week.</p>
   <p class="sp-less">You may get less. It depends on your PRSI record.</p>
@@ -3119,7 +3138,7 @@ var LEAD_FALLBACK_ADDRESS = 'hello@pensionbuddy.ie';
     </div>
     <!-- AFTER:BEGIN (Run 45: tools/pagebuild.py after_block() writes this; edit it there) -->
     <div class="pb-after" id="pbAfter" data-pb-from="state-pension-reality-check">
-      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book a free 20-minute call with us</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="btn btn-primary pb-after-btn" href="booking.html" data-pb-cta="after" data-pb-ab="cta"><span class="pb-ab-t">Book your free 20-minute call</span> <svg class="ico" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
       <form class="pbr" id="pbrForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" aria-labelledby="pbrH" novalidate hidden>
         <input type="hidden" name="form-name" value="enquiry"><input type="hidden" name="details"><input type="hidden" name="page"><input type="hidden" name="reply_by">
         <p class="pb-hp" hidden><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -3488,6 +3507,23 @@ function initJar() {
 }
 
 initJar();
+
+/* Guess first (2026-10-15, the Marketing Bible: Hopkins, "curiosity is one of
+   the strongest human incentives"): the reader guesses the weekly rate, then
+   sees it. The answer is the module's maximum; "Just show me" skips. */
+(function () {
+  const box = document.getElementById('spGuess'), head = box && box.closest('.phead');
+  if (!box || !head || !SP) return;
+  const max = SP.MAX_WEEKLY_CENTS / 100, r = document.getElementById('spGuessR');
+  head.classList.add('sp-guessing'); box.hidden = false;
+  function reveal(g) {
+    head.classList.remove('sp-guessing'); box.hidden = true;
+    if (g == null) return;
+    r.textContent = Math.abs(g - max) <= 10 ? 'Spot on.' : g < max ? 'More than you guessed.' : 'Less than you guessed.';
+  }
+  box.querySelectorAll('[data-g]').forEach(function (b) { b.addEventListener('click', function () { reveal(+b.getAttribute('data-g')); }); });
+  document.getElementById('spGuessSkip').addEventListener('click', function () { reveal(null); });
+})();
 </script>
 
 <script>
@@ -3694,14 +3730,14 @@ initJar();
 </script>
 
 
-<script src="assets/js/pb-buddy.js?v=eed6446b" type="text/pb-late"></script>
+<script src="assets/js/pb-buddy.js?v=a0185d22" type="text/pb-late"></script>
 <script src="assets/js/pb-search.js?v=7329e1c1" type="text/pb-late"></script>
-<script src="assets/js/pb-search-index.js?v=ea90e1fa" type="text/pb-lazy"></script>
+<script src="assets/js/pb-search-index.js?v=66bc07b3" type="text/pb-lazy"></script>
 <script src="assets/js/pb-pop.js?v=3129b60f" type="text/pb-late"></script>
 <script src="assets/js/pb-glossary.js?v=11cd5ca5" type="text/pb-late"></script>
 <script src="assets/js/pb-terms.js?v=d257b615" type="text/pb-late"></script>
 <script src="assets/js/pb-consent.js?v=b381cfcc"></script>
-<script src="assets/js/pb-cta.js?v=03610d23"></script>
+<script src="assets/js/pb-cta.js?v=794812de"></script>
 
 <script src="assets/js/pb-deadline.js?v=0e6abecc"></script>
 
@@ -3804,7 +3840,7 @@ initJar();
 <script src="assets/js/pb-after.js?v=3fb9a2fe"></script>
 <script src="assets/js/pb-share.js?v=b4da6488"></script>
 <script src="assets/js/pb-calc-motion.js?v=ed819ca8"></script>
-<script src="assets/js/pb-bookbar.js?v=bc087c1f"></script>
+<script src="assets/js/pb-bookbar.js?v=8533d87e"></script>
 <script src="assets/js/pb-navmenu.js?v=ac76aef5"></script>
 <script src="assets/js/pb-chrome-motion.js?v=9fb1f86d"></script>
 <script src="assets/js/pb-alive.js?v=045fe050"></script>

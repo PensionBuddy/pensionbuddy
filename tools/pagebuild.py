@@ -1446,7 +1446,7 @@ AFTER = {  # page: (its name for #from= and the events, what it does not show or
     'my-pensions.html': ('my-pensions', None, False),
     'director-pension-rules.html': ('director-pension-rules', None, True),
 }
-AFTER_WORDS = 'Book a free 20-minute call with us'   # the one wording (the button test ended 8 October 2026)
+AFTER_WORDS = 'Book your free 20-minute call'   # the one wording (the button test ended 8 October 2026)
 # The line under the button, cut on 8 October 2026 (the owner: the button
 # already says free, and the line was words in the way). '' writes none.
 AFTER_WHY = ''

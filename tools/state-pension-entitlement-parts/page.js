@@ -210,6 +210,10 @@ function render() {
 
     $('spWeekly').textContent = euro2(award.weekly);
     $('spAnnual').textContent = euro(award.annual);
+    /* Marketing Bible A6, specific beats general: the reader's own gap to the
+       full rate, a week and a year, in place of "many people get less" */
+    const gapC = SP.MAX_WEEKLY_CENTS - Math.round(award.weekly * 100);
+    $('spGap').textContent = gapC > 0 ? euro2c(gapC) + ' a week under the full rate: ' + euro(gapC * SP.WEEKS_PER_YEAR / 100) + ' a year.' : 'The full rate.';
     /* which method is paid is the card's to say, once (mClose) */
     $('spFoot').textContent = 'For a pension from ' + yr(res.drawdownYear) + '.';
 

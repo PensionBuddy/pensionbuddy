@@ -38,7 +38,7 @@ var TEXT = require('../../shared/compliance-text.json');
 var FROM = 'Damian at Pensionbuddy <hello@pensionbuddy.ie>';
 var REPLY_TO = 'hello@pensionbuddy.ie';
 var SITE = 'https://pensionbuddy.ie';
-var BOOK_WORDS = 'Book a free 20-minute call with us';   // tools/pagebuild.py AFTER_WORDS
+var BOOK_WORDS = 'Book your free 20-minute call';   // tools/pagebuild.py AFTER_WORDS
 
 // page file -> the calculator's name, as the footer's Tools list names it
 var CALCULATORS = {
@@ -284,6 +284,12 @@ function figuresTable(groups) {
     }).join('') + '</table>';
 }
 
+/* The Marketing Bible (Ogilvy: "pretend you are writing each of them a
+   letter"), 2026-10-15: the results email opens as a note from Damian and
+   is signed by him */
+var LETTER = 'Here are your figures. Got a question about them? Just reply. I\u2019ll answer it myself.';
+var SIGN = 'Damian';
+
 function calculatorEmail(d, env) {
   var base = siteBase(env);
   var file = pageFile(d.page);
@@ -311,6 +317,7 @@ function calculatorEmail(d, env) {
 
   var body = [
     p(esc(hi ? 'Hello ' + hi + ',' : 'Hello,')),
+    p(esc(LETTER)),
     head
       ? '<p class="pb-ink2" style="margin:4px 0 2px;font-size:15px;color:' + C.ink2 + ';">' + esc(head.label) + '</p>' +
         '<p style="margin:0 0 6px;font:800 34px/1.15 Arial,Helvetica,sans-serif;">' + esc(head.value) + '</p>' +
@@ -321,6 +328,7 @@ function calculatorEmail(d, env) {
     groups.length ? h2('Your figures') + figuresTable(groups) : '',
     h2('What this means'),
     p(esc(means.join(' '))),
+    p(esc(SIGN)),
     button(book, BOOK_WORDS),
     warnings()
   ].filter(Boolean).join('\n');
@@ -328,6 +336,7 @@ function calculatorEmail(d, env) {
   var line = function (r) { return r.label + ': ' + r.value + (r.today ? ' (' + r.today + ' in today\'s money)' : ''); };
   var text = [
     hi ? 'Hello ' + hi + ',' : 'Hello,', '',
+    LETTER, '',
     head ? head.label + ': ' + head.value + (head.today ? '\n' + head.today + ' in today\'s money' : '') : '',
     head ? lead : '',
     notes.length ? notes.join('\n') : (head ? '' : none), '',
@@ -335,6 +344,7 @@ function calculatorEmail(d, env) {
     groups.map(function (g) { return g.title + '\n' + g.rows.map(line).join('\n'); }).join('\n\n'), '',
     'WHAT THIS MEANS',
     means.join(' '), '',
+    SIGN, '',
     BOOK_WORDS + ': ' + book, '',
     TEXT.warnings.join('\n'), '',
     '--',
